@@ -68,7 +68,7 @@ public class UpdateRecommendationsService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (VERSION.SDK_INT < 21) {
-            Log.d(TAG, "Recommendations disabled on api < 21");
+            Log.d(TAG, "Recommendations are not supported on api < 21");
             mNotifManager.cancelAll();
             return;
         }
