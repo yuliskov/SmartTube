@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2014 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false">
+    <item android:drawable="@drawable/tv_c_00000" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00003" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00006" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00009" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00012" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00015" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00018" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00021" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00024" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00027" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00030" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00033" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00036" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00039" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00042" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00045" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00048" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00051" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00054" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00057" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00060" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00063" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00066" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00069" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00072" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00075" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00078" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00081" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00084" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00087" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00090" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00093" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00096" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00099" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00102" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00105" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00108" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00111" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00114" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00117" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00120" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00123" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00126" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00129" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00132" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00135" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00138" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00141" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00144" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00147" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00150" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00153" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00156" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00159" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00162" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00165" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00168" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00171" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00174" android:duration="500" />
+    <item android:drawable="@drawable/tv_c_00225" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00228" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00231" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00234" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00237" android:duration="50" />
+    <item android:drawable="@drawable/tv_c_00000" android:duration="500" />
+</animation-list>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (c) 2016 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+    <dimen name="card_width">156dp</dimen>
+    <dimen name="card_height">88dp</dimen>
+    <dimen name="grid_item_width">100dp</dimen>
+    <dimen name="grid_item_height">100dp</dimen>
+    <dimen name="spinner_width">50dp</dimen>
+    <dimen name="spinner_height">50dp</dimen>
+    <dimen name="detail_thumb_width">274dp</dimen>
+    <dimen name="detail_thumb_height">274dp</dimen>
+    <dimen name="playback_overlay_width">240dp</dimen>
+    <dimen name="playback_overlay_height">240dp</dimen>
+
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+</resources>

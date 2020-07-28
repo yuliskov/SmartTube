@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/pref_title_settings">
+        <SwitchPreference
+            android:title="@string/pref_title_recommendations"
+            android:defaultValue="true"
+            android:key="@string/pref_key_recommendations" />
+    </PreferenceCategory>
+    <Preference
+        android:key="@string/pref_key_login"
+        android:title="@string/pref_title_login" />
+</PreferenceScreen>

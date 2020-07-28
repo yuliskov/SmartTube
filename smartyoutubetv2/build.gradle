@@ -1,0 +1,51 @@
+apply from: '../../SharedUtils/constants.gradle'
+apply plugin: 'com.android.application'
+
+android {
+    // FIX: Default interface methods are only supported starting with Android N (--min-api 24)
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    compileSdkVersion project.properties.compileSdkVersion
+    buildToolsVersion project.properties.buildToolsVersion
+    testOptions.unitTests.includeAndroidResources = true
+    
+    defaultConfig {
+        // values linked with applicationId: searchable.searchSuggestAuthority, searchable.searchSuggestIntentData, VideoContract.CONTENT_AUTHORITY
+        applicationId "com.liskovsoft.videomanager2"
+        minSdkVersion 17
+        targetSdkVersion project.properties.targetSdkVersion
+        versionCode 11
+        versionName "0.1"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.recyclerview:recyclerview:' + appCompatXLibraryVersion
+    implementation 'androidx.leanback:leanback:' + appCompatXLibraryVersion
+    implementation 'androidx.recommendation:recommendation:' + appCompatXLibraryVersion
+    implementation 'androidx.leanback:leanback-preference:' + appCompatXLibraryVersion
+    implementation 'androidx.annotation:annotation:' + appCompatXLibraryVersion
+
+    implementation 'com.github.bumptech.glide:glide:' + glideVersion
+
+    implementation 'com.google.android.exoplayer:exoplayer:' + legacyExoplayerVersion
+    implementation 'com.google.android.exoplayer:extension-leanback:' + legacyExoplayerVersion
+
+    testImplementation 'junit:junit:' + junitVersion
+    testImplementation 'org.robolectric:robolectric:' + robolectricVersion
+    androidTestImplementation 'androidx.test.ext:junit:' + testXSupportLibraryVersion
+    androidTestImplementation 'androidx.test.ext:truth:' + testXSupportLibraryVersion
+    androidTestImplementation 'androidx.test:runner:' + testXSupportLibraryVersion
+    androidTestImplementation 'androidx.test:rules:' + testXSupportLibraryVersion
+}

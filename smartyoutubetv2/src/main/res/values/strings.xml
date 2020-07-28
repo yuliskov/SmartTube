@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2014 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+    <string name="app_name"><![CDATA[Videos by Google]]></string>
+    <string name="browse_title"><![CDATA[Videos by Google]]></string>
+    <string name="related_movies">Related Videos</string>
+    <string name="vertical_grid_title"><![CDATA[Vertical Video Grid]]></string>
+
+    <string name="popular_header">Popular Videos</string>
+    <string name="more_samples">More Samples</string>
+    <string name="grid_view">Vertical Grid View</string>
+    <string name="error_fragment">Error Fragment</string>
+    <string name="personal_settings">Personal Settings</string>
+    <string name="watch_trailer_1">Watch trailer</string>
+    <string name="watch_trailer_2">FREE</string>
+    <string name="rent_1">Rent By Day</string>
+    <string name="rent_2">From $1.99</string>
+    <string name="buy_1">Buy and Own</string>
+    <string name="buy_2">AT $9.99</string>
+    <string name="queue_name">Play Queue</string>
+
+    <string name="search_results">Search results for \'%1$s\'</string>
+    <string name="no_search_results">No search results found for \'%1$s\'</string>
+    <string name="catalog_url">https://storage.googleapis.com/android-tv/android_tv_videos_new.json</string>
+
+    <!-- Error messages -->
+
+    <string name="videos_loading_error">Failed to load videos. Please check your network connection.</string>
+    <string name="error_fragment_message">An error occurred</string>
+    <string name="dismiss_error">Dismiss</string>
+
+    <!-- Global Search -->
+    <!-- The action label for global search -->
+    <string name="global_search">GLOBALSEARCH</string>
+
+    <!-- The label for use as a searchable item -->
+    <string name="search_label">Leanback API Demo</string>
+
+    <!-- The hint text that appears in the search box. -->
+    <string name="search_hint">Search for videos</string>
+
+    <!-- The description that will show up in the search settings for this source.  -->
+    <string name="settings_description">Leanback API Demo Videos</string>
+
+    <string name="noah_description">to build an Ark to save creation from the coming flood.</string>
+    <string name="noah_title">Noah</string>
+    <string name="dragon2_title">How to Train Your Dragon 2</string>
+    <string name="dragon2_description">Set in the mythical world of burly Vikings and wild dragons,
+        and based on the book by Cressida Cowell, the action comedy tells the story of Hiccup, a
+        Viking teenager who doesn\'t exactly fit in with his tribe\'s longstanding tradition of
+        heroic dragon slayers. Hiccup\'s world is turned upside down when he encounters a dragon
+        that challenges he and his fellow Vikings to see the world from an entirely different point
+        of view.
+    </string>
+    <string name="maleficent_title">Maleficent</string>
+    <string name="maleficent_description">The untold story of Disney\'s most iconic villain from the
+        1959 classic "Sleeping Beauty." A beautiful, pure-hearted young woman with stunning black
+        wings, Maleficent has an idyllic life growing up in a peaceable forest kingdom, until one
+        day when an invading army of humans threatens the harmony of the land.
+    </string>
+
+    <!-- Strings related to guided sequence activity -->
+    <string name="guidedstep_first_title">Guided Step First Page</string>
+    <string name="guidedstep_first_description">First step of guided sequence</string>
+    <string name="guidedstep_first_breadcrumb">Guided Steps: 1</string>
+    <string name="guidedstep_second_title">Guided Step Second Page</string>
+    <string name="guidedstep_second_description">Showcasing different action configurations</string>
+    <string name="guidedstep_second_breadcrumb">Guided Steps: 2</string>
+    <string name="guidedstep_third_title">Guided Step Third Page</string>
+    <string name="guidedstep_third_breadcrumb">Guided Steps: 3</string>
+    <string name="guidedstep_third_command">You chose: </string>
+    <string name="guidedstep_action_description">The description can be quite long as well.
+        Just be sure to set multilineDescription to true in the GuidedAction.
+    </string>
+    <string name="guidedstep_action_title">
+        Note that Guided Actions can have titles that are quite long.
+    </string>
+    <string name="guidedstep_continue">Continue</string>
+    <string name="guidedstep_letsdoit">Let\'s do it</string>
+    <string name="guidedstep_nevermind">Never mind</string>
+    <string name="guidedstep_cancel">Cancel</string>
+    <string name="header_icon">Header icon</string>
+
+    <string name="mobile_welcome_title">Welcome to the Leanback Sample</string>
+    <string name="mobile_welcome_description">Welcome to the Leanback Sample app! Try opening this on an Android TV for a great leanback experience.</string>
+
+    <!-- Strings related to onboarding -->
+    <string name="onboarding_title_welcome">Welcome to the Leanback Sample</string>
+    <string name="onboarding_title_design">Designed for Android TV</string>
+    <string name="onboarding_title_simple">Simple to include</string>
+    <string name="onboarding_title_project">Check out the Sample Project</string>
+
+    <string name="onboarding_description_welcome">This is the Onboarding Fragment, which runs when the user first opens the app</string>
+    <string name="onboarding_description_design">The Leanback sample shows how to quickly design apps designed for a 10-foot user interface</string>
+    <string name="onboarding_description_simple">You can include the Leanback library through gradle in your own apps</string>
+    <string name="onboarding_description_project">Are you looking for guidance? This sample is available on GitHub so you can see how we built this.</string>
+    <string name="pref_title_settings">App Settings</string>
+    <string name="pref_title_recommendations">Recommendations</string>
+    <string name="pref_key_recommendations">pref_recommendations</string>
+    <string name="pref_key_screen_general">general_settings</string>
+    <string name="pref_title_screen_general">General Settings</string>
+    <string name="pref_key_screen_signin">signin</string>
+    <string name="pref_title_screen_signin">Please Login</string>
+    <string name="pref_title_login_description">Please enter your username and password</string>
+    <string name="pref_title_username">Username</string>
+    <string name="pref_title_password">Password</string>
+    <string name="pref_key_login">pref_login</string>
+    <string name="pref_title_login">Login</string>
+    <string name="playback_tag">PLAYBACK_TAG</string>
+</resources>
