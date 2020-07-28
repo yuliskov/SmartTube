@@ -17,6 +17,6 @@
 <fragment
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main_frame"
-    android:name="com.example.android.tvleanback.ui.MainFragment"
+    android:name="com.liskovsoft.android.smartyoutubetv2.ui.MainFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />

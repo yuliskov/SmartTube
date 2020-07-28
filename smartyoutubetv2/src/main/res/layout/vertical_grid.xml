@@ -16,6 +16,6 @@
 
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/vertical_grid_fragment"
-    android:name="com.example.android.tvleanback.ui.VerticalGridFragment"
+    android:name="com.liskovsoft.android.smartyoutubetv2.ui.VerticalGridFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />

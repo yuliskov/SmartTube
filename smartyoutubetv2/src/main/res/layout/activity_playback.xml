@@ -27,7 +27,7 @@
 
     <fragment
         android:id="@+id/playback_controls_fragment"
-        android:name="com.example.android.tvleanback.ui.PlaybackFragment"
+        android:name="com.liskovsoft.android.smartyoutubetv2.ui.PlaybackFragment"
         android:tag="@string/playback_tag"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

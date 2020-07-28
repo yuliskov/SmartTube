@@ -16,6 +16,6 @@
 
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/search_fragment"
-    android:name="com.example.android.tvleanback.ui.SearchFragment"
+    android:name="com.liskovsoft.android.smartyoutubetv2.ui.SearchFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />

@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.android.tvleanback.mobile.MobileWelcomeActivity">
+    tools:context="com.liskovsoft.android.smartyoutubetv2.mobile.MobileWelcomeActivity">
     <TextView
         android:layout_width="match_parent"
         android:text="@string/mobile_welcome_title"

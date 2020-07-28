@@ -15,7 +15,7 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.android.tvleanback">
+    package="com.liskovsoft.android.smartyoutubetv2">
 
     <permission
         android:name="${applicationId}.ACCESS_VIDEO_DATA"
@@ -58,9 +58,9 @@
         android:label="@string/app_name"
         android:logo="@drawable/videos_by_google_banner"
         android:theme="@style/Theme.Leanback"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="GoogleAppIndexingWarning, LockedOrientationActivity">
         <activity
-            android:name=".ui.MainActivity"
+            android:name="com.liskovsoft.android.smartyoutubetv2.ui.MainActivity"
             android:icon="@drawable/videos_by_google_banner"
             android:label="@string/app_name"
             android:logo="@drawable/videos_by_google_banner"
@@ -73,7 +73,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".mobile.MobileWelcomeActivity">
+        <activity
+            android:name="com.liskovsoft.android.smartyoutubetv2.mobile.MobileWelcomeActivity"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -84,8 +86,9 @@
         <meta-data android:name="android.app.default_searchable"
             android:value=".ui.VideoDetailsActivity" />
         <activity
-            android:name=".ui.VideoDetailsActivity"
+            android:name="com.liskovsoft.android.smartyoutubetv2.ui.VideoDetailsActivity"
             android:exported="true"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.Leanback.Details">
 
             <!-- Receives the search request. -->
@@ -100,23 +103,26 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".ui.PlaybackActivity"
+            android:name="com.liskovsoft.android.smartyoutubetv2.ui.PlaybackActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:launchMode="singleTask"
-            android:resizeableActivity="true" />
+            android:resizeableActivity="true"
+            android:screenOrientation="landscape"/>
         <activity
-            android:name=".ui.VerticalGridActivity"
+            android:name="com.liskovsoft.android.smartyoutubetv2.ui.VerticalGridActivity"
             android:exported="true"
-            android:parentActivityName=".ui.MainActivity"
+            android:parentActivityName="com.liskovsoft.android.smartyoutubetv2.ui.MainActivity"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.Leanback.VerticalGrid" />
-        <activity android:name=".ui.SearchActivity" />
+        <activity android:name="com.liskovsoft.android.smartyoutubetv2.ui.SearchActivity" />
         <activity
-            android:name=".ui.GuidedStepActivity"
+            android:name="com.liskovsoft.android.smartyoutubetv2.ui.GuidedStepActivity"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.Example.Leanback.GuidedStep" />
 
         <!-- Provides search suggestions for keywords against video metadata. -->
         <provider
-            android:name=".data.VideoProvider"
+            android:name="com.liskovsoft.android.smartyoutubetv2.data.VideoProvider"
             android:authorities="${packageName}"
             android:permission="${applicationId}.ACCESS_VIDEO_DATA"
             android:exported="true">
@@ -126,7 +132,7 @@
         </provider>
 
         <receiver
-            android:name=".recommendation.RecommendationReceiver"
+            android:name="com.liskovsoft.android.smartyoutubetv2.recommendation.RecommendationReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -135,22 +141,25 @@
         </receiver>
 
         <service
-            android:name=".data.FetchVideoService"
+            android:name="com.liskovsoft.android.smartyoutubetv2.data.FetchVideoService"
             android:exported="false" />
         <service
-            android:name=".recommendation.UpdateRecommendationsService"
+            android:name="com.liskovsoft.android.smartyoutubetv2.recommendation.UpdateRecommendationsService"
             android:enabled="true" />
 
-        <activity android:name=".ui.OnboardingActivity"
+        <activity android:name="com.liskovsoft.android.smartyoutubetv2.ui.OnboardingActivity"
             android:enabled="true"
             android:exported="true"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.Leanback.Onboarding" />
-        <activity android:name=".ui.SettingsActivity"
+        <activity android:name="com.liskovsoft.android.smartyoutubetv2.ui.SettingsActivity"
             android:exported="true"
+            android:screenOrientation="landscape"
             android:theme="@style/LeanbackPreferences"
             />
         <activity
-            android:name=".ui.AuthenticationActivity"
+            android:name="com.liskovsoft.android.smartyoutubetv2.ui.AuthenticationActivity"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.Example.Leanback.GuidedStep" />
     </application>
 
