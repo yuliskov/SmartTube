@@ -18,6 +18,7 @@ package com.liskovsoft.android.smartyoutubetv2.presenter;
 
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.view.View;
 import androidx.leanback.widget.ImageCardView;
 import androidx.leanback.widget.Presenter;
 import androidx.core.content.ContextCompat;
@@ -65,7 +66,10 @@ public class CardPresenter extends Presenter {
         // Both background colors should be set because the view's
         // background is temporarily visible during animations.
         view.setBackgroundColor(color);
-        view.findViewById(R.id.info_field).setBackgroundColor(color);
+        View infoField = view.findViewById(R.id.info_field);
+        if (infoField != null) {
+            infoField.setBackgroundColor(color);
+        }
     }
 
     @Override

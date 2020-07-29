@@ -48,4 +48,11 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:truth:' + testXSupportLibraryVersion
     androidTestImplementation 'androidx.test:runner:' + testXSupportLibraryVersion
     androidTestImplementation 'androidx.test:rules:' + testXSupportLibraryVersion
+
+    implementation project(':sharedutils')
+    implementation project(':myvideotubeapi')
+    implementation project(':youtubeapi')
+
+    implementation 'io.reactivex.rxjava2:rxandroid:' + rxAndroidVersion
+    implementation 'io.reactivex.rxjava2:rxjava:' + rxJavaVersion
 }

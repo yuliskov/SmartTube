@@ -1,1 +1,11 @@
 include ':smartyoutubetv2'
+
+def rootDir = settingsDir
+
+// prepare for git submodules
+gradle.ext.sharedUtilsRoot = new File(rootDir, '../SharedUtils').exists() ? new File(rootDir, '../SharedUtils') : new File(rootDir, './SharedUtils')
+apply from: new File(gradle.ext.sharedUtilsRoot, 'core_settings.gradle')
+
+// prepare for git submodules
+gradle.ext.myVideoTubeApiRoot = new File(rootDir, '../MyVideoTubeApi').exists() ? new File(rootDir, '../MyVideoTubeApi') : new File(rootDir, './MyVideoTubeApi') 
+apply from: new File(gradle.ext.myVideoTubeApiRoot, 'core_settings.gradle')
