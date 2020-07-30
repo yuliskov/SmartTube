@@ -7,5 +7,5 @@ gradle.ext.sharedUtilsRoot = new File(rootDir, '../SharedUtils').exists() ? new 
 apply from: new File(gradle.ext.sharedUtilsRoot, 'core_settings.gradle')
 
 // prepare to git submodule
-gradle.ext.videoServiceCoreRoot = new File(rootDir, '../VideoServiceCore').exists() ? new File(rootDir, '../VideoServiceCore') : new File(rootDir, './VideoServiceCore')
-apply from: new File(gradle.ext.videoServiceCoreRoot, 'core_settings.gradle')
+gradle.ext.mediaServiceCoreRoot = new File(rootDir, '../MediaServiceCore').exists() ? new File(rootDir, '../MediaServiceCore') : new File(rootDir, './MediaServiceCore')
+apply from: new File(gradle.ext.mediaServiceCoreRoot, 'core_settings.gradle')

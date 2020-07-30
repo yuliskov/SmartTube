@@ -51,7 +51,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.liskovsoft.android.smartyoutubetv2.R;
-import com.liskovsoft.android.smartyoutubetv2.adapter.VideoSectionObjectAdapter;
+import com.liskovsoft.android.smartyoutubetv2.adapter.MediaSectionObjectAdapter;
 import com.liskovsoft.android.smartyoutubetv2.data.FetchVideoService;
 import com.liskovsoft.android.smartyoutubetv2.data.VideoContract;
 import com.liskovsoft.android.smartyoutubetv2.model.Video;
@@ -60,8 +60,8 @@ import com.liskovsoft.android.smartyoutubetv2.presenter.CardPresenter;
 import com.liskovsoft.android.smartyoutubetv2.presenter.GridItemPresenter;
 import com.liskovsoft.android.smartyoutubetv2.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.android.smartyoutubetv2.recommendation.UpdateRecommendationsService;
-import com.liskovsoft.videoserviceinterfaces.VideoSection;
-import com.liskovsoft.youtubeapi.service.YouTubeVideoService;
+import com.liskovsoft.mediaserviceinterfaces.MediaSection;
+import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.schedulers.Schedulers;
 
 import java.util.HashMap;
@@ -71,7 +71,7 @@ import java.util.Map;
  * Main class to show BrowseFragment with header and rows of videos
  */
 public class MainFragment extends BrowseSupportFragment
-        implements LoaderManager.LoaderCallbacks<Cursor>, VideoSectionObjectAdapter.Listener {
+        implements LoaderManager.LoaderCallbacks<Cursor>, MediaSectionObjectAdapter.Listener {
 
     private static final int BACKGROUND_UPDATE_DELAY = 300;
     private final Handler mHandler = new Handler();
@@ -86,7 +86,7 @@ public class MainFragment extends BrowseSupportFragment
 
     // Maps a Loader Id to its CursorObjectAdapter.
     private Map<Integer, CursorObjectAdapter> mVideoCursorAdapters;
-    private Map<Integer, VideoSectionObjectAdapter> mVideoSectionAdapters;
+    private Map<Integer, MediaSectionObjectAdapter> mVideoSectionAdapters;
 
     @Override
     public void onAttach(Context context) {
@@ -393,12 +393,12 @@ public class MainFragment extends BrowseSupportFragment
         // Every time we have to re-get the category loader, we must re-create the sidebar.
         mCategoryRowAdapter.clear();
 
-        YouTubeVideoService service = YouTubeVideoService.instance();
+        YouTubeMediaService service = YouTubeMediaService.instance();
 
         service.getHomeSectionsObserve()
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(videoSections -> {
-            for (VideoSection section : videoSections) {
+            for (MediaSection section : videoSections) {
                 // Create header for this category.
                 String category = section.getTitle();
 
@@ -409,9 +409,9 @@ public class MainFragment extends BrowseSupportFragment
                 HeaderItem header = new HeaderItem(category);
                 int videoLoaderId = section.hashCode(); // Create unique int from category.
 
-                VideoSectionObjectAdapter existingAdapter = mVideoSectionAdapters.get(videoLoaderId);
+                MediaSectionObjectAdapter existingAdapter = mVideoSectionAdapters.get(videoLoaderId);
                 if (existingAdapter == null) {
-                    VideoSectionObjectAdapter videoSectionAdapter = new VideoSectionObjectAdapter(section, videoSections.indexOf(section));
+                    MediaSectionObjectAdapter videoSectionAdapter = new MediaSectionObjectAdapter(section, videoSections.indexOf(section));
                     videoSectionAdapter.addListener(this);
 
                     mVideoSectionAdapters.put(videoLoaderId, videoSectionAdapter);
@@ -441,10 +441,10 @@ public class MainFragment extends BrowseSupportFragment
     }
 
     @Override
-    public void onPositionChange(VideoSectionObjectAdapter adapter) {
+    public void onPositionChange(MediaSectionObjectAdapter adapter) {
         if (adapter.getPosition() > (adapter.size() - 3)) {
             int sectionIndex = adapter.getSectionIndex();
-            YouTubeVideoService service = YouTubeVideoService.instance();
+            YouTubeMediaService service = YouTubeMediaService.instance();
             service.continueHomeSectionObserve(sectionIndex)
                     .subscribeOn(Schedulers.newThread())
                     .subscribe(adapter::addAll);

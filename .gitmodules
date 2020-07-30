@@ -1,6 +1,6 @@
 [submodule "SharedUtils"]
 	path = SharedUtils
 	url = https://github.com/yuliskov/SharedUtils
-[submodule "VideoServiceCore"]
-	path = VideoServiceCore
-	url = https://github.com/yuliskov/VideoServiceCore
+[submodule "MediaServiceCore"]
+	path = MediaServiceCore
+	url = https://github.com/yuliskov/MediaServiceCore

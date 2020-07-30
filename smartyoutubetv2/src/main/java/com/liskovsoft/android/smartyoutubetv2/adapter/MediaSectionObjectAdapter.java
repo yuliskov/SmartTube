@@ -3,18 +3,18 @@ package com.liskovsoft.android.smartyoutubetv2.adapter;
 import androidx.leanback.widget.ObjectAdapter;
 import com.liskovsoft.android.smartyoutubetv2.model.Video;
 import com.liskovsoft.android.smartyoutubetv2.presenter.CardPresenter;
-import com.liskovsoft.videoserviceinterfaces.VideoSection;
+import com.liskovsoft.mediaserviceinterfaces.MediaSection;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class VideoSectionObjectAdapter extends ObjectAdapter {
-    private final VideoSection mSection;
+public class MediaSectionObjectAdapter extends ObjectAdapter {
+    private final MediaSection mSection;
     private int mPosition;
     private final List<Listener> mListeners = new ArrayList<>();
     private final int mSectionIndex;
 
-    public VideoSectionObjectAdapter(VideoSection section, int sectionIndex) {
+    public MediaSectionObjectAdapter(MediaSection section, int sectionIndex) {
         super(new CardPresenter());
         mSection = section;
         mSectionIndex = sectionIndex;
@@ -22,7 +22,7 @@ public class VideoSectionObjectAdapter extends ObjectAdapter {
 
     @Override
     public int size() {
-        return mSection.getVideos().size();
+        return mSection.getVideoItems().size();
     }
 
     @Override
@@ -32,7 +32,7 @@ public class VideoSectionObjectAdapter extends ObjectAdapter {
             onPositionChange();
         }
 
-        com.liskovsoft.videoserviceinterfaces.Video video = mSection.getVideos().get(position);
+        com.liskovsoft.mediaserviceinterfaces.VideoItem video = mSection.getVideoItems().get(position);
         long id = video.getId();
         String title = video.getTitle();
         String category = video.getContentType();
@@ -71,9 +71,9 @@ public class VideoSectionObjectAdapter extends ObjectAdapter {
         return mSectionIndex;
     }
 
-    public void addAll(List<com.liskovsoft.videoserviceinterfaces.Video> videos) {
+    public void addAll(List<com.liskovsoft.mediaserviceinterfaces.VideoItem> videos) {
         if (mSection != null) {
-            mSection.getVideos().addAll(videos);
+            mSection.getVideoItems().addAll(videos);
         }
     }
 
@@ -82,6 +82,6 @@ public class VideoSectionObjectAdapter extends ObjectAdapter {
     }
 
     public interface Listener {
-        void onPositionChange(VideoSectionObjectAdapter adapter);
+        void onPositionChange(MediaSectionObjectAdapter adapter);
     }
 }
