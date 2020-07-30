@@ -24,6 +24,11 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
+import android.view.View;
+import android.widget.Toast;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.content.ContextCompat;
 import androidx.leanback.app.BackgroundManager;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
@@ -38,15 +43,9 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.PresenterSelector;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
-import androidx.core.app.ActivityOptionsCompat;
 import androidx.loader.app.LoaderManager;
-import androidx.core.content.ContextCompat;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
-import android.util.DisplayMetrics;
-import android.view.View;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -61,8 +60,8 @@ import com.liskovsoft.android.smartyoutubetv2.presenter.CardPresenter;
 import com.liskovsoft.android.smartyoutubetv2.presenter.GridItemPresenter;
 import com.liskovsoft.android.smartyoutubetv2.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.android.smartyoutubetv2.recommendation.UpdateRecommendationsService;
-import com.liskovsoft.myvideotubeapi.VideoSection;
-import com.liskovsoft.youtubeapi.adapters.YouTubeVideoService;
+import com.liskovsoft.videoserviceinterfaces.VideoSection;
+import com.liskovsoft.youtubeapi.service.YouTubeVideoService;
 import io.reactivex.schedulers.Schedulers;
 
 import java.util.HashMap;
@@ -396,7 +395,7 @@ public class MainFragment extends BrowseSupportFragment
 
         YouTubeVideoService service = YouTubeVideoService.instance();
 
-        service.getHomeObserve()
+        service.getHomeSectionsObserve()
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(videoSections -> {
             for (VideoSection section : videoSections) {

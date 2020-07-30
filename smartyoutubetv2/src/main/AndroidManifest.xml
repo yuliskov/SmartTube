@@ -69,19 +69,20 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="com.liskovsoft.android.smartyoutubetv2.mobile.MobileWelcomeActivity"
-            android:screenOrientation="landscape">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <!--<activity-->
+        <!--    android:name="com.liskovsoft.android.smartyoutubetv2.mobile.MobileWelcomeActivity"-->
+        <!--    android:screenOrientation="landscape">-->
+        <!--    <intent-filter>-->
+        <!--        <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <!--        <category android:name="android.intent.category.LAUNCHER" />-->
+        <!--    </intent-filter>-->
+        <!--</activity>-->
 
         <meta-data android:name="android.app.default_searchable"
             android:value=".ui.VideoDetailsActivity" />

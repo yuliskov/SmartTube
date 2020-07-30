@@ -50,7 +50,7 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:' + testXSupportLibraryVersion
 
     implementation project(':sharedutils')
-    implementation project(':myvideotubeapi')
+    implementation project(':videoserviceinterfaces')
     implementation project(':youtubeapi')
 
     implementation 'io.reactivex.rxjava2:rxandroid:' + rxAndroidVersion

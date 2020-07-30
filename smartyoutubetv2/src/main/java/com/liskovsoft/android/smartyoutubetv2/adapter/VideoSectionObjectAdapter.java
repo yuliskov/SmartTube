@@ -3,7 +3,7 @@ package com.liskovsoft.android.smartyoutubetv2.adapter;
 import androidx.leanback.widget.ObjectAdapter;
 import com.liskovsoft.android.smartyoutubetv2.model.Video;
 import com.liskovsoft.android.smartyoutubetv2.presenter.CardPresenter;
-import com.liskovsoft.myvideotubeapi.VideoSection;
+import com.liskovsoft.videoserviceinterfaces.VideoSection;
 
 public class VideoSectionObjectAdapter extends ObjectAdapter {
     private final VideoSection mSection;
@@ -20,7 +20,7 @@ public class VideoSectionObjectAdapter extends ObjectAdapter {
 
     @Override
     public Object get(int position) {
-        com.liskovsoft.myvideotubeapi.Video video = mSection.getVideos().get(position);
+        com.liskovsoft.videoserviceinterfaces.Video video = mSection.getVideos().get(position);
         long id = video.getId();
         String title = video.getTitle();
         String category = video.getContentType();
