@@ -5,12 +5,19 @@ import com.liskovsoft.android.smartyoutubetv2.model.Video;
 import com.liskovsoft.android.smartyoutubetv2.presenter.CardPresenter;
 import com.liskovsoft.videoserviceinterfaces.VideoSection;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class VideoSectionObjectAdapter extends ObjectAdapter {
     private final VideoSection mSection;
+    private int mPosition;
+    private final List<Listener> mListeners = new ArrayList<>();
+    private final int mSectionIndex;
 
-    public VideoSectionObjectAdapter(VideoSection section) {
+    public VideoSectionObjectAdapter(VideoSection section, int sectionIndex) {
         super(new CardPresenter());
         mSection = section;
+        mSectionIndex = sectionIndex;
     }
 
     @Override
@@ -20,6 +27,11 @@ public class VideoSectionObjectAdapter extends ObjectAdapter {
 
     @Override
     public Object get(int position) {
+        if (mPosition != position) {
+            mPosition = position;
+            onPositionChange();
+        }
+
         com.liskovsoft.videoserviceinterfaces.Video video = mSection.getVideos().get(position);
         long id = video.getId();
         String title = video.getTitle();
@@ -41,5 +53,35 @@ public class VideoSectionObjectAdapter extends ObjectAdapter {
                 .cardImageUrl(cardImageUrl)
                 .studio(studio)
                 .build();
+    }
+
+    private void onPositionChange() {
+        for (Listener listener : mListeners) {
+            listener.onPositionChange(this);
+        }
+    }
+
+    public void addListener(Listener listener) {
+        if (!mListeners.contains(listener)) {
+            mListeners.add(listener);
+        }
+    }
+
+    public int getSectionIndex() {
+        return mSectionIndex;
+    }
+
+    public void addAll(List<com.liskovsoft.videoserviceinterfaces.Video> videos) {
+        if (mSection != null) {
+            mSection.getVideos().addAll(videos);
+        }
+    }
+
+    public int getPosition() {
+        return mPosition;
+    }
+
+    public interface Listener {
+        void onPositionChange(VideoSectionObjectAdapter adapter);
     }
 }

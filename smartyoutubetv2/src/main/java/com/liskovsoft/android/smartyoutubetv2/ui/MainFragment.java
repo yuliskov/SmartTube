@@ -71,7 +71,7 @@ import java.util.Map;
  * Main class to show BrowseFragment with header and rows of videos
  */
 public class MainFragment extends BrowseSupportFragment
-        implements LoaderManager.LoaderCallbacks<Cursor> {
+        implements LoaderManager.LoaderCallbacks<Cursor>, VideoSectionObjectAdapter.Listener {
 
     private static final int BACKGROUND_UPDATE_DELAY = 300;
     private final Handler mHandler = new Handler();
@@ -123,7 +123,7 @@ public class MainFragment extends BrowseSupportFragment
 
         //updateRecommendations();
 
-        initHome();
+        loadVideoData();
     }
 
     @Override
@@ -389,7 +389,7 @@ public class MainFragment extends BrowseSupportFragment
         }
     }
 
-    private void initHome() {
+    private void loadVideoData() {
         // Every time we have to re-get the category loader, we must re-create the sidebar.
         mCategoryRowAdapter.clear();
 
@@ -411,7 +411,8 @@ public class MainFragment extends BrowseSupportFragment
 
                 VideoSectionObjectAdapter existingAdapter = mVideoSectionAdapters.get(videoLoaderId);
                 if (existingAdapter == null) {
-                    VideoSectionObjectAdapter videoSectionAdapter = new VideoSectionObjectAdapter(section);
+                    VideoSectionObjectAdapter videoSectionAdapter = new VideoSectionObjectAdapter(section, videoSections.indexOf(section));
+                    videoSectionAdapter.addListener(this);
 
                     mVideoSectionAdapters.put(videoLoaderId, videoSectionAdapter);
 
@@ -437,5 +438,16 @@ public class MainFragment extends BrowseSupportFragment
 
         startEntranceTransition(); // TODO: Move startEntranceTransition to after all
         // cursors have loaded.
+    }
+
+    @Override
+    public void onPositionChange(VideoSectionObjectAdapter adapter) {
+        if (adapter.getPosition() > (adapter.size() - 3)) {
+            int sectionIndex = adapter.getSectionIndex();
+            YouTubeVideoService service = YouTubeVideoService.instance();
+            service.continueHomeSectionObserve(sectionIndex)
+                    .subscribeOn(Schedulers.newThread())
+                    .subscribe(adapter::addAll);
+        }
     }
 }
