@@ -1,24 +1,7 @@
-/*
- * Copyright (c) 2014 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.liskovsoft.android.smartyoutubetv2.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -32,7 +15,6 @@ import androidx.core.content.ContextCompat;
 import androidx.leanback.app.BackgroundManager;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
-import androidx.leanback.widget.CursorObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ImageCardView;
 import androidx.leanback.widget.ListRow;
@@ -43,20 +25,13 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.PresenterSelector;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.liskovsoft.android.smartyoutubetv2.R;
-import com.liskovsoft.android.smartyoutubetv2.adapter.MediaSectionObjectAdapter;
-import com.liskovsoft.android.smartyoutubetv2.data.FetchVideoService;
-import com.liskovsoft.android.smartyoutubetv2.data.VideoContract;
+import com.liskovsoft.android.smartyoutubetv2.adapter.MediaTabObjectAdapter;
 import com.liskovsoft.android.smartyoutubetv2.model.Video;
-import com.liskovsoft.android.smartyoutubetv2.model.VideoCursorMapper;
-import com.liskovsoft.android.smartyoutubetv2.presenter.CardPresenter;
 import com.liskovsoft.android.smartyoutubetv2.presenter.GridItemPresenter;
 import com.liskovsoft.android.smartyoutubetv2.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.android.smartyoutubetv2.recommendation.UpdateRecommendationsService;
@@ -70,9 +45,7 @@ import java.util.Map;
 /*
  * Main class to show BrowseFragment with header and rows of videos
  */
-public class MainFragment extends BrowseSupportFragment
-        implements LoaderManager.LoaderCallbacks<Cursor>, MediaSectionObjectAdapter.Listener {
-
+public class MainFragment extends BrowseSupportFragment {
     private static final int BACKGROUND_UPDATE_DELAY = 300;
     private final Handler mHandler = new Handler();
     private ArrayObjectAdapter mCategoryRowAdapter;
@@ -81,27 +54,16 @@ public class MainFragment extends BrowseSupportFragment
     private Runnable mBackgroundTask;
     private Uri mBackgroundURI;
     private BackgroundManager mBackgroundManager;
-    private LoaderManager mLoaderManager;
-    private static final int CATEGORY_LOADER = 123; // Unique ID for Category Loader.
 
-    // Maps a Loader Id to its CursorObjectAdapter.
-    private Map<Integer, CursorObjectAdapter> mVideoCursorAdapters;
-    private Map<Integer, MediaSectionObjectAdapter> mVideoSectionAdapters;
+    // Maps a Loader Id to its Adapter.
+    private Map<Integer, MediaTabObjectAdapter> mMediaTabAdapters;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        // Create a list to contain all the CursorObjectAdapters.
         // Each adapter is used to render a specific row of videos in the MainFragment.
-        mVideoCursorAdapters = new HashMap<>();
-        mVideoSectionAdapters = new HashMap<>();
-
-        // Start loading the categories from the database.
-        //mLoaderManager = LoaderManager.getInstance(this);
-        //mLoaderManager.initLoader(CATEGORY_LOADER, null, this);
-
-
+        mMediaTabAdapters = new HashMap<>();
     }
 
     @Override
@@ -214,113 +176,6 @@ public class MainFragment extends BrowseSupportFragment
         getActivity().startService(recommendationIntent);
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if (id == CATEGORY_LOADER) {
-            return new CursorLoader(
-                    getContext(),
-                    VideoContract.VideoEntry.CONTENT_URI, // Table to query
-                    new String[]{"DISTINCT " + VideoContract.VideoEntry.COLUMN_CATEGORY},
-                    // Only categories
-                    null, // No selection clause
-                    null, // No selection arguments
-                    null  // Default sort order
-            );
-        } else {
-            // Assume it is for a video.
-            String category = args.getString(VideoContract.VideoEntry.COLUMN_CATEGORY);
-
-            // This just creates a CursorLoader that gets all videos.
-            return new CursorLoader(
-                    getContext(),
-                    VideoContract.VideoEntry.CONTENT_URI, // Table to query
-                    null, // Projection to return - null means return all fields
-                    VideoContract.VideoEntry.COLUMN_CATEGORY + " = ?", // Selection clause
-                    new String[]{category},  // Select based on the category id.
-                    null // Default sort order
-            );
-        }
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (data != null && data.moveToFirst()) {
-            final int loaderId = loader.getId();
-
-            if (loaderId == CATEGORY_LOADER) {
-
-                // Every time we have to re-get the category loader, we must re-create the sidebar.
-                mCategoryRowAdapter.clear();
-
-                // Iterate through each category entry and add it to the ArrayAdapter.
-                while (!data.isAfterLast()) {
-
-                    int categoryIndex =
-                            data.getColumnIndex(VideoContract.VideoEntry.COLUMN_CATEGORY);
-                    String category = data.getString(categoryIndex);
-
-                    // Create header for this category.
-                    HeaderItem header = new HeaderItem(category);
-
-                    int videoLoaderId = category.hashCode(); // Create unique int from category.
-                    CursorObjectAdapter existingAdapter = mVideoCursorAdapters.get(videoLoaderId);
-                    if (existingAdapter == null) {
-
-                        // Map video results from the database to Video objects.
-                        CursorObjectAdapter videoCursorAdapter =
-                                new CursorObjectAdapter(new CardPresenter());
-                        videoCursorAdapter.setMapper(new VideoCursorMapper());
-                        mVideoCursorAdapters.put(videoLoaderId, videoCursorAdapter);
-
-                        ListRow row = new ListRow(header, videoCursorAdapter);
-                        mCategoryRowAdapter.add(row);
-
-                        // Start loading the videos from the database for a particular category.
-                        Bundle args = new Bundle();
-                        args.putString(VideoContract.VideoEntry.COLUMN_CATEGORY, category);
-                        mLoaderManager.initLoader(videoLoaderId, args, this);
-                    } else {
-                        ListRow row = new ListRow(header, existingAdapter);
-                        mCategoryRowAdapter.add(row);
-                    }
-
-                    data.moveToNext();
-                }
-
-                // Create a row for this special case with more samples.
-                HeaderItem gridHeader = new HeaderItem(getString(R.string.more_samples));
-                GridItemPresenter gridPresenter = new GridItemPresenter(this);
-                ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(gridPresenter);
-                gridRowAdapter.add(getString(R.string.grid_view));
-                gridRowAdapter.add(getString(R.string.guidedstep_first_title));
-                gridRowAdapter.add(getString(R.string.error_fragment));
-                gridRowAdapter.add(getString(R.string.personal_settings));
-                ListRow row = new ListRow(gridHeader, gridRowAdapter);
-                mCategoryRowAdapter.add(row);
-
-                startEntranceTransition(); // TODO: Move startEntranceTransition to after all
-                // cursors have loaded.
-            } else {
-                // The CursorAdapter contains a Cursor pointing to all videos.
-                mVideoCursorAdapters.get(loaderId).changeCursor(data);
-            }
-        } else {
-            // Start an Intent to fetch the videos.
-            Intent serviceIntent = new Intent(getActivity(), FetchVideoService.class);
-            getActivity().startService(serviceIntent);
-        }
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        int loaderId = loader.getId();
-        if (loaderId != CATEGORY_LOADER) {
-            mVideoCursorAdapters.get(loaderId).changeCursor(null);
-        } else {
-            mCategoryRowAdapter.clear();
-        }
-    }
-
     private class UpdateBackgroundTask implements Runnable {
 
         @Override
@@ -393,38 +248,6 @@ public class MainFragment extends BrowseSupportFragment
         // Every time we have to re-get the category loader, we must re-create the sidebar.
         mCategoryRowAdapter.clear();
 
-        YouTubeMediaService service = YouTubeMediaService.instance();
-
-        service.getHomeTabsObserve()
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(videoSections -> {
-            for (MediaTab section : videoSections) {
-                // Create header for this category.
-                String category = section.getTitle();
-
-                if (category == null) {
-                    category = "No title";
-                }
-
-                HeaderItem header = new HeaderItem(category);
-                int videoLoaderId = section.hashCode(); // Create unique int from category.
-
-                MediaSectionObjectAdapter existingAdapter = mVideoSectionAdapters.get(videoLoaderId);
-                if (existingAdapter == null) {
-                    MediaSectionObjectAdapter videoSectionAdapter = new MediaSectionObjectAdapter(section, videoSections.indexOf(section));
-                    videoSectionAdapter.addListener(this);
-
-                    mVideoSectionAdapters.put(videoLoaderId, videoSectionAdapter);
-
-                    ListRow row = new ListRow(header, videoSectionAdapter);
-                    mCategoryRowAdapter.add(row);
-                } else {
-                    ListRow row = new ListRow(header, existingAdapter);
-                    mCategoryRowAdapter.add(row);
-                }
-            }
-        });
-
         // Create a row for this special case with more samples.
         HeaderItem gridHeader = new HeaderItem(getString(R.string.more_samples));
         GridItemPresenter gridPresenter = new GridItemPresenter(this);
@@ -433,21 +256,50 @@ public class MainFragment extends BrowseSupportFragment
         gridRowAdapter.add(getString(R.string.guidedstep_first_title));
         gridRowAdapter.add(getString(R.string.error_fragment));
         gridRowAdapter.add(getString(R.string.personal_settings));
-        ListRow row = new ListRow(gridHeader, gridRowAdapter);
-        mCategoryRowAdapter.add(row);
+        mCategoryRowAdapter.add(new ListRow(gridHeader, gridRowAdapter));
 
-        startEntranceTransition(); // TODO: Move startEntranceTransition to after all
-        // cursors have loaded.
-    }
+        // place network code after ui
 
-    @Override
-    public void onPositionChange(MediaSectionObjectAdapter adapter) {
-        if (adapter.getPosition() > (adapter.size() - 3)) {
-            int sectionIndex = adapter.getSectionIndex();
-            YouTubeMediaService service = YouTubeMediaService.instance();
-            service.continueHomeTabObserve(sectionIndex)
-                    .subscribeOn(Schedulers.newThread())
-                    .subscribe(adapter::addAll);
-        }
+        YouTubeMediaService service = YouTubeMediaService.instance();
+
+        service.getHomeTabsObserve()
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(nextMediaTabs -> {
+            for (MediaTab mediaTab : nextMediaTabs) {
+                // Create header for this category.
+                String category = mediaTab.getTitle();
+
+                if (category == null) {
+                    category = "No title";
+                }
+
+                HeaderItem header = new HeaderItem(category);
+                int mediaTabId = mediaTab.hashCode(); // Create unique int from category.
+
+                MediaTabObjectAdapter existingAdapter = mMediaTabAdapters.get(mediaTabId);
+                if (existingAdapter == null) {
+                    MediaTabObjectAdapter mediaTabAdapter = new MediaTabObjectAdapter(mediaTab);
+
+                    mMediaTabAdapters.put(mediaTabId, mediaTabAdapter);
+
+                    ListRow row = new ListRow(header, mediaTabAdapter);
+                    mCategoryRowAdapter.add(row);
+                } else {
+                    ListRow row = new ListRow(header, existingAdapter);
+                    mCategoryRowAdapter.add(row);
+                }
+            }
+        },
+        error -> {},
+        () -> {
+            // on Finish Tabs
+            startEntranceTransition(); // TODO: Move startEntranceTransition to after all
+
+            for (MediaTabObjectAdapter adapter : mMediaTabAdapters.values()) {
+                service.continueHomeTabObserve(adapter.getMediaTab())
+                        .subscribeOn(Schedulers.newThread())
+                        .subscribe(adapter::addAll);
+            }
+        });
     }
 }

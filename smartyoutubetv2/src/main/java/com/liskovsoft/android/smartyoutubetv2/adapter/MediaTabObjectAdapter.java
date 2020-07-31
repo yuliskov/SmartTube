@@ -6,34 +6,31 @@ import com.liskovsoft.android.smartyoutubetv2.presenter.CardPresenter;
 import com.liskovsoft.mediaserviceinterfaces.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.MediaTab;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class MediaSectionObjectAdapter extends ObjectAdapter {
-    private final MediaTab mSection;
-    private int mPosition;
-    private final List<Listener> mListeners = new ArrayList<>();
-    private final int mSectionIndex;
+public class MediaTabObjectAdapter extends ObjectAdapter {
+    private static final String TAG = MediaTabObjectAdapter.class.getSimpleName();
+    private final MediaTab mMediaTab;
+    private final int mTabIndex;
 
-    public MediaSectionObjectAdapter(MediaTab section, int sectionIndex) {
+    public MediaTabObjectAdapter(MediaTab mediaTab) {
+        this(mediaTab, 0);
+    }
+
+    public MediaTabObjectAdapter(MediaTab mediaTab, int tabIndex) {
         super(new CardPresenter());
-        mSection = section;
-        mSectionIndex = sectionIndex;
+        mMediaTab = mediaTab;
+        mTabIndex = tabIndex;
     }
 
     @Override
     public int size() {
-        return mSection.getMediaItems().size();
+        return mMediaTab.getMediaItems().size();
     }
 
     @Override
     public Object get(int position) {
-        if (mPosition != position) {
-            mPosition = position;
-            onPositionChange();
-        }
-
-        MediaItem video = mSection.getMediaItems().get(position);
+        MediaItem video = mMediaTab.getMediaItems().get(position);
         long id = video.getId();
         String title = video.getTitle();
         String category = video.getContentType();
@@ -56,33 +53,17 @@ public class MediaSectionObjectAdapter extends ObjectAdapter {
                 .build();
     }
 
-    private void onPositionChange() {
-        for (Listener listener : mListeners) {
-            listener.onPositionChange(this);
-        }
-    }
-
-    public void addListener(Listener listener) {
-        if (!mListeners.contains(listener)) {
-            mListeners.add(listener);
-        }
-    }
-
-    public int getSectionIndex() {
-        return mSectionIndex;
+    public int getTabIndex() {
+        return mTabIndex;
     }
 
     public void addAll(List<MediaItem> videos) {
-        if (mSection != null) {
-            mSection.getMediaItems().addAll(videos);
+        if (mMediaTab != null) {
+            mMediaTab.getMediaItems().addAll(videos);
         }
     }
 
-    public int getPosition() {
-        return mPosition;
-    }
-
-    public interface Listener {
-        void onPositionChange(MediaSectionObjectAdapter adapter);
+    public MediaTab getMediaTab() {
+        return mMediaTab;
     }
 }
