@@ -4,18 +4,18 @@ import androidx.leanback.widget.ObjectAdapter;
 import com.liskovsoft.android.smartyoutubetv2.model.Video;
 import com.liskovsoft.android.smartyoutubetv2.presenter.CardPresenter;
 import com.liskovsoft.mediaserviceinterfaces.MediaItem;
-import com.liskovsoft.mediaserviceinterfaces.MediaSection;
+import com.liskovsoft.mediaserviceinterfaces.MediaTab;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MediaSectionObjectAdapter extends ObjectAdapter {
-    private final MediaSection mSection;
+    private final MediaTab mSection;
     private int mPosition;
     private final List<Listener> mListeners = new ArrayList<>();
     private final int mSectionIndex;
 
-    public MediaSectionObjectAdapter(MediaSection section, int sectionIndex) {
+    public MediaSectionObjectAdapter(MediaTab section, int sectionIndex) {
         super(new CardPresenter());
         mSection = section;
         mSectionIndex = sectionIndex;
@@ -23,7 +23,7 @@ public class MediaSectionObjectAdapter extends ObjectAdapter {
 
     @Override
     public int size() {
-        return mSection.getVideoItems().size();
+        return mSection.getMediaItems().size();
     }
 
     @Override
@@ -33,7 +33,7 @@ public class MediaSectionObjectAdapter extends ObjectAdapter {
             onPositionChange();
         }
 
-        MediaItem video = mSection.getVideoItems().get(position);
+        MediaItem video = mSection.getMediaItems().get(position);
         long id = video.getId();
         String title = video.getTitle();
         String category = video.getContentType();
@@ -74,7 +74,7 @@ public class MediaSectionObjectAdapter extends ObjectAdapter {
 
     public void addAll(List<MediaItem> videos) {
         if (mSection != null) {
-            mSection.getVideoItems().addAll(videos);
+            mSection.getMediaItems().addAll(videos);
         }
     }
 

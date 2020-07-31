@@ -60,7 +60,7 @@ import com.liskovsoft.android.smartyoutubetv2.presenter.CardPresenter;
 import com.liskovsoft.android.smartyoutubetv2.presenter.GridItemPresenter;
 import com.liskovsoft.android.smartyoutubetv2.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.android.smartyoutubetv2.recommendation.UpdateRecommendationsService;
-import com.liskovsoft.mediaserviceinterfaces.MediaSection;
+import com.liskovsoft.mediaserviceinterfaces.MediaTab;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.schedulers.Schedulers;
 
@@ -395,10 +395,10 @@ public class MainFragment extends BrowseSupportFragment
 
         YouTubeMediaService service = YouTubeMediaService.instance();
 
-        service.getHomeSectionsObserve()
+        service.getHomeTabsObserve()
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(videoSections -> {
-            for (MediaSection section : videoSections) {
+            for (MediaTab section : videoSections) {
                 // Create header for this category.
                 String category = section.getTitle();
 
@@ -445,7 +445,7 @@ public class MainFragment extends BrowseSupportFragment
         if (adapter.getPosition() > (adapter.size() - 3)) {
             int sectionIndex = adapter.getSectionIndex();
             YouTubeMediaService service = YouTubeMediaService.instance();
-            service.continueHomeSectionObserve(sectionIndex)
+            service.continueHomeTabObserve(sectionIndex)
                     .subscribeOn(Schedulers.newThread())
                     .subscribe(adapter::addAll);
         }
