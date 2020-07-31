@@ -16,10 +16,13 @@
 
 package com.liskovsoft.android.smartyoutubetv2.ui;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import androidx.fragment.app.FragmentActivity;
 
 import com.liskovsoft.android.smartyoutubetv2.R;
+import com.liskovsoft.android.smartyoutubetv2.prefs.AppPrefs;
 
 /*
  * OnboardingActivity for OnboardingFragment
@@ -33,5 +36,12 @@ public class OnboardingActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.onboarding);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        AppPrefs.instance(this).setCompletedOnboarding(true);
     }
 }

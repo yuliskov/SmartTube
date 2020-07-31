@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import com.liskovsoft.android.smartyoutubetv2.R;
+import com.liskovsoft.android.smartyoutubetv2.prefs.AppPrefs;
 
 /*
  * MainActivity class that loads MainFragment.
@@ -31,8 +32,7 @@ public class MainActivity extends LeanbackActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        if(!sharedPreferences.getBoolean(OnboardingFragment.COMPLETED_ONBOARDING, false)) {
+        if(!AppPrefs.instance(this).getCompletedOnboarding()) {
             // This is the first time running the app, let's go to onboarding
             startActivity(new Intent(this, OnboardingActivity.class));
         }

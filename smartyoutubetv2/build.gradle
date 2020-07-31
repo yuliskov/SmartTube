@@ -1,4 +1,4 @@
-apply from: '../../SharedUtils/constants.gradle'
+apply from: '../../SharedModules/constants.gradle'
 apply plugin: 'com.android.application'
 
 android {

@@ -3,6 +3,7 @@ package com.liskovsoft.android.smartyoutubetv2.adapter;
 import androidx.leanback.widget.ObjectAdapter;
 import com.liskovsoft.android.smartyoutubetv2.model.Video;
 import com.liskovsoft.android.smartyoutubetv2.presenter.CardPresenter;
+import com.liskovsoft.mediaserviceinterfaces.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.MediaSection;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class MediaSectionObjectAdapter extends ObjectAdapter {
             onPositionChange();
         }
 
-        com.liskovsoft.mediaserviceinterfaces.VideoItem video = mSection.getVideoItems().get(position);
+        MediaItem video = mSection.getVideoItems().get(position);
         long id = video.getId();
         String title = video.getTitle();
         String category = video.getContentType();
@@ -71,7 +72,7 @@ public class MediaSectionObjectAdapter extends ObjectAdapter {
         return mSectionIndex;
     }
 
-    public void addAll(List<com.liskovsoft.mediaserviceinterfaces.VideoItem> videos) {
+    public void addAll(List<MediaItem> videos) {
         if (mSection != null) {
             mSection.getVideoItems().addAll(videos);
         }
