@@ -10,35 +10,31 @@ import java.util.List;
 
 public class MediaTabObjectAdapter extends ObjectAdapter {
     private static final String TAG = MediaTabObjectAdapter.class.getSimpleName();
+    private final List<MediaItem> mMediaItems;
     private final MediaTab mMediaTab;
-    private final int mTabIndex;
 
     public MediaTabObjectAdapter(MediaTab mediaTab) {
-        this(mediaTab, 0);
-    }
-
-    public MediaTabObjectAdapter(MediaTab mediaTab, int tabIndex) {
         super(new CardPresenter());
         mMediaTab = mediaTab;
-        mTabIndex = tabIndex;
+        mMediaItems = mediaTab.getMediaItems();
     }
 
     @Override
     public int size() {
-        return mMediaTab.getMediaItems().size();
+        return mMediaItems.size();
     }
 
     @Override
     public Object get(int position) {
-        MediaItem video = mMediaTab.getMediaItems().get(position);
-        long id = video.getId();
-        String title = video.getTitle();
-        String category = video.getContentType();
-        String desc = video.getDescription();
-        String videoUrl = video.getVideoUrl();
-        String bgImageUrl = video.getBackgroundImageUrl();
-        String cardImageUrl = video.getCardImageUrl();
-        String studio = video.getDescription();
+        MediaItem mediaItem = mMediaItems.get(position);
+        long id = mediaItem.getId();
+        String title = mediaItem.getTitle();
+        String category = mediaItem.getContentType();
+        String desc = mediaItem.getDescription();
+        String videoUrl = mediaItem.getVideoUrl();
+        String bgImageUrl = mediaItem.getBackgroundImageUrl();
+        String cardImageUrl = mediaItem.getCardImageUrl();
+        String studio = mediaItem.getDescription();
 
         // Build a Video object to be processed.
         return new Video.VideoBuilder()
@@ -53,13 +49,9 @@ public class MediaTabObjectAdapter extends ObjectAdapter {
                 .build();
     }
 
-    public int getTabIndex() {
-        return mTabIndex;
-    }
-
-    public void addAll(List<MediaItem> videos) {
-        if (mMediaTab != null) {
-            mMediaTab.getMediaItems().addAll(videos);
+    public void append(MediaTab mediaTab) {
+        if (mMediaItems != null && mediaTab != null) {
+            mMediaItems.addAll(mediaTab.getMediaItems());
         }
     }
 

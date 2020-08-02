@@ -35,6 +35,7 @@ import com.liskovsoft.android.smartyoutubetv2.model.Video;
 import com.liskovsoft.android.smartyoutubetv2.presenter.GridItemPresenter;
 import com.liskovsoft.android.smartyoutubetv2.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.android.smartyoutubetv2.recommendation.UpdateRecommendationsService;
+import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.MediaTab;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.schedulers.Schedulers;
@@ -258,9 +259,11 @@ public class MainFragment extends BrowseSupportFragment {
         gridRowAdapter.add(getString(R.string.personal_settings));
         mCategoryRowAdapter.add(new ListRow(gridHeader, gridRowAdapter));
 
+        startEntranceTransition(); // TODO: Move startEntranceTransition to after all
+
         // place network code after ui
 
-        YouTubeMediaService service = YouTubeMediaService.instance();
+        MediaService service = YouTubeMediaService.instance();
 
         service.getHomeTabsObserve()
                 .subscribeOn(Schedulers.newThread())
@@ -293,12 +296,11 @@ public class MainFragment extends BrowseSupportFragment {
         error -> {},
         () -> {
             // on Finish Tabs
-            startEntranceTransition(); // TODO: Move startEntranceTransition to after all
 
             for (MediaTabObjectAdapter adapter : mMediaTabAdapters.values()) {
-                service.continueHomeTabObserve(adapter.getMediaTab())
+                service.continueTabObserve(adapter.getMediaTab())
                         .subscribeOn(Schedulers.newThread())
-                        .subscribe(adapter::addAll);
+                        .subscribe(adapter::append);
             }
         });
     }

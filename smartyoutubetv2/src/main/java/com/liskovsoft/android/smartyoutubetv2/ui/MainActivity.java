@@ -32,7 +32,7 @@ public class MainActivity extends LeanbackActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        if(!AppPrefs.instance(this).getCompletedOnboarding()) {
+        if(!AppPrefs.instance(this.getApplicationContext()).getCompletedOnboarding()) {
             // This is the first time running the app, let's go to onboarding
             startActivity(new Intent(this, OnboardingActivity.class));
         }
