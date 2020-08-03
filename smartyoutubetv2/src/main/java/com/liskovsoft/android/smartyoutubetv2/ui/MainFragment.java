@@ -47,7 +47,7 @@ import java.util.Map;
  * Main class to show BrowseFragment with header and rows of videos
  */
 public class MainFragment extends BrowseSupportFragment {
-    private static final int BACKGROUND_UPDATE_DELAY = 300;
+    private static final int BACKGROUND_UPDATE_DELAY_MS = 300;
     private final Handler mHandler = new Handler();
     private ArrayObjectAdapter mCategoryRowAdapter;
     private Drawable mDefaultBackground;
@@ -169,7 +169,7 @@ public class MainFragment extends BrowseSupportFragment {
 
     private void startBackgroundTimer() {
         mHandler.removeCallbacks(mBackgroundTask);
-        mHandler.postDelayed(mBackgroundTask, BACKGROUND_UPDATE_DELAY);
+        mHandler.postDelayed(mBackgroundTask, BACKGROUND_UPDATE_DELAY_MS);
     }
 
     private void updateRecommendations() {
