@@ -37,6 +37,7 @@ import com.liskovsoft.android.smartyoutubetv2.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.android.smartyoutubetv2.recommendation.UpdateRecommendationsService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.MediaTab;
+import com.liskovsoft.mediaserviceinterfaces.MediaTabManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.schedulers.Schedulers;
 
@@ -264,8 +265,9 @@ public class MainFragment extends BrowseSupportFragment {
         // place network code after ui
 
         MediaService service = YouTubeMediaService.instance();
+        MediaTabManager mediaTabManager = service.getMediaTabManager();
 
-        service.getHomeTabsObserve()
+        mediaTabManager.getHomeTabsObserve()
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(nextMediaTabs -> {
             for (MediaTab mediaTab : nextMediaTabs) {
@@ -298,7 +300,7 @@ public class MainFragment extends BrowseSupportFragment {
             // on Finish Tabs
 
             for (MediaTabObjectAdapter adapter : mMediaTabAdapters.values()) {
-                service.continueTabObserve(adapter.getMediaTab())
+                mediaTabManager.continueTabObserve(adapter.getMediaTab())
                         .subscribeOn(Schedulers.newThread())
                         .subscribe(adapter::append);
             }
