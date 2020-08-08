@@ -30,14 +30,14 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.liskovsoft.android.smartyoutubetv2.R;
-import com.liskovsoft.android.smartyoutubetv2.adapter.MediaTabObjectAdapter;
+import com.liskovsoft.android.smartyoutubetv2.adapter.MediaGroupObjectAdapter;
 import com.liskovsoft.android.smartyoutubetv2.model.Video;
 import com.liskovsoft.android.smartyoutubetv2.presenter.GridItemPresenter;
 import com.liskovsoft.android.smartyoutubetv2.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.android.smartyoutubetv2.recommendation.UpdateRecommendationsService;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.MediaTab;
-import com.liskovsoft.mediaserviceinterfaces.MediaTabManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.schedulers.Schedulers;
 
@@ -58,14 +58,14 @@ public class MainFragment extends BrowseSupportFragment {
     private BackgroundManager mBackgroundManager;
 
     // Maps a Loader Id to its Adapter.
-    private Map<Integer, MediaTabObjectAdapter> mMediaTabAdapters;
+    private Map<Integer, MediaGroupObjectAdapter> mMediaGroupAdapters;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
         // Each adapter is used to render a specific row of videos in the MainFragment.
-        mMediaTabAdapters = new HashMap<>();
+        mMediaGroupAdapters = new HashMap<>();
     }
 
     @Override
@@ -265,29 +265,29 @@ public class MainFragment extends BrowseSupportFragment {
         // place network code after ui
 
         MediaService service = YouTubeMediaService.instance();
-        MediaTabManager mediaTabManager = service.getMediaTabManager();
+        MediaGroupManager mediaGroupManager = service.getMediaGroupManager();
 
-        mediaTabManager.getHomeTabsObserve()
+        mediaGroupManager.getHomeGroupsObserve()
                 .subscribeOn(Schedulers.newThread())
-                .subscribe(nextMediaTabs -> {
-            for (MediaTab mediaTab : nextMediaTabs) {
+                .subscribe(nextMediaGroups -> {
+            for (MediaGroup mediaGroup : nextMediaGroups) {
                 // Create header for this category.
-                String category = mediaTab.getTitle();
+                String category = mediaGroup.getTitle();
 
                 if (category == null) {
                     category = "No title";
                 }
 
                 HeaderItem header = new HeaderItem(category);
-                int mediaTabId = mediaTab.hashCode(); // Create unique int from category.
+                int mediaGroupId = mediaGroup.hashCode(); // Create unique int from category.
 
-                MediaTabObjectAdapter existingAdapter = mMediaTabAdapters.get(mediaTabId);
+                MediaGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(mediaGroupId);
                 if (existingAdapter == null) {
-                    MediaTabObjectAdapter mediaTabAdapter = new MediaTabObjectAdapter(mediaTab);
+                    MediaGroupObjectAdapter mediaGroupAdapter = new MediaGroupObjectAdapter(mediaGroup);
 
-                    mMediaTabAdapters.put(mediaTabId, mediaTabAdapter);
+                    mMediaGroupAdapters.put(mediaGroupId, mediaGroupAdapter);
 
-                    ListRow row = new ListRow(header, mediaTabAdapter);
+                    ListRow row = new ListRow(header, mediaGroupAdapter);
                     mCategoryRowAdapter.add(row);
                 } else {
                     ListRow row = new ListRow(header, existingAdapter);
@@ -299,8 +299,8 @@ public class MainFragment extends BrowseSupportFragment {
         () -> {
             // on Finish Tabs
 
-            for (MediaTabObjectAdapter adapter : mMediaTabAdapters.values()) {
-                mediaTabManager.continueTabObserve(adapter.getMediaTab())
+            for (MediaGroupObjectAdapter adapter : mMediaGroupAdapters.values()) {
+                mediaGroupManager.continueGroupObserve(adapter.getMediaGroup())
                         .subscribeOn(Schedulers.newThread())
                         .subscribe(adapter::append);
             }

@@ -3,20 +3,20 @@ package com.liskovsoft.android.smartyoutubetv2.adapter;
 import androidx.leanback.widget.ObjectAdapter;
 import com.liskovsoft.android.smartyoutubetv2.model.Video;
 import com.liskovsoft.android.smartyoutubetv2.presenter.CardPresenter;
+import com.liskovsoft.mediaserviceinterfaces.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.MediaItem;
-import com.liskovsoft.mediaserviceinterfaces.MediaTab;
 
 import java.util.List;
 
-public class MediaTabObjectAdapter extends ObjectAdapter {
-    private static final String TAG = MediaTabObjectAdapter.class.getSimpleName();
+public class MediaGroupObjectAdapter extends ObjectAdapter {
+    private static final String TAG = MediaGroupObjectAdapter.class.getSimpleName();
     private final List<MediaItem> mMediaItems;
-    private final MediaTab mMediaTab;
+    private final MediaGroup mMediaGroup;
 
-    public MediaTabObjectAdapter(MediaTab mediaTab) {
+    public MediaGroupObjectAdapter(MediaGroup mediaGroup) {
         super(new CardPresenter());
-        mMediaTab = mediaTab;
-        mMediaItems = mediaTab.getMediaItems();
+        mMediaGroup = mediaGroup;
+        mMediaItems = mediaGroup.getMediaItems();
     }
 
     @Override
@@ -49,13 +49,13 @@ public class MediaTabObjectAdapter extends ObjectAdapter {
                 .build();
     }
 
-    public void append(MediaTab mediaTab) {
+    public void append(MediaGroup mediaTab) {
         if (mMediaItems != null && mediaTab != null) {
             mMediaItems.addAll(mediaTab.getMediaItems());
         }
     }
 
-    public MediaTab getMediaTab() {
-        return mMediaTab;
+    public MediaGroup getMediaGroup() {
+        return mMediaGroup;
     }
 }
