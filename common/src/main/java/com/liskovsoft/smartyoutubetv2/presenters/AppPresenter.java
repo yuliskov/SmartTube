@@ -66,10 +66,8 @@ public class AppPresenter {
             }
 
             for (MediaGroup mediaGroup : nextMediaGroup.getNestedGroups()) {
-                int mediaGroupId = mediaGroup.hashCode(); // Create unique int from category.
-
                 for (AppView listener : mListeners) {
-                    listener.showHomeGroup(mediaGroup);
+                    listener.addHomeGroup(mediaGroup);
                 }
 
                 mMediaGroups.add(mediaGroup);
@@ -79,12 +77,12 @@ public class AppPresenter {
         () -> {
             // continue nested groups
 
+            // TODO: How many times group should be continued? Maybe continue on demand?
             for (MediaGroup mediaGroup : mMediaGroups) {
                 mediaGroupManager.continueGroupObserve(mediaGroup)
                         .subscribeOn(Schedulers.newThread())
                         .subscribe(nextMediaGroup -> {
                             for (AppView listener : mListeners) {
-                                int mediaGroupId = mediaGroup.hashCode(); // Create unique int from category.
                                 listener.continueHomeGroup(mediaGroup);
                             }
                         });

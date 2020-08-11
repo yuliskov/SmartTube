@@ -68,6 +68,7 @@ public class MainFragment extends BrowseSupportFragment implements AppView {
         // Each adapter is used to render a specific row of videos in the MainFragment.
         mMediaGroupAdapters = new HashMap<>();
         mPresenter = AppPresenter.instance(context.getApplicationContext());
+        mPresenter.subscribe(this);
     }
 
     @Override
@@ -89,7 +90,7 @@ public class MainFragment extends BrowseSupportFragment implements AppView {
 
         //updateRecommendations();
 
-        loadVideoData();
+        initRowAdapters();
     }
 
     @Override
@@ -248,7 +249,7 @@ public class MainFragment extends BrowseSupportFragment implements AppView {
         }
     }
 
-    private void loadVideoData() {
+    private void initRowAdapters() {
         // Every time we have to re-get the category loader, we must re-create the sidebar.
         mCategoryRowAdapter.clear();
 
@@ -268,12 +269,12 @@ public class MainFragment extends BrowseSupportFragment implements AppView {
     }
 
     @Override
-    public void showHomeGroup(MediaGroup homeGroup) {
+    public void addHomeGroup(MediaGroup homeGroup) {
         // Create header for this category.
         String category = homeGroup.getTitle();
 
         if (category == null) {
-            category = "No title";
+            category = getString(R.string.no_title);
         }
 
         HeaderItem header = new HeaderItem(category);
