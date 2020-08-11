@@ -35,11 +35,10 @@ import com.liskovsoft.android.smartyoutubetv2.model.Video;
 import com.liskovsoft.android.smartyoutubetv2.presenter.GridItemPresenter;
 import com.liskovsoft.android.smartyoutubetv2.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.android.smartyoutubetv2.recommendation.UpdateRecommendationsService;
-import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroup;
-import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
-import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
-import io.reactivex.schedulers.Schedulers;
+import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.presenters.AppPresenter;
+import com.liskovsoft.smartyoutubetv2.presenters.AppView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,8 +46,9 @@ import java.util.Map;
 /*
  * Main class to show BrowseFragment with header and rows of videos
  */
-public class MainFragment extends BrowseSupportFragment {
+public class MainFragment extends BrowseSupportFragment implements AppView {
     private static final int BACKGROUND_UPDATE_DELAY_MS = 300;
+    private static final String TAG = MainFragment.class.getSimpleName();
     private final Handler mHandler = new Handler();
     private ArrayObjectAdapter mCategoryRowAdapter;
     private Drawable mDefaultBackground;
@@ -59,6 +59,7 @@ public class MainFragment extends BrowseSupportFragment {
 
     // Maps a Loader Id to its Adapter.
     private Map<Integer, MediaGroupObjectAdapter> mMediaGroupAdapters;
+    private AppPresenter mPresenter;
 
     @Override
     public void onAttach(Context context) {
@@ -66,6 +67,7 @@ public class MainFragment extends BrowseSupportFragment {
 
         // Each adapter is used to render a specific row of videos in the MainFragment.
         mMediaGroupAdapters = new HashMap<>();
+        mPresenter = AppPresenter.instance(context.getApplicationContext());
     }
 
     @Override
@@ -262,48 +264,44 @@ public class MainFragment extends BrowseSupportFragment {
 
         startEntranceTransition(); // TODO: Move startEntranceTransition to after all
 
-        // place network code after ui
+        mPresenter.onInitDone();
+    }
 
-        MediaService service = YouTubeMediaService.instance();
-        MediaGroupManager mediaGroupManager = service.getMediaGroupManager();
+    @Override
+    public void showHomeGroup(MediaGroup homeGroup) {
+        // Create header for this category.
+        String category = homeGroup.getTitle();
 
-        mediaGroupManager.getHomeGroupsObserve()
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(nextMediaGroups -> {
-            for (MediaGroup mediaGroup : nextMediaGroups) {
-                // Create header for this category.
-                String category = mediaGroup.getTitle();
+        if (category == null) {
+            category = "No title";
+        }
 
-                if (category == null) {
-                    category = "No title";
-                }
+        HeaderItem header = new HeaderItem(category);
+        int mediaGroupId = homeGroup.hashCode(); // Create unique int from category.
 
-                HeaderItem header = new HeaderItem(category);
-                int mediaGroupId = mediaGroup.hashCode(); // Create unique int from category.
+        MediaGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(mediaGroupId);
 
-                MediaGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(mediaGroupId);
-                if (existingAdapter == null) {
-                    MediaGroupObjectAdapter mediaGroupAdapter = new MediaGroupObjectAdapter(mediaGroup);
+        if (existingAdapter == null) {
+            MediaGroupObjectAdapter mediaGroupAdapter = new MediaGroupObjectAdapter(homeGroup);
 
-                    mMediaGroupAdapters.put(mediaGroupId, mediaGroupAdapter);
+            mMediaGroupAdapters.put(mediaGroupId, mediaGroupAdapter);
 
-                    ListRow row = new ListRow(header, mediaGroupAdapter);
-                    mCategoryRowAdapter.add(row);
-                } else {
-                    ListRow row = new ListRow(header, existingAdapter);
-                    mCategoryRowAdapter.add(row);
-                }
-            }
-        },
-        error -> {},
-        () -> {
-            // on Finish Tabs
+            ListRow row = new ListRow(header, mediaGroupAdapter);
+            mCategoryRowAdapter.add(row);
+        } else {
+            ListRow row = new ListRow(header, existingAdapter);
+            mCategoryRowAdapter.add(row);
+        }
+    }
 
-            for (MediaGroupObjectAdapter adapter : mMediaGroupAdapters.values()) {
-                mediaGroupManager.continueGroupObserve(adapter.getMediaGroup())
-                        .subscribeOn(Schedulers.newThread())
-                        .subscribe(adapter::append);
-            }
-        });
+    @Override
+    public void continueHomeGroup(MediaGroup homeGroup) {
+        MediaGroupObjectAdapter adapter = mMediaGroupAdapters.get(homeGroup.hashCode());
+
+        if (adapter != null) {
+            adapter.append(homeGroup);
+        } else {
+            Log.e(TAG, "Cant't continue home group " + homeGroup.getTitle());
+        }
     }
 }

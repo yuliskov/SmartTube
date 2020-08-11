@@ -1,0 +1,46 @@
+apply from: gradle.ext.sharedModulesConstants
+apply plugin: 'com.android.library'
+
+android {
+    // FIX: Default interface methods are only supported starting with Android N (--min-api 24)
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    compileSdkVersion project.properties.compileSdkVersion
+    buildToolsVersion project.properties.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion project.properties.minSdkVersion
+        targetSdkVersion project.properties.targetSdkVersion
+        versionCode 1
+        versionName "0.1"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'androidx.appcompat:appcompat:' + appCompatXLibraryVersion
+    testImplementation 'junit:junit:' + junitVersion
+    androidTestImplementation 'androidx.test.ext:junit:' + testXSupportLibraryVersion
+
+    implementation project(':sharedutils')
+    implementation project(':mediaserviceinterfaces')
+    implementation project(':youtubeapi')
+
+    implementation 'io.reactivex.rxjava2:rxandroid:' + rxAndroidVersion
+    implementation 'io.reactivex.rxjava2:rxjava:' + rxJavaVersion
+}

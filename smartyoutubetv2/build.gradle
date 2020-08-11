@@ -15,7 +15,7 @@ android {
     defaultConfig {
         // values linked with applicationId: searchable.searchSuggestAuthority, searchable.searchSuggestIntentData, VideoContract.CONTENT_AUTHORITY
         applicationId "com.liskovsoft.videomanager2"
-        minSdkVersion 17
+        minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
         versionCode 11
         versionName "0.1"
@@ -31,6 +31,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+
     implementation 'androidx.recyclerview:recyclerview:' + appCompatXLibraryVersion
     implementation 'androidx.leanback:leanback:' + appCompatXLibraryVersion
     implementation 'androidx.recommendation:recommendation:' + appCompatXLibraryVersion
@@ -48,6 +49,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:truth:' + testXSupportLibraryVersion
     androidTestImplementation 'androidx.test:runner:' + testXSupportLibraryVersion
     androidTestImplementation 'androidx.test:rules:' + testXSupportLibraryVersion
+    androidTestImplementation 'androidx.test.espresso:espresso-core:' + espressoVersion
 
     implementation project(':sharedutils')
     implementation project(':mediaserviceinterfaces')
@@ -55,4 +57,6 @@ dependencies {
 
     implementation 'io.reactivex.rxjava2:rxandroid:' + rxAndroidVersion
     implementation 'io.reactivex.rxjava2:rxjava:' + rxJavaVersion
+
+    implementation project(path: ':common')
 }
