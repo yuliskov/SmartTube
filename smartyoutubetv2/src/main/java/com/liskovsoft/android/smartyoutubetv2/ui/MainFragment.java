@@ -305,4 +305,9 @@ public class MainFragment extends BrowseSupportFragment implements AppView {
             Log.e(TAG, "Cant't continue home group " + homeGroup.getTitle());
         }
     }
+
+    @Override
+    public void showOnboarding() {
+        startActivity(new Intent(getContext(), OnboardingActivity.class));
+    }
 }

@@ -16,13 +16,11 @@
 
 package com.liskovsoft.android.smartyoutubetv2.ui;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import androidx.fragment.app.FragmentActivity;
 
 import com.liskovsoft.android.smartyoutubetv2.R;
-import com.liskovsoft.android.smartyoutubetv2.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.prefs.AppPrefs;
 
 /*
  * OnboardingActivity for OnboardingFragment

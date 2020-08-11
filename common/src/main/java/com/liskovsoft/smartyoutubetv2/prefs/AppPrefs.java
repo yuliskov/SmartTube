@@ -1,4 +1,4 @@
-package com.liskovsoft.android.smartyoutubetv2.prefs;
+package com.liskovsoft.smartyoutubetv2.prefs;
 
 import android.content.Context;
 import com.liskovsoft.sharedutils.prefs.SharedPreferencesBase;

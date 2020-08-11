@@ -16,13 +16,9 @@
 
 package com.liskovsoft.android.smartyoutubetv2.ui;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 
 import com.liskovsoft.android.smartyoutubetv2.R;
-import com.liskovsoft.android.smartyoutubetv2.prefs.AppPrefs;
 
 /*
  * MainActivity class that loads MainFragment.
@@ -32,9 +28,5 @@ public class MainActivity extends LeanbackActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        if(!AppPrefs.instance(this.getApplicationContext()).getCompletedOnboarding()) {
-            // This is the first time running the app, let's go to onboarding
-            startActivity(new Intent(this, OnboardingActivity.class));
-        }
     }
 }

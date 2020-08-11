@@ -20,10 +20,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.app.OnboardingSupportFragment;
@@ -33,7 +31,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.liskovsoft.android.smartyoutubetv2.R;
-import com.liskovsoft.android.smartyoutubetv2.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.prefs.AppPrefs;
 
 import java.util.ArrayList;
 
