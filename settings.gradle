@@ -1,4 +1,4 @@
-include ':smartyoutubetv2'
+include ':tvapp', ':common'
 
 def rootDir = settingsDir
 
@@ -11,4 +11,3 @@ gradle.ext.sharedModulesConstants = new File(gradle.ext.sharedModulesRoot, 'cons
 // prepare to git submodule
 gradle.ext.mediaServiceCoreRoot = new File(rootDir, '../MediaServiceCore').exists() ? new File(rootDir, '../MediaServiceCore') : new File(rootDir, './MediaServiceCore')
 apply from: new File(gradle.ext.mediaServiceCoreRoot, 'core_settings.gradle')
-include ':common'

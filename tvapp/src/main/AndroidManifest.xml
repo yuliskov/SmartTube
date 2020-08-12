@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+     Copyright (C) 2014 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.liskovsoft.smartyoutubetv2.tv">
+
+    <permission
+        android:name="${applicationId}.ACCESS_VIDEO_DATA"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="${applicationId}.ACCESS_VIDEO_DATA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- NOTE: use older api -->
+    <uses-sdk tools:overrideLibrary="
+        androidx.recommendation,
+        org.xwalk.core,
+        com.algolia.instantsearch.voice,
+        androidx.leanback, androidx.tvprovider,
+        com.github.rubensousa.previewseekbar,
+        com.github.rubensousa.previewseekbar.exoplayer,
+        com.google.android.exoplayer2.ext.vp9,
+        com.google.android.exoplayer2.testutil,
+        com.google.android.exoplayer2.ext.okhttp,
+        com.google.firebase.crashlytics,
+        com.google.firebase.iid"/>
+
+
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="true" />
+
+    <application
+        android:allowBackup="false"
+        android:banner="@drawable/videos_by_google_banner"
+        android:icon="@drawable/app_icon_quantum"
+        android:label="@string/app_name"
+        android:logo="@drawable/videos_by_google_banner"
+        android:theme="@style/Theme.Leanback"
+        tools:ignore="GoogleAppIndexingWarning,LockedOrientationActivity,UnusedAttribute">
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.MainActivity"
+            android:icon="@drawable/videos_by_google_banner"
+            android:label="@string/app_name"
+            android:logo="@drawable/videos_by_google_banner"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Leanback.Browse">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--<activity-->
+        <!--    android:name="com.liskovsoft.smartyoutubetv2.tv.mobile.MobileWelcomeActivity"-->
+        <!--    android:screenOrientation="landscape">-->
+        <!--    <intent-filter>-->
+        <!--        <action android:name="android.intent.action.MAIN" />-->
+
+        <!--        <category android:name="android.intent.category.LAUNCHER" />-->
+        <!--    </intent-filter>-->
+        <!--</activity>-->
+
+        <meta-data android:name="android.app.default_searchable"
+            android:value=".ui.VideoDetailsActivity" />
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.VideoDetailsActivity"
+            android:exported="true"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Leanback.Details">
+
+            <!-- Receives the search request. -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+                <!-- No category needed, because the Intent will specify this class component -->
+            </intent-filter>
+
+            <!-- Points to searchable meta data. -->
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.PlaybackActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:launchMode="singleTask"
+            android:resizeableActivity="true"
+            android:screenOrientation="landscape"/>
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.VerticalGridActivity"
+            android:exported="true"
+            android:parentActivityName="com.liskovsoft.smartyoutubetv2.tv.ui.MainActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Leanback.VerticalGrid" />
+        <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.SearchActivity" />
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.GuidedStepActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Example.Leanback.GuidedStep" />
+
+        <!-- Provides search suggestions for keywords against video metadata. -->
+        <provider
+            android:name="com.liskovsoft.smartyoutubetv2.tv.data.VideoProvider"
+            android:authorities="${packageName}"
+            android:permission="${applicationId}.ACCESS_VIDEO_DATA"
+            android:exported="true">
+            <path-permission
+                android:pathPrefix="/search"
+                android:readPermission="android.permission.GLOBAL_SEARCH" />
+        </provider>
+
+        <receiver
+            android:name="com.liskovsoft.smartyoutubetv2.tv.recommendation.RecommendationReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name="com.liskovsoft.smartyoutubetv2.tv.data.FetchVideoService"
+            android:exported="false" />
+        <service
+            android:name="com.liskovsoft.smartyoutubetv2.tv.recommendation.UpdateRecommendationsService"
+            android:enabled="true" />
+
+        <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.OnboardingActivity"
+            android:enabled="true"
+            android:exported="true"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Leanback.Onboarding" />
+        <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.SettingsActivity"
+            android:exported="true"
+            android:screenOrientation="landscape"
+            android:theme="@style/LeanbackPreferences"
+            />
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.AuthenticationActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Example.Leanback.GuidedStep" />
+    </application>
+
+</manifest>
