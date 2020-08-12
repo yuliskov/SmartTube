@@ -37,8 +37,8 @@ import com.liskovsoft.android.smartyoutubetv2.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.android.smartyoutubetv2.recommendation.UpdateRecommendationsService;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroup;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.presenters.AppPresenter;
-import com.liskovsoft.smartyoutubetv2.views.AppView;
+import com.liskovsoft.smartyoutubetv2.presenters.MainPresenter;
+import com.liskovsoft.smartyoutubetv2.views.MainView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +46,7 @@ import java.util.Map;
 /*
  * Main class to show BrowseFragment with header and rows of videos
  */
-public class MainFragment extends BrowseSupportFragment implements AppView {
+public class MainFragment extends BrowseSupportFragment implements MainView {
     private static final int BACKGROUND_UPDATE_DELAY_MS = 300;
     private static final String TAG = MainFragment.class.getSimpleName();
     private final Handler mHandler = new Handler();
@@ -59,7 +59,7 @@ public class MainFragment extends BrowseSupportFragment implements AppView {
 
     // Maps a Loader Id to its Adapter.
     private Map<Integer, MediaGroupObjectAdapter> mMediaGroupAdapters;
-    private AppPresenter mPresenter;
+    private MainPresenter mPresenter;
 
     @Override
     public void onAttach(Context context) {
@@ -67,7 +67,7 @@ public class MainFragment extends BrowseSupportFragment implements AppView {
 
         // Each adapter is used to render a specific row of videos in the MainFragment.
         mMediaGroupAdapters = new HashMap<>();
-        mPresenter = AppPresenter.instance(context.getApplicationContext());
+        mPresenter = MainPresenter.instance(context.getApplicationContext());
         mPresenter.subscribe(this);
     }
 
@@ -87,8 +87,6 @@ public class MainFragment extends BrowseSupportFragment implements AppView {
         // This Adapter is used to render the MainFragment sidebar labels.
         mCategoryRowAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         setAdapter(mCategoryRowAdapter);
-
-        //updateRecommendations();
 
         initRowAdapters();
     }
@@ -174,11 +172,6 @@ public class MainFragment extends BrowseSupportFragment implements AppView {
     private void startBackgroundTimer() {
         mHandler.removeCallbacks(mBackgroundTask);
         mHandler.postDelayed(mBackgroundTask, BACKGROUND_UPDATE_DELAY_MS);
-    }
-
-    private void updateRecommendations() {
-        Intent recommendationIntent = new Intent(getActivity(), UpdateRecommendationsService.class);
-        getActivity().startService(recommendationIntent);
     }
 
     private class UpdateBackgroundTask implements Runnable {
