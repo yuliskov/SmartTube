@@ -21,11 +21,13 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.liskovsoft.android.smartyoutubetv2.R;
 import com.liskovsoft.smartyoutubetv2.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.presenters.OnboardingPresenter;
 
 /*
  * OnboardingActivity for OnboardingFragment
  */
 public class OnboardingActivity extends FragmentActivity {
+    private OnboardingPresenter mPresenter;
 
     /**
      * Called when the activity is first created.
@@ -34,12 +36,14 @@ public class OnboardingActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.onboarding);
+
+        mPresenter = OnboardingPresenter.instance(getApplicationContext());
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
 
-        AppPrefs.instance(this).setCompletedOnboarding(true);
+        mPresenter.onBackPressed();
     }
 }

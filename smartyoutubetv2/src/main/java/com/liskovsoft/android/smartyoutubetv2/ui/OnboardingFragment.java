@@ -32,6 +32,7 @@ import android.widget.ImageView;
 
 import com.liskovsoft.android.smartyoutubetv2.R;
 import com.liskovsoft.smartyoutubetv2.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.presenters.OnboardingPresenter;
 
 import java.util.ArrayList;
 
@@ -57,12 +58,14 @@ public class OnboardingFragment extends OnboardingSupportFragment {
     private static final long ANIMATION_DURATION = 500;
     private Animator mContentAnimator;
     private ImageView mContentView;
+    private OnboardingPresenter mPresenter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Set the logo to display a splash animation
         setLogoResourceId(R.drawable.videos_by_google_banner);
+        mPresenter = OnboardingPresenter.instance(getContext());
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
@@ -71,7 +74,7 @@ public class OnboardingFragment extends OnboardingSupportFragment {
         super.onFinishFragment();
         // Our onboarding is done
         // Update the shared preferences
-        AppPrefs.instance(getActivity()).setCompletedOnboarding(true);
+        mPresenter.onFinish();
         // Let's go back to the MainActivity
         getActivity().finish();
     }
