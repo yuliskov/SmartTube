@@ -38,7 +38,7 @@ import com.liskovsoft.android.smartyoutubetv2.recommendation.UpdateRecommendatio
 import com.liskovsoft.mediaserviceinterfaces.MediaGroup;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.presenters.AppPresenter;
-import com.liskovsoft.smartyoutubetv2.presenters.AppView;
+import com.liskovsoft.smartyoutubetv2.views.AppView;
 
 import java.util.HashMap;
 import java.util.Map;

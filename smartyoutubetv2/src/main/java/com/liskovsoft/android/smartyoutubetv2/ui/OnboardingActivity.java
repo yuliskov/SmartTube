@@ -20,7 +20,6 @@ import android.os.Bundle;
 import androidx.fragment.app.FragmentActivity;
 
 import com.liskovsoft.android.smartyoutubetv2.R;
-import com.liskovsoft.smartyoutubetv2.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.presenters.OnboardingPresenter;
 
 /*
@@ -44,6 +43,6 @@ public class OnboardingActivity extends FragmentActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        mPresenter.onBackPressed();
+        mPresenter.onClose();
     }
 }

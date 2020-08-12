@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.presenters;
+package com.liskovsoft.smartyoutubetv2.views;
 
 import com.liskovsoft.mediaserviceinterfaces.MediaGroup;
 

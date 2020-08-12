@@ -8,21 +8,21 @@ import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.views.AppView;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 
-public class AppPresenter {
+public class AppPresenter extends Presenter<AppView> {
     private static final String TAG = AppPresenter.class.getSimpleName();
+    @SuppressLint("StaticFieldLeak")
     private static AppPresenter sInstance;
     private final Handler mHandler = new Handler();
     private final Context mContext;
-    private final ArrayList<AppView> mAppViews;
     private final ArrayList<MediaGroup> mMediaGroups;
 
     private AppPresenter(Context context) {
-        mAppViews = new ArrayList<>();
         mMediaGroups = new ArrayList<>();
         mContext = context;
     }
@@ -35,18 +35,10 @@ public class AppPresenter {
         return sInstance;
     }
 
-    public void subscribe(AppView view) {
-        mAppViews.add(view);
-    }
-
-    public void unsubscribe(AppView view) {
-        mAppViews.remove(view);
-    }
-
     public void onInitDone() {
         if (!AppPrefs.instance(mContext).getCompletedOnboarding()) {
             // This is the first time running the app, let's go to onboarding
-            for (AppView view : mAppViews) {
+            for (AppView view : mViews) {
                 view.showOnboarding();
             }
         }
@@ -74,7 +66,7 @@ public class AppPresenter {
             }
 
             for (MediaGroup mediaGroup : nextMediaGroup.getNestedGroups()) {
-                for (AppView view : mAppViews) {
+                for (AppView view : mViews) {
                     view.addHomeGroup(mediaGroup);
                 }
 
@@ -90,7 +82,7 @@ public class AppPresenter {
                 mediaGroupManager.continueGroupObserve(mediaGroup)
                         .subscribeOn(Schedulers.newThread())
                         .subscribe(nextMediaGroup -> {
-                            for (AppView view : mAppViews) {
+                            for (AppView view : mViews) {
                                 view.continueHomeGroup(mediaGroup);
                             }
                         });

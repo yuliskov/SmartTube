@@ -33,10 +33,11 @@ import android.widget.ImageView;
 import com.liskovsoft.android.smartyoutubetv2.R;
 import com.liskovsoft.smartyoutubetv2.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.presenters.OnboardingPresenter;
+import com.liskovsoft.smartyoutubetv2.views.OnboardingView;
 
 import java.util.ArrayList;
 
-public class OnboardingFragment extends OnboardingSupportFragment {
+public class OnboardingFragment extends OnboardingSupportFragment implements OnboardingView {
     private static final int[] pageTitles = {
             R.string.onboarding_title_welcome,
             R.string.onboarding_title_design,
@@ -72,9 +73,12 @@ public class OnboardingFragment extends OnboardingSupportFragment {
     @Override
     protected void onFinishFragment() {
         super.onFinishFragment();
-        // Our onboarding is done
-        // Update the shared preferences
+
         mPresenter.onFinish();
+    }
+
+    @Override
+    public void finishOnboarding() {
         // Let's go back to the MainActivity
         getActivity().finish();
     }
