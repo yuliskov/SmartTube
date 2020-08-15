@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
-import com.liskovsoft.mediaserviceinterfaces.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -60,12 +60,12 @@ public class MainPresenter extends Presenter<MainView> {
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(nextMediaGroup -> {
 
-            if (nextMediaGroup == null || nextMediaGroup.getNestedGroups() == null) {
+            if (nextMediaGroup == null) {
                 Log.e(TAG, "Home groups not found");
                 return;
             }
 
-            for (MediaGroup mediaGroup : nextMediaGroup.getNestedGroups()) {
+            for (MediaGroup mediaGroup : nextMediaGroup) {
                 for (MainView view : mViews) {
                     view.addHomeGroup(mediaGroup);
                 }

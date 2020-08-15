@@ -34,7 +34,7 @@ import com.liskovsoft.smartyoutubetv2.tv.adapter.MediaGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.model.Video;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.GridItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
-import com.liskovsoft.mediaserviceinterfaces.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.presenters.MainPresenter;
 import com.liskovsoft.smartyoutubetv2.common.views.MainView;

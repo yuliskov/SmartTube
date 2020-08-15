@@ -3,8 +3,8 @@ package com.liskovsoft.smartyoutubetv2.tv.adapter;
 import androidx.leanback.widget.ObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.model.Video;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
-import com.liskovsoft.mediaserviceinterfaces.MediaGroup;
-import com.liskovsoft.mediaserviceinterfaces.MediaItem;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ public class MediaGroupObjectAdapter extends ObjectAdapter {
         String title = mediaItem.getTitle();
         String category = mediaItem.getContentType();
         String desc = mediaItem.getDescription();
-        String videoUrl = mediaItem.getVideoUrl();
+        String videoUrl = mediaItem.getMediaUrl();
         String bgImageUrl = mediaItem.getBackgroundImageUrl();
         String cardImageUrl = mediaItem.getCardImageUrl();
         String studio = mediaItem.getDescription();
