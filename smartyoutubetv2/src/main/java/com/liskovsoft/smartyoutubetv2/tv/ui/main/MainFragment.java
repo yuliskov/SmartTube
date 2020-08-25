@@ -2,48 +2,26 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.main;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.DisplayMetrics;
-import android.view.View;
-import android.widget.Toast;
-import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.leanback.app.BackgroundManager;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
-import androidx.leanback.widget.ImageCardView;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
-import androidx.leanback.widget.OnItemViewClickedListener;
-import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.PageRow;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.PresenterSelector;
 import androidx.leanback.widget.Row;
-import androidx.leanback.widget.RowPresenter;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.Header;
-import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.mvp.presenters.MainPresenter;
 import com.liskovsoft.smartyoutubetv2.common.mvp.views.MainView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.GridItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.ui.old.BrowseErrorFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.old.GuidedStepActivity;
-import com.liskovsoft.smartyoutubetv2.tv.ui.old.SettingsActivity;
-import com.liskovsoft.smartyoutubetv2.tv.ui.old.VerticalGridActivity;
-import com.liskovsoft.smartyoutubetv2.tv.ui.old.VideoDetailsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.onboarding.OnboardingActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
 
@@ -54,16 +32,8 @@ import java.util.Map;
  * Main class to show BrowseFragment with header and rows of videos
  */
 public class MainFragment extends BrowseSupportFragment implements MainView {
-    private static final int BACKGROUND_UPDATE_DELAY_MS = 300;
     private static final String TAG = MainFragment.class.getSimpleName();
-    private final Handler mHandler = new Handler();
     private ArrayObjectAdapter mCategoryRowAdapter;
-    private Drawable mDefaultBackground;
-    private DisplayMetrics mMetrics;
-    private Runnable mBackgroundTask;
-    private Uri mBackgroundURI;
-    private BackgroundManager mBackgroundManager;
-
     private MainPresenter mPresenter;
     private Map<Integer, Header> mHeaders;
     private PageRowFragmentFactory mPageRowFragmentFactory;
@@ -82,10 +52,7 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
         // Final initialization, modifying UI elements.
         super.onActivityCreated(savedInstanceState);
 
-        // Prepare the manager that maintains the same background image between activities.
-        prepareBackgroundManager();
-
-        setupUIElements();
+        setupUi();
         setupEventListeners();
         prepareEntranceTransition();
 
@@ -94,35 +61,13 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
         mCategoryRowAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         setAdapter(mCategoryRowAdapter);
 
-        mPageRowFragmentFactory = new PageRowFragmentFactory(mBackgroundManager);
+        mPageRowFragmentFactory = new PageRowFragmentFactory(null);
         getMainFragmentRegistry().registerFragment(PageRow.class, mPageRowFragmentFactory);
 
         initRowAdapters();
     }
 
-    @Override
-    public void onDestroy() {
-        mHandler.removeCallbacks(mBackgroundTask);
-        mBackgroundManager = null;
-        super.onDestroy();
-    }
-
-    @Override
-    public void onStop() {
-        mBackgroundManager.release();
-        super.onStop();
-    }
-
-    private void prepareBackgroundManager() {
-        mBackgroundManager = BackgroundManager.getInstance(getActivity());
-        mBackgroundManager.attach(getActivity().getWindow());
-        mDefaultBackground = ContextCompat.getDrawable(getActivity(), R.drawable.default_background);
-        mBackgroundTask = new UpdateBackgroundTask();
-        mMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(mMetrics);
-    }
-
-    private void setupUIElements() {
+    private void setupUi() {
         setBadgeDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.videos_by_google_banner));
         setTitle(getString(R.string.browse_title)); // Badge, when set, takes precedent over title
         setHeadersState(HEADERS_ENABLED);
@@ -143,112 +88,10 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
     }
 
     private void setupEventListeners() {
-        setOnSearchClickedListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), SearchActivity.class);
-                startActivity(intent);
-            }
+        setOnSearchClickedListener(view -> {
+            Intent intent = new Intent(getActivity(), SearchActivity.class);
+            startActivity(intent);
         });
-
-        setOnItemViewClickedListener(new ItemViewClickedListener());
-        setOnItemViewSelectedListener(new ItemViewSelectedListener());
-    }
-
-    private void updateBackground(String uri) {
-        int width = mMetrics.widthPixels;
-        int height = mMetrics.heightPixels;
-
-        RequestOptions options = new RequestOptions()
-                .centerCrop()
-                .error(mDefaultBackground);
-
-        Glide.with(this)
-                .asBitmap()
-                .load(uri)
-                .apply(options)
-                .into(new SimpleTarget<Bitmap>(width, height) {
-                    @Override
-                    public void onResourceReady(
-                            Bitmap resource,
-                            Transition<? super Bitmap> transition) {
-                        mBackgroundManager.setBitmap(resource);
-                    }
-                });
-    }
-
-    private void startBackgroundTimer() {
-        mHandler.removeCallbacks(mBackgroundTask);
-        mHandler.postDelayed(mBackgroundTask, BACKGROUND_UPDATE_DELAY_MS);
-    }
-
-    private class UpdateBackgroundTask implements Runnable {
-
-        @Override
-        public void run() {
-            if (mBackgroundURI != null) {
-                updateBackground(mBackgroundURI.toString());
-            }
-        }
-    }
-
-    private final class ItemViewClickedListener implements OnItemViewClickedListener {
-        @Override
-        public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
-                RowPresenter.ViewHolder rowViewHolder, Row row) {
-
-            if (item instanceof Video) {
-                Video video = (Video) item;
-                Intent intent = new Intent(getActivity(), VideoDetailsActivity.class);
-                intent.putExtra(VideoDetailsActivity.VIDEO, video);
-
-                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        getActivity(),
-                        ((ImageCardView) itemViewHolder.view).getMainImageView(),
-                        VideoDetailsActivity.SHARED_ELEMENT_NAME).toBundle();
-                getActivity().startActivity(intent, bundle);
-            } else if (item instanceof String) {
-                if (((String) item).contains(getString(R.string.grid_view))) {
-                    Intent intent = new Intent(getActivity(), VerticalGridActivity.class);
-                    Bundle bundle =
-                            ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
-                                    .toBundle();
-                    startActivity(intent, bundle);
-                } else if (((String) item).contains(getString(R.string.guidedstep_first_title))) {
-                    Intent intent = new Intent(getActivity(), GuidedStepActivity.class);
-                    Bundle bundle =
-                            ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
-                                    .toBundle();
-                    startActivity(intent, bundle);
-                } else if (((String) item).contains(getString(R.string.error_fragment))) {
-                    BrowseErrorFragment errorFragment = new BrowseErrorFragment();
-                    getFragmentManager().beginTransaction().replace(R.id.main_frame, errorFragment)
-                            .addToBackStack(null).commit();
-                } else if(((String) item).contains(getString(R.string.personal_settings))) {
-                    Intent intent = new Intent(getActivity(), SettingsActivity.class);
-                    Bundle bundle =
-                            ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
-                                    .toBundle();
-                    startActivity(intent, bundle);
-                } else {
-                    Toast.makeText(getActivity(), ((String) item), Toast.LENGTH_SHORT)
-                            .show();
-                }
-            }
-        }
-    }
-
-    private final class ItemViewSelectedListener implements OnItemViewSelectedListener {
-        @Override
-        public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
-                RowPresenter.ViewHolder rowViewHolder, Row row) {
-            if (item instanceof Video) {
-                mBackgroundURI = Uri.parse(((Video) item).bgImageUrl);
-                startBackgroundTimer();
-            }
-
-        }
     }
 
     private void initRowAdapters() {
@@ -319,7 +162,9 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
         public Fragment createFragment(Object rowObj) {
             Row row = (Row) rowObj;
 
-            mBackgroundManager.setDrawable(null);
+            if (mBackgroundManager != null) {
+                mBackgroundManager.setDrawable(null);
+            }
 
             HeaderItem headerItem = row.getHeaderItem();
             Fragment fragment = null;
