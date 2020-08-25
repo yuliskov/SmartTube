@@ -70,14 +70,19 @@ public class MainPresenter extends PresenterBase<MainView> {
 
         mediaGroupManager.getHomeObserve()
                 .subscribeOn(Schedulers.newThread())
-                .subscribe(nextMediaGroup -> {
+                .subscribe(mediaGroups -> {
 
-            if (nextMediaGroup == null) {
+            if (mediaGroups == null) {
                 Log.e(TAG, "Home groups not found");
                 return;
             }
 
-            for (MediaGroup mediaGroup : nextMediaGroup) {
+            for (MediaGroup mediaGroup : mediaGroups) {
+                if (mediaGroup.getMediaItems() == null) {
+                    Log.e(TAG, "MediaGroup is empty: " + mediaGroup.getTitle());
+                    continue;
+                }
+
                 for (MainView view : mViews) {
                     view.updateRow(VideoGroup.from(mediaGroup), mHeaders.get(MediaGroup.TYPE_HOME));
                 }
@@ -93,16 +98,17 @@ public class MainPresenter extends PresenterBase<MainView> {
             for (MediaGroup mediaGroup : mMediaGroups) {
                 mediaGroupManager.continueGroupObserve(mediaGroup)
                         .subscribeOn(Schedulers.newThread())
-                        .subscribe(nextMediaGroup -> {
-                            if (nextMediaGroup == null) {
-                                Log.e(TAG, "Next Home groups are empty");
+                        .subscribe(continueMediaGroup -> {
+                            if (continueMediaGroup == null) {
+                                Log.e(TAG, "Next Home group is empty: " + mediaGroup.getTitle());
                                 return;
                             }
 
                             for (MainView view : mViews) {
-                                view.updateRow(VideoGroup.from(nextMediaGroup), mHeaders.get(MediaGroup.TYPE_HOME));
+                                view.updateRow(VideoGroup.from(continueMediaGroup), mHeaders.get(MediaGroup.TYPE_HOME));
                             }
-                        });
+                        },
+                        error -> {});
             }
         });
     }

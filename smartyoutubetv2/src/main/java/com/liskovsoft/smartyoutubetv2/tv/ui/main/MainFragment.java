@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.main;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.leanback.app.BackgroundManager;
@@ -15,6 +16,7 @@ import androidx.leanback.widget.PageRow;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.PresenterSelector;
 import androidx.leanback.widget.Row;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.Header;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.mvp.presenters.MainPresenter;
@@ -37,12 +39,14 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
     private MainPresenter mPresenter;
     private Map<Integer, Header> mHeaders;
     private PageRowFragmentFactory mPageRowFragmentFactory;
+    private Handler mHandler;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         
         mHeaders = new HashMap<>();
+        mHandler = new Handler();
         mPresenter = MainPresenter.instance(context.getApplicationContext());
         mPresenter.subscribe(this);
     }
@@ -106,7 +110,7 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
         gridRowAdapter.add(getString(R.string.guidedstep_first_title));
         gridRowAdapter.add(getString(R.string.error_fragment));
         gridRowAdapter.add(getString(R.string.personal_settings));
-        mCategoryRowAdapter.add(new ListRow(gridHeader, gridRowAdapter));
+        //mCategoryRowAdapter.add(new ListRow(gridHeader, gridRowAdapter));
 
         startEntranceTransition(); // TODO: Move startEntranceTransition to after all
 
@@ -120,7 +124,7 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
             createMultiRowHeader(header);
         }
 
-        mPageRowFragmentFactory.updateRow(group, header);
+        mHandler.postDelayed(() -> mPageRowFragmentFactory.updateRow(group, header), 2_000);
     }
 
     private void createMultiRowHeader(Header header) {
@@ -160,6 +164,8 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
 
         @Override
         public Fragment createFragment(Object rowObj) {
+            Log.d(TAG, "Creating PageRow fragment");
+
             Row row = (Row) rowObj;
 
             if (mBackgroundManager != null) {
