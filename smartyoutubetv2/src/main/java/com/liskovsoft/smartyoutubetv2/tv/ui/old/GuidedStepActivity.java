@@ -20,6 +20,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.leanback.app.GuidedStepSupportFragment;
 import androidx.leanback.widget.GuidanceStylist;
 import androidx.leanback.widget.GuidanceStylist.Guidance;
@@ -102,7 +103,7 @@ public class GuidedStepActivity extends FragmentActivity {
             String title = getString(R.string.guidedstep_first_title);
             String breadcrumb = getString(R.string.guidedstep_first_breadcrumb);
             String description = getString(R.string.guidedstep_first_description);
-            Drawable icon = getActivity().getDrawable(R.drawable.ic_main_icon);
+            Drawable icon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_main_icon);
             return new Guidance(title, description, breadcrumb, icon);
         }
 

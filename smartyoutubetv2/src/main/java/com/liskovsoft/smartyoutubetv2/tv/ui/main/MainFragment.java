@@ -2,21 +2,27 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.widget.Toast;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.leanback.app.BackgroundManager;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
+import androidx.leanback.widget.ImageCardView;
+import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
+import androidx.leanback.widget.OnItemViewClickedListener;
+import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.PageRow;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.PresenterSelector;
 import androidx.leanback.widget.Row;
-import com.liskovsoft.sharedutils.mylogger.Log;
+import androidx.leanback.widget.RowPresenter;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.Header;
+import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.mvp.presenters.MainPresenter;
 import com.liskovsoft.smartyoutubetv2.common.mvp.views.MainView;
@@ -24,6 +30,13 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.GridItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.base.UriBackgroundManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.main.pagerow.PageRowHeaderItem;
+import com.liskovsoft.smartyoutubetv2.tv.ui.main.pagerow.PageRowFragmentFactory;
+import com.liskovsoft.smartyoutubetv2.tv.ui.old.BrowseErrorFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.old.GuidedStepActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.old.SettingsActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.old.VerticalGridActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.old.VideoDetailsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.onboarding.OnboardingActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
 
@@ -59,12 +72,6 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
 
         mBackgroundManager = UriBackgroundManager.instance(getActivity());
 
-        setupUi();
-        // Prepare the manager that maintains the same background image between activities.
-        //prepareBackgroundManager();
-        setupEventListeners();
-        prepareEntranceTransition();
-
         // Map category results from the database to ListRow objects.
         // This Adapter is used to render the MainFragment sidebar labels.
         mCategoryRowAdapter = new ArrayObjectAdapter(new ListRowPresenter());
@@ -72,6 +79,12 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
 
         mPageRowFragmentFactory = new PageRowFragmentFactory(mBackgroundManager.getBackgroundManager());
         getMainFragmentRegistry().registerFragment(PageRow.class, mPageRowFragmentFactory);
+
+        setupUi();
+        // Prepare the manager that maintains the same background image between activities.
+        //prepareBackgroundManager();
+        setupEventListeners();
+        prepareEntranceTransition();
 
         initRowAdapters();
     }
@@ -102,8 +115,8 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
             startActivity(intent);
         });
 
-        //setOnItemViewClickedListener(new ItemViewClickedListener());
-        //setOnItemViewSelectedListener(new ItemViewSelectedListener());
+        setOnItemViewClickedListener(new ItemViewClickedListener());
+        setOnItemViewSelectedListener(new ItemViewSelectedListener());
     }
 
     private void initRowAdapters() {
@@ -118,7 +131,7 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
         gridRowAdapter.add(getString(R.string.guidedstep_first_title));
         gridRowAdapter.add(getString(R.string.error_fragment));
         gridRowAdapter.add(getString(R.string.personal_settings));
-        //mCategoryRowAdapter.add(new ListRow(gridHeader, gridRowAdapter));
+        mCategoryRowAdapter.add(new ListRow(gridHeader, gridRowAdapter));
 
         startEntranceTransition(); // TODO: Move startEntranceTransition to after all
 
@@ -132,11 +145,11 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
             createMultiRowHeader(header);
         }
 
-        mHandler.postDelayed(() -> mPageRowFragmentFactory.updateRow(group, header), 2_000);
+        mPageRowFragmentFactory.updateRow(group, header.getId());
     }
 
     private void createMultiRowHeader(Header header) {
-        HeaderItem headerItem = new MultiRowHeaderItem(header.getId(), header.getTitle());
+        HeaderItem headerItem = new PageRowHeaderItem(header.getId(), header.getTitle());
         PageRow pageRow = new PageRow(headerItem);
         mCategoryRowAdapter.add(pageRow);
     }
@@ -161,75 +174,62 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
         // TODO: not implemented
     }
 
-    private static class PageRowFragmentFactory extends BrowseSupportFragment.FragmentFactory<Fragment> {
-        private final BackgroundManager mBackgroundManager;
-        private final Map<Integer, Fragment> mFragments;
-
-        PageRowFragmentFactory(BackgroundManager backgroundManager) {
-            mBackgroundManager = backgroundManager;
-            mFragments = new HashMap<>();
-        }
-
+    private final class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override
-        public Fragment createFragment(Object rowObj) {
-            Log.d(TAG, "Creating PageRow fragment");
+        public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
+                                  RowPresenter.ViewHolder rowViewHolder, Row row) {
 
-            Row row = (Row) rowObj;
+            if (item instanceof Video) {
+                Video video = (Video) item;
+                Intent intent = new Intent(getActivity(), VideoDetailsActivity.class);
+                intent.putExtra(VideoDetailsActivity.VIDEO, video);
 
-            if (mBackgroundManager != null) {
-                mBackgroundManager.setDrawable(null);
+                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        getActivity(),
+                        ((ImageCardView) itemViewHolder.view).getMainImageView(),
+                        VideoDetailsActivity.SHARED_ELEMENT_NAME).toBundle();
+                getActivity().startActivity(intent, bundle);
+            } else if (item instanceof String) {
+                if (((String) item).contains(getString(R.string.grid_view))) {
+                    Intent intent = new Intent(getActivity(), VerticalGridActivity.class);
+                    Bundle bundle =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
+                                    .toBundle();
+                    startActivity(intent, bundle);
+                } else if (((String) item).contains(getString(R.string.guidedstep_first_title))) {
+                    Intent intent = new Intent(getActivity(), GuidedStepActivity.class);
+                    Bundle bundle =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
+                                    .toBundle();
+                    startActivity(intent, bundle);
+                } else if (((String) item).contains(getString(R.string.error_fragment))) {
+                    BrowseErrorFragment errorFragment = new BrowseErrorFragment();
+                    getFragmentManager().beginTransaction().replace(R.id.main_frame, errorFragment)
+                            .addToBackStack(null).commit();
+                } else if(((String) item).contains(getString(R.string.personal_settings))) {
+                    Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                    Bundle bundle =
+                            ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
+                                    .toBundle();
+                    startActivity(intent, bundle);
+                } else {
+                    Toast.makeText(getActivity(), ((String) item), Toast.LENGTH_SHORT)
+                            .show();
+                }
             }
-
-            HeaderItem headerItem = row.getHeaderItem();
-            Fragment fragment = null;
-
-            if (headerItem instanceof MultiRowHeaderItem) {
-                fragment = new MultiRowFragment();
-            } else if (headerItem instanceof GridHeaderItem) {
-                fragment = new GridFragment();
-            }
-
-            if (fragment != null) {
-                mFragments.put((int) headerItem.getId(), fragment);
-                return fragment;
-            }
-
-            throw new IllegalArgumentException(String.format("Invalid row %s", rowObj));
         }
+    }
 
-        public void updateRow(VideoGroup group, Header header) {
-            Fragment fragment = mFragments.get(header.getId());
-
-            if (fragment == null) {
-                throw new IllegalStateException("Page row fragment not initialized");
-            }
-
-            if (fragment instanceof MultiRowFragment) {
-                MultiRowFragment rowFragment = (MultiRowFragment) fragment;
-                rowFragment.updateRow(group);
+    private final class ItemViewSelectedListener implements OnItemViewSelectedListener {
+        @Override
+        public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
+                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
+            if (item instanceof Video) {
+                Uri backgroundURI = Uri.parse(((Video) item).bgImageUrl);
+                mBackgroundManager.startBackgroundTimer(backgroundURI);
             } else {
-                throw new IllegalStateException("Page row fragment has incompatible type");
+                mBackgroundManager.getBackgroundManager().setDrawable(null);
             }
-        }
-    }
-
-    private static class MultiRowHeaderItem extends HeaderItem {
-        public MultiRowHeaderItem(long id, String name) {
-            super(id, name);
-        }
-
-        public MultiRowHeaderItem(String name) {
-            super(name);
-        }
-    }
-
-    private static class GridHeaderItem extends HeaderItem {
-        public GridHeaderItem(long id, String name) {
-            super(id, name);
-        }
-
-        public GridHeaderItem(String name) {
-            super(name);
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.main;
+package com.liskovsoft.smartyoutubetv2.tv.ui.main.pagerow;
 
 import android.content.Context;
 import android.content.Intent;
@@ -30,15 +30,18 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.old.SettingsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.VerticalGridActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.VideoDetailsActivity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class MultiRowFragment extends RowsSupportFragment {
-    private static final String TAG = MultiRowFragment.class.getSimpleName();
+public class PageRowFragment extends RowsSupportFragment {
+    private static final String TAG = PageRowFragment.class.getSimpleName();
     private UriBackgroundManager mBackgroundManager;
     private Handler mHandler;
     private ArrayObjectAdapter mRowsAdapter;
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
+    private List<VideoGroup> mPendingUpdates = new ArrayList<>();
 
     @Override
     public void onAttach(Context context) {
@@ -61,6 +64,12 @@ public class MultiRowFragment extends RowsSupportFragment {
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         setAdapter(mRowsAdapter);
 
+        for (VideoGroup group : mPendingUpdates) {
+            updateRow(group);
+        }
+
+        mPendingUpdates.clear();
+
         getMainFragmentAdapter().getFragmentHost().notifyDataReady(getMainFragmentAdapter());
     }
 
@@ -80,6 +89,11 @@ public class MultiRowFragment extends RowsSupportFragment {
     //}
 
     public void updateRow(VideoGroup group) {
+        if (mMediaGroupAdapters == null) {
+            mPendingUpdates.add(group);
+            return;
+        }
+
         HeaderItem rowHeader = new HeaderItem(group.getTitle());
         int mediaGroupId = group.getId(); // Create unique int from category.
 
