@@ -2,17 +2,12 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.main;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.DisplayMetrics;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityOptionsCompat;
-import androidx.core.content.ContextCompat;
-import androidx.leanback.app.BackgroundManager;
 import androidx.leanback.app.RowsSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
@@ -24,14 +19,11 @@ import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.base.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.BrowseErrorFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.GuidedStepActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.SettingsActivity;
@@ -43,12 +35,7 @@ import java.util.Map;
 
 public class MultiRowFragment extends RowsSupportFragment {
     private static final String TAG = MultiRowFragment.class.getSimpleName();
-    private static final int BACKGROUND_UPDATE_DELAY_MS = 300;
-    private Uri mBackgroundURI;
-    private Drawable mDefaultBackground;
-    private DisplayMetrics mMetrics;
-    private Runnable mBackgroundTask;
-    private BackgroundManager mBackgroundManager;
+    private UriBackgroundManager mBackgroundManager;
     private Handler mHandler;
     private ArrayObjectAdapter mRowsAdapter;
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
@@ -59,6 +46,7 @@ public class MultiRowFragment extends RowsSupportFragment {
 
         mMediaGroupAdapters = new HashMap<>();
         mHandler = new Handler();
+        mBackgroundManager = UriBackgroundManager.instance(getActivity());
     }
 
     @Override
@@ -66,7 +54,7 @@ public class MultiRowFragment extends RowsSupportFragment {
         super.onActivityCreated(savedInstanceState);
 
         // Prepare the manager that maintains the same background image between activities.
-        prepareBackgroundManager();
+        //prepareBackgroundManager();
 
         setupEventListeners();
 
@@ -83,15 +71,6 @@ public class MultiRowFragment extends RowsSupportFragment {
 
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
-    }
-
-    private void prepareBackgroundManager() {
-        mBackgroundManager = BackgroundManager.getInstance(getActivity());
-        mBackgroundManager.attach(getActivity().getWindow());
-        mDefaultBackground = ContextCompat.getDrawable(getActivity(), R.drawable.default_background);
-        mBackgroundTask = new UpdateBackgroundTask();
-        mMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(mMetrics);
     }
 
     //@Override
@@ -115,55 +94,6 @@ public class MultiRowFragment extends RowsSupportFragment {
             mRowsAdapter.add(row);
         } else {
             existingAdapter.append(group); // continue row
-        }
-    }
-
-    private void startBackgroundTimer() {
-        mHandler.removeCallbacks(mBackgroundTask);
-        mHandler.postDelayed(mBackgroundTask, BACKGROUND_UPDATE_DELAY_MS);
-    }
-
-    @Override
-    public void onDestroy() {
-        mHandler.removeCallbacks(mBackgroundTask);
-        mBackgroundManager = null;
-        super.onDestroy();
-    }
-
-    @Override
-    public void onStop() {
-        mBackgroundManager.release();
-        super.onStop();
-    }
-
-    private void updateBackground(String uri) {
-        int width = mMetrics.widthPixels;
-        int height = mMetrics.heightPixels;
-
-        RequestOptions options = new RequestOptions()
-                .centerCrop()
-                .error(mDefaultBackground);
-
-        Glide.with(this)
-                .asBitmap()
-                .load(uri)
-                .apply(options)
-                .into(new SimpleTarget<Bitmap>(width, height) {
-                    @Override
-                    public void onResourceReady(
-                            Bitmap resource,
-                            Transition<? super Bitmap> transition) {
-                        mBackgroundManager.setBitmap(resource);
-                    }
-                });
-    }
-
-    private class UpdateBackgroundTask implements Runnable {
-        @Override
-        public void run() {
-            if (mBackgroundURI != null) {
-                updateBackground(mBackgroundURI.toString());
-            }
         }
     }
 
@@ -218,10 +148,9 @@ public class MultiRowFragment extends RowsSupportFragment {
         public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
                                    RowPresenter.ViewHolder rowViewHolder, Row row) {
             if (item instanceof Video) {
-                mBackgroundURI = Uri.parse(((Video) item).bgImageUrl);
-                startBackgroundTimer();
+                Uri backgroundURI = Uri.parse(((Video) item).bgImageUrl);
+                mBackgroundManager.startBackgroundTimer(backgroundURI);
             }
-
         }
     }
 }

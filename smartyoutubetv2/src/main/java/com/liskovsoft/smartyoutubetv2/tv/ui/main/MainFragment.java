@@ -10,7 +10,6 @@ import androidx.leanback.app.BackgroundManager;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
-import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.PageRow;
 import androidx.leanback.widget.Presenter;
@@ -24,6 +23,7 @@ import com.liskovsoft.smartyoutubetv2.common.mvp.views.MainView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.GridItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.base.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.onboarding.OnboardingActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
 
@@ -40,6 +40,7 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
     private Map<Integer, Header> mHeaders;
     private PageRowFragmentFactory mPageRowFragmentFactory;
     private Handler mHandler;
+    private UriBackgroundManager mBackgroundManager;
 
     @Override
     public void onAttach(Context context) {
@@ -56,7 +57,11 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
         // Final initialization, modifying UI elements.
         super.onActivityCreated(savedInstanceState);
 
+        mBackgroundManager = UriBackgroundManager.instance(getActivity());
+
         setupUi();
+        // Prepare the manager that maintains the same background image between activities.
+        //prepareBackgroundManager();
         setupEventListeners();
         prepareEntranceTransition();
 
@@ -65,7 +70,7 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
         mCategoryRowAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         setAdapter(mCategoryRowAdapter);
 
-        mPageRowFragmentFactory = new PageRowFragmentFactory(null);
+        mPageRowFragmentFactory = new PageRowFragmentFactory(mBackgroundManager.getBackgroundManager());
         getMainFragmentRegistry().registerFragment(PageRow.class, mPageRowFragmentFactory);
 
         initRowAdapters();
@@ -96,6 +101,9 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
             Intent intent = new Intent(getActivity(), SearchActivity.class);
             startActivity(intent);
         });
+
+        //setOnItemViewClickedListener(new ItemViewClickedListener());
+        //setOnItemViewSelectedListener(new ItemViewSelectedListener());
     }
 
     private void initRowAdapters() {

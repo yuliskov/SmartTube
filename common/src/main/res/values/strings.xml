@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="home_header">Home</string>
+    <string name="header_home">Home</string>
+    <string name="header_search">Search</string>
 </resources>

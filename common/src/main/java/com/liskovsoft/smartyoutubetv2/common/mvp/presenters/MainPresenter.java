@@ -51,10 +51,14 @@ public class MainPresenter extends PresenterBase<MainView> {
 
         initHeaders();
         loadHomeData();
+
+        //mHandler.postDelayed(this::loadSearchData, 10_000);
+        //loadSearchData();
     }
 
     private void initHeaders() {
-        mHeaders.put(MediaGroup.TYPE_HOME, new Header(MediaGroup.TYPE_HOME, mContext.getString(R.string.home_header)));
+        mHeaders.put(MediaGroup.TYPE_HOME, new Header(MediaGroup.TYPE_HOME, mContext.getString(R.string.header_home)));
+        mHeaders.put(MediaGroup.TYPE_SEARCH, new Header(MediaGroup.TYPE_SEARCH, mContext.getString(R.string.header_search)));
     }
 
     // TODO: implement Android TV channels
@@ -62,7 +66,7 @@ public class MainPresenter extends PresenterBase<MainView> {
     //    Intent recommendationIntent = new Intent(mContext, UpdateRecommendationsService.class);
     //    mContext.startService(recommendationIntent);
     //}
-    
+
     @SuppressLint("CheckResult")
     private void loadHomeData() {
         MediaService service = YouTubeMediaService.instance();
@@ -111,5 +115,19 @@ public class MainPresenter extends PresenterBase<MainView> {
                         error -> {});
             }
         });
+    }
+
+    @SuppressLint("CheckResult")
+    private void loadSearchData() {
+        MediaService service = YouTubeMediaService.instance();
+        MediaGroupManager mediaGroupManager = service.getMediaGroupManager();
+
+        mediaGroupManager.getSearchObserve("Самый лучший фильм")
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(mediaGroup -> {
+                    for (MainView view : mViews) {
+                        view.updateRow(VideoGroup.from(mediaGroup), mHeaders.get(MediaGroup.TYPE_SEARCH));
+                    }
+                }, error -> {});
     }
 }
