@@ -55,13 +55,13 @@ public class MainPresenter extends PresenterBase<MainView> {
         loadSearchData();
     }
 
-    public void onVideoItemClicked(Video item) {
+    public void onVideoItemClick(Video item) {
         for (MainView view : mViews) {
             view.openPlaybackView(item);
         }
     }
 
-    public void onVideoItemLongPress(Video item) {
+    public void onVideoItemLongClick(Video item) {
         for (MainView view : mViews) {
             view.openDetailsView(item);
         }

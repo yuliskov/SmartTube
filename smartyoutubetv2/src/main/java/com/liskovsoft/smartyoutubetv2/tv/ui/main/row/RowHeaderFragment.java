@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.main.row;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,13 +16,13 @@ import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.mvp.presenters.MainPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.base.UriBackgroundManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.old.VideoDetailsActivity;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.main.MainActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -110,7 +109,16 @@ public class RowHeaderFragment extends RowsSupportFragment {
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
 
             if (item instanceof Video) {
-                mMainPresenter.onVideoItemClicked((Video) item);
+                if (getActivity() instanceof MainActivity) {
+                    boolean longClick = ((MainActivity) getActivity()).isLongClick();
+                    Log.d(TAG, "Is long click: " + longClick);
+
+                    if (longClick) {
+                        mMainPresenter.onVideoItemLongClick((Video) item);
+                    } else {
+                        mMainPresenter.onVideoItemClick((Video) item);
+                    }
+                }
             } else {
                 Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
             }
