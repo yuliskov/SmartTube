@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.main.pagerow;
+package com.liskovsoft.smartyoutubetv2.tv.ui.main.row;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,11 +7,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityOptionsCompat;
 import androidx.leanback.app.RowsSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
-import androidx.leanback.widget.ImageCardView;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.OnItemViewClickedListener;
@@ -21,27 +19,25 @@ import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.common.mvp.presenters.MainPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.base.UriBackgroundManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.old.BrowseErrorFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.old.GuidedStepActivity;
-import com.liskovsoft.smartyoutubetv2.tv.ui.old.SettingsActivity;
-import com.liskovsoft.smartyoutubetv2.tv.ui.old.VerticalGridActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.VideoDetailsActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PageRowFragment extends RowsSupportFragment {
-    private static final String TAG = PageRowFragment.class.getSimpleName();
+public class RowHeaderFragment extends RowsSupportFragment {
+    private static final String TAG = RowHeaderFragment.class.getSimpleName();
     private UriBackgroundManager mBackgroundManager;
     private Handler mHandler;
     private ArrayObjectAdapter mRowsAdapter;
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
     private List<VideoGroup> mPendingUpdates = new ArrayList<>();
+    private MainPresenter mMainPresenter;
 
     @Override
     public void onAttach(Context context) {
@@ -50,6 +46,7 @@ public class PageRowFragment extends RowsSupportFragment {
         mMediaGroupAdapters = new HashMap<>();
         mHandler = new Handler();
         mBackgroundManager = UriBackgroundManager.instance(getActivity());
+        mMainPresenter = MainPresenter.instance(context);
     }
 
     @Override
@@ -74,10 +71,6 @@ public class PageRowFragment extends RowsSupportFragment {
     }
 
     private void setupEventListeners() {
-        //setOnItemViewClickedListener((itemViewHolder, item, rowViewHolder, row) -> {
-        //    Toast.makeText(getActivity(), "Implement click handler", Toast.LENGTH_SHORT).show();
-        //});
-
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
     }
@@ -117,42 +110,9 @@ public class PageRowFragment extends RowsSupportFragment {
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
 
             if (item instanceof Video) {
-                Video video = (Video) item;
-                Intent intent = new Intent(getActivity(), VideoDetailsActivity.class);
-                intent.putExtra(VideoDetailsActivity.VIDEO, video);
-
-                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        getActivity(),
-                        ((ImageCardView) itemViewHolder.view).getMainImageView(),
-                        VideoDetailsActivity.SHARED_ELEMENT_NAME).toBundle();
-                getActivity().startActivity(intent, bundle);
-            } else if (item instanceof String) {
-                if (((String) item).contains(getString(R.string.grid_view))) {
-                    Intent intent = new Intent(getActivity(), VerticalGridActivity.class);
-                    Bundle bundle =
-                            ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
-                                    .toBundle();
-                    startActivity(intent, bundle);
-                } else if (((String) item).contains(getString(R.string.guidedstep_first_title))) {
-                    Intent intent = new Intent(getActivity(), GuidedStepActivity.class);
-                    Bundle bundle =
-                            ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
-                                    .toBundle();
-                    startActivity(intent, bundle);
-                } else if (((String) item).contains(getString(R.string.error_fragment))) {
-                    BrowseErrorFragment errorFragment = new BrowseErrorFragment();
-                    getFragmentManager().beginTransaction().replace(R.id.main_frame, errorFragment)
-                            .addToBackStack(null).commit();
-                } else if(((String) item).contains(getString(R.string.personal_settings))) {
-                    Intent intent = new Intent(getActivity(), SettingsActivity.class);
-                    Bundle bundle =
-                            ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
-                                    .toBundle();
-                    startActivity(intent, bundle);
-                } else {
-                    Toast.makeText(getActivity(), ((String) item), Toast.LENGTH_SHORT)
-                            .show();
-                }
+                mMainPresenter.onVideoItemClicked((Video) item);
+            } else {
+                Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
             }
         }
     }

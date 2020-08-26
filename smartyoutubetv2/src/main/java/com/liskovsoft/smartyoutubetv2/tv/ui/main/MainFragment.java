@@ -30,14 +30,14 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.GridItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.base.UriBackgroundManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.main.pagerow.PageRowHeaderItem;
-import com.liskovsoft.smartyoutubetv2.tv.ui.main.pagerow.PageRowFragmentFactory;
+import com.liskovsoft.smartyoutubetv2.tv.ui.main.row.RowHeaderItem;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.BrowseErrorFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.GuidedStepActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.SettingsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.VerticalGridActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.VideoDetailsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.onboarding.OnboardingActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
 
 import java.util.HashMap;
@@ -139,17 +139,17 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
     }
 
     @Override
-    public void updateRow(VideoGroup group, Header header) {
+    public void updateRowHeader(VideoGroup row, Header header) {
         if (mHeaders.get(header.getId()) == null) {
             mHeaders.put(header.getId(), header);
             createMultiRowHeader(header);
         }
 
-        mPageRowFragmentFactory.updateRow(group, header.getId());
+        mPageRowFragmentFactory.updateRowFragment(row, header.getId());
     }
 
     private void createMultiRowHeader(Header header) {
-        HeaderItem headerItem = new PageRowHeaderItem(header.getId(), header.getTitle());
+        HeaderItem headerItem = new RowHeaderItem(header.getId(), header.getTitle());
         PageRow pageRow = new PageRow(headerItem);
         mCategoryRowAdapter.add(pageRow);
     }
@@ -160,17 +160,17 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
     }
 
     @Override
-    public void updateGrid(VideoGroup group, Header header) {
+    public void updateGridHeader(VideoGroup grid, Header header) {
         // TODO: not implemented
     }
 
     @Override
-    public void clearRow(Header header) {
+    public void clearRowHeader(Header header) {
         // TODO: not implemented
     }
 
     @Override
-    public void clearGrid(Header header) {
+    public void clearGridHeader(Header header) {
         // TODO: not implemented
     }
 
@@ -179,17 +179,7 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
 
-            if (item instanceof Video) {
-                Video video = (Video) item;
-                Intent intent = new Intent(getActivity(), VideoDetailsActivity.class);
-                intent.putExtra(VideoDetailsActivity.VIDEO, video);
-
-                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        getActivity(),
-                        ((ImageCardView) itemViewHolder.view).getMainImageView(),
-                        VideoDetailsActivity.SHARED_ELEMENT_NAME).toBundle();
-                getActivity().startActivity(intent, bundle);
-            } else if (item instanceof String) {
+            if (item instanceof String) {
                 if (((String) item).contains(getString(R.string.grid_view))) {
                     Intent intent = new Intent(getActivity(), VerticalGridActivity.class);
                     Bundle bundle =
@@ -231,5 +221,26 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
                 mBackgroundManager.getBackgroundManager().setDrawable(null);
             }
         }
+    }
+
+    @Override
+    public void openPlaybackView(Video item) {
+        Intent intent = new Intent(getActivity(), PlaybackActivity.class);
+        intent.putExtra(VideoDetailsActivity.VIDEO, item);
+        startActivity(intent);
+    }
+
+    @Override
+    public void openDetailsView(Video item) {
+        Intent intent = new Intent(getActivity(), VideoDetailsActivity.class);
+        intent.putExtra(VideoDetailsActivity.VIDEO, item);
+
+        //Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+        //        getActivity(),
+        //        ((ImageCardView) itemViewHolder.view).getMainImageView(),
+        //        VideoDetailsActivity.SHARED_ELEMENT_NAME).toBundle();
+        //getActivity().startActivity(intent, bundle);
+
+        startActivity(intent);
     }
 }

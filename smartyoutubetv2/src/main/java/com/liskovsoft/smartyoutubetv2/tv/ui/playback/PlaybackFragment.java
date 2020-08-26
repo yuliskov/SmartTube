@@ -40,6 +40,7 @@ import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
+import com.liskovsoft.smartyoutubetv2.common.mvp.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.data.old.VideoContract;
 import com.liskovsoft.smartyoutubetv2.tv.model.Playlist;
@@ -69,7 +70,7 @@ import static com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackFragment.Vid
  * Plays selected video, loads playlist and related videos, and delegates playback to {@link
  * VideoPlayerGlue}.
  */
-public class PlaybackFragment extends VideoSupportFragment {
+public class PlaybackFragment extends VideoSupportFragment implements PlaybackView {
 
     private static final int UPDATE_DELAY = 16;
 

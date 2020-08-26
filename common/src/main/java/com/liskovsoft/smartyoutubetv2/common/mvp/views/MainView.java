@@ -1,12 +1,15 @@
 package com.liskovsoft.smartyoutubetv2.common.mvp.views;
 
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.Header;
+import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 
 public interface MainView {
-    void updateRow(VideoGroup group, Header header);
-    void updateGrid(VideoGroup group, Header header);
-    void clearRow(Header header);
-    void clearGrid(Header header);
+    void updateRowHeader(VideoGroup row, Header header);
+    void updateGridHeader(VideoGroup grid, Header header);
+    void clearRowHeader(Header header);
+    void clearGridHeader(Header header);
     void showOnboarding();
+    void openPlaybackView(Video item);
+    void openDetailsView(Video item);
 }

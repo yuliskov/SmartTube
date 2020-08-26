@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.main.pagerow;
+package com.liskovsoft.smartyoutubetv2.tv.ui.main;
 
 import androidx.fragment.app.Fragment;
 import androidx.leanback.app.BackgroundManager;
@@ -7,8 +7,10 @@ import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.Row;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.tv.ui.main.grid.GridFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.main.grid.GridHeaderFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.main.grid.GridHeaderItem;
+import com.liskovsoft.smartyoutubetv2.tv.ui.main.row.RowHeaderFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.main.row.RowHeaderItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,10 +42,10 @@ public class PageRowFragmentFactory extends BrowseSupportFragment.FragmentFactor
         HeaderItem header = row.getHeaderItem();
         Fragment fragment = null;
 
-        if (header instanceof PageRowHeaderItem) {
-            fragment = new PageRowFragment();
+        if (header instanceof RowHeaderItem) {
+            fragment = new RowHeaderFragment();
         } else if (header instanceof GridHeaderItem) {
-            fragment = new GridFragment();
+            fragment = new GridHeaderFragment();
         }
 
         if (fragment != null) {
@@ -57,7 +59,7 @@ public class PageRowFragmentFactory extends BrowseSupportFragment.FragmentFactor
         throw new IllegalArgumentException(String.format("Invalid row %s", rowObj));
     }
 
-    public void updateRow(VideoGroup group, int headerId) {
+    public void updateRowFragment(VideoGroup group, int headerId) {
         Fragment fragment = mFragments.get(headerId);
 
         addToPending(group, headerId);
@@ -68,13 +70,13 @@ public class PageRowFragmentFactory extends BrowseSupportFragment.FragmentFactor
             return;
         }
 
-        updateRow(fragment, group);
+        updateRowFragment(fragment, group);
     }
 
-    private void updateRow(Fragment fragment, VideoGroup group) {
-        if (fragment instanceof PageRowFragment) {
-            PageRowFragment rowFragment = (PageRowFragment) fragment;
-            rowFragment.updateRow(group);
+    private void updateRowFragment(Fragment fragment, VideoGroup row) {
+        if (fragment instanceof RowHeaderFragment) {
+            RowHeaderFragment rowFragment = (RowHeaderFragment) fragment;
+            rowFragment.updateRow(row);
         } else {
             throw new IllegalStateException("Page row fragment has incompatible type");
         }
@@ -96,7 +98,7 @@ public class PageRowFragmentFactory extends BrowseSupportFragment.FragmentFactor
 
         if (videoGroups != null) {
             for (VideoGroup group : videoGroups) {
-                updateRow(fragment, group);
+                updateRowFragment(fragment, group);
             }
         }
     }

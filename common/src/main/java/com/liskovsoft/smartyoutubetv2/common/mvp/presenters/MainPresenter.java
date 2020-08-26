@@ -9,6 +9,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.Header;
+import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.mvp.views.MainView;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
@@ -51,9 +52,19 @@ public class MainPresenter extends PresenterBase<MainView> {
 
         initHeaders();
         loadHomeData();
+        loadSearchData();
+    }
 
-        //mHandler.postDelayed(this::loadSearchData, 10_000);
-        //loadSearchData();
+    public void onVideoItemClicked(Video item) {
+        for (MainView view : mViews) {
+            view.openPlaybackView(item);
+        }
+    }
+
+    public void onVideoItemLongPress(Video item) {
+        for (MainView view : mViews) {
+            view.openDetailsView(item);
+        }
     }
 
     private void initHeaders() {
@@ -88,7 +99,7 @@ public class MainPresenter extends PresenterBase<MainView> {
                 }
 
                 for (MainView view : mViews) {
-                    view.updateRow(VideoGroup.from(mediaGroup), mHeaders.get(MediaGroup.TYPE_HOME));
+                    view.updateRowHeader(VideoGroup.from(mediaGroup), mHeaders.get(MediaGroup.TYPE_HOME));
                 }
 
                 mMediaGroups.add(mediaGroup);
@@ -109,7 +120,7 @@ public class MainPresenter extends PresenterBase<MainView> {
                             }
 
                             for (MainView view : mViews) {
-                                view.updateRow(VideoGroup.from(continueMediaGroup), mHeaders.get(MediaGroup.TYPE_HOME));
+                                view.updateRowHeader(VideoGroup.from(continueMediaGroup), mHeaders.get(MediaGroup.TYPE_HOME));
                             }
                         },
                         error -> {});
@@ -126,7 +137,7 @@ public class MainPresenter extends PresenterBase<MainView> {
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(mediaGroup -> {
                     for (MainView view : mViews) {
-                        view.updateRow(VideoGroup.from(mediaGroup), mHeaders.get(MediaGroup.TYPE_SEARCH));
+                        view.updateRowHeader(VideoGroup.from(mediaGroup), mHeaders.get(MediaGroup.TYPE_SEARCH));
                     }
                 }, error -> {});
     }
