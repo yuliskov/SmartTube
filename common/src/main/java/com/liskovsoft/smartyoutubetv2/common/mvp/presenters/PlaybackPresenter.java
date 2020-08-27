@@ -48,7 +48,7 @@ public class PlaybackPresenter extends PresenterBase<PlaybackView> {
                         return;
                     }
 
-                    List<MediaItemSuggestions> suggestions = mediaItemMetadata.getSuggestions();
+                    List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
 
                     for (PlaybackView view : mViews) {
                         view.updateRelatedVideos(VideoGroup.from(suggestions.get(0))); // TODO: multiple rows
