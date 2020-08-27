@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.common.mvp.models;
 
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItemSuggestions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,10 +45,6 @@ public class VideoGroup {
         }
 
         return videoGroup;
-    }
-
-    public static VideoGroup from(MediaItemSuggestions suggestions) {
-        return null;
     }
 
     public List<Video> getVideos() {

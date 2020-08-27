@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.mvp.views.PlaybackView;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.schedulers.Schedulers;
 
+import java.io.InputStream;
 import java.util.List;
 
 public class PlaybackPresenter implements Presenter<PlaybackView> {
@@ -35,6 +36,7 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
     @Override
     public void onInitDone() {
         if (mView != null) {
+            loadFormatInfo();
             loadRelatedVideos();
         }
     }
@@ -59,7 +61,7 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(mediaItemMetadata -> {
                     if (mediaItemMetadata == null) {
-                        Log.e(TAG, "Item doesn't contain metadata");
+                        Log.e(TAG, "Item doesn't contain metadata: " + video.title);
                         return;
                     }
 
@@ -68,6 +70,26 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
                     for (MediaGroup group : suggestions) {
                         mView.updateRelatedVideos(VideoGroup.from(group));
                     }
+                }, error -> Log.e(TAG, error));
+    }
+
+    @SuppressLint("CheckResult")
+    private void loadFormatInfo() {
+        Video video = mView.getVideo();
+
+        MediaService service = YouTubeMediaService.instance();
+        MediaItemManager mediaItemManager = service.getMediaItemManager();
+        mediaItemManager.getFormatInfoObserve(video.videoId)
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(formatInfo -> {
+                    if (formatInfo == null) {
+                        Log.e(TAG, "Can't obtains format info: " + video.title);
+                        return;
+                    }
+
+                    InputStream mpdStream = formatInfo.getMpdStream();
+
+                    mView.loadDashStream(mpdStream);
                 }, error -> Log.e(TAG, error));
     }
 }

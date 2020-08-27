@@ -25,7 +25,9 @@ import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
+import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.MediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.mvp.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.mvp.views.PlaybackView;
@@ -53,14 +55,15 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.VideoDetailsActivity;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 //import static com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackFragment.VideoLoaderCallbacks.RELATED_VIDEOS_LOADER;
 
 /**
- * Plays selected video, loads playlist and related videos, and delegates playback to {@link
- * VideoPlayerGlue}.
+ * Plays selected video, loads playlist and related videos, and delegates playback to
+ * {@link VideoPlayerGlue}.
  */
 public class PlaybackFragment extends VideoSupportFragment implements PlaybackView {
     private static final String TAG = PlaybackFragment.class.getSimpleName();
@@ -78,6 +81,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private PlaybackPresenter mPlaybackPresenter;
     private ArrayObjectAdapter mRowsAdapter;
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
+    private MediaSourceFactory mMediaSourceFactory;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,6 +91,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
         mPlaybackPresenter = PlaybackPresenter.instance(getContext());
         mPlaybackPresenter.register(this);
+
+        mMediaSourceFactory = MediaSourceFactory.instance(getContext());
 
         mVideo = getActivity().getIntent().getParcelableExtra(VideoDetailsActivity.VIDEO);
         mPlaylist = new Playlist();
@@ -200,6 +206,12 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         return mVideo;
     }
 
+    @Override
+    public void loadDashStream(InputStream dashManifest) {
+        prepareMediaForPlaying(dashManifest);
+        mPlayerGlue.play();
+    }
+
     private void updateRelatedVideosRow() {
         //if (mRowsAdapter == null) {
         //    Log.e(TAG, "Related videos row not initialized yet.");
@@ -225,8 +237,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private void play(Video video) {
         mPlayerGlue.setTitle(video.title);
         mPlayerGlue.setSubtitle(video.description);
-        prepareMediaForPlaying(Uri.parse(video.videoUrl));
-        mPlayerGlue.play();
+        //prepareMediaForPlaying(Uri.parse(video.videoUrl));
+        //mPlayerGlue.play();
     }
 
     private void prepareMediaForPlaying(Uri mediaSourceUri) {
@@ -239,6 +251,12 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
                         null,
                         null);
 
+        mPlayer.prepare(mediaSource);
+    }
+
+    private void prepareMediaForPlaying(InputStream dashManifest) {
+        String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
+        MediaSource mediaSource = mMediaSourceFactory.fromDashManifest(dashManifest);
         mPlayer.prepare(mediaSource);
     }
 
