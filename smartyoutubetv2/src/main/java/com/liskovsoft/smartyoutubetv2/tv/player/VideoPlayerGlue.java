@@ -18,11 +18,10 @@ package com.liskovsoft.smartyoutubetv2.tv.player;
 
 import android.content.Context;
 import androidx.leanback.media.PlaybackTransportControlGlue;
+import androidx.leanback.media.PlayerAdapter;
 import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.PlaybackControlsRow;
-
-import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
 
 import java.util.concurrent.TimeUnit;
 
@@ -43,7 +42,7 @@ import java.util.concurrent.TimeUnit;
  * Note that the superclass, {@link PlaybackTransportControlGlue}, manages the playback controls
  * row.
  */
-public class VideoPlayerGlue extends PlaybackTransportControlGlue<LeanbackPlayerAdapter> {
+public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter> {
 
     private static final long TEN_SECONDS = TimeUnit.SECONDS.toMillis(10);
 
@@ -69,7 +68,7 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<LeanbackPlayer
 
     public VideoPlayerGlue(
             Context context,
-            LeanbackPlayerAdapter playerAdapter,
+            PlayerAdapter playerAdapter,
             OnActionClickedListener actionListener) {
         super(context, playerAdapter);
 

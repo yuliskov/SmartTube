@@ -66,7 +66,7 @@ public class OnboardingFragment extends OnboardingSupportFragment implements Onb
         // Set the logo to display a splash animation
         setLogoResourceId(R.drawable.videos_by_google_banner);
         mPresenter = OnboardingPresenter.instance(getContext());
-        mPresenter.subscribe(this);
+        mPresenter.register(this);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 

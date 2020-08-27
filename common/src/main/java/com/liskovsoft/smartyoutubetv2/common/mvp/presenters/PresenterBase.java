@@ -6,11 +6,13 @@ import java.util.List;
 public abstract class PresenterBase<T> {
     protected final List<T> mViews = new ArrayList<T>();
 
-    public void subscribe(T view) {
+    public void register(T view) {
         mViews.add(view);
     }
 
-    public void unsubscribe(T view) {
+    public void unregister(T view) {
         mViews.remove(view);
     }
+
+    public abstract void onInitDone();
 }

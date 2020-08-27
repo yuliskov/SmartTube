@@ -17,8 +17,10 @@
 package com.liskovsoft.smartyoutubetv2.common.mvp.models;
 
 import android.media.MediaDescription;
+import android.os.Build.VERSION_CODES;
 import android.os.Parcel;
 import android.os.Parcelable;
+import androidx.annotation.RequiresApi;
 
 /**
  * Video is an immutable object that holds the various metadata associated with a single video.
@@ -161,6 +163,7 @@ public final class Video implements Parcelable {
             return this;
         }
 
+        @RequiresApi(21)
         public Video buildFromMediaDesc(MediaDescription desc) {
             return new Video(
                     Long.parseLong(desc.getMediaId()),

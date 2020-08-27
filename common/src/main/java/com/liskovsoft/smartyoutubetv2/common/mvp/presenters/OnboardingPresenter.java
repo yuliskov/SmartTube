@@ -38,4 +38,9 @@ public class OnboardingPresenter extends PresenterBase<OnboardingView> {
         AppPrefs.instance(mContext).setCompletedOnboarding(true);
         sInstance = null;
     }
+
+    @Override
+    public void onInitDone() {
+        // NOP
+    }
 }

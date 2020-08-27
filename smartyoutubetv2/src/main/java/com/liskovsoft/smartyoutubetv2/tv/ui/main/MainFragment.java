@@ -11,7 +11,6 @@ import androidx.core.content.ContextCompat;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
-import androidx.leanback.widget.ImageCardView;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.OnItemViewClickedListener;
@@ -62,7 +61,7 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
         mHeaders = new HashMap<>();
         mHandler = new Handler();
         mPresenter = MainPresenter.instance(context.getApplicationContext());
-        mPresenter.subscribe(this);
+        mPresenter.register(this);
     }
 
     @Override

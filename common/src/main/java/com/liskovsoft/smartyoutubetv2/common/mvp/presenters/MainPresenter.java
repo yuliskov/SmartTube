@@ -42,6 +42,7 @@ public class MainPresenter extends PresenterBase<MainView> {
         return sInstance;
     }
 
+    @Override
     public void onInitDone() {
         if (!AppPrefs.instance(mContext).getCompletedOnboarding()) {
             // This is the first time running the app, let's go to onboarding
@@ -105,7 +106,7 @@ public class MainPresenter extends PresenterBase<MainView> {
                 mMediaGroups.add(mediaGroup);
             }
         },
-        error -> {},
+        error -> Log.e(TAG, error),
         () -> {
             // continue nested groups
 
@@ -123,7 +124,7 @@ public class MainPresenter extends PresenterBase<MainView> {
                                 view.updateRowHeader(VideoGroup.from(continueMediaGroup), mHeaders.get(MediaGroup.TYPE_HOME));
                             }
                         },
-                        error -> {});
+                        error -> Log.e(TAG, error));
             }
         });
     }
@@ -139,6 +140,6 @@ public class MainPresenter extends PresenterBase<MainView> {
                     for (MainView view : mViews) {
                         view.updateRowHeader(VideoGroup.from(mediaGroup), mHeaders.get(MediaGroup.TYPE_SEARCH));
                     }
-                }, error -> {});
+                }, error -> Log.e(TAG, error));
     }
 }
