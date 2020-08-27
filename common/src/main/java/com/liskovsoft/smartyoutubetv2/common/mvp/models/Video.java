@@ -32,6 +32,7 @@ public final class Video implements Parcelable {
     public final String description;
     public final String bgImageUrl;
     public final String cardImageUrl;
+    public final String videoId;
     public final String videoUrl;
     public final String studio;
 
@@ -40,6 +41,7 @@ public final class Video implements Parcelable {
             final String category,
             final String title,
             final String desc,
+            final String videoId,
             final String videoUrl,
             final String bgImageUrl,
             final String cardImageUrl,
@@ -48,6 +50,7 @@ public final class Video implements Parcelable {
         this.category = category;
         this.title = title;
         this.description = desc;
+        this.videoId = videoId;
         this.videoUrl = videoUrl;
         this.bgImageUrl = bgImageUrl;
         this.cardImageUrl = cardImageUrl;
@@ -61,6 +64,7 @@ public final class Video implements Parcelable {
         description = in.readString();
         bgImageUrl = in.readString();
         cardImageUrl = in.readString();
+        videoId = in.readString();
         videoUrl = in.readString();
         studio = in.readString();
     }
@@ -94,6 +98,7 @@ public final class Video implements Parcelable {
         dest.writeString(description);
         dest.writeString(bgImageUrl);
         dest.writeString(cardImageUrl);
+        dest.writeString(videoId);
         dest.writeString(videoUrl);
         dest.writeString(studio);
     }
@@ -104,6 +109,7 @@ public final class Video implements Parcelable {
         s += "id=" + id;
         s += ", category='" + category + "'";
         s += ", title='" + title + "'";
+        s += ", videoId='" + videoId + "'";
         s += ", videoUrl='" + videoUrl + "'";
         s += ", bgImageUrl='" + bgImageUrl + "'";
         s += ", cardImageUrl='" + cardImageUrl + "'";
@@ -120,6 +126,7 @@ public final class Video implements Parcelable {
         private String desc;
         private String bgImageUrl;
         private String cardImageUrl;
+        private String videoId;
         private String videoUrl;
         private String studio;
 
@@ -140,6 +147,11 @@ public final class Video implements Parcelable {
 
         public VideoBuilder description(String desc) {
             this.desc = desc;
+            return this;
+        }
+
+        public VideoBuilder videoId(String videoId) {
+            this.videoId = videoId;
             return this;
         }
 
@@ -170,6 +182,7 @@ public final class Video implements Parcelable {
                     "", // Category - not provided by MediaDescription.
                     String.valueOf(desc.getTitle()),
                     String.valueOf(desc.getDescription()),
+                    "", // Media ID - not provided by MediaDescription.
                     "", // Media URI - not provided by MediaDescription.
                     "", // Background Image URI - not provided by MediaDescription.
                     String.valueOf(desc.getIconUri()),
@@ -183,6 +196,7 @@ public final class Video implements Parcelable {
                     category,
                     title,
                     desc,
+                    videoId,
                     videoUrl,
                     bgImageUrl,
                     cardImageUrl,

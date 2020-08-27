@@ -23,6 +23,7 @@ public class VideoGroup {
             String title = item.getTitle();
             String category = item.getContentType();
             String desc = item.getDescription();
+            String videoId = item.getMediaId();
             String videoUrl = item.getMediaUrl();
             String bgImageUrl = item.getBackgroundImageUrl();
             String cardImageUrl = item.getCardImageUrl();
@@ -34,6 +35,7 @@ public class VideoGroup {
                     .title(title)
                     .category(category)
                     .description(desc)
+                    .videoId(videoId)
                     .videoUrl(videoUrl)
                     .bgImageUrl(bgImageUrl)
                     .cardImageUrl(cardImageUrl)

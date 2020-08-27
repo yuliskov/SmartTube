@@ -195,6 +195,11 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         }
     }
 
+    @Override
+    public Video getVideo() {
+        return mVideo;
+    }
+
     private void updateRelatedVideosRow() {
         //if (mRowsAdapter == null) {
         //    Log.e(TAG, "Related videos row not initialized yet.");

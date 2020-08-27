@@ -5,8 +5,8 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItemSuggestions;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.mvp.views.PlaybackView;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -14,10 +14,11 @@ import io.reactivex.schedulers.Schedulers;
 
 import java.util.List;
 
-public class PlaybackPresenter extends PresenterBase<PlaybackView> {
+public class PlaybackPresenter implements Presenter<PlaybackView> {
     private static final String TAG = PlaybackPresenter.class.getSimpleName();
     private static PlaybackPresenter sInstance;
     private final Context mContext;
+    private PlaybackView mView;
 
     private PlaybackPresenter(Context context) {
         mContext = context;
@@ -33,14 +34,28 @@ public class PlaybackPresenter extends PresenterBase<PlaybackView> {
 
     @Override
     public void onInitDone() {
-        loadRelatedVideos();
+        if (mView != null) {
+            loadRelatedVideos();
+        }
+    }
+
+    @Override
+    public void register(PlaybackView view) {
+        mView = view;
+    }
+
+    @Override
+    public void unregister(PlaybackView view) {
+        mView = null;
     }
 
     @SuppressLint("CheckResult")
     private void loadRelatedVideos() {
+        Video video = mView.getVideo();
+
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
-        mediaItemManager.getMetadataObserve("3Gh5uKzmVaQ")
+        mediaItemManager.getMetadataObserve(video.videoId)
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(mediaItemMetadata -> {
                     if (mediaItemMetadata == null) {
@@ -50,8 +65,8 @@ public class PlaybackPresenter extends PresenterBase<PlaybackView> {
 
                     List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
 
-                    for (PlaybackView view : mViews) {
-                        view.updateRelatedVideos(VideoGroup.from(suggestions.get(0))); // TODO: multiple rows
+                    for (MediaGroup group : suggestions) {
+                        mView.updateRelatedVideos(VideoGroup.from(group));
                     }
                 }, error -> Log.e(TAG, error));
     }

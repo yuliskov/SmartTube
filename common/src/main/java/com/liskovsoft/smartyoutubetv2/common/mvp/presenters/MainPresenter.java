@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainPresenter extends PresenterBase<MainView> {
+public class MainPresenter implements Presenter<MainView> {
     private static final String TAG = MainPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static MainPresenter sInstance;
@@ -28,6 +28,7 @@ public class MainPresenter extends PresenterBase<MainView> {
     private final Context mContext;
     private final ArrayList<MediaGroup> mMediaGroups;
     private final Map<Integer, Header> mHeaders = new HashMap<>();
+    private MainView mView;
 
     private MainPresenter(Context context) {
         mMediaGroups = new ArrayList<>();
@@ -44,11 +45,13 @@ public class MainPresenter extends PresenterBase<MainView> {
 
     @Override
     public void onInitDone() {
+        if (mView == null) {
+            return;
+        }
+
         if (!AppPrefs.instance(mContext).getCompletedOnboarding()) {
             // This is the first time running the app, let's go to onboarding
-            for (MainView view : mViews) {
-                view.showOnboarding();
-            }
+            mView.showOnboarding();
         }
 
         initHeaders();
@@ -56,16 +59,30 @@ public class MainPresenter extends PresenterBase<MainView> {
         loadSearchData();
     }
 
+    @Override
+    public void register(MainView view) {
+        mView = view;
+    }
+
+    @Override
+    public void unregister(MainView view) {
+        mView = null;
+    }
+
     public void onVideoItemClick(Video item) {
-        for (MainView view : mViews) {
-            view.openPlaybackView(item);
+        if (mView == null) {
+            return;
         }
+
+        mView.openPlaybackView(item);
     }
 
     public void onVideoItemLongClick(Video item) {
-        for (MainView view : mViews) {
-            view.openDetailsView(item);
+        if (mView == null) {
+            return;
         }
+
+        mView.openDetailsView(item);
     }
 
     private void initHeaders() {
@@ -99,9 +116,7 @@ public class MainPresenter extends PresenterBase<MainView> {
                     continue;
                 }
 
-                for (MainView view : mViews) {
-                    view.updateRowHeader(VideoGroup.from(mediaGroup), mHeaders.get(MediaGroup.TYPE_HOME));
-                }
+                mView.updateRowHeader(VideoGroup.from(mediaGroup), mHeaders.get(MediaGroup.TYPE_HOME));
 
                 mMediaGroups.add(mediaGroup);
             }
@@ -120,9 +135,7 @@ public class MainPresenter extends PresenterBase<MainView> {
                                 return;
                             }
 
-                            for (MainView view : mViews) {
-                                view.updateRowHeader(VideoGroup.from(continueMediaGroup), mHeaders.get(MediaGroup.TYPE_HOME));
-                            }
+                            mView.updateRowHeader(VideoGroup.from(continueMediaGroup), mHeaders.get(MediaGroup.TYPE_HOME));
                         },
                         error -> Log.e(TAG, error));
             }
@@ -137,9 +150,7 @@ public class MainPresenter extends PresenterBase<MainView> {
         mediaGroupManager.getSearchObserve("Самый лучший фильм")
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(mediaGroup -> {
-                    for (MainView view : mViews) {
-                        view.updateRowHeader(VideoGroup.from(mediaGroup), mHeaders.get(MediaGroup.TYPE_SEARCH));
-                    }
+                    mView.updateRowHeader(VideoGroup.from(mediaGroup), mHeaders.get(MediaGroup.TYPE_SEARCH));
                 }, error -> Log.e(TAG, error));
     }
 }
