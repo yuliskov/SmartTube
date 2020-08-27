@@ -92,4 +92,10 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
                     mView.loadDashStream(mpdStream);
                 }, error -> Log.e(TAG, error));
     }
+
+    public void onSuggestionItemClicked(Video video) {
+        if (mView != null) {
+            mView.openVideo(video);
+        }
+    }
 }

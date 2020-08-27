@@ -69,7 +69,7 @@ public class MainPresenter implements Presenter<MainView> {
         mView = null;
     }
 
-    public void onVideoItemClick(Video item) {
+    public void onVideoItemClicked(Video item) {
         if (mView == null) {
             return;
         }
@@ -77,7 +77,7 @@ public class MainPresenter implements Presenter<MainView> {
         mView.openPlaybackView(item);
     }
 
-    public void onVideoItemLongClick(Video item) {
+    public void onVideoItemLongPressed(Video item) {
         if (mView == null) {
             return;
         }

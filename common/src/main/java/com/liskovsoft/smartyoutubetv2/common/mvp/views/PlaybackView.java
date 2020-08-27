@@ -9,4 +9,5 @@ public interface PlaybackView {
     void updateRelatedVideos(VideoGroup row);
     Video getVideo();
     void loadDashStream(InputStream dashManifest);
+    void openVideo(Video item);
 }
