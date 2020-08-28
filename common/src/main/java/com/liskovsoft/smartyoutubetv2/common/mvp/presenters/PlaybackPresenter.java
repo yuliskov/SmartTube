@@ -6,6 +6,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.mvp.models.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.mvp.views.PlaybackView;
@@ -19,10 +20,12 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
     private static final String TAG = PlaybackPresenter.class.getSimpleName();
     private static PlaybackPresenter sInstance;
     private final Context mContext;
+    private final Playlist mPlaylist;
     private PlaybackView mView;
 
     private PlaybackPresenter(Context context) {
         mContext = context;
+        mPlaylist = new Playlist();
     }
 
     public static PlaybackPresenter instance(Context context) {
@@ -36,8 +39,11 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
     @Override
     public void onInitDone() {
         if (mView != null) {
-            loadFormatInfo();
-            loadRelatedVideos();
+            Video video = mView.getVideo();
+            mPlaylist.add(video);
+            mPlaylist.setCurrentPosition(mPlaylist.size() - 1);
+            loadFormatInfo(video);
+            loadRelatedVideos(video);
         }
     }
 
@@ -52,9 +58,7 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
     }
 
     @SuppressLint("CheckResult")
-    private void loadRelatedVideos() {
-        Video video = mView.getVideo();
-
+    private void loadRelatedVideos(Video video) {
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
         mediaItemManager.getMetadataObserve(video.videoId)
@@ -74,9 +78,7 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
     }
 
     @SuppressLint("CheckResult")
-    private void loadFormatInfo() {
-        Video video = mView.getVideo();
-
+    private void loadFormatInfo(Video video) {
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
         mediaItemManager.getFormatInfoObserve(video.videoId)
@@ -95,7 +97,25 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
 
     public void onSuggestionItemClicked(Video video) {
         if (mView != null) {
-            mView.openVideo(video);
+            mPlaylist.add(video);
+            mPlaylist.setCurrentPosition(mPlaylist.size() - 1);
+            loadVideo(video);
         }
+    }
+
+    private void loadVideo(Video video) {
+        if (mView != null) {
+            mView.setVideo(video);
+            loadFormatInfo(video);
+            loadRelatedVideos(video);
+        }
+    }
+
+    public void onPrevious() {
+        loadVideo(mPlaylist.previous());
+    }
+
+    public void onNext() {
+        loadVideo(mPlaylist.next());
     }
 }

@@ -61,7 +61,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private PlaylistActionListener mPlaylistActionListener;
 
     private Video mVideo;
-    private Playlist mPlaylist;
     private PlaybackPresenter mPlaybackPresenter;
     private ArrayObjectAdapter mRowsAdapter;
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
@@ -79,8 +78,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mMediaSourceFactory = MediaSourceFactory.instance(getContext());
 
         mVideo = getActivity().getIntent().getParcelableExtra(VideoDetailsActivity.VIDEO);
-        mPlaylist = new Playlist();
-        mPlaylist.add(mVideo); // TODO: only one video in playlist
     }
 
     @Override
@@ -136,12 +133,12 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
         mPlayerAdapter = new LeanbackPlayerAdapter(getActivity(), mPlayer, UPDATE_DELAY);
 
-        mPlaylistActionListener = new PlaylistActionListener(mPlaylist);
+        mPlaylistActionListener = new PlaylistActionListener();
         mPlayerGlue = new VideoPlayerGlue(getActivity(), mPlayerAdapter, mPlaylistActionListener);
         mPlayerGlue.setHost(new VideoSupportFragmentGlueHost(this));
         mPlayerGlue.playWhenPrepared();
 
-        play(mVideo);
+        initTitle(mVideo);
 
         mRowsAdapter = initializeRelatedVideosRow();
         setAdapter(mRowsAdapter);
@@ -193,12 +190,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
             mPlayerAdapter = null;
             mPlaylistActionListener = null;
         }
-    }
-
-    private void play(Video video) {
-        initTitle(video);
-        //prepareMediaForPlaying(Uri.parse(video.videoUrl));
-        //mPlayerGlue.play();
     }
 
     private void initTitle(Video video) {
@@ -279,29 +270,20 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
-    public void openVideo(Video item) {
-        mVideo = item;
-        mPlaylist.add(item);
-        mPlaylist.setCurrentPosition(mPlaylist.size() - 1);
-        initTitle(item);
-        mPlaybackPresenter.onInitDone();
+    public void setVideo(Video video) {
+        mVideo = video;
+        initTitle(video);
     }
 
     class PlaylistActionListener implements VideoPlayerGlue.OnActionClickedListener {
-        private final Playlist mPlaylist;
-
-        PlaylistActionListener(Playlist playlist) {
-            this.mPlaylist = playlist;
-        }
-
         @Override
         public void onPrevious() {
-            play(mPlaylist.previous());
+            mPlaybackPresenter.onPrevious();
         }
 
         @Override
         public void onNext() {
-            play(mPlaylist.next());
+            mPlaybackPresenter.onNext();
         }
     }
 }

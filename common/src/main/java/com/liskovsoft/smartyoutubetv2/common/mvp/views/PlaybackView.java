@@ -6,8 +6,8 @@ import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 import java.io.InputStream;
 
 public interface PlaybackView {
-    void updateRelatedVideos(VideoGroup row);
-    Video getVideo();
     void loadDashStream(InputStream dashManifest);
-    void openVideo(Video item);
+    void updateRelatedVideos(VideoGroup row);
+    void setVideo(Video video);
+    Video getVideo();
 }
