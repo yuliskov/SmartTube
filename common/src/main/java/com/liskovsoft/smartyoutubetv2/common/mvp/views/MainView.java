@@ -10,6 +10,6 @@ public interface MainView {
     void clearRowHeader(Header header);
     void clearGridHeader(Header header);
     void showOnboarding();
-    void openPlaybackView(Video item);
+    void openPlaybackView();
     void openDetailsView(Video item);
 }

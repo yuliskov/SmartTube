@@ -22,6 +22,7 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
     private final Context mContext;
     private final Playlist mPlaylist;
     private PlaybackView mView;
+    private Video mVideo;
 
     private PlaybackPresenter(Context context) {
         mContext = context;
@@ -30,7 +31,7 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
 
     public static PlaybackPresenter instance(Context context) {
         if (sInstance == null) {
-            sInstance = new PlaybackPresenter(context);
+            sInstance = new PlaybackPresenter(context.getApplicationContext());
         }
 
         return sInstance;
@@ -39,11 +40,7 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
     @Override
     public void onInitDone() {
         if (mView != null) {
-            Video video = mView.getVideo();
-            mPlaylist.add(video);
-            mPlaylist.setCurrentPosition(mPlaylist.size() - 1);
-            loadFormatInfo(video);
-            loadRelatedVideos(video);
+            loadVideo(mVideo);
         }
     }
 
@@ -58,7 +55,7 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
     }
 
     @SuppressLint("CheckResult")
-    private void loadRelatedVideos(Video video) {
+    private void loadSuggestedVideos(Video video) {
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
         mediaItemManager.getMetadataObserve(video.videoId)
@@ -97,17 +94,18 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
 
     public void onSuggestionItemClicked(Video video) {
         if (mView != null) {
-            mPlaylist.add(video);
-            mPlaylist.setCurrentPosition(mPlaylist.size() - 1);
             loadVideo(video);
         }
     }
 
     private void loadVideo(Video video) {
         if (mView != null) {
+            mVideo = video;
             mView.setVideo(video);
+            mPlaylist.add(video);
+            mPlaylist.setCurrentPosition(mPlaylist.size() - 1);
             loadFormatInfo(video);
-            loadRelatedVideos(video);
+            loadSuggestedVideos(video);
         }
     }
 
@@ -117,5 +115,9 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
 
     public void onNext() {
         loadVideo(mPlaylist.next());
+    }
+
+    public void setVideo(Video video) {
+        mVideo = video;
     }
 }

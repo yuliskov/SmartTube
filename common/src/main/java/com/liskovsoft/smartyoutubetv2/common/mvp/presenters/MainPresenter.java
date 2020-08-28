@@ -28,16 +28,18 @@ public class MainPresenter implements Presenter<MainView> {
     private final Context mContext;
     private final ArrayList<MediaGroup> mMediaGroups;
     private final Map<Integer, Header> mHeaders = new HashMap<>();
+    private final PlaybackPresenter mPlaybackPresenter;
     private MainView mView;
 
     private MainPresenter(Context context) {
         mMediaGroups = new ArrayList<>();
         mContext = context;
+        mPlaybackPresenter = PlaybackPresenter.instance(context);
     }
 
     public static MainPresenter instance(Context context) {
         if (sInstance == null) {
-            sInstance = new MainPresenter(context);
+            sInstance = new MainPresenter(context.getApplicationContext());
         }
 
         return sInstance;
@@ -74,7 +76,8 @@ public class MainPresenter implements Presenter<MainView> {
             return;
         }
 
-        mView.openPlaybackView(item);
+        mPlaybackPresenter.setVideo(item);
+        mView.openPlaybackView();
     }
 
     public void onVideoItemLongPressed(Video item) {

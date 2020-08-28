@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,7 +23,6 @@ import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.mvp.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.mvp.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
-import com.liskovsoft.smartyoutubetv2.tv.model.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.tv.player.VideoPlayerGlue;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -41,7 +39,6 @@ import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
-import com.liskovsoft.smartyoutubetv2.tv.ui.old.VideoDetailsActivity;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -59,8 +56,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private SimpleExoPlayer mPlayer;
     private TrackSelector mTrackSelector;
     private PlaylistActionListener mPlaylistActionListener;
-
-    private Video mVideo;
     private PlaybackPresenter mPlaybackPresenter;
     private ArrayObjectAdapter mRowsAdapter;
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
@@ -76,8 +71,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlaybackPresenter.register(this);
 
         mMediaSourceFactory = MediaSourceFactory.instance(getContext());
-
-        mVideo = getActivity().getIntent().getParcelableExtra(VideoDetailsActivity.VIDEO);
     }
 
     @Override
@@ -138,8 +131,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlayerGlue.setHost(new VideoSupportFragmentGlueHost(this));
         mPlayerGlue.playWhenPrepared();
 
-        initTitle(mVideo);
-
         mRowsAdapter = initializeRelatedVideosRow();
         setAdapter(mRowsAdapter);
 
@@ -168,11 +159,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         } else {
             existingAdapter.append(group); // continue row
         }
-    }
-
-    @Override
-    public Video getVideo() {
-        return mVideo;
     }
 
     @Override
@@ -231,6 +217,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
         ArrayObjectAdapter rowsAdapter = new ArrayObjectAdapter(presenterSelector);
 
+        // player controls row
         rowsAdapter.add(mPlayerGlue.getControlsRow());
 
         setOnItemViewClickedListener(new ItemViewClickedListener());
@@ -271,8 +258,16 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
     @Override
     public void setVideo(Video video) {
-        mVideo = video;
         initTitle(video);
+        resetRelatedVideos();
+    }
+
+    private void resetRelatedVideos() {
+        mMediaGroupAdapters.clear();
+        mRowsAdapter.clear();
+
+        // player controls row
+        mRowsAdapter.add(mPlayerGlue.getControlsRow());
     }
 
     class PlaylistActionListener implements VideoPlayerGlue.OnActionClickedListener {

@@ -223,9 +223,9 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
     }
 
     @Override
-    public void openPlaybackView(Video item) {
+    public void openPlaybackView() {
         Intent intent = new Intent(getActivity(), PlaybackActivity.class);
-        intent.putExtra(VideoDetailsActivity.VIDEO, item);
+        //intent.putExtra(VideoDetailsActivity.VIDEO, item);
         startActivity(intent);
     }
 
