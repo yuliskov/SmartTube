@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Handler;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -29,12 +30,14 @@ public class MainPresenter implements Presenter<MainView> {
     private final ArrayList<MediaGroup> mMediaGroups;
     private final Map<Integer, Header> mHeaders = new HashMap<>();
     private final PlaybackPresenter mPlaybackPresenter;
+    private final MediaService mMediaService;
     private MainView mView;
 
     private MainPresenter(Context context) {
         mMediaGroups = new ArrayList<>();
         mContext = context;
         mPlaybackPresenter = PlaybackPresenter.instance(context);
+        mMediaService = YouTubeMediaService.instance();
     }
 
     public static MainPresenter instance(Context context) {
@@ -56,9 +59,12 @@ public class MainPresenter implements Presenter<MainView> {
             mView.showOnboarding();
         }
 
+
+        checkUserIsSigned();
         initHeaders();
         loadHomeData();
-        loadSearchData();
+        loadSubscriptions();
+        loadHistory();
     }
 
     @Override
@@ -100,9 +106,18 @@ public class MainPresenter implements Presenter<MainView> {
     //}
 
     @SuppressLint("CheckResult")
+    private void checkUserIsSigned() {
+        SignInManager signInManager = mMediaService.getSignInManager();
+        if (!signInManager.isSigned()) {
+            signInManager.signInObserve()
+                    .subscribeOn(Schedulers.newThread())
+                    .subscribe((userCode) -> Log.d(TAG, "User code is: " + userCode), error -> Log.e(TAG, error));
+        }
+    }
+
+    @SuppressLint("CheckResult")
     private void loadHomeData() {
-        MediaService service = YouTubeMediaService.instance();
-        MediaGroupManager mediaGroupManager = service.getMediaGroupManager();
+        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
         mediaGroupManager.getHomeObserve()
                 .subscribeOn(Schedulers.newThread())
@@ -147,13 +162,44 @@ public class MainPresenter implements Presenter<MainView> {
 
     @SuppressLint("CheckResult")
     private void loadSearchData() {
-        MediaService service = YouTubeMediaService.instance();
-        MediaGroupManager mediaGroupManager = service.getMediaGroupManager();
+        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
         mediaGroupManager.getSearchObserve("Самый лучший фильм")
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(mediaGroup -> {
                     mView.updateRowHeader(VideoGroup.from(mediaGroup), mHeaders.get(MediaGroup.TYPE_SEARCH));
+                }, error -> Log.e(TAG, error));
+    }
+
+    @SuppressLint("CheckResult")
+    private void loadSubscriptions() {
+        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
+
+        mediaGroupManager.getSubscriptionsObserve()
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(mediaGroup -> {
+                    if (mediaGroup == null) {
+                        Log.e(TAG, "Can't obtain subscriptions. User probably not logged in");
+                        return;
+                    }
+
+                    mView.updateGridHeader(VideoGroup.from(mediaGroup), mHeaders.get(MediaGroup.TYPE_SUBSCRIPTIONS));
+                }, error -> Log.e(TAG, error));
+    }
+
+    @SuppressLint("CheckResult")
+    private void loadHistory() {
+        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
+
+        mediaGroupManager.getHistoryObserve()
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(mediaGroup -> {
+                    if (mediaGroup == null) {
+                        Log.e(TAG, "Can't obtain history. User probably not logged in");
+                        return;
+                    }
+
+                    mView.updateGridHeader(VideoGroup.from(mediaGroup), mHeaders.get(MediaGroup.TYPE_HISTORY));
                 }, error -> Log.e(TAG, error));
     }
 }
