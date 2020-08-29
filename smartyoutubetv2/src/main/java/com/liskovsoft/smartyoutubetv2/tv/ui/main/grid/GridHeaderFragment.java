@@ -32,6 +32,7 @@ public class GridHeaderFragment extends GridFragment {
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private UriBackgroundManager mBackgroundManager;
     private MainPresenter mMainPresenter;
+    private VideoGroup mLastGroup;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,6 +80,8 @@ public class GridHeaderFragment extends GridFragment {
             mPendingUpdates.add(group);
             return;
         }
+
+        mLastGroup = group;
         
         mAdapter.addAll(mAdapter.size(), group.getVideos());
     }
@@ -112,7 +115,18 @@ public class GridHeaderFragment extends GridFragment {
             if (item instanceof Video) {
                 Uri backgroundURI = Uri.parse(((Video) item).bgImageUrl);
                 mBackgroundManager.startBackgroundTimer(backgroundURI);
+
+                checkScrollEnd(item);
             }
+        }
+    }
+
+    private void checkScrollEnd(Object item) {
+        int size = mAdapter.size();
+        int index = mAdapter.indexOf(item);
+
+        if (index > (size - 10)) {
+            mMainPresenter.onScrollEnd(mLastGroup);
         }
     }
 }

@@ -102,9 +102,9 @@ public class MainPresenter implements Presenter<MainView> {
         mHeaders.put(MediaGroup.TYPE_SUBSCRIPTIONS, new Header(MediaGroup.TYPE_SUBSCRIPTIONS, mContext.getString(R.string.header_subscriptions)));
         mHeaders.put(MediaGroup.TYPE_HISTORY, new Header(MediaGroup.TYPE_HISTORY, mContext.getString(R.string.header_history)));
 
-        mView.updateHeader(null, mHeaders.get(MediaGroup.TYPE_HOME));
-        mView.updateHeader(null, mHeaders.get(MediaGroup.TYPE_SUBSCRIPTIONS));
-        mView.updateHeader(null, mHeaders.get(MediaGroup.TYPE_HISTORY));
+        mView.updateHeader(VideoGroup.from(mHeaders.get(MediaGroup.TYPE_HOME)));
+        mView.updateHeader(VideoGroup.from(mHeaders.get(MediaGroup.TYPE_SUBSCRIPTIONS)));
+        mView.updateHeader(VideoGroup.from(mHeaders.get(MediaGroup.TYPE_HISTORY)));
     }
 
     // TODO: implement Android TV channels
@@ -142,7 +142,7 @@ public class MainPresenter implements Presenter<MainView> {
                     continue;
                 }
 
-                mView.updateHeader(VideoGroup.from(mediaGroup), mHeaders.get(MediaGroup.TYPE_HOME));
+                mView.updateHeader(VideoGroup.from(mediaGroup, mHeaders.get(MediaGroup.TYPE_HOME)));
 
                 mMediaGroups.add(mediaGroup);
             }
@@ -161,7 +161,7 @@ public class MainPresenter implements Presenter<MainView> {
                                 return;
                             }
 
-                            mView.updateHeader(VideoGroup.from(continueMediaGroup), mHeaders.get(MediaGroup.TYPE_HOME));
+                            mView.updateHeader(VideoGroup.from(continueMediaGroup, mHeaders.get(MediaGroup.TYPE_HOME)));
                         },
                         error -> Log.e(TAG, error));
             }
@@ -175,7 +175,7 @@ public class MainPresenter implements Presenter<MainView> {
         mediaGroupManager.getSearchObserve("Самый лучший фильм")
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(mediaGroup -> {
-                    mView.updateHeader(VideoGroup.from(mediaGroup), mHeaders.get(MediaGroup.TYPE_SEARCH));
+                    mView.updateHeader(VideoGroup.from(mediaGroup, mHeaders.get(MediaGroup.TYPE_SEARCH)));
                 }, error -> Log.e(TAG, error));
     }
 
@@ -191,7 +191,7 @@ public class MainPresenter implements Presenter<MainView> {
                         return;
                     }
 
-                    mView.updateHeader(VideoGroup.from(mediaGroup), mHeaders.get(MediaGroup.TYPE_SUBSCRIPTIONS));
+                    mView.updateHeader(VideoGroup.from(mediaGroup, mHeaders.get(MediaGroup.TYPE_SUBSCRIPTIONS)));
                 }, error -> Log.e(TAG, error));
     }
 
@@ -207,7 +207,28 @@ public class MainPresenter implements Presenter<MainView> {
                         return;
                     }
 
-                    mView.updateHeader(VideoGroup.from(mediaGroup), mHeaders.get(MediaGroup.TYPE_HISTORY));
+                    mView.updateHeader(VideoGroup.from(mediaGroup, mHeaders.get(MediaGroup.TYPE_HISTORY)));
+                }, error -> Log.e(TAG, error));
+    }
+
+    public void onScrollEnd(VideoGroup group) {
+        continueGroup(group);
+    }
+
+    @SuppressLint("CheckResult")
+    private void continueGroup(VideoGroup group) {
+        MediaGroup mediaGroup = group.getMediaGroup();
+        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
+
+        mediaGroupManager.continueGroupObserve(mediaGroup)
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(continueMediaGroup -> {
+                    if (continueMediaGroup == null) {
+                        Log.e(TAG, "Can't continue group: " + mediaGroup.getTitle());
+                        return;
+                    }
+
+                    mView.updateHeader(VideoGroup.from(continueMediaGroup, group.getHeader()));
                 }, error -> Log.e(TAG, error));
     }
 }

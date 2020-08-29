@@ -139,13 +139,15 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
     }
 
     @Override
-    public void updateHeader(VideoGroup row, Header header) {
+    public void updateHeader(VideoGroup group) {
+        Header header = group.getHeader();
+
         if (mHeaders.get(header.getId()) == null) {
             mHeaders.put(header.getId(), header);
             createHeader(header);
         }
 
-        mPageRowFragmentFactory.updateFragment(row, header.getId());
+        mPageRowFragmentFactory.updateFragment(group);
     }
 
     private void createHeader(Header header) {

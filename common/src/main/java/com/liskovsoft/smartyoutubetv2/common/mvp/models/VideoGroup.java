@@ -10,9 +10,18 @@ public class VideoGroup {
     private int mId;
     private String mTitle;
     private List<Video> mVideos;
+    private MediaGroup mMediaGroup;
+    private Header mHeader;
 
-    public static VideoGroup from(MediaGroup mediaGroup) {
+    public static VideoGroup from(MediaGroup mediaGroup, Header header) {
         VideoGroup videoGroup = new VideoGroup();
+        videoGroup.mHeader = header;
+
+        if (mediaGroup == null) {
+            return videoGroup;
+        }
+
+        videoGroup.mMediaGroup = mediaGroup;
         videoGroup.mId = mediaGroup.hashCode(); // TODO: replace with real id
         videoGroup.mTitle = mediaGroup.getTitle();
         videoGroup.mVideos = new ArrayList<>();
@@ -47,6 +56,13 @@ public class VideoGroup {
         return videoGroup;
     }
 
+    public static VideoGroup from(Header header) {
+        VideoGroup videoGroup = new VideoGroup();
+        videoGroup.mHeader = header;
+
+        return videoGroup;
+    }
+
     public List<Video> getVideos() {
         return mVideos;
     }
@@ -69,5 +85,17 @@ public class VideoGroup {
 
     public void setId(int id) {
         mId = id;
+    }
+
+    public MediaGroup getMediaGroup() {
+        return mMediaGroup;
+    }
+
+    public Header getHeader() {
+        return mHeader;
+    }
+
+    public boolean isEmpty() {
+        return mVideos == null;
     }
 }

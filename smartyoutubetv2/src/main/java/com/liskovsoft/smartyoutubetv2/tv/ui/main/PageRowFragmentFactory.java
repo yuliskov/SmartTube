@@ -59,10 +59,12 @@ public class PageRowFragmentFactory extends BrowseSupportFragment.FragmentFactor
         throw new IllegalArgumentException(String.format("Invalid row %s", rowObj));
     }
 
-    public void updateFragment(VideoGroup group, int headerId) {
-        if (group == null) {
+    public void updateFragment(VideoGroup group) {
+        if (group == null || group.isEmpty()) {
             return;
         }
+
+        int headerId = group.getHeader().getId();
 
         Fragment fragment = mFragments.get(headerId);
 

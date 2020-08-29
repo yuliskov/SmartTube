@@ -69,7 +69,7 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
                     List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
 
                     for (MediaGroup group : suggestions) {
-                        mView.updateRelatedVideos(VideoGroup.from(group));
+                        mView.updateRelatedVideos(VideoGroup.from(group, null));
                     }
                 }, error -> Log.e(TAG, error));
     }

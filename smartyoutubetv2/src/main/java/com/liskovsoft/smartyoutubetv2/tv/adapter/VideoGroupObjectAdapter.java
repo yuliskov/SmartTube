@@ -10,11 +10,11 @@ import java.util.List;
 public class VideoGroupObjectAdapter extends ObjectAdapter {
     private static final String TAG = VideoGroupObjectAdapter.class.getSimpleName();
     private final List<Video> mMediaItems;
-    private final VideoGroup mMediaGroup;
+    private final VideoGroup mLastGroup;
 
     public VideoGroupObjectAdapter(VideoGroup videoGroup) {
         super(new CardPresenter());
-        mMediaGroup = videoGroup;
+        mLastGroup = videoGroup;
         mMediaItems = videoGroup.getVideos();
     }
 
@@ -28,9 +28,13 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         return mMediaItems.get(position);
     }
 
-    public void append(VideoGroup mediaTab) {
-        if (mMediaItems != null && mediaTab != null) {
-            mMediaItems.addAll(mediaTab.getVideos());
+    public void append(VideoGroup group) {
+        if (mMediaItems != null && group != null) {
+            mMediaItems.addAll(group.getVideos());
         }
+    }
+
+    public VideoGroup getLastGroup() {
+        return mLastGroup;
     }
 }
