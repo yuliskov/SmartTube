@@ -59,7 +59,11 @@ public class PageRowFragmentFactory extends BrowseSupportFragment.FragmentFactor
         throw new IllegalArgumentException(String.format("Invalid row %s", rowObj));
     }
 
-    public void updateRowFragment(VideoGroup group, int headerId) {
+    public void updateFragment(VideoGroup group, int headerId) {
+        if (group == null) {
+            return;
+        }
+
         Fragment fragment = mFragments.get(headerId);
 
         addToPending(group, headerId);
@@ -70,15 +74,18 @@ public class PageRowFragmentFactory extends BrowseSupportFragment.FragmentFactor
             return;
         }
 
-        updateRowFragment(fragment, group);
+        updateFragment(fragment, group);
     }
 
-    private void updateRowFragment(Fragment fragment, VideoGroup row) {
+    private void updateFragment(Fragment fragment, VideoGroup group) {
         if (fragment instanceof RowHeaderFragment) {
             RowHeaderFragment rowFragment = (RowHeaderFragment) fragment;
-            rowFragment.updateRow(row);
+            rowFragment.updateRow(group);
+        } else if (fragment instanceof GridHeaderFragment) {
+            GridHeaderFragment gridFragment = (GridHeaderFragment) fragment;
+            gridFragment.updateGrid(group);
         } else {
-            throw new IllegalStateException("Page row fragment has incompatible type");
+            throw new IllegalStateException("Page group fragment has incompatible type");
         }
     }
 
@@ -98,7 +105,7 @@ public class PageRowFragmentFactory extends BrowseSupportFragment.FragmentFactor
 
         if (videoGroups != null) {
             for (VideoGroup group : videoGroups) {
-                updateRowFragment(fragment, group);
+                updateFragment(fragment, group);
             }
         }
     }

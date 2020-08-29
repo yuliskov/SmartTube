@@ -2,4 +2,6 @@
 <resources>
     <string name="header_home">Home</string>
     <string name="header_search">Search</string>
+    <string name="header_subscriptions">Subscriptions</string>
+    <string name="header_history">History</string>
 </resources>

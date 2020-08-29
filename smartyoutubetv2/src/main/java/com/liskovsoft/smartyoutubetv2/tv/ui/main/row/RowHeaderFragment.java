@@ -35,8 +35,18 @@ public class RowHeaderFragment extends RowsSupportFragment {
     private Handler mHandler;
     private ArrayObjectAdapter mRowsAdapter;
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
-    private List<VideoGroup> mPendingUpdates = new ArrayList<>();
+    private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private MainPresenter mMainPresenter;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setupEventListeners();
+        setupAdapter();
+        applyPendingUpdates();
+        getMainFragmentAdapter().getFragmentHost().notifyDataReady(getMainFragmentAdapter());
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -48,37 +58,23 @@ public class RowHeaderFragment extends RowsSupportFragment {
         mMainPresenter = MainPresenter.instance(context);
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        // Prepare the manager that maintains the same background image between activities.
-        //prepareBackgroundManager();
-
-        setupEventListeners();
-
-        mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
-        setAdapter(mRowsAdapter);
-
+    private void applyPendingUpdates() {
         for (VideoGroup group : mPendingUpdates) {
             updateRow(group);
         }
 
         mPendingUpdates.clear();
+    }
 
-        getMainFragmentAdapter().getFragmentHost().notifyDataReady(getMainFragmentAdapter());
+    private void setupAdapter() {
+        mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
+        setAdapter(mRowsAdapter);
     }
 
     private void setupEventListeners() {
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
     }
-
-    //@Override
-    //public void onCreate(Bundle savedInstanceState) {
-    //    super.onCreate(savedInstanceState);
-    //    getMainFragmentAdapter().getFragmentHost().notifyDataReady(getMainFragmentAdapter());
-    //}
 
     public void updateRow(VideoGroup group) {
         if (mMediaGroupAdapters == null) {

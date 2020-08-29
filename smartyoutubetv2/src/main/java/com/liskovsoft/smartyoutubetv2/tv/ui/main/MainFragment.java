@@ -29,6 +29,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.GridItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.base.UriBackgroundManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.main.grid.GridHeaderItem;
 import com.liskovsoft.smartyoutubetv2.tv.ui.main.row.RowHeaderItem;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.BrowseErrorFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.GuidedStepActivity;
@@ -138,17 +139,28 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
     }
 
     @Override
-    public void updateRowHeader(VideoGroup row, Header header) {
+    public void updateHeader(VideoGroup row, Header header) {
         if (mHeaders.get(header.getId()) == null) {
             mHeaders.put(header.getId(), header);
-            createMultiRowHeader(header);
+            createHeader(header);
         }
 
-        mPageRowFragmentFactory.updateRowFragment(row, header.getId());
+        mPageRowFragmentFactory.updateFragment(row, header.getId());
     }
 
-    private void createMultiRowHeader(Header header) {
-        HeaderItem headerItem = new RowHeaderItem(header.getId(), header.getTitle());
+    private void createHeader(Header header) {
+        HeaderItem headerItem;
+
+        switch (header.getType()) {
+            case Header.TYPE_ROW:
+                headerItem = new RowHeaderItem(header.getId(), header.getTitle());
+                break;
+            case Header.TYPE_GRID:
+            default:
+                headerItem = new GridHeaderItem(header.getId(), header.getTitle());
+                break;
+        }
+
         PageRow pageRow = new PageRow(headerItem);
         mCategoryRowAdapter.add(pageRow);
     }
@@ -159,17 +171,7 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
     }
 
     @Override
-    public void updateGridHeader(VideoGroup grid, Header header) {
-        // TODO: not implemented
-    }
-
-    @Override
-    public void clearRowHeader(Header header) {
-        // TODO: not implemented
-    }
-
-    @Override
-    public void clearGridHeader(Header header) {
+    public void clearHeader(Header header) {
         // TODO: not implemented
     }
 
