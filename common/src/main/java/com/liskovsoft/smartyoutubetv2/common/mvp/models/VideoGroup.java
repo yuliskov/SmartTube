@@ -12,6 +12,7 @@ public class VideoGroup {
     private List<Video> mVideos;
     private MediaGroup mMediaGroup;
     private Header mHeader;
+    private boolean mIsContinued;
 
     public static VideoGroup from(MediaGroup mediaGroup, Header header) {
         VideoGroup videoGroup = new VideoGroup();
@@ -91,11 +92,23 @@ public class VideoGroup {
         return mMediaGroup;
     }
 
+    public void setMediaGroup(MediaGroup group) {
+        mMediaGroup = group;
+    }
+
     public Header getHeader() {
         return mHeader;
     }
 
     public boolean isEmpty() {
         return mVideos == null;
+    }
+
+    public boolean isContinued() {
+        return mIsContinued;
+    }
+
+    public void setContinued(boolean continued) {
+        mIsContinued = continued;
     }
 }

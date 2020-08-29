@@ -19,8 +19,6 @@ import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MainPresenter implements Presenter<MainView> {
     private static final String TAG = MainPresenter.class.getSimpleName();
@@ -29,17 +27,21 @@ public class MainPresenter implements Presenter<MainView> {
     private final Handler mHandler = new Handler();
     private final Context mContext;
     private final ArrayList<MediaGroup> mMediaGroups;
-    private final Map<Integer, Header> mHeaders = new HashMap<>();
     private final PlaybackPresenter mPlaybackPresenter;
     private final MediaService mMediaService;
     private MainView mView;
+    private Header mHomeHeader;
+    private Header mSearchHeader;
+    private Header mSubscriptionsHeader;
+    private Header mHistoryHeader;
 
     private MainPresenter(Context context) {
+        GlobalPreferences.instance(context); // auth token storage
         mMediaGroups = new ArrayList<>();
         mContext = context;
         mPlaybackPresenter = PlaybackPresenter.instance(context);
         mMediaService = YouTubeMediaService.instance();
-        GlobalPreferences.instance(context);
+        initHeaders();
     }
 
     public static MainPresenter instance(Context context) {
@@ -61,10 +63,8 @@ public class MainPresenter implements Presenter<MainView> {
             mView.showOnboarding();
         }
 
-
         checkUserIsSigned();
-        initHeaders();
-        loadHomeData();
+        loadHome();
         loadSubscriptions();
         loadHistory();
     }
@@ -97,14 +97,10 @@ public class MainPresenter implements Presenter<MainView> {
     }
 
     private void initHeaders() {
-        mHeaders.put(MediaGroup.TYPE_HOME, new Header(MediaGroup.TYPE_HOME, mContext.getString(R.string.header_home), Header.TYPE_ROW));
-        mHeaders.put(MediaGroup.TYPE_SEARCH, new Header(MediaGroup.TYPE_SEARCH, mContext.getString(R.string.header_search)));
-        mHeaders.put(MediaGroup.TYPE_SUBSCRIPTIONS, new Header(MediaGroup.TYPE_SUBSCRIPTIONS, mContext.getString(R.string.header_subscriptions)));
-        mHeaders.put(MediaGroup.TYPE_HISTORY, new Header(MediaGroup.TYPE_HISTORY, mContext.getString(R.string.header_history)));
-
-        mView.updateHeader(VideoGroup.from(mHeaders.get(MediaGroup.TYPE_HOME)));
-        mView.updateHeader(VideoGroup.from(mHeaders.get(MediaGroup.TYPE_SUBSCRIPTIONS)));
-        mView.updateHeader(VideoGroup.from(mHeaders.get(MediaGroup.TYPE_HISTORY)));
+        mHomeHeader = new Header(MediaGroup.TYPE_HOME, mContext.getString(R.string.header_home), Header.TYPE_ROW);
+        mSearchHeader = new Header(MediaGroup.TYPE_SEARCH, mContext.getString(R.string.header_search));
+        mSubscriptionsHeader = new Header(MediaGroup.TYPE_SUBSCRIPTIONS, mContext.getString(R.string.header_subscriptions));
+        mHistoryHeader = new Header(MediaGroup.TYPE_HISTORY, mContext.getString(R.string.header_history));
     }
 
     // TODO: implement Android TV channels
@@ -119,12 +115,14 @@ public class MainPresenter implements Presenter<MainView> {
         if (!signInManager.isSigned()) {
             signInManager.signInObserve()
                     .subscribeOn(Schedulers.newThread())
-                    .subscribe((userCode) -> Log.d(TAG, "User code is: " + userCode), error -> Log.e(TAG, error));
+                    .subscribe(userCode -> Log.d(TAG, "User code is: " + userCode), error -> Log.e(TAG, error));
         }
     }
 
     @SuppressLint("CheckResult")
-    private void loadHomeData() {
+    private void loadHome() {
+        mView.updateHeader(VideoGroup.from(mHomeHeader));
+
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
         mediaGroupManager.getHomeObserve()
@@ -142,12 +140,12 @@ public class MainPresenter implements Presenter<MainView> {
                     continue;
                 }
 
-                mView.updateHeader(VideoGroup.from(mediaGroup, mHeaders.get(MediaGroup.TYPE_HOME)));
+                mView.updateHeader(VideoGroup.from(mediaGroup, mHomeHeader));
 
                 mMediaGroups.add(mediaGroup);
             }
         },
-        error -> Log.e(TAG, error),
+        error -> Log.e(TAG, "loadHomeData: " + error),
         () -> {
             // continue nested groups
 
@@ -161,26 +159,30 @@ public class MainPresenter implements Presenter<MainView> {
                                 return;
                             }
 
-                            mView.updateHeader(VideoGroup.from(continueMediaGroup, mHeaders.get(MediaGroup.TYPE_HOME)));
+                            mView.updateHeader(VideoGroup.from(continueMediaGroup, mHomeHeader));
                         },
-                        error -> Log.e(TAG, error));
+                        error -> Log.e(TAG, "loadHomeData continue: " + error));
             }
         });
     }
 
     @SuppressLint("CheckResult")
     private void loadSearchData() {
+        mView.updateHeader(VideoGroup.from(mSearchHeader));
+
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
         mediaGroupManager.getSearchObserve("Самый лучший фильм")
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(mediaGroup -> {
-                    mView.updateHeader(VideoGroup.from(mediaGroup, mHeaders.get(MediaGroup.TYPE_SEARCH)));
+                    mView.updateHeader(VideoGroup.from(mediaGroup, mSearchHeader));
                 }, error -> Log.e(TAG, error));
     }
 
     @SuppressLint("CheckResult")
     private void loadSubscriptions() {
+        mView.updateHeader(VideoGroup.from(mSubscriptionsHeader));
+
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
         mediaGroupManager.getSubscriptionsObserve()
@@ -191,12 +193,14 @@ public class MainPresenter implements Presenter<MainView> {
                         return;
                     }
 
-                    mView.updateHeader(VideoGroup.from(mediaGroup, mHeaders.get(MediaGroup.TYPE_SUBSCRIPTIONS)));
-                }, error -> Log.e(TAG, error));
+                    mView.updateHeader(VideoGroup.from(mediaGroup, mSubscriptionsHeader));
+                }, error -> Log.e(TAG, "loadSubscriptions: " + error));
     }
 
     @SuppressLint("CheckResult")
     private void loadHistory() {
+        mView.updateHeader(VideoGroup.from(mHistoryHeader));
+
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
         mediaGroupManager.getHistoryObserve()
@@ -207,17 +211,21 @@ public class MainPresenter implements Presenter<MainView> {
                         return;
                     }
 
-                    mView.updateHeader(VideoGroup.from(mediaGroup, mHeaders.get(MediaGroup.TYPE_HISTORY)));
-                }, error -> Log.e(TAG, error));
-    }
-
-    public void onScrollEnd(VideoGroup group) {
-        continueGroup(group);
+                    mView.updateHeader(VideoGroup.from(mediaGroup, mHistoryHeader));
+                }, error -> Log.e(TAG, "loadHistory: " + error));
     }
 
     @SuppressLint("CheckResult")
     private void continueGroup(VideoGroup group) {
+        // avoid to continue multiple times
+        if (group.isContinued()) {
+            return;
+        } else {
+            group.setContinued(true);
+        }
+
         MediaGroup mediaGroup = group.getMediaGroup();
+
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
         mediaGroupManager.continueGroupObserve(mediaGroup)
@@ -229,6 +237,10 @@ public class MainPresenter implements Presenter<MainView> {
                     }
 
                     mView.updateHeader(VideoGroup.from(continueMediaGroup, group.getHeader()));
-                }, error -> Log.e(TAG, error));
+        }, error -> Log.e(TAG, "continueGroup: " + error));
+    }
+
+    public void onScrollEnd(VideoGroup group) {
+        continueGroup(group);
     }
 }
