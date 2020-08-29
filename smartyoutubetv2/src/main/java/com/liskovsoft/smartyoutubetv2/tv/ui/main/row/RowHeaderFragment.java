@@ -110,7 +110,7 @@ public class RowHeaderFragment extends RowsSupportFragment {
                     Log.d(TAG, "Is long click: " + longClick);
 
                     if (longClick) {
-                        mMainPresenter.onVideoItemLongPressed((Video) item);
+                        mMainPresenter.onVideoItemLongClicked((Video) item);
                     } else {
                         mMainPresenter.onVideoItemClicked((Video) item);
                     }

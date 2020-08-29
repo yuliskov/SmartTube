@@ -7,7 +7,7 @@ public class LongClickManager {
     private int mLastEventCode;
     private long mLastEventTimeMs;
 
-    public void registerEvent(KeyEvent event) {
+    public void dispatchKeyEvent(KeyEvent event) {
         int keyCode = event.getKeyCode();
         long currentTimeMillis = System.currentTimeMillis();
         boolean sameKey = mLastEventCode == keyCode;

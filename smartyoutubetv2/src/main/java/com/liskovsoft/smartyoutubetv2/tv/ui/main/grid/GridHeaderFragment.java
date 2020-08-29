@@ -66,10 +66,11 @@ public class GridHeaderFragment extends GridFragment {
     }
 
     private void setupAdapter() {
-        VerticalGridPresenter presenter = new VerticalGridPresenter(ZOOM_FACTOR);
+        VerticalGridPresenter presenter = new VerticalGridPresenter(ZOOM_FACTOR, false);
         presenter.setNumberOfColumns(COLUMNS);
         setGridPresenter(presenter);
 
+        // TODO: Select presenter based on the video item type. Such channel, playlist, or simple video
         //CardPresenterSelector cardPresenter = new CardPresenterSelector(getActivity());
         mAdapter = new ArrayObjectAdapter(new CardPresenter());
         setAdapter(mAdapter);
@@ -97,7 +98,7 @@ public class GridHeaderFragment extends GridFragment {
                     Log.d(TAG, "Is long click: " + longClick);
 
                     if (longClick) {
-                        mMainPresenter.onVideoItemLongPressed((Video) item);
+                        mMainPresenter.onVideoItemLongClicked((Video) item);
                     } else {
                         mMainPresenter.onVideoItemClicked((Video) item);
                     }

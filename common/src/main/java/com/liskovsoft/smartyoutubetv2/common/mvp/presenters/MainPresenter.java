@@ -88,7 +88,7 @@ public class MainPresenter implements Presenter<MainView> {
         mView.openPlaybackView();
     }
 
-    public void onVideoItemLongPressed(Video item) {
+    public void onVideoItemLongClicked(Video item) {
         if (mView == null) {
             return;
         }
@@ -164,19 +164,6 @@ public class MainPresenter implements Presenter<MainView> {
                         error -> Log.e(TAG, "loadHomeData continue: " + error));
             }
         });
-    }
-
-    @SuppressLint("CheckResult")
-    private void loadSearchData() {
-        mView.updateHeader(VideoGroup.from(mSearchHeader));
-
-        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
-
-        mediaGroupManager.getSearchObserve("Самый лучший фильм")
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(mediaGroup -> {
-                    mView.updateHeader(VideoGroup.from(mediaGroup, mSearchHeader));
-                }, error -> Log.e(TAG, error));
     }
 
     @SuppressLint("CheckResult")

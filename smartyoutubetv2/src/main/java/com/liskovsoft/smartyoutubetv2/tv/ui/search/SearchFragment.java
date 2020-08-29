@@ -1,19 +1,3 @@
-/*
- * Copyright (c) 2014 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.liskovsoft.smartyoutubetv2.tv.ui.search;
 
 import android.Manifest;
@@ -43,9 +27,12 @@ import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.Toast;
 
+import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.mvp.presenters.SearchPresenter;
+import com.liskovsoft.smartyoutubetv2.common.mvp.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.tv.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.data.old.VideoContract;
@@ -53,13 +40,11 @@ import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.tv.model.old.VideoCursorMapper;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.VideoDetailsActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
 
-/*
- * This class demonstrates how to do in-app search
- */
 public class SearchFragment extends SearchSupportFragment
         implements SearchSupportFragment.SearchResultProvider,
-        LoaderManager.LoaderCallbacks<Cursor> {
+        LoaderManager.LoaderCallbacks<Cursor>, SearchView {
     private static final String TAG = "SearchFragment";
     private static final boolean DEBUG = BuildConfig.DEBUG;
     private static final boolean FINISH_ON_RECOGNIZER_CANCELED = true;
@@ -73,6 +58,7 @@ public class SearchFragment extends SearchSupportFragment
 
     private int mSearchLoaderId = 1;
     private boolean mResultsFound = false;
+    private SearchPresenter mSearchPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -110,6 +96,14 @@ public class SearchFragment extends SearchSupportFragment
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        mSearchPresenter = SearchPresenter.instance(context);
+        mSearchPresenter.register(this);
+    }
+
+    @Override
     public void onPause() {
         mHandler.removeCallbacksAndMessages(null);
         super.onPause();
@@ -127,7 +121,7 @@ public class SearchFragment extends SearchSupportFragment
                         // If recognizer is canceled or failed, keep focus on the search orb
                         if (FINISH_ON_RECOGNIZER_CANCELED) {
                             if (!hasResults()) {
-                                if (DEBUG) Log.v(TAG, "Voice search canceled");
+                                if (DEBUG) Log.i(TAG, "Voice search canceled");
                                 getView().findViewById(R.id.lb_search_bar_speech_orb).requestFocus();
                             }
                         }
@@ -213,6 +207,39 @@ public class SearchFragment extends SearchSupportFragment
         mVideoCursorAdapter.changeCursor(null);
     }
 
+    @Override
+    public void loadSearchResult(VideoGroup group) {
+        // TODO: not implemented
+    }
+
+    @Override
+    public void openPlaybackView() {
+        Intent intent = new Intent(getActivity(), PlaybackActivity.class);
+        //intent.putExtra(VideoDetailsActivity.VIDEO, item);
+
+        //Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+        //        getActivity(),
+        //        ((ImageCardView) itemViewHolder.view).getMainImageView(),
+        //        VideoDetailsActivity.SHARED_ELEMENT_NAME).toBundle();
+        //getActivity().startActivity(intent, bundle);
+
+        startActivity(intent);
+    }
+
+    @Override
+    public void openDetailsView(Video item) {
+        Intent intent = new Intent(getActivity(), VideoDetailsActivity.class);
+        intent.putExtra(VideoDetailsActivity.VIDEO, item);
+
+        //Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
+        //        getActivity(),
+        //        ((ImageCardView) itemViewHolder.view).getMainImageView(),
+        //        VideoDetailsActivity.SHARED_ELEMENT_NAME).toBundle();
+        //getActivity().startActivity(intent, bundle);
+
+        startActivity(intent);
+    }
+
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
@@ -233,5 +260,4 @@ public class SearchFragment extends SearchSupportFragment
             }
         }
     }
-
 }

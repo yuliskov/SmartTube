@@ -64,6 +64,10 @@ public class VideoGroup {
         return videoGroup;
     }
 
+    public static VideoGroup from(MediaGroup mediaGroup) {
+        return from(mediaGroup, null);
+    }
+
     public List<Video> getVideos() {
         return mVideos;
     }
