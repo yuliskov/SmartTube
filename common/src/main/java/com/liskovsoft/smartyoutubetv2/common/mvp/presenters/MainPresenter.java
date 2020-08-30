@@ -137,6 +137,8 @@ public class MainPresenter implements VideoItemPresenter<MainView> {
 
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
+        Log.d(TAG, "Start loading home...");
+
         mediaGroupManager.getHomeObserve()
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(mediaGroups -> {
@@ -145,6 +147,8 @@ public class MainPresenter implements VideoItemPresenter<MainView> {
                 Log.e(TAG, "Home groups not found");
                 return;
             }
+
+            Log.d(TAG, "Loading home groups...");
 
             for (MediaGroup mediaGroup : mediaGroups) {
                 if (mediaGroup.getMediaItems() == null) {

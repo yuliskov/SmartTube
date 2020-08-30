@@ -218,4 +218,16 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
             }
         }
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mBackgroundManager.onDestroy();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mBackgroundManager.onStop();
+    }
 }
