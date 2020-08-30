@@ -257,7 +257,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
-    public void setVideo(Video video) {
+    public void openVideo(Video video) {
         initTitle(video);
         resetRelatedVideos();
     }

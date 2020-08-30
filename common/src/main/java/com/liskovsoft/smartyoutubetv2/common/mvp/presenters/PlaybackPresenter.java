@@ -110,7 +110,7 @@ public class PlaybackPresenter implements VideoItemPresenter<PlaybackView> {
     private void loadVideo(Video video) {
         if (mView != null) {
             mVideo = video;
-            mView.setVideo(video);
+            mView.openVideo(video);
             mPlaylist.add(video);
             mPlaylist.setCurrentPosition(mPlaylist.size() - 1);
             loadFormatInfo(video);

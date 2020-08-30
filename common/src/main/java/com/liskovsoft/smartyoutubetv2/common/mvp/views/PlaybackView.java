@@ -8,5 +8,5 @@ import java.io.InputStream;
 public interface PlaybackView {
     void loadDashStream(InputStream dashManifest);
     void updateRelatedVideos(VideoGroup row);
-    void setVideo(Video video);
+    void openVideo(Video video);
 }

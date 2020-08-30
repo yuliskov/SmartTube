@@ -20,12 +20,14 @@ public class SearchPresenter implements VideoItemPresenter<SearchView> {
     private final MediaService mMediaService;
     private final PlaybackPresenter mPlaybackPresenter;
     private final ViewManager mViewManager;
+    private final DetailsPresenter mDetailsPresenter;
     private SearchView mView;
 
     private SearchPresenter(Context context) {
         mContext = context;
         mMediaService = YouTubeMediaService.instance();
         mPlaybackPresenter = PlaybackPresenter.instance(context);
+        mDetailsPresenter = DetailsPresenter.instance(context);
         mViewManager = ViewManager.instance(context);
     }
 
@@ -71,7 +73,7 @@ public class SearchPresenter implements VideoItemPresenter<SearchView> {
             return;
         }
 
-        mView.openDetailsView(item);
+        mDetailsPresenter.openVideo(item);
     }
 
     public void onSearchText(String searchText) {
