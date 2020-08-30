@@ -152,7 +152,7 @@ public class MainPresenter implements VideoItemPresenter<MainView> {
 
             for (MediaGroup mediaGroup : mediaGroups) {
                 if (mediaGroup.getMediaItems() == null) {
-                    Log.e(TAG, "MediaGroup is empty: " + mediaGroup.getTitle());
+                    Log.e(TAG, "MediaGroup is empty. Name: " + mediaGroup.getTitle());
                     continue;
                 }
 
@@ -160,26 +160,7 @@ public class MainPresenter implements VideoItemPresenter<MainView> {
 
                 mMediaGroups.add(mediaGroup);
             }
-        },
-        error -> Log.e(TAG, "loadHomeData: " + error),
-        () -> {
-            // continue nested groups
-
-            // TODO: How many times group should be continued? Maybe continue on demand?
-            for (MediaGroup mediaGroup : mMediaGroups) {
-                mediaGroupManager.continueGroupObserve(mediaGroup)
-                        .subscribeOn(Schedulers.newThread())
-                        .subscribe(continueMediaGroup -> {
-                            if (continueMediaGroup == null) {
-                                Log.e(TAG, "Next Home group is empty: " + mediaGroup.getTitle());
-                                return;
-                            }
-
-                            mView.updateHeader(VideoGroup.from(continueMediaGroup, mHomeHeader));
-                        },
-                        error -> Log.e(TAG, "loadHomeData continue: " + error));
-            }
-        });
+        }, error -> Log.e(TAG, "loadHomeData: " + error));
     }
 
     @SuppressLint("CheckResult")
@@ -235,7 +216,7 @@ public class MainPresenter implements VideoItemPresenter<MainView> {
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(continueMediaGroup -> {
                     if (continueMediaGroup == null) {
-                        Log.e(TAG, "Can't continue group: " + mediaGroup.getTitle());
+                        Log.e(TAG, "Can't continue group with name " + mediaGroup.getTitle());
                         return;
                     }
 

@@ -55,8 +55,15 @@ public class RowHeaderFragment extends RowsSupportFragment {
 
         mMediaGroupAdapters = new HashMap<>();
         mHandler = new Handler();
-        mBackgroundManager = UriBackgroundManager.instance(getActivity());
         mMainPresenter = MainPresenter.instance(context);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
+
     }
 
     private void applyPendingUpdates() {

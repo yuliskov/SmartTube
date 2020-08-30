@@ -49,8 +49,14 @@ public class GridHeaderFragment extends GridFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        mBackgroundManager = UriBackgroundManager.instance(getActivity());
         mMainPresenter = MainPresenter.instance(context);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
     }
 
     private void setupEventListeners() {

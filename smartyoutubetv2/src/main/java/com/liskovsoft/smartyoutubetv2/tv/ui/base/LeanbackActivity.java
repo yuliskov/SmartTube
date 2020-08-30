@@ -14,11 +14,13 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
 public abstract class LeanbackActivity extends FragmentActivity {
     private static final String TAG = LeanbackActivity.class.getSimpleName();
     private LongClickManager mLongClickManager;
+    private UriBackgroundManager mBackgroundManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mLongClickManager = new LongClickManager();
+        mBackgroundManager = new UriBackgroundManager(this);
     }
 
     @Override
@@ -39,5 +41,9 @@ public abstract class LeanbackActivity extends FragmentActivity {
 
     public boolean isLongClick() {
         return mLongClickManager.isLongClick();
+    }
+
+    public UriBackgroundManager getBackgroundManager() {
+        return mBackgroundManager;
     }
 }

@@ -28,6 +28,7 @@ import com.liskovsoft.smartyoutubetv2.common.mvp.views.MainView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.GridItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.base.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.base.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.main.grid.GridHeaderItem;
 import com.liskovsoft.smartyoutubetv2.tv.ui.main.row.RowHeaderItem;
@@ -68,7 +69,7 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
         // Final initialization, modifying UI elements.
         super.onActivityCreated(savedInstanceState);
 
-        mBackgroundManager = UriBackgroundManager.instance(getActivity());
+        mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
 
         // Map category results from the database to ListRow objects.
         // This Adapter is used to render the MainFragment sidebar labels.

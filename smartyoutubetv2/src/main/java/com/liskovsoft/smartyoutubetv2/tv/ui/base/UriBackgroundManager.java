@@ -22,22 +22,13 @@ public class UriBackgroundManager {
     private DisplayMetrics mMetrics;
     private Runnable mBackgroundTask;
     private BackgroundManager mBackgroundManager;
-    private static UriBackgroundManager sInstance;
     private final Activity mActivity;
     private final Handler mHandler;
 
-    private UriBackgroundManager(Activity activity) {
+    public UriBackgroundManager(Activity activity) {
         mActivity = activity;
         mHandler = new Handler();
         prepareBackgroundManager();
-    }
-
-    public static UriBackgroundManager instance(Activity activity) {
-        if (sInstance == null) {
-            sInstance = new UriBackgroundManager(activity);
-        }
-
-        return sInstance;
     }
 
     private void prepareBackgroundManager() {
