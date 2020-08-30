@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.mvp.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import com.liskovsoft.smartyoutubetv2.common.mvp.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.mvp.views.OnboardingView;
 
@@ -9,10 +10,12 @@ public class OnboardingPresenter implements Presenter<OnboardingView> {
     @SuppressLint("StaticFieldLeak")
     private static OnboardingPresenter sInstance;
     private final Context mContext;
+    private final ViewManager mViewManager;
     private OnboardingView mView;
 
     private OnboardingPresenter(Context context) {
         mContext = context;
+        mViewManager = ViewManager.instance(context);
     }
 
     public static OnboardingPresenter instance(Context context) {
@@ -53,5 +56,12 @@ public class OnboardingPresenter implements Presenter<OnboardingView> {
     @Override
     public void unregister(OnboardingView view) {
         mView = null;
+    }
+
+    public void showOnboarding() {
+        if (!AppPrefs.instance(mContext).getCompletedOnboarding()) {
+            // This is the first time running the app, let's go to onboarding
+            mViewManager.startView(OnboardingView.class);
+        }
     }
 }

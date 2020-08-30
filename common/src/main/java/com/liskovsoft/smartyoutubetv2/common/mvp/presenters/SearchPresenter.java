@@ -62,8 +62,7 @@ public class SearchPresenter implements VideoItemPresenter<SearchView> {
             return;
         }
 
-        mPlaybackPresenter.setVideo(item);
-        mViewManager.startView(PlaybackView.class);
+        mPlaybackPresenter.openVideo(item);
     }
 
     @Override

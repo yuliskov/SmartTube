@@ -218,18 +218,4 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
             }
         }
     }
-
-    @Override
-    public void openDetailsView(Video item) {
-        Intent intent = new Intent(getActivity(), VideoDetailsActivity.class);
-        intent.putExtra(VideoDetailsActivity.VIDEO, item);
-
-        //Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-        //        getActivity(),
-        //        ((ImageCardView) itemViewHolder.view).getMainImageView(),
-        //        VideoDetailsActivity.SHARED_ELEMENT_NAME).toBundle();
-        //getActivity().startActivity(intent, bundle);
-
-        startActivity(intent);
-    }
 }

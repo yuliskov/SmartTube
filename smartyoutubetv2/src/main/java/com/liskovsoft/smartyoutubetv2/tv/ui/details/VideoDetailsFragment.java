@@ -45,6 +45,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.liskovsoft.smartyoutubetv2.common.mvp.presenters.DetailsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.mvp.views.DetailsView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.data.old.VideoContract;
@@ -81,6 +82,7 @@ public class VideoDetailsFragment extends DetailsSupportFragment
     private CursorObjectAdapter mVideoCursorAdapter;
     private FullWidthDetailsOverviewSharedElementHelper mHelper;
     private final VideoCursorMapper mVideoCursorMapper = new VideoCursorMapper();
+    private DetailsPresenter mDetailsPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,9 +92,21 @@ public class VideoDetailsFragment extends DetailsSupportFragment
         mVideoCursorAdapter = new CursorObjectAdapter(new CardPresenter());
         mVideoCursorAdapter.setMapper(mVideoCursorMapper);
 
-        mSelectedVideo = (Video) getActivity().getIntent()
-                .getParcelableExtra(VideoDetailsActivity.VIDEO);
+        //mSelectedVideo = (Video) getActivity().getIntent()
+        //        .getParcelableExtra(VideoDetailsActivity.VIDEO);
 
+        //init();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        mDetailsPresenter = DetailsPresenter.instance(context);
+        mDetailsPresenter.register(this);
+    }
+
+    private void init() {
         if (mSelectedVideo != null || !hasGlobalSearchIntent()) {
             removeNotification(getActivity().getIntent()
                     .getIntExtra(VideoDetailsActivity.NOTIFICATION_ID, NO_NOTIFICATION));
@@ -265,8 +279,9 @@ public class VideoDetailsFragment extends DetailsSupportFragment
     }
 
     @Override
-    public void setVideo(Video video) {
+    public void openVideo(Video video) {
         mSelectedVideo = video;
+        init();
     }
 
     static class MovieDetailsOverviewLogoPresenter extends DetailsOverviewLogoPresenter {

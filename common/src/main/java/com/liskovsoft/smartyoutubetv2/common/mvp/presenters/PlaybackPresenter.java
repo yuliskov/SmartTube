@@ -6,6 +6,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.mvp.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
@@ -21,12 +22,14 @@ public class PlaybackPresenter implements VideoItemPresenter<PlaybackView> {
     private static PlaybackPresenter sInstance;
     private final Context mContext;
     private final Playlist mPlaylist;
+    private final ViewManager mViewManager;
     private PlaybackView mView;
     private Video mVideo;
 
     private PlaybackPresenter(Context context) {
         mContext = context;
         mPlaylist = new Playlist();
+        mViewManager = ViewManager.instance(context);
     }
 
     public static PlaybackPresenter instance(Context context) {
@@ -123,7 +126,9 @@ public class PlaybackPresenter implements VideoItemPresenter<PlaybackView> {
         loadVideo(mPlaylist.next());
     }
 
-    public void setVideo(Video video) {
+    public void openVideo(Video video) {
         mVideo = video;
+
+        mViewManager.startView(PlaybackView.class);
     }
 }

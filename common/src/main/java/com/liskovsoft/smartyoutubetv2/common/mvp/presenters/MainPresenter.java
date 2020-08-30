@@ -15,9 +15,6 @@ import com.liskovsoft.smartyoutubetv2.common.mvp.models.Header;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.mvp.views.MainView;
-import com.liskovsoft.smartyoutubetv2.common.mvp.views.OnboardingView;
-import com.liskovsoft.smartyoutubetv2.common.mvp.views.PlaybackView;
-import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.schedulers.Schedulers;
 
@@ -31,8 +28,10 @@ public class MainPresenter implements VideoItemPresenter<MainView> {
     private final Context mContext;
     private final ArrayList<MediaGroup> mMediaGroups;
     private final PlaybackPresenter mPlaybackPresenter;
+    private final DetailsPresenter mDetailsPresenter;
     private final MediaService mMediaService;
     private final ViewManager mViewManager;
+    private final OnboardingPresenter mOnboardingPresenter;
     private MainView mView;
     private Header mHomeHeader;
     private Header mSearchHeader;
@@ -44,6 +43,8 @@ public class MainPresenter implements VideoItemPresenter<MainView> {
         mMediaGroups = new ArrayList<>();
         mContext = context;
         mPlaybackPresenter = PlaybackPresenter.instance(context);
+        mDetailsPresenter = DetailsPresenter.instance(context);
+        mOnboardingPresenter = OnboardingPresenter.instance(context);
         mMediaService = YouTubeMediaService.instance();
         mViewManager = ViewManager.instance(context);
         initHeaders();
@@ -63,10 +64,7 @@ public class MainPresenter implements VideoItemPresenter<MainView> {
             return;
         }
 
-        if (!AppPrefs.instance(mContext).getCompletedOnboarding()) {
-            // This is the first time running the app, let's go to onboarding
-            mViewManager.startView(OnboardingView.class);
-        }
+        mOnboardingPresenter.showOnboarding();
 
         checkUserIsSigned();
         loadHome();
@@ -90,8 +88,7 @@ public class MainPresenter implements VideoItemPresenter<MainView> {
             return;
         }
 
-        mPlaybackPresenter.setVideo(item);
-        mViewManager.startView(PlaybackView.class);
+        mPlaybackPresenter.openVideo(item);
     }
 
     @Override
@@ -100,7 +97,7 @@ public class MainPresenter implements VideoItemPresenter<MainView> {
             return;
         }
 
-        mView.openDetailsView(item);
+        mDetailsPresenter.openVideo(item);
     }
 
     private void initHeaders() {
