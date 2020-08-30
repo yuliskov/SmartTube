@@ -21,6 +21,7 @@ import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.mvp.presenters.MainPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.base.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.base.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.main.MainActivity;
 
@@ -105,8 +106,8 @@ public class RowHeaderFragment extends RowsSupportFragment {
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
 
             if (item instanceof Video) {
-                if (getActivity() instanceof MainActivity) {
-                    boolean longClick = ((MainActivity) getActivity()).isLongClick();
+                if (getActivity() instanceof LeanbackActivity) {
+                    boolean longClick = ((LeanbackActivity) getActivity()).isLongClick();
                     Log.d(TAG, "Is long click: " + longClick);
 
                     if (longClick) {

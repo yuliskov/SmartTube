@@ -39,6 +39,7 @@ import com.liskovsoft.smartyoutubetv2.tv.data.old.VideoContract;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.tv.model.old.VideoCursorMapper;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.base.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.VideoDetailsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
 
@@ -243,20 +244,21 @@ public class SearchFragment extends SearchSupportFragment
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
-                RowPresenter.ViewHolder rowViewHolder, Row row) {
+                                  RowPresenter.ViewHolder rowViewHolder, Row row) {
 
             if (item instanceof Video) {
-                Video video = (Video) item;
-                Intent intent = new Intent(getActivity(), VideoDetailsActivity.class);
-                intent.putExtra(VideoDetailsActivity.VIDEO, video);
+                if (getActivity() instanceof LeanbackActivity) {
+                    boolean longClick = ((LeanbackActivity) getActivity()).isLongClick();
+                    Log.d(TAG, "Is long click: " + longClick);
 
-                Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        getActivity(),
-                        ((ImageCardView) itemViewHolder.view).getMainImageView(),
-                        VideoDetailsActivity.SHARED_ELEMENT_NAME).toBundle();
-                getActivity().startActivity(intent, bundle);
+                    if (longClick) {
+                        mSearchPresenter.onVideoItemLongClicked((Video) item);
+                    } else {
+                        mSearchPresenter.onVideoItemClicked((Video) item);
+                    }
+                }
             } else {
-                Toast.makeText(getActivity(), ((String) item), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
             }
         }
     }
