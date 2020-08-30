@@ -1,20 +1,4 @@
-/*
- * Copyright (c) 2014 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-package com.liskovsoft.smartyoutubetv2.tv.ui.old;
+package com.liskovsoft.smartyoutubetv2.tv.ui.details;
 
 import android.app.NotificationManager;
 import android.content.Context;
@@ -61,6 +45,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.liskovsoft.smartyoutubetv2.common.mvp.views.DetailsView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.data.old.VideoContract;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
@@ -74,7 +59,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
  * It shows a detailed view of video and its metadata plus related videos.
  */
 public class VideoDetailsFragment extends DetailsSupportFragment
-        implements LoaderManager.LoaderCallbacks<Cursor> {
+        implements LoaderManager.LoaderCallbacks<Cursor>, DetailsView {
 
     private static final int NO_NOTIFICATION = -1;
     private static final int ACTION_WATCH_TRAILER = 1;
@@ -277,6 +262,11 @@ public class VideoDetailsFragment extends DetailsSupportFragment
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mVideoCursorAdapter.changeCursor(null);
+    }
+
+    @Override
+    public void setVideo(Video video) {
+        mSelectedVideo = video;
     }
 
     static class MovieDetailsOverviewLogoPresenter extends DetailsOverviewLogoPresenter {

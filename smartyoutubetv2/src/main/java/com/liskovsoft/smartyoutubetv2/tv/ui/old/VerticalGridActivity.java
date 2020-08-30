@@ -31,7 +31,7 @@ public class VerticalGridActivity extends LeanbackActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.vertical_grid);
+        setContentView(R.layout.fragment_vertical_grid);
         getWindow().setBackgroundDrawableResource(R.drawable.grid_bg);
     }
 }

@@ -5,24 +5,28 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.mvp.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.mvp.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.mvp.views.SearchView;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.schedulers.Schedulers;
 
-public class SearchPresenter implements Presenter<SearchView> {
+public class SearchPresenter implements VideoItemPresenter<SearchView> {
     private static final String TAG = SearchPresenter.class.getSimpleName();
     private static SearchPresenter sInstance;
     private final Context mContext;
     private final MediaService mMediaService;
     private final PlaybackPresenter mPlaybackPresenter;
+    private final ViewManager mViewManager;
     private SearchView mView;
 
     private SearchPresenter(Context context) {
         mContext = context;
         mMediaService = YouTubeMediaService.instance();
         mPlaybackPresenter = PlaybackPresenter.instance(context);
+        mViewManager = ViewManager.instance(context);
     }
 
     public static SearchPresenter instance(Context context) {
@@ -52,15 +56,17 @@ public class SearchPresenter implements Presenter<SearchView> {
         // TODO: not implemented
     }
 
+    @Override
     public void onVideoItemClicked(Video item) {
         if (mView == null) {
             return;
         }
 
         mPlaybackPresenter.setVideo(item);
-        mView.openPlaybackView();
+        mViewManager.startView(PlaybackView.class);
     }
 
+    @Override
     public void onVideoItemLongClicked(Video item) {
         if (mView == null) {
             return;

@@ -36,7 +36,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.data.old.VideoContract;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.tv.model.old.VideoCursorMapper;
-import com.liskovsoft.smartyoutubetv2.tv.ui.old.VideoDetailsActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.details.VideoDetailsActivity;
 
 import java.util.concurrent.ExecutionException;
 

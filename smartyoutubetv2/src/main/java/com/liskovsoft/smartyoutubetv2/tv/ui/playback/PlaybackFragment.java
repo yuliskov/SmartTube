@@ -251,7 +251,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
                 Row row) {
 
             if (item instanceof Video) {
-                mPlaybackPresenter.onSuggestionItemClicked((Video) item);
+                mPlaybackPresenter.onVideoItemClicked((Video) item);
             }
         }
     }

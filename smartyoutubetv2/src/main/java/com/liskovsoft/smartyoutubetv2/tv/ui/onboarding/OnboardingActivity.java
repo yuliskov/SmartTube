@@ -34,7 +34,7 @@ public class OnboardingActivity extends FragmentActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.onboarding);
+        setContentView(R.layout.fragment_onboarding);
 
         mPresenter = OnboardingPresenter.instance(getApplicationContext());
     }

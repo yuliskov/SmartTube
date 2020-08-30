@@ -7,7 +7,5 @@ import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 public interface MainView {
     void updateHeader(VideoGroup row);
     void clearHeader(Header header);
-    void showOnboarding();
-    void openPlaybackView();
     void openDetailsView(Video item);
 }

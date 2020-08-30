@@ -10,17 +10,20 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.mvp.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.Header;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.mvp.views.MainView;
+import com.liskovsoft.smartyoutubetv2.common.mvp.views.OnboardingView;
+import com.liskovsoft.smartyoutubetv2.common.mvp.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 
-public class MainPresenter implements Presenter<MainView> {
+public class MainPresenter implements VideoItemPresenter<MainView> {
     private static final String TAG = MainPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static MainPresenter sInstance;
@@ -29,6 +32,7 @@ public class MainPresenter implements Presenter<MainView> {
     private final ArrayList<MediaGroup> mMediaGroups;
     private final PlaybackPresenter mPlaybackPresenter;
     private final MediaService mMediaService;
+    private final ViewManager mViewManager;
     private MainView mView;
     private Header mHomeHeader;
     private Header mSearchHeader;
@@ -41,6 +45,7 @@ public class MainPresenter implements Presenter<MainView> {
         mContext = context;
         mPlaybackPresenter = PlaybackPresenter.instance(context);
         mMediaService = YouTubeMediaService.instance();
+        mViewManager = ViewManager.instance(context);
         initHeaders();
     }
 
@@ -60,7 +65,7 @@ public class MainPresenter implements Presenter<MainView> {
 
         if (!AppPrefs.instance(mContext).getCompletedOnboarding()) {
             // This is the first time running the app, let's go to onboarding
-            mView.showOnboarding();
+            mViewManager.startView(OnboardingView.class);
         }
 
         checkUserIsSigned();
@@ -79,15 +84,17 @@ public class MainPresenter implements Presenter<MainView> {
         mView = null;
     }
 
+    @Override
     public void onVideoItemClicked(Video item) {
         if (mView == null) {
             return;
         }
 
         mPlaybackPresenter.setVideo(item);
-        mView.openPlaybackView();
+        mViewManager.startView(PlaybackView.class);
     }
 
+    @Override
     public void onVideoItemLongClicked(Video item) {
         if (mView == null) {
             return;

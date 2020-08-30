@@ -35,9 +35,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.old.BrowseErrorFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.GuidedStepActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.SettingsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.VerticalGridActivity;
-import com.liskovsoft.smartyoutubetv2.tv.ui.old.VideoDetailsActivity;
-import com.liskovsoft.smartyoutubetv2.tv.ui.onboarding.OnboardingActivity;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.details.VideoDetailsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
 
 import java.util.HashMap;
@@ -168,11 +166,6 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
     }
 
     @Override
-    public void showOnboarding() {
-        startActivity(new Intent(getContext(), OnboardingActivity.class));
-    }
-
-    @Override
     public void clearHeader(Header header) {
         // TODO: not implemented
     }
@@ -224,13 +217,6 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
                 mBackgroundManager.getBackgroundManager().setDrawable(null);
             }
         }
-    }
-
-    @Override
-    public void openPlaybackView() {
-        Intent intent = new Intent(getActivity(), PlaybackActivity.class);
-        //intent.putExtra(VideoDetailsActivity.VIDEO, item);
-        startActivity(intent);
     }
 
     @Override

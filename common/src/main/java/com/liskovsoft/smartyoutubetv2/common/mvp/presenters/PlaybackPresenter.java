@@ -16,7 +16,7 @@ import io.reactivex.schedulers.Schedulers;
 import java.io.InputStream;
 import java.util.List;
 
-public class PlaybackPresenter implements Presenter<PlaybackView> {
+public class PlaybackPresenter implements VideoItemPresenter<PlaybackView> {
     private static final String TAG = PlaybackPresenter.class.getSimpleName();
     private static PlaybackPresenter sInstance;
     private final Context mContext;
@@ -92,10 +92,16 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
                 }, error -> Log.e(TAG, error));
     }
 
-    public void onSuggestionItemClicked(Video video) {
+    @Override
+    public void onVideoItemClicked(Video video) {
         if (mView != null) {
             loadVideo(video);
         }
+    }
+
+    @Override
+    public void onVideoItemLongClicked(Video item) {
+        // TODO: not implemented
     }
 
     private void loadVideo(Video video) {

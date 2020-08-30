@@ -13,7 +13,6 @@ import androidx.leanback.app.SearchSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.CursorObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
-import androidx.leanback.widget.ImageCardView;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.ObjectAdapter;
@@ -22,7 +21,6 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.SpeechRecognitionCallback;
-import androidx.core.app.ActivityOptionsCompat;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
@@ -40,8 +38,7 @@ import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.tv.model.old.VideoCursorMapper;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.base.LeanbackActivity;
-import com.liskovsoft.smartyoutubetv2.tv.ui.old.VideoDetailsActivity;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.details.VideoDetailsActivity;
 
 public class SearchFragment extends SearchSupportFragment
         implements SearchSupportFragment.SearchResultProvider,
@@ -211,20 +208,6 @@ public class SearchFragment extends SearchSupportFragment
     @Override
     public void loadSearchResult(VideoGroup group) {
         // TODO: not implemented
-    }
-
-    @Override
-    public void openPlaybackView() {
-        Intent intent = new Intent(getActivity(), PlaybackActivity.class);
-        //intent.putExtra(VideoDetailsActivity.VIDEO, item);
-
-        //Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-        //        getActivity(),
-        //        ((ImageCardView) itemViewHolder.view).getMainImageView(),
-        //        VideoDetailsActivity.SHARED_ELEMENT_NAME).toBundle();
-        //getActivity().startActivity(intent, bundle);
-
-        startActivity(intent);
     }
 
     @Override
