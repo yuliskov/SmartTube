@@ -8,7 +8,6 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.mvp.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.mvp.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.mvp.views.SearchView;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.schedulers.Schedulers;

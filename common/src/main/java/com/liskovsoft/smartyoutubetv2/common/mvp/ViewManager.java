@@ -47,7 +47,7 @@ public class ViewManager {
             Intent intent = new Intent(mContext, activityClass);
             mContext.startActivity(intent);
         } else {
-            Log.e(TAG, "Activity not found in registry for view " + viewClass.getSimpleName());
+            Log.e(TAG, "Activity not registered for view " + viewClass.getSimpleName());
         }
     }
 }
