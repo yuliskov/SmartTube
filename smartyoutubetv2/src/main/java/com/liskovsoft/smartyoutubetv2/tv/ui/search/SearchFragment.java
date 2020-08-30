@@ -119,7 +119,7 @@ public class SearchFragment extends SearchSupportFragment
     @Override
     public boolean onQueryTextChange(String newQuery) {
         Log.i(TAG, String.format("Search text changed: %s", newQuery));
-        loadQuery(newQuery);
+        //loadQuery(newQuery);
         return true;
     }
 
@@ -144,7 +144,6 @@ public class SearchFragment extends SearchSupportFragment
         if (!TextUtils.isEmpty(query) && !query.equals("nil")) {
             mQuery = query;
             mSearchPresenter.onSearchText(query);
-            //getLoaderManager().initLoader(mSearchLoaderId++, null, this);
         }
     }
 

@@ -4,18 +4,19 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.mvp.views.PlaybackView;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class ViewManager {
     private static final String TAG = ViewManager.class.getSimpleName();
     private static ViewManager sInstance;
     private final Context mContext;
-    private Map<Class<?>, Class<? extends Activity>> mViewMapping;
+    private final Map<Class<?>, Class<? extends Activity>> mViewMapping;
 
     private ViewManager(Context context) {
         mContext = context;
+        mViewMapping = new HashMap<>();
     }
 
     public static ViewManager instance(Context context) {

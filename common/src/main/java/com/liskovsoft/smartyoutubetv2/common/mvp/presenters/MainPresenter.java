@@ -116,11 +116,19 @@ public class MainPresenter implements VideoItemPresenter<MainView> {
     @SuppressLint("CheckResult")
     private void checkUserIsSigned() {
         SignInManager signInManager = mMediaService.getSignInManager();
-        if (!signInManager.isSigned()) {
-            signInManager.signInObserve()
-                    .subscribeOn(Schedulers.newThread())
-                    .subscribe(userCode -> Log.d(TAG, "User code is: " + userCode), error -> Log.e(TAG, error));
-        }
+
+        signInManager.isSignedObserve()
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(isSigned -> {
+                    if (!isSigned) {
+                        signInManager.signInObserve()
+                                .subscribeOn(Schedulers.newThread())
+                                .subscribe(userCode -> Log.d(TAG, "User code is: " + userCode),
+                                        error -> Log.e(TAG, error));
+                    } else {
+                        Log.d(TAG, "User already signed");
+                    }
+                }, error -> Log.e(TAG, "checkUserIsSigned: " + error));
     }
 
     @SuppressLint("CheckResult")
