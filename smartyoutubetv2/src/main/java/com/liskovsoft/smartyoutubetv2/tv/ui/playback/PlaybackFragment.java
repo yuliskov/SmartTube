@@ -18,7 +18,7 @@ import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.MediaSourceFactory;
+import com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.MediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.mvp.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.mvp.views.PlaybackView;

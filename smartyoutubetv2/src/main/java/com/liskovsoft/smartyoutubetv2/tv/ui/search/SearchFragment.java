@@ -6,10 +6,12 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.widget.Toast;
+import androidx.annotation.Nullable;
 import androidx.leanback.app.SearchSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
@@ -17,6 +19,7 @@ import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.OnItemViewClickedListener;
+import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
@@ -29,6 +32,7 @@ import com.liskovsoft.smartyoutubetv2.common.mvp.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.base.LeanbackActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.base.UriBackgroundManager;
 
 public class SearchFragment extends SearchSupportFragment
         implements SearchSupportFragment.SearchResultProvider, SearchView {
@@ -41,6 +45,9 @@ public class SearchFragment extends SearchSupportFragment
     private String mQuery;
     private boolean mResultsFound = false;
     private SearchPresenter mSearchPresenter;
+    private UriBackgroundManager mBackgroundManager;
+    private VideoGroup mLastGroup;
+    private VideoGroupObjectAdapter mGroupObjectAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,7 +56,7 @@ public class SearchFragment extends SearchSupportFragment
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
 
         setSearchResultProvider(this);
-        setOnItemViewClickedListener(new ItemViewClickedListener());
+        setupEventListeners();
 
         // TODO: move permission acquirement to presenter
         Log.d(TAG, "User is initiating a search. Do we have RECORD_AUDIO permission? " +
@@ -75,12 +82,24 @@ public class SearchFragment extends SearchSupportFragment
         }
     }
 
+    private void setupEventListeners() {
+        setOnItemViewClickedListener(new ItemViewClickedListener());
+        setOnItemViewSelectedListener(new ItemViewSelectedListener());
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
 
         mSearchPresenter = SearchPresenter.instance(context);
         mSearchPresenter.register(this);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
     }
 
     @Override
@@ -152,7 +171,7 @@ public class SearchFragment extends SearchSupportFragment
     }
 
     @Override
-    public void loadSearchResult(VideoGroup group) {
+    public void updateSearch(VideoGroup group) {
         int titleRes;
         if (group.getVideos() != null) {
             mResultsFound = true;
@@ -161,11 +180,22 @@ public class SearchFragment extends SearchSupportFragment
             mResultsFound = false;
             titleRes = R.string.no_search_results;
         }
-        
-        HeaderItem header = new HeaderItem(getString(titleRes, mQuery));
+
+        if (mRowsAdapter.size() == 0) {
+            HeaderItem header = new HeaderItem(getString(titleRes, mQuery));
+            mGroupObjectAdapter = new VideoGroupObjectAdapter(group);
+            ListRow row = new ListRow(header, mGroupObjectAdapter);
+            mRowsAdapter.add(row);
+        } else {
+            mGroupObjectAdapter.append(group);
+        }
+
+        mLastGroup = group;
+    }
+
+    @Override
+    public void clearSearch() {
         mRowsAdapter.clear();
-        ListRow row = new ListRow(header, new VideoGroupObjectAdapter(group));
-        mRowsAdapter.add(row);
     }
 
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
@@ -186,6 +216,28 @@ public class SearchFragment extends SearchSupportFragment
                 }
             } else {
                 Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private final class ItemViewSelectedListener implements OnItemViewSelectedListener {
+        @Override
+        public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
+                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
+            if (item instanceof Video) {
+                Uri backgroundURI = Uri.parse(((Video) item).bgImageUrl);
+                mBackgroundManager.startBackgroundTimer(backgroundURI);
+
+                checkScrollEnd((Video) item);
+            }
+        }
+
+        private void checkScrollEnd(Video item) {
+            int size = mGroupObjectAdapter.size();
+            int index = mGroupObjectAdapter.indexOf(item);
+
+            if (index > (size - 4)) {
+                mSearchPresenter.onScrollEnd(mLastGroup);
             }
         }
     }

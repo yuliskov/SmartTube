@@ -127,14 +127,14 @@ public class GridHeaderFragment extends GridFragment {
                 checkScrollEnd(item);
             }
         }
-    }
 
-    private void checkScrollEnd(Object item) {
-        int size = mAdapter.size();
-        int index = mAdapter.indexOf(item);
+        private void checkScrollEnd(Object item) {
+            int size = mAdapter.size();
+            int index = mAdapter.indexOf(item);
 
-        if (index > (size - 10)) {
-            mMainPresenter.onScrollEnd(mLastGroup);
+            if (index > (size - 10)) {
+                mMainPresenter.onScrollEnd(mLastGroup);
+            }
         }
     }
 }

@@ -136,7 +136,18 @@ public class RowHeaderFragment extends RowsSupportFragment {
             if (item instanceof Video) {
                 Uri backgroundURI = Uri.parse(((Video) item).bgImageUrl);
                 mBackgroundManager.startBackgroundTimer(backgroundURI);
+
+                checkScrollEnd(item);
             }
+        }
+
+        private void checkScrollEnd(Object item) {
+            //int size = mRowsAdapter.size();
+            //int index = mRowsAdapter.indexOf(item);
+            //
+            //if (index > (size - 10)) {
+            //    mSearchPresenter.onScrollEnd(mLastGroup);
+            //}
         }
     }
 }

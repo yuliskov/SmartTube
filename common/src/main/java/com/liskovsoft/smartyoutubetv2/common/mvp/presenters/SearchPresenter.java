@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.mvp.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
@@ -12,7 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.mvp.views.SearchView;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.schedulers.Schedulers;
 
-public class SearchPresenter implements VideoItemPresenter<SearchView> {
+public class SearchPresenter implements VideoGroupPresenter<SearchView> {
     private static final String TAG = SearchPresenter.class.getSimpleName();
     private static SearchPresenter sInstance;
     private final Context mContext;
@@ -83,6 +84,8 @@ public class SearchPresenter implements VideoItemPresenter<SearchView> {
     private void loadSearchData(String searchText) {
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
+        mView.clearSearch();
+
         mediaGroupManager.getSearchObserve(searchText)
                 .subscribeOn(Schedulers.newThread())
                 .subscribe(mediaGroup -> {
@@ -91,7 +94,37 @@ public class SearchPresenter implements VideoItemPresenter<SearchView> {
                         return;
                     }
 
-                    mView.loadSearchResult(VideoGroup.from(mediaGroup));
+                    mView.updateSearch(VideoGroup.from(mediaGroup));
                 }, error -> Log.e(TAG, "loadSearchData: " + error));
+    }
+
+    @SuppressLint("CheckResult")
+    private void continueGroup(VideoGroup group) {
+        // avoid to continue multiple times
+        if (group.isContinued()) {
+            return;
+        } else {
+            group.setContinued(true);
+        }
+
+        MediaGroup mediaGroup = group.getMediaGroup();
+
+        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
+
+        mediaGroupManager.continueGroupObserve(mediaGroup)
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(continueMediaGroup -> {
+                    if (continueMediaGroup == null) {
+                        Log.e(TAG, "Can't continue group with name " + mediaGroup.getTitle());
+                        return;
+                    }
+
+                    mView.updateSearch(VideoGroup.from(continueMediaGroup));
+                }, error -> Log.e(TAG, "continueGroup: " + error));
+    }
+
+    @Override
+    public void onScrollEnd(VideoGroup group) {
+        continueGroup(group);
     }
 }

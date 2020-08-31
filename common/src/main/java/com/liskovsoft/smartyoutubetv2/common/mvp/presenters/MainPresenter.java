@@ -20,7 +20,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 
-public class MainPresenter implements VideoItemPresenter<MainView> {
+public class MainPresenter implements VideoGroupPresenter<MainView> {
     private static final String TAG = MainPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static MainPresenter sInstance;
@@ -224,6 +224,7 @@ public class MainPresenter implements VideoItemPresenter<MainView> {
         }, error -> Log.e(TAG, "continueGroup: " + error));
     }
 
+    @Override
     public void onScrollEnd(VideoGroup group) {
         continueGroup(group);
     }

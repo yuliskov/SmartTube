@@ -18,7 +18,7 @@ import io.reactivex.schedulers.Schedulers;
 import java.io.InputStream;
 import java.util.List;
 
-public class PlaybackPresenter implements VideoItemPresenter<PlaybackView> {
+public class PlaybackPresenter implements VideoGroupPresenter<PlaybackView> {
     private static final String TAG = PlaybackPresenter.class.getSimpleName();
     private static PlaybackPresenter sInstance;
     private final Context mContext;
@@ -137,5 +137,10 @@ public class PlaybackPresenter implements VideoItemPresenter<PlaybackView> {
         mVideo = video;
 
         mViewManager.startView(PlaybackView.class);
+    }
+
+    @Override
+    public void onScrollEnd(VideoGroup group) {
+        // NOP
     }
 }

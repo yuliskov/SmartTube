@@ -37,4 +37,8 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
     public VideoGroup getLastGroup() {
         return mLastGroup;
     }
+
+    public int indexOf(Video item) {
+        return mMediaItems.indexOf(item);
+    }
 }
