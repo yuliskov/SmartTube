@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.mvp.views.PlaybackView;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 import java.io.InputStream;
@@ -71,10 +72,15 @@ public class PlaybackPresenter implements VideoItemPresenter<PlaybackView> {
 
                     List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
 
+                    if (suggestions == null) {
+                        Log.e(TAG, "Can't obtain suggestions for video : " + video.title);
+                        return;
+                    }
+
                     for (MediaGroup group : suggestions) {
                         mView.updateRelatedVideos(VideoGroup.from(group, null));
                     }
-                }, error -> Log.e(TAG, error));
+                }, error -> Log.e(TAG, "loadSuggestedVideos: " + error));
     }
 
     @SuppressLint("CheckResult")
@@ -83,6 +89,7 @@ public class PlaybackPresenter implements VideoItemPresenter<PlaybackView> {
         MediaItemManager mediaItemManager = service.getMediaItemManager();
         mediaItemManager.getFormatInfoObserve(video.videoId)
                 .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(formatInfo -> {
                     if (formatInfo == null) {
                         Log.e(TAG, "Can't obtains format info: " + video.title);
@@ -92,7 +99,7 @@ public class PlaybackPresenter implements VideoItemPresenter<PlaybackView> {
                     InputStream mpdStream = formatInfo.getMpdStream();
 
                     mView.loadDashStream(mpdStream);
-                }, error -> Log.e(TAG, error));
+                }, error -> Log.e(TAG, "loadFormatInfo: " + error));
     }
 
     @Override

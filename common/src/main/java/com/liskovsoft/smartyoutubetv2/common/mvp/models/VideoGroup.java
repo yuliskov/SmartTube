@@ -2,11 +2,13 @@ package com.liskovsoft.smartyoutubetv2.common.mvp.models;
 
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
+import com.liskovsoft.sharedutils.mylogger.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class VideoGroup {
+    private static final String TAG = VideoGroup.class.getSimpleName();
     private int mId;
     private String mTitle;
     private List<Video> mVideos;
@@ -26,6 +28,11 @@ public class VideoGroup {
         videoGroup.mId = mediaGroup.hashCode(); // TODO: replace with real id
         videoGroup.mTitle = mediaGroup.getTitle();
         videoGroup.mVideos = new ArrayList<>();
+
+        if (mediaGroup.getMediaItems() == null) {
+            Log.e(TAG, "MediaGroup doesn't contain media items. Title: " + mediaGroup.getTitle());
+            return videoGroup;
+        }
 
         for (MediaItem item : mediaGroup.getMediaItems()) {
             long id = item.getId();
