@@ -104,7 +104,8 @@ public class PlaybackPresenter implements VideoGroupPresenter<PlaybackView> {
 
     @Override
     public void onVideoItemClicked(Video video) {
-        if (mView != null) {
+        if (mView != null && video != null) {
+            appendToPlaylist(video);
             loadVideo(video);
         }
     }
@@ -115,11 +116,9 @@ public class PlaybackPresenter implements VideoGroupPresenter<PlaybackView> {
     }
 
     private void loadVideo(Video video) {
-        if (mView != null) {
+        if (mView != null && video != null) {
             mVideo = video;
             mView.openVideo(video);
-            mPlaylist.add(video);
-            mPlaylist.setCurrentPosition(mPlaylist.size() - 1);
             loadFormatInfo(video);
             loadSuggestedVideos(video);
         }
@@ -136,7 +135,20 @@ public class PlaybackPresenter implements VideoGroupPresenter<PlaybackView> {
     public void openVideo(Video video) {
         mVideo = video;
 
+        appendToPlaylist(video);
+
         mViewManager.startView(PlaybackView.class);
+    }
+
+    private void appendToPlaylist(Video video) {
+        if (mVideo != null) {
+            mPlaylist.insert(mPlaylist.indexOf(mVideo) + 1, video);
+        } else {
+            mPlaylist.insert(mPlaylist.size() - 1, video);
+        }
+
+        //mPlaylist.add(video);
+        //mPlaylist.setCurrentPosition(mPlaylist.size() - 1);
     }
 
     @Override

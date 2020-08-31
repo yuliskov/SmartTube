@@ -18,7 +18,8 @@ import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.MediaSourceFactory;
+import com.liskovsoft.smartyoutubetv2.common.playback.PlaybackState;
+import com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.mvp.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.mvp.views.PlaybackView;
@@ -54,12 +55,13 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private VideoPlayerGlue mPlayerGlue;
     private LeanbackPlayerAdapter mPlayerAdapter;
     private SimpleExoPlayer mPlayer;
-    private TrackSelector mTrackSelector;
+    private DefaultTrackSelector mTrackSelector;
     private PlaylistActionListener mPlaylistActionListener;
     private PlaybackPresenter mPlaybackPresenter;
     private ArrayObjectAdapter mRowsAdapter;
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
-    private MediaSourceFactory mMediaSourceFactory;
+    private ExoMediaSourceFactory mMediaSourceFactory;
+    private PlaybackState mPlaybackState;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +72,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlaybackPresenter = PlaybackPresenter.instance(getContext());
         mPlaybackPresenter.register(this);
 
-        mMediaSourceFactory = MediaSourceFactory.instance(getContext());
+        mMediaSourceFactory = ExoMediaSourceFactory.instance(getContext());
     }
 
     @Override
@@ -121,6 +123,9 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         TrackSelection.Factory videoTrackSelectionFactory =
                 new AdaptiveTrackSelection.Factory(bandwidthMeter);
         mTrackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+
+        // TODO: testing max bitrate
+        mTrackSelector.setParameters(mTrackSelector.getParameters().buildUpon().setForceHighestSupportedBitrate(true));
 
         mPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), mTrackSelector);
 
@@ -183,18 +188,18 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlayerGlue.setSubtitle(video.description);
     }
 
-    private void prepareMediaForPlaying(Uri mediaSourceUri) {
-        String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
-        MediaSource mediaSource =
-                new ExtractorMediaSource(
-                        mediaSourceUri,
-                        new DefaultDataSourceFactory(getActivity(), userAgent),
-                        new DefaultExtractorsFactory(),
-                        null,
-                        null);
-
-        mPlayer.prepare(mediaSource);
-    }
+    //private void prepareMediaForPlaying(Uri mediaSourceUri) {
+    //    String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
+    //    MediaSource mediaSource =
+    //            new ExtractorMediaSource(
+    //                    mediaSourceUri,
+    //                    new DefaultDataSourceFactory(getActivity(), userAgent),
+    //                    new DefaultExtractorsFactory(),
+    //                    null,
+    //                    null);
+    //
+    //    mPlayer.prepare(mediaSource);
+    //}
 
     private void prepareMediaForPlaying(InputStream dashManifest) {
         //String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
@@ -280,5 +285,10 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         public void onNext() {
             mPlaybackPresenter.onNext();
         }
+    }
+
+    @Override
+    public void syncState(PlaybackState state) {
+        mPlaybackState = state;
     }
 }

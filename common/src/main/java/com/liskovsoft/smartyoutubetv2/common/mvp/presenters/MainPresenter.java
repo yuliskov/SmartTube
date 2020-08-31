@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.mvp.views.MainView;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
@@ -214,6 +215,7 @@ public class MainPresenter implements VideoGroupPresenter<MainView> {
 
         mediaGroupManager.continueGroupObserve(mediaGroup)
                 .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(continueMediaGroup -> {
                     if (continueMediaGroup == null) {
                         Log.e(TAG, "Can't continue group with name " + mediaGroup.getTitle());

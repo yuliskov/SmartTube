@@ -11,6 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.mvp.views.SearchView;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public class SearchPresenter implements VideoGroupPresenter<SearchView> {
@@ -113,6 +114,7 @@ public class SearchPresenter implements VideoGroupPresenter<SearchView> {
 
         mediaGroupManager.continueGroupObserve(mediaGroup)
                 .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(continueMediaGroup -> {
                     if (continueMediaGroup == null) {
                         Log.e(TAG, "Can't continue group with name " + mediaGroup.getTitle());

@@ -14,7 +14,8 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
     private VideoGroup mLastGroup;
 
     // TODO: Select presenter based on the video item type. Such channel, playlist, or simple video
-    //CardPresenterSelector cardPresenter = new CardPresenterSelector(getActivity());
+    // https://github.com/googlearchive/leanback-showcase/blob/master/app/src/main/java/android/support/v17/leanback/supportleanbackshowcase/app/page/PageAndListRowFragment.java
+    // CardPresenterSelector cardPresenter = new CardPresenterSelector(getActivity());
     public VideoGroupObjectAdapter(VideoGroup videoGroup) {
         super(new CardPresenter());
         mMediaItems = new ArrayList<>();
@@ -42,6 +43,7 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         if (group != null) {
             mMediaItems.addAll(group.getVideos());
             mLastGroup = group;
+            notifyChanged();
         }
     }
 

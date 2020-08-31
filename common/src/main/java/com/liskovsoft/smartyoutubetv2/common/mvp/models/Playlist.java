@@ -7,20 +7,19 @@ import java.util.List;
  * Manages a playlist of videos.
  */
 public class Playlist {
-
-    private List<Video> playlist;
-    private int currentPosition;
+    private final List<Video> mPlaylist;
+    private int mCurrentPosition;
 
     public Playlist() {
-        playlist = new ArrayList<>();
-        currentPosition = 0;
+        mPlaylist = new ArrayList<>();
+        mCurrentPosition = 0;
     }
 
     /**
      * Clears the videos from the playlist.
      */
     public void clear() {
-        playlist.clear();
+        mPlaylist.clear();
     }
 
     /**
@@ -29,7 +28,11 @@ public class Playlist {
      * @param video to be added to the playlist.
      */
     public void add(Video video) {
-        playlist.add(video);
+        mPlaylist.add(video);
+    }
+
+    public void add(int index, Video video) {
+        mPlaylist.add(index, video);
     }
 
     /**
@@ -38,7 +41,7 @@ public class Playlist {
      * @param currentPosition
      */
     public void setCurrentPosition(int currentPosition) {
-        this.currentPosition = currentPosition;
+        mCurrentPosition = currentPosition;
     }
 
     /**
@@ -47,7 +50,7 @@ public class Playlist {
      * @return The size of the playlist.
      */
     public int size() {
-        return playlist.size();
+        return mPlaylist.size();
     }
 
     /**
@@ -57,9 +60,9 @@ public class Playlist {
      * @return The next video in the playlist.
      */
     public Video next() {
-        if ((currentPosition + 1) < size()) {
-            currentPosition++;
-            return playlist.get(currentPosition);
+        if ((mCurrentPosition + 1) < size()) {
+            mCurrentPosition++;
+            return mPlaylist.get(mCurrentPosition);
         }
         return null;
     }
@@ -71,10 +74,24 @@ public class Playlist {
      * @return The previous video in the playlist.
      */
     public Video previous() {
-        if (currentPosition - 1 >= 0) {
-            currentPosition--;
-            return playlist.get(currentPosition);
+        if (mCurrentPosition - 1 >= 0) {
+            mCurrentPosition--;
+            return mPlaylist.get(mCurrentPosition);
         }
         return null;
+    }
+
+    public void insert(int index, Video video) {
+        if (index < 0 || index > size()) {
+            add(video);
+            setCurrentPosition(size() - 1);
+        } else {
+            add(index, video);
+            setCurrentPosition(index);
+        }
+    }
+
+    public int indexOf(Video video) {
+        return mPlaylist.indexOf(video);
     }
 }

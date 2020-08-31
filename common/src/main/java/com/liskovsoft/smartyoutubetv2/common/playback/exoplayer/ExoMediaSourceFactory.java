@@ -34,9 +34,9 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
-public class MediaSourceFactory {
-    private static final String TAG = MediaSourceFactory.class.getSimpleName();
-    private static MediaSourceFactory sInstance;
+public class ExoMediaSourceFactory {
+    private static final String TAG = ExoMediaSourceFactory.class.getSimpleName();
+    private static ExoMediaSourceFactory sInstance;
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private final Factory mMediaDataSourceFactory;
     private final Context mContext;
@@ -49,14 +49,14 @@ public class MediaSourceFactory {
     private Handler mMainHandler;
     private MediaSourceEventListener mEventLogger;
 
-    private MediaSourceFactory(Context context) {
+    private ExoMediaSourceFactory(Context context) {
         mContext = context;
         mMediaDataSourceFactory = buildDataSourceFactory(false);
     }
 
-    public static MediaSourceFactory instance(Context context) {
+    public static ExoMediaSourceFactory instance(Context context) {
         if (sInstance == null) {
-            sInstance = new MediaSourceFactory(context.getApplicationContext());
+            sInstance = new ExoMediaSourceFactory(context.getApplicationContext());
         }
 
         return sInstance;
