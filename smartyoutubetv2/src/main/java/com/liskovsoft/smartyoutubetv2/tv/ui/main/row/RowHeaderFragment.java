@@ -23,7 +23,6 @@ import com.liskovsoft.smartyoutubetv2.common.mvp.presenters.MainPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.base.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.base.UriBackgroundManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.main.MainActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +34,7 @@ public class RowHeaderFragment extends RowsSupportFragment {
     private UriBackgroundManager mBackgroundManager;
     private Handler mHandler;
     private ArrayObjectAdapter mRowsAdapter;
-    private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
+    private Map<Integer, VideoGroupObjectAdapter> mVideoGroupAdapters;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private MainPresenter mMainPresenter;
 
@@ -53,7 +52,7 @@ public class RowHeaderFragment extends RowsSupportFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        mMediaGroupAdapters = new HashMap<>();
+        mVideoGroupAdapters = new HashMap<>();
         mHandler = new Handler();
         mMainPresenter = MainPresenter.instance(context);
     }
@@ -85,7 +84,7 @@ public class RowHeaderFragment extends RowsSupportFragment {
     }
 
     public void updateRow(VideoGroup group) {
-        if (mMediaGroupAdapters == null) {
+        if (mVideoGroupAdapters == null) {
             mPendingUpdates.add(group);
             return;
         }
@@ -93,12 +92,12 @@ public class RowHeaderFragment extends RowsSupportFragment {
         HeaderItem rowHeader = new HeaderItem(group.getTitle());
         int mediaGroupId = group.getId(); // Create unique int from category.
 
-        VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(mediaGroupId);
+        VideoGroupObjectAdapter existingAdapter = mVideoGroupAdapters.get(mediaGroupId);
 
         if (existingAdapter == null) {
             VideoGroupObjectAdapter mediaGroupAdapter = new VideoGroupObjectAdapter(group);
 
-            mMediaGroupAdapters.put(mediaGroupId, mediaGroupAdapter);
+            mVideoGroupAdapters.put(mediaGroupId, mediaGroupAdapter);
 
             ListRow row = new ListRow(rowHeader, mediaGroupAdapter);
             mRowsAdapter.add(row);
@@ -137,17 +136,22 @@ public class RowHeaderFragment extends RowsSupportFragment {
                 Uri backgroundURI = Uri.parse(((Video) item).bgImageUrl);
                 mBackgroundManager.startBackgroundTimer(backgroundURI);
 
-                checkScrollEnd(item);
+                checkScrollEnd((Video)item);
             }
         }
 
-        private void checkScrollEnd(Object item) {
-            //int size = mRowsAdapter.size();
-            //int index = mRowsAdapter.indexOf(item);
-            //
-            //if (index > (size - 10)) {
-            //    mSearchPresenter.onScrollEnd(mLastGroup);
-            //}
+        private void checkScrollEnd(Video item) {
+            for (VideoGroupObjectAdapter adapter : mVideoGroupAdapters.values()) {
+                int index = adapter.indexOf(item);
+
+                if (index != -1) {
+                    int size = adapter.size();
+                    if (index > (size - 4)) {
+                        mMainPresenter.onScrollEnd(adapter.getLastGroup());
+                    }
+                    break;
+                }
+            }
         }
     }
 }

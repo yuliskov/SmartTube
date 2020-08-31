@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
-import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.FocusHighlight;
 import androidx.leanback.widget.OnItemViewClickedListener;
 import androidx.leanback.widget.OnItemViewSelectedListener;
@@ -17,10 +16,9 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.mvp.presenters.MainPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.base.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.base.UriBackgroundManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.main.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +27,10 @@ public class GridHeaderFragment extends GridFragment {
     private static final String TAG = GridHeaderFragment.class.getSimpleName();
     private static final int COLUMNS = 5;
     private final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
-    private ArrayObjectAdapter mAdapter;
+    private VideoGroupObjectAdapter mAdapter;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private UriBackgroundManager mBackgroundManager;
     private MainPresenter mMainPresenter;
-    private VideoGroup mLastGroup;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,9 +74,7 @@ public class GridHeaderFragment extends GridFragment {
         presenter.setNumberOfColumns(COLUMNS);
         setGridPresenter(presenter);
 
-        // TODO: Select presenter based on the video item type. Such channel, playlist, or simple video
-        //CardPresenterSelector cardPresenter = new CardPresenterSelector(getActivity());
-        mAdapter = new ArrayObjectAdapter(new CardPresenter());
+        mAdapter = new VideoGroupObjectAdapter();
         setAdapter(mAdapter);
     }
 
@@ -88,10 +83,8 @@ public class GridHeaderFragment extends GridFragment {
             mPendingUpdates.add(group);
             return;
         }
-
-        mLastGroup = group;
         
-        mAdapter.addAll(mAdapter.size(), group.getVideos());
+        mAdapter.append(group);
     }
 
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
@@ -124,16 +117,16 @@ public class GridHeaderFragment extends GridFragment {
                 Uri backgroundURI = Uri.parse(((Video) item).bgImageUrl);
                 mBackgroundManager.startBackgroundTimer(backgroundURI);
 
-                checkScrollEnd(item);
+                checkScrollEnd((Video) item);
             }
         }
 
-        private void checkScrollEnd(Object item) {
+        private void checkScrollEnd(Video item) {
             int size = mAdapter.size();
             int index = mAdapter.indexOf(item);
 
             if (index > (size - 10)) {
-                mMainPresenter.onScrollEnd(mLastGroup);
+                mMainPresenter.onScrollEnd(mAdapter.getLastGroup());
             }
         }
     }

@@ -226,6 +226,7 @@ public class MainPresenter implements VideoGroupPresenter<MainView> {
 
     @Override
     public void onScrollEnd(VideoGroup group) {
+        Log.d(TAG, "onScrollEnd. Group title: " + group.getTitle());
         continueGroup(group);
     }
 }

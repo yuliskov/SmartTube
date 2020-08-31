@@ -46,8 +46,7 @@ public class SearchFragment extends SearchSupportFragment
     private boolean mResultsFound = false;
     private SearchPresenter mSearchPresenter;
     private UriBackgroundManager mBackgroundManager;
-    private VideoGroup mLastGroup;
-    private VideoGroupObjectAdapter mGroupObjectAdapter;
+    private VideoGroupObjectAdapter mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -183,14 +182,12 @@ public class SearchFragment extends SearchSupportFragment
 
         if (mRowsAdapter.size() == 0) {
             HeaderItem header = new HeaderItem(getString(titleRes, mQuery));
-            mGroupObjectAdapter = new VideoGroupObjectAdapter(group);
-            ListRow row = new ListRow(header, mGroupObjectAdapter);
+            mAdapter = new VideoGroupObjectAdapter(group);
+            ListRow row = new ListRow(header, mAdapter);
             mRowsAdapter.add(row);
         } else {
-            mGroupObjectAdapter.append(group);
+            mAdapter.append(group);
         }
-
-        mLastGroup = group;
     }
 
     @Override
@@ -233,11 +230,11 @@ public class SearchFragment extends SearchSupportFragment
         }
 
         private void checkScrollEnd(Video item) {
-            int size = mGroupObjectAdapter.size();
-            int index = mGroupObjectAdapter.indexOf(item);
+            int size = mAdapter.size();
+            int index = mAdapter.indexOf(item);
 
             if (index > (size - 4)) {
-                mSearchPresenter.onScrollEnd(mLastGroup);
+                mSearchPresenter.onScrollEnd(mAdapter.getLastGroup());
             }
         }
     }

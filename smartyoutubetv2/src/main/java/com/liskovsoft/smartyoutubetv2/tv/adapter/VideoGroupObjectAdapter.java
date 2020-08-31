@@ -5,17 +5,27 @@ import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class VideoGroupObjectAdapter extends ObjectAdapter {
     private static final String TAG = VideoGroupObjectAdapter.class.getSimpleName();
     private final List<Video> mMediaItems;
-    private final VideoGroup mLastGroup;
+    private VideoGroup mLastGroup;
 
+    // TODO: Select presenter based on the video item type. Such channel, playlist, or simple video
+    //CardPresenterSelector cardPresenter = new CardPresenterSelector(getActivity());
     public VideoGroupObjectAdapter(VideoGroup videoGroup) {
         super(new CardPresenter());
-        mLastGroup = videoGroup;
-        mMediaItems = videoGroup.getVideos();
+        mMediaItems = new ArrayList<>();
+
+        if (videoGroup != null) {
+            append(videoGroup);
+        }
+    }
+
+    public VideoGroupObjectAdapter() {
+        this(null);
     }
 
     @Override
@@ -29,8 +39,9 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
     }
 
     public void append(VideoGroup group) {
-        if (mMediaItems != null && group != null) {
+        if (group != null) {
             mMediaItems.addAll(group.getVideos());
+            mLastGroup = group;
         }
     }
 
