@@ -18,6 +18,7 @@ import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.ExoStateManager;
 import com.liskovsoft.smartyoutubetv2.common.playback.player.PlaybackState;
 import com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
@@ -52,12 +53,13 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private LeanbackPlayerAdapter mPlayerAdapter;
     private SimpleExoPlayer mPlayer;
     private DefaultTrackSelector mTrackSelector;
-    private PlaylistActionListener mPlaylistActionListener;
+    private PlayerActionListener mPlaylistActionListener;
     private PlaybackPresenter mPlaybackPresenter;
     private ArrayObjectAdapter mRowsAdapter;
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
     private ExoMediaSourceFactory mMediaSourceFactory;
     private PlaybackState mPlaybackState;
+    private ExoStateManager mStateManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlaybackPresenter.register(this);
 
         mMediaSourceFactory = ExoMediaSourceFactory.instance(getContext());
+
+        mStateManager = ExoStateManager.instance(getContext());
     }
 
     @Override
@@ -127,7 +131,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
         mPlayerAdapter = new LeanbackPlayerAdapter(getActivity(), mPlayer, UPDATE_DELAY);
 
-        mPlaylistActionListener = new PlaylistActionListener();
+        mPlaylistActionListener = new PlayerActionListener();
         mPlayerGlue = new VideoPlayerGlue(getActivity(), mPlayerAdapter, mPlaylistActionListener);
         mPlayerGlue.setHost(new VideoSupportFragmentGlueHost(this));
         mPlayerGlue.playWhenPrepared();
@@ -255,7 +259,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlayerGlue.fastForward();
     }
 
-    /** Opens the video details page when a related video has been clicked. */
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override
         public void onItemClicked(
@@ -279,7 +282,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mRowsAdapter.add(mPlayerGlue.getControlsRow());
     }
 
-    class PlaylistActionListener implements VideoPlayerGlue.OnActionClickedListener {
+    private class PlayerActionListener implements VideoPlayerGlue.OnActionClickedListener {
         @Override
         public void onPrevious() {
             mPlaybackPresenter.onPrevious();
