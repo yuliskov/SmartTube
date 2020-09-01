@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#ffffff</color>
+    <color name="white_50">#7dffffff</color>
+    <color name="white_70">#b2ffffff</color>
+    <color name="black">#000000</color>
+    <color name="red">#ff0000</color>
+    <color name="transparent">#00ffffff</color>
+    <color name="light_blue">#2793e6</color>
+    <color name="sub_text_color">#CDDC39</color>
+    <color name="sub_text_color2">#E4E4E4</color>
+    <color name="sub_outline_color">#000000</color>
+    <color name="sub_background_color">#64000000</color>
+</resources>
