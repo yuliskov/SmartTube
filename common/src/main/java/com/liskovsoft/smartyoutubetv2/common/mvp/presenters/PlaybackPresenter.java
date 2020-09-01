@@ -59,7 +59,9 @@ public class PlaybackPresenter implements VideoGroupPresenter<PlaybackView> {
     }
 
     @SuppressLint("CheckResult")
-    private void loadSuggestedVideos(Video video) {
+    private void loadRelated(Video video) {
+        mView.clearRelated(); // clear previous videos
+
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
         mediaItemManager.getMetadataObserve(video.videoId)
@@ -78,7 +80,7 @@ public class PlaybackPresenter implements VideoGroupPresenter<PlaybackView> {
                     }
 
                     for (MediaGroup group : suggestions) {
-                        mView.updateRelatedVideos(VideoGroup.from(group, null));
+                        mView.updateRelated(VideoGroup.from(group, null));
                     }
                 }, error -> Log.e(TAG, "loadSuggestedVideos: " + error));
     }
@@ -96,9 +98,14 @@ public class PlaybackPresenter implements VideoGroupPresenter<PlaybackView> {
                         return;
                     }
 
-                    InputStream mpdStream = formatInfo.getMpdStream();
+                    InputStream dashStream = formatInfo.getMpdStream();
+                    String hlsManifestUrl = formatInfo.getHlsManifestUrl();
 
-                    mView.loadDashStream(mpdStream);
+                    if (dashStream != null) {
+                        mView.openDash(dashStream);
+                    } else {
+                        mView.openHls(hlsManifestUrl);
+                    }
                 }, error -> Log.e(TAG, "loadFormatInfo: " + error));
     }
 
@@ -118,9 +125,9 @@ public class PlaybackPresenter implements VideoGroupPresenter<PlaybackView> {
     private void loadVideo(Video video) {
         if (mView != null && video != null) {
             mVideo = video;
-            mView.openVideo(video);
+            mView.initTitle(video);
             loadFormatInfo(video);
-            loadSuggestedVideos(video);
+            loadRelated(video);
         }
     }
 
@@ -141,14 +148,7 @@ public class PlaybackPresenter implements VideoGroupPresenter<PlaybackView> {
     }
 
     private void appendToPlaylist(Video video) {
-        if (mVideo != null) {
-            mPlaylist.insert(mPlaylist.indexOf(mVideo) + 1, video);
-        } else {
-            mPlaylist.insert(mPlaylist.size() - 1, video);
-        }
-
-        //mPlaylist.add(video);
-        //mPlaylist.setCurrentPosition(mPlaylist.size() - 1);
+        mPlaylist.insertAfter(video, mVideo);
     }
 
     @Override

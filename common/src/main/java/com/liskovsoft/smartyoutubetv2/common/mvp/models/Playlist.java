@@ -81,8 +81,10 @@ public class Playlist {
         return null;
     }
 
-    public void insert(int index, Video video) {
-        if (index < 0 || index > size()) {
+    public void insertAfter(Video video, Video after) {
+        int index = mPlaylist.indexOf(after) + 1;
+
+        if (index > size()) {
             add(video);
             setCurrentPosition(size() - 1);
         } else {

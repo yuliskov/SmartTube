@@ -18,7 +18,7 @@ import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.playback.PlaybackState;
+import com.liskovsoft.smartyoutubetv2.common.playback.player.PlaybackState;
 import com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.mvp.presenters.PlaybackPresenter;
@@ -29,16 +29,12 @@ import com.liskovsoft.smartyoutubetv2.tv.player.VideoPlayerGlue;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
 import java.io.InputStream;
@@ -143,7 +139,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
-    public void updateRelatedVideos(VideoGroup group) {
+    public void updateRelated(VideoGroup group) {
         if (mRowsAdapter == null) {
             Log.e(TAG, "Related videos row not initialized yet.");
             return;
@@ -167,8 +163,14 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
-    public void loadDashStream(InputStream dashManifest) {
+    public void openDash(InputStream dashManifest) {
         prepareMediaForPlaying(dashManifest);
+        mPlayerGlue.play();
+    }
+
+    @Override
+    public void openHls(String hlsPlaylistUrl) {
+        prepareMediaForPlaying(hlsPlaylistUrl);
         mPlayerGlue.play();
     }
 
@@ -183,7 +185,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         }
     }
 
-    private void initTitle(Video video) {
+    @Override
+    public void initTitle(Video video) {
         mPlayerGlue.setTitle(video.title);
         mPlayerGlue.setSubtitle(video.description);
     }
@@ -204,6 +207,12 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private void prepareMediaForPlaying(InputStream dashManifest) {
         //String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
         MediaSource mediaSource = mMediaSourceFactory.fromDashManifest(dashManifest);
+        mPlayer.prepare(mediaSource);
+    }
+
+    private void prepareMediaForPlaying(String hlsPlaylistUrl) {
+        //String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
+        MediaSource mediaSource = mMediaSourceFactory.fromHlsPlaylist(Uri.parse(hlsPlaylistUrl));
         mPlayer.prepare(mediaSource);
     }
 
@@ -262,12 +271,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
-    public void openVideo(Video video) {
-        initTitle(video);
-        resetRelatedVideos();
-    }
-
-    private void resetRelatedVideos() {
+    public void clearRelated() {
         mMediaGroupAdapters.clear();
         mRowsAdapter.clear();
 
