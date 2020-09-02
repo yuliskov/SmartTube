@@ -4,7 +4,7 @@ import com.liskovsoft.smartyoutubetv2.common.mvp.models.data.Video;
 
 public abstract class PlayerCommandProcessorHelper implements PlayerCommandProcessor {
     @Override
-    public void onOpenVideo(Video item) {
+    public void onInit(Video item) {
         // NOP
     }
 

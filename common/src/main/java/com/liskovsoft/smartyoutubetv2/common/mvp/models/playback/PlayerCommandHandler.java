@@ -10,7 +10,7 @@ import java.io.InputStream;
 public interface PlayerCommandHandler {
     void updateRelated(VideoGroup group);
     void clearRelated();
-    void initTitle(Video video);
     void openDash(InputStream dashManifest);
     void openHls(String hlsPlaylistUrl);
+    void initTitle(Video item);
 }

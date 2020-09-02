@@ -34,7 +34,6 @@ import com.liskovsoft.smartyoutubetv2.common.mvp.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.mvp.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.ExoStateManager;
-import com.liskovsoft.smartyoutubetv2.common.mvp.models.playback.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.playback.PlayerCommandHandler;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.player.VideoPlayerGlue;
@@ -60,7 +59,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
     private ExoMediaSourceFactory mMediaSourceFactory;
     private ExoStateManager mStateManager;
-    private PlayerCommandProcessor mStateBridge;
+    private PlayerCommandProcessor mEventListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -269,7 +268,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
                 Row row) {
 
             if (item instanceof Video) {
-                mStateBridge.onSuggestionItemClicked((Video) item);
+                mEventListener.onSuggestionItemClicked((Video) item);
             }
         }
     }
@@ -286,18 +285,18 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private class PlayerActionListener implements VideoPlayerGlue.OnActionClickedListener {
         @Override
         public void onPrevious() {
-            mStateBridge.onPrevious();
+            mEventListener.onPrevious();
         }
 
         @Override
         public void onNext() {
-            mStateBridge.onNext();
+            mEventListener.onNext();
         }
     }
 
     @Override
-    public void setPlayerProcessor(PlayerCommandProcessor stateBridge) {
-        mStateBridge = stateBridge;
-        stateBridge.setCommandHandler(this);
+    public void registerProcessor(PlayerCommandProcessor commandProcessor) {
+        mEventListener = commandProcessor;
+        commandProcessor.setCommandHandler(this);
     }
 }

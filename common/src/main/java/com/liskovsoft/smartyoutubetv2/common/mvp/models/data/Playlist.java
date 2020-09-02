@@ -50,7 +50,13 @@ public class Playlist {
      * @param currentPosition
      */
     public void setCurrentPosition(int currentPosition) {
-        mCurrentPosition = currentPosition;
+        if (currentPosition < size() && currentPosition >= 0) {
+            mCurrentPosition = currentPosition;
+        }
+    }
+
+    public int getCurrentPosition() {
+        return mCurrentPosition;
     }
 
     /**
@@ -70,9 +76,9 @@ public class Playlist {
      */
     public Video next() {
         if ((mCurrentPosition + 1) < size()) {
-            mCurrentPosition++;
-            return mPlaylist.get(mCurrentPosition);
+            return mPlaylist.get(mCurrentPosition + 1);
         }
+
         return null;
     }
 
@@ -84,8 +90,7 @@ public class Playlist {
      */
     public Video previous() {
         if (mCurrentPosition - 1 >= 0) {
-            mCurrentPosition--;
-            return mPlaylist.get(mCurrentPosition);
+            return mPlaylist.get(mCurrentPosition - 1);
         }
         return null;
     }
@@ -95,22 +100,8 @@ public class Playlist {
 
         if (index > size()) {
             add(video);
-            setCurrentPosition(size() - 1);
         } else {
             add(index, video);
-            setCurrentPosition(index);
-        }
-    }
-
-    public void insertAfter(Video video, Video after) {
-        int index = mPlaylist.indexOf(after) + 1;
-
-        if (index > size()) {
-            add(video);
-            setCurrentPosition(size() - 1);
-        } else {
-            add(index, video);
-            setCurrentPosition(index);
         }
     }
 

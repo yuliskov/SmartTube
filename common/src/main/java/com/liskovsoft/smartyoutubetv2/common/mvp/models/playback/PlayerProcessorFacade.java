@@ -12,10 +12,11 @@ public class PlayerProcessorFacade implements PlayerCommandProcessor {
 
     public PlayerProcessorFacade() {
         mProcessors = new ArrayList<>();
-
+        
         mProcessors.add(new HistoryUpdater());
         mProcessors.add(new SuggestionsLoader());
         mProcessors.add(new VideoLoader());
+        mProcessors.add(new PlaylistUpdater());
     }
 
     public static PlayerProcessorFacade instance() {
@@ -72,14 +73,14 @@ public class PlayerProcessorFacade implements PlayerCommandProcessor {
     }
 
     @Override
-    public void onOpenVideo(Video item) {
+    public void onInit(Video item) {
         if (item == null) {
             Log.e(TAG, "onOpenVideo: item is null");
             return;
         }
 
         for (PlayerCommandProcessor processor : mProcessors) {
-            processor.onOpenVideo(item);
+            processor.onInit(item);
         }
     }
 }

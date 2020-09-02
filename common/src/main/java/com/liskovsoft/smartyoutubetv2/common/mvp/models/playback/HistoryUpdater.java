@@ -11,7 +11,7 @@ public class HistoryUpdater extends PlayerCommandProcessorHelper {
     }
 
     @Override
-    public void onOpenVideo(Video item) {
+    public void onInit(Video item) {
         // save history
     }
 
