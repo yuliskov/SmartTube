@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.mvp.models;
+package com.liskovsoft.smartyoutubetv2.common.mvp.models.data;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,10 +9,19 @@ import java.util.List;
 public class Playlist {
     private final List<Video> mPlaylist;
     private int mCurrentPosition;
+    private static Playlist sInstance;
 
-    public Playlist() {
+    private Playlist() {
         mPlaylist = new ArrayList<>();
         mCurrentPosition = 0;
+    }
+
+    public static Playlist instance() {
+        if (sInstance == null) {
+            sInstance = new Playlist();
+        }
+
+        return sInstance;
     }
 
     /**
@@ -79,6 +88,18 @@ public class Playlist {
             return mPlaylist.get(mCurrentPosition);
         }
         return null;
+    }
+
+    public void insertAfterCurrent(Video video) {
+        int index = mCurrentPosition + 1;
+
+        if (index > size()) {
+            add(video);
+            setCurrentPosition(size() - 1);
+        } else {
+            add(index, video);
+            setCurrentPosition(index);
+        }
     }
 
     public void insertAfter(Video video, Video after) {

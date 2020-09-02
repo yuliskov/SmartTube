@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.mvp.presenters;
 
 import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.mvp.ViewManager;
-import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
+import com.liskovsoft.smartyoutubetv2.common.mvp.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.mvp.views.DetailsView;
 
 public class DetailsPresenter implements Presenter<DetailsView> {

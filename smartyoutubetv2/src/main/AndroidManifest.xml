@@ -52,7 +52,8 @@
             android:label="@string/app_name"
             android:logo="@drawable/videos_by_google_banner"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.Leanback.Browse">
+            android:theme="@style/Theme.Leanback.Browse"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

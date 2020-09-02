@@ -16,17 +16,6 @@ import androidx.leanback.widget.OnItemViewClickedListener;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
-
-import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.ExoStateManager;
-import com.liskovsoft.smartyoutubetv2.common.playback.player.PlaybackState;
-import com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.ExoMediaSourceFactory;
-import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.mvp.presenters.PlaybackPresenter;
-import com.liskovsoft.smartyoutubetv2.common.mvp.views.PlaybackView;
-import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
-import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
-import com.liskovsoft.smartyoutubetv2.tv.player.VideoPlayerGlue;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
@@ -37,6 +26,18 @@ import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.util.Util;
+import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.mvp.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.mvp.models.data.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.mvp.models.playback.PlayerCommandProcessor;
+import com.liskovsoft.smartyoutubetv2.common.mvp.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.mvp.views.PlaybackView;
+import com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.ExoMediaSourceFactory;
+import com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.ExoStateManager;
+import com.liskovsoft.smartyoutubetv2.common.mvp.models.playback.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.mvp.models.playback.PlayerCommandHandler;
+import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
+import com.liskovsoft.smartyoutubetv2.tv.player.VideoPlayerGlue;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -46,7 +47,7 @@ import java.util.Map;
  * Plays selected video, loads playlist and related videos, and delegates playback to
  * {@link VideoPlayerGlue}.
  */
-public class PlaybackFragment extends VideoSupportFragment implements PlaybackView {
+public class PlaybackFragment extends VideoSupportFragment implements PlaybackView, PlayerCommandHandler {
     private static final String TAG = PlaybackFragment.class.getSimpleName();
     private static final int UPDATE_DELAY = 16;
     private VideoPlayerGlue mPlayerGlue;
@@ -58,8 +59,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private ArrayObjectAdapter mRowsAdapter;
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
     private ExoMediaSourceFactory mMediaSourceFactory;
-    private PlaybackState mPlaybackState;
     private ExoStateManager mStateManager;
+    private PlayerCommandProcessor mStateBridge;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -268,7 +269,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
                 Row row) {
 
             if (item instanceof Video) {
-                mPlaybackPresenter.onVideoItemClicked((Video) item);
+                mStateBridge.onSuggestionItemClicked((Video) item);
             }
         }
     }
@@ -285,17 +286,18 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private class PlayerActionListener implements VideoPlayerGlue.OnActionClickedListener {
         @Override
         public void onPrevious() {
-            mPlaybackPresenter.onPrevious();
+            mStateBridge.onPrevious();
         }
 
         @Override
         public void onNext() {
-            mPlaybackPresenter.onNext();
+            mStateBridge.onNext();
         }
     }
 
     @Override
-    public void syncState(PlaybackState state) {
-        mPlaybackState = state;
+    public void setPlayerProcessor(PlayerCommandProcessor stateBridge) {
+        mStateBridge = stateBridge;
+        stateBridge.setCommandHandler(this);
     }
 }

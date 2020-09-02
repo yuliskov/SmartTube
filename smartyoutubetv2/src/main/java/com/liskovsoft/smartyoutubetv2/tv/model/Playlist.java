@@ -16,7 +16,7 @@
 
 package com.liskovsoft.smartyoutubetv2.tv.model;
 
-import com.liskovsoft.smartyoutubetv2.common.mvp.models.Video;
+import com.liskovsoft.smartyoutubetv2.common.mvp.models.data.Video;
 
 import java.util.ArrayList;
 import java.util.List;

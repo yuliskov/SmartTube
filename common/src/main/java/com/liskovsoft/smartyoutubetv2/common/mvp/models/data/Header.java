@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.mvp.models;
+package com.liskovsoft.smartyoutubetv2.common.mvp.models.data;
 
 public class Header {
     private int mId;

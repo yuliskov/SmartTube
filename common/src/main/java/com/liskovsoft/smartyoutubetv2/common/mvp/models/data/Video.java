@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package com.liskovsoft.smartyoutubetv2.common.mvp.models;
+package com.liskovsoft.smartyoutubetv2.common.mvp.models.data;
 
 import android.media.MediaDescription;
-import android.os.Build.VERSION_CODES;
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.RequiresApi;

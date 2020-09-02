@@ -6,7 +6,7 @@ import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.Row;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.mvp.models.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.mvp.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.tv.ui.main.grid.GridHeaderFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.main.grid.GridHeaderItem;
 import com.liskovsoft.smartyoutubetv2.tv.ui.main.row.RowHeaderFragment;
