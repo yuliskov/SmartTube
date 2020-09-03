@@ -5,12 +5,12 @@ import com.liskovsoft.smartyoutubetv2.common.mvp.models.data.Video;
 
 import java.util.ArrayList;
 
-public class PlayerProcessorFacade implements PlayerCommandProcessor {
-    private static final String TAG = PlayerProcessorFacade.class.getSimpleName();
-    private static PlayerProcessorFacade sInstance;
-    private final ArrayList<PlayerCommandProcessor> mProcessors;
+public class RootPlayerEventBridge implements PlayerEventBridge {
+    private static final String TAG = RootPlayerEventBridge.class.getSimpleName();
+    private static RootPlayerEventBridge sInstance;
+    private final ArrayList<PlayerEventBridge> mProcessors;
 
-    public PlayerProcessorFacade() {
+    public RootPlayerEventBridge() {
         mProcessors = new ArrayList<>();
         
         mProcessors.add(new HistoryUpdater());
@@ -19,18 +19,18 @@ public class PlayerProcessorFacade implements PlayerCommandProcessor {
         mProcessors.add(new PlaylistUpdater());
     }
 
-    public static PlayerProcessorFacade instance() {
+    public static RootPlayerEventBridge instance() {
         if (sInstance == null) {
-            sInstance = new PlayerProcessorFacade();
+            sInstance = new RootPlayerEventBridge();
         }
 
         return sInstance;
     }
 
     @Override
-    public void setCommandHandler(PlayerCommandHandler commandHandler) {
-        for (PlayerCommandProcessor processor : mProcessors) {
-             processor.setCommandHandler(commandHandler);
+    public void setController(PlayerController controller) {
+        for (PlayerEventBridge processor : mProcessors) {
+             processor.setController(controller);
         }
     }
 
@@ -41,7 +41,7 @@ public class PlayerProcessorFacade implements PlayerCommandProcessor {
             return;
         }
 
-        for (PlayerCommandProcessor processor : mProcessors) {
+        for (PlayerEventBridge processor : mProcessors) {
             processor.onSuggestionItemClicked(item);
         }
     }
@@ -53,21 +53,21 @@ public class PlayerProcessorFacade implements PlayerCommandProcessor {
             return;
         }
 
-        for (PlayerCommandProcessor processor : mProcessors) {
+        for (PlayerEventBridge processor : mProcessors) {
             processor.onSuggestionItemLongClicked(item);
         }
     }
 
     @Override
     public void onPrevious() {
-        for (PlayerCommandProcessor processor : mProcessors) {
+        for (PlayerEventBridge processor : mProcessors) {
             processor.onPrevious();
         }
     }
 
     @Override
     public void onNext() {
-        for (PlayerCommandProcessor processor : mProcessors) {
+        for (PlayerEventBridge processor : mProcessors) {
             processor.onNext();
         }
     }
@@ -79,7 +79,7 @@ public class PlayerProcessorFacade implements PlayerCommandProcessor {
             return;
         }
 
-        for (PlayerCommandProcessor processor : mProcessors) {
+        for (PlayerEventBridge processor : mProcessors) {
             processor.onInit(item);
         }
     }

@@ -3,11 +3,11 @@ package com.liskovsoft.smartyoutubetv2.common.mvp.models.playback;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.data.Video;
 
 public class HistoryUpdater extends PlayerCommandProcessorHelper {
-    private PlayerCommandHandler mCommandHandler;
+    private PlayerController mCommandHandler;
 
     @Override
-    public void setCommandHandler(PlayerCommandHandler commandHandler) {
-        mCommandHandler = commandHandler;
+    public void setController(PlayerController controller) {
+        mCommandHandler = controller;
     }
 
     @Override

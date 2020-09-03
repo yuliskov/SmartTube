@@ -16,7 +16,7 @@ import java.util.List;
 public class SuggestionsLoader extends PlayerCommandProcessorHelper {
     private static final String TAG = SuggestionsLoader.class.getSimpleName();
     private final Playlist mPlaylist;
-    private PlayerCommandHandler mCommandHandler;
+    private PlayerController mCommandHandler;
 
     public SuggestionsLoader() {
         mPlaylist = Playlist.instance();
@@ -43,8 +43,8 @@ public class SuggestionsLoader extends PlayerCommandProcessorHelper {
     }
 
     @Override
-    public void setCommandHandler(PlayerCommandHandler commandHandler) {
-        mCommandHandler = commandHandler;
+    public void setController(PlayerController controller) {
+        mCommandHandler = controller;
     }
 
     @SuppressLint("CheckResult")

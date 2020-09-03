@@ -4,7 +4,7 @@ import com.liskovsoft.smartyoutubetv2.common.mvp.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.data.Video;
 
 public class PlaylistUpdater extends PlayerCommandProcessorHelper {
-    private PlayerCommandHandler mCommandHandler;
+    private PlayerController mCommandHandler;
     private static PlaylistUpdater sInstance;
     private final Playlist mPlaylist;
 
@@ -35,7 +35,7 @@ public class PlaylistUpdater extends PlayerCommandProcessorHelper {
     }
 
     @Override
-    public void setCommandHandler(PlayerCommandHandler commandHandler) {
-        mCommandHandler = commandHandler;
+    public void setController(PlayerController controller) {
+        mCommandHandler = controller;
     }
 }

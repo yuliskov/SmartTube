@@ -35,6 +35,9 @@ public class ViewManager {
         mViewMapping.remove(viewClass);
     }
 
+    /**
+     * Calling startActivity() from outside of an Activity  context requires the FLAG_ACTIVITY_NEW_TASK flag. Is this really what you want?
+     */
     public void startView(Class<?> viewClass) {
         Class<?> activityClass = mViewMapping.get(viewClass);
 
@@ -46,6 +49,7 @@ public class ViewManager {
             //getActivity().startActivity(intent, bundle);
 
             Intent intent = new Intent(mContext, activityClass);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mContext.startActivity(intent);
         } else {
             Log.e(TAG, "Activity not registered for view " + viewClass.getSimpleName());

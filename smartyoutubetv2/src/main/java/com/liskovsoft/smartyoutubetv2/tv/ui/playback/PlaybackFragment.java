@@ -29,12 +29,12 @@ import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.mvp.models.playback.PlayerCommandProcessor;
+import com.liskovsoft.smartyoutubetv2.common.mvp.models.playback.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.mvp.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.mvp.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.ExoStateManager;
-import com.liskovsoft.smartyoutubetv2.common.mvp.models.playback.PlayerCommandHandler;
+import com.liskovsoft.smartyoutubetv2.common.mvp.models.playback.PlayerController;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.player.VideoPlayerGlue;
 
@@ -46,7 +46,7 @@ import java.util.Map;
  * Plays selected video, loads playlist and related videos, and delegates playback to
  * {@link VideoPlayerGlue}.
  */
-public class PlaybackFragment extends VideoSupportFragment implements PlaybackView, PlayerCommandHandler {
+public class PlaybackFragment extends VideoSupportFragment implements PlaybackView, PlayerController {
     private static final String TAG = PlaybackFragment.class.getSimpleName();
     private static final int UPDATE_DELAY = 16;
     private VideoPlayerGlue mPlayerGlue;
@@ -59,7 +59,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
     private ExoMediaSourceFactory mMediaSourceFactory;
     private ExoStateManager mStateManager;
-    private PlayerCommandProcessor mEventListener;
+    private PlayerEventListener mEventListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -295,8 +295,12 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
-    public void registerProcessor(PlayerCommandProcessor commandProcessor) {
-        mEventListener = commandProcessor;
-        commandProcessor.setCommandHandler(this);
+    public void setListener(PlayerEventListener listener) {
+        mEventListener = listener;
+    }
+
+    @Override
+    public PlayerController getController() {
+        return this;
     }
 }

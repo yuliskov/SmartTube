@@ -15,15 +15,15 @@ import java.io.InputStream;
 public class VideoLoader extends PlayerCommandProcessorHelper {
     private static final String TAG = VideoLoader.class.getSimpleName();
     private final Playlist mPlaylist;
-    private PlayerCommandHandler mCommandHandler;
+    private PlayerController mCommandHandler;
 
     public VideoLoader() {
         mPlaylist = Playlist.instance();
     }
 
     @Override
-    public void setCommandHandler(PlayerCommandHandler commandHandler) {
-        mCommandHandler = commandHandler;
+    public void setController(PlayerController controller) {
+        mCommandHandler = controller;
     }
 
     @Override

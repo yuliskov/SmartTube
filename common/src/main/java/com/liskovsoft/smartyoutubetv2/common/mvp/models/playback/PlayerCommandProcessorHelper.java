@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.mvp.models.playback;
 
 import com.liskovsoft.smartyoutubetv2.common.mvp.models.data.Video;
 
-public abstract class PlayerCommandProcessorHelper implements PlayerCommandProcessor {
+public abstract class PlayerCommandProcessorHelper implements PlayerEventBridge {
     @Override
     public void onInit(Video item) {
         // NOP
