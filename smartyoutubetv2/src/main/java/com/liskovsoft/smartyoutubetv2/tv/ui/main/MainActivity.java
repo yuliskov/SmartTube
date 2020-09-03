@@ -5,9 +5,6 @@ import android.os.Bundle;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.base.LeanbackActivity;
 
-/*
- * MainActivity class that loads MainFragment.
- */
 public class MainActivity extends LeanbackActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 

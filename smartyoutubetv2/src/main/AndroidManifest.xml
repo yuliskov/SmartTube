@@ -40,20 +40,18 @@
     <application
         android:name="com.liskovsoft.smartyoutubetv2.tv.MainApplication"
         android:allowBackup="false"
-        android:banner="@drawable/videos_by_google_banner"
+        android:banner="@drawable/app_banner"
+        android:logo="@drawable/app_banner"
         android:icon="@drawable/app_icon_quantum"
         android:label="@string/app_name"
-        android:logo="@drawable/videos_by_google_banner"
         android:theme="@style/Theme.Leanback"
         tools:ignore="GoogleAppIndexingWarning,LockedOrientationActivity,UnusedAttribute">
+
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.main.MainActivity"
-            android:icon="@drawable/videos_by_google_banner"
-            android:label="@string/app_name"
-            android:logo="@drawable/videos_by_google_banner"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.Leanback.Browse"
-            android:launchMode="singleTask">
+            android:theme="@style/Theme.Leanback.Browse">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -62,15 +60,20 @@
             </intent-filter>
         </activity>
 
-        <!--<activity-->
-        <!--    android:name="com.liskovsoft.smartyoutubetv2.tv.mobile.MobileWelcomeActivity"-->
-        <!--    android:screenOrientation="landscape">-->
-        <!--    <intent-filter>-->
-        <!--        <action android:name="android.intent.action.MAIN" />-->
+        <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.onboarding.OnboardingActivity"
+                  android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+                  android:screenOrientation="landscape"
+                  android:theme="@style/Theme.Leanback.Onboarding" />
 
-        <!--        <category android:name="android.intent.category.LAUNCHER" />-->
-        <!--    </intent-filter>-->
-        <!--</activity>-->
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="landscape"/>
+
+        <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="landscape"/>
 
         <meta-data android:name="android.app.default_searchable"
             android:value=".ui.VideoDetailsActivity" />
@@ -91,19 +94,15 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity
-            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
-            android:launchMode="singleTask"
-            android:resizeableActivity="true"
-            android:screenOrientation="landscape"/>
+
+        <!-- Begin Old activities -->
+
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.old.VerticalGridActivity"
             android:exported="true"
             android:parentActivityName="com.liskovsoft.smartyoutubetv2.tv.ui.main.MainActivity"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Leanback.VerticalGrid" />
-        <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity" />
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.old.GuidedStepActivity"
             android:screenOrientation="landscape"
@@ -136,11 +135,6 @@
             android:name="com.liskovsoft.smartyoutubetv2.tv.recommendation.old.UpdateRecommendationsService"
             android:enabled="true" />
 
-        <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.onboarding.OnboardingActivity"
-            android:enabled="true"
-            android:exported="true"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.Leanback.Onboarding" />
         <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.old.SettingsActivity"
             android:exported="true"
             android:screenOrientation="landscape"
@@ -150,6 +144,8 @@
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.old.AuthenticationActivity"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Example.Leanback.GuidedStep" />
+
+        <!-- End Old activities -->
     </application>
 
 </manifest>
