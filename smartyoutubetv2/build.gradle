@@ -32,16 +32,17 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    implementation 'androidx.recyclerview:recyclerview:' + appCompatXLibraryVersion
-    implementation 'androidx.leanback:leanback:' + appCompatXLibraryVersion
-    implementation 'androidx.recommendation:recommendation:' + appCompatXLibraryVersion
-    implementation 'androidx.leanback:leanback-preference:' + appCompatXLibraryVersion
+    implementation 'androidx.leanback:leanback:' + leanbackXLibraryVersion
+    implementation 'androidx.leanback:leanback-preference:' + leanbackXLibraryVersion
+    implementation 'androidx.recommendation:recommendation:' + leanbackXLibraryVersion
     implementation 'androidx.annotation:annotation:' + appCompatXLibraryVersion
+    implementation 'androidx.recyclerview:recyclerview:' + appCompatXLibraryVersion
 
     implementation 'com.github.bumptech.glide:glide:' + glideVersion
 
-    implementation 'com.google.android.exoplayer:exoplayer:' + legacyExoplayerVersion
-    implementation 'com.google.android.exoplayer:extension-leanback:' + legacyExoplayerVersion
+    implementation 'com.google.android.exoplayer:exoplayer:' + amazonExoplayerVersion
+    implementation 'com.google.android.exoplayer:extension-leanback:' + amazonExoplayerVersion
+    implementation 'androidx.media:media:' + mediaXLibraryVersion // exoplayer fix
 
     testImplementation 'junit:junit:' + junitVersion
     testImplementation 'org.robolectric:robolectric:' + robolectricVersion

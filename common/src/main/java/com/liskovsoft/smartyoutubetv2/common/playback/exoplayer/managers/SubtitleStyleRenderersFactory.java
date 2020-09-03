@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.state;
+package com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.managers;
 
 import android.os.Handler;
 import androidx.annotation.Nullable;
@@ -15,7 +15,7 @@ import com.google.android.exoplayer2.video.VideoRendererEventListener;
  * My wrapper<br/>
  * Main intent: fix subtitle alignment on some videos
  */
-public class SubtitleStyleRenderersFactory extends AudioDelayRenderersFactoryV1 {
+public class SubtitleStyleRenderersFactory extends AudioDelayRenderersFactoryV2 {
     public SubtitleStyleRenderersFactory(FragmentActivity activity) {
         super(activity);
     }

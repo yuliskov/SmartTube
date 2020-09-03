@@ -44,5 +44,6 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:' + rxAndroidVersion
     implementation 'io.reactivex.rxjava2:rxjava:' + rxJavaVersion
 
-    implementation 'com.google.android.exoplayer:exoplayer:' + legacyExoplayerVersion
+    implementation 'com.google.android.exoplayer:exoplayer:' + amazonExoplayerVersion
+    implementation 'androidx.media:media:' + mediaXLibraryVersion // exoplayer fix
 }

@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.state;
+package com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.managers;
 
 import android.content.Context;
 import android.graphics.Color;

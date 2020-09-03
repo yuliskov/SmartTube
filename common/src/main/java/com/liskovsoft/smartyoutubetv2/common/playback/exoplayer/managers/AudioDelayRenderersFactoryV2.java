@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.state;
+package com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.managers;
 
 import android.content.Context;
 import android.os.Handler;
@@ -21,10 +21,10 @@ import java.util.ArrayList;
  * My wrapper<br/>
  * Main intent: override audio delay
  */
-public class AudioDelayRenderersFactoryV1 extends DefaultRenderersFactory {
-    private static final String TAG = AudioDelayRenderersFactoryV1.class.getSimpleName();
+public class AudioDelayRenderersFactoryV2 extends DefaultRenderersFactory {
+    private static final String TAG = AudioDelayRenderersFactoryV2.class.getSimpleName();
 
-    public AudioDelayRenderersFactoryV1(FragmentActivity activity) {
+    public AudioDelayRenderersFactoryV2(FragmentActivity activity) {
         super(activity);
     }
 
@@ -35,6 +35,7 @@ public class AudioDelayRenderersFactoryV1 extends DefaultRenderersFactory {
             MediaCodecSelector mediaCodecSelector,
             @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager,
             boolean playClearSamplesWithoutKeys,
+            boolean enableDecoderFallback,
             AudioProcessor[] audioProcessors,
             Handler eventHandler,
             AudioRendererEventListener eventListener,
@@ -45,6 +46,7 @@ public class AudioDelayRenderersFactoryV1 extends DefaultRenderersFactory {
                 mediaCodecSelector,
                 drmSessionManager,
                 playClearSamplesWithoutKeys,
+                enableDecoderFallback,
                 audioProcessors,
                 eventHandler,
                 eventListener,
@@ -64,11 +66,12 @@ public class AudioDelayRenderersFactoryV1 extends DefaultRenderersFactory {
         if (index != -1) {
             out.remove(mediaCodecAudioRenderer);
             out.add(index,
-                    new AudioDelayMediaCodecAudioRendererV1(
+                    new AudioDelayMediaCodecAudioRendererV2(
                             context,
                             mediaCodecSelector,
                             drmSessionManager,
                             playClearSamplesWithoutKeys,
+                            enableDecoderFallback,
                             eventHandler,
                             eventListener,
                             new DefaultAudioSink(AudioCapabilities.getCapabilities(context), audioProcessors)));

@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.state;
+package com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.managers;
 
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlayerView;

@@ -169,12 +169,14 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public void openDash(InputStream dashManifest) {
         prepareMediaForPlaying(dashManifest);
+        // TODO: remove
         mPlayerGlue.play();
     }
 
     @Override
     public void openHls(String hlsPlaylistUrl) {
         prepareMediaForPlaying(hlsPlaylistUrl);
+        // TODO: remove
         mPlayerGlue.play();
     }
 

@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.state;
+package com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.managers;
 
 import android.content.Context;
 import android.os.Handler;
@@ -12,31 +12,31 @@ import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
 
-public class AudioDelayMediaCodecAudioRendererV1 extends MediaCodecAudioRenderer {
-    private static final String TAG = AudioDelayMediaCodecAudioRendererV1.class.getSimpleName();
+public class AudioDelayMediaCodecAudioRendererV2 extends MediaCodecAudioRenderer {
+    private static final String TAG = AudioDelayMediaCodecAudioRendererV2.class.getSimpleName();
     private int mDelayUs;
 
-    public AudioDelayMediaCodecAudioRendererV1(Context context, MediaCodecSelector mediaCodecSelector) {
+    public AudioDelayMediaCodecAudioRendererV2(Context context, MediaCodecSelector mediaCodecSelector) {
         super(context, mediaCodecSelector);
     }
 
-    public AudioDelayMediaCodecAudioRendererV1(Context context, MediaCodecSelector mediaCodecSelector, @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys) {
+    public AudioDelayMediaCodecAudioRendererV2(Context context, MediaCodecSelector mediaCodecSelector, @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys) {
         super(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys);
     }
 
-    public AudioDelayMediaCodecAudioRendererV1(Context context, MediaCodecSelector mediaCodecSelector, @Nullable Handler eventHandler,
+    public AudioDelayMediaCodecAudioRendererV2(Context context, MediaCodecSelector mediaCodecSelector, @Nullable Handler eventHandler,
                                                @Nullable AudioRendererEventListener eventListener) {
         super(context, mediaCodecSelector, eventHandler, eventListener);
     }
 
-    public AudioDelayMediaCodecAudioRendererV1(Context context, MediaCodecSelector mediaCodecSelector,
+    public AudioDelayMediaCodecAudioRendererV2(Context context, MediaCodecSelector mediaCodecSelector,
                                                @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager,
                                                boolean playClearSamplesWithoutKeys, @Nullable Handler eventHandler,
                                                @Nullable AudioRendererEventListener eventListener) {
         super(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, eventHandler, eventListener);
     }
 
-    public AudioDelayMediaCodecAudioRendererV1(Context context, MediaCodecSelector mediaCodecSelector,
+    public AudioDelayMediaCodecAudioRendererV2(Context context, MediaCodecSelector mediaCodecSelector,
                                                @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager,
                                                boolean playClearSamplesWithoutKeys, @Nullable Handler eventHandler,
                                                @Nullable AudioRendererEventListener eventListener, @Nullable AudioCapabilities audioCapabilities,
@@ -45,11 +45,15 @@ public class AudioDelayMediaCodecAudioRendererV1 extends MediaCodecAudioRenderer
                 audioProcessors);
     }
 
-    public AudioDelayMediaCodecAudioRendererV1(Context context, MediaCodecSelector mediaCodecSelector,
+    public AudioDelayMediaCodecAudioRendererV2(Context context, MediaCodecSelector mediaCodecSelector,
                                                @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager,
                                                boolean playClearSamplesWithoutKeys, @Nullable Handler eventHandler,
                                                @Nullable AudioRendererEventListener eventListener, AudioSink audioSink) {
         super(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, eventHandler, eventListener, audioSink);
+    }
+
+    public AudioDelayMediaCodecAudioRendererV2(Context context, MediaCodecSelector mediaCodecSelector, @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, boolean enableDecoderFallback, @Nullable Handler eventHandler, @Nullable AudioRendererEventListener eventListener, AudioSink audioSink) {
+        super(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, audioSink);
     }
 
     @Override
