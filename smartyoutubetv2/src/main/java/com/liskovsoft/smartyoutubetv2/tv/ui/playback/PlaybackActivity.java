@@ -33,12 +33,6 @@ public class PlaybackActivity extends LeanbackActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        finish();
-    }
-
-    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BUTTON_R1) {
             mPlaybackFragment.skipToNext();

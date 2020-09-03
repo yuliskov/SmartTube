@@ -12,7 +12,6 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
-import androidx.leanback.app.SearchSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRow;
@@ -104,6 +103,8 @@ public class SearchFragment extends SearchSupportFragment
     @Override
     public void onPause() {
         mHandler.removeCallbacksAndMessages(null);
+
+        // fix Service not registered: android.speech.SpeechRecognizer$Connection
         super.onPause();
     }
 

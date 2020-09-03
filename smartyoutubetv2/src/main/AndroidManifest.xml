@@ -26,7 +26,6 @@
         com.google.firebase.crashlytics,
         com.google.firebase.iid"/>
 
-
     <uses-feature
         android:name="android.hardware.microphone"
         android:required="false" />
@@ -49,6 +48,7 @@
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.main.MainActivity"
+            android:launchMode="singleTop"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Leanback.Browse">
@@ -61,25 +61,29 @@
         </activity>
 
         <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.onboarding.OnboardingActivity"
+                  android:launchMode="singleTop"
                   android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
                   android:screenOrientation="landscape"
                   android:theme="@style/Theme.Leanback.Onboarding" />
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity"
+            android:launchMode="singleTop"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:screenOrientation="landscape"/>
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity"
+            android:launchMode="singleTop"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:screenOrientation="landscape"/>
 
         <meta-data android:name="android.app.default_searchable"
-            android:value=".ui.VideoDetailsActivity" />
+            android:value="com.liskovsoft.smartyoutubetv2.tv.ui.details.VideoDetailsActivity"/>
+
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.details.VideoDetailsActivity"
-            android:exported="true"
+            android:launchMode="singleTop"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Leanback.Details">
 
