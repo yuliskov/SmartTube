@@ -59,4 +59,14 @@ public abstract class PlayerEventListenerHelper implements PlayerEventBridge {
     public void onVideoLoaded(Video item) {
         // NOP
     }
+
+    @Override
+    public void onEngineInitialized() {
+        // NOP
+    }
+
+    @Override
+    public void onEngineReleased() {
+        // NOP
+    }
 }

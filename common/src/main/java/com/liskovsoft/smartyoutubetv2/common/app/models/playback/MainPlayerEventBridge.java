@@ -125,4 +125,18 @@ public class MainPlayerEventBridge implements PlayerEventBridge {
             listener.setController(controller);
         }
     }
+
+    @Override
+    public void onEngineInitialized() {
+        for (PlayerEventListener listener : mEventListeners) {
+            listener.onEngineInitialized();
+        }
+    }
+
+    @Override
+    public void onEngineReleased() {
+        for (PlayerEventListener listener : mEventListeners) {
+            listener.onEngineReleased();
+        }
+    }
 }

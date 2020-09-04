@@ -28,26 +28,26 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onViewResumed() {
-        loadItem(mLastVideo);
+    public void onEngineInitialized() {
+        loadVideo(mLastVideo);
     }
 
     @Override
     public void onPrevious() {
-        loadItem(mPlaylist.previous());
+        loadVideo(mPlaylist.previous());
     }
 
     @Override
     public void onNext() {
-        loadItem(mPlaylist.next());
+        loadVideo(mPlaylist.next());
     }
 
     @Override
     public void onSuggestionItemClicked(Video item) {
-        loadItem(item);
+        loadVideo(item);
     }
 
-    private void loadItem(Video item) {
+    private void loadVideo(Video item) {
         if (item != null) {
             mLastVideo = item;
             mController.openVideo(item);

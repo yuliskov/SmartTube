@@ -20,7 +20,7 @@ public class PositionRestorer extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onViewPaused() {
+    public void onEngineReleased() {
         savePosition();
     }
 

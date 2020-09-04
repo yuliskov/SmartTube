@@ -87,6 +87,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
             mPlaybackPresenter.onInitDone();
 
+            mEventListener.onEngineInitialized();
             mEventListener.onViewResumed();
         }
     }
@@ -99,6 +100,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
             mPlaybackPresenter.onInitDone();
 
+            mEventListener.onEngineInitialized();
             mEventListener.onViewResumed();
         }
     }
@@ -113,6 +115,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
             mPlayerGlue.pause();
         }
         if (Util.SDK_INT <= 23) {
+            mEventListener.onEngineReleased();
             mEventListener.onViewPaused();
             releasePlayer();
         }
@@ -122,6 +125,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     public void onStop() {
         super.onStop();
         if (Util.SDK_INT > 23) {
+            mEventListener.onEngineReleased();
             mEventListener.onViewPaused();
             releasePlayer();
         }
