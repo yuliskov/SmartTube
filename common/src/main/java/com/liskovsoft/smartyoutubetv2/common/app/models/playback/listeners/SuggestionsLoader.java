@@ -8,7 +8,6 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.schedulers.Schedulers;
@@ -70,7 +69,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
                     }
 
                     for (MediaGroup group : suggestions) {
-                        mController.updateRelated(VideoGroup.from(group, null));
+                        mController.updateSuggestions(VideoGroup.from(group, null));
                     }
                 }, error -> Log.e(TAG, "loadSuggestions: " + error));
     }

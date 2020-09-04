@@ -80,12 +80,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mEventListener.onViewDestroyed();
-    }
-
-    @Override
     public void onStart() {
         super.onStart();
         if (Util.SDK_INT > 23) {
@@ -159,12 +153,12 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlayerGlue.setHost(new VideoSupportFragmentGlueHost(this));
         mPlayerGlue.playWhenPrepared();
 
-        mRowsAdapter = initializeRelatedVideosRow();
+        mRowsAdapter = initializeSuggestedVideosRow();
         setAdapter(mRowsAdapter);
     }
 
     @Override
-    public void updateRelated(VideoGroup group) {
+    public void updateSuggestions(VideoGroup group) {
         if (mRowsAdapter == null) {
             Log.e(TAG, "Related videos row not initialized yet.");
             return;
@@ -246,7 +240,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mEventListener.onVideoLoaded();
     }
 
-    private ArrayObjectAdapter initializeRelatedVideosRow() {
+    private ArrayObjectAdapter initializeSuggestedVideosRow() {
         /*
          * To add a new row to the mPlayerAdapter and not lose the controls row that is provided by the
          * glue, we need to compose a new row with the controls row and our related videos row.
@@ -302,10 +296,10 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public void resetSuggestions() {
         mMediaGroupAdapters.clear();
-        mRowsAdapter.clear();
 
-        // player controls row
-        mRowsAdapter.add(mPlayerGlue.getControlsRow());
+        if (mRowsAdapter.size() > 1) {
+            mRowsAdapter.removeItems(1, mRowsAdapter.size() - 1);
+        }
     }
 
     private class PlayerActionListener implements VideoPlayerGlue.OnActionClickedListener {
@@ -338,5 +332,29 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public void setPositionMs(long positionMs) {
         mExoPlayerController.setPosition(positionMs);
+    }
+
+    @Override
+    public String getTitle() {
+        if (mPlayerGlue == null) {
+            return null;
+        }
+
+        return (String) mPlayerGlue.getTitle();
+    }
+
+    @Override
+    public String getSubtitle() {
+        if (mPlayerGlue == null) {
+            return null;
+        }
+
+        return (String) mPlayerGlue.getSubtitle();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mEventListener.onViewDestroyed();
     }
 }
