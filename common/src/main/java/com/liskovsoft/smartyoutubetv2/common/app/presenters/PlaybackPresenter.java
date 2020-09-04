@@ -11,7 +11,6 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
     private static PlaybackPresenter sInstance;
     private final Context mContext;
     private final ViewManager mViewManager;
-    private MainPlayerEventBridge mMainPlayerEventBridge;
     private PlaybackView mView;
     private Video mVideo;
 
@@ -30,9 +29,9 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
 
     @Override
     public void onInitDone() {
-        mMainPlayerEventBridge = new MainPlayerEventBridge(mView.getController());
-        mView.setListener(mMainPlayerEventBridge);
-        mMainPlayerEventBridge.onInit(mVideo);
+        MainPlayerEventBridge mainPlayerEventBridge = new MainPlayerEventBridge(mView.getController());
+        mView.setListener(mainPlayerEventBridge);
+        mainPlayerEventBridge.onInit(mVideo);
     }
 
     @Override

@@ -13,6 +13,6 @@ public interface PlayerController {
     void openDash(InputStream dashManifest);
     void openHls(String hlsPlaylistUrl);
     void initTitle(Video item);
-    long getPosition();
+    long getPositionMs();
     void setPosition(long positionMs);
 }

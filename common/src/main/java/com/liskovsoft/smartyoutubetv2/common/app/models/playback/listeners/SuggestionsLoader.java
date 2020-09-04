@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.models.playback.processors;
+package com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners;
 
 import android.annotation.SuppressLint;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;

@@ -2,11 +2,11 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.processors.HistoryUpdater;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.processors.PlaylistUpdater;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.processors.StateRestorer;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.processors.SuggestionsLoader;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.processors.VideoLoader;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.HistoryUpdater;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.PlaylistUpdater;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.PositionRestorer;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.SuggestionsLoader;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.VideoLoader;
 
 import java.util.ArrayList;
 
@@ -22,7 +22,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         mEventListeners.add(new HistoryUpdater());
         mEventListeners.add(new SuggestionsLoader(controller));
         mEventListeners.add(new VideoLoader(controller));
-        mEventListeners.add(new StateRestorer(controller));
+        mEventListeners.add(new PositionRestorer(controller));
 
         // should come last
         mEventListeners.add(new PlaylistUpdater());
