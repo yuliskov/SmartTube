@@ -27,14 +27,14 @@ import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.mvp.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.mvp.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.mvp.models.playback.PlayerEventListener;
-import com.liskovsoft.smartyoutubetv2.common.mvp.presenters.PlaybackPresenter;
-import com.liskovsoft.smartyoutubetv2.common.mvp.views.PlaybackView;
-import com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.ExoMediaSourceFactory;
-import com.liskovsoft.smartyoutubetv2.common.playback.exoplayer.ExoStateManager;
-import com.liskovsoft.smartyoutubetv2.common.mvp.models.playback.PlayerController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerController;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.ExoPlayerController;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.player.VideoPlayerGlue;
 
@@ -58,8 +58,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private ArrayObjectAdapter mRowsAdapter;
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
     private ExoMediaSourceFactory mMediaSourceFactory;
-    private ExoStateManager mStateManager;
     private PlayerEventListener mEventListener;
+    private ExoPlayerController mExoPlayerController;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,8 +71,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlaybackPresenter.register(this);
 
         mMediaSourceFactory = ExoMediaSourceFactory.instance(getContext());
-
-        mStateManager = ExoStateManager.instance(getContext());
     }
 
     @Override
@@ -128,6 +126,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mTrackSelector.setParameters(mTrackSelector.getParameters().buildUpon().setForceHighestSupportedBitrate(true));
 
         mPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), mTrackSelector);
+
+        mExoPlayerController = new ExoPlayerController(mPlayer, mTrackSelector);
 
         mPlayerAdapter = new LeanbackPlayerAdapter(getActivity(), mPlayer, UPDATE_DELAY);
 
@@ -188,6 +188,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
             mPlayerGlue = null;
             mPlayerAdapter = null;
             mPlaylistActionListener = null;
+            mExoPlayerController = null;
         }
     }
 
@@ -304,5 +305,15 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public PlayerController getController() {
         return this;
+    }
+
+    @Override
+    public long getPosition() {
+        return mExoPlayerController.getPosition();
+    }
+
+    @Override
+    public void setPosition(long positionMs) {
+        mExoPlayerController.setPosition(positionMs);
     }
 }

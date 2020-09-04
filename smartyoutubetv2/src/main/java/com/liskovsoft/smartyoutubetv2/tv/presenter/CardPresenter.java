@@ -27,7 +27,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.common.mvp.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 
 /*
  * A CardPresenter is used to generate Views and bind Objects to them on demand.

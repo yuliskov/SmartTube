@@ -1,8 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.tv.adapter;
 
 import androidx.leanback.widget.ObjectAdapter;
-import com.liskovsoft.smartyoutubetv2.common.mvp.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.mvp.models.data.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
 
 import java.util.ArrayList;

@@ -4,7 +4,7 @@ import android.media.MediaDescription;
 import android.net.Uri;
 import android.os.Parcel;
 
-import com.liskovsoft.smartyoutubetv2.common.mvp.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

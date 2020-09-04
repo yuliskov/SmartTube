@@ -1,12 +1,12 @@
 package com.liskovsoft.smartyoutubetv2.tv;
 
 import android.app.Application;
-import com.liskovsoft.smartyoutubetv2.common.mvp.ViewManager;
-import com.liskovsoft.smartyoutubetv2.common.mvp.views.DetailsView;
-import com.liskovsoft.smartyoutubetv2.common.mvp.views.MainView;
-import com.liskovsoft.smartyoutubetv2.common.mvp.views.OnboardingView;
-import com.liskovsoft.smartyoutubetv2.common.mvp.views.PlaybackView;
-import com.liskovsoft.smartyoutubetv2.common.mvp.views.SearchView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.app.views.DetailsView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.MainView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.OnboardingView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.main.MainActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.details.VideoDetailsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.onboarding.OnboardingActivity;

@@ -20,7 +20,7 @@ import android.os.Bundle;
 import androidx.fragment.app.FragmentActivity;
 
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.common.mvp.presenters.OnboardingPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.OnboardingPresenter;
 
 /*
  * OnboardingActivity for OnboardingFragment

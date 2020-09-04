@@ -31,8 +31,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.common.mvp.presenters.OnboardingPresenter;
-import com.liskovsoft.smartyoutubetv2.common.mvp.views.OnboardingView;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.OnboardingPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.OnboardingView;
 
 import java.util.ArrayList;
 
