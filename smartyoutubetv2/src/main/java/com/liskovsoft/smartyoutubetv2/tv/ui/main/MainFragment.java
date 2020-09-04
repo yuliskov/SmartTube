@@ -85,6 +85,8 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
         prepareEntranceTransition();
 
         initRowAdapters();
+
+        mPresenter.onInitDone();
     }
 
     private void setupUi() {
@@ -132,8 +134,6 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
         mCategoryRowAdapter.add(new ListRow(gridHeader, gridRowAdapter));
 
         startEntranceTransition(); // TODO: Move startEntranceTransition to after all
-
-        mPresenter.onInitDone();
     }
 
     @Override

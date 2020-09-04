@@ -23,7 +23,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onInit(Video item) {
+    public void openVideo(Video item) {
         loadItem(item);
     }
 

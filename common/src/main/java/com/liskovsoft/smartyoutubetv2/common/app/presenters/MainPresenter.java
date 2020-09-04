@@ -89,7 +89,7 @@ public class MainPresenter implements VideoGroupPresenter<MainView> {
             return;
         }
 
-        mPlaybackPresenter.openVideo(item);
+        mPlaybackPresenter.openVideo(mView, item);
     }
 
     @Override

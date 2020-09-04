@@ -1,6 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners;
 
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 
 public class PositionRestorer extends PlayerEventListenerHelper {
@@ -11,6 +11,11 @@ public class PositionRestorer extends PlayerEventListenerHelper {
         if (mPositionMs != 0) {
             mController.setPositionMs(mPositionMs);
         }
+    }
+
+    @Override
+    public void onSuggestionItemClicked(Video item) {
+        mPositionMs = 0;
     }
 
     @Override

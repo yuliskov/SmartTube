@@ -98,6 +98,8 @@ public class SearchFragment extends SearchSupportFragment
         super.onActivityCreated(savedInstanceState);
 
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
+
+        mSearchPresenter.onInitDone();
     }
 
     @Override

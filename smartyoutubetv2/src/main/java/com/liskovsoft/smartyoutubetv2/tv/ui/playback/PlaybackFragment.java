@@ -60,6 +60,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private ExoMediaSourceFactory mMediaSourceFactory;
     private PlayerEventListener mEventListener;
     private ExoPlayerController mExoPlayerController;
+    private boolean mInitDone;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,6 +90,12 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         super.onStart();
         if (Util.SDK_INT > 23) {
             initializePlayer();
+
+            if (!mInitDone) {
+                mPlaybackPresenter.onInitDone();
+                mInitDone = true;
+            }
+
             mEventListener.onViewResumed();
         }
     }
@@ -98,6 +105,12 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         super.onResume();
         if ((Util.SDK_INT <= 23 || mPlayer == null)) {
             initializePlayer();
+
+            if (!mInitDone) {
+                mPlaybackPresenter.onInitDone();
+                mInitDone = true;
+            }
+
             mEventListener.onViewResumed();
         }
     }
@@ -148,8 +161,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
         mRowsAdapter = initializeRelatedVideosRow();
         setAdapter(mRowsAdapter);
-
-        mPlaybackPresenter.onInitDone();
     }
 
     @Override

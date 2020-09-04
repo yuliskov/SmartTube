@@ -57,9 +57,9 @@ public class ViewManager {
         }
     }
 
-    public void startView(Object initiator, Class<?> viewClass) {
-        if (initiator instanceof Fragment) {
-            Fragment fragment = (Fragment) initiator;
+    public void startView(Object fragmentView, Class<?> viewClass) {
+        if (fragmentView instanceof Fragment) {
+            Fragment fragment = (Fragment) fragmentView;
 
             Class<?> activityClass = mViewMapping.get(viewClass);
 

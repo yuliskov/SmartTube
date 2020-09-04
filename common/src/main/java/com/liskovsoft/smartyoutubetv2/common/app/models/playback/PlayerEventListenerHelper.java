@@ -11,7 +11,7 @@ public abstract class PlayerEventListenerHelper implements PlayerEventBridge {
     }
 
     @Override
-    public void onInit(Video item) {
+    public void openVideo(Video item) {
         // NOP
     }
 

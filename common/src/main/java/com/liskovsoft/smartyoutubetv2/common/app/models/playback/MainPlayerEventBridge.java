@@ -74,18 +74,6 @@ public class MainPlayerEventBridge implements PlayerEventBridge {
     }
 
     @Override
-    public void onInit(Video item) {
-        if (item == null) {
-            Log.e(TAG, "onOpenVideo: item is null");
-            return;
-        }
-
-        for (PlayerEventListener listener : mEventListeners) {
-            listener.onInit(item);
-        }
-    }
-
-    @Override
     public void onViewCreated() {
         for (PlayerEventListener listener : mEventListeners) {
             listener.onViewCreated();
@@ -117,6 +105,18 @@ public class MainPlayerEventBridge implements PlayerEventBridge {
     public void onVideoLoaded() {
         for (PlayerEventListener listener : mEventListeners) {
             listener.onVideoLoaded();
+        }
+    }
+
+    @Override
+    public void openVideo(Video item) {
+        if (item == null) {
+            Log.e(TAG, "load: item is null");
+            return;
+        }
+
+        for (PlayerEventBridge listener : mEventListeners) {
+            listener.openVideo(item);
         }
     }
 

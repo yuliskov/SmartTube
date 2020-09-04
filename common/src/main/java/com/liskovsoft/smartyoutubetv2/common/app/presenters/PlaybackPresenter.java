@@ -34,7 +34,7 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
         mMainPlayerEventBridge.setController(mView.getController());
         mView.setListener(mMainPlayerEventBridge);
 
-        mMainPlayerEventBridge.onInit(mVideo);
+        mMainPlayerEventBridge.openVideo(mVideo);
     }
 
     @Override
@@ -50,5 +50,10 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
     public void openVideo(Video item) {
         mVideo = item;
         mViewManager.startView(PlaybackView.class);
+    }
+
+    public void openVideo(Object fragmentView, Video item) {
+        mVideo = item;
+        mViewManager.startView(fragmentView, PlaybackView.class);
     }
 }

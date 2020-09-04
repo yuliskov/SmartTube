@@ -65,7 +65,7 @@ public class SearchPresenter implements VideoGroupPresenter<SearchView> {
             return;
         }
 
-        mPlaybackPresenter.openVideo(item);
+        mPlaybackPresenter.openVideo(mView, item);
     }
 
     @Override
