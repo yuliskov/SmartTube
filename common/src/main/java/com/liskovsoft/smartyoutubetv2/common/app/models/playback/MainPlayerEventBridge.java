@@ -10,22 +10,29 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.Video
 
 import java.util.ArrayList;
 
-public class MainPlayerEventBridge implements PlayerEventListener {
+public class MainPlayerEventBridge implements PlayerEventBridge {
     private static final String TAG = MainPlayerEventBridge.class.getSimpleName();
-    private final ArrayList<PlayerEventListener> mEventListeners;
-    private final PlayerController mController;
+    private final ArrayList<PlayerEventBridge> mEventListeners;
+    private static MainPlayerEventBridge sInstance;
 
-    public MainPlayerEventBridge(PlayerController controller) {
-        mController = controller;
+    public MainPlayerEventBridge() {
         mEventListeners = new ArrayList<>();
         
         mEventListeners.add(new HistoryUpdater());
-        mEventListeners.add(new SuggestionsLoader(controller));
-        mEventListeners.add(new VideoLoader(controller));
-        mEventListeners.add(new PositionRestorer(controller));
+        mEventListeners.add(new SuggestionsLoader());
+        mEventListeners.add(new VideoLoader());
+        mEventListeners.add(new PositionRestorer());
 
         // should come last
         mEventListeners.add(new PlaylistUpdater());
+    }
+
+    public static MainPlayerEventBridge instance() {
+        if (sInstance == null) {
+            sInstance = new MainPlayerEventBridge();
+        }
+
+        return sInstance;
     }
 
     @Override
@@ -103,6 +110,20 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     public void onViewResumed() {
         for (PlayerEventListener listener : mEventListeners) {
             listener.onViewResumed();
+        }
+    }
+
+    @Override
+    public void onVideoLoaded() {
+        for (PlayerEventListener listener : mEventListeners) {
+            listener.onVideoLoaded();
+        }
+    }
+
+    @Override
+    public void setController(PlayerController controller) {
+        for (PlayerEventBridge listener : mEventListeners) {
+            listener.setController(controller);
         }
     }
 }

@@ -4,11 +4,13 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerControlle
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 
 public class PositionRestorer extends PlayerEventListenerHelper {
-    private PlayerController mController;
     private long mPositionMs;
 
-    public PositionRestorer(PlayerController controller) {
-        mController = controller;
+    @Override
+    public void onVideoLoaded() {
+        if (mPositionMs != 0) {
+            mController.setPositionMs(mPositionMs);
+        }
     }
 
     @Override
@@ -19,12 +21,5 @@ public class PositionRestorer extends PlayerEventListenerHelper {
     @Override
     public void onViewPaused() {
         mPositionMs = mController.getPositionMs();
-    }
-
-    @Override
-    public void onViewResumed() {
-        if (mPositionMs != 0) {
-            mController.setPosition(mPositionMs);
-        }
     }
 }

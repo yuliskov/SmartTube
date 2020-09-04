@@ -79,10 +79,17 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mEventListener.onViewDestroyed();
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         if (Util.SDK_INT > 23) {
             initializePlayer();
+            mEventListener.onViewResumed();
         }
     }
 
@@ -91,6 +98,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         super.onResume();
         if ((Util.SDK_INT <= 23 || mPlayer == null)) {
             initializePlayer();
+            mEventListener.onViewResumed();
         }
     }
 
@@ -104,6 +112,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
             mPlayerGlue.pause();
         }
         if (Util.SDK_INT <= 23) {
+            mEventListener.onViewPaused();
             releasePlayer();
         }
     }
@@ -112,6 +121,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     public void onStop() {
         super.onStop();
         if (Util.SDK_INT > 23) {
+            mEventListener.onViewPaused();
             releasePlayer();
         }
     }
@@ -215,12 +225,14 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         //String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
         MediaSource mediaSource = mMediaSourceFactory.fromDashManifest(dashManifest);
         mPlayer.prepare(mediaSource);
+        mEventListener.onVideoLoaded();
     }
 
     private void prepareMediaForPlaying(String hlsPlaylistUrl) {
         //String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
         MediaSource mediaSource = mMediaSourceFactory.fromHlsPlaylist(Uri.parse(hlsPlaylistUrl));
         mPlayer.prepare(mediaSource);
+        mEventListener.onVideoLoaded();
     }
 
     private ArrayObjectAdapter initializeRelatedVideosRow() {
@@ -277,7 +289,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
-    public void clearRelated() {
+    public void resetSuggestions() {
         mMediaGroupAdapters.clear();
         mRowsAdapter.clear();
 
@@ -313,7 +325,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
-    public void setPosition(long positionMs) {
+    public void setPositionMs(long positionMs) {
         mExoPlayerController.setPosition(positionMs);
     }
 }

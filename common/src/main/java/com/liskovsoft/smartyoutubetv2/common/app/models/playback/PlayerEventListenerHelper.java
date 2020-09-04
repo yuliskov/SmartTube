@@ -2,7 +2,14 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 
-public abstract class PlayerEventListenerHelper implements PlayerEventListener {
+public abstract class PlayerEventListenerHelper implements PlayerEventBridge {
+    protected PlayerController mController;
+
+    @Override
+    public void setController(PlayerController controller) {
+        mController = controller;
+    }
+
     @Override
     public void onInit(Video item) {
         // NOP
@@ -45,6 +52,11 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
 
     @Override
     public void onViewResumed() {
+        // NOP
+    }
+
+    @Override
+    public void onVideoLoaded() {
         // NOP
     }
 }

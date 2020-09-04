@@ -9,10 +9,10 @@ import java.io.InputStream;
 // title, subtitle (description), subscribed/liked nums, published date, toggle buttons, simple buttons
 public interface PlayerController {
     void updateRelated(VideoGroup group);
-    void clearRelated();
+    void resetSuggestions();
+    void initTitle(Video item);
     void openDash(InputStream dashManifest);
     void openHls(String hlsPlaylistUrl);
-    void initTitle(Video item);
     long getPositionMs();
-    void setPosition(long positionMs);
+    void setPositionMs(long positionMs);
 }

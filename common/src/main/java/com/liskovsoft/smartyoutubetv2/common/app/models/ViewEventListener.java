@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
+package com.liskovsoft.smartyoutubetv2.common.app.models;
 
 public interface ViewEventListener {
     void onViewCreated();

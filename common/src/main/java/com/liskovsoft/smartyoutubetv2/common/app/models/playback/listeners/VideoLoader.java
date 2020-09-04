@@ -17,10 +17,8 @@ import java.io.InputStream;
 public class VideoLoader extends PlayerEventListenerHelper {
     private static final String TAG = VideoLoader.class.getSimpleName();
     private final Playlist mPlaylist;
-    private final PlayerController mController;
 
-    public VideoLoader(PlayerController controller) {
-        mController = controller;
+    public VideoLoader() {
         mPlaylist = Playlist.instance();
     }
 

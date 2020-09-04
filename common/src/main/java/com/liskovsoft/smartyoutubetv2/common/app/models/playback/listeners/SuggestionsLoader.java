@@ -18,10 +18,8 @@ import java.util.List;
 public class SuggestionsLoader extends PlayerEventListenerHelper {
     private static final String TAG = SuggestionsLoader.class.getSimpleName();
     private final Playlist mPlaylist;
-    private final PlayerController mController;
 
-    public SuggestionsLoader(PlayerController controller) {
-        mController = controller;
+    public SuggestionsLoader() {
         mPlaylist = Playlist.instance();
     }
 
@@ -52,7 +50,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
             return;
         }
 
-        mController.clearRelated(); // clear previous videos
+        mController.resetSuggestions(); // clear previous videos
 
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
