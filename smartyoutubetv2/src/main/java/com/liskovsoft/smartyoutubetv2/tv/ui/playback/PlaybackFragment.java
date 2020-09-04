@@ -60,7 +60,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private ExoMediaSourceFactory mMediaSourceFactory;
     private PlayerEventListener mEventListener;
     private ExoPlayerController mExoPlayerController;
-    private boolean mInitDone;
+    private Video mVideo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -202,7 +202,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
-    public void initTitle(Video video) {
+    public void openVideo(Video video) {
+        mVideo = video;
         mPlayerGlue.setTitle(video.title);
         mPlayerGlue.setSubtitle(video.description);
     }
@@ -224,14 +225,14 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         //String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
         MediaSource mediaSource = mMediaSourceFactory.fromDashManifest(dashManifest);
         mPlayer.prepare(mediaSource);
-        mEventListener.onVideoLoaded();
+        mEventListener.onVideoLoaded(mVideo);
     }
 
     private void prepareMediaForPlaying(String hlsPlaylistUrl) {
         //String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
         MediaSource mediaSource = mMediaSourceFactory.fromHlsPlaylist(Uri.parse(hlsPlaylistUrl));
         mPlayer.prepare(mediaSource);
-        mEventListener.onVideoLoaded();
+        mEventListener.onVideoLoaded(mVideo);
     }
 
     private ArrayObjectAdapter initializeSuggestedVideosRow() {
@@ -329,26 +330,13 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
-    public String getTitle() {
-        if (mPlayerGlue == null) {
-            return null;
-        }
-
-        return (String) mPlayerGlue.getTitle();
-    }
-
-    @Override
-    public String getSubtitle() {
-        if (mPlayerGlue == null) {
-            return null;
-        }
-
-        return (String) mPlayerGlue.getSubtitle();
-    }
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mEventListener.onViewDestroyed();
+    }
+
+    @Override
+    public Video getVideo() {
+        return mVideo;
     }
 }

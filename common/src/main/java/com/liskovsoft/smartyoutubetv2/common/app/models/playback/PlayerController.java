@@ -10,11 +10,10 @@ import java.io.InputStream;
 public interface PlayerController {
     void updateSuggestions(VideoGroup group);
     void resetSuggestions();
-    void initTitle(Video item);
+    void openVideo(Video item);
     void openDash(InputStream dashManifest);
     void openHls(String hlsPlaylistUrl);
     long getPositionMs();
     void setPositionMs(long positionMs);
-    String getTitle();
-    String getSubtitle();
+    Video getVideo();
 }

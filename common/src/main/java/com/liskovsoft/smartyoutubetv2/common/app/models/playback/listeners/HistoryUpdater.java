@@ -10,7 +10,7 @@ public class HistoryUpdater extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void openVideo(Video item) {
+    public void onStart(Video item) {
         // save history
     }
 

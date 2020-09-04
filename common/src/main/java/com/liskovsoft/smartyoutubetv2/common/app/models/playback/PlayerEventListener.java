@@ -10,5 +10,5 @@ public interface PlayerEventListener extends ViewEventListener {
     void onSuggestionItemLongClicked(Video item);
     void onPrevious();
     void onNext();
-    void onVideoLoaded();
+    void onVideoLoaded(Video item);
 }

@@ -5,7 +5,6 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
@@ -16,29 +15,9 @@ import java.util.List;
 
 public class SuggestionsLoader extends PlayerEventListenerHelper {
     private static final String TAG = SuggestionsLoader.class.getSimpleName();
-    private final Playlist mPlaylist;
-
-    public SuggestionsLoader() {
-        mPlaylist = Playlist.instance();
-    }
 
     @Override
-    public void openVideo(Video item) {
-        loadSuggestions(item);
-    }
-
-    @Override
-    public void onPrevious() {
-        loadSuggestions(mPlaylist.previous());
-    }
-
-    @Override
-    public void onNext() {
-        loadSuggestions(mPlaylist.next());
-    }
-
-    @Override
-    public void onSuggestionItemClicked(Video item) {
+    public void onVideoLoaded(Video item) {
         loadSuggestions(item);
     }
 

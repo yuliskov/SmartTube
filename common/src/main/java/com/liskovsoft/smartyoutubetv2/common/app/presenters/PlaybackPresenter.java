@@ -12,7 +12,6 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
     private final Context mContext;
     private final ViewManager mViewManager;
     private PlaybackView mView;
-    private Video mVideo;
     private final MainPlayerEventBridge mMainPlayerEventBridge;
 
     private PlaybackPresenter(Context context) {
@@ -33,8 +32,6 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
     public void onInitDone() {
         mMainPlayerEventBridge.setController(mView.getController());
         mView.setListener(mMainPlayerEventBridge);
-
-        mMainPlayerEventBridge.openVideo(mVideo);
     }
 
     @Override
@@ -48,12 +45,12 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
     }
 
     public void openVideo(Video item) {
-        mVideo = item;
+        mMainPlayerEventBridge.onStart(item);
         mViewManager.startView(PlaybackView.class);
     }
 
     public void openVideo(Object fragmentView, Video item) {
-        mVideo = item;
+        mMainPlayerEventBridge.onStart(item);
         mViewManager.startView(fragmentView, PlaybackView.class);
     }
 }

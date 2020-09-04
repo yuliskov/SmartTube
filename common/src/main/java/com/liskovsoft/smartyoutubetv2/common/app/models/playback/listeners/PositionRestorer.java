@@ -10,12 +10,8 @@ public class PositionRestorer extends PlayerEventListenerHelper {
     private Map<String, Long> mPositionMap = new HashMap<>();
 
     @Override
-    public void onVideoLoaded() {
-        Long mPositionMs = mPositionMap.get(mController.getTitle() + mController.getSubtitle());
-
-        if (mPositionMs != null) {
-            mController.setPositionMs(mPositionMs);
-        }
+    public void onVideoLoaded(Video item) {
+        restorePosition(item);
     }
 
     @Override
@@ -28,7 +24,16 @@ public class PositionRestorer extends PlayerEventListenerHelper {
         savePosition();
     }
 
+    private void restorePosition(Video item) {
+        Long mPositionMs = mPositionMap.get(item.title + item.description);
+
+        if (mPositionMs != null) {
+            mController.setPositionMs(mPositionMs);
+        }
+    }
+
     private void savePosition() {
-        mPositionMap.put(mController.getTitle() + mController.getSubtitle(), mController.getPositionMs());
+        Video video = mController.getVideo();
+        mPositionMap.put(video.title + video.description, mController.getPositionMs());
     }
 }

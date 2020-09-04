@@ -11,7 +11,7 @@ public abstract class PlayerEventListenerHelper implements PlayerEventBridge {
     }
 
     @Override
-    public void openVideo(Video item) {
+    public void onStart(Video item) {
         // NOP
     }
 
@@ -56,7 +56,7 @@ public abstract class PlayerEventListenerHelper implements PlayerEventBridge {
     }
 
     @Override
-    public void onVideoLoaded() {
+    public void onVideoLoaded(Video item) {
         // NOP
     }
 }

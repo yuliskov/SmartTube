@@ -16,14 +16,20 @@ import java.io.InputStream;
 public class VideoLoader extends PlayerEventListenerHelper {
     private static final String TAG = VideoLoader.class.getSimpleName();
     private final Playlist mPlaylist;
+    private Video mLastVideo;
 
     public VideoLoader() {
         mPlaylist = Playlist.instance();
     }
 
     @Override
-    public void openVideo(Video item) {
-        loadItem(item);
+    public void onStart(Video item) {
+        mLastVideo = item;
+    }
+
+    @Override
+    public void onViewResumed() {
+        loadItem(mLastVideo);
     }
 
     @Override
@@ -43,7 +49,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     private void loadItem(Video item) {
         if (item != null) {
-            mController.initTitle(item);
+            mLastVideo = item;
+            mController.openVideo(item);
             loadFormatInfo(item);
         }
     }

@@ -101,21 +101,21 @@ public class MainPlayerEventBridge implements PlayerEventBridge {
     }
 
     @Override
-    public void onVideoLoaded() {
+    public void onVideoLoaded(Video item) {
         for (PlayerEventListener listener : mEventListeners) {
-            listener.onVideoLoaded();
+            listener.onVideoLoaded(item);
         }
     }
 
     @Override
-    public void openVideo(Video item) {
+    public void onStart(Video item) {
         if (item == null) {
             Log.e(TAG, "load: item is null");
             return;
         }
 
         for (PlayerEventBridge listener : mEventListeners) {
-            listener.openVideo(item);
+            listener.onStart(item);
         }
     }
 

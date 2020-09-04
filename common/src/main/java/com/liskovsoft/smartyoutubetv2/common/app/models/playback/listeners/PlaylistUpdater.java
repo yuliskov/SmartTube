@@ -12,7 +12,7 @@ public class PlaylistUpdater extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void openVideo(Video item) {
+    public void onStart(Video item) {
         mPlaylist.insertAfterCurrent(item);
         mPlaylist.setCurrentPosition(mPlaylist.getCurrentPosition() + 1);
     }
