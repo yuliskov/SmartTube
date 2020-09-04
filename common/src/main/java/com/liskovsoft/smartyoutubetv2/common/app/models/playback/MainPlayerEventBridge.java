@@ -17,13 +17,12 @@ public class MainPlayerEventBridge implements PlayerEventBridge {
 
     public MainPlayerEventBridge() {
         mEventListeners = new ArrayList<>();
-        
+
+        // NOTE: position matters!!!
+        mEventListeners.add(new PositionRestorer());
         mEventListeners.add(new HistoryUpdater());
         mEventListeners.add(new SuggestionsLoader());
         mEventListeners.add(new VideoLoader());
-        mEventListeners.add(new PositionRestorer());
-
-        // should come last
         mEventListeners.add(new PlaylistUpdater());
     }
 
