@@ -1,0 +1,235 @@
+ACTIVITY MANAGER ACTIVITIES (dumpsys activity activities)
+Display #0 (activities from top to bottom):
+  Stack #1:
+  mFullscreen=true
+  mBounds=null
+    Task id #14760
+    mFullscreen=true
+    mBounds=null
+    mMinWidth=-1
+    mMinHeight=-1
+    mLastNonFullscreenBounds=null
+    * TaskRecord{ec655bd #14760 A=com.liskovsoft.videomanager2 U=0 StackId=1 sz=2}
+      userId=0 effectiveUid=u0a264 mCallingUid=u0a264 mUserSetupComplete=true mCallingPackage=com.liskovsoft.videomanager2
+      affinity=com.liskovsoft.videomanager2
+      intent={act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10800000 cmp=com.liskovsoft.videomanager2/com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity}
+      realActivity=com.liskovsoft.videomanager2/com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity
+      autoRemoveRecents=false isPersistable=false numFullscreen=2 taskType=0 mTaskToReturnTo=1
+      rootWasReset=false mNeverRelinquishIdentity=true mReuseTask=false mLockTaskAuth=LOCK_TASK_AUTH_PINNABLE
+      Activities=[ActivityRecord{5cc71ef u0 com.liskovsoft.videomanager2/com.liskovsoft.smartyoutubetv2.tv.ui.main.MainActivity t14760}, ActivityRecord{fab9a1c u0 com.liskovsoft.videomanager2/com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity t14760}]
+      askedCompatMode=false inRecents=true isAvailable=true
+      lastThumbnail=null lastThumbnailFile=/data/system_ce/0/recent_images/14760_task_thumbnail.png
+      stackId=1
+      hasBeenVisible=true mResizeMode=RESIZE_MODE_RESIZEABLE isResizeable=true firstActiveTime=1599244289568 lastActiveTime=1599244289568 (inactive for 16s)
+      * Hist #1: ActivityRecord{fab9a1c u0 com.liskovsoft.videomanager2/com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity t14760}
+          packageName=com.liskovsoft.videomanager2 processName=com.liskovsoft.videomanager2
+          launchedFromUid=10264 launchedFromPackage=com.liskovsoft.videomanager2 userId=0
+          app=ProcessRecord{5c047b2 17594:com.liskovsoft.videomanager2/u0a264}
+          Intent { flg=0x10000000 cmp=com.liskovsoft.videomanager2/com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity }
+          frontOfTask=false task=TaskRecord{ec655bd #14760 A=com.liskovsoft.videomanager2 U=0 StackId=1 sz=2}
+          taskAffinity=com.liskovsoft.videomanager2
+          realActivity=com.liskovsoft.videomanager2/com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity
+          baseDir=/data/app/com.liskovsoft.videomanager2-2/base.apk
+          dataDir=/data/user/0/com.liskovsoft.videomanager2
+          stateNotNeeded=false componentSpecified=true mActivityType=0
+          compat={320dpi always-compat} labelRes=0x7f0d0027 icon=0x7f070057 theme=0x7f0e0160
+          config={1.0 ?mcc?mnc [en_US] ldltr sw540dp w960dp h540dp 320dpi lrg long land television -touch -keyb/v/h dpad/v s.3}
+          taskConfigOverride={1.0 ?mcc?mnc ?localeList ?layoutDir ?swdp ?wdp ?hdp ?density ?lsize ?long ?orien ?uimode ?night ?touch ?keyb/?/? ?nav/?}
+          taskDescription: iconFilename=null label="null" color=ff1b1c1e
+          launchFailed=false launchCount=0 lastLaunchTime=-24s406ms
+          haveState=false icicle=null
+          state=RESUMED stopped=false delayedResume=false finishing=false
+          keysPaused=false inHistory=true visible=true sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_NOT_SHOWN
+          fullscreen=true noDisplay=false immersive=false launchMode=2
+          frozenBeforeDestroy=false forceNewConfig=false
+          mActivityType=APPLICATION_ACTIVITY_TYPE
+          waitingVisible=false nowVisible=true lastVisibleTime=-16s313ms
+          resizeMode=RESIZE_MODE_RESIZEABLE
+      * Hist #0: ActivityRecord{5cc71ef u0 com.liskovsoft.videomanager2/com.liskovsoft.smartyoutubetv2.tv.ui.main.MainActivity t14760}
+          packageName=com.liskovsoft.videomanager2 processName=com.liskovsoft.videomanager2
+          launchedFromUid=10264 launchedFromPackage=com.liskovsoft.videomanager2 userId=0
+          app=ProcessRecord{5c047b2 17594:com.liskovsoft.videomanager2/u0a264}
+          Intent { flg=0x10000000 cmp=com.liskovsoft.videomanager2/com.liskovsoft.smartyoutubetv2.tv.ui.main.MainActivity }
+          frontOfTask=true task=TaskRecord{ec655bd #14760 A=com.liskovsoft.videomanager2 U=0 StackId=1 sz=2}
+          taskAffinity=com.liskovsoft.videomanager2
+          realActivity=com.liskovsoft.videomanager2/com.liskovsoft.smartyoutubetv2.tv.ui.main.MainActivity
+          baseDir=/data/app/com.liskovsoft.videomanager2-2/base.apk
+          dataDir=/data/user/0/com.liskovsoft.videomanager2
+          stateNotNeeded=false componentSpecified=true mActivityType=0
+          compat={320dpi always-compat} labelRes=0x7f0d0027 icon=0x7f070057 theme=0x7f0e0161
+          config={1.0 ?mcc?mnc [en_US] ldltr sw540dp w960dp h540dp 320dpi lrg long land television -touch -keyb/v/h dpad/v s.3}
+          taskConfigOverride={1.0 ?mcc?mnc ?localeList ?layoutDir ?swdp ?wdp ?hdp ?density ?lsize ?long ?orien ?uimode ?night ?touch ?keyb/?/? ?nav/?}
+          taskDescription: iconFilename=null label="null" color=ff1b1c1e
+          launchFailed=false launchCount=0 lastLaunchTime=-40s919ms
+          haveState=true icicle=Bundle[mParcelledData.dataSize=5960]
+          state=STOPPED stopped=true delayedResume=false finishing=false
+          keysPaused=false inHistory=true visible=false sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_SHOWN
+          fullscreen=true noDisplay=false immersive=false launchMode=2
+          frozenBeforeDestroy=false forceNewConfig=false
+          mActivityType=APPLICATION_ACTIVITY_TYPE
+          waitingVisible=false nowVisible=false lastVisibleTime=-28s889ms
+          resizeMode=RESIZE_MODE_RESIZEABLE
+    Task id #14746
+    mFullscreen=true
+    mBounds=null
+    mMinWidth=-1
+    mMinHeight=-1
+    mLastNonFullscreenBounds=null
+    * TaskRecord{4c9b530 #14746 A=dkc.video.hdbox U=0 StackId=1 sz=3}
+      userId=0 effectiveUid=u0a162 mCallingUid=u0a162 mUserSetupComplete=true mCallingPackage=dkc.video.hdbox
+      affinity=dkc.video.hdbox
+      intent={act=android.intent.action.MAIN cat=[android.intent.category.LEANBACK_LAUNCHER] flg=0x10000000 pkg=dkc.video.hdbox cmp=dkc.video.hdbox/com.dkc.fs.ui.activities.SplashActivity}
+      realActivity=dkc.video.hdbox/com.dkc.fs.ui.activities.SplashActivity
+      autoRemoveRecents=false isPersistable=true numFullscreen=3 taskType=0 mTaskToReturnTo=1
+      rootWasReset=false mNeverRelinquishIdentity=true mReuseTask=false mLockTaskAuth=LOCK_TASK_AUTH_PINNABLE
+      Activities=[ActivityRecord{ec3e66d u0 dkc.video.hdbox/com.dkc.fs.ui.activities.HomeActivity t14746}, ActivityRecord{adb624c u0 dkc.video.hdbox/com.dkc.fs.ui.activities.FilmActivity t14746}, ActivityRecord{a396e37 u0 com.mxtech.videoplayer.pro/com.mxtech.videoplayer.ActivityScreen t14746}]
+      askedCompatMode=false inRecents=true isAvailable=true
+      lastThumbnail=null lastThumbnailFile=/data/system_ce/0/recent_images/14746_task_thumbnail.png
+      stackId=1
+      hasBeenVisible=true mResizeMode=RESIZE_MODE_RESIZEABLE isResizeable=true firstActiveTime=1599244263245 lastActiveTime=1599244263245 (inactive for 42s)
+      * Hist #2: ActivityRecord{a396e37 u0 com.mxtech.videoplayer.pro/com.mxtech.videoplayer.ActivityScreen t14746}
+          packageName=com.mxtech.videoplayer.pro processName=com.mxtech.videoplayer.pro
+          launchedFromUid=10162 launchedFromPackage=dkc.video.hdbox userId=0
+          app=ProcessRecord{64e79ff 6154:com.mxtech.videoplayer.pro/u0a203}
+          Intent { act=android.intent.action.VIEW dat=https://cdn075.vb17112tiffanyhayward.pw/stream2/cdn-s/2e3ef11978f9c290ff07c5b975337113/MJTMsp1RshGTygnMNRUR2N2MSlnWXZEdMNDZzQWe5MDZzMmdZJTO1R2RWVHZDljekhkSsl1VwYnWtx2cihVT210VVNTTqtWMOdUW1klMKpWWUZUaNJTS6lFVSlmTHl0dOJTW45EVrlnTEtWP:1599243674:192.162.109.245:b2c4cd81a7ad38e189b23c33c9741093a142ce43fc858af45b24fc9b6a200b09/1080/index.m3u8 typ=application/vnd.apple.mpegurl flg=0x10000000 cmp=com.mxtech.videoplayer.pro/com.mxtech.videoplayer.ActivityScreen (has extras) }
+          frontOfTask=false task=TaskRecord{4c9b530 #14746 A=dkc.video.hdbox U=0 StackId=1 sz=3}
+          taskAffinity=com.mxtech.videoplayer.pro
+          realActivity=com.mxtech.videoplayer.pro/.ActivityScreen
+          baseDir=/data/app/com.mxtech.videoplayer.pro-1/base.apk
+          dataDir=/data/user/0/com.mxtech.videoplayer.pro
+          stateNotNeeded=false componentSpecified=true mActivityType=0
+          compat={320dpi always-compat} labelRes=0x7f120037 icon=0x7f0f0000 theme=0x7f13019d
+          config={1.0 ?mcc?mnc [en_US] ldltr sw540dp w960dp h540dp 320dpi lrg long land television -touch -keyb/v/h dpad/v s.3}
+          taskConfigOverride={1.0 ?mcc?mnc ?localeList ?layoutDir ?swdp ?wdp ?hdp ?density ?lsize ?long ?orien ?uimode ?night ?touch ?keyb/?/? ?nav/?}
+          resultTo=ActivityRecord{adb624c u0 dkc.video.hdbox/com.dkc.fs.ui.activities.FilmActivity t14746} resultWho=null resultCode=222
+          taskDescription: iconFilename=null label="null" color=ff212121
+          launchFailed=false launchCount=0 lastLaunchTime=-1h10m18s901ms
+          haveState=true icicle=Bundle[mParcelledData.dataSize=5156]
+          state=STOPPED stopped=true delayedResume=false finishing=false
+          keysPaused=false inHistory=true visible=false sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_SHOWN
+          fullscreen=true noDisplay=false immersive=false launchMode=2
+          frozenBeforeDestroy=false forceNewConfig=false
+          mActivityType=APPLICATION_ACTIVITY_TYPE
+          waitingVisible=false nowVisible=false lastVisibleTime=-42s799ms
+          resizeMode=RESIZE_MODE_RESIZEABLE_AND_PIPABLE
+      * Hist #1: ActivityRecord{adb624c u0 dkc.video.hdbox/com.dkc.fs.ui.activities.FilmActivity t14746}
+          packageName=dkc.video.hdbox processName=dkc.video.hdbox
+          launchedFromUid=10162 launchedFromPackage=dkc.video.hdbox userId=0
+          app=ProcessRecord{ef25416 2783:dkc.video.hdbox/u0a162}
+          Intent { cmp=dkc.video.hdbox/com.dkc.fs.ui.activities.FilmActivity (has extras) }
+          frontOfTask=false task=TaskRecord{4c9b530 #14746 A=dkc.video.hdbox U=0 StackId=1 sz=3}
+          taskAffinity=dkc.video.hdbox
+          realActivity=dkc.video.hdbox/com.dkc.fs.ui.activities.FilmActivity
+          baseDir=/data/app/dkc.video.hdbox-2/base.apk
+          dataDir=/data/user/0/dkc.video.hdbox
+          stateNotNeeded=false componentSpecified=true mActivityType=0
+          compat={320dpi always-compat} labelRes=0x7f110043 icon=0x7f0e0000 theme=0x7f1201a9
+          config={1.0 ?mcc?mnc [en_US] ldltr sw540dp w960dp h540dp 320dpi lrg long land television -touch -keyb/v/h dpad/v s.3}
+          taskConfigOverride={1.0 ?mcc?mnc ?localeList ?layoutDir ?swdp ?wdp ?hdp ?density ?lsize ?long ?orien ?uimode ?night ?touch ?keyb/?/? ?nav/?}
+          taskDescription: iconFilename=null label="null" color=ff212121
+          launchFailed=false launchCount=0 lastLaunchTime=-1h10m33s296ms
+          haveState=true icicle=Bundle[mParcelledData.dataSize=69724]
+          state=STOPPED stopped=true delayedResume=false finishing=false
+          keysPaused=false inHistory=true visible=false sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_NOT_SHOWN
+          fullscreen=true noDisplay=false immersive=false launchMode=0
+          frozenBeforeDestroy=false forceNewConfig=false
+          mActivityType=APPLICATION_ACTIVITY_TYPE
+          waitingVisible=false nowVisible=false lastVisibleTime=-1h10m32s861ms
+          resizeMode=RESIZE_MODE_RESIZEABLE
+      * Hist #0: ActivityRecord{ec3e66d u0 dkc.video.hdbox/com.dkc.fs.ui.activities.HomeActivity t14746}
+          packageName=dkc.video.hdbox processName=dkc.video.hdbox
+          launchedFromUid=10162 launchedFromPackage=dkc.video.hdbox userId=0
+          app=ProcessRecord{ef25416 2783:dkc.video.hdbox/u0a162}
+          Intent { flg=0x10000000 cmp=dkc.video.hdbox/com.dkc.fs.ui.activities.HomeActivity (has extras) }
+          frontOfTask=true task=TaskRecord{4c9b530 #14746 A=dkc.video.hdbox U=0 StackId=1 sz=3}
+          taskAffinity=dkc.video.hdbox
+          realActivity=dkc.video.hdbox/com.dkc.fs.ui.activities.HomeActivity
+          baseDir=/data/app/dkc.video.hdbox-2/base.apk
+          dataDir=/data/user/0/dkc.video.hdbox
+          stateNotNeeded=false componentSpecified=true mActivityType=0
+          compat={320dpi always-compat} labelRes=0x7f110043 icon=0x7f0e0000 theme=0x7f120006
+          config={1.0 ?mcc?mnc [en_US] ldltr sw540dp w960dp h540dp 320dpi lrg long land television -touch -keyb/v/h dpad/v s.3}
+          taskConfigOverride={1.0 ?mcc?mnc ?localeList ?layoutDir ?swdp ?wdp ?hdp ?density ?lsize ?long ?orien ?uimode ?night ?touch ?keyb/?/? ?nav/?}
+          taskDescription: iconFilename=null label="null" color=ff212121
+          launchFailed=false launchCount=0 lastLaunchTime=-1h10m35s171ms
+          haveState=true icicle=Bundle[mParcelledData.dataSize=3424]
+          state=STOPPED stopped=true delayedResume=false finishing=false
+          keysPaused=false inHistory=true visible=false sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_NOT_SHOWN
+          fullscreen=true noDisplay=false immersive=false launchMode=2
+          frozenBeforeDestroy=false forceNewConfig=false
+          mActivityType=APPLICATION_ACTIVITY_TYPE
+          waitingVisible=false nowVisible=false lastVisibleTime=-1h10m34s106ms
+          resizeMode=RESIZE_MODE_RESIZEABLE
+
+    Running activities (most recent first):
+      TaskRecord{ec655bd #14760 A=com.liskovsoft.videomanager2 U=0 StackId=1 sz=2}
+        Run #4: ActivityRecord{fab9a1c u0 com.liskovsoft.videomanager2/com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity t14760}
+        Run #3: ActivityRecord{5cc71ef u0 com.liskovsoft.videomanager2/com.liskovsoft.smartyoutubetv2.tv.ui.main.MainActivity t14760}
+      TaskRecord{4c9b530 #14746 A=dkc.video.hdbox U=0 StackId=1 sz=3}
+        Run #2: ActivityRecord{a396e37 u0 com.mxtech.videoplayer.pro/com.mxtech.videoplayer.ActivityScreen t14746}
+        Run #1: ActivityRecord{adb624c u0 dkc.video.hdbox/com.dkc.fs.ui.activities.FilmActivity t14746}
+        Run #0: ActivityRecord{ec3e66d u0 dkc.video.hdbox/com.dkc.fs.ui.activities.HomeActivity t14746}
+
+    mResumedActivity: ActivityRecord{fab9a1c u0 com.liskovsoft.videomanager2/com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity t14760}
+
+  Stack #0:
+  mFullscreen=true
+  mBounds=null
+    Task id #14745
+    mFullscreen=true
+    mBounds=null
+    mMinWidth=-1
+    mMinHeight=-1
+    mLastNonFullscreenBounds=null
+    * TaskRecord{3561bd0 #14745 I=com.amazon.tv.launcher/.ui.HomeActivity_vNext U=0 StackId=0 sz=1}
+      userId=0 effectiveUid=u0a109 mCallingUid=1000 mUserSetupComplete=true mCallingPackage=android
+      intent={act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000100 cmp=com.amazon.tv.launcher/.ui.HomeActivity_vNext}
+      realActivity=com.amazon.tv.launcher/.ui.HomeActivity_vNext
+      autoRemoveRecents=false isPersistable=true numFullscreen=1 taskType=1 mTaskToReturnTo=0
+      rootWasReset=false mNeverRelinquishIdentity=true mReuseTask=false mLockTaskAuth=LOCK_TASK_AUTH_PINNABLE
+      Activities=[ActivityRecord{eee276b u0 com.amazon.tv.launcher/.ui.HomeActivity_vNext t14745}]
+      askedCompatMode=false inRecents=true isAvailable=true
+      lastThumbnail=null lastThumbnailFile=/data/system_ce/0/recent_images/14745_task_thumbnail.png
+      stackId=0
+      hasBeenVisible=true mResizeMode=RESIZE_MODE_RESIZEABLE isResizeable=false firstActiveTime=1599244289477 lastActiveTime=1599244289477 (inactive for 16s)
+      * Hist #0: ActivityRecord{eee276b u0 com.amazon.tv.launcher/.ui.HomeActivity_vNext t14745}
+          packageName=com.amazon.tv.launcher processName=com.amazon.tv.launcher
+          launchedFromUid=0 launchedFromPackage=null userId=0
+          app=ProcessRecord{6fb5434 1286:com.amazon.tv.launcher/u0a109}
+          Intent { act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000100 cmp=com.amazon.tv.launcher/.ui.HomeActivity_vNext }
+          frontOfTask=true task=TaskRecord{3561bd0 #14745 I=com.amazon.tv.launcher/.ui.HomeActivity_vNext U=0 StackId=0 sz=1}
+          taskAffinity=null
+          realActivity=com.amazon.tv.launcher/.ui.HomeActivity_vNext
+          baseDir=/system/priv-app/com.amazon.tv.launcher/com.amazon.tv.launcher.apk
+          dataDir=/data/user/0/com.amazon.tv.launcher
+          stateNotNeeded=false componentSpecified=false mActivityType=1
+          compat={320dpi always-compat} labelRes=0x7f1001c8 icon=0x7f0800be theme=0x7f11007e
+          config={1.0 ?mcc?mnc [en_US] ldltr sw540dp w960dp h540dp 320dpi lrg long land television -touch -keyb/v/h dpad/v s.3}
+          taskConfigOverride={1.0 ?mcc?mnc ?localeList ?layoutDir ?swdp ?wdp ?hdp ?density ?lsize ?long ?orien ?uimode ?night ?touch ?keyb/?/? ?nav/?}
+          taskDescription: iconFilename=null label="null" color=ff455a64
+          launchFailed=false launchCount=0 lastLaunchTime=-1h22m46s214ms
+          haveState=true icicle=Bundle[mParcelledData.dataSize=1020]
+          state=STOPPED stopped=true delayedResume=false finishing=false
+          keysPaused=false inHistory=true visible=false sleeping=false idle=true mStartingWindowState=STARTING_WINDOW_NOT_SHOWN
+          fullscreen=true noDisplay=false immersive=false launchMode=2
+          frozenBeforeDestroy=false forceNewConfig=false
+          mActivityType=HOME_ACTIVITY_TYPE
+          waitingVisible=false nowVisible=false lastVisibleTime=-19s746ms
+          resizeMode=RESIZE_MODE_RESIZEABLE
+
+    Running activities (most recent first):
+      TaskRecord{3561bd0 #14745 I=com.amazon.tv.launcher/.ui.HomeActivity_vNext U=0 StackId=0 sz=1}
+        Run #0: ActivityRecord{eee276b u0 com.amazon.tv.launcher/.ui.HomeActivity_vNext t14745}
+
+    mLastPausedActivity: ActivityRecord{eee276b u0 com.amazon.tv.launcher/.ui.HomeActivity_vNext t14745}
+
+  mFocusedActivity: ActivityRecord{fab9a1c u0 com.liskovsoft.videomanager2/com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity t14760}
+  mFocusedStack=ActivityStack{5d693ea stackId=1, 2 tasks} mLastFocusedStack=ActivityStack{5d693ea stackId=1, 2 tasks}
+  mSleepTimeout=false
+  mCurTaskIdForUser={0=14760}
+  mUserStackInFront={}
+  mActivityContainers={0=ActivtyContainer{0}A, 1=ActivtyContainer{1}A}
+  mLockTaskModeState=NONE mLockTaskPackages (userId:packages)=
+    0:[]
+    10:[]
+ mLockTaskModeTasks[]

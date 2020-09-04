@@ -85,10 +85,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         if (Util.SDK_INT > 23) {
             initializePlayer();
 
-            if (!mInitDone) {
-                mPlaybackPresenter.onInitDone();
-                mInitDone = true;
-            }
+            mPlaybackPresenter.onInitDone();
 
             mEventListener.onViewResumed();
         }
@@ -100,10 +97,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         if ((Util.SDK_INT <= 23 || mPlayer == null)) {
             initializePlayer();
 
-            if (!mInitDone) {
-                mPlaybackPresenter.onInitDone();
-                mInitDone = true;
-            }
+            mPlaybackPresenter.onInitDone();
 
             mEventListener.onViewResumed();
         }

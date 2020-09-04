@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import androidx.fragment.app.FragmentActivity;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.tv.MainApplication;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
 
 /**
@@ -21,6 +22,7 @@ public abstract class LeanbackActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         mLongClickManager = new LongClickManager();
         mBackgroundManager = new UriBackgroundManager(this);
+        MainApplication.setLastActivity(this.getClass());
     }
 
     @Override

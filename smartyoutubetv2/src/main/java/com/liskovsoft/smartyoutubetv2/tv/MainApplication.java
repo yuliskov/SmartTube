@@ -14,6 +14,8 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
 
 public class MainApplication extends Application {
+    private static Class<?> sLastActivity;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -25,5 +27,13 @@ public class MainApplication extends Application {
         viewManager.register(OnboardingView.class, OnboardingActivity.class);
         viewManager.register(DetailsView.class, VideoDetailsActivity.class);
         viewManager.register(SearchView.class, SearchActivity.class);
+    }
+
+    public static void setLastActivity(Class<?> lastActivity) {
+        sLastActivity = lastActivity;
+    }
+
+    public static Class<?> getLastActivity() {
+        return sLastActivity;
     }
 }

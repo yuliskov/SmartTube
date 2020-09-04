@@ -71,6 +71,8 @@ public class ViewManager {
                 //getActivity().startActivity(intent, bundle);
 
                 Intent intent = new Intent(fragment.getActivity(), activityClass);
+                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  // merge new activity with current one
+                //intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); // merge new activity with current one
                 fragment.startActivity(intent);
             } else {
                 Log.e(TAG, "Activity not registered for view " + viewClass.getSimpleName());
