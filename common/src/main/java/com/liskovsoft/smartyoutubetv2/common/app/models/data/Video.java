@@ -20,6 +20,7 @@ import android.media.MediaDescription;
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.RequiresApi;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 
 /**
  * Video is an immutable object that holds the various metadata associated with a single video.
@@ -34,6 +35,7 @@ public final class Video implements Parcelable {
     public final String videoId;
     public final String videoUrl;
     public final String studio;
+    public MediaItem mMediaItem;
 
     private Video(
             final long id,

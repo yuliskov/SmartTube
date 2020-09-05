@@ -48,4 +48,10 @@ public abstract class LeanbackActivity extends FragmentActivity {
     public UriBackgroundManager getBackgroundManager() {
         return mBackgroundManager;
     }
+
+    //@Override
+    //public void finish() {
+    //    super.finish();
+    //    Log.d(TAG, "Activity finishing...");
+    //}
 }

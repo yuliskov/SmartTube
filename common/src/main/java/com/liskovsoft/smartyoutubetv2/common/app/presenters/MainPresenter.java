@@ -21,7 +21,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 
-public class MainPresenter implements VideoGroupPresenter<MainView> {
+public class MainPresenter implements HeaderPresenter<MainView> {
     private static final String TAG = MainPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static MainPresenter sInstance;
@@ -108,6 +108,20 @@ public class MainPresenter implements VideoGroupPresenter<MainView> {
         mHistoryHeader = new Header(MediaGroup.TYPE_HISTORY, mContext.getString(R.string.header_history));
     }
 
+    @Override
+    public void onScrollEnd(VideoGroup group) {
+        Log.d(TAG, "onScrollEnd. Group title: " + group.getTitle());
+        continueGroup(group);
+    }
+
+    @Override
+    public void onHeaderSelected(long headerId) {
+        if (mHistoryHeader.getId() == headerId) {
+            mView.clearHeader(mHistoryHeader);
+            loadHistory();
+        }
+    }
+
     // TODO: implement Android TV channels
     //private void updateRecommendations() {
     //    Intent recommendationIntent = new Intent(mContext, UpdateRecommendationsService.class);
@@ -190,6 +204,7 @@ public class MainPresenter implements VideoGroupPresenter<MainView> {
 
         mediaGroupManager.getHistoryObserve()
                 .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mediaGroup -> {
                     if (mediaGroup == null) {
                         Log.e(TAG, "Can't obtain history. User probably not logged in");
@@ -224,11 +239,5 @@ public class MainPresenter implements VideoGroupPresenter<MainView> {
 
                     mView.updateHeader(VideoGroup.from(continueMediaGroup, group.getHeader()));
         }, error -> Log.e(TAG, "continueGroup: " + error));
-    }
-
-    @Override
-    public void onScrollEnd(VideoGroup group) {
-        Log.d(TAG, "onScrollEnd. Group title: " + group.getTitle());
-        continueGroup(group);
     }
 }

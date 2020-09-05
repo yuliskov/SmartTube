@@ -45,13 +45,13 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
 
     private final OnActionClickedListener mActionListener;
 
-    private PlaybackControlsRow.RepeatAction mRepeatAction;
-    private PlaybackControlsRow.ThumbsUpAction mThumbsUpAction;
-    private PlaybackControlsRow.ThumbsDownAction mThumbsDownAction;
-    private PlaybackControlsRow.SkipPreviousAction mSkipPreviousAction;
-    private PlaybackControlsRow.SkipNextAction mSkipNextAction;
-    private PlaybackControlsRow.FastForwardAction mFastForwardAction;
-    private PlaybackControlsRow.RewindAction mRewindAction;
+    private final PlaybackControlsRow.RepeatAction mRepeatAction;
+    private final PlaybackControlsRow.ThumbsUpAction mThumbsUpAction;
+    private final PlaybackControlsRow.ThumbsDownAction mThumbsDownAction;
+    private final PlaybackControlsRow.SkipPreviousAction mSkipPreviousAction;
+    private final PlaybackControlsRow.SkipNextAction mSkipNextAction;
+    private final PlaybackControlsRow.FastForwardAction mFastForwardAction;
+    private final PlaybackControlsRow.RewindAction mRewindAction;
 
     public VideoPlayerGlue(
             Context context,
@@ -142,12 +142,12 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
 
     @Override
     public void play() {
-        mActionListener.onPlay();
+        super.play();
     }
 
     @Override
     public void pause() {
-        mActionListener.onPause();
+        super.pause();
     }
 
     @Override

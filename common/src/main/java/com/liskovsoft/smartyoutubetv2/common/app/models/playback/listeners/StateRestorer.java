@@ -21,16 +21,6 @@ public class StateRestorer extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onPlayClicked() {
-        mController.setPlay(true);
-    }
-
-    @Override
-    public void onPauseClicked() {
-        mController.setPlay(false);
-    }
-
-    @Override
     public void onPreviousClicked() {
         saveState();
     }
@@ -41,11 +31,6 @@ public class StateRestorer extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onVideoLoaded(Video item) {
-        restoreState(item);
-    }
-
-    @Override
     public void onSuggestionItemClicked(Video item) {
         saveState();
     }
@@ -53,6 +38,11 @@ public class StateRestorer extends PlayerEventListenerHelper {
     @Override
     public void onEngineReleased() {
         saveState();
+    }
+
+    @Override
+    public void onVideoLoaded(Video item) {
+        restoreState(item);
     }
 
     @Override

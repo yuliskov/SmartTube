@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.app.BrowseSupportFragment;
+import androidx.leanback.app.HeadersSupportFragment.OnHeaderViewSelectedListener;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRow;
@@ -19,6 +20,7 @@ import androidx.leanback.widget.PageRow;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.PresenterSelector;
 import androidx.leanback.widget.Row;
+import androidx.leanback.widget.RowHeaderPresenter.ViewHolder;
 import androidx.leanback.widget.RowPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Header;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -75,7 +77,7 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
         mCategoryRowAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         setAdapter(mCategoryRowAdapter);
 
-        mPageRowFragmentFactory = new PageRowFragmentFactory(mBackgroundManager.getBackgroundManager());
+        mPageRowFragmentFactory = new PageRowFragmentFactory(mBackgroundManager.getBackgroundManager(), new HeaderViewSelectedListener());
         getMainFragmentRegistry().registerFragment(PageRow.class, mPageRowFragmentFactory);
 
         setupUi();
@@ -117,6 +119,8 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
 
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
+
+        //getHeadersSupportFragment().setOnHeaderViewSelectedListener(new HeaderViewSelectedListener());
     }
 
     private void initRowAdapters() {
@@ -167,7 +171,25 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
 
     @Override
     public void clearHeader(Header header) {
-        // TODO: not implemented
+        mPageRowFragmentFactory.clearFragment(header.getId());
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mBackgroundManager.onDestroy();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mBackgroundManager.onStop();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mBackgroundManager.onStart();
     }
 
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
@@ -219,21 +241,10 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
         }
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mBackgroundManager.onDestroy();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mBackgroundManager.onStop();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mBackgroundManager.onStart();
+    public final class HeaderViewSelectedListener implements OnHeaderViewSelectedListener {
+        @Override
+        public void onHeaderSelected(ViewHolder viewHolder, Row row) {
+            mPresenter.onHeaderSelected(row.getHeaderItem().getId());
+        }
     }
 }

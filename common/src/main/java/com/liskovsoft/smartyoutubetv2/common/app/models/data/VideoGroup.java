@@ -58,6 +58,8 @@ public class VideoGroup {
                     .studio(studio)
                     .build();
 
+            video.mMediaItem = item;
+
             videoGroup.mVideos.add(video);
         }
 

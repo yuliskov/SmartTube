@@ -7,6 +7,7 @@ import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.Row;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.tv.ui.main.MainFragment.HeaderViewSelectedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.main.grid.GridHeaderFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.main.grid.GridHeaderItem;
 import com.liskovsoft.smartyoutubetv2.tv.ui.main.row.RowHeaderFragment;
@@ -22,9 +23,15 @@ public class PageRowFragmentFactory extends BrowseSupportFragment.FragmentFactor
     private final BackgroundManager mBackgroundManager;
     private final Map<Integer, Fragment> mFragments;
     private final Map<Integer, List<VideoGroup>> mPendingUpdates;
+    private final HeaderViewSelectedListener mViewSelectedListener;
 
     public PageRowFragmentFactory(BackgroundManager backgroundManager) {
+        this(backgroundManager, null);
+    }
+
+    public PageRowFragmentFactory(BackgroundManager backgroundManager, HeaderViewSelectedListener viewSelectedListener) {
         mBackgroundManager = backgroundManager;
+        mViewSelectedListener = viewSelectedListener;
         mFragments = new HashMap<>();
         mPendingUpdates = new HashMap<>();
     }
@@ -50,6 +57,11 @@ public class PageRowFragmentFactory extends BrowseSupportFragment.FragmentFactor
 
         if (fragment != null) {
             mFragments.put((int) header.getId(), fragment);
+
+            // give a chance to clear pending updates
+            if (mViewSelectedListener != null) {
+                mViewSelectedListener.onHeaderSelected(null, row);
+            }
 
             updateFromPending(fragment, (int) header.getId());
 
@@ -112,7 +124,7 @@ public class PageRowFragmentFactory extends BrowseSupportFragment.FragmentFactor
         }
     }
 
-    public void clear(int headerId) {
+    public void clearFragment(int headerId) {
         mPendingUpdates.remove(headerId);
     }
 }
