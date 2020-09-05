@@ -3,6 +3,8 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.managers;
 import android.content.Context;
 import android.net.Uri;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.Player.EventListener;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -11,7 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 
 import java.io.InputStream;
 
-public class ExoPlayerController {
+public class ExoPlayerController implements EventListener {
     private final ExoPlayer mPlayer;
     private final TrackSelector mTrackSelector;
     private final ExoMediaSourceFactory mMediaSourceFactory;
@@ -20,6 +22,7 @@ public class ExoPlayerController {
 
     public ExoPlayerController(ExoPlayer player, TrackSelector trackSelector, Context context) {
         mPlayer = player;
+        player.addListener(this);
         mTrackSelector = trackSelector;
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
     }
@@ -83,5 +86,16 @@ public class ExoPlayerController {
 
     public Video getVideo() {
         return mVideo;
+    }
+
+    @Override
+    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+        if (Player.STATE_READY == playbackState) {
+            if (playWhenReady) {
+                mEventListener.onPlay();
+            } else {
+                mEventListener.onPause();
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.player;
+package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
 import android.content.Context;
 import androidx.leanback.media.PlaybackTransportControlGlue;

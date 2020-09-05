@@ -18,4 +18,5 @@ public interface PlayerController {
     Video getVideo();
     void setPlay(boolean isPlaying);
     boolean isPlaying();
+    void showControls(boolean isShowing);
 }

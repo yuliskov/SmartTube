@@ -59,16 +59,16 @@ public class MainPlayerEventBridge implements PlayerEventBridge {
     }
 
     @Override
-    public void onPrevious() {
+    public void onPreviousClicked() {
         for (PlayerEventListener listener : mEventListeners) {
-            listener.onPrevious();
+            listener.onPreviousClicked();
         }
     }
 
     @Override
-    public void onNext() {
+    public void onNextClicked() {
         for (PlayerEventListener listener : mEventListeners) {
-            listener.onNext();
+            listener.onNextClicked();
         }
     }
 
@@ -108,14 +108,14 @@ public class MainPlayerEventBridge implements PlayerEventBridge {
     }
 
     @Override
-    public void onStart(Video item) {
+    public void setFirstVideo(Video item) {
         if (item == null) {
             Log.e(TAG, "load: item is null");
             return;
         }
 
         for (PlayerEventBridge listener : mEventListeners) {
-            listener.onStart(item);
+            listener.setFirstVideo(item);
         }
     }
 
@@ -137,6 +137,20 @@ public class MainPlayerEventBridge implements PlayerEventBridge {
     public void onEngineReleased() {
         for (PlayerEventListener listener : mEventListeners) {
             listener.onEngineReleased();
+        }
+    }
+
+    @Override
+    public void onPlay() {
+        for (PlayerEventListener listener : mEventListeners) {
+            listener.onPlay();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        for (PlayerEventListener listener : mEventListeners) {
+            listener.onPause();
         }
     }
 }

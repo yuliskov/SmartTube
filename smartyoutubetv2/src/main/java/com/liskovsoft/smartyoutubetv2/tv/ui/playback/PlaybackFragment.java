@@ -3,6 +3,8 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.leanback.app.VideoSupportFragment;
 import androidx.leanback.app.VideoSupportFragmentGlueHost;
@@ -33,7 +35,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.ExoPlayerController;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
-import com.liskovsoft.smartyoutubetv2.tv.player.VideoPlayerGlue;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -121,6 +122,28 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         }
     }
 
+    public void skipToNext() {
+        mPlayerGlue.next();
+    }
+
+    public void skipToPrevious() {
+        mPlayerGlue.previous();
+    }
+
+    public void rewind() {
+        mPlayerGlue.rewind();
+    }
+
+    public void fastForward() {
+        mPlayerGlue.fastForward();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        hideControlsOverlay(false); // don't show controls initially
+    }
+
     private void initializePlayer() {
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory =
@@ -143,30 +166,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
         mRowsAdapter = initializeSuggestedVideosRow();
         setAdapter(mRowsAdapter);
-    }
-
-    @Override
-    public void updateSuggestions(VideoGroup group) {
-        if (mRowsAdapter == null) {
-            Log.e(TAG, "Related videos row not initialized yet.");
-            return;
-        }
-
-        HeaderItem rowHeader = new HeaderItem(group.getTitle());
-        int mediaGroupId = group.getId(); // Create unique int from category.
-
-        VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(mediaGroupId);
-
-        if (existingAdapter == null) {
-            VideoGroupObjectAdapter mediaGroupAdapter = new VideoGroupObjectAdapter(group);
-
-            mMediaGroupAdapters.put(mediaGroupId, mediaGroupAdapter);
-
-            ListRow row = new ListRow(rowHeader, mediaGroupAdapter);
-            mRowsAdapter.add(row);
-        } else {
-            existingAdapter.append(group); // continue row
-        }
     }
 
     private void releasePlayer() {
@@ -204,22 +203,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         return rowsAdapter;
     }
 
-    public void skipToNext() {
-        mPlayerGlue.next();
-    }
-
-    public void skipToPrevious() {
-        mPlayerGlue.previous();
-    }
-
-    public void rewind() {
-        mPlayerGlue.rewind();
-    }
-
-    public void fastForward() {
-        mPlayerGlue.fastForward();
-    }
-
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override
         public void onItemClicked(
@@ -234,6 +217,20 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         }
     }
 
+    private class PlayerActionListener implements VideoPlayerGlue.OnActionClickedListener {
+        @Override
+        public void onPrevious() {
+            mEventListener.onPreviousClicked();
+        }
+
+        @Override
+        public void onNext() {
+            mEventListener.onNextClicked();
+        }
+    }
+
+    /* Begin PlayerController */
+
     @Override
     public void resetSuggestions() {
         if (mRowsAdapter.size() > 1) {
@@ -241,20 +238,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
             mMediaGroupAdapters.clear();
         }
     }
-
-    private class PlayerActionListener implements VideoPlayerGlue.OnActionClickedListener {
-        @Override
-        public void onPrevious() {
-            mEventListener.onPrevious();
-        }
-
-        @Override
-        public void onNext() {
-            mEventListener.onNext();
-        }
-    }
-
-    /* Begin PlayerController */
 
     @Override
     public void openVideo(Video video) {
@@ -313,6 +296,41 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public boolean isPlaying() {
         return mExoPlayerController.isPlaying();
+    }
+
+    @Override
+    public void showControls(boolean isShowing) {
+        boolean runAnimation = true;
+
+        if (isShowing) {
+            showControlsOverlay(runAnimation);
+        } else {
+            hideControlsOverlay(runAnimation);
+        }
+    }
+
+    @Override
+    public void updateSuggestions(VideoGroup group) {
+        if (mRowsAdapter == null) {
+            Log.e(TAG, "Related videos row not initialized yet.");
+            return;
+        }
+
+        HeaderItem rowHeader = new HeaderItem(group.getTitle());
+        int mediaGroupId = group.getId(); // Create unique int from category.
+
+        VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(mediaGroupId);
+
+        if (existingAdapter == null) {
+            VideoGroupObjectAdapter mediaGroupAdapter = new VideoGroupObjectAdapter(group);
+
+            mMediaGroupAdapters.put(mediaGroupId, mediaGroupAdapter);
+
+            ListRow row = new ListRow(rowHeader, mediaGroupAdapter);
+            mRowsAdapter.add(row);
+        } else {
+            existingAdapter.append(group); // continue row
+        }
     }
 
     /* End PlayerController */

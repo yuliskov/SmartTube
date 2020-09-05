@@ -8,8 +8,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 public interface PlayerEventListener extends ViewEventListener {
     void onSuggestionItemClicked(Video item);
     void onSuggestionItemLongClicked(Video item);
-    void onPrevious();
-    void onNext();
+    void onPreviousClicked();
+    void onNextClicked();
+    void onPlay();
+    void onPause();
     void onVideoLoaded(Video item);
     void onEngineInitialized();
     void onEngineReleased();

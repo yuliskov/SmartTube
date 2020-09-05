@@ -1,17 +1,21 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 
 public abstract class PlayerEventListenerHelper implements PlayerEventBridge {
     protected PlayerController mController;
+    protected FragmentActivity mActivity;
 
     @Override
     public void setController(PlayerController controller) {
         mController = controller;
+        mActivity = ((Fragment) controller).getActivity();
     }
 
     @Override
-    public void onStart(Video item) {
+    public void setFirstVideo(Video item) {
         // NOP
     }
 
@@ -26,12 +30,12 @@ public abstract class PlayerEventListenerHelper implements PlayerEventBridge {
     }
 
     @Override
-    public void onPrevious() {
+    public void onPreviousClicked() {
         // NOP
     }
 
     @Override
-    public void onNext() {
+    public void onNextClicked() {
         // NOP
     }
 
@@ -67,6 +71,16 @@ public abstract class PlayerEventListenerHelper implements PlayerEventBridge {
 
     @Override
     public void onEngineReleased() {
+        // NOP
+    }
+
+    @Override
+    public void onPlay() {
+        // NOP
+    }
+
+    @Override
+    public void onPause() {
         // NOP
     }
 }

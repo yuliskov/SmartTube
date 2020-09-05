@@ -45,12 +45,12 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
     }
 
     public void openVideo(Video item) {
-        mMainPlayerEventBridge.onStart(item);
+        mMainPlayerEventBridge.setFirstVideo(item);
         mViewManager.startView(PlaybackView.class);
     }
 
     public void openVideo(Object fragmentView, Video item) {
-        mMainPlayerEventBridge.onStart(item);
+        mMainPlayerEventBridge.setFirstVideo(item);
         mViewManager.startView(fragmentView, PlaybackView.class);
     }
 }

@@ -23,7 +23,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onStart(Video item) {
+    public void setFirstVideo(Video item) {
         mLastVideo = item;
     }
 
@@ -33,12 +33,12 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onPrevious() {
+    public void onPreviousClicked() {
         loadVideo(mPlaylist.previous());
     }
 
     @Override
-    public void onNext() {
+    public void onNextClicked() {
         loadVideo(mPlaylist.next());
     }
 
