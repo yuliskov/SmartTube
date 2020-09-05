@@ -139,7 +139,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlaylistActionListener = new PlayerActionListener();
         mPlayerGlue = new VideoPlayerGlue(getActivity(), mPlayerAdapter, mPlaylistActionListener);
         mPlayerGlue.setHost(new VideoSupportFragmentGlueHost(this));
-        //mPlayerGlue.playWhenPrepared();
+        mPlayerGlue.setSeekEnabled(true);
 
         mRowsAdapter = initializeSuggestedVideosRow();
         setAdapter(mRowsAdapter);
