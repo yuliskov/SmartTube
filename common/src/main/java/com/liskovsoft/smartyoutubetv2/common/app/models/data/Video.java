@@ -35,7 +35,8 @@ public final class Video implements Parcelable {
     public final String videoId;
     public final String videoUrl;
     public final String studio;
-    public MediaItem mMediaItem;
+    public MediaItem mediaItem;
+    public MediaItem nextMediaItem;
 
     private Video(
             final long id,
@@ -68,6 +69,35 @@ public final class Video implements Parcelable {
         videoId = in.readString();
         videoUrl = in.readString();
         studio = in.readString();
+    }
+
+    public static Video from(MediaItem item) {
+        long id = item.getId();
+        String title = item.getTitle();
+        String category = item.getContentType();
+        String desc = item.getDescription();
+        String videoId = item.getMediaId();
+        String videoUrl = item.getMediaUrl();
+        String bgImageUrl = item.getBackgroundImageUrl();
+        String cardImageUrl = item.getCardImageUrl();
+        String studio = item.getDescription();
+
+        // Build a Video object to be processed.
+        Video video = new Video.VideoBuilder()
+                .id(id)
+                .title(title)
+                .category(category)
+                .description(desc)
+                .videoId(videoId)
+                .videoUrl(videoUrl)
+                .bgImageUrl(bgImageUrl)
+                .cardImageUrl(cardImageUrl)
+                .studio(studio)
+                .build();
+
+        video.mediaItem = item;
+
+        return video;
     }
 
     public static final Creator<Video> CREATOR = new Creator<Video>() {

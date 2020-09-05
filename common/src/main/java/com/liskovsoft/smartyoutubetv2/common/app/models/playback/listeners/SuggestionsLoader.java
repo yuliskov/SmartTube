@@ -40,6 +40,8 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
                         return;
                     }
 
+                    mController.getVideo().nextMediaItem = mediaItemMetadata.getNextVideo();
+
                     List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
 
                     if (suggestions == null) {

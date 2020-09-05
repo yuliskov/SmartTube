@@ -18,7 +18,7 @@ public class HistoryUpdater extends PlayerEventListenerHelper {
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
 
-        mediaItemManager.updateHistoryPositionObserve(item.mMediaItem, mController.getPositionMs() / 1_000)
+        mediaItemManager.updateHistoryPositionObserve(item.mediaItem, mController.getPositionMs() / 1_000)
                 .subscribeOn(Schedulers.newThread())
                 .subscribe((Void v) -> {}, error -> Log.e(TAG, "History update error: " + error));
     }
