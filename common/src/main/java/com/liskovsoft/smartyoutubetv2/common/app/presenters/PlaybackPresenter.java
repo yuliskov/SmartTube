@@ -31,7 +31,7 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
     @Override
     public void onInitDone() {
         mMainPlayerEventBridge.setController(mView.getController());
-        mView.setListener(mMainPlayerEventBridge);
+        mView.setEventListener(mMainPlayerEventBridge);
     }
 
     @Override

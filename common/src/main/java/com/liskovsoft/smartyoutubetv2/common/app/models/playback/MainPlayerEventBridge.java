@@ -4,7 +4,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.HistoryUpdater;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.PlaylistUpdater;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.PositionRestorer;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.StateRestorer;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.SuggestionsLoader;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.VideoLoader;
 
@@ -19,7 +19,7 @@ public class MainPlayerEventBridge implements PlayerEventBridge {
         mEventListeners = new ArrayList<>();
 
         // NOTE: position matters!!!
-        mEventListeners.add(new PositionRestorer());
+        mEventListeners.add(new StateRestorer());
         mEventListeners.add(new HistoryUpdater());
         mEventListeners.add(new SuggestionsLoader());
         mEventListeners.add(new VideoLoader());

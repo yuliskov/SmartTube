@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
 import android.annotation.TargetApi;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
@@ -19,7 +18,6 @@ import androidx.leanback.widget.RowPresenter;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
-import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
@@ -32,7 +30,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.ExoPlayerController;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
@@ -57,10 +54,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private PlaybackPresenter mPlaybackPresenter;
     private ArrayObjectAdapter mRowsAdapter;
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
-    private ExoMediaSourceFactory mMediaSourceFactory;
     private PlayerEventListener mEventListener;
     private ExoPlayerController mExoPlayerController;
-    private Video mVideo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,8 +65,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
         mPlaybackPresenter = PlaybackPresenter.instance(getContext());
         mPlaybackPresenter.register(this);
-
-        mMediaSourceFactory = ExoMediaSourceFactory.instance(getContext());
     }
 
     @Override
@@ -111,9 +104,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     public void onPause() {
         super.onPause();
 
-        if (mPlayerGlue != null && mPlayerGlue.isPlaying()) {
-            mPlayerGlue.pause();
-        }
         if (Util.SDK_INT <= 23) {
             mEventListener.onEngineReleased();
             mEventListener.onViewPaused();
@@ -142,14 +132,14 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
         mPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), mTrackSelector);
 
-        mExoPlayerController = new ExoPlayerController(mPlayer, mTrackSelector);
+        mExoPlayerController = new ExoPlayerController(mPlayer, mTrackSelector, getContext());
 
         mPlayerAdapter = new LeanbackPlayerAdapter(getActivity(), mPlayer, UPDATE_DELAY);
 
         mPlaylistActionListener = new PlayerActionListener();
         mPlayerGlue = new VideoPlayerGlue(getActivity(), mPlayerAdapter, mPlaylistActionListener);
         mPlayerGlue.setHost(new VideoSupportFragmentGlueHost(this));
-        mPlayerGlue.playWhenPrepared();
+        //mPlayerGlue.playWhenPrepared();
 
         mRowsAdapter = initializeSuggestedVideosRow();
         setAdapter(mRowsAdapter);
@@ -179,20 +169,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         }
     }
 
-    @Override
-    public void openDash(InputStream dashManifest) {
-        prepareMediaForPlaying(dashManifest);
-        // TODO: remove
-        mPlayerGlue.play();
-    }
-
-    @Override
-    public void openHls(String hlsPlaylistUrl) {
-        prepareMediaForPlaying(hlsPlaylistUrl);
-        // TODO: remove
-        mPlayerGlue.play();
-    }
-
     private void releasePlayer() {
         if (mPlayer != null) {
             mPlayer.release();
@@ -203,40 +179,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
             mPlaylistActionListener = null;
             mExoPlayerController = null;
         }
-    }
-
-    @Override
-    public void openVideo(Video video) {
-        mVideo = video;
-        mPlayerGlue.setTitle(video.title);
-        mPlayerGlue.setSubtitle(video.description);
-    }
-
-    //private void prepareMediaForPlaying(Uri mediaSourceUri) {
-    //    String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
-    //    MediaSource mediaSource =
-    //            new ExtractorMediaSource(
-    //                    mediaSourceUri,
-    //                    new DefaultDataSourceFactory(getActivity(), userAgent),
-    //                    new DefaultExtractorsFactory(),
-    //                    null,
-    //                    null);
-    //
-    //    mPlayer.prepare(mediaSource);
-    //}
-
-    private void prepareMediaForPlaying(InputStream dashManifest) {
-        //String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
-        MediaSource mediaSource = mMediaSourceFactory.fromDashManifest(dashManifest);
-        mPlayer.prepare(mediaSource);
-        mEventListener.onVideoLoaded(mVideo);
-    }
-
-    private void prepareMediaForPlaying(String hlsPlaylistUrl) {
-        //String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
-        MediaSource mediaSource = mMediaSourceFactory.fromHlsPlaylist(Uri.parse(hlsPlaylistUrl));
-        mPlayer.prepare(mediaSource);
-        mEventListener.onVideoLoaded(mVideo);
     }
 
     private ArrayObjectAdapter initializeSuggestedVideosRow() {
@@ -294,10 +236,9 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
     @Override
     public void resetSuggestions() {
-        mMediaGroupAdapters.clear();
-
         if (mRowsAdapter.size() > 1) {
             mRowsAdapter.removeItems(1, mRowsAdapter.size() - 1);
+            mMediaGroupAdapters.clear();
         }
     }
 
@@ -313,9 +254,29 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         }
     }
 
+    /* Begin PlayerController */
+
     @Override
-    public void setListener(PlayerEventListener listener) {
+    public void openVideo(Video video) {
+        mExoPlayerController.setVideo(video);
+        mPlayerGlue.setTitle(video.title);
+        mPlayerGlue.setSubtitle(video.description);
+    }
+
+    @Override
+    public void openDash(InputStream dashManifest) {
+        mExoPlayerController.openDash(dashManifest);
+    }
+
+    @Override
+    public void openHls(String hlsPlaylistUrl) {
+        mExoPlayerController.openHls(hlsPlaylistUrl);
+    }
+
+    @Override
+    public void setEventListener(PlayerEventListener listener) {
         mEventListener = listener;
+        mExoPlayerController.setEventListener(listener);
     }
 
     @Override
@@ -341,6 +302,18 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
     @Override
     public Video getVideo() {
-        return mVideo;
+        return mExoPlayerController.getVideo();
     }
+
+    @Override
+    public void setPlay(boolean isPlaying) {
+        mExoPlayerController.setPlay(isPlaying);
+    }
+
+    @Override
+    public boolean isPlaying() {
+        return mExoPlayerController.isPlaying();
+    }
+
+    /* End PlayerController */
 }

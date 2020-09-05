@@ -230,4 +230,10 @@ public class MainFragment extends BrowseSupportFragment implements MainView {
         super.onStop();
         mBackgroundManager.onStop();
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mBackgroundManager.onStart();
+    }
 }

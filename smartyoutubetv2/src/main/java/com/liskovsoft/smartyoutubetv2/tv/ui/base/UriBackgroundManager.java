@@ -51,6 +51,12 @@ public class UriBackgroundManager {
         mBackgroundManager = null;
     }
 
+    public void onStart() {
+        if (mBackgroundURI != null) {
+            updateBackground(mBackgroundURI.toString());
+        }
+    }
+
     public void onStop() {
         mBackgroundManager.release();
     }

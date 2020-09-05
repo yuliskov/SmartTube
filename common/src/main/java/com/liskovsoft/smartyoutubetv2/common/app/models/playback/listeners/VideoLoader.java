@@ -71,10 +71,10 @@ public class VideoLoader extends PlayerEventListenerHelper {
                     InputStream dashStream = formatInfo.getMpdStream();
                     String hlsManifestUrl = formatInfo.getHlsManifestUrl();
 
-                    if (dashStream != null) {
-                        mController.openDash(dashStream);
-                    } else {
+                    if (hlsManifestUrl != null) {
                         mController.openHls(hlsManifestUrl);
+                    } else {
+                        mController.openDash(dashStream);
                     }
                 }, error -> Log.e(TAG, "loadFormatInfo: " + error));
     }

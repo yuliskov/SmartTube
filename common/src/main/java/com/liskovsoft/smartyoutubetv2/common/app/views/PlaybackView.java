@@ -4,6 +4,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerControlle
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListener;
 
 public interface PlaybackView {
-    void setListener(PlayerEventListener stateBridge);
+    void setEventListener(PlayerEventListener stateBridge);
     PlayerController getController();
 }

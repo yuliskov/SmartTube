@@ -16,4 +16,6 @@ public interface PlayerController {
     long getPositionMs();
     void setPositionMs(long positionMs);
     Video getVideo();
+    void setPlay(boolean isPlaying);
+    boolean isPlaying();
 }

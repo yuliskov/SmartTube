@@ -111,25 +111,21 @@ public class SearchFragment extends SearchSupportFragment
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_SPEECH:
-                switch (resultCode) {
-                    case Activity.RESULT_OK:
-                        setSearchQuery(data, true);
-                        break;
-                    default:
-                        // If recognizer is canceled or failed, keep focus on the search orb
-                        if (FINISH_ON_RECOGNIZER_CANCELED) {
-                            if (!hasResults()) {
-                                Log.i(TAG, "Voice search canceled");
-                                getView().findViewById(R.id.lb_search_bar_speech_orb).requestFocus();
-                            }
-                        }
-                        break;
-                }
-                break;
-        }
+    public void onDestroy() {
+        super.onDestroy();
+        mBackgroundManager.onDestroy();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mBackgroundManager.onStop();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mBackgroundManager.onStart();
     }
 
     @Override
@@ -239,6 +235,28 @@ public class SearchFragment extends SearchSupportFragment
             if (index > (size - 4)) {
                 mSearchPresenter.onScrollEnd(mAdapter.getLastGroup());
             }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_SPEECH:
+                switch (resultCode) {
+                    case Activity.RESULT_OK:
+                        setSearchQuery(data, true);
+                        break;
+                    default:
+                        // If recognizer is canceled or failed, keep focus on the search orb
+                        if (FINISH_ON_RECOGNIZER_CANCELED) {
+                            if (!hasResults()) {
+                                Log.i(TAG, "Voice search canceled");
+                                getView().findViewById(R.id.lb_search_bar_speech_orb).requestFocus();
+                            }
+                        }
+                        break;
+                }
+                break;
         }
     }
 }
