@@ -37,6 +37,10 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
 
         /** Skip to the next item in the queue. */
         void onNext();
+
+        void onPlay();
+
+        void onPause();
     }
 
     private final OnActionClickedListener mActionListener;
@@ -134,6 +138,16 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
                 adapter.notifyArrayItemRangeChanged(index, 1);
             }
         }
+    }
+
+    @Override
+    public void play() {
+        mActionListener.onPlay();
+    }
+
+    @Override
+    public void pause() {
+        mActionListener.onPause();
     }
 
     @Override

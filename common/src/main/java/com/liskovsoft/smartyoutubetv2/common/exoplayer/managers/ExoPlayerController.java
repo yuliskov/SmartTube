@@ -23,6 +23,7 @@ public class ExoPlayerController implements EventListener {
     public ExoPlayerController(ExoPlayer player, TrackSelector trackSelector, Context context) {
         mPlayer = player;
         player.addListener(this);
+
         mTrackSelector = trackSelector;
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
     }

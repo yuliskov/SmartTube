@@ -21,6 +21,16 @@ public class StateRestorer extends PlayerEventListenerHelper {
     }
 
     @Override
+    public void onPlayClicked() {
+        mController.setPlay(true);
+    }
+
+    @Override
+    public void onPauseClicked() {
+        mController.setPlay(false);
+    }
+
+    @Override
     public void onPreviousClicked() {
         saveState();
     }

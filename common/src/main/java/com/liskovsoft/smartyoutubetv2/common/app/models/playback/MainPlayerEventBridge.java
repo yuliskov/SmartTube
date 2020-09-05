@@ -153,4 +153,18 @@ public class MainPlayerEventBridge implements PlayerEventBridge {
             listener.onPause();
         }
     }
+
+    @Override
+    public void onPlayClicked() {
+        for (PlayerEventListener listener : mEventListeners) {
+            listener.onPlayClicked();
+        }
+    }
+
+    @Override
+    public void onPauseClicked() {
+        for (PlayerEventListener listener : mEventListeners) {
+            listener.onPauseClicked();
+        }
+    }
 }

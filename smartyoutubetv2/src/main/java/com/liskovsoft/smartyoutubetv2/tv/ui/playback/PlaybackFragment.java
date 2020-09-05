@@ -141,7 +141,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        hideControlsOverlay(false); // don't show controls initially
+        hideControlsOverlay(true); // don't show controls initially
     }
 
     private void initializePlayer() {
@@ -227,6 +227,16 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         public void onNext() {
             mEventListener.onNextClicked();
         }
+
+        @Override
+        public void onPlay() {
+            mEventListener.onPlayClicked();
+        }
+
+        @Override
+        public void onPause() {
+            mEventListener.onPauseClicked();
+        }
     }
 
     /* Begin PlayerController */
@@ -291,6 +301,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public void setPlay(boolean isPlaying) {
         mExoPlayerController.setPlay(isPlaying);
+        hideControlsOverlay(true);
     }
 
     @Override
