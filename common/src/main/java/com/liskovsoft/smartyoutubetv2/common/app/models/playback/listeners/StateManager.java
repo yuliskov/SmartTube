@@ -7,7 +7,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventList
 import java.util.HashMap;
 import java.util.Map;
 
-public class StateRestorer extends PlayerEventListenerHelper {
+public class StateManager extends PlayerEventListenerHelper {
     private final Map<String, State> mPositionMap = new HashMap<>();
 
     private static class State {

@@ -25,7 +25,7 @@ import androidx.leanback.widget.RowPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Header;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.MainPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.GridItemPresenter;
@@ -49,7 +49,7 @@ import java.util.Map;
 public class BrowseFragment extends BrowseSupportFragment implements BrowseView {
     private static final String TAG = BrowseFragment.class.getSimpleName();
     private ArrayObjectAdapter mCategoryRowAdapter;
-    private MainPresenter mPresenter;
+    private BrowsePresenter mPresenter;
     private Map<Integer, Header> mHeaders;
     private PageRowFragmentFactory mPageRowFragmentFactory;
     private Handler mHandler;
@@ -61,7 +61,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         
         mHeaders = new HashMap<>();
         mHandler = new Handler();
-        mPresenter = MainPresenter.instance(context.getApplicationContext());
+        mPresenter = BrowsePresenter.instance(context.getApplicationContext());
         mPresenter.register(this);
     }
 
@@ -87,6 +87,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         prepareEntranceTransition();
 
         initRowAdapters();
+
+        mHandler.postDelayed(this::initSampleRow, 3_000);
 
         mPresenter.onInitDone();
     }
@@ -126,7 +128,9 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private void initRowAdapters() {
         // Every time we have to re-get the category loader, we must re-create the sidebar.
         mCategoryRowAdapter.clear();
+    }
 
+    private void initSampleRow() {
         // Create a row for this special case with more samples.
         HeaderItem gridHeader = new HeaderItem(getString(R.string.more_samples));
         GridItemPresenter gridPresenter = new GridItemPresenter(this);

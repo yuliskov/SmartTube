@@ -21,10 +21,10 @@ import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 
-public class MainPresenter implements HeaderPresenter<BrowseView> {
-    private static final String TAG = MainPresenter.class.getSimpleName();
+public class BrowsePresenter implements HeaderPresenter<BrowseView> {
+    private static final String TAG = BrowsePresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
-    private static MainPresenter sInstance;
+    private static BrowsePresenter sInstance;
     private final Handler mHandler = new Handler();
     private final Context mContext;
     private final ArrayList<MediaGroup> mMediaGroups;
@@ -39,7 +39,7 @@ public class MainPresenter implements HeaderPresenter<BrowseView> {
     private Header mSubscriptionsHeader;
     private Header mHistoryHeader;
 
-    private MainPresenter(Context context) {
+    private BrowsePresenter(Context context) {
         GlobalPreferences.instance(context); // auth token storage
         mMediaGroups = new ArrayList<>();
         mContext = context;
@@ -51,9 +51,9 @@ public class MainPresenter implements HeaderPresenter<BrowseView> {
         initHeaders();
     }
 
-    public static MainPresenter instance(Context context) {
+    public static BrowsePresenter instance(Context context) {
         if (sInstance == null) {
-            sInstance = new MainPresenter(context.getApplicationContext());
+            sInstance = new BrowsePresenter(context.getApplicationContext());
         }
 
         return sInstance;
@@ -65,7 +65,7 @@ public class MainPresenter implements HeaderPresenter<BrowseView> {
             return;
         }
 
-        mOnboardingPresenter.showOnboarding();
+        //mOnboardingPresenter.showOnboarding();
 
         checkUserIsSigned();
         loadHome();

@@ -2,10 +2,10 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.HistoryUpdater;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.StateRestorer;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.SuggestionsLoader;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.VideoLoader;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.HistoryManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.StateManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.SuggestionsManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.VideoManger;
 
 import java.util.ArrayList;
 
@@ -18,10 +18,10 @@ public class MainPlayerEventBridge implements PlayerEventBridge {
         mEventListeners = new ArrayList<>();
 
         // NOTE: position matters!!!
-        mEventListeners.add(new StateRestorer());
-        mEventListeners.add(new HistoryUpdater());
-        mEventListeners.add(new SuggestionsLoader());
-        mEventListeners.add(new VideoLoader());
+        mEventListeners.add(new StateManager());
+        mEventListeners.add(new HistoryManager());
+        mEventListeners.add(new SuggestionsManager());
+        mEventListeners.add(new VideoManger());
     }
 
     public static MainPlayerEventBridge instance() {

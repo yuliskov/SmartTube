@@ -21,6 +21,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.RequiresApi;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 
 /**
  * Video is an immutable object that holds the various metadata associated with a single video.
@@ -35,8 +36,8 @@ public final class Video implements Parcelable {
     public final String videoId;
     public final String videoUrl;
     public final String studio;
-    public MediaItem mediaItem;
-    public MediaItem nextMediaItem;
+    public final MediaItem mediaItem;
+    public final MediaItemMetadata mediaItemMetadata;
 
     private Video(
             final long id,
@@ -47,7 +48,9 @@ public final class Video implements Parcelable {
             final String videoUrl,
             final String bgImageUrl,
             final String cardImageUrl,
-            final String studio) {
+            final String studio,
+            final MediaItem mediaItem,
+            final MediaItemMetadata mediaItemMetadata) {
         this.id = id;
         this.category = category;
         this.title = title;
@@ -57,6 +60,8 @@ public final class Video implements Parcelable {
         this.bgImageUrl = bgImageUrl;
         this.cardImageUrl = cardImageUrl;
         this.studio = studio;
+        this.mediaItem = mediaItem;
+        this.mediaItemMetadata = mediaItemMetadata;
     }
 
     protected Video(Parcel in) {
@@ -69,6 +74,8 @@ public final class Video implements Parcelable {
         videoId = in.readString();
         videoUrl = in.readString();
         studio = in.readString();
+        mediaItem = null;
+        mediaItemMetadata = null;
     }
 
     public static Video from(MediaItem item) {
@@ -93,9 +100,38 @@ public final class Video implements Parcelable {
                 .bgImageUrl(bgImageUrl)
                 .cardImageUrl(cardImageUrl)
                 .studio(studio)
+                .mediaItem(item)
                 .build();
 
-        video.mediaItem = item;
+        return video;
+    }
+
+    public static Video sync(Video origin, MediaItemMetadata metadata) {
+        long id = origin.id;
+        String title = origin.title;
+        String category = origin.category;
+        String desc = metadata.getDescription();
+        String videoId = origin.videoId;
+        String videoUrl = origin.videoUrl;
+        String bgImageUrl = origin.bgImageUrl;
+        String cardImageUrl = origin.cardImageUrl;
+        String studio = origin.studio;
+        MediaItem mediaItem = origin.mediaItem;
+
+        // Build a Video object to be processed.
+        Video video = new VideoBuilder()
+                .id(id)
+                .title(title)
+                .category(category)
+                .description(desc)
+                .videoId(videoId)
+                .videoUrl(videoUrl)
+                .bgImageUrl(bgImageUrl)
+                .cardImageUrl(cardImageUrl)
+                .studio(studio)
+                .mediaItem(mediaItem)
+                .mediaItemMetadata(metadata)
+                .build();
 
         return video;
     }
@@ -160,6 +196,8 @@ public final class Video implements Parcelable {
         private String videoId;
         private String videoUrl;
         private String studio;
+        private MediaItem mediaItem;
+        private MediaItemMetadata mediaItemMetadata;
 
         public VideoBuilder id(long id) {
             this.id = id;
@@ -206,6 +244,16 @@ public final class Video implements Parcelable {
             return this;
         }
 
+        public VideoBuilder mediaItem(MediaItem mediaItem) {
+            this.mediaItem = mediaItem;
+            return this;
+        }
+
+        public VideoBuilder mediaItemMetadata(MediaItemMetadata itemMetadata) {
+            this.mediaItemMetadata = itemMetadata;
+            return this;
+        }
+
         @RequiresApi(21)
         public Video buildFromMediaDesc(MediaDescription desc) {
             return new Video(
@@ -217,7 +265,9 @@ public final class Video implements Parcelable {
                     "", // Media URI - not provided by MediaDescription.
                     "", // Background Image URI - not provided by MediaDescription.
                     String.valueOf(desc.getIconUri()),
-                    String.valueOf(desc.getSubtitle())
+                    String.valueOf(desc.getSubtitle()),
+                    null,
+                    null
             );
         }
 
@@ -231,7 +281,9 @@ public final class Video implements Parcelable {
                     videoUrl,
                     bgImageUrl,
                     cardImageUrl,
-                    studio
+                    studio,
+                    mediaItem,
+                    mediaItemMetadata
             );
         }
     }

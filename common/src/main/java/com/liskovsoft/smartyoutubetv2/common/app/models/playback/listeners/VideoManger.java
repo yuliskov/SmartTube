@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -14,12 +15,12 @@ import io.reactivex.schedulers.Schedulers;
 
 import java.io.InputStream;
 
-public class VideoLoader extends PlayerEventListenerHelper {
-    private static final String TAG = VideoLoader.class.getSimpleName();
+public class VideoManger extends PlayerEventListenerHelper {
+    private static final String TAG = VideoManger.class.getSimpleName();
     private final Playlist mPlaylistManager;
     private Video mLastVideo;
 
-    public VideoLoader() {
+    public VideoManger() {
         mPlaylistManager = Playlist.instance();
     }
 
@@ -70,8 +71,9 @@ public class VideoLoader extends PlayerEventListenerHelper {
             return;
         }
 
-        if (mController.getVideo().nextMediaItem != null) {
-            Video item = Video.from(mController.getVideo().nextMediaItem);
+        MediaItemMetadata mediaItemMetadata = mController.getVideo().mediaItemMetadata;
+        if (mediaItemMetadata != null && mediaItemMetadata.getNextVideo() != null) {
+            Video item = Video.from(mediaItemMetadata.getNextVideo());
             mPlaylistManager.add(item);
             loadVideo(item);
             return;

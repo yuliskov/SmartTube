@@ -19,7 +19,7 @@ import androidx.leanback.widget.RowPresenter;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.MainPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
@@ -36,7 +36,7 @@ public class RowHeaderFragment extends RowsSupportFragment {
     private ArrayObjectAdapter mRowsAdapter;
     private Map<Integer, VideoGroupObjectAdapter> mVideoGroupAdapters;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
-    private MainPresenter mMainPresenter;
+    private BrowsePresenter mMainPresenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class RowHeaderFragment extends RowsSupportFragment {
 
         mVideoGroupAdapters = new HashMap<>();
         mHandler = new Handler();
-        mMainPresenter = MainPresenter.instance(context);
+        mMainPresenter = BrowsePresenter.instance(context);
     }
 
     @Override

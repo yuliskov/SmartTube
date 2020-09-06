@@ -13,8 +13,8 @@ import io.reactivex.schedulers.Schedulers;
 
 import java.util.List;
 
-public class SuggestionsLoader extends PlayerEventListenerHelper {
-    private static final String TAG = SuggestionsLoader.class.getSimpleName();
+public class SuggestionsManager extends PlayerEventListenerHelper {
+    private static final String TAG = SuggestionsManager.class.getSimpleName();
 
     @Override
     public void onVideoLoaded(Video item) {
@@ -40,8 +40,6 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
                         return;
                     }
 
-                    mController.getVideo().nextMediaItem = mediaItemMetadata.getNextVideo();
-
                     List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
 
                     if (suggestions == null) {
@@ -52,6 +50,8 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
                     for (MediaGroup group : suggestions) {
                         mController.updateSuggestions(VideoGroup.from(group, null));
                     }
+
+                    mController.setVideo(Video.sync(video, mediaItemMetadata));
                 }, error -> Log.e(TAG, "loadSuggestions: " + error));
     }
 }
