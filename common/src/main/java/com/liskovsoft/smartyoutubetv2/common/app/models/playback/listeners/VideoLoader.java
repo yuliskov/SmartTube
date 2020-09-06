@@ -5,7 +5,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.PlaylistManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -16,11 +16,11 @@ import java.io.InputStream;
 
 public class VideoLoader extends PlayerEventListenerHelper {
     private static final String TAG = VideoLoader.class.getSimpleName();
-    private final PlaylistManager mPlaylistManager;
+    private final Playlist mPlaylistManager;
     private Video mLastVideo;
 
     public VideoLoader() {
-        mPlaylistManager = PlaylistManager.instance();
+        mPlaylistManager = Playlist.instance();
     }
 
     @Override

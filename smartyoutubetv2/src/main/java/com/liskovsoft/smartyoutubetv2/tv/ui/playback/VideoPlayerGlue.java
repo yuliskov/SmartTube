@@ -1,10 +1,13 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
 import android.content.Context;
+import android.view.KeyEvent;
+import android.view.View;
 import androidx.leanback.media.PlaybackTransportControlGlue;
 import androidx.leanback.media.PlayerAdapter;
 import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ArrayObjectAdapter;
+import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.PlaybackControlsRow;
 
 import java.util.concurrent.TimeUnit;
@@ -113,33 +116,6 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
                 || action == mRepeatAction;
     }
 
-    private void dispatchAction(Action action) {
-        // Primary actions are handled manually.
-        if (action == mRewindAction) {
-            rewind();
-        } else if (action == mFastForwardAction) {
-            fastForward();
-        } else if (action instanceof PlaybackControlsRow.MultiAction) {
-            PlaybackControlsRow.MultiAction multiAction = (PlaybackControlsRow.MultiAction) action;
-            multiAction.nextIndex();
-            // Notify adapter of action changes to handle secondary actions, such as, thumbs up/down
-            // and repeat.
-            notifyActionChanged(
-                    multiAction,
-                    (ArrayObjectAdapter) getControlsRow().getSecondaryActionsAdapter());
-        }
-    }
-
-    private void notifyActionChanged(
-            PlaybackControlsRow.MultiAction action, ArrayObjectAdapter adapter) {
-        if (adapter != null) {
-            int index = adapter.indexOf(action);
-            if (index >= 0) {
-                adapter.notifyArrayItemRangeChanged(index, 1);
-            }
-        }
-    }
-
     @Override
     public void play() {
         super.play();
@@ -174,5 +150,63 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
             newPosition = (newPosition > getDuration()) ? getDuration() : newPosition;
             getPlayerAdapter().seekTo(newPosition);
         }
+    }
+
+    private boolean dispatchAction(Action action) {
+        boolean handled = false;
+
+        // Primary actions are handled manually.
+        if (action == mRewindAction) {
+            rewind();
+            handled = true;
+        } else if (action == mFastForwardAction) {
+            fastForward();
+            handled = true;
+        } else if (action instanceof PlaybackControlsRow.MultiAction) {
+            PlaybackControlsRow.MultiAction multiAction = (PlaybackControlsRow.MultiAction) action;
+            multiAction.nextIndex();
+            // Notify adapter of action changes to handle secondary actions, such as, thumbs up/down
+            // and repeat.
+            notifyActionChanged(
+                    multiAction,
+                    (ArrayObjectAdapter) getControlsRow().getSecondaryActionsAdapter());
+        }
+
+        return handled;
+    }
+
+    private void notifyActionChanged(
+            PlaybackControlsRow.MultiAction action, ArrayObjectAdapter adapter) {
+        if (adapter != null) {
+            int index = adapter.indexOf(action);
+            if (index >= 0) {
+                adapter.notifyArrayItemRangeChanged(index, 1);
+            }
+        }
+    }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        PlaybackControlsRow controlsRow = getControlsRow();
+        boolean handled = false;
+
+        if (controlsRow != null) {
+            final ObjectAdapter primaryActionsAdapter = controlsRow.getPrimaryActionsAdapter();
+            Action action = controlsRow.getActionForKeyCode(primaryActionsAdapter, keyCode);
+            if (action == null) {
+                action = controlsRow.getActionForKeyCode(controlsRow.getSecondaryActionsAdapter(),
+                        keyCode);
+            }
+
+            if (action != null) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    handled = dispatchAction(action);
+                } else {
+                    handled = true;
+                }
+            }
+        }
+
+        return handled || super.onKey(v, keyCode, event);
     }
 }
