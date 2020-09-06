@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.base;
+package com.liskovsoft.smartyoutubetv2.tv.ui.common;
 
 import android.app.Activity;
 import android.graphics.Bitmap;

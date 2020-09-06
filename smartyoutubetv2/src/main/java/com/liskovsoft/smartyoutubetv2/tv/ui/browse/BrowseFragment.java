@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.main;
+package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 
 import android.content.Context;
 import android.content.Intent;
@@ -26,14 +26,14 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Header;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.MainPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.MainView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.GridItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.ui.base.LeanbackActivity;
-import com.liskovsoft.smartyoutubetv2.tv.ui.base.UriBackgroundManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.main.grid.GridHeaderItem;
-import com.liskovsoft.smartyoutubetv2.tv.ui.main.row.RowHeaderItem;
+import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.grid.GridHeaderItem;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.row.RowHeaderItem;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.BrowseErrorFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.GuidedStepActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.SettingsActivity;
@@ -46,8 +46,8 @@ import java.util.Map;
 /*
  * Main class to show BrowseFragment with header and rows of videos
  */
-public class MainFragment extends BrowseSupportFragment implements MainView {
-    private static final String TAG = MainFragment.class.getSimpleName();
+public class BrowseFragment extends BrowseSupportFragment implements BrowseView {
+    private static final String TAG = BrowseFragment.class.getSimpleName();
     private ArrayObjectAdapter mCategoryRowAdapter;
     private MainPresenter mPresenter;
     private Map<Integer, Header> mHeaders;

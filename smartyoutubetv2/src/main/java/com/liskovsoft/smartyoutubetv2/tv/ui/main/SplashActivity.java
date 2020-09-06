@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.main;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import com.liskovsoft.smartyoutubetv2.tv.MainApplication;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity;
 
 public class SplashActivity extends Activity {
     @Override
@@ -13,7 +13,7 @@ public class SplashActivity extends Activity {
         Class<?> lastActivity = MainApplication.getLastActivity();
 
         if (lastActivity == null) {
-            lastActivity = MainActivity.class;
+            lastActivity = BrowseActivity.class;
         }
         
         Intent intent = new Intent(this, lastActivity);

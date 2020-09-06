@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.PlaylistManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -25,7 +24,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void setFirstVideo(Video item) {
+    public void setVideo(Video item) {
         mLastVideo = item;
         mPlaylistManager.add(item);
     }
@@ -60,7 +59,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private void loadVideo(Video item) {
         if (item != null) {
             mLastVideo = item;
-            mController.openVideo(item);
+            mController.setVideo(item);
             loadFormatInfo(item);
         }
     }

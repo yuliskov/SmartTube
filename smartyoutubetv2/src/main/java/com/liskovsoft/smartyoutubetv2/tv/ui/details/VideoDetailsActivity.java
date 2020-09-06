@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.details;
 import android.os.Bundle;
 
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.ui.base.LeanbackActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 
 public class VideoDetailsActivity extends LeanbackActivity {
     public static final String SHARED_ELEMENT_NAME = "hero";

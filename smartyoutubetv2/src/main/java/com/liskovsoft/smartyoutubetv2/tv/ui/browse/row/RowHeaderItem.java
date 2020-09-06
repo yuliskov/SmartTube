@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.main.row;
+package com.liskovsoft.smartyoutubetv2.tv.ui.browse.row;
 
 import androidx.leanback.widget.HeaderItem;
 

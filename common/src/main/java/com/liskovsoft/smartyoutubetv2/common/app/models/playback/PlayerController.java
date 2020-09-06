@@ -8,14 +8,14 @@ import java.io.InputStream;
 // is paused, position, tracks (audio, video, subs), codecs, aspect, speed
 // title, subtitle (description), subscribed/liked nums, published date, toggle buttons, simple buttons
 public interface PlayerController {
-    void updateSuggestions(VideoGroup group);
-    void resetSuggestions();
-    void openVideo(Video item);
+    void setVideo(Video item);
+    Video getVideo();
     void openDash(InputStream dashManifest);
     void openHls(String hlsPlaylistUrl);
+    void updateSuggestions(VideoGroup group);
+    void resetSuggestions();
     long getPositionMs();
     void setPositionMs(long positionMs);
-    Video getVideo();
     void setPlay(boolean isPlaying);
     boolean isPlaying();
     void showControls(boolean isShowing);

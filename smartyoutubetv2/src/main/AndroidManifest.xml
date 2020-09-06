@@ -37,7 +37,7 @@
         android:required="true" />
 
     <application
-        android:name="com.liskovsoft.smartyoutubetv2.tv.MainApplication"
+        android:name="com.liskovsoft.smartyoutubetv2.tv.ui.main.MainApplication"
         android:allowBackup="false"
         android:banner="@drawable/app_banner"
         android:logo="@drawable/app_banner"
@@ -61,7 +61,7 @@
         </activity>
 
         <activity
-            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.main.MainActivity"
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity"
             android:launchMode="singleTask"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:screenOrientation="landscape"
@@ -111,7 +111,7 @@
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.old.VerticalGridActivity"
             android:exported="true"
-            android:parentActivityName="com.liskovsoft.smartyoutubetv2.tv.ui.main.MainActivity"
+            android:parentActivityName="com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Leanback.VerticalGrid" />
         <activity

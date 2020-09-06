@@ -19,7 +19,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.old;
 import android.os.Bundle;
 
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.ui.base.LeanbackActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 
 /*
  * VerticalGridActivity that loads VerticalGridFragment

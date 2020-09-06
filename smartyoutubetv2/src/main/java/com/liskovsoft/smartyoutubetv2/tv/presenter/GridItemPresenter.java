@@ -25,12 +25,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.ui.main.MainFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseFragment;
 
 public class GridItemPresenter extends Presenter {
-    private final MainFragment mainFragment;
+    private final BrowseFragment mainFragment;
 
-    public GridItemPresenter(MainFragment mainFragment) {
+    public GridItemPresenter(BrowseFragment mainFragment) {
         this.mainFragment = mainFragment;
     }
 

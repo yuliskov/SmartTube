@@ -14,14 +14,14 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Header;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.app.views.MainView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 
-public class MainPresenter implements HeaderPresenter<MainView> {
+public class MainPresenter implements HeaderPresenter<BrowseView> {
     private static final String TAG = MainPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static MainPresenter sInstance;
@@ -33,7 +33,7 @@ public class MainPresenter implements HeaderPresenter<MainView> {
     private final MediaService mMediaService;
     private final ViewManager mViewManager;
     private final OnboardingPresenter mOnboardingPresenter;
-    private MainView mView;
+    private BrowseView mView;
     private Header mHomeHeader;
     private Header mSearchHeader;
     private Header mSubscriptionsHeader;
@@ -74,12 +74,12 @@ public class MainPresenter implements HeaderPresenter<MainView> {
     }
 
     @Override
-    public void register(MainView view) {
+    public void register(BrowseView view) {
         mView = view;
     }
 
     @Override
-    public void unregister(MainView view) {
+    public void unregister(BrowseView view) {
         mView = null;
     }
 

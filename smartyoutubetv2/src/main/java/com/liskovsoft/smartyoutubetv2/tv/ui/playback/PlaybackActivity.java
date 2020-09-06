@@ -6,7 +6,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.ui.base.LeanbackActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 
 /**
  * Loads PlaybackFragment and delegates input from a game controller.

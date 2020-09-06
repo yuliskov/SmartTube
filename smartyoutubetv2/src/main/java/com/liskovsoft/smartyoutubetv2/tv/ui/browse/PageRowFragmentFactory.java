@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.main;
+package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 
 import androidx.fragment.app.Fragment;
 import androidx.leanback.app.BackgroundManager;
@@ -7,11 +7,11 @@ import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.Row;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.tv.ui.main.MainFragment.HeaderViewSelectedListener;
-import com.liskovsoft.smartyoutubetv2.tv.ui.main.grid.GridHeaderFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.main.grid.GridHeaderItem;
-import com.liskovsoft.smartyoutubetv2.tv.ui.main.row.RowHeaderFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.main.row.RowHeaderItem;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseFragment.HeaderViewSelectedListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.grid.GridHeaderFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.grid.GridHeaderItem;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.row.RowHeaderFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.row.RowHeaderItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;

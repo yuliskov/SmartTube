@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.base;
+package com.liskovsoft.smartyoutubetv2.tv.ui.common;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -6,7 +6,8 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import androidx.fragment.app.FragmentActivity;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.tv.MainApplication;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.main.MainApplication;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
 
 /**
@@ -16,6 +17,7 @@ public abstract class LeanbackActivity extends FragmentActivity {
     private static final String TAG = LeanbackActivity.class.getSimpleName();
     private LongClickManager mLongClickManager;
     private UriBackgroundManager mBackgroundManager;
+    private ViewManager mViewManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,7 @@ public abstract class LeanbackActivity extends FragmentActivity {
         mLongClickManager = new LongClickManager();
         mBackgroundManager = new UriBackgroundManager(this);
         MainApplication.setLastActivity(this.getClass());
+        mViewManager = ViewManager.instance(this);
     }
 
     @Override
@@ -49,9 +52,10 @@ public abstract class LeanbackActivity extends FragmentActivity {
         return mBackgroundManager;
     }
 
-    //@Override
-    //public void finish() {
-    //    super.finish();
-    //    Log.d(TAG, "Activity finishing...");
-    //}
+    @Override
+    public void finish() {
+        super.finish();
+
+        mViewManager.startParentView(this);
+    }
 }

@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.liskovsoft.smartyoutubetv2.tv.ui.main.grid;
+package com.liskovsoft.smartyoutubetv2.tv.ui.browse.grid;
 
 import android.os.Bundle;
 import android.util.Log;
