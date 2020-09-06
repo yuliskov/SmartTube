@@ -153,6 +153,10 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
     }
 
     private boolean dispatchAction(Action action) {
+        if (action == null) {
+            return false;
+        }
+
         boolean handled = false;
 
         // Primary actions are handled manually.
@@ -187,26 +191,47 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
 
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
-        PlaybackControlsRow controlsRow = getControlsRow();
         boolean handled = false;
 
-        if (controlsRow != null) {
-            final ObjectAdapter primaryActionsAdapter = controlsRow.getPrimaryActionsAdapter();
-            Action action = controlsRow.getActionForKeyCode(primaryActionsAdapter, keyCode);
-            if (action == null) {
-                action = controlsRow.getActionForKeyCode(controlsRow.getSecondaryActionsAdapter(),
-                        keyCode);
-            }
+        Action action = findAction(keyCode);
 
-            if (action != null) {
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    handled = dispatchAction(action);
-                } else {
-                    handled = true;
-                }
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            handled = dispatchAction(action);
+
+            if (!handled) {
+                handled = dispatchKey(keyCode);
             }
         }
 
         return handled || super.onKey(v, keyCode, event);
+    }
+
+    private boolean dispatchKey(int keyCode) {
+        boolean handled = false;
+
+        if (keyCode == KeyEvent.KEYCODE_BACK ||
+            keyCode == KeyEvent.KEYCODE_ESCAPE) {
+            // reset row position
+            // handled = true;
+        }
+
+        return handled;
+    }
+
+    private Action findAction(int keyCode) {
+        Action action = null;
+        PlaybackControlsRow controlsRow = getControlsRow();
+
+        if (controlsRow != null) {
+            final ObjectAdapter primaryActionsAdapter = controlsRow.getPrimaryActionsAdapter();
+            action = controlsRow.getActionForKeyCode(primaryActionsAdapter, keyCode);
+
+            if (action == null) {
+                action = controlsRow.getActionForKeyCode(controlsRow.getSecondaryActionsAdapter(),
+                        keyCode);
+            }
+        }
+
+        return action;
     }
 }
