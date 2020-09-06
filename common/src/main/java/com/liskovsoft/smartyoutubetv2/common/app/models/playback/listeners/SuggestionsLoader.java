@@ -9,12 +9,13 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 import java.util.List;
 
-public class SuggestionsManager extends PlayerEventListenerHelper {
-    private static final String TAG = SuggestionsManager.class.getSimpleName();
+public class SuggestionsLoader extends PlayerEventListenerHelper {
+    private static final String TAG = SuggestionsLoader.class.getSimpleName();
 
     @Override
     public void onVideoLoaded(Video item) {
@@ -34,6 +35,7 @@ public class SuggestionsManager extends PlayerEventListenerHelper {
         MediaItemManager mediaItemManager = service.getMediaItemManager();
         mediaItemManager.getMetadataObserve(video.videoId)
                 .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mediaItemMetadata -> {
                     if (mediaItemMetadata == null) {
                         Log.e(TAG, "loadSuggestions: Item doesn't contain metadata: " + video.title);

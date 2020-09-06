@@ -27,17 +27,17 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
  * Video is an immutable object that holds the various metadata associated with a single video.
  */
 public final class Video implements Parcelable {
-    public final long id;
-    public final String category;
-    public final String title;
-    public final String description;
-    public final String bgImageUrl;
-    public final String cardImageUrl;
-    public final String videoId;
-    public final String videoUrl;
-    public final String studio;
-    public final MediaItem mediaItem;
-    public final MediaItemMetadata mediaItemMetadata;
+    public long id;
+    public String category;
+    public String title;
+    public String description;
+    public String bgImageUrl;
+    public String cardImageUrl;
+    public String videoId;
+    public String videoUrl;
+    public String studio;
+    public MediaItem mediaItem;
+    public MediaItemMetadata mediaItemMetadata;
 
     private Video(
             final long id,
@@ -107,34 +107,41 @@ public final class Video implements Parcelable {
     }
 
     public static Video sync(Video origin, MediaItemMetadata metadata) {
-        long id = origin.id;
-        String title = origin.title;
-        String category = origin.category;
-        String desc = metadata.getDescription();
-        String videoId = origin.videoId;
-        String videoUrl = origin.videoUrl;
-        String bgImageUrl = origin.bgImageUrl;
-        String cardImageUrl = origin.cardImageUrl;
-        String studio = origin.studio;
-        MediaItem mediaItem = origin.mediaItem;
+        origin.description = metadata.getDescription();
+        origin.mediaItemMetadata = metadata;
 
-        // Build a Video object to be processed.
-        Video video = new VideoBuilder()
-                .id(id)
-                .title(title)
-                .category(category)
-                .description(desc)
-                .videoId(videoId)
-                .videoUrl(videoUrl)
-                .bgImageUrl(bgImageUrl)
-                .cardImageUrl(cardImageUrl)
-                .studio(studio)
-                .mediaItem(mediaItem)
-                .mediaItemMetadata(metadata)
-                .build();
-
-        return video;
+        return origin;
     }
+
+    //public static Video sync(Video origin, MediaItemMetadata metadata) {
+    //    long id = origin.id;
+    //    String title = origin.title;
+    //    String category = origin.category;
+    //    String desc = metadata.getDescription();
+    //    String videoId = origin.videoId;
+    //    String videoUrl = origin.videoUrl;
+    //    String bgImageUrl = origin.bgImageUrl;
+    //    String cardImageUrl = origin.cardImageUrl;
+    //    String studio = origin.studio;
+    //    MediaItem mediaItem = origin.mediaItem;
+    //
+    //    // Build a Video object to be processed.
+    //    Video video = new VideoBuilder()
+    //            .id(id)
+    //            .title(title)
+    //            .category(category)
+    //            .description(desc)
+    //            .videoId(videoId)
+    //            .videoUrl(videoUrl)
+    //            .bgImageUrl(bgImageUrl)
+    //            .cardImageUrl(cardImageUrl)
+    //            .studio(studio)
+    //            .mediaItem(mediaItem)
+    //            .mediaItemMetadata(metadata)
+    //            .build();
+    //
+    //    return video;
+    //}
 
     public static final Creator<Video> CREATOR = new Creator<Video>() {
         @Override

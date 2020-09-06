@@ -68,9 +68,14 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
         //mOnboardingPresenter.showOnboarding();
 
         checkUserIsSigned();
-        loadHome();
-        loadSubscriptions();
-        loadHistory();
+
+        addHeader(mHomeHeader);
+        addHeader(mSubscriptionsHeader);
+        addHeader(mHistoryHeader);
+    }
+
+    private void addHeader(Header header) {
+        mView.updateHeader(VideoGroup.from(header));
     }
 
     @Override
@@ -115,8 +120,14 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     }
 
     @Override
-    public void onHeaderSelected(long headerId) {
-        if (mHistoryHeader.getId() == headerId) {
+    public void onHeaderFocused(long headerId) {
+        if (mHomeHeader.getId() == headerId) {
+            mView.clearHeader(mHomeHeader);
+            loadHome();
+        } else if (mSubscriptionsHeader.getId() == headerId) {
+            mView.clearHeader(mSubscriptionsHeader);
+            loadSubscriptions();
+        } else if (mHistoryHeader.getId() == headerId) {
             mView.clearHeader(mHistoryHeader);
             loadHistory();
         }
@@ -148,14 +159,13 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
     @SuppressLint("CheckResult")
     private void loadHome() {
-        mView.updateHeader(VideoGroup.from(mHomeHeader));
+        Log.d(TAG, "Start loading home...");
 
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
-        Log.d(TAG, "Start loading home...");
-
         mediaGroupManager.getHomeObserve()
                 .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mediaGroups -> {
 
             if (mediaGroups == null) {
@@ -167,7 +177,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
             for (MediaGroup mediaGroup : mediaGroups) {
                 if (mediaGroup.getMediaItems() == null) {
-                    Log.e(TAG, "MediaGroup is empty. Name: " + mediaGroup.getTitle());
+                    Log.e(TAG, "MediaGroup is empty. Group Name: " + mediaGroup.getTitle());
                     continue;
                 }
 
@@ -180,12 +190,13 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
     @SuppressLint("CheckResult")
     private void loadSubscriptions() {
-        mView.updateHeader(VideoGroup.from(mSubscriptionsHeader));
+        Log.d(TAG, "Start loading subs...");
 
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
         mediaGroupManager.getSubscriptionsObserve()
                 .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mediaGroup -> {
                     if (mediaGroup == null) {
                         Log.e(TAG, "Can't obtain subscriptions. User probably not logged in");
@@ -198,7 +209,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
     @SuppressLint("CheckResult")
     private void loadHistory() {
-        mView.updateHeader(VideoGroup.from(mHistoryHeader));
+        Log.d(TAG, "Start loading history...");
 
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 

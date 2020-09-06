@@ -15,12 +15,12 @@ import io.reactivex.schedulers.Schedulers;
 
 import java.io.InputStream;
 
-public class VideoManger extends PlayerEventListenerHelper {
-    private static final String TAG = VideoManger.class.getSimpleName();
+public class VideoLoader extends PlayerEventListenerHelper {
+    private static final String TAG = VideoLoader.class.getSimpleName();
     private final Playlist mPlaylistManager;
     private Video mLastVideo;
 
-    public VideoManger() {
+    public VideoLoader() {
         mPlaylistManager = Playlist.instance();
     }
 

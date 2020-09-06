@@ -248,7 +248,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     public final class HeaderViewSelectedListener implements OnHeaderViewSelectedListener {
         @Override
         public void onHeaderSelected(ViewHolder viewHolder, Row row) {
-            mPresenter.onHeaderSelected(row.getHeaderItem().getId());
+            mPresenter.onHeaderFocused(row.getHeaderItem().getId());
         }
     }
 }

@@ -9,8 +9,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventList
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.schedulers.Schedulers;
 
-public class HistoryManager extends PlayerEventListenerHelper {
-    private static final String TAG = HistoryManager.class.getSimpleName();
+public class HistoryUpdater extends PlayerEventListenerHelper {
+    private static final String TAG = HistoryUpdater.class.getSimpleName();
 
     @Override
     @SuppressLint("CheckResult")
