@@ -169,8 +169,14 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         } else if (action instanceof PlaybackControlsRow.MultiAction) {
             PlaybackControlsRow.MultiAction multiAction = (PlaybackControlsRow.MultiAction) action;
             multiAction.nextIndex();
-            // Notify adapter of action changes to handle secondary actions, such as, thumbs up/down
-            // and repeat.
+
+            // Notify adapter of action changes to handle primary actions, such as, play/pause.
+            notifyActionChanged(
+                    multiAction,
+                    (ArrayObjectAdapter) getControlsRow().getPrimaryActionsAdapter());
+
+
+            // Notify adapter of action changes to handle secondary actions, such as, thumbs up/down and repeat.
             notifyActionChanged(
                     multiAction,
                     (ArrayObjectAdapter) getControlsRow().getSecondaryActionsAdapter());
