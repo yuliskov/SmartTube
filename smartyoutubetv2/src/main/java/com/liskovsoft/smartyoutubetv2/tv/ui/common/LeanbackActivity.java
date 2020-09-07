@@ -24,8 +24,8 @@ public abstract class LeanbackActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         mLongClickManager = new LongClickManager();
         mBackgroundManager = new UriBackgroundManager(this);
-        MainApplication.setLastActivity(this.getClass());
         mViewManager = ViewManager.instance(this);
+        mViewManager.setDefault(this.getClass());
     }
 
     @Override
@@ -55,7 +55,7 @@ public abstract class LeanbackActivity extends FragmentActivity {
     @Override
     public void finish() {
         super.finish();
-
+        
         mViewManager.startParentView(this);
     }
 }

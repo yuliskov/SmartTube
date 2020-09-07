@@ -60,4 +60,6 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:' + rxJavaVersion
 
     implementation project(path: ':common')
+
+    // experimentsImplementation project(path: ':leanbackassistant')
 }

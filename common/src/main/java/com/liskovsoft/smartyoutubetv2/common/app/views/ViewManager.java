@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
@@ -11,12 +13,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ViewManager {
+    private static final String PARENT_ACTIVITY = "PARENT_ACTIVITY";
     private static final String TAG = ViewManager.class.getSimpleName();
     private static ViewManager sInstance;
     private final Context mContext;
     private final Map<Class<?>, Class<? extends Activity>> mViewMapping;
     private final Map<Class<? extends Activity>, Class<? extends Activity>> mParentMapping;
-    public static final String PARENT_ACTIVITY = "PARENT_ACTIVITY";
+    private Class<?> mDefaultActivity;
+    private Class<?> mRootActivity;
 
     private ViewManager(Context context) {
         mContext = context;
@@ -104,6 +108,7 @@ public class ViewManager {
 
             try {
                 Log.d(TAG, "Launching parent activity...");
+                setDefault(null); // current activity is finished, so do reset
                 activity.startActivity(new Intent(activity, parentActivity));
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();
@@ -144,5 +149,26 @@ public class ViewManager {
         }
 
         return parentActivity;
+    }
+
+    public void startDefaultView(Activity activity) {
+        Class<?> lastActivity = mDefaultActivity;
+
+        if (lastActivity == null) {
+            lastActivity = mRootActivity;
+        }
+
+        Intent intent = new Intent(activity, lastActivity);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        activity.startActivity(intent);
+    }
+
+    public void setDefault(@Nullable Class<?> defaultActivity) {
+        mDefaultActivity = defaultActivity;
+    }
+
+    public void setRoot(@NonNull Class<?> rootActivity) {
+        mRootActivity = rootActivity;
     }
 }
