@@ -14,8 +14,13 @@ import io.reactivex.schedulers.Schedulers;
 
 import java.util.List;
 
-public class SuggestionsLoader extends PlayerEventListenerHelper {
-    private static final String TAG = SuggestionsLoader.class.getSimpleName();
+public class MetadataLoader extends PlayerEventListenerHelper {
+    private static final String TAG = MetadataLoader.class.getSimpleName();
+    private final StateUpdater mStateUpdater;
+
+    public MetadataLoader(StateUpdater stateUpdater) {
+        mStateUpdater = stateUpdater;
+    }
 
     @Override
     public void onVideoLoaded(Video item) {
@@ -29,7 +34,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
             return;
         }
 
-        mController.resetSuggestions(); // clear previous videos
+        mController.clearSuggestions(); // clear previous videos
 
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
@@ -42,6 +47,8 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
                         return;
                     }
 
+                    mStateUpdater.onMetadataLoaded(mediaItemMetadata);
+
                     List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
 
                     if (suggestions == null) {
@@ -52,8 +59,6 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
                     for (MediaGroup group : suggestions) {
                         mController.updateSuggestions(VideoGroup.from(group, null));
                     }
-
-                    mController.setVideo(Video.sync(video, mediaItemMetadata));
                 }, error -> Log.e(TAG, "loadSuggestions: " + error));
     }
 }

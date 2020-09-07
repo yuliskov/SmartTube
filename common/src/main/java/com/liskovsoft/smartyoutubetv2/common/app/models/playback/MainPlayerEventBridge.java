@@ -4,7 +4,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.HistoryUpdater;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.StateUpdater;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.SuggestionsLoader;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.MetadataLoader;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.VideoLoader;
 
 import java.util.ArrayList;
@@ -18,9 +18,10 @@ public class MainPlayerEventBridge implements PlayerEventBridge {
         mEventListeners = new ArrayList<>();
 
         // NOTE: position matters!!!
-        mEventListeners.add(new StateUpdater());
+        StateUpdater stateUpdater = new StateUpdater();
+        mEventListeners.add(stateUpdater);
         mEventListeners.add(new HistoryUpdater());
-        mEventListeners.add(new SuggestionsLoader());
+        mEventListeners.add(new MetadataLoader(stateUpdater));
         mEventListeners.add(new VideoLoader());
     }
 
@@ -163,6 +164,13 @@ public class MainPlayerEventBridge implements PlayerEventBridge {
     public void onPauseClicked() {
         for (PlayerEventListener listener : mEventListeners) {
             listener.onPauseClicked();
+        }
+    }
+
+    @Override
+    public void onSeek() {
+        for (PlayerEventListener listener : mEventListeners) {
+            listener.onSeek();
         }
     }
 }

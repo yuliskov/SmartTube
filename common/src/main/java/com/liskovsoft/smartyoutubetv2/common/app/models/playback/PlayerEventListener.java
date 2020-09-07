@@ -17,6 +17,7 @@ public interface PlayerEventListener extends ViewEventListener {
     /** Engine **/
     void onPlay();
     void onPause();
+    void onSeek();
     void onVideoLoaded(Video item);
     void onEngineInitialized();
     void onEngineReleased();

@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners;
 
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
@@ -8,11 +9,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StateUpdater extends PlayerEventListenerHelper {
-    private final Map<String, State> mPositionMap = new HashMap<>();
+    private final Map<Long, State> mPositionMap = new HashMap<>();
 
     private static class State {
-        long positionMs;
-        boolean isPlaying;
+        final long positionMs;
+        final boolean isPlaying;
 
         public State(long positionMs, boolean isPlaying) {
             this.positionMs = positionMs;
@@ -57,17 +58,35 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     private void saveState() {
         Video video = mController.getVideo();
-        mPositionMap.put(video.title + video.description, new State(mController.getPositionMs(), mController.isPlaying()));
+        mPositionMap.put(video.id, new State(mController.getPositionMs(), mController.isPlaying()));
     }
 
     private void restoreState(Video item) {
-        State state = mPositionMap.get(item.title + item.description);
+        State state = mPositionMap.get(item.id);
 
         if (state != null) {
             mController.setPositionMs(state.positionMs);
             mController.setPlay(state.isPlaying);
         } else {
             mController.setPlay(true); // start play immediately by default
+        }
+    }
+
+    public void onMetadataLoaded(MediaItemMetadata mediaItemMetadata) {
+        Video video = mController.getVideo();
+        mController.setVideo(Video.sync(video, mediaItemMetadata));
+
+        if (mPositionMap.get(video.id) == null) {
+            boolean isUserSeeking = mController.getPositionMs() > 10_000;
+            if (!isUserSeeking) {
+                long newPositionMs = mController.getLengthMs() / 100 * mediaItemMetadata.getPercentWatched();
+
+                boolean positionsMismatch = Math.abs(newPositionMs - mController.getPositionMs()) > 10_000;
+
+                if (positionsMismatch) {
+                    mController.setPositionMs(newPositionMs);
+                }
+            }
         }
     }
 }

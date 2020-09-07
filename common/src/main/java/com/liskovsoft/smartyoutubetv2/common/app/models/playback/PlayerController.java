@@ -13,9 +13,10 @@ public interface PlayerController {
     void openDash(InputStream dashManifest);
     void openHls(String hlsPlaylistUrl);
     void updateSuggestions(VideoGroup group);
-    void resetSuggestions();
+    void clearSuggestions();
     long getPositionMs();
     void setPositionMs(long positionMs);
+    long getLengthMs();
     void setPlay(boolean isPlaying);
     boolean isPlaying();
     void showControls(boolean isShowing);

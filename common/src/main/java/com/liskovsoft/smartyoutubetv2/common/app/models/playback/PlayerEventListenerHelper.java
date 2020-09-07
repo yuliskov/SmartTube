@@ -93,4 +93,9 @@ public abstract class PlayerEventListenerHelper implements PlayerEventBridge {
     public void onPauseClicked() {
         // NOP
     }
+
+    @Override
+    public void onSeek() {
+        // NOP
+    }
 }

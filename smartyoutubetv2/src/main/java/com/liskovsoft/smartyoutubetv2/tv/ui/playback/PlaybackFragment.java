@@ -242,7 +242,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     /* Begin PlayerController */
 
     @Override
-    public void resetSuggestions() {
+    public void clearSuggestions() {
         if (mRowsAdapter.size() > 1) {
             mRowsAdapter.removeItems(1, mRowsAdapter.size() - 1);
             mMediaGroupAdapters.clear();
@@ -285,6 +285,11 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public void setPositionMs(long positionMs) {
         mExoPlayerController.setPosition(positionMs);
+    }
+
+    @Override
+    public long getLengthMs() {
+        return mExoPlayerController.getLengthMs();
     }
 
     @Override
