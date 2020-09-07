@@ -132,6 +132,12 @@ public class VideoDetailsFragment extends DetailsSupportFragment implements Deta
         super.onStop();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mDetailsPresenter.unregister(this);
+    }
+
     /**
      * Check if there is a global search intent. If there is, load that video.
      */

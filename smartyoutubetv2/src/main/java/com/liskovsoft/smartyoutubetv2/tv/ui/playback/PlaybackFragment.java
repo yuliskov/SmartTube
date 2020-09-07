@@ -307,6 +307,13 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mBackgroundManager.onDestroy();
+        mPlaybackPresenter.unregister(this);
+    }
+
+    @Override
     public Video getVideo() {
         return mExoPlayerController.getVideo();
     }

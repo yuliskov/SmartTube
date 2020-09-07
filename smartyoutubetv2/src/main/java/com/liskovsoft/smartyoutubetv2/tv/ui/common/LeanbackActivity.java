@@ -25,7 +25,7 @@ public abstract class LeanbackActivity extends FragmentActivity {
         mLongClickManager = new LongClickManager();
         mBackgroundManager = new UriBackgroundManager(this);
         mViewManager = ViewManager.instance(this);
-        mViewManager.setDefault(this.getClass());
+        mViewManager.setDefault(this.getClass()); // we can't do it in the ViewManager because activity may be started from outside
     }
 
     @Override

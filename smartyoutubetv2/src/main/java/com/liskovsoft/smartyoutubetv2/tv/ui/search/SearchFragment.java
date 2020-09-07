@@ -114,19 +114,20 @@ public class SearchFragment extends SearchSupportFragment
     public void onDestroy() {
         super.onDestroy();
         mBackgroundManager.onDestroy();
+        mSearchPresenter.unregister(this);
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        mBackgroundManager.onStop();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mBackgroundManager.onStart();
-    }
+    //@Override
+    //public void onStop() {
+    //    super.onStop();
+    //    mBackgroundManager.onStop();
+    //}
+    //
+    //@Override
+    //public void onStart() {
+    //    super.onStart();
+    //    mBackgroundManager.onStart();
+    //}
 
     @Override
     public ObjectAdapter getResultsAdapter() {

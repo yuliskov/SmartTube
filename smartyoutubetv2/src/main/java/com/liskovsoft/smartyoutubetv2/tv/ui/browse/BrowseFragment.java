@@ -49,7 +49,7 @@ import java.util.Map;
 public class BrowseFragment extends BrowseSupportFragment implements BrowseView {
     private static final String TAG = BrowseFragment.class.getSimpleName();
     private ArrayObjectAdapter mCategoryRowAdapter;
-    private BrowsePresenter mPresenter;
+    private BrowsePresenter mBrowsePresenter;
     private Map<Integer, Header> mHeaders;
     private PageRowFragmentFactory mPageRowFragmentFactory;
     private Handler mHandler;
@@ -61,8 +61,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         
         mHeaders = new HashMap<>();
         mHandler = new Handler();
-        mPresenter = BrowsePresenter.instance(context.getApplicationContext());
-        mPresenter.register(this);
+        mBrowsePresenter = BrowsePresenter.instance(context.getApplicationContext());
+        mBrowsePresenter.register(this);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
         mHandler.postDelayed(this::initSampleRow, 3_000);
 
-        mPresenter.onInitDone();
+        mBrowsePresenter.onInitDone();
     }
 
     private void setupUi() {
@@ -182,19 +182,20 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     public void onDestroy() {
         super.onDestroy();
         mBackgroundManager.onDestroy();
+        mBrowsePresenter.unregister(this);
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        mBackgroundManager.onStop();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        mBackgroundManager.onStart();
-    }
+    //@Override
+    //public void onStop() {
+    //    super.onStop();
+    //    mBackgroundManager.onStop();
+    //}
+    //
+    //@Override
+    //public void onStart() {
+    //    super.onStart();
+    //    mBackgroundManager.onStart();
+    //}
 
     @Override
     public void showProgressBar(boolean show) {
@@ -249,7 +250,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
                 Uri backgroundURI = Uri.parse(((Video) item).bgImageUrl);
                 mBackgroundManager.startBackgroundTimer(backgroundURI);
             } else {
-                mBackgroundManager.getBackgroundManager().setDrawable(null);
+                mBackgroundManager.removeBackground();
             }
         }
     }
@@ -257,7 +258,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     public final class HeaderViewSelectedListener implements OnHeaderViewSelectedListener {
         @Override
         public void onHeaderSelected(ViewHolder viewHolder, Row row) {
-            mPresenter.onHeaderFocused(row.getHeaderItem().getId());
+            mBrowsePresenter.onHeaderFocused(row.getHeaderItem().getId());
         }
     }
 }
