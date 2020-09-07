@@ -64,7 +64,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private void restoreState(Video item) {
         State state = mPositionMap.get(item.id);
 
-        boolean nearEnd = (mController.getLengthMs() - mController.getPositionMs()) < 10_000;
+        boolean nearEnd = Math.abs(mController.getLengthMs() - mController.getPositionMs()) < 10_000;
 
         if (state != null && !nearEnd) {
             mController.setPositionMs(state.positionMs);
