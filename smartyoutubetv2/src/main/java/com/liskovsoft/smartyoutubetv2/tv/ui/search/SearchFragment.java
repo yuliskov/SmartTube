@@ -113,7 +113,6 @@ public class SearchFragment extends SearchSupportFragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mBackgroundManager.onDestroy();
         mSearchPresenter.unregister(this);
     }
 

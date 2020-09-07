@@ -33,6 +33,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     private final MediaService mMediaService;
     private final ViewManager mViewManager;
     private final OnboardingPresenter mOnboardingPresenter;
+    private final SignInPresenter mSignInPresenter;
     private BrowseView mView;
     private Header mHomeHeader;
     private Header mSearchHeader;
@@ -46,6 +47,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
         mPlaybackPresenter = PlaybackPresenter.instance(context);
         mDetailsPresenter = DetailsPresenter.instance(context);
         mOnboardingPresenter = OnboardingPresenter.instance(context);
+        mSignInPresenter = SignInPresenter.instance(context);
         mMediaService = YouTubeMediaService.instance();
         mViewManager = ViewManager.instance(context);
         initHeaders();
@@ -67,7 +69,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
         //mOnboardingPresenter.showOnboarding();
 
-        checkUserIsSigned();
+        //mSignInPresenter.checkUserIsSigned();
 
         addHeader(mHomeHeader);
         addHeader(mSubscriptionsHeader);
@@ -140,24 +142,6 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     //}
 
     @SuppressLint("CheckResult")
-    private void checkUserIsSigned() {
-        SignInManager signInManager = mMediaService.getSignInManager();
-
-        signInManager.isSignedObserve()
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(isSigned -> {
-                    if (!isSigned) {
-                        signInManager.signInObserve()
-                                .subscribeOn(Schedulers.newThread())
-                                .subscribe(userCode -> Log.d(TAG, "User code is: " + userCode),
-                                        error -> Log.e(TAG, error));
-                    } else {
-                        Log.d(TAG, "User already signed");
-                    }
-                }, error -> Log.e(TAG, "checkUserIsSigned: " + error));
-    }
-
-    @SuppressLint("CheckResult")
     private void loadHome() {
         Log.d(TAG, "Start loading home...");
 
@@ -179,7 +163,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
             for (MediaGroup mediaGroup : mediaGroups) {
                 if (mediaGroup.getMediaItems() == null) {
-                    Log.e(TAG, "MediaGroup is empty. Group Name: " + mediaGroup.getTitle());
+                    Log.e(TAG, "loadHome: MediaGroup is empty. Group Name: " + mediaGroup.getTitle());
                     continue;
                 }
 
@@ -189,7 +173,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
             }
 
             mView.showProgressBar(false);
-        }, error -> Log.e(TAG, "loadHomeData: " + error));
+        }, error -> Log.e(TAG, "loadHome: " + error));
     }
 
     @SuppressLint("CheckResult")

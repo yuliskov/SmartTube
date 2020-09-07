@@ -53,6 +53,24 @@ public abstract class LeanbackActivity extends FragmentActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        mBackgroundManager.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mBackgroundManager.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mBackgroundManager.onDestroy();
+    }
+
+    @Override
     public void finish() {
         super.finish();
         

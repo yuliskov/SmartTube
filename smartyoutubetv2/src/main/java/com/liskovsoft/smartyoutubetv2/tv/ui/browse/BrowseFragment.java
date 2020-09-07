@@ -181,7 +181,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mBackgroundManager.onDestroy();
         mBrowsePresenter.unregister(this);
     }
 

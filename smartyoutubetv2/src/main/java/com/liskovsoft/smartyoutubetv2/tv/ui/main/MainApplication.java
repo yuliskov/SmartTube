@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.main;
 
 import android.app.Application;
+import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.app.views.DetailsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
@@ -12,6 +13,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.details.VideoDetailsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.onboarding.OnboardingActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.signin.SignInActivity;
 
 public class MainApplication extends Application {
     @Override
@@ -26,5 +28,6 @@ public class MainApplication extends Application {
         viewManager.register(OnboardingView.class, OnboardingActivity.class, BrowseActivity.class);
         viewManager.register(DetailsView.class, VideoDetailsActivity.class, BrowseActivity.class);
         viewManager.register(SearchView.class, SearchActivity.class, BrowseActivity.class);
+        viewManager.register(SignInView.class, SignInActivity.class, BrowseActivity.class);
     }
 }

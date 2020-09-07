@@ -47,20 +47,20 @@ public class UriBackgroundManager {
         mHandler.postDelayed(mBackgroundTask, BACKGROUND_UPDATE_DELAY_MS);
     }
 
+    public void onStart() {
+        if (mBackgroundURI != null) {
+            updateBackground(mBackgroundURI.toString());
+        }
+    }
+
+    public void onStop() {
+        mBackgroundManager.release();
+    }
+
     public void onDestroy() {
         mHandler.removeCallbacks(mBackgroundTask);
         mBackgroundManager = null;
     }
-
-    //public void onStart() {
-    //    if (mBackgroundURI != null) {
-    //        updateBackground(mBackgroundURI.toString());
-    //    }
-    //}
-    //
-    //public void onStop() {
-    //    mBackgroundManager.release();
-    //}
 
     public void removeBackground() {
         mBackgroundManager.setDrawable(null);
