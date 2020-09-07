@@ -106,13 +106,6 @@ public final class Video implements Parcelable {
         return video;
     }
 
-    public static Video sync(Video origin, MediaItemMetadata metadata) {
-        origin.description = metadata.getDescription();
-        origin.mediaItemMetadata = metadata;
-
-        return origin;
-    }
-
     //public static Video sync(Video origin, MediaItemMetadata metadata) {
     //    long id = origin.id;
     //    String title = origin.title;

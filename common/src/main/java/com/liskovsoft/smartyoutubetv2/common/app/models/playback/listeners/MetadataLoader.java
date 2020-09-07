@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -34,7 +35,14 @@ public class MetadataLoader extends PlayerEventListenerHelper {
             return;
         }
 
+        String debugTitle = video.title;
+
         mController.clearSuggestions(); // clear previous videos
+
+        if (video.mediaItemMetadata != null) {
+            loadSuggestions(video.mediaItemMetadata, debugTitle);
+            return;
+        }
 
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
@@ -42,23 +50,36 @@ public class MetadataLoader extends PlayerEventListenerHelper {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mediaItemMetadata -> {
-                    if (mediaItemMetadata == null) {
-                        Log.e(TAG, "loadSuggestions: Item doesn't contain metadata: " + video.title);
-                        return;
-                    }
-
-                    mStateUpdater.onMetadataLoaded(mediaItemMetadata);
-
-                    List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
-
-                    if (suggestions == null) {
-                        Log.e(TAG, "loadSuggestions: Can't obtain suggestions for video : " + video.title);
-                        return;
-                    }
-
-                    for (MediaGroup group : suggestions) {
-                        mController.updateSuggestions(VideoGroup.from(group, null));
-                    }
+                    loadSuggestions(mediaItemMetadata, debugTitle);
                 }, error -> Log.e(TAG, "loadSuggestions: " + error));
+    }
+
+    private void loadSuggestions(MediaItemMetadata mediaItemMetadata, String debugTitle) {
+        if (mediaItemMetadata == null) {
+            Log.e(TAG, "loadSuggestions: Video doesn't contain metadata: " + debugTitle);
+            return;
+        }
+
+        mStateUpdater.onMetadataLoaded(mediaItemMetadata);
+
+        updateCurrentVideo(mediaItemMetadata);
+
+        List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
+
+        if (suggestions == null) {
+            Log.e(TAG, "loadSuggestions: Can't obtain suggestions for video: " + debugTitle);
+            return;
+        }
+
+        for (MediaGroup group : suggestions) {
+            mController.updateSuggestions(VideoGroup.from(group, null));
+        }
+    }
+
+    private void updateCurrentVideo(MediaItemMetadata mediaItemMetadata) {
+        Video video = mController.getVideo();
+        video.description = mediaItemMetadata.getDescription();
+        video.mediaItemMetadata = mediaItemMetadata;
+        mController.setVideo(video);
     }
 }

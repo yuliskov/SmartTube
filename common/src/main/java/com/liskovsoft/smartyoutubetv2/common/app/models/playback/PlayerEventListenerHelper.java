@@ -98,4 +98,9 @@ public abstract class PlayerEventListenerHelper implements PlayerEventBridge {
     public void onSeek() {
         // NOP
     }
+
+    @Override
+    public void onPlayEnd() {
+        // NOP
+    }
 }

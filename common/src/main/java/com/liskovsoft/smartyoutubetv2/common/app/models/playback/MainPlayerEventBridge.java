@@ -167,10 +167,18 @@ public class MainPlayerEventBridge implements PlayerEventBridge {
         }
     }
 
+    // Not implemented
     @Override
     public void onSeek() {
         for (PlayerEventListener listener : mEventListeners) {
             listener.onSeek();
+        }
+    }
+
+    @Override
+    public void onPlayEnd() {
+        for (PlayerEventListener listener : mEventListeners) {
+            listener.onPlayEnd();
         }
     }
 }

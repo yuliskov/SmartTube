@@ -21,4 +21,5 @@ public interface PlayerEventListener extends ViewEventListener {
     void onVideoLoaded(Video item);
     void onEngineInitialized();
     void onEngineReleased();
+    void onPlayEnd();
 }

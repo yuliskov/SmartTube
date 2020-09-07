@@ -78,17 +78,18 @@ public class SearchPresenter implements VideoGroupPresenter<SearchView> {
     }
 
     public void onSearchText(String searchText) {
-         loadSearchData(searchText);
+         loadSearchResult(searchText);
     }
 
     @SuppressLint("CheckResult")
-    private void loadSearchData(String searchText) {
+    private void loadSearchResult(String searchText) {
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
         mView.clearSearch();
 
         mediaGroupManager.getSearchObserve(searchText)
                 .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mediaGroup -> {
                     if (mediaGroup == null) {
                         Log.e(TAG, "Search result is empty");

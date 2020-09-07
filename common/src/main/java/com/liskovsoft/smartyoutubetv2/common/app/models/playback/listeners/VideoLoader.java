@@ -52,6 +52,11 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     @Override
+    public void onPlayEnd() {
+        onNextClicked();
+    }
+
+    @Override
     public void onSuggestionItemClicked(Video item) {
         mPlaylistManager.add(item);
         loadVideo(item);

@@ -64,7 +64,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private void restoreState(Video item) {
         State state = mPositionMap.get(item.id);
 
-        if (state != null) {
+        boolean nearEnd = (mController.getLengthMs() - mController.getPositionMs()) < 10_000;
+
+        if (state != null && !nearEnd) {
             mController.setPositionMs(state.positionMs);
             mController.setPlay(state.isPlaying);
         } else {
@@ -73,10 +75,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     public void onMetadataLoaded(MediaItemMetadata mediaItemMetadata) {
-        Video video = mController.getVideo();
-        mController.setVideo(Video.sync(video, mediaItemMetadata));
-
-        if (mPositionMap.get(video.id) == null) {
+        if (mPositionMap.get(mController.getVideo().id) == null) {
             boolean isUserSeeking = mController.getPositionMs() > 10_000;
             if (!isUserSeeking) {
                 long newPositionMs = mController.getLengthMs() / 100 * mediaItemMetadata.getPercentWatched();

@@ -99,12 +99,16 @@ public class ExoPlayerController implements EventListener {
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         Log.d(TAG, "State: " + playbackState);
 
-        if (Player.STATE_READY == playbackState) {
-            if (playWhenReady) {
-                mEventListener.onPlay();
-            } else {
-                mEventListener.onPause();
-            }
+        boolean playPressed = Player.STATE_READY == playbackState && playWhenReady;
+        boolean pausePressed = Player.STATE_READY == playbackState && !playWhenReady;
+        boolean playbackEnded = Player.STATE_ENDED == playbackState && playWhenReady;
+
+        if (playPressed) {
+            mEventListener.onPlay();
+        } else if (pausePressed) {
+            mEventListener.onPause();
+        } else if (playbackEnded) {
+            mEventListener.onPlayEnd();
         }
     }
 }
