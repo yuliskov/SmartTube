@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
@@ -70,6 +71,15 @@ public class VideoLoader extends PlayerEventListenerHelper {
         }
     }
 
+    private void loadNextVideo(MediaItemMetadata metadata) {
+        mController.getVideo().mediaItemMetadata = metadata;
+
+        MediaItem nextVideo = metadata.getNextVideo();
+        Video item = Video.from(nextVideo);
+        mPlaylistManager.add(item);
+        loadVideo(item);
+    }
+
     @SuppressLint("CheckResult")
     private void loadNextVideo(Video current) {
         if (current == null) {
@@ -78,9 +88,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
         MediaItemMetadata mediaItemMetadata = mController.getVideo().mediaItemMetadata;
         if (mediaItemMetadata != null && mediaItemMetadata.getNextVideo() != null) {
-            Video item = Video.from(mediaItemMetadata.getNextVideo());
-            mPlaylistManager.add(item);
-            loadVideo(item);
+            loadNextVideo(mediaItemMetadata);
             return;
         }
 
@@ -89,35 +97,35 @@ public class VideoLoader extends PlayerEventListenerHelper {
         mediaItemManager.getMetadataObserve(current.mediaItem)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(metadata -> {
-                    MediaItem nextVideo = metadata.getNextVideo();
-                    Video item = Video.from(nextVideo);
-                    mPlaylistManager.add(item);
-                    loadVideo(item);
-                }, error -> Log.e(TAG, "loadMetadata: " + error));
+                .subscribe(this::loadNextVideo, error -> Log.e(TAG, "loadNextVideo: " + error));
     }
 
     @SuppressLint("CheckResult")
     private void loadFormatInfo(Video video) {
+        String videoTitle = video.title;
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
         mediaItemManager.getFormatInfoObserve(video.videoId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(formatInfo -> {
-                    if (formatInfo == null) {
-                        Log.e(TAG, "loadFormatInfo: Can't obtains format info: " + video.title);
-                        return;
-                    }
-
-                    InputStream dashStream = formatInfo.getMpdStream();
-                    String hlsManifestUrl = formatInfo.getHlsManifestUrl();
-
-                    if (hlsManifestUrl != null) {
-                        mController.openHls(hlsManifestUrl);
-                    } else {
-                        mController.openDash(dashStream);
-                    }
+                    loadFormatInfo(formatInfo, videoTitle);
                 }, error -> Log.e(TAG, "loadFormatInfo: " + error));
+    }
+
+    private void loadFormatInfo(MediaItemFormatInfo formatInfo, String videoTitle) {
+        if (formatInfo == null) {
+            Log.e(TAG, "loadFormatInfo: Can't obtains format info: " + videoTitle);
+            return;
+        }
+
+        InputStream dashStream = formatInfo.getMpdStream();
+        String hlsManifestUrl = formatInfo.getHlsManifestUrl();
+
+        if (hlsManifestUrl != null) {
+            mController.openHls(hlsManifestUrl);
+        } else {
+            mController.openDash(dashStream);
+        }
     }
 }

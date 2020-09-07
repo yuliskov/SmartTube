@@ -35,12 +35,12 @@ public class MetadataLoader extends PlayerEventListenerHelper {
             return;
         }
 
-        String debugTitle = video.title;
+        String videoTitle = video.title;
 
         mController.clearSuggestions(); // clear previous videos
 
         if (video.mediaItemMetadata != null) {
-            loadSuggestions(video.mediaItemMetadata, debugTitle);
+            loadSuggestions(video.mediaItemMetadata, video.title);
             return;
         }
 
@@ -50,13 +50,13 @@ public class MetadataLoader extends PlayerEventListenerHelper {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mediaItemMetadata -> {
-                    loadSuggestions(mediaItemMetadata, debugTitle);
+                    loadSuggestions(mediaItemMetadata, videoTitle);
                 }, error -> Log.e(TAG, "loadSuggestions: " + error));
     }
 
-    private void loadSuggestions(MediaItemMetadata mediaItemMetadata, String debugTitle) {
+    private void loadSuggestions(MediaItemMetadata mediaItemMetadata, String videoTitle) {
         if (mediaItemMetadata == null) {
-            Log.e(TAG, "loadSuggestions: Video doesn't contain metadata: " + debugTitle);
+            Log.e(TAG, "loadSuggestions: Video doesn't contain metadata: " + videoTitle);
             return;
         }
 
@@ -67,7 +67,7 @@ public class MetadataLoader extends PlayerEventListenerHelper {
         List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
 
         if (suggestions == null) {
-            Log.e(TAG, "loadSuggestions: Can't obtain suggestions for video: " + debugTitle);
+            Log.e(TAG, "loadSuggestions: Can't obtain suggestions for video: " + videoTitle);
             return;
         }
 
