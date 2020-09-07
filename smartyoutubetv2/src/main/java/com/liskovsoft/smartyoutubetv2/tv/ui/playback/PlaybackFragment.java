@@ -35,6 +35,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.ExoPlayerController;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -57,6 +59,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
     private PlayerEventListener mEventListener;
     private ExoPlayerController mExoPlayerController;
+    private UriBackgroundManager mBackgroundManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,6 +74,10 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
+
+        mBackgroundManager.setBlackBackground();
     }
 
     @Override
