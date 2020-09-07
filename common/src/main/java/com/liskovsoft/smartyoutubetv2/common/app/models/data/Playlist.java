@@ -40,16 +40,23 @@ public class Playlist {
     public void add(Video video) {
         mPlaylist.add(++mCurrentPosition, video);
 
-        removeAllAfterCurrent();
+        trimPlaylist();
     }
 
-    private void removeAllAfterCurrent() {
-        boolean alreadyLastElement = mCurrentPosition == (mPlaylist.size() - 1);
-        if (alreadyLastElement) {
-            return;
+    private void trimPlaylist() {
+        int fromIndex = 0;
+        int toIndex = mCurrentPosition + 1;
+
+        boolean isLastElement = mCurrentPosition == (mPlaylist.size() - 1);
+        boolean playlistTooBig = mPlaylist.size() > 50;
+
+        if (playlistTooBig) {
+            fromIndex = mPlaylist.size() - 50;
         }
 
-        mPlaylist = mPlaylist.subList(0, mCurrentPosition + 1);
+        if (!isLastElement || playlistTooBig) {
+            mPlaylist = mPlaylist.subList(fromIndex, toIndex);
+        }
     }
 
     /**
