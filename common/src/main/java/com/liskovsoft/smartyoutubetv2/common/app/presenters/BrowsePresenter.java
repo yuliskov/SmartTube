@@ -161,6 +161,8 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     private void loadHome() {
         Log.d(TAG, "Start loading home...");
 
+        mView.showProgressBar(true);
+
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
         mediaGroupManager.getHomeObserve()
@@ -185,12 +187,16 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
                 mMediaGroups.add(mediaGroup);
             }
+
+            mView.showProgressBar(false);
         }, error -> Log.e(TAG, "loadHomeData: " + error));
     }
 
     @SuppressLint("CheckResult")
     private void loadSubscriptions() {
         Log.d(TAG, "Start loading subs...");
+
+        mView.showProgressBar(true);
 
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
@@ -204,12 +210,16 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
                     }
 
                     mView.updateHeader(VideoGroup.from(mediaGroup, mSubscriptionsHeader));
+
+                    mView.showProgressBar(false);
                 }, error -> Log.e(TAG, "loadSubscriptions: " + error));
     }
 
     @SuppressLint("CheckResult")
     private void loadHistory() {
         Log.d(TAG, "Start loading history...");
+
+        mView.showProgressBar(true);
 
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
@@ -223,6 +233,8 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
                     }
 
                     mView.updateHeader(VideoGroup.from(mediaGroup, mHistoryHeader));
+
+                    mView.showProgressBar(false);
                 }, error -> Log.e(TAG, "loadHistory: " + error));
     }
 
@@ -234,6 +246,8 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
         } else {
             group.setContinued(true);
         }
+
+        mView.showProgressBar(true);
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
@@ -249,6 +263,8 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
                     }
 
                     mView.updateHeader(VideoGroup.from(continueMediaGroup, group.getHeader()));
+
+                    mView.showProgressBar(false);
         }, error -> Log.e(TAG, "continueGroup: " + error));
     }
 }

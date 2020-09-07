@@ -196,6 +196,15 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mBackgroundManager.onStart();
     }
 
+    @Override
+    public void showProgressBar(boolean show) {
+        if (show) {
+            getProgressBarManager().show();
+        } else {
+            getProgressBarManager().hide();
+        }
+    }
+
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,

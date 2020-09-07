@@ -28,6 +28,13 @@ public class MetadataLoader extends PlayerEventListenerHelper {
         loadSuggestions(item);
     }
 
+    private void updateCurrentVideo(MediaItemMetadata mediaItemMetadata) {
+        Video video = mController.getVideo();
+        video.description = mediaItemMetadata.getDescription();
+        video.mediaItemMetadata = mediaItemMetadata;
+        mController.setVideo(video);
+    }
+
     @SuppressLint("CheckResult")
     private void loadSuggestions(Video video) {
         if (video == null) {
@@ -72,14 +79,7 @@ public class MetadataLoader extends PlayerEventListenerHelper {
         }
 
         for (MediaGroup group : suggestions) {
-            mController.updateSuggestions(VideoGroup.from(group, null));
+            mController.updateSuggestions(VideoGroup.from(group));
         }
-    }
-
-    private void updateCurrentVideo(MediaItemMetadata mediaItemMetadata) {
-        Video video = mController.getVideo();
-        video.description = mediaItemMetadata.getDescription();
-        video.mediaItemMetadata = mediaItemMetadata;
-        mController.setVideo(video);
     }
 }

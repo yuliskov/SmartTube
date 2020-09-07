@@ -125,7 +125,7 @@ public class GridHeaderFragment extends GridFragment {
             int size = mAdapter.size();
             int index = mAdapter.indexOf(item);
 
-            if (index > (size - 10)) {
+            if (index > (size - 15)) {
                 mMainPresenter.onScrollEnd(mAdapter.getLastGroup());
             }
         }

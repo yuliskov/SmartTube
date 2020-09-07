@@ -17,7 +17,7 @@ public interface PlayerController {
     long getPositionMs();
     void setPositionMs(long positionMs);
     long getLengthMs();
-    void setPlay(boolean isPlaying);
+    void setPlay(boolean play);
     boolean isPlaying();
-    void showControls(boolean isShowing);
+    void showControls(boolean show);
 }

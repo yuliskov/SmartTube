@@ -245,8 +245,9 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     public void clearSuggestions() {
         if (mRowsAdapter.size() > 1) {
             mRowsAdapter.removeItems(1, mRowsAdapter.size() - 1);
-            mMediaGroupAdapters.clear();
         }
+
+        mMediaGroupAdapters.clear();
     }
 
     @Override
@@ -304,8 +305,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
-    public void setPlay(boolean isPlaying) {
-        mExoPlayerController.setPlay(isPlaying);
+    public void setPlay(boolean play) {
+        mExoPlayerController.setPlay(play);
         hideControlsOverlay(true);
     }
 
@@ -315,10 +316,10 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
-    public void showControls(boolean isShowing) {
+    public void showControls(boolean show) {
         boolean runAnimation = true;
 
-        if (isShowing) {
+        if (show) {
             showControlsOverlay(runAnimation);
         } else {
             hideControlsOverlay(runAnimation);
