@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.common;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
@@ -66,12 +65,12 @@ public class UriBackgroundManager {
         mBackgroundManager.setDrawable(null);
     }
 
-    public void setDefaultBackground() {
+    public void setBackgroundDefault() {
         mBackgroundManager.setDrawable(mDefaultBackground);
     }
 
-    public void setBlackBackground() {
-        mBackgroundManager.setColor(Color.BLACK);
+    public void setBackground(int color) {
+        mBackgroundManager.setColor(color);
     }
 
     private class UpdateBackgroundTask implements Runnable {

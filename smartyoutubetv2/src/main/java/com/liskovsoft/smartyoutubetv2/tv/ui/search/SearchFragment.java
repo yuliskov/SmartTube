@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -98,6 +99,7 @@ public class SearchFragment extends SearchSupportFragment
         super.onActivityCreated(savedInstanceState);
 
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
+        mBackgroundManager.setBackground(Color.BLACK);
 
         mSearchPresenter.onInitDone();
     }

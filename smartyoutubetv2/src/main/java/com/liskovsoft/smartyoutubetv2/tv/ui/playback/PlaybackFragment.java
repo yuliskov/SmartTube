@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
 import android.annotation.TargetApi;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -78,7 +79,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
 
-        mBackgroundManager.setBlackBackground();
+        mBackgroundManager.setBackground(Color.BLACK);
     }
 
     @Override
@@ -149,7 +150,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        hideControlsOverlay(mEnableAnimation); // don't show controls initially
+        hideControlsOverlay(mEnableAnimation); // hide controls on video start
     }
 
     private void initializePlayer() {
@@ -171,6 +172,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlayerGlue = new VideoPlayerGlue(getActivity(), mPlayerAdapter, mPlaylistActionListener);
         mPlayerGlue.setHost(new VideoSupportFragmentGlueHost(this));
         mPlayerGlue.setSeekEnabled(true);
+        mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events
 
         mRowsAdapter = initializeSuggestedVideosRow();
         setAdapter(mRowsAdapter);
@@ -321,7 +323,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public void setPlay(boolean play) {
         mExoPlayerController.setPlay(play);
-        hideControlsOverlay(mEnableAnimation);
     }
 
     @Override
