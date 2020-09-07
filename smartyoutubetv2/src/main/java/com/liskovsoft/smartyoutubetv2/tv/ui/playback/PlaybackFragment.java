@@ -60,6 +60,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private PlayerEventListener mEventListener;
     private ExoPlayerController mExoPlayerController;
     private UriBackgroundManager mBackgroundManager;
+    private final boolean mEnableAnimation = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -148,7 +149,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        hideControlsOverlay(true); // don't show controls initially
+        hideControlsOverlay(mEnableAnimation); // don't show controls initially
     }
 
     private void initializePlayer() {
@@ -321,7 +322,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public void setPlay(boolean play) {
         mExoPlayerController.setPlay(play);
-        hideControlsOverlay(true);
+        hideControlsOverlay(mEnableAnimation);
     }
 
     @Override
@@ -331,12 +332,10 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
     @Override
     public void showControls(boolean show) {
-        boolean runAnimation = true;
-
         if (show) {
-            showControlsOverlay(runAnimation);
+            showControlsOverlay(mEnableAnimation);
         } else {
-            hideControlsOverlay(runAnimation);
+            hideControlsOverlay(mEnableAnimation);
         }
     }
 
