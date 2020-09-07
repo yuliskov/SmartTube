@@ -150,7 +150,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        hideControlsOverlay(mEnableAnimation); // hide controls on video start
+        hideControlsOverlay(mEnableAnimation); // hide controls upon fragment creation
     }
 
     private void initializePlayer() {
@@ -172,7 +172,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlayerGlue = new VideoPlayerGlue(getActivity(), mPlayerAdapter, mPlaylistActionListener);
         mPlayerGlue.setHost(new VideoSupportFragmentGlueHost(this));
         mPlayerGlue.setSeekEnabled(true);
-        mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events
+        mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end
 
         mRowsAdapter = initializeSuggestedVideosRow();
         setAdapter(mRowsAdapter);
