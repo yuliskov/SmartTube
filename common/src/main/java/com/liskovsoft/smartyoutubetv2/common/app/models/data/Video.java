@@ -36,8 +36,13 @@ public final class Video implements Parcelable {
     public String videoId;
     public String videoUrl;
     public String studio;
+    public int percentWatched;
     public MediaItem mediaItem;
     public MediaItemMetadata mediaItemMetadata;
+
+    private Video() {
+        
+    }
 
     private Video(
             final long id,
@@ -79,62 +84,22 @@ public final class Video implements Parcelable {
     }
 
     public static Video from(MediaItem item) {
-        long id = item.getId();
-        String title = item.getTitle();
-        String category = item.getContentType();
-        String desc = item.getDescription();
-        String videoId = item.getMediaId();
-        String videoUrl = item.getMediaUrl();
-        String bgImageUrl = item.getBackgroundImageUrl();
-        String cardImageUrl = item.getCardImageUrl();
-        String studio = item.getDescription();
+        Video video = new Video();
 
-        // Build a Video object to be processed.
-        Video video = new Video.VideoBuilder()
-                .id(id)
-                .title(title)
-                .category(category)
-                .description(desc)
-                .videoId(videoId)
-                .videoUrl(videoUrl)
-                .bgImageUrl(bgImageUrl)
-                .cardImageUrl(cardImageUrl)
-                .studio(studio)
-                .mediaItem(item)
-                .build();
+        video.id = item.getId();
+        video.title = item.getTitle();
+        video.category = item.getContentType();
+        video.description = item.getDescription();
+        video.videoId = item.getMediaId();
+        video.videoUrl = item.getMediaUrl();
+        video.bgImageUrl = item.getBackgroundImageUrl();
+        video.cardImageUrl = item.getCardImageUrl();
+        video.studio = item.getDescription();
+        video.percentWatched = item.getPercentWatched();
+        video.mediaItem = item;
 
         return video;
     }
-
-    //public static Video sync(Video origin, MediaItemMetadata metadata) {
-    //    long id = origin.id;
-    //    String title = origin.title;
-    //    String category = origin.category;
-    //    String desc = metadata.getDescription();
-    //    String videoId = origin.videoId;
-    //    String videoUrl = origin.videoUrl;
-    //    String bgImageUrl = origin.bgImageUrl;
-    //    String cardImageUrl = origin.cardImageUrl;
-    //    String studio = origin.studio;
-    //    MediaItem mediaItem = origin.mediaItem;
-    //
-    //    // Build a Video object to be processed.
-    //    Video video = new VideoBuilder()
-    //            .id(id)
-    //            .title(title)
-    //            .category(category)
-    //            .description(desc)
-    //            .videoId(videoId)
-    //            .videoUrl(videoUrl)
-    //            .bgImageUrl(bgImageUrl)
-    //            .cardImageUrl(cardImageUrl)
-    //            .studio(studio)
-    //            .mediaItem(mediaItem)
-    //            .mediaItemMetadata(metadata)
-    //            .build();
-    //
-    //    return video;
-    //}
 
     public static final Creator<Video> CREATOR = new Creator<Video>() {
         @Override

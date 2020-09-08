@@ -295,7 +295,9 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
     @Override
     public void setPositionMs(long positionMs) {
-        mExoPlayerController.setPosition(positionMs);
+        if (positionMs >= 0) {
+            mExoPlayerController.setPosition(positionMs);
+        }
     }
 
     @Override

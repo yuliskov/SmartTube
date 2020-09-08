@@ -67,7 +67,7 @@ public class MetadataLoader extends PlayerEventListenerHelper {
             return;
         }
 
-        mStateUpdater.onMetadataLoaded(mediaItemMetadata);
+        //mStateUpdater.onMetadataLoaded(mediaItemMetadata);
 
         updateCurrentVideo(mediaItemMetadata);
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="header_home">Рекомендации</string>
+    <string name="header_search">Поиск</string>
+    <string name="header_subscriptions">Подписки</string>
+    <string name="header_history">История</string>
+    <string name="header_music">Музыка</string>
+    <string name="header_news">Новости</string>
+    <string name="header_gaming">Игры</string>
+</resources>

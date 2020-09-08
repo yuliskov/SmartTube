@@ -62,7 +62,13 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void restoreState(Video item) {
-        State state = mPositionMap.get(item.id);
+        State state = null;
+
+        if (item.percentWatched > 0 && item.percentWatched < 100) {
+            state = new State(getNewPosition(item.percentWatched), true);
+        } else {
+            state = mPositionMap.get(item.id);
+        }
 
         boolean nearEnd = Math.abs(mController.getLengthMs() - mController.getPositionMs()) < 10_000;
 
@@ -74,18 +80,15 @@ public class StateUpdater extends PlayerEventListenerHelper {
         }
     }
 
-    public void onMetadataLoaded(MediaItemMetadata mediaItemMetadata) {
-        if (mPositionMap.get(mController.getVideo().id) == null) {
-            boolean isUserSeeking = mController.getPositionMs() > 10_000;
-            if (!isUserSeeking) {
-                long newPositionMs = mController.getLengthMs() / 100 * mediaItemMetadata.getPercentWatched();
+    private long getNewPosition(int percentWatched) {
+        long newPositionMs = mController.getLengthMs() / 100 * percentWatched;
 
-                boolean positionsMismatch = Math.abs(newPositionMs - mController.getPositionMs()) > 10_000;
+        boolean samePositions = Math.abs(newPositionMs - mController.getPositionMs()) < 10_000;
 
-                if (positionsMismatch) {
-                    mController.setPositionMs(newPositionMs);
-                }
-            }
+        if (samePositions) {
+            newPositionMs = -1;
         }
+
+        return newPositionMs;
     }
 }
