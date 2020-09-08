@@ -121,9 +121,9 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
         mHeaders.add(new Header(MediaGroup.TYPE_HOME, mContext.getString(R.string.header_home), Header.TYPE_ROW));
-        mHeaders.add(new Header(MediaGroup.TYPE_MUSIC, mContext.getString(R.string.header_music), Header.TYPE_ROW));
         mHeaders.add(new Header(MediaGroup.TYPE_GAMING, mContext.getString(R.string.header_gaming), Header.TYPE_ROW));
         mHeaders.add(new Header(MediaGroup.TYPE_NEWS, mContext.getString(R.string.header_news), Header.TYPE_ROW));
+        mHeaders.add(new Header(MediaGroup.TYPE_MUSIC, mContext.getString(R.string.header_music), Header.TYPE_ROW));
         mHeaders.add(new Header(MediaGroup.TYPE_SUBSCRIPTIONS, mContext.getString(R.string.header_subscriptions)));
         mHeaders.add(new Header(MediaGroup.TYPE_HISTORY, mContext.getString(R.string.header_history)));
 
@@ -197,9 +197,8 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
                     mView.updateHeader(VideoGroup.from(mediaGroup, header));
                 }
-
-                mView.showProgressBar(false);
-            }, error -> Log.e(TAG, "loadRowsHeader error: " + error + " Group Name: " + header.getTitle()));
+            }, error -> Log.e(TAG, "loadRowsHeader error: " + error + " Group Name: " + header.getTitle())
+            , () -> mView.showProgressBar(false));
     }
 
     @SuppressLint("CheckResult")
@@ -223,9 +222,8 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
                 }
 
                 mView.updateHeader(VideoGroup.from(mediaGroup, header));
-
-                mView.showProgressBar(false);
-            }, error -> Log.e(TAG, "loadGridHeader error: " + error + " Group Name: " + header.getTitle()));
+            }, error -> Log.e(TAG, "loadGridHeader error: " + error + " Group Name: " + header.getTitle())
+            , () -> mView.showProgressBar(false));
     }
 
     @SuppressLint("CheckResult")
@@ -253,8 +251,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
                     }
 
                     mView.updateHeader(VideoGroup.from(continueMediaGroup, group.getHeader()));
-
-                    mView.showProgressBar(false);
-        }, error -> Log.e(TAG, "continueGroup: " + error));
+        }, error -> Log.e(TAG, "continueGroup: " + error)
+        , () -> mView.showProgressBar(false));
     }
 }

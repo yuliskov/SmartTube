@@ -133,8 +133,7 @@ public class RowHeaderFragment extends RowsSupportFragment {
         public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
                                    RowPresenter.ViewHolder rowViewHolder, Row row) {
             if (item instanceof Video) {
-                Uri backgroundURI = Uri.parse(((Video) item).bgImageUrl);
-                mBackgroundManager.startBackgroundTimer(backgroundURI);
+                mBackgroundManager.startBackgroundTimer(((Video) item).bgImageUrl);
 
                 checkScrollEnd((Video)item);
             }

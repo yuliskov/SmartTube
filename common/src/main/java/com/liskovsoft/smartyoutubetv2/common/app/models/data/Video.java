@@ -1,30 +1,15 @@
-/*
- * Copyright (c) 2016 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 
 import android.media.MediaDescription;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.Parcelable.Creator;
 import androidx.annotation.RequiresApi;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 
 /**
- * Video is an immutable object that holds the various metadata associated with a single video.
+ * Video is an object that holds the various metadata associated with a single video.
  */
 public final class Video implements Parcelable {
     public long id;
@@ -38,9 +23,9 @@ public final class Video implements Parcelable {
     public String studio;
     public int percentWatched;
     public MediaItem mediaItem;
-    public MediaItemMetadata mediaItemMetadata;
+    public MediaItemMetadata cachedMetadata;
 
-    private Video() {
+    public Video() {
         
     }
 
@@ -53,9 +38,7 @@ public final class Video implements Parcelable {
             final String videoUrl,
             final String bgImageUrl,
             final String cardImageUrl,
-            final String studio,
-            final MediaItem mediaItem,
-            final MediaItemMetadata mediaItemMetadata) {
+            final String studio) {
         this.id = id;
         this.category = category;
         this.title = title;
@@ -65,8 +48,6 @@ public final class Video implements Parcelable {
         this.bgImageUrl = bgImageUrl;
         this.cardImageUrl = cardImageUrl;
         this.studio = studio;
-        this.mediaItem = mediaItem;
-        this.mediaItemMetadata = mediaItemMetadata;
     }
 
     protected Video(Parcel in) {
@@ -79,8 +60,6 @@ public final class Video implements Parcelable {
         videoId = in.readString();
         videoUrl = in.readString();
         studio = in.readString();
-        mediaItem = null;
-        mediaItemMetadata = null;
     }
 
     public static Video from(MediaItem item) {
@@ -115,7 +94,13 @@ public final class Video implements Parcelable {
 
     @Override
     public boolean equals(Object m) {
-        return m instanceof Video && id == ((Video) m).id;
+        if (m instanceof Video) {
+            if (videoId != null) {
+                return videoId.equals(((Video) m).videoId);
+            }
+        }
+
+        return false;
     }
 
     public int describeContents() {
@@ -230,9 +215,7 @@ public final class Video implements Parcelable {
                     "", // Media URI - not provided by MediaDescription.
                     "", // Background Image URI - not provided by MediaDescription.
                     String.valueOf(desc.getIconUri()),
-                    String.valueOf(desc.getSubtitle()),
-                    null,
-                    null
+                    String.valueOf(desc.getSubtitle())
             );
         }
 
@@ -246,9 +229,7 @@ public final class Video implements Parcelable {
                     videoUrl,
                     bgImageUrl,
                     cardImageUrl,
-                    studio,
-                    mediaItem,
-                    mediaItemMetadata
+                    studio
             );
         }
     }

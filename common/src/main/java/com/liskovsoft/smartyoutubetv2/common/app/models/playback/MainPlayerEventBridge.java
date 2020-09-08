@@ -4,7 +4,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.HistoryUpdater;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.StateUpdater;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.MetadataLoader;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.SuggestionsLoader;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.PlayerUiManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.VideoLoader;
 
@@ -24,7 +24,7 @@ public class MainPlayerEventBridge implements PlayerEventBridge {
         mEventListeners.add(new PlayerUiManager());
         mEventListeners.add(stateUpdater);
         mEventListeners.add(new HistoryUpdater());
-        mEventListeners.add(new MetadataLoader(stateUpdater));
+        mEventListeners.add(new SuggestionsLoader(stateUpdater));
         mEventListeners.add(new VideoLoader());
     }
 

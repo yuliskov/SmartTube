@@ -18,17 +18,17 @@ import java.io.InputStream;
 
 public class VideoLoader extends PlayerEventListenerHelper {
     private static final String TAG = VideoLoader.class.getSimpleName();
-    private final Playlist mPlaylistManager;
+    private final Playlist mPlaylist;
     private Video mLastVideo;
 
     public VideoLoader() {
-        mPlaylistManager = Playlist.instance();
+        mPlaylist = Playlist.instance();
     }
 
     @Override
     public void setVideo(Video item) {
         mLastVideo = item;
-        mPlaylistManager.add(item);
+        mPlaylist.add(item);
     }
 
     @Override
@@ -38,15 +38,15 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onPreviousClicked() {
-        loadVideo(mPlaylistManager.previous());
+        loadVideo(mPlaylist.previous());
     }
 
     @Override
     public void onNextClicked() {
-        Video next = mPlaylistManager.next();
+        Video next = mPlaylist.next();
 
         if (next == null) {
-            loadNextVideo(mPlaylistManager.getCurrent());
+            loadNextVideo(mController.getVideo());
         } else {
             loadVideo(next);
         }
@@ -59,7 +59,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onSuggestionItemClicked(Video item) {
-        mPlaylistManager.add(item);
+        mPlaylist.add(item);
         loadVideo(item);
     }
 
@@ -72,11 +72,9 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     private void loadNextVideo(MediaItemMetadata metadata) {
-        mController.getVideo().mediaItemMetadata = metadata;
-
         MediaItem nextVideo = metadata.getNextVideo();
         Video item = Video.from(nextVideo);
-        mPlaylistManager.add(item);
+        mPlaylist.add(item);
         loadVideo(item);
     }
 
@@ -86,9 +84,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
             return;
         }
 
-        MediaItemMetadata mediaItemMetadata = mController.getVideo().mediaItemMetadata;
-        if (mediaItemMetadata != null && mediaItemMetadata.getNextVideo() != null) {
-            loadNextVideo(mediaItemMetadata);
+        if (current.cachedMetadata != null) {
+            loadNextVideo(current.cachedMetadata);
             return;
         }
 

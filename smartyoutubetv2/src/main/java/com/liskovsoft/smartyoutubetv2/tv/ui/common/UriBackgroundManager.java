@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class UriBackgroundManager {
@@ -71,6 +72,12 @@ public class UriBackgroundManager {
 
     public void setBackground(int color) {
         mBackgroundManager.setColor(color);
+    }
+
+    public void startBackgroundTimer(String bgImageUrl) {
+        if (bgImageUrl != null) {
+            startBackgroundTimer(Uri.parse(bgImageUrl));
+        }
     }
 
     private class UpdateBackgroundTask implements Runnable {

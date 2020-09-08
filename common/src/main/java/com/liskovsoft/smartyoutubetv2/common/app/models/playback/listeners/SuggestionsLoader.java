@@ -15,11 +15,11 @@ import io.reactivex.schedulers.Schedulers;
 
 import java.util.List;
 
-public class MetadataLoader extends PlayerEventListenerHelper {
-    private static final String TAG = MetadataLoader.class.getSimpleName();
+public class SuggestionsLoader extends PlayerEventListenerHelper {
+    private static final String TAG = SuggestionsLoader.class.getSimpleName();
     private final StateUpdater mStateUpdater;
 
-    public MetadataLoader(StateUpdater stateUpdater) {
+    public SuggestionsLoader(StateUpdater stateUpdater) {
         mStateUpdater = stateUpdater;
     }
 
@@ -28,10 +28,10 @@ public class MetadataLoader extends PlayerEventListenerHelper {
         loadSuggestions(item);
     }
 
-    private void updateCurrentVideo(MediaItemMetadata mediaItemMetadata) {
+    private void syncCurrentVideo(MediaItemMetadata mediaItemMetadata) {
         Video video = mController.getVideo();
         video.description = mediaItemMetadata.getDescription();
-        video.mediaItemMetadata = mediaItemMetadata;
+        video.cachedMetadata = mediaItemMetadata;
         mController.setVideo(video);
     }
 
@@ -42,12 +42,10 @@ public class MetadataLoader extends PlayerEventListenerHelper {
             return;
         }
 
-        String videoTitle = video.title;
-
         mController.clearSuggestions(); // clear previous videos
 
-        if (video.mediaItemMetadata != null) {
-            loadSuggestions(video.mediaItemMetadata, video.title);
+        if (video.cachedMetadata != null) {
+            loadSuggestions(video.cachedMetadata, video.title);
             return;
         }
 
@@ -57,24 +55,24 @@ public class MetadataLoader extends PlayerEventListenerHelper {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mediaItemMetadata -> {
-                    loadSuggestions(mediaItemMetadata, videoTitle);
+                    loadSuggestions(mediaItemMetadata, video.title);
                 }, error -> Log.e(TAG, "loadSuggestions: " + error));
     }
 
-    private void loadSuggestions(MediaItemMetadata mediaItemMetadata, String videoTitle) {
+    private void loadSuggestions(MediaItemMetadata mediaItemMetadata, String tag) {
         if (mediaItemMetadata == null) {
-            Log.e(TAG, "loadSuggestions: Video doesn't contain metadata: " + videoTitle);
+            Log.e(TAG, "loadSuggestions: Video doesn't contain metadata: " + tag);
             return;
         }
 
         //mStateUpdater.onMetadataLoaded(mediaItemMetadata);
 
-        updateCurrentVideo(mediaItemMetadata);
+        syncCurrentVideo(mediaItemMetadata);
 
         List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
 
         if (suggestions == null) {
-            Log.e(TAG, "loadSuggestions: Can't obtain suggestions for video: " + videoTitle);
+            Log.e(TAG, "loadSuggestions: Can't obtain suggestions for video: " + tag);
             return;
         }
 
