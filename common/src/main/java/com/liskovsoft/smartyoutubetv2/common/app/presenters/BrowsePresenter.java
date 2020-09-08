@@ -3,9 +3,11 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
+import android.telecom.Call;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.sharedutils.configparser.AssetPropertyParser2;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -19,7 +21,11 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
 
 public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     private static final String TAG = BrowsePresenter.class.getSimpleName();
@@ -34,13 +40,9 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     private final OnboardingPresenter mOnboardingPresenter;
     private final SignInPresenter mSignInPresenter;
     private BrowseView mView;
-    private Header mHomeHeader;
-    private Header mSearchHeader;
-    private Header mSubscriptionsHeader;
-    private Header mHistoryHeader;
-    private Header mMusicHeader;
-    private Header mNewsHeader;
-    private Header mGamingHeader;
+    private final List<Header> mHeaders;
+    private final Map<Integer, Observable<MediaGroup>> mGridMapping;
+    private final Map<Integer, Observable<List<MediaGroup>>> mRowMapping;
 
     private BrowsePresenter(Context context) {
         GlobalPreferences.instance(context); // auth token storage
@@ -51,7 +53,9 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
         mSignInPresenter = SignInPresenter.instance(context);
         mMediaService = YouTubeMediaService.instance();
         mViewManager = ViewManager.instance(context);
-        initHeaders();
+        mHeaders = new ArrayList<>();
+        mGridMapping = new HashMap<>();
+        mRowMapping = new HashMap<>();
     }
 
     public static BrowsePresenter instance(Context context) {
@@ -72,12 +76,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
         //mSignInPresenter.checkUserIsSigned();
 
-        addHeader(mHomeHeader);
-        addHeader(mMusicHeader);
-        addHeader(mNewsHeader);
-        addHeader(mGamingHeader);
-        addHeader(mSubscriptionsHeader);
-        addHeader(mHistoryHeader);
+        initHeaders();
     }
 
     private void addHeader(Header header) {
@@ -112,44 +111,53 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
         mDetailsPresenter.openVideo(item);
     }
 
-    private void initHeaders() {
-        mHomeHeader = new Header(MediaGroup.TYPE_HOME, mContext.getString(R.string.header_home), Header.TYPE_ROW);
-        mSearchHeader = new Header(MediaGroup.TYPE_SEARCH, mContext.getString(R.string.header_search));
-        mSubscriptionsHeader = new Header(MediaGroup.TYPE_SUBSCRIPTIONS, mContext.getString(R.string.header_subscriptions));
-        mHistoryHeader = new Header(MediaGroup.TYPE_HISTORY, mContext.getString(R.string.header_history));
-        mMusicHeader = new Header(MediaGroup.TYPE_MUSIC, mContext.getString(R.string.header_music), Header.TYPE_ROW);
-        mNewsHeader = new Header(MediaGroup.TYPE_NEWS, mContext.getString(R.string.header_news), Header.TYPE_ROW);
-        mGamingHeader = new Header(MediaGroup.TYPE_GAMING, mContext.getString(R.string.header_gaming), Header.TYPE_ROW);
-    }
-
     @Override
     public void onScrollEnd(VideoGroup group) {
         Log.d(TAG, "onScrollEnd. Group title: " + group.getTitle());
         continueGroup(group);
     }
 
-    @Override
-    public void onHeaderFocused(long headerId) {
+    private void initHeaders() {
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
-        if (mHomeHeader.getId() == headerId) {
-            mView.clearHeader(mHomeHeader);
-            loadRowsHeader(mHomeHeader, mediaGroupManager.getHomeObserve());
-        } else if (mSubscriptionsHeader.getId() == headerId) {
-            mView.clearHeader(mSubscriptionsHeader);
-            loadGridHeader(mSubscriptionsHeader, mediaGroupManager.getSubscriptionsObserve());
-        } else if (mHistoryHeader.getId() == headerId) {
-            mView.clearHeader(mHistoryHeader);
-            loadGridHeader(mHistoryHeader, mediaGroupManager.getHistoryObserve());
-        } else if (mMusicHeader.getId() == headerId) {
-            mView.clearHeader(mMusicHeader);
-            loadRowsHeader(mMusicHeader, mediaGroupManager.getMusicObserve());
-        } else if (mNewsHeader.getId() == headerId) {
-            mView.clearHeader(mNewsHeader);
-            loadRowsHeader(mNewsHeader, mediaGroupManager.getNewsObserve());
-        } else if (mGamingHeader.getId() == headerId) {
-            mView.clearHeader(mGamingHeader);
-            loadRowsHeader(mGamingHeader, mediaGroupManager.getGamingObserve());
+        mHeaders.add(new Header(MediaGroup.TYPE_HOME, mContext.getString(R.string.header_home), Header.TYPE_ROW));
+        mHeaders.add(new Header(MediaGroup.TYPE_MUSIC, mContext.getString(R.string.header_music), Header.TYPE_ROW));
+        mHeaders.add(new Header(MediaGroup.TYPE_GAMING, mContext.getString(R.string.header_gaming), Header.TYPE_ROW));
+        mHeaders.add(new Header(MediaGroup.TYPE_NEWS, mContext.getString(R.string.header_news), Header.TYPE_ROW));
+        mHeaders.add(new Header(MediaGroup.TYPE_SUBSCRIPTIONS, mContext.getString(R.string.header_subscriptions)));
+        mHeaders.add(new Header(MediaGroup.TYPE_HISTORY, mContext.getString(R.string.header_history)));
+
+        mRowMapping.put(MediaGroup.TYPE_HOME, mediaGroupManager.getHomeObserve());
+        mRowMapping.put(MediaGroup.TYPE_NEWS, mediaGroupManager.getNewsObserve());
+        mRowMapping.put(MediaGroup.TYPE_MUSIC, mediaGroupManager.getMusicObserve());
+        mRowMapping.put(MediaGroup.TYPE_GAMING, mediaGroupManager.getGamingObserve());
+
+        mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mediaGroupManager.getSubscriptionsObserve());
+        mGridMapping.put(MediaGroup.TYPE_HISTORY, mediaGroupManager.getHistoryObserve());
+
+        for (Header header : mHeaders) {
+            addHeader(header);
+        }
+    }
+
+    @Override
+    public void onHeaderFocused(long headerId) {
+        for (Header header : mHeaders) {
+            if (header.getId() == headerId) {
+                mView.clearHeader(header);
+                loadHeader(header);
+            }
+        }
+    }
+
+    private void loadHeader(Header header) {
+        switch (header.getType()) {
+            case Header.TYPE_GRID:
+                loadGridHeader(header, mGridMapping.get(header.getId()));
+                break;
+            case Header.TYPE_ROW:
+                loadRowsHeader(header, mRowMapping.get(header.getId()));
+                break;
         }
     }
 
@@ -161,6 +169,11 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
     @SuppressLint("CheckResult")
     private void loadRowsHeader(Header header, Observable<List<MediaGroup>> groups) {
+        if (groups == null) {
+            Log.e(TAG, "loadRowsHeader: No observable for header: " + header.getTitle());
+            return;
+        }
+
         Log.d(TAG, "loadRowsHeader: Start loading header: " + header.getTitle());
 
         mView.showProgressBar(true);
@@ -191,6 +204,11 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
     @SuppressLint("CheckResult")
     private void loadGridHeader(Header header, Observable<MediaGroup> group) {
+        if (group == null) {
+            Log.e(TAG, "loadGridHeader: No observable for header: " + header.getTitle());
+            return;
+        }
+
         Log.d(TAG, "loadGridHeader: Start loading header: " + header.getTitle());
 
         mView.showProgressBar(true);
