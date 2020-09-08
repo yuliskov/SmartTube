@@ -1,31 +1,21 @@
-/*
- * Copyright (c) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import androidx.annotation.Nullable;
 import androidx.leanback.widget.ImageCardView;
 import androidx.leanback.widget.Presenter;
 import androidx.core.content.ContextCompat;
 import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 
@@ -34,6 +24,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
  * It contains an Image CardView
  */
 public class CardPresenter extends Presenter {
+    private static final String TAG = CardPresenter.class.getSimpleName();
     private int mSelectedBackgroundColor = -1;
     private int mDefaultBackgroundColor = -1;
     private Drawable mDefaultCardImage;
@@ -93,6 +84,7 @@ public class CardPresenter extends Presenter {
             Glide.with(cardView.getContext())
                     .load(video.cardImageUrl)
                     .apply(RequestOptions.errorOf(mDefaultCardImage))
+                    .listener(mErrorListener)
                     .into(cardView.getMainImageView());
         }
     }
@@ -105,4 +97,17 @@ public class CardPresenter extends Presenter {
         cardView.setBadgeImage(null);
         cardView.setMainImage(null);
     }
+
+    private final RequestListener<Drawable> mErrorListener = new RequestListener<Drawable>() {
+        @Override
+        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+            Log.e(TAG, "Glide load failed: " + e);
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+            return false;
+        }
+    };
 }

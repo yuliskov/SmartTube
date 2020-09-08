@@ -182,11 +182,6 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(mediaGroups -> {
-                if (mediaGroups == null) {
-                    Log.e(TAG, "loadRowsHeader: Groups not found for header: " + header.getTitle());
-                    return;
-                }
-
                 Log.d(TAG, "loadRowsHeader: Loading groups for header: " + header.getTitle());
 
                 for (MediaGroup mediaGroup : mediaGroups) {
@@ -216,11 +211,6 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(mediaGroup -> {
-                if (mediaGroup == null) {
-                    Log.e(TAG, "loadGridHeader: Can't obtain header: " + header.getTitle());
-                    return;
-                }
-
                 mView.updateHeader(VideoGroup.from(mediaGroup, header));
             }, error -> Log.e(TAG, "loadGridHeader error: " + error + " Group Name: " + header.getTitle())
             , () -> mView.showProgressBar(false));
