@@ -17,14 +17,49 @@ android {
         applicationId "com.liskovsoft.videomanager2"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 11
-        versionName "0.1"
+        versionCode 15
+        versionName "0.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    // gradle 4.6 migration: disable dimensions mechanism
+    // more: https://proandroiddev.com/advanced-android-flavors-part-4-a-new-version-fc2ad80c01bb
+    flavorDimensions "default"
+
+    productFlavors {
+        Vorig {
+            // matchingFallbacks = ['lite']
+        }
+        Vbeta {
+            // matchingFallbacks = ['lite']
+            applicationIdSuffix ".beta"
+        }
+        Vtesting {
+            // matchingFallbacks = ['lite']
+            applicationIdSuffix ".testing"
+        }
+    }
+
+    // naming example: SmartYouTubeTV_Xwalk_v6.8.12_r.apk
+    // https://stackoverflow.com/questions/18332474/how-to-set-versionname-in-apk-filename-using-gradle
+    applicationVariants.all { variant ->
+        variant.outputs.each { output ->
+            def project = "STubeTV"
+            def flavor = variant.productFlavors[-1].name.capitalize()
+            def buildType = variant.variantData.variantConfiguration.buildType.name.take(1)
+            def version = variant.versionName
+
+            def newApkName = sprintf("%s_%s_v%s_%s.apk", [project, flavor, version, buildType])
+
+            // gradle 4.6 migration
+            output.outputFileName = new File(newApkName)
         }
     }
 }

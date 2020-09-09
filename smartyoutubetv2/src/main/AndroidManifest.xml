@@ -39,9 +39,9 @@
     <application
         android:name="com.liskovsoft.smartyoutubetv2.tv.ui.main.MainApplication"
         android:allowBackup="false"
-        android:banner="@drawable/app_banner"
-        android:logo="@drawable/app_banner"
-        android:icon="@drawable/app_icon_quantum"
+        android:banner="@mipmap/app_banner"
+        android:logo="@mipmap/app_logo"
+        android:icon="@mipmap/app_icon"
         android:label="@string/app_name"
         android:theme="@style/Theme.Leanback"
         tools:ignore="GoogleAppIndexingWarning,LockedOrientationActivity,UnusedAttribute">

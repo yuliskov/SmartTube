@@ -94,7 +94,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private void setupUi() {
-        setBadgeDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.app_banner));
+        setBadgeDrawable(ContextCompat.getDrawable(getActivity(), R.mipmap.app_logo));
         setTitle(getString(R.string.browse_title)); // Badge, when set, takes precedent over title
         setHeadersState(HEADERS_ENABLED);
         setHeadersTransitionOnBackEnabled(true);

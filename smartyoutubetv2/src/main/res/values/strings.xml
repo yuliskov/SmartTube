@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name"><![CDATA[Smart YouTube TV 2]]></string>
-    <string name="browse_title"><![CDATA[Smart YouTube TV 2]]></string>
+    <string translatable="false" name="app_name"><![CDATA[Smart Tube TV]]></string>
+    <string translatable="false" name="browse_title"><![CDATA[Smart Tube TV]]></string>
     <string name="related_movies">Related Videos</string>
     <string name="vertical_grid_title"><![CDATA[Vertical Video Grid]]></string>
 
