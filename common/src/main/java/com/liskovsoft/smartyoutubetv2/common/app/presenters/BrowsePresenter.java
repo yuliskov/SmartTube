@@ -3,11 +3,9 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
-import android.telecom.Call;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
-import com.liskovsoft.sharedutils.configparser.AssetPropertyParser2;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -19,13 +17,13 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     private static final String TAG = BrowsePresenter.class.getSimpleName();
@@ -43,6 +41,8 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     private final List<Header> mHeaders;
     private final Map<Integer, Observable<MediaGroup>> mGridMapping;
     private final Map<Integer, Observable<List<MediaGroup>>> mRowMapping;
+    private Disposable mPendingUpdate;
+    private Disposable mPendingScroll;
 
     private BrowsePresenter(Context context) {
         GlobalPreferences.instance(context); // auth token storage
@@ -56,6 +56,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
         mHeaders = new ArrayList<>();
         mGridMapping = new HashMap<>();
         mRowMapping = new HashMap<>();
+        initHeaders();
     }
 
     public static BrowsePresenter instance(Context context) {
@@ -76,7 +77,13 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
         //mSignInPresenter.checkUserIsSigned();
 
-        initHeaders();
+        addHeaders();
+    }
+
+    private void addHeaders() {
+        for (Header header : mHeaders) {
+            addHeader(header);
+        }
     }
 
     private void addHeader(Header header) {
@@ -114,34 +121,24 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     @Override
     public void onScrollEnd(VideoGroup group) {
         Log.d(TAG, "onScrollEnd. Group title: " + group.getTitle());
-        continueGroup(group);
-    }
 
-    private void initHeaders() {
-        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
+        boolean updateInProgress = mPendingScroll != null && !mPendingScroll.isDisposed();
 
-        mHeaders.add(new Header(MediaGroup.TYPE_HOME, mContext.getString(R.string.header_home), Header.TYPE_ROW));
-        mHeaders.add(new Header(MediaGroup.TYPE_GAMING, mContext.getString(R.string.header_gaming), Header.TYPE_ROW));
-        mHeaders.add(new Header(MediaGroup.TYPE_NEWS, mContext.getString(R.string.header_news), Header.TYPE_ROW));
-        mHeaders.add(new Header(MediaGroup.TYPE_MUSIC, mContext.getString(R.string.header_music), Header.TYPE_ROW));
-        mHeaders.add(new Header(MediaGroup.TYPE_SUBSCRIPTIONS, mContext.getString(R.string.header_subscriptions)));
-        mHeaders.add(new Header(MediaGroup.TYPE_HISTORY, mContext.getString(R.string.header_history)));
-
-        mRowMapping.put(MediaGroup.TYPE_HOME, mediaGroupManager.getHomeObserve());
-        mRowMapping.put(MediaGroup.TYPE_NEWS, mediaGroupManager.getNewsObserve());
-        mRowMapping.put(MediaGroup.TYPE_MUSIC, mediaGroupManager.getMusicObserve());
-        mRowMapping.put(MediaGroup.TYPE_GAMING, mediaGroupManager.getGamingObserve());
-
-        mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mediaGroupManager.getSubscriptionsObserve());
-        mGridMapping.put(MediaGroup.TYPE_HISTORY, mediaGroupManager.getHistoryObserve());
-
-        for (Header header : mHeaders) {
-            addHeader(header);
+        if (updateInProgress) {
+            return;
         }
+
+        continueGroup(group);
     }
 
     @Override
     public void onHeaderFocused(long headerId) {
+        boolean updateInProgress = mPendingUpdate != null && !mPendingUpdate.isDisposed();
+
+        if (updateInProgress) {
+            mPendingUpdate.dispose();
+        }
+
         for (Header header : mHeaders) {
             if (header.getId() == headerId) {
                 mView.clearHeader(header);
@@ -161,6 +158,25 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
         }
     }
 
+    private void initHeaders() {
+        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
+
+        mHeaders.add(new Header(MediaGroup.TYPE_HOME, mContext.getString(R.string.header_home), Header.TYPE_ROW));
+        mHeaders.add(new Header(MediaGroup.TYPE_GAMING, mContext.getString(R.string.header_gaming), Header.TYPE_ROW));
+        mHeaders.add(new Header(MediaGroup.TYPE_NEWS, mContext.getString(R.string.header_news), Header.TYPE_ROW));
+        mHeaders.add(new Header(MediaGroup.TYPE_MUSIC, mContext.getString(R.string.header_music), Header.TYPE_ROW));
+        mHeaders.add(new Header(MediaGroup.TYPE_SUBSCRIPTIONS, mContext.getString(R.string.header_subscriptions)));
+        mHeaders.add(new Header(MediaGroup.TYPE_HISTORY, mContext.getString(R.string.header_history)));
+
+        mRowMapping.put(MediaGroup.TYPE_HOME, mediaGroupManager.getHomeObserve());
+        mRowMapping.put(MediaGroup.TYPE_NEWS, mediaGroupManager.getNewsObserve());
+        mRowMapping.put(MediaGroup.TYPE_MUSIC, mediaGroupManager.getMusicObserve());
+        mRowMapping.put(MediaGroup.TYPE_GAMING, mediaGroupManager.getGamingObserve());
+
+        mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mediaGroupManager.getSubscriptionsObserve());
+        mGridMapping.put(MediaGroup.TYPE_HISTORY, mediaGroupManager.getHistoryObserve());
+    }
+
     // TODO: implement Android TV channels
     //private void updateRecommendations() {
     //    Intent recommendationIntent = new Intent(mContext, UpdateRecommendationsService.class);
@@ -178,7 +194,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
         mView.showProgressBar(true);
 
-        groups
+        mPendingUpdate = groups
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(mediaGroups -> {
@@ -207,7 +223,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
         mView.showProgressBar(true);
 
-        group
+        mPendingUpdate = group
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(mediaGroup -> {
@@ -218,12 +234,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
     @SuppressLint("CheckResult")
     private void continueGroup(VideoGroup group) {
-        // avoid to continue multiple times
-        if (group.isContinued()) {
-            return;
-        } else {
-            group.setContinued(true);
-        }
+        Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
         mView.showProgressBar(true);
 
@@ -231,7 +242,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
-        mediaGroupManager.continueGroupObserve(mediaGroup)
+        mPendingScroll = mediaGroupManager.continueGroupObserve(mediaGroup)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(continueMediaGroup -> {

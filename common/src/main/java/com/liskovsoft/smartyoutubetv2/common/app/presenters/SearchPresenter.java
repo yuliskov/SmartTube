@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class SearchPresenter implements VideoGroupPresenter<SearchView> {
@@ -23,6 +24,7 @@ public class SearchPresenter implements VideoGroupPresenter<SearchView> {
     private final ViewManager mViewManager;
     private final DetailsPresenter mDetailsPresenter;
     private SearchView mView;
+    private Disposable mPendingScroll;
 
     private SearchPresenter(Context context) {
         mContext = context;
@@ -99,21 +101,15 @@ public class SearchPresenter implements VideoGroupPresenter<SearchView> {
                     mView.updateSearch(VideoGroup.from(mediaGroup));
                 }, error -> Log.e(TAG, "loadSearchData: " + error));
     }
-
-    @SuppressLint("CheckResult")
+    
     private void continueGroup(VideoGroup group) {
-        // avoid to continue multiple times
-        if (group.isContinued()) {
-            return;
-        } else {
-            group.setContinued(true);
-        }
+        Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
-        mediaGroupManager.continueGroupObserve(mediaGroup)
+        mPendingScroll = mediaGroupManager.continueGroupObserve(mediaGroup)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(continueMediaGroup -> {
@@ -129,6 +125,13 @@ public class SearchPresenter implements VideoGroupPresenter<SearchView> {
     @Override
     public void onScrollEnd(VideoGroup group) {
         Log.d(TAG, "onScrollEnd: Group title: " + group.getTitle());
+
+        boolean updateInProgress = mPendingScroll != null && !mPendingScroll.isDisposed();
+
+        if (updateInProgress) {
+            return;
+        }
+
         continueGroup(group);
     }
 }

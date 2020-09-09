@@ -147,12 +147,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlayerGlue.fastForward();
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        hideControlsOverlay(mEnableAnimation); // hide controls upon fragment creation
-    }
-
     private void initializePlayer() {
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory =
@@ -173,6 +167,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlayerGlue.setHost(new VideoSupportFragmentGlueHost(this));
         mPlayerGlue.setSeekEnabled(true);
         mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end
+        hideControlsOverlay(mEnableAnimation); // hide controls upon fragment creation
 
         mRowsAdapter = initializeSuggestedVideosRow();
         setAdapter(mRowsAdapter);

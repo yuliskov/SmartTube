@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.browse.row;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
@@ -146,7 +145,7 @@ public class RowHeaderFragment extends RowsSupportFragment {
                 if (index != -1) {
                     int size = adapter.size();
                     if (index > (size - 4)) {
-                        mMainPresenter.onScrollEnd(adapter.getLastGroup());
+                        mMainPresenter.onScrollEnd(adapter.getGroup());
                     }
                     break;
                 }

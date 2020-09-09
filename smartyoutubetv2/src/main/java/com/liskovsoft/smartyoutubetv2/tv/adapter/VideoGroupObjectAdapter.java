@@ -43,11 +43,12 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         if (group != null) {
             mMediaItems.addAll(group.getVideos());
             mLastGroup = group;
+            
             notifyChanged();
         }
     }
 
-    public VideoGroup getLastGroup() {
+    public VideoGroup getGroup() {
         return mLastGroup;
     }
 

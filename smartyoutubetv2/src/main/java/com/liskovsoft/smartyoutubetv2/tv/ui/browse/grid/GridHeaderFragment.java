@@ -27,7 +27,7 @@ public class GridHeaderFragment extends GridFragment {
     private static final String TAG = GridHeaderFragment.class.getSimpleName();
     private static final int COLUMNS = 5;
     private final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
-    private VideoGroupObjectAdapter mAdapter;
+    private VideoGroupObjectAdapter mGridAdapter;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private UriBackgroundManager mBackgroundManager;
     private BrowsePresenter mMainPresenter;
@@ -74,17 +74,17 @@ public class GridHeaderFragment extends GridFragment {
         presenter.setNumberOfColumns(COLUMNS);
         setGridPresenter(presenter);
 
-        mAdapter = new VideoGroupObjectAdapter();
-        setAdapter(mAdapter);
+        mGridAdapter = new VideoGroupObjectAdapter();
+        setAdapter(mGridAdapter);
     }
 
     public void updateGrid(VideoGroup group) {
-        if (mAdapter == null) {
+        if (mGridAdapter == null) {
             mPendingUpdates.add(group);
             return;
         }
         
-        mAdapter.append(group);
+        mGridAdapter.append(group);
     }
 
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
@@ -122,11 +122,11 @@ public class GridHeaderFragment extends GridFragment {
         }
 
         private void checkScrollEnd(Video item) {
-            int size = mAdapter.size();
-            int index = mAdapter.indexOf(item);
+            int size = mGridAdapter.size();
+            int index = mGridAdapter.indexOf(item);
 
             if (index > (size - 15)) {
-                mMainPresenter.onScrollEnd(mAdapter.getLastGroup());
+                mMainPresenter.onScrollEnd(mGridAdapter.getGroup());
             }
         }
     }
