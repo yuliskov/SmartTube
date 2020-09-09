@@ -13,6 +13,7 @@ public interface PlayerEventListener extends ViewEventListener {
     void onNextClicked();
     void onPlayClicked();
     void onPauseClicked();
+    void onKeyDown(int keyCode);
 
     /** Engine **/
     void onPlay();

@@ -242,6 +242,11 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         public void onPause() {
             mEventListener.onPauseClicked();
         }
+
+        @Override
+        public void onKeyDown(int keyCode) {
+            mEventListener.onKeyDown(keyCode);
+        }
     }
 
     /* Begin PlayerController */
@@ -325,6 +330,11 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public boolean isPlaying() {
         return mExoPlayerController.isPlaying();
+    }
+
+    @Override
+    public boolean isControlsShown() {
+        return isControlsOverlayVisible();
     }
 
     @Override

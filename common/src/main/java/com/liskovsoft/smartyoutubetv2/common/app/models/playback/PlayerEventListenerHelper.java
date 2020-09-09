@@ -103,4 +103,9 @@ public abstract class PlayerEventListenerHelper implements PlayerEventBridge {
     public void onPlayEnd() {
         // NOP
     }
+
+    @Override
+    public void onKeyDown(int keyCode) {
+        // NOP
+    }
 }

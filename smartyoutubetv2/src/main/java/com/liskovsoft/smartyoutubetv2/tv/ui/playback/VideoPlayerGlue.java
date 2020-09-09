@@ -44,6 +44,8 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         void onPlay();
 
         void onPause();
+
+        void onKeyDown(int keyCode);
     }
 
     private final OnActionClickedListener mActionListener;
@@ -207,6 +209,8 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
             if (!handled) {
                 handled = dispatchKey(keyCode);
             }
+
+            mActionListener.onKeyDown(keyCode);
         }
 
         return handled || super.onKey(v, keyCode, event);

@@ -184,4 +184,11 @@ public class MainPlayerEventBridge implements PlayerEventBridge {
             listener.onPlayEnd();
         }
     }
+
+    @Override
+    public void onKeyDown(int keyCode) {
+        for (PlayerEventListener listener : mEventListeners) {
+            listener.onKeyDown(keyCode);
+        }
+    }
 }

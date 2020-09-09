@@ -20,4 +20,5 @@ public interface PlayerController {
     void setPlay(boolean play);
     boolean isPlaying();
     void showControls(boolean show);
+    boolean isControlsShown();
 }

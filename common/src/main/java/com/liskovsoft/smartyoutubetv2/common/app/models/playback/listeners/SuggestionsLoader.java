@@ -30,6 +30,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
     private void syncCurrentVideo(MediaItemMetadata mediaItemMetadata) {
         Video video = mController.getVideo();
+        video.title = mediaItemMetadata.getTitle();
         video.description = mediaItemMetadata.getDescription();
         video.cachedMetadata = mediaItemMetadata;
         mController.setVideo(video);
