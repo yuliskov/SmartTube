@@ -34,16 +34,12 @@ android {
     flavorDimensions "default"
 
     productFlavors {
-        Vorig {
+        vbeta {
             // matchingFallbacks = ['lite']
+            // applicationIdSuffix ".beta"
         }
-        Vbeta {
+        vorig {
             // matchingFallbacks = ['lite']
-            applicationIdSuffix ".beta"
-        }
-        Vtesting {
-            // matchingFallbacks = ['lite']
-            applicationIdSuffix ".testing"
         }
     }
 
@@ -95,6 +91,6 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:' + rxJavaVersion
 
     implementation project(path: ':common')
-
-    // experimentsImplementation project(path: ':leanbackassistant')
+    
+    // vbetaImplementation project(path: ':leanbackassistant')
 }
