@@ -18,51 +18,53 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
 
     @Override
     public void onKeyDown(int keyCode) {
-        stopHideUiTimer();
+        stopUiVisibilityTimer();
+        stopSuggestionsPositionTimer();
 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            startResetPositionTimer();
+            startSuggestionsPositionTimer();
         } else {
-            startHideUiTimer();
+            startUiVisibilityTimer();
         }
     }
 
     @Override
     public void onEngineReleased() {
-        stopHideUiTimer();
+        stopUiVisibilityTimer();
+        stopSuggestionsPositionTimer();
     }
 
-    private void stopHideUiTimer() {
+    private void stopUiVisibilityTimer() {
         Log.d(TAG, "Stopping hide ui timer...");
-        mHandler.removeCallbacks(mHideUiHandler);
+        mHandler.removeCallbacks(mUiVisibilityHandler);
     }
 
-    private void startHideUiTimer() {
+    private void startUiVisibilityTimer() {
         Log.d(TAG, "Starting hide ui timer...");
-        mHandler.postDelayed(mHideUiHandler, UI_HIDE_TIMEOUT_MS);
+        mHandler.postDelayed(mUiVisibilityHandler, UI_HIDE_TIMEOUT_MS);
     }
 
-    private void stopResetPositionTimer() {
+    private void stopSuggestionsPositionTimer() {
         Log.d(TAG, "Stopping reset position timer...");
-        mHandler.postDelayed(mResetPositionHandler, RESET_TIMEOUT_MS);
+        mHandler.removeCallbacks(mSuggestionsPositionHandler);
     }
 
-    private void startResetPositionTimer() {
+    private void startSuggestionsPositionTimer() {
         Log.d(TAG, "Starting reset position timer...");
-        mHandler.postDelayed(mResetPositionHandler, RESET_TIMEOUT_MS);
+        mHandler.postDelayed(mSuggestionsPositionHandler, RESET_TIMEOUT_MS);
     }
 
-    private final Runnable mResetPositionHandler = () -> mController.resetSuggestedPosition();
+    private final Runnable mSuggestionsPositionHandler = () -> mController.resetSuggestedPosition();
 
-    private final Runnable mHideUiHandler = () -> {
+    private final Runnable mUiVisibilityHandler = () -> {
         if (mController.isPlaying()) {
             if (!mController.isSuggestionsShown()) { // don't hide when suggestions is shown
                 mController.showControls(false);
             }
         } else {
             // in seeking state? doing recheck...
-            stopHideUiTimer();
-            startHideUiTimer();
+            stopUiVisibilityTimer();
+            startUiVisibilityTimer();
         }
     };
 }
