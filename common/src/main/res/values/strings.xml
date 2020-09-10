@@ -7,4 +7,5 @@
     <string name="header_music">Music</string>
     <string name="header_news">News</string>
     <string name="header_gaming">Gaming</string>
+    <string name="header_playlists">Playlists</string>
 </resources>

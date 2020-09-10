@@ -8,7 +8,7 @@ public class Header {
     public static final int TYPE_ROW = 1;
 
     public Header(int id, String title) {
-        this(id, title, TYPE_GRID);
+        this(id, title, TYPE_ROW);
     }
 
     public Header(int id, String title, int type) {

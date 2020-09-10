@@ -7,4 +7,5 @@
     <string name="header_music">Музыка</string>
     <string name="header_news">Новости</string>
     <string name="header_gaming">Игры</string>
+    <string name="header_playlists">Плейлисты</string>
 </resources>
