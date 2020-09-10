@@ -4,9 +4,9 @@ import android.annotation.TargetApi;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
-import androidx.annotation.NonNull;
+import android.view.KeyEvent;
 import androidx.annotation.Nullable;
+import androidx.leanback.app.RowsSupportFragment;
 import androidx.leanback.app.VideoSupportFragment;
 import androidx.leanback.app.VideoSupportFragmentGlueHost;
 import androidx.leanback.widget.ArrayObjectAdapter;
@@ -34,7 +34,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventList
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerController;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.DirectExoPlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.ExoPlayerController;
+import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
@@ -62,6 +64,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private ExoPlayerController mExoPlayerController;
     private UriBackgroundManager mBackgroundManager;
     private final boolean mEnableAnimation = true;
+    private RowsSupportFragment mRowsSupportFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -147,30 +150,14 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlayerGlue.fastForward();
     }
 
-    private void initializePlayer() {
-        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        TrackSelection.Factory videoTrackSelectionFactory =
-                new AdaptiveTrackSelection.Factory(bandwidthMeter);
-        mTrackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+    private int getSuggestedRowIndex() {
+        int selectedPosition = 0;
 
-        // TODO: testing max bitrate
-        mTrackSelector.setParameters(mTrackSelector.getParameters().buildUpon().setForceHighestSupportedBitrate(true));
+        if (mRowsSupportFragment != null) {
+            selectedPosition = mRowsSupportFragment.getVerticalGridView().getSelectedPosition();
+        }
 
-        mPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), mTrackSelector);
-
-        mExoPlayerController = new ExoPlayerController(mPlayer, mTrackSelector, getContext());
-
-        mPlayerAdapter = new LeanbackPlayerAdapter(getActivity(), mPlayer, UPDATE_DELAY);
-
-        mPlaylistActionListener = new PlayerActionListener();
-        mPlayerGlue = new VideoPlayerGlue(getActivity(), mPlayerAdapter, mPlaylistActionListener);
-        mPlayerGlue.setHost(new VideoSupportFragmentGlueHost(this));
-        mPlayerGlue.setSeekEnabled(true);
-        mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end
-        hideControlsOverlay(mEnableAnimation); // hide controls upon fragment creation
-
-        mRowsAdapter = initializeSuggestedVideosRow();
-        setAdapter(mRowsAdapter);
+        return selectedPosition;
     }
 
     private void releasePlayer() {
@@ -183,6 +170,35 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
             mPlaylistActionListener = null;
             mExoPlayerController = null;
         }
+    }
+
+    private void initializePlayer() {
+        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+        TrackSelection.Factory videoTrackSelectionFactory =
+                new AdaptiveTrackSelection.Factory(bandwidthMeter);
+        mTrackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+
+        // TODO: testing max bitrate
+        mTrackSelector.setParameters(mTrackSelector.getParameters().buildUpon().setForceHighestSupportedBitrate(true));
+
+        mPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), mTrackSelector);
+
+        mExoPlayerController = new DirectExoPlayerController(mPlayer, mTrackSelector, getContext());
+
+        mPlayerAdapter = new LeanbackPlayerAdapter(getActivity(), mPlayer, UPDATE_DELAY);
+
+        mPlaylistActionListener = new PlayerActionListener();
+        mPlayerGlue = new VideoPlayerGlue(getActivity(), mPlayerAdapter, mPlaylistActionListener);
+        mPlayerGlue.setHost(new VideoSupportFragmentGlueHost(this));
+        mPlayerGlue.setSeekEnabled(true);
+        mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end
+        hideControlsOverlay(mEnableAnimation); // hide controls upon fragment creation
+
+        mRowsAdapter = initializeSuggestedVideosRow();
+        setAdapter(mRowsAdapter);
+
+        mRowsSupportFragment = (RowsSupportFragment) getChildFragmentManager().findFragmentById(
+                R.id.playback_controls_dock);
     }
 
     private ArrayObjectAdapter initializeSuggestedVideosRow() {
@@ -250,6 +266,13 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     /* Begin PlayerController */
+
+    @Override
+    public void resetSuggestedPosition() {
+        if (mRowsSupportFragment != null) {
+            mRowsSupportFragment.getVerticalGridView().setSelectedPosition(0);
+        }
+    }
 
     @Override
     public void clearSuggestions() {
@@ -333,8 +356,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
-    public boolean isControlsShown() {
-        return isControlsOverlayVisible();
+    public boolean isSuggestionsShown() {
+        return isControlsOverlayVisible() && getSuggestedRowIndex() != 0;
     }
 
     @Override
