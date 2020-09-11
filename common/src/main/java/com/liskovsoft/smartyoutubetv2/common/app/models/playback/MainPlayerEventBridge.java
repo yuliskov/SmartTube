@@ -3,9 +3,9 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.HistoryUpdater;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.PlayerUiManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.StateUpdater;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.SuggestionsLoader;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.PlayerUiManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners.VideoLoader;
 
 import java.util.ArrayList;
@@ -18,11 +18,9 @@ public class MainPlayerEventBridge implements PlayerEventBridge {
     public MainPlayerEventBridge() {
         mEventListeners = new ArrayList<>();
 
-        StateUpdater stateUpdater = new StateUpdater();
-
         // NOTE: position matters!!!
+        mEventListeners.add(new StateUpdater());
         mEventListeners.add(new PlayerUiManager());
-        mEventListeners.add(stateUpdater);
         mEventListeners.add(new HistoryUpdater());
         mEventListeners.add(new SuggestionsLoader());
         mEventListeners.add(new VideoLoader());
@@ -80,17 +78,13 @@ public class MainPlayerEventBridge implements PlayerEventBridge {
     }
 
     @Override
-    public void onPreviousClicked() {
-        for (PlayerEventListener listener : mEventListeners) {
-            listener.onPreviousClicked();
-        }
+    public boolean onPreviousClicked() {
+        return chainProcess(PlayerEventListener::onPreviousClicked);
     }
 
     @Override
-    public void onNextClicked() {
-        for (PlayerEventListener listener : mEventListeners) {
-            listener.onNextClicked();
-        }
+    public boolean onNextClicked() {
+        return chainProcess(PlayerEventListener::onNextClicked);
     }
 
     @Override
@@ -190,5 +184,23 @@ public class MainPlayerEventBridge implements PlayerEventBridge {
         for (PlayerEventListener listener : mEventListeners) {
             listener.onKeyDown(keyCode);
         }
+    }
+
+    private boolean chainProcess(ChainProcessor processor) {
+        boolean result = false;
+
+        for (PlayerEventListener listener : mEventListeners) {
+            result = processor.process(listener);
+
+            if (result) {
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    private interface ChainProcessor {
+        boolean process(PlayerEventListener listener);
     }
 }

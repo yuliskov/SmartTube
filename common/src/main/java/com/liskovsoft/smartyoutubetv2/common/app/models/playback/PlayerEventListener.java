@@ -9,8 +9,8 @@ public interface PlayerEventListener extends ViewEventListener {
     /** UI **/
     void onSuggestionItemClicked(Video item);
     void onSuggestionItemLongClicked(Video item);
-    void onPreviousClicked();
-    void onNextClicked();
+    boolean onPreviousClicked();
+    boolean onNextClicked();
     void onPlayClicked();
     void onPauseClicked();
     void onKeyDown(int keyCode);

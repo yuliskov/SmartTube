@@ -25,13 +25,22 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onPreviousClicked() {
+    public boolean onPreviousClicked() {
+        boolean isShortVideo = mController.getPositionMs() > 10_000 && mController.getLengthMs() < 5*60*1000;
+
+        if (isShortVideo) {
+            mController.setPositionMs(0);
+            return true;
+        }
+
         saveState();
+        return false;
     }
 
     @Override
-    public void onNextClicked() {
+    public boolean onNextClicked() {
         saveState();
+        return false;
     }
 
     @Override

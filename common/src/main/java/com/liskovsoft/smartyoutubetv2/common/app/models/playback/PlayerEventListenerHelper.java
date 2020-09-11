@@ -30,13 +30,15 @@ public abstract class PlayerEventListenerHelper implements PlayerEventBridge {
     }
 
     @Override
-    public void onPreviousClicked() {
+    public boolean onPreviousClicked() {
         // NOP
+        return false;
     }
 
     @Override
-    public void onNextClicked() {
+    public boolean onNextClicked() {
         // NOP
+        return false;
     }
 
     @Override

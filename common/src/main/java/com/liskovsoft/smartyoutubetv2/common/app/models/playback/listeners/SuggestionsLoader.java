@@ -30,13 +30,15 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onNextClicked() {
+    public boolean onNextClicked() {
         disposeActions();
+        return false;
     }
 
     @Override
-    public void onPreviousClicked() {
+    public boolean onPreviousClicked() {
         disposeActions();
+        return false;
     }
 
     private void disposeActions() {
