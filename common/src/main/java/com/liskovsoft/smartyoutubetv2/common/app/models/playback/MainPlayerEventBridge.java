@@ -37,6 +37,25 @@ public class MainPlayerEventBridge implements PlayerEventBridge {
     }
 
     @Override
+    public void setController(PlayerController controller) {
+        for (PlayerEventBridge listener : mEventListeners) {
+            listener.setController(controller);
+        }
+    }
+
+    @Override
+    public void openVideo(Video item) {
+        if (item == null) {
+            Log.e(TAG, "load: item is null");
+            return;
+        }
+
+        for (PlayerEventBridge listener : mEventListeners) {
+            listener.openVideo(item);
+        }
+    }
+
+    @Override
     public void onSuggestionItemClicked(Video item) {
         if (item == null) {
             Log.e(TAG, "onSuggestionItemClicked: item is null");
@@ -106,25 +125,6 @@ public class MainPlayerEventBridge implements PlayerEventBridge {
     public void onVideoLoaded(Video item) {
         for (PlayerEventListener listener : mEventListeners) {
             listener.onVideoLoaded(item);
-        }
-    }
-
-    @Override
-    public void setVideo(Video item) {
-        if (item == null) {
-            Log.e(TAG, "load: item is null");
-            return;
-        }
-
-        for (PlayerEventBridge listener : mEventListeners) {
-            listener.setVideo(item);
-        }
-    }
-
-    @Override
-    public void setController(PlayerController controller) {
-        for (PlayerEventBridge listener : mEventListeners) {
-            listener.setController(controller);
         }
     }
 

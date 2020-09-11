@@ -22,24 +22,32 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private Video mLastVideo;
     private Disposable mMetadataAction;
     private Disposable mFormatInfoAction;
+    private boolean mEngineInitialized;
 
     public VideoLoader() {
         mPlaylist = Playlist.instance();
     }
 
     @Override
-    public void setVideo(Video item) {
-        mLastVideo = item;
+    public void openVideo(Video item) {
         mPlaylist.add(item);
+
+        if (mEngineInitialized) { // player is initialized
+            loadVideo(item); // play immediately
+        } else {
+            mLastVideo = item; // save for later
+        }
     }
 
     @Override
     public void onEngineInitialized() {
+        mEngineInitialized = true;
         loadVideo(mLastVideo);
     }
 
     @Override
     public void onEngineReleased() {
+        mEngineInitialized = false;
         disposeActions();
     }
 
@@ -57,7 +65,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         Video next = mPlaylist.next();
 
         if (next == null) {
-            loadNextVideo(mController.getVideo());
+            loadVideoFromMetadata(mController.getVideo());
         } else {
             loadVideo(next);
         }
@@ -92,20 +100,20 @@ public class VideoLoader extends PlayerEventListenerHelper {
         }
     }
 
-    private void loadNextVideo(MediaItemMetadata metadata) {
+    private void loadVideoFromMetadata(MediaItemMetadata metadata) {
         MediaItem nextVideo = metadata.getNextVideo();
         Video item = Video.from(nextVideo);
         mPlaylist.add(item);
         loadVideo(item);
     }
 
-    private void loadNextVideo(Video current) {
+    private void loadVideoFromMetadata(Video current) {
         if (current == null) {
             return;
         }
 
         if (current.cachedMetadata != null) {
-            loadNextVideo(current.cachedMetadata);
+            loadVideoFromMetadata(current.cachedMetadata);
             return;
         }
 
@@ -114,7 +122,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         mMetadataAction = mediaItemManager.getMetadataObserve(current.mediaItem)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::loadNextVideo, error -> Log.e(TAG, "loadNextVideo error: " + error));
+                .subscribe(this::loadVideoFromMetadata, error -> Log.e(TAG, "loadNextVideo error: " + error));
     }
 
     private void loadFormatInfo(Video video) {
