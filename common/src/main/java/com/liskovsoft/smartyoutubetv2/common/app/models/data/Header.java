@@ -8,14 +8,6 @@ public class Header {
     public static final int TYPE_ROW = 1;
     private final int mResId;
 
-    public Header(int id, String title) {
-        this(id, title, TYPE_ROW);
-    }
-
-    public Header(int id, String title, int type) {
-        this(id, title, type, -1);
-    }
-
     public Header(int id, String title, int type, int resId) {
         mId = id;
         mTitle = title;
