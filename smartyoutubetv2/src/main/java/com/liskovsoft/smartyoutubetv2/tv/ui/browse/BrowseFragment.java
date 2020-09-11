@@ -128,6 +128,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
 
+        // Listener moved to PageRowFragmentFactory
         //getHeadersSupportFragment().setOnHeaderViewSelectedListener(new HeaderViewSelectedListener());
     }
 

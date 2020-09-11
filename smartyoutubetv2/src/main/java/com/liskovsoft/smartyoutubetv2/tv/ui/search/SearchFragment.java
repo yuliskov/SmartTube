@@ -11,8 +11,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
+import androidx.leanback.app.ProgressBarManager;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRow;
@@ -47,12 +51,14 @@ public class SearchFragment extends SearchSupportFragment
     private SearchPresenter mSearchPresenter;
     private UriBackgroundManager mBackgroundManager;
     private VideoGroupObjectAdapter mAdapter;
+    private ProgressBarManager mProgressBarManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
+        mProgressBarManager = new ProgressBarManager();
 
         setSearchResultProvider(this);
         setupEventListeners();
@@ -81,11 +87,6 @@ public class SearchFragment extends SearchSupportFragment
         }
     }
 
-    private void setupEventListeners() {
-        setOnItemViewClickedListener(new ItemViewClickedListener());
-        setOnItemViewSelectedListener(new ItemViewSelectedListener());
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -105,6 +106,20 @@ public class SearchFragment extends SearchSupportFragment
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View root = super.onCreateView(inflater, container, savedInstanceState);
+
+        mProgressBarManager.setRootView((ViewGroup)root);
+
+        return root;
+    }
+
+    private void setupEventListeners() {
+        setOnItemViewClickedListener(new ItemViewClickedListener());
+        setOnItemViewSelectedListener(new ItemViewSelectedListener());
+    }
+
+    @Override
     public void onPause() {
         mHandler.removeCallbacksAndMessages(null);
 
@@ -117,18 +132,6 @@ public class SearchFragment extends SearchSupportFragment
         super.onDestroy();
         mSearchPresenter.unregister(this);
     }
-
-    //@Override
-    //public void onStop() {
-    //    super.onStop();
-    //    mBackgroundManager.onStop();
-    //}
-    //
-    //@Override
-    //public void onStart() {
-    //    super.onStart();
-    //    mBackgroundManager.onStart();
-    //}
 
     @Override
     public ObjectAdapter getResultsAdapter() {
@@ -171,6 +174,20 @@ public class SearchFragment extends SearchSupportFragment
     }
 
     @Override
+    public void clearSearch() {
+        mRowsAdapter.clear();
+    }
+
+    @Override
+    public void showProgressBar(boolean show) {
+        if (show) {
+            mProgressBarManager.show();
+        } else {
+            mProgressBarManager.hide();
+        }
+    }
+
+    @Override
     public void updateSearch(VideoGroup group) {
         int titleRes;
         if (group.getVideos() != null) {
@@ -189,11 +206,6 @@ public class SearchFragment extends SearchSupportFragment
         } else {
             mAdapter.append(group);
         }
-    }
-
-    @Override
-    public void clearSearch() {
-        mRowsAdapter.clear();
     }
 
     private final class ItemViewClickedListener implements OnItemViewClickedListener {

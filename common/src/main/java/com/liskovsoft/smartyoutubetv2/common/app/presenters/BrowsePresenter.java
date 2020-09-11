@@ -41,8 +41,8 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     private final List<Header> mHeaders;
     private final Map<Integer, Observable<MediaGroup>> mGridMapping;
     private final Map<Integer, Observable<List<MediaGroup>>> mRowMapping;
-    private Disposable mPendingUpdate;
-    private Disposable mPendingScroll;
+    private Disposable mUpdateAction;
+    private Disposable mScrollAction;
 
     private BrowsePresenter(Context context) {
         GlobalPreferences.instance(context); // auth token storage
@@ -122,7 +122,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     public void onScrollEnd(VideoGroup group) {
         Log.d(TAG, "onScrollEnd. Group title: " + group.getTitle());
 
-        boolean updateInProgress = mPendingScroll != null && !mPendingScroll.isDisposed();
+        boolean updateInProgress = mScrollAction != null && !mScrollAction.isDisposed();
 
         if (updateInProgress) {
             return;
@@ -133,10 +133,10 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
     @Override
     public void onHeaderFocused(long headerId) {
-        boolean updateInProgress = mPendingUpdate != null && !mPendingUpdate.isDisposed();
+        boolean updateInProgress = mUpdateAction != null && !mUpdateAction.isDisposed();
 
         if (updateInProgress) {
-            mPendingUpdate.dispose();
+            mUpdateAction.dispose();
         }
 
         for (Header header : mHeaders) {
@@ -196,7 +196,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
         mView.showProgressBar(true);
 
-        mPendingUpdate = groups
+        mUpdateAction = groups
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(mediaGroups -> {
@@ -225,7 +225,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
         mView.showProgressBar(true);
 
-        mPendingUpdate = group
+        mUpdateAction = group
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(mediaGroup -> {
@@ -244,7 +244,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
-        mPendingScroll = mediaGroupManager.continueGroupObserve(mediaGroup)
+        mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(continueMediaGroup -> {

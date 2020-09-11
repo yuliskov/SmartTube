@@ -24,7 +24,8 @@ public class SearchPresenter implements VideoGroupPresenter<SearchView> {
     private final ViewManager mViewManager;
     private final DetailsPresenter mDetailsPresenter;
     private SearchView mView;
-    private Disposable mPendingScroll;
+    private Disposable mScrollAction;
+    private Disposable mLoadAction;
 
     private SearchPresenter(Context context) {
         mContext = context;
@@ -50,6 +51,18 @@ public class SearchPresenter implements VideoGroupPresenter<SearchView> {
     @Override
     public void unregister(SearchView view) {
         mView = null;
+
+        disposeActions();
+    }
+
+    private void disposeActions() {
+        if (mScrollAction != null && !mScrollAction.isDisposed()) {
+            mScrollAction.dispose();
+        }
+
+        if (mLoadAction != null && !mLoadAction.isDisposed()) {
+            mLoadAction.dispose();
+        }
     }
 
     @Override
@@ -82,56 +95,49 @@ public class SearchPresenter implements VideoGroupPresenter<SearchView> {
     public void onSearchText(String searchText) {
          loadSearchResult(searchText);
     }
-
-    @SuppressLint("CheckResult")
+    
     private void loadSearchResult(String searchText) {
+        mView.showProgressBar(true);
+
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
         mView.clearSearch();
 
-        mediaGroupManager.getSearchObserve(searchText)
+        mLoadAction = mediaGroupManager.getSearchObserve(searchText)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mediaGroup -> {
-                    if (mediaGroup == null) {
-                        Log.e(TAG, "Search result is empty");
-                        return;
-                    }
-
                     mView.updateSearch(VideoGroup.from(mediaGroup));
-                }, error -> Log.e(TAG, "loadSearchData: " + error));
+                }, error -> Log.e(TAG, "loadSearchData error: " + error),
+                   () -> mView.showProgressBar(false));
     }
     
     private void continueGroup(VideoGroup group) {
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
+        mView.showProgressBar(true);
+
         MediaGroup mediaGroup = group.getMediaGroup();
 
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
-        mPendingScroll = mediaGroupManager.continueGroupObserve(mediaGroup)
+        mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(continueMediaGroup -> {
-                    if (continueMediaGroup == null) {
-                        Log.e(TAG, "Can't continue group with name " + mediaGroup.getTitle());
-                        return;
-                    }
-
                     mView.updateSearch(VideoGroup.from(continueMediaGroup));
-                }, error -> Log.e(TAG, "continueGroup: " + error));
+                }, error -> Log.e(TAG, "continueGroup error: " + error),
+                   () -> mView.showProgressBar(false));
     }
 
     @Override
     public void onScrollEnd(VideoGroup group) {
         Log.d(TAG, "onScrollEnd: Group title: " + group.getTitle());
 
-        boolean updateInProgress = mPendingScroll != null && !mPendingScroll.isDisposed();
+        boolean updateInProgress = mScrollAction != null && !mScrollAction.isDisposed();
 
-        if (updateInProgress) {
-            return;
+        if (!updateInProgress) {
+            continueGroup(group);
         }
-
-        continueGroup(group);
     }
 }
