@@ -29,6 +29,16 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
         disposeActions();
     }
 
+    @Override
+    public void onNextClicked() {
+        disposeActions();
+    }
+
+    @Override
+    public void onPreviousClicked() {
+        disposeActions();
+    }
+
     private void disposeActions() {
         if (mMetadataAction != null && !mMetadataAction.isDisposed()) {
             mMetadataAction.dispose();

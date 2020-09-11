@@ -39,12 +39,21 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     @Override
+    public void onEngineReleased() {
+        disposeActions();
+    }
+
+    @Override
     public void onPreviousClicked() {
+        disposeActions();
+
         loadVideo(mPlaylist.previous());
     }
 
     @Override
     public void onNextClicked() {
+        disposeActions();
+
         Video next = mPlaylist.next();
 
         if (next == null) {
@@ -52,11 +61,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
         } else {
             loadVideo(next);
         }
-    }
-
-    @Override
-    public void onEngineReleased() {
-        disposeActions();
     }
 
     private void disposeActions() {
