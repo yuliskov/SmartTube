@@ -23,8 +23,8 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GridHeaderFragment extends GridFragment {
-    private static final String TAG = GridHeaderFragment.class.getSimpleName();
+public class HeaderGridFragment extends GridFragment {
+    private static final String TAG = HeaderGridFragment.class.getSimpleName();
     private static final int COLUMNS = 5;
     private final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
     private VideoGroupObjectAdapter mGridAdapter;

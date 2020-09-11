@@ -44,7 +44,7 @@ public class RowHeaderFragment extends RowsSupportFragment {
         setupEventListeners();
         setupAdapter();
         applyPendingUpdates();
-        getMainFragmentAdapter().getFragmentHost().notifyDataReady(getMainFragmentAdapter());
+        //getMainFragmentAdapter().getFragmentHost().notifyDataReady(getMainFragmentAdapter());
     }
 
     @Override

@@ -32,8 +32,6 @@ import com.liskovsoft.smartyoutubetv2.tv.presenter.GridItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.grid.GridHeaderItem;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.row.RowHeaderItem;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.BrowseErrorFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.GuidedStepActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.SettingsActivity;
@@ -108,9 +106,17 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         setHeaderPresenterSelector(new PresenterSelector() {
             @Override
             public Presenter getPresenter(Object o) {
-                return new IconHeaderItemPresenter();
+                return new IconHeaderItemPresenter(getHeaderResId(o));
             }
         });
+    }
+
+    private int getHeaderResId(Object o) {
+        if (o instanceof PageRow) {
+            return ((CustomHeaderItem) ((PageRow) o).getHeaderItem()).getResId();
+        }
+
+        return -1;
     }
 
     private void setupEventListeners() {
@@ -157,17 +163,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private void createHeader(Header header) {
-        HeaderItem headerItem;
-
-        switch (header.getType()) {
-            case Header.TYPE_ROW:
-                headerItem = new RowHeaderItem(header.getId(), header.getTitle());
-                break;
-            case Header.TYPE_GRID:
-            default:
-                headerItem = new GridHeaderItem(header.getId(), header.getTitle());
-                break;
-        }
+        HeaderItem headerItem = new CustomHeaderItem(header.getId(), header.getTitle(), header.getType(), header.getResId());;
 
         PageRow pageRow = new PageRow(headerItem);
         mCategoryRowAdapter.add(pageRow);

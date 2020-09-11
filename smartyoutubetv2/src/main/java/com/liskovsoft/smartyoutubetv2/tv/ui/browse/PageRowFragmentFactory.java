@@ -6,12 +6,11 @@ import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.Row;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Header;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseFragment.HeaderViewSelectedListener;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.grid.GridHeaderFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.grid.GridHeaderItem;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.grid.HeaderGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.row.RowHeaderFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.row.RowHeaderItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,10 +48,14 @@ public class PageRowFragmentFactory extends BrowseSupportFragment.FragmentFactor
         HeaderItem header = row.getHeaderItem();
         Fragment fragment = null;
 
-        if (header instanceof RowHeaderItem) {
-            fragment = new RowHeaderFragment();
-        } else if (header instanceof GridHeaderItem) {
-            fragment = new GridHeaderFragment();
+        if (header instanceof CustomHeaderItem) {
+            int type = ((CustomHeaderItem) header).getType();
+
+            if (type == Header.TYPE_ROW) {
+                fragment = new RowHeaderFragment();
+            } else if (type == Header.TYPE_GRID) {
+                fragment = new HeaderGridFragment();
+            }
         }
 
         if (fragment != null) {
@@ -95,8 +98,8 @@ public class PageRowFragmentFactory extends BrowseSupportFragment.FragmentFactor
         if (fragment instanceof RowHeaderFragment) {
             RowHeaderFragment rowFragment = (RowHeaderFragment) fragment;
             rowFragment.updateRow(group);
-        } else if (fragment instanceof GridHeaderFragment) {
-            GridHeaderFragment gridFragment = (GridHeaderFragment) fragment;
+        } else if (fragment instanceof HeaderGridFragment) {
+            HeaderGridFragment gridFragment = (HeaderGridFragment) fragment;
             gridFragment.updateGrid(group);
         } else {
             throw new IllegalStateException("Page group fragment has incompatible type");

@@ -1,19 +1,3 @@
-/*
- * Copyright (c) 2016 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.content.Context;
@@ -33,8 +17,12 @@ import android.widget.TextView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class IconHeaderItemPresenter extends RowHeaderPresenter {
-
+    private final int mResId;
     private float mUnselectedAlpha;
+
+    public IconHeaderItemPresenter(int resId) {
+        mResId = resId;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup) {
@@ -62,11 +50,11 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
         View rootView = viewHolder.view;
         rootView.setFocusable(true);
 
-        ImageView iconView = (ImageView) rootView.findViewById(R.id.header_icon);
-        Drawable icon = ContextCompat.getDrawable(rootView.getContext(), R.drawable.android_header);
+        ImageView iconView = rootView.findViewById(R.id.header_icon);
+        Drawable icon = ContextCompat.getDrawable(rootView.getContext(), mResId > 0 ? mResId : R.drawable.android_header);
         iconView.setImageDrawable(icon);
 
-        TextView label = (TextView) rootView.findViewById(R.id.header_label);
+        TextView label = rootView.findViewById(R.id.header_label);
         label.setText(headerItem.getName());
     }
 

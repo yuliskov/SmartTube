@@ -161,7 +161,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     private void initHeaders() {
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
-        mHeaders.add(new Header(MediaGroup.TYPE_HOME, mContext.getString(R.string.header_home)));
+        mHeaders.add(new Header(MediaGroup.TYPE_HOME, mContext.getString(R.string.header_home), Header.TYPE_ROW, R.drawable.header_home));
         mHeaders.add(new Header(MediaGroup.TYPE_GAMING, mContext.getString(R.string.header_gaming)));
         mHeaders.add(new Header(MediaGroup.TYPE_NEWS, mContext.getString(R.string.header_news)));
         mHeaders.add(new Header(MediaGroup.TYPE_MUSIC, mContext.getString(R.string.header_music)));
