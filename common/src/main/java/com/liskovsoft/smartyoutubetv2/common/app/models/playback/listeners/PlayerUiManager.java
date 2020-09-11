@@ -10,7 +10,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     private static final String TAG = PlayerUiManager.class.getSimpleName();
     private final Handler mHandler;
     private static final long UI_HIDE_TIMEOUT_MS = 2_000;
-    private static final long RESET_TIMEOUT_MS = 1_000;
+    private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
 
     public PlayerUiManager() {
         mHandler = new Handler(Looper.getMainLooper());
@@ -51,7 +51,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
 
     private void startSuggestionsPositionTimer() {
         Log.d(TAG, "Starting reset position timer...");
-        mHandler.postDelayed(mSuggestionsPositionHandler, RESET_TIMEOUT_MS);
+        mHandler.postDelayed(mSuggestionsPositionHandler, SUGGESTIONS_RESET_TIMEOUT_MS);
     }
 
     private final Runnable mSuggestionsPositionHandler = () -> mController.resetSuggestedPosition();
