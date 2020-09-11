@@ -53,9 +53,14 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onPreviousClicked() {
-        disposeActions();
+        boolean nearStartOrLongVideo = mController.getPositionMs() < 10_000 || mController.getLengthMs() > 5*60*1000;
 
-        loadVideo(mPlaylist.previous());
+        if (nearStartOrLongVideo) {
+            disposeActions();
+            loadVideo(mPlaylist.previous());
+        } else {
+            mController.setPositionMs(0);
+        }
     }
 
     @Override
