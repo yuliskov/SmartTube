@@ -51,7 +51,7 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
         rootView.setFocusable(true);
 
         ImageView iconView = rootView.findViewById(R.id.header_icon);
-        Drawable icon = ContextCompat.getDrawable(rootView.getContext(), mResId > 0 ? mResId : R.drawable.android_header);
+        Drawable icon = ContextCompat.getDrawable(rootView.getContext(), mResId > 0 ? mResId : R.drawable.header_default);
         iconView.setImageDrawable(icon);
 
         TextView label = rootView.findViewById(R.id.header_label);
@@ -60,7 +60,7 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
 
     @Override
     public void onUnbindViewHolder(Presenter.ViewHolder viewHolder) {
-        // no op
+        // NOP
     }
 
     // TODO: This is a temporary fix. Remove me when leanback onCreateViewHolder no longer sets the
