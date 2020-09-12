@@ -299,7 +299,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     @Override
     public void onViewResumed() {
         long timeAfterPauseMs = System.currentTimeMillis() - mLastUpdateTimeMs;
-        if (timeAfterPauseMs > 10*1_000) { // update header every n minutes
+        if (timeAfterPauseMs > 5*60*1_000) { // update header every n minutes
             if (mCurrentHeaderId != -1) {
                 updateHeader(mCurrentHeaderId);
             }
