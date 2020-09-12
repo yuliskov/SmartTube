@@ -10,7 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Header;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseFragment.HeaderViewSelectedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.grid.HeaderGridFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.row.RowHeaderFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.row.HeaderRowFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,7 +52,7 @@ public class PageRowFragmentFactory extends BrowseSupportFragment.FragmentFactor
             int type = ((CustomHeaderItem) header).getType();
 
             if (type == Header.TYPE_ROW) {
-                fragment = new RowHeaderFragment();
+                fragment = new HeaderRowFragment();
             } else if (type == Header.TYPE_GRID) {
                 fragment = new HeaderGridFragment();
             }
@@ -81,9 +81,9 @@ public class PageRowFragmentFactory extends BrowseSupportFragment.FragmentFactor
 
         int headerId = group.getHeader().getId();
 
-        Fragment fragment = mFragments.get(headerId);
-
         addToPending(group, headerId);
+
+        Fragment fragment = mFragments.get(headerId);
 
         if (fragment == null) {
             Log.d(TAG, "Page row fragment not initialized for group: " + group.getTitle());
@@ -95,8 +95,8 @@ public class PageRowFragmentFactory extends BrowseSupportFragment.FragmentFactor
     }
 
     private void updateFragment(Fragment fragment, VideoGroup group) {
-        if (fragment instanceof RowHeaderFragment) {
-            RowHeaderFragment rowFragment = (RowHeaderFragment) fragment;
+        if (fragment instanceof HeaderRowFragment) {
+            HeaderRowFragment rowFragment = (HeaderRowFragment) fragment;
             rowFragment.updateRow(group);
         } else if (fragment instanceof HeaderGridFragment) {
             HeaderGridFragment gridFragment = (HeaderGridFragment) fragment;

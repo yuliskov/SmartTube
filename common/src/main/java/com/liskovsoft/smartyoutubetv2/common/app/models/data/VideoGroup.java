@@ -15,6 +15,14 @@ public class VideoGroup {
     private MediaGroup mMediaGroup;
     private Header mHeader;
 
+    public static VideoGroup from(Header header) {
+        return from(null, header);
+    }
+
+    public static VideoGroup from(MediaGroup mediaGroup) {
+        return from(mediaGroup, null);
+    }
+
     public static VideoGroup from(MediaGroup mediaGroup, Header header) {
         VideoGroup videoGroup = new VideoGroup();
         videoGroup.mHeader = header;
@@ -38,17 +46,6 @@ public class VideoGroup {
         }
 
         return videoGroup;
-    }
-
-    public static VideoGroup from(Header header) {
-        VideoGroup videoGroup = new VideoGroup();
-        videoGroup.mHeader = header;
-
-        return videoGroup;
-    }
-
-    public static VideoGroup from(MediaGroup mediaGroup) {
-        return from(mediaGroup, null);
     }
 
     public List<Video> getVideos() {

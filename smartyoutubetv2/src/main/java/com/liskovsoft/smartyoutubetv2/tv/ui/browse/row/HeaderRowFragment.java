@@ -28,8 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RowHeaderFragment extends RowsSupportFragment {
-    private static final String TAG = RowHeaderFragment.class.getSimpleName();
+public class HeaderRowFragment extends RowsSupportFragment {
+    private static final String TAG = HeaderRowFragment.class.getSimpleName();
     private UriBackgroundManager mBackgroundManager;
     private Handler mHandler;
     private ArrayObjectAdapter mRowsAdapter;
@@ -61,7 +61,6 @@ public class RowHeaderFragment extends RowsSupportFragment {
         super.onActivityCreated(savedInstanceState);
 
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
-
     }
 
     private void applyPendingUpdates() {
@@ -132,7 +131,7 @@ public class RowHeaderFragment extends RowsSupportFragment {
         public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
                                    RowPresenter.ViewHolder rowViewHolder, Row row) {
             if (item instanceof Video) {
-                mBackgroundManager.startBackgroundTimer(((Video) item).bgImageUrl);
+                mBackgroundManager.updateBackground((Video) item);
 
                 checkScrollEnd((Video)item);
             }

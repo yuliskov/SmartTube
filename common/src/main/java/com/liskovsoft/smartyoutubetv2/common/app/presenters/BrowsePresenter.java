@@ -73,10 +73,6 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
             return;
         }
 
-        //mOnboardingPresenter.showOnboarding();
-
-        //mSignInPresenter.checkUserIsSigned();
-
         addHeaders();
     }
 
@@ -185,7 +181,6 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     //    mContext.startService(recommendationIntent);
     //}
 
-    @SuppressLint("CheckResult")
     private void loadRowsHeader(Header header, Observable<List<MediaGroup>> groups) {
         if (groups == null) {
             Log.e(TAG, "loadRowsHeader: No observable for header: " + header.getTitle());
@@ -214,7 +209,6 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
             , () -> mView.showProgressBar(false));
     }
 
-    @SuppressLint("CheckResult")
     private void loadGridHeader(Header header, Observable<MediaGroup> group) {
         if (group == null) {
             Log.e(TAG, "loadGridHeader: No observable for header: " + header.getTitle());
@@ -234,7 +228,6 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
             , () -> mView.showProgressBar(false));
     }
 
-    @SuppressLint("CheckResult")
     private void continueGroup(VideoGroup group) {
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 

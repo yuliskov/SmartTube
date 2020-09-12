@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -100,7 +99,6 @@ public class SearchFragment extends SearchSupportFragment
         super.onActivityCreated(savedInstanceState);
 
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
-        mBackgroundManager.setBackground(Color.BLACK);
 
         mSearchPresenter.onInitDone();
     }
@@ -235,8 +233,7 @@ public class SearchFragment extends SearchSupportFragment
         public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
                                    RowPresenter.ViewHolder rowViewHolder, Row row) {
             if (item instanceof Video) {
-                Uri backgroundURI = Uri.parse(((Video) item).bgImageUrl);
-                mBackgroundManager.startBackgroundTimer(backgroundURI);
+                mBackgroundManager.updateBackground((Video) item);
 
                 checkScrollEnd((Video) item);
             }

@@ -114,8 +114,7 @@ public class HeaderGridFragment extends GridFragment {
         public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
                                    RowPresenter.ViewHolder rowViewHolder, Row row) {
             if (item instanceof Video) {
-                Uri backgroundURI = Uri.parse(((Video) item).bgImageUrl);
-                mBackgroundManager.startBackgroundTimer(backgroundURI);
+                mBackgroundManager.updateBackground((Video) item);
 
                 checkScrollEnd((Video) item);
             }

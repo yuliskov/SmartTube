@@ -162,7 +162,7 @@ public class VideoDetailsFragment extends DetailsSupportFragment implements Deta
     private void prepareBackgroundManager() {
         mBackgroundManager = BackgroundManager.getInstance(getActivity());
         mBackgroundManager.attach(getActivity().getWindow());
-        mDefaultBackground = ContextCompat.getDrawable(getActivity(), R.drawable.default_background);
+        mDefaultBackground = ContextCompat.getDrawable(getActivity(), R.drawable.default_background_gradient);
         mMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(mMetrics);
     }
@@ -193,7 +193,7 @@ public class VideoDetailsFragment extends DetailsSupportFragment implements Deta
                         new MovieDetailsOverviewLogoPresenter());
 
         detailsPresenter.setBackgroundColor(
-                ContextCompat.getColor(getActivity(), R.color.selected_background));
+                ContextCompat.getColor(getActivity(), R.color.card_selected_background));
         detailsPresenter.setInitialState(FullWidthDetailsOverviewRowPresenter.STATE_HALF);
 
         // Hook up transition element.
@@ -336,7 +336,7 @@ public class VideoDetailsFragment extends DetailsSupportFragment implements Deta
         final DetailsOverviewRow row = new DetailsOverviewRow(mSelectedVideo);
 
         RequestOptions options = new RequestOptions()
-                .error(R.drawable.default_background)
+                .error(R.drawable.default_background_gradient)
                 .dontAnimate();
 
         Glide.with(this)

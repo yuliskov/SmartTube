@@ -30,21 +30,34 @@ public class UriBackgroundManager {
         mActivity = activity;
         mHandler = new Handler();
         prepareBackgroundManager();
+        setBackgroundDefault();
     }
 
     private void prepareBackgroundManager() {
         mBackgroundManager = BackgroundManager.getInstance(mActivity);
         mBackgroundManager.attach(mActivity.getWindow());
-        mDefaultBackground = ContextCompat.getDrawable(mActivity, R.drawable.default_background);
+        mDefaultBackground = ContextCompat.getDrawable(mActivity, R.color.shelf_background);
         mBackgroundTask = new UpdateBackgroundTask();
         mMetrics = new DisplayMetrics();
         mActivity.getWindowManager().getDefaultDisplay().getMetrics(mMetrics);
     }
 
-    public void startBackgroundTimer(Uri backgroundURI) {
+    private void startBackgroundTimer(Uri backgroundURI) {
         mBackgroundURI = backgroundURI;
         mHandler.removeCallbacks(mBackgroundTask);
         mHandler.postDelayed(mBackgroundTask, BACKGROUND_UPDATE_DELAY_MS);
+    }
+
+    public void startBackgroundTimer(String bgImageUrl) {
+        if (bgImageUrl != null) {
+            startBackgroundTimer(Uri.parse(bgImageUrl));
+        }
+    }
+
+    public void updateBackground(Video item) {
+        // ignore
+        // startBackgroundTimer(item.bgImageUrl);
+        setBackgroundDefault();
     }
 
     public void onStart() {
@@ -72,12 +85,6 @@ public class UriBackgroundManager {
 
     public void setBackground(int color) {
         mBackgroundManager.setColor(color);
-    }
-
-    public void startBackgroundTimer(String bgImageUrl) {
-        if (bgImageUrl != null) {
-            startBackgroundTimer(Uri.parse(bgImageUrl));
-        }
     }
 
     private class UpdateBackgroundTask implements Runnable {
