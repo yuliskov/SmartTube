@@ -17,18 +17,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PageRowFragmentFactory extends BrowseSupportFragment.FragmentFactory<Fragment> {
-    private static final String TAG = PageRowFragmentFactory.class.getSimpleName();
+public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory<Fragment> {
+    private static final String TAG = HeaderFragmentFactory.class.getSimpleName();
     private final BackgroundManager mBackgroundManager;
     private final Map<Integer, Fragment> mFragments;
     private final Map<Integer, List<VideoGroup>> mPendingUpdates;
     private final HeaderViewSelectedListener mViewSelectedListener;
 
-    public PageRowFragmentFactory(BackgroundManager backgroundManager) {
+    public HeaderFragmentFactory(BackgroundManager backgroundManager) {
         this(backgroundManager, null);
     }
 
-    public PageRowFragmentFactory(BackgroundManager backgroundManager, HeaderViewSelectedListener viewSelectedListener) {
+    public HeaderFragmentFactory(BackgroundManager backgroundManager, HeaderViewSelectedListener viewSelectedListener) {
         mBackgroundManager = backgroundManager;
         mViewSelectedListener = viewSelectedListener;
         mFragments = new HashMap<>();
@@ -102,7 +102,7 @@ public class PageRowFragmentFactory extends BrowseSupportFragment.FragmentFactor
             HeaderGridFragment gridFragment = (HeaderGridFragment) fragment;
             gridFragment.updateGrid(group);
         } else {
-            throw new IllegalStateException("Page group fragment has incompatible type");
+            Log.e(TAG, "Page group fragment has incompatible type: " + fragment.getClass().getSimpleName());
         }
     }
 

@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
@@ -30,9 +29,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.GridItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.old.BrowseErrorFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.old.BrowseErrorFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.GuidedStepActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.SettingsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.old.VerticalGridActivity;
@@ -49,18 +48,21 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private ArrayObjectAdapter mCategoryRowAdapter;
     private BrowsePresenter mBrowsePresenter;
     private Map<Integer, Header> mHeaders;
-    private PageRowFragmentFactory mPageRowFragmentFactory;
+    private HeaderFragmentFactory mPageRowFragmentFactory;
     private Handler mHandler;
     private UriBackgroundManager mBackgroundManager;
+    private boolean mAttachCalledBefore;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        
+
         mHeaders = new HashMap<>();
         mHandler = new Handler();
         mBrowsePresenter = BrowsePresenter.instance(context.getApplicationContext());
         mBrowsePresenter.register(this);
+
+        mAttachCalledBefore = true;
     }
 
     @Override
@@ -75,7 +77,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mCategoryRowAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         setAdapter(mCategoryRowAdapter);
 
-        mPageRowFragmentFactory = new PageRowFragmentFactory(mBackgroundManager.getBackgroundManager(), new HeaderViewSelectedListener());
+        mPageRowFragmentFactory = new HeaderFragmentFactory(mBackgroundManager.getBackgroundManager(), new HeaderViewSelectedListener());
         getMainFragmentRegistry().registerFragment(PageRow.class, mPageRowFragmentFactory);
 
         setupUi();
@@ -181,17 +183,16 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mBrowsePresenter.unregister(this);
     }
 
-    //@Override
-    //public void onStop() {
-    //    super.onStop();
-    //    mBackgroundManager.onStop();
-    //}
-    //
-    //@Override
-    //public void onStart() {
-    //    super.onStart();
-    //    mBackgroundManager.onStart();
-    //}
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!mAttachCalledBefore) {
+            mBrowsePresenter.onViewResumed();
+        }
+
+        mAttachCalledBefore = false;
+    }
 
     @Override
     public void showProgressBar(boolean show) {

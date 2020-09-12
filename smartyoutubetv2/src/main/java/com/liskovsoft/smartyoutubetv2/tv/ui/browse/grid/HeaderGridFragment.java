@@ -39,7 +39,10 @@ public class HeaderGridFragment extends GridFragment {
         setupEventListeners();
         setupAdapter();
         applyPendingUpdates();
-        getMainFragmentAdapter().getFragmentHost().notifyDataReady(getMainFragmentAdapter());
+
+        if (getMainFragmentAdapter().getFragmentHost() != null) {
+            getMainFragmentAdapter().getFragmentHost().notifyDataReady(getMainFragmentAdapter());
+        }
     }
 
     @Override

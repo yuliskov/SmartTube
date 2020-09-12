@@ -14,33 +14,39 @@
  * limitations under the License.
  */
 
-package com.liskovsoft.smartyoutubetv2.tv.ui.old;
+package com.liskovsoft.smartyoutubetv2.tv.ui.browse.error;
 
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.leanback.app.BrowseSupportFragment;
-import androidx.leanback.app.BrowseSupportFragment.MainFragmentAdapter;
-import androidx.leanback.app.ErrorSupportFragment;
-import androidx.fragment.app.Fragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
-
+import androidx.fragment.app.Fragment;
+import androidx.leanback.app.BrowseSupportFragment;
+import androidx.leanback.app.BrowseSupportFragment.MainFragmentAdapter;
+import androidx.leanback.app.ErrorSupportFragment;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /*
  * This class demonstrates how to extend ErrorFragment to create an error dialog.
  */
-public class BrowseErrorFragment extends ErrorSupportFragment {
+public class BrowseErrorFragment extends ErrorSupportFragment implements BrowseSupportFragment.MainFragmentAdapterProvider {
     private static final boolean TRANSLUCENT = true;
     private static final int TIMER_DELAY = 1000;
 
     private final Handler mHandler = new Handler();
     private SpinnerFragment mSpinnerFragment;
+    private MainFragmentAdapter mMainFragmentAdapter =
+            new MainFragmentAdapter(this) {
+                @Override
+                public void setEntranceTransitionState(boolean state) {
+                    setEntranceTransitionState(state);
+                }
+            };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,6 +89,11 @@ public class BrowseErrorFragment extends ErrorSupportFragment {
                 getFragmentManager().popBackStack();
             }
         });
+    }
+
+    @Override
+    public MainFragmentAdapter getMainFragmentAdapter() {
+        return mMainFragmentAdapter;
     }
 
     public static class SpinnerFragment extends Fragment {

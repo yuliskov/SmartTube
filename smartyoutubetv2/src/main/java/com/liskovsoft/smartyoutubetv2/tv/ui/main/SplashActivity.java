@@ -14,4 +14,10 @@ public class SplashActivity extends Activity {
 
         finish();
     }
+
+    // TODO: implement Android TV channels
+    //private void updateRecommendations() {
+    //    Intent recommendationIntent = new Intent(mContext, UpdateRecommendationsService.class);
+    //    mContext.startService(recommendationIntent);
+    //}
 }

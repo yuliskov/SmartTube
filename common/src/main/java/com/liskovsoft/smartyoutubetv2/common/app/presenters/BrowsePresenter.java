@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Handler;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
@@ -43,6 +44,8 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     private final Map<Integer, Observable<List<MediaGroup>>> mRowMapping;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
+    private long mCurrentHeaderId = -1;
+    private long mLastUpdateTimeMs;
 
     private BrowsePresenter(Context context) {
         GlobalPreferences.instance(context); // auth token storage
@@ -129,6 +132,18 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
     @Override
     public void onHeaderFocused(long headerId) {
+        updateHeader(headerId);
+    }
+
+    private void updateHeader(long headerId) {
+        mCurrentHeaderId = headerId;
+
+        if (headerId == -1) {
+            return;
+        }
+
+        mLastUpdateTimeMs = System.currentTimeMillis();
+
         boolean updateInProgress = mUpdateAction != null && !mUpdateAction.isDisposed();
 
         if (updateInProgress) {
@@ -146,10 +161,22 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     private void loadHeader(Header header) {
         switch (header.getType()) {
             case Header.TYPE_GRID:
-                loadGridHeader(header, mGridMapping.get(header.getId()));
+                Observable<MediaGroup> group = mGridMapping.get(header.getId());
+
+                if (header.isAuthOnly()) {
+                    loadGridHeaderAuth(header, group);
+                } else {
+                    loadGridHeader(header, group);
+                }
                 break;
             case Header.TYPE_ROW:
-                loadRowsHeader(header, mRowMapping.get(header.getId()));
+                Observable<List<MediaGroup>> groups = mRowMapping.get(header.getId());
+
+                if (header.isAuthOnly()) {
+                    loadRowsHeaderAuth(header, groups);
+                } else {
+                    loadRowsHeader(header, groups);
+                }
                 break;
         }
     }
@@ -161,9 +188,9 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
         mHeaders.add(new Header(MediaGroup.TYPE_GAMING, mContext.getString(R.string.title_gaming), Header.TYPE_ROW, R.drawable.icon_gaming));
         mHeaders.add(new Header(MediaGroup.TYPE_NEWS, mContext.getString(R.string.title_news), Header.TYPE_ROW, R.drawable.icon_news));
         mHeaders.add(new Header(MediaGroup.TYPE_MUSIC, mContext.getString(R.string.title_music), Header.TYPE_ROW, R.drawable.icon_music));
-        mHeaders.add(new Header(MediaGroup.TYPE_SUBSCRIPTIONS, mContext.getString(R.string.title_subscriptions), Header.TYPE_GRID, R.drawable.icon_subscriptions));
-        mHeaders.add(new Header(MediaGroup.TYPE_HISTORY, mContext.getString(R.string.title_history), Header.TYPE_GRID, R.drawable.icon_history));
-        mHeaders.add(new Header(MediaGroup.TYPE_PLAYLISTS, mContext.getString(R.string.title_playlists), Header.TYPE_ROW, R.drawable.icon_playlist));
+        mHeaders.add(new Header(MediaGroup.TYPE_SUBSCRIPTIONS, mContext.getString(R.string.title_subscriptions), Header.TYPE_GRID, R.drawable.icon_subscriptions, true));
+        mHeaders.add(new Header(MediaGroup.TYPE_HISTORY, mContext.getString(R.string.title_history), Header.TYPE_GRID, R.drawable.icon_history, true));
+        mHeaders.add(new Header(MediaGroup.TYPE_PLAYLISTS, mContext.getString(R.string.title_playlists), Header.TYPE_ROW, R.drawable.icon_playlist, true));
 
         mRowMapping.put(MediaGroup.TYPE_HOME, mediaGroupManager.getHomeObserve());
         mRowMapping.put(MediaGroup.TYPE_NEWS, mediaGroupManager.getNewsObserve());
@@ -175,18 +202,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
         mGridMapping.put(MediaGroup.TYPE_HISTORY, mediaGroupManager.getHistoryObserve());
     }
 
-    // TODO: implement Android TV channels
-    //private void updateRecommendations() {
-    //    Intent recommendationIntent = new Intent(mContext, UpdateRecommendationsService.class);
-    //    mContext.startService(recommendationIntent);
-    //}
-
     private void loadRowsHeader(Header header, Observable<List<MediaGroup>> groups) {
-        if (groups == null) {
-            Log.e(TAG, "loadRowsHeader: No observable for header: " + header.getTitle());
-            return;
-        }
-
         Log.d(TAG, "loadRowsHeader: Start loading header: " + header.getTitle());
 
         mView.showProgressBar(true);
@@ -194,27 +210,24 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
         mUpdateAction = groups
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(mediaGroups -> {
-                Log.d(TAG, "loadRowsHeader: Loading groups for header: " + header.getTitle());
+            .subscribe(
+                    mediaGroups -> updateRowsHeader(header, mediaGroups)
+                    , error -> Log.e(TAG, "loadRowsHeader error: " + error)
+                    , () -> mView.showProgressBar(false));
+    }
 
-                for (MediaGroup mediaGroup : mediaGroups) {
-                    if (mediaGroup.getMediaItems() == null) {
-                        Log.e(TAG, "loadRowsHeader: MediaGroup is empty. Group Name: " + mediaGroup.getTitle());
-                        continue;
-                    }
+    private void updateRowsHeader(Header header, List<MediaGroup> mediaGroups) {
+        for (MediaGroup mediaGroup : mediaGroups) {
+            if (mediaGroup.getMediaItems() == null) {
+                Log.e(TAG, "loadRowsHeader: MediaGroup is empty. Group Name: " + mediaGroup.getTitle());
+                continue;
+            }
 
-                    mView.updateHeader(VideoGroup.from(mediaGroup, header));
-                }
-            }, error -> Log.e(TAG, "loadRowsHeader error: " + error + " Group Name: " + header.getTitle())
-            , () -> mView.showProgressBar(false));
+            mView.updateHeader(VideoGroup.from(mediaGroup, header));
+        }
     }
 
     private void loadGridHeader(Header header, Observable<MediaGroup> group) {
-        if (group == null) {
-            Log.e(TAG, "loadGridHeader: No observable for header: " + header.getTitle());
-            return;
-        }
-
         Log.d(TAG, "loadGridHeader: Start loading header: " + header.getTitle());
 
         mView.showProgressBar(true);
@@ -222,10 +235,10 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
         mUpdateAction = group
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(mediaGroup -> {
-                mView.updateHeader(VideoGroup.from(mediaGroup, header));
-            }, error -> Log.e(TAG, "loadGridHeader error: " + error + " Group Name: " + header.getTitle())
-            , () -> mView.showProgressBar(false));
+            .subscribe(
+                    mediaGroup -> mView.updateHeader(VideoGroup.from(mediaGroup, header))
+                    , error -> Log.e(TAG, "loadGridHeader error: " + error)
+                    , () -> mView.showProgressBar(false));
     }
 
     private void continueGroup(VideoGroup group) {
@@ -240,14 +253,65 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
         mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(continueMediaGroup -> {
-                    if (continueMediaGroup == null) {
-                        Log.e(TAG, "Can't continue group with name " + mediaGroup.getTitle());
-                        return;
-                    }
+                .subscribe(
+                        continueMediaGroup -> mView.updateHeader(VideoGroup.from(continueMediaGroup, group.getHeader()))
+                        , error -> Log.e(TAG, "continueGroup error: " + error)
+                        , () -> mView.showProgressBar(false));
+    }
 
-                    mView.updateHeader(VideoGroup.from(continueMediaGroup, group.getHeader()));
-        }, error -> Log.e(TAG, "continueGroup: " + error)
-        , () -> mView.showProgressBar(false));
+    private void loadRowsHeaderAuth(Header header, Observable<List<MediaGroup>> groups) {
+        Log.d(TAG, "loadRowsHeaderAuth: Start loading header: " + header.getTitle());
+
+        mView.showProgressBar(true);
+
+        SignInManager signInManager = mMediaService.getSignInManager();
+
+        mUpdateAction = signInManager.isSignedObserve()
+                .flatMap(isSigned -> {
+                    if (isSigned) {
+                        return groups;
+                    } else {
+                        return Observable.empty();
+                    }
+                })
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        mediaGroups -> updateRowsHeader(header, mediaGroups),
+                        error -> Log.e(TAG, "loadRowsHeaderAuth error: " + error)
+                        , () -> mView.showProgressBar(false));
+    }
+
+    private void loadGridHeaderAuth(Header header, Observable<MediaGroup> group) {
+        Log.d(TAG, "loadGridHeaderAuth: Start loading header: " + header.getTitle());
+
+        mView.showProgressBar(true);
+
+        SignInManager signInManager = mMediaService.getSignInManager();
+
+        mUpdateAction = signInManager.isSignedObserve()
+                .flatMap(isSigned -> {
+                    if (isSigned) {
+                        return group;
+                    } else {
+                        return Observable.empty();
+                    }
+                })
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        mediaGroup -> mView.updateHeader(VideoGroup.from(mediaGroup, header)),
+                        error -> Log.e(TAG, "loadGridHeaderAuth error: " + error)
+                        , () -> mView.showProgressBar(false));
+    }
+
+    @Override
+    public void onViewResumed() {
+        long timeAfterPauseMs = System.currentTimeMillis() - mLastUpdateTimeMs;
+        if (timeAfterPauseMs > 10*60*1_000) { // update header every five minutes
+            if (mCurrentHeaderId != -1) {
+                updateHeader(mCurrentHeaderId);
+            }
+        }
     }
 }
