@@ -161,13 +161,13 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     private void initHeaders() {
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
-        mHeaders.add(new Header(MediaGroup.TYPE_HOME, mContext.getString(R.string.header_home), Header.TYPE_ROW, R.drawable.header_home));
-        mHeaders.add(new Header(MediaGroup.TYPE_GAMING, mContext.getString(R.string.header_gaming), Header.TYPE_ROW, R.drawable.header_gaming));
-        mHeaders.add(new Header(MediaGroup.TYPE_NEWS, mContext.getString(R.string.header_news), Header.TYPE_ROW, R.drawable.header_news));
-        mHeaders.add(new Header(MediaGroup.TYPE_MUSIC, mContext.getString(R.string.header_music), Header.TYPE_ROW, R.drawable.header_music));
-        mHeaders.add(new Header(MediaGroup.TYPE_SUBSCRIPTIONS, mContext.getString(R.string.header_subscriptions), Header.TYPE_GRID, R.drawable.header_subscriptions));
-        mHeaders.add(new Header(MediaGroup.TYPE_HISTORY, mContext.getString(R.string.header_history), Header.TYPE_GRID, R.drawable.header_history));
-        mHeaders.add(new Header(MediaGroup.TYPE_PLAYLISTS, mContext.getString(R.string.header_playlists), Header.TYPE_ROW, R.drawable.header_playlist));
+        mHeaders.add(new Header(MediaGroup.TYPE_HOME, mContext.getString(R.string.title_home), Header.TYPE_ROW, R.drawable.icon_home));
+        mHeaders.add(new Header(MediaGroup.TYPE_GAMING, mContext.getString(R.string.title_gaming), Header.TYPE_ROW, R.drawable.icon_gaming));
+        mHeaders.add(new Header(MediaGroup.TYPE_NEWS, mContext.getString(R.string.title_news), Header.TYPE_ROW, R.drawable.icon_news));
+        mHeaders.add(new Header(MediaGroup.TYPE_MUSIC, mContext.getString(R.string.title_music), Header.TYPE_ROW, R.drawable.icon_music));
+        mHeaders.add(new Header(MediaGroup.TYPE_SUBSCRIPTIONS, mContext.getString(R.string.title_subscriptions), Header.TYPE_GRID, R.drawable.icon_subscriptions));
+        mHeaders.add(new Header(MediaGroup.TYPE_HISTORY, mContext.getString(R.string.title_history), Header.TYPE_GRID, R.drawable.icon_history));
+        mHeaders.add(new Header(MediaGroup.TYPE_PLAYLISTS, mContext.getString(R.string.title_playlists), Header.TYPE_ROW, R.drawable.icon_playlist));
 
         mRowMapping.put(MediaGroup.TYPE_HOME, mediaGroupManager.getHomeObserve());
         mRowMapping.put(MediaGroup.TYPE_NEWS, mediaGroupManager.getNewsObserve());

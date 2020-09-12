@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="header_home">Рекомендации</string>
-    <string name="header_search">Поиск</string>
-    <string name="header_subscriptions">Подписки</string>
-    <string name="header_history">История</string>
-    <string name="header_music">Музыка</string>
-    <string name="header_news">Новости</string>
-    <string name="header_gaming">Игры</string>
-    <string name="header_playlists">Плейлисты</string>
+    <string name="title_home">Главная</string>
+    <string name="title_search">Поиск</string>
+    <string name="title_subscriptions">Подписки</string>
+    <string name="title_history">История</string>
+    <string name="title_music">Музыка</string>
+    <string name="title_news">Новости</string>
+    <string name="title_gaming">Видеоигры</string>
+    <string name="title_playlists">Плейлисты</string>
+    <string name="subscriptions_signin_title">Смотрите новые видео с каналов, на которые вы подписаны</string>
+    <string name="subscriptions_signin_subtitle">Для начала вам нужно войти в аккаунт.</string>
+    <string name="subscriptions_signin_button_text">ВОЙТИ</string>
+    <string name="library_signin_title">Здесь хранятся понравившиеся, сохраненные и купленные видео</string>
+    <string name="library_signin_subtitle">Чтобы увидеть их, войдите в аккаунт.</string>
+    <string name="library_signin_button_text">ВОЙТИ</string>
 </resources>
