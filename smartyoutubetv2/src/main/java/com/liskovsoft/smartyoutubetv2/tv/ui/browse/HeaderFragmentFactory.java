@@ -86,7 +86,7 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
         Fragment fragment = mFragments.get(headerId);
 
         if (fragment == null) {
-            Log.d(TAG, "Page row fragment not initialized for group: " + group.getTitle());
+            Log.e(TAG, "Page row fragment not initialized for group: " + group.getTitle());
 
             return;
         }
@@ -102,7 +102,7 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
             HeaderGridFragment gridFragment = (HeaderGridFragment) fragment;
             gridFragment.updateGrid(group);
         } else {
-            Log.e(TAG, "Page group fragment has incompatible type: " + fragment.getClass().getSimpleName());
+            Log.e(TAG, "updateFragment: Page group fragment has incompatible type: " + fragment.getClass().getSimpleName());
         }
     }
 
@@ -129,5 +129,23 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
 
     public void clearFragment(int headerId) {
         mPendingUpdates.remove(headerId);
+
+        Fragment fragment = mFragments.get(headerId);
+
+        if (fragment != null) {
+            clearFragment(fragment);
+        }
+    }
+
+    private void clearFragment(Fragment fragment) {
+        if (fragment instanceof HeaderRowFragment) {
+            HeaderRowFragment rowFragment = (HeaderRowFragment) fragment;
+            rowFragment.clear();
+        } else if (fragment instanceof HeaderGridFragment) {
+            HeaderGridFragment gridFragment = (HeaderGridFragment) fragment;
+            gridFragment.clear();
+        } else {
+            Log.e(TAG, "clearFragment: Page group fragment has incompatible type: " + fragment.getClass().getSimpleName());
+        }
     }
 }

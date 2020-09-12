@@ -55,4 +55,13 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
     public int indexOf(Video item) {
         return mMediaItems.indexOf(item);
     }
+
+    public void clear() {
+        int itemCount = mMediaItems.size();
+        if (itemCount == 0) {
+            return;
+        }
+        mMediaItems.clear();
+        notifyItemRangeRemoved(0, itemCount);
+    }
 }

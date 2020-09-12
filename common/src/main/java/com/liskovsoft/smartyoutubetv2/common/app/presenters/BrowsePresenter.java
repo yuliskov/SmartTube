@@ -152,6 +152,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
         for (Header header : mHeaders) {
             if (header.getId() == headerId) {
+                mView.showProgressBar(true);
                 mView.clearHeader(header);
                 loadHeader(header);
             }
@@ -205,8 +206,6 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     private void loadRowsHeader(Header header, Observable<List<MediaGroup>> groups) {
         Log.d(TAG, "loadRowsHeader: Start loading header: " + header.getTitle());
 
-        mView.showProgressBar(true);
-
         mUpdateAction = groups
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
@@ -230,8 +229,6 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     private void loadGridHeader(Header header, Observable<MediaGroup> group) {
         Log.d(TAG, "loadGridHeader: Start loading header: " + header.getTitle());
 
-        mView.showProgressBar(true);
-
         mUpdateAction = group
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
@@ -243,8 +240,6 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
     private void continueGroup(VideoGroup group) {
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
-
-        mView.showProgressBar(true);
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
@@ -261,8 +256,6 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
     private void loadRowsHeaderAuth(Header header, Observable<List<MediaGroup>> groups) {
         Log.d(TAG, "loadRowsHeaderAuth: Start loading header: " + header.getTitle());
-
-        mView.showProgressBar(true);
 
         SignInManager signInManager = mMediaService.getSignInManager();
 
@@ -285,8 +278,6 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     private void loadGridHeaderAuth(Header header, Observable<MediaGroup> group) {
         Log.d(TAG, "loadGridHeaderAuth: Start loading header: " + header.getTitle());
 
-        mView.showProgressBar(true);
-
         SignInManager signInManager = mMediaService.getSignInManager();
 
         mUpdateAction = signInManager.isSignedObserve()
@@ -308,7 +299,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     @Override
     public void onViewResumed() {
         long timeAfterPauseMs = System.currentTimeMillis() - mLastUpdateTimeMs;
-        if (timeAfterPauseMs > 10*60*1_000) { // update header every five minutes
+        if (timeAfterPauseMs > 10*1_000) { // update header every n minutes
             if (mCurrentHeaderId != -1) {
                 updateHeader(mCurrentHeaderId);
             }

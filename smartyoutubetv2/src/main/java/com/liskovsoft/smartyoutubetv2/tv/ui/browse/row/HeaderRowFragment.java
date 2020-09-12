@@ -36,6 +36,7 @@ public class HeaderRowFragment extends RowsSupportFragment {
     private Map<Integer, VideoGroupObjectAdapter> mVideoGroupAdapters;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private BrowsePresenter mMainPresenter;
+    private boolean mInvalidate;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -84,10 +85,20 @@ public class HeaderRowFragment extends RowsSupportFragment {
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
     }
 
+    public void clear() {
+        mInvalidate = true;
+    }
+
     public void updateRow(VideoGroup group) {
         if (mVideoGroupAdapters == null) {
             mPendingUpdates.add(group);
             return;
+        }
+
+        if (mInvalidate) {
+            mRowsAdapter.clear();
+            mVideoGroupAdapters.clear();
+            mInvalidate = false;
         }
 
         HeaderItem rowHeader = new HeaderItem(group.getTitle());

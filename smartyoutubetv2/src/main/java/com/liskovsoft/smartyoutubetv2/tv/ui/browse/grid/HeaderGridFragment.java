@@ -31,6 +31,7 @@ public class HeaderGridFragment extends GridFragment {
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private UriBackgroundManager mBackgroundManager;
     private BrowsePresenter mMainPresenter;
+    private boolean mInvalidate;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,8 +87,17 @@ public class HeaderGridFragment extends GridFragment {
             mPendingUpdates.add(group);
             return;
         }
+
+        if (mInvalidate) {
+            mGridAdapter.clear();
+            mInvalidate = false;
+        }
         
         mGridAdapter.append(group);
+    }
+
+    public void clear() {
+        mInvalidate = true;
     }
 
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
