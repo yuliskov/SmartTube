@@ -92,6 +92,15 @@ public class HeaderRowFragment extends RowsSupportFragment implements HeaderFrag
     }
 
     @Override
+    public boolean isEmpty() {
+        if (mRowsAdapter == null) {
+            return false;
+        }
+
+        return mRowsAdapter.size() == 0;
+    }
+
+    @Override
     public void update(VideoGroup group) {
         if (mVideoGroupAdapters == null) {
             mPendingUpdates.add(group);

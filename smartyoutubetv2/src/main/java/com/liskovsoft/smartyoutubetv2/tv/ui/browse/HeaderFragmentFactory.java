@@ -100,6 +100,7 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
     }
 
     public void clearFragment() {
+        mErrorData = null;
         mPendingUpdates.clear();
 
         if (mCurrentFragment != null) {
@@ -116,7 +117,10 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
     }
 
     public void setUpdateFragmentIfEmpty(ErrorFragmentData data) {
-        // replace current fragment
-        //mErrorData = data;
+        if (mCurrentFragment instanceof HeaderFragment) {
+            if (((HeaderFragment) mCurrentFragment).isEmpty()) {
+                mErrorData = data;
+            }
+        }
     }
 }

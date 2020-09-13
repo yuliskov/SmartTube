@@ -102,6 +102,15 @@ public class HeaderGridFragment extends GridFragment implements HeaderFragment {
         mInvalidate = true;
     }
 
+    @Override
+    public boolean isEmpty() {
+        if (mGridAdapter == null) {
+            return false;
+        }
+
+        return mGridAdapter.size() == 0;
+    }
+
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,

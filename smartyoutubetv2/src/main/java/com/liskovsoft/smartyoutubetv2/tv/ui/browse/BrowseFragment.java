@@ -89,7 +89,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
         initRowAdapters();
 
-        mHandler.postDelayed(this::initSampleRow, 3_000);
+        //mHandler.postDelayed(this::initSampleRow, 3_000);
 
         mBrowsePresenter.onInitDone();
     }
