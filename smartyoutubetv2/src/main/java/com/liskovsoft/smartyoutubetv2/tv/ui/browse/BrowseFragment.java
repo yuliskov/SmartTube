@@ -160,7 +160,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private void replaceMainFragment(Fragment fragment) {
         Object currentFragment = Helpers.getField(this,"mMainFragment");
 
-        if (currentFragment != fragment) {
+        if (currentFragment != null && fragment != null && currentFragment != fragment) {
             Helpers.setField(this, "mMainFragment", fragment);
 
             FragmentTransaction ft = getChildFragmentManager().beginTransaction();

@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.search;
+package com.liskovsoft.smartyoutubetv2.tv.ui.mod;
 
 import android.Manifest;
 import android.content.Intent;
@@ -416,6 +416,7 @@ public class SearchSupportFragment extends Fragment {
         return mRowsSupportFragment;
     }
 
+    // NOTE: fix Service not registered: android.speech.SpeechRecognizer$Connection
     private void releaseRecognizer() {
         try {
             if (null != mSpeechRecognizer) {
@@ -423,7 +424,7 @@ public class SearchSupportFragment extends Fragment {
                 mSpeechRecognizer.destroy();
                 mSpeechRecognizer = null;
             }
-        } catch (IllegalArgumentException e) { // NOTE: fix Service not registered: android.speech.SpeechRecognizer$Connection
+        } catch (IllegalArgumentException e) {
             e.printStackTrace();
             Log.e(TAG, e.getMessage());
         }

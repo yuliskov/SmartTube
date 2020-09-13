@@ -36,7 +36,7 @@ android {
     productFlavors {
         vbeta {
             // matchingFallbacks = ['lite']
-            applicationIdSuffix ".beta"
+            // applicationIdSuffix ".beta"
         }
         vorig {
             // matchingFallbacks = ['lite']

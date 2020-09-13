@@ -50,7 +50,7 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
 
     private final OnActionClickedListener mActionListener;
 
-    private final PlaybackControlsRow.RepeatAction mRepeatAction;
+    private final TwoStateRepeatAction mRepeatAction;
     private final PlaybackControlsRow.ThumbsUpAction mThumbsUpAction;
     private final PlaybackControlsRow.ThumbsDownAction mThumbsDownAction;
     private final PlaybackControlsRow.SkipPreviousAction mSkipPreviousAction;
@@ -75,7 +75,7 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         mThumbsUpAction.setIndex(PlaybackControlsRow.ThumbsUpAction.INDEX_OUTLINE);
         mThumbsDownAction = new PlaybackControlsRow.ThumbsDownAction(context);
         mThumbsDownAction.setIndex(PlaybackControlsRow.ThumbsDownAction.INDEX_OUTLINE);
-        mRepeatAction = new PlaybackControlsRow.RepeatAction(context);
+        mRepeatAction = new TwoStateRepeatAction(context);
     }
 
     @Override
@@ -154,6 +154,10 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         }
     }
 
+    public void setRepeatMode(int actionIndex) {
+        getPlayerAdapter().setRepeatAction(actionIndex);
+    }
+
     private boolean dispatchAction(Action action) {
         if (action == null) {
             return false;
@@ -170,7 +174,7 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
             handled = true;
         } else if (action instanceof PlaybackControlsRow.MultiAction) {
             PlaybackControlsRow.MultiAction multiAction = (PlaybackControlsRow.MultiAction) action;
-            multiAction.nextIndex();
+            multiAction.nextIndex(); // increment state
 
             // Notify adapter of action changes to handle primary actions, such as, play/pause.
             notifyActionChanged(
@@ -182,6 +186,11 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
             notifyActionChanged(
                     multiAction,
                     (ArrayObjectAdapter) getControlsRow().getSecondaryActionsAdapter());
+
+            if (action == mRepeatAction) {
+                setRepeatMode(multiAction.getIndex());
+                handled = true;
+            }
         }
 
         return handled;
