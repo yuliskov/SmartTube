@@ -5,11 +5,9 @@ import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.Row;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.app.models.auth.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Header;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseFragment.HeaderViewSelectedListener;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.error.BrowseErrorFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.grid.HeaderGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.row.HeaderRowFragment;
 
@@ -19,13 +17,12 @@ import java.util.List;
 public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory<Fragment> {
     private static final String TAG = HeaderFragmentFactory.class.getSimpleName();
     private final HeaderViewSelectedListener mViewSelectedListener;
-    private ErrorFragmentData mErrorData;
-    private final List<VideoGroup> mPendingUpdates;
+    private final List<VideoGroup> mCachedData;
     private Fragment mCurrentFragment;
 
     public HeaderFragmentFactory(HeaderViewSelectedListener viewSelectedListener) {
         mViewSelectedListener = viewSelectedListener;
-        mPendingUpdates = new ArrayList<>();
+        mCachedData = new ArrayList<>();
     }
 
     /**
@@ -44,9 +41,7 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
         if (header instanceof CustomHeaderItem) {
             int type = ((CustomHeaderItem) header).getType();
 
-            if (mErrorData != null) {
-                fragment = new BrowseErrorFragment(mErrorData);
-            } else if (type == Header.TYPE_ROW) {
+            if (type == Header.TYPE_ROW) {
                 fragment = new HeaderRowFragment();
             } else if (type == Header.TYPE_GRID) {
                 fragment = new HeaderGridFragment();
@@ -61,7 +56,7 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
                 mViewSelectedListener.onHeaderSelected(null, row);
             }
 
-            updateFromPending(fragment);
+            updateFromCache(fragment);
 
             return fragment;
         }
@@ -76,11 +71,10 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
 
         if (mCurrentFragment == null) {
             Log.e(TAG, "Page row fragment not initialized for group: " + group.getTitle());
-
-            mPendingUpdates.add(group);
-
             return;
         }
+
+        mCachedData.add(group);
 
         updateFragment(mCurrentFragment, group);
     }
@@ -93,15 +87,14 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
         }
     }
 
-    private void updateFromPending(Fragment fragment) {
-        for (VideoGroup group : mPendingUpdates) {
+    private void updateFromCache(Fragment fragment) {
+        for (VideoGroup group : mCachedData) {
             updateFragment(fragment, group);
         }
     }
 
     public void clearFragment() {
-        mErrorData = null;
-        mPendingUpdates.clear();
+        mCachedData.clear();
 
         if (mCurrentFragment != null) {
             clearFragment(mCurrentFragment);
@@ -116,11 +109,11 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
         }
     }
 
-    public void setUpdateFragmentIfEmpty(ErrorFragmentData data) {
+    public boolean isEmpty() {
         if (mCurrentFragment instanceof HeaderFragment) {
-            if (((HeaderFragment) mCurrentFragment).isEmpty()) {
-                mErrorData = data;
-            }
+            return ((HeaderFragment) mCurrentFragment).isEmpty();
         }
+
+        return false;
     }
 }

@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.widget.Toast;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.app.HeadersSupportFragment.OnHeaderViewSelectedListener;
 import androidx.leanback.widget.ArrayObjectAdapter;
@@ -30,12 +31,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.GridItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.ui.old.BrowseErrorFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.error.BrowseErrorFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.old.GuidedStepActivity;
-import com.liskovsoft.smartyoutubetv2.tv.ui.old.SettingsActivity;
-import com.liskovsoft.smartyoutubetv2.tv.ui.old.VerticalGridActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
 
 import java.util.HashMap;
@@ -128,9 +126,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
             startActivity(intent);
         });
 
-        setOnItemViewClickedListener(new ItemViewClickedListener());
-        setOnItemViewSelectedListener(new ItemViewSelectedListener());
-
         // Listener moved to PageRowFragmentFactory
         //getHeadersSupportFragment().setOnHeaderViewSelectedListener(new HeaderViewSelectedListener());
     }
@@ -140,25 +135,36 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mCategoryRowAdapter.clear();
     }
 
-    private void initSampleRow() {
-        // Create a row for this special case with more samples.
-        HeaderItem gridHeader = new HeaderItem(getString(R.string.more_samples));
-        GridItemPresenter gridPresenter = new GridItemPresenter(this);
-        ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(gridPresenter);
-        gridRowAdapter.add(getString(R.string.grid_view));
-        gridRowAdapter.add(getString(R.string.guidedstep_first_title));
-        gridRowAdapter.add(getString(R.string.error_fragment));
-        gridRowAdapter.add(getString(R.string.personal_settings));
-        mCategoryRowAdapter.add(new ListRow(gridHeader, gridRowAdapter));
-
-        startEntranceTransition(); // TODO: Move startEntranceTransition to after all
-    }
+    //private void initSampleRow() {
+    //    setOnItemViewClickedListener(new ItemViewClickedListener());
+    //    setOnItemViewSelectedListener(new ItemViewSelectedListener());
+    //
+    //    // Create a row for this special case with more samples.
+    //    HeaderItem gridHeader = new HeaderItem(getString(R.string.more_samples));
+    //    GridItemPresenter gridPresenter = new GridItemPresenter(this);
+    //    ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(gridPresenter);
+    //    gridRowAdapter.add(getString(R.string.grid_view));
+    //    gridRowAdapter.add(getString(R.string.guidedstep_first_title));
+    //    gridRowAdapter.add(getString(R.string.error_fragment));
+    //    gridRowAdapter.add(getString(R.string.personal_settings));
+    //    mCategoryRowAdapter.add(new ListRow(gridHeader, gridRowAdapter));
+    //
+    //    startEntranceTransition(); // TODO: Move startEntranceTransition to after all
+    //}
 
     @Override
     public void updateHeaderIfEmpty(ErrorFragmentData data) {
-        mHeaderFragmentFactory.setUpdateFragmentIfEmpty(data);
+        mHandler.postDelayed(() -> showErrorIfEmpty(data), 500); // need delay because header may be not updated
+    }
 
-        setSelectedPosition(getSelectedPosition()); // reload header
+    private void showErrorIfEmpty(ErrorFragmentData data) {
+        if (mHeaderFragmentFactory.isEmpty()) {
+            if (getChildFragmentManager().findFragmentById(R.id.scale_frame) != null) {
+                FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+                ft.replace(R.id.scale_frame, new BrowseErrorFragment(data));
+                ft.commit();
+            }
+        }
     }
 
     @Override
@@ -211,53 +217,53 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         }
     }
 
-    private final class ItemViewClickedListener implements OnItemViewClickedListener {
-        @Override
-        public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
-                                  RowPresenter.ViewHolder rowViewHolder, Row row) {
+    //private final class ItemViewClickedListener implements OnItemViewClickedListener {
+    //    @Override
+    //    public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
+    //                              RowPresenter.ViewHolder rowViewHolder, Row row) {
+    //
+    //        if (item instanceof String) {
+    //            if (((String) item).contains(getString(R.string.grid_view))) {
+    //                Intent intent = new Intent(getActivity(), VerticalGridActivity.class);
+    //                Bundle bundle =
+    //                        ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
+    //                                .toBundle();
+    //                startActivity(intent, bundle);
+    //            } else if (((String) item).contains(getString(R.string.guidedstep_first_title))) {
+    //                Intent intent = new Intent(getActivity(), GuidedStepActivity.class);
+    //                Bundle bundle =
+    //                        ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
+    //                                .toBundle();
+    //                startActivity(intent, bundle);
+    //            } else if (((String) item).contains(getString(R.string.error_fragment))) {
+    //                BrowseErrorFragment errorFragment = new BrowseErrorFragment();
+    //                getFragmentManager().beginTransaction().replace(R.id.main_frame, errorFragment)
+    //                        .addToBackStack(null).commit();
+    //            } else if(((String) item).contains(getString(R.string.personal_settings))) {
+    //                Intent intent = new Intent(getActivity(), SettingsActivity.class);
+    //                Bundle bundle =
+    //                        ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
+    //                                .toBundle();
+    //                startActivity(intent, bundle);
+    //            } else {
+    //                Toast.makeText(getActivity(), ((String) item), Toast.LENGTH_SHORT)
+    //                        .show();
+    //            }
+    //        }
+    //    }
+    //}
 
-            if (item instanceof String) {
-                if (((String) item).contains(getString(R.string.grid_view))) {
-                    Intent intent = new Intent(getActivity(), VerticalGridActivity.class);
-                    Bundle bundle =
-                            ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
-                                    .toBundle();
-                    startActivity(intent, bundle);
-                } else if (((String) item).contains(getString(R.string.guidedstep_first_title))) {
-                    Intent intent = new Intent(getActivity(), GuidedStepActivity.class);
-                    Bundle bundle =
-                            ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
-                                    .toBundle();
-                    startActivity(intent, bundle);
-                } else if (((String) item).contains(getString(R.string.error_fragment))) {
-                    BrowseErrorFragment errorFragment = new BrowseErrorFragment();
-                    getFragmentManager().beginTransaction().replace(R.id.main_frame, errorFragment)
-                            .addToBackStack(null).commit();
-                } else if(((String) item).contains(getString(R.string.personal_settings))) {
-                    Intent intent = new Intent(getActivity(), SettingsActivity.class);
-                    Bundle bundle =
-                            ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity())
-                                    .toBundle();
-                    startActivity(intent, bundle);
-                } else {
-                    Toast.makeText(getActivity(), ((String) item), Toast.LENGTH_SHORT)
-                            .show();
-                }
-            }
-        }
-    }
-
-    private final class ItemViewSelectedListener implements OnItemViewSelectedListener {
-        @Override
-        public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
-                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
-            if (item instanceof Video) {
-                mBackgroundManager.setBackgroundFrom((Video) item);
-            } else {
-                mBackgroundManager.removeBackground();
-            }
-        }
-    }
+    //private final class ItemViewSelectedListener implements OnItemViewSelectedListener {
+    //    @Override
+    //    public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
+    //                               RowPresenter.ViewHolder rowViewHolder, Row row) {
+    //        if (item instanceof Video) {
+    //            mBackgroundManager.setBackgroundFrom((Video) item);
+    //        } else {
+    //            mBackgroundManager.removeBackground();
+    //        }
+    //    }
+    //}
 
     public final class HeaderViewSelectedListener implements OnHeaderViewSelectedListener {
         @Override
