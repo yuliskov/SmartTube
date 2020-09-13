@@ -30,7 +30,7 @@ public class UriBackgroundManager {
         mActivity = activity;
         mHandler = new Handler();
         prepareBackgroundManager();
-        setBackgroundDefault();
+        setDefaultBackground();
     }
 
     private void prepareBackgroundManager() {
@@ -57,12 +57,14 @@ public class UriBackgroundManager {
     public void updateBackground(Video item) {
         // ignore
         // startBackgroundTimer(item.bgImageUrl);
-        setBackgroundDefault();
+        setDefaultBackground();
     }
 
     public void onStart() {
         if (mBackgroundURI != null) {
             updateBackground(mBackgroundURI.toString());
+        } else {
+            setDefaultBackground();
         }
     }
 
@@ -79,11 +81,11 @@ public class UriBackgroundManager {
         mBackgroundManager.setDrawable(null);
     }
 
-    public void setBackgroundDefault() {
+    public void setDefaultBackground() {
         mBackgroundManager.setDrawable(mDefaultBackground);
     }
 
-    public void setBackground(int color) {
+    public void setBackgroundColor(int color) {
         mBackgroundManager.setColor(color);
     }
 

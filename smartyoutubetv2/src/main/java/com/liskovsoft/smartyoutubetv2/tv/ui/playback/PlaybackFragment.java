@@ -81,8 +81,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         super.onActivityCreated(savedInstanceState);
 
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
-
-        mBackgroundManager.setBackground(Color.BLACK);
     }
 
     @Override
