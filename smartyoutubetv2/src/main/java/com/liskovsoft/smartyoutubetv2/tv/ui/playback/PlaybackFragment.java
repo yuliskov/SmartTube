@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.leanback.app.RowsSupportFragment;
 import androidx.leanback.app.VideoSupportFragment;
 import androidx.leanback.app.VideoSupportFragmentGlueHost;
@@ -81,6 +82,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         super.onActivityCreated(savedInstanceState);
 
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
+        mBackgroundManager.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.player_background));
     }
 
     @Override

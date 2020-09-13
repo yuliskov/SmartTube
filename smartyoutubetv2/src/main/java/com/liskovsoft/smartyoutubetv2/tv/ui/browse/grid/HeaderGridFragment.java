@@ -128,7 +128,7 @@ public class HeaderGridFragment extends GridFragment implements HeaderFragment {
         public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
                                    RowPresenter.ViewHolder rowViewHolder, Row row) {
             if (item instanceof Video) {
-                mBackgroundManager.updateBackground((Video) item);
+                mBackgroundManager.setBackgroundFrom((Video) item);
 
                 checkScrollEnd((Video) item);
             }

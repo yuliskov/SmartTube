@@ -25,6 +25,7 @@ public class UriBackgroundManager {
     private BackgroundManager mBackgroundManager;
     private final Activity mActivity;
     private final Handler mHandler;
+    private int mBackgroundColor = -1;
 
     public UriBackgroundManager(Activity activity) {
         mActivity = activity;
@@ -54,7 +55,7 @@ public class UriBackgroundManager {
         }
     }
 
-    public void updateBackground(Video item) {
+    public void setBackgroundFrom(Video item) {
         // ignore
         // startBackgroundTimer(item.bgImageUrl);
         setDefaultBackground();
@@ -62,7 +63,9 @@ public class UriBackgroundManager {
 
     public void onStart() {
         if (mBackgroundURI != null) {
-            updateBackground(mBackgroundURI.toString());
+            setBackground(mBackgroundURI.toString());
+        } else if (mBackgroundColor != -1) {
+            setBackgroundColor(mBackgroundColor);
         } else {
             setDefaultBackground();
         }
@@ -86,6 +89,7 @@ public class UriBackgroundManager {
     }
 
     public void setBackgroundColor(int color) {
+        mBackgroundColor = color;
         mBackgroundManager.setColor(color);
     }
 
@@ -93,12 +97,16 @@ public class UriBackgroundManager {
         @Override
         public void run() {
             if (mBackgroundURI != null) {
-                updateBackground(mBackgroundURI.toString());
+                setBackground(mBackgroundURI.toString());
             }
         }
     }
 
-    private void updateBackground(String uri) {
+    public BackgroundManager getBackgroundManager() {
+        return mBackgroundManager;
+    }
+
+    private void setBackground(String uri) {
         int width = mMetrics.widthPixels;
         int height = mMetrics.heightPixels;
 
@@ -118,9 +126,5 @@ public class UriBackgroundManager {
                         mBackgroundManager.setBitmap(resource);
                     }
                 });
-    }
-
-    public BackgroundManager getBackgroundManager() {
-        return mBackgroundManager;
     }
 }

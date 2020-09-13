@@ -30,6 +30,7 @@ import java.util.Map;
 
 public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     private static final String TAG = BrowsePresenter.class.getSimpleName();
+    private static final long RELOAD_PERIOD_MS = 10*60*1_000;
     @SuppressLint("StaticFieldLeak")
     private static BrowsePresenter sInstance;
     private final Handler mHandler = new Handler();
@@ -135,7 +136,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     @Override
     public void onViewResumed() {
         long timeAfterPauseMs = System.currentTimeMillis() - mLastUpdateTimeMs;
-        if (timeAfterPauseMs > 5*60*1_000) { // update header every n minutes
+        if (timeAfterPauseMs > RELOAD_PERIOD_MS) { // update header every n minutes
             if (mCurrentHeaderId != -1) {
                 updateHeader(mCurrentHeaderId);
             }

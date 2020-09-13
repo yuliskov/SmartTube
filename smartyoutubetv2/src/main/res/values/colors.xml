@@ -9,4 +9,5 @@
     <color name="shelf_background">#282828</color>
     <color name="icon_background">#4A4F51</color>
     <color name="icon_alt_background">#2A2F51</color>
+    <color name="player_background">#FF000000</color>
 </resources>

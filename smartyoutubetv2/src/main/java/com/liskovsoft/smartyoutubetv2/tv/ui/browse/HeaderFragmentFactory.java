@@ -147,6 +147,6 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
     }
 
     public void updateFragmentIfEmpty(ErrorFragmentData data) {
-        
+        // replace current fragment
     }
 }

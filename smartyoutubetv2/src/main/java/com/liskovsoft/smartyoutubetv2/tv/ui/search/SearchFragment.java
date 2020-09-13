@@ -6,7 +6,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -233,7 +232,7 @@ public class SearchFragment extends SearchSupportFragment
         public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
                                    RowPresenter.ViewHolder rowViewHolder, Row row) {
             if (item instanceof Video) {
-                mBackgroundManager.updateBackground((Video) item);
+                mBackgroundManager.setBackgroundFrom((Video) item);
 
                 checkScrollEnd((Video) item);
             }
