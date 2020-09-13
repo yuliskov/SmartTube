@@ -29,6 +29,7 @@ import androidx.fragment.app.Fragment;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.app.BrowseSupportFragment.MainFragmentAdapter;
 import androidx.leanback.app.ErrorSupportFragment;
+import com.liskovsoft.smartyoutubetv2.common.app.models.auth.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /*
@@ -39,6 +40,7 @@ public class BrowseErrorFragment extends ErrorSupportFragment implements BrowseS
     private static final int TIMER_DELAY = 1000;
 
     private final Handler mHandler = new Handler();
+    private final ErrorFragmentData mErrorData;
     private SpinnerFragment mSpinnerFragment;
     private MainFragmentAdapter mMainFragmentAdapter =
             new MainFragmentAdapter(this) {
@@ -47,6 +49,10 @@ public class BrowseErrorFragment extends ErrorSupportFragment implements BrowseS
                     setEntranceTransitionState(state);
                 }
             };
+
+    public BrowseErrorFragment(ErrorFragmentData errorData) {
+        mErrorData = errorData;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

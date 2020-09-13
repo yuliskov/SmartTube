@@ -78,7 +78,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mCategoryRowAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         setAdapter(mCategoryRowAdapter);
 
-        mHeaderFragmentFactory = new HeaderFragmentFactory(mBackgroundManager.getBackgroundManager(), new HeaderViewSelectedListener());
+        mHeaderFragmentFactory = new HeaderFragmentFactory(new HeaderViewSelectedListener());
         getMainFragmentRegistry().registerFragment(PageRow.class, mHeaderFragmentFactory);
 
         setupUi();
@@ -156,7 +156,9 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     @Override
     public void updateHeaderIfEmpty(ErrorFragmentData data) {
-        mHeaderFragmentFactory.updateFragmentIfEmpty(data);
+        mHeaderFragmentFactory.setUpdateFragmentIfEmpty(data);
+
+        setSelectedPosition(getSelectedPosition()); // reload header
     }
 
     @Override
@@ -180,7 +182,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     @Override
     public void clearHeader(Header header) {
-        mHeaderFragmentFactory.clearFragment(header.getId());
+        mHeaderFragmentFactory.clearFragment();
     }
 
     @Override

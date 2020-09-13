@@ -97,6 +97,7 @@ public class HeaderGridFragment extends GridFragment implements HeaderFragment {
         mGridAdapter.append(group);
     }
 
+    @Override
     public void clear() {
         mInvalidate = true;
     }

@@ -4,4 +4,5 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 
 public interface HeaderFragment {
     void update(VideoGroup group);
+    void clear();
 }

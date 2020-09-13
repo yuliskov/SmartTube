@@ -86,6 +86,7 @@ public class HeaderRowFragment extends RowsSupportFragment implements HeaderFrag
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
     }
 
+    @Override
     public void clear() {
         mInvalidate = true;
     }

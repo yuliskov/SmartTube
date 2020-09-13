@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 
 import androidx.fragment.app.Fragment;
+import androidx.leanback.app.BackgroundManager;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.Row;
@@ -14,29 +15,38 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.browse.grid.HeaderGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.row.HeaderRowFragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory<Fragment> {
-    private static final String TAG = HeaderFragmentFactory.class.getSimpleName();
+public class HeaderFragmentFactoryOld extends BrowseSupportFragment.FragmentFactory<Fragment> {
+    private static final String TAG = HeaderFragmentFactoryOld.class.getSimpleName();
+    private final BackgroundManager mBackgroundManager;
+    private final Map<Integer, Fragment> mFragments;
+    private final Map<Integer, List<VideoGroup>> mPendingUpdates;
     private final HeaderViewSelectedListener mViewSelectedListener;
     private ErrorFragmentData mErrorData;
-    private final List<VideoGroup> mPendingUpdates;
-    private Fragment mCurrentFragment;
 
-    public HeaderFragmentFactory(HeaderViewSelectedListener viewSelectedListener) {
-        mViewSelectedListener = viewSelectedListener;
-        mPendingUpdates = new ArrayList<>();
+    public HeaderFragmentFactoryOld(BackgroundManager backgroundManager) {
+        this(backgroundManager, null);
     }
 
-    /**
-     * Called each time when header is selected!<br/>
-     * So, No need to clear.
-     */
+    public HeaderFragmentFactoryOld(BackgroundManager backgroundManager, HeaderViewSelectedListener viewSelectedListener) {
+        mBackgroundManager = backgroundManager;
+        mViewSelectedListener = viewSelectedListener;
+        mFragments = new HashMap<>();
+        mPendingUpdates = new HashMap<>();
+    }
+
     @Override
     public Fragment createFragment(Object rowObj) {
         Log.d(TAG, "Creating PageRow fragment");
 
         Row row = (Row) rowObj;
+
+        if (mBackgroundManager != null) {
+            mBackgroundManager.setDrawable(null);
+        }
 
         HeaderItem header = row.getHeaderItem();
         Fragment fragment = null;
@@ -54,14 +64,14 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
         }
 
         if (fragment != null) {
-            mCurrentFragment = fragment;
+            mFragments.put((int) header.getId(), fragment);
 
             // give a chance to clear pending updates
             if (mViewSelectedListener != null) {
                 mViewSelectedListener.onHeaderSelected(null, row);
             }
 
-            updateFromPending(fragment);
+            updateFromPending(fragment, (int) header.getId());
 
             return fragment;
         }
@@ -74,15 +84,19 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
             return;
         }
 
-        if (mCurrentFragment == null) {
-            Log.e(TAG, "Page row fragment not initialized for group: " + group.getTitle());
+        int headerId = group.getHeader().getId();
 
-            mPendingUpdates.add(group);
+        addToPending(group, headerId);
+
+        Fragment fragment = mFragments.get(headerId);
+
+        if (fragment == null) {
+            Log.e(TAG, "Page row fragment not initialized for group: " + group.getTitle());
 
             return;
         }
 
-        updateFragment(mCurrentFragment, group);
+        updateFragment(fragment, group);
     }
 
     private void updateFragment(Fragment fragment, VideoGroup group) {
@@ -93,23 +107,44 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
         }
     }
 
-    private void updateFromPending(Fragment fragment) {
-        for (VideoGroup group : mPendingUpdates) {
-            updateFragment(fragment, group);
+    private void addToPending(VideoGroup group, int headerId) {
+        List<VideoGroup> videoGroups = mPendingUpdates.get(headerId);
+
+        if (videoGroups == null) {
+            videoGroups = new ArrayList<>();
+            mPendingUpdates.put(headerId, videoGroups);
+        }
+
+        videoGroups.add(group);
+    }
+
+    private void updateFromPending(Fragment fragment, int headerId) {
+        List<VideoGroup> videoGroups = mPendingUpdates.get(headerId);
+
+        if (videoGroups != null) {
+            for (VideoGroup group : videoGroups) {
+                updateFragment(fragment, group);
+            }
         }
     }
 
-    public void clearFragment() {
-        mPendingUpdates.clear();
+    public void clearFragment(int headerId) {
+        mPendingUpdates.remove(headerId);
 
-        if (mCurrentFragment != null) {
-            clearFragment(mCurrentFragment);
+        Fragment fragment = mFragments.get(headerId);
+
+        if (fragment != null) {
+            clearFragment(fragment);
         }
     }
 
     private void clearFragment(Fragment fragment) {
-        if (fragment instanceof HeaderFragment) {
-            ((HeaderFragment) fragment).clear();
+        if (fragment instanceof HeaderRowFragment) {
+            HeaderRowFragment rowFragment = (HeaderRowFragment) fragment;
+            rowFragment.clear();
+        } else if (fragment instanceof HeaderGridFragment) {
+            HeaderGridFragment gridFragment = (HeaderGridFragment) fragment;
+            gridFragment.clear();
         } else {
             Log.e(TAG, "clearFragment: Page group fragment has incompatible type: " + fragment.getClass().getSimpleName());
         }
@@ -117,6 +152,6 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
 
     public void setUpdateFragmentIfEmpty(ErrorFragmentData data) {
         // replace current fragment
-        //mErrorData = data;
+        mErrorData = data;
     }
 }
