@@ -20,6 +20,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.HeaderFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 
@@ -28,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class HeaderRowFragment extends RowsSupportFragment {
+public class HeaderRowFragment extends RowsSupportFragment implements HeaderFragment {
     private static final String TAG = HeaderRowFragment.class.getSimpleName();
     private UriBackgroundManager mBackgroundManager;
     private Handler mHandler;
@@ -69,7 +70,7 @@ public class HeaderRowFragment extends RowsSupportFragment {
 
     private void applyPendingUpdates() {
         for (VideoGroup group : mPendingUpdates) {
-            updateRow(group);
+            update(group);
         }
 
         mPendingUpdates.clear();
@@ -89,7 +90,8 @@ public class HeaderRowFragment extends RowsSupportFragment {
         mInvalidate = true;
     }
 
-    public void updateRow(VideoGroup group) {
+    @Override
+    public void update(VideoGroup group) {
         if (mVideoGroupAdapters == null) {
             mPendingUpdates.add(group);
             return;

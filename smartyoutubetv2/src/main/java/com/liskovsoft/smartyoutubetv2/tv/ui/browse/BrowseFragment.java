@@ -21,6 +21,7 @@ import androidx.leanback.widget.PresenterSelector;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowHeaderPresenter.ViewHolder;
 import androidx.leanback.widget.RowPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.models.auth.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Header;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -48,7 +49,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private ArrayObjectAdapter mCategoryRowAdapter;
     private BrowsePresenter mBrowsePresenter;
     private Map<Integer, Header> mHeaders;
-    private HeaderFragmentFactory mPageRowFragmentFactory;
+    private HeaderFragmentFactory mHeaderFragmentFactory;
     private Handler mHandler;
     private UriBackgroundManager mBackgroundManager;
     private boolean mAttachCalledBefore;
@@ -77,8 +78,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mCategoryRowAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         setAdapter(mCategoryRowAdapter);
 
-        mPageRowFragmentFactory = new HeaderFragmentFactory(mBackgroundManager.getBackgroundManager(), new HeaderViewSelectedListener());
-        getMainFragmentRegistry().registerFragment(PageRow.class, mPageRowFragmentFactory);
+        mHeaderFragmentFactory = new HeaderFragmentFactory(mBackgroundManager.getBackgroundManager(), new HeaderViewSelectedListener());
+        getMainFragmentRegistry().registerFragment(PageRow.class, mHeaderFragmentFactory);
 
         setupUi();
         // Prepare the manager that maintains the same background image between activities.
@@ -154,6 +155,11 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     @Override
+    public void updateHeaderIfEmpty(ErrorFragmentData data) {
+        mHeaderFragmentFactory.updateFragmentIfEmpty(data);
+    }
+
+    @Override
     public void updateHeader(VideoGroup group) {
         Header header = group.getHeader();
 
@@ -162,7 +168,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
             createHeader(header);
         }
 
-        mPageRowFragmentFactory.updateFragment(group);
+        mHeaderFragmentFactory.updateFragment(group);
     }
 
     private void createHeader(Header header) {
@@ -174,7 +180,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     @Override
     public void clearHeader(Header header) {
-        mPageRowFragmentFactory.clearFragment(header.getId());
+        mHeaderFragmentFactory.clearFragment(header.getId());
     }
 
     @Override

@@ -6,6 +6,7 @@ import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.Row;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.models.auth.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Header;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseFragment.HeaderViewSelectedListener;
@@ -95,12 +96,8 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
     }
 
     private void updateFragment(Fragment fragment, VideoGroup group) {
-        if (fragment instanceof HeaderRowFragment) {
-            HeaderRowFragment rowFragment = (HeaderRowFragment) fragment;
-            rowFragment.updateRow(group);
-        } else if (fragment instanceof HeaderGridFragment) {
-            HeaderGridFragment gridFragment = (HeaderGridFragment) fragment;
-            gridFragment.updateGrid(group);
+        if (fragment instanceof HeaderFragment) {
+            ((HeaderFragment) fragment).update(group);
         } else {
             Log.e(TAG, "updateFragment: Page group fragment has incompatible type: " + fragment.getClass().getSimpleName());
         }
@@ -147,5 +144,9 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
         } else {
             Log.e(TAG, "clearFragment: Page group fragment has incompatible type: " + fragment.getClass().getSimpleName());
         }
+    }
+
+    public void updateFragmentIfEmpty(ErrorFragmentData data) {
+        
     }
 }

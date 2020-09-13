@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.browse.grid;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
@@ -17,13 +16,14 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.HeaderFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HeaderGridFragment extends GridFragment {
+public class HeaderGridFragment extends GridFragment implements HeaderFragment {
     private static final String TAG = HeaderGridFragment.class.getSimpleName();
     private static final int COLUMNS = 5;
     private final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
@@ -67,7 +67,7 @@ public class HeaderGridFragment extends GridFragment {
 
     private void applyPendingUpdates() {
         for (VideoGroup group : mPendingUpdates) {
-            updateGrid(group);
+            update(group);
         }
 
         mPendingUpdates.clear();
@@ -82,7 +82,8 @@ public class HeaderGridFragment extends GridFragment {
         setAdapter(mGridAdapter);
     }
 
-    public void updateGrid(VideoGroup group) {
+    @Override
+    public void update(VideoGroup group) {
         if (mGridAdapter == null) {
             mPendingUpdates.add(group);
             return;
