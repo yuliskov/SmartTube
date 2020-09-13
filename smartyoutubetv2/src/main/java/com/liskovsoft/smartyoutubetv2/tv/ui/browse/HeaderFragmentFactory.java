@@ -116,4 +116,8 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
 
         return false;
     }
+
+    public Fragment getCurrentFragment() {
+        return mCurrentFragment;
+    }
 }

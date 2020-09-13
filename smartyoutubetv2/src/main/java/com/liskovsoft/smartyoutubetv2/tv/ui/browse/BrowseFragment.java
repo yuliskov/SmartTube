@@ -4,32 +4,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.Toast;
-import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.app.HeadersSupportFragment.OnHeaderViewSelectedListener;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
-import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
-import androidx.leanback.widget.OnItemViewClickedListener;
-import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.PageRow;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.PresenterSelector;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowHeaderPresenter.ViewHolder;
-import androidx.leanback.widget.RowPresenter;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.auth.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Header;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.GridItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.error.BrowseErrorFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
@@ -159,11 +153,19 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     private void showErrorIfEmpty(ErrorFragmentData data) {
         if (mHeaderFragmentFactory.isEmpty()) {
-            if (getChildFragmentManager().findFragmentById(R.id.scale_frame) != null) {
-                FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-                ft.replace(R.id.scale_frame, new BrowseErrorFragment(data));
-                ft.commit();
-            }
+            replaceMainFragment(new BrowseErrorFragment(data));
+        }
+    }
+
+    private void replaceMainFragment(Fragment fragment) {
+        Object currentFragment = Helpers.getField(this,"mMainFragment");
+
+        if (currentFragment != fragment) {
+            Helpers.setField(this, "mMainFragment", fragment);
+
+            FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+            ft.replace(R.id.scale_frame, fragment);
+            ft.commit();
         }
     }
 
@@ -176,7 +178,17 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
             createHeader(header);
         }
 
+        restoreMainFragment();
+
         mHeaderFragmentFactory.updateFragment(group);
+    }
+
+    private void restoreMainFragment() {
+        Fragment currentFragment = mHeaderFragmentFactory.getCurrentFragment();
+
+        if (currentFragment != null) {
+            replaceMainFragment(currentFragment);
+        }
     }
 
     private void createHeader(Header header) {

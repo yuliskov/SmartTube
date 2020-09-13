@@ -423,7 +423,7 @@ public class SearchSupportFragment extends Fragment {
                 mSpeechRecognizer.destroy();
                 mSpeechRecognizer = null;
             }
-        } catch (IllegalArgumentException e) { // fix Service not registered: android.speech.SpeechRecognizer$Connection
+        } catch (IllegalArgumentException e) { // NOTE: fix Service not registered: android.speech.SpeechRecognizer$Connection
             e.printStackTrace();
             Log.e(TAG, e.getMessage());
         }
