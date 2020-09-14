@@ -107,4 +107,9 @@
     <string name="pref_title_login">Login</string>
     <string name="playback_tag">PLAYBACK_TAG</string>
     <string name="no_title">No title</string>
+
+    <!--  NEW ITEMS  -->
+    <string name="signin_view_title">User Code is loading…</string>
+    <string name="signin_view_description">Enter this code on https://youtube.com/activate</string>
+    <string name="signin_view_action_text">Done</string>
 </resources>

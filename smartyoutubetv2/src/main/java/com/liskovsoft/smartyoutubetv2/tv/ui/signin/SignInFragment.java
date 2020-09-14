@@ -2,29 +2,20 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.signin;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.leanback.app.ErrorSupportFragment;
+import androidx.leanback.app.GuidedStepSupportFragment;
+import androidx.leanback.widget.GuidanceStylist;
+import androidx.leanback.widget.GuidedAction;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
-import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
-import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
+import com.liskovsoft.smartyoutubetv2.tv.R;
 
-public class SignInFragment extends ErrorSupportFragment implements SignInView {
-    private static final String TAG = SignInFragment.class.getSimpleName();
+import java.util.List;
 
-    private final Handler mHandler = new Handler();
+public class SignInFragment extends GuidedStepSupportFragment implements SignInView {
+    private static final int CONTINUE = 2;
     private SignInPresenter mSignInPresenter;
-    private UriBackgroundManager mBackgroundManager;
-    private static final boolean TRANSLUCENT = true;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -38,24 +29,7 @@ public class SignInFragment extends ErrorSupportFragment implements SignInView {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
-
-        setupUi();
-
         mSignInPresenter.onInitDone();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
-    @Override
-    public void onPause() {
-        mHandler.removeCallbacksAndMessages(null);
-
-        // fix Service not registered: android.speech.SpeechRecognizer$Connection
-        super.onPause();
     }
 
     @Override
@@ -66,7 +40,11 @@ public class SignInFragment extends ErrorSupportFragment implements SignInView {
 
     @Override
     public void showCode(String userCode) {
-        setMessage(userCode);
+        setTitle(userCode);
+    }
+
+    private void setTitle(String userCode) {
+        getGuidanceStylist().getTitleView().setText(userCode);
     }
 
     @Override
@@ -74,17 +52,27 @@ public class SignInFragment extends ErrorSupportFragment implements SignInView {
         getActivity().finish();
     }
 
-    private void setupUi() {
-        //setImageDrawable(getResources().getDrawable(R.drawable.lb_ic_sad_cloud, null));
+    @Override
+    @NonNull
+    public GuidanceStylist.Guidance onCreateGuidance(@NonNull Bundle savedInstanceState) {
+        String title = getString(R.string.signin_view_title);
+        String description = getString(R.string.signin_view_description);
+        return new GuidanceStylist.Guidance(title, description, "", null);
+    }
 
-        setMessage("Code is loading...");
-        setDefaultBackground(TRANSLUCENT);
+    @Override
+    public void onCreateActions(@NonNull List<GuidedAction> actions, Bundle savedInstanceState) {
+        GuidedAction login = new GuidedAction.Builder()
+                .id(CONTINUE)
+                .title(getString(R.string.signin_view_action_text))
+                .build();
+        actions.add(login);
+    }
 
-        setButtonText("DONE");
-        setButtonClickListener(arg0 -> {
-            getActivity().finish();
-            //getFragmentManager().beginTransaction().remove(SignInFragment.this).commit();
-            //getFragmentManager().popBackStack();
-        });
+    @Override
+    public void onGuidedActionClicked(GuidedAction action) {
+        if (action.getId() == CONTINUE) {
+            getActivity().finishAfterTransition();
+        }
     }
 }
