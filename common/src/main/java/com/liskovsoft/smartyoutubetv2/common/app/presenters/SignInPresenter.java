@@ -47,6 +47,7 @@ public class SignInPresenter implements Presenter<SignInView> {
     @Override
     public void unregister(SignInView view) {
         mView = null;
+        unhold();
     }
 
     @Override

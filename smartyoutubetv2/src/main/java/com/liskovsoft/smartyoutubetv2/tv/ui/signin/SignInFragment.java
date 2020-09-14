@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.signin;
 
-import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,10 +17,10 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
     private SignInPresenter mSignInPresenter;
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        mSignInPresenter = SignInPresenter.instance(context);
+        mSignInPresenter = SignInPresenter.instance(getContext());
         mSignInPresenter.register(this);
     }
 

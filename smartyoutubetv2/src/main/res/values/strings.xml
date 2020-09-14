@@ -110,6 +110,6 @@
 
     <!--  NEW ITEMS  -->
     <string name="signin_view_title">User Code is loading…</string>
-    <string name="signin_view_description">Enter this code on https://youtube.com/activate</string>
+    <string name="signin_view_description">To sign-in enter this code on https://youtube.com/activate</string>
     <string name="signin_view_action_text">Done</string>
 </resources>

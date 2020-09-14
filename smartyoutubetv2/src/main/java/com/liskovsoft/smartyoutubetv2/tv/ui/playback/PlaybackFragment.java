@@ -70,17 +70,11 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         super.onCreate(savedInstanceState);
 
         mMediaGroupAdapters = new HashMap<>();
+        mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
+        mBackgroundManager.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.player_background));
 
         mPlaybackPresenter = PlaybackPresenter.instance(getContext());
         mPlaybackPresenter.register(this);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
-        mBackgroundManager.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.player_background));
     }
 
     @Override

@@ -81,20 +81,10 @@ public class VideoDetailsFragment extends DetailsSupportFragment implements Deta
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        prepareBackgroundManager();
-
-        //mSelectedVideo = (Video) getActivity().getIntent()
-        //        .getParcelableExtra(VideoDetailsActivity.VIDEO);
-
-        //init();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        mDetailsPresenter = DetailsPresenter.instance(context);
+        mDetailsPresenter = DetailsPresenter.instance(getContext());
         mDetailsPresenter.register(this);
+
+        prepareBackgroundManager();
     }
 
     @Override

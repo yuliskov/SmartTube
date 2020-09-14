@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.browse.grid;
+package com.liskovsoft.smartyoutubetv2.tv.ui.mod;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +19,9 @@ import androidx.leanback.widget.VerticalGridPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /**
- * A fragment for rendering items in a vertical grids.
+ * The code was copied from:<br/>
+ * https://github.com/googlearchive/leanback-showcase/blob/master/app/src/main/java/android/support/v17/leanback/supportleanbackshowcase/app/page/PageAndListRowFragment.java<br/>
+ * Description: A fragment for rendering items in a vertical grids.
  */
 public class GridFragment extends Fragment implements BrowseSupportFragment.MainFragmentAdapterProvider {
     private static final String TAG = "VerticalGridFragment";

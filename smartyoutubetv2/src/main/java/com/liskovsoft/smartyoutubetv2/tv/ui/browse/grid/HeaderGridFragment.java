@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.browse.grid;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
@@ -19,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.HeaderFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.GridFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,27 +37,16 @@ public class HeaderGridFragment extends GridFragment implements HeaderFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setupEventListeners();
+        mMainPresenter = BrowsePresenter.instance(getContext());
+        mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
+
         setupAdapter();
+        setupEventListeners();
         applyPendingUpdates();
 
         if (getMainFragmentAdapter().getFragmentHost() != null) {
             getMainFragmentAdapter().getFragmentHost().notifyDataReady(getMainFragmentAdapter());
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        mMainPresenter = BrowsePresenter.instance(context);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
     }
 
     private void setupEventListeners() {

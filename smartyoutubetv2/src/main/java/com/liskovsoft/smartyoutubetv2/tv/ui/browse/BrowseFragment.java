@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,8 +24,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
-import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
 
 import java.util.HashMap;
@@ -42,28 +39,35 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private Map<Integer, Header> mHeaders;
     private HeaderFragmentFactory mHeaderFragmentFactory;
     private Handler mHandler;
-    private UriBackgroundManager mBackgroundManager;
-    private boolean mAttachCalledBefore;
+    private boolean mCreateAlreadyCalled;
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
         mHeaders = new HashMap<>();
         mHandler = new Handler();
-        mBrowsePresenter = BrowsePresenter.instance(context.getApplicationContext());
+        mBrowsePresenter = BrowsePresenter.instance(getContext());
         mBrowsePresenter.register(this);
+        mCreateAlreadyCalled = true;
 
-        mAttachCalledBefore = true;
+        setupAdapter();
+        setupUi();
+        // Prepare the manager that maintains the same background image between activities.
+        //prepareBackgroundManager();
+        setupEventListeners();
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        // Final initialization, modifying UI elements.
         super.onActivityCreated(savedInstanceState);
 
-        mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
+        prepareEntranceTransition();
 
+        mBrowsePresenter.onInitDone();
+    }
+
+    private void setupAdapter() {
         // Map category results from the database to ListRow objects.
         // This Adapter is used to render the MainFragment sidebar labels.
         mCategoryRowAdapter = new ArrayObjectAdapter(new ListRowPresenter());
@@ -71,18 +75,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
         mHeaderFragmentFactory = new HeaderFragmentFactory(new HeaderViewSelectedListener());
         getMainFragmentRegistry().registerFragment(PageRow.class, mHeaderFragmentFactory);
-
-        setupUi();
-        // Prepare the manager that maintains the same background image between activities.
-        //prepareBackgroundManager();
-        setupEventListeners();
-        prepareEntranceTransition();
-
-        initRowAdapters();
-
-        //mHandler.postDelayed(this::initSampleRow, 3_000);
-
-        mBrowsePresenter.onInitDone();
     }
 
     private void setupUi() {
@@ -121,11 +113,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
         // Listener moved to PageRowFragmentFactory
         //getHeadersSupportFragment().setOnHeaderViewSelectedListener(new HeaderViewSelectedListener());
-    }
-
-    private void initRowAdapters() {
-        // Every time we have to re-get the category loader, we must re-create the sidebar.
-        mCategoryRowAdapter.clear();
     }
 
     //private void initSampleRow() {
@@ -212,11 +199,11 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     public void onResume() {
         super.onResume();
 
-        if (!mAttachCalledBefore) {
+        if (!mCreateAlreadyCalled) {
             mBrowsePresenter.onViewResumed();
         }
 
-        mAttachCalledBefore = false;
+        mCreateAlreadyCalled = false;
     }
 
     @Override

@@ -56,6 +56,10 @@ public class SearchFragment extends SearchSupportFragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
+        mSearchPresenter = SearchPresenter.instance(getContext());
+        mSearchPresenter.register(this);
+
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         mProgressBarManager = new ProgressBarManager();
 
@@ -87,18 +91,8 @@ public class SearchFragment extends SearchSupportFragment
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        mSearchPresenter = SearchPresenter.instance(context);
-        mSearchPresenter.register(this);
-    }
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
 
         mSearchPresenter.onInitDone();
     }

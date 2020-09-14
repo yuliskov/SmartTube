@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.browse.row;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
@@ -43,31 +42,17 @@ public class HeaderRowFragment extends RowsSupportFragment implements HeaderFrag
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setupEventListeners();
+        mHandler = new Handler();
+        mMainPresenter = BrowsePresenter.instance(getContext());
+        mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
+
         setupAdapter();
+        setupEventListeners();
         applyPendingUpdates();
 
         if (getMainFragmentAdapter().getFragmentHost() != null) {
             getMainFragmentAdapter().getFragmentHost().notifyDataReady(getMainFragmentAdapter());
         }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        if (mVideoGroupAdapters == null) {
-            mVideoGroupAdapters = new HashMap<>();
-        }
-        mHandler = new Handler();
-        mMainPresenter = BrowsePresenter.instance(context);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
     }
 
     private void applyPendingUpdates() {
@@ -79,6 +64,10 @@ public class HeaderRowFragment extends RowsSupportFragment implements HeaderFrag
     }
 
     private void setupAdapter() {
+        if (mVideoGroupAdapters == null) {
+            mVideoGroupAdapters = new HashMap<>();
+        }
+
         if (mRowsAdapter == null) {
             mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
             setAdapter(mRowsAdapter);
