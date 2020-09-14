@@ -72,7 +72,7 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
     @Override
     public void onGuidedActionClicked(GuidedAction action) {
         if (action.getId() == CONTINUE) {
-            getActivity().finishAfterTransition();
+            mSignInPresenter.onActionClicked();
         }
     }
 }

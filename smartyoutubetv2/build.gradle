@@ -51,6 +51,7 @@ android {
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
         // More info: http://myhexaville.com/2017/03/10/android-multidex/
+        // Additionally, you should extend your application from MultiDexApplication
         multiDexEnabled = true
     }
     buildTypes {

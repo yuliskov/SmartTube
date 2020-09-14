@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="signin_view_title">Код загружается…</string>
+    <string name="signin_view_description">Чтобы войти в аккаунт введите этот код на странице %s</string>
+    <string name="signin_view_action_text">Готово</string>
+</resources>

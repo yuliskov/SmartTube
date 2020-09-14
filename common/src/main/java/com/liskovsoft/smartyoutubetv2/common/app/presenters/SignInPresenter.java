@@ -52,11 +52,21 @@ public class SignInPresenter implements Presenter<SignInView> {
 
     @Override
     public void onInitDone() {
+        disposeActions();
+
+        updateUserCode();
+    }
+
+    public void onActionClicked() {
+        disposeActions();
+
+        mView.close();
+    }
+
+    private void disposeActions() {
         if (mSignInAction != null && !mSignInAction.isDisposed()) {
             mSignInAction.dispose();
         }
-
-        updateUserCode();
     }
 
     private void updateUserCode() {
