@@ -66,19 +66,25 @@ public class SignInFragment extends ErrorSupportFragment implements SignInView {
 
     @Override
     public void showCode(String userCode) {
-        // TODO: not implemented
+        setMessage(userCode);
+    }
+
+    @Override
+    public void close() {
+        getActivity().finish();
     }
 
     private void setupUi() {
         //setImageDrawable(getResources().getDrawable(R.drawable.lb_ic_sad_cloud, null));
 
-        setMessage("User code");
+        setMessage("Code is loading...");
         setDefaultBackground(TRANSLUCENT);
 
         setButtonText("DONE");
         setButtonClickListener(arg0 -> {
-            getFragmentManager().beginTransaction().remove(SignInFragment.this).commit();
-            getFragmentManager().popBackStack();
+            getActivity().finish();
+            //getFragmentManager().beginTransaction().remove(SignInFragment.this).commit();
+            //getFragmentManager().popBackStack();
         });
     }
 }

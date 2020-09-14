@@ -10,7 +10,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.auth.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Header;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseFragment.HeaderViewSelectedListener;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.error.BrowseErrorFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.grid.HeaderGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.row.HeaderRowFragment;
 
@@ -55,7 +54,7 @@ public class HeaderFragmentFactoryOld extends BrowseSupportFragment.FragmentFact
             int type = ((CustomHeaderItem) header).getType();
 
             if (mErrorData != null) {
-                fragment = new BrowseErrorFragment(mErrorData);
+                fragment = new BrowseDialogFragment(mErrorData);
             } else if (type == Header.TYPE_ROW) {
                 fragment = new HeaderRowFragment();
             } else if (type == Header.TYPE_GRID) {

@@ -2,9 +2,13 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class SignInPresenter implements Presenter<SignInView> {
     private static final String TAG = SignInPresenter.class.getSimpleName();
@@ -14,6 +18,7 @@ public class SignInPresenter implements Presenter<SignInView> {
     private final Context mContext;
     private SignInView mView;
     private String mUserCode;
+    private Disposable mSignInAction;
 
     public SignInPresenter(Context context) {
         mContext = context;
@@ -44,6 +49,20 @@ public class SignInPresenter implements Presenter<SignInView> {
 
     @Override
     public void onInitDone() {
-        mView.showCode(mUserCode);
+        if (mSignInAction != null && !mSignInAction.isDisposed()) {
+            mSignInAction.dispose();
+        }
+
+        updateUserCode();
+    }
+
+    private void updateUserCode() {
+        mSignInAction = mMediaService.getSignInManager().signInObserve()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        userCode -> mView.showCode(userCode),
+                        error -> Log.e(TAG, error),
+                        () -> mView.close());
     }
 }

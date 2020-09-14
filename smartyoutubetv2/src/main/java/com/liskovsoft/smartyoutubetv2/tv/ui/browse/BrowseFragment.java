@@ -25,7 +25,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.error.BrowseErrorFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
@@ -153,7 +152,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     private void showErrorIfEmpty(ErrorFragmentData data) {
         if (mHeaderFragmentFactory.isEmpty()) {
-            replaceMainFragment(new BrowseErrorFragment(data));
+            replaceMainFragment(new BrowseDialogFragment(data));
         }
     }
 
