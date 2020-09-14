@@ -3,8 +3,10 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlayerController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 
-public abstract class PlayerEventListenerHelper implements PlayerEventBridge {
+public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     protected PlayerController mController;
     protected FragmentActivity mActivity;
 
@@ -97,6 +99,11 @@ public abstract class PlayerEventListenerHelper implements PlayerEventBridge {
     }
 
     @Override
+    public void onRepeatModeClicked(int modeIndex) {
+        // NOP
+    }
+
+    @Override
     public void onSeek() {
         // NOP
     }
@@ -108,6 +115,11 @@ public abstract class PlayerEventListenerHelper implements PlayerEventBridge {
 
     @Override
     public void onKeyDown(int keyCode) {
+        // NOP
+    }
+
+    @Override
+    public void onRepeatModeChange(int modeIndex) {
         // NOP
     }
 }

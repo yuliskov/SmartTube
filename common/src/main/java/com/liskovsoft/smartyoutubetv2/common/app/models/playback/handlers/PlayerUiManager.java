@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners;
+package com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -32,6 +32,16 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     public void onEngineReleased() {
         stopUiVisibilityTimer();
         stopSuggestionsPositionTimer();
+    }
+
+    @Override
+    public void onRepeatModeClicked(int modeIndex) {
+        mController.setRepeatMode(modeIndex);
+    }
+
+    @Override
+    public void onRepeatModeChange(int modeIndex) {
+        mController.setRepeatButtonState(modeIndex);
     }
 
     private void stopUiVisibilityTimer() {

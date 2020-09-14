@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.MainPlayerEventBridge;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.MainPlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 
 public class PlaybackPresenter implements Presenter<PlaybackView> {
@@ -12,12 +12,12 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
     private final Context mContext;
     private final ViewManager mViewManager;
     private PlaybackView mView;
-    private final MainPlayerEventBridge mMainPlayerEventBridge;
+    private final MainPlayerEventListener mMainPlayerEventBridge;
 
     private PlaybackPresenter(Context context) {
         mContext = context;
         mViewManager = ViewManager.instance(context);
-        mMainPlayerEventBridge = MainPlayerEventBridge.instance();
+        mMainPlayerEventBridge = MainPlayerEventListener.instance();
     }
 
     public static PlaybackPresenter instance(Context context) {

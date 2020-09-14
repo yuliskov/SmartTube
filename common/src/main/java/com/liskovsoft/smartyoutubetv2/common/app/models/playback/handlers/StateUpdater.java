@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.models.playback.listeners;
+package com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -10,6 +10,7 @@ import java.util.Map;
 public class StateUpdater extends PlayerEventListenerHelper {
     private final Map<Long, State> mPositionMap = new HashMap<>();
     private boolean mIsPlaying;
+    private int mRepeatMode = 0;
 
     private static class State {
         final long positionMs;
@@ -21,7 +22,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void openVideo(Video item) {
-        mIsPlaying = true; // video just changed externally
+        mIsPlaying = true; // video just added
     }
 
     @Override
@@ -49,6 +50,11 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     @Override
+    public void onEngineInitialized() {
+        mController.setRepeatMode(mRepeatMode);
+    }
+
+    @Override
     public void onEngineReleased() {
         saveState();
     }
@@ -68,6 +74,11 @@ public class StateUpdater extends PlayerEventListenerHelper {
     public void onPause() {
         mIsPlaying = false;
         Helpers.enableScreensaver(mActivity);
+    }
+
+    @Override
+    public void onRepeatModeChange(int modeIndex) {
+        mRepeatMode = modeIndex;
     }
 
     private void saveState() {

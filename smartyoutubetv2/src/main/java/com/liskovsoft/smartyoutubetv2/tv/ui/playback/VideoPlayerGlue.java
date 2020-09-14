@@ -9,6 +9,7 @@ import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.PlaybackControlsRow;
+import androidx.leanback.widget.PlaybackControlsRow.MultiAction;
 
 import java.util.concurrent.TimeUnit;
 
@@ -46,6 +47,8 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         void onPause();
 
         void onKeyDown(int keyCode);
+
+        void setRepeatMode(int modeIndex);
     }
 
     private final OnActionClickedListener mActionListener;
@@ -154,8 +157,13 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         }
     }
 
-    public void setRepeatMode(int actionIndex) {
-        getPlayerAdapter().setRepeatAction(actionIndex);
+    public void setRepeatMode(int modeIndex) {
+        mActionListener.setRepeatMode(modeIndex);
+    }
+
+    public void setRepeatButtonState(int modeIndex) {
+        mRepeatAction.setIndex(modeIndex);
+        invalidateUi(mRepeatAction);
     }
 
     private boolean dispatchAction(Action action) {
@@ -176,28 +184,31 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
             PlaybackControlsRow.MultiAction multiAction = (PlaybackControlsRow.MultiAction) action;
             multiAction.nextIndex(); // increment state
 
-            // Notify adapter of action changes to handle primary actions, such as, play/pause.
-            notifyActionChanged(
-                    multiAction,
-                    (ArrayObjectAdapter) getControlsRow().getPrimaryActionsAdapter());
-
-
-            // Notify adapter of action changes to handle secondary actions, such as, thumbs up/down and repeat.
-            notifyActionChanged(
-                    multiAction,
-                    (ArrayObjectAdapter) getControlsRow().getSecondaryActionsAdapter());
-
             if (action == mRepeatAction) {
                 setRepeatMode(multiAction.getIndex());
                 handled = true;
             }
+
+            invalidateUi(multiAction);
         }
 
         return handled;
     }
 
+    private void invalidateUi(Action multiAction) {
+        // Notify adapter of action changes to handle primary actions, such as, play/pause.
+        notifyActionChanged(
+                multiAction,
+                (ArrayObjectAdapter) getControlsRow().getPrimaryActionsAdapter());
+
+        // Notify adapter of action changes to handle secondary actions, such as, thumbs up/down and repeat.
+        notifyActionChanged(
+                multiAction,
+                (ArrayObjectAdapter) getControlsRow().getSecondaryActionsAdapter());
+    }
+
     private void notifyActionChanged(
-            PlaybackControlsRow.MultiAction action, ArrayObjectAdapter adapter) {
+            Action action, ArrayObjectAdapter adapter) {
         if (adapter != null) {
             int index = adapter.indexOf(action);
             if (index >= 0) {

@@ -14,11 +14,11 @@ android {
     
     defaultConfig {
         // values linked with applicationId: searchable.searchSuggestAuthority, searchable.searchSuggestIntentData, VideoContract.CONTENT_AUTHORITY
-        applicationId "com.liskovsoft.videomanager2"
+        applicationId "com.liskovsoft.smarttube"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 15
-        versionName "0.5"
+        versionCode 17
+        versionName "0.7"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
     }
@@ -36,7 +36,7 @@ android {
     productFlavors {
         vbeta {
             // matchingFallbacks = ['lite']
-            // applicationIdSuffix ".beta"
+            applicationIdSuffix ".beta"
         }
         vorig {
             // matchingFallbacks = ['lite']

@@ -1,7 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.managers;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 
 import java.io.InputStream;
 
@@ -16,4 +16,5 @@ public interface ExoPlayerController {
     void setEventListener(PlayerEventListener eventListener);
     void setVideo(Video video);
     Video getVideo();
+    void setRepeatMode(int modeIndex);
 }

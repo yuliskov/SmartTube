@@ -19,6 +19,7 @@ import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
@@ -28,8 +29,8 @@ import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlayerController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.DirectExoPlayerController;
@@ -38,7 +39,6 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.LeanbackPlayerAdapter;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -261,6 +261,11 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         public void onKeyDown(int keyCode) {
             mEventListener.onKeyDown(keyCode);
         }
+
+        @Override
+        public void setRepeatMode(int modeIndex) {
+            mEventListener.onRepeatModeClicked(modeIndex);
+        }
     }
 
     /* Begin PlayerController */
@@ -365,6 +370,16 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         } else {
             hideControlsOverlay(mEnableAnimation);
         }
+    }
+
+    @Override
+    public void setRepeatMode(int modeIndex) {
+        mExoPlayerController.setRepeatMode(modeIndex);
+    }
+
+    @Override
+    public void setRepeatButtonState(int modeIndex) {
+        mPlayerGlue.setRepeatButtonState(modeIndex);
     }
 
     @Override

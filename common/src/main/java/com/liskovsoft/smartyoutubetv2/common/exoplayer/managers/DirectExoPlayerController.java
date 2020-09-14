@@ -9,7 +9,7 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 
 import java.io.InputStream;
@@ -103,6 +103,12 @@ public class DirectExoPlayerController implements EventListener, ExoPlayerContro
     @Override
     public Video getVideo() {
         return mVideo;
+    }
+
+    @Override
+    public void setRepeatMode(int modeIndex) {
+        mPlayer.setRepeatMode(modeIndex);
+        mEventListener.onRepeatModeChange(modeIndex);
     }
 
     @Override
