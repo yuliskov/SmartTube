@@ -12,6 +12,7 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
     private static final String TAG = VideoGroupObjectAdapter.class.getSimpleName();
     private final List<Video> mMediaItems;
     private VideoGroup mLastGroup;
+    private int mLastAddedSize;
 
     // TODO: Select presenter based on the video item type. Such channel, playlist, or simple video
     // https://github.com/googlearchive/leanback-showcase/blob/master/app/src/main/java/android/support/v17/leanback/supportleanbackshowcase/app/page/PageAndListRowFragment.java
@@ -43,6 +44,7 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         if (group != null) {
             mMediaItems.addAll(group.getVideos());
             mLastGroup = group;
+            mLastAddedSize = group.getVideos().size();
             
             notifyChanged();
         }

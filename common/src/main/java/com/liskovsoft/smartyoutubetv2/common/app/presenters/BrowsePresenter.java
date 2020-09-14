@@ -39,7 +39,6 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     private final MediaService mMediaService;
     private final ViewManager mViewManager;
     private final OnboardingPresenter mOnboardingPresenter;
-    private final SignInPresenter mSignInPresenter;
     private BrowseView mView;
     private final List<Header> mHeaders;
     private final Map<Integer, Observable<MediaGroup>> mGridMapping;
@@ -55,7 +54,6 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
         mPlaybackPresenter = PlaybackPresenter.instance(context);
         mDetailsPresenter = DetailsPresenter.instance(context);
         mOnboardingPresenter = OnboardingPresenter.instance(context);
-        mSignInPresenter = SignInPresenter.instance(context);
         mMediaService = YouTubeMediaService.instance();
         mViewManager = ViewManager.instance(context);
         mHeaders = new ArrayList<>();
@@ -147,14 +145,16 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
         updateHeader(headerId);
     }
 
+    public void refresh() {
+        updateHeader(mCurrentHeaderId);
+    }
+
     private void updateHeader(long headerId) {
         mCurrentHeaderId = headerId;
 
-        if (headerId == -1) {
+        if (headerId == -1 || mView == null) {
             return;
         }
-
-        mLastUpdateTimeMs = System.currentTimeMillis();
 
         boolean updateInProgress = mUpdateAction != null && !mUpdateAction.isDisposed();
 
@@ -245,7 +245,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mediaGroups -> updateHeader(header, mediaGroups)
+                        mediaGroups -> updateRowsHeader(header, mediaGroups)
                         , error -> Log.e(TAG, "loadRowsHeader error: " + error)
                         , () -> {
                             mView.showProgressBar(false);
@@ -253,7 +253,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
                         });
     }
 
-    private void updateHeader(Header header, List<MediaGroup> mediaGroups) {
+    private void updateRowsHeader(Header header, List<MediaGroup> mediaGroups) {
         for (MediaGroup mediaGroup : mediaGroups) {
             if (mediaGroup.getMediaItems() == null) {
                 Log.e(TAG, "loadRowsHeader: MediaGroup is empty. Group Name: " + mediaGroup.getTitle());
@@ -261,6 +261,8 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
             }
 
             mView.updateHeader(VideoGroup.from(mediaGroup, header));
+
+            mLastUpdateTimeMs = System.currentTimeMillis();
         }
     }
 
@@ -288,7 +290,10 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mediaGroup -> mView.updateHeader(VideoGroup.from(mediaGroup, header))
+                        mediaGroup -> {
+                            mView.updateHeader(VideoGroup.from(mediaGroup, header));
+                            mLastUpdateTimeMs = System.currentTimeMillis();
+                        }
                         , error -> Log.e(TAG, "loadGridHeader error: " + error)
                         , () -> {
                             mView.showProgressBar(false);

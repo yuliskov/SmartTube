@@ -16,6 +16,7 @@ public class SignInPresenter implements Presenter<SignInView> {
     private final MediaService mMediaService;
     private final ViewManager mViewManager;
     private final Context mContext;
+    private final BrowsePresenter mBrowsePresenter;
     private SignInView mView;
     private String mUserCode;
     private Disposable mSignInAction;
@@ -24,6 +25,7 @@ public class SignInPresenter implements Presenter<SignInView> {
         mContext = context;
         mMediaService = YouTubeMediaService.instance();
         mViewManager = ViewManager.instance(context);
+        mBrowsePresenter = BrowsePresenter.instance(context);
     }
 
     public static SignInPresenter instance(Context context) {
@@ -63,6 +65,9 @@ public class SignInPresenter implements Presenter<SignInView> {
                 .subscribe(
                         userCode -> mView.showCode(userCode),
                         error -> Log.e(TAG, error),
-                        () -> mView.close());
+                        () -> {
+                            mBrowsePresenter.refresh();
+                            mView.close();
+                        });
     }
 }

@@ -56,7 +56,9 @@ public class HeaderRowFragment extends RowsSupportFragment implements HeaderFrag
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        mVideoGroupAdapters = new HashMap<>();
+        if (mVideoGroupAdapters == null) {
+            mVideoGroupAdapters = new HashMap<>();
+        }
         mHandler = new Handler();
         mMainPresenter = BrowsePresenter.instance(context);
     }
@@ -77,8 +79,10 @@ public class HeaderRowFragment extends RowsSupportFragment implements HeaderFrag
     }
 
     private void setupAdapter() {
-        mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
-        setAdapter(mRowsAdapter);
+        if (mRowsAdapter == null) {
+            mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
+            setAdapter(mRowsAdapter);
+        }
     }
 
     private void setupEventListeners() {

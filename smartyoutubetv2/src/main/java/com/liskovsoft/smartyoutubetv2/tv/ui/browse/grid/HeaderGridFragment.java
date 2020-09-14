@@ -78,8 +78,10 @@ public class HeaderGridFragment extends GridFragment implements HeaderFragment {
         presenter.setNumberOfColumns(COLUMNS);
         setGridPresenter(presenter);
 
-        mGridAdapter = new VideoGroupObjectAdapter();
-        setAdapter(mGridAdapter);
+        if (mGridAdapter == null) {
+            mGridAdapter = new VideoGroupObjectAdapter();
+            setAdapter(mGridAdapter);
+        }
     }
 
     @Override
