@@ -4,7 +4,6 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -14,7 +13,6 @@ public class SignInPresenter implements Presenter<SignInView> {
     private static final String TAG = SignInPresenter.class.getSimpleName();
     private static SignInPresenter sInstance;
     private final MediaService mMediaService;
-    private final ViewManager mViewManager;
     private final Context mContext;
     private final BrowsePresenter mBrowsePresenter;
     private SignInView mView;
@@ -24,7 +22,6 @@ public class SignInPresenter implements Presenter<SignInView> {
     public SignInPresenter(Context context) {
         mContext = context;
         mMediaService = YouTubeMediaService.instance();
-        mViewManager = ViewManager.instance(context);
         mBrowsePresenter = BrowsePresenter.instance(context);
     }
 
@@ -53,13 +50,10 @@ public class SignInPresenter implements Presenter<SignInView> {
     @Override
     public void onInitDone() {
         disposeActions();
-
         updateUserCode();
     }
 
     public void onActionClicked() {
-        disposeActions();
-
         mView.close();
     }
 
@@ -78,7 +72,9 @@ public class SignInPresenter implements Presenter<SignInView> {
                         error -> Log.e(TAG, error),
                         () -> {
                             mBrowsePresenter.refresh();
-                            mView.close();
+                            if (mView != null) {
+                                mView.close();
+                            }
                         });
     }
 }
