@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.view.KeyEvent;
+import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 
@@ -21,10 +21,10 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         stopUiVisibilityTimer();
         stopSuggestionsPositionTimer();
 
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            startSuggestionsPositionTimer();
+        if (KeyHelpers.isBackKey(keyCode)) {
+            startSuggestionsResetTimer();
         } else {
-            startUiVisibilityTimer();
+            startUiHideTimer();
         }
     }
 
@@ -49,7 +49,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         mHandler.removeCallbacks(mUiVisibilityHandler);
     }
 
-    private void startUiVisibilityTimer() {
+    private void startUiHideTimer() {
         Log.d(TAG, "Starting hide ui timer...");
         mHandler.postDelayed(mUiVisibilityHandler, UI_HIDE_TIMEOUT_MS);
     }
@@ -59,7 +59,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         mHandler.removeCallbacks(mSuggestionsPositionHandler);
     }
 
-    private void startSuggestionsPositionTimer() {
+    private void startSuggestionsResetTimer() {
         Log.d(TAG, "Starting reset position timer...");
         mHandler.postDelayed(mSuggestionsPositionHandler, SUGGESTIONS_RESET_TIMEOUT_MS);
     }
@@ -74,7 +74,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         } else {
             // in seeking state? doing recheck...
             stopUiVisibilityTimer();
-            startUiVisibilityTimer();
+            startUiHideTimer();
         }
     };
 }
