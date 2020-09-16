@@ -29,12 +29,11 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.OptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.DirectExoPlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.ExoPlayerController;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.PlayerController;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
@@ -49,7 +48,7 @@ import java.util.Map;
  * Plays selected video, loads playlist and related videos, and delegates playback to
  * {@link VideoPlayerGlue}.
  */
-public class PlaybackFragment extends VideoSupportFragment implements PlaybackView, PlayerController {
+public class PlaybackFragment extends VideoSupportFragment implements PlaybackView, com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlayerController {
     private static final String TAG = PlaybackFragment.class.getSimpleName();
     private static final int UPDATE_DELAY = 16;
     private VideoPlayerGlue mPlayerGlue;
@@ -61,7 +60,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private ArrayObjectAdapter mRowsAdapter;
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
     private PlayerEventListener mEventListener;
-    private ExoPlayerController mExoPlayerController;
+    private PlayerController mExoPlayerController;
     private UriBackgroundManager mBackgroundManager;
     private final boolean mEnableAnimation = true;
     private RowsSupportFragment mRowsSupportFragment;
@@ -176,7 +175,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
         mPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), mTrackSelector);
 
-        mExoPlayerController = new DirectExoPlayerController(mPlayer, mTrackSelector, getContext());
+        mExoPlayerController = new ExoPlayerController(mPlayer, mTrackSelector, getContext());
 
         mPlayerAdapter = new LeanbackPlayerAdapter(getActivity(), mPlayer, UPDATE_DELAY);
 
@@ -369,7 +368,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
-    public PlayerController getController() {
+    public com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlayerController getController() {
         return this;
     }
 
