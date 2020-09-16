@@ -9,7 +9,12 @@ import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.PlaybackControlsRow;
-import androidx.leanback.widget.PlaybackControlsRow.MultiAction;
+import com.liskovsoft.smartyoutubetv2.common.app.views.VideoSettingsView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.HighQualityAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.RepeatAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SubscribeAction;
 
 import java.util.concurrent.TimeUnit;
 
@@ -53,13 +58,16 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
 
     private final OnActionClickedListener mActionListener;
 
-    private final TwoStateRepeatAction mRepeatAction;
     private final PlaybackControlsRow.ThumbsUpAction mThumbsUpAction;
     private final PlaybackControlsRow.ThumbsDownAction mThumbsDownAction;
     private final PlaybackControlsRow.SkipPreviousAction mSkipPreviousAction;
     private final PlaybackControlsRow.SkipNextAction mSkipNextAction;
     private final PlaybackControlsRow.FastForwardAction mFastForwardAction;
     private final PlaybackControlsRow.RewindAction mRewindAction;
+    private final RepeatAction mRepeatAction;
+    private final HighQualityAction mHighQualityAction;
+    private final ClosedCaptioningAction mClosedCaptioningAction;
+    private final SubscribeAction mSubscribeAction;
 
     public VideoPlayerGlue(
             Context context,
@@ -78,7 +86,10 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         mThumbsUpAction.setIndex(PlaybackControlsRow.ThumbsUpAction.INDEX_OUTLINE);
         mThumbsDownAction = new PlaybackControlsRow.ThumbsDownAction(context);
         mThumbsDownAction.setIndex(PlaybackControlsRow.ThumbsDownAction.INDEX_OUTLINE);
-        mRepeatAction = new TwoStateRepeatAction(context);
+        mRepeatAction = new RepeatAction(context);
+        mHighQualityAction = new HighQualityAction(context);
+        mClosedCaptioningAction = new ClosedCaptioningAction(context);
+        mSubscribeAction = new SubscribeAction(context);
     }
 
     @Override
@@ -99,26 +110,18 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         super.onCreateSecondaryActions(adapter);
         adapter.add(mThumbsDownAction);
         adapter.add(mThumbsUpAction);
+        adapter.add(mSubscribeAction);
+        adapter.add(mHighQualityAction);
+        adapter.add(mClosedCaptioningAction);
         adapter.add(mRepeatAction);
     }
 
     @Override
     public void onActionClicked(Action action) {
-        if (shouldDispatchAction(action)) {
-            dispatchAction(action);
-            return;
+        if (!dispatchAction(action)) {
+            // Super class handles play/pause and delegates to abstract methods next()/previous().
+            super.onActionClicked(action);
         }
-        // Super class handles play/pause and delegates to abstract methods next()/previous().
-        super.onActionClicked(action);
-    }
-
-    // Should dispatch actions that the super class does not supply callbacks for.
-    private boolean shouldDispatchAction(Action action) {
-        return action == mRewindAction
-                || action == mFastForwardAction
-                || action == mThumbsDownAction
-                || action == mThumbsUpAction
-                || action == mRepeatAction;
     }
 
     @Override
@@ -173,6 +176,16 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
 
         boolean handled = false;
 
+        int actionIndex = 0;
+
+        // properly handle ui changes of multi-action buttons
+        if (action instanceof PlaybackControlsRow.MultiAction) {
+            PlaybackControlsRow.MultiAction multiAction = (PlaybackControlsRow.MultiAction) action;
+            multiAction.nextIndex(); // increment state
+            invalidateUi(multiAction);
+            actionIndex = multiAction.getIndex();
+        }
+
         // Primary actions are handled manually.
         if (action == mRewindAction) {
             rewind();
@@ -180,16 +193,12 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         } else if (action == mFastForwardAction) {
             fastForward();
             handled = true;
-        } else if (action instanceof PlaybackControlsRow.MultiAction) {
-            PlaybackControlsRow.MultiAction multiAction = (PlaybackControlsRow.MultiAction) action;
-            multiAction.nextIndex(); // increment state
-
-            if (action == mRepeatAction) {
-                setRepeatMode(multiAction.getIndex());
-                handled = true;
-            }
-
-            invalidateUi(multiAction);
+        } else if (action == mRepeatAction) {
+            setRepeatMode(actionIndex);
+            handled = true;
+        } else if (action == mHighQualityAction) {
+            ViewManager.instance(getContext()).startView(VideoSettingsView.class);
+            handled = true;
         }
 
         return handled;
@@ -237,15 +246,7 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
     }
 
     private boolean dispatchKey(int keyCode) {
-        boolean handled = false;
-
-        if (keyCode == KeyEvent.KEYCODE_BACK ||
-            keyCode == KeyEvent.KEYCODE_ESCAPE) {
-            // reset row position
-            // handled = true;
-        }
-
-        return handled;
+        return false;
     }
 
     private Action findAction(int keyCode) {
