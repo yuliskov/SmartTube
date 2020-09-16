@@ -9,10 +9,12 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 
 import java.io.InputStream;
+import java.util.List;
 
 public class DirectExoPlayerController implements EventListener, ExoPlayerController {
     private static final String TAG = DirectExoPlayerController.class.getSimpleName();
@@ -72,7 +74,9 @@ public class DirectExoPlayerController implements EventListener, ExoPlayerContro
 
     @Override
     public void setPosition(long positionMs) {
-        mPlayer.seekTo(positionMs);
+        if (positionMs >= 0) {
+            mPlayer.seekTo(positionMs);
+        }
     }
 
     @Override
@@ -109,6 +113,11 @@ public class DirectExoPlayerController implements EventListener, ExoPlayerContro
     public void setRepeatMode(int modeIndex) {
         mPlayer.setRepeatMode(modeIndex);
         mEventListener.onRepeatModeChange(modeIndex);
+    }
+
+    @Override
+    public List<OptionItem> getVideoFormats() {
+        return null;
     }
 
     @Override

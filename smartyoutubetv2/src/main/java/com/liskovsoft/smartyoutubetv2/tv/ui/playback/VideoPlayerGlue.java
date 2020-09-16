@@ -9,6 +9,7 @@ import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.PlaybackControlsRow;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChannelAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.HighQualityAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.RepeatAction;
@@ -60,6 +61,8 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         void onThumbsDown(boolean thumbsDown);
 
         void onThumbsUp(boolean thumbsUp);
+
+        void onChannel();
     }
 
     private final OnActionClickedListener mActionListener;
@@ -74,6 +77,7 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
     private final HighQualityAction mHighQualityAction;
     private final ClosedCaptioningAction mClosedCaptioningAction;
     private final SubscribeAction mSubscribeAction;
+    private final ChannelAction mChannelAction;
 
     public VideoPlayerGlue(
             Context context,
@@ -96,6 +100,7 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         mHighQualityAction = new HighQualityAction(context);
         mClosedCaptioningAction = new ClosedCaptioningAction(context);
         mSubscribeAction = new SubscribeAction(context);
+        mChannelAction = new ChannelAction(context);
     }
 
     @Override
@@ -114,6 +119,7 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
     @Override
     protected void onCreateSecondaryActions(ArrayObjectAdapter adapter) {
         super.onCreateSecondaryActions(adapter);
+        adapter.add(mChannelAction);
         adapter.add(mThumbsDownAction);
         adapter.add(mThumbsUpAction);
         adapter.add(mSubscribeAction);
@@ -237,6 +243,9 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         } else if (action == mThumbsUpAction) {
             incrementActionIndex(action);
             mActionListener.onThumbsUp(getActionIndex(action) != 0);
+            handled = true;
+        } else if (action == mChannelAction) {
+            mActionListener.onChannel();
             handled = true;
         }
 

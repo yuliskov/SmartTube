@@ -114,4 +114,5 @@
     <string name="signin_view_action_text">Done</string>
     <string name="action_subscribe_off">Subscribe Off</string>
     <string name="action_subscribe_on">Subscribe On</string>
+    <string name="action_channel_off">Channel Off</string>
 </resources>

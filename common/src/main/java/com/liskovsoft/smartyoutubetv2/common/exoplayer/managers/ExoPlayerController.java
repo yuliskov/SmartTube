@@ -1,9 +1,11 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.managers;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 
 import java.io.InputStream;
+import java.util.List;
 
 public interface ExoPlayerController {
     void openDash(InputStream dashManifest);
@@ -17,4 +19,5 @@ public interface ExoPlayerController {
     void setVideo(Video video);
     Video getVideo();
     void setRepeatMode(int modeIndex);
+    List<OptionItem> getVideoFormats();
 }

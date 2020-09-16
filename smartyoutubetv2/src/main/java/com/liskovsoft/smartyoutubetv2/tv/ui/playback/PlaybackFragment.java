@@ -28,6 +28,7 @@ import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
@@ -41,6 +42,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -279,6 +281,11 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         public void onThumbsUp(boolean thumbsUp) {
             mEventListener.onThumbsUpClicked(thumbsUp);
         }
+
+        @Override
+        public void onChannel() {
+            mEventListener.onChannelClicked();
+        }
     }
 
     /* Begin PlayerController */
@@ -306,6 +313,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlayerGlue.setSubtitle(video.description);
     }
 
+    // Begin Engine Events
+
     @Override
     public void openDash(InputStream dashManifest) {
         mExoPlayerController.openDash(dashManifest);
@@ -317,6 +326,43 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
+    public long getPositionMs() {
+        return mExoPlayerController.getPosition();
+    }
+
+    @Override
+    public void setPositionMs(long positionMs) {
+        mExoPlayerController.setPosition(positionMs);
+    }
+
+    @Override
+    public long getLengthMs() {
+        return mExoPlayerController.getLengthMs();
+    }
+
+    @Override
+    public void setPlay(boolean play) {
+        mExoPlayerController.setPlay(play);
+    }
+
+    @Override
+    public boolean isPlaying() {
+        return mExoPlayerController.isPlaying();
+    }
+
+    @Override
+    public void setRepeatMode(int modeIndex) {
+        mExoPlayerController.setRepeatMode(modeIndex);
+    }
+
+    @Override
+    public List<OptionItem> getVideoFormats() {
+        return mExoPlayerController.getVideoFormats();
+    }
+
+    // End Engine Events
+
+    @Override
     public void setEventListener(PlayerEventListener listener) {
         mEventListener = listener;
         mExoPlayerController.setEventListener(listener);
@@ -325,23 +371,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public PlayerController getController() {
         return this;
-    }
-
-    @Override
-    public long getPositionMs() {
-        return mExoPlayerController.getPosition();
-    }
-
-    @Override
-    public void setPositionMs(long positionMs) {
-        if (positionMs >= 0) {
-            mExoPlayerController.setPosition(positionMs);
-        }
-    }
-
-    @Override
-    public long getLengthMs() {
-        return mExoPlayerController.getLengthMs();
     }
 
     @Override
@@ -362,16 +391,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
-    public void setPlay(boolean play) {
-        mExoPlayerController.setPlay(play);
-    }
-
-    @Override
-    public boolean isPlaying() {
-        return mExoPlayerController.isPlaying();
-    }
-
-    @Override
     public boolean isSuggestionsShown() {
         return isControlsOverlayVisible() && getSuggestedRowIndex() != 0;
     }
@@ -383,11 +402,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         } else {
             hideControlsOverlay(mEnableAnimation);
         }
-    }
-
-    @Override
-    public void setRepeatMode(int modeIndex) {
-        mExoPlayerController.setRepeatMode(modeIndex);
     }
 
     @Override

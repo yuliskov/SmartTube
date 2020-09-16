@@ -158,7 +158,10 @@ public class ViewManager {
             lastActivity = mRootActivity;
         }
 
+        Log.d(TAG, "Starting activity: " + lastActivity.getSimpleName());
+
         Intent intent = new Intent(activity, lastActivity);
+
         //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         activity.startActivity(intent);

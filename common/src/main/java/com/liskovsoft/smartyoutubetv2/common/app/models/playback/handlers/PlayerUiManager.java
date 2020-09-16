@@ -5,8 +5,11 @@ import android.os.Looper;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.views.VideoSettingsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+
+import java.util.List;
 
 public class PlayerUiManager extends PlayerEventListenerHelper {
     private static final String TAG = PlayerUiManager.class.getSimpleName();
@@ -48,6 +51,8 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
 
     @Override
     public void onHighQualityClicked() {
+        List<OptionItem> formats = mController.getVideoFormats();
+
         ViewManager.instance(mActivity).startView(VideoSettingsView.class);
     }
 
@@ -64,6 +69,11 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     @Override
     public void onThumbsUpClicked(boolean thumbsUp) {
         // TODO: make network request
+    }
+
+    @Override
+    public void onChannelClicked() {
+        // TODO: open channel view
     }
 
     private void stopUiVisibilityTimer() {

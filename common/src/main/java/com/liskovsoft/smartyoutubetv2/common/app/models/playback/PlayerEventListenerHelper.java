@@ -142,4 +142,9 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     public void onThumbsUpClicked(boolean thumbsUp) {
         // NOP
     }
+
+    @Override
+    public void onChannelClicked() {
+        // NOP
+    }
 }

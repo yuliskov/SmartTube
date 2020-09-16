@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller;
 
 import java.io.InputStream;
+import java.util.List;
 
 public interface PlayerEngineController {
     void openDash(InputStream dashManifest);
@@ -11,4 +12,5 @@ public interface PlayerEngineController {
     void setPlay(boolean play);
     boolean isPlaying();
     void setRepeatMode(int modeIndex);
+    List<OptionItem> getVideoFormats();
 }

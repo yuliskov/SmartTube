@@ -15,4 +15,5 @@ public interface PlayerUiEventListener {
     void onSubscribeClicked(boolean subscribed);
     void onThumbsDownClicked(boolean thumbsDown);
     void onThumbsUpClicked(boolean thumbsUp);
+    void onChannelClicked();
 }

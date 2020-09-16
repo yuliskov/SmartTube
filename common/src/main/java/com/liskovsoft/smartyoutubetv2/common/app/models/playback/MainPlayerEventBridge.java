@@ -202,4 +202,9 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     public void onThumbsUpClicked(boolean thumbsUp) {
         process(listener -> listener.onThumbsUpClicked(thumbsUp));
     }
+
+    @Override
+    public void onChannelClicked() {
+        process(PlayerUiEventListener::onChannelClicked);
+    }
 }
