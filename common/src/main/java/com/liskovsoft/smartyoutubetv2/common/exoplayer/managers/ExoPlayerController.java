@@ -6,12 +6,13 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Player.EventListener;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.tracks.TrackSelectionManager;
 
 import java.io.InputStream;
 import java.util.List;
@@ -19,17 +20,19 @@ import java.util.List;
 public class ExoPlayerController implements EventListener, PlayerController {
     private static final String TAG = ExoPlayerController.class.getSimpleName();
     private final ExoPlayer mPlayer;
-    private final TrackSelector mTrackSelector;
+    private final DefaultTrackSelector mTrackSelector;
     private final ExoMediaSourceFactory mMediaSourceFactory;
+    private final TrackSelectionManager mTrackSelectionManager;
     private PlayerEventListener mEventListener;
     private Video mVideo;
 
-    public ExoPlayerController(ExoPlayer player, TrackSelector trackSelector, Context context) {
+    public ExoPlayerController(ExoPlayer player, DefaultTrackSelector trackSelector, Context context) {
         mPlayer = player;
         player.addListener(this);
 
         mTrackSelector = trackSelector;
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
+        mTrackSelectionManager = new TrackSelectionManager(trackSelector);
     }
 
     //private void prepareMediaForPlaying(Uri mediaSourceUri) {

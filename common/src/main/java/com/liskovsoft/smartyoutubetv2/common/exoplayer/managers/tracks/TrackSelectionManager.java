@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.managers;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.tracks;
 
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.RendererCapabilities;
@@ -65,6 +65,10 @@ public class TrackSelectionManager {
         }
     }
 
+    public TrackSelectionManager(DefaultTrackSelector selector) {
+        this(selector, null);
+    }
+
     /**
      * @param selector The track selector.
      * @param trackSelectionFactory A factory for adaptive {@link TrackSelection}s, or null
@@ -97,11 +101,6 @@ public class TrackSelectionManager {
     }
 
     private void buildMediaTracks() {
-        //if (mRendererIndex == ExoPlayerFragment.RENDERER_INDEX_SUBTITLE) {
-        //    defaultViewTitle = mContext.getResources().getString(R.string.default_subtitle);
-        //}
-
-        // Per-track views.
         boolean haveSupportedTracks = false;
         boolean haveAdaptiveTracks = false;
         mMediaTracks = new MediaTrack[mTrackGroups.length][];
@@ -166,7 +165,7 @@ public class TrackSelectionManager {
         clearOverride();
     }
 
-    public Set<MediaTrack> getSortedTracks() {
+    private Set<MediaTrack> getSortedTracks() {
         return mSortedTrackList;
     }
 
