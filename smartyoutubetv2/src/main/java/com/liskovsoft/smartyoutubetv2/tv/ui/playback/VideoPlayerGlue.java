@@ -54,6 +54,12 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         void setRepeatMode(int modeIndex);
 
         void onHighQuality();
+
+        void onSubscribe(boolean subscribed);
+
+        void onThumbsDown(boolean thumbsDown);
+
+        void onThumbsUp(boolean thumbsUp);
     }
 
     private final OnActionClickedListener mActionListener;
@@ -160,66 +166,24 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         }
     }
 
-    public void setRepeatButtonState(int modeIndex) {
+    public void setRepeatActionState(int modeIndex) {
         mRepeatAction.setIndex(modeIndex);
         invalidateUi(mRepeatAction);
     }
 
-    private boolean dispatchAction(Action action) {
-        if (action == null) {
-            return false;
-        }
-
-        boolean handled = false;
-
-        int actionIndex = 0;
-
-        // properly handle ui changes of multi-action buttons
-        if (action instanceof PlaybackControlsRow.MultiAction) {
-            PlaybackControlsRow.MultiAction multiAction = (PlaybackControlsRow.MultiAction) action;
-            multiAction.nextIndex(); // increment state
-            invalidateUi(multiAction);
-            actionIndex = multiAction.getIndex();
-        }
-
-        // Primary actions are handled manually.
-        if (action == mRewindAction) {
-            rewind();
-            handled = true;
-        } else if (action == mFastForwardAction) {
-            fastForward();
-            handled = true;
-        } else if (action == mRepeatAction) {
-            mActionListener.setRepeatMode(actionIndex);
-            handled = true;
-        } else if (action == mHighQualityAction) {
-            mActionListener.onHighQuality();
-            handled = true;
-        }
-
-        return handled;
+    public void setSubscribeActionState(boolean subscribed) {
+        mSubscribeAction.setIndex(subscribed ? 1 : 0);
+        invalidateUi(mSubscribeAction);
     }
 
-    private void invalidateUi(Action multiAction) {
-        // Notify adapter of action changes to handle primary actions, such as, play/pause.
-        notifyActionChanged(
-                multiAction,
-                (ArrayObjectAdapter) getControlsRow().getPrimaryActionsAdapter());
-
-        // Notify adapter of action changes to handle secondary actions, such as, thumbs up/down and repeat.
-        notifyActionChanged(
-                multiAction,
-                (ArrayObjectAdapter) getControlsRow().getSecondaryActionsAdapter());
+    public void setThumbsUpActionState(boolean thumbsUp) {
+        mThumbsUpAction.setIndex(thumbsUp ? 1 : 0);
+        invalidateUi(mThumbsUpAction);
     }
 
-    private void notifyActionChanged(
-            Action action, ArrayObjectAdapter adapter) {
-        if (adapter != null) {
-            int index = adapter.indexOf(action);
-            if (index >= 0) {
-                adapter.notifyArrayItemRangeChanged(index, 1);
-            }
-        }
+    public void setThumbsDownActionState(boolean thumbsDown) {
+        mThumbsDownAction.setIndex(thumbsDown ? 1 : 0);
+        invalidateUi(mThumbsDownAction);
     }
 
     @Override
@@ -239,6 +203,91 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         }
 
         return handled || super.onKey(v, keyCode, event);
+    }
+
+    private boolean dispatchAction(Action action) {
+        if (action == null) {
+            return false;
+        }
+
+        boolean handled = false;
+
+        // Primary actions are handled manually.
+        if (action == mRewindAction) {
+            rewind();
+            handled = true;
+        } else if (action == mFastForwardAction) {
+            fastForward();
+            handled = true;
+        } else if (action == mRepeatAction) {
+            incrementActionIndex(action);
+            mActionListener.setRepeatMode(getActionIndex(action));
+            handled = true;
+        } else if (action == mHighQualityAction) {
+            mActionListener.onHighQuality();
+            handled = true;
+        } else if (action == mSubscribeAction) {
+            incrementActionIndex(action);
+            mActionListener.onSubscribe(getActionIndex(action) != 0);
+            handled = true;
+        } else if (action == mThumbsDownAction) {
+            incrementActionIndex(action);
+            mActionListener.onThumbsDown(getActionIndex(action) != 0);
+            handled = true;
+        } else if (action == mThumbsUpAction) {
+            incrementActionIndex(action);
+            mActionListener.onThumbsUp(getActionIndex(action) != 0);
+            handled = true;
+        }
+
+        if (handled) {
+            invalidateUi(action);
+        }
+
+        return handled;
+    }
+
+    private int getActionIndex(Action action) {
+        if (action instanceof PlaybackControlsRow.MultiAction) {
+            PlaybackControlsRow.MultiAction multiAction = (PlaybackControlsRow.MultiAction) action;
+            return multiAction.getIndex();
+        }
+
+        return 0;
+    }
+
+    private void incrementActionIndex(Action action) {
+        if (action instanceof PlaybackControlsRow.MultiAction) {
+            PlaybackControlsRow.MultiAction multiAction = (PlaybackControlsRow.MultiAction) action;
+            multiAction.nextIndex();
+        }
+    }
+
+    /**
+     * Properly handle ui changes of multi-action buttons
+     */
+    private void invalidateUi(Action action) {
+        if (action instanceof PlaybackControlsRow.MultiAction) {
+            // Notify adapter of action changes to handle primary actions, such as, play/pause.
+            notifyActionChanged(
+                    action,
+                    (ArrayObjectAdapter) getControlsRow().getPrimaryActionsAdapter());
+
+            // Notify adapter of action changes to handle secondary actions, such as, thumbs up/down and repeat.
+            notifyActionChanged(
+                    action,
+                    (ArrayObjectAdapter) getControlsRow().getSecondaryActionsAdapter());
+        }
+    }
+
+    private void notifyActionChanged(
+            Action action, ArrayObjectAdapter adapter) {
+        if (adapter != null) {
+            int index = adapter.indexOf(action);
+            if (index >= 0) {
+                adapter.notifyArrayItemRangeChanged(index, 1);
+            }
+        }
     }
 
     private boolean dispatchKey(int keyCode) {

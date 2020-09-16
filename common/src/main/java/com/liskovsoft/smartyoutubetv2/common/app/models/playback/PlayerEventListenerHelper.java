@@ -127,4 +127,19 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     public void onHighQualityClicked() {
         // NOP
     }
+
+    @Override
+    public void onSubscribeClicked(boolean subscribed) {
+        // NOP
+    }
+
+    @Override
+    public void onThumbsDownClicked(boolean thumbsDown) {
+        // NOP
+    }
+
+    @Override
+    public void onThumbsUpClicked(boolean thumbsUp) {
+        // NOP
+    }
 }

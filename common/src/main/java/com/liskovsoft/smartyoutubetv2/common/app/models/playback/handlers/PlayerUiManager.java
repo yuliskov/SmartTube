@@ -51,6 +51,21 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         ViewManager.instance(mActivity).startView(VideoSettingsView.class);
     }
 
+    @Override
+    public void onSubscribeClicked(boolean subscribed) {
+        // TODO: make network request
+    }
+
+    @Override
+    public void onThumbsDownClicked(boolean thumbsDown) {
+        // TODO: make network request
+    }
+
+    @Override
+    public void onThumbsUpClicked(boolean thumbsUp) {
+        // TODO: make network request
+    }
+
     private void stopUiVisibilityTimer() {
         Log.d(TAG, "Stopping hide ui timer...");
         mHandler.removeCallbacks(mUiVisibilityHandler);

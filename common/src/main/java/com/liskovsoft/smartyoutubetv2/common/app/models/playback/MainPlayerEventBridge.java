@@ -187,4 +187,19 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     public void onHighQualityClicked() {
         process(PlayerUiEventListener::onHighQualityClicked);
     }
+
+    @Override
+    public void onSubscribeClicked(boolean subscribed) {
+        process(listener -> listener.onSubscribeClicked(subscribed));
+    }
+
+    @Override
+    public void onThumbsDownClicked(boolean thumbsDown) {
+        process(listener -> listener.onThumbsDownClicked(thumbsDown));
+    }
+
+    @Override
+    public void onThumbsUpClicked(boolean thumbsUp) {
+        process(listener -> listener.onThumbsUpClicked(thumbsUp));
+    }
 }

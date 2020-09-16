@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.app.RowsSupportFragment;
 import androidx.leanback.app.VideoSupportFragment;
@@ -265,6 +264,21 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         public void onHighQuality() {
             mEventListener.onHighQualityClicked();
         }
+
+        @Override
+        public void onSubscribe(boolean subscribed) {
+            mEventListener.onSubscribeClicked(subscribed);
+        }
+
+        @Override
+        public void onThumbsDown(boolean thumbsDown) {
+            mEventListener.onThumbsDownClicked(thumbsDown);
+        }
+
+        @Override
+        public void onThumbsUp(boolean thumbsUp) {
+            mEventListener.onThumbsUpClicked(thumbsUp);
+        }
     }
 
     /* Begin PlayerController */
@@ -378,7 +392,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
     @Override
     public void setRepeatButtonState(int modeIndex) {
-        mPlayerGlue.setRepeatButtonState(modeIndex);
+        mPlayerGlue.setRepeatActionState(modeIndex);
     }
 
     @Override

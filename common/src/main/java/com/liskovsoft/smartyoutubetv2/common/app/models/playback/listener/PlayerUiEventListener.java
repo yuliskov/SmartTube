@@ -12,4 +12,7 @@ public interface PlayerUiEventListener {
     void onKeyDown(int keyCode);
     void onRepeatModeClicked(int modeIndex);
     void onHighQualityClicked();
+    void onSubscribeClicked(boolean subscribed);
+    void onThumbsDownClicked(boolean thumbsDown);
+    void onThumbsUpClicked(boolean thumbsUp);
 }
