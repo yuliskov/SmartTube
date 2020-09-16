@@ -5,6 +5,8 @@ import android.os.Looper;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.views.VideoSettingsView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 
 public class PlayerUiManager extends PlayerEventListenerHelper {
     private static final String TAG = PlayerUiManager.class.getSimpleName();
@@ -42,6 +44,11 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     @Override
     public void onRepeatModeChange(int modeIndex) {
         mController.setRepeatButtonState(modeIndex);
+    }
+
+    @Override
+    public void onHighQualityClicked() {
+        ViewManager.instance(mActivity).startView(VideoSettingsView.class);
     }
 
     private void stopUiVisibilityTimer() {

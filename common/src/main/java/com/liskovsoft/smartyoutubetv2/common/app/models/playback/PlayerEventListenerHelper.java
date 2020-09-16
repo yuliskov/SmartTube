@@ -122,4 +122,9 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     public void onRepeatModeChange(int modeIndex) {
         // NOP
     }
+
+    @Override
+    public void onHighQualityClicked() {
+        // NOP
+    }
 }

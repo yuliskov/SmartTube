@@ -9,8 +9,6 @@ import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.PlaybackControlsRow;
-import com.liskovsoft.smartyoutubetv2.common.app.views.VideoSettingsView;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.HighQualityAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.RepeatAction;
@@ -54,6 +52,8 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         void onKeyDown(int keyCode);
 
         void setRepeatMode(int modeIndex);
+
+        void onHighQuality();
     }
 
     private final OnActionClickedListener mActionListener;
@@ -160,10 +160,6 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         }
     }
 
-    public void setRepeatMode(int modeIndex) {
-        mActionListener.setRepeatMode(modeIndex);
-    }
-
     public void setRepeatButtonState(int modeIndex) {
         mRepeatAction.setIndex(modeIndex);
         invalidateUi(mRepeatAction);
@@ -194,10 +190,10 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
             fastForward();
             handled = true;
         } else if (action == mRepeatAction) {
-            setRepeatMode(actionIndex);
+            mActionListener.setRepeatMode(actionIndex);
             handled = true;
         } else if (action == mHighQualityAction) {
-            ViewManager.instance(getContext()).startView(VideoSettingsView.class);
+            mActionListener.onHighQuality();
             handled = true;
         }
 

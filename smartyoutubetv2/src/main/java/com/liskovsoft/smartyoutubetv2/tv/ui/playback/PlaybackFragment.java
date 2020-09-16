@@ -260,6 +260,11 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         public void setRepeatMode(int modeIndex) {
             mEventListener.onRepeatModeClicked(modeIndex);
         }
+
+        @Override
+        public void onHighQuality() {
+            mEventListener.onHighQualityClicked();
+        }
     }
 
     /* Begin PlayerController */

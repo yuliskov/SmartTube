@@ -11,4 +11,5 @@ public interface PlayerUiEventListener {
     void onPauseClicked();
     void onKeyDown(int keyCode);
     void onRepeatModeClicked(int modeIndex);
+    void onHighQualityClicked();
 }

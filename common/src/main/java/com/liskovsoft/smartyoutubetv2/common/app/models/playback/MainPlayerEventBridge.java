@@ -8,16 +8,17 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers.StateU
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers.SuggestionsLoader;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers.VideoLoader;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerUiEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.ViewEventListener;
 
 import java.util.ArrayList;
 
-public class MainPlayerEventListener implements PlayerEventListener {
-    private static final String TAG = MainPlayerEventListener.class.getSimpleName();
+public class MainPlayerEventBridge implements PlayerEventListener {
+    private static final String TAG = MainPlayerEventBridge.class.getSimpleName();
     private final ArrayList<PlayerEventListener> mEventListeners;
-    private static MainPlayerEventListener sInstance;
+    private static MainPlayerEventBridge sInstance;
 
-    public MainPlayerEventListener() {
+    public MainPlayerEventBridge() {
         mEventListeners = new ArrayList<>();
 
         // NOTE: position matters!!!
@@ -28,9 +29,9 @@ public class MainPlayerEventListener implements PlayerEventListener {
         mEventListeners.add(new VideoLoader());
     }
 
-    public static MainPlayerEventListener instance() {
+    public static MainPlayerEventBridge instance() {
         if (sInstance == null) {
-            sInstance = new MainPlayerEventListener();
+            sInstance = new MainPlayerEventBridge();
         }
 
         return sInstance;
@@ -180,5 +181,10 @@ public class MainPlayerEventListener implements PlayerEventListener {
     @Override
     public void onRepeatModeChange(int modeIndex) {
         process(listener -> listener.onRepeatModeChange(modeIndex));
+    }
+
+    @Override
+    public void onHighQualityClicked() {
+        process(PlayerUiEventListener::onHighQualityClicked);
     }
 }
