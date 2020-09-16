@@ -2,10 +2,13 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers;
 
 import android.os.Handler;
 import android.os.Looper;
+import androidx.core.content.ContextCompat;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.OptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.VideoSettingsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 
@@ -52,8 +55,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     @Override
     public void onHighQualityClicked() {
         List<OptionItem> formats = mController.getVideoFormats();
+        String title = mActivity.getString(R.string.dialog_video_formats);
 
-        ViewManager.instance(mActivity).startView(VideoSettingsView.class);
+        VideoSettingsPresenter.instance(mActivity).showDialog(title, formats);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -32,6 +33,7 @@ public class SignInPresenter implements Presenter<SignInView> {
 
         return sInstance;
     }
+
     public static void unhold() {
         sInstance = null;
     }

@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.presenters;
+package com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces;
 
 public interface Presenter<T> {
     void register(T view);

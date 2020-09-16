@@ -13,6 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.Opti
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.tracks.TrackSelectionManager;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.tracks.VideoFormatItem;
 
 import java.io.InputStream;
 import java.util.List;
@@ -120,7 +121,7 @@ public class ExoPlayerController implements EventListener, PlayerController {
 
     @Override
     public List<OptionItem> getVideoFormats() {
-        return null;
+        return VideoFormatItem.from(mTrackSelectionManager.getVideoTracks());
     }
 
     @Override
