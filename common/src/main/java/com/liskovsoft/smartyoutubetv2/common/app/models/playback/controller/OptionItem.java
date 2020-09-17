@@ -5,4 +5,5 @@ public interface OptionItem {
     int getId();
     String getTitle();
     String getDescription();
+    boolean isSelected();
 }

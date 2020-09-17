@@ -21,4 +21,5 @@ public interface PlayerController {
     void setRepeatMode(int modeIndex);
     List<OptionItem> getVideoFormats();
     List<OptionItem> getAudioFormats();
+    void selectFormat(OptionItem option);
 }

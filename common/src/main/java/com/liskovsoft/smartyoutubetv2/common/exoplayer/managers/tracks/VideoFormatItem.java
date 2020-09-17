@@ -14,6 +14,7 @@ public class VideoFormatItem implements OptionItem {
     private String mTitle;
     private String mDescription;
     private MediaTrack mTrack;
+    private boolean mIsSelected;
 
     public static List<OptionItem> from(Set<MediaTrack> mediaTracks) {
         List<OptionItem> formats = new ArrayList<>();
@@ -21,7 +22,6 @@ public class VideoFormatItem implements OptionItem {
         for (MediaTrack track : mediaTracks) {
             formats.add(from(track));
         }
-
 
         return formats;
     }
@@ -34,11 +34,22 @@ public class VideoFormatItem implements OptionItem {
         if (format != null) {
             videoFormatItem.mTitle = createTitle(
                     format.height, format.frameRate, format.containerMimeType);
+        } else {
+            videoFormatItem.mTitle = "Auto";
         }
 
+        videoFormatItem.mIsSelected = track.isSelected;
         videoFormatItem.mTrack = track;
 
         return videoFormatItem;
+    }
+
+    public static MediaTrack toMediaTrack(OptionItem option) {
+        if (option instanceof VideoFormatItem) {
+            return ((VideoFormatItem) option).mTrack;
+        }
+
+        return null;
     }
 
     private static String createTitle(Object... args) {
@@ -73,5 +84,10 @@ public class VideoFormatItem implements OptionItem {
     @Override
     public String getDescription() {
         return mDescription;
+    }
+
+    @Override
+    public boolean isSelected() {
+        return mIsSelected;
     }
 }

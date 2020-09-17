@@ -287,7 +287,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         }
     }
 
-    /* Begin PlayerController */
+    // Begin Ui events
 
     @Override
     public void resetSuggestedPosition() {
@@ -311,6 +311,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlayerGlue.setTitle(video.title);
         mPlayerGlue.setSubtitle(video.description);
     }
+
+    // End Ui events
 
     // Begin Engine Events
 
@@ -362,6 +364,11 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public List<OptionItem> getAudioFormats() {
         return mExoPlayerController.getAudioFormats();
+    }
+
+    @Override
+    public void selectFormat(OptionItem option) {
+        mExoPlayerController.selectFormat(option);
     }
 
     // End Engine Events

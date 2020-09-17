@@ -10,6 +10,7 @@ import com.google.android.exoplayer2.trackselection.FixedTrackSelection;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector.MappedTrackInfo;
 import com.google.android.exoplayer2.trackselection.RandomTrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.liskovsoft.sharedutils.mylogger.Log;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -17,11 +18,12 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class TrackSelectionManager {
-    private static final int RENDERER_INDEX_VIDEO = 0;
-    private static final int RENDERER_INDEX_AUDIO = 1;
-    private static final int RENDERER_INDEX_SUBTITLE = 2;
+    public static final int RENDERER_INDEX_VIDEO = 0;
+    public static final int RENDERER_INDEX_AUDIO = 1;
+    public static final int RENDERER_INDEX_SUBTITLE = 2;
     private static final TrackSelection.Factory FIXED_FACTORY = new FixedTrackSelection.Factory();
     private static final TrackSelection.Factory RANDOM_FACTORY = new RandomTrackSelection.Factory();
+    private static final String TAG = TrackSelectionManager.class.getSimpleName();
 
     private final DefaultTrackSelector mSelector;
     private final TrackSelection.Factory mTrackSelectionFactory;
@@ -39,9 +41,10 @@ public class TrackSelectionManager {
 
     public static class MediaTrack {
         public Format format;
-        public int groupIndex;
-        public int trackIndex;
+        public int groupIndex = -1;
+        public int trackIndex = -1;
         public boolean isSelected;
+
         public int rendererIndex;
     }
 
@@ -123,6 +126,13 @@ public class TrackSelectionManager {
         renderer.mediaTracks = new MediaTrack[renderer.trackGroups.length][];
         renderer.sortedTracks = new TreeSet<>(new MediaTrackFormatComparator());
 
+        // AUTO OPTION: add auto option
+        MediaTrack autoTrack = new MediaTrack();
+        autoTrack.rendererIndex = rendererIndex;
+        renderer.sortedTracks.add(autoTrack);
+
+        boolean hasSelected = false;
+
         for (int groupIndex = 0; groupIndex < renderer.trackGroups.length; groupIndex++) {
             TrackGroup group = renderer.trackGroups.get(groupIndex);
             renderer.mediaTracks[groupIndex] = new MediaTrack[group.length];
@@ -141,10 +151,17 @@ public class TrackSelectionManager {
                 mediaTrack.isSelected =
                         renderer.override != null && renderer.override.groupIndex == groupIndex && renderer.override.containsTrack(trackIndex);
 
+                if (mediaTrack.isSelected) {
+                    hasSelected = true;
+                }
+
                 renderer.mediaTracks[groupIndex][trackIndex] = mediaTrack;
                 renderer.sortedTracks.add(mediaTrack);
             }
         }
+
+        // AUTO OPTION: unselect auto if other is selected
+        autoTrack.isSelected = !hasSelected;
     }
 
     /**
@@ -172,14 +189,23 @@ public class TrackSelectionManager {
     }
 
     private void updateSelection(int rendererIndex) {
+        boolean hasSelected = false;
+
         Renderer renderer = mRenderers[rendererIndex];
         for (int groupIndex = 0; groupIndex < renderer.mediaTracks.length; groupIndex++) {
             for (int trackIndex = 0; trackIndex < renderer.mediaTracks[groupIndex].length; trackIndex++) {
                 MediaTrack mediaTrack = renderer.mediaTracks[groupIndex][trackIndex];
                 mediaTrack.isSelected =
                         renderer.override != null && renderer.override.groupIndex == groupIndex && renderer.override.containsTrack(trackIndex);
+
+                if (mediaTrack.isSelected) {
+                    hasSelected = true;
+                }
             }
         }
+
+        // AUTO OPTION: unselect auto if other is selected
+        renderer.sortedTracks.first().isSelected = !hasSelected;
     }
 
     private void enableAutoSelection(int rendererIndex) {
@@ -201,15 +227,15 @@ public class TrackSelectionManager {
     
     public void selectMediaTrack(MediaTrack track) {
         int rendererIndex = track.rendererIndex;
-
-        // change quality
-        mRenderers[rendererIndex].isDisabled = false;
-
         int groupIndex = track.groupIndex;
         int trackIndex = track.trackIndex;
+        boolean selectedBefore = track.isSelected;
+
+        // enable renderer
+        mRenderers[rendererIndex].isDisabled = false;
 
         // The group being modified is adaptive and we already have a non-null override.
-        if (!track.isSelected) { // selected before
+        if (!selectedBefore) {
             setOverride(rendererIndex, groupIndex, trackIndex);
 
             // Update the items with the new state.
@@ -235,8 +261,13 @@ public class TrackSelectionManager {
         mRenderers[rendererIndex].override = null;
     }
 
-    private void setOverride(int rendererIndex, int groupIndex, int... tracks) {
-        mRenderers[rendererIndex].override = new SelectionOverride(groupIndex, tracks);
+    private void setOverride(int rendererIndex, int groupIndex, int... trackIndexes) {
+        if (groupIndex == -1) {
+            mRenderers[rendererIndex].override = null; // auto option selected
+            return;
+        }
+
+        mRenderers[rendererIndex].override = new SelectionOverride(groupIndex, trackIndexes);
     }
 
     private void setOverride(int rendererIndex, int group, int[] tracks, boolean enableRandomAdaptation) {

@@ -13,16 +13,22 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
     private static VideoSettingsPresenter sInstance;
     private final Context mContext;
     private VideoSettingsView mView;
-    private List<DialogCategory> mCategories;
+    private List<SettingsCategory> mCategories;
 
-    public static class DialogCategory {
-        public DialogCategory(String title, List<OptionItem> items) {
+    public interface OptionCallback {
+        void onSelect(OptionItem optionItem);
+    }
+
+    public static class SettingsCategory {
+        public SettingsCategory(String title, List<OptionItem> items, OptionCallback callback) {
             this.title = title;
             this.items = items;
+            this.callback = callback;
         }
 
         public String title;
         public List<OptionItem> items;
+        public OptionCallback callback;
     }
 
     public VideoSettingsPresenter(Context context) {
@@ -62,7 +68,7 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
         ViewManager.instance(mContext).startView(VideoSettingsView.class);
     }
 
-    public void append(String title, List<OptionItem> items) {
-        mCategories.add(new DialogCategory(title, items));
+    public void append(String title, List<OptionItem> items, OptionCallback callback) {
+        mCategories.add(new SettingsCategory(title, items, callback));
     }
 }
