@@ -15,4 +15,5 @@
     <string name="library_signin_subtitle">Чтобы увидеть их, войдите в аккаунт.</string>
     <string name="library_signin_button_text">ВОЙТИ</string>
     <string name="dialog_video_formats">Видео форматы</string>
+    <string name="dialog_audio_formats">Аудио форматы</string>
 </resources>

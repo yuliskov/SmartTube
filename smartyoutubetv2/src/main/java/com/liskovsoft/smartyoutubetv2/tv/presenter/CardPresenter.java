@@ -67,12 +67,9 @@ public class CardPresenter extends Presenter {
     public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object item) {
         Video video = (Video) item;
 
-        String title = video.title;
-        String desc = video.studio;
-
         ImageCardView cardView = (ImageCardView) viewHolder.view;
-        cardView.setTitleText(title);
-        cardView.setContentText(desc);
+        cardView.setTitleText(video.title);
+        cardView.setContentText(video.description);
 
         if (video.cardImageUrl != null) {
             // Set card size from dimension resources.

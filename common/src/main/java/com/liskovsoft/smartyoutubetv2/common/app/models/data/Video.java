@@ -73,7 +73,7 @@ public final class Video implements Parcelable {
         video.videoUrl = item.getMediaUrl();
         video.bgImageUrl = item.getBackgroundImageUrl();
         video.cardImageUrl = item.getCardImageUrl();
-        video.studio = item.getDescription();
+        video.studio = item.getAuthor();
         video.percentWatched = item.getPercentWatched();
         video.mediaItem = item;
 

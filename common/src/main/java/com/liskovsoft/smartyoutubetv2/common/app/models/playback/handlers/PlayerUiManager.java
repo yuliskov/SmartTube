@@ -54,10 +54,16 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
 
     @Override
     public void onHighQualityClicked() {
-        List<OptionItem> formats = mController.getVideoFormats();
-        String title = mActivity.getString(R.string.dialog_video_formats);
+        List<OptionItem> videoFormats = mController.getVideoFormats();
+        String videoFormatsTitle = mActivity.getString(R.string.dialog_video_formats);
 
-        VideoSettingsPresenter.instance(mActivity).showDialog(title, formats);
+        List<OptionItem> audioFormats = mController.getAudioFormats();
+        String audioFormatsTitle = mActivity.getString(R.string.dialog_audio_formats);
+
+        VideoSettingsPresenter settingsPresenter = VideoSettingsPresenter.instance(mActivity);
+        settingsPresenter.append(videoFormatsTitle, videoFormats);
+        settingsPresenter.append(audioFormatsTitle, audioFormats);
+        settingsPresenter.showDialog();
     }
 
     @Override

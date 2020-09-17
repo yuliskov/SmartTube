@@ -359,6 +359,11 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         return mExoPlayerController.getVideoFormats();
     }
 
+    @Override
+    public List<OptionItem> getAudioFormats() {
+        return mExoPlayerController.getAudioFormats();
+    }
+
     // End Engine Events
 
     @Override

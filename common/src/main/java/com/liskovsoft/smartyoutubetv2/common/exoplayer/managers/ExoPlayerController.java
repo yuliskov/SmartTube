@@ -125,6 +125,11 @@ public class ExoPlayerController implements EventListener, PlayerController {
     }
 
     @Override
+    public List<OptionItem> getAudioFormats() {
+        return VideoFormatItem.from(mTrackSelectionManager.getAudioTracks());
+    }
+
+    @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         Log.d(TAG, "State: " + playbackState);
 
