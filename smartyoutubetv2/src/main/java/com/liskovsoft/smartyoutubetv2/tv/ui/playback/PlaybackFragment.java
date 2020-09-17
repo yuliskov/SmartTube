@@ -371,6 +371,11 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mExoPlayerController.selectFormat(option);
     }
 
+    @Override
+    public OptionItem getCurrentFormat() {
+        return mExoPlayerController.getCurrentFormat();
+    }
+
     // End Engine Events
 
     @Override

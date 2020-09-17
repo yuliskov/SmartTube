@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.OptionItem;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +12,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private final Map<Long, State> mPositionMap = new HashMap<>();
     private boolean mIsPlaying;
     private int mRepeatMode = 0;
+    private OptionItem mFormat;
 
     private static class State {
         final long positionMs;
@@ -84,10 +86,15 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private void saveState() {
         Video video = mController.getVideo();
         mPositionMap.put(video.id, new State(mController.getPositionMs()));
+        mFormat = mController.getCurrentFormat();
     }
 
     private void restoreState(Video item) {
         State state = null;
+
+        if (mFormat != null) {
+            mController.selectFormat(mFormat);
+        }
 
         if (mPositionMap.containsKey(item.id)) {
             state = mPositionMap.get(item.id);

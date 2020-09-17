@@ -30,11 +30,15 @@ public class FormatOptionItem implements OptionItem {
         return formats;
     }
 
-    private static OptionItem from(MediaTrack track) {
+    public static OptionItem from(MediaTrack track) {
         return from(track, null);
     }
 
-    private static OptionItem from(MediaTrack track, String defaultTitle) {
+    public static OptionItem from(MediaTrack track, String defaultTitle) {
+        if (track == null) {
+            return null;
+        }
+
         FormatOptionItem videoFormatItem = new FormatOptionItem();
 
         Format format = track.format;

@@ -28,7 +28,11 @@ public class TrackSelectorManager {
     private final TrackSelection.Factory mTrackSelectionFactory;
 
     private final Renderer[] mRenderers;
-    
+
+    public MediaTrack getCurrentTrack() {
+        return null;
+    }
+
     private static class Renderer {
         public TrackGroupArray trackGroups;
         public TreeSet<MediaTrack> sortedTracks;

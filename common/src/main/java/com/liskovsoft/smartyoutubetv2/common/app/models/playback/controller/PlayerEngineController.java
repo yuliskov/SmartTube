@@ -15,4 +15,5 @@ public interface PlayerEngineController {
     List<OptionItem> getVideoFormats();
     List<OptionItem> getAudioFormats();
     void selectFormat(OptionItem option);
+    OptionItem getCurrentFormat();
 }

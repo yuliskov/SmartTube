@@ -143,6 +143,11 @@ public class ExoPlayerController implements EventListener, PlayerController {
     }
 
     @Override
+    public OptionItem getCurrentFormat() {
+        return FormatOptionItem.from(mTrackSelectionManager.getCurrentTrack());
+    }
+
+    @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         Log.d(TAG, "State: " + playbackState);
 
