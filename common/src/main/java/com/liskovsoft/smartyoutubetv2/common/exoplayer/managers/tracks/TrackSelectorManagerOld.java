@@ -16,7 +16,7 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class TrackSelectionManagerOld {
+public class TrackSelectorManagerOld {
     private static final int RENDERER_INDEX_VIDEO = 0;
     private static final int RENDERER_INDEX_AUDIO = 1;
     private static final int RENDERER_INDEX_SUBTITLE = 2;
@@ -65,7 +65,7 @@ public class TrackSelectionManagerOld {
         }
     }
 
-    public TrackSelectionManagerOld(DefaultTrackSelector selector) {
+    public TrackSelectorManagerOld(DefaultTrackSelector selector) {
         this(selector, null);
     }
 
@@ -74,7 +74,7 @@ public class TrackSelectionManagerOld {
      * @param trackSelectionFactory A factory for adaptive {@link TrackSelection}s, or null
      *                              if the selection helper should not support adaptive tracks.
      */
-    public TrackSelectionManagerOld(DefaultTrackSelector selector, TrackSelection.Factory trackSelectionFactory) {
+    public TrackSelectorManagerOld(DefaultTrackSelector selector, TrackSelection.Factory trackSelectionFactory) {
         mSelector = selector;
         mTrackSelectionFactory = trackSelectionFactory;
     }

@@ -2,40 +2,47 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.tracks;
 
 import com.google.android.exoplayer2.Format;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.OptionItem;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.tracks.TrackSelectionManager.MediaTrack;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.tracks.TrackSelectorManager.MediaTrack;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class VideoFormatItem implements OptionItem {
+public class FormatOptionItem implements OptionItem {
     private int mId;
     private int mType;
-    private String mTitle;
-    private String mDescription;
+    private CharSequence mTitle;
+    private CharSequence mDescription;
     private MediaTrack mTrack;
     private boolean mIsSelected;
 
     public static List<OptionItem> from(Set<MediaTrack> mediaTracks) {
+        return from(mediaTracks, null);
+    }
+
+    public static List<OptionItem> from(Set<MediaTrack> mediaTracks, String defaultTitle) {
         List<OptionItem> formats = new ArrayList<>();
 
         for (MediaTrack track : mediaTracks) {
-            formats.add(from(track));
+            formats.add(from(track, defaultTitle));
         }
 
         return formats;
     }
 
     private static OptionItem from(MediaTrack track) {
-        VideoFormatItem videoFormatItem = new VideoFormatItem();
+        return from(track, null);
+    }
+
+    private static OptionItem from(MediaTrack track, String defaultTitle) {
+        FormatOptionItem videoFormatItem = new FormatOptionItem();
 
         Format format = track.format;
 
         if (format != null) {
-            videoFormatItem.mTitle = createTitle(
-                    format.height, format.frameRate, format.containerMimeType);
+            videoFormatItem.mTitle = TrackSelectorUtil.buildTrackNameShort(format);
         } else {
-            videoFormatItem.mTitle = "Auto";
+            videoFormatItem.mTitle = defaultTitle;
         }
 
         videoFormatItem.mIsSelected = track.isSelected;
@@ -45,8 +52,8 @@ public class VideoFormatItem implements OptionItem {
     }
 
     public static MediaTrack toMediaTrack(OptionItem option) {
-        if (option instanceof VideoFormatItem) {
-            return ((VideoFormatItem) option).mTrack;
+        if (option instanceof FormatOptionItem) {
+            return ((FormatOptionItem) option).mTrack;
         }
 
         return null;
@@ -77,12 +84,12 @@ public class VideoFormatItem implements OptionItem {
     }
 
     @Override
-    public String getTitle() {
+    public CharSequence getTitle() {
         return mTitle;
     }
 
     @Override
-    public String getDescription() {
+    public CharSequence getDescription() {
         return mDescription;
     }
 

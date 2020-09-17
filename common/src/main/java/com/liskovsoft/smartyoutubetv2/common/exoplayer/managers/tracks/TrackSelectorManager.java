@@ -10,20 +10,19 @@ import com.google.android.exoplayer2.trackselection.FixedTrackSelection;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector.MappedTrackInfo;
 import com.google.android.exoplayer2.trackselection.RandomTrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.liskovsoft.sharedutils.mylogger.Log;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class TrackSelectionManager {
+public class TrackSelectorManager {
     public static final int RENDERER_INDEX_VIDEO = 0;
     public static final int RENDERER_INDEX_AUDIO = 1;
     public static final int RENDERER_INDEX_SUBTITLE = 2;
     private static final TrackSelection.Factory FIXED_FACTORY = new FixedTrackSelection.Factory();
     private static final TrackSelection.Factory RANDOM_FACTORY = new RandomTrackSelection.Factory();
-    private static final String TAG = TrackSelectionManager.class.getSimpleName();
+    private static final String TAG = TrackSelectorManager.class.getSimpleName();
 
     private final DefaultTrackSelector mSelector;
     private final TrackSelection.Factory mTrackSelectionFactory;
@@ -54,6 +53,14 @@ public class TrackSelectionManager {
             Format format1 = mediaTrack1.format;
             Format format2 = mediaTrack2.format;
 
+            if (format1 == null) { // assume it's auto option
+                return -1;
+            }
+
+            if (format2 == null) { // assume it's auto option
+                return 1;
+            }
+
             // sort subtitles by language code
             if (format1.language != null && format2.language != null) {
                 return format1.language.compareTo(format2.language);
@@ -71,7 +78,7 @@ public class TrackSelectionManager {
         }
     }
 
-    public TrackSelectionManager(DefaultTrackSelector selector) {
+    public TrackSelectorManager(DefaultTrackSelector selector) {
         this(selector, null);
     }
 
@@ -80,7 +87,7 @@ public class TrackSelectionManager {
      * @param trackSelectionFactory A factory for adaptive {@link TrackSelection}s, or null
      *                              if the selection helper should not support adaptive tracks.
      */
-    public TrackSelectionManager(DefaultTrackSelector selector, TrackSelection.Factory trackSelectionFactory) {
+    public TrackSelectorManager(DefaultTrackSelector selector, TrackSelection.Factory trackSelectionFactory) {
         mSelector = selector;
         mTrackSelectionFactory = trackSelectionFactory;
         mRenderers = new Renderer[3];

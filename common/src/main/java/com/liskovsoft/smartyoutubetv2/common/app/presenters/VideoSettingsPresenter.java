@@ -14,6 +14,7 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
     private final Context mContext;
     private VideoSettingsView mView;
     private List<SettingsCategory> mCategories;
+    private Runnable mOnClose;
 
     public interface OptionCallback {
         void onSelect(OptionItem optionItem);
@@ -53,6 +54,9 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
     public void unregister(VideoSettingsView view) {
         mView = null;
         mCategories.clear();
+        if (mOnClose != null) {
+            mOnClose.run();
+        }
     }
 
     @Override
@@ -64,7 +68,8 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
         mView.addCategories(mCategories);
     }
 
-    public void showDialog() {
+    public void showDialog(Runnable onClose) {
+        mOnClose = onClose;
         ViewManager.instance(mContext).startView(VideoSettingsView.class);
     }
 

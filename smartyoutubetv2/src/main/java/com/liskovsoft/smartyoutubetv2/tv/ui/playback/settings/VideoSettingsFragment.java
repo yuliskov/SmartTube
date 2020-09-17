@@ -1,15 +1,16 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback.settings;
 
+import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.TypedValue;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.leanback.preference.LeanbackListPreferenceDialogFragment;
 import androidx.leanback.preference.LeanbackPreferenceFragment;
 import androidx.leanback.preference.LeanbackSettingsFragment;
 import androidx.preference.DialogPreference;
 import androidx.preference.ListPreference;
+import androidx.preference.MultiSelectListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragment;
 import androidx.preference.PreferenceScreen;
@@ -18,11 +19,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.Opti
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresenter.SettingsCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.views.VideoSettingsView;
-import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.ui.old.AuthenticationActivity;
 
 import java.util.List;
-import java.util.Locale.Category;
 
 public class VideoSettingsFragment extends LeanbackSettingsFragment
         implements DialogPreference.TargetFragment, VideoSettingsView {
@@ -84,6 +82,34 @@ public class VideoSettingsFragment extends LeanbackSettingsFragment
         mPreferenceFragment.addCategories(categories);
     }
 
+    //@Override
+    //public boolean onPreferenceDisplayDialog(@NonNull PreferenceFragment caller, Preference pref) {
+    //    if (caller == null) {
+    //        throw new IllegalArgumentException("Cannot display dialog for preference " + pref
+    //                + ", Caller must not be null!");
+    //    }
+    //    final Fragment f;
+    //    if (pref instanceof ListPreference) {
+    //        final ListPreference listPreference = (ListPreference) pref;
+    //        f = LeanbackListPreferenceDialogFragment.newInstanceSingle(listPreference.getKey());
+    //        f.setTargetFragment(caller, 0);
+    //        startPreferenceFragment(f);
+    //    } else if (pref instanceof MultiSelectListPreference) {
+    //        MultiSelectListPreference listPreference = (MultiSelectListPreference) pref;
+    //        f = LeanbackListPreferenceDialogFragment.newInstanceMulti(listPreference.getKey());
+    //        f.setTargetFragment(caller, 0);
+    //        startPreferenceFragment(f);
+    //    }
+    //    // TODO
+    //    //        else if (pref instanceof EditTextPreference) {
+    //    //
+    //    //        }
+    //    else {
+    //        return false;
+    //    }
+    //    return true;
+    //}
+
     public static class PrefFragment extends LeanbackPreferenceFragment {
         private List<SettingsCategory> mCategories;
         private Context mStyledContext;
@@ -106,20 +132,27 @@ public class VideoSettingsFragment extends LeanbackSettingsFragment
             setPreferenceScreen(screen);
         }
 
+        @Override
+        public boolean onPreferenceTreeClick(Preference preference) {
+            return super.onPreferenceTreeClick(preference);
+        }
+
+        public void addCategories(List<SettingsCategory> categories) {
+            mCategories = categories;
+        }
+
         public Preference createPreference(SettingsCategory category) {
             ListPreference pref = new ListPreference(mStyledContext);
             pref.setTitle(category.title);
             pref.setKey(category.toString());
 
-            pref.setEntries(toTitleArray(category.items));
-            pref.setEntryValues(toHashArray(category.items));
+            ListPrefData prefData = createListPrefData(category.items);
 
-            for (OptionItem item : category.items) {
-                if (item.isSelected()) {
-                    pref.setValue(item.toString());
-                    break;
-                }
-            }
+            pref.setEntries(prefData.entries);
+            pref.setEntryValues(prefData.values);
+            pref.setValue(prefData.defaultValue);
+
+            // don't close menu on select
 
             pref.setOnPreferenceChangeListener((preference, newValue) -> {
                 for (OptionItem optionItem : category.items) {
@@ -135,45 +168,35 @@ public class VideoSettingsFragment extends LeanbackSettingsFragment
             return pref;
         }
 
-        private CharSequence[] toTitleArray(List<OptionItem> items) {
-            CharSequence[] result = new CharSequence[items.size()];
+        private ListPrefData createListPrefData(List<OptionItem> items) {
+            CharSequence[] titles = new CharSequence[items.size()];
+            CharSequence[] hashes = new CharSequence[items.size()];
+            String defaultValue = null;
 
             for (int i = 0; i < items.size(); i++) {
-                result[i] = items.get(i).getTitle();
+                OptionItem optionItem = items.get(i);
+
+                titles[i] = optionItem.getTitle();
+                hashes[i] = optionItem.toString();
+
+                if (optionItem.isSelected()) {
+                    defaultValue = optionItem.toString();
+                }
             }
 
-            return result;
+            return new ListPrefData(titles, hashes, defaultValue);
         }
 
-        private CharSequence[] toHashArray(List<OptionItem> items) {
-            CharSequence[] result = new CharSequence[items.size()];
+        private static class ListPrefData {
+            public final CharSequence[] entries;
+            public final CharSequence[] values;
+            public final String defaultValue;
 
-            for (int i = 0; i < items.size(); i++) {
-                result[i] = items.get(i).toString();
+            public ListPrefData(CharSequence[] entries, CharSequence[] values, String defaultValue) {
+                 this.entries = entries;
+                 this.values = values;
+                 this.defaultValue = defaultValue;
             }
-
-            return result;
-        }
-
-        @Override
-        public boolean onPreferenceTreeClick(Preference preference) {
-            return super.onPreferenceTreeClick(preference);
-        }
-
-        private Context getStyledContext() {
-            final TypedValue tv = new TypedValue();
-            getActivity().getTheme().resolveAttribute(R.attr.preferenceTheme, tv, true);
-            int theme = tv.resourceId;
-            if (theme == 0) {
-                // Fallback to default theme.
-                theme = R.style.PreferenceThemeOverlay;
-            }
-
-            return new ContextThemeWrapper(getActivity(), theme);
-        }
-
-        public void addCategories(List<SettingsCategory> categories) {
-            mCategories = categories;
         }
     }
 }

@@ -2,15 +2,12 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers;
 
 import android.os.Handler;
 import android.os.Looper;
-import androidx.core.content.ContextCompat;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.VideoSettingsView;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 
 import java.util.List;
 
@@ -26,20 +23,20 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
 
     @Override
     public void onKeyDown(int keyCode) {
-        stopUiVisibilityTimer();
-        stopSuggestionsPositionTimer();
+        disableUiAutoHideTimeout();
+        disableSuggestionsResetTimeout();
 
         if (KeyHelpers.isBackKey(keyCode)) {
-            startSuggestionsResetTimer();
+            enableSuggestionsResetTimeout();
         } else {
-            startUiHideTimer();
+            enableUiAutoHideTimeout();
         }
     }
 
     @Override
     public void onEngineReleased() {
-        stopUiVisibilityTimer();
-        stopSuggestionsPositionTimer();
+        disableUiAutoHideTimeout();
+        disableSuggestionsResetTimeout();
     }
 
     @Override
@@ -54,6 +51,8 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
 
     @Override
     public void onHighQualityClicked() {
+        disableUiAutoHideTimeout();
+
         List<OptionItem> videoFormats = mController.getVideoFormats();
         String videoFormatsTitle = mActivity.getString(R.string.dialog_video_formats);
 
@@ -63,7 +62,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         VideoSettingsPresenter settingsPresenter = VideoSettingsPresenter.instance(mActivity);
         settingsPresenter.append(videoFormatsTitle, videoFormats, option -> mController.selectFormat(option));
         settingsPresenter.append(audioFormatsTitle, audioFormats, option -> mController.selectFormat(option));
-        settingsPresenter.showDialog();
+        settingsPresenter.showDialog(this::enableUiAutoHideTimeout);
     }
 
     @Override
@@ -86,27 +85,27 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         // TODO: open channel view
     }
 
-    private void stopUiVisibilityTimer() {
+    private void disableUiAutoHideTimeout() {
         Log.d(TAG, "Stopping hide ui timer...");
         mHandler.removeCallbacks(mUiVisibilityHandler);
     }
 
-    private void startUiHideTimer() {
+    private void enableUiAutoHideTimeout() {
         Log.d(TAG, "Starting hide ui timer...");
         mHandler.postDelayed(mUiVisibilityHandler, UI_HIDE_TIMEOUT_MS);
     }
 
-    private void stopSuggestionsPositionTimer() {
+    private void disableSuggestionsResetTimeout() {
         Log.d(TAG, "Stopping reset position timer...");
-        mHandler.removeCallbacks(mSuggestionsPositionHandler);
+        mHandler.removeCallbacks(mSuggestionsResetHandler);
     }
 
-    private void startSuggestionsResetTimer() {
+    private void enableSuggestionsResetTimeout() {
         Log.d(TAG, "Starting reset position timer...");
-        mHandler.postDelayed(mSuggestionsPositionHandler, SUGGESTIONS_RESET_TIMEOUT_MS);
+        mHandler.postDelayed(mSuggestionsResetHandler, SUGGESTIONS_RESET_TIMEOUT_MS);
     }
 
-    private final Runnable mSuggestionsPositionHandler = () -> mController.resetSuggestedPosition();
+    private final Runnable mSuggestionsResetHandler = () -> mController.resetSuggestedPosition();
 
     private final Runnable mUiVisibilityHandler = () -> {
         if (mController.isPlaying()) {
@@ -115,8 +114,8 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
             }
         } else {
             // in seeking state? doing recheck...
-            stopUiVisibilityTimer();
-            startUiHideTimer();
+            disableUiAutoHideTimeout();
+            enableUiAutoHideTimeout();
         }
     };
 }

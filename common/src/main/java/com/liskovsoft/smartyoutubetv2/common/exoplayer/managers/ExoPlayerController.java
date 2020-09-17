@@ -8,12 +8,13 @@ import com.google.android.exoplayer2.Player.EventListener;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.tracks.TrackSelectionManager;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.tracks.VideoFormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.tracks.TrackSelectorManager;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.tracks.FormatOptionItem;
 
 import java.io.InputStream;
 import java.util.List;
@@ -21,19 +22,21 @@ import java.util.List;
 public class ExoPlayerController implements EventListener, PlayerController {
     private static final String TAG = ExoPlayerController.class.getSimpleName();
     private final ExoPlayer mPlayer;
+    private final Context mContext;
     private final DefaultTrackSelector mTrackSelector;
     private final ExoMediaSourceFactory mMediaSourceFactory;
-    private final TrackSelectionManager mTrackSelectionManager;
+    private final TrackSelectorManager mTrackSelectionManager;
     private PlayerEventListener mEventListener;
     private Video mVideo;
 
     public ExoPlayerController(ExoPlayer player, DefaultTrackSelector trackSelector, Context context) {
         mPlayer = player;
+        mContext = context;
         player.addListener(this);
 
         mTrackSelector = trackSelector;
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
-        mTrackSelectionManager = new TrackSelectionManager(trackSelector);
+        mTrackSelectionManager = new TrackSelectorManager(trackSelector);
     }
 
     //private void prepareMediaForPlaying(Uri mediaSourceUri) {
@@ -121,17 +124,22 @@ public class ExoPlayerController implements EventListener, PlayerController {
 
     @Override
     public List<OptionItem> getVideoFormats() {
-        return VideoFormatItem.from(mTrackSelectionManager.getVideoTracks());
+        return FormatOptionItem.from(mTrackSelectionManager.getVideoTracks(), mContext.getString(R.string.dialog_video_default));
     }
 
     @Override
     public List<OptionItem> getAudioFormats() {
-        return VideoFormatItem.from(mTrackSelectionManager.getAudioTracks());
+        return FormatOptionItem.from(mTrackSelectionManager.getAudioTracks(), mContext.getString(R.string.dialog_audio_default));
+    }
+
+    @Override
+    public List<OptionItem> getSubtitleFormats() {
+        return FormatOptionItem.from(mTrackSelectionManager.getAudioTracks(), mContext.getString(R.string.dialog_subtitile_default));
     }
 
     @Override
     public void selectFormat(OptionItem option) {
-        mTrackSelectionManager.selectMediaTrack(VideoFormatItem.toMediaTrack(option));
+        mTrackSelectionManager.selectMediaTrack(FormatOptionItem.toMediaTrack(option));
     }
 
     @Override
