@@ -16,7 +16,7 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class TrackSelectionManager {
+public class TrackSelectionManagerOld {
     private static final int RENDERER_INDEX_VIDEO = 0;
     private static final int RENDERER_INDEX_AUDIO = 1;
     private static final int RENDERER_INDEX_SUBTITLE = 2;
@@ -26,16 +26,13 @@ public class TrackSelectionManager {
     private final DefaultTrackSelector mSelector;
     private final TrackSelection.Factory mTrackSelectionFactory;
 
-    private final Renderer[] mRenderers;
-    
-    private static class Renderer {
-        public TrackGroupArray trackGroups;
-        public TreeSet<MediaTrack> sortedTracks;
-        public boolean[] trackGroupsAdaptive;
-        public boolean isDisabled;
-        public SelectionOverride override;
-        public MediaTrack[][] mediaTracks;
-    }
+    private int mRendererIndex;
+    private TrackGroupArray mTrackGroups;
+    private boolean[] mTrackGroupsAdaptive;
+    private boolean mIsDisabled;
+    private SelectionOverride mOverride;
+
+    private MediaTrack[][] mMediaTracks;
 
     public static class MediaTrack {
         public Format format;
@@ -68,7 +65,7 @@ public class TrackSelectionManager {
         }
     }
 
-    public TrackSelectionManager(DefaultTrackSelector selector) {
+    public TrackSelectionManagerOld(DefaultTrackSelector selector) {
         this(selector, null);
     }
 
@@ -77,10 +74,9 @@ public class TrackSelectionManager {
      * @param trackSelectionFactory A factory for adaptive {@link TrackSelection}s, or null
      *                              if the selection helper should not support adaptive tracks.
      */
-    public TrackSelectionManager(DefaultTrackSelector selector, TrackSelection.Factory trackSelectionFactory) {
+    public TrackSelectionManagerOld(DefaultTrackSelector selector, TrackSelection.Factory trackSelectionFactory) {
         mSelector = selector;
         mTrackSelectionFactory = trackSelectionFactory;
-        mRenderers = new Renderer[3];
     }
 
     /**
@@ -89,46 +85,34 @@ public class TrackSelectionManager {
      *                      One of the {@link #RENDERER_INDEX_VIDEO}, {@link #RENDERER_INDEX_AUDIO}, {@link #RENDERER_INDEX_SUBTITLE}
      */
     private Set<MediaTrack> getAvailableTracks(int rendererIndex) {
-        if (mRenderers[rendererIndex] != null) {
-            return mRenderers[rendererIndex].sortedTracks;
-        }
-
-        initRenderer(rendererIndex);
-
-        buildMediaTracks(rendererIndex);
-
-        return mRenderers[rendererIndex].sortedTracks;
-    }
-
-    private void initRenderer(int rendererIndex) {
         MappedTrackInfo trackInfo = mSelector.getCurrentMappedTrackInfo();
+        mRendererIndex = rendererIndex;
 
-        Renderer renderer = new Renderer();
-        mRenderers[rendererIndex] = renderer;
-
-        renderer.trackGroups = trackInfo.getTrackGroups(rendererIndex);
-        renderer.trackGroupsAdaptive = new boolean[renderer.trackGroups.length];
-        for (int i = 0; i < renderer.trackGroups.length; i++) {
-            renderer.trackGroupsAdaptive[i] = mTrackSelectionFactory != null && trackInfo.getAdaptiveSupport(rendererIndex, i, false) !=
-                    RendererCapabilities.ADAPTIVE_NOT_SUPPORTED && renderer.trackGroups.get(i).length > 1;
+        mTrackGroups = trackInfo.getTrackGroups(rendererIndex);
+        mTrackGroupsAdaptive = new boolean[mTrackGroups.length];
+        for (int i = 0; i < mTrackGroups.length; i++) {
+            mTrackGroupsAdaptive[i] = mTrackSelectionFactory != null && trackInfo.getAdaptiveSupport(rendererIndex, i, false) !=
+                    RendererCapabilities.ADAPTIVE_NOT_SUPPORTED && mTrackGroups.get(i).length > 1;
         }
-        renderer.isDisabled = mSelector.getParameters().getRendererDisabled(rendererIndex);
-        renderer.override = mSelector.getParameters().getSelectionOverride(rendererIndex, renderer.trackGroups);
+        mIsDisabled = mSelector.getParameters().getRendererDisabled(rendererIndex);
+        mOverride = mSelector.getParameters().getSelectionOverride(rendererIndex, mTrackGroups);
+
+        return buildMediaTracks();
     }
 
-    private void buildMediaTracks(int rendererIndex) {
+    private Set<MediaTrack> buildMediaTracks() {
         boolean haveSupportedTracks = false;
         boolean haveAdaptiveTracks = false;
-        Renderer renderer = mRenderers[rendererIndex];
-        renderer.mediaTracks = new MediaTrack[renderer.trackGroups.length][];
-        renderer.sortedTracks = new TreeSet<>(new MediaTrackFormatComparator());
+        mMediaTracks = new MediaTrack[mTrackGroups.length][];
 
-        for (int groupIndex = 0; groupIndex < renderer.trackGroups.length; groupIndex++) {
-            TrackGroup group = renderer.trackGroups.get(groupIndex);
-            renderer.mediaTracks[groupIndex] = new MediaTrack[group.length];
+        TreeSet<MediaTrack> sortedTrackList = new TreeSet<>(new MediaTrackFormatComparator());
+
+        for (int groupIndex = 0; groupIndex < mTrackGroups.length; groupIndex++) {
+            TrackGroup group = mTrackGroups.get(groupIndex);
+            mMediaTracks[groupIndex] = new MediaTrack[group.length];
 
             for (int trackIndex = 0; trackIndex < group.length; trackIndex++) {
-                boolean groupIsAdaptive = renderer.trackGroupsAdaptive[groupIndex];
+                boolean groupIsAdaptive = mTrackGroupsAdaptive[groupIndex];
                 haveAdaptiveTracks |= groupIsAdaptive;
                 haveSupportedTracks = true;
                 Format format = group.getFormat(trackIndex);
@@ -137,14 +121,13 @@ public class TrackSelectionManager {
                 mediaTrack.format = format;
                 mediaTrack.groupIndex = groupIndex;
                 mediaTrack.trackIndex = trackIndex;
-                mediaTrack.rendererIndex = rendererIndex;
-                mediaTrack.isSelected =
-                        renderer.override != null && renderer.override.groupIndex == groupIndex && renderer.override.containsTrack(trackIndex);
 
-                renderer.mediaTracks[groupIndex][trackIndex] = mediaTrack;
-                renderer.sortedTracks.add(mediaTrack);
+                mMediaTracks[groupIndex][trackIndex] = mediaTrack;
+                sortedTrackList.add(mediaTrack);
             }
         }
+
+        return sortedTrackList;
     }
 
     /**
@@ -171,20 +154,18 @@ public class TrackSelectionManager {
         return offset;
     }
 
-    private void updateSelection(int rendererIndex) {
-        Renderer renderer = mRenderers[rendererIndex];
-        for (int groupIndex = 0; groupIndex < renderer.mediaTracks.length; groupIndex++) {
-            for (int trackIndex = 0; trackIndex < renderer.mediaTracks[groupIndex].length; trackIndex++) {
-                MediaTrack mediaTrack = renderer.mediaTracks[groupIndex][trackIndex];
-                mediaTrack.isSelected =
-                        renderer.override != null && renderer.override.groupIndex == groupIndex && renderer.override.containsTrack(trackIndex);
+    private void updateMediaTracks() {
+        for (int i = 0; i < mMediaTracks.length; i++) {
+            for (int j = 0; j < mMediaTracks[i].length; j++) {
+                MediaTrack mediaTrack = mMediaTracks[i][j];
+                mediaTrack.isSelected = mOverride != null && mOverride.groupIndex == i && mOverride.containsTrack(j);
             }
         }
     }
 
-    private void enableAutoSelection(int rendererIndex) {
-        mRenderers[rendererIndex].isDisabled = false;
-        clearOverride(rendererIndex);
+    private void enableAutoSelection() {
+        mIsDisabled = false;
+        clearOverride();
     }
 
     public Set<MediaTrack> getVideoTracks() {
@@ -198,50 +179,73 @@ public class TrackSelectionManager {
     public Set<MediaTrack> getSubtitleTracks() {
         return getAvailableTracks(RENDERER_INDEX_SUBTITLE);
     }
-    
-    public void selectMediaTrack(MediaTrack track) {
-        int rendererIndex = track.rendererIndex;
 
+    // old: click on selected track
+    public void selectMediaTrack(MediaTrack track) {
         // change quality
-        mRenderers[rendererIndex].isDisabled = false;
+        mIsDisabled = false;
 
         int groupIndex = track.groupIndex;
         int trackIndex = track.trackIndex;
 
         // The group being modified is adaptive and we already have a non-null override.
-        if (!track.isSelected) { // selected before
-            setOverride(rendererIndex, groupIndex, trackIndex);
-
-            // Update the items with the new state.
-            updateSelection(rendererIndex);
-
-            // save immediately
-            applyOverride(rendererIndex);
+        if (!track.isSelected) {
+            setOverride(groupIndex, trackIndex);
         }
+
+        // Update the views with the new state.
+        updateMediaTracks();
+
+        // save immediately
+        applySelection();
     }
 
-    private void applyOverride(int rendererIndex) {
-        Renderer renderer = mRenderers[rendererIndex];
-        mSelector.setParameters(mSelector.buildUponParameters().setRendererDisabled(rendererIndex, renderer.isDisabled));
+    private void applySelection() {
+        mSelector.setParameters(mSelector.buildUponParameters().setRendererDisabled(mRendererIndex, mIsDisabled));
 
-        if (renderer.override != null) {
-            mSelector.setParameters(mSelector.buildUponParameters().setSelectionOverride(rendererIndex, renderer.trackGroups, renderer.override));
+        if (mOverride != null) {
+            mSelector.setParameters(mSelector.buildUponParameters().setSelectionOverride(mRendererIndex, mTrackGroups, mOverride));
         } else {
-            mSelector.setParameters(mSelector.buildUponParameters().clearSelectionOverrides(rendererIndex)); // Auto quality button selected
+            mSelector.setParameters(mSelector.buildUponParameters().clearSelectionOverrides(mRendererIndex)); // Auto quality button selected
+        }
+
+        // TODO: attempt to play after selection
+        //mPlayerFragment.retryIfNeeded();
+    }
+
+    private void clearOverride() {
+        if (canSwitchFormats()) {
+            mOverride = null;
         }
     }
 
-    private void clearOverride(int rendererIndex) {
-        mRenderers[rendererIndex].override = null;
+    private void setOverride(int groupIndex, int... tracks) {
+        if (canSwitchFormats()) {
+            mOverride = new SelectionOverride(groupIndex, tracks);
+        }
     }
 
-    private void setOverride(int rendererIndex, int groupIndex, int... tracks) {
-        mRenderers[rendererIndex].override = new SelectionOverride(groupIndex, tracks);
+    private boolean canSwitchFormats() {
+        return true; // allow user to switch format temporally (until next video)
+
+        //if (mRendererIndex != ExoPlayerFragment.RENDERER_INDEX_VIDEO) {
+        //    return true;
+        //}
+        //
+        //ExoPreferences prefs = ExoPreferences.instance(mContext);
+        //
+        //if (prefs.getPreferredFormat().equals(ExoPreferences.FORMAT_ANY)) {
+        //    return true;
+        //}
+        //
+        //MessageHelpers.showMessage(mContext, R.string.toast_format_restricted);
+        //
+        //return false;
     }
 
-    private void setOverride(int rendererIndex, int group, int[] tracks, boolean enableRandomAdaptation) {
+    private void setOverride(int group, int[] tracks, boolean enableRandomAdaptation) {
         TrackSelection.Factory factory = tracks.length == 1 ? FIXED_FACTORY : (enableRandomAdaptation ? RANDOM_FACTORY : mTrackSelectionFactory);
-        mRenderers[rendererIndex].override = new SelectionOverride(group, tracks);
+        mOverride = new SelectionOverride(group, tracks);
     }
 
     // Track array manipulation.
