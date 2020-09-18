@@ -112,7 +112,11 @@ public class TrackSelectorUtil {
         return format.bitrate > 300000 ? "5.1" : "";
     }
 
-    public static boolean equals(int height1, int height2) {
+    public static boolean heightEquals(int height1, int height2) {
         return Math.abs(height1 - height2) < 100;
+    }
+
+    public static boolean codecEquals(String codecs1, String codecs2) {
+        return Helpers.equals(codecNameShort(codecs1), codecNameShort(codecs2));
     }
 }

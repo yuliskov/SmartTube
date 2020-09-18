@@ -346,12 +346,13 @@ public class TrackSelectorManager {
                     if (Helpers.equals(mediaTrack.format.id, track.format.id)) {
                         result = mediaTrack;
                         break;
-                    } else if (TrackSelectorUtil.equals(mediaTrack.format.height, track.format.height) &&
-                        Helpers.equals(mediaTrack.format.codecs, track.format.codecs)) {
-                        result = mediaTrack;
-                        break;
-                    } else if (TrackSelectorUtil.equals(mediaTrack.format.height, track.format.height)) {
-                        result = mediaTrack;
+                    } else if (TrackSelectorUtil.codecEquals(mediaTrack.format.codecs, track.format.codecs)) {
+                        if (TrackSelectorUtil.heightEquals(mediaTrack.format.height, track.format.height)) {
+                            result = mediaTrack;
+                            break;
+                        } else if (mediaTrack.format.height <= track.format.height) {
+                            result = mediaTrack;
+                        }
                     }
                 }
             }
