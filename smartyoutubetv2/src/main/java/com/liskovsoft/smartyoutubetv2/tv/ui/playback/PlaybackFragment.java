@@ -156,9 +156,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
             return;
         }
 
-        mEventListener.onEngineReleased();
-        
         if (mPlayer != null) {
+            mEventListener.onEngineReleased();
             mPlayer.release();
             mPlayer = null;
             mTrackSelector = null;
@@ -303,7 +302,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
     @Override
     public void resetSuggestedPosition() {
-        if (mRowsSupportFragment != null) {
+        if (mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
             mRowsSupportFragment.getVerticalGridView().setSelectedPosition(0);
         }
     }
@@ -420,6 +419,12 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        // Fix situations when engine didn't properly destroyed.
+        // E.g. after closing dialogs.
+        unblockEngine();
+        releasePlayer();
+
         mPlaybackPresenter.unregister(this);
     }
 
