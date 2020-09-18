@@ -85,8 +85,11 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     private void saveState() {
         Video video = mController.getVideo();
-        mPositionMap.put(video.id, new State(mController.getPositionMs()));
-        mVideoFormat = mController.getVideoFormat();
+
+        if (video != null) {
+            mPositionMap.put(video.id, new State(mController.getPositionMs()));
+            mVideoFormat = mController.getVideoFormat();
+        }
     }
 
     private void restoreState(Video item) {

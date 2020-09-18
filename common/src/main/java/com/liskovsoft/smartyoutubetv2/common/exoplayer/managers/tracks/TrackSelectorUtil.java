@@ -111,4 +111,8 @@ public class TrackSelectorUtil {
     private static String buildChannels(Format format) {
         return format.bitrate > 300000 ? "5.1" : "";
     }
+
+    public static boolean equals(int height1, int height2) {
+        return Math.abs(height1 - height2) < 100;
+    }
 }

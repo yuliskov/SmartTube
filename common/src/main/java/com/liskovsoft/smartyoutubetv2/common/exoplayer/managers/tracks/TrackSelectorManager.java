@@ -335,13 +335,15 @@ public class TrackSelectorManager {
                 for (int trackIndex = 0; trackIndex < renderer.mediaTracks[groupIndex].length; trackIndex++) {
                     MediaTrack mediaTrack = renderer.mediaTracks[groupIndex][trackIndex];
 
-                    if (mediaTrack.format.height == track.format.height) {
-                        result = mediaTrack;
-                    }
-
                     if (Helpers.equals(mediaTrack.format.id, track.format.id)) {
                         result = mediaTrack;
                         break;
+                    } else if (TrackSelectorUtil.equals(mediaTrack.format.height, track.format.height) &&
+                        Helpers.equals(mediaTrack.format.codecs, track.format.codecs)) {
+                        result = mediaTrack;
+                        break;
+                    } else if (TrackSelectorUtil.equals(mediaTrack.format.height, track.format.height)) {
+                        result = mediaTrack;
                     }
                 }
             }
