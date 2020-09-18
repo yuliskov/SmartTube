@@ -170,6 +170,10 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     private void initializePlayer() {
+        if (mBlockEngine) {
+            return;
+        }
+
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory =
                 new AdaptiveTrackSelection.Factory(bandwidthMeter);
