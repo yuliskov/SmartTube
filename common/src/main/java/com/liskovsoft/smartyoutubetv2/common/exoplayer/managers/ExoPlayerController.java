@@ -25,7 +25,7 @@ public class ExoPlayerController implements EventListener, PlayerController {
     private final Context mContext;
     private final DefaultTrackSelector mTrackSelector;
     private final ExoMediaSourceFactory mMediaSourceFactory;
-    private final TrackSelectorManager mTrackSelectionManager;
+    private final TrackSelectorManager mTrackSelectorManager;
     private PlayerEventListener mEventListener;
     private Video mVideo;
 
@@ -36,7 +36,7 @@ public class ExoPlayerController implements EventListener, PlayerController {
 
         mTrackSelector = trackSelector;
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
-        mTrackSelectionManager = new TrackSelectorManager(trackSelector);
+        mTrackSelectorManager = new TrackSelectorManager(trackSelector);
     }
 
     //private void prepareMediaForPlaying(Uri mediaSourceUri) {
@@ -124,32 +124,32 @@ public class ExoPlayerController implements EventListener, PlayerController {
 
     @Override
     public List<OptionItem> getVideoFormats() {
-        return FormatOptionItem.from(mTrackSelectionManager.getVideoTracks(), mContext.getString(R.string.dialog_video_default));
+        return FormatOptionItem.from(mTrackSelectorManager.getVideoTracks(), mContext.getString(R.string.dialog_video_default));
     }
 
     @Override
     public List<OptionItem> getAudioFormats() {
-        return FormatOptionItem.from(mTrackSelectionManager.getAudioTracks(), mContext.getString(R.string.dialog_audio_default));
+        return FormatOptionItem.from(mTrackSelectorManager.getAudioTracks(), mContext.getString(R.string.dialog_audio_default));
     }
 
     @Override
     public List<OptionItem> getSubtitleFormats() {
-        return FormatOptionItem.from(mTrackSelectionManager.getAudioTracks(), mContext.getString(R.string.dialog_subtitile_default));
+        return FormatOptionItem.from(mTrackSelectorManager.getAudioTracks(), mContext.getString(R.string.dialog_subtitile_default));
     }
 
     @Override
     public void selectFormat(OptionItem option) {
-        mTrackSelectionManager.selectMediaTrack(FormatOptionItem.toMediaTrack(option));
+        mTrackSelectorManager.selectTrack(FormatOptionItem.toMediaTrack(option));
     }
 
     @Override
-    public OptionItem getCurrentFormat() {
-        return FormatOptionItem.from(mTrackSelectionManager.getCurrentTrack());
+    public OptionItem getVideoFormat() {
+        return FormatOptionItem.from(mTrackSelectorManager.getVideoTrack());
     }
 
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        Log.d(TAG, "State: " + playbackState);
+        Log.d(TAG, "onPlayerStateChanged: State: " + playbackState);
 
         boolean playPressed = Player.STATE_READY == playbackState && playWhenReady;
         boolean pausePressed = Player.STATE_READY == playbackState && !playWhenReady;
@@ -157,6 +157,7 @@ public class ExoPlayerController implements EventListener, PlayerController {
 
         if (playPressed) {
             mEventListener.onPlay();
+            mTrackSelectorManager.applyPendingSelection();
         } else if (pausePressed) {
             mEventListener.onPause();
         } else if (playbackEnded) {

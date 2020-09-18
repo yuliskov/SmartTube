@@ -12,7 +12,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private final Map<Long, State> mPositionMap = new HashMap<>();
     private boolean mIsPlaying;
     private int mRepeatMode = 0;
-    private OptionItem mFormat;
+    private OptionItem mVideoFormat;
 
     private static class State {
         final long positionMs;
@@ -86,14 +86,14 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private void saveState() {
         Video video = mController.getVideo();
         mPositionMap.put(video.id, new State(mController.getPositionMs()));
-        mFormat = mController.getCurrentFormat();
+        mVideoFormat = mController.getVideoFormat();
     }
 
     private void restoreState(Video item) {
         State state = null;
 
-        if (mFormat != null) {
-            mController.selectFormat(mFormat);
+        if (mVideoFormat != null) {
+            mController.selectFormat(mVideoFormat);
         }
 
         if (mPositionMap.containsKey(item.id)) {

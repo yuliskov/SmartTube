@@ -23,5 +23,5 @@ public interface PlayerController {
     List<OptionItem> getAudioFormats();
     List<OptionItem> getSubtitleFormats();
     void selectFormat(OptionItem option);
-    OptionItem getCurrentFormat();
+    OptionItem getVideoFormat();
 }
