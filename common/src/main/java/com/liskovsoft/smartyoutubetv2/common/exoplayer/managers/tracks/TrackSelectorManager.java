@@ -343,16 +343,9 @@ public class TrackSelectorManager {
                 for (int trackIndex = 0; trackIndex < renderer.mediaTracks[groupIndex].length; trackIndex++) {
                     MediaTrack mediaTrack = renderer.mediaTracks[groupIndex][trackIndex];
 
-                    if (Helpers.equals(mediaTrack.format.id, track.format.id)) {
+                    if (TrackSelectorUtil.compare(mediaTrack, track)) {
                         result = mediaTrack;
                         break;
-                    } else if (TrackSelectorUtil.codecEquals(mediaTrack.format.codecs, track.format.codecs)) {
-                        if (TrackSelectorUtil.heightEquals(mediaTrack.format.height, track.format.height)) {
-                            result = mediaTrack;
-                            break;
-                        } else if (mediaTrack.format.height <= track.format.height) {
-                            result = mediaTrack;
-                        }
                     }
                 }
             }

@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.tracks.TrackSelectorManager.MediaTrack;
 
 public class TrackSelectorUtil {
     public static final String CODEC_SHORT_AVC = "avc";
@@ -118,5 +119,27 @@ public class TrackSelectorUtil {
 
     public static boolean codecEquals(String codecs1, String codecs2) {
         return Helpers.equals(codecNameShort(codecs1), codecNameShort(codecs2));
+    }
+
+    public static boolean fpsEquals(float fps1, float fps2) {
+        return Math.abs(fps1 - fps2) < 10;
+    }
+
+    public static boolean compare(MediaTrack track1, MediaTrack track2) {
+        boolean result = false;
+
+        if (Helpers.equals(track1.format.id, track2.format.id)) {
+            result = true;
+        } else if (TrackSelectorUtil.codecEquals(track1.format.codecs, track2.format.codecs)) {
+            if (TrackSelectorUtil.fpsEquals(track1.format.frameRate, track2.format.frameRate)) {
+                if (TrackSelectorUtil.heightEquals(track1.format.height, track2.format.height)) {
+                    result = true;
+                } else if (track1.format.height <= track2.format.height) {
+                    result = true;
+                }
+            }
+        }
+
+        return result;
     }
 }
