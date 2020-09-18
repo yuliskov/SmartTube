@@ -105,6 +105,10 @@ public class TrackSelectorManager {
     private Set<MediaTrack> getAvailableTracks(int rendererIndex) {
         initRenderer(rendererIndex);
 
+        if (mRenderers[rendererIndex] == null) {
+            return null;
+        }
+
         return mRenderers[rendererIndex].sortedTracks;
     }
 
@@ -273,9 +277,6 @@ public class TrackSelectorManager {
         }
 
         int rendererIndex = track.rendererIndex;
-        //int groupIndex = track.groupIndex;
-        //int trackIndex = track.trackIndex;
-        //boolean selectedBefore = track.isSelected;
 
         initRenderer(rendererIndex);
 
@@ -316,6 +317,10 @@ public class TrackSelectorManager {
         initRenderer(RENDERER_INDEX_VIDEO);
 
         Renderer renderer = mRenderers[RENDERER_INDEX_VIDEO];
+
+        if (renderer == null) {
+            return null;
+        }
 
         return renderer.selectedTrack;
     }

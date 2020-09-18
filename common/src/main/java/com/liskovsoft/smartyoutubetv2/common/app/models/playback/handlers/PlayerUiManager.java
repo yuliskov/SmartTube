@@ -52,6 +52,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     @Override
     public void onHighQualityClicked() {
         disableUiAutoHideTimeout();
+        mController.blockEngine();
 
         List<OptionItem> videoFormats = mController.getVideoFormats();
         String videoFormatsTitle = mActivity.getString(R.string.dialog_video_formats);
@@ -62,7 +63,11 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         VideoSettingsPresenter settingsPresenter = VideoSettingsPresenter.instance(mActivity);
         settingsPresenter.append(videoFormatsTitle, videoFormats, option -> mController.selectFormat(option));
         settingsPresenter.append(audioFormatsTitle, audioFormats, option -> mController.selectFormat(option));
-        settingsPresenter.showDialog(this::enableUiAutoHideTimeout);
+
+        settingsPresenter.showDialog(() -> {
+            enableUiAutoHideTimeout();
+            mController.unblockEngine();
+        });
     }
 
     @Override

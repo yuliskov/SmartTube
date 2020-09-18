@@ -21,6 +21,10 @@ public class FormatOptionItem implements OptionItem {
     }
 
     public static List<OptionItem> from(Set<MediaTrack> mediaTracks, String defaultTitle) {
+        if (mediaTracks == null) {
+            return null;
+        }
+
         List<OptionItem> formats = new ArrayList<>();
 
         for (MediaTrack track : mediaTracks) {

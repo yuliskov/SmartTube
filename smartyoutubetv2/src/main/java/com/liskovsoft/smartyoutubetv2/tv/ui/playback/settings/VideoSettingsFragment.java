@@ -126,7 +126,9 @@ public class VideoSettingsFragment extends LeanbackSettingsFragment
             //screen.addPreference(category);
 
             for (SettingsCategory category : mCategories) {
-                screen.addPreference(createPreference(category));
+                if (category.items != null) {
+                    screen.addPreference(createPreference(category));
+                }
             }
 
             setPreferenceScreen(screen);

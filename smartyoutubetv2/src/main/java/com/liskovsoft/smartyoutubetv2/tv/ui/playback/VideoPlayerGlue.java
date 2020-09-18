@@ -120,10 +120,10 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
     protected void onCreateSecondaryActions(ArrayObjectAdapter adapter) {
         super.onCreateSecondaryActions(adapter);
         adapter.add(mChannelAction);
+        adapter.add(mHighQualityAction);
         adapter.add(mThumbsDownAction);
         adapter.add(mThumbsUpAction);
         adapter.add(mSubscribeAction);
-        adapter.add(mHighQualityAction);
         adapter.add(mClosedCaptioningAction);
         adapter.add(mRepeatAction);
     }

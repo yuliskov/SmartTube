@@ -16,4 +16,12 @@ public interface PlayerEngineController {
     List<OptionItem> getAudioFormats();
     void selectFormat(OptionItem option);
     OptionItem getVideoFormat();
+    /**
+     * Block engine from destroying
+     */
+    void blockEngine();
+    /**
+     * Unblock engine from destroying
+     */
+    void unblockEngine();
 }

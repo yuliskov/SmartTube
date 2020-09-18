@@ -65,6 +65,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private UriBackgroundManager mBackgroundManager;
     private final boolean mEnableAnimation = true;
     private RowsSupportFragment mRowsSupportFragment;
+    private boolean mBlockEngine;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -151,6 +152,10 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     private void releasePlayer() {
+        if (mBlockEngine) {
+            return;
+        }
+
         mEventListener.onEngineReleased();
         
         if (mPlayer != null) {
@@ -378,6 +383,16 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public OptionItem getVideoFormat() {
         return mExoPlayerController.getVideoFormat();
+    }
+
+    @Override
+    public void blockEngine() {
+        mBlockEngine = true;
+    }
+
+    @Override
+    public void unblockEngine() {
+        mBlockEngine = false;
     }
 
     // End Engine Events
