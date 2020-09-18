@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.app.RowsSupportFragment;
 import androidx.leanback.app.VideoSupportFragment;
@@ -78,14 +79,17 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        mPlaybackPresenter.onInitDone();
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         if (Util.SDK_INT > 23) {
             initializePlayer();
-
-            mPlaybackPresenter.onInitDone();
-
-            mEventListener.onEngineInitialized();
             mEventListener.onViewResumed();
         }
     }
@@ -95,10 +99,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         super.onResume();
         if ((Util.SDK_INT <= 23 || mPlayer == null)) {
             initializePlayer();
-
-            mPlaybackPresenter.onInitDone();
-
-            mEventListener.onEngineInitialized();
             mEventListener.onViewResumed();
         }
     }
@@ -110,9 +110,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         super.onPause();
 
         if (Util.SDK_INT <= 23) {
-            mEventListener.onEngineReleased();
-            mEventListener.onViewPaused();
             releasePlayer();
+            mEventListener.onViewPaused();
         }
     }
 
@@ -120,9 +119,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     public void onStop() {
         super.onStop();
         if (Util.SDK_INT > 23) {
-            mEventListener.onEngineReleased();
-            mEventListener.onViewPaused();
             releasePlayer();
+            mEventListener.onViewPaused();
         }
     }
 
@@ -153,6 +151,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     private void releasePlayer() {
+        mEventListener.onEngineReleased();
+        
         if (mPlayer != null) {
             mPlayer.release();
             mPlayer = null;
@@ -176,6 +176,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), mTrackSelector);
 
         mExoPlayerController = new ExoPlayerController(mPlayer, mTrackSelector, getContext());
+        mExoPlayerController.setEventListener(mEventListener);
 
         mPlayerAdapter = new LeanbackPlayerAdapter(getActivity(), mPlayer, UPDATE_DELAY);
 
@@ -191,6 +192,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
         mRowsSupportFragment = (RowsSupportFragment) getChildFragmentManager().findFragmentById(
                 R.id.playback_controls_dock);
+
+        mEventListener.onEngineInitialized();
     }
 
     private ArrayObjectAdapter initializeSuggestedVideosRow() {
@@ -382,7 +385,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public void setEventListener(PlayerEventListener listener) {
         mEventListener = listener;
-        mExoPlayerController.setEventListener(listener);
     }
 
     @Override
