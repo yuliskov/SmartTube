@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers.HistoryUpdater;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers.PlayerUiManager;
@@ -206,5 +207,10 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     @Override
     public void onChannelClicked() {
         process(PlayerUiEventListener::onChannelClicked);
+    }
+
+    @Override
+    public void onTrackChange(OptionItem track) {
+        process(listener -> listener.onTrackChange(track));
     }
 }

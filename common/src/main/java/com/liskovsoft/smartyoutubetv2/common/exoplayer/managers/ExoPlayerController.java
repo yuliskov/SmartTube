@@ -59,6 +59,7 @@ public class ExoPlayerController implements EventListener, PlayerController {
         mPlayer.prepare(mediaSource);
 
         if (mEventListener != null) {
+            mTrackSelectorManager.invalidate();
             mEventListener.onVideoLoaded(mVideo);
         }
     }
@@ -70,6 +71,7 @@ public class ExoPlayerController implements EventListener, PlayerController {
         mPlayer.prepare(mediaSource);
 
         if (mEventListener != null) {
+            mTrackSelectorManager.invalidate();
             mEventListener.onVideoLoaded(mVideo);
         }
     }
@@ -140,6 +142,7 @@ public class ExoPlayerController implements EventListener, PlayerController {
     @Override
     public void selectFormat(OptionItem option) {
         mTrackSelectorManager.selectTrack(FormatOptionItem.toMediaTrack(option));
+        mEventListener.onTrackChange(option);
     }
 
     @Override

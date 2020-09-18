@@ -83,12 +83,16 @@ public class StateUpdater extends PlayerEventListenerHelper {
         mRepeatMode = modeIndex;
     }
 
+    @Override
+    public void onTrackChange(OptionItem track) {
+        mVideoFormat = track;
+    }
+
     private void saveState() {
         Video video = mController.getVideo();
 
         if (video != null) {
             mPositionMap.put(video.id, new State(mController.getPositionMs()));
-            mVideoFormat = mController.getVideoFormat();
         }
     }
 

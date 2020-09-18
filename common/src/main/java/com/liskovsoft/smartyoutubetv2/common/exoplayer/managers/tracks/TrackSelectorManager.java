@@ -32,6 +32,12 @@ public class TrackSelectorManager {
     private final Renderer[] mRenderers;
     private MediaTrack mPendingSelection;
 
+    public void invalidate() {
+        if (mRenderers != null) {
+            Arrays.fill(mRenderers, null);
+        }
+    }
+
     private static class Renderer {
         public TrackGroupArray trackGroups;
         public TreeSet<MediaTrack> sortedTracks;
@@ -326,6 +332,8 @@ public class TrackSelectorManager {
     }
 
     private MediaTrack findBestMatch(MediaTrack track) {
+        Log.d(TAG, "findBestMatch: Starting: " + track.format);
+
         Renderer renderer = mRenderers[track.rendererIndex];
 
         MediaTrack result = createAutoSelection(track.rendererIndex);
@@ -348,6 +356,8 @@ public class TrackSelectorManager {
                 }
             }
         }
+
+        Log.d(TAG, "findBestMatch: Found: " + result.format);
 
         return result;
     }
