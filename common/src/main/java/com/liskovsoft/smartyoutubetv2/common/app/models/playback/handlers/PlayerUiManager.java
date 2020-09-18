@@ -61,6 +61,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         String audioFormatsTitle = mActivity.getString(R.string.dialog_audio_formats);
 
         VideoSettingsPresenter settingsPresenter = VideoSettingsPresenter.instance(mActivity);
+        settingsPresenter.clear();
         settingsPresenter.append(videoFormatsTitle, videoFormats, option -> mController.selectFormat(option));
         settingsPresenter.append(audioFormatsTitle, audioFormats, option -> mController.selectFormat(option));
 

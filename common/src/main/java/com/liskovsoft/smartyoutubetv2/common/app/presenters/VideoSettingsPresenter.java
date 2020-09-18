@@ -13,7 +13,7 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
     private static VideoSettingsPresenter sInstance;
     private final Context mContext;
     private VideoSettingsView mView;
-    private List<SettingsCategory> mCategories;
+    private final List<SettingsCategory> mCategories;
     private Runnable mOnClose;
 
     public interface OptionCallback {
@@ -53,18 +53,18 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
     @Override
     public void unregister(VideoSettingsView view) {
         mView = null;
-        mCategories.clear();
+        clear();
         if (mOnClose != null) {
             mOnClose.run();
         }
     }
 
+    public void clear() {
+        mCategories.clear();
+    }
+
     @Override
     public void onInitDone() {
-        //for (DialogCategory dialogCategory : mCategories) {
-        //    mView.addCategory(dialogCategory.title, dialogCategory.items);
-        //}
-
         mView.addCategories(mCategories);
     }
 

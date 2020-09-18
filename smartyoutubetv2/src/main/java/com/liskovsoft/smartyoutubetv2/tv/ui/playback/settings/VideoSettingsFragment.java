@@ -21,6 +21,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresent
 import com.liskovsoft.smartyoutubetv2.common.app.views.VideoSettingsView;
 
 import java.util.List;
+import java.util.Set;
 
 public class VideoSettingsFragment extends LeanbackSettingsFragment
         implements DialogPreference.TargetFragment, VideoSettingsView {
