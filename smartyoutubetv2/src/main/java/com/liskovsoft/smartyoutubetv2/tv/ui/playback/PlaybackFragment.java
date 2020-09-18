@@ -153,10 +153,12 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
     private void releasePlayer() {
         if (mBlockEngine) {
+            Log.d(TAG, "releasePlayer: Engine release is blocked. Exiting...");
             return;
         }
 
         if (mPlayer != null) {
+            Log.d(TAG, "releasePlayer: Start releasing player engine...");
             mEventListener.onEngineReleased();
             mPlayer.release();
             mPlayer = null;
