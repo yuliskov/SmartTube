@@ -170,7 +170,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     private void initializePlayer() {
-        if (mBlockEngine) {
+        if (mPlayer != null) {
             return;
         }
 

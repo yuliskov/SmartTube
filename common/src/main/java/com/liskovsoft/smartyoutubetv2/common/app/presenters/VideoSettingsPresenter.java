@@ -53,6 +53,10 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
     @Override
     public void unregister(VideoSettingsView view) {
         mView = null;
+        onClose();
+    }
+
+    public void onClose() {
         clear();
         if (mOnClose != null) {
             mOnClose.run();
