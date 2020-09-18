@@ -368,6 +368,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
     @Override
     public void selectFormat(OptionItem option) {
+        // Android 4.4 fix for format selection dialog (player destroyed when dialog is focused)
         mExoPlayerController.selectFormat(option);
     }
 
