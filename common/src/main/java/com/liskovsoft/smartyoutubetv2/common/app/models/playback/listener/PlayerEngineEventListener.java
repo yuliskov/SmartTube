@@ -12,5 +12,5 @@ public interface PlayerEngineEventListener {
     void onEngineReleased();
     void onPlayEnd();
     void onRepeatModeChange(int modeIndex);
-    void onTrackChanged(FormatItem track);
+    void onVideoTrackChanged(FormatItem track);
 }

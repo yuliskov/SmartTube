@@ -217,7 +217,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
-    public void onTrackChanged(FormatItem track) {
-        process(listener -> listener.onTrackChanged(track));
+    public void onVideoTrackChanged(FormatItem track) {
+        process(listener -> listener.onVideoTrackChanged(track));
     }
 }

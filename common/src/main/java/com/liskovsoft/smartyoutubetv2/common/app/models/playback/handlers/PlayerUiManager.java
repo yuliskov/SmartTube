@@ -17,6 +17,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     private final Handler mHandler;
     private static final long UI_HIDE_TIMEOUT_MS = 2_000;
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
+    private boolean mEngineReady;
 
     public PlayerUiManager() {
         mHandler = new Handler(Looper.getMainLooper());
@@ -35,7 +36,15 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     }
 
     @Override
+    public void onEngineInitialized() {
+        mEngineReady = true;
+    }
+
+    @Override
     public void onEngineReleased() {
+        Log.d(TAG, "Engine released. Disabling all callbacks...");
+        mEngineReady = false;
+
         disableUiAutoHideTimeout();
         disableSuggestionsResetTimeout();
     }
@@ -103,7 +112,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
 
     private void enableUiAutoHideTimeout() {
         Log.d(TAG, "Starting hide ui timer...");
-        mHandler.postDelayed(mUiVisibilityHandler, UI_HIDE_TIMEOUT_MS);
+        if (mEngineReady) {
+            mHandler.postDelayed(mUiVisibilityHandler, UI_HIDE_TIMEOUT_MS);
+        }
     }
 
     private void disableSuggestionsResetTimeout() {
@@ -113,7 +124,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
 
     private void enableSuggestionsResetTimeout() {
         Log.d(TAG, "Starting reset position timer...");
-        mHandler.postDelayed(mSuggestionsResetHandler, SUGGESTIONS_RESET_TIMEOUT_MS);
+        if (mEngineReady) {
+            mHandler.postDelayed(mSuggestionsResetHandler, SUGGESTIONS_RESET_TIMEOUT_MS);
+        }
     }
 
     private final Runnable mSuggestionsResetHandler = () -> mController.resetSuggestedPosition();

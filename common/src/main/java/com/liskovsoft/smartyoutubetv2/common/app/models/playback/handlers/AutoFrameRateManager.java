@@ -15,12 +15,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onTrackChanged(FormatItem track) {
+    public void onVideoTrackChanged(FormatItem track) {
         mAutoFrameRateHelper.apply(track);
-    }
-
-    @Override
-    public void onEngineReleased() {
-        mAutoFrameRateHelper.restoreOriginalState();
     }
 }

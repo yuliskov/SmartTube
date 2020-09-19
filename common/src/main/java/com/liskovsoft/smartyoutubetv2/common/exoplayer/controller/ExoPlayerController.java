@@ -6,7 +6,10 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Player.EventListener;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
@@ -147,6 +150,16 @@ public class ExoPlayerController implements EventListener, PlayerController {
     @Override
     public FormatItem getVideoFormat() {
         return ExoFormatItem.from(mTrackSelectorManager.getVideoTrack());
+    }
+
+    @Override
+    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+        for (TrackSelection selection : trackSelections.getAll()) {
+            if (selection != null && selection.getSelectedIndex() == TrackSelectorManager.RENDERER_INDEX_VIDEO) {
+                Log.d(TAG, "onTracksChanged: video track");
+                mEventListener.onVideoTrackChanged(ExoFormatItem.from(selection.getSelectedFormat()));
+            }
+        }
     }
 
     @Override

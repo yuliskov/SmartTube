@@ -70,6 +70,16 @@ public class ExoFormatItem implements FormatItem {
         return null;
     }
 
+    public static FormatItem from(Format format) {
+        ExoFormatItem formatItem = new ExoFormatItem();
+        formatItem.mFrameRate = format.frameRate;
+        formatItem.mWidth = format.width;
+        formatItem.mHeight = format.height;
+        formatItem.mTitle = TrackSelectorUtil.buildTrackNameShort(format);
+
+        return formatItem;
+    }
+
     @Override
     public int getId() {
         return mId;
