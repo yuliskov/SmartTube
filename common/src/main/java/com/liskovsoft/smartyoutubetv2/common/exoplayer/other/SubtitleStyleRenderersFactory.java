@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.managers;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.other;
 
 import android.os.Handler;
 import androidx.annotation.Nullable;

@@ -1,8 +1,8 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.managers;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.controller;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
 import java.io.InputStream;
 import java.util.List;
@@ -19,9 +19,9 @@ public interface PlayerController {
     void setVideo(Video video);
     Video getVideo();
     void setRepeatMode(int modeIndex);
-    List<OptionItem> getVideoFormats();
-    List<OptionItem> getAudioFormats();
-    List<OptionItem> getSubtitleFormats();
-    void selectFormat(OptionItem option);
-    OptionItem getVideoFormat();
+    List<FormatItem> getVideoFormats();
+    List<FormatItem> getAudioFormats();
+    List<FormatItem> getSubtitleFormats();
+    void selectFormat(FormatItem option);
+    FormatItem getVideoFormat();
 }

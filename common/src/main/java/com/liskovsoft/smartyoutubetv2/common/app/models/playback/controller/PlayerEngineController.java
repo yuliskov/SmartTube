@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller;
 
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+
 import java.io.InputStream;
 import java.util.List;
 
@@ -12,10 +14,10 @@ public interface PlayerEngineController {
     void setPlay(boolean play);
     boolean isPlaying();
     void setRepeatMode(int modeIndex);
-    List<OptionItem> getVideoFormats();
-    List<OptionItem> getAudioFormats();
-    void selectFormat(OptionItem option);
-    OptionItem getVideoFormat();
+    List<FormatItem> getVideoFormats();
+    List<FormatItem> getAudioFormats();
+    void selectFormat(FormatItem option);
+    FormatItem getVideoFormat();
     /**
      * Block engine from destroying
      */

@@ -6,8 +6,9 @@ import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.OptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
 import java.util.List;
 
@@ -54,16 +55,18 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         disableUiAutoHideTimeout();
         mController.blockEngine();
 
-        List<OptionItem> videoFormats = mController.getVideoFormats();
+        List<FormatItem> videoFormats = mController.getVideoFormats();
         String videoFormatsTitle = mActivity.getString(R.string.dialog_video_formats);
 
-        List<OptionItem> audioFormats = mController.getAudioFormats();
+        List<FormatItem> audioFormats = mController.getAudioFormats();
         String audioFormatsTitle = mActivity.getString(R.string.dialog_audio_formats);
 
         VideoSettingsPresenter settingsPresenter = VideoSettingsPresenter.instance(mActivity);
         settingsPresenter.clear();
-        settingsPresenter.append(videoFormatsTitle, videoFormats, option -> mController.selectFormat(option));
-        settingsPresenter.append(audioFormatsTitle, audioFormats, option -> mController.selectFormat(option));
+        settingsPresenter.append(videoFormatsTitle,
+                UiOptionItem.from(videoFormats), option -> mController.selectFormat(UiOptionItem.toFormat(option)));
+        settingsPresenter.append(audioFormatsTitle,
+                UiOptionItem.from(audioFormats), option -> mController.selectFormat(UiOptionItem.toFormat(option)));
 
         settingsPresenter.showDialog(() -> {
             enableUiAutoHideTimeout();

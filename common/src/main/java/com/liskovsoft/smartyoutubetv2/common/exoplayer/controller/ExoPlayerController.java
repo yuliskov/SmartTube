@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.managers;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.controller;
 
 import android.content.Context;
 import android.net.Uri;
@@ -8,13 +8,12 @@ import com.google.android.exoplayer2.Player.EventListener;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.tracks.TrackSelectorManager;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.tracks.FormatOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 
 import java.io.InputStream;
 import java.util.List;
@@ -125,29 +124,29 @@ public class ExoPlayerController implements EventListener, PlayerController {
     }
 
     @Override
-    public List<OptionItem> getVideoFormats() {
-        return FormatOptionItem.from(mTrackSelectorManager.getVideoTracks(), mContext.getString(R.string.dialog_video_default));
+    public List<FormatItem> getVideoFormats() {
+        return ExoFormatItem.from(mTrackSelectorManager.getVideoTracks());
     }
 
     @Override
-    public List<OptionItem> getAudioFormats() {
-        return FormatOptionItem.from(mTrackSelectorManager.getAudioTracks(), mContext.getString(R.string.dialog_audio_default));
+    public List<FormatItem> getAudioFormats() {
+        return ExoFormatItem.from(mTrackSelectorManager.getAudioTracks());
     }
 
     @Override
-    public List<OptionItem> getSubtitleFormats() {
-        return FormatOptionItem.from(mTrackSelectorManager.getAudioTracks(), mContext.getString(R.string.dialog_subtitile_default));
+    public List<FormatItem> getSubtitleFormats() {
+        return ExoFormatItem.from(mTrackSelectorManager.getAudioTracks());
     }
 
     @Override
-    public void selectFormat(OptionItem option) {
-        mTrackSelectorManager.selectTrack(FormatOptionItem.toMediaTrack(option));
+    public void selectFormat(FormatItem option) {
+        mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(option));
         mEventListener.onTrackClicked(option);
     }
 
     @Override
-    public OptionItem getVideoFormat() {
-        return FormatOptionItem.from(mTrackSelectorManager.getVideoTrack());
+    public FormatItem getVideoFormat() {
+        return ExoFormatItem.from(mTrackSelectorManager.getVideoTrack());
     }
 
     @Override

@@ -29,12 +29,13 @@ import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.ExoPlayerController;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.PlayerController;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerController;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
@@ -178,7 +179,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory =
                 new AdaptiveTrackSelection.Factory(bandwidthMeter);
-        mTrackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+        mTrackSelector = new RestoreTrackSelector(videoTrackSelectionFactory, getContext());
 
         // TODO: testing max bitrate
         mTrackSelector.setParameters(mTrackSelector.getParameters().buildUpon().setForceHighestSupportedBitrate(true));
@@ -370,23 +371,23 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
-    public List<OptionItem> getVideoFormats() {
+    public List<FormatItem> getVideoFormats() {
         return mExoPlayerController.getVideoFormats();
     }
 
     @Override
-    public List<OptionItem> getAudioFormats() {
+    public List<FormatItem> getAudioFormats() {
         return mExoPlayerController.getAudioFormats();
     }
 
     @Override
-    public void selectFormat(OptionItem option) {
+    public void selectFormat(FormatItem option) {
         // Android 4.4 fix for format selection dialog (player destroyed when dialog is focused)
         mExoPlayerController.selectFormat(option);
     }
 
     @Override
-    public OptionItem getVideoFormat() {
+    public FormatItem getVideoFormat() {
         return mExoPlayerController.getVideoFormat();
     }
 

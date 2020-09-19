@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers.AutoFrameRateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers.HistoryUpdater;
@@ -213,7 +212,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
-    public void onTrackClicked(OptionItem track) {
+    public void onTrackClicked(FormatItem track) {
         process(listener -> listener.onTrackClicked(track));
     }
 

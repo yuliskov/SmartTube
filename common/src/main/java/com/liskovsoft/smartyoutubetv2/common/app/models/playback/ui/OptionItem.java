@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller;
+package com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui;
 
 public interface OptionItem {
     int getType();

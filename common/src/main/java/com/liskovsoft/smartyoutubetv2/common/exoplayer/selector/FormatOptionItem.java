@@ -1,8 +1,8 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.tracks;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
 import com.google.android.exoplayer2.Format;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.OptionItem;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.tracks.TrackSelectorManager.MediaTrack;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager.MediaTrack;
 
 import java.util.ArrayList;
 import java.util.List;

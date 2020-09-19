@@ -1,10 +1,10 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.tracks;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
 import android.text.TextUtils;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.managers.tracks.TrackSelectorManager.MediaTrack;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager.MediaTrack;
 
 public class TrackSelectorUtil {
     public static final String CODEC_SHORT_AVC = "avc";
