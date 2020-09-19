@@ -1,8 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.autoframerate;
 
 import android.app.Activity;
-import com.google.android.exoplayer2.Format;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncHelper;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncHelper.AutoFrameRateListener;
@@ -11,21 +9,19 @@ import java.util.HashMap;
 
 class AutoFrameRateHelper {
     private static final String TAG = AutoFrameRateHelper.class.getSimpleName();
-    private final Activity mContext;
+    private final Activity mActivity;
     private final DisplaySyncHelper mSyncHelper;
-    private SimpleExoPlayer mPlayer;
     private static final long THROTTLE_INTERVAL_MS = 5_000;
     private long mPrevCall;
     private HashMap<Float, Float> mFrameRateMapping;
-    private boolean mIsAfr60fpsCorrectionEnabled;
+    private boolean mIsFpsCorrectionEnabled;
 
-    public AutoFrameRateHelper(Activity context, DisplaySyncHelper syncHelper, boolean enableResolutionSwitch) {
-        mContext = context;
-        mSyncHelper = syncHelper;
-
-        mSyncHelper.setResolutionSwitchEnabled(enableResolutionSwitch);
+    public AutoFrameRateHelper(Activity activity) {
+        mActivity = activity;
+        mSyncHelper = new DisplaySyncHelper(activity);
 
         initFrameRateMapping();
+        saveOriginalState();
     }
 
     private void initFrameRateMapping() {
@@ -34,18 +30,13 @@ class AutoFrameRateHelper {
         mFrameRateMapping.put(60f, 59.94f);
     }
 
-    public void apply() {
-        if (!getEnabled()) {
-            Log.d(TAG, "Autoframerate not enabled... exiting...");
+    public void apply(FormatItem format) {
+        if (!isSupported()) {
+            Log.d(TAG, "Autoframerate not supported... exiting...");
             return;
         }
 
-        if (mPlayer == null) {
-            Log.e(TAG, "Can't apply mode change: player is null");
-            return;
-        }
-
-        if (mPlayer.getVideoFormat() == null) {
+        if (format == null) {
             Log.e(TAG, "Can't apply mode change: format is null");
             return;
         }
@@ -56,47 +47,28 @@ class AutoFrameRateHelper {
         } else {
             mPrevCall = System.currentTimeMillis();
         }
+        
+        float frameRate = correctFps(format.getFrameRate());
+        int width = format.getWidth();
 
-        Format videoFormat = mPlayer.getVideoFormat();
-        float frameRate = correctFps(videoFormat.frameRate);
-
-        int width = videoFormat.width;
         Log.d(TAG, String.format("Applying mode change... Video fps: %s, width: %s", frameRate, width));
-        mSyncHelper.syncDisplayMode(mContext.getWindow(), width, frameRate);
+        mSyncHelper.syncDisplayMode(mActivity.getWindow(), width, frameRate);
     }
 
-    public boolean getEnabled() {
+    public boolean isSupported() {
         return mSyncHelper.supportsDisplayModeChangeComplex();
     }
 
-    public void setEnabled(boolean enabled) {
-        if (!mSyncHelper.supportsDisplayModeChangeComplex()) {
-            Log.e(TAG, "Autoframerate isn't supported");
-            //MessageHelpers.showMessage(mContext, R.string.autoframerate_not_supported);
-            enabled = false;
-        }
-        
-        apply();
-    }
-
     public boolean isResolutionSwitchEnabled() {
-        return mSyncHelper.isAfrResolutionSwitchEnabled();
+        return mSyncHelper.isResolutionSwitchEnabled();
     }
 
     public void setResolutionSwitchEnabled(boolean enabled) {
         mSyncHelper.setResolutionSwitchEnabled(enabled);
     }
 
-    public void applyModeChangeFix() {
-        if (!getEnabled()) {
-            return;
-        }
-
-        mSyncHelper.applyModeChangeFix(mContext.getWindow());
-    }
-
-    public void saveOriginalState() {
-        if (!getEnabled()) {
+    private void saveOriginalState() {
+        if (!isSupported()) {
             return;
         }
 
@@ -104,41 +76,48 @@ class AutoFrameRateHelper {
     }
 
     public void restoreOriginalState() {
-        if (!getEnabled()) {
+        if (!isSupported()) {
             Log.d(TAG, "restoreOriginalState: autoframerate not enabled... exiting...");
             return;
         }
 
         Log.d(TAG, "Restoring original mode...");
 
-        mSyncHelper.restoreOriginalState(mContext.getWindow());
-    }
-
-    public void setPlayer(SimpleExoPlayer player) {
-        mPlayer = player;
+        mSyncHelper.restoreOriginalState(mActivity.getWindow());
     }
 
     public void setListener(AutoFrameRateListener listener) {
         mSyncHelper.setListener(listener);
     }
 
-    public void resetStats() {
+    public boolean isFpsCorrectionEnabled() {
+        return mIsFpsCorrectionEnabled;
+    }
+
+    public void setFpsCorrectionEnabled(boolean enabled) {
+        mIsFpsCorrectionEnabled = enabled;
+    }
+
+    private void resetStats() {
         mSyncHelper.resetStats();
     }
 
     private float correctFps(float frameRate) {
-        if (mIsAfr60fpsCorrectionEnabled && mFrameRateMapping.containsKey(frameRate)) {
+        if (mIsFpsCorrectionEnabled && mFrameRateMapping.containsKey(frameRate)) {
             return mFrameRateMapping.get(frameRate);
         }
 
         return frameRate;
     }
 
-    public boolean is60fpsCorrectionEnabled() {
-        return mIsAfr60fpsCorrectionEnabled;
-    }
+    /**
+     * UGOOS mode change fix. DEPRECATED!
+     */
+    private void applyModeChangeFix() {
+        if (!isSupported()) {
+            return;
+        }
 
-    public void set60fpsCorrectionEnabled(boolean enabled) {
-        mIsAfr60fpsCorrectionEnabled = enabled;
+        mSyncHelper.applyModeChangeFix(mActivity.getWindow());
     }
 }

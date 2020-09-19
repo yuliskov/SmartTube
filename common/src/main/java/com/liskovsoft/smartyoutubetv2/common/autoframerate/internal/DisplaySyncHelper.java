@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.autoframerate.internal;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.view.Window;
@@ -20,7 +21,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
     private static final String TAG = DisplaySyncHelper.class.getSimpleName();
     private static final int STATE_ORIGINAL = 1;
     private static final int STATE_CURRENT = 2;
-    protected final Activity mContext;
+    protected final Context mContext;
     private boolean mDisplaySyncInProgress = false;
     private UhdHelper mUhdHelper;
     protected Mode mOriginalMode;
@@ -36,7 +37,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
         void onModeStart(Mode newMode);
     }
 
-    public DisplaySyncHelper(Activity context) {
+    public DisplaySyncHelper(Context context) {
         mContext = context;
     }
 
@@ -450,7 +451,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
         mSwitchToFHD = enabled;
     }
 
-    public boolean isAfrResolutionSwitchEnabled() {
+    public boolean isResolutionSwitchEnabled() {
         return mSwitchToUHD || mSwitchToFHD;
     }
 }

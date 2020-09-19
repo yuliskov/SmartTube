@@ -15,7 +15,6 @@ import android.os.Message;
 import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
-import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolder.Mode;
 
@@ -525,7 +524,7 @@ public class UhdHelper {
     }
 
     public static Mode getCurrentMode(Context context) {
-        if (Util.SDK_INT < 23) {
+        if (Build.VERSION.SDK_INT < 23) {
             WindowManager wm = (WindowManager) context.getApplicationContext().getSystemService(Context.WINDOW_SERVICE); // the results will be higher than using the activity context object or the getWindowManager() shortcut
             Display display = wm.getDefaultDisplay();
 
