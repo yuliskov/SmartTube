@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 public class ExoFormatItem implements FormatItem {
+    private int mType;
     private int mId;
     private CharSequence mTitle;
     private MediaTrack mTrack;
@@ -54,6 +55,7 @@ public class ExoFormatItem implements FormatItem {
             videoFormatItem.mIsDefault = true; // fake auto track
         }
 
+        videoFormatItem.mType = track.rendererIndex;
         videoFormatItem.mIsSelected = track.isSelected;
         videoFormatItem.mTrack = track;
 
@@ -83,6 +85,7 @@ public class ExoFormatItem implements FormatItem {
         return mIsSelected;
     }
 
+    @Override
     public boolean isDefault() {
         return mIsDefault;
     }
@@ -100,5 +103,10 @@ public class ExoFormatItem implements FormatItem {
     @Override
     public int getHeight() {
         return mHeight;
+    }
+
+    @Override
+    public int getType() {
+        return mType;
     }
 }

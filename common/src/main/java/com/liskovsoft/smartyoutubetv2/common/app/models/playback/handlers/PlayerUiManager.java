@@ -64,9 +64,11 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         VideoSettingsPresenter settingsPresenter = VideoSettingsPresenter.instance(mActivity);
         settingsPresenter.clear();
         settingsPresenter.append(videoFormatsTitle,
-                UiOptionItem.from(videoFormats), option -> mController.selectFormat(UiOptionItem.toFormat(option)));
+                UiOptionItem.from(videoFormats, mActivity.getString(R.string.dialog_video_default)),
+                option -> mController.selectFormat(UiOptionItem.toFormat(option)));
         settingsPresenter.append(audioFormatsTitle,
-                UiOptionItem.from(audioFormats), option -> mController.selectFormat(UiOptionItem.toFormat(option)));
+                UiOptionItem.from(audioFormats, mActivity.getString(R.string.dialog_audio_default)),
+                option -> mController.selectFormat(UiOptionItem.toFormat(option)));
 
         settingsPresenter.showDialog(() -> {
             enableUiAutoHideTimeout();
