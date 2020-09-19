@@ -6,6 +6,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
 public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     protected PlayerController mController;
@@ -150,7 +151,12 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
-    public void onTrackChange(OptionItem track) {
+    public void onTrackClicked(OptionItem track) {
+        // NOP
+    }
+
+    @Override
+    public void onTrackChanged(FormatItem track) {
         // NOP
     }
 }

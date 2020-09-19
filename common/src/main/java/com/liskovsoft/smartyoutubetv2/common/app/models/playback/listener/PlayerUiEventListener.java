@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.OptionItem;
 
 public interface PlayerUiEventListener {
     void onSuggestionItemClicked(Video item);
@@ -16,4 +17,5 @@ public interface PlayerUiEventListener {
     void onThumbsDownClicked(boolean thumbsDown);
     void onThumbsUpClicked(boolean thumbsUp);
     void onChannelClicked();
+    void onTrackClicked(OptionItem track);
 }

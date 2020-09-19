@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlayerController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers.AutoFrameRateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers.HistoryUpdater;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers.PlayerUiManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers.StateUpdater;
@@ -11,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers.VideoL
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerUiEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.ViewEventListener;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
 import java.util.ArrayList;
 
@@ -23,6 +25,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         mEventListeners = new ArrayList<>();
 
         // NOTE: position matters!!!
+        mEventListeners.add(new AutoFrameRateManager());
         mEventListeners.add(new PlayerUiManager());
         mEventListeners.add(new StateUpdater());
         mEventListeners.add(new HistoryUpdater());
@@ -210,7 +213,12 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
-    public void onTrackChange(OptionItem track) {
-        process(listener -> listener.onTrackChange(track));
+    public void onTrackClicked(OptionItem track) {
+        process(listener -> listener.onTrackClicked(track));
+    }
+
+    @Override
+    public void onTrackChanged(FormatItem track) {
+        process(listener -> listener.onTrackChanged(track));
     }
 }

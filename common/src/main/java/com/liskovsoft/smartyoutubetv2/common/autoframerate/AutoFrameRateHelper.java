@@ -7,7 +7,7 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncH
 
 import java.util.HashMap;
 
-class AutoFrameRateHelper {
+public class AutoFrameRateHelper {
     private static final String TAG = AutoFrameRateHelper.class.getSimpleName();
     private final Activity mActivity;
     private final DisplaySyncHelper mSyncHelper;

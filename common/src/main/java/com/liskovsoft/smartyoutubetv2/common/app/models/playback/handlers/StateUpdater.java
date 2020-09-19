@@ -84,7 +84,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onTrackChange(OptionItem track) {
+    public void onTrackClicked(OptionItem track) {
         mVideoFormat = track;
     }
 
