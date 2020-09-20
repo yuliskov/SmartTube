@@ -1,6 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
-import android.content.Context;
+import android.util.Pair;
 import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.source.TrackGroupArray;
@@ -8,19 +8,25 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Definition;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Factory;
-import com.liskovsoft.sharedutils.mylogger.Log;
 
 public class RestoreTrackSelector extends DefaultTrackSelector {
     private static final String TAG = RestoreTrackSelector.class.getSimpleName();
-    private final Context mContext;
-    //private final PlayerStateManagerBase mStateManager;
-    private boolean mAlreadyRestored;
+    private static final int FORMAT_NOT_SUPPORTED = 19;
+    private static final int FORMAT_FORCE_SUPPORT = 52;
     private TrackSelectorCallback mCallback;
 
-    public RestoreTrackSelector(Factory trackSelectionFactory, Context context) {
+    public interface TrackSelectorCallback {
+        Definition onSelectVideoTrack(TrackGroupArray groups, Parameters params);
+        void updateVideoTrackSelection(TrackGroupArray groups, Parameters params, Definition definition);
+        void updateAudioTrackSelection(TrackGroupArray groups, Parameters params, Definition definition);
+    }
+
+    public RestoreTrackSelector(Factory trackSelectionFactory) {
         super(trackSelectionFactory);
-        mContext = context;
-        //mStateManager = new PlayerStateManagerBase(context);
+    }
+
+    public void setTrackSelectCallback(TrackSelectorCallback callback) {
+        mCallback = callback;
     }
 
     // Ver 2.9.6
@@ -52,8 +58,6 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
             }
         }
 
-        Log.d(TAG, "selectVideoTrack: " + getCurrentMappedTrackInfo());
-
         Definition definition = super.selectVideoTrack(groups, formatSupports, mixedMimeTypeAdaptationSupports, params, enableAdaptiveTrackSelection);
 
         if (mCallback != null) {
@@ -63,41 +67,27 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
         return definition;
     }
 
-    //@Override
-    //protected Definition[] selectAllTracks(MappedTrackInfo mappedTrackInfo, int[][][] rendererFormatSupports,
-    //                                       int[] rendererMixedMimeTypeAdaptationSupports, Parameters params) throws ExoPlaybackException {
-    //
-    //    return super.selectAllTracks(mappedTrackInfo, rendererFormatSupports, rendererMixedMimeTypeAdaptationSupports, params);
-    //}
+    @Nullable
+    @Override
+    protected Pair<Definition, AudioTrackScore> selectAudioTrack(TrackGroupArray groups, int[][] formatSupports,
+                                                                 int mixedMimeTypeAdaptationSupports, Parameters params, boolean enableAdaptiveTrackSelection) throws ExoPlaybackException {
+        Pair<Definition, AudioTrackScore> trackScorePair = super.selectAudioTrack(groups, formatSupports,
+                mixedMimeTypeAdaptationSupports, params, enableAdaptiveTrackSelection);
 
-    //private void restoreVideoTrack(TrackGroupArray groups) {
-    //    MyFormat format = mStateManager.findPreferredVideoFormat(groups);
-    //
-    //    if (format != null) {
-    //        setParameters(buildUponParameters().setSelectionOverride(
-    //                ExoPlayerFragment.RENDERER_INDEX_VIDEO,
-    //                groups,
-    //                new SelectionOverride(format.pair.first, format.pair.second)
-    //        ));
-    //    }
-    //}
+        if (mCallback != null && trackScorePair != null) {
+            mCallback.updateAudioTrackSelection(groups, params, trackScorePair.first);
+        }
+
+        return trackScorePair;
+    }
 
     private void unlockAllVideoFormats(int[][] formatSupports) {
         final int videoTrackIndex = 0;
 
         for (int j = 0; j < formatSupports[videoTrackIndex].length; j++) {
-            if (formatSupports[videoTrackIndex][j] == 19) { // video format not supported by system decoders
-                formatSupports[videoTrackIndex][j] = 52; // force support of video format
+            if (formatSupports[videoTrackIndex][j] == FORMAT_NOT_SUPPORTED) { // video format not supported by system decoders
+                formatSupports[videoTrackIndex][j] = FORMAT_FORCE_SUPPORT; // force support of video format
             }
         }
-    }
-
-    public void setTrackSelectCallback(TrackSelectorCallback callback) {
-        mCallback = callback;
-    }
-
-    public interface TrackSelectorCallback {
-        Definition onSelectVideoTrack(TrackGroupArray groups, Parameters params);
-        void updateVideoTrackSelection(TrackGroupArray groups, Parameters params, Definition definition);
     }
 }

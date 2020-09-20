@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.content.Context;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers.PlayerUiManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers.PlayerUiManager.SwitchCallback;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.VideoSettingsView;
@@ -79,5 +81,9 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
 
     public void append(String title, List<OptionItem> items, OptionCallback callback) {
         mCategories.add(new SettingsCategory(title, items, callback));
+    }
+
+    public void append(String title, SwitchCallback callback) {
+        // TODO: not implemented
     }
 }

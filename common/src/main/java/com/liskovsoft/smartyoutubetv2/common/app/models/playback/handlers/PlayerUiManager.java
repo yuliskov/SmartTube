@@ -2,14 +2,17 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers;
 
 import android.os.Handler;
 import android.os.Looper;
+import androidx.core.util.Pair;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlayerController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerUiManager extends PlayerEventListenerHelper {
@@ -18,9 +21,21 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     private static final long UI_HIDE_TIMEOUT_MS = 2_000;
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
     private boolean mEngineReady;
+    private VideoSettingsPresenter mSettingsPresenter;
+    private final List<Pair<String, SwitchCallback>> mSwitches = new ArrayList<>();
+
+    public interface SwitchCallback {
+        void onClick(boolean checked);
+    }
 
     public PlayerUiManager() {
         mHandler = new Handler(Looper.getMainLooper());
+    }
+
+    @Override
+    public void setController(PlayerController controller) {
+        super.setController(controller);
+        mSettingsPresenter = VideoSettingsPresenter.instance(mActivity);
     }
 
     @Override
@@ -64,22 +79,12 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         disableUiAutoHideTimeout();
         mController.blockEngine();
 
-        List<FormatItem> videoFormats = mController.getVideoFormats();
-        String videoFormatsTitle = mActivity.getString(R.string.dialog_video_formats);
+        mSettingsPresenter.clear();
 
-        List<FormatItem> audioFormats = mController.getAudioFormats();
-        String audioFormatsTitle = mActivity.getString(R.string.dialog_audio_formats);
+        addListOption();
+        addSwitches();
 
-        VideoSettingsPresenter settingsPresenter = VideoSettingsPresenter.instance(mActivity);
-        settingsPresenter.clear();
-        settingsPresenter.append(videoFormatsTitle,
-                UiOptionItem.from(videoFormats, mActivity.getString(R.string.dialog_video_default)),
-                option -> mController.selectFormat(UiOptionItem.toFormat(option)));
-        settingsPresenter.append(audioFormatsTitle,
-                UiOptionItem.from(audioFormats, mActivity.getString(R.string.dialog_audio_default)),
-                option -> mController.selectFormat(UiOptionItem.toFormat(option)));
-
-        settingsPresenter.showDialog(() -> {
+        mSettingsPresenter.showDialog(() -> {
             enableUiAutoHideTimeout();
             mController.unblockEngine();
         });
@@ -105,6 +110,10 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         // TODO: open channel view
     }
 
+    public void addHQSwitch(String title, SwitchCallback callback) {
+        mSwitches.add(Pair.create(title, callback));
+    }
+
     private void disableUiAutoHideTimeout() {
         Log.d(TAG, "Stopping hide ui timer...");
         mHandler.removeCallbacks(mUiVisibilityHandler);
@@ -127,6 +136,27 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         if (mEngineReady) {
             mHandler.postDelayed(mSuggestionsResetHandler, SUGGESTIONS_RESET_TIMEOUT_MS);
         }
+    }
+
+    private void addSwitches() {
+        for (Pair<String, SwitchCallback> pair : mSwitches) {
+            mSettingsPresenter.append(pair.first, pair.second);
+        }
+    }
+
+    private void addListOption() {
+        List<FormatItem> videoFormats = mController.getVideoFormats();
+        String videoFormatsTitle = mActivity.getString(R.string.dialog_video_formats);
+
+        List<FormatItem> audioFormats = mController.getAudioFormats();
+        String audioFormatsTitle = mActivity.getString(R.string.dialog_audio_formats);
+
+        mSettingsPresenter.append(videoFormatsTitle,
+                UiOptionItem.from(videoFormats, mActivity.getString(R.string.dialog_video_default)),
+                option -> mController.selectFormat(UiOptionItem.toFormat(option)));
+        mSettingsPresenter.append(audioFormatsTitle,
+                UiOptionItem.from(audioFormats, mActivity.getString(R.string.dialog_audio_default)),
+                option -> mController.selectFormat(UiOptionItem.toFormat(option)));
     }
 
     private final Runnable mSuggestionsResetHandler = () -> mController.resetSuggestedPosition();

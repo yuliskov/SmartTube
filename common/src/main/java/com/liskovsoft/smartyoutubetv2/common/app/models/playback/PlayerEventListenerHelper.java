@@ -155,7 +155,7 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
-    public void onVideoTrackChanged(FormatItem track) {
+    public void onTrackChanged(FormatItem track) {
         // NOP
     }
 }

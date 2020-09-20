@@ -179,7 +179,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory =
                 new AdaptiveTrackSelection.Factory(bandwidthMeter);
-        mTrackSelector = new RestoreTrackSelector(videoTrackSelectionFactory, getContext());
+        mTrackSelector = new RestoreTrackSelector(videoTrackSelectionFactory);
 
         // TODO: testing max bitrate
         mTrackSelector.setParameters(mTrackSelector.getParameters().buildUpon().setForceHighestSupportedBitrate(true));

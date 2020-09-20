@@ -23,9 +23,11 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     public MainPlayerEventBridge() {
         mEventListeners = new ArrayList<>();
 
+        PlayerUiManager uiManager = new PlayerUiManager();
+
         // NOTE: position matters!!!
-        //mEventListeners.add(new AutoFrameRateManager());
-        mEventListeners.add(new PlayerUiManager());
+        mEventListeners.add(new AutoFrameRateManager(uiManager));
+        mEventListeners.add(uiManager);
         mEventListeners.add(new StateUpdater());
         mEventListeners.add(new HistoryUpdater());
         mEventListeners.add(new SuggestionsLoader());
@@ -217,7 +219,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
-    public void onVideoTrackChanged(FormatItem track) {
-        process(listener -> listener.onVideoTrackChanged(track));
+    public void onTrackChanged(FormatItem track) {
+        process(listener -> listener.onTrackChanged(track));
     }
 }

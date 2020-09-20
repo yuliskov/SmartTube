@@ -191,6 +191,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
         renderer.trackGroups = trackGroups;
         renderer.trackGroupsAdaptive = new boolean[renderer.trackGroups.length];
+        // TODO: do I need part below?
         //for (int i = 0; i < renderer.trackGroups.length; i++) {
         //    renderer.trackGroupsAdaptive[i] = mTrackSelectionFactory != null && trackInfo.getAdaptiveSupport(rendererIndex, i, false) !=
         //            RendererCapabilities.ADAPTIVE_NOT_SUPPORTED && renderer.trackGroups.get(i).length > 1;
@@ -210,10 +211,12 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         renderer.mediaTracks = new MediaTrack[renderer.trackGroups.length][];
         renderer.sortedTracks = new TreeSet<>(new MediaTrackFormatComparator());
 
-        // AUTO OPTION: add auto option
+        // AUTO OPTION: add disable subs option
         MediaTrack autoTrack = new MediaTrack();
         autoTrack.rendererIndex = rendererIndex;
-        renderer.sortedTracks.add(autoTrack);
+        if (rendererIndex == RENDERER_INDEX_SUBTITLE) {
+            renderer.sortedTracks.add(autoTrack);
+        }
 
         boolean hasSelected = false;
 
@@ -252,30 +255,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         }
     }
 
-    /**
-     * Get the number of tracks with the same resolution.
-     * <p>I assume that the tracks already have been sorted in descendants order. <br/>
-     * <p>Details: {@code com.liskovsoft.smartyoutubetv.flavors.exoplayer.youtubeinfoparser.mpdbuilder.MyMPDBuilder}
-     * @param group the group
-     * @param trackIndex current track in group
-     * @return
-     */
-    private int getRelatedTrackOffsets(TrackGroup group, int trackIndex) {
-        int prevHeight = 0;
-        int offset = 0;
-        for (int i = trackIndex; i > 0; i--) {
-            Format format = group.getFormat(i);
-            if (prevHeight == 0) {
-                prevHeight = format.height;
-            } else if (prevHeight == format.height) {
-                offset++;
-            } else {
-                break;
-            }
-        }
-        return offset;
-    }
-
     private void updateSelection(int rendererIndex) {
         boolean hasSelected = false;
 
@@ -295,9 +274,11 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
         // AUTO OPTION: unselect auto if other is selected
         MediaTrack autoTrack = renderer.sortedTracks.first();
-        autoTrack.isSelected = !hasSelected;
-        if (autoTrack.isSelected) {
-            renderer.selectedTrack = autoTrack;
+        if (autoTrack.groupIndex == -1) {
+            autoTrack.isSelected = !hasSelected;
+            if (autoTrack.isSelected) {
+                renderer.selectedTrack = autoTrack;
+            }
         }
     }
 
@@ -346,6 +327,14 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
         setOverride(RENDERER_INDEX_VIDEO, groups.indexOf(definition.group), definition.tracks);
         updateSelection(RENDERER_INDEX_VIDEO);
+    }
+
+    @Override
+    public void updateAudioTrackSelection(TrackGroupArray groups, Parameters params, Definition definition) {
+        initRenderer(RENDERER_INDEX_AUDIO, groups, params);
+
+        setOverride(RENDERER_INDEX_AUDIO, groups.indexOf(definition.group), definition.tracks);
+        updateSelection(RENDERER_INDEX_AUDIO);
     }
 
     public void selectTrack(MediaTrack track) {
@@ -480,5 +469,29 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             }
         }
         return tracks;
+    }
+
+    /**
+     * Get the number of tracks with the same resolution.
+     * <p>I assume that the tracks already have been sorted in descendants order. <br/>
+     * <p>Details: {@code com.liskovsoft.smartyoutubetv.flavors.exoplayer.youtubeinfoparser.mpdbuilder.MyMPDBuilder}
+     * @param group the group
+     * @param trackIndex current track in group
+     * @return
+     */
+    private int getRelatedTrackOffsets(TrackGroup group, int trackIndex) {
+        int prevHeight = 0;
+        int offset = 0;
+        for (int i = trackIndex; i > 0; i--) {
+            Format format = group.getFormat(i);
+            if (prevHeight == 0) {
+                prevHeight = format.height;
+            } else if (prevHeight == format.height) {
+                offset++;
+            } else {
+                break;
+            }
+        }
+        return offset;
     }
 }

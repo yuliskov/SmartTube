@@ -19,4 +19,5 @@
     <string name="dialog_video_default">Auto (max quality)</string>
     <string name="dialog_audio_default">Auto (max quality)</string>
     <string name="dialog_subtitile_default">Disable subtitles</string>
+    <string name="enable_auto_frame_rate">Auto Frame Rate</string>
 </resources>
