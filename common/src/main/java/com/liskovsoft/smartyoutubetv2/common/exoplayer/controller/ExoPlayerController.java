@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.controller;
 import android.content.Context;
 import android.net.Uri;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Player.EventListener;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -10,6 +11,7 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
@@ -17,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 
 import java.io.InputStream;
 import java.util.List;
@@ -155,8 +158,8 @@ public class ExoPlayerController implements EventListener, PlayerController {
     @Override
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
         for (TrackSelection selection : trackSelections.getAll()) {
-            if (selection != null && selection.getSelectedIndex() == TrackSelectorManager.RENDERER_INDEX_VIDEO) {
-                Log.d(TAG, "onTracksChanged: video track");
+            if (selection != null) {
+                Log.d(TAG, "onTracksChanged: video");
                 mEventListener.onVideoTrackChanged(ExoFormatItem.from(selection.getSelectedFormat()));
             }
         }

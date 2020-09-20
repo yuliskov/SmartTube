@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
 import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.util.MimeTypes;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager.MediaTrack;
 
@@ -76,8 +77,15 @@ public class ExoFormatItem implements FormatItem {
         formatItem.mWidth = format.width;
         formatItem.mHeight = format.height;
         formatItem.mTitle = TrackSelectorUtil.buildTrackNameShort(format);
+        formatItem.mType = getType(format);
 
         return formatItem;
+    }
+
+    private static int getType(Format format) {
+        String sampleMimeType = format.sampleMimeType;
+
+        return MimeTypes.isVideo(sampleMimeType) ? TYPE_VIDEO : MimeTypes.isAudio(sampleMimeType) ? TYPE_AUDIO : TYPE_SUBTITLE;
     }
 
     @Override
