@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
 import com.google.android.exoplayer2.Format;
-import com.google.android.exoplayer2.RendererCapabilities;
 import com.google.android.exoplayer2.source.TrackGroup;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
@@ -340,7 +339,15 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         initRenderer(RENDERER_INDEX_VIDEO, groups, params);
         return applyPendingSelection(groups);
     }
-    
+
+    @Override
+    public void updateVideoTrackSelection(TrackGroupArray groups, Parameters params, Definition definition) {
+        initRenderer(RENDERER_INDEX_VIDEO, groups, params);
+
+        setOverride(RENDERER_INDEX_VIDEO, groups.indexOf(definition.group), definition.tracks);
+        updateSelection(RENDERER_INDEX_VIDEO);
+    }
+
     public void selectTrack(MediaTrack track) {
         if (track == null) {
             return;

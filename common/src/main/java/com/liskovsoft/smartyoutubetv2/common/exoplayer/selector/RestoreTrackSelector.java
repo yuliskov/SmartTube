@@ -45,15 +45,6 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
     @Override
     protected TrackSelection.Definition selectVideoTrack(TrackGroupArray groups, int[][] formatSupports, int mixedMimeTypeAdaptationSupports,
                                               Parameters params, boolean enableAdaptiveTrackSelection) throws ExoPlaybackException {
-
-        //// Restore state before video starts playing
-        //boolean isAuto = !params.hasSelectionOverride(ExoPlayerFragment.RENDERER_INDEX_VIDEO, groups);
-        //
-        //if (isAuto && !mAlreadyRestored) {
-        //    mAlreadyRestored = true;
-        //    restoreVideoTrack(groups);
-        //}
-
         if (mCallback != null) {
             TrackSelection.Definition definition = mCallback.onSelectVideoTrack(groups, params);
             if (definition != null) {
@@ -61,11 +52,15 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
             }
         }
 
-        // mTrackSelectorManager.applyPendingSelection(groups);
-
         Log.d(TAG, "selectVideoTrack: " + getCurrentMappedTrackInfo());
 
-        return super.selectVideoTrack(groups, formatSupports, mixedMimeTypeAdaptationSupports, params, enableAdaptiveTrackSelection);
+        Definition definition = super.selectVideoTrack(groups, formatSupports, mixedMimeTypeAdaptationSupports, params, enableAdaptiveTrackSelection);
+
+        if (mCallback != null) {
+            mCallback.updateVideoTrackSelection(groups, params, definition);
+        }
+
+        return definition;
     }
 
     //@Override
@@ -103,6 +98,6 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
 
     public interface TrackSelectorCallback {
         Definition onSelectVideoTrack(TrackGroupArray groups, Parameters params);
-        //void onSelectAllTracks(MappedTrackInfo trackInfo, Parameters params);
+        void updateVideoTrackSelection(TrackGroupArray groups, Parameters params, Definition definition);
     }
 }

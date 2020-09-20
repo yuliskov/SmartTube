@@ -157,9 +157,10 @@ public class ExoPlayerController implements EventListener, PlayerController {
 
     @Override
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+        Log.d(TAG, "onTracksChanged: start");
+
         for (TrackSelection selection : trackSelections.getAll()) {
             if (selection != null) {
-                Log.d(TAG, "onTracksChanged: video");
                 mEventListener.onVideoTrackChanged(ExoFormatItem.from(selection.getSelectedFormat()));
             }
         }
