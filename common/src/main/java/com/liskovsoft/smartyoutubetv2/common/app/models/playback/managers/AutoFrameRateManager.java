@@ -12,6 +12,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     private AutoFrameRateHelper mAutoFrameRateHelper;
     private boolean mEnabled;
     private boolean mCorrectionEnabled;
+    private boolean mInitDone;
 
     public AutoFrameRateManager(PlayerUiManager uiManager) {
         mUiManager = uiManager;
@@ -20,13 +21,19 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     @Override
     public void setController(PlayerController controller) {
         super.setController(controller);
+
         mAutoFrameRateHelper = new AutoFrameRateHelper(mActivity);
-        String title = mActivity.getString(R.string.auto_frame_rate_enable);
-        String fpsCorrection = mActivity.getString(R.string.auto_frame_rate_correction);
-        mUiManager.addHQSwitch(title, UiOptionItem.from(title,
-                (optionItem) -> mEnabled = optionItem.isSelected(), mEnabled));
-        mUiManager.addHQSwitch(title, UiOptionItem.from(fpsCorrection,
-                (optionItem) -> mCorrectionEnabled = optionItem.isSelected(), mCorrectionEnabled));
+
+        if (!mInitDone) {
+            String title = mActivity.getString(R.string.auto_frame_rate_enable);
+            String fpsCorrection = mActivity.getString(R.string.auto_frame_rate_correction, "(30 => 29.97)");
+            mUiManager.addHQSwitch(title, UiOptionItem.from(title,
+                    (optionItem) -> mEnabled = optionItem.isSelected(), mEnabled));
+            mUiManager.addHQSwitch(title, UiOptionItem.from(fpsCorrection,
+                    (optionItem) -> mCorrectionEnabled = optionItem.isSelected(), mCorrectionEnabled));
+
+            mInitDone = true;
+        }
     }
 
     @Override

@@ -149,9 +149,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     }
 
     private void addSwitches() {
-        //for (Pair<String, SwitchCallback> pair : mSwitches) {
-        //    mSettingsPresenter.appendChecked(pair.first, pair.second);
-        //}
+        for (String key : mSwitches.keySet()) {
+            mSettingsPresenter.appendChecked(key, mSwitches.get(key));
+        }
     }
 
     private void addListOption() {
@@ -161,11 +161,11 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         List<FormatItem> audioFormats = mController.getAudioFormats();
         String audioFormatsTitle = mActivity.getString(R.string.dialog_audio_formats);
 
-        mSettingsPresenter.appendChecked(videoFormatsTitle,
+        mSettingsPresenter.appendRadio(videoFormatsTitle,
                 UiOptionItem.from(videoFormats,
                         option -> mController.selectFormat(UiOptionItem.toFormat(option)),
                         mActivity.getString(R.string.dialog_video_default)));
-        mSettingsPresenter.appendChecked(audioFormatsTitle,
+        mSettingsPresenter.appendRadio(audioFormatsTitle,
                 UiOptionItem.from(audioFormats,
                         option -> mController.selectFormat(UiOptionItem.toFormat(option)),
                         mActivity.getString(R.string.dialog_audio_default)));

@@ -13,6 +13,7 @@ public class TrackSelectorUtil {
     public static final String CODEC_SHORT_MP4A = "mp4a";
     public static final String CODEC_SHORT_VORBIS = "vorbis";
     private static final String SEPARATOR = ", ";
+    private static final int HEIGHT_EQUITY_THRESHOLD_PX = 80;
 
     /**
      * Builds a track name for display.
@@ -114,14 +115,34 @@ public class TrackSelectorUtil {
     }
 
     public static boolean heightEquals(int height1, int height2) {
-        return Math.abs(height1 - height2) < 80;
+        if (height1 == -1 || height2 == -1) {
+            return false;
+        }
+
+        return Math.abs(height1 - height2) < HEIGHT_EQUITY_THRESHOLD_PX;
+    }
+
+    public static boolean heightLessOrEquals(int height1, int height2) {
+        if (height1 == -1 || height2 == -1) {
+            return false;
+        }
+
+        return height1 <= height2 || Math.abs(height1 - height2) < HEIGHT_EQUITY_THRESHOLD_PX;
     }
 
     public static boolean codecEquals(String codecs1, String codecs2) {
+        if (codecs1 == null || codecs2 == null) {
+            return false;
+        }
+
         return Helpers.equals(codecNameShort(codecs1), codecNameShort(codecs2));
     }
 
     public static boolean fpsEquals(float fps1, float fps2) {
+        if (fps1 == -1 || fps2 == -1) {
+            return false;
+        }
+
         return Math.abs(fps1 - fps2) < 10;
     }
 
@@ -132,9 +153,7 @@ public class TrackSelectorUtil {
             result = true;
         } else if (TrackSelectorUtil.codecEquals(track1.format.codecs, track2.format.codecs)) {
             if (TrackSelectorUtil.fpsEquals(track1.format.frameRate, track2.format.frameRate)) {
-                if (TrackSelectorUtil.heightEquals(track1.format.height, track2.format.height)) {
-                    result = true;
-                } else if (track1.format.height <= track2.format.height) {
+                if (TrackSelectorUtil.heightLessOrEquals(track1.format.height, track2.format.height)) {
                     result = true;
                 }
             }

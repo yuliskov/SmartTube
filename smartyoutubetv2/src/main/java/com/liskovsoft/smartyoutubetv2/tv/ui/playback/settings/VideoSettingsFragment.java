@@ -190,7 +190,7 @@ public class VideoSettingsFragment extends LeanbackSettingsFragment
             pref.setOnPreferenceChangeListener((preference, newValue) -> {
                 for (OptionItem optionItem : category.items) {
                     if (newValue.equals(optionItem.toString())) {
-                        optionItem.onSelect((boolean) newValue);
+                        optionItem.onSelect(true);
                         break;
                     }
                 }

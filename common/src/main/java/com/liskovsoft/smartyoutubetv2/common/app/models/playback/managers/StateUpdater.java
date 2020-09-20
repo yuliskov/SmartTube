@@ -85,7 +85,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onTrackClicked(FormatItem track) {
-        mVideoFormat = track;
+        if (track.getType() == FormatItem.TYPE_VIDEO) {
+            mVideoFormat = track;
+        }
     }
 
     private void saveState() {

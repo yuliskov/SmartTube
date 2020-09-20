@@ -20,5 +20,5 @@
     <string name="dialog_audio_default">Авто (макс. качество)</string>
     <string name="dialog_subtitile_default">Субтитры отключены</string>
     <string name="auto_frame_rate_enable">Автофреймрейт</string>
-    <string name="auto_frame_rate_correction">Испрвлять FPS</string>
+    <string name="auto_frame_rate_correction">Испрвлять fps %s</string>
 </resources>

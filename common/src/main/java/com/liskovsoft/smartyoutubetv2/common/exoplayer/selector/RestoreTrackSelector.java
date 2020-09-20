@@ -60,7 +60,8 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
 
         Definition definition = super.selectVideoTrack(groups, formatSupports, mixedMimeTypeAdaptationSupports, params, enableAdaptiveTrackSelection);
 
-        if (mCallback != null) {
+        // Don't invoke if track already has been selected by the app
+        if (mCallback != null && !params.hasSelectionOverride(TrackSelectorManager.RENDERER_INDEX_VIDEO, groups)) {
             mCallback.updateVideoTrackSelection(groups, params, definition);
         }
 
@@ -74,7 +75,8 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
         Pair<Definition, AudioTrackScore> trackScorePair = super.selectAudioTrack(groups, formatSupports,
                 mixedMimeTypeAdaptationSupports, params, enableAdaptiveTrackSelection);
 
-        if (mCallback != null && trackScorePair != null) {
+        // Don't invoke if track already has been selected by the app
+        if (mCallback != null && trackScorePair != null && !params.hasSelectionOverride(TrackSelectorManager.RENDERER_INDEX_AUDIO, groups)) {
             mCallback.updateAudioTrackSelection(groups, params, trackScorePair.first);
         }
 
