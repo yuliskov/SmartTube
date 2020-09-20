@@ -12,7 +12,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private final Map<Long, State> mPositionMap = new HashMap<>();
     private boolean mIsPlaying;
     private int mRepeatMode = 0;
-    private FormatItem mVideoFormat;
+    private FormatItem mVideoFormat = FormatItem.HD_AVC;
 
     private static class State {
         final long positionMs;

@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Set;
 
 public class ExoFormatItem implements FormatItem {
+    public static final int RESOLUTION_FHD = 0;
+    public static final int RESOLUTION_HD = 1;
+    public static final int FORMAT_AVC = 0;
+    public static final int FPS_30 = 0;
     private int mType;
     private int mId;
     private CharSequence mTitle;
@@ -86,6 +90,47 @@ public class ExoFormatItem implements FormatItem {
         String sampleMimeType = format.sampleMimeType;
 
         return MimeTypes.isVideo(sampleMimeType) ? TYPE_VIDEO : MimeTypes.isAudio(sampleMimeType) ? TYPE_AUDIO : TYPE_SUBTITLE;
+    }
+
+    public static FormatItem defaultVideo(int resolution, int format, int frameRate) {
+        ExoFormatItem formatItem = new ExoFormatItem();
+        MediaTrack mediaTrack = new MediaTrack();
+        formatItem.mTrack = mediaTrack;
+
+        mediaTrack.rendererIndex = TrackSelectorManager.RENDERER_INDEX_VIDEO;
+
+        int width = -1;
+        int height = -1;
+        String codec = null;
+        int fps = 30;
+
+        switch (resolution) {
+            case RESOLUTION_FHD:
+                width = 1920;
+                height = 1080;
+                break;
+            case RESOLUTION_HD:
+                width = 1280;
+                height = 720;
+                break;
+        }
+
+        switch (format) {
+            case FORMAT_AVC:
+                codec = "avc";
+                break;
+        }
+
+        switch (frameRate) {
+            case FPS_30:
+                fps = 30;
+                break;
+        }
+
+        mediaTrack.format = Format.createVideoSampleFormat(
+                null, null, codec, -1, -1, width, height, fps, null, null);
+
+        return formatItem;
     }
 
     @Override
