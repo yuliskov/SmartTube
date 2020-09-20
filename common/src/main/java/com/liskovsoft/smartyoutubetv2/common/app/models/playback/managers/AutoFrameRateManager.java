@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers;
+package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;

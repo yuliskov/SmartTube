@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers;
+package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;

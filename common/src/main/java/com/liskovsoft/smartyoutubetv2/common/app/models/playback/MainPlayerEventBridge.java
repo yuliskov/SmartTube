@@ -2,12 +2,12 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlayerController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers.AutoFrameRateManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers.HistoryUpdater;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers.PlayerUiManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers.StateUpdater;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers.SuggestionsLoader;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.handlers.VideoLoader;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HistoryUpdater;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.StateUpdater;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.VideoLoader;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerUiEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.ViewEventListener;
