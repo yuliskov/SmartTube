@@ -5,19 +5,22 @@ import com.google.android.exoplayer2.RendererCapabilities;
 import com.google.android.exoplayer2.source.TrackGroup;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector.Parameters;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector.SelectionOverride;
 import com.google.android.exoplayer2.trackselection.FixedTrackSelection;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector.MappedTrackInfo;
 import com.google.android.exoplayer2.trackselection.RandomTrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelection.Definition;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.RestoreTrackSelector.TrackSelectorCallback;
 
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class TrackSelectorManager {
+public class TrackSelectorManager implements TrackSelectorCallback {
     public static final int RENDERER_INDEX_VIDEO = 0;
     public static final int RENDERER_INDEX_AUDIO = 1;
     public static final int RENDERER_INDEX_SUBTITLE = 2;
@@ -100,6 +103,10 @@ public class TrackSelectorManager {
         mSelector = selector;
         mTrackSelectionFactory = trackSelectionFactory;
         mRenderers = new Renderer[3];
+
+        if (selector instanceof RestoreTrackSelector) {
+            ((RestoreTrackSelector) selector).setTrackSelectCallback(this);
+        }
     }
 
     /**
@@ -127,29 +134,70 @@ public class TrackSelectorManager {
             return;
         }
 
-        initTrackGroups(rendererIndex);
+        initTrackGroups(rendererIndex, mSelector.getCurrentMappedTrackInfo(), mSelector.getParameters());
         initMediaTracks(rendererIndex);
     }
 
-    private void initTrackGroups(int rendererIndex) {
-        MappedTrackInfo trackInfo = mSelector.getCurrentMappedTrackInfo();
+    /**
+     * Creates renderer structure.
+     * @param rendererIndex The index of the renderer. <br/>
+     *                      One of the {@link #RENDERER_INDEX_VIDEO}, {@link #RENDERER_INDEX_AUDIO}, {@link #RENDERER_INDEX_SUBTITLE}
+     * @param trackInfo supplied externally from {@link RestoreTrackSelector}
+     * @param parameters supplied externally from {@link RestoreTrackSelector}
+     */
+    private void initRenderer(int rendererIndex, MappedTrackInfo trackInfo, Parameters parameters) {
+        if (mRenderers[rendererIndex] != null) {
+            return;
+        }
 
+        initTrackGroups(rendererIndex, trackInfo, parameters);
+        initMediaTracks(rendererIndex);
+    }
+
+    /**
+     * Creates renderer structure.
+     * @param rendererIndex The index of the renderer. <br/>
+     *                      One of the {@link #RENDERER_INDEX_VIDEO}, {@link #RENDERER_INDEX_AUDIO}, {@link #RENDERER_INDEX_SUBTITLE}
+     * @param groups supplied externally from {@link RestoreTrackSelector}
+     * @param parameters supplied externally from {@link RestoreTrackSelector}
+     */
+    private void initRenderer(int rendererIndex, TrackGroupArray groups, Parameters parameters) {
+        if (mRenderers[rendererIndex] != null) {
+            return;
+        }
+
+        initTrackGroups(rendererIndex, groups, parameters);
+        initMediaTracks(rendererIndex);
+    }
+
+    private void initTrackGroups(int rendererIndex, MappedTrackInfo trackInfo, Parameters parameters) {
         if (trackInfo == null) {
             Log.e(TAG, "Can't perform track selection. Mapped track info isn't initialized yet!");
             return;
         }
 
+        if (parameters == null) {
+            Log.e(TAG, "Can't perform track selection. Track parameters isn't initialized yet!");
+            return;
+        }
+
+        TrackGroupArray trackGroups = trackInfo.getTrackGroups(rendererIndex);
+
+        initTrackGroups(rendererIndex, trackGroups, parameters);
+    }
+
+    private void initTrackGroups(int rendererIndex, TrackGroupArray trackGroups, Parameters parameters) {
         Renderer renderer = new Renderer();
         mRenderers[rendererIndex] = renderer;
 
-        renderer.trackGroups = trackInfo.getTrackGroups(rendererIndex);
+        renderer.trackGroups = trackGroups;
         renderer.trackGroupsAdaptive = new boolean[renderer.trackGroups.length];
-        for (int i = 0; i < renderer.trackGroups.length; i++) {
-            renderer.trackGroupsAdaptive[i] = mTrackSelectionFactory != null && trackInfo.getAdaptiveSupport(rendererIndex, i, false) !=
-                    RendererCapabilities.ADAPTIVE_NOT_SUPPORTED && renderer.trackGroups.get(i).length > 1;
-        }
-        renderer.isDisabled = mSelector.getParameters().getRendererDisabled(rendererIndex);
-        renderer.override = mSelector.getParameters().getSelectionOverride(rendererIndex, renderer.trackGroups);
+        //for (int i = 0; i < renderer.trackGroups.length; i++) {
+        //    renderer.trackGroupsAdaptive[i] = mTrackSelectionFactory != null && trackInfo.getAdaptiveSupport(rendererIndex, i, false) !=
+        //            RendererCapabilities.ADAPTIVE_NOT_SUPPORTED && renderer.trackGroups.get(i).length > 1;
+        //}
+        renderer.isDisabled = parameters.getRendererDisabled(rendererIndex);
+        renderer.override = parameters.getSelectionOverride(rendererIndex, renderer.trackGroups);
     }
 
     private void initMediaTracks(int rendererIndex) {
@@ -271,9 +319,26 @@ public class TrackSelectorManager {
         return getAvailableTracks(RENDERER_INDEX_SUBTITLE);
     }
 
-    public void applyPendingSelection() {
-        selectTrack(mPendingSelection);
+    private Definition applyPendingSelection(TrackGroupArray groups) {
+        Definition definition = null;
+
+        if (mPendingSelection != null) {
+            MediaTrack matchedTrack = findBestMatch(mPendingSelection);
+            if (matchedTrack.groupIndex != -1) {
+                definition = new Definition(groups.get(matchedTrack.groupIndex), matchedTrack.trackIndex);
+                setOverride(matchedTrack.rendererIndex, matchedTrack.groupIndex, matchedTrack.trackIndex);
+                updateSelection(matchedTrack.rendererIndex);
+            }
+        }
+
         mPendingSelection = null;
+        return definition;
+    }
+
+    @Override
+    public Definition onSelectVideoTrack(TrackGroupArray groups, Parameters params) {
+        initRenderer(RENDERER_INDEX_VIDEO, groups, params);
+        return applyPendingSelection(groups);
     }
     
     public void selectTrack(MediaTrack track) {

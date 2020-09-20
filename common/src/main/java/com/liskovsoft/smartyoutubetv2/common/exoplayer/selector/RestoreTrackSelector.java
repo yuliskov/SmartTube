@@ -6,6 +6,7 @@ import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelection.Definition;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Factory;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
@@ -14,6 +15,7 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
     private final Context mContext;
     //private final PlayerStateManagerBase mStateManager;
     private boolean mAlreadyRestored;
+    private TrackSelectorCallback mCallback;
 
     public RestoreTrackSelector(Factory trackSelectionFactory, Context context) {
         super(trackSelectionFactory);
@@ -52,10 +54,26 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
         //    restoreVideoTrack(groups);
         //}
 
+        if (mCallback != null) {
+            TrackSelection.Definition definition = mCallback.onSelectVideoTrack(groups, params);
+            if (definition != null) {
+                return definition;
+            }
+        }
+
+        // mTrackSelectorManager.applyPendingSelection(groups);
+
         Log.d(TAG, "selectVideoTrack: " + getCurrentMappedTrackInfo());
 
         return super.selectVideoTrack(groups, formatSupports, mixedMimeTypeAdaptationSupports, params, enableAdaptiveTrackSelection);
     }
+
+    //@Override
+    //protected Definition[] selectAllTracks(MappedTrackInfo mappedTrackInfo, int[][][] rendererFormatSupports,
+    //                                       int[] rendererMixedMimeTypeAdaptationSupports, Parameters params) throws ExoPlaybackException {
+    //
+    //    return super.selectAllTracks(mappedTrackInfo, rendererFormatSupports, rendererMixedMimeTypeAdaptationSupports, params);
+    //}
 
     //private void restoreVideoTrack(TrackGroupArray groups) {
     //    MyFormat format = mStateManager.findPreferredVideoFormat(groups);
@@ -77,5 +95,14 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
                 formatSupports[videoTrackIndex][j] = 52; // force support of video format
             }
         }
+    }
+
+    public void setTrackSelectCallback(TrackSelectorCallback callback) {
+        mCallback = callback;
+    }
+
+    public interface TrackSelectorCallback {
+        Definition onSelectVideoTrack(TrackGroupArray groups, Parameters params);
+        //void onSelectAllTracks(MappedTrackInfo trackInfo, Parameters params);
     }
 }

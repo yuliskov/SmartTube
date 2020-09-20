@@ -114,7 +114,7 @@ public class TrackSelectorUtil {
     }
 
     public static boolean heightEquals(int height1, int height2) {
-        return Math.abs(height1 - height2) < 100;
+        return Math.abs(height1 - height2) < 80;
     }
 
     public static boolean codecEquals(String codecs1, String codecs2) {

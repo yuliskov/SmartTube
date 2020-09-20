@@ -51,7 +51,7 @@ public class AutoFrameRateHelper {
         float frameRate = correctFps(format.getFrameRate());
         int width = format.getWidth();
 
-        Log.d(TAG, String.format("Applying mode change... Video fps: %s, width: %s", frameRate, width));
+        Log.d(TAG, String.format("Applying mode change... Video fps: %s, width: %s, height: %s", frameRate, width, format.getHeight()));
         mSyncHelper.syncDisplayMode(mActivity.getWindow(), width, frameRate);
     }
 

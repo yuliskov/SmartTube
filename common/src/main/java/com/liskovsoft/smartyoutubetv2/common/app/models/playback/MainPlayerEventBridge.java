@@ -24,7 +24,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         mEventListeners = new ArrayList<>();
 
         // NOTE: position matters!!!
-        //mEventListeners.add(new AutoFrameRateManager());
+        mEventListeners.add(new AutoFrameRateManager());
         mEventListeners.add(new PlayerUiManager());
         mEventListeners.add(new StateUpdater());
         mEventListeners.add(new HistoryUpdater());
