@@ -4,6 +4,7 @@ import android.app.Activity;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncHelper;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncHelper.AutoFrameRateListener;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncHelperAlt;
 
 import java.util.HashMap;
 
@@ -18,7 +19,7 @@ public class AutoFrameRateHelper {
 
     public AutoFrameRateHelper(Activity activity) {
         mActivity = activity;
-        mSyncHelper = new DisplaySyncHelper(activity);
+        mSyncHelper = new DisplaySyncHelperAlt(activity);
 
         initFrameRateMapping();
         saveOriginalState();

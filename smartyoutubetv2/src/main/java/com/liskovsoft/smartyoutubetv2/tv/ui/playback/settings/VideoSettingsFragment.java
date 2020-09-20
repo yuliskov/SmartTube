@@ -7,6 +7,7 @@ import androidx.leanback.preference.LeanbackPreferenceFragment;
 import androidx.leanback.preference.LeanbackSettingsFragment;
 import androidx.preference.DialogPreference;
 import androidx.preference.ListPreference;
+import androidx.preference.MultiSelectListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragment;
 import androidx.preference.PreferenceScreen;
@@ -140,6 +141,14 @@ public class VideoSettingsFragment extends LeanbackSettingsFragment
         }
 
         public Preference createPreference(SettingsCategory category) {
+            if (category.type == SettingsCategory.TYPE_CHECKBOX) {
+                return createCheckedPreference(category);
+            }
+
+            return createRadioPreference(category);
+        }
+
+        private Preference createRadioPreference(SettingsCategory category) {
             ListPreference pref = new ListPreference(mStyledContext);
             pref.setTitle(category.title);
             pref.setKey(category.toString());
@@ -155,7 +164,33 @@ public class VideoSettingsFragment extends LeanbackSettingsFragment
             pref.setOnPreferenceChangeListener((preference, newValue) -> {
                 for (OptionItem optionItem : category.items) {
                     if (newValue.equals(optionItem.toString())) {
-                        category.callback.onSelect(optionItem);
+                        optionItem.onSelect(true);
+                        break;
+                    }
+                }
+
+                return true;
+            });
+
+            return pref;
+        }
+
+        private Preference createCheckedPreference(SettingsCategory category) {
+            MultiSelectListPreference pref = new MultiSelectListPreference(mStyledContext);
+            pref.setTitle(category.title);
+            pref.setKey(category.toString());
+
+            ListPrefData prefData = createListPrefData(category.items);
+
+            pref.setEntries(prefData.entries);
+            pref.setEntryValues(prefData.values);
+
+            // don't close menu on select
+
+            pref.setOnPreferenceChangeListener((preference, newValue) -> {
+                for (OptionItem optionItem : category.items) {
+                    if (newValue.equals(optionItem.toString())) {
+                        optionItem.onSelect((boolean) newValue);
                         break;
                     }
                 }

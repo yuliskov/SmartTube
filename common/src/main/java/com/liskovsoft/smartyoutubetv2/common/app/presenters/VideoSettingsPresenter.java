@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.content.Context;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager.SwitchCallback;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.VideoSettingsView;
@@ -17,24 +16,19 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
     private final List<SettingsCategory> mCategories;
     private Runnable mOnClose;
 
-    public interface OptionCallback {
-        void onSelect(OptionItem optionItem);
-    }
-
     public static class SettingsCategory {
-        private SettingsCategory(String title, List<OptionItem> items, OptionCallback callback, int type) {
+        public static SettingsCategory radioList(String title, List<OptionItem> items) {
+            return new SettingsCategory(title, items, TYPE_RADIO);
+        }
+
+        public static SettingsCategory checkedList(String title, List<OptionItem> items) {
+            return new SettingsCategory(title, items, TYPE_CHECKBOX);
+        }
+
+        private SettingsCategory(String title, List<OptionItem> items, int type) {
             this.type = type;
             this.title = title;
             this.items = items;
-            this.callback = callback;
-        }
-
-        public static SettingsCategory radioList(String title, List<OptionItem> items, OptionCallback callback) {
-            return new SettingsCategory(title, items, callback, TYPE_RADIO);
-        }
-
-        public static SettingsCategory checkList(String title, List<OptionItem> items, OptionCallback callback) {
-            return new SettingsCategory(title, items, callback, TYPE_CHECKBOX);
         }
 
         public static final int TYPE_RADIO = 0;
@@ -42,7 +36,6 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
         public int type;
         public String title;
         public List<OptionItem> items;
-        public OptionCallback callback;
     }
 
     public VideoSettingsPresenter(Context context) {
@@ -90,11 +83,11 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
         ViewManager.instance(mContext).startView(VideoSettingsView.class);
     }
 
-    public void append(String title, List<OptionItem> items, OptionCallback callback) {
-        mCategories.add(SettingsCategory.radioList(title, items, callback));
+    public void appendRadio(String title, List<OptionItem> items) {
+        mCategories.add(SettingsCategory.radioList(title, items));
     }
 
-    public void append(String title, SwitchCallback callback) {
-        // TODO: not implemented
+    public void appendChecked(String title, List<OptionItem> items) {
+        mCategories.add(SettingsCategory.checkedList(title, items));
     }
 }

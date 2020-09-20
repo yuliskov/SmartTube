@@ -11,12 +11,13 @@ public class UiOptionItem implements OptionItem {
     private CharSequence mDescription;
     private boolean mIsSelected;
     private FormatItem mFormat;
+    private OptionCallback mCallback;
 
-    public static List<OptionItem> from(List<FormatItem> formats) {
-        return from(formats, null);
+    public static List<OptionItem> from(List<FormatItem> formats, OptionCallback callback) {
+        return from(formats, callback, null);
     }
 
-    public static List<OptionItem> from(List<FormatItem> formats, String defaultTitle) {
+    public static List<OptionItem> from(List<FormatItem> formats, OptionCallback callback, String defaultTitle) {
         if (formats == null) {
             return null;
         }
@@ -24,17 +25,17 @@ public class UiOptionItem implements OptionItem {
         List<OptionItem> options = new ArrayList<>();
 
         for (FormatItem format : formats) {
-            options.add(from(format, defaultTitle));
+            options.add(from(format, callback, defaultTitle));
         }
 
         return options;
     }
 
-    public static OptionItem from(FormatItem format) {
-        return from(format, null);
+    public static OptionItem from(FormatItem format, OptionCallback callback) {
+        return from(format, callback, null);
     }
 
-    public static OptionItem from(FormatItem format, String defaultTitle) {
+    public static OptionItem from(FormatItem format, OptionCallback callback, String defaultTitle) {
         if (format == null) {
             return null;
         }
@@ -44,6 +45,17 @@ public class UiOptionItem implements OptionItem {
         uiOptionItem.mTitle = format.isDefault() ? defaultTitle : format.getTitle();
         uiOptionItem.mIsSelected = format.isSelected();
         uiOptionItem.mFormat = format;
+        uiOptionItem.mCallback = callback;
+
+        return uiOptionItem;
+    }
+
+    public static OptionItem from(String title, OptionCallback callback, boolean defaultValue) {
+        UiOptionItem uiOptionItem = new UiOptionItem();
+
+        uiOptionItem.mTitle = title;
+        uiOptionItem.mIsSelected = defaultValue;
+        uiOptionItem.mCallback = callback;
 
         return uiOptionItem;
     }
@@ -74,5 +86,14 @@ public class UiOptionItem implements OptionItem {
     @Override
     public boolean isSelected() {
         return mIsSelected;
+    }
+
+    @Override
+    public void onSelect(boolean isSelected) {
+        mIsSelected = isSelected;
+
+        if (mCallback != null) {
+            mCallback.onSelect(this);
+        }
     }
 }

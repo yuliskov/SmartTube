@@ -5,4 +5,5 @@ public interface OptionItem {
     CharSequence getTitle();
     CharSequence getDescription();
     boolean isSelected();
+    void onSelect(boolean isSelected);
 }

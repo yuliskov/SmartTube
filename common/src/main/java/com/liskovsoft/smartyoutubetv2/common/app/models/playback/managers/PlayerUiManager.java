@@ -8,12 +8,15 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlayerController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PlayerUiManager extends PlayerEventListenerHelper {
     private static final String TAG = PlayerUiManager.class.getSimpleName();
@@ -22,7 +25,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
     private boolean mEngineReady;
     private VideoSettingsPresenter mSettingsPresenter;
-    private final List<Pair<String, SwitchCallback>> mSwitches = new ArrayList<>();
+    private final Map<String, List<OptionItem>> mSwitches = new HashMap<>();
 
     public interface SwitchCallback {
         void onClick(boolean checked);
@@ -110,8 +113,15 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         // TODO: open channel view
     }
 
-    public void addHQSwitch(String title, SwitchCallback callback) {
-        mSwitches.add(Pair.create(title, callback));
+    public void addHQSwitch(String categoryTitle, OptionItem optionItem) {
+        List<OptionItem> items = mSwitches.get(categoryTitle);
+
+        if (items == null) {
+            items = new ArrayList<>();
+            mSwitches.put(categoryTitle, items);
+        }
+
+        items.add(optionItem);
     }
 
     private void disableUiAutoHideTimeout() {
@@ -139,9 +149,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     }
 
     private void addSwitches() {
-        for (Pair<String, SwitchCallback> pair : mSwitches) {
-            mSettingsPresenter.append(pair.first, pair.second);
-        }
+        //for (Pair<String, SwitchCallback> pair : mSwitches) {
+        //    mSettingsPresenter.appendChecked(pair.first, pair.second);
+        //}
     }
 
     private void addListOption() {
@@ -151,12 +161,14 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         List<FormatItem> audioFormats = mController.getAudioFormats();
         String audioFormatsTitle = mActivity.getString(R.string.dialog_audio_formats);
 
-        mSettingsPresenter.append(videoFormatsTitle,
-                UiOptionItem.from(videoFormats, mActivity.getString(R.string.dialog_video_default)),
-                option -> mController.selectFormat(UiOptionItem.toFormat(option)));
-        mSettingsPresenter.append(audioFormatsTitle,
-                UiOptionItem.from(audioFormats, mActivity.getString(R.string.dialog_audio_default)),
-                option -> mController.selectFormat(UiOptionItem.toFormat(option)));
+        mSettingsPresenter.appendChecked(videoFormatsTitle,
+                UiOptionItem.from(videoFormats,
+                        option -> mController.selectFormat(UiOptionItem.toFormat(option)),
+                        mActivity.getString(R.string.dialog_video_default)));
+        mSettingsPresenter.appendChecked(audioFormatsTitle,
+                UiOptionItem.from(audioFormats,
+                        option -> mController.selectFormat(UiOptionItem.toFormat(option)),
+                        mActivity.getString(R.string.dialog_audio_default)));
     }
 
     private final Runnable mSuggestionsResetHandler = () -> mController.resetSuggestedPosition();
