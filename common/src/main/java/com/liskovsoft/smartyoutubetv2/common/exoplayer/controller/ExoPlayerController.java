@@ -154,11 +154,14 @@ public class ExoPlayerController implements EventListener, PlayerController {
 
     @Override
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-        Log.d(TAG, "onTracksChanged: start");
+        Log.d(TAG, "onTracksChanged: start: groups length: " + trackGroups.length);
+
+        if (trackGroups.length == 0) {
+            Log.i(TAG, "onTracksChanged: Hmm. Strange. Received empty groups, no selections. Why is this happens only on next/prev videos?");
+        }
 
         for (TrackSelection selection : trackSelections.getAll()) {
             if (selection != null) {
-                Log.d(TAG, "onTracksChanged: format: " + selection.getSelectedFormat());
                 mEventListener.onTrackChanged(ExoFormatItem.from(selection.getSelectedFormat()));
             }
         }

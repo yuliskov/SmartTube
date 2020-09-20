@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class AutoFrameRateHelper {
     private static final String TAG = AutoFrameRateHelper.class.getSimpleName();
-    private final Activity mActivity;
+    private Activity mActivity;
     private final DisplaySyncHelper mSyncHelper;
     private static final long THROTTLE_INTERVAL_MS = 5_000;
     private long mPrevCall;
@@ -32,8 +32,13 @@ public class AutoFrameRateHelper {
     }
 
     public void apply(FormatItem format) {
+        if (mActivity == null) {
+            Log.e(TAG, "Activity in null. exiting...");
+            return;
+        }
+
         if (!isSupported()) {
-            Log.d(TAG, "Autoframerate not supported... exiting...");
+            Log.d(TAG, "Autoframerate not supported. Exiting...");
             return;
         }
 
@@ -69,6 +74,11 @@ public class AutoFrameRateHelper {
     }
 
     private void saveOriginalState() {
+        if (mActivity == null) {
+            Log.e(TAG, "Activity in null. exiting...");
+            return;
+        }
+
         if (!isSupported()) {
             return;
         }
@@ -120,5 +130,10 @@ public class AutoFrameRateHelper {
         }
 
         mSyncHelper.applyModeChangeFix(mActivity.getWindow());
+    }
+
+    public void updateActivity(Activity activity) {
+        mActivity = activity;
+        mSyncHelper.setContext(activity);
     }
 }

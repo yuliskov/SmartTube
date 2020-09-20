@@ -17,7 +17,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresent
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresenter.SettingsCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.views.VideoSettingsView;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class VideoSettingsFragment extends LeanbackSettingsFragment
         implements DialogPreference.TargetFragment, VideoSettingsView {
@@ -159,7 +161,7 @@ public class VideoSettingsFragment extends LeanbackSettingsFragment
             pref.setEntryValues(prefData.values);
             pref.setValue(prefData.defaultValue);
 
-            // don't close menu on select
+            // TODO: don't close menu on select
 
             pref.setOnPreferenceChangeListener((preference, newValue) -> {
                 for (OptionItem optionItem : category.items) {
@@ -184,14 +186,22 @@ public class VideoSettingsFragment extends LeanbackSettingsFragment
 
             pref.setEntries(prefData.entries);
             pref.setEntryValues(prefData.values);
+            pref.setValues(prefData.defaultValues);
 
-            // don't close menu on select
+            // TODO: don't close menu on select
 
             pref.setOnPreferenceChangeListener((preference, newValue) -> {
-                for (OptionItem optionItem : category.items) {
-                    if (newValue.equals(optionItem.toString())) {
-                        optionItem.onSelect(true);
-                        break;
+                if (newValue instanceof Set) {
+                    Set values = ((Set) newValue);
+                    for (OptionItem item : category.items) {
+                        boolean found = false;
+                        for (Object value : values) {
+                            found = value.equals(item.toString());
+                            if (found) {
+                                break;
+                            }
+                        }
+                        item.onSelect(found);
                     }
                 }
 
@@ -205,30 +215,37 @@ public class VideoSettingsFragment extends LeanbackSettingsFragment
             CharSequence[] titles = new CharSequence[items.size()];
             CharSequence[] hashes = new CharSequence[items.size()];
             String defaultValue = null;
+            Set<String> defaultValues = new HashSet<>(); // used in multi set lists
 
             for (int i = 0; i < items.size(); i++) {
                 OptionItem optionItem = items.get(i);
 
-                titles[i] = optionItem.getTitle();
-                hashes[i] = optionItem.toString();
+                CharSequence title = optionItem.getTitle();
+                String value = optionItem.toString();
+
+                titles[i] = title;
+                hashes[i] = value;
 
                 if (optionItem.isSelected()) {
-                    defaultValue = optionItem.toString();
+                    defaultValue = value;
+                    defaultValues.add(value);
                 }
             }
 
-            return new ListPrefData(titles, hashes, defaultValue);
+            return new ListPrefData(titles, hashes, defaultValue, defaultValues);
         }
 
         private static class ListPrefData {
             public final CharSequence[] entries;
             public final CharSequence[] values;
             public final String defaultValue;
+            public final Set<String> defaultValues;
 
-            public ListPrefData(CharSequence[] entries, CharSequence[] values, String defaultValue) {
-                 this.entries = entries;
-                 this.values = values;
-                 this.defaultValue = defaultValue;
+            public ListPrefData(CharSequence[] entries, CharSequence[] values, String defaultValue, Set<String> defaultValues) {
+                this.entries = entries;
+                this.values = values;
+                this.defaultValue = defaultValue;
+                this.defaultValues = defaultValues;
             }
         }
     }

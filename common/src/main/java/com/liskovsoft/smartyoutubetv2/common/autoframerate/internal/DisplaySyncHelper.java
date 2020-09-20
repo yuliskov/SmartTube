@@ -21,7 +21,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
     private static final String TAG = DisplaySyncHelper.class.getSimpleName();
     private static final int STATE_ORIGINAL = 1;
     private static final int STATE_CURRENT = 2;
-    protected final Context mContext;
+    protected Context mContext;
     private boolean mDisplaySyncInProgress = false;
     private UhdHelper mUhdHelper;
     protected Mode mOriginalMode;
@@ -453,5 +453,9 @@ public class DisplaySyncHelper implements UhdHelperListener {
 
     public boolean isResolutionSwitchEnabled() {
         return mSwitchToUHD || mSwitchToFHD;
+    }
+
+    public void setContext(Context context) {
+        mContext = context;
     }
 }
