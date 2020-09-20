@@ -158,6 +158,7 @@ public class ExoPlayerController implements EventListener, PlayerController {
 
         for (TrackSelection selection : trackSelections.getAll()) {
             if (selection != null) {
+                Log.d(TAG, "onTracksChanged: format: " + selection.getSelectedFormat());
                 mEventListener.onTrackChanged(ExoFormatItem.from(selection.getSelectedFormat()));
             }
         }

@@ -8,6 +8,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Definition;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Factory;
+import com.liskovsoft.sharedutils.mylogger.Log;
 
 public class RestoreTrackSelector extends DefaultTrackSelector {
     private static final String TAG = RestoreTrackSelector.class.getSimpleName();
@@ -52,11 +53,14 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
     protected TrackSelection.Definition selectVideoTrack(TrackGroupArray groups, int[][] formatSupports, int mixedMimeTypeAdaptationSupports,
                                               Parameters params, boolean enableAdaptiveTrackSelection) throws ExoPlaybackException {
         if (mCallback != null) {
+            Log.d(TAG, "selectVideoTrack: choose custom processing");
             TrackSelection.Definition definition = mCallback.onSelectVideoTrack(groups, params);
             if (definition != null) {
                 return definition;
             }
         }
+
+        Log.d(TAG, "selectVideoTrack: choose default processing");
 
         Definition definition = super.selectVideoTrack(groups, formatSupports, mixedMimeTypeAdaptationSupports, params, enableAdaptiveTrackSelection);
 
