@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import android.os.Build;
+import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.Looper;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
@@ -86,7 +88,11 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     @Override
     public void onHighQualityClicked() {
         disableUiAutoHideTimeout();
-        mController.blockEngine(); // Android 4.4 fix (don't destroy player in background)
+
+        if (VERSION.SDK_INT < 25) {
+            // Old Android fix: don't destroy player while dialog is open
+            mController.blockEngine();
+        }
 
         mSettingsPresenter.clear();
 
@@ -129,7 +135,10 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     private void setupBackgroundPlayback() {
         mBackgroundPlaybackSwitch = UiOptionItem.from(
                 mActivity.getString(R.string.dialog_background_playback),
-                optionItem -> mBlockEngine = optionItem.isSelected(), mBlockEngine);
+                optionItem -> {
+                    mBlockEngine = optionItem.isSelected();
+                    updateBackgroundPlayback();
+                }, mBlockEngine);
     }
 
     private void updateBackgroundPlayback() {
