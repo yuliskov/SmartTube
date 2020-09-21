@@ -219,6 +219,11 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
+    public void onClosedCaptionsClicked() {
+        process(PlayerUiEventListener::onClosedCaptionsClicked);
+    }
+
+    @Override
     public void onTrackChanged(FormatItem track) {
         process(listener -> listener.onTrackChanged(track));
     }

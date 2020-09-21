@@ -63,6 +63,8 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         void onThumbsUp(boolean thumbsUp);
 
         void onChannel();
+
+        void onClosedCaptions();
     }
 
     private final OnActionClickedListener mActionListener;
@@ -246,6 +248,9 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
             handled = true;
         } else if (action == mChannelAction) {
             mActionListener.onChannel();
+            handled = true;
+        } else if (action == mClosedCaptioningAction) {
+            mActionListener.onClosedCaptions();
             handled = true;
         }
 

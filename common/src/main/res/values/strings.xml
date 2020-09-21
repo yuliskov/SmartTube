@@ -22,4 +22,5 @@
     <string name="auto_frame_rate_enable">Auto frame rate</string>
     <string name="auto_frame_rate_correction">Fix fps: %s</string>
     <string name="dialog_background_playback">Background playback</string>
+    <string name="not_implemented">Not implemented</string>
 </resources>

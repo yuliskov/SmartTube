@@ -163,6 +163,11 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
+    public void onClosedCaptionsClicked() {
+        // NOP
+    }
+
+    @Override
     public void onTrackChanged(FormatItem track) {
         // NOP
     }

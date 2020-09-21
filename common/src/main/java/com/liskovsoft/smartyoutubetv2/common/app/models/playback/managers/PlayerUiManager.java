@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 import android.os.Handler;
 import android.os.Looper;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
@@ -29,10 +30,6 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     private boolean mRunOnce;
     private boolean mBlockEngine;
 
-    public interface SwitchCallback {
-        void onClick(boolean checked);
-    }
-
     public PlayerUiManager() {
         mHandler = new Handler(Looper.getMainLooper());
     }
@@ -43,9 +40,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         mSettingsPresenter = VideoSettingsPresenter.instance(mActivity);
 
         if (!mRunOnce) {
-            mBackgroundPlaybackSwitch = UiOptionItem.from(
-                    mActivity.getString(R.string.dialog_background_playback),
-                    optionItem -> mBlockEngine = optionItem.isSelected(), mBlockEngine);
+            setupBackgroundPlayback();
             mRunOnce = true;
         }
     }
@@ -66,11 +61,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     public void onEngineInitialized() {
         mEngineReady = true;
 
-        if (mBlockEngine) {
-            mController.blockEngine();
-        } else {
-            mController.unblockEngine();
-        }
+        updateBackgroundPlayback();
     }
 
     @Override
@@ -95,7 +86,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     @Override
     public void onHighQualityClicked() {
         disableUiAutoHideTimeout();
-        mController.blockEngine(); // Android 4.4 fix
+        mController.blockEngine(); // Android 4.4 fix (don't destroy player in background)
 
         mSettingsPresenter.clear();
 
@@ -106,30 +97,47 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         mSettingsPresenter.showDialog(() -> {
             enableUiAutoHideTimeout();
 
-            if (!mBlockEngine) {
-                mController.unblockEngine(); // Android 4.4 fix
-            }
+            updateBackgroundPlayback();
         });
     }
 
     @Override
     public void onSubscribeClicked(boolean subscribed) {
-        // TODO: make network request
+        MessageHelpers.showMessage(mActivity, R.string.not_implemented);
     }
 
     @Override
     public void onThumbsDownClicked(boolean thumbsDown) {
-        // TODO: make network request
+        MessageHelpers.showMessage(mActivity, R.string.not_implemented);
     }
 
     @Override
     public void onThumbsUpClicked(boolean thumbsUp) {
-        // TODO: make network request
+        MessageHelpers.showMessage(mActivity, R.string.not_implemented);
     }
 
     @Override
     public void onChannelClicked() {
-        // TODO: open channel view
+        MessageHelpers.showMessage(mActivity, R.string.not_implemented);
+    }
+
+    @Override
+    public void onClosedCaptionsClicked() {
+        MessageHelpers.showMessage(mActivity, R.string.not_implemented);
+    }
+
+    private void setupBackgroundPlayback() {
+        mBackgroundPlaybackSwitch = UiOptionItem.from(
+                mActivity.getString(R.string.dialog_background_playback),
+                optionItem -> mBlockEngine = optionItem.isSelected(), mBlockEngine);
+    }
+
+    private void updateBackgroundPlayback() {
+        if (mBlockEngine) {
+            mController.blockEngine();
+        } else {
+            mController.unblockEngine();
+        }
     }
 
     public void addHQSwitch(String categoryTitle, OptionItem optionItem) {

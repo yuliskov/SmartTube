@@ -18,4 +18,5 @@ public interface PlayerUiEventListener {
     void onThumbsUpClicked(boolean thumbsUp);
     void onChannelClicked();
     void onTrackClicked(FormatItem track);
+    void onClosedCaptionsClicked();
 }
