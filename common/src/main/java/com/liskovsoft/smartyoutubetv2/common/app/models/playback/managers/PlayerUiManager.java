@@ -2,12 +2,11 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import android.os.Handler;
 import android.os.Looper;
-import androidx.core.util.Pair;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlayerController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresenter;
@@ -36,7 +35,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void setController(PlayerController controller) {
+    public void setController(PlaybackController controller) {
         super.setController(controller);
         mSettingsPresenter = VideoSettingsPresenter.instance(mActivity);
     }

@@ -109,7 +109,9 @@ public class ViewManager {
             try {
                 Log.d(TAG, "Launching parent activity...");
                 setDefault(null); // current activity is finished, so do reset
-                activity.startActivity(new Intent(activity, parentActivity));
+                Intent intent = new Intent(activity, parentActivity);
+                //intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                activity.startActivity(intent);
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();
                 Log.e(TAG, "Parent activity not found.");

@@ -4,7 +4,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 
 // is paused, position, tracks (audio, video, subs), codecs, aspect, speed
 // title, subtitle (description), subscribed/liked nums, published date, toggle buttons, simple buttons
-public interface PlayerController extends PlayerEngineController, PlayerUiController {
+public interface PlaybackController extends PlaybackEngineController, PlaybackUiController {
     void setVideo(Video item);
     Video getVideo();
 }

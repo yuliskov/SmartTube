@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 
-public interface PlayerUiController {
+public interface PlaybackUiController {
     void updateSuggestions(VideoGroup group);
     void resetSuggestedPosition();
     void clearSuggestions();

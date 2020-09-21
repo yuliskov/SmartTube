@@ -1,7 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlayerController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HistoryUpdater;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager;
@@ -43,7 +43,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
-    public void setController(PlayerController controller) {
+    public void setController(PlaybackController controller) {
         process(listener -> listener.setController(controller));
     }
 

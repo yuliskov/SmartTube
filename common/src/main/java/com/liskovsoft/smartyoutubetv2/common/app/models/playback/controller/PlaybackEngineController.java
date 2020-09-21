@@ -5,7 +5,7 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import java.io.InputStream;
 import java.util.List;
 
-public interface PlayerEngineController {
+public interface PlaybackEngineController {
     void openDash(InputStream dashManifest);
     void openHls(String hlsPlaylistUrl);
     long getPositionMs();

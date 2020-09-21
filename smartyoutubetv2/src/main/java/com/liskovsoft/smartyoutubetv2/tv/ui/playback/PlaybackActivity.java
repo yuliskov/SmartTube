@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 
@@ -65,5 +66,10 @@ public class PlaybackActivity extends LeanbackActivity {
             gamepadTriggerPressed = false;
         }
         return super.onGenericMotionEvent(event);
+    }
+
+    @Override
+    public void finish() {
+        ViewManager.instance(this).startParentView(this);
     }
 }

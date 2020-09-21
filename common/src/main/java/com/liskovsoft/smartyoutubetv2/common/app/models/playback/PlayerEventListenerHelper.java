@@ -3,17 +3,17 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 import android.app.Activity;
 import androidx.fragment.app.Fragment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlayerController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
 public abstract class PlayerEventListenerHelper implements PlayerEventListener {
-    protected PlayerController mController;
+    protected PlaybackController mController;
     protected Activity mActivity;
     protected Activity mParentActivity;
 
     @Override
-    public void setController(PlayerController controller) {
+    public void setController(PlaybackController controller) {
         mController = controller;
         mActivity = ((Fragment) controller).getActivity();
     }

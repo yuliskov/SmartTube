@@ -29,6 +29,7 @@ import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
@@ -50,7 +51,7 @@ import java.util.Map;
  * Plays selected video, loads playlist and related videos, and delegates playback to
  * {@link VideoPlayerGlue}.
  */
-public class PlaybackFragment extends VideoSupportFragment implements PlaybackView, com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlayerController {
+public class PlaybackFragment extends VideoSupportFragment implements PlaybackView, PlaybackController {
     private static final String TAG = PlaybackFragment.class.getSimpleName();
     private static final int UPDATE_DELAY = 16;
     private VideoPlayerGlue mPlayerGlue;
@@ -409,7 +410,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
-    public com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlayerController getController() {
+    public PlaybackController getController() {
         return this;
     }
 
@@ -422,6 +423,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        Log.d(TAG, "Destroying PlaybackFragment...");
 
         // Fix situations when engine didn't properly destroyed.
         // E.g. after closing dialogs.
