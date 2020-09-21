@@ -67,11 +67,11 @@ android {
     flavorDimensions "default"
 
     productFlavors {
-        beta {
+        ubeta {
             // matchingFallbacks = ['lite']
             applicationIdSuffix ".beta"
         }
-        orig {
+        uorig {
             // matchingFallbacks = ['lite']
         }
     }
@@ -125,10 +125,10 @@ dependencies {
 
     implementation project(path: ':common')
     
-    // betaImplementation project(path: ':leanbackassistant')
+    ubetaImplementation project(path: ':leanbackassistant')
 
     // Add the Firebase Crashlytics SDK.
-    betaImplementation('com.google.firebase:firebase-crashlytics:' + firebaseCrashlyticsVersion) {
+    ubetaImplementation('com.google.firebase:firebase-crashlytics:' + firebaseCrashlyticsVersion) {
         transitive = true
     }
 }

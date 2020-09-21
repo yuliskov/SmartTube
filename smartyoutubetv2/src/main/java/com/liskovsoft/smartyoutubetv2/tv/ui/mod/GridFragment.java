@@ -34,8 +34,8 @@ public class GridFragment extends Fragment implements BrowseSupportFragment.Main
     private OnItemViewClickedListener mOnItemViewClickedListener;
     private Object mSceneAfterEntranceTransition;
     private int mSelectedPosition = -1;
-    private BrowseSupportFragment.MainFragmentAdapter mMainFragmentAdapter =
-            new BrowseSupportFragment.MainFragmentAdapter(this) {
+    private final BrowseSupportFragment.MainFragmentAdapter<Fragment> mMainFragmentAdapter =
+            new BrowseSupportFragment.MainFragmentAdapter<Fragment>(this) {
                 @Override
                 public void setEntranceTransitionState(boolean state) {
                     GridFragment.this.setEntranceTransitionState(state);
