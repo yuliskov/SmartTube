@@ -80,6 +80,13 @@ public final class Video implements Parcelable {
         return video;
     }
 
+    public static Video from(String videoId) {
+        Video video = new Video();
+        video.videoId = videoId;
+
+        return video;
+    }
+
     public static final Creator<Video> CREATOR = new Creator<Video>() {
         @Override
         public Video createFromParcel(Parcel in) {

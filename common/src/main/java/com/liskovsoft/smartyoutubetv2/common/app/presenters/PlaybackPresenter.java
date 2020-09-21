@@ -45,9 +45,18 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
         mView = null;
     }
 
+    /**
+     * Opens video item from browser or search views<br/>
+     * Parent view needed to properly handle auto frame rate changes
+     */
     public void openVideo(Object parentView, Video item) {
         mMainPlayerEventBridge.setParentView(parentView);
         mMainPlayerEventBridge.openVideo(item);
         mViewManager.startView(parentView, PlaybackView.class);
+    }
+
+    public void openVideo(String videoId) {
+        mMainPlayerEventBridge.openVideo(Video.from(videoId));
+        mViewManager.startView(PlaybackView.class);
     }
 }

@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
 
 public class SplashActivity extends Activity {
     private static final String TAG = SplashActivity.class.getSimpleName();
@@ -14,8 +17,13 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ViewManager viewManager = ViewManager.instance(this);
-        viewManager.startDefaultView(this);
+        if (IntentExtractor.isVideo(getIntent())) {
+            PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(this);
+            playbackPresenter.openVideo(IntentExtractor.getVideoId(getIntent()));
+        } else {
+            ViewManager viewManager = ViewManager.instance(this);
+            viewManager.startDefaultView(this);
+        }
 
         updateChannels();
 

@@ -13,6 +13,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private boolean mIsPlaying;
     private int mRepeatMode = 0;
     private FormatItem mVideoFormat = FormatItem.HD_AVC;
+    private static final long MUSIC_VIDEO_LENGTH_MS = 10 * 60 * 1000;
 
     private static class State {
         final long positionMs;
@@ -29,7 +30,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public boolean onPreviousClicked() {
-        boolean isShortVideo = mController.getPositionMs() > 10_000 && mController.getLengthMs() < 5*60*1000;
+        boolean isShortVideo = mController.getPositionMs() > 10_000 && mController.getLengthMs() < MUSIC_VIDEO_LENGTH_MS;
 
         if (isShortVideo) {
             mController.setPositionMs(0);
