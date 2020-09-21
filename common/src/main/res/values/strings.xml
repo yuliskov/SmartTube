@@ -20,5 +20,5 @@
     <string name="dialog_audio_default">Auto (max quality)</string>
     <string name="dialog_subtitile_default">Disable subtitles</string>
     <string name="auto_frame_rate_enable">Auto frame rate</string>
-    <string name="auto_frame_rate_correction">Fps correction %s</string>
+    <string name="auto_frame_rate_correction">Fix fps: %s</string>
 </resources>
