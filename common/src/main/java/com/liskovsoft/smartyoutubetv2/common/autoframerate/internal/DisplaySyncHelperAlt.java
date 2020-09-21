@@ -39,18 +39,18 @@ public class DisplaySyncHelperAlt extends DisplaySyncHelper {
         return relatedRates;
     }
 
-    @Override
-    public boolean restoreOriginalState(Window window) {
-        Mode currentMode = getUhdHelper().getCurrentMode();
-
-        if (currentMode != null && mOriginalMode != null && (currentMode.getPhysicalHeight() != mOriginalMode.getPhysicalHeight() || currentMode.getRefreshRate() < UI_LAGGING_THRESHOLD)) {
-            String msg =
-                    "Restoring original state: rate: " + mOriginalMode.getRefreshRate() +
-                            ", resolution: " + mOriginalMode.getPhysicalWidth() + "x" + mOriginalMode.getPhysicalHeight();
-            Log.d(TAG, msg);
-            super.restoreOriginalState(window);
-        }
-
-        return false;
-    }
+    //@Override
+    //public boolean restoreOriginalState(Window window) {
+    //    Mode currentMode = getUhdHelper().getCurrentMode();
+    //
+    //    if (currentMode != null && mOriginalMode != null && (currentMode.getPhysicalHeight() != mOriginalMode.getPhysicalHeight() || currentMode.getRefreshRate() < UI_LAGGING_THRESHOLD)) {
+    //        String msg =
+    //                "Restoring original state: rate: " + mOriginalMode.getRefreshRate() +
+    //                        ", resolution: " + mOriginalMode.getPhysicalWidth() + "x" + mOriginalMode.getPhysicalHeight();
+    //        Log.d(TAG, msg);
+    //        super.restoreOriginalState(window);
+    //    }
+    //
+    //    return false;
+    //}
 }

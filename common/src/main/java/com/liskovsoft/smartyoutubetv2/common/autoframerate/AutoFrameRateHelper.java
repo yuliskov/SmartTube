@@ -94,7 +94,9 @@ public class AutoFrameRateHelper {
 
         Log.d(TAG, "Restoring original mode...");
 
-        mSyncHelper.restoreOriginalState(mActivity.getWindow());
+        boolean result = mSyncHelper.restoreOriginalState(mActivity.getWindow());
+
+        Log.d(TAG, "Restore mode result: " + result);
     }
 
     public void setListener(AutoFrameRateListener listener) {

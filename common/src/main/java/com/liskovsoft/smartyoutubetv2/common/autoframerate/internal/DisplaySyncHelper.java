@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.common.autoframerate.internal;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Build.VERSION;
@@ -379,6 +378,8 @@ public class DisplaySyncHelper implements UhdHelperListener {
     }
 
     private boolean restoreState(Window window, int state) {
+        Log.d(TAG, "Beginning to restore state...");
+
         Mode modeTmp = null;
 
         switch (state) {
@@ -391,13 +392,14 @@ public class DisplaySyncHelper implements UhdHelperListener {
         }
 
         if (modeTmp == null) {
+            Log.e(TAG, "Can't restore state. Mode is null.");
             return false;
         }
 
         Mode mode = getUhdHelper().getCurrentMode();
 
         if (modeTmp.equals(mode)) {
-            Log.i(TAG, "Do not need to restore mode.");
+            Log.d(TAG, "Do not need to restore mode. Current mode is the same as new.");
             return false;
         }
 
