@@ -222,4 +222,9 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     public void onTrackChanged(FormatItem track) {
         process(listener -> listener.onTrackChanged(track));
     }
+
+    @Override
+    public void setParentView(Object parentView) {
+        process(listener -> listener.setParentView(parentView));
+    }
 }

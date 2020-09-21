@@ -144,14 +144,15 @@ public class VideoSettingsFragment extends LeanbackSettingsFragment
 
         public Preference createPreference(SettingsCategory category) {
             if (category.type == SettingsCategory.TYPE_CHECKBOX) {
-                return createCheckedPreference(category);
+                return createCheckedListPreference(category);
             }
 
-            return createRadioPreference(category);
+            return createRadioListPreference(category);
         }
 
-        private Preference createRadioPreference(SettingsCategory category) {
+        private Preference createRadioListPreference(SettingsCategory category) {
             ListPreference pref = new ListPreference(mStyledContext);
+            pref.setPersistent(false);
             pref.setTitle(category.title);
             pref.setKey(category.toString());
 
@@ -160,8 +161,6 @@ public class VideoSettingsFragment extends LeanbackSettingsFragment
             pref.setEntries(prefData.entries);
             pref.setEntryValues(prefData.values);
             pref.setValue(prefData.defaultValue);
-
-            // TODO: don't close menu on select
 
             pref.setOnPreferenceChangeListener((preference, newValue) -> {
                 for (OptionItem optionItem : category.items) {
@@ -177,8 +176,9 @@ public class VideoSettingsFragment extends LeanbackSettingsFragment
             return pref;
         }
 
-        private Preference createCheckedPreference(SettingsCategory category) {
+        private Preference createCheckedListPreference(SettingsCategory category) {
             MultiSelectListPreference pref = new MultiSelectListPreference(mStyledContext);
+            pref.setPersistent(false);
             pref.setTitle(category.title);
             pref.setKey(category.toString());
 
@@ -187,8 +187,6 @@ public class VideoSettingsFragment extends LeanbackSettingsFragment
             pref.setEntries(prefData.entries);
             pref.setEntryValues(prefData.values);
             pref.setValues(prefData.defaultValues);
-
-            // TODO: don't close menu on select
 
             pref.setOnPreferenceChangeListener((preference, newValue) -> {
                 if (newValue instanceof Set) {

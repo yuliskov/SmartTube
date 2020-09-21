@@ -8,4 +8,5 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.Play
 public interface PlayerEventListener extends PlayerUiEventListener, PlayerEngineEventListener, ViewEventListener {
     void openVideo(Video item);
     void setController(PlayerController controller);
+    void setParentView(Object parentView);
 }

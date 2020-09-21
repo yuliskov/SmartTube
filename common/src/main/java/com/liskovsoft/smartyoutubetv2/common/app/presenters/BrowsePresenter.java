@@ -107,6 +107,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
         }
 
         mPlaybackPresenter.openVideo(mView, item);
+        updateRefreshTime();
     }
 
     @Override
@@ -133,10 +134,10 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
     @Override
     public void onViewResumed() {
-        //long timeAfterPauseMs = System.currentTimeMillis() - mLastUpdateTimeMs;
-        //if (timeAfterPauseMs > RELOAD_PERIOD_MS) { // update header every n minutes
-        //    refresh();
-        //}
+        long timeAfterPauseMs = System.currentTimeMillis() - mLastUpdateTimeMs;
+        if (timeAfterPauseMs > RELOAD_PERIOD_MS) { // update header every n minutes
+            refresh();
+        }
     }
 
     @Override
@@ -146,6 +147,10 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
     public void refresh() {
         updateHeader(mCurrentHeaderId);
+    }
+
+    private void updateRefreshTime() {
+        mLastUpdateTimeMs = System.currentTimeMillis();
     }
 
     private void updateHeader(long headerId) {
@@ -261,7 +266,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
 
             mView.updateHeader(VideoGroup.from(mediaGroup, header));
 
-            mLastUpdateTimeMs = System.currentTimeMillis();
+            updateRefreshTime();
         }
     }
 
@@ -291,7 +296,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
                 .subscribe(
                         mediaGroup -> {
                             mView.updateHeader(VideoGroup.from(mediaGroup, header));
-                            mLastUpdateTimeMs = System.currentTimeMillis();
+                            updateRefreshTime();
                         }
                         , error -> Log.e(TAG, "loadGridHeader error: " + error)
                         , () -> {
