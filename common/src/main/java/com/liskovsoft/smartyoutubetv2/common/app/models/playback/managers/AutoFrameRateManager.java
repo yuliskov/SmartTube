@@ -30,7 +30,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
             mParentAutoFrameRateHelper = new AutoFrameRateHelper(mParentActivity);
 
             String title = mActivity.getString(R.string.auto_frame_rate_enable);
-            String fpsCorrection = mActivity.getString(R.string.auto_frame_rate_correction, "30>29.97, 60>59.94");
+            String fpsCorrection = mActivity.getString(R.string.auto_frame_rate_correction, "30->29.97, 60->59.94");
             mUiManager.addHQSwitch(title,
                     UiOptionItem.from(title, this::onAfrOptionClick, mEnabled));
             mUiManager.addHQSwitch(title,

@@ -25,6 +25,12 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
             return new SettingsCategory(title, items, TYPE_CHECKBOX);
         }
 
+        public static SettingsCategory singleSwitch(OptionItem item) {
+            ArrayList<OptionItem> items = new ArrayList<>();
+            items.add(item);
+            return new SettingsCategory(null, items, TYPE_SWITCH);
+        }
+
         private SettingsCategory(String title, List<OptionItem> items, int type) {
             this.type = type;
             this.title = title;
@@ -33,6 +39,7 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
 
         public static final int TYPE_RADIO = 0;
         public static final int TYPE_CHECKBOX = 1;
+        public static final int TYPE_SWITCH = 2;
         public int type;
         public String title;
         public List<OptionItem> items;
@@ -89,5 +96,9 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
 
     public void appendChecked(String title, List<OptionItem> items) {
         mCategories.add(SettingsCategory.checkedList(title, items));
+    }
+
+    public void appendSingleSwitch(OptionItem optionItem) {
+        mCategories.add(SettingsCategory.singleSwitch(optionItem));
     }
 }

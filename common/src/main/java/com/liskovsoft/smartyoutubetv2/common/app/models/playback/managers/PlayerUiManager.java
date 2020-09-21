@@ -25,6 +25,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     private boolean mEngineReady;
     private VideoSettingsPresenter mSettingsPresenter;
     private final Map<String, List<OptionItem>> mSwitches = new HashMap<>();
+    private OptionItem mBackgroundPlaybackSwitch;
+    private boolean mRunOnce;
+    private boolean mBlockEngine;
 
     public interface SwitchCallback {
         void onClick(boolean checked);
@@ -38,6 +41,13 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     public void setController(PlaybackController controller) {
         super.setController(controller);
         mSettingsPresenter = VideoSettingsPresenter.instance(mActivity);
+
+        if (!mRunOnce) {
+            mBackgroundPlaybackSwitch = UiOptionItem.from(
+                    mActivity.getString(R.string.dialog_background_playback),
+                    optionItem -> mBlockEngine = optionItem.isSelected(), mBlockEngine);
+            mRunOnce = true;
+        }
     }
 
     @Override
@@ -55,6 +65,12 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     @Override
     public void onEngineInitialized() {
         mEngineReady = true;
+
+        if (mBlockEngine) {
+            mController.blockEngine();
+        } else {
+            mController.unblockEngine();
+        }
     }
 
     @Override
@@ -79,16 +95,20 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     @Override
     public void onHighQualityClicked() {
         disableUiAutoHideTimeout();
-        mController.blockEngine();
+        mController.blockEngine(); // Android 4.4 fix
 
         mSettingsPresenter.clear();
 
-        addListOption();
-        addSwitches();
+        addRadioList();
+        addCheckedList();
+        addSingleOption();
 
         mSettingsPresenter.showDialog(() -> {
             enableUiAutoHideTimeout();
-            mController.unblockEngine();
+
+            if (!mBlockEngine) {
+                mController.unblockEngine(); // Android 4.4 fix
+            }
         });
     }
 
@@ -147,13 +167,17 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         }
     }
 
-    private void addSwitches() {
+    private void addSingleOption() {
+        mSettingsPresenter.appendSingleSwitch(mBackgroundPlaybackSwitch);
+    }
+
+    private void addCheckedList() {
         for (String key : mSwitches.keySet()) {
             mSettingsPresenter.appendChecked(key, mSwitches.get(key));
         }
     }
 
-    private void addListOption() {
+    private void addRadioList() {
         List<FormatItem> videoFormats = mController.getVideoFormats();
         String videoFormatsTitle = mActivity.getString(R.string.dialog_video_formats);
 

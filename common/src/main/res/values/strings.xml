@@ -21,4 +21,5 @@
     <string name="dialog_subtitile_default">Disable subtitles</string>
     <string name="auto_frame_rate_enable">Auto frame rate</string>
     <string name="auto_frame_rate_correction">Fix fps: %s</string>
+    <string name="dialog_background_playback">Background playback</string>
 </resources>

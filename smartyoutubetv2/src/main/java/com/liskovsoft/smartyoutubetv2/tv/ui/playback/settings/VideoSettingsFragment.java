@@ -11,6 +11,7 @@ import androidx.preference.MultiSelectListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragment;
 import androidx.preference.PreferenceScreen;
+import androidx.preference.SwitchPreference;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresenter;
@@ -145,9 +146,31 @@ public class VideoSettingsFragment extends LeanbackSettingsFragment
         public Preference createPreference(SettingsCategory category) {
             if (category.type == SettingsCategory.TYPE_CHECKBOX) {
                 return createCheckedListPreference(category);
+            } else if (category.type == SettingsCategory.TYPE_SWITCH) {
+                return createSwitchListPreference(category);
             }
 
             return createRadioListPreference(category);
+        }
+
+        private Preference createSwitchListPreference(SettingsCategory category) {
+            Preference result = null;
+
+            if (category.items.size() == 1) {
+                OptionItem item = category.items.get(0);
+                SwitchPreference pref = new SwitchPreference(mStyledContext);
+                pref.setPersistent(false);
+                pref.setTitle(item.getTitle());
+                pref.setDefaultValue(item.isSelected());
+                pref.setOnPreferenceChangeListener((preference, newValue) -> {
+                    item.onSelect((boolean) newValue);
+                    return true;
+                });
+
+                result = pref;
+            }
+
+            return result;
         }
 
         private Preference createRadioListPreference(SettingsCategory category) {

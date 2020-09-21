@@ -21,4 +21,5 @@
     <string name="dialog_subtitile_default">Субтитры отключены</string>
     <string name="auto_frame_rate_enable">Автофреймрейт</string>
     <string name="auto_frame_rate_correction">Исправлять fps: %s</string>
+    <string name="dialog_background_playback">Фоновое воспроизведение</string>
 </resources>
