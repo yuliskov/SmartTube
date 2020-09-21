@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import android.view.KeyEvent;
@@ -7,6 +8,7 @@ import android.view.MotionEvent;
 
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 
 /**
@@ -71,5 +73,9 @@ public class PlaybackActivity extends LeanbackActivity {
     @Override
     public void finish() {
         ViewManager.instance(this).startParentView(this);
+
+        //Intent intent = new Intent(this, BrowseActivity.class);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        //startActivity(intent);
     }
 }
