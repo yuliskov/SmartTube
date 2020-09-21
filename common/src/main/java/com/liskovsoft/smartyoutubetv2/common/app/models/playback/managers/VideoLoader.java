@@ -33,7 +33,9 @@ public class VideoLoader extends PlayerEventListenerHelper {
         mPlaylist.add(item);
 
         if (mEngineInitialized) { // player is initialized
-            loadVideo(item); // play immediately
+            if (!item.equals(mLastVideo)) {
+                loadVideo(item); // play immediately
+            }
         } else {
             mLastVideo = item; // save for later
         }

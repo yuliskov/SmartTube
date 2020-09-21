@@ -56,12 +56,6 @@ public class ViewManager {
         Class<?> activityClass = mViewMapping.get(viewClass);
 
         if (activityClass != null) {
-            //Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-            //        getActivity(),
-            //        ((ImageCardView) itemViewHolder.view).getMainImageView(),
-            //        VideoDetailsActivity.SHARED_ELEMENT_NAME).toBundle();
-            //getActivity().startActivity(intent, bundle);
-
             Intent intent = new Intent(mContext, activityClass);
 
             // Fix: Calling startActivity() from outside of an Activity  context requires the FLAG_ACTIVITY_NEW_TASK flag
@@ -80,15 +74,7 @@ public class ViewManager {
             Class<?> activityClass = mViewMapping.get(viewClass);
 
             if (activityClass != null) {
-                //Bundle bundle = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                //        getActivity(),
-                //        ((ImageCardView) itemViewHolder.view).getMainImageView(),
-                //        VideoDetailsActivity.SHARED_ELEMENT_NAME).toBundle();
-                //getActivity().startActivity(intent, bundle);
-
                 Intent intent = new Intent(fragment.getActivity(), activityClass);
-                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  // merge new activity with current one
-                //intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); // merge new activity with current one
                 intent.putExtra(PARENT_ACTIVITY, fragment.getActivity().getClass().getName());
                 fragment.startActivity(intent);
             } else {
@@ -102,7 +88,8 @@ public class ViewManager {
             Class<?> parentActivity = getParent(activity);
 
             if (parentActivity == null) {
-                Log.d(TAG, "Parent activity name doesn't stored in registry. Exiting...");
+                Log.d(TAG, "Parent activity name doesn't stored in registry. Exiting to Home...");
+                activity.moveTaskToBack(true);
                 return;
             }
 
@@ -110,7 +97,6 @@ public class ViewManager {
                 Log.d(TAG, "Launching parent activity...");
                 setDefault(null); // current activity is finished, so do reset
                 Intent intent = new Intent(activity, parentActivity);
-                //intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 activity.startActivity(intent);
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();
@@ -163,8 +149,6 @@ public class ViewManager {
         Log.d(TAG, "Starting activity: " + lastActivity.getSimpleName());
 
         Intent intent = new Intent(activity, lastActivity);
-
-        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         activity.startActivity(intent);
     }
