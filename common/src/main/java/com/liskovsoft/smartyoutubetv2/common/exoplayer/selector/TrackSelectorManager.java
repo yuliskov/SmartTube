@@ -355,19 +355,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         // enable renderer
         mRenderers[rendererIndex].isDisabled = false;
 
-        // The group being modified is adaptive and we already have a non-null override.
-        //if (!selectedBefore) {
-        //    MediaTrack matchedTrack = findBestMatch(track);
-        //
-        //    setOverride(matchedTrack.rendererIndex, matchedTrack.groupIndex, matchedTrack.trackIndex);
-        //
-        //    // Update the items with the new state.
-        //    updateSelection(rendererIndex);
-        //
-        //    // save immediately
-        //    applyOverride(rendererIndex);
-        //}
-
         MediaTrack matchedTrack = findBestMatch(track);
 
         setOverride(matchedTrack.rendererIndex, matchedTrack.groupIndex, matchedTrack.trackIndex);

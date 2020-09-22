@@ -56,12 +56,16 @@ public abstract class LeanbackActivity extends FragmentActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        mModeSyncManager.restore(this);
-
         mBackgroundManager.onStart();
 
         // we can't do it in the ViewManager because activity may be started from outside
         mViewManager.addTopActivity(this.getClass());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mModeSyncManager.restore(this);
     }
 
     @Override

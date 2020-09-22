@@ -53,9 +53,9 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
     protected TrackSelection.Definition selectVideoTrack(TrackGroupArray groups, int[][] formatSupports, int mixedMimeTypeAdaptationSupports,
                                               Parameters params, boolean enableAdaptiveTrackSelection) throws ExoPlaybackException {
         if (mCallback != null) {
-            Log.d(TAG, "selectVideoTrack: choose custom processing");
             TrackSelection.Definition definition = mCallback.onSelectVideoTrack(groups, params);
             if (definition != null) {
+                Log.d(TAG, "selectVideoTrack: choose custom processing");
                 return definition;
             }
         }

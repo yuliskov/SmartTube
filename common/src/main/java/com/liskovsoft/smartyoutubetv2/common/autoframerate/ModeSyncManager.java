@@ -28,8 +28,9 @@ public class ModeSyncManager {
     public void restore(Activity activity) {
         if (mFormatItem != null) {
             mAutoFrameRateHelper.setActivity(activity);
+            mAutoFrameRateHelper.apply(mFormatItem);
 
-            new Handler(Looper.myLooper()).postDelayed(() -> mAutoFrameRateHelper.apply(mFormatItem), 5_000);
+            //new Handler(Looper.myLooper()).postDelayed(() -> mAutoFrameRateHelper.apply(mFormatItem), 5_000);
         }
     }
 }
