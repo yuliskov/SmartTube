@@ -1,8 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import android.app.Activity;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.AutoFrameRateHelper;
@@ -13,7 +13,8 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     private AutoFrameRateHelper mAutoFrameRateHelper;
     private boolean mEnabled;
     private boolean mCorrectionEnabled;
-    private boolean mRunOnce;
+    private boolean mMainActivityRunOnce;
+    private boolean mParentActivityRunOnce;
     private FormatItem mSelectedVideoTrack;
     private AutoFrameRateHelper mParentAutoFrameRateHelper;
 
@@ -22,24 +23,29 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void setController(PlaybackController controller) {
-        super.setController(controller);
+    public void onMainActivity(Activity activity) {
+        super.onMainActivity(activity);
 
-        if (!mRunOnce) {
-            mAutoFrameRateHelper = new AutoFrameRateHelper(mActivity);
+        if (!mMainActivityRunOnce) {
+            mAutoFrameRateHelper = new AutoFrameRateHelper(mMainActivity);
+
+            addUiOptions();
+
+            mMainActivityRunOnce = true;
+        } else {
+            mAutoFrameRateHelper.updateActivity(mMainActivity);
+        }
+    }
+
+    @Override
+    public void onParentActivity(Activity activity) {
+        super.onParentActivity(activity);
+
+        if (!mParentActivityRunOnce) {
             mParentAutoFrameRateHelper = new AutoFrameRateHelper(mParentActivity);
 
-            String title = mActivity.getString(R.string.auto_frame_rate_enable);
-            String fpsCorrection = mActivity.getString(R.string.auto_frame_rate_correction, "30->29.97, 60->59.94");
-            mUiManager.addHQSwitch(title,
-                    UiOptionItem.from(title, this::onAfrOptionClick, mEnabled));
-            mUiManager.addHQSwitch(title,
-                    UiOptionItem.from(fpsCorrection, this::onFpsCorrectionClick, mCorrectionEnabled)
-            );
-
-            mRunOnce = true;
+            mParentActivityRunOnce = true;
         } else {
-            mAutoFrameRateHelper.updateActivity(mActivity);
             mParentAutoFrameRateHelper.updateActivity(mParentActivity);
         }
     }
@@ -78,5 +84,15 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     private void applyAfr(FormatItem track) {
         mAutoFrameRateHelper.apply(track);
         mParentAutoFrameRateHelper.apply(track);
+    }
+
+    private void addUiOptions() {
+        String title = mMainActivity.getString(R.string.auto_frame_rate_enable);
+        String fpsCorrection = mMainActivity.getString(R.string.auto_frame_rate_correction, "30->29.97, 60->59.94");
+        mUiManager.addHQSwitch(title,
+                UiOptionItem.from(title, this::onAfrOptionClick, mEnabled));
+        mUiManager.addHQSwitch(title,
+                UiOptionItem.from(fpsCorrection, this::onFpsCorrectionClick, mCorrectionEnabled)
+        );
     }
 }

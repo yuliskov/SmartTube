@@ -1,6 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
-import android.os.Build;
+import android.app.Activity;
 import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.Looper;
@@ -37,9 +37,10 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void setController(PlaybackController controller) {
-        super.setController(controller);
-        mSettingsPresenter = VideoSettingsPresenter.instance(mActivity);
+    public void onMainActivity(Activity activity) {
+        super.onMainActivity(activity);
+
+        mSettingsPresenter = VideoSettingsPresenter.instance(mMainActivity);
 
         if (!mRunOnce) {
             setupBackgroundPlayback();
@@ -109,32 +110,32 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
 
     @Override
     public void onSubscribeClicked(boolean subscribed) {
-        MessageHelpers.showMessage(mActivity, R.string.not_implemented);
+        MessageHelpers.showMessage(mMainActivity, R.string.not_implemented);
     }
 
     @Override
     public void onThumbsDownClicked(boolean thumbsDown) {
-        MessageHelpers.showMessage(mActivity, R.string.not_implemented);
+        MessageHelpers.showMessage(mMainActivity, R.string.not_implemented);
     }
 
     @Override
     public void onThumbsUpClicked(boolean thumbsUp) {
-        MessageHelpers.showMessage(mActivity, R.string.not_implemented);
+        MessageHelpers.showMessage(mMainActivity, R.string.not_implemented);
     }
 
     @Override
     public void onChannelClicked() {
-        MessageHelpers.showMessage(mActivity, R.string.not_implemented);
+        MessageHelpers.showMessage(mMainActivity, R.string.not_implemented);
     }
 
     @Override
     public void onClosedCaptionsClicked() {
-        MessageHelpers.showMessage(mActivity, R.string.not_implemented);
+        MessageHelpers.showMessage(mMainActivity, R.string.not_implemented);
     }
 
     private void setupBackgroundPlayback() {
         mBackgroundPlaybackSwitch = UiOptionItem.from(
-                mActivity.getString(R.string.dialog_background_playback),
+                mMainActivity.getString(R.string.dialog_background_playback),
                 optionItem -> {
                     mBlockEngine = optionItem.isSelected();
                     updateBackgroundPlayback();
@@ -196,19 +197,19 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
 
     private void addRadioList() {
         List<FormatItem> videoFormats = mController.getVideoFormats();
-        String videoFormatsTitle = mActivity.getString(R.string.dialog_video_formats);
+        String videoFormatsTitle = mMainActivity.getString(R.string.dialog_video_formats);
 
         List<FormatItem> audioFormats = mController.getAudioFormats();
-        String audioFormatsTitle = mActivity.getString(R.string.dialog_audio_formats);
+        String audioFormatsTitle = mMainActivity.getString(R.string.dialog_audio_formats);
 
         mSettingsPresenter.appendRadio(videoFormatsTitle,
                 UiOptionItem.from(videoFormats,
                         option -> mController.selectFormat(UiOptionItem.toFormat(option)),
-                        mActivity.getString(R.string.dialog_video_default)));
+                        mMainActivity.getString(R.string.dialog_video_default)));
         mSettingsPresenter.appendRadio(audioFormatsTitle,
                 UiOptionItem.from(audioFormats,
                         option -> mController.selectFormat(UiOptionItem.toFormat(option)),
-                        mActivity.getString(R.string.dialog_audio_default)));
+                        mMainActivity.getString(R.string.dialog_audio_default)));
     }
 
     private final Runnable mSuggestionsResetHandler = () -> mController.resetSuggestedPosition();

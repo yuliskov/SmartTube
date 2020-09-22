@@ -5,24 +5,27 @@ import androidx.fragment.app.Fragment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerHandlerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
-public abstract class PlayerEventListenerHelper implements PlayerEventListener {
+public abstract class PlayerEventListenerHelper implements PlayerHandlerEventListener {
     protected PlaybackController mController;
-    protected Activity mActivity;
+    protected Activity mMainActivity;
     protected Activity mParentActivity;
 
     @Override
-    public void setController(PlaybackController controller) {
+    public void onController(PlaybackController controller) {
         mController = controller;
-        mActivity = ((Fragment) controller).getActivity();
     }
 
     @Override
-    public void setParentView(Object parentView) {
-        if (parentView instanceof Fragment) {
-            mParentActivity = ((Fragment) parentView).getActivity();
-        }
+    public void onMainActivity(Activity activity) {
+        mMainActivity = activity;
+    }
+
+    @Override
+    public void onParentActivity(Activity activity) {
+        mParentActivity = activity;
     }
 
     @Override

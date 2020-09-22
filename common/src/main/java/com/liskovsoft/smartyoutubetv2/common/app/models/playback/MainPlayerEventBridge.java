@@ -1,7 +1,9 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 
+import androidx.fragment.app.Fragment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerHandlerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HistoryUpdater;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager;
@@ -17,7 +19,7 @@ import java.util.ArrayList;
 
 public class MainPlayerEventBridge implements PlayerEventListener {
     private static final String TAG = MainPlayerEventBridge.class.getSimpleName();
-    private final ArrayList<PlayerEventListener> mEventListeners;
+    private final ArrayList<PlayerHandlerEventListener> mEventListeners;
     private static MainPlayerEventBridge sInstance;
 
     public MainPlayerEventBridge() {
@@ -41,10 +43,24 @@ public class MainPlayerEventBridge implements PlayerEventListener {
 
         return sInstance;
     }
-
-    @Override
+    
     public void setController(PlaybackController controller) {
-        process(listener -> listener.setController(controller));
+        if (controller != null) {
+            process(listener -> listener.onController(controller));
+            process(listener -> {
+                Fragment fragment = (Fragment) controller;
+                listener.onMainActivity(fragment.getActivity());
+            });
+        }
+    }
+    
+    public void setParentView(Object parentView) {
+        if (parentView instanceof Fragment) {
+            process(listener -> {
+                Fragment fragment = (Fragment) parentView;
+                listener.onParentActivity(fragment.getActivity());
+            });
+        }
     }
 
     @Override
@@ -57,7 +73,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     private boolean chainProcess(ChainProcessor processor) {
         boolean result = false;
 
-        for (PlayerEventListener listener : mEventListeners) {
+        for (PlayerHandlerEventListener listener : mEventListeners) {
             result = processor.process(listener);
 
             if (result) {
@@ -69,17 +85,17 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     private interface ChainProcessor {
-        boolean process(PlayerEventListener listener);
+        boolean process(PlayerHandlerEventListener listener);
     }
 
     private void process(Processor processor) {
-        for (PlayerEventListener listener : mEventListeners) {
+        for (PlayerHandlerEventListener listener : mEventListeners) {
             processor.process(listener);
         }
     }
 
     private interface Processor {
-        void process(PlayerEventListener listener);
+        void process(PlayerHandlerEventListener listener);
     }
 
     // End Helpers
@@ -120,12 +136,12 @@ public class MainPlayerEventBridge implements PlayerEventListener {
 
     @Override
     public boolean onPreviousClicked() {
-        return chainProcess(PlayerEventListener::onPreviousClicked);
+        return chainProcess(PlayerHandlerEventListener::onPreviousClicked);
     }
 
     @Override
     public boolean onNextClicked() {
-        return chainProcess(PlayerEventListener::onNextClicked);
+        return chainProcess(PlayerHandlerEventListener::onNextClicked);
     }
 
     @Override
@@ -135,42 +151,42 @@ public class MainPlayerEventBridge implements PlayerEventListener {
 
     @Override
     public void onEngineInitialized() {
-        process(PlayerEventListener::onEngineInitialized);
+        process(PlayerHandlerEventListener::onEngineInitialized);
     }
 
     @Override
     public void onEngineReleased() {
-        process(PlayerEventListener::onEngineReleased);
+        process(PlayerHandlerEventListener::onEngineReleased);
     }
 
     @Override
     public void onPlay() {
-        process(PlayerEventListener::onPlay);
+        process(PlayerHandlerEventListener::onPlay);
     }
 
     @Override
     public void onPause() {
-        process(PlayerEventListener::onPause);
+        process(PlayerHandlerEventListener::onPause);
     }
 
     @Override
     public void onPlayClicked() {
-        process(PlayerEventListener::onPlayClicked);
+        process(PlayerHandlerEventListener::onPlayClicked);
     }
 
     @Override
     public void onPauseClicked() {
-        process(PlayerEventListener::onPauseClicked);
+        process(PlayerHandlerEventListener::onPauseClicked);
     }
     
     @Override
     public void onSeek() {
-        process(PlayerEventListener::onSeek);
+        process(PlayerHandlerEventListener::onSeek);
     }
 
     @Override
     public void onPlayEnd() {
-        process(PlayerEventListener::onPlayEnd);
+        process(PlayerHandlerEventListener::onPlayEnd);
     }
 
     @Override
@@ -226,10 +242,5 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     @Override
     public void onTrackChanged(FormatItem track) {
         process(listener -> listener.onTrackChanged(track));
-    }
-
-    @Override
-    public void setParentView(Object parentView) {
-        process(listener -> listener.setParentView(parentView));
     }
 }
