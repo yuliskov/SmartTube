@@ -1,15 +1,16 @@
 package com.liskovsoft.smartyoutubetv2.common.autoframerate;
 
 import android.app.Activity;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncHelper;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncHelperAlt;
+import android.os.Handler;
+import android.os.Looper;
 
 public class ModeSyncManager {
     private static ModeSyncManager sInstance;
-    private final DisplaySyncHelper mDisplaySyncHelper;
+    private final AutoFrameRateHelper mAutoFrameRateHelper;
+    private FormatItem mFormatItem;
 
     public ModeSyncManager(Activity activity) {
-        mDisplaySyncHelper = new DisplaySyncHelperAlt(activity);
+        mAutoFrameRateHelper = new AutoFrameRateHelper(activity);
     }
 
     public static ModeSyncManager instance(Activity activity) {
@@ -20,13 +21,15 @@ public class ModeSyncManager {
         return sInstance;
     }
 
-    public void save(Activity activity) {
-        mDisplaySyncHelper.setContext(activity);
-        mDisplaySyncHelper.saveCurrentState();
+    public void save(FormatItem formatItem) {
+        mFormatItem = formatItem;
     }
 
     public void restore(Activity activity) {
-        mDisplaySyncHelper.setContext(activity);
-        mDisplaySyncHelper.restoreCurrentState(activity.getWindow());
+        if (mFormatItem != null) {
+            mAutoFrameRateHelper.setActivity(activity);
+
+            new Handler(Looper.myLooper()).postDelayed(() -> mAutoFrameRateHelper.apply(mFormatItem), 5_000);
+        }
     }
 }

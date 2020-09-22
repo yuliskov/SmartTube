@@ -7,6 +7,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.AutoFrameRateHelper;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
 
 public class AutoFrameRateManager extends PlayerEventListenerHelper {
     private final PlayerUiManager mUiManager;
@@ -17,6 +18,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     private boolean mParentActivityRunOnce;
     private FormatItem mSelectedVideoTrack;
     private AutoFrameRateHelper mParentAutoFrameRateHelper;
+    private ModeSyncManager mModeSyncManager;
 
     public AutoFrameRateManager(PlayerUiManager uiManager) {
         mUiManager = uiManager;
@@ -28,6 +30,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
 
         if (!mMainActivityRunOnce) {
             mAutoFrameRateHelper = new AutoFrameRateHelper(mMainActivity);
+            mModeSyncManager = ModeSyncManager.instance(activity);
 
             addUiOptions();
 
@@ -79,11 +82,13 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     private void restoreAfr() {
         mAutoFrameRateHelper.restoreOriginalState();
         mParentAutoFrameRateHelper.restoreOriginalState();
+        mModeSyncManager.save(null);
     }
 
     private void applyAfr(FormatItem track) {
         mAutoFrameRateHelper.apply(track);
         mParentAutoFrameRateHelper.apply(track);
+        mModeSyncManager.save(track);
     }
 
     private void addUiOptions() {

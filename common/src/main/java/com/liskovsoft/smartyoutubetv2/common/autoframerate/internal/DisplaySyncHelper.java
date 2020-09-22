@@ -205,7 +205,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
     public void onModeChanged(Mode mode) {
         mDisplaySyncInProgress = false;
 
-        Mode currentMode = mUhdHelper.getCurrentMode();
+        Mode currentMode = getUhdHelper().getCurrentMode();
 
         if (mode == null && currentMode == null) {
             String msg = "Mode change failure. Internal error occurred.";
@@ -476,6 +476,6 @@ public class DisplaySyncHelper implements UhdHelperListener {
 
     public void setContext(Context context) {
         mContext = context;
-        mUhdHelper = null; // uhd helper uses context, so do refresh
+        mUhdHelper = null; // uhd helper uses context, so do re-init
     }
 }
