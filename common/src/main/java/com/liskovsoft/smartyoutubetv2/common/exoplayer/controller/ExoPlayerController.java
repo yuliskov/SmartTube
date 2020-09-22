@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.controller;
 
 import android.content.Context;
 import android.net.Uri;
+import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.Player.EventListener;
@@ -165,6 +166,11 @@ public class ExoPlayerController implements EventListener, PlayerController {
                 mEventListener.onTrackChanged(ExoFormatItem.from(selection.getSelectedFormat()));
             }
         }
+    }
+
+    @Override
+    public void onPlayerError(ExoPlaybackException error) {
+        Log.e(TAG, "onPlayerError: " + error);
     }
 
     @Override
