@@ -337,9 +337,9 @@ public class UhdHelper {
      */
     @TargetApi(17)
     public void setPreferredDisplayModeId(Window targetWindow, int modeId, boolean allowOverlayDisplay) {
-        //if (modeId == 0) { // mode is not set
-        //    return;
-        //}
+        if (modeId == 0) { // mode is not set
+            return;
+        }
 
         /*
          * The Android M preview adds a preferredDisplayModeId to
