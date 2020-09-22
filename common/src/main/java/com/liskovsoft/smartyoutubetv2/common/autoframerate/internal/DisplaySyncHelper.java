@@ -334,6 +334,10 @@ public class DisplaySyncHelper implements UhdHelperListener {
         return false;
     }
 
+    public void resetMode(Window window) {
+        getUhdHelper().setPreferredDisplayModeId(window, 0, true);
+    }
+
     /**
      * Lazy init of uhd helper.<br/>
      * Convenient when user doesn't use a afr at all.

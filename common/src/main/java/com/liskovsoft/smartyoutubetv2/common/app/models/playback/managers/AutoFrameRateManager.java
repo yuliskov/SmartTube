@@ -33,7 +33,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
 
             mMainActivityRunOnce = true;
         } else {
-            mAutoFrameRateHelper.updateActivity(mMainActivity);
+            mAutoFrameRateHelper.setActivity(mMainActivity);
         }
     }
 
@@ -46,7 +46,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
 
             mParentActivityRunOnce = true;
         } else {
-            mParentAutoFrameRateHelper.updateActivity(mParentActivity);
+            mParentAutoFrameRateHelper.setActivity(mParentActivity);
         }
     }
 

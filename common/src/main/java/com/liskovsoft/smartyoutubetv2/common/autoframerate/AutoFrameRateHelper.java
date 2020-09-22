@@ -143,8 +143,12 @@ public class AutoFrameRateHelper {
         mSyncHelper.applyModeChangeFix(mActivity.getWindow());
     }
 
-    public void updateActivity(Activity activity) {
+    public void setActivity(Activity activity) {
         mActivity = activity;
         mSyncHelper.setContext(activity);
+    }
+
+    public void resetState() {
+        mSyncHelper.resetMode(mActivity.getWindow());
     }
 }

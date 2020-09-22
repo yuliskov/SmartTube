@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 
+import android.app.Activity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerHandlerEventListener;
@@ -21,6 +23,9 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     private static final String TAG = MainPlayerEventBridge.class.getSimpleName();
     private final ArrayList<PlayerHandlerEventListener> mEventListeners;
     private static MainPlayerEventBridge sInstance;
+    private PlaybackController mController;
+    private Activity mMainActivity;
+    private Activity mParentActivity;
 
     public MainPlayerEventBridge() {
         mEventListeners = new ArrayList<>();
@@ -46,20 +51,35 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     
     public void setController(PlaybackController controller) {
         if (controller != null) {
-            process(listener -> listener.onController(controller));
-            process(listener -> {
-                Fragment fragment = (Fragment) controller;
-                listener.onMainActivity(fragment.getActivity());
-            });
+            Fragment fragment = (Fragment) controller;
+            Activity mainActivity = fragment.getActivity();
+
+            if (mController != controller) {
+                mController = controller;
+
+                process(listener -> listener.onController(controller));
+            }
+
+            if (mMainActivity != mainActivity) {
+                mMainActivity = mainActivity;
+
+                process(listener -> listener.onMainActivity(mainActivity));
+            }
         }
     }
     
     public void setParentView(Object parentView) {
         if (parentView instanceof Fragment) {
-            process(listener -> {
-                Fragment fragment = (Fragment) parentView;
-                listener.onParentActivity(fragment.getActivity());
-            });
+            Fragment fragment = (Fragment) parentView;
+            Activity parentActivity = fragment.getActivity();
+
+            if (mParentActivity != parentActivity) {
+                mParentActivity = parentActivity;
+
+                process(listener -> {
+                    listener.onParentActivity(parentActivity);
+                });
+            }
         }
     }
 
