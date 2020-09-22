@@ -13,6 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.Play
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
 import java.util.ArrayList;
@@ -155,8 +156,10 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     private void updateBackgroundPlayback() {
         if (mBlockEngine) {
             mController.blockEngine();
+            ViewManager.instance(mMainActivity).blockTop(true); // open player regarding its position in stack
         } else {
             mController.unblockEngine();
+            ViewManager.instance(mMainActivity).blockTop(false);
         }
     }
 

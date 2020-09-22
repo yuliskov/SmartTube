@@ -9,7 +9,7 @@ import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.PlaybackControlsRow;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.BugReportAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoStatsAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChannelAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.HighQualityAction;
@@ -87,7 +87,7 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
     private final SubscribeAction mSubscribeAction;
     private final ChannelAction mChannelAction;
     private final PlaylistAddAction mPlaylistAddAction;
-    private final BugReportAction mVideoStatsAction;
+    private final VideoStatsAction mVideoStatsAction;
 
     public VideoPlayerGlue(
             Context context,
@@ -112,7 +112,7 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         mSubscribeAction = new SubscribeAction(context);
         mChannelAction = new ChannelAction(context);
         mPlaylistAddAction = new PlaylistAddAction(context);
-        mVideoStatsAction = new BugReportAction(context);
+        mVideoStatsAction = new VideoStatsAction(context);
     }
 
     @Override

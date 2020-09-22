@@ -20,6 +20,7 @@ public class ViewManager {
     private final Map<Class<? extends Activity>, Class<? extends Activity>> mParentMapping;
     private final Stack<Class<?>> mActivityStack;
     private Class<?> mRootActivity;
+    private Class<?> mDefaultTop;
 
     private ViewManager(Context context) {
         mContext = context;
@@ -96,13 +97,13 @@ public class ViewManager {
     }
 
     public void startDefaultView(Context context) {
-        Class<?> lastActivity = null;
+        Class<?> lastActivity;
 
-        if (!mActivityStack.isEmpty()) {
+        if (mDefaultTop != null) {
+            lastActivity = mDefaultTop;
+        } else if (!mActivityStack.isEmpty()) {
             lastActivity = mActivityStack.peek();
-        }
-
-        if (lastActivity == null) {
+        } else {
             lastActivity = mRootActivity;
         }
 
@@ -151,5 +152,9 @@ public class ViewManager {
         }
 
         return parentActivity;
+    }
+
+    public void blockTop(boolean block) {
+        mDefaultTop = block ? getTopActivity() : null;
     }
 }
