@@ -240,6 +240,10 @@ public class DisplaySyncHelper implements UhdHelperListener {
         return true;
     }
 
+    public boolean syncDisplayMode(Window window, int videoWidth, float videoFramerate) {
+        return syncDisplayMode(window, videoWidth, videoFramerate, false);
+    }
+
     /**
      * Tries to find best suited display params for the video
      * @param window window object
@@ -247,7 +251,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
      * @param videoFramerate framerate of the video
      * @return
      */
-    public boolean syncDisplayMode(Window window, int videoWidth, float videoFramerate) {
+    public boolean syncDisplayMode(Window window, int videoWidth, float videoFramerate, boolean force) {
         if (supportsDisplayModeChange() && videoWidth >= 10) {
             if (mUhdHelper == null) {
                 mUhdHelper = new UhdHelper(mContext);
@@ -307,7 +311,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
             Log.i(TAG, "Found closer mode: " + closerMode + " for fps " + videoFramerate);
             Log.i(TAG, "Current mode: " + currentMode);
 
-            if (closerMode.equals(currentMode)) {
+            if (!force && closerMode.equals(currentMode)) {
                 Log.i(TAG, "Do not need to change mode.");
 
                 // NOTE: changed
@@ -351,16 +355,26 @@ public class DisplaySyncHelper implements UhdHelperListener {
         saveState(STATE_CURRENT);
     }
 
+    public boolean restoreOriginalState(Window window, boolean force) {
+        return restoreState(window, STATE_ORIGINAL, force);
+    }
+
     public boolean restoreOriginalState(Window window) {
-        return restoreState(window, STATE_ORIGINAL);
+        return restoreOriginalState(window, false);
+    }
+
+    public boolean restoreCurrentState(Window window, boolean force) {
+        return restoreState(window, STATE_CURRENT, force);
     }
 
     public boolean restoreCurrentState(Window window) {
-        return restoreState(window, STATE_CURRENT);
+        return restoreState(window, STATE_CURRENT, false);
     }
 
     private void saveState(int state) {
         Mode mode = getUhdHelper().getCurrentMode();
+
+        Log.d(TAG, "Saving mode: " + mode);
 
         if (mode != null) {
             switch (state) {
@@ -377,7 +391,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
         }
     }
 
-    private boolean restoreState(Window window, int state) {
+    private boolean restoreState(Window window, int state, boolean force) {
         Log.d(TAG, "Beginning to restore state...");
 
         Mode modeTmp = null;
@@ -392,16 +406,18 @@ public class DisplaySyncHelper implements UhdHelperListener {
         }
 
         if (modeTmp == null) {
-            Log.e(TAG, "Can't restore state. Mode is null.");
+            Log.d(TAG, "Can't restore state. Mode is null.");
             return false;
         }
 
         Mode mode = getUhdHelper().getCurrentMode();
 
-        if (modeTmp.equals(mode)) {
+        if (!force && modeTmp.equals(mode)) {
             Log.d(TAG, "Do not need to restore mode. Current mode is the same as new.");
             return false;
         }
+
+        Log.d(TAG, "Restoring mode: " + modeTmp);
 
         getUhdHelper().setPreferredDisplayModeId(
                 window,
@@ -440,9 +456,6 @@ public class DisplaySyncHelper implements UhdHelperListener {
 
         if (mNewMode != null) {
             mOriginalMode = mNewMode;
-
-            // NOTE: changed
-            //CommonApplication.getPreferences().setDefaultDisplayMode(UhdHelper.formatMode(mOriginalMode));
         }
     }
 
@@ -459,5 +472,6 @@ public class DisplaySyncHelper implements UhdHelperListener {
 
     public void setContext(Context context) {
         mContext = context;
+        mUhdHelper = null; // uhd helper uses context, so do refresh
     }
 }

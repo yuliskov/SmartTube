@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import androidx.fragment.app.FragmentActivity;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
 
@@ -17,6 +18,7 @@ public abstract class LeanbackActivity extends FragmentActivity {
     private LongClickManager mLongClickManager;
     private UriBackgroundManager mBackgroundManager;
     private ViewManager mViewManager;
+    private ModeSyncManager mModeSyncManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,7 @@ public abstract class LeanbackActivity extends FragmentActivity {
         mLongClickManager = new LongClickManager();
         mBackgroundManager = new UriBackgroundManager(this);
         mViewManager = ViewManager.instance(this);
+        mModeSyncManager = ModeSyncManager.instance(this);
     }
 
     @Override
@@ -58,6 +61,20 @@ public abstract class LeanbackActivity extends FragmentActivity {
         // we can't do it in the ViewManager because activity may be started from outside
         mViewManager.addTopActivity(this.getClass());
     }
+
+    //@Override
+    //protected void onResume() {
+    //    super.onResume();
+    //
+    //    mModeSyncManager.restore(this);
+    //}
+
+    //@Override
+    //protected void onPause() {
+    //    super.onPause();
+    //
+    //    mModeSyncManager.save(this);
+    //}
 
     @Override
     protected void onStop() {

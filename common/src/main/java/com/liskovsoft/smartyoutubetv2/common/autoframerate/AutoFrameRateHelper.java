@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.autoframerate;
 
 import android.app.Activity;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolder.Mode;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncHelper;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncHelper.AutoFrameRateListener;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncHelperAlt;
@@ -31,7 +32,7 @@ public class AutoFrameRateHelper {
         mFrameRateMapping.put(60f, 59.94f);
     }
 
-    public void apply(FormatItem format) {
+    public void apply(FormatItem format, boolean force) {
         if (mActivity == null) {
             Log.e(TAG, "Activity in null. exiting...");
             return;
@@ -53,12 +54,16 @@ public class AutoFrameRateHelper {
         } else {
             mPrevCall = System.currentTimeMillis();
         }
-        
+
         float frameRate = correctFps(format.getFrameRate());
         int width = format.getWidth();
 
         Log.d(TAG, String.format("Applying mode change... Video fps: %s, width: %s, height: %s", frameRate, width, format.getHeight()));
-        mSyncHelper.syncDisplayMode(mActivity.getWindow(), width, frameRate);
+        mSyncHelper.syncDisplayMode(mActivity.getWindow(), width, frameRate, force);
+    }
+
+    public void apply(FormatItem format) {
+        apply(format, false);
     }
 
     public boolean isSupported() {
@@ -86,7 +91,7 @@ public class AutoFrameRateHelper {
         mSyncHelper.saveOriginalState();
     }
 
-    public void restoreOriginalState() {
+    public void restoreOriginalState(boolean force) {
         if (!isSupported()) {
             Log.d(TAG, "restoreOriginalState: autoframerate not enabled... exiting...");
             return;
@@ -94,9 +99,13 @@ public class AutoFrameRateHelper {
 
         Log.d(TAG, "Restoring original mode...");
 
-        boolean result = mSyncHelper.restoreOriginalState(mActivity.getWindow());
+        boolean result = mSyncHelper.restoreOriginalState(mActivity.getWindow(), force);
 
         Log.d(TAG, "Restore mode result: " + result);
+    }
+
+    public void restoreOriginalState() {
+        restoreOriginalState(false);
     }
 
     public void setListener(AutoFrameRateListener listener) {
