@@ -263,4 +263,14 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     public void onTrackChanged(FormatItem track) {
         process(listener -> listener.onTrackChanged(track));
     }
+
+    @Override
+    public void onPlaylistAddClicked() {
+        process(PlayerUiEventListener::onPlaylistAddClicked);
+    }
+
+    @Override
+    public void onVideoStatsClicked() {
+        process(PlayerUiEventListener::onVideoStatsClicked);
+    }
 }

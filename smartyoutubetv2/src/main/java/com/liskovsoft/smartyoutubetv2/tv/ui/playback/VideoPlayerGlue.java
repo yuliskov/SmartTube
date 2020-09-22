@@ -9,9 +9,11 @@ import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.PlaybackControlsRow;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.BugReportAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChannelAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.HighQualityAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PlaylistAddAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.RepeatAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SubscribeAction;
 
@@ -65,6 +67,10 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         void onChannel();
 
         void onClosedCaptions();
+
+        void onPlaylistAdd();
+
+        void onVideoStats();
     }
 
     private final OnActionClickedListener mActionListener;
@@ -80,6 +86,8 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
     private final ClosedCaptioningAction mClosedCaptioningAction;
     private final SubscribeAction mSubscribeAction;
     private final ChannelAction mChannelAction;
+    private final PlaylistAddAction mPlaylistAddAction;
+    private final BugReportAction mVideoStatsAction;
 
     public VideoPlayerGlue(
             Context context,
@@ -103,6 +111,8 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         mClosedCaptioningAction = new ClosedCaptioningAction(context);
         mSubscribeAction = new SubscribeAction(context);
         mChannelAction = new ChannelAction(context);
+        mPlaylistAddAction = new PlaylistAddAction(context);
+        mVideoStatsAction = new BugReportAction(context);
     }
 
     @Override
@@ -123,10 +133,12 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         super.onCreateSecondaryActions(adapter);
         adapter.add(mChannelAction);
         adapter.add(mHighQualityAction);
+        adapter.add(mPlaylistAddAction);
         adapter.add(mThumbsDownAction);
         adapter.add(mThumbsUpAction);
         adapter.add(mSubscribeAction);
         adapter.add(mClosedCaptioningAction);
+        adapter.add(mVideoStatsAction);
         adapter.add(mRepeatAction);
     }
 
@@ -251,6 +263,12 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
             handled = true;
         } else if (action == mClosedCaptioningAction) {
             mActionListener.onClosedCaptions();
+            handled = true;
+        } else if (action == mPlaylistAddAction) {
+            mActionListener.onPlaylistAdd();
+            handled = true;
+        } else if (action == mVideoStatsAction) {
+            mActionListener.onVideoStats();
             handled = true;
         }
 

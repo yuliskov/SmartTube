@@ -22,7 +22,7 @@ public class SubscribeAction extends MultiAction {
     public SubscribeAction(Context context, int highlightColor) {
         super(R.id.action_subscribe);
         Drawable[] drawables = new Drawable[2];
-        BitmapDrawable offDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_subscribe_off);
+        BitmapDrawable offDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_subscribe);
         drawables[INDEX_OFF] = offDrawable;
         drawables[INDEX_ON] = offDrawable == null ? null
                 : new BitmapDrawable(context.getResources(),

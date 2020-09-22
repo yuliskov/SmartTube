@@ -2,4 +2,6 @@
 <resources>
     <item name="action_subscribe" type="id"/>
     <item name="action_channel" type="id"/>
+    <item name="action_playlist_add" type="id"/>
+    <item name="action_bug_report" type="id"/>
 </resources>

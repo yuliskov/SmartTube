@@ -19,4 +19,6 @@ public interface PlayerUiEventListener {
     void onChannelClicked();
     void onTrackClicked(FormatItem track);
     void onClosedCaptionsClicked();
+    void onPlaylistAddClicked();
+    void onVideoStatsClicked();
 }

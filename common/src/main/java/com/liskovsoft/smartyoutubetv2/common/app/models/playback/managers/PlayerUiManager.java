@@ -133,6 +133,16 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         MessageHelpers.showMessage(mMainActivity, R.string.not_implemented);
     }
 
+    @Override
+    public void onPlaylistAddClicked() {
+        MessageHelpers.showMessage(mMainActivity, R.string.not_implemented);
+    }
+
+    @Override
+    public void onVideoStatsClicked() {
+        MessageHelpers.showMessage(mMainActivity, R.string.not_implemented);
+    }
+
     private void setupBackgroundPlayback() {
         mBackgroundPlaybackSwitch = UiOptionItem.from(
                 mMainActivity.getString(R.string.dialog_background_playback),

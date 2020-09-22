@@ -174,4 +174,14 @@ public abstract class PlayerEventListenerHelper implements PlayerHandlerEventLis
     public void onTrackChanged(FormatItem track) {
         // NOP
     }
+
+    @Override
+    public void onPlaylistAddClicked() {
+        // NOP
+    }
+
+    @Override
+    public void onVideoStatsClicked() {
+        // NOP
+    }
 }

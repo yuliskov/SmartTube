@@ -305,6 +305,16 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         public void onClosedCaptions() {
             mEventListener.onClosedCaptionsClicked();
         }
+
+        @Override
+        public void onPlaylistAdd() {
+            mEventListener.onPlaylistAddClicked();
+        }
+
+        @Override
+        public void onVideoStats() {
+            mEventListener.onVideoStatsClicked();
+        }
     }
 
     // Begin Ui events
