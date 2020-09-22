@@ -7,7 +7,6 @@ import android.view.KeyEvent;
 import androidx.fragment.app.FragmentActivity;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.main.MainApplication;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
 
 /**
@@ -57,7 +56,7 @@ public abstract class LeanbackActivity extends FragmentActivity {
         mBackgroundManager.onStart();
 
         // we can't do it in the ViewManager because activity may be started from outside
-        mViewManager.setDefault(this.getClass());
+        mViewManager.addTopActivity(this.getClass());
     }
 
     @Override

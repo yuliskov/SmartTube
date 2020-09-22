@@ -6,26 +6,26 @@ import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 public class ViewManager {
-    private static final String PARENT_ACTIVITY = "PARENT_ACTIVITY";
     private static final String TAG = ViewManager.class.getSimpleName();
     private static ViewManager sInstance;
     private final Context mContext;
     private final Map<Class<?>, Class<? extends Activity>> mViewMapping;
     private final Map<Class<? extends Activity>, Class<? extends Activity>> mParentMapping;
-    private Class<?> mDefaultActivity;
+    private final Stack<Class<?>> mActivityStack;
     private Class<?> mRootActivity;
 
     private ViewManager(Context context) {
         mContext = context;
         mViewMapping = new HashMap<>();
         mParentMapping = new HashMap<>();
+        mActivityStack = new Stack<>();
     }
 
     public static ViewManager instance(Context context) {
@@ -67,26 +67,15 @@ public class ViewManager {
         }
     }
 
-    public void startView(Object parentView, Class<?> viewClass) {
-        if (parentView instanceof Fragment) {
-            Fragment fragment = (Fragment) parentView;
-
-            Class<?> activityClass = mViewMapping.get(viewClass);
-
-            if (activityClass != null) {
-                Intent intent = new Intent(fragment.getActivity(), activityClass);
-                intent.putExtra(PARENT_ACTIVITY, fragment.getActivity().getClass().getName());
-
-                fragment.startActivity(intent);
-            } else {
-                Log.e(TAG, "Activity not registered for view " + viewClass.getSimpleName());
-            }
-        }
-    }
-
     public void startParentView(Activity activity) {
         if (activity.getIntent() != null) {
-            Class<?> parentActivity = getParent(activity);
+            removeTopActivity();
+
+            Class<?> parentActivity = getTopActivity();
+
+            if (parentActivity == null) {
+                parentActivity = getDefaultParent(activity);
+            }
 
             if (parentActivity == null) {
                 Log.d(TAG, "Parent activity name doesn't stored in registry. Exiting to Home...");
@@ -96,7 +85,6 @@ public class ViewManager {
 
             try {
                 Log.d(TAG, "Launching parent activity...");
-                setDefault(null); // current activity is finished, so do reset
                 Intent intent = new Intent(activity, parentActivity);
 
                 activity.startActivity(intent);
@@ -107,26 +95,50 @@ public class ViewManager {
         }
     }
 
-    private Class<?> getParent(Activity activity) {
-        Class<?> parentActivity = null;
-        String parentActivityName = null;
+    public void startDefaultView(Context context) {
+        Class<?> lastActivity = null;
 
-        if (activity.getIntent() != null) {
-            parentActivityName = activity.getIntent().getStringExtra(PARENT_ACTIVITY);
+        if (!mActivityStack.isEmpty()) {
+            lastActivity = mActivityStack.peek();
         }
 
-        if (parentActivityName != null) {
-            try {
-                parentActivity = Class.forName(parentActivityName);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-                Log.e(TAG, "Activity class not found.");
-            }
-        } else {
-            parentActivity = getDefaultParent(activity);
+        if (lastActivity == null) {
+            lastActivity = mRootActivity;
         }
 
-        return parentActivity;
+        Log.d(TAG, "Starting activity: " + lastActivity.getSimpleName());
+
+        Intent intent = new Intent(context, lastActivity);
+
+        context.startActivity(intent);
+    }
+
+    public void addTopActivity(@Nullable Class<?> activity) {
+        if (!mActivityStack.isEmpty() && mActivityStack.peek() == activity) {
+            return;
+        }
+
+        mActivityStack.push(activity);
+    }
+
+    private void removeTopActivity() {
+        if (!mActivityStack.isEmpty()) {
+            mActivityStack.pop();
+        }
+    }
+
+    private Class<?> getTopActivity() {
+        Class<?> result = null;
+
+        if (!mActivityStack.isEmpty()) {
+            result = mActivityStack.peek();
+        }
+
+        return result;
+    }
+
+    public void setRoot(@NonNull Class<?> rootActivity) {
+        mRootActivity = rootActivity;
     }
 
     private Class<?> getDefaultParent(Activity activity) {
@@ -139,27 +151,5 @@ public class ViewManager {
         }
 
         return parentActivity;
-    }
-
-    public void startDefaultView(Activity activity) {
-        Class<?> lastActivity = mDefaultActivity;
-
-        if (lastActivity == null) {
-            lastActivity = mRootActivity;
-        }
-
-        Log.d(TAG, "Starting activity: " + lastActivity.getSimpleName());
-
-        Intent intent = new Intent(activity, lastActivity);
-
-        activity.startActivity(intent);
-    }
-
-    public void setDefault(@Nullable Class<?> defaultActivity) {
-        mDefaultActivity = defaultActivity;
-    }
-
-    public void setRoot(@NonNull Class<?> rootActivity) {
-        mRootActivity = rootActivity;
     }
 }
