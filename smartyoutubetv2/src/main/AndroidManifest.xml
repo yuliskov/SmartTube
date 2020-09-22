@@ -49,7 +49,7 @@
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Leanback.Browse">
@@ -63,37 +63,37 @@
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Leanback.Browse"/>
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:screenOrientation="landscape"/>
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:screenOrientation="landscape"/>
 
         <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.onboarding.OnboardingActivity"
-                  android:launchMode="singleTask"
+                  android:launchMode="singleInstance"
                   android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
                   android:screenOrientation="landscape"
                   android:theme="@style/Theme.Leanback.Onboarding"/>
 
         <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.signin.SignInActivity"
-                  android:launchMode="singleTask"
+                  android:launchMode="singleInstance"
                   android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
                   android:screenOrientation="landscape"
                   android:theme="@style/Theme.Example.Leanback.GuidedStep"/>
 
         <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.playback.settings.VideoSettingsActivity"
-                  android:launchMode="singleTask"
+                  android:launchMode="singleInstance"
                   android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
                   android:screenOrientation="landscape"
                   android:theme="@style/LeanbackPreferences"/>
@@ -103,7 +103,7 @@
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.details.VideoDetailsActivity"
-            android:launchMode="singleTask"
+            android:launchMode="singleInstance"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Leanback.Details">
 

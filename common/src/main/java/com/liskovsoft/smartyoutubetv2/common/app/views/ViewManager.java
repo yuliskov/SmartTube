@@ -76,6 +76,7 @@ public class ViewManager {
             if (activityClass != null) {
                 Intent intent = new Intent(fragment.getActivity(), activityClass);
                 intent.putExtra(PARENT_ACTIVITY, fragment.getActivity().getClass().getName());
+
                 fragment.startActivity(intent);
             } else {
                 Log.e(TAG, "Activity not registered for view " + viewClass.getSimpleName());
@@ -97,6 +98,7 @@ public class ViewManager {
                 Log.d(TAG, "Launching parent activity...");
                 setDefault(null); // current activity is finished, so do reset
                 Intent intent = new Intent(activity, parentActivity);
+
                 activity.startActivity(intent);
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();

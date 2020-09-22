@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
 
@@ -17,17 +16,18 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (IntentExtractor.isVideo(getIntent())) {
-            PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(this);
-            playbackPresenter.openVideo(IntentExtractor.getVideoId(getIntent()));
-        } else {
-            ViewManager viewManager = ViewManager.instance(this);
-            viewManager.startDefaultView(this);
-        }
+        applyNewIntent(getIntent());
 
         updateChannels();
 
         finish();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        applyNewIntent(intent);
     }
 
     private void updateChannels() {
@@ -45,6 +45,16 @@ public class SplashActivity extends Activity {
             sendBroadcast(intent);
         } else {
             Log.e(TAG, "Channels receiver class not found: " + CHANNELS_RECEIVER_CLASS_NAME);
+        }
+    }
+
+    private void applyNewIntent(Intent intent) {
+        if (IntentExtractor.isVideo(intent)) {
+            PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(this);
+            playbackPresenter.openVideo(IntentExtractor.getVideoId(intent));
+        } else {
+            ViewManager viewManager = ViewManager.instance(this);
+            viewManager.startDefaultView(this);
         }
     }
 }
