@@ -1,6 +1,10 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
+import android.app.PictureInPictureParams;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import android.view.KeyEvent;
@@ -23,6 +27,7 @@ public class PlaybackActivity extends LeanbackActivity {
     private static final float GAMEPAD_TRIGGER_INTENSITY_OFF = 0.45f;
     private boolean gamepadTriggerPressed = false;
     private PlaybackFragment mPlaybackFragment;
+    private boolean mBackPressed;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,6 +73,53 @@ public class PlaybackActivity extends LeanbackActivity {
             gamepadTriggerPressed = false;
         }
         return super.onGenericMotionEvent(event);
+    }
+
+    // For N devices that support it, not "officially"
+    // More: https://medium.com/s23nyc-tech/drop-in-android-video-exoplayer2-with-picture-in-picture-e2d4f8c1eb30
+    @SuppressWarnings("Deprecation")
+    private boolean enterPIPMode() {
+        if (Build.VERSION.SDK_INT >= 24 && getPackageManager().hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
+            //videoPosition = player.currentPosition
+            //playerView.useController = false
+            if (Build.VERSION.SDK_INT >= 26) {
+                PictureInPictureParams.Builder params = new PictureInPictureParams.Builder();
+                enterPictureInPictureMode(params.build());
+            } else {
+                enterPictureInPictureMode();
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        mBackPressed = true;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mBackPressed = false;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (mPlaybackFragment.isEngineBlocked()) {
+            enterPIPMode();
+
+            if (mBackPressed) {
+                ViewManager.instance(this).startParentView(this);
+            }
+        }
     }
 
     @Override

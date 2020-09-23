@@ -9,6 +9,9 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.AutoFrameRateHelper;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AutoFrameRateManager extends PlayerEventListenerHelper {
     private final PlayerUiManager mUiManager;
     private AutoFrameRateHelper mAutoFrameRateHelper;
@@ -94,10 +97,10 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     private void addUiOptions() {
         String title = mActivity.getString(R.string.auto_frame_rate_enable);
         String fpsCorrection = mActivity.getString(R.string.auto_frame_rate_correction, "30->29.97, 60->59.94");
-        mUiManager.addHQSwitch(title,
-                UiOptionItem.from(title, this::onAfrOptionClick, mEnabled));
-        mUiManager.addHQSwitch(title,
-                UiOptionItem.from(fpsCorrection, this::onFpsCorrectionClick, mCorrectionEnabled)
-        );
+        List<OptionItem> options = new ArrayList<>();
+        options.add(UiOptionItem.from(title, this::onAfrOptionClick, mEnabled));
+        options.add(UiOptionItem.from(fpsCorrection, this::onFpsCorrectionClick, mCorrectionEnabled));
+
+        mUiManager.addCheckedCategory(title, options);
     }
 }

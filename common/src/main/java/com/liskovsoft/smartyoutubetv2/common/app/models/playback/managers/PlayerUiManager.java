@@ -27,9 +27,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
     private boolean mEngineReady;
     private VideoSettingsPresenter mSettingsPresenter;
-    private final Map<String, List<OptionItem>> mSwitches = new HashMap<>();
-    private OptionItem mBackgroundPlaybackSwitch;
-    private boolean mRunOnce;
+    private final Map<String, List<OptionItem>> mCheckedCategories = new HashMap<>();
+    private final Map<String, List<OptionItem>> mRadioCategories = new HashMap<>();
+    private final Map<CharSequence, OptionItem> mSingleOptions = new HashMap<>();
     private boolean mBlockEngine;
 
     public PlayerUiManager() {
@@ -41,11 +41,23 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         super.onActivity(activity);
 
         mSettingsPresenter = VideoSettingsPresenter.instance(mActivity);
+    }
 
-        if (!mRunOnce) {
-            setupBackgroundPlayback();
-            mRunOnce = true;
-        }
+    private void addQualityCategories() {
+        List<FormatItem> videoFormats = mController.getVideoFormats();
+        String videoFormatsTitle = mActivity.getString(R.string.dialog_video_formats);
+
+        List<FormatItem> audioFormats = mController.getAudioFormats();
+        String audioFormatsTitle = mActivity.getString(R.string.dialog_audio_formats);
+
+        addRadioCategory(videoFormatsTitle,
+                UiOptionItem.from(videoFormats,
+                        option -> mController.selectFormat(UiOptionItem.toFormat(option)),
+                        mActivity.getString(R.string.dialog_video_default)));
+        addRadioCategory(audioFormatsTitle,
+                UiOptionItem.from(audioFormats,
+                        option -> mController.selectFormat(UiOptionItem.toFormat(option)),
+                        mActivity.getString(R.string.dialog_audio_default)));
     }
 
     @Override
@@ -88,18 +100,21 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
 
     @Override
     public void onHighQualityClicked() {
+        addQualityCategories();
+        addBackgroundPlaybackOption();
+
         disableUiAutoHideTimeout();
 
         if (VERSION.SDK_INT < 25) {
             // Old Android fix: don't destroy player while dialog is open
-            mController.blockEngine();
+            mController.blockEngine(true);
         }
 
         mSettingsPresenter.clear();
 
-        addRadioList();
-        addCheckedList();
-        addSingleOption();
+        createRadioOptions();
+        createCheckedOptions();
+        createSingleOptions();
 
         mSettingsPresenter.showDialog(() -> {
             enableUiAutoHideTimeout();
@@ -143,34 +158,35 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         MessageHelpers.showMessage(mActivity, R.string.not_implemented);
     }
 
-    private void setupBackgroundPlayback() {
-        mBackgroundPlaybackSwitch = UiOptionItem.from(
+    private void updateBackgroundPlayback() {
+        if (mBlockEngine) {
+            ViewManager.instance(mActivity).blockTop(mActivity); // open player regarding its position in stack
+        } else {
+            ViewManager.instance(mActivity).blockTop(null);
+        }
+
+        mController.blockEngine(mBlockEngine);
+    }
+
+    private void addBackgroundPlaybackOption() {
+        addSingleOption(UiOptionItem.from(
                 mActivity.getString(R.string.dialog_background_playback),
                 optionItem -> {
                     mBlockEngine = optionItem.isSelected();
                     updateBackgroundPlayback();
-                }, mBlockEngine);
+                }, mBlockEngine));
     }
 
-    private void updateBackgroundPlayback() {
-        if (mBlockEngine) {
-            mController.blockEngine();
-            ViewManager.instance(mActivity).blockTop(mActivity); // open player regarding its position in stack
-        } else {
-            mController.unblockEngine();
-            ViewManager.instance(mActivity).blockTop(null);
-        }
+    public void addSingleOption(OptionItem option) {
+        mSingleOptions.put(option.getTitle(), option);
     }
 
-    public void addHQSwitch(String categoryTitle, OptionItem optionItem) {
-        List<OptionItem> items = mSwitches.get(categoryTitle);
+    public void addCheckedCategory(String categoryTitle, List<OptionItem> options) {
+        mCheckedCategories.put(categoryTitle, options);
+    }
 
-        if (items == null) {
-            items = new ArrayList<>();
-            mSwitches.put(categoryTitle, items);
-        }
-
-        items.add(optionItem);
+    public void addRadioCategory(String categoryTitle, List<OptionItem> options) {
+        mRadioCategories.put(categoryTitle, options);
     }
 
     private void disableUiAutoHideTimeout() {
@@ -197,31 +213,22 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         }
     }
 
-    private void addSingleOption() {
-        mSettingsPresenter.appendSingleSwitch(mBackgroundPlaybackSwitch);
-    }
-
-    private void addCheckedList() {
-        for (String key : mSwitches.keySet()) {
-            mSettingsPresenter.appendChecked(key, mSwitches.get(key));
+    private void createSingleOptions() {
+        for (OptionItem option : mSingleOptions.values()) {
+            mSettingsPresenter.appendSingleSwitch(option);
         }
     }
 
-    private void addRadioList() {
-        List<FormatItem> videoFormats = mController.getVideoFormats();
-        String videoFormatsTitle = mActivity.getString(R.string.dialog_video_formats);
+    private void createCheckedOptions() {
+        for (String key : mCheckedCategories.keySet()) {
+            mSettingsPresenter.appendChecked(key, mCheckedCategories.get(key));
+        }
+    }
 
-        List<FormatItem> audioFormats = mController.getAudioFormats();
-        String audioFormatsTitle = mActivity.getString(R.string.dialog_audio_formats);
-
-        mSettingsPresenter.appendRadio(videoFormatsTitle,
-                UiOptionItem.from(videoFormats,
-                        option -> mController.selectFormat(UiOptionItem.toFormat(option)),
-                        mActivity.getString(R.string.dialog_video_default)));
-        mSettingsPresenter.appendRadio(audioFormatsTitle,
-                UiOptionItem.from(audioFormats,
-                        option -> mController.selectFormat(UiOptionItem.toFormat(option)),
-                        mActivity.getString(R.string.dialog_audio_default)));
+    private void createRadioOptions() {
+        for (String key : mRadioCategories.keySet()) {
+            mSettingsPresenter.appendRadio(key, mRadioCategories.get(key));
+        }
     }
 
     private final Runnable mSuggestionsResetHandler = () -> mController.resetSuggestedPosition();

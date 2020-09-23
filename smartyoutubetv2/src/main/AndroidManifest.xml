@@ -72,6 +72,7 @@
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity"
             android:launchMode="singleInstance"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:supportsPictureInPicture="true"
             android:screenOrientation="landscape"/>
 
         <activity

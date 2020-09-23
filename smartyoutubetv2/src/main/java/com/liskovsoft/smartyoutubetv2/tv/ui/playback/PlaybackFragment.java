@@ -406,13 +406,13 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
-    public void blockEngine() {
-        mBlockEngine = true;
+    public void blockEngine(boolean block) {
+        mBlockEngine = block;
     }
 
     @Override
-    public void unblockEngine() {
-        mBlockEngine = false;
+    public boolean isEngineBlocked() {
+        return mBlockEngine;
     }
 
     // End Engine Events
@@ -441,7 +441,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
         // Fix situations when engine didn't properly destroyed.
         // E.g. after closing dialogs.
-        unblockEngine();
+        blockEngine(false);
         releasePlayer();
 
         mPlaybackPresenter.unregister(this);

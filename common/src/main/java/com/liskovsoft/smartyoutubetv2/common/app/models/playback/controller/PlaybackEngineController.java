@@ -21,9 +21,6 @@ public interface PlaybackEngineController {
     /**
      * Block engine from destroying
      */
-    void blockEngine();
-    /**
-     * Unblock engine from destroying
-     */
-    void unblockEngine();
+    void blockEngine(boolean block);
+    boolean isEngineBlocked();
 }
