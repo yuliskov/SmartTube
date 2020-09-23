@@ -80,8 +80,8 @@ android {
     // https://stackoverflow.com/questions/18332474/how-to-set-versionname-in-apk-filename-using-gradle
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
-            def project = "STubeTV"
-            def flavor = variant.productFlavors[-1].name.capitalize()
+            def project = "STubeNext"
+            def flavor = variant.productFlavors[-1].name
             def buildType = variant.variantData.variantConfiguration.buildType.name.take(1)
             def version = variant.versionName
 
@@ -124,8 +124,9 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:' + rxJavaVersion
 
     implementation project(path: ':common')
-    
+
     stbetaImplementation project(path: ':leanbackassistant')
+    stbetaImplementation project(path: ':appupdatechecker2')
 
     // Add the Firebase Crashlytics SDK.
     stbetaImplementation('com.google.firebase:firebase-crashlytics:' + firebaseCrashlyticsVersion) {
