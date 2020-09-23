@@ -85,7 +85,7 @@ public class ViewManager {
             }
 
             try {
-                Log.d(TAG, "Launching parent activity...");
+                Log.d(TAG, "Launching parent activity: " + parentActivity.getSimpleName());
                 Intent intent = new Intent(activity, parentActivity);
 
                 activity.startActivity(intent);
