@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.mod;
+package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback;
 
 import android.Manifest;
 import android.content.Intent;
@@ -416,7 +416,10 @@ public class SearchSupportFragment extends Fragment {
         return mRowsSupportFragment;
     }
 
-    // NOTE: fix Service not registered: android.speech.SpeechRecognizer$Connection
+    /**
+     * NOTE: fix Service not registered: android.speech.SpeechRecognizer$Connection<br/>
+     * Leanback version 1.0.0
+     */
     private void releaseRecognizer() {
         try {
             if (null != mSpeechRecognizer) {

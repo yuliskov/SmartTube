@@ -9,6 +9,7 @@ import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.PlaybackControlsRow;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.FixedVideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoStatsAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChannelAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAction;
@@ -36,7 +37,7 @@ import java.util.concurrent.TimeUnit;
  * Note that the superclass, {@link PlaybackTransportControlGlue}, manages the playback controls
  * row.
  */
-public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter> {
+public class VideoPlayerGlue extends FixedVideoPlayerGlue<PlayerAdapter> {
     private static final long TEN_SECONDS = TimeUnit.SECONDS.toMillis(10);
 
     /** Listens for when skip to next and previous actions have been dispatched. */
@@ -131,6 +132,11 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
     @Override
     protected void onCreateSecondaryActions(ArrayObjectAdapter adapter) {
         super.onCreateSecondaryActions(adapter);
+
+        // MAX: 7 items. But with custom modification it supports more.
+        // Origin: {@link androidx.leanback.widget.ControlBarPresenter#MAX_CONTROLS}
+        // Custom mod: {@link com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.ControlBarPresenter#MAX_CONTROLS}
+
         adapter.add(mChannelAction);
         adapter.add(mHighQualityAction);
         adapter.add(mPlaylistAddAction);
@@ -138,8 +144,8 @@ public class VideoPlayerGlue extends PlaybackTransportControlGlue<PlayerAdapter>
         adapter.add(mThumbsUpAction);
         adapter.add(mSubscribeAction);
         adapter.add(mClosedCaptioningAction);
-        adapter.add(mVideoStatsAction);
         adapter.add(mRepeatAction);
+        adapter.add(mVideoStatsAction);
     }
 
     @Override

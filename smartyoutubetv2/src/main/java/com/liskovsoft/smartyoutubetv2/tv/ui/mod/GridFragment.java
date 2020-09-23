@@ -19,7 +19,7 @@ import androidx.leanback.widget.VerticalGridPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /**
- * The code was copied from:<br/>
+ * NOTE: All code was new. It's copied from:<br/>
  * https://github.com/googlearchive/leanback-showcase/blob/master/app/src/main/java/android/support/v17/leanback/supportleanbackshowcase/app/page/PageAndListRowFragment.java<br/>
  * Description: A fragment for rendering items in a vertical grids.
  */

@@ -35,7 +35,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.SearchSupportFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.SearchSupportFragment;
 
 public class SearchFragment extends SearchSupportFragment
         implements SearchSupportFragment.SearchResultProvider, SearchView {
