@@ -31,6 +31,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     private final Map<String, List<OptionItem>> mRadioCategories = new HashMap<>();
     private final Map<CharSequence, OptionItem> mSingleOptions = new HashMap<>();
     private boolean mBlockEngine;
+    private boolean mEnablePIP;
 
     public PlayerUiManager() {
         mHandler = new Handler(Looper.getMainLooper());
@@ -101,7 +102,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     @Override
     public void onHighQualityClicked() {
         addQualityCategories();
-        addBackgroundPlaybackOption();
+        addBackgroundPlaybackCategory();
 
         disableUiAutoHideTimeout();
 
@@ -166,15 +167,33 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         }
 
         mController.blockEngine(mBlockEngine);
+        mController.enablePIP(mEnablePIP);
     }
 
-    private void addBackgroundPlaybackOption() {
-        addSingleOption(UiOptionItem.from(
-                mActivity.getString(R.string.dialog_background_playback),
+    private void addBackgroundPlaybackCategory() {
+        String categoryTitle = mActivity.getString(R.string.category_background_playback);
+
+        List<OptionItem> options = new ArrayList<>();
+        options.add(UiOptionItem.from(mActivity.getString(R.string.option_background_playback_off),
                 optionItem -> {
-                    mBlockEngine = optionItem.isSelected();
+                    mBlockEngine = false;
+                    mEnablePIP = false;
                     updateBackgroundPlayback();
-                }, mBlockEngine));
+                }, !mBlockEngine && !mEnablePIP));
+        options.add(UiOptionItem.from(mActivity.getString(R.string.option_background_playback_all),
+                optionItem -> {
+                    mBlockEngine = true;
+                    mEnablePIP = true;
+                    updateBackgroundPlayback();
+                }, mEnablePIP && mBlockEngine));
+        options.add(UiOptionItem.from(mActivity.getString(R.string.option_background_playback_only_audio),
+                optionItem -> {
+                    mBlockEngine = true;
+                    mEnablePIP = false;
+                    updateBackgroundPlayback();
+                }, mBlockEngine && !mEnablePIP));
+
+        addRadioCategory(categoryTitle, options);
     }
 
     public void addSingleOption(OptionItem option) {

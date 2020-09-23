@@ -23,13 +23,12 @@ import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.upstream.BandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
@@ -68,6 +67,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private final boolean mEnableAnimation = true;
     private RowsSupportFragment mRowsSupportFragment;
     private boolean mBlockEngine;
+    private boolean mEnablePIP;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -154,7 +154,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     private void releasePlayer() {
-        if (mBlockEngine) {
+        if (isEngineBlocked()) {
             Log.d(TAG, "releasePlayer: Engine release is blocked. Exiting...");
             return;
         }
@@ -413,6 +413,16 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public boolean isEngineBlocked() {
         return mBlockEngine;
+    }
+
+    @Override
+    public void enablePIP(boolean enable) {
+        mEnablePIP = enable;
+    }
+
+    @Override
+    public boolean isPIPEnabled() {
+        return mEnablePIP;
     }
 
     // End Engine Events

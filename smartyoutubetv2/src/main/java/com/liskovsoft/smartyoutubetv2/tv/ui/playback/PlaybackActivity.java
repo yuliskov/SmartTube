@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity;
@@ -113,7 +114,7 @@ public class PlaybackActivity extends LeanbackActivity {
     protected void onStop() {
         super.onStop();
 
-        if (mPlaybackFragment.isEngineBlocked()) {
+        if (mPlaybackFragment.isEngineBlocked() && mPlaybackFragment.isPIPEnabled()) {
             enterPIPMode();
 
             if (mBackPressed) {
