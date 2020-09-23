@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 import android.media.MediaDescription;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.Parcelable.Creator;
 import androidx.annotation.RequiresApi;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
@@ -22,8 +21,17 @@ public final class Video implements Parcelable {
     public String videoUrl;
     public String studio;
     public int percentWatched;
+    public State state;
     public MediaItem mediaItem;
     public MediaItemMetadata cachedMetadata;
+
+    public static class State {
+        public final long positionMs;
+
+        public State(long positionMs) {
+            this.positionMs = positionMs;
+        }
+    }
 
     public Video() {
         

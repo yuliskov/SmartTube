@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video.State;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
@@ -9,19 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StateUpdater extends PlayerEventListenerHelper {
-    private final Map<Long, State> mPositionMap = new HashMap<>();
     private boolean mIsPlaying;
     private int mRepeatMode = 0;
     private FormatItem mVideoFormat = FormatItem.HD_AVC;
     private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
-
-    private static class State {
-        final long positionMs;
-
-        public State(long positionMs) {
-            this.positionMs = positionMs;
-        }
-    }
 
     @Override
     public void openVideo(Video item) {
@@ -95,27 +87,23 @@ public class StateUpdater extends PlayerEventListenerHelper {
         Video video = mController.getVideo();
 
         if (video != null) {
-            mPositionMap.put(video.id, new State(mController.getPositionMs()));
+            video.state = new State(mController.getPositionMs());
         }
     }
 
     private void restoreState(Video item) {
-        State state = null;
-
         if (mVideoFormat != null) {
             mController.selectFormat(mVideoFormat);
         }
 
-        if (mPositionMap.containsKey(item.id)) {
-            state = mPositionMap.get(item.id);
-        } else if (item.percentWatched > 0 && item.percentWatched < 100) {
-            state = new State(getNewPosition(item.percentWatched));
+        if (item.state == null && item.percentWatched > 0 && item.percentWatched < 100) {
+            item.state = new State(getNewPosition(item.percentWatched));
         }
 
         boolean nearEnd = Math.abs(mController.getLengthMs() - mController.getPositionMs()) < 10_000;
 
-        if (state != null && !nearEnd) {
-            mController.setPositionMs(state.positionMs);
+        if (item.state != null && !nearEnd) {
+            mController.setPositionMs(item.state.positionMs);
             mController.setPlay(mIsPlaying);
         } else {
             mController.setPlay(true); // start play immediately when state not found
