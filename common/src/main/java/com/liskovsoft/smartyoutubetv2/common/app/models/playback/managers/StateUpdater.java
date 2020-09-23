@@ -70,13 +70,13 @@ public class StateUpdater extends PlayerEventListenerHelper {
     @Override
     public void onPlay() {
         mIsPlaying = true;
-        Helpers.disableScreensaver(mMainActivity);
+        Helpers.disableScreensaver(mActivity);
     }
 
     @Override
     public void onPause() {
         mIsPlaying = false;
-        Helpers.enableScreensaver(mMainActivity);
+        Helpers.enableScreensaver(mActivity);
     }
 
     @Override

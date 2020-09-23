@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 
 import android.app.Activity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerHandlerEventListener;
@@ -63,7 +62,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
             if (mMainActivity != mainActivity) {
                 mMainActivity = mainActivity;
 
-                process(listener -> listener.onMainActivity(mainActivity));
+                process(listener -> listener.onActivity(mainActivity));
             }
         }
     }

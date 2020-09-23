@@ -25,18 +25,18 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onMainActivity(Activity activity) {
-        super.onMainActivity(activity);
+    public void onActivity(Activity activity) {
+        super.onActivity(activity);
 
         if (!mMainActivityRunOnce) {
-            mAutoFrameRateHelper = new AutoFrameRateHelper(mMainActivity);
+            mAutoFrameRateHelper = new AutoFrameRateHelper(mActivity);
             mModeSyncManager = ModeSyncManager.instance(activity);
 
             addUiOptions();
 
             mMainActivityRunOnce = true;
         } else {
-            mAutoFrameRateHelper.setActivity(mMainActivity);
+            mAutoFrameRateHelper.setActivity(mActivity);
         }
     }
 
@@ -92,8 +92,8 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     }
 
     private void addUiOptions() {
-        String title = mMainActivity.getString(R.string.auto_frame_rate_enable);
-        String fpsCorrection = mMainActivity.getString(R.string.auto_frame_rate_correction, "30->29.97, 60->59.94");
+        String title = mActivity.getString(R.string.auto_frame_rate_enable);
+        String fpsCorrection = mActivity.getString(R.string.auto_frame_rate_correction, "30->29.97, 60->59.94");
         mUiManager.addHQSwitch(title,
                 UiOptionItem.from(title, this::onAfrOptionClick, mEnabled));
         mUiManager.addHQSwitch(title,

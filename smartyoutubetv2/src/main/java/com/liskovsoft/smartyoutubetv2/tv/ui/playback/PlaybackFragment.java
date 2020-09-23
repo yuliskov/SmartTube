@@ -174,17 +174,15 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
     private void initializePlayer() {
         if (mPlayer != null) {
+            Log.d(TAG, "Skip player initialization.");
             return;
         }
 
-        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         TrackSelection.Factory videoTrackSelectionFactory =
-                new AdaptiveTrackSelection.Factory(bandwidthMeter);
+                new AdaptiveTrackSelection.Factory();
         mTrackSelector = new RestoreTrackSelector(videoTrackSelectionFactory);
 
-        // TODO: testing max bitrate
-        mTrackSelector.setParameters(mTrackSelector.getParameters().buildUpon().setForceHighestSupportedBitrate(true));
-
+        // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
         mPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), mTrackSelector);
 
         mExoPlayerController = new ExoPlayerController(mPlayer, mTrackSelector, getContext());

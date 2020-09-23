@@ -1,16 +1,14 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 
 import android.app.Activity;
-import androidx.fragment.app.Fragment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerHandlerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
 public abstract class PlayerEventListenerHelper implements PlayerHandlerEventListener {
     protected PlaybackController mController;
-    protected Activity mMainActivity;
+    protected Activity mActivity;
     protected Activity mParentActivity;
 
     @Override
@@ -19,8 +17,8 @@ public abstract class PlayerEventListenerHelper implements PlayerHandlerEventLis
     }
 
     @Override
-    public void onMainActivity(Activity activity) {
-        mMainActivity = activity;
+    public void onActivity(Activity activity) {
+        mActivity = activity;
     }
 
     @Override

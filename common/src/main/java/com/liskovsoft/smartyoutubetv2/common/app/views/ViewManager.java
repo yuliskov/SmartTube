@@ -154,7 +154,7 @@ public class ViewManager {
         return parentActivity;
     }
 
-    public void blockTop(boolean block) {
-        mDefaultTop = block ? getTopActivity() : null;
+    public void blockTop(Activity activity) {
+        mDefaultTop = activity == null ? null : activity.getClass();
     }
 }
