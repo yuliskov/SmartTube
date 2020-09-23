@@ -127,6 +127,7 @@ public class VideoPlayerGlue extends FixedVideoPlayerGlue<PlayerAdapter> {
         adapter.add(mRewindAction);
         adapter.add(mFastForwardAction);
         adapter.add(mSkipNextAction);
+        adapter.add(mRepeatAction);
     }
 
     @Override
@@ -144,7 +145,6 @@ public class VideoPlayerGlue extends FixedVideoPlayerGlue<PlayerAdapter> {
         adapter.add(mThumbsUpAction);
         adapter.add(mSubscribeAction);
         adapter.add(mClosedCaptioningAction);
-        adapter.add(mRepeatAction);
         adapter.add(mVideoStatsAction);
     }
 

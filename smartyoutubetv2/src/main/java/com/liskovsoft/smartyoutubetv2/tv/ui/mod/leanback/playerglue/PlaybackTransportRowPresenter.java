@@ -595,9 +595,9 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         setHeaderPresenter(null);
         setSelectEffectEnabled(false);
 
-        mPlaybackControlsPresenter = new ControlBarPresenter(com.liskovsoft.smartyoutubetv2.tv.R.layout.lb_control_bar_mod);
+        mPlaybackControlsPresenter = new ControlBarPresenter(com.liskovsoft.smartyoutubetv2.tv.R.layout.mod_lb_control_bar);
         mPlaybackControlsPresenter.setDefaultFocusToMiddle(false);
-        mSecondaryControlsPresenter = new ControlBarPresenter(com.liskovsoft.smartyoutubetv2.tv.R.layout.lb_control_bar_mod);
+        mSecondaryControlsPresenter = new ControlBarPresenter(com.liskovsoft.smartyoutubetv2.tv.R.layout.mod_lb_control_bar);
         mSecondaryControlsPresenter.setDefaultFocusToMiddle(false);
 
         mPlaybackControlsPresenter.setOnControlSelectedListener(mOnControlSelectedListener);
@@ -694,7 +694,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
     @Override
     protected RowPresenter.ViewHolder createRowViewHolder(ViewGroup parent) {
         View v = LayoutInflater.from(parent.getContext()).inflate(
-                com.liskovsoft.smartyoutubetv2.tv.R.layout.lb_playback_transport_controls_row_mod, parent, false);
+                com.liskovsoft.smartyoutubetv2.tv.R.layout.mod_lb_playback_transport_controls_row, parent, false);
         ViewHolder vh = new ViewHolder(v, mDescriptionPresenter);
         initRow(vh);
         return vh;

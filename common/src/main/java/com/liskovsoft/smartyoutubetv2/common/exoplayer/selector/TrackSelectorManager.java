@@ -390,9 +390,13 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 for (int trackIndex = 0; trackIndex < renderer.mediaTracks[groupIndex].length; trackIndex++) {
                     MediaTrack mediaTrack = renderer.mediaTracks[groupIndex][trackIndex];
 
-                    if (TrackSelectorUtil.compare(mediaTrack, track)) {
+                    int compare = TrackSelectorUtil.compare(mediaTrack, track);
+
+                    if (compare == 0) {
                         result = mediaTrack;
                         break;
+                    } else if (compare < 0 && TrackSelectorUtil.compare(result, mediaTrack) < 0) {
+                        result = mediaTrack;
                     }
                 }
             }

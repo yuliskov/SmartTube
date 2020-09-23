@@ -114,23 +114,7 @@ public class TrackSelectorUtil {
         return format.bitrate > 300000 ? "5.1" : "";
     }
 
-    public static boolean heightEquals(int height1, int height2) {
-        if (height1 == -1 || height2 == -1) {
-            return false;
-        }
-
-        return Math.abs(height1 - height2) < HEIGHT_EQUITY_THRESHOLD_PX;
-    }
-
-    public static boolean heightLessOrEquals(int height1, int height2) {
-        if (height1 == -1 || height2 == -1) {
-            return false;
-        }
-
-        return height1 <= height2 || Math.abs(height1 - height2) < HEIGHT_EQUITY_THRESHOLD_PX;
-    }
-
-    public static boolean codecEquals(String codecs1, String codecs2) {
+    private static boolean codecEquals(String codecs1, String codecs2) {
         if (codecs1 == null || codecs2 == null) {
             return false;
         }
@@ -138,23 +122,53 @@ public class TrackSelectorUtil {
         return Helpers.equals(codecNameShort(codecs1), codecNameShort(codecs2));
     }
 
-    public static boolean fpsEquals(float fps1, float fps2) {
-        if (fps1 == -1 || fps2 == -1) {
+    private static boolean heightEquals(int height1, int height2) {
+        if (height1 == -1 || height2 == -1) {
             return false;
+        }
+
+        return Math.abs(height1 - height2) < HEIGHT_EQUITY_THRESHOLD_PX;
+    }
+
+    private static boolean heightLessOrEquals(int height1, int height2) {
+        if (height1 == -1 || height2 == -1) {
+            return false;
+        }
+
+        return height1 <= height2 || heightEquals(height1, height2);
+    }
+
+    private static boolean fpsEquals(float fps1, float fps2) {
+        if (fps1 == -1 || fps2 == -1) {
+            return true;
         }
 
         return Math.abs(fps1 - fps2) < 10;
     }
 
-    public static boolean compare(MediaTrack track1, MediaTrack track2) {
-        boolean result = false;
+    private static boolean fpsLessOrEquals(float fps1, float fps2) {
+        if (fps1 == -1 || fps2 == -1) {
+            return true;
+        }
+
+        return fps1 <= fps2 || fpsEquals(fps1, fps2);
+    }
+
+    public static int compare(MediaTrack track1, MediaTrack track2) {
+        if (track1 == null || track1.format == null) {
+            return -1;
+        }
+
+        int result = 1;
 
         if (Helpers.equals(track1.format.id, track2.format.id)) {
-            result = true;
+            result = 0;
         } else if (TrackSelectorUtil.codecEquals(track1.format.codecs, track2.format.codecs)) {
-            if (TrackSelectorUtil.fpsEquals(track1.format.frameRate, track2.format.frameRate)) {
-                if (TrackSelectorUtil.heightLessOrEquals(track1.format.height, track2.format.height)) {
-                    result = true;
+            if (TrackSelectorUtil.fpsLessOrEquals(track1.format.frameRate, track2.format.frameRate)) {
+                if (TrackSelectorUtil.heightEquals(track1.format.height, track2.format.height)) {
+                    result = 0;
+                } else if (TrackSelectorUtil.heightLessOrEquals(track1.format.height, track2.format.height)) {
+                    result = -1;
                 }
             }
         }
