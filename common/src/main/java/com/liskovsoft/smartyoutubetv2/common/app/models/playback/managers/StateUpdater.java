@@ -19,19 +19,31 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     private static class State {
         public final long positionMs;
+        private final long lengthMs;
 
         public State(long positionMs) {
+            this(positionMs, -1);
+        }
+
+        public State(long positionMs, long lengthMs) {
             this.positionMs = positionMs;
+            this.lengthMs = lengthMs;
         }
     }
 
+    /**
+     * Fired after user clicked on video in browse activity<br/>
+     * or video is opened from the intent
+     */
     @Override
     public void openVideo(Video item) {
+        ensureVideoSize(item); // reset position of music videos
+
         mIsPlaying = true; // video just added
 
         // Ensure that we aren't running on presenter init stage
         if (mController != null) {
-            saveState();
+            saveState(); // save state of previous item
         }
     }
 
@@ -98,13 +110,22 @@ public class StateUpdater extends PlayerEventListenerHelper {
         }
     }
 
+    private void ensureVideoSize(Video item) {
+        State state = mStates.get(item.videoId);
+
+        // Trying to start music video from beginning
+        if (state != null && state.lengthMs < MUSIC_VIDEO_LENGTH_MS) {
+            mStates.remove(item.videoId);
+        }
+    }
+
     private void saveState() {
         trimStorage();
 
         Video video = mController.getVideo();
 
         if (video != null) {
-            mStates.put(video.videoId, new State(mController.getPositionMs()));
+            mStates.put(video.videoId, new State(mController.getPositionMs(), mController.getLengthMs()));
         }
     }
 
