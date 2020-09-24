@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014 The Android Open Source Project
+ * Copyright (c) 2016 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,17 @@
  * limitations under the License.
  */
 
-package com.liskovsoft.smartyoutubetv2.tv.ui.old;
+package com.liskovsoft.smartyoutubetv2.tv.old.ui;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 
-/*
- * VerticalGridActivity that loads VerticalGridFragment
- */
-public class VerticalGridActivity extends LeanbackActivity {
-    /**
-     * Called when the activity is first created.
-     */
+public class SettingsActivity extends Activity {
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_vertical_grid);
-        getWindow().setBackgroundDrawableResource(R.drawable.grid_bg);
+        setContentView(R.layout.fragment_settings);
     }
 }

@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
+    @SuppressLint("StaticFieldLeak")
     private static VideoSettingsPresenter sInstance;
     private final Context mContext;
     private VideoSettingsView mView;

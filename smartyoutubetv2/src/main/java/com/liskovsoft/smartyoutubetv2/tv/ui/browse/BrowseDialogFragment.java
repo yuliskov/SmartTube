@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.app.BrowseSupportFragment.MainFragmentAdapter;
 import androidx.leanback.app.ErrorSupportFragment;
-import com.liskovsoft.smartyoutubetv2.common.app.models.auth.ErrorFragmentData;
+import com.liskovsoft.smartyoutubetv2.common.app.models.signin.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class BrowseDialogFragment extends ErrorSupportFragment implements BrowseSupportFragment.MainFragmentAdapterProvider {

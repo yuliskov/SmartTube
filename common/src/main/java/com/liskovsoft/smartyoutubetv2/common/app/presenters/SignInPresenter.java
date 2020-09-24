@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -12,6 +13,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class SignInPresenter implements Presenter<SignInView> {
     private static final String TAG = SignInPresenter.class.getSimpleName();
+    @SuppressLint("StaticFieldLeak")
     private static SignInPresenter sInstance;
     private final MediaService mMediaService;
     private final Context mContext;

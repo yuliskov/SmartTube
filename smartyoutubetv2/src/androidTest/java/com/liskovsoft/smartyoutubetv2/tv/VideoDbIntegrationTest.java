@@ -7,11 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 
-import com.liskovsoft.smartyoutubetv2.tv.data.old.FetchVideoService;
-import com.liskovsoft.smartyoutubetv2.tv.data.old.VideoContract;
-import com.liskovsoft.smartyoutubetv2.tv.data.old.VideoContract.VideoEntry;
-import com.liskovsoft.smartyoutubetv2.tv.data.old.VideoDbBuilder;
-import com.liskovsoft.smartyoutubetv2.tv.data.old.VideoDbHelper;
+import com.liskovsoft.smartyoutubetv2.tv.old.data.FetchVideoService;
+import com.liskovsoft.smartyoutubetv2.tv.old.data.VideoContract;
+import com.liskovsoft.smartyoutubetv2.tv.old.data.VideoContract.VideoEntry;
+import com.liskovsoft.smartyoutubetv2.tv.old.data.VideoDbBuilder;
+import com.liskovsoft.smartyoutubetv2.tv.old.data.VideoDbHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;

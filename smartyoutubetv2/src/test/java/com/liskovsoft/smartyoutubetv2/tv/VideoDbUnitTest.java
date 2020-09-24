@@ -2,8 +2,8 @@ package com.liskovsoft.smartyoutubetv2.tv;
 
 import android.content.ContentValues;
 
-import com.liskovsoft.smartyoutubetv2.tv.data.old.VideoContract;
-import com.liskovsoft.smartyoutubetv2.tv.data.old.VideoDbBuilder;
+import com.liskovsoft.smartyoutubetv2.tv.old.data.VideoContract;
+import com.liskovsoft.smartyoutubetv2.tv.old.data.VideoDbBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;

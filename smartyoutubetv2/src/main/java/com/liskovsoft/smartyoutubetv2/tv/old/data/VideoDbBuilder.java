@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.liskovsoft.smartyoutubetv2.tv.data.old;
+package com.liskovsoft.smartyoutubetv2.tv.old.data;
 
 import android.content.ContentValues;
 import android.content.Context;

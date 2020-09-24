@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.liskovsoft.smartyoutubetv2.tv.ui.old;
+package com.liskovsoft.smartyoutubetv2.tv.old.ui;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;

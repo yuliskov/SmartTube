@@ -44,9 +44,9 @@ import com.bumptech.glide.request.transition.Transition;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.DetailsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.DetailsView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.data.old.VideoContract;
+import com.liskovsoft.smartyoutubetv2.tv.old.data.VideoContract;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.tv.model.old.VideoCursorMapper;
+import com.liskovsoft.smartyoutubetv2.tv.old.model.VideoCursorMapper;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.DetailsDescriptionPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
 

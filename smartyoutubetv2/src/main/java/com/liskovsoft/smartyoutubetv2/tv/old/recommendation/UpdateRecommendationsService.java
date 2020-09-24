@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.liskovsoft.smartyoutubetv2.tv.recommendation.old;
+package com.liskovsoft.smartyoutubetv2.tv.old.recommendation;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -33,9 +33,9 @@ import android.util.Log;
 import com.bumptech.glide.Glide;
 import com.liskovsoft.smartyoutubetv2.tv.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.data.old.VideoContract;
+import com.liskovsoft.smartyoutubetv2.tv.old.data.VideoContract;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.tv.model.old.VideoCursorMapper;
+import com.liskovsoft.smartyoutubetv2.tv.old.model.VideoCursorMapper;
 import com.liskovsoft.smartyoutubetv2.tv.ui.details.VideoDetailsActivity;
 
 import java.util.concurrent.ExecutionException;

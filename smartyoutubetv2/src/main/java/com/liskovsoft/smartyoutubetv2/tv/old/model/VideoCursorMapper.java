@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.liskovsoft.smartyoutubetv2.tv.model.old;
+package com.liskovsoft.smartyoutubetv2.tv.old.model;
 
 import android.database.Cursor;
 import androidx.leanback.database.CursorMapper;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.tv.data.old.VideoContract;
+import com.liskovsoft.smartyoutubetv2.tv.old.data.VideoContract;
 
 /**
  * VideoCursorMapper maps a database Cursor to a Video object.

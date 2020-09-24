@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.tv.update.AppUpdateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
@@ -19,6 +20,7 @@ public class SplashActivity extends Activity {
         applyNewIntent(getIntent());
 
         updateChannels();
+        checkForUpdates();
 
         finish();
     }
@@ -28,6 +30,16 @@ public class SplashActivity extends Activity {
         super.onNewIntent(intent);
 
         applyNewIntent(intent);
+    }
+
+    private void applyNewIntent(Intent intent) {
+        if (IntentExtractor.isVideo(intent)) {
+            PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(this);
+            playbackPresenter.openVideo(IntentExtractor.getVideoId(intent));
+        } else {
+            ViewManager viewManager = ViewManager.instance(this);
+            viewManager.startDefaultView(this);
+        }
     }
 
     private void updateChannels() {
@@ -48,13 +60,9 @@ public class SplashActivity extends Activity {
         }
     }
 
-    private void applyNewIntent(Intent intent) {
-        if (IntentExtractor.isVideo(intent)) {
-            PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(this);
-            playbackPresenter.openVideo(IntentExtractor.getVideoId(intent));
-        } else {
-            ViewManager viewManager = ViewManager.instance(this);
-            viewManager.startDefaultView(this);
-        }
+    private void checkForUpdates() {
+        AppUpdateManager updatePresenter = AppUpdateManager.instance(this);
+        updatePresenter.checkForUpdates();
+        updatePresenter.unhold();
     }
 }

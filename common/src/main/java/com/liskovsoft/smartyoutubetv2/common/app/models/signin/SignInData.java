@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.models.auth;
+package com.liskovsoft.smartyoutubetv2.common.app.models.signin;
 
 import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.R;

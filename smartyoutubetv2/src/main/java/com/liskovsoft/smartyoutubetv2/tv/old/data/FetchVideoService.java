@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.liskovsoft.smartyoutubetv2.tv.data.old;
+package com.liskovsoft.smartyoutubetv2.tv.old.data;
 
 import android.app.IntentService;
 import android.content.ContentValues;

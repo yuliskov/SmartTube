@@ -12,7 +12,7 @@
  * the License.
  */
 
-package com.liskovsoft.smartyoutubetv2.tv.ui.old;
+package com.liskovsoft.smartyoutubetv2.tv.old.ui;
 
 import android.content.Intent;
 import android.os.Bundle;

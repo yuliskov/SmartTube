@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.liskovsoft.smartyoutubetv2.tv.ui.old;
+package com.liskovsoft.smartyoutubetv2.tv.old.ui;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -36,9 +36,9 @@ import androidx.loader.content.Loader;
 import android.view.View;
 
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.data.old.VideoContract;
+import com.liskovsoft.smartyoutubetv2.tv.old.data.VideoContract;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.tv.model.old.VideoCursorMapper;
+import com.liskovsoft.smartyoutubetv2.tv.old.model.VideoCursorMapper;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.details.VideoDetailsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.liskovsoft.smartyoutubetv2.tv.data.old;
+package com.liskovsoft.smartyoutubetv2.tv.old.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.liskovsoft.smartyoutubetv2.tv.data.old.VideoContract.VideoEntry;
+import com.liskovsoft.smartyoutubetv2.tv.old.data.VideoContract.VideoEntry;
 
 /**
  * VideoDbHelper manages the creation and upgrade of the database used in this sample.

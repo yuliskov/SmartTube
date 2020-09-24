@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.liskovsoft.smartyoutubetv2.tv.recommendation.old;
+package com.liskovsoft.smartyoutubetv2.tv.old.recommendation;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

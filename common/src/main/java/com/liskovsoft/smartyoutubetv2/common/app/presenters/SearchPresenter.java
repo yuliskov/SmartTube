@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
@@ -17,6 +18,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class SearchPresenter implements VideoGroupPresenter<SearchView> {
     private static final String TAG = SearchPresenter.class.getSimpleName();
+    @SuppressLint("StaticFieldLeak")
     private static SearchPresenter sInstance;
     private final Context mContext;
     private final MediaService mMediaService;

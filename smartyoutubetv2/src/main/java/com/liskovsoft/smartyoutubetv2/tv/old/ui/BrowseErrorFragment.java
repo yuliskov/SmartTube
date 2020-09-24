@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-package com.liskovsoft.smartyoutubetv2.tv.ui.old;
+package com.liskovsoft.smartyoutubetv2.tv.old.ui;
 
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.leanback.app.BrowseSupportFragment;
-import androidx.leanback.app.BrowseSupportFragment.MainFragmentAdapter;
 import androidx.leanback.app.ErrorSupportFragment;
 import androidx.fragment.app.Fragment;
 import android.view.Gravity;
