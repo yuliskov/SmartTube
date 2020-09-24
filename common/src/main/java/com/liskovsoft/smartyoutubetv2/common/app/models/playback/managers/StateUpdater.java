@@ -42,8 +42,10 @@ public class StateUpdater extends PlayerEventListenerHelper {
         mIsPlaying = true; // video just added
 
         // Ensure that we aren't running on presenter init stage
-        if (mController != null) {
-            saveState(); // save state of previous item
+        if (mController != null && mController.isEngineBlocked()) {
+            // In background mode some event not called.
+            // So, for proper state persistence, we need to save state here.
+            saveState();
         }
     }
 
@@ -105,7 +107,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onTrackClicked(FormatItem track) {
-        if (track.getType() == FormatItem.TYPE_VIDEO) {
+        if (track.getType() == FormatItem.TYPE_VIDEO && !mController.isInPIPMode()) {
             mVideoFormat = track;
         }
     }
@@ -134,7 +136,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void restoreState(Video item) {
-        if (mVideoFormat != null) {
+        if (mController.isInPIPMode()) {
+            mController.selectFormat(FormatItem.SD_AVC);
+        } else if (mVideoFormat != null) {
             mController.selectFormat(mVideoFormat);
         }
 

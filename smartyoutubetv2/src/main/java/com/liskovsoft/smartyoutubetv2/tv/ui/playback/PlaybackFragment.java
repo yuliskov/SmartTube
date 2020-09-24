@@ -444,6 +444,11 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         return mEnablePIP;
     }
 
+    @Override
+    public boolean isInPIPMode() {
+        return ((PlaybackActivity) getActivity()).isInPIPMode();
+    }
+
     // End Engine Events
 
     @Override

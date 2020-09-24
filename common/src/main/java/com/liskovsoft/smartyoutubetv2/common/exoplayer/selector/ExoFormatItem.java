@@ -10,8 +10,10 @@ import java.util.List;
 import java.util.Set;
 
 public class ExoFormatItem implements FormatItem {
-    public static final int RESOLUTION_FHD = 0;
-    public static final int RESOLUTION_HD = 1;
+    public static final int RESOLUTION_FHD = 3;
+    public static final int RESOLUTION_HD = 2;
+    public static final int RESOLUTION_SD = 1;
+    public static final int RESOLUTION_LD = 0;
     public static final int FORMAT_AVC = 0;
     public static final int FPS_30 = 0;
     private int mType;
@@ -112,6 +114,14 @@ public class ExoFormatItem implements FormatItem {
             case RESOLUTION_HD:
                 width = 1280;
                 height = 720;
+                break;
+            case RESOLUTION_SD:
+                width = 640;
+                height = 360;
+                break;
+            case RESOLUTION_LD:
+                width = 426;
+                height = 240;
                 break;
         }
 
