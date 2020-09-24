@@ -52,11 +52,21 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
     public void openVideo(Object parentView, Video item) {
         mMainPlayerEventBridge.setParentView(parentView);
         mMainPlayerEventBridge.openVideo(item);
-        mViewManager.startView(PlaybackView.class);
+
+        focusView();
     }
 
     public void openVideo(String videoId) {
         mMainPlayerEventBridge.openVideo(Video.from(videoId));
+
+        focusView();
+    }
+
+    private void focusView() {
+        if (mView != null && mView.getController().isPIPEnabled()) {
+            return;
+        }
+
         mViewManager.startView(PlaybackView.class);
     }
 }

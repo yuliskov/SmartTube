@@ -154,13 +154,12 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     public void restartPlayer() {
-        boolean engineBlocked = isEngineBlocked();
-        blockEngine(false);
-
-        releasePlayer();
-        initializePlayer();
-
-        blockEngine(engineBlocked);
+        if (mPlayer != null) {
+            mEventListener.onEngineReleased();
+        }
+        destroyPlayerObjects();
+        createPlayerObjects();
+        mEventListener.onEngineInitialized();
     }
 
     private void releasePlayer() {
@@ -172,13 +171,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         if (mPlayer != null) {
             Log.d(TAG, "releasePlayer: Start releasing player engine...");
             mEventListener.onEngineReleased();
-            mPlayer.release();
-            mPlayer = null;
-            mTrackSelector = null;
-            mPlayerGlue = null;
-            mPlayerAdapter = null;
-            mPlaylistActionListener = null;
-            mExoPlayerController = null;
+            destroyPlayerObjects();
         }
     }
 
@@ -188,6 +181,24 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
             return;
         }
 
+        createPlayerObjects();
+
+        mEventListener.onEngineInitialized();
+    }
+
+    private void destroyPlayerObjects() {
+        if (mPlayer != null) {
+            mPlayer.release();
+        }
+        mPlayer = null;
+        mTrackSelector = null;
+        mPlayerGlue = null;
+        mPlayerAdapter = null;
+        mPlaylistActionListener = null;
+        mExoPlayerController = null;
+    }
+
+    private void createPlayerObjects() {
         TrackSelection.Factory videoTrackSelectionFactory =
                 new AdaptiveTrackSelection.Factory();
         mTrackSelector = new RestoreTrackSelector(videoTrackSelectionFactory);
@@ -212,8 +223,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
         mRowsSupportFragment = (RowsSupportFragment) getChildFragmentManager().findFragmentById(
                 R.id.playback_controls_dock);
-
-        mEventListener.onEngineInitialized();
     }
 
     private ArrayObjectAdapter initializeSuggestedVideosRow() {

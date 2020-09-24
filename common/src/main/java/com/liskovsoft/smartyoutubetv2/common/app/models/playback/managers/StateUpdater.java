@@ -6,9 +6,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video.State;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class StateUpdater extends PlayerEventListenerHelper {
     private boolean mIsPlaying;
     private int mRepeatMode = 0;
@@ -18,6 +15,11 @@ public class StateUpdater extends PlayerEventListenerHelper {
     @Override
     public void openVideo(Video item) {
         mIsPlaying = true; // video just added
+
+        // Ensure that we aren't running on presenter init stage
+        if (mController != null) {
+            saveState();
+        }
     }
 
     @Override
