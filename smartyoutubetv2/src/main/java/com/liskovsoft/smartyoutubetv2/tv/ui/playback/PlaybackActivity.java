@@ -30,7 +30,6 @@ public class PlaybackActivity extends LeanbackActivity {
     private static final float GAMEPAD_TRIGGER_INTENSITY_OFF = 0.45f;
     private boolean gamepadTriggerPressed = false;
     private PlaybackFragment mPlaybackFragment;
-    private boolean mBackPressed;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,29 +105,11 @@ public class PlaybackActivity extends LeanbackActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-        mBackPressed = true;
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        mBackPressed = false;
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
 
-        if (mPlaybackFragment.isEngineBlocked() && mPlaybackFragment.isPIPEnabled()) {
+        if (!isFinishing() && mPlaybackFragment.isEngineBlocked() && mPlaybackFragment.isPIPEnabled()) {
             enterPIPMode();
-
-            if (mBackPressed) {
-                ViewManager.instance(this).startParentView(this);
-            }
         }
     }
 
@@ -141,6 +122,10 @@ public class PlaybackActivity extends LeanbackActivity {
 
     @Override
     public void finish() {
+        if (mPlaybackFragment.isEngineBlocked() && mPlaybackFragment.isPIPEnabled()) {
+            enterPIPMode();
+        }
+
         ViewManager.instance(this).startParentView(this);
 
         //Intent intent = new Intent(this, BrowseActivity.class);
