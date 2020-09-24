@@ -17,7 +17,7 @@ public interface PlayerUiEventListener {
     void onThumbsDownClicked(boolean thumbsDown);
     void onThumbsUpClicked(boolean thumbsUp);
     void onChannelClicked();
-    void onTrackClicked(FormatItem track);
+    void onTrackSelected(FormatItem track);
     void onClosedCaptionsClicked();
     void onPlaylistAddClicked();
     void onVideoStatsClicked();

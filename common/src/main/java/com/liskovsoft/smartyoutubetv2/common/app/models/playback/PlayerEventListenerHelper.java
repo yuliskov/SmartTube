@@ -159,7 +159,7 @@ public abstract class PlayerEventListenerHelper implements PlayerHandlerEventLis
     }
 
     @Override
-    public void onTrackClicked(FormatItem track) {
+    public void onTrackSelected(FormatItem track) {
         // NOP
     }
 

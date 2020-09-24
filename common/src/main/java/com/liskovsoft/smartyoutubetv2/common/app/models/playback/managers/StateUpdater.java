@@ -106,7 +106,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onTrackClicked(FormatItem track) {
+    public void onTrackSelected(FormatItem track) {
         if (track.getType() == FormatItem.TYPE_VIDEO && !mController.isInPIPMode()) {
             mVideoFormat = track;
         }

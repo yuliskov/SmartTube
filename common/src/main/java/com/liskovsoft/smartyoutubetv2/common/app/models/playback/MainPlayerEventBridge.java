@@ -249,8 +249,8 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
-    public void onTrackClicked(FormatItem track) {
-        process(listener -> listener.onTrackClicked(track));
+    public void onTrackSelected(FormatItem track) {
+        process(listener -> listener.onTrackSelected(track));
     }
 
     @Override
