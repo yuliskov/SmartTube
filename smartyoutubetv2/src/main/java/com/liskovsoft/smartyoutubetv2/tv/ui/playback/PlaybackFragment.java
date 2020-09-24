@@ -153,6 +153,16 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         return selectedPosition;
     }
 
+    public void restartPlayer() {
+        boolean engineBlocked = isEngineBlocked();
+        blockEngine(false);
+
+        releasePlayer();
+        initializePlayer();
+
+        blockEngine(engineBlocked);
+    }
+
     private void releasePlayer() {
         if (isEngineBlocked()) {
             Log.d(TAG, "releasePlayer: Engine release is blocked. Exiting...");

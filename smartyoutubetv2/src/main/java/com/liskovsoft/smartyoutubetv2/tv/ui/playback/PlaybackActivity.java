@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.tv.R;
@@ -23,6 +24,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
  * <a href="https://developer.android.com/training/game-controllers/controller-input.html">docs</href>.
  */
 public class PlaybackActivity extends LeanbackActivity {
+    private static final String TAG = PlaybackActivity.class.getSimpleName();
     private static final float GAMEPAD_TRIGGER_INTENSITY_ON = 0.5f;
     // Off-condition slightly smaller for button debouncing.
     private static final float GAMEPAD_TRIGGER_INTENSITY_OFF = 0.45f;
@@ -97,6 +99,13 @@ public class PlaybackActivity extends LeanbackActivity {
     }
 
     @Override
+    public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode);
+
+        mPlaybackFragment.restartPlayer();
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
 
@@ -121,6 +130,13 @@ public class PlaybackActivity extends LeanbackActivity {
                 ViewManager.instance(this).startParentView(this);
             }
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        Log.d(TAG, "Config changed: " + newConfig);
     }
 
     @Override
