@@ -2,15 +2,28 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video.State;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class StateUpdater extends PlayerEventListenerHelper {
     private boolean mIsPlaying;
     private int mRepeatMode = 0;
     private FormatItem mVideoFormat = FormatItem.HD_AVC;
     private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
+    // Don't store state inside Video object.
+    // As one video might correspond to multiple Video objects.
+    private final Map<String, State> mStates = new HashMap<>();
+
+    private static class State {
+        public final long positionMs;
+
+        public State(long positionMs) {
+            this.positionMs = positionMs;
+        }
+    }
 
     @Override
     public void openVideo(Video item) {
@@ -86,11 +99,17 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void saveState() {
+        trimStorage();
+
         Video video = mController.getVideo();
 
         if (video != null) {
-            video.state = new State(mController.getPositionMs());
+            mStates.put(video.videoId, new State(mController.getPositionMs()));
         }
+    }
+
+    private void trimStorage() {
+        // NOP
     }
 
     private void restoreState(Video item) {
@@ -98,14 +117,17 @@ public class StateUpdater extends PlayerEventListenerHelper {
             mController.selectFormat(mVideoFormat);
         }
 
-        if (item.state == null && item.percentWatched > 0 && item.percentWatched < 100) {
-            item.state = new State(getNewPosition(item.percentWatched));
+        State state = mStates.get(item.videoId);
+
+        // internal storage has priority over item data loaded from network
+        if (state == null && item.percentWatched > 0 && item.percentWatched < 100) {
+            state = new State(getNewPosition(item.percentWatched));
         }
 
         boolean nearEnd = Math.abs(mController.getLengthMs() - mController.getPositionMs()) < 10_000;
 
-        if (item.state != null && !nearEnd) {
-            mController.setPositionMs(item.state.positionMs);
+        if (state != null && !nearEnd) {
+            mController.setPositionMs(state.positionMs);
             mController.setPlay(mIsPlaying);
         } else {
             mController.setPlay(true); // start play immediately when state not found

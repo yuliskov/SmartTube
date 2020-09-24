@@ -21,17 +21,8 @@ public final class Video implements Parcelable {
     public String videoUrl;
     public String studio;
     public int percentWatched;
-    public State state;
     public MediaItem mediaItem;
     public MediaItemMetadata cachedMetadata;
-
-    public static class State {
-        public final long positionMs;
-
-        public State(long positionMs) {
-            this.positionMs = positionMs;
-        }
-    }
 
     public Video() {
         
