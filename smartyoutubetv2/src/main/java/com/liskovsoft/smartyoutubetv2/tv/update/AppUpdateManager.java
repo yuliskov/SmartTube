@@ -4,7 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.appupdatechecker2.AppUpdateChecker;
 import com.liskovsoft.appupdatechecker2.AppUpdateCheckerListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresenter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AppUpdateManager implements AppUpdateCheckerListener {
@@ -13,10 +17,12 @@ public class AppUpdateManager implements AppUpdateCheckerListener {
     private static AppUpdateManager sInstance;
     private final Context mContext;
     private final AppUpdateChecker mUpdateChecker;
+    private final VideoSettingsPresenter mSettingsPresenter;
 
     public AppUpdateManager(Context context) {
         mContext = context;
         mUpdateChecker = new AppUpdateChecker(mContext, this);
+        mSettingsPresenter = VideoSettingsPresenter.instance(context);
     }
 
     public static AppUpdateManager instance(Context context) {
@@ -36,8 +42,26 @@ public class AppUpdateManager implements AppUpdateCheckerListener {
     }
 
     @Override
-    public int onUpdateFound(List<String> changelog) {
-        return AppUpdateCheckerListener.ACTION_INSTALL;
+    public void onUpdateFound(List<String> changelog, String apkPath) {
+        showUpdateDialog(changelog, apkPath);
+
+        //mUpdateChecker.installUpdate();
+        //unhold();
+    }
+
+    private void showUpdateDialog(List<String> changelog, String apkPath) {
+        mSettingsPresenter.appendChecked("Changelog", createChangelogOptions(changelog));
+        mSettingsPresenter.showDialog(null);
+    }
+
+    private List<OptionItem> createChangelogOptions(List<String> changelog) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (String change : changelog) {
+            options.add(UiOptionItem.from(change, null, false));
+        }
+
+        return options;
     }
 
     @Override
