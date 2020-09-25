@@ -16,6 +16,7 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
     private final Context mContext;
     private VideoSettingsView mView;
     private final List<SettingsCategory> mCategories;
+    private String mTitle;
     private Runnable mOnClose;
 
     public static class SettingsCategory {
@@ -25,6 +26,10 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
 
         public static SettingsCategory checkedList(String title, List<OptionItem> items) {
             return new SettingsCategory(title, items, TYPE_CHECKBOX_LIST);
+        }
+
+        public static SettingsCategory stringList(String title, List<OptionItem> items) {
+            return new SettingsCategory(title, items, TYPE_STRING_LIST);
         }
 
         public static SettingsCategory singleSwitch(OptionItem item) {
@@ -49,6 +54,7 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
         public static final int TYPE_CHECKBOX_LIST = 1;
         public static final int TYPE_SINGLE_SWITCH = 2;
         public static final int TYPE_SINGLE_BUTTON = 3;
+        public static final int TYPE_STRING_LIST = 4;
         public int type;
         public String title;
         public List<OptionItem> items;
@@ -91,6 +97,7 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
 
     @Override
     public void onInitDone() {
+        mView.setTitle(mTitle);
         mView.addCategories(mCategories);
     }
 
@@ -99,16 +106,25 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
     }
 
     public void showDialog(Runnable onClose) {
+        showDialog(null, onClose);
+    }
+
+    public void showDialog(String title, Runnable onClose) {
+        mTitle = title;
         mOnClose = onClose;
         ViewManager.instance(mContext).startView(VideoSettingsView.class);
     }
 
-    public void appendRadio(String title, List<OptionItem> items) {
-        mCategories.add(SettingsCategory.radioList(title, items));
+    public void appendRadio(String categoryTitle, List<OptionItem> items) {
+        mCategories.add(SettingsCategory.radioList(categoryTitle, items));
     }
 
-    public void appendChecked(String title, List<OptionItem> items) {
-        mCategories.add(SettingsCategory.checkedList(title, items));
+    public void appendChecked(String categoryTitle, List<OptionItem> items) {
+        mCategories.add(SettingsCategory.checkedList(categoryTitle, items));
+    }
+
+    public void appendStrings(String categoryTitle, List<OptionItem> items) {
+        mCategories.add(SettingsCategory.stringList(categoryTitle, items));
     }
 
     public void appendSingleSwitch(OptionItem optionItem) {

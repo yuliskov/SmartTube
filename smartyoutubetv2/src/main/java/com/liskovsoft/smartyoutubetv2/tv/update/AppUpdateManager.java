@@ -7,6 +7,7 @@ import com.liskovsoft.appupdatechecker2.AppUpdateCheckerListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,18 +45,18 @@ public class AppUpdateManager implements AppUpdateCheckerListener {
     }
 
     @Override
-    public void onUpdateFound(List<String> changelog, String apkPath) {
-        showUpdateDialog(changelog, apkPath);
+    public void onUpdateFound(String versionName, List<String> changelog, String apkPath) {
+        showUpdateDialog(String.format("%s %s", mContext.getString(R.string.app_name), versionName), changelog, apkPath);
     }
 
-    private void showUpdateDialog(List<String> changelog, String apkPath) {
-        mSettingsPresenter.appendChecked("Changelog", createChangelogOptions(changelog));
+    private void showUpdateDialog(String title, List<String> textItems, String apkPath) {
+        mSettingsPresenter.appendStrings("Changelog", createChangelogOptions(textItems));
         mSettingsPresenter.appendButton(
                 UiOptionItem.from("Install update", optionItem -> {
                     mUpdateChecker.installUpdate();
                     mUpdateInstalled = true;
                 }, false));
-        mSettingsPresenter.showDialog(()->{
+        mSettingsPresenter.showDialog(title, ()->{
             if (!mUpdateInstalled) {
                 mUpdateChecker.onUserCancel();
             }

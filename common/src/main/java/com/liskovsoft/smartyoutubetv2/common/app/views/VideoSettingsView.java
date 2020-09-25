@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface VideoSettingsView {
     void addCategories(List<SettingsCategory> categories);
+    void setTitle(String title);
 }
