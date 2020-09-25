@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.settings;
 
 import android.content.Context;
+import androidx.preference.DialogPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.MultiSelectListPreference;
 import androidx.preference.Preference;
@@ -16,13 +17,13 @@ import java.util.Set;
 public class SettingsFragmentHelper {
     private final Context mStyledContext;
 
-    public static class ListPrefData {
+    public static class ListPreferenceData {
         public final CharSequence[] entries;
         public final CharSequence[] values;
         public final String defaultValue;
         public final Set<String> defaultValues;
 
-        public ListPrefData(CharSequence[] entries, CharSequence[] values, String defaultValue, Set<String> defaultValues) {
+        public ListPreferenceData(CharSequence[] entries, CharSequence[] values, String defaultValue, Set<String> defaultValues) {
             this.entries = entries;
             this.values = values;
             this.defaultValue = defaultValue;
@@ -54,7 +55,7 @@ public class SettingsFragmentHelper {
     private Preference createStringListPreference(SettingsCategory category) {
         MultiSelectListPreference pref = new StringListPreference(mStyledContext);
 
-        initMultiSelectListPref(category, pref);
+        initMultiSelectListPreference(category, pref);
 
         return pref;
     }
@@ -83,16 +84,16 @@ public class SettingsFragmentHelper {
 
         if (category.items.size() == 1) {
             OptionItem item = category.items.get(0);
-            SwitchPreference pref = new SwitchPreference(mStyledContext);
-            pref.setPersistent(false);
-            pref.setTitle(item.getTitle());
-            pref.setDefaultValue(item.isSelected());
-            pref.setOnPreferenceChangeListener((preference, newValue) -> {
+            Preference preference = new SwitchPreference(mStyledContext);
+            preference.setPersistent(false);
+            preference.setTitle(item.getTitle());
+            preference.setDefaultValue(item.isSelected());
+            preference.setOnPreferenceChangeListener((pref, newValue) -> {
                 item.onSelect((boolean) newValue);
                 return true;
             });
 
-            result = pref;
+            result = preference;
         }
 
         return result;
@@ -100,11 +101,24 @@ public class SettingsFragmentHelper {
 
     public Preference createRadioListPreference(SettingsCategory category) {
         ListPreference pref = new ListPreference(mStyledContext);
-        pref.setPersistent(false);
-        pref.setTitle(category.title);
-        pref.setKey(category.toString());
 
-        ListPrefData prefData = createListPrefData(category.items);
+        initSingleSelectListPreference(category, pref);
+
+        return pref;
+    }
+
+    public Preference createCheckedListPreference(SettingsCategory category) {
+        MultiSelectListPreference pref = new MultiSelectListPreference(mStyledContext);
+
+        initMultiSelectListPreference(category, pref);
+
+        return pref;
+    }
+
+    private void initSingleSelectListPreference(SettingsCategory category, ListPreference pref) {
+        initDialogPreference(category, pref);
+
+        ListPreferenceData prefData = createListPreferenceData(category.items);
 
         pref.setEntries(prefData.entries);
         pref.setEntryValues(prefData.values);
@@ -120,24 +134,12 @@ public class SettingsFragmentHelper {
 
             return true;
         });
-
-        return pref;
     }
 
-    public Preference createCheckedListPreference(SettingsCategory category) {
-        MultiSelectListPreference pref = new MultiSelectListPreference(mStyledContext);
+    private void initMultiSelectListPreference(SettingsCategory category, MultiSelectListPreference pref) {
+        initDialogPreference(category, pref);
 
-        initMultiSelectListPref(category, pref);
-
-        return pref;
-    }
-
-    private void initMultiSelectListPref(SettingsCategory category, MultiSelectListPreference pref) {
-        pref.setPersistent(false);
-        pref.setTitle(category.title);
-        pref.setKey(category.toString());
-
-        ListPrefData prefData = createListPrefData(category.items);
+        ListPreferenceData prefData = createListPreferenceData(category.items);
 
         pref.setEntries(prefData.entries);
         pref.setEntryValues(prefData.values);
@@ -162,7 +164,7 @@ public class SettingsFragmentHelper {
         });
     }
 
-    public ListPrefData createListPrefData(List<OptionItem> items) {
+    public ListPreferenceData createListPreferenceData(List<OptionItem> items) {
         CharSequence[] titles = new CharSequence[items.size()];
         CharSequence[] hashes = new CharSequence[items.size()];
         String defaultValue = null;
@@ -183,6 +185,13 @@ public class SettingsFragmentHelper {
             }
         }
 
-        return new ListPrefData(titles, hashes, defaultValue, defaultValues);
+        return new ListPreferenceData(titles, hashes, defaultValue, defaultValues);
+    }
+
+    private void initDialogPreference(SettingsCategory category, DialogPreference pref) {
+        pref.setPersistent(false);
+        pref.setTitle(category.title);
+        pref.setDialogTitle(category.title);
+        pref.setKey(category.toString());
     }
 }

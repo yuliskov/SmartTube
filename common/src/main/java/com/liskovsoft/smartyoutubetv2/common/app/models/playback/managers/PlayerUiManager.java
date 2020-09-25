@@ -118,11 +118,11 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
         createCheckedOptions();
         createSingleOptions();
 
-        mSettingsPresenter.showDialog(() -> {
-            enableUiAutoHideTimeout();
-
-            updateBackgroundPlayback();
-        });
+        mSettingsPresenter.showDialog(mActivity.getString(R.string.playback_settings),
+                () -> {
+                    enableUiAutoHideTimeout();
+                    updateBackgroundPlayback();
+                });
     }
 
     @Override

@@ -94,7 +94,7 @@ public class StringListPreferenceDialogFragment extends LeanbackListPreferenceDi
 
     @Override
     public Adapter<ViewHolder> onCreateAdapter() {
-        return new AdapterMulti(mEntries, mEntryValues, mInitialSelections);
+        return new AdapterMultiStrings(mEntries, mEntryValues, mInitialSelections);
     }
 
     public class AdapterMultiStrings extends RecyclerView.Adapter<ViewHolder>
