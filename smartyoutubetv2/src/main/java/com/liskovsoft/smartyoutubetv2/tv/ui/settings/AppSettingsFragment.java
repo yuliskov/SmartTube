@@ -1,11 +1,17 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.settings;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.leanback.preference.LeanbackListPreferenceDialogFragment;
+import androidx.leanback.preference.LeanbackPreferenceDialogFragment;
 import androidx.leanback.preference.LeanbackPreferenceFragment;
 import androidx.leanback.preference.LeanbackSettingsFragment;
 import androidx.preference.DialogPreference;
+import androidx.preference.MultiSelectListPreference;
+import androidx.preference.MultiSelectListPreferenceDialogFragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragment;
 import androidx.preference.PreferenceScreen;
@@ -13,6 +19,8 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresenter.SettingsCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.views.VideoSettingsView;
+import com.liskovsoft.smartyoutubetv2.tv.ui.settings.strings.StringListPreference;
+import com.liskovsoft.smartyoutubetv2.tv.ui.settings.strings.StringListPreferenceDialogFragment;
 
 import java.util.List;
 
@@ -83,30 +91,16 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
 
     //@Override
     //public boolean onPreferenceDisplayDialog(@NonNull PreferenceFragment caller, Preference pref) {
-    //    if (caller == null) {
-    //        throw new IllegalArgumentException("Cannot display dialog for preference " + pref
-    //                + ", Caller must not be null!");
-    //    }
-    //    final Fragment f;
-    //    if (pref instanceof ListPreference) {
-    //        final ListPreference listPreference = (ListPreference) pref;
-    //        f = LeanbackListPreferenceDialogFragment.newInstanceSingle(listPreference.getKey());
+    //    if (pref instanceof StringListPreference) {
+    //        StringListPreference listPreference = (StringListPreference) pref;
+    //        LeanbackPreferenceDialogFragment f = StringListPreferenceDialogFragment.newInstanceStringList(listPreference.getKey());
     //        f.setTargetFragment(caller, 0);
     //        startPreferenceFragment(f);
-    //    } else if (pref instanceof MultiSelectListPreference) {
-    //        MultiSelectListPreference listPreference = (MultiSelectListPreference) pref;
-    //        f = LeanbackListPreferenceDialogFragment.newInstanceMulti(listPreference.getKey());
-    //        f.setTargetFragment(caller, 0);
-    //        startPreferenceFragment(f);
+    //
+    //        return true;
     //    }
-    //    // TODO
-    //    //        else if (pref instanceof EditTextPreference) {
-    //    //
-    //    //        }
-    //    else {
-    //        return false;
-    //    }
-    //    return true;
+    //
+    //    return super.onPreferenceDisplayDialog(caller, pref);
     //}
 
     public static class PrefFragment extends LeanbackPreferenceFragment {
@@ -114,6 +108,17 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
         private Context mStyledContext;
         private SettingsFragmentHelper mManager;
         private String mTitle;
+
+        @Override
+        public void onDisplayPreferenceDialog(Preference preference) {
+            //if (preference instanceof StringListPreference) {
+            //    StringListPreferenceDialogFragment f = StringListPreferenceDialogFragment.newInstanceStringList(preference.getKey());
+            //    f.setTargetFragment(this, 0);
+            //    f.show(getFragmentManager(), DIALOG_FRAGMENT_TAG);
+            //}
+
+            super.onDisplayPreferenceDialog(preference);
+        }
 
         @Override
         public void onCreatePreferences(Bundle bundle, String s) {

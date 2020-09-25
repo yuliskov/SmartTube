@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.settings;
+package com.liskovsoft.smartyoutubetv2.tv.ui.settings.strings;
 
 import android.content.Context;
 import android.util.AttributeSet;
