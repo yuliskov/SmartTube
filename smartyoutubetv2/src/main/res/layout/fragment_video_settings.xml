@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
     <fragment
         android:id="@+id/videoSettingsFragment"
-        android:name="com.liskovsoft.smartyoutubetv2.tv.ui.playback.settings.VideoSettingsFragment"
+        android:name="com.liskovsoft.smartyoutubetv2.tv.ui.settings.AppSettingsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </fragment>

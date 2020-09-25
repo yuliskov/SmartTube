@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.playback.settings;
+package com.liskovsoft.smartyoutubetv2.tv.ui.settings;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.VideoSettingsView;
 
 import java.util.List;
 
-public class VideoSettingsFragment extends LeanbackSettingsFragment
+public class AppSettingsFragment extends LeanbackSettingsFragment
         implements DialogPreference.TargetFragment, VideoSettingsView {
     private PrefFragment mPreferenceFragment;
     private VideoSettingsPresenter mSettingsPresenter;
@@ -112,13 +112,13 @@ public class VideoSettingsFragment extends LeanbackSettingsFragment
     public static class PrefFragment extends LeanbackPreferenceFragment {
         private List<SettingsCategory> mCategories;
         private Context mStyledContext;
-        private PreferenceFragmentHelper mManager;
+        private SettingsFragmentHelper mManager;
         private String mTitle;
 
         @Override
         public void onCreatePreferences(Bundle bundle, String s) {
             mStyledContext = (Context) Helpers.getField(this, "mStyledContext");
-            mManager = new PreferenceFragmentHelper(mStyledContext);
+            mManager = new SettingsFragmentHelper(mStyledContext);
 
             PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(mStyledContext);
             screen.setTitle(mTitle);

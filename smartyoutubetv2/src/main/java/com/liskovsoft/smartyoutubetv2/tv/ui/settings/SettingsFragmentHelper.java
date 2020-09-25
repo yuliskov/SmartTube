@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.playback.settings;
+package com.liskovsoft.smartyoutubetv2.tv.ui.settings;
 
 import android.content.Context;
 import androidx.preference.ListPreference;
@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class PreferenceFragmentHelper {
+public class SettingsFragmentHelper {
     private final Context mStyledContext;
 
     public static class ListPrefData {
@@ -29,7 +29,7 @@ public class PreferenceFragmentHelper {
         }
     }
 
-    public PreferenceFragmentHelper(Context styledContext) {
+    public SettingsFragmentHelper(Context styledContext) {
         mStyledContext = styledContext;
     }
 

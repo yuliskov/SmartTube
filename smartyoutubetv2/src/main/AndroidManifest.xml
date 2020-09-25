@@ -94,7 +94,7 @@
                   android:screenOrientation="landscape"
                   android:theme="@style/Theme.Example.Leanback.GuidedStep"/>
 
-        <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.playback.settings.VideoSettingsActivity"
+        <activity android:name=".ui.settings.AppSettingsActivity"
                   android:launchMode="singleInstance"
                   android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
                   android:screenOrientation="landscape"
