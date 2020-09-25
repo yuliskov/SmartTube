@@ -51,7 +51,9 @@ public class AppUpdateManager implements AppUpdateCheckerListener {
 
     private void showUpdateDialog(List<String> changelog, String apkPath) {
         mSettingsPresenter.appendChecked("Changelog", createChangelogOptions(changelog));
-        mSettingsPresenter.showDialog(null);
+        mSettingsPresenter.appendButton(
+                UiOptionItem.from("Install update", optionItem -> mUpdateChecker.installUpdate(), false));
+        mSettingsPresenter.showDialog();
     }
 
     private List<OptionItem> createChangelogOptions(List<String> changelog) {

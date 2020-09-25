@@ -20,17 +20,23 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
 
     public static class SettingsCategory {
         public static SettingsCategory radioList(String title, List<OptionItem> items) {
-            return new SettingsCategory(title, items, TYPE_RADIO);
+            return new SettingsCategory(title, items, TYPE_RADIO_LIST);
         }
 
         public static SettingsCategory checkedList(String title, List<OptionItem> items) {
-            return new SettingsCategory(title, items, TYPE_CHECKBOX);
+            return new SettingsCategory(title, items, TYPE_CHECKBOX_LIST);
         }
 
         public static SettingsCategory singleSwitch(OptionItem item) {
             ArrayList<OptionItem> items = new ArrayList<>();
             items.add(item);
-            return new SettingsCategory(null, items, TYPE_SWITCH);
+            return new SettingsCategory(null, items, TYPE_SINGLE_SWITCH);
+        }
+
+        public static SettingsCategory singleButton(OptionItem item) {
+            ArrayList<OptionItem> items = new ArrayList<>();
+            items.add(item);
+            return new SettingsCategory(null, items, TYPE_SINGLE_BUTTON);
         }
 
         private SettingsCategory(String title, List<OptionItem> items, int type) {
@@ -39,9 +45,10 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
             this.items = items;
         }
 
-        public static final int TYPE_RADIO = 0;
-        public static final int TYPE_CHECKBOX = 1;
-        public static final int TYPE_SWITCH = 2;
+        public static final int TYPE_RADIO_LIST = 0;
+        public static final int TYPE_CHECKBOX_LIST = 1;
+        public static final int TYPE_SINGLE_SWITCH = 2;
+        public static final int TYPE_SINGLE_BUTTON = 3;
         public int type;
         public String title;
         public List<OptionItem> items;
@@ -87,6 +94,10 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
         mView.addCategories(mCategories);
     }
 
+    public void showDialog() {
+        showDialog(null);
+    }
+
     public void showDialog(Runnable onClose) {
         mOnClose = onClose;
         ViewManager.instance(mContext).startView(VideoSettingsView.class);
@@ -102,5 +113,9 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
 
     public void appendSingleSwitch(OptionItem optionItem) {
         mCategories.add(SettingsCategory.singleSwitch(optionItem));
+    }
+
+    public void appendButton(OptionItem optionItem) {
+        mCategories.add(SettingsCategory.singleButton(optionItem));
     }
 }

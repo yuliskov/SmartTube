@@ -44,6 +44,7 @@
         android:icon="@mipmap/app_icon"
         android:label="@string/app_name"
         android:theme="@style/Theme.Leanback"
+        tools:node="merge"
         tools:replace="android:theme,android:allowBackup"
         tools:ignore="GoogleAppIndexingWarning,LockedOrientationActivity,UnusedAttribute">
 

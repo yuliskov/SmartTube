@@ -144,13 +144,41 @@ public class VideoSettingsFragment extends LeanbackSettingsFragment
         }
 
         public Preference createPreference(SettingsCategory category) {
-            if (category.type == SettingsCategory.TYPE_CHECKBOX) {
-                return createCheckedListPreference(category);
-            } else if (category.type == SettingsCategory.TYPE_SWITCH) {
-                return createSwitchListPreference(category);
+            //if (category.type == SettingsCategory.TYPE_CHECKBOX) {
+            //    return createCheckedListPreference(category);
+            //} else if (category.type == SettingsCategory.TYPE_SWITCH) {
+            //    return createSwitchListPreference(category);
+            //}
+
+            switch (category.type) {
+                case SettingsCategory.TYPE_CHECKBOX_LIST:
+                    return createCheckedListPreference(category);
+                case SettingsCategory.TYPE_SINGLE_SWITCH:
+                    return createSwitchListPreference(category);
+                case SettingsCategory.TYPE_SINGLE_BUTTON:
+                    return createButtonListPreference(category);
             }
 
             return createRadioListPreference(category);
+        }
+
+        private Preference createButtonListPreference(SettingsCategory category) {
+            Preference result = null;
+
+            if (category.items.size() == 1) {
+                OptionItem item = category.items.get(0);
+                Preference preference = new Preference(mStyledContext);
+                preference.setPersistent(false);
+                preference.setTitle(item.getTitle());
+                preference.setOnPreferenceClickListener(pref -> {
+                    item.onSelect(true);
+                    return true;
+                });
+
+                result = preference;
+            }
+
+            return result;
         }
 
         private Preference createSwitchListPreference(SettingsCategory category) {
