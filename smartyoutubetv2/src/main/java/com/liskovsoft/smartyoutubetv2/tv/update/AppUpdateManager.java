@@ -41,7 +41,7 @@ public class AppUpdateManager implements AppUpdateCheckerListener {
 
     public void start() {
         mUpdateInstalled = false;
-        mUpdateChecker.forceCheckForUpdates(UPDATE_MANIFEST_URL);
+        mUpdateChecker.checkForUpdates(UPDATE_MANIFEST_URL);
     }
 
     @Override
@@ -59,12 +59,7 @@ public class AppUpdateManager implements AppUpdateCheckerListener {
                     mUpdateInstalled = true;
                 }, false));
 
-        mSettingsPresenter.showDialog(String.format("%s %s", mContext.getString(R.string.app_name), versionName), ()->{
-            if (!mUpdateInstalled) {
-                mUpdateChecker.onUserCancel();
-            }
-            unhold();
-        });
+        mSettingsPresenter.showDialog(String.format("%s %s", mContext.getString(R.string.app_name), versionName), this::unhold);
     }
 
     private List<OptionItem> createChangelogOptions(List<String> changelog) {
