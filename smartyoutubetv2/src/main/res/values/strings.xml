@@ -117,4 +117,6 @@
     <string name="action_channel">Open Channel</string>
     <string name="action_playlist_add">Add to Playlist</string>
     <string name="action_video_stats">Video Stats</string>
+    <string name="update_changelog">Changelog</string>
+    <string name="install_update">Install update</string>
 </resources>

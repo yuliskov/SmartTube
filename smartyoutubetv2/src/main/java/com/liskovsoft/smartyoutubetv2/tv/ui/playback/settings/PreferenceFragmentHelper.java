@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 public class PreferenceFragmentHelper {
-    private final Context mContext;
+    private final Context mStyledContext;
 
     public static class ListPrefData {
         public final CharSequence[] entries;
@@ -29,22 +29,33 @@ public class PreferenceFragmentHelper {
         }
     }
 
-    public PreferenceFragmentHelper(Context context) {
-        mContext = context;
+    public PreferenceFragmentHelper(Context styledContext) {
+        mStyledContext = styledContext;
     }
 
     public Preference createPreference(SettingsCategory category) {
         switch (category.type) {
             case SettingsCategory.TYPE_CHECKBOX_LIST:
                 return createCheckedListPreference(category);
+            case SettingsCategory.TYPE_RADIO_LIST:
+                return createRadioListPreference(category);
+            case SettingsCategory.TYPE_STRING_LIST:
+                return createStringListPreference(category);
             case SettingsCategory.TYPE_SINGLE_SWITCH:
                 return createSwitchPreference(category);
             case SettingsCategory.TYPE_SINGLE_BUTTON:
                 return createButtonPreference(category);
-            case SettingsCategory.TYPE_STRING_LIST:
         }
 
-        return createRadioListPreference(category);
+        throw  new IllegalStateException("Can't find matched preference for type: " + category.type);
+    }
+
+    private Preference createStringListPreference(SettingsCategory category) {
+        MultiSelectListPreference pref = new StringListPreference(mStyledContext);
+
+        initMultiSelectListPref(category, pref);
+
+        return pref;
     }
 
     public Preference createButtonPreference(SettingsCategory category) {
@@ -52,7 +63,7 @@ public class PreferenceFragmentHelper {
 
         if (category.items.size() == 1) {
             OptionItem item = category.items.get(0);
-            Preference preference = new Preference(mContext);
+            Preference preference = new Preference(mStyledContext);
             preference.setPersistent(false);
             preference.setTitle(item.getTitle());
             preference.setOnPreferenceClickListener(pref -> {
@@ -71,7 +82,7 @@ public class PreferenceFragmentHelper {
 
         if (category.items.size() == 1) {
             OptionItem item = category.items.get(0);
-            SwitchPreference pref = new SwitchPreference(mContext);
+            SwitchPreference pref = new SwitchPreference(mStyledContext);
             pref.setPersistent(false);
             pref.setTitle(item.getTitle());
             pref.setDefaultValue(item.isSelected());
@@ -87,7 +98,7 @@ public class PreferenceFragmentHelper {
     }
 
     public Preference createRadioListPreference(SettingsCategory category) {
-        ListPreference pref = new ListPreference(mContext);
+        ListPreference pref = new ListPreference(mStyledContext);
         pref.setPersistent(false);
         pref.setTitle(category.title);
         pref.setKey(category.toString());
@@ -113,7 +124,14 @@ public class PreferenceFragmentHelper {
     }
 
     public Preference createCheckedListPreference(SettingsCategory category) {
-        MultiSelectListPreference pref = new MultiSelectListPreference(mContext);
+        MultiSelectListPreference pref = new MultiSelectListPreference(mStyledContext);
+
+        initMultiSelectListPref(category, pref);
+
+        return pref;
+    }
+
+    private void initMultiSelectListPref(SettingsCategory category, MultiSelectListPreference pref) {
         pref.setPersistent(false);
         pref.setTitle(category.title);
         pref.setKey(category.toString());
@@ -141,8 +159,6 @@ public class PreferenceFragmentHelper {
 
             return true;
         });
-
-        return pref;
     }
 
     public ListPrefData createListPrefData(List<OptionItem> items) {

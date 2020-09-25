@@ -41,22 +41,22 @@ public class AppUpdateManager implements AppUpdateCheckerListener {
 
     public void start() {
         mUpdateInstalled = false;
-        mUpdateChecker.checkForUpdates(UPDATE_MANIFEST_URL);
+        mUpdateChecker.forceCheckForUpdates(UPDATE_MANIFEST_URL);
     }
 
     @Override
     public void onUpdateFound(String versionName, List<String> changelog, String apkPath) {
-        showUpdateDialog(String.format("%s %s", mContext.getString(R.string.app_name), versionName), changelog, apkPath);
+        showUpdateDialog(versionName, changelog, apkPath);
     }
 
-    private void showUpdateDialog(String title, List<String> textItems, String apkPath) {
-        mSettingsPresenter.appendStrings("Changelog", createChangelogOptions(textItems));
+    private void showUpdateDialog(String versionName, List<String> changelog, String apkPath) {
+        mSettingsPresenter.appendStrings(mContext.getString(R.string.update_changelog), createChangelogOptions(changelog));
         mSettingsPresenter.appendButton(
-                UiOptionItem.from("Install update", optionItem -> {
+                UiOptionItem.from(mContext.getString(R.string.install_update), optionItem -> {
                     mUpdateChecker.installUpdate();
                     mUpdateInstalled = true;
                 }, false));
-        mSettingsPresenter.showDialog(title, ()->{
+        mSettingsPresenter.showDialog(String.format("%s %s", mContext.getString(R.string.app_name), versionName), ()->{
             if (!mUpdateInstalled) {
                 mUpdateChecker.onUserCancel();
             }
