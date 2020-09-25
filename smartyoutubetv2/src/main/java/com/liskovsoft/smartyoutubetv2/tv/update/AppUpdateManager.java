@@ -18,6 +18,7 @@ public class AppUpdateManager implements AppUpdateCheckerListener {
     private final Context mContext;
     private final AppUpdateChecker mUpdateChecker;
     private final VideoSettingsPresenter mSettingsPresenter;
+    private boolean mUpdateInstalled;
 
     public AppUpdateManager(Context context) {
         mContext = context;
@@ -38,22 +39,28 @@ public class AppUpdateManager implements AppUpdateCheckerListener {
     }
 
     public void start() {
-        mUpdateChecker.forceCheckForUpdates(UPDATE_MANIFEST_URL);
+        mUpdateInstalled = false;
+        mUpdateChecker.checkForUpdates(UPDATE_MANIFEST_URL);
     }
 
     @Override
     public void onUpdateFound(List<String> changelog, String apkPath) {
         showUpdateDialog(changelog, apkPath);
-
-        //mUpdateChecker.installUpdate();
-        //unhold();
     }
 
     private void showUpdateDialog(List<String> changelog, String apkPath) {
         mSettingsPresenter.appendChecked("Changelog", createChangelogOptions(changelog));
         mSettingsPresenter.appendButton(
-                UiOptionItem.from("Install update", optionItem -> mUpdateChecker.installUpdate(), false));
-        mSettingsPresenter.showDialog();
+                UiOptionItem.from("Install update", optionItem -> {
+                    mUpdateChecker.installUpdate();
+                    mUpdateInstalled = true;
+                }, false));
+        mSettingsPresenter.showDialog(()->{
+            if (!mUpdateInstalled) {
+                mUpdateChecker.onUserCancel();
+            }
+            unhold();
+        });
     }
 
     private List<OptionItem> createChangelogOptions(List<String> changelog) {
