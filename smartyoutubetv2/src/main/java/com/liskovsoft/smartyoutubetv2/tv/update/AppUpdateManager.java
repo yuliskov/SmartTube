@@ -3,8 +3,11 @@ package com.liskovsoft.smartyoutubetv2.tv.update;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.appupdatechecker2.AppUpdateChecker;
+import com.liskovsoft.appupdatechecker2.AppUpdateCheckerListener;
 
-public class AppUpdateManager {
+import java.util.List;
+
+public class AppUpdateManager implements AppUpdateCheckerListener {
     private static final String UPDATE_MANIFEST_URL = "https://github.com/yuliskov/SmartYouTubeTV/releases/download/stable/smartyoutubetv.json";
     @SuppressLint("StaticFieldLeak")
     private static AppUpdateManager sInstance;
@@ -13,7 +16,7 @@ public class AppUpdateManager {
 
     public AppUpdateManager(Context context) {
         mContext = context;
-        mUpdateChecker = new AppUpdateChecker(mContext);
+        mUpdateChecker = new AppUpdateChecker(mContext, this);
     }
 
     public static AppUpdateManager instance(Context context) {
@@ -24,11 +27,21 @@ public class AppUpdateManager {
         return sInstance;
     }
 
-    public void checkForUpdates() {
+    public void unhold() {
+        sInstance = null;
+    }
+
+    public void start() {
         mUpdateChecker.forceCheckForUpdates(UPDATE_MANIFEST_URL);
     }
 
-    public void unhold() {
-        sInstance = null;
+    @Override
+    public int onUpdateFound(List<String> changelog) {
+        return AppUpdateCheckerListener.ACTION_INSTALL;
+    }
+
+    @Override
+    public void onError(Exception error) {
+        // NOP
     }
 }

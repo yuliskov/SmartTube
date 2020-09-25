@@ -62,7 +62,7 @@ public class SplashActivity extends Activity {
 
     private void checkForUpdates() {
         AppUpdateManager updatePresenter = AppUpdateManager.instance(this);
-        updatePresenter.checkForUpdates();
+        updatePresenter.start();
         updatePresenter.unhold();
     }
 }
