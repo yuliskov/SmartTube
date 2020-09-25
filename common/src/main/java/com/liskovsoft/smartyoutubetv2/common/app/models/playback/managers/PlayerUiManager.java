@@ -17,6 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,9 +28,10 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
     private boolean mEngineReady;
     private VideoSettingsPresenter mSettingsPresenter;
-    private final Map<String, List<OptionItem>> mCheckedCategories = new HashMap<>();
-    private final Map<String, List<OptionItem>> mRadioCategories = new HashMap<>();
-    private final Map<CharSequence, OptionItem> mSingleOptions = new HashMap<>();
+    // NOTE: using map, because same item could be changed time to time
+    private final Map<String, List<OptionItem>> mCheckedCategories = new LinkedHashMap<>();
+    private final Map<String, List<OptionItem>> mRadioCategories = new LinkedHashMap<>();
+    private final Map<CharSequence, OptionItem> mSingleOptions = new LinkedHashMap<>();
     private boolean mBlockEngine;
     private boolean mEnablePIP;
 
