@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AppUpdateManager implements AppUpdateCheckerListener {
-    private static final String UPDATE_MANIFEST_URL = "https://github.com/yuliskov/SmartYouTubeTV/releases/download/stable/smartyoutubetv.json";
+    private static final String UPDATE_MANIFEST_URL = "https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json";
     @SuppressLint("StaticFieldLeak")
     private static AppUpdateManager sInstance;
     private final Context mContext;
