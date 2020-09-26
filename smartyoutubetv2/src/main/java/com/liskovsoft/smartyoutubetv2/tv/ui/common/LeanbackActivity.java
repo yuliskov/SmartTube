@@ -65,6 +65,15 @@ public abstract class LeanbackActivity extends FragmentActivity {
     }
 
     @Override
+    public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode);
+
+        if (!isInPictureInPictureMode) {
+            mViewManager.addTopActivity(this); // user makes pip activity fullscreen
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         mModeSyncManager.restore(this);
