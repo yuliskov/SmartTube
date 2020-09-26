@@ -152,11 +152,14 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     private void loadFormatInfo(MediaItemFormatInfo formatInfo) {
         if (formatInfo.containsHlsInfo()) {
+            Log.d(TAG, "Found hls video. Loading...");
             mController.openHls(formatInfo.getHlsManifestUrl());
         } else if (formatInfo.containsDashInfo()) {
+            Log.d(TAG, "Found dash video. Loading...");
             mController.openDash(formatInfo.createMpdStream());
         } else if (formatInfo.containsUrlListInfo()) {
-            //mController.openUrlList(formatInfo.createUrlList());
+            Log.d(TAG, "Found simple url video. Loading...");
+            mController.openUrlList(formatInfo.createUrlList());
         } else {
             Log.e(TAG, "Empty format info received. No video data to pass to the player.");
         }

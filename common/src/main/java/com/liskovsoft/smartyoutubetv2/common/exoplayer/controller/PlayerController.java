@@ -10,6 +10,7 @@ import java.util.List;
 public interface PlayerController {
     void openDash(InputStream dashManifest);
     void openHls(String hlsPlaylistUrl);
+    void openUrlList(List<String> urlList);
     long getPosition();
     void setPosition(long positionMs);
     long getLengthMs();

@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.MediaSourceEventListener;
@@ -62,16 +63,39 @@ public class ExoMediaSourceFactory {
         return sInstance;
     }
 
+    //private void prepareMediaForPlaying(Uri mediaSourceUri) {
+    //    String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
+    //    MediaSource mediaSource =
+    //            new ExtractorMediaSource(
+    //                    mediaSourceUri,
+    //                    new DefaultDataSourceFactory(getActivity(), userAgent),
+    //                    new DefaultExtractorsFactory(),
+    //                    null,
+    //                    null);
+    //
+    //    mPlayer.prepare(mediaSource);
+    //}
+
     public MediaSource fromDashManifest(InputStream dashManifest) {
         return buildMPDMediaSource(DASH_MANIFEST_URI, dashManifest);
     }
 
-    public MediaSource fromDashManifest(Uri dashManifest) {
-        return buildMediaSource(dashManifest, DASH_MANIFEST_EXTENSION);
+    public MediaSource fromDashManifest(String dashManifest) {
+        return buildMediaSource(Uri.parse(dashManifest), DASH_MANIFEST_EXTENSION);
     }
 
-    public MediaSource fromHlsPlaylist(Uri hlsPlaylist) {
-        return buildMediaSource(hlsPlaylist, HLS_PLAYLIST_EXTENSION);
+    public MediaSource fromHlsPlaylist(String hlsPlaylist) {
+        return buildMediaSource(Uri.parse(hlsPlaylist), HLS_PLAYLIST_EXTENSION);
+    }
+
+    public MediaSource fromUrlList(List<String> urlList) {
+        MediaSource[] mediaSources = new MediaSource[urlList.size()];
+
+        for (int i = 0; i < urlList.size(); i++) {
+            mediaSources[i] = buildMediaSource(Uri.parse(urlList.get(i)), null);
+        }
+
+        return mediaSources.length == 1 ? mediaSources[0] : new ConcatenatingMediaSource(mediaSources); // or playlist
     }
 
     /**

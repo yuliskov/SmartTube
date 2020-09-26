@@ -378,6 +378,11 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
+    public void openUrlList(List<String> urlList) {
+        mExoPlayerController.openUrlList(urlList);
+    }
+
+    @Override
     public long getPositionMs() {
         return mExoPlayerController.getPosition();
     }

@@ -8,6 +8,7 @@ import java.util.List;
 public interface PlaybackEngineController {
     void openDash(InputStream dashManifest);
     void openHls(String hlsPlaylistUrl);
+    void openUrlList(List<String> urlList);
     long getPositionMs();
     void setPositionMs(long positionMs);
     long getLengthMs();

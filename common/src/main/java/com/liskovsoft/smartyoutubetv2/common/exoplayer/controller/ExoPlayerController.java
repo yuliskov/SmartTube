@@ -42,35 +42,28 @@ public class ExoPlayerController implements EventListener, PlayerController {
         mTrackSelectorManager = new TrackSelectorManager(trackSelector);
     }
 
-    //private void prepareMediaForPlaying(Uri mediaSourceUri) {
-    //    String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
-    //    MediaSource mediaSource =
-    //            new ExtractorMediaSource(
-    //                    mediaSourceUri,
-    //                    new DefaultDataSourceFactory(getActivity(), userAgent),
-    //                    new DefaultExtractorsFactory(),
-    //                    null,
-    //                    null);
-    //
-    //    mPlayer.prepare(mediaSource);
-    //}
-
     @Override
     public void openDash(InputStream dashManifest) {
         //String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
         MediaSource mediaSource = mMediaSourceFactory.fromDashManifest(dashManifest);
-        mPlayer.prepare(mediaSource);
-
-        if (mEventListener != null) {
-            mTrackSelectorManager.invalidate();
-            mEventListener.onVideoLoaded(mVideo);
-        }
+        openMediaSource(mediaSource);
     }
 
     @Override
     public void openHls(String hlsPlaylistUrl) {
         //String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
-        MediaSource mediaSource = mMediaSourceFactory.fromHlsPlaylist(Uri.parse(hlsPlaylistUrl));
+        MediaSource mediaSource = mMediaSourceFactory.fromHlsPlaylist(hlsPlaylistUrl);
+        openMediaSource(mediaSource);
+    }
+
+    @Override
+    public void openUrlList(List<String> urlList) {
+        //String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
+        MediaSource mediaSource = mMediaSourceFactory.fromUrlList(urlList);
+        openMediaSource(mediaSource);
+    }
+
+    private void openMediaSource(MediaSource mediaSource) {
         mPlayer.prepare(mediaSource);
 
         if (mEventListener != null) {
