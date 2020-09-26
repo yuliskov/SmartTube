@@ -14,8 +14,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-import java.io.InputStream;
-
 public class VideoLoader extends PlayerEventListenerHelper {
     private static final String TAG = VideoLoader.class.getSimpleName();
     private final Playlist mPlaylist;
@@ -153,13 +151,14 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     private void loadFormatInfo(MediaItemFormatInfo formatInfo) {
-        InputStream dashStream = formatInfo.getMpdStream();
-        String hlsManifestUrl = formatInfo.getHlsManifestUrl();
-
-        if (hlsManifestUrl != null) {
-            mController.openHls(hlsManifestUrl);
+        if (formatInfo.containsHlsInfo()) {
+            mController.openHls(formatInfo.getHlsManifestUrl());
+        } else if (formatInfo.containsDashInfo()) {
+            mController.openDash(formatInfo.createMpdStream());
+        } else if (formatInfo.containsUrlListInfo()) {
+            //mController.openUrlList(formatInfo.createUrlList());
         } else {
-            mController.openDash(dashStream);
+            Log.e(TAG, "Empty format info received. No video data to pass to the player.");
         }
     }
 }
