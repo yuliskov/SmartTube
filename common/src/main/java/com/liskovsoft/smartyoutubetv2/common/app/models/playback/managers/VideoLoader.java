@@ -56,6 +56,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     public void onEngineError(int type) {
         // restart once per video
         if (mErrorVideo != mLastVideo) {
+            Log.e(TAG, "Player error occurred. Restarting engine...");
             mController.restartEngine();
         }
 
@@ -156,9 +157,13 @@ public class VideoLoader extends PlayerEventListenerHelper {
             mController.openHls(formatInfo.getHlsManifestUrl());
         } else if (formatInfo.containsDashInfo()) {
             Log.d(TAG, "Found dash video. Loading...");
-            mController.openDash(formatInfo.createMpdStream());
+
+            Disposable action = formatInfo.createMpdStreamObservable()
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(mController::openDash, error -> Log.e(TAG, "createMpdStream error: " + error));
         } else if (formatInfo.containsUrlListInfo()) {
-            Log.d(TAG, "Found simple url video. Loading...");
+            Log.d(TAG, "Found url list video. Loading...");
             mController.openUrlList(formatInfo.createUrlList());
         } else {
             Log.e(TAG, "Empty format info received. No video data to pass to the player.");
