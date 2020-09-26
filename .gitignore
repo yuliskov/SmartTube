@@ -35,6 +35,8 @@ Thumbs.db
 build/
 
 # my other stuff
+/smartyoutubetv2/release
+/smarttube/release
 google-services.json
 *.hprof
 log.txt
