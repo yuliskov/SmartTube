@@ -179,6 +179,11 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
+    public void onEngineError(int type) {
+        process(listener -> listener.onEngineError(type));
+    }
+
+    @Override
     public void onPlay() {
         process(PlayerHandlerEventListener::onPlay);
     }

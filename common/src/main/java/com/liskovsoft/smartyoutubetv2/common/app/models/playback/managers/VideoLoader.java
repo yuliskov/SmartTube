@@ -20,6 +20,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private static final String TAG = VideoLoader.class.getSimpleName();
     private final Playlist mPlaylist;
     private Video mLastVideo;
+    private Video mErrorVideo;
     private Disposable mMetadataAction;
     private Disposable mFormatInfoAction;
     private boolean mEngineInitialized;
@@ -51,6 +52,16 @@ public class VideoLoader extends PlayerEventListenerHelper {
     public void onEngineReleased() {
         mEngineInitialized = false;
         disposeActions();
+    }
+
+    @Override
+    public void onEngineError(int type) {
+        // restart once per video
+        if (mErrorVideo != mLastVideo) {
+            mController.restartEngine();
+        }
+
+        mErrorVideo = mLastVideo;
     }
 
     @Override

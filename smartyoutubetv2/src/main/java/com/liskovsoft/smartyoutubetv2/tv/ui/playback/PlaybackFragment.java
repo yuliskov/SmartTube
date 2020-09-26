@@ -156,7 +156,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         return selectedPosition;
     }
 
-    public void restartPlayer() {
+    @Override
+    public void restartEngine() {
         if (mPlayer != null) {
             mEventListener.onEngineReleased();
         }

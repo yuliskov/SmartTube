@@ -89,6 +89,11 @@ public abstract class PlayerEventListenerHelper implements PlayerHandlerEventLis
     }
 
     @Override
+    public void onEngineError(int type) {
+        // NOP
+    }
+
+    @Override
     public void onPlay() {
         // NOP
     }

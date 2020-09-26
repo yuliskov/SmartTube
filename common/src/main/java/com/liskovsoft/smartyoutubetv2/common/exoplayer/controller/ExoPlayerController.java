@@ -171,6 +171,7 @@ public class ExoPlayerController implements EventListener, PlayerController {
     @Override
     public void onPlayerError(ExoPlaybackException error) {
         Log.e(TAG, "onPlayerError: " + error);
+        mEventListener.onEngineError(error.type);
     }
 
     @Override

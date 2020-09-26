@@ -23,6 +23,7 @@ public interface PlaybackEngineController {
      */
     void blockEngine(boolean block);
     boolean isEngineBlocked();
+    void restartEngine();
     void enablePIP(boolean enable);
     boolean isPIPEnabled();
     boolean isInPIPMode();
