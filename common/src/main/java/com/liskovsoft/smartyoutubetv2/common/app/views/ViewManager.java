@@ -22,6 +22,7 @@ public class ViewManager {
     private Class<?> mRootActivity;
     private Class<?> mDefaultTop;
     private long mPrevThrottleTimeMS;
+    private boolean mMoveTaskToBack;
 
     private ViewManager(Context context) {
         mContext = context;
@@ -90,7 +91,8 @@ public class ViewManager {
 
             if (parentActivity == null) {
                 Log.d(TAG, "Parent activity name doesn't stored in registry. Exiting to Home...");
-                //activity.moveTaskToBack(true);
+                mMoveTaskToBack = true;
+                activity.moveTaskToBack(true);
 
                 return;
             }
@@ -108,6 +110,8 @@ public class ViewManager {
     }
 
     public void startDefaultView(Context context) {
+        mMoveTaskToBack = false;
+
         if (doThrottle()) {
             return;
         }
@@ -138,12 +142,18 @@ public class ViewManager {
         return skipEvent;
     }
 
-    public void addTopActivity(@Nullable Class<?> activity) {
-        if (!mActivityStack.isEmpty() && mActivityStack.peek() == activity) {
+    public void addTopActivity(Activity activity) {
+        if (checkMoveTaskToBack(activity)) {
             return;
         }
 
-        mActivityStack.push(activity);
+        Class<?> activityClass = activity.getClass();
+
+        if (!mActivityStack.isEmpty() && mActivityStack.peek() == activityClass) {
+            return;
+        }
+
+        mActivityStack.push(activityClass);
     }
 
     private void removeTopActivity() {
@@ -180,5 +190,14 @@ public class ViewManager {
 
     public void blockTop(Activity activity) {
         mDefaultTop = activity == null ? null : activity.getClass();
+    }
+
+    private boolean checkMoveTaskToBack(Activity activity) {
+        if (mMoveTaskToBack) {
+            activity.moveTaskToBack(true);
+            return true;
+        }
+
+        return false;
     }
 }

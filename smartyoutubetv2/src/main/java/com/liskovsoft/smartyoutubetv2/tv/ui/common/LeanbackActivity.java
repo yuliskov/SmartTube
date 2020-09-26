@@ -61,7 +61,7 @@ public abstract class LeanbackActivity extends FragmentActivity {
         mBackgroundManager.onStart();
 
         // we can't do it in the ViewManager because activity may be started from outside
-        mViewManager.addTopActivity(this.getClass());
+        mViewManager.addTopActivity(this);
     }
 
     @Override
