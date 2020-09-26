@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.common;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import androidx.fragment.app.FragmentActivity;
@@ -82,8 +84,6 @@ public abstract class LeanbackActivity extends FragmentActivity {
 
     @Override
     public void finish() {
-        //super.finish();
-        
         mViewManager.startParentView(this);
     }
 }
