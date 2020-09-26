@@ -90,7 +90,8 @@ public class ViewManager {
 
             if (parentActivity == null) {
                 Log.d(TAG, "Parent activity name doesn't stored in registry. Exiting to Home...");
-                activity.moveTaskToBack(true);
+                //activity.moveTaskToBack(true);
+
                 return;
             }
 

@@ -79,6 +79,8 @@ public class PlaybackActivity extends LeanbackActivity {
     // More: https://medium.com/s23nyc-tech/drop-in-android-video-exoplayer2-with-picture-in-picture-e2d4f8c1eb30
     @SuppressWarnings("deprecation")
     private void enterPIPMode() {
+        Log.d(TAG, "Entering PIP mode...");
+
         if (Build.VERSION.SDK_INT >= 24 && getPackageManager().hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
             //videoPosition = player.currentPosition
             //playerView.useController = false
@@ -91,6 +93,13 @@ public class PlaybackActivity extends LeanbackActivity {
         }
     }
 
+    //@Override
+    //protected void onUserLeaveHint() {
+    //    super.onUserLeaveHint();
+    //
+    //    Log.d(TAG, "onUserLeaveHint");
+    //}
+
     @Override
     public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode);
@@ -102,11 +111,11 @@ public class PlaybackActivity extends LeanbackActivity {
 
     @Override
     protected void onStop() {
-        super.onStop();
-
         if (!isFinishing() && mPlaybackFragment.isEngineBlocked() && mPlaybackFragment.isPIPEnabled()) {
             enterPIPMode();
         }
+
+        super.onStop();
     }
 
     @Override
@@ -122,11 +131,7 @@ public class PlaybackActivity extends LeanbackActivity {
             enterPIPMode();
         }
 
-        ViewManager.instance(this).startParentView(this);
-
-        //Intent intent = new Intent(this, BrowseActivity.class);
-        //intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        //startActivity(intent);
+        super.finish();
     }
 
     public boolean isInPIPMode() {
