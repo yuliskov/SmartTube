@@ -111,6 +111,7 @@ public class PlaybackActivity extends LeanbackActivity {
 
     @Override
     protected void onStop() {
+        // User pressed home. Don't restore parent activity.
         if (!isFinishing() && mPlaybackFragment.isEngineBlocked() && mPlaybackFragment.isPIPEnabled()) {
             enterPIPMode();
         }
@@ -127,6 +128,7 @@ public class PlaybackActivity extends LeanbackActivity {
 
     @Override
     public void finish() {
+        // User pressed back. We need to restore parent activity.
         if (mPlaybackFragment.isEngineBlocked() && mPlaybackFragment.isPIPEnabled()) {
             enterPIPMode();
         }
