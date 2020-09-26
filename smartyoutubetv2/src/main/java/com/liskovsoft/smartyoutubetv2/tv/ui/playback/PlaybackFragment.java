@@ -85,6 +85,9 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        // Make player controls more distinguished on white background
+        setBackgroundType(BG_DARK);
+
         mPlaybackPresenter.onInitDone();
     }
 
