@@ -6,11 +6,13 @@ import android.os.Handler;
 import android.os.Looper;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader.MetadataCallback;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresenter;
@@ -26,7 +28,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PlayerUiManager extends PlayerEventListenerHelper {
+public class PlayerUiManager extends PlayerEventListenerHelper implements MetadataCallback {
     private static final String TAG = PlayerUiManager.class.getSimpleName();
     private final Handler mHandler;
     private static final long UI_HIDE_TIMEOUT_MS = 2_000;
@@ -218,6 +220,13 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     @Override
     public void onVideoStatsClicked() {
         MessageHelpers.showMessage(mActivity, R.string.not_implemented);
+    }
+
+    @Override
+    public void onMetadata(MediaItemMetadata metadata) {
+        mController.setLike(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_LIKE);
+        mController.setDislike(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_DISLIKE);
+        mController.setSubscribe(metadata.isSubscribed());
     }
 
     private void updateBackgroundPlayback() {

@@ -9,6 +9,7 @@ import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.PlaybackControlsRow;
+import androidx.leanback.widget.PlaybackControlsRow.ThumbsAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.FixedVideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoStatsAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChannelAction;
@@ -198,17 +199,17 @@ public class VideoPlayerGlue extends FixedVideoPlayerGlue<PlayerAdapter> {
     }
 
     public void setSubscribeActionState(boolean subscribed) {
-        mSubscribeAction.setIndex(subscribed ? 1 : 0);
+        mSubscribeAction.setIndex(subscribed ? SubscribeAction.INDEX_ON : SubscribeAction.INDEX_OFF);
         invalidateUi(mSubscribeAction);
     }
 
     public void setThumbsUpActionState(boolean thumbsUp) {
-        mThumbsUpAction.setIndex(thumbsUp ? 1 : 0);
+        mThumbsUpAction.setIndex(thumbsUp ? ThumbsAction.INDEX_SOLID : ThumbsAction.INDEX_OUTLINE);
         invalidateUi(mThumbsUpAction);
     }
 
     public void setThumbsDownActionState(boolean thumbsDown) {
-        mThumbsDownAction.setIndex(thumbsDown ? 1 : 0);
+        mThumbsDownAction.setIndex(thumbsDown ? ThumbsAction.INDEX_SOLID : ThumbsAction.INDEX_OUTLINE);
         invalidateUi(mThumbsDownAction);
     }
 
@@ -254,15 +255,15 @@ public class VideoPlayerGlue extends FixedVideoPlayerGlue<PlayerAdapter> {
             handled = true;
         } else if (action == mSubscribeAction) {
             incrementActionIndex(action);
-            mActionListener.onSubscribe(getActionIndex(action) != 0);
+            mActionListener.onSubscribe(getActionIndex(action) == SubscribeAction.INDEX_ON);
             handled = true;
         } else if (action == mThumbsDownAction) {
             incrementActionIndex(action);
-            mActionListener.onThumbsDown(getActionIndex(action) != 0);
+            mActionListener.onThumbsDown(getActionIndex(action) == ThumbsAction.INDEX_SOLID);
             handled = true;
         } else if (action == mThumbsUpAction) {
             incrementActionIndex(action);
-            mActionListener.onThumbsUp(getActionIndex(action) != 0);
+            mActionListener.onThumbsUp(getActionIndex(action) == ThumbsAction.INDEX_SOLID);
             handled = true;
         } else if (action == mChannelAction) {
             mActionListener.onChannel();

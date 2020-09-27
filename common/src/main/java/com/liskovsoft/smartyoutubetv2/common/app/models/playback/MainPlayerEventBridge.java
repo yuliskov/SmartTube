@@ -36,7 +36,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         mEventListeners.add(uiManager);
         mEventListeners.add(new StateUpdater());
         mEventListeners.add(new HistoryUpdater());
-        mEventListeners.add(new SuggestionsLoader());
+        mEventListeners.add(new SuggestionsLoader(uiManager));
         mEventListeners.add(new VideoLoader());
     }
 

@@ -9,4 +9,7 @@ public interface PlaybackUiController {
     void showControls(boolean show);
     boolean isSuggestionsShown();
     void setRepeatButtonState(int modeIndex);
+    void setLike(boolean like);
+    void setDislike(boolean dislike);
+    void setSubscribe(boolean subscribe);
 }

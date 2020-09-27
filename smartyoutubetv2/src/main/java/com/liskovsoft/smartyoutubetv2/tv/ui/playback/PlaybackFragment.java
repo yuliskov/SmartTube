@@ -515,6 +515,21 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
+    public void setLike(boolean like) {
+        mPlayerGlue.setThumbsUpActionState(like);
+    }
+
+    @Override
+    public void setDislike(boolean dislike) {
+        mPlayerGlue.setThumbsDownActionState(dislike);
+    }
+
+    @Override
+    public void setSubscribe(boolean subscribe) {
+        mPlayerGlue.setSubscribeActionState(subscribe);
+    }
+
+    @Override
     public void updateSuggestions(VideoGroup group) {
         if (mRowsAdapter == null) {
             Log.e(TAG, "Related videos row not initialized yet.");

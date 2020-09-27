@@ -17,7 +17,20 @@ import java.util.List;
 
 public class SuggestionsLoader extends PlayerEventListenerHelper {
     private static final String TAG = SuggestionsLoader.class.getSimpleName();
+    private final MetadataCallback mMetadataCallback;
     private Disposable mMetadataAction;
+
+    public interface MetadataCallback {
+        void onMetadata(MediaItemMetadata metadata);
+    }
+
+    public SuggestionsLoader() {
+        this(null);
+    }
+
+    public SuggestionsLoader(MetadataCallback metadataCallback) {
+        mMetadataCallback = metadataCallback;
+    }
 
     @Override
     public void onVideoLoaded(Video item) {
@@ -79,6 +92,10 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
     private void loadSuggestions(MediaItemMetadata mediaItemMetadata) {
         syncCurrentVideo(mediaItemMetadata);
+
+        if (mMetadataCallback != null) {
+            mMetadataCallback.onMetadata(mediaItemMetadata);
+        }
 
         List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
 
