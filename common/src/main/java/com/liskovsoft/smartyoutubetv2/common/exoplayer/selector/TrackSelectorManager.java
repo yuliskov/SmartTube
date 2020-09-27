@@ -33,7 +33,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
     private final Renderer[] mRenderers = new Renderer[3];
     private final MediaTrack[] mSelectedTracks = new MediaTrack[3];
-    //private MediaTrack mPendingSelection;
+    private final TrackComparator mComparator = new TrackComparator();
 
     public void invalidate() {
         Arrays.fill(mRenderers, null);
@@ -400,17 +400,19 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
         MediaTrack result = createAutoSelection(track.rendererIndex);
 
+        mComparator.setRendererIndex(track.rendererIndex);
+
         if (track.format != null) { // not auto selection
             for (int groupIndex = 0; groupIndex < renderer.mediaTracks.length; groupIndex++) {
                 for (int trackIndex = 0; trackIndex < renderer.mediaTracks[groupIndex].length; trackIndex++) {
                     MediaTrack mediaTrack = renderer.mediaTracks[groupIndex][trackIndex];
 
-                    int compare = TrackSelectorUtil.compare(mediaTrack, track);
+                    int compare = mComparator.compare(mediaTrack, track);
 
                     if (compare == 0) {
                         result = mediaTrack;
                         break;
-                    } else if (compare < 0 && TrackSelectorUtil.compare(result, mediaTrack) < 0) {
+                    } else if (compare < 0 && mComparator.compare(result, mediaTrack) < 0) {
                         result = mediaTrack;
                     }
                 }
