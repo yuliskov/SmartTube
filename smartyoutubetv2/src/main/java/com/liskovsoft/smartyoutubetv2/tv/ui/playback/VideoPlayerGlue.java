@@ -9,8 +9,10 @@ import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.PlaybackControlsRow;
-import androidx.leanback.widget.PlaybackControlsRow.ThumbsAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.FixedVideoPlayerGlue;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsDownAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsUpAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoStatsAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChannelAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAction;
@@ -77,8 +79,8 @@ public class VideoPlayerGlue extends FixedVideoPlayerGlue<PlayerAdapter> {
 
     private final OnActionClickedListener mActionListener;
 
-    private final PlaybackControlsRow.ThumbsUpAction mThumbsUpAction;
-    private final PlaybackControlsRow.ThumbsDownAction mThumbsDownAction;
+    private final ThumbsUpAction mThumbsUpAction;
+    private final ThumbsDownAction mThumbsDownAction;
     private final PlaybackControlsRow.SkipPreviousAction mSkipPreviousAction;
     private final PlaybackControlsRow.SkipNextAction mSkipNextAction;
     private final PlaybackControlsRow.FastForwardAction mFastForwardAction;
@@ -104,10 +106,10 @@ public class VideoPlayerGlue extends FixedVideoPlayerGlue<PlayerAdapter> {
         mFastForwardAction = new PlaybackControlsRow.FastForwardAction(context);
         mRewindAction = new PlaybackControlsRow.RewindAction(context);
 
-        mThumbsUpAction = new PlaybackControlsRow.ThumbsUpAction(context);
-        mThumbsUpAction.setIndex(PlaybackControlsRow.ThumbsUpAction.INDEX_OUTLINE);
-        mThumbsDownAction = new PlaybackControlsRow.ThumbsDownAction(context);
-        mThumbsDownAction.setIndex(PlaybackControlsRow.ThumbsDownAction.INDEX_OUTLINE);
+        mThumbsUpAction = new ThumbsUpAction(context);
+        mThumbsUpAction.setIndex(ThumbsAction.INDEX_OUTLINE);
+        mThumbsDownAction = new ThumbsDownAction(context);
+        mThumbsDownAction.setIndex(ThumbsAction.INDEX_OUTLINE);
         mRepeatAction = new RepeatAction(context);
         mHighQualityAction = new HighQualityAction(context);
         mClosedCaptioningAction = new ClosedCaptioningAction(context);

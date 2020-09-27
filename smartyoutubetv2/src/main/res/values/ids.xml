@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <item name="action_thumbs_up" type="id"/>
+    <item name="action_thumbs_down" type="id"/>
     <item name="action_subscribe" type="id"/>
     <item name="action_channel" type="id"/>
     <item name="action_playlist_add" type="id"/>
