@@ -161,8 +161,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
     }
 
     private void updateBackgroundPlayback() {
-        if (mBlockEngine && !mEnablePIP) {
-            ViewManager.instance(mActivity).blockTop(mActivity); // open player regarding its position in stack when playing audio
+        if (mBlockEngine) {
+            // return to the player regardless the last activity user watched in moment exiting to HOME
+            ViewManager.instance(mActivity).blockTop(mActivity);
         } else {
             ViewManager.instance(mActivity).blockTop(null);
         }
