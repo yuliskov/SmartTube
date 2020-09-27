@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.Looper;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -14,6 +16,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -127,17 +133,71 @@ public class PlayerUiManager extends PlayerEventListenerHelper {
 
     @Override
     public void onSubscribeClicked(boolean subscribed) {
-        MessageHelpers.showMessage(mActivity, R.string.not_implemented);
+        if (mController.getVideo() == null) {
+            Log.e(TAG, "Seems that video isn't initialized yet. Cancelling...");
+            return;
+        }
+
+        MediaService service = YouTubeMediaService.instance();
+        MediaItemManager mediaItemManager = service.getMediaItemManager();
+
+        Observable<Void> observable;
+
+        if (subscribed) {
+            observable = mediaItemManager.subscribeObserve(mController.getVideo().mediaItem);
+        } else {
+            observable = mediaItemManager.unsubscribeObserve(mController.getVideo().mediaItem);
+        }
+
+        observable
+                .subscribeOn(Schedulers.newThread())
+                .subscribe();
     }
 
     @Override
     public void onThumbsDownClicked(boolean thumbsDown) {
-        MessageHelpers.showMessage(mActivity, R.string.not_implemented);
+        if (mController.getVideo() == null) {
+            Log.e(TAG, "Seems that video isn't initialized yet. Cancelling...");
+            return;
+        }
+
+        MediaService service = YouTubeMediaService.instance();
+        MediaItemManager mediaItemManager = service.getMediaItemManager();
+
+        Observable<Void> observable;
+
+        if (thumbsDown) {
+            observable = mediaItemManager.setDislikeObserve(mController.getVideo().mediaItem);
+        } else {
+            observable = mediaItemManager.removeDislikeObserve(mController.getVideo().mediaItem);
+        }
+
+        observable
+                .subscribeOn(Schedulers.newThread())
+                .subscribe();
     }
 
     @Override
     public void onThumbsUpClicked(boolean thumbsUp) {
-        MessageHelpers.showMessage(mActivity, R.string.not_implemented);
+        if (mController.getVideo() == null) {
+            Log.e(TAG, "Seems that video isn't initialized yet. Cancelling...");
+            return;
+        }
+
+        MediaService service = YouTubeMediaService.instance();
+        MediaItemManager mediaItemManager = service.getMediaItemManager();
+
+        Observable<Void> observable;
+
+        if (thumbsUp) {
+            observable = mediaItemManager.setLikeObserve(mController.getVideo().mediaItem);
+        } else {
+            observable = mediaItemManager.removeLikeObserve(mController.getVideo().mediaItem);
+        }
+
+        observable
+                .subscribeOn(Schedulers.newThread())
+                .subscribe();
     }
 
     @Override
