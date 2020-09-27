@@ -107,9 +107,11 @@ public class VideoPlayerGlue extends FixedVideoPlayerGlue<PlayerAdapter> {
         mRewindAction = new PlaybackControlsRow.RewindAction(context);
 
         mThumbsUpAction = new ThumbsUpAction(context);
-        mThumbsUpAction.setIndex(ThumbsAction.INDEX_OUTLINE);
+        mThumbsUpAction.setIndex(ThumbsAction.INDEX_OFF);
         mThumbsDownAction = new ThumbsDownAction(context);
-        mThumbsDownAction.setIndex(ThumbsAction.INDEX_OUTLINE);
+        mThumbsDownAction.setIndex(ThumbsAction.INDEX_OFF);
+        mThumbsUpAction.setBoundAction(mThumbsDownAction);
+        mThumbsDownAction.setBoundAction(mThumbsUpAction);
         mRepeatAction = new RepeatAction(context);
         mHighQualityAction = new HighQualityAction(context);
         mClosedCaptioningAction = new ClosedCaptioningAction(context);
@@ -206,12 +208,14 @@ public class VideoPlayerGlue extends FixedVideoPlayerGlue<PlayerAdapter> {
     }
 
     public void setThumbsUpActionState(boolean thumbsUp) {
-        mThumbsUpAction.setIndex(thumbsUp ? ThumbsAction.INDEX_SOLID : ThumbsAction.INDEX_OUTLINE);
+        mThumbsUpAction.setIndex(thumbsUp ? ThumbsAction.INDEX_ON : ThumbsAction.INDEX_OFF);
+
         invalidateUi(mThumbsUpAction);
     }
 
     public void setThumbsDownActionState(boolean thumbsDown) {
-        mThumbsDownAction.setIndex(thumbsDown ? ThumbsAction.INDEX_SOLID : ThumbsAction.INDEX_OUTLINE);
+        mThumbsDownAction.setIndex(thumbsDown ? ThumbsAction.INDEX_ON : ThumbsAction.INDEX_OFF);
+
         invalidateUi(mThumbsDownAction);
     }
 
@@ -261,11 +265,11 @@ public class VideoPlayerGlue extends FixedVideoPlayerGlue<PlayerAdapter> {
             handled = true;
         } else if (action == mThumbsDownAction) {
             incrementActionIndex(action);
-            mActionListener.onThumbsDown(getActionIndex(action) == ThumbsAction.INDEX_SOLID);
+            mActionListener.onThumbsDown(getActionIndex(action) == ThumbsAction.INDEX_ON);
             handled = true;
         } else if (action == mThumbsUpAction) {
             incrementActionIndex(action);
-            mActionListener.onThumbsUp(getActionIndex(action) == ThumbsAction.INDEX_SOLID);
+            mActionListener.onThumbsUp(getActionIndex(action) == ThumbsAction.INDEX_ON);
             handled = true;
         } else if (action == mChannelAction) {
             mActionListener.onChannel();
@@ -283,6 +287,10 @@ public class VideoPlayerGlue extends FixedVideoPlayerGlue<PlayerAdapter> {
 
         if (handled) {
             invalidateUi(action);
+
+            if (action instanceof ThumbsAction) {
+                invalidateUi(((ThumbsAction) action).getBoundAction());
+            }
         }
 
         return handled;
