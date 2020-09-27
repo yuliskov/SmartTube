@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
+import android.util.Pair;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.source.TrackGroup;
 import com.google.android.exoplayer2.source.TrackGroupArray;
@@ -30,13 +31,12 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     private final DefaultTrackSelector mSelector;
     private final TrackSelection.Factory mTrackSelectionFactory;
 
-    private final Renderer[] mRenderers;
-    private MediaTrack mPendingSelection;
+    private final Renderer[] mRenderers = new Renderer[3];
+    private final MediaTrack[] mSelectedTracks = new MediaTrack[3];
+    //private MediaTrack mPendingSelection;
 
     public void invalidate() {
-        if (mRenderers != null) {
-            Arrays.fill(mRenderers, null);
-        }
+        Arrays.fill(mRenderers, null);
     }
 
     private static class Renderer {
@@ -101,7 +101,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     public TrackSelectorManager(DefaultTrackSelector selector, TrackSelection.Factory trackSelectionFactory) {
         mSelector = selector;
         mTrackSelectionFactory = trackSelectionFactory;
-        mRenderers = new Renderer[3];
 
         if (selector instanceof RestoreTrackSelector) {
             ((RestoreTrackSelector) selector).setTrackSelectCallback(this);
@@ -299,26 +298,40 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         return getAvailableTracks(RENDERER_INDEX_SUBTITLE);
     }
 
-    private Definition applyPendingSelection(TrackGroupArray groups) {
-        Definition definition = null;
+    private Pair<Definition, MediaTrack> createSelection(TrackGroupArray groups, MediaTrack selectedTrack) {
+        Pair<Definition, MediaTrack> definitionPair = null;
 
-        if (mPendingSelection != null) {
-            MediaTrack matchedTrack = findBestMatch(mPendingSelection);
+        if (selectedTrack != null) {
+            MediaTrack matchedTrack = findBestMatch(selectedTrack);
             if (matchedTrack.groupIndex != -1) {
-                definition = new Definition(groups.get(matchedTrack.groupIndex), matchedTrack.trackIndex);
+                Definition definition = new Definition(groups.get(matchedTrack.groupIndex), matchedTrack.trackIndex);
+                definitionPair = new Pair<>(definition, selectedTrack);
                 setOverride(matchedTrack.rendererIndex, matchedTrack.groupIndex, matchedTrack.trackIndex);
                 updateSelection(matchedTrack.rendererIndex);
             }
         }
-
-        mPendingSelection = null;
-        return definition;
+        
+        return definitionPair;
     }
 
     @Override
-    public Definition onSelectVideoTrack(TrackGroupArray groups, Parameters params) {
+    public Pair<Definition, MediaTrack> onSelectVideoTrack(TrackGroupArray groups, Parameters params) {
+        if (mSelectedTracks[RENDERER_INDEX_VIDEO] == null) {
+            return null;
+        }
+
         initRenderer(RENDERER_INDEX_VIDEO, groups, params);
-        return applyPendingSelection(groups);
+        return createSelection(groups, mSelectedTracks[RENDERER_INDEX_VIDEO]);
+    }
+
+    @Override
+    public Pair<Definition, MediaTrack> onSelectAudioTrack(TrackGroupArray groups, Parameters params) {
+        if (mSelectedTracks[RENDERER_INDEX_AUDIO] == null) {
+            return null;
+        }
+
+        initRenderer(RENDERER_INDEX_AUDIO, groups, params);
+        return createSelection(groups, mSelectedTracks[RENDERER_INDEX_AUDIO]);
     }
 
     @Override
@@ -346,9 +359,11 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
         initRenderer(rendererIndex);
 
+        mSelectedTracks[rendererIndex] = track;
+
         if (mRenderers[rendererIndex] == null) {
-            Log.e(TAG, "Renderer isn't initialized. Create pending selection...");
-            mPendingSelection = track;
+            Log.e(TAG, "Renderer isn't initialized. Waiting for later selection...");
+            //mPendingSelection = track;
             return;
         }
 

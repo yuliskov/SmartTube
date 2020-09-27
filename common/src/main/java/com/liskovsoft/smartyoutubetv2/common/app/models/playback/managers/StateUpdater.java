@@ -11,7 +11,8 @@ import java.util.Map;
 public class StateUpdater extends PlayerEventListenerHelper {
     private boolean mIsPlaying;
     private int mRepeatMode = 0;
-    private FormatItem mVideoFormat = FormatItem.HD_AVC;
+    private FormatItem mVideoFormat = FormatItem.VIDEO_HD_AVC;
+    private FormatItem mAudioFormat = FormatItem.AUDIO_HQ_MP4A;
     private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
     // Don't store state inside Video object.
     // As one video might correspond to multiple Video objects.
@@ -109,6 +110,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
     public void onTrackSelected(FormatItem track) {
         if (track.getType() == FormatItem.TYPE_VIDEO && !mController.isInPIPMode()) {
             mVideoFormat = track;
+        } else if (track.getType() == FormatItem.TYPE_AUDIO) {
+            mAudioFormat = track;
         }
     }
 
@@ -137,9 +140,13 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     private void restoreState(Video item) {
         if (mController.isInPIPMode()) {
-            mController.selectFormat(FormatItem.SD_AVC);
+            mController.selectFormat(FormatItem.VIDEO_SD_AVC);
         } else if (mVideoFormat != null) {
             mController.selectFormat(mVideoFormat);
+        }
+
+        if (mAudioFormat != null) {
+            mController.selectFormat(mAudioFormat);
         }
 
         State state = mStates.get(item.videoId);

@@ -3,12 +3,14 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 import android.util.Pair;
 import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.RendererCapabilities;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Definition;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Factory;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager.MediaTrack;
 
 public class RestoreTrackSelector extends DefaultTrackSelector {
     private static final String TAG = RestoreTrackSelector.class.getSimpleName();
@@ -17,7 +19,8 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
     private TrackSelectorCallback mCallback;
 
     public interface TrackSelectorCallback {
-        Definition onSelectVideoTrack(TrackGroupArray groups, Parameters params);
+        Pair<Definition, MediaTrack> onSelectVideoTrack(TrackGroupArray groups, Parameters params);
+        Pair<Definition, MediaTrack> onSelectAudioTrack(TrackGroupArray groups, Parameters params);
         void updateVideoTrackSelection(TrackGroupArray groups, Parameters params, Definition definition);
         void updateAudioTrackSelection(TrackGroupArray groups, Parameters params, Definition definition);
     }
@@ -50,22 +53,25 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
     // Ver 2.10.4
     @Nullable
     @Override
-    protected TrackSelection.Definition selectVideoTrack(TrackGroupArray groups, int[][] formatSupports, int mixedMimeTypeAdaptationSupports,
+    protected Definition selectVideoTrack(TrackGroupArray groups, int[][] formatSupports, int mixedMimeTypeAdaptationSupports,
                                               Parameters params, boolean enableAdaptiveTrackSelection) throws ExoPlaybackException {
+        Definition definition;
+
         if (mCallback != null) {
-            TrackSelection.Definition definition = mCallback.onSelectVideoTrack(groups, params);
-            if (definition != null) {
-                Log.d(TAG, "selectVideoTrack: choose custom processing");
-                return definition;
+            Pair<Definition, MediaTrack> resultPair = mCallback.onSelectVideoTrack(groups, params);
+
+            if (resultPair != null) {
+                Log.d(TAG, "selectVideoTrack: choose custom video processing");
+                return resultPair.first;
             }
         }
 
-        Log.d(TAG, "selectVideoTrack: choose default processing");
+        Log.d(TAG, "selectVideoTrack: choose default video processing");
 
-        Definition definition = super.selectVideoTrack(groups, formatSupports, mixedMimeTypeAdaptationSupports, params, enableAdaptiveTrackSelection);
+        definition = super.selectVideoTrack(groups, formatSupports, mixedMimeTypeAdaptationSupports, params, enableAdaptiveTrackSelection);
 
         // Don't invoke if track already has been selected by the app
-        if (mCallback != null && !params.hasSelectionOverride(TrackSelectorManager.RENDERER_INDEX_VIDEO, groups)) {
+        if (mCallback != null && definition != null && !params.hasSelectionOverride(TrackSelectorManager.RENDERER_INDEX_VIDEO, groups)) {
             mCallback.updateVideoTrackSelection(groups, params, definition);
         }
 
@@ -76,15 +82,27 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
     @Override
     protected Pair<Definition, AudioTrackScore> selectAudioTrack(TrackGroupArray groups, int[][] formatSupports,
                                                                  int mixedMimeTypeAdaptationSupports, Parameters params, boolean enableAdaptiveTrackSelection) throws ExoPlaybackException {
-        Pair<Definition, AudioTrackScore> trackScorePair = super.selectAudioTrack(groups, formatSupports,
+        Pair<Definition, AudioTrackScore> definitionPair;
+
+        if (mCallback != null) {
+            Pair<Definition, MediaTrack> resultPair = mCallback.onSelectAudioTrack(groups, params);
+            if (resultPair != null) {
+                Log.d(TAG, "selectVideoTrack: choose custom audio processing");
+                return new Pair<>(resultPair.first, new AudioTrackScore(resultPair.second.format, params, RendererCapabilities.FORMAT_HANDLED));
+            }
+        }
+
+        Log.d(TAG, "selectVideoTrack: choose default audio processing");
+
+        definitionPair = super.selectAudioTrack(groups, formatSupports,
                 mixedMimeTypeAdaptationSupports, params, enableAdaptiveTrackSelection);
 
         // Don't invoke if track already has been selected by the app
-        if (mCallback != null && trackScorePair != null && !params.hasSelectionOverride(TrackSelectorManager.RENDERER_INDEX_AUDIO, groups)) {
-            mCallback.updateAudioTrackSelection(groups, params, trackScorePair.first);
+        if (mCallback != null && definitionPair != null && !params.hasSelectionOverride(TrackSelectorManager.RENDERER_INDEX_AUDIO, groups)) {
+            mCallback.updateAudioTrackSelection(groups, params, definitionPair.first);
         }
 
-        return trackScorePair;
+        return definitionPair;
     }
 
     private void unlockAllVideoFormats(int[][] formatSupports) {

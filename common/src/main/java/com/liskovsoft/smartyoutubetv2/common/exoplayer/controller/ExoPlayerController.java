@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.controller;
 
 import android.content.Context;
-import android.net.Uri;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Player;

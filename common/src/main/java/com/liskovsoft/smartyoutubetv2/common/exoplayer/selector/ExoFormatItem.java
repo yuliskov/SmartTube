@@ -15,6 +15,8 @@ public class ExoFormatItem implements FormatItem {
     public static final int RESOLUTION_SD = 1;
     public static final int RESOLUTION_LD = 0;
     public static final int FORMAT_AVC = 0;
+    public static final int FORMAT_VP9 = 1;
+    public static final int FORMAT_MP4A = 2;
     public static final int FPS_30 = 0;
     private int mType;
     private int mId;
@@ -94,10 +96,11 @@ public class ExoFormatItem implements FormatItem {
         return MimeTypes.isVideo(sampleMimeType) ? TYPE_VIDEO : MimeTypes.isAudio(sampleMimeType) ? TYPE_AUDIO : TYPE_SUBTITLE;
     }
 
-    public static FormatItem defaultVideo(int resolution, int format, int frameRate) {
+    public static FormatItem createFakeVideoFormat(int resolution, int format, int frameRate) {
         ExoFormatItem formatItem = new ExoFormatItem();
         MediaTrack mediaTrack = new MediaTrack();
         formatItem.mTrack = mediaTrack;
+        formatItem.mType = TYPE_VIDEO;
 
         mediaTrack.rendererIndex = TrackSelectorManager.RENDERER_INDEX_VIDEO;
 
@@ -137,8 +140,33 @@ public class ExoFormatItem implements FormatItem {
                 break;
         }
 
+        // Fake format. It's used in app internal comparison routine.
         mediaTrack.format = Format.createVideoSampleFormat(
                 null, null, codec, -1, -1, width, height, fps, null, null);
+
+        return formatItem;
+    }
+
+    public static FormatItem createFakeAudioFormat(int format) {
+        ExoFormatItem formatItem = new ExoFormatItem();
+        MediaTrack mediaTrack = new MediaTrack();
+        formatItem.mTrack = mediaTrack;
+        formatItem.mType = TYPE_AUDIO;
+
+        mediaTrack.rendererIndex = TrackSelectorManager.RENDERER_INDEX_AUDIO;
+
+        String codec = null;
+
+        switch (format) {
+            case FORMAT_MP4A:
+            default:
+                codec = "mp4a";
+                break;
+        }
+
+        // Fake format. It's used in app internal comparison routine.
+        mediaTrack.format = Format.createAudioSampleFormat(
+                null, null, codec, -1, -1,0, 0, null, null, 0, null);
 
         return formatItem;
     }
