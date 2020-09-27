@@ -31,6 +31,9 @@ public class VideoLoader extends PlayerEventListenerHelper {
     public void openVideo(Video item) {
         mPlaylist.add(item);
 
+        // reset next video prediction when new video opens
+        mPlaylist.clearNext();
+
         if (mEngineInitialized) { // player is initialized
             if (!item.equals(mLastVideo)) {
                 loadVideo(item); // play immediately
@@ -123,13 +126,26 @@ public class VideoLoader extends PlayerEventListenerHelper {
         loadVideo(item);
     }
 
+    private void loadVideoFromMetadata(MediaItem nextVideo) {
+        Video item = Video.from(nextVideo);
+        mPlaylist.add(item);
+        loadVideo(item);
+    }
+
     private void loadVideoFromMetadata(Video current) {
         if (current == null) {
             return;
         }
 
-        if (current.cachedMetadata != null) {
-            loadVideoFromMetadata(current.cachedMetadata);
+        // Significantly improves next video loading time!
+        //if (current.cachedMetadata != null) {
+        //    loadVideoFromMetadata(current.cachedMetadata);
+        //    return;
+        //}
+
+        // Significantly improves next video loading time!
+        if (current.nextMediaItem != null) {
+            loadVideoFromMetadata(current.nextMediaItem);
             return;
         }
 

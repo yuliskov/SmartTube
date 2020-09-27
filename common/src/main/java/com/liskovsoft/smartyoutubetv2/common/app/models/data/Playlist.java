@@ -32,6 +32,12 @@ public class Playlist {
         mCurrentPosition = -1;
     }
 
+    public void clearNext() {
+        if (mCurrentPosition > 0 && (mCurrentPosition + 1) < mPlaylist.size()) {
+            mPlaylist = mPlaylist.subList(mCurrentPosition + 1, mPlaylist.size());
+        }
+    }
+
     /**
      * Adds a video to the end of the playlist.
      *

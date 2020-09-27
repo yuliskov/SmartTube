@@ -64,7 +64,8 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
         Video video = mController.getVideo();
         video.title = mediaItemMetadata.getTitle();
         video.description = mediaItemMetadata.getDescription();
-        video.cachedMetadata = mediaItemMetadata;
+        video.nextMediaItem = mediaItemMetadata.getNextVideo();
+        //video.cachedMetadata = mediaItemMetadata;
         mController.setVideo(video);
     }
 
@@ -76,10 +77,10 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
         mController.clearSuggestions(); // clear previous videos
 
-        if (video.cachedMetadata != null) {
-            loadSuggestions(video.cachedMetadata);
-            return;
-        }
+        //if (video.cachedMetadata != null) {
+        //    loadSuggestions(video.cachedMetadata);
+        //    return;
+        //}
 
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
