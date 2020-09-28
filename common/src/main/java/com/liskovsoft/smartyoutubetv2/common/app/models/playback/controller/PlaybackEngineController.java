@@ -28,4 +28,5 @@ public interface PlaybackEngineController {
     void enablePIP(boolean enable);
     boolean isPIPEnabled();
     boolean isInPIPMode();
+    boolean hasNoMedia();
 }

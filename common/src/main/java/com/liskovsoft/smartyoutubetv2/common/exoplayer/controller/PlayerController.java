@@ -25,4 +25,5 @@ public interface PlayerController {
     List<FormatItem> getSubtitleFormats();
     void selectFormat(FormatItem option);
     FormatItem getVideoFormat();
+    boolean hasNoMedia();
 }

@@ -5,7 +5,9 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -91,7 +93,9 @@ public class SearchPresenter implements VideoGroupPresenter<SearchView> {
             return;
         }
 
-        mDetailsPresenter.openVideo(item);
+        MessageHelpers.showMessage(mContext, R.string.not_implemented);
+
+        //mDetailsPresenter.openVideo(item);
     }
 
     public void onSearchText(String searchText) {

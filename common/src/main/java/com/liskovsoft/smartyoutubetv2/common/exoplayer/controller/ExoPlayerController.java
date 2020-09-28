@@ -11,12 +11,14 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 
 import java.io.InputStream;
 import java.util.List;
@@ -99,6 +101,11 @@ public class ExoPlayerController implements EventListener, PlayerController {
     }
 
     @Override
+    public boolean hasNoMedia() {
+        return mPlayer.getPlaybackState() == Player.STATE_IDLE;
+    }
+
+    @Override
     public void setEventListener(PlayerEventListener eventListener) {
         mEventListener = eventListener;
     }
@@ -168,7 +175,9 @@ public class ExoPlayerController implements EventListener, PlayerController {
 
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        Log.d(TAG, "onPlayerStateChanged: State: " + playbackState);
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "onPlayerStateChanged: " + TrackSelectorUtil.stateToString(playbackState));
+        }
 
         boolean playPressed = Player.STATE_READY == playbackState && playWhenReady;
         boolean pausePressed = Player.STATE_READY == playbackState && !playWhenReady;

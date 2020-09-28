@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
 import android.text.TextUtils;
 import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
@@ -110,5 +111,12 @@ public class TrackSelectorUtil {
 
     private static String buildChannels(Format format) {
         return format.bitrate > 300000 ? "5.1" : "";
+    }
+
+    public static String stateToString(int playbackState) {
+        return playbackState == Player.STATE_BUFFERING ? "STATE_BUFFERING" :
+                playbackState == Player.STATE_READY ? "STATE_READY" :
+                playbackState == Player.STATE_IDLE ? "STATE_IDLE" :
+                "STATE_ENDED";
     }
 }

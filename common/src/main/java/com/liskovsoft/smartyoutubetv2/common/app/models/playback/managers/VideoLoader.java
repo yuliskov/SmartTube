@@ -9,6 +9,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -56,10 +57,18 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     @Override
+    public void onTrackSelected(FormatItem track) {
+        if (mController.hasNoMedia()) {
+            Log.e(TAG, "Engine lost his track. Is user selected unsupported format? Restarting...");
+            mController.restartEngine();
+        }
+    }
+
+    @Override
     public void onEngineError(int type) {
         // restart once per video
         if (mErrorVideo != mLastVideo) {
-            Log.e(TAG, "Player error occurred. Restarting engine...");
+            Log.e(TAG, "Player error occurred. Restarting engine once...");
             mController.restartEngine();
         }
 

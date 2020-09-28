@@ -455,7 +455,18 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
     @Override
     public boolean isInPIPMode() {
-        return ((PlaybackActivity) getActivity()).isInPIPMode();
+        PlaybackActivity playbackActivity = (PlaybackActivity) getActivity();
+
+        if (playbackActivity == null) {
+            return false;
+        }
+
+        return playbackActivity.isInPIPMode();
+    }
+
+    @Override
+    public boolean hasNoMedia() {
+        return mExoPlayerController.hasNoMedia();
     }
 
     // End Engine Events
