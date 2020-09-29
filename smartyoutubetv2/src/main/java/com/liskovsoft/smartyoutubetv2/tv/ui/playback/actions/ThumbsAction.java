@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.PlaybackControlsRow.MultiAction;
 
-public abstract class ThumbsAction extends MultiAction {
+public class ThumbsAction extends MultiAction {
     /**
      * Action index for the solid thumb icon.
      */
@@ -19,20 +19,19 @@ public abstract class ThumbsAction extends MultiAction {
 
     private ThumbsAction mBoundAction;
 
-    public ThumbsAction(int id, Context context, int solidIconResId, int outlineIconResId) {
-        this(id, context, solidIconResId, outlineIconResId, ActionHelpers.getIconHighlightColor(context));
+    public ThumbsAction(Context context, int actionId, int solidIconResId) {
+        this(context, actionId, solidIconResId, ActionHelpers.getIconHighlightColor(context));
     }
 
     /**
      * Constructor
      * @param context Context used for loading resources.
      */
-    public ThumbsAction(int id, Context context, int solidIconResId, int outlineIconResId, int highlightColor) {
-        super(id);
+    public ThumbsAction(Context context, int actionId, int solidIconResId, int highlightColor) {
+        super(actionId);
         Drawable[] drawables = new Drawable[2];
 
         BitmapDrawable solidDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, solidIconResId);
-        BitmapDrawable outlineDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, outlineIconResId);
         drawables[INDEX_ON] = solidDrawable == null ? null
                 : new BitmapDrawable(context.getResources(),
                 ActionHelpers.createBitmap(solidDrawable.getBitmap(), highlightColor));
@@ -41,9 +40,11 @@ public abstract class ThumbsAction extends MultiAction {
 
         //String[] labels = new String[drawables.length];
         //// Note, labels denote the action taken when clicked
-        //labels[INDEX_OUTLINE] = context.getString(R.string.action_thumbs_off);
-        //labels[INDEX_SOLID] = context.getString(R.string.action_thumbs_on);
+        //labels[INDEX_OFF] = getClass().getSimpleName() + "Off";
+        //labels[INDEX_ON] = getClass().getSimpleName() + "On";
         //setLabels(labels);
+
+        setIndex(INDEX_OFF); // default state
     }
 
     @Override

@@ -9,7 +9,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 public class VideoStatsAction extends Action {
     public VideoStatsAction(Context context) {
         super(R.id.action_video_stats);
-        Drawable uncoloredDrawable = ContextCompat.getDrawable(context, R.drawable.action_bug_report);
+        Drawable uncoloredDrawable = ContextCompat.getDrawable(context, R.drawable.action_video_stats);
 
         setIcon(uncoloredDrawable);
         setLabel1(context.getString(

@@ -13,6 +13,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.FixedVideoPl
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsDownAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsUpAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoSpeedAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoStatsAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChannelAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAction;
@@ -92,6 +93,7 @@ public class VideoPlayerGlue extends FixedVideoPlayerGlue<PlayerAdapter> {
     private final ChannelAction mChannelAction;
     private final PlaylistAddAction mPlaylistAddAction;
     private final VideoStatsAction mVideoStatsAction;
+    private final VideoSpeedAction mVideoSpeedAction;
 
     public VideoPlayerGlue(
             Context context,
@@ -107,9 +109,7 @@ public class VideoPlayerGlue extends FixedVideoPlayerGlue<PlayerAdapter> {
         mRewindAction = new PlaybackControlsRow.RewindAction(context);
 
         mThumbsUpAction = new ThumbsUpAction(context);
-        mThumbsUpAction.setIndex(ThumbsAction.INDEX_OFF);
         mThumbsDownAction = new ThumbsDownAction(context);
-        mThumbsDownAction.setIndex(ThumbsAction.INDEX_OFF);
         mThumbsUpAction.setBoundAction(mThumbsDownAction);
         mThumbsDownAction.setBoundAction(mThumbsUpAction);
         mRepeatAction = new RepeatAction(context);
@@ -119,6 +119,7 @@ public class VideoPlayerGlue extends FixedVideoPlayerGlue<PlayerAdapter> {
         mChannelAction = new ChannelAction(context);
         mPlaylistAddAction = new PlaylistAddAction(context);
         mVideoStatsAction = new VideoStatsAction(context);
+        mVideoSpeedAction = new VideoSpeedAction(context);
     }
 
     @Override
@@ -133,6 +134,7 @@ public class VideoPlayerGlue extends FixedVideoPlayerGlue<PlayerAdapter> {
         adapter.add(mFastForwardAction);
         adapter.add(mSkipNextAction);
         adapter.add(mRepeatAction);
+        adapter.add(mVideoSpeedAction);
     }
 
     @Override
