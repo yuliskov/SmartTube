@@ -16,6 +16,7 @@ import java.util.Map;
 
 public class StateUpdater extends PlayerEventListenerHelper {
     private boolean mIsPlaying;
+    private float mSpeed = -1;
     private int mRepeatMode = 0;
     private FormatItem mVideoFormat = FormatItem.VIDEO_HD_AVC;
     private FormatItem mAudioFormat = FormatItem.AUDIO_HQ_MP4A;
@@ -164,6 +165,10 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
         boolean nearEnd = Math.abs(mController.getLengthMs() - mController.getPositionMs()) < 10_000;
 
+        if (!nearEnd) {
+            mController.setSpeed(mSpeed);
+        }
+
         if (state != null && !nearEnd) {
             mController.setPositionMs(state.positionMs);
             mController.setPlay(mIsPlaying);
@@ -188,6 +193,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
     public void onVideoSpeedClicked() {
         List<OptionItem> items = new ArrayList<>();
 
+        // suppose live stream if buffering near the end
+        // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
         intSpeedItems(items, new float[]{0.25f, 0.5f, 0.75f, 1.0f, 1.1f, 1.15f, 1.25f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f});
 
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mActivity);
@@ -200,9 +207,11 @@ public class StateUpdater extends PlayerEventListenerHelper {
         for (float speed : speedValues) {
             items.add(UiOptionItem.from(
                     String.valueOf(speed),
-                    optionItem -> mController.setSpeed((float) optionItem.getData()),
-                    mController.getSpeed() == speed,
-                    speed));
+                    optionItem -> {
+                        mController.setSpeed(speed);
+                        mSpeed = speed;
+                    },
+                    mController.getSpeed() == speed));
         }
     }
 }

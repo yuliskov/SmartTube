@@ -94,7 +94,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
         }
     }
 
-    public void addListener(MetadataListener listener) {
+    public void addMetadataListener(MetadataListener listener) {
         mListeners.add(listener);
     }
 

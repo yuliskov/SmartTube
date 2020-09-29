@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppSettingsView;
@@ -18,6 +19,7 @@ public class AppSettingsPresenter implements Presenter<AppSettingsView> {
     private final List<SettingsCategory> mCategories;
     private String mTitle;
     private Runnable mOnClose;
+    private PlayerUiManager mUiManager;
 
     public static class SettingsCategory {
         public static SettingsCategory radioList(String title, List<OptionItem> items) {
@@ -86,6 +88,11 @@ public class AppSettingsPresenter implements Presenter<AppSettingsView> {
 
     public void onClose() {
         clear();
+
+        if (mUiManager != null) {
+            mUiManager.enableUiAutoHideTimeout();
+        }
+
         if (mOnClose != null) {
             mOnClose.run();
         }
@@ -101,6 +108,10 @@ public class AppSettingsPresenter implements Presenter<AppSettingsView> {
         mView.addCategories(mCategories);
     }
 
+    public void setPlayerUiManager(PlayerUiManager uiManager) {
+        mUiManager = uiManager;
+    }
+
     public void showDialog() {
         showDialog(null);
     }
@@ -113,6 +124,10 @@ public class AppSettingsPresenter implements Presenter<AppSettingsView> {
         mTitle = dialogTitle;
         mOnClose = onClose;
         ViewManager.instance(mContext).startView(AppSettingsView.class);
+
+        if (mUiManager != null) {
+            mUiManager.disableUiAutoHideTimeout();
+        }
     }
 
     public void appendRadioCategory(String categoryTitle, List<OptionItem> items) {

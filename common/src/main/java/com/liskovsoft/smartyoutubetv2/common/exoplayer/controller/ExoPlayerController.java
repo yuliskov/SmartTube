@@ -196,7 +196,7 @@ public class ExoPlayerController implements EventListener, PlayerController {
 
     @Override
     public void setSpeed(float speed) {
-        if (mPlayer != null) {
+        if (mPlayer != null && speed > 0) {
             mPlayer.setPlaybackParameters(new PlaybackParameters(speed, 1.0f));
         }
     }

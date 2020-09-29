@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import androidx.fragment.app.Fragment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -8,6 +9,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.Player
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HistoryUpdater;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HqDialogManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.StateUpdater;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.VideoLoader;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 public class MainPlayerEventBridge implements PlayerEventListener {
     private static final String TAG = MainPlayerEventBridge.class.getSimpleName();
     private final ArrayList<PlayerHandlerEventListener> mEventListeners;
+    @SuppressLint("StaticFieldLeak")
     private static MainPlayerEventBridge sInstance;
     private PlaybackController mController;
     private Activity mMainActivity;
@@ -29,15 +32,17 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     public MainPlayerEventBridge() {
         mEventListeners = new ArrayList<>();
 
-        HqDialogManager uiManager = new HqDialogManager();
+        PlayerUiManager uiManager = new PlayerUiManager();
+        HqDialogManager hqDialogManager = new HqDialogManager();
         VideoLoader videoLoader = new VideoLoader();
         SuggestionsLoader suggestionsLoader = new SuggestionsLoader();
-        suggestionsLoader.addListener(uiManager);
-        suggestionsLoader.addListener(videoLoader);
+        suggestionsLoader.addMetadataListener(uiManager);
+        suggestionsLoader.addMetadataListener(videoLoader);
 
         // NOTE: position matters!!!
-        mEventListeners.add(new AutoFrameRateManager(uiManager));
+        mEventListeners.add(new AutoFrameRateManager(hqDialogManager));
         mEventListeners.add(uiManager);
+        mEventListeners.add(hqDialogManager);
         mEventListeners.add(new StateUpdater());
         mEventListeners.add(new HistoryUpdater());
         mEventListeners.add(suggestionsLoader);

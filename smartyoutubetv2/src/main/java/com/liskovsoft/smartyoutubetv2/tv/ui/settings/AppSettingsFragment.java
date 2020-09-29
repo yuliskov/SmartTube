@@ -120,6 +120,11 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
             }
 
             setPreferenceScreen(screen);
+
+            // auto expand first preference
+            if (mCategories.size() == 1) {
+                getPreferenceManager().showDialog(screen.getPreference(0));
+            }
         }
 
         @Override
