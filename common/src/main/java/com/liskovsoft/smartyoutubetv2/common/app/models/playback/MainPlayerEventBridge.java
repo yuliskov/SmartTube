@@ -30,14 +30,18 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         mEventListeners = new ArrayList<>();
 
         PlayerUiManager uiManager = new PlayerUiManager();
+        VideoLoader videoLoader = new VideoLoader();
+        SuggestionsLoader suggestionsLoader = new SuggestionsLoader();
+        suggestionsLoader.addListener(uiManager);
+        suggestionsLoader.addListener(videoLoader);
 
         // NOTE: position matters!!!
         mEventListeners.add(new AutoFrameRateManager(uiManager));
         mEventListeners.add(uiManager);
         mEventListeners.add(new StateUpdater());
         mEventListeners.add(new HistoryUpdater());
-        mEventListeners.add(new SuggestionsLoader(uiManager));
-        mEventListeners.add(new VideoLoader());
+        mEventListeners.add(suggestionsLoader);
+        mEventListeners.add(videoLoader);
     }
 
     public static MainPlayerEventBridge instance() {

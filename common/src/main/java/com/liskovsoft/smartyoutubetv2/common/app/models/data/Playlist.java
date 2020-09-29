@@ -7,6 +7,7 @@ import java.util.List;
  * Manages a playlist of videos.
  */
 public class Playlist {
+    private static final int PLAYLIST_MAX_SIZE = 20;
     private List<Video> mPlaylist;
     private int mCurrentPosition;
     private static Playlist sInstance;
@@ -57,10 +58,10 @@ public class Playlist {
         int toIndex = mCurrentPosition + 1;
 
         boolean isLastElement = mCurrentPosition == (mPlaylist.size() - 1);
-        boolean playlistTooBig = mPlaylist.size() > 50;
+        boolean playlistTooBig = mPlaylist.size() > PLAYLIST_MAX_SIZE;
 
         if (playlistTooBig) {
-            fromIndex = mPlaylist.size() - 50;
+            fromIndex = mPlaylist.size() - PLAYLIST_MAX_SIZE;
         }
 
         if (!isLastElement || playlistTooBig) {

@@ -22,8 +22,6 @@ public final class Video implements Parcelable {
     public String studio;
     public int percentWatched;
     public MediaItem mediaItem;
-    public MediaItem nextMediaItem;
-    //public MediaItemMetadata cachedMetadata;
 
     public Video() {
         
@@ -198,16 +196,6 @@ public final class Video implements Parcelable {
 
         public VideoBuilder studio(String studio) {
             this.studio = studio;
-            return this;
-        }
-
-        public VideoBuilder mediaItem(MediaItem mediaItem) {
-            this.mediaItem = mediaItem;
-            return this;
-        }
-
-        public VideoBuilder mediaItemMetadata(MediaItemMetadata itemMetadata) {
-            this.mediaItemMetadata = itemMetadata;
             return this;
         }
 

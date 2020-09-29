@@ -13,23 +13,16 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SuggestionsLoader extends PlayerEventListenerHelper {
     private static final String TAG = SuggestionsLoader.class.getSimpleName();
-    private final MetadataCallback mMetadataCallback;
+    private final List<MetadataListener> mListeners = new ArrayList<>();
     private Disposable mMetadataAction;
 
-    public interface MetadataCallback {
+    public interface MetadataListener {
         void onMetadata(MediaItemMetadata metadata);
-    }
-
-    public SuggestionsLoader() {
-        this(null);
-    }
-
-    public SuggestionsLoader(MetadataCallback metadataCallback) {
-        mMetadataCallback = metadataCallback;
     }
 
     @Override
@@ -64,8 +57,6 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
         Video video = mController.getVideo();
         video.title = mediaItemMetadata.getTitle();
         video.description = mediaItemMetadata.getDescription();
-        video.nextMediaItem = mediaItemMetadata.getNextVideo();
-        //video.cachedMetadata = mediaItemMetadata;
         mController.setVideo(video);
     }
 
@@ -76,11 +67,6 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
         }
 
         mController.clearSuggestions(); // clear previous videos
-
-        //if (video.cachedMetadata != null) {
-        //    loadSuggestions(video.cachedMetadata);
-        //    return;
-        //}
 
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
@@ -94,9 +80,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
     private void loadSuggestions(MediaItemMetadata mediaItemMetadata) {
         syncCurrentVideo(mediaItemMetadata);
 
-        if (mMetadataCallback != null) {
-            mMetadataCallback.onMetadata(mediaItemMetadata);
-        }
+        callListener(mediaItemMetadata);
 
         List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
 
@@ -107,6 +91,18 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
         for (MediaGroup group : suggestions) {
             mController.updateSuggestions(VideoGroup.from(group));
+        }
+    }
+
+    public void addListener(MetadataListener listener) {
+        mListeners.add(listener);
+    }
+
+    private void callListener(MediaItemMetadata mediaItemMetadata) {
+        if (mediaItemMetadata != null) {
+            for (MetadataListener listener : mListeners) {
+                listener.onMetadata(mediaItemMetadata);
+            }
         }
     }
 }

@@ -9,13 +9,14 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class VideoLoader extends PlayerEventListenerHelper {
+public class VideoLoader extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = VideoLoader.class.getSimpleName();
     private final Playlist mPlaylist;
     private Video mLastVideo;
@@ -23,6 +24,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private Disposable mMetadataAction;
     private Disposable mFormatInfoAction;
     private boolean mEngineInitialized;
+    private MediaItem mCachedNextVideo;
 
     public VideoLoader() {
         mPlaylist = Playlist.instance();
@@ -128,17 +130,15 @@ public class VideoLoader extends PlayerEventListenerHelper {
         }
     }
 
-    private void loadVideoFromMetadata(MediaItemMetadata metadata) {
-        MediaItem nextVideo = metadata.getNextVideo();
+    private void loadVideoFromNext(MediaItem nextVideo) {
         Video item = Video.from(nextVideo);
         mPlaylist.add(item);
         loadVideo(item);
     }
 
-    private void loadVideoFromMetadata(MediaItem nextVideo) {
-        Video item = Video.from(nextVideo);
-        mPlaylist.add(item);
-        loadVideo(item);
+    private void loadVideoFromMetadata(MediaItemMetadata metadata) {
+        MediaItem nextVideo = metadata.getNextVideo();
+        loadVideoFromNext(nextVideo);
     }
 
     private void loadVideoFromMetadata(Video current) {
@@ -147,14 +147,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
         }
 
         // Significantly improves next video loading time!
-        //if (current.cachedMetadata != null) {
-        //    loadVideoFromMetadata(current.cachedMetadata);
-        //    return;
-        //}
-
-        // Significantly improves next video loading time!
-        if (current.nextMediaItem != null) {
-            loadVideoFromMetadata(current.nextMediaItem);
+        if (mCachedNextVideo != null) {
+            loadVideoFromNext(mCachedNextVideo);
             return;
         }
 
@@ -193,5 +187,10 @@ public class VideoLoader extends PlayerEventListenerHelper {
         } else {
             Log.e(TAG, "Empty format info received. No video data to pass to the player.");
         }
+    }
+
+    @Override
+    public void onMetadata(MediaItemMetadata metadata) {
+        mCachedNextVideo = metadata.getNextVideo();
     }
 }
