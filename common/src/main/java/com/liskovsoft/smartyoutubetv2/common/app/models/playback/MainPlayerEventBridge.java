@@ -7,7 +7,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.Play
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerHandlerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HistoryUpdater;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HqDialogManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.StateUpdater;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.VideoLoader;
@@ -29,7 +29,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     public MainPlayerEventBridge() {
         mEventListeners = new ArrayList<>();
 
-        PlayerUiManager uiManager = new PlayerUiManager();
+        HqDialogManager uiManager = new HqDialogManager();
         VideoLoader videoLoader = new VideoLoader();
         SuggestionsLoader suggestionsLoader = new SuggestionsLoader();
         suggestionsLoader.addListener(uiManager);

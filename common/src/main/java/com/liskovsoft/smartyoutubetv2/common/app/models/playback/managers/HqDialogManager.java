@@ -27,8 +27,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PlayerUiManager extends PlayerEventListenerHelper implements MetadataListener {
-    private static final String TAG = PlayerUiManager.class.getSimpleName();
+public class HqDialogManager extends PlayerEventListenerHelper implements MetadataListener {
+    private static final String TAG = HqDialogManager.class.getSimpleName();
     private final Handler mHandler;
     private static final long UI_HIDE_TIMEOUT_MS = 2_000;
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
@@ -41,7 +41,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     private boolean mBlockEngine;
     private boolean mEnablePIP;
 
-    public PlayerUiManager() {
+    public HqDialogManager() {
         mHandler = new Handler(Looper.getMainLooper());
     }
 
@@ -310,13 +310,13 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     private void createCheckedOptions() {
         for (String key : mCheckedCategories.keySet()) {
-            mSettingsPresenter.appendChecked(key, mCheckedCategories.get(key));
+            mSettingsPresenter.appendCheckedCategory(key, mCheckedCategories.get(key));
         }
     }
 
     private void createRadioOptions() {
         for (String key : mRadioCategories.keySet()) {
-            mSettingsPresenter.appendRadio(key, mRadioCategories.get(key));
+            mSettingsPresenter.appendRadioCategory(key, mRadioCategories.get(key));
         }
     }
 

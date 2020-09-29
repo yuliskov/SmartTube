@@ -109,21 +109,21 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
         showDialog(null, onClose);
     }
 
-    public void showDialog(String title, Runnable onClose) {
-        mTitle = title;
+    public void showDialog(String dialogTitle, Runnable onClose) {
+        mTitle = dialogTitle;
         mOnClose = onClose;
         ViewManager.instance(mContext).startView(VideoSettingsView.class);
     }
 
-    public void appendRadio(String categoryTitle, List<OptionItem> items) {
+    public void appendRadioCategory(String categoryTitle, List<OptionItem> items) {
         mCategories.add(SettingsCategory.radioList(categoryTitle, items));
     }
 
-    public void appendChecked(String categoryTitle, List<OptionItem> items) {
+    public void appendCheckedCategory(String categoryTitle, List<OptionItem> items) {
         mCategories.add(SettingsCategory.checkedList(categoryTitle, items));
     }
 
-    public void appendStrings(String categoryTitle, List<OptionItem> items) {
+    public void appendStringsCategory(String categoryTitle, List<OptionItem> items) {
         mCategories.add(SettingsCategory.stringList(categoryTitle, items));
     }
 
@@ -131,7 +131,7 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
         mCategories.add(SettingsCategory.singleSwitch(optionItem));
     }
 
-    public void appendButton(OptionItem optionItem) {
+    public void appendSingleButton(OptionItem optionItem) {
         mCategories.add(SettingsCategory.singleButton(optionItem));
     }
 }

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AutoFrameRateManager extends PlayerEventListenerHelper {
-    private final PlayerUiManager mUiManager;
+    private final HqDialogManager mUiManager;
     private AutoFrameRateHelper mAutoFrameRateHelper;
     private boolean mEnabled;
     private boolean mCorrectionEnabled;
@@ -23,7 +23,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     private AutoFrameRateHelper mParentAutoFrameRateHelper;
     private ModeSyncManager mModeSyncManager;
 
-    public AutoFrameRateManager(PlayerUiManager uiManager) {
+    public AutoFrameRateManager(HqDialogManager uiManager) {
         mUiManager = uiManager;
     }
 
