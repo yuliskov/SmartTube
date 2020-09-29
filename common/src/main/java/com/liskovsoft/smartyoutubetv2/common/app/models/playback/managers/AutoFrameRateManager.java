@@ -15,8 +15,9 @@ import java.util.List;
 public class AutoFrameRateManager extends PlayerEventListenerHelper {
     private final HqDialogManager mUiManager;
     private AutoFrameRateHelper mAutoFrameRateHelper;
-    private boolean mEnabled;
+    private boolean mAfrEnabled;
     private boolean mCorrectionEnabled;
+    private boolean mSwitchEnabled;
     private boolean mMainActivityRunOnce;
     private boolean mParentActivityRunOnce;
     private FormatItem mSelectedVideoTrack;
@@ -61,16 +62,16 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         if (track.getType() == FormatItem.TYPE_VIDEO) {
             mSelectedVideoTrack = track;
 
-            if (mEnabled) {
+            if (mAfrEnabled) {
                 applyAfr(track);
             }
         }
     }
 
     private void onAfrOptionClick(OptionItem optionItem) {
-        mEnabled = optionItem.isSelected();
+        mAfrEnabled = optionItem.isSelected();
 
-        if (mEnabled) {
+        if (mAfrEnabled) {
             applyAfr(mSelectedVideoTrack);
         } else {
             restoreAfr();
@@ -82,6 +83,12 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         mAutoFrameRateHelper.setFpsCorrectionEnabled(mCorrectionEnabled);
     }
 
+    private void onResolutionSwitchClick(OptionItem optionItem) {
+        mSwitchEnabled = optionItem.isSelected();
+        mAutoFrameRateHelper.setResolutionSwitchEnabled(mSwitchEnabled);
+        applyAfr(mSelectedVideoTrack);
+    }
+
     private void restoreAfr() {
         mAutoFrameRateHelper.restoreOriginalState();
         mParentAutoFrameRateHelper.restoreOriginalState();
@@ -89,16 +96,20 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     }
 
     private void applyAfr(FormatItem track) {
-        mAutoFrameRateHelper.apply(track);
-        mParentAutoFrameRateHelper.apply(track);
-        mModeSyncManager.save(track);
+        if (track != null) {
+            mAutoFrameRateHelper.apply(track);
+            mParentAutoFrameRateHelper.apply(track);
+            mModeSyncManager.save(track);
+        }
     }
 
     private void addUiOptions() {
-        String title = mActivity.getString(R.string.auto_frame_rate_enable);
-        String fpsCorrection = mActivity.getString(R.string.auto_frame_rate_correction, "30->29.97, 60->59.94");
+        String title = mActivity.getString(R.string.auto_frame_rate);
+        String fpsCorrection = mActivity.getString(R.string.frame_rate_correction, "30->29.97, 60->59.94");
+        String resolutionSwitch = mActivity.getString(R.string.resolution_switch);
         List<OptionItem> options = new ArrayList<>();
-        options.add(UiOptionItem.from(title, this::onAfrOptionClick, mEnabled));
+        options.add(UiOptionItem.from(title, this::onAfrOptionClick, mAfrEnabled));
+        options.add(UiOptionItem.from(resolutionSwitch, this::onResolutionSwitchClick, mSwitchEnabled));
         options.add(UiOptionItem.from(fpsCorrection, this::onFpsCorrectionClick, mCorrectionEnabled));
 
         mUiManager.addCheckedCategory(title, options);

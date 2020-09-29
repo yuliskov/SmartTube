@@ -8,6 +8,7 @@ import androidx.leanback.preference.LeanbackPreferenceDialogFragment;
 import androidx.leanback.preference.LeanbackPreferenceFragment;
 import androidx.leanback.preference.LeanbackSettingsFragment;
 import androidx.preference.DialogPreference;
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragment;
 import androidx.preference.PreferenceScreen;
@@ -15,8 +16,9 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter.SettingsCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppSettingsView;
-import com.liskovsoft.smartyoutubetv2.tv.ui.settings.strings.StringListPreference;
-import com.liskovsoft.smartyoutubetv2.tv.ui.settings.strings.StringListPreferenceDialogFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.settings.dialogs.RadioListPreferenceDialogFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.settings.dialogs.StringListPreference;
+import com.liskovsoft.smartyoutubetv2.tv.ui.settings.dialogs.StringListPreferenceDialogFragment;
 
 import java.util.List;
 
@@ -94,12 +96,20 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
             startPreferenceFragment(f);
 
             return true;
+        } else if (pref instanceof ListPreference) {
+            ListPreference listPreference = (ListPreference) pref;
+            LeanbackPreferenceDialogFragment f = RadioListPreferenceDialogFragment.newInstanceSingle(listPreference.getKey());
+            f.setTargetFragment(caller, 0);
+            startPreferenceFragment(f);
+
+            return true;
         }
 
         return super.onPreferenceDisplayDialog(caller, pref);
     }
 
     public static class AppPreferenceFragment extends LeanbackPreferenceFragment {
+        private static final String TAG = AppPreferenceFragment.class.getSimpleName();
         private List<SettingsCategory> mCategories;
         private Context mStyledContext;
         private AppSettingsFragmentHelper mManager;
@@ -121,10 +131,25 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
 
             setPreferenceScreen(screen);
 
-            // auto expand first preference
+            setSingleListAsRoot(screen);
+        }
+
+        private void setSingleListAsRoot(PreferenceScreen screen) {
+            // auto expand single list preference
             if (mCategories.size() == 1) {
-                getPreferenceManager().showDialog(screen.getPreference(0));
+                onDisplayPreferenceDialog(screen.getPreference(0));
+
+                getFragmentManager().addOnBackStackChangedListener(() -> {
+                    if (getFragmentManager().getBackStackEntryCount() == 0) {
+                        getActivity().onBackPressed();
+                    }
+                });
             }
+        }
+
+        @Override
+        public void onDisplayPreferenceDialog(Preference preference) {
+            super.onDisplayPreferenceDialog(preference);
         }
 
         @Override
