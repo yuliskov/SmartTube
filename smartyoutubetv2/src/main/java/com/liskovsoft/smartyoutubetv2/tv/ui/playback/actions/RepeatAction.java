@@ -12,20 +12,6 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 public class RepeatAction extends MultiAction {
     /**
      * Action index for the repeat-none icon.
-     * @deprecated Use {@link #INDEX_NONE}
-     */
-    @Deprecated
-    public static final int NONE = 0;
-
-    /**
-     * Action index for the repeat-all icon.
-     * @deprecated Use {@link #INDEX_ALL}
-     */
-    @Deprecated
-    public static final int ALL = 1;
-
-    /**
-     * Action index for the repeat-none icon.
      */
     public static final int INDEX_NONE = 0;
 
@@ -45,17 +31,19 @@ public class RepeatAction extends MultiAction {
     /**
      * Constructor
      * @param context Context used for loading resources
-     * @param repeatAllColor Color to display the repeat-all icon.
+     * @param selectionColor Color to display the repeat-all icon.
      */
-    public RepeatAction(Context context, int repeatAllColor) {
+    public RepeatAction(Context context, int selectionColor) {
         super(R.id.lb_control_repeat);
         Drawable[] drawables = new Drawable[2];
         BitmapDrawable repeatDrawable = (BitmapDrawable) ActionHelpers.getStyledDrawable(context,
                 R.styleable.lbPlaybackControlsActionIcons_repeat);
+        BitmapDrawable repeatOneDrawable = (BitmapDrawable) ActionHelpers.getStyledDrawable(context,
+                R.styleable.lbPlaybackControlsActionIcons_repeat_one);
         drawables[INDEX_NONE] = repeatDrawable;
-        drawables[INDEX_ALL] = repeatDrawable == null ? null
+        drawables[INDEX_ALL] = repeatOneDrawable == null ? null
                 : new BitmapDrawable(context.getResources(),
-                ActionHelpers.createBitmap(repeatDrawable.getBitmap(), repeatAllColor));
+                ActionHelpers.createBitmap(repeatOneDrawable.getBitmap(), selectionColor));
         setDrawables(drawables);
 
         String[] labels = new String[drawables.length];

@@ -5,6 +5,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.PlaybackControlsRow.MultiAction;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class ThumbsAction extends MultiAction {
     /**
@@ -38,11 +39,12 @@ public class ThumbsAction extends MultiAction {
         drawables[INDEX_OFF] = solidDrawable;
         setDrawables(drawables);
 
-        //String[] labels = new String[drawables.length];
-        //// Note, labels denote the action taken when clicked
-        //labels[INDEX_OFF] = getClass().getSimpleName() + "Off";
-        //labels[INDEX_ON] = getClass().getSimpleName() + "On";
-        //setLabels(labels);
+        String[] labels = new String[drawables.length];
+        // Note, labels denote the action taken when clicked
+        String simpleName = Helpers.getSimpleClassName(getClass().getSimpleName());
+        labels[INDEX_OFF] = simpleName + " Off";
+        labels[INDEX_ON] = simpleName + " On";
+        setLabels(labels);
 
         setIndex(INDEX_OFF); // default state
     }
