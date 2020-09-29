@@ -33,6 +33,7 @@ public class ExoPlayerController implements EventListener, PlayerController {
     private final TrackSelectorManager mTrackSelectorManager;
     private PlayerEventListener mEventListener;
     private Video mVideo;
+    private boolean mOnSourceChanged;
 
     public ExoPlayerController(ExoPlayer player, DefaultTrackSelector trackSelector, Context context) {
         mPlayer = player;
@@ -70,17 +71,18 @@ public class ExoPlayerController implements EventListener, PlayerController {
 
         if (mEventListener != null) {
             mTrackSelectorManager.invalidate();
-            mEventListener.onVideoLoaded(mVideo);
+            mOnSourceChanged = true;
+            mEventListener.onSourceChanged(mVideo);
         }
     }
 
     @Override
-    public long getPosition() {
+    public long getPositionMs() {
         return mPlayer.getCurrentPosition();
     }
 
     @Override
-    public void setPosition(long positionMs) {
+    public void setPositionMs(long positionMs) {
         if (positionMs >= 0) {
             mPlayer.seekTo(positionMs);
         }
@@ -157,6 +159,8 @@ public class ExoPlayerController implements EventListener, PlayerController {
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
         Log.d(TAG, "onTracksChanged: start: groups length: " + trackGroups.length);
 
+        notifyOnVideoLoad();
+
         if (trackGroups.length == 0) {
             Log.i(TAG, "onTracksChanged: Hmm. Strange. Received empty groups, no selections. Why is this happens only on next/prev videos?");
         }
@@ -165,6 +169,13 @@ public class ExoPlayerController implements EventListener, PlayerController {
             if (selection != null) {
                 mEventListener.onTrackChanged(ExoFormatItem.from(selection.getSelectedFormat()));
             }
+        }
+    }
+
+    private void notifyOnVideoLoad() {
+        if (mOnSourceChanged) {
+            mOnSourceChanged = false;
+            mEventListener.onVideoLoaded(mVideo);
         }
     }
 

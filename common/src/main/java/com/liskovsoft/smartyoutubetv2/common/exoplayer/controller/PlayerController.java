@@ -11,8 +11,8 @@ public interface PlayerController {
     void openDash(InputStream dashManifest);
     void openHls(String hlsPlaylistUrl);
     void openUrlList(List<String> urlList);
-    long getPosition();
-    void setPosition(long positionMs);
+    long getPositionMs();
+    void setPositionMs(long positionMs);
     long getLengthMs();
     void setPlay(boolean isPlaying);
     boolean isPlaying();

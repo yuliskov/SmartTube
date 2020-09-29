@@ -28,7 +28,6 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
@@ -389,12 +388,12 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
     @Override
     public long getPositionMs() {
-        return mExoPlayerController.getPosition();
+        return mExoPlayerController.getPositionMs();
     }
 
     @Override
     public void setPositionMs(long positionMs) {
-        mExoPlayerController.setPosition(positionMs);
+        mExoPlayerController.setPositionMs(positionMs);
     }
 
     @Override

@@ -152,29 +152,11 @@ public class MainPlayerEventBridge implements PlayerEventListener {
 
     // End common events
 
-    @Override
-    public void onSuggestionItemClicked(Video item) {
-        process(listener -> listener.onSuggestionItemClicked(item));
-    }
+    // Start engine events
 
     @Override
-    public void onSuggestionItemLongClicked(Video item) {
-        process(listener -> listener.onSuggestionItemLongClicked(item));
-    }
-
-    @Override
-    public boolean onPreviousClicked() {
-        return chainProcess(PlayerHandlerEventListener::onPreviousClicked);
-    }
-
-    @Override
-    public boolean onNextClicked() {
-        return chainProcess(PlayerHandlerEventListener::onNextClicked);
-    }
-
-    @Override
-    public void onVideoLoaded(Video item) {
-        process(listener -> listener.onVideoLoaded(item));
+    public void onSourceChanged(Video item) {
+        process(listener -> listener.onSourceChanged(item));
     }
 
     @Override
@@ -237,7 +219,34 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         process(listener -> listener.onRepeatModeChange(modeIndex));
     }
 
-    // PlayerUiEventListener Start
+    @Override
+    public void onVideoLoaded(Video item) {
+        process(listener -> listener.onVideoLoaded(item));
+    }
+
+    // End engine events
+
+    // Start UI events
+
+    @Override
+    public void onSuggestionItemClicked(Video item) {
+        process(listener -> listener.onSuggestionItemClicked(item));
+    }
+
+    @Override
+    public void onSuggestionItemLongClicked(Video item) {
+        process(listener -> listener.onSuggestionItemLongClicked(item));
+    }
+
+    @Override
+    public boolean onPreviousClicked() {
+        return chainProcess(PlayerHandlerEventListener::onPreviousClicked);
+    }
+
+    @Override
+    public boolean onNextClicked() {
+        return chainProcess(PlayerHandlerEventListener::onNextClicked);
+    }
 
     @Override
     public void onHighQualityClicked() {
@@ -294,5 +303,5 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         process(PlayerUiEventListener::onVideoSpeedClicked);
     }
 
-    // PlayerUiEventListener End
+    // End UI events
 }

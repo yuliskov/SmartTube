@@ -15,7 +15,7 @@ public class HistoryUpdater extends PlayerEventListenerHelper {
     private Disposable mHistoryAction;
 
     @Override
-    public void onVideoLoaded(Video item) {
+    public void onSourceChanged(Video item) {
         updateHistory(item);
     }
 

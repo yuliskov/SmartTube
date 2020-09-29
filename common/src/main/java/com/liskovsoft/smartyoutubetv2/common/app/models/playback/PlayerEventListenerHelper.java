@@ -74,6 +74,11 @@ public abstract class PlayerEventListenerHelper implements PlayerHandlerEventLis
     }
 
     @Override
+    public void onSourceChanged(Video item) {
+        // NOP
+    }
+
+    @Override
     public void onVideoLoaded(Video item) {
         // NOP
     }

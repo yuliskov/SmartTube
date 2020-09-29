@@ -146,6 +146,14 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void restoreState(Video item) {
+        restoreFormat();
+
+        restorePosition(item);
+
+        restoreSpeed();
+    }
+
+    private void restoreFormat() {
         if (mController.isInPIPMode()) {
             mController.selectFormat(FormatItem.VIDEO_SD_AVC);
         } else if (mVideoFormat != null) {
@@ -155,7 +163,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
         if (mAudioFormat != null) {
             mController.selectFormat(mAudioFormat);
         }
+    }
 
+    private void restorePosition(Video item) {
         State state = mStates.get(item.videoId);
 
         // internal storage has priority over item data loaded from network
@@ -165,15 +175,17 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
         boolean nearEnd = Math.abs(mController.getLengthMs() - mController.getPositionMs()) < 10_000;
 
-        if (!nearEnd) {
-            mController.setSpeed(mSpeed);
-        }
-
         if (state != null && !nearEnd) {
             mController.setPositionMs(state.positionMs);
             mController.setPlay(mIsPlaying);
         } else {
             mController.setPlay(true); // start play immediately when state not found
+        }
+    }
+
+    private void restoreSpeed() {
+        if (mController.getLengthMs() - mController.getPositionMs() > 30_000) {
+            mController.setSpeed(mSpeed);
         }
     }
 

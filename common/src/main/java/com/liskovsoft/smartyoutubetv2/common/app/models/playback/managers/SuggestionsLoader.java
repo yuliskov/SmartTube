@@ -26,7 +26,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onVideoLoaded(Video item) {
+    public void onSourceChanged(Video item) {
         loadSuggestions(item);
     }
 
