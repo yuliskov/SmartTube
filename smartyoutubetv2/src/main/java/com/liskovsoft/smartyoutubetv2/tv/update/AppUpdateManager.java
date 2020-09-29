@@ -6,7 +6,7 @@ import com.liskovsoft.appupdatechecker2.AppUpdateChecker;
 import com.liskovsoft.appupdatechecker2.AppUpdateCheckerListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 import java.util.ArrayList;
@@ -18,13 +18,13 @@ public class AppUpdateManager implements AppUpdateCheckerListener {
     private static AppUpdateManager sInstance;
     private final Context mContext;
     private final AppUpdateChecker mUpdateChecker;
-    private final VideoSettingsPresenter mSettingsPresenter;
+    private final AppSettingsPresenter mSettingsPresenter;
     private boolean mUpdateInstalled;
 
     public AppUpdateManager(Context context) {
         mContext = context;
         mUpdateChecker = new AppUpdateChecker(mContext, this);
-        mSettingsPresenter = VideoSettingsPresenter.instance(context);
+        mSettingsPresenter = AppSettingsPresenter.instance(context);
     }
 
     public static AppUpdateManager instance(Context context) {

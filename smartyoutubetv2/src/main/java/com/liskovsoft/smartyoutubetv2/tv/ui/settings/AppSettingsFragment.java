@@ -12,24 +12,24 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragment;
 import androidx.preference.PreferenceScreen;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresenter.SettingsCategory;
-import com.liskovsoft.smartyoutubetv2.common.app.views.VideoSettingsView;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter.SettingsCategory;
+import com.liskovsoft.smartyoutubetv2.common.app.views.AppSettingsView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.settings.strings.StringListPreference;
 import com.liskovsoft.smartyoutubetv2.tv.ui.settings.strings.StringListPreferenceDialogFragment;
 
 import java.util.List;
 
 public class AppSettingsFragment extends LeanbackSettingsFragment
-        implements DialogPreference.TargetFragment, VideoSettingsView {
+        implements DialogPreference.TargetFragment, AppSettingsView {
     private AppPreferenceFragment mPreferenceFragment;
-    private VideoSettingsPresenter mSettingsPresenter;
+    private AppSettingsPresenter mSettingsPresenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mSettingsPresenter = VideoSettingsPresenter.instance(getActivity());
+        mSettingsPresenter = AppSettingsPresenter.instance(getActivity());
         mSettingsPresenter.register(this);
     }
 
@@ -102,13 +102,13 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
     public static class AppPreferenceFragment extends LeanbackPreferenceFragment {
         private List<SettingsCategory> mCategories;
         private Context mStyledContext;
-        private SettingsFragmentHelper mManager;
+        private AppSettingsFragmentHelper mManager;
         private String mTitle;
 
         @Override
         public void onCreatePreferences(Bundle bundle, String s) {
             mStyledContext = (Context) Helpers.getField(this, "mStyledContext");
-            mManager = new SettingsFragmentHelper(mStyledContext);
+            mManager = new AppSettingsFragmentHelper(mStyledContext);
 
             PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(mStyledContext);
             screen.setTitle(mTitle);

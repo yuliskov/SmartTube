@@ -7,14 +7,14 @@ import androidx.preference.MultiSelectListPreference;
 import androidx.preference.Preference;
 import androidx.preference.SwitchPreference;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresenter.SettingsCategory;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter.SettingsCategory;
 import com.liskovsoft.smartyoutubetv2.tv.ui.settings.strings.StringListPreference;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class SettingsFragmentHelper {
+public class AppSettingsFragmentHelper {
     private final Context mStyledContext;
 
     public static class ListPreferenceData {
@@ -31,7 +31,7 @@ public class SettingsFragmentHelper {
         }
     }
 
-    public SettingsFragmentHelper(Context styledContext) {
+    public AppSettingsFragmentHelper(Context styledContext) {
         mStyledContext = styledContext;
     }
 

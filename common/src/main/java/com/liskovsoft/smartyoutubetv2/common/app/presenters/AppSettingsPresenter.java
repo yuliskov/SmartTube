@@ -4,17 +4,17 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.VideoSettingsView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.AppSettingsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
+public class AppSettingsPresenter implements Presenter<AppSettingsView> {
     @SuppressLint("StaticFieldLeak")
-    private static VideoSettingsPresenter sInstance;
+    private static AppSettingsPresenter sInstance;
     private final Context mContext;
-    private VideoSettingsView mView;
+    private AppSettingsView mView;
     private final List<SettingsCategory> mCategories;
     private String mTitle;
     private Runnable mOnClose;
@@ -60,26 +60,26 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
         public List<OptionItem> items;
     }
 
-    public VideoSettingsPresenter(Context context) {
+    public AppSettingsPresenter(Context context) {
         mContext = context;
         mCategories = new ArrayList<>();
     }
 
-    public static VideoSettingsPresenter instance(Context context) {
+    public static AppSettingsPresenter instance(Context context) {
         if (sInstance == null) {
-            sInstance = new VideoSettingsPresenter(context.getApplicationContext());
+            sInstance = new AppSettingsPresenter(context.getApplicationContext());
         }
 
         return sInstance;
     }
 
     @Override
-    public void register(VideoSettingsView view) {
+    public void register(AppSettingsView view) {
         mView = view;
     }
 
     @Override
-    public void unregister(VideoSettingsView view) {
+    public void unregister(AppSettingsView view) {
         mView = null;
         onClose();
     }
@@ -112,7 +112,7 @@ public class VideoSettingsPresenter implements Presenter<VideoSettingsView> {
     public void showDialog(String dialogTitle, Runnable onClose) {
         mTitle = dialogTitle;
         mOnClose = onClose;
-        ViewManager.instance(mContext).startView(VideoSettingsView.class);
+        ViewManager.instance(mContext).startView(AppSettingsView.class);
     }
 
     public void appendRadioCategory(String categoryTitle, List<OptionItem> items) {

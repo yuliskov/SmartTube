@@ -29,4 +29,6 @@ public interface PlaybackEngineController {
     boolean isPIPEnabled();
     boolean isInPIPMode();
     boolean hasNoMedia();
+    void setSpeed(float speed);
+    float getSpeed();
 }

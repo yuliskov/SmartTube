@@ -21,4 +21,5 @@ public interface PlayerUiEventListener {
     void onClosedCaptionsClicked();
     void onPlaylistAddClicked();
     void onVideoStatsClicked();
+    void onVideoSpeedClicked();
 }

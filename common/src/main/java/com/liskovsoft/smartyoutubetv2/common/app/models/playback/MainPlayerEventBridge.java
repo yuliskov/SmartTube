@@ -232,6 +232,8 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         process(listener -> listener.onRepeatModeChange(modeIndex));
     }
 
+    // PlayerUiEventListener Start
+
     @Override
     public void onHighQualityClicked() {
         process(PlayerUiEventListener::onHighQualityClicked);
@@ -281,4 +283,11 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     public void onVideoStatsClicked() {
         process(PlayerUiEventListener::onVideoStatsClicked);
     }
+
+    @Override
+    public void onVideoSpeedClicked() {
+        process(PlayerUiEventListener::onVideoSpeedClicked);
+    }
+
+    // PlayerUiEventListener End
 }

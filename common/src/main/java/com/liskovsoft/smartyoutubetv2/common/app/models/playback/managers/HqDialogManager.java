@@ -15,7 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventList
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -33,7 +33,7 @@ public class HqDialogManager extends PlayerEventListenerHelper implements Metada
     private static final long UI_HIDE_TIMEOUT_MS = 2_000;
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
     private boolean mEngineReady;
-    private VideoSettingsPresenter mSettingsPresenter;
+    private AppSettingsPresenter mSettingsPresenter;
     // NOTE: using map, because same item could be changed time to time
     private final Map<String, List<OptionItem>> mCheckedCategories = new LinkedHashMap<>();
     private final Map<String, List<OptionItem>> mRadioCategories = new LinkedHashMap<>();
@@ -49,7 +49,7 @@ public class HqDialogManager extends PlayerEventListenerHelper implements Metada
     public void onActivity(Activity activity) {
         super.onActivity(activity);
 
-        mSettingsPresenter = VideoSettingsPresenter.instance(mActivity);
+        mSettingsPresenter = AppSettingsPresenter.instance(mActivity);
     }
 
     private void addQualityCategories() {

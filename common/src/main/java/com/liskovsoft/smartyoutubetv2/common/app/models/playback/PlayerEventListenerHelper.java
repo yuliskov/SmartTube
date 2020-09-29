@@ -187,4 +187,9 @@ public abstract class PlayerEventListenerHelper implements PlayerHandlerEventLis
     public void onVideoStatsClicked() {
         // NOP
     }
+
+    @Override
+    public void onVideoSpeedClicked() {
+        // NOP
+    }
 }

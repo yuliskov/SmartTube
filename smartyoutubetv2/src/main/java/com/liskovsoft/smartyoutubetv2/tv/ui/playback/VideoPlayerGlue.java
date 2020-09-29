@@ -46,7 +46,6 @@ public class VideoPlayerGlue extends FixedVideoPlayerGlue<PlayerAdapter> {
 
     /** Listens for when skip to next and previous actions have been dispatched. */
     public interface OnActionClickedListener {
-
         /** Skip to the previous item in the queue. */
         void onPrevious();
 
@@ -76,6 +75,8 @@ public class VideoPlayerGlue extends FixedVideoPlayerGlue<PlayerAdapter> {
         void onPlaylistAdd();
 
         void onVideoStats();
+
+        void onVideoSpeed();
     }
 
     private final OnActionClickedListener mActionListener;
@@ -284,6 +285,9 @@ public class VideoPlayerGlue extends FixedVideoPlayerGlue<PlayerAdapter> {
             handled = true;
         } else if (action == mVideoStatsAction) {
             mActionListener.onVideoStats();
+            handled = true;
+        } else if (action == mVideoSpeedAction) {
+            mActionListener.onVideoSpeed();
             handled = true;
         }
 

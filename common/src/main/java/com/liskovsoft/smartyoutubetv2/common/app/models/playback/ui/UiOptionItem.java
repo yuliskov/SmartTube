@@ -12,6 +12,7 @@ public class UiOptionItem implements OptionItem {
     private boolean mIsSelected;
     private FormatItem mFormat;
     private OptionCallback mCallback;
+    private Object mData;
 
     public static List<OptionItem> from(List<FormatItem> formats, OptionCallback callback) {
         return from(formats, callback, null);
@@ -51,11 +52,16 @@ public class UiOptionItem implements OptionItem {
     }
 
     public static OptionItem from(String title, OptionCallback callback, boolean isChecked) {
+        return from(title, callback, isChecked, null);
+    }
+
+    public static OptionItem from(String title, OptionCallback callback, boolean isChecked, Object data) {
         UiOptionItem uiOptionItem = new UiOptionItem();
 
         uiOptionItem.mTitle = title;
         uiOptionItem.mIsSelected = isChecked;
         uiOptionItem.mCallback = callback;
+        uiOptionItem.mData = data;
 
         return uiOptionItem;
     }
@@ -95,5 +101,10 @@ public class UiOptionItem implements OptionItem {
         if (mCallback != null) {
             mCallback.onSelect(this);
         }
+    }
+
+    @Override
+    public Object getData() {
+        return mData;
     }
 }

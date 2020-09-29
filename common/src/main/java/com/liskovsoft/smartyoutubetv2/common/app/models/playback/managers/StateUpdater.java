@@ -1,11 +1,17 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class StateUpdater extends PlayerEventListenerHelper {
@@ -176,5 +182,27 @@ public class StateUpdater extends PlayerEventListenerHelper {
         }
 
         return newPositionMs;
+    }
+
+    @Override
+    public void onVideoSpeedClicked() {
+        List<OptionItem> items = new ArrayList<>();
+
+        intSpeedItems(items, new float[]{0.25f, 0.5f, 0.75f, 1.0f, 1.1f, 1.15f, 1.25f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f});
+
+        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mActivity);
+        settingsPresenter.clear();
+        settingsPresenter.appendRadioCategory(mActivity.getString(R.string.video_speed), items);
+        settingsPresenter.showDialog();
+    }
+
+    private void intSpeedItems(List<OptionItem> items, float[] speedValues) {
+        for (float speed : speedValues) {
+            items.add(UiOptionItem.from(
+                    String.valueOf(speed),
+                    optionItem -> mController.setSpeed((float) optionItem.getData()),
+                    mController.getSpeed() == speed,
+                    speed));
+        }
     }
 }

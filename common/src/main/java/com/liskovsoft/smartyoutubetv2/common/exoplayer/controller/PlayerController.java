@@ -26,4 +26,6 @@ public interface PlayerController {
     void selectFormat(FormatItem option);
     FormatItem getVideoFormat();
     boolean hasNoMedia();
+    void setSpeed(float speed);
+    float getSpeed();
 }

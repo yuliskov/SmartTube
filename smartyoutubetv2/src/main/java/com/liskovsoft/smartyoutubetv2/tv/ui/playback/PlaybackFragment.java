@@ -336,6 +336,11 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         public void onVideoStats() {
             mEventListener.onVideoStatsClicked();
         }
+
+        @Override
+        public void onVideoSpeed() {
+            mEventListener.onVideoSpeedClicked();
+        }
     }
 
     // Begin Ui events
@@ -467,6 +472,16 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public boolean hasNoMedia() {
         return mExoPlayerController.hasNoMedia();
+    }
+
+    @Override
+    public void setSpeed(float speed) {
+        mExoPlayerController.setSpeed(speed);
+    }
+
+    @Override
+    public float getSpeed() {
+        return mExoPlayerController.getSpeed();
     }
 
     // End Engine Events
