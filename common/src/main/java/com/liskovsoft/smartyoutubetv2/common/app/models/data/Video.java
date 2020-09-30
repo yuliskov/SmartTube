@@ -142,6 +142,14 @@ public final class Video implements Parcelable {
         return s;
     }
 
+    public boolean isVideo() {
+        return videoId != null;
+    }
+
+    public boolean isChannel() {
+        return videoId == null && channelId != null;
+    }
+
     // Builder for Video object.
     public static class VideoBuilder {
         private long id;

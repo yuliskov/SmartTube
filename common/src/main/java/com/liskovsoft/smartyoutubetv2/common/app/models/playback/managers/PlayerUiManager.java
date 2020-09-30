@@ -62,7 +62,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onChannelClicked() {
-        ChannelPresenter.instance(mActivity).openChannel(mController.getVideo().channelId);
+        ChannelPresenter.instance(mActivity).openChannel(mController.getVideo());
     }
 
     @Override

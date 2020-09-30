@@ -119,11 +119,11 @@ public class VideoLoader extends PlayerEventListenerHelper implements MetadataLi
 
     @Override
     public void onSuggestionItemClicked(Video item) {
-        if (item.videoId != null) {
+        if (item.isVideo()) {
             mPlaylist.add(item);
             loadVideo(item);
-        } else if (item.channelId != null) {
-            ChannelPresenter.instance(mActivity).openChannel(item.channelId);
+        } else if (item.isChannel()) {
+            ChannelPresenter.instance(mActivity).openChannel(item);
         } else {
             Log.e(TAG, "Video item doesn't contain needed data!");
         }

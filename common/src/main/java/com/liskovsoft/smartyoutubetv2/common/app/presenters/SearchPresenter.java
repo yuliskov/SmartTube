@@ -84,7 +84,11 @@ public class SearchPresenter implements VideoGroupPresenter<SearchView> {
             return;
         }
 
-        mPlaybackPresenter.openVideo(mView, item);
+        if (item.isVideo()) {
+            mPlaybackPresenter.openVideo(mView, item);
+        } else if (item.isChannel()) {
+            ChannelPresenter.instance(mContext).openChannel(item);
+        }
     }
 
     @Override

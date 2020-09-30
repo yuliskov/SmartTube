@@ -88,6 +88,12 @@ public class ChannelPresenter implements VideoGroupPresenter<ChannelView> {
         disposeActions();
     }
 
+    public void openChannel(Video item) {
+        if (item != null) {
+            openChannel(item.channelId);
+        }
+    }
+
     public void openChannel(String channelId) {
         if (channelId == null) {
             return;
