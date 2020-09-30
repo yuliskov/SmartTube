@@ -21,8 +21,10 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
     public interface TrackSelectorCallback {
         Pair<Definition, MediaTrack> onSelectVideoTrack(TrackGroupArray groups, Parameters params);
         Pair<Definition, MediaTrack> onSelectAudioTrack(TrackGroupArray groups, Parameters params);
+        Pair<Definition, MediaTrack> onSelectSubtitleTrack(TrackGroupArray groups, Parameters params);
         void updateVideoTrackSelection(TrackGroupArray groups, Parameters params, Definition definition);
         void updateAudioTrackSelection(TrackGroupArray groups, Parameters params, Definition definition);
+        void updateSubtitleTrackSelection(TrackGroupArray groups, Parameters params, Definition definition);
     }
 
     public RestoreTrackSelector(Factory trackSelectionFactory) {
@@ -55,8 +57,6 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
     @Override
     protected Definition selectVideoTrack(TrackGroupArray groups, int[][] formatSupports, int mixedMimeTypeAdaptationSupports,
                                               Parameters params, boolean enableAdaptiveTrackSelection) throws ExoPlaybackException {
-        Definition definition;
-
         if (mCallback != null) {
             Pair<Definition, MediaTrack> resultPair = mCallback.onSelectVideoTrack(groups, params);
 
@@ -68,7 +68,7 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
 
         Log.d(TAG, "selectVideoTrack: choose default video processing");
 
-        definition = super.selectVideoTrack(groups, formatSupports, mixedMimeTypeAdaptationSupports, params, enableAdaptiveTrackSelection);
+        Definition definition = super.selectVideoTrack(groups, formatSupports, mixedMimeTypeAdaptationSupports, params, enableAdaptiveTrackSelection);
 
         // Don't invoke if track already has been selected by the app
         if (mCallback != null && definition != null && !params.hasSelectionOverride(TrackSelectorManager.RENDERER_INDEX_VIDEO, groups)) {
@@ -82,8 +82,6 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
     @Override
     protected Pair<Definition, AudioTrackScore> selectAudioTrack(TrackGroupArray groups, int[][] formatSupports,
                                                                  int mixedMimeTypeAdaptationSupports, Parameters params, boolean enableAdaptiveTrackSelection) throws ExoPlaybackException {
-        Pair<Definition, AudioTrackScore> definitionPair;
-
         if (mCallback != null) {
             Pair<Definition, MediaTrack> resultPair = mCallback.onSelectAudioTrack(groups, params);
             if (resultPair != null) {
@@ -92,14 +90,38 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
             }
         }
 
-        Log.d(TAG, "selectVideoTrack: choose default audio processing");
+        Log.d(TAG, "selectAudioTrack: choose default audio processing");
 
-        definitionPair = super.selectAudioTrack(groups, formatSupports,
+        Pair<Definition, AudioTrackScore> definitionPair = super.selectAudioTrack(groups, formatSupports,
                 mixedMimeTypeAdaptationSupports, params, enableAdaptiveTrackSelection);
 
         // Don't invoke if track already has been selected by the app
         if (mCallback != null && definitionPair != null && !params.hasSelectionOverride(TrackSelectorManager.RENDERER_INDEX_AUDIO, groups)) {
             mCallback.updateAudioTrackSelection(groups, params, definitionPair.first);
+        }
+
+        return definitionPair;
+    }
+
+    @Nullable
+    @Override
+    protected Pair<Definition, TextTrackScore> selectTextTrack(TrackGroupArray groups, int[][] formatSupport, Parameters params,
+                                                               @Nullable String selectedAudioLanguage) throws ExoPlaybackException {
+        if (mCallback != null) {
+            Pair<Definition, MediaTrack> resultPair = mCallback.onSelectSubtitleTrack(groups, params);
+            if (resultPair != null) {
+                Log.d(TAG, "selectTextTrack: choose custom text processing");
+                return new Pair<>(resultPair.first, new TextTrackScore(resultPair.second.format, params, RendererCapabilities.FORMAT_HANDLED, ""));
+            }
+        }
+
+        Log.d(TAG, "selectTextTrack: choose default text processing");
+
+        Pair<Definition, TextTrackScore> definitionPair = super.selectTextTrack(groups, formatSupport, params, selectedAudioLanguage);
+
+        // Don't invoke if track already has been selected by the app
+        if (mCallback != null && definitionPair != null && !params.hasSelectionOverride(TrackSelectorManager.RENDERER_INDEX_SUBTITLE, groups)) {
+            mCallback.updateSubtitleTrackSelection(groups, params, definitionPair.first);
         }
 
         return definitionPair;

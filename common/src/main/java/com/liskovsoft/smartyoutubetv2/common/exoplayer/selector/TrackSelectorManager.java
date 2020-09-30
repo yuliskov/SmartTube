@@ -314,40 +314,50 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         return definitionPair;
     }
 
-    @Override
-    public Pair<Definition, MediaTrack> onSelectVideoTrack(TrackGroupArray groups, Parameters params) {
-        if (mSelectedTracks[RENDERER_INDEX_VIDEO] == null) {
+    private Pair<Definition, MediaTrack> createRendererSelection(int rendererIndex, TrackGroupArray groups, Parameters params) {
+        if (mSelectedTracks[rendererIndex] == null) {
             return null;
         }
 
-        initRenderer(RENDERER_INDEX_VIDEO, groups, params);
-        return createSelection(groups, mSelectedTracks[RENDERER_INDEX_VIDEO]);
+        initRenderer(rendererIndex, groups, params);
+        return createSelection(groups, mSelectedTracks[rendererIndex]);
+    }
+
+    private void updateRendererSelection(int rendererIndex, TrackGroupArray groups, Parameters params, Definition definition) {
+        initRenderer(rendererIndex, groups, params);
+
+        setOverride(rendererIndex, groups.indexOf(definition.group), definition.tracks);
+        updateSelection(rendererIndex);
+    }
+
+    @Override
+    public Pair<Definition, MediaTrack> onSelectVideoTrack(TrackGroupArray groups, Parameters params) {
+        return createRendererSelection(RENDERER_INDEX_VIDEO, groups, params);
     }
 
     @Override
     public Pair<Definition, MediaTrack> onSelectAudioTrack(TrackGroupArray groups, Parameters params) {
-        if (mSelectedTracks[RENDERER_INDEX_AUDIO] == null) {
-            return null;
-        }
+        return createRendererSelection(RENDERER_INDEX_AUDIO, groups, params);
+    }
 
-        initRenderer(RENDERER_INDEX_AUDIO, groups, params);
-        return createSelection(groups, mSelectedTracks[RENDERER_INDEX_AUDIO]);
+    @Override
+    public Pair<Definition, MediaTrack> onSelectSubtitleTrack(TrackGroupArray groups, Parameters params) {
+        return createRendererSelection(RENDERER_INDEX_SUBTITLE, groups, params);
     }
 
     @Override
     public void updateVideoTrackSelection(TrackGroupArray groups, Parameters params, Definition definition) {
-        initRenderer(RENDERER_INDEX_VIDEO, groups, params);
-
-        setOverride(RENDERER_INDEX_VIDEO, groups.indexOf(definition.group), definition.tracks);
-        updateSelection(RENDERER_INDEX_VIDEO);
+        updateRendererSelection(RENDERER_INDEX_VIDEO, groups, params, definition);
     }
 
     @Override
     public void updateAudioTrackSelection(TrackGroupArray groups, Parameters params, Definition definition) {
-        initRenderer(RENDERER_INDEX_AUDIO, groups, params);
+        updateRendererSelection(RENDERER_INDEX_AUDIO, groups, params, definition);
+    }
 
-        setOverride(RENDERER_INDEX_AUDIO, groups.indexOf(definition.group), definition.tracks);
-        updateSelection(RENDERER_INDEX_AUDIO);
+    @Override
+    public void updateSubtitleTrackSelection(TrackGroupArray groups, Parameters params, Definition definition) {
+        updateRendererSelection(RENDERER_INDEX_SUBTITLE, groups, params, definition);
     }
 
     public void selectTrack(MediaTrack track) {

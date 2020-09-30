@@ -17,6 +17,7 @@ import androidx.leanback.widget.OnItemViewClickedListener;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
@@ -34,6 +35,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerController;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleStyleRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
@@ -56,6 +58,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private LeanbackPlayerAdapter mPlayerAdapter;
     private SimpleExoPlayer mPlayer;
     private DefaultTrackSelector mTrackSelector;
+    private DefaultRenderersFactory mRenderersFactory;
     private PlayerActionListener mPlaylistActionListener;
     private PlaybackPresenter mPlaybackPresenter;
     private ArrayObjectAdapter mRowsAdapter;
@@ -199,15 +202,17 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlayerAdapter = null;
         mPlaylistActionListener = null;
         mExoPlayerController = null;
+        mRenderersFactory = null;
     }
 
     private void createPlayerObjects() {
         TrackSelection.Factory videoTrackSelectionFactory =
                 new AdaptiveTrackSelection.Factory();
         mTrackSelector = new RestoreTrackSelector(videoTrackSelectionFactory);
+        mRenderersFactory = new SubtitleStyleRenderersFactory(getActivity());
 
         // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
-        mPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), mTrackSelector);
+        mPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), mRenderersFactory, mTrackSelector);
 
         mExoPlayerController = new ExoPlayerController(mPlayer, mTrackSelector, getContext());
         mExoPlayerController.setEventListener(mEventListener);
