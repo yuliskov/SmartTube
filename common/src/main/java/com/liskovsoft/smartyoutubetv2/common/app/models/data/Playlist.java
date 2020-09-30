@@ -33,12 +33,6 @@ public class Playlist {
         mCurrentPosition = -1;
     }
 
-    public void clearNext() {
-        if (mCurrentPosition > 0 && (mCurrentPosition + 1) < mPlaylist.size()) {
-            mPlaylist = mPlaylist.subList(mCurrentPosition + 1, mPlaylist.size());
-        }
-    }
-
     /**
      * Adds a video to the end of the playlist.
      *
@@ -49,10 +43,14 @@ public class Playlist {
             mPlaylist.set(mCurrentPosition, video);
         } else {
             mPlaylist.add(++mCurrentPosition, video);
-            trimPlaylist();
         }
+
+        trimPlaylist();
     }
 
+    /**
+     * Trim playlist if one exceeds needed size or current element not last in the list
+     */
     private void trimPlaylist() {
         int fromIndex = 0;
         int toIndex = mCurrentPosition + 1;
@@ -66,6 +64,7 @@ public class Playlist {
 
         if (!isLastElement || playlistTooBig) {
             mPlaylist = mPlaylist.subList(fromIndex, toIndex);
+            mCurrentPosition = mPlaylist.size() - 1;
         }
     }
 

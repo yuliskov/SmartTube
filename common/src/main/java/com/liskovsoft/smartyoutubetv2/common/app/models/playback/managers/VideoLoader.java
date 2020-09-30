@@ -35,9 +35,6 @@ public class VideoLoader extends PlayerEventListenerHelper implements MetadataLi
     public void openVideo(Video item) {
         mPlaylist.add(item);
 
-        // reset next video prediction when new video opens
-        mPlaylist.clearNext();
-
         if (mEngineInitialized) { // player is initialized
             if (!item.equals(mLastVideo)) {
                 loadVideo(item); // play immediately
