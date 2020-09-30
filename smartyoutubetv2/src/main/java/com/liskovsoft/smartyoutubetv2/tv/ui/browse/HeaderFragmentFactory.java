@@ -9,7 +9,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Header;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseFragment.HeaderViewSelectedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.grid.HeaderGridFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.row.HeaderRowFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.row.HeaderRowsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,7 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
             int type = ((CustomHeaderItem) header).getType();
 
             if (type == Header.TYPE_ROW) {
-                fragment = new HeaderRowFragment();
+                fragment = new HeaderRowsFragment();
             } else if (type == Header.TYPE_GRID) {
                 fragment = new HeaderGridFragment();
             }

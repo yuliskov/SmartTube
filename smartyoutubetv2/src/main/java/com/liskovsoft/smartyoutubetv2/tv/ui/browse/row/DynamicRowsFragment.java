@@ -17,7 +17,7 @@ import androidx.leanback.widget.RowPresenter;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.HeaderFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
@@ -28,14 +28,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class HeaderRowFragment extends RowsSupportFragment implements HeaderFragment {
-    private static final String TAG = HeaderRowFragment.class.getSimpleName();
+public abstract class DynamicRowsFragment extends RowsSupportFragment implements HeaderFragment {
+    private static final String TAG = DynamicRowsFragment.class.getSimpleName();
     private UriBackgroundManager mBackgroundManager;
     private Handler mHandler;
     private ArrayObjectAdapter mRowsAdapter;
     private Map<Integer, VideoGroupObjectAdapter> mVideoGroupAdapters;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
-    private BrowsePresenter mMainPresenter;
+    private VideoGroupPresenter<?> mMainPresenter;
     private boolean mInvalidate;
 
     @Override
@@ -43,7 +43,7 @@ public class HeaderRowFragment extends RowsSupportFragment implements HeaderFrag
         super.onCreate(savedInstanceState);
 
         mHandler = new Handler();
-        mMainPresenter = BrowsePresenter.instance(getContext());
+        mMainPresenter = getMainPresenter();
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
 
         setupAdapter();
@@ -54,6 +54,8 @@ public class HeaderRowFragment extends RowsSupportFragment implements HeaderFrag
             getMainFragmentAdapter().getFragmentHost().notifyDataReady(getMainFragmentAdapter());
         }
     }
+
+    protected abstract VideoGroupPresenter<?> getMainPresenter();
 
     private void applyPendingUpdates() {
         for (VideoGroup group : mPendingUpdates) {
