@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -28,8 +29,9 @@ public class ChannelPresenter implements VideoGroupPresenter<ChannelView> {
     private final MediaService mMediaService;
     private final PlaybackPresenter mPlaybackPresenter;
     private ChannelView mView;
-    private Disposable mUpdateAction;
     private String mChannelId;
+    private Disposable mUpdateAction;
+    private Disposable mScrollAction;
 
     public ChannelPresenter(Context context) {
         mContext = context;
@@ -65,7 +67,13 @@ public class ChannelPresenter implements VideoGroupPresenter<ChannelView> {
 
     @Override
     public void onScrollEnd(VideoGroup group) {
+        Log.d(TAG, "onScrollEnd: Group title: " + group.getTitle());
 
+        boolean scrollInProgress = mScrollAction != null && !mScrollAction.isDisposed();
+
+        if (!scrollInProgress) {
+            continueGroup(group);
+        }
     }
 
     @Override
@@ -76,6 +84,8 @@ public class ChannelPresenter implements VideoGroupPresenter<ChannelView> {
     @Override
     public void unregister(ChannelView view) {
         mView = null;
+
+        disposeActions();
     }
 
     public void openChannel(String channelId) {
@@ -83,7 +93,7 @@ public class ChannelPresenter implements VideoGroupPresenter<ChannelView> {
             return;
         }
 
-        disposeUpdateAction();
+        disposeActions();
         ViewManager.instance(mContext).startView(ChannelView.class);
 
         if (mView != null) {
@@ -94,11 +104,13 @@ public class ChannelPresenter implements VideoGroupPresenter<ChannelView> {
         }
     }
 
-    private void disposeUpdateAction() {
-        boolean updateInProgress = mUpdateAction != null && !mUpdateAction.isDisposed();
-
-        if (updateInProgress) {
+    private void disposeActions() {
+        if (mUpdateAction != null && !mUpdateAction.isDisposed()) {
             mUpdateAction.dispose();
+        }
+
+        if (mScrollAction != null && !mScrollAction.isDisposed()) {
+            mScrollAction.dispose();
         }
     }
 
@@ -130,5 +142,23 @@ public class ChannelPresenter implements VideoGroupPresenter<ChannelView> {
 
             mView.update(VideoGroup.from(mediaGroup));
         }
+    }
+
+    private void continueGroup(VideoGroup group) {
+        Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
+
+        mView.showProgressBar(true);
+
+        MediaGroup mediaGroup = group.getMediaGroup();
+
+        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
+
+        mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(continueMediaGroup -> {
+                            mView.update(VideoGroup.from(continueMediaGroup));
+                        }, error -> Log.e(TAG, "continueGroup error: " + error),
+                        () -> mView.showProgressBar(false));
     }
 }
