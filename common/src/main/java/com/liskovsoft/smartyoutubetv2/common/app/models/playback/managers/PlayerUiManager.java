@@ -12,11 +12,15 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader.MetadataListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
+
+import java.util.List;
 
 public class PlayerUiManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = PlayerUiManager.class.getSimpleName();
@@ -67,7 +71,19 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onClosedCaptionsClicked() {
-        MessageHelpers.showMessage(mActivity, R.string.not_implemented);
+        List<FormatItem> subtitleFormats = mController.getSubtitleFormats();
+        String subtitleFormatsTitle = mActivity.getString(R.string.subtitle_formats_title);
+
+        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mActivity);
+
+        settingsPresenter.clear();
+
+        settingsPresenter.appendRadioCategory(subtitleFormatsTitle,
+                UiOptionItem.from(subtitleFormats,
+                        option -> mController.selectFormat(UiOptionItem.toFormat(option)),
+                        mActivity.getString(R.string.default_subtitle_option)));
+
+        settingsPresenter.showDialog();
     }
 
     @Override

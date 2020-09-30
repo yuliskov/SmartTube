@@ -141,7 +141,7 @@ public class ExoPlayerController implements EventListener, PlayerController {
 
     @Override
     public List<FormatItem> getSubtitleFormats() {
-        return ExoFormatItem.from(mTrackSelectorManager.getAudioTracks());
+        return ExoFormatItem.from(mTrackSelectorManager.getSubtitleTracks());
     }
 
     @Override

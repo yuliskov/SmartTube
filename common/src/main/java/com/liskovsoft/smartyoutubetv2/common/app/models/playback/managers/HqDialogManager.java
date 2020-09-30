@@ -34,19 +34,19 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
     private void addQualityCategories() {
         List<FormatItem> videoFormats = mController.getVideoFormats();
-        String videoFormatsTitle = mActivity.getString(R.string.dialog_video_formats);
+        String videoFormatsTitle = mActivity.getString(R.string.video_formats_title);
 
         List<FormatItem> audioFormats = mController.getAudioFormats();
-        String audioFormatsTitle = mActivity.getString(R.string.dialog_audio_formats);
+        String audioFormatsTitle = mActivity.getString(R.string.audio_formats_title);
 
         addRadioCategory(videoFormatsTitle,
                 UiOptionItem.from(videoFormats,
                         option -> mController.selectFormat(UiOptionItem.toFormat(option)),
-                        mActivity.getString(R.string.dialog_video_default)));
+                        mActivity.getString(R.string.default_video_option)));
         addRadioCategory(audioFormatsTitle,
                 UiOptionItem.from(audioFormats,
                         option -> mController.selectFormat(UiOptionItem.toFormat(option)),
-                        mActivity.getString(R.string.dialog_audio_default)));
+                        mActivity.getString(R.string.default_audio_option)));
     }
 
     @Override

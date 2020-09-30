@@ -14,11 +14,12 @@
     <string name="library_signin_title">Watch videos you liked, saved, or purchased</string>
     <string name="library_signin_subtitle">Sign in to see your library</string>
     <string name="library_signin_button_text">SIGN IN</string>
-    <string name="dialog_video_formats">Video formats</string>
-    <string name="dialog_audio_formats">Audio formats</string>
-    <string name="dialog_video_default">Auto (max quality)</string>
-    <string name="dialog_audio_default">Auto (max quality)</string>
-    <string name="dialog_subtitile_default">Disable subtitles</string>
+    <string name="video_formats_title">Video formats</string>
+    <string name="audio_formats_title">Audio formats</string>
+    <string name="subtitle_formats_title">Subtitles</string>
+    <string name="default_video_option">Auto (max quality)</string>
+    <string name="default_audio_option">Auto (max quality)</string>
+    <string name="default_subtitle_option">Disabled</string>
     <string name="auto_frame_rate">Auto frame rate</string>
     <string name="frame_rate_correction">Fix fps: %s</string>
     <string name="category_background_playback">Background playback</string>

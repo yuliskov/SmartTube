@@ -17,6 +17,7 @@ public interface PlaybackEngineController {
     void setRepeatMode(int modeIndex);
     List<FormatItem> getVideoFormats();
     List<FormatItem> getAudioFormats();
+    List<FormatItem> getSubtitleFormats();
     void selectFormat(FormatItem option);
     FormatItem getVideoFormat();
     /**

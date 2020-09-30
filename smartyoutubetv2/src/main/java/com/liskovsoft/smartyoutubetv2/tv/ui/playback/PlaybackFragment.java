@@ -427,6 +427,11 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
+    public List<FormatItem> getSubtitleFormats() {
+        return mExoPlayerController.getSubtitleFormats();
+    }
+
+    @Override
     public void selectFormat(FormatItem option) {
         // Android 4.4 fix for format selection dialog (player destroyed when dialog is focused)
         mExoPlayerController.selectFormat(option);
