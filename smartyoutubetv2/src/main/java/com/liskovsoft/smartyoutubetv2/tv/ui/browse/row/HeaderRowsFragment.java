@@ -1,9 +1,20 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.browse.row;
 
+import android.os.Bundle;
+import androidx.annotation.Nullable;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 
 public class HeaderRowsFragment extends DynamicRowsFragment {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (getMainFragmentAdapter().getFragmentHost() != null) {
+            getMainFragmentAdapter().getFragmentHost().notifyDataReady(getMainFragmentAdapter());
+        }
+    }
+
     @Override
     protected VideoGroupPresenter<?> getMainPresenter() {
         return BrowsePresenter.instance(getContext());

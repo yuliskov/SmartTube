@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader.MetadataListener;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -118,8 +119,14 @@ public class VideoLoader extends PlayerEventListenerHelper implements MetadataLi
 
     @Override
     public void onSuggestionItemClicked(Video item) {
-        mPlaylist.add(item);
-        loadVideo(item);
+        if (item.videoId != null) {
+            mPlaylist.add(item);
+            loadVideo(item);
+        } else if (item.channelId != null) {
+            ChannelPresenter.instance(mActivity).openChannel(item.channelId);
+        } else {
+            Log.e(TAG, "Video item doesn't contain needed data!");
+        }
     }
 
     private void loadVideo(Video item) {

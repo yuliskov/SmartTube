@@ -49,10 +49,6 @@ public abstract class DynamicRowsFragment extends RowsSupportFragment implements
         setupAdapter();
         setupEventListeners();
         applyPendingUpdates();
-
-        if (getMainFragmentAdapter().getFragmentHost() != null) {
-            getMainFragmentAdapter().getFragmentHost().notifyDataReady(getMainFragmentAdapter());
-        }
     }
 
     protected abstract VideoGroupPresenter<?> getMainPresenter();

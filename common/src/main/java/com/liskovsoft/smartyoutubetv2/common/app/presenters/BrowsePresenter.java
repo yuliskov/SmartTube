@@ -163,11 +163,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
             return;
         }
 
-        boolean updateInProgress = mUpdateAction != null && !mUpdateAction.isDisposed();
-
-        if (updateInProgress) {
-            mUpdateAction.dispose();
-        }
+        disposeUpdateAction();
 
         for (Header header : mHeaders) {
             if (header.getId() == headerId) {
@@ -175,6 +171,14 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
                 mView.clearHeader(header);
                 updateHeader(header);
             }
+        }
+    }
+
+    private void disposeUpdateAction() {
+        boolean updateInProgress = mUpdateAction != null && !mUpdateAction.isDisposed();
+
+        if (updateInProgress) {
+            mUpdateAction.dispose();
         }
     }
 

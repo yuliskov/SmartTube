@@ -70,6 +70,13 @@
             android:theme="@style/Theme.Leanback.Browse"/>
 
         <activity
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.channel.ChannelActivity"
+            android:launchMode="singleInstance"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Leanback.Browse"/>
+
+        <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity"
             android:launchMode="singleInstance"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"

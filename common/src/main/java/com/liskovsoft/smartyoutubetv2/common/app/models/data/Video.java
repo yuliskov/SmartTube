@@ -12,13 +12,14 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
  */
 public final class Video implements Parcelable {
     public long id;
-    public String category;
     public String title;
+    public String category;
     public String description;
-    public String bgImageUrl;
-    public String cardImageUrl;
+    public String channelId;
     public String videoId;
     public String videoUrl;
+    public String bgImageUrl;
+    public String cardImageUrl;
     public String studio;
     public int percentWatched;
     public MediaItem mediaItem;
@@ -68,6 +69,7 @@ public final class Video implements Parcelable {
         video.category = item.getContentType();
         video.description = item.getDescription();
         video.videoId = item.getMediaId();
+        video.channelId = item.getChannelId();
         video.videoUrl = item.getMediaUrl();
         video.bgImageUrl = item.getBackgroundImageUrl();
         video.cardImageUrl = item.getCardImageUrl();

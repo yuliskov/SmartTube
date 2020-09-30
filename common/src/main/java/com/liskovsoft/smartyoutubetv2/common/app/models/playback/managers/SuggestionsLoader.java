@@ -57,6 +57,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
         Video video = mController.getVideo();
         video.title = mediaItemMetadata.getTitle();
         video.description = mediaItemMetadata.getDescription();
+        video.channelId = mediaItemMetadata.getChannelId();
         mController.setVideo(video);
     }
 
