@@ -57,7 +57,11 @@ public class ChannelPresenter implements VideoGroupPresenter<ChannelView> {
 
     @Override
     public void onVideoItemClicked(Video item) {
-        mPlaybackPresenter.openVideo(item);
+        if (item.isVideo()) {
+            mPlaybackPresenter.openVideo(item);
+        } else if (item.isChannel()) {
+            openChannel(item);
+        }
     }
 
     @Override

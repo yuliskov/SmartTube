@@ -20,6 +20,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private int mRepeatMode = 0;
     private FormatItem mVideoFormat = FormatItem.VIDEO_HD_AVC;
     private FormatItem mAudioFormat = FormatItem.AUDIO_HQ_MP4A;
+    private FormatItem mSubtitleFormat;
     private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
     // Don't store state inside Video object.
     // As one video might correspond to multiple Video objects.
@@ -119,6 +120,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
             mVideoFormat = track;
         } else if (track.getType() == FormatItem.TYPE_AUDIO) {
             mAudioFormat = track;
+        } else if (track.getType() == FormatItem.TYPE_SUBTITLE) {
+            mSubtitleFormat = track;
         }
     }
 
@@ -162,6 +165,10 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
         if (mAudioFormat != null) {
             mController.selectFormat(mAudioFormat);
+        }
+
+        if (mSubtitleFormat != null) {
+            mController.selectFormat(mSubtitleFormat);
         }
     }
 

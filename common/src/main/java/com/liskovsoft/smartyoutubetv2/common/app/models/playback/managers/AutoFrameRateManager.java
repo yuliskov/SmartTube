@@ -19,9 +19,9 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     private boolean mCorrectionEnabled;
     private boolean mSwitchEnabled;
     private boolean mMainActivityRunOnce;
-    private boolean mParentActivityRunOnce;
+    //private boolean mParentActivityRunOnce;
     private FormatItem mSelectedVideoTrack;
-    private AutoFrameRateHelper mParentAutoFrameRateHelper;
+    //private AutoFrameRateHelper mParentAutoFrameRateHelper;
     private ModeSyncManager mModeSyncManager;
 
     public AutoFrameRateManager(HqDialogManager uiManager) {
@@ -44,18 +44,18 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         }
     }
 
-    @Override
-    public void onParentActivity(Activity activity) {
-        super.onParentActivity(activity);
-
-        if (!mParentActivityRunOnce) {
-            mParentAutoFrameRateHelper = new AutoFrameRateHelper(mParentActivity);
-
-            mParentActivityRunOnce = true;
-        } else {
-            mParentAutoFrameRateHelper.setActivity(mParentActivity);
-        }
-    }
+    //@Override
+    //public void onParentActivity(Activity activity) {
+    //    super.onParentActivity(activity);
+    //
+    //    if (!mParentActivityRunOnce) {
+    //        mParentAutoFrameRateHelper = new AutoFrameRateHelper(mParentActivity);
+    //
+    //        mParentActivityRunOnce = true;
+    //    } else {
+    //        mParentAutoFrameRateHelper.setActivity(mParentActivity);
+    //    }
+    //}
 
     @Override
     public void onTrackChanged(FormatItem track) {
@@ -91,14 +91,14 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
 
     private void restoreAfr() {
         mAutoFrameRateHelper.restoreOriginalState();
-        mParentAutoFrameRateHelper.restoreOriginalState();
+        //mParentAutoFrameRateHelper.restoreOriginalState();
         mModeSyncManager.save(null);
     }
 
     private void applyAfr(FormatItem track) {
         if (track != null) {
             mAutoFrameRateHelper.apply(track);
-            mParentAutoFrameRateHelper.apply(track);
+            //mParentAutoFrameRateHelper.apply(track);
             mModeSyncManager.save(track);
         }
     }

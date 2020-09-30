@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.KeyEvent;
 import android.view.View;
@@ -9,7 +10,11 @@ import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.PlaybackControlsRow;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.FixedVideoPlayerGlue;
+import com.google.android.exoplayer2.text.Cue;
+import com.google.android.exoplayer2.text.TextOutput;
+import com.google.android.exoplayer2.ui.SubtitleView;
+import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.MaxIconNumVideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsDownAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsUpAction;
@@ -22,6 +27,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PlaylistAddAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.RepeatAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SubscribeAction;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -41,44 +47,8 @@ import java.util.concurrent.TimeUnit;
  * Note that the superclass, {@link PlaybackTransportControlGlue}, manages the playback controls
  * row.
  */
-public class VideoPlayerGlue extends FixedVideoPlayerGlue<PlayerAdapter> {
+public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter> {
     private static final long TEN_SECONDS = TimeUnit.SECONDS.toMillis(10);
-
-    /** Listens for when skip to next and previous actions have been dispatched. */
-    public interface OnActionClickedListener {
-        /** Skip to the previous item in the queue. */
-        void onPrevious();
-
-        /** Skip to the next item in the queue. */
-        void onNext();
-
-        void onPlay();
-
-        void onPause();
-
-        void onKeyDown(int keyCode);
-
-        void setRepeatMode(int modeIndex);
-
-        void onHighQuality();
-
-        void onSubscribe(boolean subscribed);
-
-        void onThumbsDown(boolean thumbsDown);
-
-        void onThumbsUp(boolean thumbsUp);
-
-        void onChannel();
-
-        void onClosedCaptions();
-
-        void onPlaylistAdd();
-
-        void onVideoStats();
-
-        void onVideoSpeed();
-    }
-
     private final OnActionClickedListener mActionListener;
 
     private final ThumbsUpAction mThumbsUpAction;
@@ -97,7 +67,7 @@ public class VideoPlayerGlue extends FixedVideoPlayerGlue<PlayerAdapter> {
     private final VideoSpeedAction mVideoSpeedAction;
 
     public VideoPlayerGlue(
-            Context context,
+            Activity context,
             PlayerAdapter playerAdapter,
             OnActionClickedListener actionListener) {
         super(context, playerAdapter);
@@ -364,5 +334,40 @@ public class VideoPlayerGlue extends FixedVideoPlayerGlue<PlayerAdapter> {
         }
 
         return action;
+    }
+
+    /** Listens for when skip to next and previous actions have been dispatched. */
+    public interface OnActionClickedListener {
+        /** Skip to the previous item in the queue. */
+        void onPrevious();
+
+        /** Skip to the next item in the queue. */
+        void onNext();
+
+        void onPlay();
+
+        void onPause();
+
+        void onKeyDown(int keyCode);
+
+        void setRepeatMode(int modeIndex);
+
+        void onHighQuality();
+
+        void onSubscribe(boolean subscribed);
+
+        void onThumbsDown(boolean thumbsDown);
+
+        void onThumbsUp(boolean thumbsUp);
+
+        void onChannel();
+
+        void onClosedCaptions();
+
+        void onPlaylistAdd();
+
+        void onVideoStats();
+
+        void onVideoSpeed();
     }
 }

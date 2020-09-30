@@ -8,14 +8,14 @@ import androidx.leanback.widget.AbstractDetailsDescriptionPresenter;
 import androidx.leanback.widget.PlaybackRowPresenter;
 import androidx.leanback.widget.RowPresenter;
 
-public class FixedVideoPlayerGlue<T extends PlayerAdapter> extends PlaybackTransportControlGlue<T> {
+public class MaxIconNumVideoPlayerGlue<T extends PlayerAdapter> extends PlaybackTransportControlGlue<T> {
     /**
      * Constructor for the glue.
      *
      * @param context
      * @param impl    Implementation to underlying media player.
      */
-    public FixedVideoPlayerGlue(Context context, T impl) {
+    public MaxIconNumVideoPlayerGlue(Context context, T impl) {
         super(context, impl);
     }
 
@@ -36,7 +36,7 @@ public class FixedVideoPlayerGlue<T extends PlayerAdapter> extends PlaybackTrans
             @Override
             protected void onBindRowViewHolder(RowPresenter.ViewHolder vh, Object item) {
                 super.onBindRowViewHolder(vh, item);
-                vh.setOnKeyListener(FixedVideoPlayerGlue.this);
+                vh.setOnKeyListener(MaxIconNumVideoPlayerGlue.this);
             }
             @Override
             protected void onUnbindRowViewHolder(RowPresenter.ViewHolder vh) {

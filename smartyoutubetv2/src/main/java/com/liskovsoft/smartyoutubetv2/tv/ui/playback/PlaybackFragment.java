@@ -35,6 +35,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerController;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.AudioDelayRenderersFactoryV2;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleStyleRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.tv.R;
@@ -209,7 +211,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         TrackSelection.Factory videoTrackSelectionFactory =
                 new AdaptiveTrackSelection.Factory();
         mTrackSelector = new RestoreTrackSelector(videoTrackSelectionFactory);
-        mRenderersFactory = new SubtitleStyleRenderersFactory(getActivity());
+        mRenderersFactory = new AudioDelayRenderersFactoryV2(getActivity());
 
         // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
         mPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), mRenderersFactory, mTrackSelector);
@@ -225,6 +227,11 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlayerGlue.setSeekEnabled(true);
         mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end
         hideControlsOverlay(mEnableAnimation); // hide controls upon fragment creation
+
+        // subs renderer
+        if (mPlayer.getTextComponent() != null) {
+            mPlayer.getTextComponent().addTextOutput(new SubtitleManager(getActivity(), R.id.leanback_subtitles));
+        }
 
         mRowsAdapter = initializeSuggestedVideosRow();
         setAdapter(mRowsAdapter);

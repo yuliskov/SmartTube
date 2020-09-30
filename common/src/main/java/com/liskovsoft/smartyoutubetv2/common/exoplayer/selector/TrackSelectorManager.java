@@ -14,6 +14,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Definition;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.RestoreTrackSelector.TrackSelectorCallback;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.comparator.TrackComparator;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -33,7 +34,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
     private final Renderer[] mRenderers = new Renderer[3];
     private final MediaTrack[] mSelectedTracks = new MediaTrack[3];
-    private final TrackComparator mComparator = new TrackComparator();
 
     public void invalidate() {
         Arrays.fill(mRenderers, null);
@@ -410,7 +410,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
         MediaTrack result = createAutoSelection(track.rendererIndex);
 
-        mComparator.setRendererIndex(track.rendererIndex);
+        TrackComparator mComparator = TrackComparator.forRenderer(track.rendererIndex);
 
         if (track.format != null) { // not auto selection
             for (int groupIndex = 0; groupIndex < renderer.mediaTracks.length; groupIndex++) {

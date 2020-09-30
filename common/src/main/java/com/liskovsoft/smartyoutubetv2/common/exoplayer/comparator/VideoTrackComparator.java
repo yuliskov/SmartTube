@@ -1,11 +1,11 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.comparator;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager.MediaTrack;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 
-class TrackComparator {
+public class VideoTrackComparator extends TrackComparator {
     private static final int HEIGHT_EQUITY_THRESHOLD_PX = 80;
-    private int mRendererIndex;
 
     private static boolean codecEquals(String codecs1, String codecs2) {
         if (codecs1 == null || codecs2 == null) {
@@ -48,16 +48,6 @@ class TrackComparator {
     }
 
     public int compare(MediaTrack track1, MediaTrack track2) {
-        if (mRendererIndex == TrackSelectorManager.RENDERER_INDEX_VIDEO) {
-            return compareVideo(track1, track2);
-        } else if (mRendererIndex == TrackSelectorManager.RENDERER_INDEX_AUDIO) {
-            return compareAudio(track1, track2);
-        }
-
-        return 0;
-    }
-
-    private int compareAudio(MediaTrack track1, MediaTrack track2) {
         if (track1 == null || track1.format == null) {
             return -1;
         }
@@ -66,36 +56,16 @@ class TrackComparator {
 
         if (Helpers.equals(track1.format.id, track2.format.id)) {
             result = 0;
-        } else if (TrackComparator.codecEquals(track1.format.codecs, track2.format.codecs)) {
-            return 0;
-        }
-
-        return result;
-    }
-
-    private static int compareVideo(MediaTrack track1, MediaTrack track2) {
-        if (track1 == null || track1.format == null) {
-            return -1;
-        }
-
-        int result = 1;
-
-        if (Helpers.equals(track1.format.id, track2.format.id)) {
-            result = 0;
-        } else if (TrackComparator.codecEquals(track1.format.codecs, track2.format.codecs)) {
-            if (TrackComparator.fpsLessOrEquals(track1.format.frameRate, track2.format.frameRate)) {
-                if (TrackComparator.heightEquals(track1.format.height, track2.format.height)) {
+        } else if (VideoTrackComparator.codecEquals(track1.format.codecs, track2.format.codecs)) {
+            if (VideoTrackComparator.fpsLessOrEquals(track1.format.frameRate, track2.format.frameRate)) {
+                if (VideoTrackComparator.heightEquals(track1.format.height, track2.format.height)) {
                     result = 0;
-                } else if (TrackComparator.heightLessOrEquals(track1.format.height, track2.format.height)) {
+                } else if (VideoTrackComparator.heightLessOrEquals(track1.format.height, track2.format.height)) {
                     result = -1;
                 }
             }
         }
 
         return result;
-    }
-
-    public void setRendererIndex(int rendererIndex) {
-        mRendererIndex = rendererIndex;
     }
 }
