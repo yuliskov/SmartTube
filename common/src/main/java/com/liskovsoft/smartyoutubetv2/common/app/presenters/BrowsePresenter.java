@@ -5,16 +5,15 @@ import android.content.Context;
 import android.os.Handler;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.signin.SignInData;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Header;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.models.signin.SignInData;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.HeaderPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -31,7 +30,7 @@ import java.util.Map;
 
 public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     private static final String TAG = BrowsePresenter.class.getSimpleName();
-    private static final long RELOAD_PERIOD_MS = 10*60*1_000;
+    private static final long RELOAD_PERIOD_MS = 10 * 60 * 1_000;
     @SuppressLint("StaticFieldLeak")
     private static BrowsePresenter sInstance;
     private final Handler mHandler = new Handler();
@@ -235,24 +234,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     private void updateRowsHeader(Header header, Observable<List<MediaGroup>> groups, boolean authCheck) {
         Log.d(TAG, "loadRowsHeader: Start loading header: " + header.getTitle());
 
-        Observable<List<MediaGroup>> realGroups;
-
-        if (authCheck) {
-            SignInManager signInManager = mMediaService.getSignInManager();
-
-            realGroups = signInManager.isSignedObserve()
-                    .flatMap(isSigned -> {
-                        if (isSigned) {
-                            return groups;
-                        } else {
-                            return Observable.empty();
-                        }
-                    });
-        } else {
-            realGroups = groups;
-        }
-
-        mUpdateAction = realGroups
+        mUpdateAction = groups
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -280,24 +262,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     private void updateGridHeader(Header header, Observable<MediaGroup> group, boolean authCheck) {
         Log.d(TAG, "loadGridHeader: Start loading header: " + header.getTitle());
 
-        Observable<MediaGroup> realGroup;
-
-        if (authCheck) {
-            SignInManager signInManager = mMediaService.getSignInManager();
-
-            realGroup = signInManager.isSignedObserve()
-                    .flatMap(isSigned -> {
-                        if (isSigned) {
-                            return group;
-                        } else {
-                            return Observable.empty();
-                        }
-                    });
-        } else {
-            realGroup = group;
-        }
-
-        mUpdateAction = realGroup
+        mUpdateAction = group
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
