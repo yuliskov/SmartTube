@@ -80,8 +80,8 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
     }
 
     private void updateFragment(Fragment fragment, VideoGroup group) {
-        if (fragment instanceof HeaderFragment) {
-            ((HeaderFragment) fragment).update(group);
+        if (fragment instanceof VideoGroupFragment) {
+            ((VideoGroupFragment) fragment).update(group);
         } else {
             Log.e(TAG, "updateFragment: Page group fragment has incompatible type: " + fragment.getClass().getSimpleName());
         }
@@ -102,16 +102,16 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
     }
 
     private void clearFragment(Fragment fragment) {
-        if (fragment instanceof HeaderFragment) {
-            ((HeaderFragment) fragment).clear();
+        if (fragment instanceof VideoGroupFragment) {
+            ((VideoGroupFragment) fragment).invalidate();
         } else {
             Log.e(TAG, "clearFragment: Page group fragment has incompatible type: " + fragment.getClass().getSimpleName());
         }
     }
 
     public boolean isEmpty() {
-        if (mCurrentFragment instanceof HeaderFragment) {
-            return ((HeaderFragment) mCurrentFragment).isEmpty();
+        if (mCurrentFragment instanceof VideoGroupFragment) {
+            return ((VideoGroupFragment) mCurrentFragment).isEmpty();
         }
 
         return false;

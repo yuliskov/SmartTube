@@ -142,17 +142,16 @@ public class ViewManager {
         return skipEvent;
     }
 
-    public void addTopActivity(Activity activity) {
+    public void addTop(Activity activity) {
         if (checkMoveTaskToBack(activity)) {
             return;
         }
 
         Class<?> activityClass = activity.getClass();
 
-        if (!mActivityStack.isEmpty() && mActivityStack.peek() == activityClass) {
-            return;
-        }
+        // reorder activity
 
+        mActivityStack.remove(activityClass);
         mActivityStack.push(activityClass);
     }
 

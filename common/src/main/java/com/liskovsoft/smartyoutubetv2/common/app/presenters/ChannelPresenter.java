@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
@@ -24,6 +26,7 @@ public class ChannelPresenter implements VideoGroupPresenter<ChannelView> {
     private static ChannelPresenter sInstance;
     private final Context mContext;
     private final MediaService mMediaService;
+    private final PlaybackPresenter mPlaybackPresenter;
     private ChannelView mView;
     private Disposable mUpdateAction;
     private String mChannelId;
@@ -31,6 +34,7 @@ public class ChannelPresenter implements VideoGroupPresenter<ChannelView> {
     public ChannelPresenter(Context context) {
         mContext = context;
         mMediaService = YouTubeMediaService.instance();
+        mPlaybackPresenter = PlaybackPresenter.instance(context);
     }
 
     public static ChannelPresenter instance(Context context) {
@@ -51,12 +55,12 @@ public class ChannelPresenter implements VideoGroupPresenter<ChannelView> {
 
     @Override
     public void onVideoItemClicked(Video item) {
-
+        mPlaybackPresenter.openVideo(item);
     }
 
     @Override
     public void onVideoItemLongClicked(Video item) {
-
+        MessageHelpers.showMessage(mContext, R.string.not_implemented);
     }
 
     @Override

@@ -1,8 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.channel;
 
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.leanback.app.ProgressBarManager;
@@ -27,17 +25,10 @@ public class ChannelFragment extends DynamicRowsFragment implements ChannelView 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = super.onCreateView(inflater, container, savedInstanceState);
-
-        mProgressBarManager.setRootView((ViewGroup)root);
-
-        return root;
-    }
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        mProgressBarManager.setRootView((ViewGroup) getActivity().findViewById(android.R.id.content).getRootView());
 
         mChannelPresenter.onInitDone();
     }
@@ -55,11 +46,10 @@ public class ChannelFragment extends DynamicRowsFragment implements ChannelView 
 
     @Override
     public void showProgressBar(boolean show) {
-        //if (show) {
-        //    mProgressBarManager.enableProgressBar();
-        //    mProgressBarManager.show();
-        //} else {
-        //    mProgressBarManager.hide();
-        //}
+        if (show) {
+            mProgressBarManager.show();
+        } else {
+            mProgressBarManager.hide();
+        }
     }
 }

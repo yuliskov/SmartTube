@@ -94,16 +94,9 @@ public class SearchFragment extends SearchSupportFragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        mProgressBarManager.setRootView((ViewGroup) getActivity().findViewById(android.R.id.content).getRootView());
+
         mSearchPresenter.onInitDone();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = super.onCreateView(inflater, container, savedInstanceState);
-
-        mProgressBarManager.setRootView((ViewGroup)root);
-
-        return root;
     }
 
     private void setupEventListeners() {

@@ -2,8 +2,6 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.common;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import androidx.fragment.app.FragmentActivity;
@@ -61,7 +59,7 @@ public abstract class LeanbackActivity extends FragmentActivity {
         mBackgroundManager.onStart();
 
         // we can't do it in the ViewManager because activity may be started from outside
-        mViewManager.addTopActivity(this);
+        mViewManager.addTop(this);
     }
 
     @Override
@@ -69,7 +67,7 @@ public abstract class LeanbackActivity extends FragmentActivity {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode);
 
         if (!isInPictureInPictureMode) {
-            mViewManager.addTopActivity(this); // user makes pip activity fullscreen
+            mViewManager.addTop(this); // user makes pip activity fullscreen
         }
     }
 

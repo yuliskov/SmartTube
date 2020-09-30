@@ -19,7 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.HeaderFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.VideoGroupFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 
@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class DynamicRowsFragment extends RowsSupportFragment implements HeaderFragment {
+public abstract class DynamicRowsFragment extends RowsSupportFragment implements VideoGroupFragment {
     private static final String TAG = DynamicRowsFragment.class.getSimpleName();
     private UriBackgroundManager mBackgroundManager;
     private Handler mHandler;
@@ -78,8 +78,19 @@ public abstract class DynamicRowsFragment extends RowsSupportFragment implements
     }
 
     @Override
-    public void clear() {
+    public void invalidate() {
         mInvalidate = true;
+    }
+
+    @Override
+    public void clear() {
+        if (mRowsAdapter != null) {
+            mRowsAdapter.clear();
+        }
+
+        if (mVideoGroupAdapters != null) {
+            mVideoGroupAdapters.clear();
+        }
     }
 
     @Override
@@ -99,8 +110,7 @@ public abstract class DynamicRowsFragment extends RowsSupportFragment implements
         }
 
         if (mInvalidate) {
-            mRowsAdapter.clear();
-            mVideoGroupAdapters.clear();
+            clear();
             mInvalidate = false;
         }
 

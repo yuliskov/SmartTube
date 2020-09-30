@@ -15,7 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.HeaderFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.VideoGroupFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.GridFragment;
@@ -23,7 +23,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.GridFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HeaderGridFragment extends GridFragment implements HeaderFragment {
+public class HeaderGridFragment extends GridFragment implements VideoGroupFragment {
     private static final String TAG = HeaderGridFragment.class.getSimpleName();
     private static final int COLUMNS = 5;
     private final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
@@ -81,7 +81,7 @@ public class HeaderGridFragment extends GridFragment implements HeaderFragment {
         }
 
         if (mInvalidate) {
-            mGridAdapter.clear();
+            clear();
             mInvalidate = false;
         }
         
@@ -89,8 +89,15 @@ public class HeaderGridFragment extends GridFragment implements HeaderFragment {
     }
 
     @Override
-    public void clear() {
+    public void invalidate() {
         mInvalidate = true;
+    }
+
+    @Override
+    public void clear() {
+        if (mGridAdapter != null) {
+            mGridAdapter.clear();
+        }
     }
 
     @Override
