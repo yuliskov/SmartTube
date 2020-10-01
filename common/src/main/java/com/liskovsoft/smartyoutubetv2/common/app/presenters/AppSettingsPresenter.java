@@ -83,7 +83,6 @@ public class AppSettingsPresenter implements Presenter<AppSettingsView> {
     @Override
     public void unregister(AppSettingsView view) {
         mView = null;
-        onClose();
     }
 
     public void onClose() {

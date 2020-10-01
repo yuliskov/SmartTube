@@ -14,18 +14,19 @@ import java.util.List;
 
 public class AutoFrameRateManager extends PlayerEventListenerHelper {
     private final HqDialogManager mUiManager;
-    private AutoFrameRateHelper mAutoFrameRateHelper;
     private boolean mAfrEnabled;
     private boolean mCorrectionEnabled;
     private boolean mSwitchEnabled;
     private boolean mMainActivityRunOnce;
-    //private boolean mParentActivityRunOnce;
     private FormatItem mSelectedVideoTrack;
-    //private AutoFrameRateHelper mParentAutoFrameRateHelper;
-    private ModeSyncManager mModeSyncManager;
+    private final AutoFrameRateHelper mAutoFrameRateHelper;
+    private final ModeSyncManager mModeSyncManager;
 
     public AutoFrameRateManager(HqDialogManager uiManager) {
         mUiManager = uiManager;
+        mAutoFrameRateHelper = new AutoFrameRateHelper();
+        mModeSyncManager = ModeSyncManager.instance();
+        mModeSyncManager.setAfrHelper(mAutoFrameRateHelper);
     }
 
     @Override
@@ -33,49 +34,23 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         super.onActivity(activity);
 
         if (!mMainActivityRunOnce) {
-            mAutoFrameRateHelper = new AutoFrameRateHelper(mActivity);
-            mModeSyncManager = ModeSyncManager.instance(activity);
-
             addUiOptions();
-
+            mAutoFrameRateHelper.saveOriginalState(activity);
             mMainActivityRunOnce = true;
-        } else {
-            mAutoFrameRateHelper.setActivity(mActivity);
         }
     }
-
-    //@Override
-    //public void onParentActivity(Activity activity) {
-    //    super.onParentActivity(activity);
-    //
-    //    if (!mParentActivityRunOnce) {
-    //        mParentAutoFrameRateHelper = new AutoFrameRateHelper(mParentActivity);
-    //
-    //        mParentActivityRunOnce = true;
-    //    } else {
-    //        mParentAutoFrameRateHelper.setActivity(mParentActivity);
-    //    }
-    //}
 
     @Override
     public void onTrackChanged(FormatItem track) {
         if (track.getType() == FormatItem.TYPE_VIDEO) {
             mSelectedVideoTrack = track;
 
-            if (mAfrEnabled) {
-                applyAfr(track);
-            }
+            applyAfr();
         }
     }
 
     private void onAfrOptionClick(OptionItem optionItem) {
         mAfrEnabled = optionItem.isSelected();
-
-        if (mAfrEnabled) {
-            applyAfr(mSelectedVideoTrack);
-        } else {
-            restoreAfr();
-        }
     }
 
     private void onFpsCorrectionClick(OptionItem optionItem) {
@@ -86,19 +61,24 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     private void onResolutionSwitchClick(OptionItem optionItem) {
         mSwitchEnabled = optionItem.isSelected();
         mAutoFrameRateHelper.setResolutionSwitchEnabled(mSwitchEnabled);
-        applyAfr(mSelectedVideoTrack);
     }
 
     private void restoreAfr() {
-        mAutoFrameRateHelper.restoreOriginalState();
-        //mParentAutoFrameRateHelper.restoreOriginalState();
+        mAutoFrameRateHelper.restoreOriginalState(mActivity);
         mModeSyncManager.save(null);
+    }
+
+    private void applyAfr() {
+        if (mAfrEnabled) {
+            applyAfr(mSelectedVideoTrack);
+        } else {
+            restoreAfr();
+        }
     }
 
     private void applyAfr(FormatItem track) {
         if (track != null) {
-            mAutoFrameRateHelper.apply(track);
-            //mParentAutoFrameRateHelper.apply(track);
+            mAutoFrameRateHelper.apply(track, mActivity);
             mModeSyncManager.save(track);
         }
     }
@@ -113,5 +93,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         options.add(UiOptionItem.from(fpsCorrection, this::onFpsCorrectionClick, mCorrectionEnabled));
 
         mUiManager.addCheckedCategory(title, options);
+
+        mUiManager.setOnDialogHide(this::applyAfr);
     }
 }

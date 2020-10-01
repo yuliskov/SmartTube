@@ -75,21 +75,6 @@ public class MainPlayerEventBridge implements PlayerEventListener {
             }
         }
     }
-    
-    public void setParentView(Object parentView) {
-        if (parentView instanceof Fragment) {
-            Fragment fragment = (Fragment) parentView;
-            Activity parentActivity = fragment.getActivity();
-
-            if (mParentActivity != parentActivity) {
-                mParentActivity = parentActivity;
-
-                process(listener -> {
-                    listener.onParentActivity(parentActivity);
-                });
-            }
-        }
-    }
 
     @Override
     public void openVideo(Video item) {

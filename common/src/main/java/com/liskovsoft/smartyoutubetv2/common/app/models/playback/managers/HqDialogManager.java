@@ -24,6 +24,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     private final Map<CharSequence, OptionItem> mSingleOptions = new LinkedHashMap<>();
     private boolean mBlockEngine;
     private boolean mEnablePIP;
+    private final List<Runnable> mHideListeners = new ArrayList<>();
 
     @Override
     public void onActivity(Activity activity) {
@@ -70,7 +71,15 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         createCheckedOptions();
         createSingleOptions();
 
-        mSettingsPresenter.showDialog(mActivity.getString(R.string.playback_settings), this::updateBackgroundPlayback);
+        mSettingsPresenter.showDialog(mActivity.getString(R.string.playback_settings), this::onDialogHide);
+    }
+
+    private void onDialogHide() {
+        updateBackgroundPlayback();
+
+        for (Runnable listener : mHideListeners) {
+            listener.run();
+        }
     }
 
     private void updateBackgroundPlayback() {
@@ -121,6 +130,10 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
     public void addRadioCategory(String categoryTitle, List<OptionItem> options) {
         mRadioCategories.put(categoryTitle, options);
+    }
+
+    public void setOnDialogHide(Runnable listener) {
+        mHideListeners.add(listener);
     }
 
     private void createSingleOptions() {

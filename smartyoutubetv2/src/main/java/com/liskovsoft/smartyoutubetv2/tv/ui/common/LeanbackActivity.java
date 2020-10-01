@@ -26,7 +26,7 @@ public abstract class LeanbackActivity extends FragmentActivity {
         mLongClickManager = new LongClickManager();
         mBackgroundManager = new UriBackgroundManager(this);
         mViewManager = ViewManager.instance(this);
-        mModeSyncManager = ModeSyncManager.instance(this);
+        mModeSyncManager = ModeSyncManager.instance();
     }
 
     @Override

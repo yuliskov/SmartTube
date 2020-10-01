@@ -18,7 +18,11 @@ public class AutoFrameRateHelper {
     private HashMap<Float, Float> mFrameRateMapping;
     private boolean mIsFpsCorrectionEnabled;
 
-    public AutoFrameRateHelper(Activity activity) {
+    public AutoFrameRateHelper() {
+        this(null);
+    }
+
+    private AutoFrameRateHelper(Activity activity) {
         mActivity = activity;
         mSyncHelper = new DisplaySyncHelperAlt(activity);
 
@@ -32,7 +36,7 @@ public class AutoFrameRateHelper {
         mFrameRateMapping.put(60f, 59.94f);
     }
 
-    public void apply(FormatItem format, boolean force) {
+    private void apply(FormatItem format, boolean force) {
         if (mActivity == null) {
             Log.e(TAG, "Activity in null. exiting...");
             return;
@@ -62,7 +66,12 @@ public class AutoFrameRateHelper {
         mSyncHelper.syncDisplayMode(mActivity.getWindow(), width, frameRate, force);
     }
 
-    public void apply(FormatItem format) {
+    public void apply(FormatItem format, Activity activity) {
+        setActivity(activity);
+        apply(format);
+    }
+
+    private void apply(FormatItem format) {
         apply(format, false);
     }
 
@@ -78,6 +87,11 @@ public class AutoFrameRateHelper {
         mSyncHelper.setResolutionSwitchEnabled(enabled);
     }
 
+    public void saveOriginalState(Activity activity) {
+        setActivity(activity);
+        saveOriginalState();
+    }
+
     private void saveOriginalState() {
         if (mActivity == null) {
             Log.e(TAG, "Activity in null. exiting...");
@@ -91,7 +105,16 @@ public class AutoFrameRateHelper {
         mSyncHelper.saveOriginalState();
     }
 
-    public void restoreOriginalState(boolean force) {
+    public void restoreOriginalState(Activity activity) {
+        setActivity(activity);
+        restoreOriginalState();
+    }
+
+    private void restoreOriginalState() {
+        restoreOriginalState(false);
+    }
+
+    private void restoreOriginalState(boolean force) {
         if (!isSupported()) {
             Log.d(TAG, "restoreOriginalState: autoframerate not enabled... exiting...");
             return;
@@ -102,10 +125,6 @@ public class AutoFrameRateHelper {
         boolean result = mSyncHelper.restoreOriginalState(mActivity.getWindow(), force);
 
         Log.d(TAG, "Restore mode result: " + result);
-    }
-
-    public void restoreOriginalState() {
-        restoreOriginalState(false);
     }
 
     public void setListener(AutoFrameRateListener listener) {
@@ -143,12 +162,12 @@ public class AutoFrameRateHelper {
         mSyncHelper.applyModeChangeFix(mActivity.getWindow());
     }
 
-    public void setActivity(Activity activity) {
-        mActivity = activity;
-        mSyncHelper.setContext(activity);
+    private void resetState() {
+        mSyncHelper.resetMode(mActivity.getWindow());
     }
 
-    public void resetState() {
-        mSyncHelper.resetMode(mActivity.getWindow());
+    private void setActivity(Activity activity) {
+        mActivity = activity;
+        mSyncHelper.setContext(activity);
     }
 }

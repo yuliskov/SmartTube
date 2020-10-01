@@ -9,7 +9,6 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 public abstract class PlayerEventListenerHelper implements PlayerHandlerEventListener {
     protected PlaybackController mController;
     protected Activity mActivity;
-    protected Activity mParentActivity;
 
     @Override
     public void onController(PlaybackController controller) {
@@ -19,11 +18,6 @@ public abstract class PlayerEventListenerHelper implements PlayerHandlerEventLis
     @Override
     public void onActivity(Activity activity) {
         mActivity = activity;
-    }
-
-    @Override
-    public void onParentActivity(Activity activity) {
-        mParentActivity = activity;
     }
 
     @Override

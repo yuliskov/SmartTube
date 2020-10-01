@@ -13,6 +13,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragment;
 import androidx.preference.PreferenceScreen;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter.SettingsCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppSettingsView;
@@ -24,6 +25,7 @@ import java.util.List;
 
 public class AppSettingsFragment extends LeanbackSettingsFragment
         implements DialogPreference.TargetFragment, AppSettingsView {
+    private static final String TAG = AppSettingsFragment.class.getSimpleName();
     private AppPreferenceFragment mPreferenceFragment;
     private AppSettingsPresenter mSettingsPresenter;
 
@@ -45,6 +47,7 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.d(TAG, "onDestroy");
         mSettingsPresenter.unregister(this);
     }
 
@@ -106,6 +109,10 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
         }
 
         return super.onPreferenceDisplayDialog(caller, pref);
+    }
+
+    public void onFinish() {
+        mSettingsPresenter.onClose();
     }
 
     public static class AppPreferenceFragment extends LeanbackPreferenceFragment {

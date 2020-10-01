@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.common.app.views;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -14,14 +13,13 @@ import java.util.Stack;
 
 public class ViewManager {
     private static final String TAG = ViewManager.class.getSimpleName();
-    @SuppressLint("StaticFieldLeak")
     private static ViewManager sInstance;
     private final Context mContext;
     private final Map<Class<?>, Class<? extends Activity>> mViewMapping;
     private final Map<Class<? extends Activity>, Class<? extends Activity>> mParentMapping;
-    private final Stack<Class<?>> mActivityStack;
-    private Class<?> mRootActivity;
-    private Class<?> mDefaultTop;
+    private final Stack<Activity> mActivityStack;
+    private Class<?> mRootActivityClass;
+    private Class<?> mDefaultTopActivityClass;
     private long mPrevThrottleTimeMS;
     private boolean mMoveTaskToBack;
 
@@ -84,7 +82,7 @@ public class ViewManager {
         if (activity.getIntent() != null) {
             removeTopActivity();
 
-            Class<?> parentActivity = getTopActivity();
+            Class<?> parentActivity = getTopActivityClass();
 
             if (parentActivity == null) {
                 parentActivity = getDefaultParent(activity);
@@ -119,12 +117,12 @@ public class ViewManager {
 
         Class<?> lastActivity;
 
-        if (mDefaultTop != null) {
-            lastActivity = mDefaultTop;
+        if (mDefaultTopActivityClass != null) {
+            lastActivity = mDefaultTopActivityClass;
         } else if (!mActivityStack.isEmpty()) {
-            lastActivity = mActivityStack.peek();
+            lastActivity = mActivityStack.peek().getClass();
         } else {
-            lastActivity = mRootActivity;
+            lastActivity = mRootActivityClass;
         }
 
         Log.d(TAG, "Launching default activity: " + lastActivity.getSimpleName());
@@ -148,11 +146,25 @@ public class ViewManager {
             return;
         }
 
-        Class<?> activityClass = activity.getClass();
-
         // reorder activity
-        mActivityStack.remove(activityClass);
-        mActivityStack.push(activityClass);
+        mActivityStack.remove(activity);
+        mActivityStack.push(activity);
+    }
+
+    public Activity getTop() {
+        if (!mActivityStack.isEmpty()) {
+            return mActivityStack.peek();
+        }
+
+        return null;
+    }
+
+    public Activity getParent() {
+        if (mActivityStack.size() >= 2) {
+            return mActivityStack.get(mActivityStack.size() - 2);
+        }
+
+        return null;
     }
 
     private void removeTopActivity() {
@@ -161,18 +173,18 @@ public class ViewManager {
         }
     }
 
-    private Class<?> getTopActivity() {
+    private Class<?> getTopActivityClass() {
         Class<?> result = null;
 
         if (!mActivityStack.isEmpty()) {
-            result = mActivityStack.peek();
+            result = mActivityStack.peek().getClass();
         }
 
         return result;
     }
 
     public void setRoot(@NonNull Class<?> rootActivity) {
-        mRootActivity = rootActivity;
+        mRootActivityClass = rootActivity;
     }
 
     private Class<?> getDefaultParent(Activity activity) {
@@ -188,7 +200,7 @@ public class ViewManager {
     }
 
     public void blockTop(Activity activity) {
-        mDefaultTop = activity == null ? null : activity.getClass();
+        mDefaultTopActivityClass = activity == null ? null : activity.getClass();
     }
 
     private boolean checkMoveTaskToBack(Activity activity) {

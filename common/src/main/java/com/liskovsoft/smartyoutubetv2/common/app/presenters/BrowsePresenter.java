@@ -107,7 +107,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
         }
 
         if (item.isVideo()) {
-            mPlaybackPresenter.openVideo(mView, item);
+            mPlaybackPresenter.openVideo(item);
         } else if (item.isChannel()) {
             ChannelPresenter.instance(mContext).openChannel(item);
         }

@@ -6,16 +6,16 @@ import android.os.Looper;
 
 public class ModeSyncManager {
     private static ModeSyncManager sInstance;
-    private final AutoFrameRateHelper mAutoFrameRateHelper;
     private FormatItem mFormatItem;
+    private AutoFrameRateHelper mFrameRateHelper;
 
-    public ModeSyncManager(Activity activity) {
-        mAutoFrameRateHelper = new AutoFrameRateHelper(activity);
+    private ModeSyncManager() {
+        // NOP
     }
 
-    public static ModeSyncManager instance(Activity activity) {
+    public static ModeSyncManager instance() {
         if (sInstance == null) {
-            sInstance = new ModeSyncManager(activity);
+            sInstance = new ModeSyncManager();
         }
 
         return sInstance;
@@ -26,11 +26,22 @@ public class ModeSyncManager {
     }
 
     public void restore(Activity activity) {
-        if (mFormatItem != null) {
-            mAutoFrameRateHelper.setActivity(activity);
-            mAutoFrameRateHelper.apply(mFormatItem);
-
-            //new Handler(Looper.myLooper()).postDelayed(() -> mAutoFrameRateHelper.apply(mFormatItem), 5_000);
+        if (mFrameRateHelper == null) {
+            return;
         }
+
+        new Handler(Looper.myLooper()).postDelayed(() -> applyAfr(activity), 1_000);
+    }
+
+    private void applyAfr(Activity activity) {
+        if (mFormatItem != null) {
+            mFrameRateHelper.apply(mFormatItem, activity);
+        } else {
+            mFrameRateHelper.restoreOriginalState(activity);
+        }
+    }
+
+    public void setAfrHelper(AutoFrameRateHelper frameRateHelper) {
+        mFrameRateHelper = frameRateHelper;
     }
 }
