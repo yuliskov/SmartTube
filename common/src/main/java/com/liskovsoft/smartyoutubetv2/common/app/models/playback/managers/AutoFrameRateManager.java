@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import android.app.Activity;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AutoFrameRateManager extends PlayerEventListenerHelper {
+    private static final String TAG = AutoFrameRateManager.class.getSimpleName();
     private final HqDialogManager mUiManager;
     private boolean mAfrEnabled;
     private boolean mCorrectionEnabled;
@@ -63,11 +65,6 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         mAutoFrameRateHelper.setResolutionSwitchEnabled(mSwitchEnabled);
     }
 
-    private void restoreAfr() {
-        mAutoFrameRateHelper.restoreOriginalState(mActivity);
-        mModeSyncManager.save(null);
-    }
-
     private void applyAfr() {
         if (mAfrEnabled) {
             applyAfr(mSelectedVideoTrack);
@@ -76,8 +73,15 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         }
     }
 
+    private void restoreAfr() {
+        Log.d(TAG, "Restoring afr...");
+        mAutoFrameRateHelper.restoreOriginalState(mActivity);
+        mModeSyncManager.save(null);
+    }
+
     private void applyAfr(FormatItem track) {
         if (track != null) {
+            Log.d(TAG, "Applying afr: " + track.getFrameRate());
             mAutoFrameRateHelper.apply(track, mActivity);
             mModeSyncManager.save(track);
         }

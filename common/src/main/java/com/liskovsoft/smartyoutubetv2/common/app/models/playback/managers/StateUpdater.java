@@ -93,8 +93,16 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     @Override
+    public void onSourceChanged(Video item) {
+        // called before engine attempt to auto select track by itself
+        restoreFormat();
+    }
+
+    @Override
     public void onVideoLoaded(Video item) {
-        restoreState(item);
+        // on this state video length is not undefined
+        restorePosition(item);
+        restoreSpeed();
     }
 
     @Override
@@ -146,14 +154,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     private void trimStorage() {
         // NOP
-    }
-
-    private void restoreState(Video item) {
-        restoreFormat();
-
-        restorePosition(item);
-
-        restoreSpeed();
     }
 
     private void restoreFormat() {

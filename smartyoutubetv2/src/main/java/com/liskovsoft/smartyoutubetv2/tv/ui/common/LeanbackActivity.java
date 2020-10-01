@@ -56,6 +56,8 @@ public abstract class LeanbackActivity extends FragmentActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        mModeSyncManager.restore(this);
         mBackgroundManager.onStart();
 
         // we can't do it in the ViewManager because activity may be started from outside
@@ -69,12 +71,6 @@ public abstract class LeanbackActivity extends FragmentActivity {
         if (!isInPictureInPictureMode) {
             mViewManager.addTop(this); // user makes pip activity fullscreen
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mModeSyncManager.restore(this);
     }
 
     @Override
