@@ -197,7 +197,6 @@ public class ExoPlayerController implements EventListener, PlayerController {
 
         if (playPressed) {
             mEventListener.onPlay();
-            //mTrackSelectorManager.applyPendingSelection();
         } else if (pausePressed) {
             mEventListener.onPause();
         } else if (playbackEnded) {

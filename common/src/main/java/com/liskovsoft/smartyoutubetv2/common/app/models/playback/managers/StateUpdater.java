@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import android.app.Activity;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -8,6 +9,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,8 +20,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private boolean mIsPlaying;
     private float mSpeed = -1;
     private int mRepeatMode = 0;
-    private FormatItem mVideoFormat = FormatItem.VIDEO_HD_AVC;
-    private FormatItem mAudioFormat = FormatItem.AUDIO_HQ_MP4A;
+    private FormatItem mVideoFormat;
+    private FormatItem mAudioFormat;
     private FormatItem mSubtitleFormat;
     private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
     // Don't store state inside Video object.
@@ -37,6 +39,23 @@ public class StateUpdater extends PlayerEventListenerHelper {
         public State(long positionMs, long lengthMs) {
             this.positionMs = positionMs;
             this.lengthMs = lengthMs;
+        }
+    }
+
+    @Override
+    public void onActivity(Activity activity) {
+        super.onActivity(activity);
+
+        mVideoFormat = AppPrefs.instance(mActivity).getFormat(FormatItem.TYPE_VIDEO);
+        mAudioFormat = AppPrefs.instance(mActivity).getFormat(FormatItem.TYPE_AUDIO);
+        mSubtitleFormat = AppPrefs.instance(mActivity).getFormat(FormatItem.TYPE_SUBTITLE);
+
+        if (mVideoFormat == null) {
+            mVideoFormat = FormatItem.VIDEO_HD_AVC;
+        }
+
+        if (mAudioFormat == null) {
+            mAudioFormat = FormatItem.AUDIO_HQ_MP4A;
         }
     }
 
@@ -131,6 +150,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
         } else if (track.getType() == FormatItem.TYPE_SUBTITLE) {
             mSubtitleFormat = track;
         }
+
+        AppPrefs.instance(mActivity).setFormat(track);
     }
 
     private void ensureVideoSize(Video item) {

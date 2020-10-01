@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
+import android.content.Intent;
+import androidx.annotation.NonNull;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
@@ -86,6 +88,68 @@ public class ExoFormatItem implements FormatItem {
         formatItem.mHeight = format.height;
         formatItem.mTitle = TrackSelectorUtil.buildTrackNameShort(format);
         formatItem.mType = getType(format);
+
+        return formatItem;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        String codecs = "";
+        int width = -1;
+        int height = -1;
+        float frameRate = -1;
+        String language = "";
+        String id = "";
+
+        if (mTrack != null && mTrack.format != null) {
+            id = mTrack.format.id;
+            codecs = mTrack.format.codecs;
+            width = mTrack.format.width;
+            height = mTrack.format.height;
+            frameRate = mTrack.format.frameRate;
+            language = mTrack.format.language;
+        }
+
+        return String.format("%s,%s,%s,%s,%s,%s,%s", mType, id, codecs, width, height, frameRate, language);
+    }
+
+    public static FormatItem from(String spec) {
+        if (spec == null) {
+            return null;
+        }
+
+        ExoFormatItem formatItem = new ExoFormatItem();
+        MediaTrack mediaTrack = new MediaTrack();
+        formatItem.mTrack = mediaTrack;
+
+        String[] split = spec.split(",");
+
+        int type = Integer.parseInt(split[0]);
+        String id = split[1];
+        String codecs = split[2];
+        int width = Integer.parseInt(split[3]);
+        int height = Integer.parseInt(split[4]);
+        float frameRate = Float.parseFloat(split[5]);
+        String language = split[6];
+
+        switch (type) {
+            case TYPE_VIDEO:
+                // Fake format. It's used in app internal comparison routine.
+                mediaTrack.format = Format.createVideoSampleFormat(
+                        id, null, codecs, -1, -1, width, height, frameRate, null, null);
+                break;
+            case TYPE_AUDIO:
+                // Fake format. It's used in app internal comparison routine.
+                mediaTrack.format = Format.createAudioSampleFormat(
+                        id, null, codecs, -1, -1,0, 0, null, null, 0, null);
+                break;
+            case TYPE_SUBTITLE:
+                // Fake format. It's used in app internal comparison routine.
+                mediaTrack.format = Format.createTextSampleFormat(
+                        id, null, -1, language);
+                break;
+        }
 
         return formatItem;
     }

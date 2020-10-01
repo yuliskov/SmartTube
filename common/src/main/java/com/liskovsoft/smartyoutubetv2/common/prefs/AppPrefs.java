@@ -3,11 +3,15 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.sharedutils.prefs.SharedPreferencesBase;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
+import com.liskovsoft.youtubeapi.videoinfo.models.formats.VideoFormat;
 
 public class AppPrefs extends SharedPreferencesBase {
     private static final String TAG = AppPrefs.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static AppPrefs sInstance;
+    private static final String VIDEO_FORMAT = "video_format";
     private static final String COMPLETED_ONBOARDING = "completed_onboarding";
 
     private AppPrefs(Context context) {
@@ -28,5 +32,13 @@ public class AppPrefs extends SharedPreferencesBase {
 
     public boolean getCompletedOnboarding() {
         return getBoolean(COMPLETED_ONBOARDING, false);
+    }
+
+    public void setFormat(FormatItem track) {
+        putString(VIDEO_FORMAT + track.getType(), track.toString());
+    }
+
+    public FormatItem getFormat(int type) {
+        return ExoFormatItem.from(getString(VIDEO_FORMAT + type, null));
     }
 }

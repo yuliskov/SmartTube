@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Build.VERSION;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
@@ -50,6 +51,25 @@ public class HqDialogManager extends PlayerEventListenerHelper {
                         mActivity.getString(R.string.default_audio_option)));
     }
 
+    private void addVideoBufferCategory() {
+        String videoBuffer = mActivity.getString(R.string.video_buffer);
+        List<OptionItem> optionItems = new ArrayList<>();
+        optionItems.add(createBufferOption(R.string.video_buffer_size_low, PlaybackEngineController.BUFFER_LOW));
+        optionItems.add(createBufferOption(R.string.video_buffer_size_med, PlaybackEngineController.BUFFER_MED));
+        optionItems.add(createBufferOption(R.string.video_buffer_size_high, PlaybackEngineController.BUFFER_HIGH));
+        addRadioCategory(videoBuffer, optionItems);
+    }
+
+    private OptionItem createBufferOption(int titleResId, int val) {
+        return UiOptionItem.from(
+                mActivity.getString(titleResId),
+                optionItem -> {
+                    mController.setBuffer(val);
+                    mController.restartEngine();
+                },
+                mController.getBuffer() == val);
+    }
+
     @Override
     public void onEngineInitialized() {
         updateBackgroundPlayback();
@@ -57,9 +77,6 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
     @Override
     public void onHighQualityClicked() {
-        addQualityCategories();
-        addBackgroundPlaybackCategory();
-
         if (VERSION.SDK_INT < 25) {
             // Old Android fix: don't destroy player while dialog is open
             mController.blockEngine(true);
@@ -67,9 +84,13 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
         mSettingsPresenter.clear();
 
-        createRadioOptions();
-        createCheckedOptions();
-        createSingleOptions();
+        addQualityCategories();
+        addBackgroundPlaybackCategory();
+        addVideoBufferCategory();
+
+        appendRadioOptions();
+        appendCheckedOptions();
+        appendSingleOptions();
 
         mSettingsPresenter.showDialog(mActivity.getString(R.string.playback_settings), this::onDialogHide);
     }
@@ -136,19 +157,19 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         mHideListeners.add(listener);
     }
 
-    private void createSingleOptions() {
+    private void appendSingleOptions() {
         for (OptionItem option : mSingleOptions.values()) {
             mSettingsPresenter.appendSingleSwitch(option);
         }
     }
 
-    private void createCheckedOptions() {
+    private void appendCheckedOptions() {
         for (String key : mCheckedCategories.keySet()) {
             mSettingsPresenter.appendCheckedCategory(key, mCheckedCategories.get(key));
         }
     }
 
-    private void createRadioOptions() {
+    private void appendRadioOptions() {
         for (String key : mRadioCategories.keySet()) {
             mSettingsPresenter.appendRadioCategory(key, mRadioCategories.get(key));
         }

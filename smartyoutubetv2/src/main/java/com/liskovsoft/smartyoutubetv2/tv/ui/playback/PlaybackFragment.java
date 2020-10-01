@@ -36,6 +36,7 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.AudioDelayRenderersFactoryV2;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ExoPlayerInitializer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleStyleRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.RestoreTrackSelector;
@@ -72,6 +73,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private RowsSupportFragment mRowsSupportFragment;
     private boolean mBlockEngine;
     private boolean mEnablePIP;
+    private ExoPlayerInitializer mPlayerInitializer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mMediaGroupAdapters = new HashMap<>();
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
         mBackgroundManager.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.player_background));
+        mPlayerInitializer = new ExoPlayerInitializer(getActivity());
 
         mPlaybackPresenter = PlaybackPresenter.instance(getContext());
         mPlaybackPresenter.register(this);
@@ -214,7 +217,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mRenderersFactory = new AudioDelayRenderersFactoryV2(getActivity());
 
         // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
-        mPlayer = ExoPlayerFactory.newSimpleInstance(getActivity(), mRenderersFactory, mTrackSelector);
+        mPlayer = mPlayerInitializer.createPlayer(getActivity(), mRenderersFactory, mTrackSelector);
 
         mExoPlayerController = new ExoPlayerController(mPlayer, mTrackSelector, getContext());
         mExoPlayerController.setEventListener(mEventListener);
@@ -498,6 +501,16 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public float getSpeed() {
         return mExoPlayerController.getSpeed();
+    }
+
+    @Override
+    public void setBuffer(int bufferType) {
+        mPlayerInitializer.setBuffer(bufferType);
+    }
+
+    @Override
+    public int getBuffer() {
+        return mPlayerInitializer.getBuffer();
     }
 
     // End Engine Events
