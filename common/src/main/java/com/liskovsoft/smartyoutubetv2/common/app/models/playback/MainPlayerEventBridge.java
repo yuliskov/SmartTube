@@ -62,16 +62,16 @@ public class MainPlayerEventBridge implements PlayerEventListener {
             Fragment fragment = (Fragment) controller;
             Activity mainActivity = fragment.getActivity();
 
-            if (mController != controller) {
-                mController = controller;
-
-                process(listener -> listener.onController(controller));
-            }
-
             if (mMainActivity != mainActivity) {
                 mMainActivity = mainActivity;
 
                 process(listener -> listener.onActivity(mainActivity));
+            }
+
+            if (mController != controller) {
+                mController = controller;
+
+                process(listener -> listener.onController(controller));
             }
         }
     }

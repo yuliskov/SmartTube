@@ -9,7 +9,6 @@ public interface PlaybackEngineController {
     int BUFFER_LOW = 0;
     int BUFFER_MED = 1;
     int BUFFER_HIGH = 2;
-    int BUFFER_MAX = 3;
     void openDash(InputStream dashManifest);
     void openHls(String hlsPlaylistUrl);
     void openUrlList(List<String> urlList);

@@ -12,6 +12,7 @@ public class AppPrefs extends SharedPreferencesBase {
     private static AppPrefs sInstance;
     private static final String VIDEO_FORMAT = "video_format";
     private static final String COMPLETED_ONBOARDING = "completed_onboarding";
+    private static final String VIDEO_BUFFER_TYPE = "video_buffer_type";
 
     private AppPrefs(Context context) {
         super(context);
@@ -40,5 +41,13 @@ public class AppPrefs extends SharedPreferencesBase {
     public FormatItem getFormat(int type, FormatItem defaultFormat) {
         FormatItem formatItem = ExoFormatItem.from(getString(VIDEO_FORMAT + type, null));
         return formatItem != null ? formatItem : defaultFormat;
+    }
+
+    public int getVideoBufferType(int defaultBufferType) {
+        return getInt(VIDEO_BUFFER_TYPE, defaultBufferType);
+    }
+
+    public void setVideoBufferType(int bufferType) {
+        putInt(VIDEO_BUFFER_TYPE, bufferType);
     }
 }

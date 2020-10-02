@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.os.Build.VERSION;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -32,6 +34,13 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         super.onActivity(activity);
 
         mSettingsPresenter = AppSettingsPresenter.instance(mActivity);
+    }
+
+    @Override
+    public void onController(PlaybackController controller) {
+        super.onController(controller);
+
+        controller.setBuffer(AppPrefs.instance(mActivity).getVideoBufferType(PlaybackEngineController.BUFFER_MED));
     }
 
     private void addQualityCategories() {
@@ -65,6 +74,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
                 mActivity.getString(titleResId),
                 optionItem -> {
                     mController.setBuffer(val);
+                    AppPrefs.instance(mActivity).setVideoBufferType(val);
                     mController.restartEngine();
                 },
                 mController.getBuffer() == val);
