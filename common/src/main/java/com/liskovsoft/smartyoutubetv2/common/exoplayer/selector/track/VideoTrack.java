@@ -70,6 +70,8 @@ public class VideoTrack extends MediaTrack {
                     result = 1;
                 }
             }
+        } else if (heightLessOrEquals(track2.format.height, format.height)) {
+            result = 1;
         }
 
         return result;

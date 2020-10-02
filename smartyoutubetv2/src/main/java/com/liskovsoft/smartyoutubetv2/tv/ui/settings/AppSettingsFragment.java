@@ -118,16 +118,17 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
     public static class AppPreferenceFragment extends LeanbackPreferenceFragment {
         private static final String TAG = AppPreferenceFragment.class.getSimpleName();
         private List<SettingsCategory> mCategories;
-        private Context mStyledContext;
+        private Context mExtractedContext;
         private AppSettingsFragmentHelper mManager;
         private String mTitle;
 
         @Override
         public void onCreatePreferences(Bundle bundle, String s) {
-            mStyledContext = (Context) Helpers.getField(this, "mStyledContext");
-            mManager = new AppSettingsFragmentHelper(mStyledContext);
+            // Note, place in field with different name to avoid field overlapping
+            mExtractedContext = (Context) Helpers.getField(this, "mStyledContext");
+            mManager = new AppSettingsFragmentHelper(mExtractedContext);
 
-            PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(mStyledContext);
+            PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(mExtractedContext);
             screen.setTitle(mTitle);
 
             for (SettingsCategory category : mCategories) {

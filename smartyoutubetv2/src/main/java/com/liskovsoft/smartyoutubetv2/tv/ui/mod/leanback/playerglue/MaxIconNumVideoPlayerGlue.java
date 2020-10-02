@@ -7,6 +7,7 @@ import androidx.leanback.media.PlayerAdapter;
 import androidx.leanback.widget.AbstractDetailsDescriptionPresenter;
 import androidx.leanback.widget.PlaybackRowPresenter;
 import androidx.leanback.widget.RowPresenter;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class MaxIconNumVideoPlayerGlue<T extends PlayerAdapter> extends PlaybackTransportControlGlue<T> {
     /**
@@ -26,7 +27,10 @@ public class MaxIconNumVideoPlayerGlue<T extends PlayerAdapter> extends Playback
                     @Override
                     protected void onBindDescription(ViewHolder
                                                              viewHolder, Object obj) {
-                        PlaybackBaseControlGlue glue = (PlaybackBaseControlGlue) obj;
+                        // Mod: fix clipped title on videos with embedded icons
+                        Helpers.setField(viewHolder, "mTitleMargin", 0);
+
+                        PlaybackBaseControlGlue<?> glue = (PlaybackBaseControlGlue<?>) obj;
                         viewHolder.getTitle().setText(glue.getTitle());
                         viewHolder.getSubtitle().setText(glue.getSubtitle());
                     }
