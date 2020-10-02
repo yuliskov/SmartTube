@@ -5,7 +5,13 @@
     <color name="fastlane_background">#0096a6</color>
     <color name="search_opaque">#ffaa3f</color>
     <color name="card_selected_background">#ffaa3f</color>
+    <color name="card_selected_background2">#FFFFFF</color>
+    <color name="card_selected_background3">#343434</color>
+    <color name="card_selected_text">#000000</color>
+    <color name="card_selected_text2">#343434</color>
     <color name="card_default_background">#0096a6</color>
+    <color name="card_default_background2">#343434</color>
+    <color name="card_default_text">#FFFFFF</color>
     <color name="shelf_background">#282828</color>
     <color name="icon_background">#4A4F51</color>
     <color name="icon_alt_background">#2A2F51</color>

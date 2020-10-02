@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.leanback.widget.ImageCardView;
 import androidx.leanback.widget.Presenter;
@@ -25,16 +26,22 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
  */
 public class CardPresenter extends Presenter {
     private static final String TAG = CardPresenter.class.getSimpleName();
-    private int mSelectedBackgroundColor = -1;
     private int mDefaultBackgroundColor = -1;
+    private int mDefaultTextColor = -1;
+    private int mSelectedBackgroundColor = -1;
+    private int mSelectedTextColor = -1;
     private Drawable mDefaultCardImage;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
         mDefaultBackgroundColor =
             ContextCompat.getColor(parent.getContext(), R.color.card_default_background);
+        mDefaultTextColor =
+                ContextCompat.getColor(parent.getContext(), R.color.card_default_text);
         mSelectedBackgroundColor =
-                ContextCompat.getColor(parent.getContext(), R.color.card_selected_background);
+                ContextCompat.getColor(parent.getContext(), R.color.card_selected_background2);
+        mSelectedTextColor =
+                ContextCompat.getColor(parent.getContext(), R.color.card_selected_text2);
         mDefaultCardImage = ContextCompat.getDrawable(parent.getContext(), R.drawable.movie);
 
         ImageCardView cardView = new ImageCardView(parent.getContext()) {
@@ -52,14 +59,24 @@ public class CardPresenter extends Presenter {
     }
 
     private void updateCardBackgroundColor(ImageCardView view, boolean selected) {
-        int color = selected ? mSelectedBackgroundColor : mDefaultBackgroundColor;
+        int backgroundColor = selected ? mSelectedBackgroundColor : mDefaultBackgroundColor;
+        int textColor = selected ? mSelectedTextColor : mDefaultTextColor;
 
         // Both background colors should be set because the view's
         // background is temporarily visible during animations.
-        view.setBackgroundColor(color);
+        view.setBackgroundColor(backgroundColor);
         View infoField = view.findViewById(R.id.info_field);
         if (infoField != null) {
-            infoField.setBackgroundColor(color);
+            infoField.setBackgroundColor(backgroundColor);
+        }
+
+        TextView titleText = view.findViewById(R.id.title_text);
+        if (titleText != null) {
+            titleText.setTextColor(textColor);
+        }
+        TextView contentText = view.findViewById(R.id.content_text);
+        if (contentText != null) {
+            contentText.setTextColor(textColor);
         }
     }
 

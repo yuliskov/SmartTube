@@ -25,8 +25,8 @@ import java.util.List;
 
 public class HeaderGridFragment extends GridFragment implements VideoGroupFragment {
     private static final String TAG = HeaderGridFragment.class.getSimpleName();
-    private static final int COLUMNS = 5;
-    private final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
+    private static final int COLUMNS_NUM = 4;
+    private static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
     private VideoGroupObjectAdapter mGridAdapter;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private UriBackgroundManager mBackgroundManager;
@@ -64,7 +64,7 @@ public class HeaderGridFragment extends GridFragment implements VideoGroupFragme
 
     private void setupAdapter() {
         VerticalGridPresenter presenter = new VerticalGridPresenter(ZOOM_FACTOR, false);
-        presenter.setNumberOfColumns(COLUMNS);
+        presenter.setNumberOfColumns(COLUMNS_NUM);
         setGridPresenter(presenter);
 
         if (mGridAdapter == null) {
