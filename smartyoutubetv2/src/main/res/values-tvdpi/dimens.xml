@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="card_width">156dp</dimen>
-    <dimen name="card_height">88dp</dimen>
+    <!-- 213dpi, Old TVs, same as xhdpi -->
+
+    <dimen name="card_width">203dp</dimen>
+    <dimen name="card_height">115dp</dimen>
+
+    <!-- Elements below aren't used in the app -->
+
     <dimen name="grid_item_width">100dp</dimen>
     <dimen name="grid_item_height">100dp</dimen>
     <dimen name="spinner_width">50dp</dimen>

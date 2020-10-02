@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="card_width">200dp</dimen>
-    <dimen name="card_height">115dp</dimen>
+    <!-- 240dpi, Vermax 300UHD, xhdpi * 1.3 -->
+
+    <dimen name="card_width">260dp</dimen>
+    <dimen name="card_height">150dp</dimen>
+
+    <!-- Elements below aren't used in the app -->
+
     <dimen name="grid_item_width">130dp</dimen>
     <dimen name="grid_item_height">130dp</dimen>
     <dimen name="spinner_width">65dp</dimen>
