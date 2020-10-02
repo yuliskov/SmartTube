@@ -44,10 +44,14 @@ public class VideoTrack extends MediaTrack {
 
     private static boolean fpsLessOrEquals(float fps1, float fps2) {
         if (fps1 == -1 || fps2 == -1) {
-            return true; // probably live translation
+            return true; // probably LIVE translation
         }
 
         return fps1 <= fps2 || fpsEquals(fps1, fps2);
+    }
+
+    private boolean isLive(MediaTrack track) {
+        return track.format.frameRate == -1;
     }
 
     @Override
@@ -60,18 +64,18 @@ public class VideoTrack extends MediaTrack {
 
         if (Helpers.equals(format.id, track2.format.id)) {
             result = 0;
-        } else if (codecEquals(format.codecs, track2.format.codecs)) {
-            if (fpsLessOrEquals(format.frameRate, track2.format.frameRate)) {
+        } else if (codecEquals(format.codecs, track2.format.codecs) || isLive(track2)) {
+            if (fpsLessOrEquals(track2.format.frameRate, format.frameRate)) {
                 if (heightEquals(format.height, track2.format.height)) {
-                    result = 0;
-                } else if (heightLessOrEquals(format.height, track2.format.height)) {
-                    result = -1;
-                } else {
+                    if (TrackSelectorUtil.isHdrCodec(format.codecs) == TrackSelectorUtil.isHdrCodec(track2.format.codecs)) {
+                        result = 0;
+                    } else {
+                        result = 1;
+                    }
+                } else if (heightLessOrEquals(track2.format.height, format.height)) {
                     result = 1;
                 }
             }
-        } else if (heightLessOrEquals(track2.format.height, format.height)) {
-            result = 1;
         }
 
         return result;
