@@ -22,7 +22,7 @@ public class AudioTrack extends MediaTrack {
             return 1;
         }
 
-        int result = 1;
+        int result = -1;
 
         if (Helpers.equals(format.id, track2.format.id)) {
             result = 0;

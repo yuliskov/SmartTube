@@ -56,7 +56,7 @@ public class VideoTrack extends MediaTrack {
             return 1;
         }
 
-        int result = 1;
+        int result = -1;
 
         if (Helpers.equals(format.id, track2.format.id)) {
             result = 0;
@@ -66,6 +66,8 @@ public class VideoTrack extends MediaTrack {
                     result = 0;
                 } else if (heightLessOrEquals(format.height, track2.format.height)) {
                     result = -1;
+                } else {
+                    result = 1;
                 }
             }
         }
