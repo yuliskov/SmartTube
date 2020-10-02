@@ -6,11 +6,10 @@ import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.RendererCapabilities;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Definition;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Factory;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager.MediaTrack;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 
 public class RestoreTrackSelector extends DefaultTrackSelector {
     private static final String TAG = RestoreTrackSelector.class.getSimpleName();

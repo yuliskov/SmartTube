@@ -1,12 +1,11 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
-import android.content.Intent;
 import androidx.annotation.NonNull;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager.MediaTrack;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -129,8 +128,6 @@ public class ExoFormatItem implements FormatItem {
         }
 
         ExoFormatItem formatItem = new ExoFormatItem();
-        MediaTrack mediaTrack = new MediaTrack();
-        formatItem.mTrack = mediaTrack;
 
         String[] split = spec.split(",");
 
@@ -140,7 +137,11 @@ public class ExoFormatItem implements FormatItem {
 
         int type = Helpers.parseInt(split[0]);
         formatItem.mType = type;
-        mediaTrack.rendererIndex = Helpers.parseInt(split[1]);
+
+        int rendererIndex = Helpers.parseInt(split[1]);
+        MediaTrack mediaTrack = MediaTrack.forRendererIndex(rendererIndex);
+        formatItem.mTrack = mediaTrack;
+
         String id = split[2];
         String codecs = split[3];
         int width = Helpers.parseInt(split[4]);
@@ -171,11 +172,9 @@ public class ExoFormatItem implements FormatItem {
 
     public static FormatItem createFakeVideoFormat(int resolution, int format, int frameRate) {
         ExoFormatItem formatItem = new ExoFormatItem();
-        MediaTrack mediaTrack = new MediaTrack();
+        MediaTrack mediaTrack = MediaTrack.forRendererIndex(TrackSelectorManager.RENDERER_INDEX_VIDEO);
         formatItem.mTrack = mediaTrack;
         formatItem.mType = TYPE_VIDEO;
-
-        mediaTrack.rendererIndex = TrackSelectorManager.RENDERER_INDEX_VIDEO;
 
         int width = -1;
         int height = -1;
@@ -222,11 +221,9 @@ public class ExoFormatItem implements FormatItem {
 
     public static FormatItem createFakeAudioFormat(int format) {
         ExoFormatItem formatItem = new ExoFormatItem();
-        MediaTrack mediaTrack = new MediaTrack();
+        MediaTrack mediaTrack = MediaTrack.forRendererIndex(TrackSelectorManager.RENDERER_INDEX_AUDIO);
         formatItem.mTrack = mediaTrack;
         formatItem.mType = TYPE_AUDIO;
-
-        mediaTrack.rendererIndex = TrackSelectorManager.RENDERER_INDEX_AUDIO;
 
         String codec = null;
 

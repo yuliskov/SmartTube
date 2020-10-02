@@ -14,7 +14,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Definition;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.RestoreTrackSelector.TrackSelectorCallback;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.comparator.TrackComparator;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -47,15 +47,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         public SelectionOverride override;
         public MediaTrack[][] mediaTracks;
         public MediaTrack selectedTrack;
-    }
-
-    public static class MediaTrack {
-        public Format format;
-        public int groupIndex = -1;
-        public int trackIndex = -1;
-        public boolean isSelected;
-
-        public int rendererIndex;
     }
 
     private static class MediaTrackFormatComparator implements Comparator<MediaTrack> {
@@ -211,8 +202,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         renderer.sortedTracks = new TreeSet<>(new MediaTrackFormatComparator());
 
         // AUTO OPTION: add disable subs option
-        MediaTrack autoTrack = new MediaTrack();
-        autoTrack.rendererIndex = rendererIndex;
+        MediaTrack autoTrack = MediaTrack.forRendererIndex(rendererIndex);
         if (rendererIndex == RENDERER_INDEX_SUBTITLE) {
             renderer.sortedTracks.add(autoTrack);
         }
@@ -229,11 +219,10 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 haveSupportedTracks = true;
                 Format format = group.getFormat(trackIndex);
 
-                MediaTrack mediaTrack = new MediaTrack();
+                MediaTrack mediaTrack = MediaTrack.forRendererIndex(rendererIndex);
                 mediaTrack.format = format;
                 mediaTrack.groupIndex = groupIndex;
                 mediaTrack.trackIndex = trackIndex;
-                mediaTrack.rendererIndex = rendererIndex;
                 mediaTrack.isSelected =
                         renderer.override != null && renderer.override.groupIndex == groupIndex && renderer.override.containsTrack(trackIndex);
 
@@ -410,19 +399,17 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
         MediaTrack result = createAutoSelection(track.rendererIndex);
 
-        TrackComparator mComparator = TrackComparator.forRenderer(track.rendererIndex);
-
         if (track.format != null) { // not auto selection
             for (int groupIndex = 0; groupIndex < renderer.mediaTracks.length; groupIndex++) {
                 for (int trackIndex = 0; trackIndex < renderer.mediaTracks[groupIndex].length; trackIndex++) {
                     MediaTrack mediaTrack = renderer.mediaTracks[groupIndex][trackIndex];
 
-                    int compare = mComparator.compare(mediaTrack, track);
+                    int compare = track.compare(mediaTrack);
 
                     if (compare == 0) {
-                        result = mediaTrack;
-                        break;
-                    } else if (compare < 0 && mComparator.compare(result, mediaTrack) < 0) {
+                        Log.d(TAG, "findBestMatch: Found exact match: " + mediaTrack.format);
+                        return mediaTrack;
+                    } else if (compare > 0 && mediaTrack.compare(result) > 0) { // select track with higher possible quality
                         result = mediaTrack;
                     }
                 }
@@ -446,9 +433,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     }
 
     private MediaTrack createAutoSelection(int rendererIndex) {
-        MediaTrack result = new MediaTrack();
-        result.rendererIndex = rendererIndex;
-        return result;
+        return MediaTrack.forRendererIndex(rendererIndex);
     }
 
     private void clearOverride(int rendererIndex) {

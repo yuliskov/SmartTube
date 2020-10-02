@@ -1,11 +1,14 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.comparator;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager.MediaTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 
-public class VideoTrackComparator extends TrackComparator {
+public class VideoTrack extends MediaTrack {
     private static final int HEIGHT_EQUITY_THRESHOLD_PX = 80;
+
+    public VideoTrack(int rendererIndex) {
+        super(rendererIndex);
+    }
 
     private static boolean codecEquals(String codecs1, String codecs2) {
         if (codecs1 == null || codecs2 == null) {
@@ -47,20 +50,21 @@ public class VideoTrackComparator extends TrackComparator {
         return fps1 <= fps2 || fpsEquals(fps1, fps2);
     }
 
-    public int compare(MediaTrack track1, MediaTrack track2) {
-        if (track1 == null || track1.format == null) {
-            return -1;
+    @Override
+    public int compare(MediaTrack track2) {
+        if (track2.format == null) {
+            return 1;
         }
 
         int result = 1;
 
-        if (Helpers.equals(track1.format.id, track2.format.id)) {
+        if (Helpers.equals(format.id, track2.format.id)) {
             result = 0;
-        } else if (VideoTrackComparator.codecEquals(track1.format.codecs, track2.format.codecs)) {
-            if (VideoTrackComparator.fpsLessOrEquals(track1.format.frameRate, track2.format.frameRate)) {
-                if (VideoTrackComparator.heightEquals(track1.format.height, track2.format.height)) {
+        } else if (codecEquals(format.codecs, track2.format.codecs)) {
+            if (fpsLessOrEquals(format.frameRate, track2.format.frameRate)) {
+                if (heightEquals(format.height, track2.format.height)) {
                     result = 0;
-                } else if (VideoTrackComparator.heightLessOrEquals(track1.format.height, track2.format.height)) {
+                } else if (heightLessOrEquals(format.height, track2.format.height)) {
                     result = -1;
                 }
             }
