@@ -5,7 +5,6 @@ import android.content.Context;
 import com.liskovsoft.sharedutils.prefs.SharedPreferencesBase;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
-import com.liskovsoft.youtubeapi.videoinfo.models.formats.VideoFormat;
 
 public class AppPrefs extends SharedPreferencesBase {
     private static final String TAG = AppPrefs.class.getSimpleName();
@@ -38,7 +37,8 @@ public class AppPrefs extends SharedPreferencesBase {
         putString(VIDEO_FORMAT + track.getType(), track.toString());
     }
 
-    public FormatItem getFormat(int type) {
-        return ExoFormatItem.from(getString(VIDEO_FORMAT + type, null));
+    public FormatItem getFormat(int type, FormatItem defaultFormat) {
+        FormatItem formatItem = ExoFormatItem.from(getString(VIDEO_FORMAT + type, null));
+        return formatItem != null ? formatItem : defaultFormat;
     }
 }

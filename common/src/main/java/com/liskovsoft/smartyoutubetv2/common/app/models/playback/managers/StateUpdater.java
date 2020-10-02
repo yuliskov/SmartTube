@@ -46,17 +46,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
     public void onActivity(Activity activity) {
         super.onActivity(activity);
 
-        mVideoFormat = AppPrefs.instance(mActivity).getFormat(FormatItem.TYPE_VIDEO);
-        mAudioFormat = AppPrefs.instance(mActivity).getFormat(FormatItem.TYPE_AUDIO);
-        mSubtitleFormat = AppPrefs.instance(mActivity).getFormat(FormatItem.TYPE_SUBTITLE);
-
-        if (mVideoFormat == null) {
-            mVideoFormat = FormatItem.VIDEO_HD_AVC;
-        }
-
-        if (mAudioFormat == null) {
-            mAudioFormat = FormatItem.AUDIO_HQ_MP4A;
-        }
+        mVideoFormat = AppPrefs.instance(mActivity).getFormat(FormatItem.TYPE_VIDEO, FormatItem.VIDEO_HD_AVC);
+        mAudioFormat = AppPrefs.instance(mActivity).getFormat(FormatItem.TYPE_AUDIO, FormatItem.AUDIO_HQ_MP4A);
+        mSubtitleFormat = AppPrefs.instance(mActivity).getFormat(FormatItem.TYPE_SUBTITLE, null);
     }
 
     /**

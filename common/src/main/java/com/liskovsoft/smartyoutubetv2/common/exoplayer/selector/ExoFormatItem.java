@@ -4,6 +4,7 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.util.MimeTypes;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager.MediaTrack;
 
@@ -92,9 +93,16 @@ public class ExoFormatItem implements FormatItem {
         return formatItem;
     }
 
+    private static int getType(Format format) {
+        String sampleMimeType = format.sampleMimeType;
+
+        return MimeTypes.isVideo(sampleMimeType) ? TYPE_VIDEO : MimeTypes.isAudio(sampleMimeType) ? TYPE_AUDIO : TYPE_SUBTITLE;
+    }
+
     @NonNull
     @Override
     public String toString() {
+        int rendererIndex = -1;
         String codecs = "";
         int width = -1;
         int height = -1;
@@ -104,6 +112,7 @@ public class ExoFormatItem implements FormatItem {
 
         if (mTrack != null && mTrack.format != null) {
             id = mTrack.format.id;
+            rendererIndex = mTrack.rendererIndex;
             codecs = mTrack.format.codecs;
             width = mTrack.format.width;
             height = mTrack.format.height;
@@ -111,7 +120,7 @@ public class ExoFormatItem implements FormatItem {
             language = mTrack.format.language;
         }
 
-        return String.format("%s,%s,%s,%s,%s,%s,%s", mType, id, codecs, width, height, frameRate, language);
+        return String.format("%s,%s,%s,%s,%s,%s,%s,%s", mType, rendererIndex, id, codecs, width, height, frameRate, language);
     }
 
     public static FormatItem from(String spec) {
@@ -125,13 +134,19 @@ public class ExoFormatItem implements FormatItem {
 
         String[] split = spec.split(",");
 
-        int type = Integer.parseInt(split[0]);
-        String id = split[1];
-        String codecs = split[2];
-        int width = Integer.parseInt(split[3]);
-        int height = Integer.parseInt(split[4]);
-        float frameRate = Float.parseFloat(split[5]);
-        String language = split[6];
+        if (split.length != 8) {
+            return null;
+        }
+
+        int type = Helpers.parseInt(split[0]);
+        formatItem.mType = type;
+        mediaTrack.rendererIndex = Helpers.parseInt(split[1]);
+        String id = split[2];
+        String codecs = split[3];
+        int width = Helpers.parseInt(split[4]);
+        int height = Helpers.parseInt(split[5]);
+        float frameRate = Helpers.parseFloat(split[6]);
+        String language = split[7];
 
         switch (type) {
             case TYPE_VIDEO:
@@ -152,12 +167,6 @@ public class ExoFormatItem implements FormatItem {
         }
 
         return formatItem;
-    }
-
-    private static int getType(Format format) {
-        String sampleMimeType = format.sampleMimeType;
-
-        return MimeTypes.isVideo(sampleMimeType) ? TYPE_VIDEO : MimeTypes.isAudio(sampleMimeType) ? TYPE_AUDIO : TYPE_SUBTITLE;
     }
 
     public static FormatItem createFakeVideoFormat(int resolution, int format, int frameRate) {
