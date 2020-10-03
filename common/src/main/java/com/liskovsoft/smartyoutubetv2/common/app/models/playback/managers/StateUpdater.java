@@ -206,6 +206,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private void restoreSpeed() {
         if (mController.getLengthMs() - mController.getPositionMs() > 30_000) {
             mController.setSpeed(mSpeed);
+        } else {
+            mController.setSpeed(1.0f); // speed may be changed before, so do reset to default
         }
     }
 

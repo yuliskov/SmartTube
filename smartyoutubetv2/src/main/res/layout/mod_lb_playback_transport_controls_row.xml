@@ -15,6 +15,8 @@
   ~ limitations under the License.
   -->
 
+<!-- Note: class names was changed to locale ones -->
+
 <!-- Note: clipChildren/clipToPadding false are needed to apply shadows to child
      views with no padding of their own. Also to allow for negative margin on description. -->
 
