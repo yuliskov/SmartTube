@@ -99,16 +99,6 @@ public class VideoLoader extends PlayerEventListenerHelper implements MetadataLi
         return true;
     }
 
-    private void disposeActions() {
-        if (mMetadataAction != null && !mMetadataAction.isDisposed()) {
-            mMetadataAction.dispose();
-        }
-
-        if (mFormatInfoAction != null && !mFormatInfoAction.isDisposed()) {
-            mFormatInfoAction.dispose();
-        }
-    }
-
     @Override
     public void onPlayEnd() {
         onNextClicked();
@@ -117,12 +107,28 @@ public class VideoLoader extends PlayerEventListenerHelper implements MetadataLi
     @Override
     public void onSuggestionItemClicked(Video item) {
         if (item.isVideo()) {
+            mController.clearSuggestions();
             mPlaylist.add(item);
             loadVideo(item);
         } else if (item.isChannel()) {
             ChannelPresenter.instance(mActivity).openChannel(item);
         } else {
             Log.e(TAG, "Video item doesn't contain needed data!");
+        }
+    }
+
+    @Override
+    public void onMetadata(MediaItemMetadata metadata) {
+        mCachedNextVideo = metadata.getNextVideo();
+    }
+
+    private void disposeActions() {
+        if (mMetadataAction != null && !mMetadataAction.isDisposed()) {
+            mMetadataAction.dispose();
+        }
+
+        if (mFormatInfoAction != null && !mFormatInfoAction.isDisposed()) {
+            mFormatInfoAction.dispose();
         }
     }
 
@@ -170,11 +176,11 @@ public class VideoLoader extends PlayerEventListenerHelper implements MetadataLi
         mFormatInfoAction = mediaItemManager.getFormatInfoObserve(video.videoId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::loadFormatInfo,
+                .subscribe(this::processFormatInfo,
                            error -> Log.e(TAG, "loadFormatInfo error: " + error));
     }
 
-    private void loadFormatInfo(MediaItemFormatInfo formatInfo) {
+    private void processFormatInfo(MediaItemFormatInfo formatInfo) {
         if (formatInfo.containsHlsInfo()) {
             Log.d(TAG, "Found hls video. Loading...");
             mController.openHls(formatInfo.getHlsManifestUrl());
@@ -191,10 +197,5 @@ public class VideoLoader extends PlayerEventListenerHelper implements MetadataLi
         } else {
             Log.e(TAG, "Empty format info received. No video data to pass to the player.");
         }
-    }
-
-    @Override
-    public void onMetadata(MediaItemMetadata metadata) {
-        mCachedNextVideo = metadata.getNextVideo();
     }
 }
