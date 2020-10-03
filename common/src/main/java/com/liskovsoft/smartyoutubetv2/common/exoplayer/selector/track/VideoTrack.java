@@ -10,14 +10,6 @@ public class VideoTrack extends MediaTrack {
         super(rendererIndex);
     }
 
-    private static boolean codecEquals(String codecs1, String codecs2) {
-        if (codecs1 == null || codecs2 == null) {
-            return false;
-        }
-
-        return Helpers.equals(TrackSelectorUtil.codecNameShort(codecs1), TrackSelectorUtil.codecNameShort(codecs2));
-    }
-
     private static boolean heightEquals(int height1, int height2) {
         if (height1 == -1 || height2 == -1) {
             return false;
@@ -53,39 +45,6 @@ public class VideoTrack extends MediaTrack {
     private boolean isLive(MediaTrack track) {
         return track.format.frameRate == -1;
     }
-
-    //@Override
-    //public int compare(MediaTrack track2) {
-    //    if (track2.format == null) {
-    //        return 1;
-    //    }
-    //
-    //    int result = -1;
-    //
-    //    if (Helpers.equals(format.id, track2.format.id)) {
-    //        result = 0;
-    //    } else if (codecEquals(format.codecs, track2.format.codecs)) {
-    //        if (fpsLessOrEquals(track2.format.frameRate, format.frameRate)) {
-    //            if (heightEquals(format.height, track2.format.height)) {
-    //                if (TrackSelectorUtil.isHdrCodec(format.codecs) == TrackSelectorUtil.isHdrCodec(track2.format.codecs)) {
-    //                    result = 0;
-    //                } else {
-    //                    result = 1;
-    //                }
-    //            } else if (heightLessOrEquals(track2.format.height, format.height)) {
-    //                result = 1;
-    //            }
-    //        }
-    //    } else if (fpsLessOrEquals(track2.format.frameRate, format.frameRate)) {
-    //        if (heightEquals(format.height, track2.format.height)) {
-    //            result = 2;
-    //        } else if (heightLessOrEquals(track2.format.height, format.height)) {
-    //            result = 2;
-    //        }
-    //    }
-    //
-    //    return result;
-    //}
 
     @Override
     public int compare(MediaTrack track2) {

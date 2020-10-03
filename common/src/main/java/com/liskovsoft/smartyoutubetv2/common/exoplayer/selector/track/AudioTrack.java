@@ -1,19 +1,10 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 
 public class AudioTrack extends MediaTrack {
     public AudioTrack(int rendererIndex) {
         super(rendererIndex);
-    }
-
-    private static boolean codecEquals(String codecs1, String codecs2) {
-        if (codecs1 == null || codecs2 == null) {
-            return false;
-        }
-
-        return Helpers.equals(TrackSelectorUtil.codecNameShort(codecs1), TrackSelectorUtil.codecNameShort(codecs2));
     }
 
     @Override

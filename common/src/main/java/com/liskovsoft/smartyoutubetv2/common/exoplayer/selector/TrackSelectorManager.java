@@ -414,7 +414,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                     }
                 }
 
-                if (result.format != null && TrackSelectorUtil.codecEquals(result.format.codecs, track.format.codecs)) {
+                if (result.format != null && MediaTrack.codecEquals(result.format.codecs, track.format.codecs)) {
                     break;
                 }
             }
