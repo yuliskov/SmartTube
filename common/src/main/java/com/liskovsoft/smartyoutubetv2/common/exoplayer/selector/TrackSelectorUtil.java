@@ -119,4 +119,12 @@ public class TrackSelectorUtil {
                 playbackState == Player.STATE_IDLE ? "STATE_IDLE" :
                 "STATE_ENDED";
     }
+
+    public static boolean codecEquals(String codecs1, String codecs2) {
+        if (codecs1 == null || codecs2 == null) {
+            return false;
+        }
+
+        return Helpers.equals(TrackSelectorUtil.codecNameShort(codecs1), TrackSelectorUtil.codecNameShort(codecs2));
+    }
 }
