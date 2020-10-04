@@ -109,13 +109,16 @@ public class PlaybackActivity extends LeanbackActivity {
     }
 
     @Override
-    protected void onStop() {
+    protected void onPause() {
+        // Avoid enter pip on stop!
+        // More info: https://developer.android.com/guide/topics/ui/picture-in-picture#continuing_playback
+
         // User pressed home. Don't restore parent activity.
         if (!isFinishing() && mPlaybackFragment.isEngineBlocked() && mPlaybackFragment.isPIPEnabled()) {
             enterPIPMode();
         }
 
-        super.onStop();
+        super.onPause();
     }
 
     @Override
