@@ -279,8 +279,8 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
-    public void onVideoStatsClicked() {
-        process(PlayerUiEventListener::onVideoStatsClicked);
+    public void onVideoStatsClicked(boolean enabled) {
+        process(listener -> listener.onVideoStatsClicked(enabled));
     }
 
     @Override

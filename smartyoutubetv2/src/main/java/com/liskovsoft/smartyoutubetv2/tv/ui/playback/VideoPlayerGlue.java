@@ -192,6 +192,11 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter> {
         invalidateUi(mThumbsDownAction);
     }
 
+    public void setVideoStatsActionState(boolean show) {
+        mVideoStatsAction.setIndex(show ? ThumbsAction.INDEX_ON : ThumbsAction.INDEX_OFF);
+        invalidateUi(mVideoStatsAction);
+    }
+
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
         boolean handled = false;
@@ -254,7 +259,8 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter> {
             mActionListener.onPlaylistAdd();
             handled = true;
         } else if (action == mVideoStatsAction) {
-            mActionListener.onVideoStats();
+            incrementActionIndex(action);
+            mActionListener.onVideoStats(getActionIndex(action) == ThumbsAction.INDEX_ON);
             handled = true;
         } else if (action == mVideoSpeedAction) {
             mActionListener.onVideoSpeed();
@@ -366,7 +372,7 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter> {
 
         void onPlaylistAdd();
 
-        void onVideoStats();
+        void onVideoStats(boolean enabled);
 
         void onVideoSpeed();
     }

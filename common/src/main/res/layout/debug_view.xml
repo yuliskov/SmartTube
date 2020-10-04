@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content">
+    <LinearLayout android:id="@+id/debug_view_column1"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  android:gravity="end">
+        <!-- content goes here -->
+    </LinearLayout>
+    <LinearLayout android:orientation="vertical" android:id="@+id/divider" android:layout_width="5dp" android:layout_height="match_parent"/>
+    <LinearLayout android:id="@+id/debug_view_column2"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical">
+        <!-- content goes here -->
+    </LinearLayout>
+</LinearLayout>

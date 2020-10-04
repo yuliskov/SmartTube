@@ -4,8 +4,8 @@
 <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/playback_fragment_root"
-        android:layout_width="match_parent"
         android:transitionGroup="false"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
     <!-- Add subtitle view -->
@@ -18,6 +18,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </com.google.android.exoplayer2.ui.AspectRatioFrameLayout>
+
+    <!-- Add debug view -->
+    <FrameLayout android:id="@+id/debug_view_group"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:paddingLeft="4dp"
+                 android:paddingRight="4dp"
+                 android:visibility="gone"
+                 android:layout_gravity="center"
+                 android:background="#80000000"/>
 
     <androidx.leanback.widget.NonOverlappingFrameLayout
         android:id="@+id/playback_fragment_background"

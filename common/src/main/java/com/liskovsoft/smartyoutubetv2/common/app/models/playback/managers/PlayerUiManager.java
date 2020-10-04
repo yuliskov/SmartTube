@@ -28,6 +28,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     private static final long UI_HIDE_TIMEOUT_MS = 2_000;
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
     private boolean mEngineReady;
+    private boolean mDebugViewEnabled;
     private final Runnable mSuggestionsResetHandler = () -> mController.resetSuggestedPosition();
     private final Runnable mUiVisibilityHandler = () -> {
         if (mController.isPlaying()) {
@@ -92,13 +93,16 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     }
 
     @Override
-    public void onVideoStatsClicked() {
-        MessageHelpers.showMessage(mActivity, R.string.not_implemented);
+    public void onVideoStatsClicked(boolean enabled) {
+        mDebugViewEnabled = enabled;
+        mController.showDebugView(enabled);
     }
 
     @Override
     public void onEngineInitialized() {
         mEngineReady = true;
+        mController.showDebugView(mDebugViewEnabled);
+        mController.setDebugButtonState(mDebugViewEnabled);
     }
 
     @Override
@@ -122,9 +126,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
-        mController.setLike(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_LIKE);
-        mController.setDislike(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_DISLIKE);
-        mController.setSubscribe(metadata.isSubscribed());
+        mController.setLikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_LIKE);
+        mController.setDislikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_DISLIKE);
+        mController.setSubscribeButtonState(metadata.isSubscribed());
     }
 
     public void disableUiAutoHideTimeout() {

@@ -18,7 +18,6 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
-import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
@@ -36,9 +35,9 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.AudioDelayRenderersFactoryV2;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.DebugInfoManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ExoPlayerInitializer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleStyleRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
@@ -68,6 +67,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
     private PlayerEventListener mEventListener;
     private PlayerController mExoPlayerController;
+    private SubtitleManager mSubtitleManager;
+    private DebugInfoManager mDebugInfoManager;
     private UriBackgroundManager mBackgroundManager;
     private final boolean mEnableAnimation = true;
     private RowsSupportFragment mRowsSupportFragment;
@@ -208,6 +209,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlaylistActionListener = null;
         mExoPlayerController = null;
         mRenderersFactory = null;
+        mSubtitleManager = null;
+        mDebugInfoManager = null;
     }
 
     private void createPlayerObjects() {
@@ -219,7 +222,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
         mPlayer = mPlayerInitializer.createPlayer(getActivity(), mRenderersFactory, mTrackSelector);
 
-        mExoPlayerController = new ExoPlayerController(mPlayer, mTrackSelector, getContext());
+        mExoPlayerController = new ExoPlayerController(mPlayer, mTrackSelector, getActivity());
         mExoPlayerController.setEventListener(mEventListener);
 
         mPlayerAdapter = new LeanbackPlayerAdapter(getActivity(), mPlayer, UPDATE_DELAY);
@@ -231,10 +234,14 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end
         hideControlsOverlay(mEnableAnimation); // hide controls upon fragment creation
 
+        mSubtitleManager = new SubtitleManager(getActivity(), R.id.leanback_subtitles);
+
         // subs renderer
         if (mPlayer.getTextComponent() != null) {
-            mPlayer.getTextComponent().addTextOutput(new SubtitleManager(getActivity(), R.id.leanback_subtitles));
+            mPlayer.getTextComponent().addTextOutput(mSubtitleManager);
         }
+
+        mDebugInfoManager = new DebugInfoManager(mPlayer, R.id.debug_view_group, getActivity());
 
         mRowsAdapter = initializeSuggestedVideosRow();
         setAdapter(mRowsAdapter);
@@ -347,8 +354,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         }
 
         @Override
-        public void onVideoStats() {
-            mEventListener.onVideoStatsClicked();
+        public void onVideoStats(boolean enabled) {
+            mEventListener.onVideoStatsClicked(enabled);
         }
 
         @Override
@@ -570,18 +577,28 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
-    public void setLike(boolean like) {
+    public void setLikeButtonState(boolean like) {
         mPlayerGlue.setThumbsUpActionState(like);
     }
 
     @Override
-    public void setDislike(boolean dislike) {
+    public void setDislikeButtonState(boolean dislike) {
         mPlayerGlue.setThumbsDownActionState(dislike);
     }
 
     @Override
-    public void setSubscribe(boolean subscribe) {
+    public void setSubscribeButtonState(boolean subscribe) {
         mPlayerGlue.setSubscribeActionState(subscribe);
+    }
+
+    @Override
+    public void setDebugButtonState(boolean show) {
+        mPlayerGlue.setVideoStatsActionState(show);
+    }
+
+    @Override
+    public void showDebugView(boolean show) {
+        mDebugInfoManager.show(show);
     }
 
     @Override

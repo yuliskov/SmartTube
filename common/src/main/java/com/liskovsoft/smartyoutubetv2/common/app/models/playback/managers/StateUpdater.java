@@ -106,7 +106,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
     @Override
     public void onSourceChanged(Video item) {
         // called before engine attempt to auto select track by itself
-        restoreFormat();
+        restoreVideoFormat();
+        restoreAudioFormat();
     }
 
     @Override
@@ -114,6 +115,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
         // on this state video length is not undefined
         restorePosition(item);
         restoreSpeed();
+        // Player thinks that subs not enabled if did it too early (e.g. on source change event).
+        restoreSubtitleFormat();
     }
 
     @Override
@@ -169,17 +172,21 @@ public class StateUpdater extends PlayerEventListenerHelper {
         // NOP
     }
 
-    private void restoreFormat() {
+    private void restoreVideoFormat() {
         if (mController.isInPIPMode()) {
             mController.selectFormat(FormatItem.VIDEO_SD_AVC);
         } else if (mVideoFormat != null) {
             mController.selectFormat(mVideoFormat);
         }
+    }
 
+    private void restoreAudioFormat() {
         if (mAudioFormat != null) {
             mController.selectFormat(mAudioFormat);
         }
+    }
 
+    private void restoreSubtitleFormat() {
         if (mSubtitleFormat != null) {
             mController.selectFormat(mSubtitleFormat);
         }

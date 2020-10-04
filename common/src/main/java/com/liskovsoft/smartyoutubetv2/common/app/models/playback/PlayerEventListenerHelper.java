@@ -183,7 +183,7 @@ public abstract class PlayerEventListenerHelper implements PlayerHandlerEventLis
     }
 
     @Override
-    public void onVideoStatsClicked() {
+    public void onVideoStatsClicked(boolean enabled) {
         // NOP
     }
 

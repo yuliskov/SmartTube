@@ -6,6 +6,7 @@ import android.os.Build.VERSION;
 import android.view.Window;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolder.Mode;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -228,10 +229,9 @@ public class DisplaySyncHelper implements UhdHelperListener {
                 //CommonApplication.getPreferences().setCurrentDisplayMode(String.format("%s (%s)", UhdHelper.formatMode(currentMode), newMsg));
             } else {
                 Log.i(TAG, "Mode changed successfully");
-
-                // NOTE: changed
-                //CommonApplication.getPreferences().setCurrentDisplayMode(UhdHelper.formatMode(currentMode));
             }
+
+            AppPrefs.instance(mContext).setCurrentDisplayMode(UhdHelper.formatMode(currentMode));
         }
     }
 
@@ -255,6 +255,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
         if (supportsDisplayModeChange() && videoWidth >= 10) {
             if (mUhdHelper == null) {
                 mUhdHelper = new UhdHelper(mContext);
+                mUhdHelper.registerModeChangeListener(this);
             }
 
             Mode[] modes = mUhdHelper.getSupportedModes();
@@ -320,7 +321,6 @@ public class DisplaySyncHelper implements UhdHelperListener {
             }
 
             mNewMode = closerMode;
-            mUhdHelper.registerModeChangeListener(this);
             mUhdHelper.setPreferredDisplayModeId(window, mNewMode.getModeId(), true);
             mDisplaySyncInProgress = true;
 
@@ -346,6 +346,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
     protected UhdHelper getUhdHelper() {
         if (mUhdHelper == null) {
             mUhdHelper = new UhdHelper(mContext);
+            mUhdHelper.registerModeChangeListener(this);
         }
 
         return mUhdHelper;
@@ -385,8 +386,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
                 case STATE_ORIGINAL:
                     mOriginalMode = mode;
 
-                    // NOTE: changed
-                    //CommonApplication.getPreferences().setDefaultDisplayMode(UhdHelper.formatMode(mode));
+                    AppPrefs.instance(mContext).setDefaultDisplayMode(UhdHelper.formatMode(mode));
                     break;
                 case STATE_CURRENT:
                     mCurrentMode = mode;
@@ -422,7 +422,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
         }
 
         Log.d(TAG, "Restoring mode: " + modeTmp);
-
+        
         getUhdHelper().setPreferredDisplayModeId(
                 window,
                 modeTmp.getModeId(),
@@ -460,6 +460,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
 
         if (mNewMode != null) {
             mOriginalMode = mNewMode;
+            AppPrefs.instance(mContext).setDefaultDisplayMode(UhdHelper.formatMode(mOriginalMode));
         }
     }
 

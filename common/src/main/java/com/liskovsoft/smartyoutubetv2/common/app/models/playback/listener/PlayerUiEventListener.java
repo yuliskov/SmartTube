@@ -20,6 +20,6 @@ public interface PlayerUiEventListener {
     void onTrackSelected(FormatItem track);
     void onClosedCaptionsClicked();
     void onPlaylistAddClicked();
-    void onVideoStatsClicked();
+    void onVideoStatsClicked(boolean enabled);
     void onVideoSpeedClicked();
 }

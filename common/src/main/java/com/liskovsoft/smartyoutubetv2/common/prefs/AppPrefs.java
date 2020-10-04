@@ -13,6 +13,8 @@ public class AppPrefs extends SharedPreferencesBase {
     private static final String VIDEO_FORMAT = "video_format";
     private static final String COMPLETED_ONBOARDING = "completed_onboarding";
     private static final String VIDEO_BUFFER_TYPE = "video_buffer_type";
+    private String mDefaultDisplayMode;
+    private String mCurrentDisplayMode;
 
     private AppPrefs(Context context) {
         super(context);
@@ -49,5 +51,21 @@ public class AppPrefs extends SharedPreferencesBase {
 
     public void setVideoBufferType(int bufferType) {
         putInt(VIDEO_BUFFER_TYPE, bufferType);
+    }
+
+    public void setDefaultDisplayMode(String mode) {
+        mDefaultDisplayMode = mode;
+    }
+
+    public String getDefaultDisplayMode() {
+        return mDefaultDisplayMode;
+    }
+
+    public void setCurrentDisplayMode(String mode) {
+        mCurrentDisplayMode = mode;
+    }
+
+    public String getCurrentDisplayMode() {
+        return mCurrentDisplayMode;
     }
 }
