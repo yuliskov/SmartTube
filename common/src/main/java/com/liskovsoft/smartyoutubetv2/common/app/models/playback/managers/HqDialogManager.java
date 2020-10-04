@@ -40,7 +40,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     public void onController(PlaybackController controller) {
         super.onController(controller);
 
-        controller.setBuffer(AppPrefs.instance(mActivity).getVideoBufferType(PlaybackEngineController.BUFFER_MED));
+        controller.setBuffer(AppPrefs.instance(mActivity).getVideoBufferType(PlaybackEngineController.BUFFER_LOW));
     }
 
     private void addQualityCategories() {

@@ -10,6 +10,7 @@ import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -101,6 +102,11 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onEngineInitialized() {
         mEngineReady = true;
+    }
+
+    @Override
+    public void onVideoLoaded(Video item) {
+        // Next lines on engine initialized stage cause other listeners to disappear.
         mController.showDebugView(mDebugViewEnabled);
         mController.setDebugButtonState(mDebugViewEnabled);
     }
