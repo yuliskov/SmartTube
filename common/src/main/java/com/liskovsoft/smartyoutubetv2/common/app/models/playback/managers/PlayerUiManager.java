@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -22,6 +23,7 @@ import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 public class PlayerUiManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = PlayerUiManager.class.getSimpleName();
@@ -163,7 +165,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onSubscribeClicked(boolean subscribed) {
-        if (mController.getVideo() == null) {
+        Video video = mController.getVideo();
+
+        if (video == null || video.mediaItem == null) {
             Log.e(TAG, "Seems that video isn't initialized yet. Cancelling...");
             return;
         }
@@ -174,9 +178,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         Observable<Void> observable;
 
         if (subscribed) {
-            observable = mediaItemManager.subscribeObserve(mController.getVideo().mediaItem);
+            observable = mediaItemManager.subscribeObserve(video.mediaItem);
         } else {
-            observable = mediaItemManager.unsubscribeObserve(mController.getVideo().mediaItem);
+            observable = mediaItemManager.unsubscribeObserve(video.mediaItem);
         }
 
         observable
@@ -186,7 +190,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onThumbsDownClicked(boolean thumbsDown) {
-        if (mController.getVideo() == null) {
+        Video video = mController.getVideo();
+
+        if (video == null || video.mediaItem == null) {
             Log.e(TAG, "Seems that video isn't initialized yet. Cancelling...");
             return;
         }
@@ -197,9 +203,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         Observable<Void> observable;
 
         if (thumbsDown) {
-            observable = mediaItemManager.setDislikeObserve(mController.getVideo().mediaItem);
+            observable = mediaItemManager.setDislikeObserve(video.mediaItem);
         } else {
-            observable = mediaItemManager.removeDislikeObserve(mController.getVideo().mediaItem);
+            observable = mediaItemManager.removeDislikeObserve(video.mediaItem);
         }
 
         observable
@@ -209,7 +215,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onThumbsUpClicked(boolean thumbsUp) {
-        if (mController.getVideo() == null) {
+        Video video = mController.getVideo();
+
+        if (video == null || video.mediaItem == null) {
             Log.e(TAG, "Seems that video isn't initialized yet. Cancelling...");
             return;
         }
@@ -220,9 +228,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         Observable<Void> observable;
 
         if (thumbsUp) {
-            observable = mediaItemManager.setLikeObserve(mController.getVideo().mediaItem);
+            observable = mediaItemManager.setLikeObserve(video.mediaItem);
         } else {
-            observable = mediaItemManager.removeLikeObserve(mController.getVideo().mediaItem);
+            observable = mediaItemManager.removeLikeObserve(video.mediaItem);
         }
 
         observable

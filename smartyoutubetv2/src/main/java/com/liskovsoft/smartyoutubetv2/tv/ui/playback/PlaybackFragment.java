@@ -490,11 +490,14 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
     @Override
     public boolean isInPIPMode() {
-        if (getActivity() == null) {
+        PlaybackActivity playbackActivity = (PlaybackActivity) getActivity();
+
+        if (playbackActivity == null) {
             return false;
         }
 
-        return getActivity().isInPictureInPictureMode();
+        // Old api fix
+        return playbackActivity.isInPIPMode();
     }
 
     @Override

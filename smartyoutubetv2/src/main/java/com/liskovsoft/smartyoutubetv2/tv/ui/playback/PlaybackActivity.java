@@ -76,25 +76,37 @@ public class PlaybackActivity extends LeanbackActivity {
     // More: https://medium.com/s23nyc-tech/drop-in-android-video-exoplayer2-with-picture-in-picture-e2d4f8c1eb30
     @SuppressWarnings("deprecation")
     private void enterPIPMode() {
-        Log.d(TAG, "Entering PIP mode...");
+        // NOTE: When exiting PIP mode onPause is called immediately after onResume
 
-        if (Build.VERSION.SDK_INT >= 24 && getPackageManager().hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
-            //videoPosition = player.currentPosition
-            //playerView.useController = false
-            if (Build.VERSION.SDK_INT >= 26) {
-                PictureInPictureParams.Builder params = new PictureInPictureParams.Builder();
-                enterPictureInPictureMode(params.build());
-            } else {
-                enterPictureInPictureMode();
+        // Also, avoid enter pip on stop!
+        // More info: https://developer.android.com/guide/topics/ui/picture-in-picture#continuing_playback
+
+        if (wannaEnterToPIP()) {
+            Log.d(TAG, "Entering PIP mode...");
+
+            try {
+                if (Build.VERSION.SDK_INT >= 26) {
+                    PictureInPictureParams.Builder params = new PictureInPictureParams.Builder();
+                    enterPictureInPictureMode(params.build());
+                } else {
+                    enterPictureInPictureMode();
+                }
+            } catch (Exception e) {
+                // Device doesn't support picture-in-picture mode
+                Log.e(TAG, e.getMessage());
             }
         }
+    }
+
+    private boolean wannaEnterToPIP() {
+        boolean pipIsSupported = Build.VERSION.SDK_INT >= 24 && getPackageManager().hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE);
+
+        return pipIsSupported && !isInPictureInPictureMode() && mPlaybackFragment.isPIPEnabled();
     }
 
     @Override
     public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode);
-
-        mPlaybackFragment.blockEngine(isInPictureInPictureMode);
 
         mPlaybackFragment.restartEngine();
     }
@@ -107,14 +119,16 @@ public class PlaybackActivity extends LeanbackActivity {
         // More info: https://developer.android.com/guide/topics/ui/picture-in-picture#continuing_playback
 
         // User pressed back.
-        if (wannaEnterToPIP()) {
-            enterPIPMode();
-        }
+        enterPIPMode();
 
         super.finish();
     }
 
-    private boolean wannaEnterToPIP() {
-        return !isInPictureInPictureMode() && mPlaybackFragment.isPIPEnabled();
+    public boolean isInPIPMode() {
+        if (Build.VERSION.SDK_INT < 24) {
+            return false;
+        }
+
+        return isInPictureInPictureMode();
     }
 }

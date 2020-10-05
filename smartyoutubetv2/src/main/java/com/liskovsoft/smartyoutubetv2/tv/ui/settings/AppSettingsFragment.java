@@ -131,9 +131,11 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
             PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(mExtractedContext);
             screen.setTitle(mTitle);
 
-            for (SettingsCategory category : mCategories) {
-                if (category.items != null) {
-                    screen.addPreference(mManager.createPreference(category));
+            if (mCategories != null) {
+                for (SettingsCategory category : mCategories) {
+                    if (category.items != null) {
+                        screen.addPreference(mManager.createPreference(category));
+                    }
                 }
             }
 
@@ -144,7 +146,7 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
 
         private void setSingleListAsRoot(PreferenceScreen screen) {
             // auto expand single list preference
-            if (mCategories.size() == 1) {
+            if (mCategories.size() == 1 && screen.getPreferenceCount() > 0) {
                 onDisplayPreferenceDialog(screen.getPreference(0));
 
                 getFragmentManager().addOnBackStackChangedListener(() -> {
