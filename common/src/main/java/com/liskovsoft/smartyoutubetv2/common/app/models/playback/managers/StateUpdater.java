@@ -146,7 +146,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
             mSubtitleFormat = track;
         }
 
-        AppPrefs.instance(mActivity).setFormat(track);
+        if (!mController.isInPIPMode()) {
+            AppPrefs.instance(mActivity).setFormat(track);
+        }
     }
 
     private void ensureVideoSize(Video item) {

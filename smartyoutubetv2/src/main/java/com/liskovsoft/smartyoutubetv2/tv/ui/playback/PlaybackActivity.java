@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
 import android.app.PictureInPictureParams;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -26,7 +25,6 @@ public class PlaybackActivity extends LeanbackActivity {
     private static final float GAMEPAD_TRIGGER_INTENSITY_OFF = 0.45f;
     private boolean gamepadTriggerPressed = false;
     private PlaybackFragment mPlaybackFragment;
-    private boolean mIsInPIPMode;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,53 +90,31 @@ public class PlaybackActivity extends LeanbackActivity {
         }
     }
 
-    //@Override
-    //protected void onUserLeaveHint() {
-    //    super.onUserLeaveHint();
-    //
-    //    Log.d(TAG, "onUserLeaveHint");
-    //}
-
     @Override
     public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode);
 
-        mIsInPIPMode = isInPictureInPictureMode;
+        mPlaybackFragment.blockEngine(isInPictureInPictureMode);
 
         mPlaybackFragment.restartEngine();
     }
 
     @Override
-    protected void onPause() {
-        // Avoid enter pip on stop!
+    public void finish() {
+        // NOTE: When exiting PIP mode onPause is called immediately after onResume
+
+        // Also, avoid enter pip on stop!
         // More info: https://developer.android.com/guide/topics/ui/picture-in-picture#continuing_playback
 
-        // User pressed home. Don't restore parent activity.
-        if (!isFinishing() && mPlaybackFragment.isEngineBlocked() && mPlaybackFragment.isPIPEnabled()) {
-            enterPIPMode();
-        }
-
-        super.onPause();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        Log.d(TAG, "Config changed: " + newConfig);
-    }
-
-    @Override
-    public void finish() {
-        // User pressed back. We need to restore parent activity.
-        if (mPlaybackFragment.isEngineBlocked() && mPlaybackFragment.isPIPEnabled()) {
+        // User pressed back.
+        if (wannaEnterToPIP()) {
             enterPIPMode();
         }
 
         super.finish();
     }
 
-    public boolean isInPIPMode() {
-        return mIsInPIPMode;
+    private boolean wannaEnterToPIP() {
+        return !isInPictureInPictureMode() && mPlaybackFragment.isPIPEnabled();
     }
 }

@@ -166,12 +166,16 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
     @Override
     public void restartEngine() {
+        //if (mPlayer != null) {
+        //    mEventListener.onEngineReleased();
+        //}
+        //destroyPlayerObjects();
+        //createPlayerObjects();
+
         if (mPlayer != null) {
             mEventListener.onEngineReleased();
+            mEventListener.onEngineInitialized();
         }
-        destroyPlayerObjects();
-        createPlayerObjects();
-        mEventListener.onEngineInitialized();
     }
 
     private void releasePlayer() {
@@ -486,13 +490,11 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
     @Override
     public boolean isInPIPMode() {
-        PlaybackActivity playbackActivity = (PlaybackActivity) getActivity();
-
-        if (playbackActivity == null) {
+        if (getActivity() == null) {
             return false;
         }
 
-        return playbackActivity.isInPIPMode();
+        return getActivity().isInPictureInPictureMode();
     }
 
     @Override

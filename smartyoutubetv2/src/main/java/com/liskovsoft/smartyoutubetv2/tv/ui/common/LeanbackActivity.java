@@ -57,21 +57,32 @@ public abstract class LeanbackActivity extends FragmentActivity {
     protected void onStart() {
         super.onStart();
 
-        mModeSyncManager.restore(this);
         mBackgroundManager.onStart();
-
-        // we can't do it in the ViewManager because activity may be started from outside
-        mViewManager.addTop(this);
     }
 
     @Override
-    public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
-        super.onPictureInPictureModeChanged(isInPictureInPictureMode);
+    protected void onResume() {
+        super.onResume();
 
-        if (!isInPictureInPictureMode) {
-            mViewManager.addTop(this); // user makes pip activity fullscreen
-        }
+        // While entering/exiting PIP mode only Pause/Resume is called
+
+        mModeSyncManager.restore(this);
+
+        // We can't do it in the ViewManager because activity may be started from outside
+        mViewManager.addTop(this);
     }
+
+    //@Override
+    //public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
+    //    super.onPictureInPictureModeChanged(isInPictureInPictureMode);
+    //
+    //    // While entering/exiting PIP mode only Pause/Resume is called
+    //
+    //    if (!isInPictureInPictureMode) {
+    //        mModeSyncManager.restore(this);
+    //        mViewManager.addTop(this); // user makes pip activity fullscreen
+    //    }
+    //}
 
     @Override
     protected void onStop() {

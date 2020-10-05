@@ -64,7 +64,7 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
     }
 
     private void focusView() {
-        if (mView != null && mView.getController().isEngineBlocked()) {
+        if (mView != null && (mView.getController().isInPIPMode() || mView.getController().isEngineBlocked())) {
             return;
         }
 
