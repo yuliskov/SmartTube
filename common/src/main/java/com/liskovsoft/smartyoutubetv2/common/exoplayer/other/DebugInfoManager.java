@@ -170,7 +170,8 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         appendVideoInfo();
         appendOtherInfo();
         appendPlayerState();
-        appendPreferredDisplayModeId();
+        appendCurrentDisplayModeId();
+        appendDisplayResolution();
         //appendPlayerWindowIndex();
         appendVersion();
 
@@ -280,7 +281,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         appendRow("Playback State", text);
     }
 
-    private void appendPreferredDisplayModeId() {
+    private void appendCurrentDisplayModeId() {
         String title = "Display Mode ID";
         if (Util.SDK_INT < 23) {
             appendRow(title, NOT_AVAILABLE);
@@ -296,15 +297,20 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         }
     }
 
+    private void appendDisplayResolution() {
+        String defaultMode = AppPrefs.instance(mContext).getDefaultDisplayMode();
+        defaultMode = defaultMode != null ? defaultMode : NOT_AVAILABLE;
+        String currentMode = AppPrefs.instance(mContext).getCurrentDisplayMode();
+        currentMode = currentMode != null ? currentMode : defaultMode;
+        appendRow("Display Resolution", currentMode);
+        appendRow("Default Resolution", defaultMode);
+    }
+
     private void appendPlayerWindowIndex() {
         appendRow("Window Index", mPlayer.getCurrentWindowIndex());
     }
 
     private void appendVersion() {
-        String defaultMode = AppPrefs.instance(mContext).getDefaultDisplayMode();
-        String currentMode = AppPrefs.instance(mContext).getCurrentDisplayMode();
-        appendRow("Default Display Mode", defaultMode != null ? defaultMode : "none");
-        appendRow("Current Display Mode", currentMode != null ? currentMode : defaultMode);
         appendRow("ExoPlayer Version", ExoPlayerLibraryInfo.VERSION);
         appendRow("App Version", AppInfoHelpers.getAppVersionName(mContext));
     }
