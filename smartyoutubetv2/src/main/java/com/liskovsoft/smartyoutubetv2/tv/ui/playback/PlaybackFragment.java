@@ -157,7 +157,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private int getSuggestedRowIndex() {
         int selectedPosition = 0;
 
-        if (mRowsSupportFragment != null) {
+        if (mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
             selectedPosition = mRowsSupportFragment.getVerticalGridView().getSelectedPosition();
         }
 
