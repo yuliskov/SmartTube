@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -25,10 +26,11 @@ import java.util.List;
 
 public class PlayerUiManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = PlayerUiManager.class.getSimpleName();
-    private final Handler mHandler;
     private static final long UI_AUTO_HIDE_TIMEOUT_MS = 2_000;
     private static final long UI_AUTO_SHOW_TIMEOUT_MS = 3_000;
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
+    private final Handler mHandler;
+    private final MediaItemManager mMediaItemManager;
     private boolean mEngineReady;
     private boolean mDebugViewEnabled;
     private final Runnable mSuggestionsResetHandler = () -> mController.resetSuggestedPosition();
@@ -51,6 +53,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     public PlayerUiManager() {
         mHandler = new Handler(Looper.getMainLooper());
+
+        MediaService service = YouTubeMediaService.instance();
+        mMediaItemManager = service.getMediaItemManager();
     }
 
     @Override
@@ -149,83 +154,35 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     }
 
     @Override
-    public void onSubscribeClicked(boolean subscribed) {
-        Video video = mController.getVideo();
-
-        if (video == null || video.mediaItem == null) {
-            Log.e(TAG, "Seems that video isn't initialized yet. Cancelling...");
-            return;
-        }
-
-        MediaService service = YouTubeMediaService.instance();
-        MediaItemManager mediaItemManager = service.getMediaItemManager();
-
-        Observable<Void> observable;
-
-        if (subscribed) {
-            observable = mediaItemManager.subscribeObserve(video.mediaItem);
-        } else {
-            observable = mediaItemManager.unsubscribeObserve(video.mediaItem);
-        }
-
-        observable
-                .subscribeOn(Schedulers.newThread())
-                .subscribe();
-    }
-
-    @Override
     public void onSuggestionItemLongClicked(Video item) {
         MessageHelpers.showMessage(mActivity, R.string.not_implemented);
     }
 
     @Override
-    public void onThumbsDownClicked(boolean thumbsDown) {
-        Video video = mController.getVideo();
-
-        if (video == null || video.mediaItem == null) {
-            Log.e(TAG, "Seems that video isn't initialized yet. Cancelling...");
-            return;
-        }
-
-        MediaService service = YouTubeMediaService.instance();
-        MediaItemManager mediaItemManager = service.getMediaItemManager();
-
-        Observable<Void> observable;
-
-        if (thumbsDown) {
-            observable = mediaItemManager.setDislikeObserve(video.mediaItem);
+    public void onSubscribeClicked(boolean subscribed) {
+        if (subscribed) {
+            handleMediaItemObservable(mMediaItemManager::subscribeObserve);
         } else {
-            observable = mediaItemManager.removeDislikeObserve(video.mediaItem);
+            handleMediaItemObservable(mMediaItemManager::unsubscribeObserve);
         }
+    }
 
-        observable
-                .subscribeOn(Schedulers.newThread())
-                .subscribe();
+    @Override
+    public void onThumbsDownClicked(boolean thumbsDown) {
+        if (thumbsDown) {
+            handleMediaItemObservable(mMediaItemManager::setDislikeObserve);
+        } else {
+            handleMediaItemObservable(mMediaItemManager::removeDislikeObserve);
+        }
     }
 
     @Override
     public void onThumbsUpClicked(boolean thumbsUp) {
-        Video video = mController.getVideo();
-
-        if (video == null || video.mediaItem == null) {
-            Log.e(TAG, "Seems that video isn't initialized yet. Cancelling...");
-            return;
-        }
-
-        MediaService service = YouTubeMediaService.instance();
-        MediaItemManager mediaItemManager = service.getMediaItemManager();
-
-        Observable<Void> observable;
-
         if (thumbsUp) {
-            observable = mediaItemManager.setLikeObserve(video.mediaItem);
+            handleMediaItemObservable(mMediaItemManager::setLikeObserve);
         } else {
-            observable = mediaItemManager.removeLikeObserve(video.mediaItem);
+            handleMediaItemObservable(mMediaItemManager::removeLikeObserve);
         }
-
-        observable
-                .subscribeOn(Schedulers.newThread())
-                .subscribe();
     }
 
     public void disableUiAutoHideTimeout() {
@@ -268,5 +225,24 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         disableUiAutoShowTimeout();
         disableUiAutoHideTimeout();
         disableSuggestionsResetTimeout();
+    }
+
+    private void handleMediaItemObservable(VoidObservable callable) {
+        Video video = mController.getVideo();
+
+        if (video == null || video.mediaItem == null) {
+            Log.e(TAG, "Seems that video isn't initialized yet. Cancelling...");
+            return;
+        }
+
+        Observable<Void> observable = callable.call(video.mediaItem);
+
+        observable
+                .subscribeOn(Schedulers.newThread())
+                .subscribe();
+    }
+
+    private interface VoidObservable {
+        Observable<Void> call(MediaItem item);
     }
 }

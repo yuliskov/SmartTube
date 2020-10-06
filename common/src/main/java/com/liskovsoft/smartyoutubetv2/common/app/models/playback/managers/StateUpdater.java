@@ -211,10 +211,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
         if (state != null && !nearEnd) {
             mController.setPositionMs(state.positionMs);
-            mController.setPlay(mIsPlaying);
-        } else {
-            mController.setPlay(true); // start play immediately when state not found
         }
+
+        mController.setPlay(mIsPlaying);
     }
 
     private void restoreSpeed(Video item) {
