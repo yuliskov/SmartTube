@@ -174,6 +174,11 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     }
 
     @Override
+    public void onSuggestionItemLongClicked(Video item) {
+        MessageHelpers.showMessage(mActivity, R.string.not_implemented);
+    }
+
+    @Override
     public void onThumbsDownClicked(boolean thumbsDown) {
         Video video = mController.getVideo();
 
