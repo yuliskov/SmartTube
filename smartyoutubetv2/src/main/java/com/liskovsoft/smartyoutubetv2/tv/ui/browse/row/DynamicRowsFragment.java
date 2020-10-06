@@ -31,7 +31,7 @@ import java.util.Map;
 
 public abstract class DynamicRowsFragment extends RowsSupportFragment implements VideoGroupFragment {
     private static final String TAG = DynamicRowsFragment.class.getSimpleName();
-    private static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_MEDIUM;
+    private static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
     private UriBackgroundManager mBackgroundManager;
     private Handler mHandler;
     private ArrayObjectAdapter mRowsAdapter;

@@ -73,9 +73,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
         if (KeyHelpers.isBackKey(keyCode)) {
             enableSuggestionsResetTimeout();
-        } else {
-            enableUiAutoHideTimeout();
         }
+
+        enableUiAutoHideTimeout();
     }
 
     @Override

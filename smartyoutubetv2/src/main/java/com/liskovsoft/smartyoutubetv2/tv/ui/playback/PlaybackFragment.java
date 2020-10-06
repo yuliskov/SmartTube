@@ -286,7 +286,16 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
                 Row row) {
 
             if (item instanceof Video) {
-                mEventListener.onSuggestionItemClicked((Video) item);
+                if (getActivity() instanceof LeanbackActivity) {
+                    boolean longClick = ((LeanbackActivity) getActivity()).isLongClick();
+                    Log.d(TAG, "Is long click: " + longClick);
+
+                    if (longClick) {
+                        mEventListener.onSuggestionItemLongClicked((Video) item);
+                    } else {
+                        mEventListener.onSuggestionItemClicked((Video) item);
+                    }
+                }
             }
         }
     }

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
@@ -81,27 +82,27 @@ public class PlaybackActivity extends LeanbackActivity {
         // Also, avoid enter pip on stop!
         // More info: https://developer.android.com/guide/topics/ui/picture-in-picture#continuing_playback
 
-        if (wannaEnterToPIP()) {
-            Log.d(TAG, "Entering PIP mode...");
+        if (Helpers.isPictureInPictureSupported(this)) {
+            if (wannaEnterToPIP()) {
+                Log.d(TAG, "Entering PIP mode...");
 
-            try {
-                if (Build.VERSION.SDK_INT >= 26) {
-                    PictureInPictureParams.Builder params = new PictureInPictureParams.Builder();
-                    enterPictureInPictureMode(params.build());
-                } else {
-                    enterPictureInPictureMode();
+                try {
+                    if (Build.VERSION.SDK_INT >= 26) {
+                        PictureInPictureParams.Builder params = new PictureInPictureParams.Builder();
+                        enterPictureInPictureMode(params.build());
+                    } else {
+                        enterPictureInPictureMode();
+                    }
+                } catch (Exception e) {
+                    // Device doesn't support picture-in-picture mode
+                    Log.e(TAG, e.getMessage());
                 }
-            } catch (Exception e) {
-                // Device doesn't support picture-in-picture mode
-                Log.e(TAG, e.getMessage());
             }
         }
     }
 
     private boolean wannaEnterToPIP() {
-        boolean pipIsSupported = Build.VERSION.SDK_INT >= 24 && getPackageManager().hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE);
-
-        return pipIsSupported && !isInPictureInPictureMode() && mPlaybackFragment.isPIPEnabled();
+        return !isInPictureInPictureMode() && mPlaybackFragment.isPIPEnabled();
     }
 
     @Override

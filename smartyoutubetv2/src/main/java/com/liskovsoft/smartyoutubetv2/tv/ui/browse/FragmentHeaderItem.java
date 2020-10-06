@@ -2,21 +2,21 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 
 import androidx.leanback.widget.HeaderItem;
 
-public class BrowseHeaderItem extends HeaderItem {
+public class FragmentHeaderItem extends HeaderItem {
     private int mType = -1;
     private int mResId = -1;
 
-    public BrowseHeaderItem(long id, String name, int type, int resId) {
+    public FragmentHeaderItem(long id, String name, int type, int resId) {
         super(id, name);
         mType = type;
         mResId = resId;
     }
 
-    public BrowseHeaderItem(long id, String name) {
+    public FragmentHeaderItem(long id, String name) {
         super(id, name);
     }
 
-    public BrowseHeaderItem(String name) {
+    public FragmentHeaderItem(String name) {
         super(name);
     }
 
