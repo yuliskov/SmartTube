@@ -38,8 +38,8 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
         HeaderItem header = row.getHeaderItem();
         Fragment fragment = null;
 
-        if (header instanceof CustomHeaderItem) {
-            int type = ((CustomHeaderItem) header).getType();
+        if (header instanceof BrowseHeaderItem) {
+            int type = ((BrowseHeaderItem) header).getType();
 
             if (type == Header.TYPE_ROW) {
                 fragment = new HeaderRowsFragment();

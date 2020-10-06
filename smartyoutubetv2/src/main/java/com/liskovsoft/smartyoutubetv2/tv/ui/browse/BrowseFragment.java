@@ -24,6 +24,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.LoginDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
 
 import java.util.HashMap;
@@ -56,6 +57,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         // Prepare the manager that maintains the same background image between activities.
         //prepareBackgroundManager();
         setupEventListeners();
+
+        enableMainFragmentScaling(false);
     }
 
     @Override
@@ -99,7 +102,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     private int getHeaderResId(Object o) {
         if (o instanceof PageRow) {
-            return ((CustomHeaderItem) ((PageRow) o).getHeaderItem()).getResId();
+            return ((BrowseHeaderItem) ((PageRow) o).getHeaderItem()).getResId();
         }
 
         return -1;
@@ -139,7 +142,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     private void showErrorIfEmpty(ErrorFragmentData data) {
         if (mHeaderFragmentFactory.isEmpty()) {
-            replaceMainFragment(new BrowseDialogFragment(data));
+            replaceMainFragment(new LoginDialogFragment(data));
         }
     }
 
@@ -178,7 +181,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private void createHeader(Header header) {
-        HeaderItem headerItem = new CustomHeaderItem(header.getId(), header.getTitle(), header.getType(), header.getResId());;
+        HeaderItem headerItem = new BrowseHeaderItem(header.getId(), header.getTitle(), header.getType(), header.getResId());;
 
         PageRow pageRow = new PageRow(headerItem);
         mCategoryRowAdapter.add(pageRow);

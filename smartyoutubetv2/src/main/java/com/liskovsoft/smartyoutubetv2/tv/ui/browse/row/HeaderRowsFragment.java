@@ -19,4 +19,10 @@ public class HeaderRowsFragment extends DynamicRowsFragment {
     protected VideoGroupPresenter<?> getMainPresenter() {
         return BrowsePresenter.instance(getContext());
     }
+
+    @Override
+    public void setExpand(boolean expand) {
+        // force expand by default
+        super.setExpand(true);
+    }
 }

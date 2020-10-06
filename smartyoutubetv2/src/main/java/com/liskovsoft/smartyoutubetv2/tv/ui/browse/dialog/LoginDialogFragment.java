@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
+package com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,7 +10,7 @@ import androidx.leanback.app.ErrorSupportFragment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.signin.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
-public class BrowseDialogFragment extends ErrorSupportFragment implements BrowseSupportFragment.MainFragmentAdapterProvider {
+public class LoginDialogFragment extends ErrorSupportFragment implements BrowseSupportFragment.MainFragmentAdapterProvider {
     private static final boolean TRANSLUCENT = true;
     private static final int TIMER_DELAY = 1000;
 
@@ -24,7 +24,7 @@ public class BrowseDialogFragment extends ErrorSupportFragment implements Browse
                 }
             };
 
-    public BrowseDialogFragment(ErrorFragmentData dialogData) {
+    public LoginDialogFragment(ErrorFragmentData dialogData) {
         mDialogData = dialogData;
     }
 

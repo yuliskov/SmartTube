@@ -18,7 +18,6 @@ import java.util.Map;
 
 public class StateUpdater extends PlayerEventListenerHelper {
     private boolean mIsPlaying;
-    private float mSpeed = -1;
     private int mRepeatMode = 0;
     private FormatItem mVideoFormat;
     private FormatItem mAudioFormat;
@@ -31,14 +30,20 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private static class State {
         public final long positionMs;
         private final long lengthMs;
+        public final float speed;
 
         public State(long positionMs) {
             this(positionMs, -1);
         }
 
         public State(long positionMs, long lengthMs) {
+            this(positionMs, lengthMs, 1.0f);
+        }
+
+        public State(long positionMs, long lengthMs, float speed) {
             this.positionMs = positionMs;
             this.lengthMs = lengthMs;
+            this.speed = speed;
         }
     }
 
@@ -114,7 +119,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     public void onVideoLoaded(Video item) {
         // on this state video length is not undefined
         restorePosition(item);
-        restoreSpeed();
+        restoreSpeed(item);
         // Player thinks that subs not enabled if did it too early (e.g. on source change event).
         restoreSubtitleFormat();
     }
@@ -166,7 +171,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         Video video = mController.getVideo();
 
         if (video != null) {
-            mStates.put(video.videoId, new State(mController.getPositionMs(), mController.getLengthMs()));
+            mStates.put(video.videoId, new State(mController.getPositionMs(), mController.getLengthMs(), mController.getSpeed()));
         }
     }
 
@@ -212,9 +217,15 @@ public class StateUpdater extends PlayerEventListenerHelper {
         }
     }
 
-    private void restoreSpeed() {
+    private void restoreSpeed(Video item) {
         if (mController.getLengthMs() - mController.getPositionMs() > 30_000) {
-            mController.setSpeed(mSpeed);
+            State state = mStates.get(item.videoId);
+
+            if (state != null) {
+                mController.setSpeed(state.speed);
+            } else {
+                mController.setSpeed(1.0f); // speed may be changed before, so do reset to default
+            }
         } else {
             mController.setSpeed(1.0f); // speed may be changed before, so do reset to default
         }
@@ -252,7 +263,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
                     String.valueOf(speed),
                     optionItem -> {
                         mController.setSpeed(speed);
-                        mSpeed = speed;
                     },
                     mController.getSpeed() == speed));
         }

@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.os.Looper;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -23,17 +22,17 @@ import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 public class PlayerUiManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = PlayerUiManager.class.getSimpleName();
     private final Handler mHandler;
-    private static final long UI_HIDE_TIMEOUT_MS = 2_000;
+    private static final long UI_AUTO_HIDE_TIMEOUT_MS = 2_000;
+    private static final long UI_AUTO_SHOW_TIMEOUT_MS = 3_000;
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
     private boolean mEngineReady;
     private boolean mDebugViewEnabled;
     private final Runnable mSuggestionsResetHandler = () -> mController.resetSuggestedPosition();
-    private final Runnable mUiVisibilityHandler = () -> {
+    private final Runnable mUiAutoHideHandler = () -> {
         if (mController.isPlaying()) {
             if (!mController.isSuggestionsShown()) { // don't hide when suggestions is shown
                 mController.showControls(false);
@@ -44,9 +43,20 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
             enableUiAutoHideTimeout();
         }
     };
+    private final Runnable mUiAutoShowHandler = () -> {
+        if (!mController.isPlaying()) {
+            mController.showControls(true);
+        }
+    };
 
     public PlayerUiManager() {
         mHandler = new Handler(Looper.getMainLooper());
+    }
+
+    @Override
+    public void openVideo(Video item) {
+        // If video can't be loaded show at least some infos.
+        enableUiAutoShowTimeout();
     }
 
     @Override
@@ -118,8 +128,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         Log.d(TAG, "Engine released. Disabling all callbacks...");
         mEngineReady = false;
 
-        disableUiAutoHideTimeout();
-        disableSuggestionsResetTimeout();
+        disposeTimeouts();
     }
 
     @Override
@@ -137,30 +146,6 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         mController.setLikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_LIKE);
         mController.setDislikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_DISLIKE);
         mController.setSubscribeButtonState(metadata.isSubscribed());
-    }
-
-    public void disableUiAutoHideTimeout() {
-        Log.d(TAG, "Stopping hide ui timer...");
-        mHandler.removeCallbacks(mUiVisibilityHandler);
-    }
-
-    public void enableUiAutoHideTimeout() {
-        Log.d(TAG, "Starting hide ui timer...");
-        if (mEngineReady) {
-            mHandler.postDelayed(mUiVisibilityHandler, UI_HIDE_TIMEOUT_MS);
-        }
-    }
-
-    private void disableSuggestionsResetTimeout() {
-        Log.d(TAG, "Stopping reset position timer...");
-        mHandler.removeCallbacks(mSuggestionsResetHandler);
-    }
-
-    private void enableSuggestionsResetTimeout() {
-        Log.d(TAG, "Starting reset position timer...");
-        if (mEngineReady) {
-            mHandler.postDelayed(mSuggestionsResetHandler, SUGGESTIONS_RESET_TIMEOUT_MS);
-        }
     }
 
     @Override
@@ -236,5 +221,47 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         observable
                 .subscribeOn(Schedulers.newThread())
                 .subscribe();
+    }
+
+    public void disableUiAutoHideTimeout() {
+        Log.d(TAG, "Stopping auto hide ui timer...");
+        mHandler.removeCallbacks(mUiAutoHideHandler);
+    }
+
+    public void enableUiAutoHideTimeout() {
+        Log.d(TAG, "Starting auto hide ui timer...");
+        if (mEngineReady) {
+            mHandler.postDelayed(mUiAutoHideHandler, UI_AUTO_HIDE_TIMEOUT_MS);
+        }
+    }
+
+    private void disableSuggestionsResetTimeout() {
+        Log.d(TAG, "Stopping reset position timer...");
+        mHandler.removeCallbacks(mSuggestionsResetHandler);
+    }
+
+    private void enableSuggestionsResetTimeout() {
+        Log.d(TAG, "Starting reset position timer...");
+        if (mEngineReady) {
+            mHandler.postDelayed(mSuggestionsResetHandler, SUGGESTIONS_RESET_TIMEOUT_MS);
+        }
+    }
+
+    private void disableUiAutoShowTimeout() {
+        Log.d(TAG, "Stopping auto show ui timer...");
+        mHandler.removeCallbacks(mUiAutoShowHandler);
+    }
+
+    private void enableUiAutoShowTimeout() {
+        Log.d(TAG, "Starting auto show ui timer...");
+        if (mEngineReady) {
+            mHandler.postDelayed(mUiAutoShowHandler, UI_AUTO_SHOW_TIMEOUT_MS);
+        }
+    }
+
+    private void disposeTimeouts() {
+        disableUiAutoShowTimeout();
+        disableUiAutoHideTimeout();
+        disableSuggestionsResetTimeout();
     }
 }
