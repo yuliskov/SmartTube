@@ -213,6 +213,12 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter> {
             mActionListener.onKeyDown(keyCode);
         }
 
+        //if (!handled) {
+        //    super.onKey(v, keyCode, event);
+        //}
+
+        // Ignore result to give a chance to handle this event in
+        // com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.PlaybackTransportRowPresenter.ViewHolder
         return handled || super.onKey(v, keyCode, event);
     }
 

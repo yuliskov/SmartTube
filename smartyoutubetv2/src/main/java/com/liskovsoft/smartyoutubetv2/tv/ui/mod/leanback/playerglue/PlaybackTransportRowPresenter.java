@@ -302,6 +302,9 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                         case KeyEvent.KEYCODE_MEDIA_REWIND:
                             if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
                                 onBackward();
+                            } else {
+                                // MOD: don't pause after seeking
+                                //stopSeek(false);
                             }
                             return true;
                         case KeyEvent.KEYCODE_DPAD_RIGHT:
@@ -309,8 +312,12 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                         case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
                             if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
                                 onForward();
+                            } else {
+                                // MOD: don't pause after seeking
+                                //stopSeek(false);
                             }
                             return true;
+                        case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE: // MOD: act as OK?
                         case KeyEvent.KEYCODE_DPAD_CENTER:
                         case KeyEvent.KEYCODE_ENTER:
                             if (!mInSeek) {
