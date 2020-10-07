@@ -1,11 +1,10 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.widgets;
+package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.textbadgecard;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.leanback.widget.ImageCardView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
@@ -32,15 +31,15 @@ public class TextBadgeImageCardView extends ImageCardView {
     }
 
     private void createTextBadge() {
-        //ViewGroup wrapper = findViewById(R.id.main_image_wrapper);
-        //
-        //if (wrapper != null) {
-        //    LayoutInflater inflater = LayoutInflater.from(getContext());
-        //
-        //    int layoutId = R.layout.text_badge_image_card_view_badge;
-        //    mBadgeText = (TextView) inflater.inflate(layoutId, wrapper, false);
-        //    wrapper.addView(mBadgeText);
-        //}
+        ViewGroup wrapper = findViewById(R.id.main_image_wrapper);
+
+        if (wrapper != null) {
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+
+            int layoutId = R.layout.image_card_view_badge;
+            mBadgeText = (TextView) inflater.inflate(layoutId, wrapper, false);
+            wrapper.addView(mBadgeText);
+        }
     }
 
     /**

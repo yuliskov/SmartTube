@@ -18,7 +18,7 @@ import com.bumptech.glide.request.target.Target;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.TextBadgeImageCardView;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.textbadgecard.TextBadgeImageCardView;
 
 /*
  * A CardPresenter is used to generate Views and bind Objects to them on demand.
