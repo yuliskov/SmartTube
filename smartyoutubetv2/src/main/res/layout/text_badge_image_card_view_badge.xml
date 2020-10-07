@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:visibility="gone"
+    android:id="@+id/extra_text_badge"
+    android:layout_alignBottom="@+id/main_image"
+    android:layout_alignParentEnd="true"
+    android:layout_marginEnd="@dimen/lb_basic_card_info_badge_margin"
+    android:background="@color/black"
+    style="?attr/imageCardViewContentStyle" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Modified original file with intention to add subtitle view -->
+<!-- MOD: intention to add subtitle view -->
 <!-- More info: https://github.com/google/ExoPlayer/issues/6587 -->
 <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

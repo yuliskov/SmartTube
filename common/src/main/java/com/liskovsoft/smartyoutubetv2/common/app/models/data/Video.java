@@ -21,6 +21,7 @@ public final class Video implements Parcelable {
     public String bgImageUrl;
     public String cardImageUrl;
     public String studio;
+    public String badge;
     public int percentWatched;
     public MediaItem mediaItem;
 
@@ -75,6 +76,7 @@ public final class Video implements Parcelable {
         video.cardImageUrl = item.getCardImageUrl();
         video.studio = item.getAuthor();
         video.percentWatched = item.getPercentWatched();
+        video.badge = item.getDurationLabel();
         video.mediaItem = item;
 
         return video;

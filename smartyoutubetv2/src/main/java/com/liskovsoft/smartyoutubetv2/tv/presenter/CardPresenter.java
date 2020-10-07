@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
-import androidx.leanback.widget.ImageCardView;
 import androidx.leanback.widget.Presenter;
 import androidx.core.content.ContextCompat;
 import android.view.ViewGroup;
@@ -19,6 +18,7 @@ import com.bumptech.glide.request.target.Target;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.TextBadgeImageCardView;
 
 /*
  * A CardPresenter is used to generate Views and bind Objects to them on demand.
@@ -44,21 +44,21 @@ public class CardPresenter extends Presenter {
                 ContextCompat.getColor(parent.getContext(), R.color.card_selected_text2);
         mDefaultCardImage = ContextCompat.getDrawable(parent.getContext(), R.drawable.movie);
 
-        ImageCardView cardView = new ImageCardView(parent.getContext()) {
+        TextBadgeImageCardView cardView = new TextBadgeImageCardView(parent.getContext()) {
             @Override
             public void setSelected(boolean selected) {
                 updateCardBackgroundColor(this, selected);
                 super.setSelected(selected);
             }
         };
-
+        
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
         updateCardBackgroundColor(cardView, false);
         return new ViewHolder(cardView);
     }
 
-    private void updateCardBackgroundColor(ImageCardView view, boolean selected) {
+    private void updateCardBackgroundColor(TextBadgeImageCardView view, boolean selected) {
         int backgroundColor = selected ? mSelectedBackgroundColor : mDefaultBackgroundColor;
         int textColor = selected ? mSelectedTextColor : mDefaultTextColor;
 
@@ -84,9 +84,10 @@ public class CardPresenter extends Presenter {
     public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object item) {
         Video video = (Video) item;
 
-        ImageCardView cardView = (ImageCardView) viewHolder.view;
+        TextBadgeImageCardView cardView = (TextBadgeImageCardView) viewHolder.view;
         cardView.setTitleText(video.title);
         cardView.setContentText(video.description);
+        cardView.setBadgeText(video.badge);
 
         if (video.cardImageUrl != null) {
             // Set card size from dimension resources.
@@ -105,7 +106,7 @@ public class CardPresenter extends Presenter {
 
     @Override
     public void onUnbindViewHolder(Presenter.ViewHolder viewHolder) {
-        ImageCardView cardView = (ImageCardView) viewHolder.view;
+        TextBadgeImageCardView cardView = (TextBadgeImageCardView) viewHolder.view;
 
         // Remove references to images so that the garbage collector can free up memory.
         cardView.setBadgeImage(null);
