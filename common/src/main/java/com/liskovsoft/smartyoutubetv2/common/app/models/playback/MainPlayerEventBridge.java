@@ -34,7 +34,10 @@ public class MainPlayerEventBridge implements PlayerEventListener {
 
         PlayerUiManager uiManager = new PlayerUiManager();
         HqDialogManager hqDialogManager = new HqDialogManager();
+
         VideoLoader videoLoader = new VideoLoader();
+        videoLoader.addErrorListener(uiManager);
+
         SuggestionsLoader suggestionsLoader = new SuggestionsLoader();
         suggestionsLoader.addMetadataListener(uiManager);
         suggestionsLoader.addMetadataListener(videoLoader);

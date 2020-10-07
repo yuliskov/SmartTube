@@ -5,9 +5,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
-import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
@@ -19,6 +17,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class VideoLoader extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = VideoLoader.class.getSimpleName();
     private final Playlist mPlaylist;
@@ -28,6 +29,12 @@ public class VideoLoader extends PlayerEventListenerHelper implements MetadataLi
     private Disposable mFormatInfoAction;
     private boolean mEngineInitialized;
     private MediaItem mCachedNextVideo;
+    private final List<ErrorListener> mListeners = new ArrayList<>();
+
+    public interface ErrorListener {
+        int TYPE_EMPTY_SOURCE = 0;
+        void onError(int type);
+    }
 
     public VideoLoader() {
         mPlaylist = Playlist.instance();
@@ -198,6 +205,17 @@ public class VideoLoader extends PlayerEventListenerHelper implements MetadataLi
             mController.openUrlList(formatInfo.createUrlList());
         } else {
             Log.e(TAG, "Empty format info received. No video data to pass to the player.");
+            callListener(ErrorListener.TYPE_EMPTY_SOURCE);
+        }
+    }
+
+    public void addErrorListener(ErrorListener listener) {
+        mListeners.add(listener);
+    }
+
+    private void callListener(int type) {
+        for (ErrorListener listener : mListeners) {
+            listener.onError(type);
         }
     }
 }

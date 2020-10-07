@@ -14,6 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader.MetadataListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.VideoLoader.ErrorListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
@@ -24,10 +25,9 @@ import io.reactivex.schedulers.Schedulers;
 
 import java.util.List;
 
-public class PlayerUiManager extends PlayerEventListenerHelper implements MetadataListener {
+public class PlayerUiManager extends PlayerEventListenerHelper implements MetadataListener, ErrorListener {
     private static final String TAG = PlayerUiManager.class.getSimpleName();
     private static final long UI_AUTO_HIDE_TIMEOUT_MS = 2_000;
-    private static final long UI_AUTO_SHOW_TIMEOUT_MS = 3_000;
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
     private final Handler mHandler;
     private final MediaItemManager mMediaItemManager;
@@ -45,23 +45,12 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
             enableUiAutoHideTimeout();
         }
     };
-    private final Runnable mUiAutoShowHandler = () -> {
-        if (!mController.isPlaying()) {
-            mController.showControls(true);
-        }
-    };
 
     public PlayerUiManager() {
         mHandler = new Handler(Looper.getMainLooper());
 
         MediaService service = YouTubeMediaService.instance();
         mMediaItemManager = service.getMediaItemManager();
-    }
-
-    @Override
-    public void openVideo(Video item) {
-        // If video can't be loaded show at least some infos.
-        enableUiAutoShowTimeout();
     }
 
     @Override
@@ -161,27 +150,27 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onSubscribeClicked(boolean subscribed) {
         if (subscribed) {
-            handleMediaItemObservable(mMediaItemManager::subscribeObserve);
+            callMediaItemObservable(mMediaItemManager::subscribeObserve);
         } else {
-            handleMediaItemObservable(mMediaItemManager::unsubscribeObserve);
+            callMediaItemObservable(mMediaItemManager::unsubscribeObserve);
         }
     }
 
     @Override
     public void onThumbsDownClicked(boolean thumbsDown) {
         if (thumbsDown) {
-            handleMediaItemObservable(mMediaItemManager::setDislikeObserve);
+            callMediaItemObservable(mMediaItemManager::setDislikeObserve);
         } else {
-            handleMediaItemObservable(mMediaItemManager::removeDislikeObserve);
+            callMediaItemObservable(mMediaItemManager::removeDislikeObserve);
         }
     }
 
     @Override
     public void onThumbsUpClicked(boolean thumbsUp) {
         if (thumbsUp) {
-            handleMediaItemObservable(mMediaItemManager::setLikeObserve);
+            callMediaItemObservable(mMediaItemManager::setLikeObserve);
         } else {
-            handleMediaItemObservable(mMediaItemManager::removeLikeObserve);
+            callMediaItemObservable(mMediaItemManager::removeLikeObserve);
         }
     }
 
@@ -209,25 +198,12 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         }
     }
 
-    private void disableUiAutoShowTimeout() {
-        Log.d(TAG, "Stopping auto show ui timer...");
-        mHandler.removeCallbacks(mUiAutoShowHandler);
-    }
-
-    private void enableUiAutoShowTimeout() {
-        Log.d(TAG, "Starting auto show ui timer...");
-        if (mEngineReady) {
-            mHandler.postDelayed(mUiAutoShowHandler, UI_AUTO_SHOW_TIMEOUT_MS);
-        }
-    }
-
     private void disposeTimeouts() {
-        disableUiAutoShowTimeout();
         disableUiAutoHideTimeout();
         disableSuggestionsResetTimeout();
     }
 
-    private void handleMediaItemObservable(VoidObservable callable) {
+    private void callMediaItemObservable(MediaItemObservable callable) {
         Video video = mController.getVideo();
 
         if (video == null || video.mediaItem == null) {
@@ -242,7 +218,12 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
                 .subscribe();
     }
 
-    private interface VoidObservable {
+    private interface MediaItemObservable {
         Observable<Void> call(MediaItem item);
+    }
+
+    @Override
+    public void onError(int type) {
+        mController.showControls(true);
     }
 }
