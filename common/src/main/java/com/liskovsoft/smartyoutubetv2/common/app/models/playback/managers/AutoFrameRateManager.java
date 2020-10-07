@@ -55,7 +55,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
             }
 
             return new AfrData(
-                    Boolean.parseBoolean(split[0]), Boolean.parseBoolean(split[1]), Boolean.parseBoolean(split[1]));
+                    Boolean.parseBoolean(split[0]), Boolean.parseBoolean(split[1]), Boolean.parseBoolean(split[2]));
         }
     }
 
