@@ -32,17 +32,14 @@ public class TextBadgeImageCardView extends ImageCardView {
     }
 
     private void createTextBadge() {
-        //ViewGroup mainImageArea = findViewById(R.id.main_image_wrapper);
+        //ViewGroup wrapper = findViewById(R.id.main_image_wrapper);
         //
-        //if (mainImageArea != null) {
+        //if (wrapper != null) {
         //    LayoutInflater inflater = LayoutInflater.from(getContext());
         //
         //    int layoutId = R.layout.text_badge_image_card_view_badge;
-        //    mBadgeText = (TextView) inflater.inflate(layoutId, mainImageArea, false);
-        //    mainImageArea.addView(mBadgeText);
-        //
-        //    ImageView mainImage = findViewById(R.id.main_image);
-        //    mainImage.setVisibility(VISIBLE);
+        //    mBadgeText = (TextView) inflater.inflate(layoutId, wrapper, false);
+        //    wrapper.addView(mBadgeText);
         //}
     }
 

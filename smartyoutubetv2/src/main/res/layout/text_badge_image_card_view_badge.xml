@@ -3,7 +3,11 @@
     android:visibility="gone"
     android:id="@+id/extra_text_badge"
     android:layout_alignBottom="@+id/main_image"
-    android:layout_alignParentEnd="true"
+    android:layout_alignEnd="@+id/main_image"
     android:layout_marginEnd="@dimen/lb_basic_card_info_badge_margin"
-    android:background="@color/black"
-    style="?attr/imageCardViewContentStyle" />
+    android:background="@color/fastlane_dark"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:maxLines="1"
+    android:ellipsize="end"
+    style="@style/TextAppearance.Leanback.ImageCardView.Content" />
