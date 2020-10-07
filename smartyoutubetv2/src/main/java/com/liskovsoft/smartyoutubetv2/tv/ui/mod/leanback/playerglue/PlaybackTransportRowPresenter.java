@@ -304,7 +304,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                                 onBackward();
                             } else {
                                 // MOD: don't pause after seeking
-                                //stopSeek(false);
+                                stopSeek(false);
                             }
                             return true;
                         case KeyEvent.KEYCODE_DPAD_RIGHT:
@@ -314,7 +314,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                                 onForward();
                             } else {
                                 // MOD: don't pause after seeking
-                                //stopSeek(false);
+                                stopSeek(false);
                             }
                             return true;
                         case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE: // MOD: act as OK?
