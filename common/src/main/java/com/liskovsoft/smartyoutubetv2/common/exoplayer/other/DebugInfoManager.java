@@ -7,9 +7,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.core.util.Pair;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerLibraryInfo;
 import com.google.android.exoplayer2.Format;
@@ -23,12 +23,15 @@ import com.google.android.exoplayer2.mediacodec.MediaCodecUtil;
 import com.google.android.exoplayer2.mediacodec.MediaCodecUtil.DecoderQueryException;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolder.Mode;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.UhdHelper;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 // NOTE: original file taken from
@@ -39,6 +42,7 @@ import java.util.Locale;
  * a {@link SimpleExoPlayer}.
  */
 public final class DebugInfoManager implements Runnable, Player.EventListener {
+    private static final String TAG = DebugInfoManager.class.getSimpleName();
     private static final int REFRESH_INTERVAL_MS = 1000;
     private static final String NOT_AVAILABLE = "none";
     private static final String DEFAULT = "default";
@@ -51,6 +55,10 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private boolean started;
     private LinearLayout column1;
     private LinearLayout column2;
+    private UhdHelper mUhdHelper;
+    private final List<Pair<String, String>> mVideoInfo = new ArrayList<>();
+    private final List<Pair<String, String>> mDisplayModeId = new ArrayList<>();
+    private final List<Pair<String, String>> mDisplayInfo = new ArrayList<>();
 
     /**
      * @param player   The {@link SimpleExoPlayer} from which debug information should be obtained.
@@ -69,17 +77,15 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         mDebugViewGroup.removeAllViews();
         LayoutInflater inflater = LayoutInflater.from(mContext);
         inflater.inflate(R.layout.debug_view, mDebugViewGroup, true);
-        column1 = (LinearLayout) mDebugViewGroup.findViewById(R.id.debug_view_column1);
-        column2 = (LinearLayout) mDebugViewGroup.findViewById(R.id.debug_view_column2);
+        column1 = mDebugViewGroup.findViewById(R.id.debug_view_column1);
+        column2 = mDebugViewGroup.findViewById(R.id.debug_view_column2);
     }
 
     public void show(boolean show) {
         if (show) {
-            mDebugViewGroup.setVisibility(View.VISIBLE);
-            start();
+            create();
         } else {
-            mDebugViewGroup.setVisibility(View.GONE);
-            stop();
+            destroy();
         }
     }
 
@@ -87,12 +93,14 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
      * Starts periodic updates of the {@link TextView}. Must be called from the application's main
      * thread.
      */
-    private void start() {
+    private void create() {
         if (started) {
             return;
         }
 
         started = true;
+        mDebugViewGroup.setVisibility(View.VISIBLE);
+        mUhdHelper = new UhdHelper(mContext);
         mPlayer.addListener(this);
         updateAndPost();
     }
@@ -101,41 +109,43 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
      * Stops periodic updates of the {@link TextView}. Must be called from the application's main
      * thread.
      */
-    private void stop() {
+    private void destroy() {
         if (!started) {
             return;
         }
-        
+
         started = false;
+        mDebugViewGroup.setVisibility(View.GONE);
         mPlayer.removeListener(this);
         mDebugViewGroup.removeCallbacks(this);
+        mUhdHelper = null;
     }
 
     // Player.EventListener implementation.
 
     @Override
     public void onLoadingChanged(boolean isLoading) {
-        // Do nothing.
+        updateOncePerLongPeriodValues();
     }
 
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        updateAndPost();
+        // NOP
     }
 
     @Override
     public void onRepeatModeChanged(int repeatMode) {
-        // Do nothing.
+        // NOP
     }
 
     @Override
     public void onPositionDiscontinuity(int reason) {
-        updateAndPost();
+        // NOP
     }
 
     @Override
     public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-        // Do nothing.
+        // NOP
     }
 
     @Override
@@ -150,7 +160,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
 
     @Override
     public void onTracksChanged(TrackGroupArray tracks, TrackSelectionArray selections) {
-        // Do nothing.
+        // NOP
     }
 
     // Runnable implementation.
@@ -168,18 +178,33 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         column2.removeAllViews();
 
         appendVideoInfo();
-        appendOtherInfo();
+        appendRuntimeInfo();
         appendPlayerState();
-        appendCurrentDisplayModeId();
-        appendDisplayResolution();
+        appendDisplayModeId();
+        appendDisplayInfo();
         //appendPlayerWindowIndex();
         appendVersion();
 
+        // Schedule next update
         mDebugViewGroup.removeCallbacks(this);
         mDebugViewGroup.postDelayed(this, REFRESH_INTERVAL_MS);
     }
 
+    private void updateOncePerLongPeriodValues() {
+        updateVideoInfo();
+        updateDisplayModeId();
+        updateDisplayInfo();
+    }
+
     private void appendVideoInfo() {
+        for (Pair<String, String> pair : mVideoInfo) {
+            appendRow(pair.first, pair.second);
+        }
+    }
+
+    private void updateVideoInfo() {
+        mVideoInfo.clear();
+
         Format video = mPlayer.getVideoFormat();
         Format audio = mPlayer.getAudioFormat();
         if (video == null || audio == null) {
@@ -188,26 +213,24 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
 
         String videoRes = getVideoResolution(video);
 
-        // String displayRes = getDisplayResolution();
-
-        appendRow("Video Resolution", videoRes);
-        appendRow("Video/Audio Codecs", String.format(
+        mVideoInfo.add(new Pair<>("Video Resolution", videoRes));
+        mVideoInfo.add(new Pair<>("Video/Audio Codecs", String.format(
                 "%s%s/%s%s",
                 video.sampleMimeType.replace("video/", ""),
                 getFormatId(video),
                 audio.sampleMimeType.replace("audio/", ""),
                 getFormatId(audio)
-        ));
-        appendRow("Video/Audio Bitrate", String.format(
+        )));
+        mVideoInfo.add(new Pair<>("Video/Audio Bitrate", String.format(
                 "%s/%s",
                 toHumanReadable(video.bitrate),
                 toHumanReadable(audio.bitrate)
-        ));
+        )));
         String par = video.pixelWidthHeightRatio == Format.NO_VALUE ||
                 video.pixelWidthHeightRatio == 1f ?
                 DEFAULT : String.format(Locale.US, "%.02f", video.pixelWidthHeightRatio);
-        appendRow("Aspect Ratio", par);
-        appendRow("Hardware Accelerated", isHardwareAccelerated(video));
+        mVideoInfo.add(new Pair<>("Aspect Ratio", par));
+        mVideoInfo.add(new Pair<>("Hardware Accelerated", String.valueOf(isHardwareAccelerated(video))));
     }
 
     /**
@@ -244,7 +267,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         return true;
     }
 
-    private void appendOtherInfo() {
+    private void appendRuntimeInfo() {
         DecoderCounters counters = mPlayer.getVideoDecoderCounters();
         if (counters == null)
             return;
@@ -281,29 +304,38 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         appendRow("Playback State", text);
     }
 
-    private void appendCurrentDisplayModeId() {
-        String title = "Display Mode ID";
-        if (Util.SDK_INT < 23) {
-            appendRow(title, NOT_AVAILABLE);
-        } else {
-            Activity ctx = this.mContext;
-            if (ctx == null) {
-                // ctx = (ExoPlayerFragment) viewGroup.getContext();
-                return;
-            }
-            WindowManager.LayoutParams windowLayoutParams = ctx.getWindow().getAttributes();
-            int displayModeId = windowLayoutParams.preferredDisplayModeId;
-            appendRow(title, displayModeId);
+    private void appendDisplayModeId() {
+        for (Pair<String, String> pair : mDisplayModeId) {
+            appendRow(pair.first, pair.second);
         }
     }
 
-    private void appendDisplayResolution() {
+    private void updateDisplayModeId() {
+        mDisplayModeId.clear();
+
+        Mode currentMode = mUhdHelper.getCurrentMode();
+        mDisplayModeId.add(new Pair<>("Display Mode ID", currentMode != null ? String.valueOf(currentMode.getModeId()) : NOT_AVAILABLE));
+
+        Mode[] supportedModes = mUhdHelper.getSupportedModes();
+        mDisplayModeId.add(new Pair<>("Display Modes Length", supportedModes != null ? String.valueOf(supportedModes.length) : NOT_AVAILABLE));
+    }
+
+    private void appendDisplayInfo() {
+        for (Pair<String, String> pair : mDisplayInfo) {
+            appendRow(pair.first, pair.second);
+        }
+    }
+
+    private void updateDisplayInfo() {
+        mDisplayInfo.clear();
+
         String defaultMode = AppPrefs.instance(mContext).getDefaultDisplayMode();
         defaultMode = defaultMode != null ? defaultMode : NOT_AVAILABLE;
         String currentMode = AppPrefs.instance(mContext).getCurrentDisplayMode();
         currentMode = currentMode != null ? currentMode : defaultMode;
-        appendRow("Display Resolution", currentMode);
-        appendRow("Default Resolution", defaultMode);
+        mDisplayInfo.add(new Pair<>("Display dpi", String.valueOf(Helpers.getDeviceDpi(mContext))));
+        mDisplayInfo.add(new Pair<>("Display Resolution", currentMode));
+        mDisplayInfo.add(new Pair<>("Default Resolution", defaultMode));
     }
 
     private void appendPlayerWindowIndex() {

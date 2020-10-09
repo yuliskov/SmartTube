@@ -4,6 +4,7 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class UiOptionItem implements OptionItem {
     private int mId;
@@ -13,6 +14,8 @@ public class UiOptionItem implements OptionItem {
     private FormatItem mFormat;
     private OptionCallback mCallback;
     private Object mData;
+    private Map<OptionItem, Boolean> mUncheckedRules;
+    private Map<OptionItem, Boolean> mCheckedRules;
 
     public static List<OptionItem> from(List<FormatItem> formats, OptionCallback callback) {
         return from(formats, callback, null);
@@ -106,5 +109,25 @@ public class UiOptionItem implements OptionItem {
     @Override
     public Object getData() {
         return mData;
+    }
+
+    @Override
+    public void setUncheckedRules(Map<OptionItem, Boolean> rules) {
+        mUncheckedRules = rules;
+    }
+
+    @Override
+    public Map<OptionItem, Boolean> getUncheckedRules() {
+        return mUncheckedRules;
+    }
+
+    @Override
+    public void setCheckedRules(Map<OptionItem, Boolean> rules) {
+        mCheckedRules = rules;
+    }
+
+    @Override
+    public Map<OptionItem, Boolean> getCheckedRules() {
+        return mCheckedRules;
     }
 }

@@ -13,7 +13,9 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AutoFrameRateManager extends PlayerEventListenerHelper {
     private static final String TAG = AutoFrameRateManager.class.getSimpleName();
@@ -141,9 +143,27 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         String fpsCorrection = mActivity.getString(R.string.frame_rate_correction, "30->29.97, 60->59.94");
         String resolutionSwitch = mActivity.getString(R.string.resolution_switch);
         List<OptionItem> options = new ArrayList<>();
-        options.add(UiOptionItem.from(title, this::onAfrOptionClick, mAfrData.afrEnabled));
-        options.add(UiOptionItem.from(resolutionSwitch, this::onResolutionSwitchClick, mAfrData.afrResSwitchEnabled));
-        options.add(UiOptionItem.from(fpsCorrection, this::onFpsCorrectionClick, mAfrData.afrFpsCorrectionEnabled));
+
+        OptionItem afrEnableOption = UiOptionItem.from(title, this::onAfrOptionClick, mAfrData.afrEnabled);
+        OptionItem afrResSwitchOption = UiOptionItem.from(resolutionSwitch, this::onResolutionSwitchClick, mAfrData.afrResSwitchEnabled);
+        OptionItem afrFpsCorrectionOption = UiOptionItem.from(fpsCorrection, this::onFpsCorrectionClick, mAfrData.afrFpsCorrectionEnabled);
+
+        //Map<OptionItem, Boolean> afrEnableOptionRules = new HashMap<>();
+        //afrEnableOptionRules.put(afrResSwitchOption, false);
+        //afrEnableOptionRules.put(afrFpsCorrectionOption, false);
+        //afrEnableOption.setUncheckedRules(afrEnableOptionRules);
+        //
+        //Map<OptionItem, Boolean> afrResSwitchOptionRules = new HashMap<>();
+        //afrResSwitchOptionRules.put(afrEnableOption, true);
+        //afrResSwitchOption.setCheckedRules(afrResSwitchOptionRules);
+        //
+        //Map<OptionItem, Boolean> afrFpsCorrectionOptionRules = new HashMap<>();
+        //afrFpsCorrectionOptionRules.put(afrEnableOption, true);
+        //afrFpsCorrectionOption.setCheckedRules(afrFpsCorrectionOptionRules);
+
+        options.add(afrEnableOption);
+        options.add(afrResSwitchOption);
+        options.add(afrFpsCorrectionOption);
 
         mUiManager.addCheckedCategory(title, options);
 

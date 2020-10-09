@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.settings.dialogs.StringListPreferenc
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
 public class AppSettingsFragmentHelper {
@@ -147,7 +148,7 @@ public class AppSettingsFragmentHelper {
 
         pref.setOnPreferenceChangeListener((preference, newValue) -> {
             if (newValue instanceof Set) {
-                Set values = ((Set) newValue);
+                Set<?> values = ((Set<?>) newValue);
                 for (OptionItem item : category.items) {
                     boolean found = false;
                     for (Object value : values) {
