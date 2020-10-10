@@ -119,8 +119,8 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter> {
         adapter.add(mChannelAction);
         adapter.add(mHighQualityAction);
         adapter.add(mPlaylistAddAction);
-        adapter.add(mThumbsDownAction);
         adapter.add(mThumbsUpAction);
+        adapter.add(mThumbsDownAction);
         adapter.add(mSubscribeAction);
         adapter.add(mClosedCaptioningAction);
         adapter.add(mVideoStatsAction);
