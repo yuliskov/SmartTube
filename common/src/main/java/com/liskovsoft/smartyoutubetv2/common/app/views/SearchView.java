@@ -6,4 +6,5 @@ public interface SearchView {
     void updateSearch(VideoGroup group);
     void clearSearch();
     void showProgressBar(boolean show);
+    void startSearch(String searchText);
 }

@@ -257,4 +257,9 @@ public class SearchFragment extends SearchSupportFragment
                 break;
         }
     }
+
+    @Override
+    public void startSearch(String searchText) {
+        setSearchQuery(searchText, true);
+    }
 }

@@ -76,7 +76,7 @@ public class SearchPresenter implements VideoGroupPresenter<SearchView> {
         loadSuggestedKeywords();
 
         if (mSearchText != null) {
-            onSearchText(mSearchText);
+            mView.startSearch(mSearchText);
         }
     }
 
@@ -159,11 +159,12 @@ public class SearchPresenter implements VideoGroupPresenter<SearchView> {
 
     public void openSearch(String searchText) {
         if (mView == null) {
-            mViewManager.startView(PlaybackView.class);
+            mViewManager.startView(SearchView.class);
             mSearchText = searchText;
             return;
         }
 
-        onSearchText(searchText);
+        mViewManager.startView(SearchView.class);
+        mView.startSearch(searchText);
     }
 }

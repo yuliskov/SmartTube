@@ -169,7 +169,7 @@ public class AppSettingsFragmentHelper {
                                 for (OptionItem requiredItem : requiredItems) {
                                     if (!requiredItem.isSelected()) {
                                         MessageHelpers.showMessageThrottled(mStyledContext, mStyledContext.getString(R.string.require_checked, requiredItem.getTitle()));
-                                        return false;
+                                        //return false;
                                     }
                                 }
                             }
