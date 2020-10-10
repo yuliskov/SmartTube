@@ -125,7 +125,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
 
     @Override
     public void onLoadingChanged(boolean isLoading) {
-        updateOncePerLongPeriodValues();
+        // NOP
     }
 
     @Override
@@ -177,6 +177,8 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         column1.removeAllViews();
         column2.removeAllViews();
 
+        updateRareChangedValues();
+
         appendVideoInfo();
         appendRuntimeInfo();
         appendPlayerState();
@@ -190,7 +192,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         mDebugViewGroup.postDelayed(this, REFRESH_INTERVAL_MS);
     }
 
-    private void updateOncePerLongPeriodValues() {
+    private void updateRareChangedValues() {
         updateVideoInfo();
         updateDisplayModeId();
         updateDisplayInfo();
