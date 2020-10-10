@@ -14,8 +14,8 @@ public class UiOptionItem implements OptionItem {
     private FormatItem mFormat;
     private OptionCallback mCallback;
     private Object mData;
-    private Map<OptionItem, Boolean> mUncheckedRules;
-    private Map<OptionItem, Boolean> mCheckedRules;
+    private OptionItem[] mUncheckedRules;
+    private OptionItem[] mCheckedRules;
 
     public static List<OptionItem> from(List<FormatItem> formats, OptionCallback callback) {
         return from(formats, callback, null);
@@ -112,22 +112,30 @@ public class UiOptionItem implements OptionItem {
     }
 
     @Override
-    public void setUncheckedRules(Map<OptionItem, Boolean> rules) {
+    public void setWhenUnselected(OptionItem... rules) {
+        if (rules == null || rules.length == 0) {
+            mUncheckedRules = null;
+        }
+
         mUncheckedRules = rules;
     }
 
     @Override
-    public Map<OptionItem, Boolean> getUncheckedRules() {
+    public OptionItem[] getWhenUnselected() {
         return mUncheckedRules;
     }
 
     @Override
-    public void setCheckedRules(Map<OptionItem, Boolean> rules) {
+    public void setWhenSelected(OptionItem... rules) {
+        if (rules == null || rules.length == 0) {
+            mCheckedRules = null;
+        }
+
         mCheckedRules = rules;
     }
 
     @Override
-    public Map<OptionItem, Boolean> getCheckedRules() {
+    public OptionItem[] getWhenSelected() {
         return mCheckedRules;
     }
 }

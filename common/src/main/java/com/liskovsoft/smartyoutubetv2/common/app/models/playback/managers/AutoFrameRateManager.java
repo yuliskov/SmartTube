@@ -13,9 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class AutoFrameRateManager extends PlayerEventListenerHelper {
     private static final String TAG = AutoFrameRateManager.class.getSimpleName();
@@ -148,18 +146,9 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         OptionItem afrResSwitchOption = UiOptionItem.from(resolutionSwitch, this::onResolutionSwitchClick, mAfrData.afrResSwitchEnabled);
         OptionItem afrFpsCorrectionOption = UiOptionItem.from(fpsCorrection, this::onFpsCorrectionClick, mAfrData.afrFpsCorrectionEnabled);
 
-        //Map<OptionItem, Boolean> afrEnableOptionRules = new HashMap<>();
-        //afrEnableOptionRules.put(afrResSwitchOption, false);
-        //afrEnableOptionRules.put(afrFpsCorrectionOption, false);
-        //afrEnableOption.setUncheckedRules(afrEnableOptionRules);
-        //
-        //Map<OptionItem, Boolean> afrResSwitchOptionRules = new HashMap<>();
-        //afrResSwitchOptionRules.put(afrEnableOption, true);
-        //afrResSwitchOption.setCheckedRules(afrResSwitchOptionRules);
-        //
-        //Map<OptionItem, Boolean> afrFpsCorrectionOptionRules = new HashMap<>();
-        //afrFpsCorrectionOptionRules.put(afrEnableOption, true);
-        //afrFpsCorrectionOption.setCheckedRules(afrFpsCorrectionOptionRules);
+        //afrEnableOption.setWhenUnselected(afrResSwitchOption, afrFpsCorrectionOption);
+        //afrResSwitchOption.setWhenSelected(afrEnableOption);
+        //afrFpsCorrectionOption.setWhenSelected(afrEnableOption);
 
         options.add(afrEnableOption);
         options.add(afrResSwitchOption);

@@ -9,8 +9,8 @@ public interface OptionItem {
     boolean isSelected();
     void onSelect(boolean isSelected);
     Object getData();
-    void setUncheckedRules(Map<OptionItem, Boolean> rules);
-    Map<OptionItem, Boolean> getUncheckedRules();
-    void setCheckedRules(Map<OptionItem, Boolean> rules);
-    Map<OptionItem, Boolean> getCheckedRules();
+    void setWhenUnselected(OptionItem... rules);
+    OptionItem[] getWhenUnselected();
+    void setWhenSelected(OptionItem... rules);
+    OptionItem[] getWhenSelected();
 }

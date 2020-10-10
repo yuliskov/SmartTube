@@ -5,18 +5,20 @@ import androidx.preference.DialogPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.MultiSelectListPreference;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceScreen;
 import androidx.preference.SwitchPreference;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter.SettingsCategory;
+import com.liskovsoft.smartyoutubetv2.tv.ui.settings.AppSettingsFragment.AppPreferenceFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.settings.dialogs.StringListPreference;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Set;
 
 public class AppSettingsFragmentHelper {
     private final Context mStyledContext;
+    private final AppPreferenceFragment mAppPreferenceFragment;
 
     public static class ListPreferenceData {
         public final CharSequence[] entries;
@@ -32,8 +34,9 @@ public class AppSettingsFragmentHelper {
         }
     }
 
-    public AppSettingsFragmentHelper(Context styledContext) {
+    public AppSettingsFragmentHelper(Context styledContext, AppPreferenceFragment appPreferenceFragment) {
         mStyledContext = styledContext;
+        mAppPreferenceFragment = appPreferenceFragment;
     }
 
     public Preference createPreference(SettingsCategory category) {
@@ -148,20 +151,25 @@ public class AppSettingsFragmentHelper {
 
         pref.setOnPreferenceChangeListener((preference, newValue) -> {
             if (newValue instanceof Set) {
-                Set<?> values = ((Set<?>) newValue);
+                Set<?> values = ((Set<?>) newValue); // All checked items. That don't means that this items is pressed recently.
                 for (OptionItem item : category.items) {
-                    boolean found = false;
+                    boolean isSelected = false;
                     for (Object value : values) {
-                        found = value.equals(item.toString());
-                        if (found) {
+                        isSelected = value.equals(item.toString());
+                        if (isSelected) {
                             break;
                         }
                     }
-                    item.onSelect(found);
+
+                    if (item.isSelected() != isSelected) {
+                        item.onSelect(isSelected);
+
+                        return true;
+                    }
                 }
             }
 
-            return true;
+            return false;
         });
     }
 

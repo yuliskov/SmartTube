@@ -126,7 +126,7 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
         public void onCreatePreferences(Bundle bundle, String s) {
             // Note, place in field with different name to avoid field overlapping
             mExtractedContext = (Context) Helpers.getField(this, "mStyledContext");
-            mManager = new AppSettingsFragmentHelper(mExtractedContext);
+            mManager = new AppSettingsFragmentHelper(mExtractedContext, this);
 
             PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(mExtractedContext);
             screen.setTitle(mTitle);
