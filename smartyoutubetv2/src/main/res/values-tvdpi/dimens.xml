@@ -2,8 +2,8 @@
 <resources>
     <!-- 213dpi, Old TVs, same as xhdpi -->
 
-    <dimen name="card_width">213dp</dimen>
-    <dimen name="card_height">121dp</dimen>
+    <dimen name="card_width">205dp</dimen>
+    <dimen name="card_height">115dp</dimen>
 
     <!-- Elements below aren't used in the app -->
 
