@@ -9,8 +9,6 @@ public interface OptionItem {
     boolean isSelected();
     void onSelect(boolean isSelected);
     Object getData();
-    void setWhenUnselected(OptionItem... rules);
-    OptionItem[] getWhenUnselected();
-    void setWhenSelected(OptionItem... rules);
-    OptionItem[] getWhenSelected();
+    void setRequire(OptionItem... rules);
+    OptionItem[] getRequire();
 }

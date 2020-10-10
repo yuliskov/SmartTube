@@ -146,9 +146,8 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         OptionItem afrResSwitchOption = UiOptionItem.from(resolutionSwitch, this::onResolutionSwitchClick, mAfrData.afrResSwitchEnabled);
         OptionItem afrFpsCorrectionOption = UiOptionItem.from(fpsCorrection, this::onFpsCorrectionClick, mAfrData.afrFpsCorrectionEnabled);
 
-        //afrEnableOption.setWhenUnselected(afrResSwitchOption, afrFpsCorrectionOption);
-        //afrResSwitchOption.setWhenSelected(afrEnableOption);
-        //afrFpsCorrectionOption.setWhenSelected(afrEnableOption);
+        afrResSwitchOption.setRequire(afrEnableOption);
+        afrFpsCorrectionOption.setRequire(afrEnableOption);
 
         options.add(afrEnableOption);
         options.add(afrResSwitchOption);

@@ -2,8 +2,8 @@
 <resources>
     <!-- Default, same as xhdpi -->
 
-    <dimen name="card_width">203dp</dimen>
-    <dimen name="card_height">115dp</dimen>
+    <dimen name="card_width">213dp</dimen>
+    <dimen name="card_height">121dp</dimen>
 
     <!-- Elements below aren't used in the app -->
 

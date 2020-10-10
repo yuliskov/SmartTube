@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.update.AppUpdateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -33,12 +34,21 @@ public class SplashActivity extends Activity {
     }
 
     private void applyNewIntent(Intent intent) {
-        if (IntentExtractor.isVideo(intent)) {
+        String videoId = IntentExtractor.extractVideoId(intent);
+
+        if (videoId != null) {
             PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(this);
-            playbackPresenter.openVideo(IntentExtractor.getVideoId(intent));
+            playbackPresenter.openVideo(videoId);
         } else {
-            ViewManager viewManager = ViewManager.instance(this);
-            viewManager.startDefaultView(this);
+            String searchText = IntentExtractor.extractSearchText(intent);
+
+            if (searchText != null) {
+                SearchPresenter searchPresenter = SearchPresenter.instance(this);
+                searchPresenter.openSearch(searchText);
+            } else {
+                ViewManager viewManager = ViewManager.instance(this);
+                viewManager.startDefaultView(this);
+            }
         }
     }
 

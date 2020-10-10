@@ -7,8 +7,10 @@ import androidx.preference.MultiSelectListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
 import androidx.preference.SwitchPreference;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter.SettingsCategory;
+import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.settings.AppSettingsFragment.AppPreferenceFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.settings.dialogs.StringListPreference;
 
@@ -18,7 +20,6 @@ import java.util.Set;
 
 public class AppSettingsFragmentHelper {
     private final Context mStyledContext;
-    private final AppPreferenceFragment mAppPreferenceFragment;
 
     public static class ListPreferenceData {
         public final CharSequence[] entries;
@@ -34,9 +35,8 @@ public class AppSettingsFragmentHelper {
         }
     }
 
-    public AppSettingsFragmentHelper(Context styledContext, AppPreferenceFragment appPreferenceFragment) {
+    public AppSettingsFragmentHelper(Context styledContext) {
         mStyledContext = styledContext;
-        mAppPreferenceFragment = appPreferenceFragment;
     }
 
     public Preference createPreference(SettingsCategory category) {
@@ -162,6 +162,19 @@ public class AppSettingsFragmentHelper {
                     }
 
                     if (item.isSelected() != isSelected) {
+                        if (isSelected) {
+                            OptionItem[] requiredItems = item.getRequire();
+
+                            if (requiredItems != null) {
+                                for (OptionItem requiredItem : requiredItems) {
+                                    if (!requiredItem.isSelected()) {
+                                        MessageHelpers.showMessageThrottled(mStyledContext, mStyledContext.getString(R.string.require_checked, requiredItem.getTitle()));
+                                        return false;
+                                    }
+                                }
+                            }
+                        }
+
                         item.onSelect(isSelected);
 
                         return true;

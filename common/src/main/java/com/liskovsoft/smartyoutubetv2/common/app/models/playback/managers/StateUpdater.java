@@ -26,6 +26,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     // Don't store state inside Video object.
     // As one video might correspond to multiple Video objects.
     private final Map<String, State> mStates = new HashMap<>();
+    private float mLastSpeed = -1;
 
     private static class State {
         public final long positionMs;
@@ -62,6 +63,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
      */
     @Override
     public void openVideo(Video item) {
+        mLastSpeed = -1; // Save global speed on per-view basis
+
         ensureVideoSize(item); // reset position of music videos
 
         mIsPlaying = true; // video just added
@@ -117,7 +120,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onVideoLoaded(Video item) {
-        // on this state video length is not undefined
+        // In this state video length is not undefined.
         restorePosition(item);
         restoreSpeed(item);
         // Player thinks that subs not enabled if did it too early (e.g. on source change event).
@@ -173,6 +176,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
         if (video != null) {
             mStates.put(video.videoId, new State(mController.getPositionMs(), mController.getLengthMs(), mController.getSpeed()));
         }
+
+        mLastSpeed = mController.getSpeed();
     }
 
     private void trimStorage() {
@@ -217,11 +222,15 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void restoreSpeed(Video item) {
-        if (mController.getLengthMs() - mController.getPositionMs() > 30_000) {
+        boolean isLive = mController.getLengthMs() - mController.getPositionMs() < 30_000;
+
+        if (!isLive) {
             State state = mStates.get(item.videoId);
 
             if (state != null) {
                 mController.setSpeed(state.speed);
+            } else if (mLastSpeed != -1) {
+                mController.setSpeed(mLastSpeed);
             } else {
                 mController.setSpeed(1.0f); // speed may be changed before, so do reset to default
             }

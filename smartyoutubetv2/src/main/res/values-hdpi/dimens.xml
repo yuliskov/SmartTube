@@ -2,8 +2,8 @@
 <resources>
     <!-- 240dpi, Vermax 300UHD, xhdpi * 1.3 -->
 
-    <dimen name="card_width">260dp</dimen>
-    <dimen name="card_height">150dp</dimen>
+    <dimen name="card_width">286dp</dimen>
+    <dimen name="card_height">165dp</dimen>
 
     <!-- Elements below aren't used in the app -->
 

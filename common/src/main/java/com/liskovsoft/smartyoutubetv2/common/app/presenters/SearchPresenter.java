@@ -9,6 +9,7 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -30,6 +31,7 @@ public class SearchPresenter implements VideoGroupPresenter<SearchView> {
     private SearchView mView;
     private Disposable mScrollAction;
     private Disposable mLoadAction;
+    private String mSearchText;
 
     private SearchPresenter(Context context) {
         mContext = context;
@@ -72,6 +74,10 @@ public class SearchPresenter implements VideoGroupPresenter<SearchView> {
     @Override
     public void onInitDone() {
         loadSuggestedKeywords();
+
+        if (mSearchText != null) {
+            onSearchText(mSearchText);
+        }
     }
 
     private void loadSuggestedKeywords() {
@@ -149,5 +155,15 @@ public class SearchPresenter implements VideoGroupPresenter<SearchView> {
         if (!updateInProgress) {
             continueGroup(group);
         }
+    }
+
+    public void openSearch(String searchText) {
+        if (mView == null) {
+            mViewManager.startView(PlaybackView.class);
+            mSearchText = searchText;
+            return;
+        }
+
+        onSearchText(searchText);
     }
 }

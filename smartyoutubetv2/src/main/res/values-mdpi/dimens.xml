@@ -2,8 +2,8 @@
 <resources>
     <!-- 160dpi, Red Box TV, Eltex, same as hdpi -->
 
-    <dimen name="card_width">260dp</dimen>
-    <dimen name="card_height">150dp</dimen>
+    <dimen name="card_width">286dp</dimen>
+    <dimen name="card_height">165dp</dimen>
 
     <!-- Elements below aren't used in the app -->
 

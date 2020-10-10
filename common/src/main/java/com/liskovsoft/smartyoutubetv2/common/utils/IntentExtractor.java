@@ -1,9 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.utils;
 
 import android.content.Intent;
-import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.querystringparser.UrlQueryString;
-import com.liskovsoft.sharedutils.querystringparser.UrlQueryStringFactory;
 
 public class IntentExtractor {
     private static final String TAG = IntentExtractor.class.getSimpleName();
@@ -16,16 +13,8 @@ public class IntentExtractor {
     private static final String CHANNEL_URL = "/channel/";
     private static final String USER_URL = "/user/";
 
-    public static boolean isVideo(Intent intent) {
-        if (intent == null) {
-            return false;
-        }
-
-        return Intent.ACTION_VIEW.equals(intent.getAction()) && intent.getData() != null;
-    }
-
-    public static String getVideoId(Intent intent) {
-        if (!isVideo(intent)) {
+    public static String extractVideoId(Intent intent) {
+        if (intent == null || intent.getData() == null || !Intent.ACTION_VIEW.equals(intent.getAction())) {
             return null;
         }
 
@@ -36,24 +25,19 @@ public class IntentExtractor {
      * Browser: https://www.youtube.com/results?search_query=twice<br/>
      * Amazon: youtube://search?query=linkin+park&isVoice=true
      */
-    private static String extractSearchString(String url) {
-        UrlQueryString query = UrlQueryStringFactory.parse(url);
-
-        String result = null;
-
-        for (String key : SEARCH_KEYS) {
-            result = query.get(key);
-
-            if (result != null) {
-                break;
-            }
-        }
-
-        if (result == null) {
-            Log.w(TAG, "Url isn't a search string: " + url);
+    public static String extractSearchText(Intent intent) {
+        if (intent == null || intent.getData() == null || !Intent.ACTION_VIEW.equals(intent.getAction())) {
             return null;
         }
 
-        return result;
+        for (String searchKey : SEARCH_KEYS) {
+            String searchText = intent.getData().getQueryParameter(searchKey);
+
+            if (searchText != null) {
+                return searchText;
+            }
+        }
+
+        return null;
     }
 }

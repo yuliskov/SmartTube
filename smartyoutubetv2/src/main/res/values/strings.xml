@@ -119,4 +119,5 @@
     <string name="action_video_stats">Video Stats</string>
     <string name="update_changelog">Changelog</string>
     <string name="install_update">Install update</string>
+    <string name="require_checked">Enable \"%s\" first</string>
 </resources>

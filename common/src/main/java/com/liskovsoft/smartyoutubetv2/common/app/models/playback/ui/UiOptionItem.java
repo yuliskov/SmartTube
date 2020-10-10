@@ -4,7 +4,6 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class UiOptionItem implements OptionItem {
     private int mId;
@@ -14,7 +13,6 @@ public class UiOptionItem implements OptionItem {
     private FormatItem mFormat;
     private OptionCallback mCallback;
     private Object mData;
-    private OptionItem[] mUncheckedRules;
     private OptionItem[] mCheckedRules;
 
     public static List<OptionItem> from(List<FormatItem> formats, OptionCallback callback) {
@@ -112,21 +110,7 @@ public class UiOptionItem implements OptionItem {
     }
 
     @Override
-    public void setWhenUnselected(OptionItem... rules) {
-        if (rules == null || rules.length == 0) {
-            mUncheckedRules = null;
-        }
-
-        mUncheckedRules = rules;
-    }
-
-    @Override
-    public OptionItem[] getWhenUnselected() {
-        return mUncheckedRules;
-    }
-
-    @Override
-    public void setWhenSelected(OptionItem... rules) {
+    public void setRequire(OptionItem... rules) {
         if (rules == null || rules.length == 0) {
             mCheckedRules = null;
         }
@@ -135,7 +119,7 @@ public class UiOptionItem implements OptionItem {
     }
 
     @Override
-    public OptionItem[] getWhenSelected() {
+    public OptionItem[] getRequire() {
         return mCheckedRules;
     }
 }
