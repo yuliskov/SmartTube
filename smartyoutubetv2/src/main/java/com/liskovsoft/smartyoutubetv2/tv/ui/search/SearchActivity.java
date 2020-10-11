@@ -3,11 +3,13 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.search;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 
 public class SearchActivity extends LeanbackActivity {
     private SearchFragment mFragment;
+    private boolean mDownPressed;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -86,6 +86,10 @@ public abstract class LeanbackActivity extends FragmentActivity {
 
     @Override
     public void finish() {
-        mViewManager.startParentView(this);
+        mViewManager.startParentView(this); // user pressed back key
+    }
+
+    public void destroyActivity() {
+        super.finish();
     }
 }

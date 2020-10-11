@@ -24,6 +24,11 @@ public class LoginDialogFragment extends ErrorSupportFragment implements BrowseS
                 }
             };
 
+    public LoginDialogFragment() {
+        // "could not find Fragment constructor" fix
+        this(null);
+    }
+
     public LoginDialogFragment(ErrorFragmentData dialogData) {
         mDialogData = dialogData;
     }

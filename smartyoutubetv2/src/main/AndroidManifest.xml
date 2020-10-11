@@ -123,9 +123,9 @@
             </intent-filter>
 
             <!-- Points to searchable meta data. -->
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
+            <!--<meta-data-->
+            <!--    android:name="android.app.searchable"-->
+            <!--    android:resource="@xml/searchable" />-->
         </activity>
 
         <!-- Begin Old activities -->

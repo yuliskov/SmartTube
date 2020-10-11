@@ -13,4 +13,11 @@ public class SignInActivity extends LeanbackActivity {
             GuidedStepSupportFragment.addAsRoot(this, new SignInFragment(), android.R.id.content);
         }
     }
+
+    @Override
+    public void finish() {
+        super.finish();
+
+        destroyActivity();
+    }
 }
