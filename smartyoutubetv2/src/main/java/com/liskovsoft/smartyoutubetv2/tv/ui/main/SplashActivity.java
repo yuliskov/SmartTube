@@ -13,17 +13,26 @@ import com.liskovsoft.smartyoutubetv2.tv.update.AppUpdateManager;
 public class SplashActivity extends Activity {
     private static final String TAG = SplashActivity.class.getSimpleName();
     private static final String CHANNELS_RECEIVER_CLASS_NAME = "com.liskovsoft.leanbackassistant.channels.RunOnInstallReceiver";
+    private static boolean mRunOnce;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        applyRunOnceTasks();
+
         applyNewIntent(getIntent());
 
-        updateChannels();
         checkForUpdates();
 
         finish();
+    }
+
+    private void applyRunOnceTasks() {
+        if (!mRunOnce) {
+            updateChannels();
+            mRunOnce = true;
+        }
     }
 
     @Override
@@ -39,6 +48,9 @@ public class SplashActivity extends Activity {
         if (videoId != null) {
             PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(this);
             playbackPresenter.openVideo(videoId);
+
+            ViewManager viewManager = ViewManager.instance(this);
+            viewManager.setSinglePlayerMode(true);
         } else {
             String searchText = IntentExtractor.extractSearchText(intent);
 
@@ -47,7 +59,7 @@ public class SplashActivity extends Activity {
                 searchPresenter.openSearch(searchText);
             } else {
                 ViewManager viewManager = ViewManager.instance(this);
-                viewManager.startDefaultView(this);
+                viewManager.startDefaultView();
             }
         }
     }

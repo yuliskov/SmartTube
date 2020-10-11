@@ -23,7 +23,8 @@ public class ViewManager {
     private Class<?> mRootActivity;
     private Class<?> mDefaultTop;
     private long mPrevThrottleTimeMS;
-    private boolean mMoveTaskToBack;
+    private boolean mMoveViewsToBack;
+    private boolean mSinglePlayerMode;
 
     private ViewManager(Context context) {
         mContext = context;
@@ -57,6 +58,8 @@ public class ViewManager {
     }
     
     public void startView(Class<?> viewClass) {
+        mMoveViewsToBack = false; // Essential part or new view will be pause immediately
+
         if (doThrottle()) {
             return;
         }
@@ -86,13 +89,13 @@ public class ViewManager {
 
             Class<?> parentActivity = getTopActivity();
 
-            if (parentActivity == null) {
+            if (parentActivity == null && !mSinglePlayerMode) {
                 parentActivity = getDefaultParent(activity);
             }
 
             if (parentActivity == null) {
                 Log.d(TAG, "Parent activity name doesn't stored in registry. Exiting to Home...");
-                mMoveTaskToBack = true;
+                mMoveViewsToBack = true;
                 activity.moveTaskToBack(true);
 
                 return;
@@ -110,8 +113,9 @@ public class ViewManager {
         }
     }
 
-    public void startDefaultView(Context context) {
-        mMoveTaskToBack = false;
+    public void startDefaultView() {
+        mMoveViewsToBack = false;
+        mSinglePlayerMode = false;
 
         if (doThrottle()) {
             return;
@@ -129,9 +133,12 @@ public class ViewManager {
 
         Log.d(TAG, "Launching default activity: " + lastActivity.getSimpleName());
 
-        Intent intent = new Intent(context, lastActivity);
+        Intent intent = new Intent(mContext, lastActivity);
 
-        context.startActivity(intent);
+        // Fix: Calling startActivity() from outside of an Activity  context requires the FLAG_ACTIVITY_NEW_TASK flag
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        mContext.startActivity(intent);
     }
 
     private boolean doThrottle() {
@@ -144,7 +151,7 @@ public class ViewManager {
     }
 
     public void addTop(Activity activity) {
-        if (checkMoveTaskToBack(activity)) {
+        if (checkMoveViewsToBack(activity)) {
             return;
         }
 
@@ -191,12 +198,17 @@ public class ViewManager {
         mDefaultTop = activity == null ? null : activity.getClass();
     }
 
-    private boolean checkMoveTaskToBack(Activity activity) {
-        if (mMoveTaskToBack) {
+    private boolean checkMoveViewsToBack(Activity activity) {
+        if (mMoveViewsToBack) {
             activity.moveTaskToBack(true);
             return true;
         }
 
         return false;
+    }
+
+    public void setSinglePlayerMode(boolean enable) {
+        mActivityStack.clear();
+        mSinglePlayerMode = enable;
     }
 }
