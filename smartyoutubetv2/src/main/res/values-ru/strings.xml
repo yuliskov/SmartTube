@@ -5,5 +5,5 @@
     <string name="signin_view_action_text">Готово</string>
     <string name="update_changelog">Изменения</string>
     <string name="install_update">Установить обновление</string>
-    <string name="require_checked">Включите \"%s\" сначала</string>
+    <string name="require_checked">Требует включенного \"%s\"</string>
 </resources>
