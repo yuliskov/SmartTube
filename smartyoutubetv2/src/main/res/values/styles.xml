@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="App.Theme.Leanback" parent="Theme.Leanback">
+        <item name="android:windowBackground">@null</item>
+    </style>
+    <style name="App.Theme.Leanback.Browse" parent="Theme.Leanback.Browse">
+        <item name="android:windowBackground">@color/shelf_background2</item>
+    </style>
+    <style name="App.Theme.Leanback.GuidedStep" parent="Theme.Leanback.GuidedStep">
+        <item name="android:windowBackground">@color/shelf_background2</item>
+    </style>
     <style name="LeanbackPreferences" parent="Theme.Leanback">
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Leanback</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:colorPrimary">@color/fastlane_background</item>
+        <item name="android:colorPrimary" tools:targetApi="21">@color/fastlane_background</item>
     </style>
 </resources>

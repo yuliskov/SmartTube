@@ -85,7 +85,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         setHeadersTransitionOnBackEnabled(true);
 
         // Set fastLane (or headers) background color
-        setBrandColor(ContextCompat.getColor(getActivity(), R.color.fastlane_background));
+        setBrandColor(ContextCompat.getColor(getActivity(), R.color.fastlane_background2));
 
         // Set search icon color.
         setSearchAffordanceColor(ContextCompat.getColor(getActivity(), R.color.search_opaque));

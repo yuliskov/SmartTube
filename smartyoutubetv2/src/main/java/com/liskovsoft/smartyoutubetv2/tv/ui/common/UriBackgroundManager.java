@@ -37,7 +37,7 @@ public class UriBackgroundManager {
     private void prepareBackgroundManager() {
         mBackgroundManager = BackgroundManager.getInstance(mActivity);
         mBackgroundManager.attach(mActivity.getWindow());
-        mDefaultBackground = ContextCompat.getDrawable(mActivity, R.color.shelf_background);
+        mDefaultBackground = ContextCompat.getDrawable(mActivity, R.color.shelf_background2);
         mBackgroundTask = new UpdateBackgroundTask();
         mMetrics = new DisplayMetrics();
         mActivity.getWindowManager().getDefaultDisplay().getMetrics(mMetrics);

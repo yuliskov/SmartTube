@@ -43,7 +43,7 @@
         android:logo="@mipmap/app_logo"
         android:icon="@mipmap/app_icon"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Leanback"
+        android:theme="@style/App.Theme.Leanback.Browse"
         tools:node="merge"
         tools:replace="android:theme,android:allowBackup"
         tools:ignore="GoogleAppIndexingWarning,LockedOrientationActivity,UnusedAttribute">
@@ -52,8 +52,7 @@
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity"
             android:launchMode="singleInstance"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.Leanback.Browse">
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -66,15 +65,13 @@
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity"
             android:launchMode="singleInstance"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.Leanback.Browse"/>
+            android:screenOrientation="landscape"/>
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.channel.ChannelActivity"
             android:launchMode="singleInstance"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.Leanback.Browse"/>
+            android:screenOrientation="landscape"/>
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity"
@@ -82,7 +79,8 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:supportsPictureInPicture="true"
             android:resizeableActivity="true"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape"
+            android:theme="@style/App.Theme.Leanback"/>
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity"
@@ -100,7 +98,7 @@
                   android:launchMode="singleInstance"
                   android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
                   android:screenOrientation="landscape"
-                  android:theme="@style/Theme.Example.Leanback.GuidedStep"/>
+                  android:theme="@style/App.Theme.Leanback.GuidedStep"/>
 
         <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.settings.AppSettingsActivity"
                   android:launchMode="singleInstance"

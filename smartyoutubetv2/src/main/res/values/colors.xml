@@ -3,6 +3,7 @@
     <color name="default_background_gradient_start">#000000</color>
     <color name="default_background_gradient_end">#DDDDDD</color>
     <color name="fastlane_background">#0096a6</color>
+    <color name="fastlane_background2">#004B53</color>
     <color name="fastlane_dark">#343434</color>
     <color name="search_opaque">#ffaa3f</color>
     <color name="card_selected_background">#ffaa3f</color>
@@ -11,9 +12,11 @@
     <color name="card_selected_text">#000000</color>
     <color name="card_selected_text2">#343434</color>
     <color name="card_default_background">#0096a6</color>
+    <color name="card_default_background3">#004B53</color>
     <color name="card_default_background2">#343434</color>
     <color name="card_default_text">#FFFFFF</color>
     <color name="shelf_background">#282828</color>
+    <color name="shelf_background2">#131313</color>
     <color name="icon_background">#4A4F51</color>
     <color name="icon_alt_background">#2A2F51</color>
     <color name="player_background">#FF000000</color>
