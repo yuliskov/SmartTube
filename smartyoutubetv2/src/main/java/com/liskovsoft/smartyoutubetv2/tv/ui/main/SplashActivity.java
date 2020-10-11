@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.update.AppUpdateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
+import com.liskovsoft.smartyoutubetv2.tv.update.AppUpdateManager;
 
 public class SplashActivity extends Activity {
     private static final String TAG = SplashActivity.class.getSimpleName();

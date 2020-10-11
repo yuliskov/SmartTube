@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import androidx.fragment.app.FragmentActivity;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -58,6 +59,8 @@ public abstract class LeanbackActivity extends FragmentActivity {
         super.onStart();
 
         mBackgroundManager.onStart();
+
+        Helpers.makeActivityFullscreen(this);
     }
 
     @Override
