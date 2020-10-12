@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 1080p TV with 280dpi, same as hdpi -->
+    <!-- 1080p TV with 280dpi -->
     <!-- Example: width in dp = width in pixle / (dpi/160) dp = 1440/(560/160) =~ 411 -->
     <!-- Create drawable-w411dp -->
 
-    <dimen name="card_width">257dp</dimen>
-    <dimen name="card_height">148dp</dimen>
+    <dimen name="card_width">231dp</dimen>
+    <dimen name="card_height">133dp</dimen>
 
     <!-- Elements below aren't used in the app -->
 
