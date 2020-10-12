@@ -46,6 +46,10 @@ public class LoginDialogFragment extends ErrorSupportFragment implements BrowseS
     }
 
     private void setDialogContent() {
+        if (mDialogData == null) {
+            return;
+        }
+
         setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.lb_ic_sad_cloud));
 
         setMessage(mDialogData.getMessage());

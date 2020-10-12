@@ -211,10 +211,10 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlayerGlue = null;
         mPlayerAdapter = null;
         mPlaylistActionListener = null;
-        mExoPlayerController = null;
         mRenderersFactory = null;
         mSubtitleManager = null;
         mDebugInfoManager = null;
+        mExoPlayerController = PlayerController.NULL_CONTROLLER;
     }
 
     private void createPlayerObjects() {

@@ -132,7 +132,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
             FragmentTransaction ft = getChildFragmentManager().beginTransaction();
             ft.replace(R.id.scale_frame, fragment);
-            ft.commit();
+            ft.commitAllowingStateLoss(); // FIX: "Can not perform this action after onSaveInstanceState"
         }
     }
 
