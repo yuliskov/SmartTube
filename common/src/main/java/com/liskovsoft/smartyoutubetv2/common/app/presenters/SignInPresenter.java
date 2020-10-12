@@ -18,14 +18,16 @@ public class SignInPresenter implements Presenter<SignInView> {
     private final MediaService mMediaService;
     private final Context mContext;
     private final BrowsePresenter mBrowsePresenter;
+    private final SplashPresenter mSplashPresenter;
     private SignInView mView;
     private String mUserCode;
     private Disposable mSignInAction;
 
-    public SignInPresenter(Context context) {
+    private SignInPresenter(Context context) {
         mContext = context;
         mMediaService = YouTubeMediaService.instance();
         mBrowsePresenter = BrowsePresenter.instance(context);
+        mSplashPresenter = SplashPresenter.instance(context);
     }
 
     public static SignInPresenter instance(Context context) {
@@ -75,10 +77,12 @@ public class SignInPresenter implements Presenter<SignInView> {
                         userCode -> mView.showCode(userCode),
                         error -> Log.e(TAG, error),
                         () -> {
+                            // Success
                             mBrowsePresenter.refresh();
                             if (mView != null) {
                                 mView.close();
                             }
+                            mSplashPresenter.updateChannels();
                         });
     }
 }

@@ -125,9 +125,6 @@ dependencies {
 
     implementation project(path: ':common')
 
-    stbetaImplementation project(path: ':leanbackassistant')
-    stbetaImplementation project(path: ':appupdatechecker2')
-
     // Add the Firebase Crashlytics SDK.
     stbetaImplementation('com.google.firebase:firebase-crashlytics:' + firebaseCrashlyticsVersion) {
         transitive = true

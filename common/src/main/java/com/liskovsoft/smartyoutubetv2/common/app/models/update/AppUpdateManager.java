@@ -1,14 +1,14 @@
-package com.liskovsoft.smartyoutubetv2.tv.update;
+package com.liskovsoft.smartyoutubetv2.common.app.models.update;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.appupdatechecker2.AppUpdateChecker;
 import com.liskovsoft.appupdatechecker2.AppUpdateCheckerListener;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +57,7 @@ public class AppUpdateManager implements AppUpdateCheckerListener {
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(mContext.getString(R.string.install_update), optionItem -> {
                     mUpdateChecker.installUpdate();
-                    SplashActivity.backupData();
+                    SplashPresenter.instance(mContext).saveBackupData();
                     mUpdateInstalled = true;
                 }, false));
 

@@ -28,6 +28,14 @@ android {
         }
     }
 
+    // gradle 4.6 migration: disable dimensions mechanism
+    // more: https://proandroiddev.com/advanced-android-flavors-part-4-a-new-version-fc2ad80c01bb
+    flavorDimensions "default"
+
+    productFlavors {
+        stbeta {}
+        storig {}
+    }
 }
 
 dependencies {
@@ -46,4 +54,7 @@ dependencies {
 
     implementation 'com.google.android.exoplayer:exoplayer:' + amazonExoplayerVersion
     implementation 'androidx.media:media:' + mediaXLibraryVersion // exoplayer fix
+
+    stbetaImplementation project(path: ':leanbackassistant')
+    stbetaImplementation project(path: ':appupdatechecker2')
 }
