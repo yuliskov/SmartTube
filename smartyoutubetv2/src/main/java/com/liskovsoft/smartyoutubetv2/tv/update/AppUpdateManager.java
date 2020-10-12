@@ -8,6 +8,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,7 @@ public class AppUpdateManager implements AppUpdateCheckerListener {
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(mContext.getString(R.string.install_update), optionItem -> {
                     mUpdateChecker.installUpdate();
+                    SplashActivity.backupData();
                     mUpdateInstalled = true;
                 }, false));
 

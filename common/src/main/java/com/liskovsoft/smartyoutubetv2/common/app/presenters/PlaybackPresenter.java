@@ -70,4 +70,12 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
 
         mViewManager.startView(PlaybackView.class);
     }
+
+    public Video getVideo() {
+        if (mView == null || mView.getController() == null) {
+            return null;
+        }
+
+        return mView.getController().getVideo();
+    }
 }
