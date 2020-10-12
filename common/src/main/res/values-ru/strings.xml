@@ -11,7 +11,7 @@
     <string name="subscriptions_signin_title">Смотрите новые видео с каналов, на которые вы подписаны</string>
     <string name="subscriptions_signin_subtitle">Для начала вам нужно войти в аккаунт.</string>
     <string name="subscriptions_signin_button_text">ВОЙТИ</string>
-    <string name="library_signin_title">Здесь хранятся понравившиеся, сохраненные и купленные видео</string>
+    <string name="library_signin_title">Здесь хранятся понравившиеся, сохраненные и видео из подписок</string>
     <string name="library_signin_subtitle">Чтобы увидеть их, войдите в аккаунт.</string>
     <string name="library_signin_button_text">ВОЙТИ</string>
     <string name="video_formats_title">Видео форматы</string>

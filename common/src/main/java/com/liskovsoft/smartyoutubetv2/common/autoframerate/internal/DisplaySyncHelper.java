@@ -314,9 +314,6 @@ public class DisplaySyncHelper implements UhdHelperListener {
 
             if (!force && closerMode.equals(currentMode)) {
                 Log.i(TAG, "Do not need to change mode.");
-
-                // NOTE: changed
-                //CommonApplication.getPreferences().setCurrentDisplayMode(UhdHelper.formatMode(currentMode));
                 return false;
             }
 

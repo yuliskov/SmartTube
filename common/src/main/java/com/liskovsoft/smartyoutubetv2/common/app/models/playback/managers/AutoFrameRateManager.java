@@ -116,7 +116,15 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
 
     private void applyAfr() {
         if (mAfrData.afrEnabled) {
-            applyAfr(mSelectedVideoTrack);
+            applyAfr(mSelectedVideoTrack, false);
+        } else {
+            restoreAfr();
+        }
+    }
+
+    private void forceApplyAfr() {
+        if (mAfrData.afrEnabled) {
+            applyAfr(mSelectedVideoTrack, true);
         } else {
             restoreAfr();
         }
@@ -128,10 +136,10 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         mModeSyncManager.save(null);
     }
 
-    private void applyAfr(FormatItem track) {
+    private void applyAfr(FormatItem track, boolean force) {
         if (track != null) {
             Log.d(TAG, "Applying afr: " + track.getFrameRate());
-            mAutoFrameRateHelper.apply(track, mActivity);
+            mAutoFrameRateHelper.apply(track, mActivity, force);
             mModeSyncManager.save(track);
         }
     }
@@ -155,6 +163,6 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
 
         mUiManager.addCheckedCategory(title, options);
 
-        mUiManager.setOnDialogHide(this::applyAfr);
+        mUiManager.setOnDialogHide(this::forceApplyAfr);
     }
 }

@@ -11,7 +11,7 @@
     <string name="subscriptions_signin_title">See the latest from channels you love</string>
     <string name="subscriptions_signin_subtitle">Sign in to see your subscriptions</string>
     <string name="subscriptions_signin_button_text">SIGN IN</string>
-    <string name="library_signin_title">Watch videos you liked, saved, or purchased</string>
+    <string name="library_signin_title">Watch videos you liked, saved, or subscribed</string>
     <string name="library_signin_subtitle">Sign in to see your library</string>
     <string name="library_signin_button_text">SIGN IN</string>
     <string name="video_formats_title">Video formats</string>

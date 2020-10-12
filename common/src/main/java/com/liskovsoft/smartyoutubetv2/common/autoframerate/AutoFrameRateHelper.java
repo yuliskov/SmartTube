@@ -67,12 +67,12 @@ public class AutoFrameRateHelper {
     }
 
     public void apply(FormatItem format, Activity activity) {
-        setActivity(activity);
-        apply(format);
+        apply(format, activity, false);
     }
 
-    private void apply(FormatItem format) {
-        apply(format, false);
+    public void apply(FormatItem format, Activity activity, boolean force) {
+        setActivity(activity);
+        apply(format, force);
     }
 
     public boolean isSupported() {

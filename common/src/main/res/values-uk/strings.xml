@@ -11,7 +11,7 @@
     <string name="subscriptions_signin_title">Переглядайте найновіші відео з улюблених каналів</string>
     <string name="subscriptions_signin_subtitle">Увійдіть, щоб побачити свої підписки</string>
     <string name="subscriptions_signin_button_text">УВІЙТИ</string>
-    <string name="library_signin_title">Переглядайте відео, які ви вподобали, зберегли або придбали</string>
+    <string name="library_signin_title">Переглядайте відео, які ви вподобали, зберегли або підписалися</string>
     <string name="library_signin_subtitle">Увійдіть, щоб переглянути бібліотеку</string>
     <string name="library_signin_button_text">УВІЙТИ</string>
 </resources>
