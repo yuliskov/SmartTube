@@ -27,7 +27,7 @@ import java.util.List;
 
 public class PlayerUiManager extends PlayerEventListenerHelper implements MetadataListener, ErrorListener {
     private static final String TAG = PlayerUiManager.class.getSimpleName();
-    private static final long UI_AUTO_HIDE_TIMEOUT_MS = 2_000;
+    private static final long UI_AUTO_HIDE_TIMEOUT_MS = 3_000;
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
     private final Handler mHandler;
     private final MediaItemManager mMediaItemManager;
