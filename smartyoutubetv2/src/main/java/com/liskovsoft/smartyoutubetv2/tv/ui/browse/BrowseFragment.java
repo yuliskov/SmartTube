@@ -17,6 +17,7 @@ import androidx.leanback.widget.PresenterSelector;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowHeaderPresenter.ViewHolder;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.signin.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Header;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -66,6 +67,10 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         prepareEntranceTransition();
 
         mBrowsePresenter.onInitDone();
+
+        getHeadersSupportFragment().setOnHeaderClickedListener((viewHolder, row) -> {
+            mBrowsePresenter.refresh();
+        });
     }
 
     private void setupAdapter() {
@@ -85,7 +90,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         setHeadersTransitionOnBackEnabled(true);
 
         // Set fastLane (or headers) background color
-        setBrandColor(ContextCompat.getColor(getActivity(), R.color.fastlane_background2));
+        setBrandColor(ContextCompat.getColor(getActivity(), R.color.fastlane_background_dark));
 
         // Set search icon color.
         setSearchAffordanceColor(ContextCompat.getColor(getActivity(), R.color.search_opaque));
@@ -195,18 +200,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
             getProgressBarManager().hide();
         }
     }
-
-    //private final class ItemViewSelectedListener implements OnItemViewSelectedListener {
-    //    @Override
-    //    public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
-    //                               RowPresenter.ViewHolder rowViewHolder, Row row) {
-    //        if (item instanceof Video) {
-    //            mBackgroundManager.setBackgroundFrom((Video) item);
-    //        } else {
-    //            mBackgroundManager.removeBackground();
-    //        }
-    //    }
-    //}
 
     public final class HeaderViewSelectedListener implements OnHeaderViewSelectedListener {
         @Override

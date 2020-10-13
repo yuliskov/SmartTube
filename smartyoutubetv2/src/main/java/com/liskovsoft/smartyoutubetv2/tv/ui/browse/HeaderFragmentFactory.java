@@ -26,8 +26,8 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
     }
 
     /**
-     * Called each time when header is selected!<br/>
-     * So, No need to clear.
+     * Called each time when header is changed.<br/>
+     * So, no need to clear state.
      */
     @Override
     public Fragment createFragment(Object rowObj) {

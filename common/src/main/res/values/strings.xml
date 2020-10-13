@@ -21,7 +21,7 @@
     <string name="default_audio_option">Auto (max quality)</string>
     <string name="default_subtitle_option">Disabled</string>
     <string name="auto_frame_rate">Auto frame rate</string>
-    <string name="frame_rate_correction">Fix fps: %s</string>
+    <string name="frame_rate_correction">Fix fps:\n%s</string>
     <string name="category_background_playback">Background playback</string>
     <string name="not_implemented">Not implemented</string>
     <string name="option_background_playback_off">Disabled</string>

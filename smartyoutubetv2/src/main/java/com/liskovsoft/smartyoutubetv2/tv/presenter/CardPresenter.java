@@ -35,13 +35,13 @@ public class CardPresenter extends Presenter {
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
         mDefaultBackgroundColor =
-            ContextCompat.getColor(parent.getContext(), R.color.card_default_background3);
+            ContextCompat.getColor(parent.getContext(), R.color.card_default_background_dark);
         mDefaultTextColor =
                 ContextCompat.getColor(parent.getContext(), R.color.card_default_text);
         mSelectedBackgroundColor =
                 ContextCompat.getColor(parent.getContext(), R.color.card_selected_background2);
         mSelectedTextColor =
-                ContextCompat.getColor(parent.getContext(), R.color.card_selected_text2);
+                ContextCompat.getColor(parent.getContext(), R.color.card_selected_text_light);
         mDefaultCardImage = ContextCompat.getDrawable(parent.getContext(), R.drawable.movie);
 
         TextBadgeImageCardView cardView = new TextBadgeImageCardView(parent.getContext()) {
