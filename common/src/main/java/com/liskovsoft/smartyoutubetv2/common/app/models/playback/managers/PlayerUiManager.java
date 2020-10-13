@@ -14,7 +14,6 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader.MetadataListener;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.VideoLoader.ErrorListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
@@ -25,7 +24,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import java.util.List;
 
-public class PlayerUiManager extends PlayerEventListenerHelper implements MetadataListener, ErrorListener {
+public class PlayerUiManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = PlayerUiManager.class.getSimpleName();
     private static final long UI_AUTO_HIDE_TIMEOUT_MS = 3_000;
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
@@ -125,15 +124,10 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         disposeTimeouts();
     }
 
-    @Override
-    public void onRepeatModeClicked(int modeIndex) {
-        mController.setRepeatMode(modeIndex);
-    }
-
-    @Override
-    public void onRepeatModeChange(int modeIndex) {
-        mController.setRepeatButtonState(modeIndex);
-    }
+    //@Override
+    //public void onRepeatModeClicked(int modeIndex) {
+    //    //mController.setRepeatMode(modeIndex);
+    //}
 
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
@@ -220,10 +214,5 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     private interface MediaItemObservable {
         Observable<Void> call(MediaItem item);
-    }
-
-    @Override
-    public void onError(int type) {
-        mController.showControls(true);
     }
 }

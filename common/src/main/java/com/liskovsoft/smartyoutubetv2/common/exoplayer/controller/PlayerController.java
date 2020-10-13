@@ -24,7 +24,6 @@ public interface PlayerController {
     void setEventListener(PlayerEventListener eventListener);
     void setVideo(Video video);
     Video getVideo();
-    void setRepeatMode(int modeIndex);
     List<FormatItem> getVideoFormats();
     List<FormatItem> getAudioFormats();
     List<FormatItem> getSubtitleFormats();

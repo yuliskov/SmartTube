@@ -18,7 +18,6 @@ import java.util.Map;
 
 public class StateUpdater extends PlayerEventListenerHelper {
     private boolean mIsPlaying;
-    private int mRepeatMode = 0;
     private FormatItem mVideoFormat;
     private FormatItem mAudioFormat;
     private FormatItem mSubtitleFormat;
@@ -63,7 +62,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
      */
     @Override
     public void openVideo(Video item) {
-        mLastSpeed = -1; // Save global speed on per-view basis
+        //mLastSpeed = -1; // Save global speed on per-view basis
 
         ensureVideoSize(item); // reset position of music videos
 
@@ -102,11 +101,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onEngineInitialized() {
-        mController.setRepeatMode(mRepeatMode);
-    }
-
-    @Override
     public void onEngineReleased() {
         saveState();
     }
@@ -137,11 +131,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
     public void onPause() {
         mIsPlaying = false;
         Helpers.enableScreensaver(mActivity);
-    }
-
-    @Override
-    public void onRepeatModeChange(int modeIndex) {
-        mRepeatMode = modeIndex;
     }
 
     @Override

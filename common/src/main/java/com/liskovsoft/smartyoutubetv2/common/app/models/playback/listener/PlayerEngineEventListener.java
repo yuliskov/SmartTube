@@ -33,6 +33,5 @@ public interface PlayerEngineEventListener {
     void onEngineReleased();
     void onEngineError(int type);
     void onPlayEnd();
-    void onRepeatModeChange(int modeIndex);
     void onTrackChanged(FormatItem track);
 }

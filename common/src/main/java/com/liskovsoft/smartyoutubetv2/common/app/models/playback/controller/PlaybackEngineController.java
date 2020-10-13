@@ -17,7 +17,6 @@ public interface PlaybackEngineController {
     long getLengthMs();
     void setPlay(boolean play);
     boolean isPlaying();
-    void setRepeatMode(int modeIndex);
     List<FormatItem> getVideoFormats();
     List<FormatItem> getAudioFormats();
     List<FormatItem> getSubtitleFormats();

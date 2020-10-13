@@ -64,11 +64,6 @@ public class NullPlayerController implements PlayerController {
     }
 
     @Override
-    public void setRepeatMode(int modeIndex) {
-
-    }
-
-    @Override
     public List<FormatItem> getVideoFormats() {
         return null;
     }

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 240dpi, Vermax 300UHD, xhdpi * 1.3 -->
+    <!-- 1080p TV with 160dpi -->
+    <!-- 160dpi, Red Box TV, Eltex, same as 240dpi -->
+    <!-- Example: width in dp = width in pixle / (dpi/160) dp = 1440/(560/160) =~ 411 -->
+    <!-- Create drawable-w411dp -->
 
     <dimen name="card_width">286dp</dimen>
     <dimen name="card_height">165dp</dimen>

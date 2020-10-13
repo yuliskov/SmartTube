@@ -447,11 +447,6 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
-    public void setRepeatMode(int modeIndex) {
-        mExoPlayerController.setRepeatMode(modeIndex);
-    }
-
-    @Override
     public List<FormatItem> getVideoFormats() {
         return mExoPlayerController.getVideoFormats();
     }

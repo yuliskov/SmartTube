@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import android.app.Activity;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
@@ -9,16 +10,15 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUiController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class VideoLoader extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = VideoLoader.class.getSimpleName();
@@ -29,15 +29,17 @@ public class VideoLoader extends PlayerEventListenerHelper implements MetadataLi
     private Disposable mFormatInfoAction;
     private boolean mEngineInitialized;
     private MediaItem mCachedNextVideo;
-    private final List<ErrorListener> mListeners = new ArrayList<>();
-
-    public interface ErrorListener {
-        int TYPE_EMPTY_SOURCE = 0;
-        void onError(int type);
-    }
+    private int mRepeatMode = PlaybackUiController.REPEAT_ALL;
 
     public VideoLoader() {
         mPlaylist = Playlist.instance();
+    }
+
+    @Override
+    public void onActivity(Activity activity) {
+        super.onActivity(activity);
+
+        mRepeatMode = AppPrefs.instance(activity).getVideoLoaderData(PlaybackUiController.REPEAT_ALL);
     }
 
     @Override
@@ -57,6 +59,7 @@ public class VideoLoader extends PlayerEventListenerHelper implements MetadataLi
     public void onEngineInitialized() {
         mEngineInitialized = true;
         loadVideo(mLastVideo);
+        mController.setRepeatButtonState(mRepeatMode);
     }
 
     @Override
@@ -110,7 +113,17 @@ public class VideoLoader extends PlayerEventListenerHelper implements MetadataLi
 
     @Override
     public void onPlayEnd() {
-        onNextClicked();
+        switch (mRepeatMode) {
+            case PlaybackUiController.REPEAT_ALL:
+                onNextClicked();
+                break;
+            case PlaybackUiController.REPEAT_ONE:
+                loadVideo(mLastVideo);
+                break;
+            default: // none
+                mController.showControls(true);
+                break;
+        }
     }
 
     @Override
@@ -129,6 +142,12 @@ public class VideoLoader extends PlayerEventListenerHelper implements MetadataLi
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
         mCachedNextVideo = metadata.getNextVideo();
+    }
+
+    @Override
+    public void onRepeatModeClicked(int modeIndex) {
+        mRepeatMode = modeIndex;
+        AppPrefs.instance(mActivity).setVideoLoaderData(mRepeatMode);
     }
 
     private void disposeActions() {
@@ -205,17 +224,7 @@ public class VideoLoader extends PlayerEventListenerHelper implements MetadataLi
             mController.openUrlList(formatInfo.createUrlList());
         } else {
             Log.e(TAG, "Empty format info received. No video data to pass to the player.");
-            callListener(ErrorListener.TYPE_EMPTY_SOURCE);
-        }
-    }
-
-    public void addErrorListener(ErrorListener listener) {
-        mListeners.add(listener);
-    }
-
-    private void callListener(int type) {
-        for (ErrorListener listener : mListeners) {
-            listener.onError(type);
+            mController.showControls(true);
         }
     }
 }

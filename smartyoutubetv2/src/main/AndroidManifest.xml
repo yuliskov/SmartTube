@@ -181,22 +181,6 @@
                 android:readPermission="android.permission.GLOBAL_SEARCH" />
         </provider>
 
-        <receiver
-            android:name=".old.recommendation.RecommendationReceiver"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
-        <service
-            android:name=".old.data.FetchVideoService"
-            android:exported="false" />
-        <service
-            android:name=".old.recommendation.UpdateRecommendationsService"
-            android:enabled="true" />
-
         <activity android:name="com.liskovsoft.smartyoutubetv2.tv.old.ui.SettingsActivity"
             android:exported="true"
             android:screenOrientation="landscape"

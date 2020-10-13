@@ -123,12 +123,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     @Override
-    public void setRepeatMode(int modeIndex) {
-        mPlayer.setRepeatMode(modeIndex);
-        mEventListener.onRepeatModeChange(modeIndex);
-    }
-
-    @Override
     public List<FormatItem> getVideoFormats() {
         return ExoFormatItem.from(mTrackSelectorManager.getVideoTracks());
     }

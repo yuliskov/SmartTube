@@ -101,8 +101,8 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter> {
         //   > /||      |<        <<        >>         >|
         super.onCreatePrimaryActions(adapter);
         adapter.add(mSkipPreviousAction);
-        adapter.add(mRewindAction);
-        adapter.add(mFastForwardAction);
+        //adapter.add(mRewindAction);
+        //adapter.add(mFastForwardAction);
         adapter.add(mSkipNextAction);
         adapter.add(mRepeatAction);
         adapter.add(mVideoSpeedAction);

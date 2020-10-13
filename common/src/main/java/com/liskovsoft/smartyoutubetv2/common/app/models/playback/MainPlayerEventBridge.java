@@ -27,7 +27,6 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     private static MainPlayerEventBridge sInstance;
     private PlaybackController mController;
     private Activity mMainActivity;
-    private Activity mParentActivity;
 
     public MainPlayerEventBridge() {
         mEventListeners = new ArrayList<>();
@@ -36,7 +35,6 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         HqDialogManager hqDialogManager = new HqDialogManager();
 
         VideoLoader videoLoader = new VideoLoader();
-        videoLoader.addErrorListener(uiManager);
 
         SuggestionsLoader suggestionsLoader = new SuggestionsLoader();
         suggestionsLoader.addMetadataListener(uiManager);
@@ -200,11 +198,6 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     @Override
     public void onRepeatModeClicked(int modeIndex) {
         process(listener -> listener.onRepeatModeClicked(modeIndex));
-    }
-
-    @Override
-    public void onRepeatModeChange(int modeIndex) {
-        process(listener -> listener.onRepeatModeChange(modeIndex));
     }
 
     @Override
