@@ -84,7 +84,7 @@ public class TextBadgeImageView extends RelativeLayout {
 
         mPreviewImage.setVisibility(View.VISIBLE);
 
-        Glide.with(getContext())
+        Glide.with(getContext().getApplicationContext()) // FIX: "You cannot start a load for a destroyed activity"
                 .load(mPreviewUrl)
                 .diskCacheStrategy(DiskCacheStrategy.NONE) // ensure start animation from beginning
                 .skipMemoryCache(true) // ensure start animation from beginning
