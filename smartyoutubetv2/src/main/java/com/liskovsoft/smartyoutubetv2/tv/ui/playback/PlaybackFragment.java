@@ -75,16 +75,14 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private boolean mBlockEngine;
     private boolean mEnablePIP;
     private ExoPlayerInitializer mPlayerInitializer;
-    private LeanbackActivity mLeanbackActivity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mLeanbackActivity = (LeanbackActivity) getActivity();
         mMediaGroupAdapters = new HashMap<>();
-        mBackgroundManager = mLeanbackActivity.getBackgroundManager();
-        mBackgroundManager.setBackgroundColor(ContextCompat.getColor(mLeanbackActivity, R.color.player_background));
+        mBackgroundManager = getLeanbackActivity().getBackgroundManager();
+        mBackgroundManager.setBackgroundColor(ContextCompat.getColor(getLeanbackActivity(), R.color.player_background));
         mPlayerInitializer = new ExoPlayerInitializer(getActivity());
 
         mPlaybackPresenter = PlaybackPresenter.instance(getContext());
@@ -288,7 +286,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
                 Row row) {
 
             if (item instanceof Video) {
-                boolean longClick = mLeanbackActivity.isLongClick();
+                boolean longClick = getLeanbackActivity().isLongClick();
                 Log.d(TAG, "Is long click: " + longClick);
 
                 if (longClick) {
@@ -568,7 +566,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
     @Override
     public void exit() {
-        mLeanbackActivity.finish();
+        getLeanbackActivity().finish();
     }
 
     @Override
@@ -640,4 +638,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     /* End PlayerController */
+
+    private LeanbackActivity getLeanbackActivity() {
+        return (LeanbackActivity) getActivity();
+    }
 }
