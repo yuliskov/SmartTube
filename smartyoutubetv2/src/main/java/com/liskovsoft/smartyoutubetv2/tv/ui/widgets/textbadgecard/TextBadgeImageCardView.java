@@ -3,6 +3,8 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.textbadgecard;
 import android.content.Context;
 import android.text.TextUtils.TruncateAt;
 import android.util.AttributeSet;
+import android.view.ViewGroup;
+import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import androidx.leanback.widget.ImageCardView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
@@ -71,13 +73,40 @@ public class TextBadgeImageCardView extends ImageCardView {
 
     private void enableVideoPreview(boolean selected) {
         if (selected) {
-            mTextBadgeImageLayout.setLoading();
+            mTextBadgeImageLayout.startPlayback();
         } else {
-            mTextBadgeImageLayout.setFinished();
+            mTextBadgeImageLayout.stopPlayback();
         }
     }
 
     public void setPreviewUrl(String previewUrl) {
         mTextBadgeImageLayout.setPreviewUrl(previewUrl);
+    }
+
+    /**
+     * Enables or disables adjustment of view bounds on the main image.
+     */
+    @Override
+    public void setMainImageAdjustViewBounds(boolean adjustViewBounds) {
+        super.setMainImageAdjustViewBounds(adjustViewBounds);
+        mTextBadgeImageLayout.setMainImageAdjustViewBounds(adjustViewBounds);
+    }
+
+    /**
+     * Sets the ScaleType of the main image.
+     */
+    @Override
+    public void setMainImageScaleType(ScaleType scaleType) {
+        super.setMainImageScaleType(scaleType);
+        mTextBadgeImageLayout.setMainImageScaleType(scaleType);
+    }
+
+    /**
+     * Sets the layout dimensions of the ImageView.
+     */
+    @Override
+    public void setMainImageDimensions(int width, int height) {
+        super.setMainImageDimensions(width, height);
+        mTextBadgeImageLayout.setMainImageDimensions(width, height);
     }
 }

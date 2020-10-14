@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
@@ -74,17 +76,12 @@ public class TextBadgeImageView extends RelativeLayout {
         mPreviewUrl = videoUrl;
     }
 
-    //public ImageView getImageView() {
-    //    return mImageView;
-    //}
-
-    public void setLoading() {
+    public void startPlayback() {
         if (mPreviewUrl == null) {
             return;
         }
 
         mPreviewImage.setVisibility(View.VISIBLE);
-        mMainImage.setVisibility(View.INVISIBLE);
 
         Glide.with(getContext())
                 .load(mPreviewUrl)
@@ -97,21 +94,39 @@ public class TextBadgeImageView extends RelativeLayout {
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource,
                                                    boolean isFirstResource) {
-                        //mMainImage.setVisibility(View.GONE);
-                        //mPreviewImage.setVisibility(View.VISIBLE);
+                        mMainImage.setVisibility(View.GONE);
                         return false;
                     }
                 })
                 .into(mPreviewImage);
     }
 
-    public void setFinished() {
+    public void stopPlayback() {
         if (mPreviewUrl == null) {
             return;
         }
 
-        mPreviewImage.setVisibility(View.INVISIBLE);
-        mPreviewImage.setImageDrawable(null);
         mMainImage.setVisibility(View.VISIBLE);
+        mPreviewImage.setVisibility(View.GONE);
+        mPreviewImage.setImageDrawable(null);
+    }
+
+    public void setMainImageAdjustViewBounds(boolean adjustViewBounds) {
+        if (mPreviewImage != null) {
+            mPreviewImage.setAdjustViewBounds(adjustViewBounds);
+        }
+    }
+
+    public void setMainImageScaleType(ScaleType scaleType) {
+        if (mPreviewImage != null) {
+            mPreviewImage.setScaleType(scaleType);
+        }
+    }
+
+    public void setMainImageDimensions(int width, int height) {
+        ViewGroup.LayoutParams lp = mPreviewImage.getLayoutParams();
+        lp.width = width;
+        lp.height = height;
+        mPreviewImage.setLayoutParams(lp);
     }
 }
