@@ -84,7 +84,7 @@ public class TextBadgeImageView extends RelativeLayout {
         }
 
         mPreviewImage.setVisibility(View.VISIBLE);
-        mMainImage.setVisibility(View.GONE);
+        mMainImage.setVisibility(View.INVISIBLE);
 
         Glide.with(getContext())
                 .load(mPreviewUrl)
@@ -110,7 +110,7 @@ public class TextBadgeImageView extends RelativeLayout {
             return;
         }
 
-        mPreviewImage.setVisibility(View.GONE);
+        mPreviewImage.setVisibility(View.INVISIBLE);
         mPreviewImage.setImageDrawable(null);
         mMainImage.setVisibility(View.VISIBLE);
     }
