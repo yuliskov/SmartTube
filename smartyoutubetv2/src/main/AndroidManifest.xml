@@ -39,6 +39,7 @@
     <application
         android:name="com.liskovsoft.smartyoutubetv2.tv.ui.main.MainApplication"
         android:allowBackup="false"
+        android:largeHeap="true"
         android:banner="@mipmap/app_banner"
         android:logo="@mipmap/app_logo"
         android:icon="@mipmap/app_icon"
