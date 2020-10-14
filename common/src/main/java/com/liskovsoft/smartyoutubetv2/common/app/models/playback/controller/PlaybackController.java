@@ -7,4 +7,5 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 public interface PlaybackController extends PlaybackEngineController, PlaybackUiController {
     void setVideo(Video item);
     Video getVideo();
+    void exit();
 }

@@ -75,14 +75,16 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private boolean mBlockEngine;
     private boolean mEnablePIP;
     private ExoPlayerInitializer mPlayerInitializer;
+    private LeanbackActivity mLeanbackActivity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mLeanbackActivity = (LeanbackActivity) getActivity();
         mMediaGroupAdapters = new HashMap<>();
-        mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
-        mBackgroundManager.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.player_background));
+        mBackgroundManager = mLeanbackActivity.getBackgroundManager();
+        mBackgroundManager.setBackgroundColor(ContextCompat.getColor(mLeanbackActivity, R.color.player_background));
         mPlayerInitializer = new ExoPlayerInitializer(getActivity());
 
         mPlaybackPresenter = PlaybackPresenter.instance(getContext());
@@ -286,15 +288,13 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
                 Row row) {
 
             if (item instanceof Video) {
-                if (getActivity() instanceof LeanbackActivity) {
-                    boolean longClick = ((LeanbackActivity) getActivity()).isLongClick();
-                    Log.d(TAG, "Is long click: " + longClick);
+                boolean longClick = mLeanbackActivity.isLongClick();
+                Log.d(TAG, "Is long click: " + longClick);
 
-                    if (longClick) {
-                        mEventListener.onSuggestionItemLongClicked((Video) item);
-                    } else {
-                        mEventListener.onSuggestionItemClicked((Video) item);
-                    }
+                if (longClick) {
+                    mEventListener.onSuggestionItemLongClicked((Video) item);
+                } else {
+                    mEventListener.onSuggestionItemClicked((Video) item);
                 }
             }
         }
@@ -564,6 +564,11 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public Video getVideo() {
         return mExoPlayerController.getVideo();
+    }
+
+    @Override
+    public void exit() {
+        mLeanbackActivity.finish();
     }
 
     @Override

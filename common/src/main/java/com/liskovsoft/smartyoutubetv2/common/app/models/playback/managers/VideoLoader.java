@@ -120,10 +120,13 @@ public class VideoLoader extends PlayerEventListenerHelper implements MetadataLi
             case PlaybackUiController.REPEAT_ONE:
                 loadVideo(mLastVideo);
                 break;
-            default: // none
-                mController.showControls(true);
+            case PlaybackUiController.REPEAT_NONE:
+                // close player
+                mController.exit();
                 break;
         }
+
+        Log.e(TAG, "Undetected repeat mode " + mRepeatMode);
     }
 
     @Override
