@@ -103,6 +103,8 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:' + appCompatXLibraryVersion
 
     implementation 'com.github.bumptech.glide:glide:' + glideVersion
+    annotationProcessor 'com.github.bumptech.glide:compiler:' + glideVersion
+    implementation 'com.zlc.glide:webpdecoder:2.0.' + glideVersion
 
     implementation 'com.google.android.exoplayer:exoplayer:' + amazonExoplayerVersion
     implementation 'com.google.android.exoplayer:extension-leanback:' + amazonExoplayerVersion

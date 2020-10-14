@@ -152,6 +152,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     public void onPlayEnd() {
         Video video = mController.getVideo();
 
+        // In case we start to watch the video again
         if (video != null) {
             mStates.remove(video.videoId);
         }

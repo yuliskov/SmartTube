@@ -5,6 +5,15 @@
     <dimen name="card_width">205dp</dimen>
     <dimen name="card_height">115dp</dimen>
 
+    <dimen name="lb_basic_card_main_width">140dp</dimen>
+    <dimen name="lb_basic_card_main_height">188dp</dimen>
+    <dimen name="lb_basic_card_info_height">52dp</dimen>
+    <dimen name="lb_basic_card_info_padding">6dp</dimen>
+    <dimen name="lb_basic_card_info_text_margin">2dp</dimen>
+    <dimen name="lb_basic_card_title_text_size">16sp</dimen>
+    <dimen name="lb_basic_card_content_text_size">12sp</dimen>
+    <dimen name="lb_basic_card_info_badge_size">16dp</dimen>
+
     <!-- Elements below aren't used in the app -->
 
     <dimen name="grid_item_width">100dp</dimen>
