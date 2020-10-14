@@ -70,10 +70,10 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     private SubtitleManager mSubtitleManager;
     private DebugInfoManager mDebugInfoManager;
     private UriBackgroundManager mBackgroundManager;
-    private final boolean mEnableAnimation = true;
     private RowsSupportFragment mRowsSupportFragment;
-    private boolean mBlockEngine;
-    private boolean mEnablePIP;
+    private final boolean mIsAnimationEnabled = true;
+    private boolean mIsEngineBlocked;
+    private boolean mIsPIPEnabled;
     private ExoPlayerInitializer mPlayerInitializer;
 
     @Override
@@ -236,7 +236,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlayerGlue.setHost(new VideoSupportFragmentGlueHost(this));
         mPlayerGlue.setSeekEnabled(true);
         mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end
-        hideControlsOverlay(mEnableAnimation); // hide controls upon fragment creation
+        hideControlsOverlay(mIsAnimationEnabled); // hide controls upon fragment creation
 
         mSubtitleManager = new SubtitleManager(getActivity(), R.id.leanback_subtitles);
 
@@ -472,22 +472,22 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
     @Override
     public void blockEngine(boolean block) {
-        mBlockEngine = block;
+        mIsEngineBlocked = block;
     }
 
     @Override
     public boolean isEngineBlocked() {
-        return mBlockEngine;
+        return mIsEngineBlocked;
     }
 
     @Override
     public void enablePIP(boolean enable) {
-        mEnablePIP = enable;
+        mIsPIPEnabled = enable;
     }
 
     @Override
     public boolean isPIPEnabled() {
-        return mEnablePIP;
+        return mIsPIPEnabled;
     }
 
     @Override
@@ -577,9 +577,9 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public void showControls(boolean show) {
         if (show) {
-            showControlsOverlay(mEnableAnimation);
+            showControlsOverlay(mIsAnimationEnabled);
         } else {
-            hideControlsOverlay(mEnableAnimation);
+            hideControlsOverlay(mIsAnimationEnabled);
         }
     }
 

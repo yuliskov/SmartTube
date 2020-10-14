@@ -211,10 +211,11 @@ public class StateUpdater extends PlayerEventListenerHelper {
             state = new State(getNewPosition(item.percentWatched));
         }
 
-        boolean nearEnd = Math.abs(mController.getLengthMs() - mController.getPositionMs()) < 10_000;
-
-        if (state != null && !nearEnd) {
-            mController.setPositionMs(state.positionMs);
+        if (state != null) {
+            boolean isVideoEnded = Math.abs(mController.getLengthMs() - state.positionMs) < 1_000;
+            if (!isVideoEnded) {
+                mController.setPositionMs(state.positionMs);
+            }
         }
 
         mController.setPlay(mIsPlaying);
