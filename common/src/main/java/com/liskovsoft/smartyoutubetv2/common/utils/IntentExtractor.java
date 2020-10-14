@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.utils;
 
 import android.content.Intent;
+import com.liskovsoft.sharedutils.querystringparser.UrlQueryString;
+import com.liskovsoft.sharedutils.querystringparser.UrlQueryStringFactory;
 
 public class IntentExtractor {
     private static final String TAG = IntentExtractor.class.getSimpleName();
@@ -18,7 +20,10 @@ public class IntentExtractor {
             return null;
         }
 
-        return intent.getData().getQueryParameter(VIDEO_ID_KEY);
+        // Don't Uri directly or you might get UnsupportedOperationException on some urls.
+        UrlQueryString parser = UrlQueryStringFactory.parse(intent.getData());
+
+        return parser.get(VIDEO_ID_KEY);
     }
 
     /**
@@ -30,8 +35,11 @@ public class IntentExtractor {
             return null;
         }
 
+        // Don't Uri directly or you might get UnsupportedOperationException on some urls.
+        UrlQueryString parser = UrlQueryStringFactory.parse(intent.getData());
+
         for (String searchKey : SEARCH_KEYS) {
-            String searchText = intent.getData().getQueryParameter(searchKey);
+            String searchText = parser.get(searchKey);
 
             if (searchText != null) {
                 return searchText;
