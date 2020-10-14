@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
@@ -85,19 +86,8 @@ public class TextBadgeImageView extends RelativeLayout {
 
         Glide.with(getContext())
                 .load(mPreviewUrl)
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource,
-                                                   boolean isFirstResource) {
-                        mMainImage.setVisibility(View.GONE);
-                        return false;
-                    }
-                })
+                .diskCacheStrategy(DiskCacheStrategy.NONE) // ensure start animation from beginning
+                .skipMemoryCache(true) // ensure start animation from beginning
                 .into(mPreviewImage);
     }
 
@@ -105,8 +95,7 @@ public class TextBadgeImageView extends RelativeLayout {
         if (mPreviewUrl == null) {
             return;
         }
-
-        mMainImage.setVisibility(View.VISIBLE);
+        
         mPreviewImage.setVisibility(View.GONE);
         mPreviewImage.setImageDrawable(null);
     }
