@@ -148,6 +148,15 @@ public class StateUpdater extends PlayerEventListenerHelper {
         }
     }
 
+    @Override
+    public void onPlayEnd() {
+        Video video = mController.getVideo();
+
+        if (video != null) {
+            mStates.remove(video.videoId);
+        }
+    }
+
     private void ensureVideoSize(Video item) {
         State state = mStates.get(item.videoId);
 
