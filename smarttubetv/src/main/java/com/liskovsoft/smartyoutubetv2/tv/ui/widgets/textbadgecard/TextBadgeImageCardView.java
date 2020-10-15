@@ -1,9 +1,10 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.textbadgecard;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils.TruncateAt;
 import android.util.AttributeSet;
-import android.view.ViewGroup;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import androidx.leanback.widget.ImageCardView;
@@ -11,6 +12,8 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class TextBadgeImageCardView extends ImageCardView {
     private TextBadgeImageView mTextBadgeImageLayout;
+    private Handler mHandler;
+    private Runnable mEnableMarquee;
 
     public TextBadgeImageCardView(Context context) {
         super(context);
@@ -30,6 +33,11 @@ public class TextBadgeImageCardView extends ImageCardView {
         init();
     }
 
+    private void init() {
+        mTextBadgeImageLayout = findViewById(R.id.main_image_wrapper);
+        mHandler = new Handler(Looper.getMainLooper());
+    }
+
     private void enableTextAnimation(boolean enable) {
         TextView title = findViewById(R.id.title_text);
         TextView content = findViewById(R.id.content_text);
@@ -39,21 +47,39 @@ public class TextBadgeImageCardView extends ImageCardView {
         }
 
         if (enable) {
-            title.setEllipsize(TruncateAt.MARQUEE);
-            title.setMarqueeRepeatLimit(-1);
-            title.setHorizontallyScrolling(true);
+            mEnableMarquee = () -> enableMarquee(title, content);
 
-            content.setEllipsize(TruncateAt.MARQUEE);
-            content.setMarqueeRepeatLimit(-1);
-            content.setHorizontallyScrolling(true);
+            mHandler.postDelayed(mEnableMarquee, 1_000);
         } else {
-            title.setEllipsize(TruncateAt.END);
-            content.setEllipsize(TruncateAt.END);
+            if (mEnableMarquee != null) {
+                mHandler.removeCallbacks(mEnableMarquee);
+                mEnableMarquee = null;
+            }
+
+            disableMarquee(title, content);
         }
     }
 
-    private void init() {
-        mTextBadgeImageLayout = findViewById(R.id.main_image_wrapper);
+    private void disableMarquee(TextView... textViews) {
+        if (textViews == null || textViews.length == 0) {
+            return;
+        }
+
+        for (TextView textView : textViews) {
+            textView.setEllipsize(TruncateAt.END);
+        }
+    }
+
+    private void enableMarquee(TextView... textViews) {
+        if (textViews == null || textViews.length == 0) {
+            return;
+        }
+
+        for (TextView textView : textViews) {
+            textView.setEllipsize(TruncateAt.MARQUEE);
+            textView.setMarqueeRepeatLimit(-1);
+            textView.setHorizontallyScrolling(true);
+        }
     }
 
     /**

@@ -10,4 +10,5 @@ public interface PlayerHandlerEventListener extends PlayerUiEventListener, Playe
     void openVideo(Video item);
     void onController(PlaybackController controller);
     void onActivity(Activity activity);
+    void onInitDone();
 }

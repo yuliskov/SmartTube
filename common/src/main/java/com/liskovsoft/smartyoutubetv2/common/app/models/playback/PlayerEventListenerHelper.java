@@ -21,6 +21,11 @@ public abstract class PlayerEventListenerHelper implements PlayerHandlerEventLis
     }
 
     @Override
+    public void onInitDone() {
+        // NOP
+    }
+
+    @Override
     public void openVideo(Video item) {
         // NOP
     }

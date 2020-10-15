@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
-import android.app.Activity;
 import androidx.annotation.NonNull;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -18,7 +17,6 @@ import java.util.List;
 public class AutoFrameRateManager extends PlayerEventListenerHelper {
     private static final String TAG = AutoFrameRateManager.class.getSimpleName();
     private final HqDialogManager mUiManager;
-    private boolean mMainActivityRunOnce;
     private FormatItem mSelectedVideoTrack;
     private final AutoFrameRateHelper mAutoFrameRateHelper;
     private final ModeSyncManager mModeSyncManager;
@@ -67,17 +65,10 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onActivity(Activity activity) {
-        super.onActivity(activity);
-
-        if (!mMainActivityRunOnce) {
-            restoreAfrData();
-
-            addUiOptions();
-            mAutoFrameRateHelper.saveOriginalState(activity);
-
-            mMainActivityRunOnce = true;
-        }
+    public void onInitDone() {
+        restoreAfrData();
+        addUiOptions();
+        mAutoFrameRateHelper.saveOriginalState(mActivity);
     }
 
     @Override

@@ -36,10 +36,8 @@ public class VideoLoader extends PlayerEventListenerHelper implements MetadataLi
     }
 
     @Override
-    public void onActivity(Activity activity) {
-        super.onActivity(activity);
-
-        mRepeatMode = AppPrefs.instance(activity).getVideoLoaderData(PlaybackUiController.REPEAT_ALL);
+    public void onInitDone() {
+        mRepeatMode = AppPrefs.instance(mActivity).getVideoLoaderData(PlaybackUiController.REPEAT_ALL);
     }
 
     @Override

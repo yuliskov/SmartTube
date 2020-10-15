@@ -1,10 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
-import android.app.Activity;
 import android.os.Build.VERSION;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -30,17 +28,9 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     private final List<Runnable> mHideListeners = new ArrayList<>();
 
     @Override
-    public void onActivity(Activity activity) {
-        super.onActivity(activity);
-
+    public void onInitDone() {
         mSettingsPresenter = AppSettingsPresenter.instance(mActivity);
-    }
-
-    @Override
-    public void onController(PlaybackController controller) {
-        super.onController(controller);
-
-        controller.setBuffer(AppPrefs.instance(mActivity).getVideoBufferType(PlaybackEngineController.BUFFER_LOW));
+        mController.setBuffer(AppPrefs.instance(mActivity).getVideoBufferType(PlaybackEngineController.BUFFER_LOW));
     }
 
     private void addQualityCategories() {

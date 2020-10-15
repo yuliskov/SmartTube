@@ -1,6 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
-import android.app.Activity;
+import androidx.annotation.NonNull;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -17,43 +17,26 @@ import java.util.List;
 import java.util.Map;
 
 public class StateUpdater extends PlayerEventListenerHelper {
+    private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
+    private static final int MAX_STATE_SIZE = 10;
     private boolean mIsPlaying;
     private FormatItem mVideoFormat;
     private FormatItem mAudioFormat;
     private FormatItem mSubtitleFormat;
-    private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
     // Don't store state inside Video object.
     // As one video might correspond to multiple Video objects.
     private final Map<String, State> mStates = new HashMap<>();
     private float mLastSpeed = -1;
 
-    private static class State {
-        public final long positionMs;
-        private final long lengthMs;
-        public final float speed;
-
-        public State(long positionMs) {
-            this(positionMs, -1);
-        }
-
-        public State(long positionMs, long lengthMs) {
-            this(positionMs, lengthMs, 1.0f);
-        }
-
-        public State(long positionMs, long lengthMs, float speed) {
-            this.positionMs = positionMs;
-            this.lengthMs = lengthMs;
-            this.speed = speed;
-        }
-    }
-
     @Override
-    public void onActivity(Activity activity) {
-        super.onActivity(activity);
+    public void onInitDone() {
+        AppPrefs prefs = AppPrefs.instance(mActivity);
+        mVideoFormat = prefs.getFormat(FormatItem.TYPE_VIDEO, FormatItem.VIDEO_HD_AVC);
+        mAudioFormat = prefs.getFormat(FormatItem.TYPE_AUDIO, FormatItem.AUDIO_HQ_MP4A);
+        mSubtitleFormat = prefs.getFormat(FormatItem.TYPE_SUBTITLE, null);
 
-        mVideoFormat = AppPrefs.instance(mActivity).getFormat(FormatItem.TYPE_VIDEO, FormatItem.VIDEO_HD_AVC);
-        mAudioFormat = AppPrefs.instance(mActivity).getFormat(FormatItem.TYPE_AUDIO, FormatItem.AUDIO_HQ_MP4A);
-        mSubtitleFormat = AppPrefs.instance(mActivity).getFormat(FormatItem.TYPE_SUBTITLE, null);
+        String data = prefs.getStateUpdaterData();
+        restoreState(data);
     }
 
     /**
@@ -103,6 +86,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     @Override
     public void onEngineReleased() {
         saveState();
+        persistState();
     }
 
     @Override
@@ -173,10 +157,48 @@ public class StateUpdater extends PlayerEventListenerHelper {
         Video video = mController.getVideo();
 
         if (video != null) {
-            mStates.put(video.videoId, new State(mController.getPositionMs(), mController.getLengthMs(), mController.getSpeed()));
+            mStates.put(video.videoId, new State(video.videoId, mController.getPositionMs(), mController.getLengthMs(), mController.getSpeed()));
         }
 
         mLastSpeed = mController.getSpeed();
+    }
+
+    private void persistState() {
+        AppPrefs prefs = AppPrefs.instance(mActivity);
+        StringBuilder sb = new StringBuilder();
+        int counter = 0;
+
+        for (State state : mStates.values()) {
+            counter++;
+
+            if (sb.length() != 0) {
+                sb.append("|");
+            }
+
+            sb.append(state);
+
+            if (counter >= MAX_STATE_SIZE) {
+                break;
+            }
+        }
+
+        prefs.setStateUpdaterData(sb.toString());
+    }
+
+    private void restoreState(String data) {
+        if (data == null) {
+            return;
+        }
+
+        String[] split = data.split("\\|");
+
+        for (String spec : split) {
+            State state = State.from(spec);
+
+            if (state != null) {
+                mStates.put(state.videoId, state);
+            }
+        }
     }
 
     private void trimStorage() {
@@ -208,7 +230,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
         // internal storage has priority over item data loaded from network
         if (state == null && item.percentWatched > 0 && item.percentWatched < 100) {
-            state = new State(getNewPosition(item.percentWatched));
+            state = new State(item.videoId, getNewPosition(item.percentWatched));
         }
 
         if (state != null) {
@@ -269,10 +291,55 @@ public class StateUpdater extends PlayerEventListenerHelper {
         for (float speed : speedValues) {
             items.add(UiOptionItem.from(
                     String.valueOf(speed),
-                    optionItem -> {
-                        mController.setSpeed(speed);
-                    },
+                    optionItem -> mController.setSpeed(speed),
                     mController.getSpeed() == speed));
+        }
+    }
+
+    private static class State {
+        public final String videoId;
+        public final long positionMs;
+        private final long lengthMs;
+        public final float speed;
+
+        public State(String videoId, long positionMs) {
+            this(videoId, positionMs, -1);
+        }
+
+        public State(String videoId, long positionMs, long lengthMs) {
+            this(videoId, positionMs, lengthMs, 1.0f);
+        }
+
+        public State(String videoId, long positionMs, long lengthMs, float speed) {
+            this.videoId = videoId;
+            this.positionMs = positionMs;
+            this.lengthMs = lengthMs;
+            this.speed = speed;
+        }
+
+        public static State from(String spec) {
+            if (spec == null) {
+                return null;
+            }
+
+            String[] split = spec.split(",");
+
+            if (split.length != 4) {
+                return null;
+            }
+
+            String videoId = split[0];
+            long positionMs = Helpers.parseInt(split[1]);
+            long lengthMs = Helpers.parseInt(split[2]);
+            float speed = Helpers.parseFloat(split[3]);
+
+            return new State(videoId, positionMs, lengthMs, speed);
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return String.format("%s,%s,%s,%s", videoId, positionMs, lengthMs, speed);
         }
     }
 }

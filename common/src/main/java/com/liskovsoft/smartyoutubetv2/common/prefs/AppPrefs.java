@@ -16,6 +16,7 @@ public class AppPrefs extends SharedPreferencesBase {
     private static final String AUTO_FRAME_RATE_DATA = "auto_frame_rate_data";
     private static final String BACKUP_DATA = "backup_data";
     private static final String VIDEO_LOADER_DATA = "video_loader_data";
+    private static final String STATE_UPDATER_DATA = "state_updater_data";
     private String mDefaultDisplayMode;
     private String mCurrentDisplayMode;
 
@@ -94,5 +95,13 @@ public class AppPrefs extends SharedPreferencesBase {
 
     public void setVideoLoaderData(int data) {
         putInt(VIDEO_LOADER_DATA, data);
+    }
+
+    public String getStateUpdaterData() {
+        return getString(STATE_UPDATER_DATA, null);
+    }
+
+    public void setStateUpdaterData(String data) {
+        putString(STATE_UPDATER_DATA, data);
     }
 }

@@ -25,8 +25,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     private final ArrayList<PlayerHandlerEventListener> mEventListeners;
     @SuppressLint("StaticFieldLeak")
     private static MainPlayerEventBridge sInstance;
-    private PlaybackController mController;
-    private Activity mMainActivity;
+    private boolean mInitDone;
 
     public MainPlayerEventBridge() {
         mEventListeners = new ArrayList<>();
@@ -63,16 +62,12 @@ public class MainPlayerEventBridge implements PlayerEventListener {
             Fragment fragment = (Fragment) controller;
             Activity mainActivity = fragment.getActivity();
 
-            if (mMainActivity != mainActivity) {
-                mMainActivity = mainActivity;
+            process(listener -> listener.onActivity(mainActivity));
+            process(listener -> listener.onController(controller));
 
-                process(listener -> listener.onActivity(mainActivity));
-            }
-
-            if (mController != controller) {
-                mController = controller;
-
-                process(listener -> listener.onController(controller));
+            if (!mInitDone) {
+                mInitDone = true;
+                process(PlayerHandlerEventListener::onInitDone);
             }
         }
     }

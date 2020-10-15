@@ -53,10 +53,8 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     }
 
     @Override
-    public void onActivity(Activity activity) {
-        super.onActivity(activity);
-
-        AppSettingsPresenter.instance(activity).setPlayerUiManager(this);
+    public void onInitDone() {
+        AppSettingsPresenter.instance(mActivity).setPlayerUiManager(this);
     }
 
     @Override
