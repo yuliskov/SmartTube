@@ -11,9 +11,9 @@
     <string name="subscriptions_signin_title">Смотрите новые видео с каналов, на которые вы подписаны</string>
     <string name="subscriptions_signin_subtitle">Для начала вам нужно войти в аккаунт.</string>
     <string name="subscriptions_signin_button_text">ВОЙТИ</string>
-    <string name="library_signin_title">Здесь хранятся понравившиеся, сохраненные и видео из подписок</string>
+    <string name="msg_signin_to_show_more">Здесь хранятся понравившиеся, сохраненные и видео из подписок</string>
     <string name="library_signin_subtitle">Чтобы увидеть их, войдите в аккаунт.</string>
-    <string name="library_signin_button_text">ВОЙТИ</string>
+    <string name="action_signin">ВОЙТИ</string>
     <string name="video_formats_title">Видео форматы</string>
     <string name="audio_formats_title">Аудио форматы</string>
     <string name="subtitle_formats_title">Субтитры</string>
@@ -36,4 +36,5 @@
     <string name="video_buffer_size_high">Высокий</string>
     <string name="update_changelog">Изменения</string>
     <string name="install_update">Установить обновление</string>
+    <string name="msg_category_is_empty">Текущий раздел не заполнен</string>
 </resources>

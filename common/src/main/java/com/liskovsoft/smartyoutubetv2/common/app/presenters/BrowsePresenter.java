@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Handler;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -13,10 +14,12 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Header;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.app.models.signin.SignInData;
+import com.liskovsoft.smartyoutubetv2.common.app.models.errors.CategoryEmptyError;
+import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.HeaderPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -46,6 +49,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     private final Map<Integer, Observable<List<MediaGroup>>> mRowMapping;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
+    private Disposable mSignCheckAction;
     private long mCurrentHeaderId = -1;
     private long mLastUpdateTimeMs;
 
@@ -167,7 +171,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
             return;
         }
 
-        disposeUpdateAction();
+        RxUtils.disposeActions(mUpdateAction, mScrollAction, mSignCheckAction);
 
         for (Header header : mHeaders) {
             if (header.getId() == headerId) {
@@ -175,14 +179,6 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
                 mView.clearHeader(header);
                 updateHeader(header);
             }
-        }
-    }
-
-    private void disposeUpdateAction() {
-        boolean updateInProgress = mUpdateAction != null && !mUpdateAction.isDisposed();
-
-        if (updateInProgress) {
-            mUpdateAction.dispose();
         }
     }
 
@@ -220,6 +216,18 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
         mGridMapping.put(MediaGroup.TYPE_HISTORY, mediaGroupManager.getHistoryObserve());
     }
 
+    private void updateRowsHeader(Header header, Observable<List<MediaGroup>> groups, boolean authCheck) {
+        Log.d(TAG, "loadRowsHeader: Start loading header: " + header.getTitle());
+
+        authCheck(authCheck, () -> updateRowsHeader(header, groups));
+    }
+
+    private void updateGridHeader(Header header, Observable<MediaGroup> group, boolean authCheck) {
+        Log.d(TAG, "loadGridHeader: Start loading header: " + header.getTitle());
+
+        authCheck(authCheck, () -> updateGridHeader(header, group));
+    }
+
     private void continueGroup(VideoGroup group) {
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
@@ -236,18 +244,42 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
                         , () -> mView.showProgressBar(false));
     }
 
-    private void updateRowsHeader(Header header, Observable<List<MediaGroup>> groups, boolean authCheck) {
-        Log.d(TAG, "loadRowsHeader: Start loading header: " + header.getTitle());
+    private void authCheck(boolean check, Runnable callback) {
+        if (!check) {
+            callback.run();
+            return;
+        }
+
+        SignInManager signInManager = mMediaService.getSignInManager();
+
+        mSignCheckAction = signInManager.isSignedObserve()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        isSigned -> {
+                            if (isSigned) {
+                                callback.run();
+                            } else {
+                                mView.updateErrorIfEmpty(new SignInError(mContext));
+                                mView.showProgressBar(false);
+                            }
+                        }
+                );
+                
+    }
+
+    private void updateRowsHeader(Header header, Observable<List<MediaGroup>> groups) {
+        Log.d(TAG, "updateRowsHeader: Start loading header: " + header.getTitle());
 
         mUpdateAction = groups
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mediaGroups -> updateRowsHeader(header, mediaGroups)
-                        , error -> Log.e(TAG, "loadRowsHeader error: " + error)
+                        , error -> Log.e(TAG, "updateRowsHeader error: " + error)
                         , () -> {
                             mView.showProgressBar(false);
-                            mView.updateHeaderIfEmpty(new SignInData(mContext, header));
+                            mView.updateErrorIfEmpty(new CategoryEmptyError(mContext));
                         });
     }
 
@@ -264,8 +296,8 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
         }
     }
 
-    private void updateGridHeader(Header header, Observable<MediaGroup> group, boolean authCheck) {
-        Log.d(TAG, "loadGridHeader: Start loading header: " + header.getTitle());
+    private void updateGridHeader(Header header, Observable<MediaGroup> group) {
+        Log.d(TAG, "updateGridHeader: Start loading header: " + header.getTitle());
 
         mUpdateAction = group
                 .subscribeOn(Schedulers.newThread())
@@ -275,10 +307,10 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
                             mView.updateHeader(VideoGroup.from(mediaGroup, header));
                             updateRefreshTime();
                         }
-                        , error -> Log.e(TAG, "loadGridHeader error: " + error)
+                        , error -> Log.e(TAG, "updateGridHeader error: " + error)
                         , () -> {
                             mView.showProgressBar(false);
-                            mView.updateHeaderIfEmpty(new SignInData(mContext, header));
+                            mView.updateErrorIfEmpty(new CategoryEmptyError(mContext));
                         });
     }
 }

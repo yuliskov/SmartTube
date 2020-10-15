@@ -17,8 +17,7 @@ import androidx.leanback.widget.PresenterSelector;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowHeaderPresenter.ViewHolder;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.app.models.signin.ErrorFragmentData;
+import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Header;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
@@ -119,7 +118,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     @Override
-    public void updateHeaderIfEmpty(ErrorFragmentData data) {
+    public void updateErrorIfEmpty(ErrorFragmentData data) {
         mHandler.postDelayed(() -> showErrorIfEmpty(data), 500); // need delay because header may be not updated
     }
 

@@ -20,6 +20,7 @@ Current release of the application allows you to:
 - Search for videos
 - View subscribed channel content
 - Change various settings for the video player
+- Animated previews
 - Android TV channels and search support
 
 # Screens
@@ -35,13 +36,13 @@ is used to display the Video cards.
     <img src="images/browse.png" alt="Main"/>
 </p>
 <p align="center">
-    <img src="images/browse_music.png" alt="Browse Music"/>
+    <img src="images/browse_subscriptions.png" alt="Browse Subscriptions"/>
 </p>
 
 
 ## [Playback Activity](/smarttubetv/src/main/java/com/liskovsoft/smartyoutubetv2/tv/ui/playback/PlaybackActivity.java)
 
-The Playback Activity is used to play the video from categories. Which used the [PlaybackOverlayFragment](/smarttubetv/src/main/java/com/liskovsoft/smartyoutubetv2/tv/ui/playback/PlaybackFragment.java) to display the playback controls over the top of the PlaybackActivity.
+The Playback Activity is used to play the video from categories. Which used the [PlaybackFragment](/smarttubetv/src/main/java/com/liskovsoft/smartyoutubetv2/tv/ui/playback/PlaybackFragment.java) to display the playback controls over the top of the PlaybackActivity.
 
 <p align="center">
     <img src="images/video.png" alt="Video"/>

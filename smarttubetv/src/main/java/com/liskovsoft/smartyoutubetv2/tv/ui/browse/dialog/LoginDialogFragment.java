@@ -2,12 +2,15 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.app.BrowseSupportFragment.MainFragmentAdapter;
 import androidx.leanback.app.ErrorSupportFragment;
-import com.liskovsoft.smartyoutubetv2.common.app.models.signin.ErrorFragmentData;
+import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class LoginDialogFragment extends ErrorSupportFragment implements BrowseSupportFragment.MainFragmentAdapterProvider {
@@ -46,23 +49,24 @@ public class LoginDialogFragment extends ErrorSupportFragment implements BrowseS
     }
 
     private void setDialogContent() {
-        if (mDialogData == null) {
+        if (mDialogData == null || getActivity() == null) {
             return;
         }
 
         setImageDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.lb_ic_sad_cloud));
 
         setMessage(mDialogData.getMessage());
-        //setDefaultBackground(TRANSLUCENT);
 
-        setButtonText(mDialogData.getActionText());
-        setButtonClickListener(arg0 -> {
-            //BrowseErrorFragment errorFragment = new BrowseErrorFragment();
-            //getFragmentManager().beginTransaction().replace(R.id.main_frame, errorFragment)
-            //        .addToBackStack(null).commit();
+        if (mDialogData.getActionText() != null) {
+            setButtonText(mDialogData.getActionText());
+            setButtonClickListener(v -> mDialogData.onAction());
+        } else {
+            Button mButton = (Button) Helpers.getField(this, "mButton");
 
-            mDialogData.onAction();
-        });
+            if (mButton != null) {
+                mButton.setVisibility(View.GONE);
+            }
+        }
     }
 
     @Override
