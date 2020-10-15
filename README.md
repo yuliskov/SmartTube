@@ -4,7 +4,7 @@
     <img src="images/app_banner.png" alt="Loading Card"/>
 </p>
 
-SmartTubeNext is an _unofficial_ YouTube client for Android TV. The project currently consists of:
+SmartTubeNext is an _unofficial_ YouTube client for Android TV.
 
 Current release features:
 
