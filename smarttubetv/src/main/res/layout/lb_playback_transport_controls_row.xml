@@ -63,6 +63,14 @@
         android:paddingEnd="?attr/browsePaddingEnd"
         android:clipChildren="false"
         android:clipToPadding="false">
+
+        <!-- MOD: hide player controls on UP button -->
+        <LinearLayout android:id="@+id/hide_dock"
+                      android:orientation="horizontal"
+                      android:layout_width="match_parent"
+                      android:focusable="false"
+                      android:layout_height="0dp"/>
+
         <FrameLayout
             android:id="@+id/controls_dock"
             android:layout_width="match_parent"
