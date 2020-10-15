@@ -37,6 +37,8 @@ build/
 # my other stuff
 /smartyoutubetv2/release
 /smarttube/release
+/smarttubetv/release
+/smarttubemobile/release
 google-services.json
 *.hprof
 log.txt
