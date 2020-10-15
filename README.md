@@ -8,7 +8,7 @@ SmartTubeNext is an _unofficial_ YouTube client for Android TV. The project curr
 
 Current release features:
 
-- Run Android 4.3 and above
+- Run on Android 4.3 and above
 - Browse News, Games, Music
 - Browse Subscriptions, History, Playlists
 - Play videos
