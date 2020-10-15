@@ -93,16 +93,16 @@ of the following components:
 
 To build, install and run a debug version, run this from the root of the project:
 
-````./gradlew assembleDebug```
+```./gradlew assembleDebug```
 
 # Unit Tests
 
 To run the unit tests for the application:
 
-````./gradlew testDebugUnitTest```
+```./gradlew testDebugUnitTest```
 
 # User Interface Tests
 
 To run the user interface tests for the application:
 
-````./gradlew connectedDebugAndroidTest```
+```./gradlew connectedDebugAndroidTest```
