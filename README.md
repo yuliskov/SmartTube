@@ -1,5 +1,4 @@
 # SmartTubeNext 
-===============
 
 <p align="center">
     <img src="images/app_banner.png" alt="Loading Card"/>
@@ -7,24 +6,27 @@
 
 SmartTubeNext is an _unofficial_ YouTube client for Android TV. The project currently consists of:
 
-- Android TV Application
-- Unit Tests for media parser
-- User Interface Tests (planned)
+- Android TV application
+- Unit tests for media service
+- User interface tests (planned)
 
 
 Current release of the application allows you to:
 
-- Browse feeds from a range of Video Categories
-- Watch Vine video posts
-- Search for Vine Users and Hashtags
-- View video grids for Users and Hashtags
-- Toggle the Auto-Loop option via Settings
+- Browse range of public video categories: News, Games, Music
+- Browse range of private video categories: Subscriptions, History, Playlists
+- Apply actions for currently playing video: Like, Dislike, Subscribe
+- Play videos
+- Search for videos
+- View subscribed channel content
+- Change various settings for the video player
+- Android TV channels and search support
 
-#Screens
+# Screens
 
-##[Browse Fragment](/app/src/main/java/com/hitherejoe/vineyard/ui/fragment/MainFragment.java)
+## [Browse Fragment](/smarttubetv/src/main/java/com/liskovsoft/smartyoutubetv2/tv/ui/browse/BrowseFragment.java)
 
-The browse fragment is what is used to display the browseable categories, post and options card. The
+The browse fragment is what is used to display the browseable categories and options card. The
 [Icon Header Item Presenter](/app/src/main/java/com/hitherejoe/vineyard/ui/presenter/IconHeaderItemPresenter.java) is used
 to setup and display the categories in the headers dock, the [Post Adapter](/app/src/main/java/com/hitherejoe/vineyard/ui/adapter/PostAdapter.java) and  [Card Presenter](/app/src/main/java/com/hitherejoe/vineyard/ui/presenter/CardPresenter.java)
 is used to display the Post cards and the [Icon Item Presenter](/app/src/main/java/com/hitherejoe/vineyard/ui/presenter/IconItemPresenter.java) sets and displays
@@ -34,7 +36,7 @@ the option and error message cards.
     <img src="images/browse.png" alt="Main"/>
 </p>
 <p align="center">
-    <img src="images/browse_preview_post.gif" alt="Preview Post"/>
+    <img src="images/browse_music.png" alt="Browse Music"/>
 </p>
 
 
