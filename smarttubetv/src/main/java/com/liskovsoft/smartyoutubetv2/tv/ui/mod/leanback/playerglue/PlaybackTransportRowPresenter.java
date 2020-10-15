@@ -295,25 +295,35 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                     switch (keyCode) {
                         case KeyEvent.KEYCODE_DPAD_UP:
                         case KeyEvent.KEYCODE_DPAD_DOWN:
+                            if (!mInSeek) {
+                                enableCompactMode(false);
+                            }
+
                             // eat DPAD UP/DOWN in seek mode
                             return mInSeek;
                         case KeyEvent.KEYCODE_DPAD_LEFT:
                         case KeyEvent.KEYCODE_MINUS:
                         case KeyEvent.KEYCODE_MEDIA_REWIND:
+                            boolean isRewindKey = keyCode == KeyEvent.KEYCODE_MEDIA_REWIND;
+
                             if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                                enableCompactMode(isRewindKey);
                                 onBackward();
                             } else {
-                                // MOD: don't pause after seeking
+                                // MOD: resume immediately after seeking
                                 stopSeek(false);
                             }
                             return true;
                         case KeyEvent.KEYCODE_DPAD_RIGHT:
                         case KeyEvent.KEYCODE_PLUS:
                         case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
+                            boolean isFastForwardKey = keyCode == KeyEvent.KEYCODE_MEDIA_FAST_FORWARD;
+
                             if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                                enableCompactMode(isFastForwardKey);
                                 onForward();
                             } else {
-                                // MOD: don't pause after seeking
+                                // MOD: resume immediately after seeking
                                 stopSeek(false);
                             }
                             return true;
@@ -400,11 +410,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             } else {
                 mPositionsLength = 0;
             }
-            // MOD: seek ui tweaks
-            //mControlsVh.view.setVisibility(View.GONE);
-            //mSecondaryControlsVh.view.setVisibility(View.INVISIBLE);
-            //mDescriptionViewHolder.view.setVisibility(View.INVISIBLE);
-            //mThumbsBar.setVisibility(View.VISIBLE);
+
             return true;
         }
 
@@ -422,10 +428,21 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             mSeekDataProvider = null;
             mPositions = null;
             mPositionsLength = 0;
-            mControlsVh.view.setVisibility(View.VISIBLE);
-            mSecondaryControlsVh.view.setVisibility(View.VISIBLE);
-            mDescriptionViewHolder.view.setVisibility(View.VISIBLE);
-            mThumbsBar.setVisibility(View.INVISIBLE);
+        }
+
+        // MOD: seek ui tweaks
+        void enableCompactMode(boolean enable) {
+            if (enable) {
+                mControlsVh.view.setVisibility(View.GONE);
+                mSecondaryControlsVh.view.setVisibility(View.INVISIBLE);
+                mDescriptionViewHolder.view.setVisibility(View.INVISIBLE);
+                mThumbsBar.setVisibility(View.VISIBLE);
+            } else {
+                mControlsVh.view.setVisibility(View.VISIBLE);
+                mSecondaryControlsVh.view.setVisibility(View.VISIBLE);
+                mDescriptionViewHolder.view.setVisibility(View.VISIBLE);
+                mThumbsBar.setVisibility(View.INVISIBLE);
+            }
         }
 
         void dispatchItemSelection() {
@@ -676,6 +693,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
     public void onReappear(RowPresenter.ViewHolder rowViewHolder) {
         ViewHolder vh = (ViewHolder) rowViewHolder;
         if (vh.view.hasFocus()) {
+            vh.enableCompactMode(false);
             vh.mProgressBar.requestFocus();
         }
     }
