@@ -1,4 +1,4 @@
-include ':smartyoutubetv2', ':common'
+include ':smarttubetv', ':common'
 
 def rootDir = settingsDir
 

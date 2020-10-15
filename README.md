@@ -1,113 +1,170 @@
-# Android TV Leanback Support Library sample - Videos by Google
+# SmartTubeNext 
+===============
 
-[![Join the chat at https://gitter.im/googlesamples/androidtv-Leanback](https://badges.gitter.im/googlesamples/androidtv-Leanback.svg)](https://gitter.im/googlesamples/androidtv-Leanback?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+<p align="center">
+    <img src="images/app_banner.png" alt="Loading Card"/>
+</p>
 
-This sample is a Videos By Google app, designed to run on an Android TV device (such as the Nexus Player), which demonstrates how to use the Leanback Support library which enables you to easily develop beautiful Android TV apps with a user-friendly UI that complies with the UX guidelines of Android TV.
+SmartTubeNext is an _unofficial_ YouTube client for Android TV. The project currently consists of:
 
-
-## Getting Started
-
-- Clone this repo:
-
-```sh
-git clone https://github.com/googlesamples/androidtv-Leanback.git
-```
-
-- Open the project in [Android Studio][studio].
-- Compile and deploy to your Android TV device (such as a Nexus Player).
-
-Need more information about getting started with Android TV? Check the [official docs][getting-started].
-
-## Explore the sample
-
-- Choose a layout
-  - Videos grouped by [category][mainfragment] (See BrowseFragment in [screenshots][screenshots])
-  - Freeform [vertical grid][verticalgridfragment] of videos (See Vertical Grid Fragment in [screenshots][screenshots])
-- Customize video cards with a [Card Presenter][cardpresenter] (See Card Views in [screenshots][screenshots])
-- Display in-depth [details][detailsfragment] about your video
-- Play a video
-  - [Playback with ExoPlayer2][playbackfragment]
-  - [Add extra buttons to control playback][videoplayerglue]
-- [Display an error][errorfragment]
-- Make your app globally searchable
-  - Review searchable training [document][searchable]
-     - Creating a [content provider][videoprovider]
-     - Defining [searchable.xml][searchable.xml]
-     - Receive search intent in [manifest][manifestsearch]
-- [Search][searchfragment] within your app
-- [Onboard][onboardingfragment] new users (explain new features)
-- Customize [preference and settings][settingsfragment]
-- Add a wizard with [guided steps][guidedstep]
-
-[screenshots]: https://github.com/googlesamples/androidtv-Leanback#screenshots
-
-[manifestsearch]: https://github.com/googlesamples/androidtv-Leanback/blob/master/app/src/main/AndroidManifest.xml#L79
-
-[searchfragment]: https://github.com/googlesamples/androidtv-Leanback/blob/master/app/src/main/java/com/example/android/tvleanback/ui/SearchFragment.java
-
-[cardpresenter]: https://github.com/googlesamples/androidtv-Leanback/blob/master/app/src/main/java/com/example/android/tvleanback/presenter/CardPresenter.java
-
-[searchable.xml]: https://github.com/googlesamples/androidtv-Leanback/blob/master/app/src/main/res/xml/searchable.xml
-
-[searchable]: https://developer.android.com/training/tv/discovery/searchable.html
-
-[videoprovider]: https://github.com/googlesamples/androidtv-Leanback/blob/master/app/src/main/java/com/example/android/tvleanback/data/VideoProvider.java
-
-[errorfragment]: https://github.com/googlesamples/androidtv-Leanback/blob/master/app/src/main/java/com/example/android/tvleanback/ui/BrowseErrorFragment.java
-
-[mainfragment]: https://github.com/googlesamples/androidtv-Leanback/blob/master/app/src/main/java/com/example/android/tvleanback/ui/MainFragment.java
-
-[detailsfragment]: https://github.com/googlesamples/androidtv-Leanback/blob/master/app/src/main/java/com/example/android/tvleanback/ui/VideoDetailsFragment.java
-
-[verticalgridfragment]: https://github.com/googlesamples/androidtv-Leanback/blob/master/app/src/main/java/com/example/android/tvleanback/ui/VerticalGridFragment.java
-
-[guidedstep]: https://github.com/googlesamples/androidtv-Leanback/blob/master/app/src/main/java/com/example/android/tvleanback/ui/GuidedStepActivity.java
-
-[onboardingfragment]: https://github.com/googlesamples/androidtv-Leanback/blob/master/app/src/main/java/com/example/android/tvleanback/ui/OnboardingFragment.java
-
-[settingsfragment]: https://github.com/googlesamples/androidtv-Leanback/blob/master/app/src/main/java/com/example/android/tvleanback/ui/SettingsFragment.java
-
-[videoplayerglue]: https://github.com/googlesamples/androidtv-Leanback/blob/master/app/src/main/java/com/example/android/tvleanback/player/VideoPlayerGlue.java
-
-[playbackfragment]: https://github.com/googlesamples/androidtv-Leanback/blob/master/app/src/main/java/com/example/android/tvleanback/ui/PlaybackFragment.java
-
-## Additonal Resouroces
-
-- [Android TV Introduction](http://www.android.com/tv/)
-- [Android TV Developer Documentation](http://developer.android.com/tv)
-- [Android TV Apps in Google Play Store][store-apps]
+- Android TV Application
+- Unit Tests for media parser
+- User Interface Tests (planned)
 
 
-## Screenshots
+Current release of the application allows you to:
 
-[![Screenshot](screenshots/atv-leanback-all.png)](https://raw.githubusercontent.com/googlesamples/androidtv-Leanback/master/screenshots/atv-leanback-all.png)
+- Browse feeds from a range of Video Categories
+- Watch Vine video posts
+- Search for Vine Users and Hashtags
+- View video grids for Users and Hashtags
+- Toggle the Auto-Loop option via Settings
 
-## Support
+#Screens
 
-If you need additional help, our community might be able to help.
+##[Browse Fragment](/app/src/main/java/com/hitherejoe/vineyard/ui/fragment/MainFragment.java)
 
-- Android TV Google+ Community: [https://g.co/androidtvdev](https://g.co/androidtvdev)
-- Stack Overflow: [http://stackoverflow.com/questions/tagged/android-tv](http://stackoverflow.com/questions/tagged/android-tv)
+The browse fragment is what is used to display the browseable categories, post and options card. The
+[Icon Header Item Presenter](/app/src/main/java/com/hitherejoe/vineyard/ui/presenter/IconHeaderItemPresenter.java) is used
+to setup and display the categories in the headers dock, the [Post Adapter](/app/src/main/java/com/hitherejoe/vineyard/ui/adapter/PostAdapter.java) and  [Card Presenter](/app/src/main/java/com/hitherejoe/vineyard/ui/presenter/CardPresenter.java)
+is used to display the Post cards and the [Icon Item Presenter](/app/src/main/java/com/hitherejoe/vineyard/ui/presenter/IconItemPresenter.java) sets and displays
+the option and error message cards.
 
-## Dependencies
+<p align="center">
+    <img src="images/browse.png" alt="Main"/>
+</p>
+<p align="center">
+    <img src="images/browse_preview_post.gif" alt="Preview Post"/>
+</p>
 
-If you use Android Studio as recommended, the following dependencies will **automatically** be installed by Gradle.
 
-- Android SDK v7 appcompat library
-- Android SDK v17 leanback support library
-- Android SDK v7 recyclerview library
+##[Playback Activity](/app/src/main/java/com/hitherejoe/vineyard/ui/activity/PlaybackActivity.java)
 
-## Contributing
+The Playback Activity is used to play the video from a Vine post. Which used the [PlaybackOverlayFragment](/app/src/main/java/com/hitherejoe/vineyard/ui/fragment/PlaybackOverlayFragment.java) to display the playback controls over the top of the PlaybackActivity.
 
-We love contributions! :smile: Please follow the steps in the [CONTRIBUTING guide][contributing] to get started. If you found a bug, please file it [here][bugs].
+<p align="center">
+    <img src="images/video.png" alt="Video"/>
+</p>
 
-## License
+<p align="center">
+    <img src="images/video_related.png" alt="Video Related"/>
+</p>
 
-Licensed under the Apache 2.0 license. See the [LICENSE file][license] for details.
 
-[store-apps]: https://play.google.com/store/apps/collection/promotion_3000e26_androidtv_apps_all
-[studio]: https://developer.android.com/tools/studio/index.html
-[getting-started]: https://developer.android.com/training/tv/start/start.html
-[bugs]: https://github.com/googlesamples/androidtv-Leanback/issues/new
-[contributing]: CONTRIBUTING.md
-[license]: LICENSE
+##[Search Fragment](/app/src/main/java/com/hitherejoe/vineyard/ui/fragment/SearchFragment.java)
+
+The Search Fragment allows users to search for Vine Posts by either tags or usernames. The
+[Tag Presenter](/app/src/main/java/com/hitherejoe/vineyard/ui/presenter/TagPresenter.java) is used to
+display the tag/username query results, the posts are then displayed beneath whenever a tag/username
+result becomes focused.
+
+<p align="center">
+    <img src="images/search.png" alt="Search"/>
+</p>
+
+<p align="center">
+    <img src="images/search_no_results.png" alt="Search No Results"/>
+</p>
+
+##[Post Grid Fragment](/app/src/main/java/com/hitherejoe/vineyard/ui/fragment/PostGridFragment.java)
+
+The Post Grid Fragment is used to show a grid of videos from either a Hashtag or User feed. This screen
+is launched when a hashtag/username result is clicked in the [Search Fragment](/app/src/main/java/com/hitherejoe/vineyard/ui/fragment/SearchFragment.java).
+
+<p align="center">
+    <img src="images/post_grid.png" alt="Post Grid"/>
+</p>
+
+##[AutoLoop Step Fragment](/app/src/main/java/com/hitherejoe/vineyard/ui/fragment/AutoLoopStepFragment.java)
+
+The AutoLoop Step Fragment is used to toggle the AutoLoop setting for post videos. When enabled,
+videos will automatically loop until the video is either stopped or skipped. If this is not enabled
+then videos will automatically play until the final one in the playlist is reached.
+
+<p align="center">
+    <img src="images/settings.png" alt="Settings"/>
+</p>
+
+#Custom Components
+
+Many of the screens used some of these custom components created especially for the needs of this app:
+
+##[Video Card View](/app/src/main/java/com/hitherejoe/vineyard/ui/widget/VideoCardView.java)
+
+<p align="center">
+    <img src="images/video_card_view.gif" alt="Video Card View"/>
+</p>
+
+This view extends the BaseCardView class so that we can make our own custom CardView. The functionality
+of this view is display a video preview of the vine post card that is currently in focus. It's made up
+of the following components:
+
+- [Looping Video View](/app/src/main/java/com/hitherejoe/vineyard/ui/widget/LoopingVideoView.java) - This is a custom VideoView that automatically loops a video without sound.
+- [Preview Card View](/app/src/main/java/com/hitherejoe/vineyard/ui/widget/PreviewCardView.java) - This is the layout class used by the video card view.
+
+##[Pagination Adapter](/app/src/main/java/com/hitherejoe/vineyard/ui/adapter/PaginationAdapter.java)
+
+Here I created a custom adapter by extending the standard ArrayObjectAdapter to allow the application
+to handle pagination requests. When the final item in a row of Posts becomes focused, the paginated
+request is triggered and the [Loading Card View](/app/src/main/java/com/hitherejoe/vineyard/ui/widget/LoadingCardView.java) is displayed
+until the results are returned.
+
+##[Loading Card View](/app/src/main/java/com/hitherejoe/vineyard/ui/widget/LoadingCardView.java)
+
+The Loading Card View again extends the BaseCardView class and is a simple cardview that displays
+a loading indicator to the user. This is used when Pagination is in use (using the PaginationAdapter)
+to notify the user that Posts are being loaded.
+
+<p align="center">
+    <img src="images/loading.gif" alt="Loading Card"/>
+</p>
+
+##[Tag Card View](/app/src/main/java/com/hitherejoe/vineyard/ui/widget/TagCardView.java)
+
+The Tag Card View again extends the BaseCardView class and is a simple cardview that displays either
+a hashtag or username. This is used to display the search results in the SearchFragment.
+
+<p align="center">
+    <img src="images/tag_card.png" alt="Tag Card"/>
+</p>
+
+##[Icon Card View](/app/src/main/java/com/hitherejoe/vineyard/ui/widget/IconCardView.java)
+
+The Icon Card View again extends the BaseCardView class and is an interactable cardview that can be used to
+display an icon with both a title and description. Currently I use this for several different situations:
+
+- Displaying options
+
+<p align="center">
+    <img src="images/options_card.png" alt="Options Card"/>
+</p>
+
+- Displaying a 'Try Again' card when there is an error fetching results
+
+<p align="center">
+    <img src="images/try_again_card.png" alt="Try Again Card"/>
+</p>
+
+- Displaying a 'Check Again' card when an empty result list is returned
+
+<p align="center">
+    <img src="images/check_again_card.png" alt="Check Again Card"/>
+</p>
+
+#Building
+
+To build, install and run a debug version, run this from the root of the project:
+
+````./gradlew assembleDebug```
+
+#Unit Tests
+
+To run the unit tests for the application:
+
+````./gradlew testDebugUnitTest```
+
+#User Interface Tests
+
+To run the user interface tests for the application:
+
+````./gradlew connectedDebugAndroidTest```

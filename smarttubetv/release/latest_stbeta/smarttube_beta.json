@@ -1,0 +1,11 @@
+{
+    "package": {
+        "downloadUrlList": ["https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.apk"]
+    },
+
+    "1.4": {
+        "versionCode": 24,
+        "changelog": ["Added playback options"],
+        "changelog_ru": ["Добавлены настройки воспроизведения"]
+    }
+}
