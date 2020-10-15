@@ -19,9 +19,9 @@ Current release features:
 - Animated previews for videos
 - Android TV channels and search support
 
-[Ask a question](https://t.me/SmartTubeNext_en)
+__[Ask a question](https://t.me/SmartTubeNext_en)__
 
-[Latest release](https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.apk)
+__[Latest release](https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.apk)__
 
 # Screens
 
