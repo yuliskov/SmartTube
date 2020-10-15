@@ -19,9 +19,10 @@ Current release features:
 - Animated previews for videos
 - Android TV channels and search support
 
-__[Ask a question](https://t.me/SmartTubeNext_en)__
+__Useful links__:
 
-__[Latest release](https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.apk)__
+- __[Latest release](https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.apk)__
+- __[Ask a question](https://t.me/SmartTubeNext_en)__
 
 # Screens
 
@@ -39,7 +40,6 @@ is used to display the Video cards.
     <img src="images/browse_subscriptions.png" alt="Browse Subscriptions"/>
 </p>
 
-
 ## [Playback Activity](/smarttubetv/src/main/java/com/liskovsoft/smartyoutubetv2/tv/ui/playback/PlaybackActivity.java)
 
 The Playback Activity is used to play the video from categories. Which used the [PlaybackFragment](/smarttubetv/src/main/java/com/liskovsoft/smartyoutubetv2/tv/ui/playback/PlaybackFragment.java) to display the playback controls over the top of the PlaybackActivity.
@@ -51,7 +51,6 @@ The Playback Activity is used to play the video from categories. Which used the 
 <p align="center">
     <img src="images/video_related.png" alt="Video Related"/>
 </p>
-
 
 ## [Search Fragment](/smarttubetv/src/main/java/com.liskovsoft/smartyoutubetv2/tv/ui/search/SearchFragment.java)
 
