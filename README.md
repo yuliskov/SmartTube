@@ -27,10 +27,9 @@ Current release of the application allows you to:
 ## [Browse Fragment](/smarttubetv/src/main/java/com/liskovsoft/smartyoutubetv2/tv/ui/browse/BrowseFragment.java)
 
 The browse fragment is what is used to display the browseable categories and options card. The
-[Icon Header Item Presenter](/app/src/main/java/com/hitherejoe/vineyard/ui/presenter/IconHeaderItemPresenter.java) is used
-to setup and display the categories in the headers dock, the [Post Adapter](/app/src/main/java/com/hitherejoe/vineyard/ui/adapter/PostAdapter.java) and  [Card Presenter](/app/src/main/java/com/hitherejoe/vineyard/ui/presenter/CardPresenter.java)
-is used to display the Post cards and the [Icon Item Presenter](/app/src/main/java/com/hitherejoe/vineyard/ui/presenter/IconItemPresenter.java) sets and displays
-the option and error message cards.
+[Icon Header Item Presenter](/smarttubetv/src/main/java/com/liskovsoft/smartyoutubetv2/tv/presenter/IconHeaderItemPresenter.java) is used
+to setup and display the categories in the headers dock and  [Card Presenter](/smarttubetv/src/main/java/com/liskovsoft/smartyoutubetv2/tv/presenter/CardPresenter.java)
+is used to display the Video cards.
 
 <p align="center">
     <img src="images/browse.png" alt="Main"/>
@@ -40,9 +39,9 @@ the option and error message cards.
 </p>
 
 
-##[Playback Activity](/app/src/main/java/com/hitherejoe/vineyard/ui/activity/PlaybackActivity.java)
+## [Playback Activity](/smarttubetv/src/main/java/com/liskovsoft/smartyoutubetv2/tv/ui/playback/PlaybackActivity.java)
 
-The Playback Activity is used to play the video from a Vine post. Which used the [PlaybackOverlayFragment](/app/src/main/java/com/hitherejoe/vineyard/ui/fragment/PlaybackOverlayFragment.java) to display the playback controls over the top of the PlaybackActivity.
+The Playback Activity is used to play the video from categories. Which used the [PlaybackOverlayFragment](/smarttubetv/src/main/java/com/liskovsoft/smartyoutubetv2/tv/ui/playback/PlaybackFragment.java) to display the playback controls over the top of the PlaybackActivity.
 
 <p align="center">
     <img src="images/video.png" alt="Video"/>
@@ -53,7 +52,7 @@ The Playback Activity is used to play the video from a Vine post. Which used the
 </p>
 
 
-##[Search Fragment](/app/src/main/java/com/hitherejoe/vineyard/ui/fragment/SearchFragment.java)
+## [Search Fragment](/app/src/main/java/com/hitherejoe/vineyard/ui/fragment/SearchFragment.java)
 
 The Search Fragment allows users to search for Vine Posts by either tags or usernames. The
 [Tag Presenter](/app/src/main/java/com/hitherejoe/vineyard/ui/presenter/TagPresenter.java) is used to
