@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_home">Home</string>
+    <string name="title_search">Zoeken</string>
+    <string name="title_subscriptions">Abonnementen</string>
+    <string name="title_history">Geschiedenis</string>
+    <string name="title_music">Muziek</string>
+    <string name="title_news">Nieuws</string>
+    <string name="title_gaming">Games</string>
+    <string name="title_playlists">Playlists</string>
+    <string name="subscriptions_signin_title">Bekijk je kanalen</string>
+    <string name="subscriptions_signin_subtitle">Aanmelden om je abonnementen te zien</string>
+    <string name="subscriptions_signin_button_text">AANMELDEN</string>
+    <string name="msg_signin_to_show_more">Bekijk je video\'s</string>
+    <string name="library_signin_subtitle">Aanmelden om je bibliotheek te zien</string>
+    <string name="action_signin">AANMELDEN</string>
+    <string name="video_formats_title">Video kwaliteit</string>
+    <string name="audio_formats_title">Audio kwaliteit</string>
+    <string name="subtitle_formats_title">Ondertitels</string>
+    <string name="default_video_option">Auto (max kwaliteit)</string>
+    <string name="default_audio_option">Auto (max kwaliteit)</string>
+    <string name="default_subtitle_option">Uit</string>
+    <string name="auto_frame_rate">Auto frame rate</string>
+    <string name="frame_rate_correction">Fix fps:\n%s</string>
+    <string name="category_background_playback">Weergave op achtergrond</string>
+    <string name="not_implemented">Niet geïmplementeerd</string>
+    <string name="option_background_playback_off">Uit</string>
+    <string name="option_background_playback_all">Video en audio</string>
+    <string name="option_background_playback_only_audio">Audio</string>
+    <string name="playback_settings">Weergave instellingen</string>
+    <string name="video_speed">Video snelheid</string>
+    <string name="resolution_switch">Resolutie aanpassen</string>
+    <string name="video_buffer">Video buffer</string>
+    <string name="video_buffer_size_low">Minimum</string>
+    <string name="video_buffer_size_med">Medium</string>
+    <string name="video_buffer_size_high">Maximum</string>
+    <string name="update_changelog">Wat is er nieuw ?</string>
+    <string name="install_update">Update installeren</string>
+    <string name="msg_category_is_empty">Oeps! Niets gevonden.</string>
+</resources>
