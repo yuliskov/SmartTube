@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class StateUpdater extends PlayerEventListenerHelper {
     private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
-    private static final int MAX_STATE_SIZE = 10;
+    private static final int MAX_PERSISTENT_STATE_SIZE = 20;
     private boolean mIsPlaying;
     private FormatItem mVideoFormat;
     private FormatItem mAudioFormat;
@@ -169,6 +169,10 @@ public class StateUpdater extends PlayerEventListenerHelper {
         int counter = 0;
 
         for (State state : mStates.values()) {
+            if (state.lengthMs <= MUSIC_VIDEO_LENGTH_MS) {
+                continue;
+            }
+
             counter++;
 
             if (sb.length() != 0) {
@@ -177,7 +181,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
             sb.append(state);
 
-            if (counter >= MAX_STATE_SIZE) {
+            if (counter >= MAX_PERSISTENT_STATE_SIZE) {
                 break;
             }
         }

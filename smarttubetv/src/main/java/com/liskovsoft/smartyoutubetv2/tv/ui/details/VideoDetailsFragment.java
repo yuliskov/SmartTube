@@ -183,7 +183,7 @@ public class VideoDetailsFragment extends DetailsSupportFragment implements Deta
                         new MovieDetailsOverviewLogoPresenter());
 
         detailsPresenter.setBackgroundColor(
-                ContextCompat.getColor(getActivity(), R.color.card_selected_background));
+                ContextCompat.getColor(getActivity(), R.color.card_selected_background_yellow));
         detailsPresenter.setInitialState(FullWidthDetailsOverviewRowPresenter.STATE_HALF);
 
         // Hook up transition element.

@@ -14,7 +14,7 @@ public class CategoryEmptyError implements ErrorFragmentData {
 
     @Override
     public void onAction() {
-        ViewManager.instance(mContext).startView(SignInView.class);
+        // NOP
     }
 
     @Override

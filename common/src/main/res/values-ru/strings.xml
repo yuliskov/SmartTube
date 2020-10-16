@@ -36,5 +36,5 @@
     <string name="video_buffer_size_high">Высокий</string>
     <string name="update_changelog">Изменения</string>
     <string name="install_update">Установить обновление</string>
-    <string name="msg_category_is_empty">Текущий раздел не заполнен</string>
+    <string name="msg_category_is_empty">Ой! Здесь ничего нет.</string>
 </resources>

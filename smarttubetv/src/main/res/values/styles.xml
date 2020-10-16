@@ -5,10 +5,10 @@
         <item name="android:windowBackground">@null</item>
     </style>
     <style name="App.Theme.Leanback.Browse" parent="Theme.Leanback.Browse">
-        <item name="android:windowBackground">@color/shelf_background2</item>
+        <item name="android:windowBackground">@color/shelf_background_black</item>
     </style>
     <style name="App.Theme.Leanback.GuidedStep" parent="Theme.Leanback.GuidedStep">
-        <item name="android:windowBackground">@color/shelf_background2</item>
+        <item name="android:windowBackground">@color/shelf_background_black</item>
     </style>
     <style name="LeanbackPreferences" parent="Theme.Leanback">
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Leanback</item>
