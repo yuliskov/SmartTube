@@ -27,7 +27,7 @@ public class HeaderGridFragment extends GridFragment implements VideoGroupFragme
     private static final String TAG = HeaderGridFragment.class.getSimpleName();
     private static final int COLUMNS_NUM = 4;
     private static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
-    private static final int CHECK_SCROLL_ITEMS_NUM = 10;
+    private static final int CHECK_SCROLL_ITEMS_NUM = 15;
     private VideoGroupObjectAdapter mGridAdapter;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private UriBackgroundManager mBackgroundManager;

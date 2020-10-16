@@ -12,7 +12,6 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
     private static final String TAG = VideoGroupObjectAdapter.class.getSimpleName();
     private final List<Video> mMediaItems;
     private VideoGroup mLastGroup;
-    private int mLastAddedSize;
 
     // TODO: Select presenter based on the video item type. Such channel, playlist, or simple video
     // https://github.com/googlearchive/leanback-showcase/blob/master/app/src/main/java/android/support/v17/leanback/supportleanbackshowcase/app/page/PageAndListRowFragment.java
@@ -42,11 +41,13 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
 
     public void append(VideoGroup group) {
         if (group != null) {
+            int begin = mMediaItems.size();
+
             mMediaItems.addAll(group.getVideos());
             mLastGroup = group;
-            mLastAddedSize = group.getVideos().size();
-            
-            notifyChanged();
+
+            // Fix double item blinking by specifying exact range
+            notifyItemRangeInserted(begin, mMediaItems.size() - begin);
         }
     }
 
