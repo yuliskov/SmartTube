@@ -125,9 +125,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
             return;
         }
 
-        MessageHelpers.showMessage(mContext, R.string.not_implemented);
-
-        //mDetailsPresenter.openVideo(item);
+        VideoMenuPresenter.instance(mContext).showMenu(item);
     }
 
     @Override

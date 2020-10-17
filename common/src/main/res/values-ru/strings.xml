@@ -37,4 +37,5 @@
     <string name="update_changelog">Изменения</string>
     <string name="install_update">Установить обновление</string>
     <string name="msg_category_is_empty">Ой! Здесь ничего нет.</string>
+    <string name="dialog_add_to_playlist">Добавить в плейлист</string>
 </resources>

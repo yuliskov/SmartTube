@@ -37,4 +37,5 @@
     <string name="update_changelog">Changelog</string>
     <string name="install_update">Install update</string>
     <string name="msg_category_is_empty">Oops! There is nothing in here.</string>
+    <string name="dialog_add_to_playlist">Add to playlist</string>
 </resources>

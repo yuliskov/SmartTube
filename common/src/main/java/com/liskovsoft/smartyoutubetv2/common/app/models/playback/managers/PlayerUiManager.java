@@ -17,6 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.Sugges
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
@@ -93,7 +94,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onPlaylistAddClicked() {
-        MessageHelpers.showMessage(mActivity, R.string.not_implemented);
+        VideoMenuPresenter mp = VideoMenuPresenter.instance(mActivity);
+
+        mp.showMenu(mController.getVideo());
     }
 
     @Override
@@ -136,7 +139,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onSuggestionItemLongClicked(Video item) {
-        MessageHelpers.showMessage(mActivity, R.string.not_implemented);
+        VideoMenuPresenter.instance(mActivity).showMenu(item);
     }
 
     @Override
