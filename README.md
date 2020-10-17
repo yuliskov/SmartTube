@@ -92,7 +92,12 @@ of the following components:
 
 To build, install and run a debug version, run this from the root of the project:
 
-```./gradlew assembleDebug```
+```
+git clone https://github.com/yuliskov/SmartTubeNext.git
+cd SmartTubeNext
+git submodule update --init
+./gradlew buildStbetaDebug
+```
 
 # Unit Tests
 

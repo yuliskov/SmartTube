@@ -6,6 +6,8 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
+import java.util.HashMap;
+
 public class TrackSelectorUtil {
     public static final String CODEC_SHORT_AVC = "avc";
     public static final String CODEC_SHORT_VP9 = "vp9";
@@ -13,6 +15,19 @@ public class TrackSelectorUtil {
     public static final String CODEC_SHORT_MP4A = "mp4a";
     public static final String CODEC_SHORT_VORBIS = "vorbis";
     private static final String SEPARATOR = ", ";
+    private static final HashMap<Integer, Integer> mResolutionMap = new HashMap<>();
+
+    static {
+        mResolutionMap.put(256, 144);
+        mResolutionMap.put(426, 240);
+        mResolutionMap.put(640, 360);
+        mResolutionMap.put(854, 480);
+        mResolutionMap.put(1280, 720);
+        mResolutionMap.put(1920, 1080);
+        mResolutionMap.put(2560, 1440);
+        mResolutionMap.put(3840, 2160);
+        mResolutionMap.put(7680, 4320);
+    }
 
     /**
      * Builds a track name for display.
@@ -23,7 +38,7 @@ public class TrackSelectorUtil {
     public static CharSequence buildTrackNameShort(Format format) {
         String trackName;
         if (MimeTypes.isVideo(format.sampleMimeType)) {
-            trackName = joinWithSeparator(joinWithSeparator(joinWithSeparator(joinWithSeparator(buildResolutionString(format),
+            trackName = joinWithSeparator(joinWithSeparator(joinWithSeparator(joinWithSeparator(buildResolutionShortString(format),
                     buildFPSString(format)), buildBitrateString(format)), extractCodec(format)), buildHDRString(format));
         } else if (MimeTypes.isAudio(format.sampleMimeType)) {
             trackName = joinWithSeparator(joinWithSeparator(joinWithSeparator(joinWithSeparator(buildLanguageString(format),
@@ -46,8 +61,18 @@ public class TrackSelectorUtil {
         return format.frameRate == Format.NO_VALUE ? "" : Helpers.formatFloat(format.frameRate) + "fps";
     }
 
-    private static String buildResolutionString(Format format) {
-        return format.width == Format.NO_VALUE || format.height == Format.NO_VALUE ? "" : format.height + "p";
+    /**
+     * Build short resolution: e.g. 720p, 1080p etc
+     */
+    private static String buildResolutionShortString(Format format) {
+        if (format.width == Format.NO_VALUE || format.height == Format.NO_VALUE) {
+            return "";
+        }
+
+        // Try to amplify resolution of aspect ratios that differ from 16:9
+        Integer height = mResolutionMap.get(format.width);
+
+        return height != null ? height + "p" : format.height + "p";
     }
 
     private static String buildAudioPropertyString(Format format) {
