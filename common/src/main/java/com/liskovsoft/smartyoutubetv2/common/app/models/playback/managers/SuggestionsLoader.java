@@ -71,7 +71,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
-        mMetadataAction = mediaItemManager.getMetadataObserve(video.videoId)
+        mMetadataAction = mediaItemManager.getMetadataObserve(video.mediaItem)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::loadSuggestions,

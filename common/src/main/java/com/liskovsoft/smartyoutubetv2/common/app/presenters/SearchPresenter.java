@@ -103,9 +103,7 @@ public class SearchPresenter implements VideoGroupPresenter<SearchView> {
             return;
         }
 
-        MessageHelpers.showMessage(mContext, R.string.not_implemented);
-
-        //mDetailsPresenter.openVideo(item);
+        VideoMenuPresenter.instance(mContext).showMenu(item);
     }
 
     public void onSearchText(String searchText) {

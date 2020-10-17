@@ -66,7 +66,7 @@ public class ChannelPresenter implements VideoGroupPresenter<ChannelView> {
 
     @Override
     public void onVideoItemLongClicked(Video item) {
-        MessageHelpers.showMessage(mContext, R.string.not_implemented);
+        VideoMenuPresenter.instance(mContext).showMenu(item);
     }
 
     @Override
