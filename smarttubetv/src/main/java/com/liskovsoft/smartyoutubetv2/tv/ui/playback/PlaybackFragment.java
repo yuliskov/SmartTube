@@ -17,6 +17,7 @@ import androidx.leanback.widget.OnItemViewClickedListener;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
+import androidx.leanback.widget.RowPresenter.ViewHolder;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
@@ -265,7 +266,19 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
         presenterSelector.addClassPresenter(
                 mPlayerGlue.getControlsRow().getClass(), mPlayerGlue.getPlaybackRowPresenter());
-        presenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter());
+        presenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter() {
+            @Override
+            protected void onBindRowViewHolder(RowPresenter.ViewHolder holder, Object item) {
+                super.onBindRowViewHolder(holder, item);
+
+                // Set position of item inside first row (playlist items)
+                if (getVideo() != null && getVideo().playlistIndex > 0 &&
+                    mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView().getSelectedPosition() == 0) {
+                    ViewHolder vh = (ListRowPresenter.ViewHolder) holder;
+                    vh.getGridView().setSelectedPosition(getVideo().playlistIndex);
+                }
+            }
+        });
 
         ArrayObjectAdapter rowsAdapter = new ArrayObjectAdapter(presenterSelector);
 
