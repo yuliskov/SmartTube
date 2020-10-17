@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- MOD: intention to add subtitle view -->
+<!-- MOD: intention to add subtitle/debug view -->
 <!-- More info: https://github.com/google/ExoPlayer/issues/6587 -->
 <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/playback_fragment_root"
         android:transitionGroup="false"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:ignore="UnusedAttribute">
 
     <!-- Add subtitle view -->
     <com.google.android.exoplayer2.ui.AspectRatioFrameLayout
@@ -26,8 +28,9 @@
                  android:paddingLeft="4dp"
                  android:paddingRight="4dp"
                  android:visibility="gone"
-                 android:layout_gravity="center"
-                 android:background="#80000000"/>
+                 android:layout_gravity="bottom|right"
+                 android:background="#80000000"
+                 tools:ignore="RtlHardcoded"/>
 
     <androidx.leanback.widget.NonOverlappingFrameLayout
         android:id="@+id/playback_fragment_background"

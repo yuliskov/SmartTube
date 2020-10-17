@@ -186,6 +186,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         appendDisplayInfo();
         //appendPlayerWindowIndex();
         appendVersion();
+        appendDeviceName();
 
         // Schedule next update
         mDebugViewGroup.removeCallbacks(this);
@@ -347,6 +348,10 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private void appendVersion() {
         appendRow("ExoPlayer Version", ExoPlayerLibraryInfo.VERSION);
         appendRow("App Version", AppInfoHelpers.getAppVersionName(mContext));
+    }
+
+    private void appendDeviceName() {
+        appendRow("Device Name", Helpers.getDeviceName());
     }
 
     private void appendRow(String name, boolean val) {
