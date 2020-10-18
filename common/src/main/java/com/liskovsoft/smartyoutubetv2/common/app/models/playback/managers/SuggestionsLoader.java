@@ -29,10 +29,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onSourceChanged(Video item) {
-        // Don't reload suggested when doing navigation over the playlist
-        if (!item.isPlaylistItem() || mController.isSuggestionsEmpty()) {
-            loadSuggestions(item);
-        }
+        loadSuggestions(item);
     }
 
     @Override
@@ -98,8 +95,6 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
             return;
         }
 
-        mController.clearSuggestions(); // clear previous videos
-
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
         mMetadataAction = mediaItemManager.getMetadataObserve(video.mediaItem)
@@ -120,6 +115,13 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
             Log.e(TAG, "loadSuggestions: Can't obtain suggestions for video: " + mController.getVideo().title);
             return;
         }
+
+        // Don't reload suggestions when watching playlist items
+        if (mController.getVideo().isPlaylistItem() && !mController.isSuggestionsEmpty()) {
+            return;
+        }
+
+        mController.clearSuggestions(); // clear previous videos
 
         for (MediaGroup group : suggestions) {
             mController.updateSuggestions(VideoGroup.from(group));
