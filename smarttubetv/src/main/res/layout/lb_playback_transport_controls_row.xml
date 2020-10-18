@@ -95,8 +95,7 @@
             />
 
             <TextView
-                android:id="@+id/video_quality"
-                android:text="QualityWidget"
+                android:id="@+id/quality_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
