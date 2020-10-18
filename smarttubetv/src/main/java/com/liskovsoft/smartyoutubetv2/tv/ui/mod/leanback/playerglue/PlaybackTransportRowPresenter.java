@@ -304,8 +304,6 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                         case KeyEvent.KEYCODE_DPAD_LEFT:
                         case KeyEvent.KEYCODE_MINUS:
                         case KeyEvent.KEYCODE_MEDIA_REWIND:
-                            //boolean isRewindKey = keyCode == KeyEvent.KEYCODE_MEDIA_REWIND;
-
                             if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
                                 enableCompactMode(true);
                                 onBackward();
@@ -317,8 +315,6 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                         case KeyEvent.KEYCODE_DPAD_RIGHT:
                         case KeyEvent.KEYCODE_PLUS:
                         case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
-                            //boolean isFastForwardKey = keyCode == KeyEvent.KEYCODE_MEDIA_FAST_FORWARD;
-
                             if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
                                 enableCompactMode(true);
                                 onForward();
