@@ -39,32 +39,32 @@
     <string name="search_hint">Recherche de vidéos</string>
 
     <!-- The description that will show up in the search settings for this source.  -->
-    <string name="settings_description">Vidéos de démonstration de l'/API Leanback</string>
+    <string name="settings_description">Vidéos de démonstration de l'API Leanback</string>
 
-    <string name="noah_description">pour construire une arche pour sauver la création de l'/inondation à venir.</string>
+    <string name="noah_description">pour construire une arche pour sauver la création de l'inondation à venir.</string>
     <string name="noah_title">Noé</string>
     <string name="dragon2_title">Comment former votre Dragon 2</string>
     <string name="dragon2_description">Situé dans le monde mythique des Vikings bourru et des dragons sauvages,
-        et basé sur le livre de Cressida Cowell, la comédie d'/action raconte l'/histoire de Hiccup, un
+        et basé sur le livre de Cressida Cowell, la comédie d'action raconte l'histoire de Hiccup, un
         adolescent viking qui ne correspond pas exactement à la tradition de longue date de sa tribu de
         tueurs de dragons héroiques. Le monde de Hiccup est bouleversé quand il rencontre un dragon
-        qui met au défi lui et ses collégues Vikings de voir le monde d'/un point de vue tout à fait différent.
+        qui met au défi lui et ses collégues Vikings de voir le monde d'un point de vue tout à fait différent.
     </string>
     <string name="maleficent_title">Maléfique</string>
-    <string name="maleficent_description">L'/histoire indicible de la méchante le plus emblématique de Disney
+    <string name="maleficent_description">L'histoire indicible de la méchante le plus emblématique de Disney
         1959 "Sleeping Beauty". Une belle jeune femme au coeur pur avec le noir renversant de ses
-        ailes, Maléfique a une vie idyllique grandir dans un royaume forestier paisible, jusqu'/a ce qu'/un
-        jour une armée d'/invasion d'/homme menace l'/harmonie de la terre.
+        ailes, Maléfique a une vie idyllique grandir dans un royaume forestier paisible, jusqu'a ce qu'un
+        jour une armée d'invasion d'homme menace l'harmonie de la terre.
     </string>
 
     <!-- Strings related to guided sequence activity -->
-    <string name="guidedstep_first_title">Premiére page de l'/étape guidée</string>
+    <string name="guidedstep_first_title">Premiére page de l'étape guidée</string>
     <string name="guidedstep_first_description">Premiére étape de la séquence guidée</string>
     <string name="guidedstep_first_breadcrumb">Etapes guidées: 1</string>
-    <string name="guidedstep_second_title">Deuxiéme page d'/étape guidée</string>
-    <string name="guidedstep_second_description">Présentation de différentes configurations d'/action</string>
+    <string name="guidedstep_second_title">Deuxiéme page d'étape guidée</string>
+    <string name="guidedstep_second_description">Présentation de différentes configurations d'action</string>
     <string name="guidedstep_second_breadcrumb">Etapes guidées: 2</string>
-    <string name="guidedstep_third_title">Troisiéme page d'/étape guidée</string>
+    <string name="guidedstep_third_title">Troisiéme page d'étape guidée</string>
     <string name="guidedstep_third_breadcrumb">Etapes guidées: 3</string>
     <string name="guidedstep_third_command">Vous avez choisi: </string>
     <string name="guidedstep_action_description">La description peut également étre assez longue.
@@ -86,10 +86,10 @@
     <string name="onboarding_title_welcome">Bienvenue dans l'exemple Leanback</string>
     <string name="onboarding_title_design">Concu pour Android TV</string>
     <string name="onboarding_title_simple">Simple à inclure</string>
-    <string name="onboarding_title_project">Consultez l'/exemple de projet</string>
+    <string name="onboarding_title_project">Consultez l'exemple de projet</string>
 
-    <string name="onboarding_description_welcome">Il s'/agit du fragment d'/intégration, qui s'/exécute lorsque l'/utilisateur ouvre l'/application pour la premiére fois</string>
-    <string name="onboarding_description_design">L'/exemple Leanback montre comment concevoir rapidement des applications conçues pour une interface utilisateur de 10-foot</string>
+    <string name="onboarding_description_welcome">Il s'agit du fragment d'intégration, qui s'exécute lorsque l'utilisateur ouvre l'application pour la premiére fois</string>
+    <string name="onboarding_description_design">L'exemple Leanback montre comment concevoir rapidement des applications conçues pour une interface utilisateur de 10-foot</string>
     <string name="onboarding_description_simple">Vous pouvez inclure la bibliothéque Leanback via gradle dans vos propres applications</string>
     <string name="onboarding_description_project">Recherchez-vous des conseils? Cet exemple est disponible sur GitHub afin que vous puissiez voir comment nous avons construit cela.</string>
     <string name="pref_title_settings">Paramétres de l'application</string>
@@ -99,7 +99,7 @@
     <string name="pref_title_screen_general">Réglages généraux</string>
     <string name="pref_key_screen_signin">se connecter</string>
     <string name="pref_title_screen_signin">Veuillez vous connecter</string>
-    <string name="pref_title_login_description">Entrez votre nom d'/utilisateur et votre mot de passe</string>
+    <string name="pref_title_login_description">Entrez votre nom d'utilisateur et votre mot de passe</string>
     <string name="pref_title_username">Nom d'utilisateur</string>
     <string name="pref_title_password">Mot de passe</string>
     <string name="pref_key_login">préférences de connexion</string>
