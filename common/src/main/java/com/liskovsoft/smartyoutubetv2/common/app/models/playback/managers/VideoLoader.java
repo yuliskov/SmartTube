@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
-import android.app.Activity;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
@@ -11,7 +10,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUiController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
@@ -20,7 +18,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class VideoLoader extends PlayerEventListenerHelper implements MetadataListener {
+public class VideoLoader extends PlayerEventListenerHelper {
     private static final String TAG = VideoLoader.class.getSimpleName();
     private final Playlist mPlaylist;
     private Video mLastVideo;
@@ -28,7 +26,6 @@ public class VideoLoader extends PlayerEventListenerHelper implements MetadataLi
     private Disposable mMetadataAction;
     private Disposable mFormatInfoAction;
     private boolean mEngineInitialized;
-    private MediaItem mCachedNextVideo;
     private int mRepeatMode = PlaybackUiController.REPEAT_ALL;
 
     public VideoLoader() {
@@ -140,11 +137,6 @@ public class VideoLoader extends PlayerEventListenerHelper implements MetadataLi
     }
 
     @Override
-    public void onMetadata(MediaItemMetadata metadata) {
-        mCachedNextVideo = metadata.getNextVideo();
-    }
-
-    @Override
     public void onRepeatModeClicked(int modeIndex) {
         mRepeatMode = modeIndex;
         AppPrefs.instance(mActivity).setVideoLoaderData(mRepeatMode);
@@ -185,8 +177,8 @@ public class VideoLoader extends PlayerEventListenerHelper implements MetadataLi
         }
 
         // Significantly improves next video loading time!
-        if (mCachedNextVideo != null) {
-            loadVideoFromNext(mCachedNextVideo);
+        if (current.nextMediaItem != null) {
+            loadVideoFromNext(current.nextMediaItem);
             return;
         }
 

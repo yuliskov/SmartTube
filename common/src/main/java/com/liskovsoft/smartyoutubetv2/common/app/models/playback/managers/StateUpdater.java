@@ -72,12 +72,16 @@ public class StateUpdater extends PlayerEventListenerHelper {
         }
 
         saveState();
+
         return false;
     }
 
     @Override
     public boolean onNextClicked() {
         saveState();
+
+        clearStateOfNextVideo();
+
         return false;
     }
 
@@ -141,6 +145,12 @@ public class StateUpdater extends PlayerEventListenerHelper {
         // In case we start to watch the video again
         if (video != null) {
             mStates.remove(video.videoId);
+        }
+    }
+
+    private void clearStateOfNextVideo() {
+        if (mController.getVideo() != null && mController.getVideo().nextMediaItem != null) {
+            mStates.remove(mController.getVideo().nextMediaItem.getVideoId());
         }
     }
 

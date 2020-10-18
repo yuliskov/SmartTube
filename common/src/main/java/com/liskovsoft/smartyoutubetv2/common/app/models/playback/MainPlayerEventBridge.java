@@ -38,7 +38,6 @@ public class MainPlayerEventBridge implements PlayerEventListener {
 
         SuggestionsLoader suggestionsLoader = new SuggestionsLoader();
         suggestionsLoader.addMetadataListener(uiManager);
-        suggestionsLoader.addMetadataListener(videoLoader);
 
         // NOTE: position matters!!!
         mEventListeners.add(new AutoFrameRateManager(hqDialogManager));

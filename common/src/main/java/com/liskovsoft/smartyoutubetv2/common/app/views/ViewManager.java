@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
+import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
 import java.util.HashMap;
@@ -95,8 +96,11 @@ public class ViewManager {
 
             if (parentActivity == null) {
                 Log.d(TAG, "Parent activity name doesn't stored in registry. Exiting to Home...");
+
                 mMoveViewsToBack = true;
                 activity.moveTaskToBack(true);
+
+                closeAndClearCache();
 
                 return;
             }
@@ -210,5 +214,9 @@ public class ViewManager {
     public void setSinglePlayerMode(boolean enable) {
         mActivityStack.clear();
         mSinglePlayerMode = enable;
+    }
+
+    private void closeAndClearCache() {
+        FileHelpers.deleteCache(mContext);
     }
 }
