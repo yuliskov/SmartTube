@@ -130,7 +130,6 @@ public class VideoLoader extends PlayerEventListenerHelper implements MetadataLi
     @Override
     public void onSuggestionItemClicked(Video item) {
         if (item.isVideo()) {
-            mController.clearSuggestions();
             mPlaylist.add(item);
             loadVideo(item);
         } else if (item.isChannel()) {

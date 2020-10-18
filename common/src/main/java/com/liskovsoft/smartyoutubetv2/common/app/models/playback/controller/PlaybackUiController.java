@@ -8,6 +8,7 @@ public interface PlaybackUiController {
     int REPEAT_ALL = 2;
     void updateSuggestions(VideoGroup group);
     void resetSuggestedPosition();
+    boolean isSuggestionsEmpty();
     void clearSuggestions();
     void showControls(boolean show);
     boolean isSuggestionsShown();

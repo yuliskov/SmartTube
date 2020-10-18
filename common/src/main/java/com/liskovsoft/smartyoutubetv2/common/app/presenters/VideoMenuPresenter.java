@@ -3,9 +3,12 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
@@ -21,14 +24,17 @@ import java.util.List;
 public class VideoMenuPresenter {
     private final Context mContext;
     private final MediaItemManager mItemManager;
-    private Disposable mMenuAction;
+    private final SignInManager mAuthManager;
+    private Disposable mPlaylistAction;
     private Disposable mAddAction;
+    private Disposable mSignCheckAction;
     private Video mVideo;
 
     private VideoMenuPresenter(Context context) {
         mContext = context;
         MediaService service = YouTubeMediaService.instance();
         mItemManager = service.getMediaItemManager();
+        mAuthManager = service.getSignInManager();
     }
 
     public static VideoMenuPresenter instance(Context context) {
@@ -40,9 +46,14 @@ public class VideoMenuPresenter {
             return;
         }
 
+        authCheck(() -> obtainPlaylistsAndShow(video),
+                  () -> MessageHelpers.showMessage(mContext, R.string.msg_signed_users_only));;
+    }
+
+    private void obtainPlaylistsAndShow(Video video) {
         mVideo = video;
 
-        mMenuAction = mItemManager.getVideoPlaylistsInfosObserve(video.videoId)
+        mPlaylistAction = mItemManager.getVideoPlaylistsInfosObserve(video.videoId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::prepareAndShowDialog);
@@ -60,11 +71,11 @@ public class VideoMenuPresenter {
 
         AppSettingsPresenter appSettingsPresenter = AppSettingsPresenter.instance(mContext);
         appSettingsPresenter.appendCheckedCategory(mContext.getString(R.string.dialog_add_to_playlist), options);
-        appSettingsPresenter.showDialog(() -> RxUtils.disposeActions(mMenuAction, mAddAction));
+        appSettingsPresenter.showDialog(() -> RxUtils.disposeActions(mPlaylistAction, mAddAction, mSignCheckAction));
     }
 
     private void addToPlaylist(String playlistId, boolean checked) {
-        RxUtils.disposeActions(mMenuAction);
+        RxUtils.disposeActions(mPlaylistAction, mAddAction, mSignCheckAction);
         Observable<Void> editObserve;
 
         if (checked) {
@@ -77,5 +88,21 @@ public class VideoMenuPresenter {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
+    }
+
+    private void authCheck(Runnable onSuccess, Runnable onError) {
+        mSignCheckAction = mAuthManager.isSignedObserve()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        isSigned -> {
+                            if (isSigned) {
+                                onSuccess.run();
+                            } else {
+                                onError.run();
+                            }
+                        }
+                );
+
     }
 }

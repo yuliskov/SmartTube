@@ -11,7 +11,7 @@
     <string name="subscriptions_signin_title">See the latest from channels you love</string>
     <string name="subscriptions_signin_subtitle">Sign in to see your subscriptions</string>
     <string name="subscriptions_signin_button_text">SIGN IN</string>
-    <string name="msg_signin_to_show_more">Watch videos you liked, saved, or subscribed</string>
+    <string name="library_signin_to_show_more">Watch videos you liked, saved, or subscribed</string>
     <string name="library_signin_subtitle">Sign in to see your library</string>
     <string name="action_signin">SIGN IN</string>
     <string name="video_formats_title">Video formats</string>
@@ -38,4 +38,5 @@
     <string name="install_update">Install update</string>
     <string name="msg_category_is_empty">Oops! There is nothing in here.</string>
     <string name="dialog_add_to_playlist">Add to playlist</string>
+    <string name="msg_signed_users_only">Signed users only</string>
 </resources>

@@ -11,7 +11,7 @@
     <string name="subscriptions_signin_title">Bekijk je kanalen</string>
     <string name="subscriptions_signin_subtitle">Aanmelden om je abonnementen te bekijken</string>
     <string name="subscriptions_signin_button_text">AANMELDEN</string>
-    <string name="msg_signin_to_show_more">Bekijk je video\'s</string>
+    <string name="library_signin_to_show_more">Bekijk je video\'s</string>
     <string name="library_signin_subtitle">Aanmelden om je bibliotheek te bekijken</string>
     <string name="action_signin">AANMELDEN</string>
     <string name="video_formats_title">Video kwaliteit</string>

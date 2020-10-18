@@ -19,7 +19,7 @@ public class SignInError implements ErrorFragmentData {
 
     @Override
     public String getMessage() {
-        return mContext.getString(R.string.msg_signin_to_show_more);
+        return mContext.getString(R.string.library_signin_to_show_more);
     }
 
     @Override

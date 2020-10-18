@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
-import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
@@ -30,7 +29,10 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onSourceChanged(Video item) {
-        loadSuggestions(item);
+        // Don't reload suggested when doing navigation over the playlist
+        if (!item.isPlaylistItem() || mController.isSuggestionsEmpty()) {
+            loadSuggestions(item);
+        }
     }
 
     @Override
@@ -55,14 +57,20 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
         continueGroup(group);
     }
 
-    private void continueGroup(VideoGroup group) {
-        Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
+    @Override
+    public void onSuggestionItemClicked(Video item) {
+        // Visual response to user clicks
+        mController.resetSuggestedPosition();
+    }
 
+    private void continueGroup(VideoGroup group) {
         boolean updateInProgress = mScrollAction != null && !mScrollAction.isDisposed();
 
         if (updateInProgress) {
             return;
         }
+
+        Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
         MediaGroup mediaGroup = group.getMediaGroup();
 

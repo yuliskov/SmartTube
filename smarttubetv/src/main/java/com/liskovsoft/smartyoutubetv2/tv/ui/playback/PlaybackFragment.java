@@ -434,6 +434,11 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     }
 
     @Override
+    public boolean isSuggestionsEmpty() {
+        return mRowsAdapter.size() <= 1;
+    }
+
+    @Override
     public void setVideo(Video video) {
         mExoPlayerController.setVideo(video);
         mPlayerGlue.setTitle(video.title);
