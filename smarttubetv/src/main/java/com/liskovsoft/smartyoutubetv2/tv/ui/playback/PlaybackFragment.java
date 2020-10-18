@@ -14,10 +14,10 @@ import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.OnItemViewClickedListener;
+import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
-import androidx.leanback.widget.RowPresenter.ViewHolder;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
@@ -286,6 +286,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         rowsAdapter.add(mPlayerGlue.getControlsRow());
 
         setOnItemViewClickedListener(new ItemViewClickedListener());
+        setOnItemViewSelectedListener(new ItemViewSelectedListener());
 
         return rowsAdapter;
     }
@@ -306,6 +307,32 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
                     mEventListener.onSuggestionItemLongClicked((Video) item);
                 } else {
                     mEventListener.onSuggestionItemClicked((Video) item);
+                }
+            }
+        }
+    }
+
+    private final class ItemViewSelectedListener implements OnItemViewSelectedListener {
+        @Override
+        public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
+                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
+            if (item instanceof Video) {
+                mBackgroundManager.setBackgroundFrom((Video) item);
+
+                checkScrollEnd((Video)item);
+            }
+        }
+
+        private void checkScrollEnd(Video item) {
+            for (VideoGroupObjectAdapter adapter : mMediaGroupAdapters.values()) {
+                int index = adapter.indexOf(item);
+
+                if (index != -1) {
+                    int size = adapter.size();
+                    if (index > (size - 4)) {
+                        mEventListener.onScrollEnd(adapter.getGroup());
+                    }
+                    break;
                 }
             }
         }

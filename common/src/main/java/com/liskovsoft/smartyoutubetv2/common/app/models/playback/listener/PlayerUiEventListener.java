@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
 public interface PlayerUiEventListener {
@@ -9,6 +10,7 @@ public interface PlayerUiEventListener {
     int REPEAT_ALL = 2;
     void onSuggestionItemClicked(Video item);
     void onSuggestionItemLongClicked(Video item);
+    void onScrollEnd(VideoGroup group);
     boolean onPreviousClicked();
     boolean onNextClicked();
     void onPlayClicked();

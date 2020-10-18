@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 
 import android.app.Activity;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerHandlerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
@@ -37,6 +38,11 @@ public abstract class PlayerEventListenerHelper implements PlayerHandlerEventLis
 
     @Override
     public void onSuggestionItemLongClicked(Video item) {
+        // NOP
+    }
+
+    @Override
+    public void onScrollEnd(VideoGroup group) {
         // NOP
     }
 

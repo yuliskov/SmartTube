@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
@@ -8,6 +9,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -20,6 +22,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
     private static final String TAG = SuggestionsLoader.class.getSimpleName();
     private final List<MetadataListener> mListeners = new ArrayList<>();
     private Disposable mMetadataAction;
+    private Disposable mScrollAction;
 
     public interface MetadataListener {
         void onMetadata(MediaItemMetadata metadata);
@@ -32,25 +35,45 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onEngineReleased() {
-        disposeActions();
+        RxUtils.disposeActions(mMetadataAction, mScrollAction);
     }
 
     @Override
     public boolean onNextClicked() {
-        disposeActions();
+        RxUtils.disposeActions(mMetadataAction, mScrollAction);
         return false;
     }
 
     @Override
     public boolean onPreviousClicked() {
-        disposeActions();
+        RxUtils.disposeActions(mMetadataAction, mScrollAction);
         return false;
     }
 
-    private void disposeActions() {
-        if (mMetadataAction != null && !mMetadataAction.isDisposed()) {
-            mMetadataAction.dispose();
+    @Override
+    public void onScrollEnd(VideoGroup group) {
+        continueGroup(group);
+    }
+
+    private void continueGroup(VideoGroup group) {
+        Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
+
+        boolean updateInProgress = mScrollAction != null && !mScrollAction.isDisposed();
+
+        if (updateInProgress) {
+            return;
         }
+
+        MediaGroup mediaGroup = group.getMediaGroup();
+
+        MediaItemManager mediaItemManager = YouTubeMediaService.instance().getMediaItemManager();
+
+        mScrollAction = mediaItemManager.continueGroupObserve(mediaGroup)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        continueMediaGroup -> mController.updateSuggestions(VideoGroup.from(continueMediaGroup, group.getHeader()))
+                        , error -> Log.e(TAG, "continueGroup error: " + error));
     }
 
     private void syncCurrentVideo(MediaItemMetadata mediaItemMetadata) {

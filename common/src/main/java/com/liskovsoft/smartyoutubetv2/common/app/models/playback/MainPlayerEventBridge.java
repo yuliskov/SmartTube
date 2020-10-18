@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import androidx.fragment.app.Fragment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerHandlerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager;
@@ -212,6 +213,11 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     @Override
     public void onSuggestionItemLongClicked(Video item) {
         process(listener -> listener.onSuggestionItemLongClicked(item));
+    }
+
+    @Override
+    public void onScrollEnd(VideoGroup group) {
+        process(listener -> listener.onScrollEnd(group));
     }
 
     @Override
