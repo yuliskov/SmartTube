@@ -8,6 +8,7 @@
     <string name="header_news">Nieuws</string>
     <string name="header_gaming">Games</string>
     <string name="header_playlists">Playlists</string>
+    <string name="header_settings">Instellingen</string>
     <string name="subscriptions_signin_title">Bekijk je kanalen</string>
     <string name="subscriptions_signin_subtitle">Aanmelden om je abonnementen te bekijken</string>
     <string name="subscriptions_signin_button_text">AANMELDEN</string>
@@ -39,4 +40,5 @@
     <string name="msg_category_is_empty">Oeps! Niets gevonden.</string>
     <string name="dialog_add_to_playlist">Toevoegen aan playlist</string>
     <string name="msg_signed_users_only">Enkel voor aangemelde gebruikers</string>
+    <string name="msg_cant_load_content">Oeps! Kan inhoud niet laden.</string>
 </resources>
