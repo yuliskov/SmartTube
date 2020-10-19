@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="signin_view_title">Gebruikerscode laden...</string>
+    <string name="signin_view_description">Aanmelden met deze code op pagina %s</string>
+    <string name="signin_view_action_text">Klaar</string>
+    <string name="require_checked">Vereist \"%s\"</string>
+    <string name="msg_press_again_to_exit">Nogmaals drukken om af te sluiten</string>
+</resources>
