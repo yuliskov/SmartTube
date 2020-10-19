@@ -60,6 +60,8 @@ public class DoubleBackManager {
     }
 
     public void enableDoubleBackExit() {
+        showMsg();
+
         if (mEnableDoubleBackExit) {
             return;
         }
@@ -84,9 +86,9 @@ public class DoubleBackManager {
 
             if (mRepeatCount >= DEFAULT_REPEAT_COUNT) { // same event fires multiple times
                 mIsDoubleBackPressed = true;
-            } else if (mRepeatCount == (DEFAULT_REPEAT_COUNT - 1)) {
-                showMsg();
             }
+
+            showMsg();
         }
 
         if (!isBack) {
@@ -95,7 +97,9 @@ public class DoubleBackManager {
     }
 
     private void showMsg() {
-        MessageHelpers.showMessageThrottled(mContext, R.string.msg_press_again_to_exit);
+        if (mRepeatCount == (DEFAULT_REPEAT_COUNT - 1)) {
+            MessageHelpers.showMessageThrottled(mContext, R.string.msg_press_again_to_exit);
+        }
     }
 
     private void resetBackPressed() {
