@@ -68,6 +68,9 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
      * A ViewHolder for the PlaybackControlsRow supporting seek UI.
      */
     public class ViewHolder extends PlaybackRowPresenter.ViewHolder implements PlaybackSeekUi {
+        private static final long SPEED_INCREASE_PERIOD_MS = 1000;
+        private static final double SPEED_INCREASE_FACTOR = 1.5;
+        private static final long START_SEEK_INCREMENT_MS = 10_000;
         final Presenter.ViewHolder mDescriptionViewHolder;
         final ImageView mImageView;
         final ViewGroup mDescriptionDock;
@@ -96,6 +99,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         PlaybackSeekDataProvider mSeekDataProvider;
         long[] mPositions;
         int mPositionsLength;
+        long mSeekIncrementMs;
+        long mSeekStartTimeMs;
 
         // MOD: update quality info
         final OnQualityInfoCallback mQualityListener = this::setQualityInfo;
@@ -169,7 +174,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                 }
                 updateThumbsInSeek(thumbHeroIndex, forward);
             } else {
-                long interval = (long) (mTotalTimeInMs * getDefaultSeekIncrement());
+                long interval = calculateSeekIncrement();
                 newPos = pos + (forward ? interval : -interval);
                 if (newPos > mTotalTimeInMs) {
                     newPos = mTotalTimeInMs;
@@ -180,6 +185,31 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             double ratio = (double) newPos / mTotalTimeInMs;     // Range: [0, 1]
             mProgressBar.setProgress((int) (ratio * Integer.MAX_VALUE)); // Could safely cast to int
             mSeekClient.onSeekPositionChanged(newPos);
+        }
+
+        void resetSeekIncrement() {
+            mSeekIncrementMs = -1;
+        }
+
+        /**
+         * Implement non-linear seek speed<br/>
+         * By increasing seek speed by 1.5 every 1 second.
+         */
+        long calculateSeekIncrement() {
+            if (mSeekIncrementMs == -1) {
+                mSeekStartTimeMs = System.currentTimeMillis();
+                mSeekIncrementMs = START_SEEK_INCREMENT_MS;
+            } else {
+                // increase seek speed by 1.5 every 1 second
+                long timePassed = System.currentTimeMillis() - mSeekStartTimeMs;
+                long timeFactor = timePassed / SPEED_INCREASE_PERIOD_MS;
+                if (timeFactor == 1) {
+                    mSeekStartTimeMs = System.currentTimeMillis();
+                    mSeekIncrementMs *= SPEED_INCREASE_FACTOR;
+                }
+            }
+
+            return mSeekIncrementMs;
         }
 
         void updateThumbsInSeek(int thumbHeroIndex, boolean forward) {
@@ -430,6 +460,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             mSeekDataProvider = null;
             mPositions = null;
             mPositionsLength = 0;
+            resetSeekIncrement();
         }
 
         // MOD: seek ui tweaks
