@@ -46,6 +46,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.ControlBarPr
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.MaxIconNumVideoPlayerGlue.OnQualityInfoCallback;
 
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A PlaybackTransportRowPresenter renders a {@link PlaybackControlsRow} to display a
@@ -68,6 +69,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
      * A ViewHolder for the PlaybackControlsRow supporting seek UI.
      */
     public class ViewHolder extends PlaybackRowPresenter.ViewHolder implements PlaybackSeekUi {
+        private final long TEN_SECONDS = TimeUnit.SECONDS.toMillis(10);
         final Presenter.ViewHolder mDescriptionViewHolder;
         final ImageView mImageView;
         final ViewGroup mDescriptionDock;
@@ -169,7 +171,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                 }
                 updateThumbsInSeek(thumbHeroIndex, forward);
             } else {
-                long interval = (long) (mTotalTimeInMs * getDefaultSeekIncrement());
+                long interval = TEN_SECONDS;
                 newPos = pos + (forward ? interval : -interval);
                 if (newPos > mTotalTimeInMs) {
                     newPos = mTotalTimeInMs;
