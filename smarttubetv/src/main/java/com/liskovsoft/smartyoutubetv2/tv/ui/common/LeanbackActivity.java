@@ -81,7 +81,10 @@ public abstract class LeanbackActivity extends FragmentActivity {
         mModeSyncManager.restore(this);
 
         // We can't do it in the ViewManager because activity may be started from outside
-        mViewManager.addTop(this);
+        if (!mViewManager.addTop(this)) {
+            // not added, probably move task to back is active
+            super.finish();
+        }
     }
 
     @Override
