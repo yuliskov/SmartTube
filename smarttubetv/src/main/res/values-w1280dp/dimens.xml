@@ -7,6 +7,10 @@
     <dimen name="card_width">286dp</dimen>
     <dimen name="card_height">165dp</dimen>
 
+    <!-- Increase card view text size for some low dpi devices -->
+    <dimen name="lb_basic_card_title_text_size">17sp</dimen>
+    <dimen name="lb_basic_card_content_text_size">15sp</dimen>
+
     <!-- Elements below aren't used in the app -->
 
     <dimen name="grid_item_width">130dp</dimen>

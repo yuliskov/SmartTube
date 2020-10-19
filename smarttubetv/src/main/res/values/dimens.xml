@@ -5,7 +5,7 @@
     <dimen name="card_width">205dp</dimen>
     <dimen name="card_height">115dp</dimen>
 
-    <!-- Increase player time bar size -->
+    <!-- Increase player time text size -->
     <dimen name="lb_playback_controls_time_text_size">16sp</dimen>
 
     <!-- Vine card widget values -->
