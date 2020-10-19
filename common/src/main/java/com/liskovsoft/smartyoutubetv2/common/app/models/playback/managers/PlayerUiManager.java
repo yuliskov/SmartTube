@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
-import android.app.Activity;
 import android.os.Handler;
 import android.os.Looper;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
@@ -8,7 +7,6 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
-import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;

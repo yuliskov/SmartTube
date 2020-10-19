@@ -117,8 +117,8 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
         // Origin: {@link androidx.leanback.widget.ControlBarPresenter#MAX_CONTROLS}
         // Custom mod: {@link com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.ControlBarPresenter#MAX_CONTROLS}
 
-        adapter.add(mChannelAction);
         adapter.add(mHighQualityAction);
+        adapter.add(mChannelAction);
         adapter.add(mPlaylistAddAction);
         adapter.add(mThumbsUpAction);
         adapter.add(mThumbsDownAction);

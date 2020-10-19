@@ -64,9 +64,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public boolean onPreviousClicked() {
-        boolean isShortVideo = mController.getPositionMs() > 10_000 && mController.getLengthMs() < MUSIC_VIDEO_LENGTH_MS;
+        boolean isFarFromStart = mController.getPositionMs() > 10_000;
 
-        if (isShortVideo) {
+        if (isFarFromStart) {
             mController.setPositionMs(0);
             return true;
         }
