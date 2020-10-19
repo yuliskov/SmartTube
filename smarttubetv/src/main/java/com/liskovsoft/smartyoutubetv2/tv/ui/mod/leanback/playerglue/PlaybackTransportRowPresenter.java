@@ -41,6 +41,7 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.SeekBar;
 import androidx.leanback.widget.ThumbsBar;
+import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.ControlBarPresenter.OnControlClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.ControlBarPresenter.OnControlSelectedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.MaxIconNumVideoPlayerGlue.OnQualityInfoCallback;
@@ -79,6 +80,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         final TextView mTotalTime;
         final TextView mCurrentTime;
         final TextView mQualityInfo;
+        final TextView mCurrentDate;
+        final ViewGroup mAdditionalInfo;
         final SeekBar mProgressBar;
         final ThumbsBar mThumbsBar;
         long mTotalTimeInMs = Long.MIN_VALUE;
@@ -99,7 +102,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         PlaybackSeekDataProvider mSeekDataProvider;
         long[] mPositions;
         int mPositionsLength;
-        long mSeekIncrementMs;
+        long mSeekIncrementMs = -1;
         long mSeekStartTimeMs;
 
         // MOD: update quality info
@@ -316,6 +319,9 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             mCurrentTime = (TextView) rootView.findViewById(R.id.current_time);
             mTotalTime = (TextView) rootView.findViewById(R.id.total_time);
             mQualityInfo = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.quality_info);
+            mCurrentDate = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.current_date);
+            mAdditionalInfo = (ViewGroup) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.additional_info);
+            updateDateLabel();
             mProgressBar = (SeekBar) rootView.findViewById(R.id.playback_progress);
             mProgressBar.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -469,11 +475,13 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                 mControlsVh.view.setVisibility(View.GONE);
                 mSecondaryControlsVh.view.setVisibility(View.INVISIBLE);
                 mDescriptionViewHolder.view.setVisibility(View.INVISIBLE);
+                mAdditionalInfo.setVisibility(View.INVISIBLE);
                 mThumbsBar.setVisibility(View.VISIBLE);
             } else {
                 mControlsVh.view.setVisibility(View.VISIBLE);
                 mSecondaryControlsVh.view.setVisibility(View.VISIBLE);
                 mDescriptionViewHolder.view.setVisibility(View.VISIBLE);
+                mAdditionalInfo.setVisibility(View.VISIBLE);
                 mThumbsBar.setVisibility(View.INVISIBLE);
             }
         }
@@ -587,6 +595,10 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             if (content != null) {
                 mQualityInfo.setText(content);
             }
+        }
+
+        void updateDateLabel() {
+            mCurrentDate.setText(DateFormatter.getCurrentDateShort(mCurrentDate.getContext()));
         }
     }
 
@@ -732,6 +744,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
     public void onReappear(RowPresenter.ViewHolder rowViewHolder) {
         ViewHolder vh = (ViewHolder) rowViewHolder;
         if (vh.view.hasFocus()) {
+            vh.updateDateLabel();
             vh.enableCompactMode(false);
             vh.mProgressBar.requestFocus();
         }

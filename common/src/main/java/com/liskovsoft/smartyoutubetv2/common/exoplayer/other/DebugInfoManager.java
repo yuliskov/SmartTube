@@ -59,6 +59,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private final List<Pair<String, String>> mVideoInfo = new ArrayList<>();
     private final List<Pair<String, String>> mDisplayModeId = new ArrayList<>();
     private final List<Pair<String, String>> mDisplayInfo = new ArrayList<>();
+    private final String mAppVersion;
 
     /**
      * @param player   The {@link SimpleExoPlayer} from which debug information should be obtained.
@@ -70,6 +71,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         mDebugViewGroup = ctx.findViewById(resLayoutId);
         mContext = ctx;
         mTextSize = ctx.getResources().getDimension(R.dimen.debug_text_size);
+        mAppVersion = String.format("%s Version", mContext.getString(R.string.app_name));
         inflate();
     }
 
@@ -347,7 +349,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
 
     private void appendVersion() {
         appendRow("ExoPlayer Version", ExoPlayerLibraryInfo.VERSION);
-        appendRow("App Version", AppInfoHelpers.getAppVersionName(mContext));
+        appendRow(mAppVersion, AppInfoHelpers.getAppVersionName(mContext));
     }
 
     private void appendDeviceName() {
