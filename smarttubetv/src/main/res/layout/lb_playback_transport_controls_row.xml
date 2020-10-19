@@ -15,7 +15,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" >
         <LinearLayout
             android:id="@+id/controls_card"
             android:layout_width="match_parent"
@@ -62,7 +62,7 @@
         android:paddingStart="?attr/browsePaddingStart"
         android:paddingEnd="?attr/browsePaddingEnd"
         android:clipChildren="false"
-        android:clipToPadding="false">
+        android:clipToPadding="false" >
 
         <!-- MOD: hide player controls on UP button -->
         <LinearLayout android:id="@+id/hide_dock"

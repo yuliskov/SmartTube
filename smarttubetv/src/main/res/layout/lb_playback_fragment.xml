@@ -18,7 +18,7 @@
         <com.google.android.exoplayer2.ui.SubtitleView
             android:id="@+id/leanback_subtitles"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"/>
     </com.google.android.exoplayer2.ui.AspectRatioFrameLayout>
 
     <!-- Add debug view -->
@@ -35,7 +35,7 @@
         android:id="@+id/playback_fragment_background"
         android:transitionGroup="false"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"/>
 
     <androidx.leanback.widget.NonOverlappingFrameLayout
             android:id="@+id/playback_controls_dock"

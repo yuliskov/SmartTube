@@ -18,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.Player
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackInfoFormatter;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 
@@ -171,7 +172,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
                 mEventListener.onTrackChanged(ExoFormatItem.from(format));
 
                 if (mPlayerView != null && ExoFormatItem.isVideo(format)) {
-                    mPlayerView.setQualityInfo(format.sampleMimeType);
+                    mPlayerView.setQualityInfo(TrackInfoFormatter.formatQualityLabel(format));
                 }
             }
         }

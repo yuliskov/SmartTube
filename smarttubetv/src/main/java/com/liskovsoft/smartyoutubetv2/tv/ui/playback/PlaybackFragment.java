@@ -1,8 +1,10 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
 import android.annotation.TargetApi;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.app.RowsSupportFragment;
@@ -25,6 +27,7 @@ import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.util.Util;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -94,10 +97,20 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        // Make player controls more distinguished on white background
-        setBackgroundType(BG_DARK);
+        setupPlayerBackground();
 
         mPlaybackPresenter.onInitDone();
+    }
+
+    private void setupPlayerBackground() {
+        // Make player controls more distinguished on white background
+        //setBackgroundType(BG_NONE);
+
+        View backgroundView = (View) Helpers.getField(this, "mBackgroundView");
+
+        if (backgroundView != null) {
+            backgroundView.setBackgroundResource(R.drawable.player_background);
+        }
     }
 
     @Override
