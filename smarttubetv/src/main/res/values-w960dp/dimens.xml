@@ -5,6 +5,12 @@
     <dimen name="card_width">205dp</dimen>
     <dimen name="card_height">115dp</dimen>
 
+    <!-- Card view default size -->
+    <!--
+    <dimen name="lb_basic_card_title_text_size">14sp</dimen>
+    <dimen name="lb_basic_card_content_text_size">12sp</dimen>
+    -->
+
     <!-- Elements below aren't used in the app -->
 
     <dimen name="grid_item_width">100dp</dimen>
