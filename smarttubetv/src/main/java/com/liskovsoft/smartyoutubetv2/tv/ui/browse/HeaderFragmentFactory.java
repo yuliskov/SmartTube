@@ -2,12 +2,12 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 
 import androidx.fragment.app.Fragment;
 import androidx.leanback.app.BrowseSupportFragment;
+import androidx.leanback.app.HeadersSupportFragment.OnHeaderViewSelectedListener;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.Row;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Header;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseFragment.HeaderViewSelectedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.grid.HeaderGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.row.HeaderRowsFragment;
 
@@ -16,11 +16,15 @@ import java.util.List;
 
 public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory<Fragment> {
     private static final String TAG = HeaderFragmentFactory.class.getSimpleName();
-    private final HeaderViewSelectedListener mViewSelectedListener;
+    private final OnHeaderViewSelectedListener mViewSelectedListener;
     private final List<VideoGroup> mCachedData;
     private Fragment mCurrentFragment;
 
-    public HeaderFragmentFactory(HeaderViewSelectedListener viewSelectedListener) {
+    public HeaderFragmentFactory() {
+        this(null);
+    }
+
+    public HeaderFragmentFactory(OnHeaderViewSelectedListener viewSelectedListener) {
         mViewSelectedListener = viewSelectedListener;
         mCachedData = new ArrayList<>();
     }

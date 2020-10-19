@@ -7,19 +7,16 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.leanback.app.BrowseSupportFragment;
-import androidx.leanback.app.HeadersSupportFragment.OnHeaderViewSelectedListener;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.PageRow;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.PresenterSelector;
-import androidx.leanback.widget.Row;
-import androidx.leanback.widget.RowHeaderPresenter.ViewHolder;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Header;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
@@ -27,7 +24,7 @@ import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.LoginDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /*
@@ -46,7 +43,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mHeaders = new HashMap<>();
+        mHeaders = new LinkedHashMap<>();
         mHandler = new Handler();
         mBrowsePresenter = BrowsePresenter.instance(getContext());
         mBrowsePresenter.register(this);
@@ -54,7 +51,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
         setupAdapter();
         setupUi();
-        setupEventListeners();
 
         enableMainFragmentScaling(false);
     }
@@ -63,13 +59,11 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        setupEventListeners();
+
         prepareEntranceTransition();
 
         mBrowsePresenter.onInitDone();
-
-        getHeadersSupportFragment().setOnHeaderClickedListener((viewHolder, row) -> {
-            mBrowsePresenter.refresh();
-        });
     }
 
     private void setupAdapter() {
@@ -78,7 +72,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mCategoryRowAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         setAdapter(mCategoryRowAdapter);
 
-        mHeaderFragmentFactory = new HeaderFragmentFactory(new HeaderViewSelectedListener());
+        mHeaderFragmentFactory = new HeaderFragmentFactory(
+                (viewHolder, row) -> mBrowsePresenter.onHeaderFocused(row.getHeaderItem().getId()));
         getMainFragmentRegistry().registerFragment(PageRow.class, mHeaderFragmentFactory);
     }
 
@@ -111,6 +106,11 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private void setupEventListeners() {
+        getHeadersSupportFragment().setOnHeaderClickedListener(
+                (viewHolder, row) -> {
+                    mBrowsePresenter.onHeaderFocused(row.getHeaderItem().getId());
+                });
+
         setOnSearchClickedListener(view -> {
             Intent intent = new Intent(getActivity(), SearchActivity.class);
             startActivity(intent);
@@ -197,13 +197,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
             getProgressBarManager().show();
         } else {
             getProgressBarManager().hide();
-        }
-    }
-
-    public final class HeaderViewSelectedListener implements OnHeaderViewSelectedListener {
-        @Override
-        public void onHeaderSelected(ViewHolder viewHolder, Row row) {
-            mBrowsePresenter.onHeaderFocused(row.getHeaderItem().getId());
         }
     }
 }

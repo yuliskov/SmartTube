@@ -102,4 +102,9 @@ public class NullPlayerController implements PlayerController {
     public float getSpeed() {
         return 0;
     }
+
+    @Override
+    public void setPlayerView(PlayerView playerView) {
+        
+    }
 }

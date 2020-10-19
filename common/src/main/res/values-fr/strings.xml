@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title_home">Accueil</string>
+    <string name="header_home">Accueil</string>
     <string name="title_search">Rechercher</string>
-    <string name="title_subscriptions">Abonnements</string>
-    <string name="title_history">Historique</string>
-    <string name="title_music">Musique</string>
-    <string name="title_news">Nouvelles</string>
-    <string name="title_gaming">Jeux Video</string>
-    <string name="title_playlists">Playlists</string>
+    <string name="header_subscriptions">Abonnements</string>
+    <string name="header_history">Historique</string>
+    <string name="header_music">Musique</string>
+    <string name="header_news">Nouvelles</string>
+    <string name="header_gaming">Jeux Video</string>
+    <string name="header_playlists">Playlists</string>
     <string name="subscriptions_signin_title">Voir les derniéres chaines que vous aimez</string>
     <string name="subscriptions_signin_subtitle">Connectez-vous pour voir vos Abonnements</string>
     <string name="subscriptions_signin_button_text">CONNEXION</string>

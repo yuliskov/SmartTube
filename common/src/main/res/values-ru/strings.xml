@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title_home">Главная</string>
     <string name="title_search">Поиск</string>
-    <string name="title_subscriptions">Подписки</string>
-    <string name="title_history">История</string>
-    <string name="title_music">Музыка</string>
-    <string name="title_news">Новости</string>
-    <string name="title_gaming">Видеоигры</string>
-    <string name="title_playlists">Плейлисты</string>
+    <string name="header_home">Главная</string>
+    <string name="header_subscriptions">Подписки</string>
+    <string name="header_history">История</string>
+    <string name="header_music">Музыка</string>
+    <string name="header_news">Новости</string>
+    <string name="header_gaming">Видеоигры</string>
+    <string name="header_playlists">Плейлисты</string>
+    <string name="header_settings">Настройки</string>
     <string name="subscriptions_signin_title">Смотрите новые видео с каналов, на которые вы подписаны</string>
     <string name="subscriptions_signin_subtitle">Для начала вам нужно войти в аккаунт.</string>
     <string name="subscriptions_signin_button_text">ВОЙТИ</string>
@@ -39,4 +40,5 @@
     <string name="msg_category_is_empty">Ой! Здесь ничего нет.</string>
     <string name="dialog_add_to_playlist">Добавить в плейлист</string>
     <string name="msg_signed_users_only">Необходимо войти в вккаунт</string>
+    <string name="msg_cant_load_content">Невозможно загрузить содержимое</string>
 </resources>

@@ -239,6 +239,8 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end
         hideControlsOverlay(mIsAnimationEnabled); // hide controls upon fragment creation
 
+        mExoPlayerController.setPlayerView(mPlayerGlue);
+
         mSubtitleManager = new SubtitleManager(getActivity(), R.id.leanback_subtitles);
 
         // subs renderer

@@ -1,19 +1,17 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
 import android.app.Activity;
-import android.content.Context;
 import android.view.KeyEvent;
 import android.view.View;
+import androidx.leanback.media.PlaybackGlueHost;
 import androidx.leanback.media.PlaybackTransportControlGlue;
 import androidx.leanback.media.PlayerAdapter;
 import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.PlaybackControlsRow;
-import com.google.android.exoplayer2.text.Cue;
-import com.google.android.exoplayer2.text.TextOutput;
-import com.google.android.exoplayer2.ui.SubtitleView;
-import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.MaxIconNumVideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsDownAction;
@@ -27,7 +25,6 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PlaylistAddAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.RepeatAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SubscribeAction;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -47,8 +44,10 @@ import java.util.concurrent.TimeUnit;
  * Note that the superclass, {@link PlaybackTransportControlGlue}, manages the playback controls
  * row.
  */
-public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter> {
+public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
+                             implements PlayerView {
     private static final long TEN_SECONDS = TimeUnit.SECONDS.toMillis(10);
+    private static final String TAG = VideoPlayerGlue.class.getSimpleName();
     private final OnActionClickedListener mActionListener;
 
     private final ThumbsUpAction mThumbsUpAction;
@@ -65,6 +64,8 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter> {
     private final PlaylistAddAction mPlaylistAddAction;
     private final VideoStatsAction mVideoStatsAction;
     private final VideoSpeedAction mVideoSpeedAction;
+    private String mQualityInfo;
+    private OnQualityInfoCallback mQualityInfoListener;
 
     public VideoPlayerGlue(
             Activity context,
@@ -165,7 +166,7 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter> {
     public void fastForward() {
         if (getDuration() > -1) {
             long newPosition = getCurrentPosition() + TEN_SECONDS;
-            newPosition = (newPosition > getDuration()) ? getDuration() : newPosition;
+            newPosition = Math.min(newPosition, getDuration());
             getPlayerAdapter().seekTo(newPosition);
         }
     }
@@ -346,6 +347,31 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter> {
         }
 
         return action;
+    }
+
+    @Override
+    public void setQualityInfo(String info) {
+        mQualityInfo = info;
+
+        if (mQualityInfoListener != null) {
+            mQualityInfoListener.onQualityInfoChanged(info);
+        }
+    }
+
+    @Override
+    protected void onAttachedToHost(PlaybackGlueHost host) {
+        super.onAttachedToHost(host);
+
+        Log.d(TAG, "On attached to host");
+    }
+
+    @Override
+    protected void onQualityInfoListener(OnQualityInfoCallback listener) {
+        mQualityInfoListener = listener;
+
+        if (mQualityInfo != null) {
+            mQualityInfoListener.onQualityInfoChanged(mQualityInfo);
+        }
     }
 
     /** Listens for when skip to next and previous actions have been dispatched. */

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title_home">Home</string>
+    <string name="header_home">Home</string>
     <string name="title_search">Zoeken</string>
-    <string name="title_subscriptions">Abonnementen</string>
-    <string name="title_history">Geschiedenis</string>
-    <string name="title_music">Muziek</string>
-    <string name="title_news">Nieuws</string>
-    <string name="title_gaming">Games</string>
-    <string name="title_playlists">Playlists</string>
+    <string name="header_subscriptions">Abonnementen</string>
+    <string name="header_history">Geschiedenis</string>
+    <string name="header_music">Muziek</string>
+    <string name="header_news">Nieuws</string>
+    <string name="header_gaming">Games</string>
+    <string name="header_playlists">Playlists</string>
     <string name="subscriptions_signin_title">Bekijk je kanalen</string>
     <string name="subscriptions_signin_subtitle">Aanmelden om je abonnementen te bekijken</string>
     <string name="subscriptions_signin_button_text">AANMELDEN</string>

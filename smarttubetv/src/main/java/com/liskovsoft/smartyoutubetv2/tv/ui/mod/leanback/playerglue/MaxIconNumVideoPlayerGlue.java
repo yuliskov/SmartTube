@@ -9,7 +9,7 @@ import androidx.leanback.widget.PlaybackRowPresenter;
 import androidx.leanback.widget.RowPresenter;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
-public class MaxIconNumVideoPlayerGlue<T extends PlayerAdapter> extends PlaybackTransportControlGlue<T> {
+public abstract class MaxIconNumVideoPlayerGlue<T extends PlayerAdapter> extends PlaybackTransportControlGlue<T> {
     /**
      * Constructor for the glue.
      *
@@ -41,6 +41,8 @@ public class MaxIconNumVideoPlayerGlue<T extends PlayerAdapter> extends Playback
             protected void onBindRowViewHolder(RowPresenter.ViewHolder vh, Object item) {
                 super.onBindRowViewHolder(vh, item);
                 vh.setOnKeyListener(MaxIconNumVideoPlayerGlue.this);
+
+                onQualityInfoListener(((ViewHolder) vh).mQualityListener);
             }
             @Override
             protected void onUnbindRowViewHolder(RowPresenter.ViewHolder vh) {
@@ -51,4 +53,10 @@ public class MaxIconNumVideoPlayerGlue<T extends PlayerAdapter> extends Playback
         rowPresenter.setDescriptionPresenter(detailsPresenter);
         return rowPresenter;
     }
+
+    public interface OnQualityInfoCallback {
+        void onQualityInfoChanged(String content);
+    }
+
+    protected abstract void onQualityInfoListener(OnQualityInfoCallback listener);
 }

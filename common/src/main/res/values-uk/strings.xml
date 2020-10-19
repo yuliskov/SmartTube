@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title_home">Головна</string>
+    <string name="header_home">Головна</string>
     <string name="title_search">Пошук</string>
-    <string name="title_subscriptions">Підписки</string>
-    <string name="title_history">Історія</string>
-    <string name="title_music">Музика</string>
-    <string name="title_news">Новини</string>
-    <string name="title_gaming">Ігри</string>
-    <string name="title_playlists">Плейлисти</string>
+    <string name="header_subscriptions">Підписки</string>
+    <string name="header_history">Історія</string>
+    <string name="header_music">Музика</string>
+    <string name="header_news">Новини</string>
+    <string name="header_gaming">Ігри</string>
+    <string name="header_playlists">Плейлисти</string>
     <string name="subscriptions_signin_title">Переглядайте найновіші відео з улюблених каналів</string>
     <string name="subscriptions_signin_subtitle">Увійдіть, щоб побачити свої підписки</string>
     <string name="subscriptions_signin_button_text">УВІЙТИ</string>

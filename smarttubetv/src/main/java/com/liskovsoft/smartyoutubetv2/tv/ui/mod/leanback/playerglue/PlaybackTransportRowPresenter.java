@@ -43,6 +43,7 @@ import androidx.leanback.widget.SeekBar;
 import androidx.leanback.widget.ThumbsBar;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.ControlBarPresenter.OnControlClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.ControlBarPresenter.OnControlSelectedListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.MaxIconNumVideoPlayerGlue.OnQualityInfoCallback;
 
 import java.util.Arrays;
 
@@ -74,6 +75,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         final ViewGroup mSecondaryControlsDock;
         final TextView mTotalTime;
         final TextView mCurrentTime;
+        final TextView mQualityInfo;
         final SeekBar mProgressBar;
         final ThumbsBar mThumbsBar;
         long mTotalTimeInMs = Long.MIN_VALUE;
@@ -94,6 +96,9 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         PlaybackSeekDataProvider mSeekDataProvider;
         long[] mPositions;
         int mPositionsLength;
+
+        // MOD: update quality info
+        final OnQualityInfoCallback mQualityListener = this::setQualityInfo;
 
         final PlaybackControlsRow.OnPlaybackProgressCallback mListener =
                 new PlaybackControlsRow.OnPlaybackProgressCallback() {
@@ -280,6 +285,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             mDescriptionDock = (ViewGroup) rootView.findViewById(R.id.description_dock);
             mCurrentTime = (TextView) rootView.findViewById(R.id.current_time);
             mTotalTime = (TextView) rootView.findViewById(R.id.total_time);
+            mQualityInfo = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.quality_info);
             mProgressBar = (SeekBar) rootView.findViewById(R.id.playback_progress);
             mProgressBar.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -544,6 +550,12 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             double ratio = (double) progressMs / mTotalTimeInMs;           // Range: [0, 1]
             double progressRatio = ratio * Integer.MAX_VALUE;   // Could safely cast to int
             mProgressBar.setSecondaryProgress((int) progressRatio);
+        }
+
+        void setQualityInfo(String content) {
+            if (content != null) {
+                mQualityInfo.setText(content);
+            }
         }
     }
 

@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.controller;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
 import java.io.InputStream;
@@ -32,4 +33,5 @@ public interface PlayerController {
     boolean hasNoMedia();
     void setSpeed(float speed);
     float getSpeed();
+    void setPlayerView(PlayerView playerView);
 }

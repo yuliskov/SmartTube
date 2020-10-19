@@ -19,7 +19,7 @@ public class CategoryEmptyError implements ErrorFragmentData {
 
     @Override
     public String getMessage() {
-        return mContext.getString(R.string.msg_category_is_empty);
+        return mContext.getString(R.string.msg_cant_load_content);
     }
 
     @Override

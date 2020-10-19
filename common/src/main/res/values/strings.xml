@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="title_home">Home</string>
+    <string name="header_home">Home</string>
     <string name="title_search">Search</string>
-    <string name="title_subscriptions">Subscriptions</string>
-    <string name="title_history">History</string>
-    <string name="title_music">Music</string>
-    <string name="title_news">News</string>
-    <string name="title_gaming">Gaming</string>
-    <string name="title_playlists">Playlists</string>
+    <string name="header_subscriptions">Subscriptions</string>
+    <string name="header_history">History</string>
+    <string name="header_music">Music</string>
+    <string name="header_news">News</string>
+    <string name="header_gaming">Gaming</string>
+    <string name="header_playlists">Playlists</string>
+    <string name="header_settings">Settings</string>
     <string name="subscriptions_signin_title">See the latest from channels you love</string>
     <string name="subscriptions_signin_subtitle">Sign in to see your subscriptions</string>
     <string name="subscriptions_signin_button_text">SIGN IN</string>
@@ -39,4 +40,5 @@
     <string name="msg_category_is_empty">Oops! There is nothing in here.</string>
     <string name="dialog_add_to_playlist">Add to playlist</string>
     <string name="msg_signed_users_only">Signed users only</string>
+    <string name="msg_cant_load_content">Oops. Can\'t load content.</string>
 </resources>

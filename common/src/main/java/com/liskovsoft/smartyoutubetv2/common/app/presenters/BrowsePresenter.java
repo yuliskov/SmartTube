@@ -7,7 +7,6 @@ import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
-import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -39,10 +38,8 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
     private final Handler mHandler = new Handler();
     private final Context mContext;
     private final PlaybackPresenter mPlaybackPresenter;
-    private final DetailsPresenter mDetailsPresenter;
     private final MediaService mMediaService;
     private final ViewManager mViewManager;
-    private final OnboardingPresenter mOnboardingPresenter;
     private BrowseView mView;
     private final List<Header> mHeaders;
     private final Map<Integer, Observable<MediaGroup>> mGridMapping;
@@ -57,8 +54,6 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
         GlobalPreferences.instance(context); // auth token storage
         mContext = context;
         mPlaybackPresenter = PlaybackPresenter.instance(context);
-        mDetailsPresenter = DetailsPresenter.instance(context);
-        mOnboardingPresenter = OnboardingPresenter.instance(context);
         mMediaService = YouTubeMediaService.instance();
         mViewManager = ViewManager.instance(context);
         mHeaders = new ArrayList<>();
@@ -82,6 +77,28 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
         }
 
         addHeaders();
+    }
+
+    private void initHeaders() {
+        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
+
+        mHeaders.add(new Header(MediaGroup.TYPE_HOME, mContext.getString(R.string.header_home), Header.TYPE_ROW, R.drawable.icon_home));
+        mHeaders.add(new Header(MediaGroup.TYPE_GAMING, mContext.getString(R.string.header_gaming), Header.TYPE_ROW, R.drawable.icon_gaming));
+        mHeaders.add(new Header(MediaGroup.TYPE_NEWS, mContext.getString(R.string.header_news), Header.TYPE_ROW, R.drawable.icon_news));
+        mHeaders.add(new Header(MediaGroup.TYPE_MUSIC, mContext.getString(R.string.header_music), Header.TYPE_ROW, R.drawable.icon_music));
+        mHeaders.add(new Header(MediaGroup.TYPE_SUBSCRIPTIONS, mContext.getString(R.string.header_subscriptions), Header.TYPE_GRID, R.drawable.icon_subscriptions, true));
+        mHeaders.add(new Header(MediaGroup.TYPE_HISTORY, mContext.getString(R.string.header_history), Header.TYPE_GRID, R.drawable.icon_history, true));
+        mHeaders.add(new Header(MediaGroup.TYPE_PLAYLISTS, mContext.getString(R.string.header_playlists), Header.TYPE_ROW, R.drawable.icon_playlist, true));
+        mHeaders.add(new Header(MediaGroup.TYPE_SETTINGS, mContext.getString(R.string.header_settings), Header.TYPE_SIMPLE_ROW, R.drawable.icon_settings));
+
+        mRowMapping.put(MediaGroup.TYPE_HOME, mediaGroupManager.getHomeObserve());
+        mRowMapping.put(MediaGroup.TYPE_NEWS, mediaGroupManager.getNewsObserve());
+        mRowMapping.put(MediaGroup.TYPE_MUSIC, mediaGroupManager.getMusicObserve());
+        mRowMapping.put(MediaGroup.TYPE_GAMING, mediaGroupManager.getGamingObserve());
+        mRowMapping.put(MediaGroup.TYPE_PLAYLISTS, mediaGroupManager.getPlaylistsObserve());
+
+        mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mediaGroupManager.getSubscriptionsObserve());
+        mGridMapping.put(MediaGroup.TYPE_HISTORY, mediaGroupManager.getHistoryObserve());
     }
 
     private void addHeaders() {
@@ -191,27 +208,6 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
                 updateRowsHeader(header, groups, header.isAuthOnly());
                 break;
         }
-    }
-
-    private void initHeaders() {
-        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
-
-        mHeaders.add(new Header(MediaGroup.TYPE_HOME, mContext.getString(R.string.title_home), Header.TYPE_ROW, R.drawable.icon_home));
-        mHeaders.add(new Header(MediaGroup.TYPE_GAMING, mContext.getString(R.string.title_gaming), Header.TYPE_ROW, R.drawable.icon_gaming));
-        mHeaders.add(new Header(MediaGroup.TYPE_NEWS, mContext.getString(R.string.title_news), Header.TYPE_ROW, R.drawable.icon_news));
-        mHeaders.add(new Header(MediaGroup.TYPE_MUSIC, mContext.getString(R.string.title_music), Header.TYPE_ROW, R.drawable.icon_music));
-        mHeaders.add(new Header(MediaGroup.TYPE_SUBSCRIPTIONS, mContext.getString(R.string.title_subscriptions), Header.TYPE_GRID, R.drawable.icon_subscriptions, true));
-        mHeaders.add(new Header(MediaGroup.TYPE_HISTORY, mContext.getString(R.string.title_history), Header.TYPE_GRID, R.drawable.icon_history, true));
-        mHeaders.add(new Header(MediaGroup.TYPE_PLAYLISTS, mContext.getString(R.string.title_playlists), Header.TYPE_ROW, R.drawable.icon_playlist, true));
-
-        mRowMapping.put(MediaGroup.TYPE_HOME, mediaGroupManager.getHomeObserve());
-        mRowMapping.put(MediaGroup.TYPE_NEWS, mediaGroupManager.getNewsObserve());
-        mRowMapping.put(MediaGroup.TYPE_MUSIC, mediaGroupManager.getMusicObserve());
-        mRowMapping.put(MediaGroup.TYPE_GAMING, mediaGroupManager.getGamingObserve());
-        mRowMapping.put(MediaGroup.TYPE_PLAYLISTS, mediaGroupManager.getPlaylistsObserve());
-
-        mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mediaGroupManager.getSubscriptionsObserve());
-        mGridMapping.put(MediaGroup.TYPE_HISTORY, mediaGroupManager.getHistoryObserve());
     }
 
     private void updateRowsHeader(Header header, Observable<List<MediaGroup>> groups, boolean authCheck) {
