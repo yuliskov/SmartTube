@@ -25,7 +25,7 @@ public class ViewManager {
     private Class<?> mDefaultTop;
     private long mPrevThrottleTimeMS;
     private boolean mMoveViewsToBack;
-    private boolean mSinglePlayerMode;
+    private boolean mIsSinglePlayerMode;
 
     private ViewManager(Context context) {
         mContext = context;
@@ -80,9 +80,9 @@ public class ViewManager {
         }
     }
 
-    public void startParentView(Activity activity) {
+    public boolean startParentView(Activity activity) {
         if (doThrottle()) {
-            return;
+            return true;
         }
 
         if (activity.getIntent() != null) {
@@ -90,7 +90,7 @@ public class ViewManager {
 
             Class<?> parentActivity = getTopActivity();
 
-            if (parentActivity == null && !mSinglePlayerMode) {
+            if (parentActivity == null && !mIsSinglePlayerMode) {
                 parentActivity = getDefaultParent(activity);
             }
 
@@ -98,11 +98,15 @@ public class ViewManager {
                 Log.d(TAG, "Parent activity name doesn't stored in registry. Exiting to Home...");
 
                 mMoveViewsToBack = true;
-                activity.moveTaskToBack(true);
 
-                closeAndClearCache();
+                if (mIsSinglePlayerMode) {
+                    activity.moveTaskToBack(true);
+                    return true;
+                }
 
-                return;
+                clearCache();
+
+                return false;
             }
 
             try {
@@ -115,11 +119,13 @@ public class ViewManager {
                 Log.e(TAG, "Parent activity not found.");
             }
         }
+
+        return true;
     }
 
     public void startDefaultView() {
         mMoveViewsToBack = false;
-        mSinglePlayerMode = false;
+        mIsSinglePlayerMode = false;
 
         if (doThrottle()) {
             return;
@@ -213,10 +219,10 @@ public class ViewManager {
 
     public void setSinglePlayerMode(boolean enable) {
         mActivityStack.clear();
-        mSinglePlayerMode = enable;
+        mIsSinglePlayerMode = enable;
     }
 
-    private void closeAndClearCache() {
+    private void clearCache() {
         FileHelpers.deleteCache(mContext);
     }
 }

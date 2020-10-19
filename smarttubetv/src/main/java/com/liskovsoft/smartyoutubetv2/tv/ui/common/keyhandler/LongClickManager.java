@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.common;
+package com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler;
 
 import android.view.KeyEvent;
 

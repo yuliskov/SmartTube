@@ -118,4 +118,5 @@
     <string name="action_playlist_add">Add to Playlist</string>
     <string name="action_video_stats">Video Stats</string>
     <string name="require_checked">Requires \"%s\"</string>
+    <string name="msg_press_again_to_exit">Press again to exit</string>
 </resources>

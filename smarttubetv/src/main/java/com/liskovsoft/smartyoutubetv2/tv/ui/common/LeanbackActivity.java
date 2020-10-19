@@ -6,9 +6,12 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import androidx.fragment.app.FragmentActivity;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.DoubleBackManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.LongClickManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
 
 /**
@@ -20,6 +23,7 @@ public abstract class LeanbackActivity extends FragmentActivity {
     private UriBackgroundManager mBackgroundManager;
     private ViewManager mViewManager;
     private ModeSyncManager mModeSyncManager;
+    private DoubleBackManager mDoubleBackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,7 @@ public abstract class LeanbackActivity extends FragmentActivity {
         mBackgroundManager = new UriBackgroundManager(this);
         mViewManager = ViewManager.instance(this);
         mModeSyncManager = ModeSyncManager.instance();
+        mDoubleBackManager = new DoubleBackManager(this);
     }
 
     @Override
@@ -42,6 +47,10 @@ public abstract class LeanbackActivity extends FragmentActivity {
         Log.d(TAG, event);
 
         mLongClickManager.dispatchKeyEvent(event);
+
+        if (mDoubleBackManager.checkDoubleBack(event)) {
+            super.finish();
+        }
 
         return super.dispatchKeyEvent(event);
     }
@@ -89,7 +98,11 @@ public abstract class LeanbackActivity extends FragmentActivity {
 
     @Override
     public void finish() {
-        mViewManager.startParentView(this); // user pressed back key
+        // user pressed back key
+        if (!mViewManager.startParentView(this)) {
+            // super.finish();
+            mDoubleBackManager.enableDoubleBackExit();
+        }
     }
 
     public void destroyActivity() {

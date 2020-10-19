@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -98,7 +99,17 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
-        mMetadataAction = mediaItemManager.getMetadataObserve(video.mediaItem)
+
+        Observable<MediaItemMetadata> observable;
+
+        if (video.mediaItem != null) {
+            observable = mediaItemManager.getMetadataObserve(video.mediaItem);
+        } else {
+            // Video might be loaded from channels
+            observable = mediaItemManager.getMetadataObserve(video.videoId);
+        }
+
+        mMetadataAction = observable
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::loadSuggestions,

@@ -4,4 +4,5 @@
     <string name="signin_view_description">Чтобы войти в аккаунт введите этот код на странице %s</string>
     <string name="signin_view_action_text">Готово</string>
     <string name="require_checked">Требуется \"%s\"</string>
+    <string name="msg_press_again_to_exit">Нажмите еще раз для выхода</string>
 </resources>
