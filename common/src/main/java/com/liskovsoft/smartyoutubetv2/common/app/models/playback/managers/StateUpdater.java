@@ -67,11 +67,10 @@ public class StateUpdater extends PlayerEventListenerHelper {
         boolean isFarFromStart = mController.getPositionMs() > 10_000;
 
         if (isFarFromStart) {
+            saveState(); // in case user want to go to previous video
             mController.setPositionMs(0);
             return true;
         }
-
-        saveState();
 
         return false;
     }
