@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
-import androidx.leanback.app.ProgressBarManager;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRow;
@@ -35,6 +34,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.ProgressBarManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.SearchSupportFragment;
 
 public class SearchFragment extends SearchSupportFragment
@@ -94,9 +94,18 @@ public class SearchFragment extends SearchSupportFragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mProgressBarManager.setRootView((ViewGroup) getActivity().findViewById(android.R.id.content).getRootView());
+        //mProgressBarManager.setRootView((ViewGroup) getActivity().findViewById(android.R.id.content).getRootView());
 
         mSearchPresenter.onInitDone();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View root = super.onCreateView(inflater, container, savedInstanceState);
+
+        mProgressBarManager.setRootView((ViewGroup) root);
+
+        return root;
     }
 
     private void setupEventListeners() {

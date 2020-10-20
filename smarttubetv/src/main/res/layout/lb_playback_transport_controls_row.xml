@@ -136,6 +136,55 @@
                 android:layout_alignParentStart="true" >
             </FrameLayout>
 
+            <RelativeLayout android:id="@+id/time_info"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layoutDirection="ltr"
+                            android:layout_gravity="bottom"
+                            android:layout_alignParentEnd="true"
+                            android:focusable="false" >
+                <TextView
+                    android:id="@+id/ending_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    style="?attr/playbackControlsTimeStyle" />
+
+                <RelativeLayout android:id="@+id/current_time_wrapper"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layoutDirection="ltr"
+                                android:layout_alignParentEnd="true"
+                                android:layout_below="@+id/ending_time"
+                                android:focusable="false" >
+                    <TextView
+                        android:id="@+id/current_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toStartOf="@+id/separate_time"
+                        android:layout_marginStart="@dimen/lb_playback_transport_time_margin"
+                        style="?attr/playbackControlsTimeStyle" />
+
+                    <TextView
+                        android:id="@+id/separate_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/lb_playback_time_separator"
+                        android:layout_toStartOf="@+id/total_time"
+                        android:layout_marginStart="@dimen/lb_playback_transport_time_margin"
+                        style="?attr/playbackControlsTimeStyle" />
+
+                    <TextView
+                        android:id="@+id/total_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginStart="@dimen/lb_playback_transport_time_margin"
+                        style="?attr/playbackControlsTimeStyle" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <!--
             <TextView
                 android:id="@+id/current_time"
                 android:layout_width="wrap_content"
@@ -166,6 +215,7 @@
                 android:layout_marginStart="@dimen/lb_playback_transport_time_margin"
                 android:layout_marginTop="@dimen/lb_playback_transport_time_margin_top"
                 style="?attr/playbackControlsTimeStyle" />
+             -->
         </RelativeLayout>
 
 

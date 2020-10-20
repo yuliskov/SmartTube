@@ -3,6 +3,9 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -22,6 +25,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.LoginDialogFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.ProgressBarManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
 
 import java.util.LinkedHashMap;
@@ -38,6 +42,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private HeaderFragmentFactory mHeaderFragmentFactory;
     private Handler mHandler;
     private boolean mCreateAlreadyCalled;
+    private ProgressBarManager mProgressBarManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,11 +53,21 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mBrowsePresenter = BrowsePresenter.instance(getContext());
         mBrowsePresenter.register(this);
         mCreateAlreadyCalled = true;
+        mProgressBarManager = new ProgressBarManager();
 
         setupAdapter();
         setupUi();
 
         enableMainFragmentScaling(false);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View root = super.onCreateView(inflater, container, savedInstanceState);
+
+        mProgressBarManager.setRootView((ViewGroup) root);
+
+        return root;
     }
 
     @Override
@@ -194,9 +209,9 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     @Override
     public void showProgressBar(boolean show) {
         if (show) {
-            getProgressBarManager().show();
+            mProgressBarManager.show();
         } else {
-            getProgressBarManager().hide();
+            mProgressBarManager.hide();
         }
     }
 }
