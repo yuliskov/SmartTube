@@ -89,6 +89,13 @@ public class TextBadgeImageCardView extends ImageCardView {
         mTextBadgeImageLayout.setBadgeText(text);
     }
 
+    /**
+     * Sets the progress.
+     */
+    public void setProgress(int percent) {
+        mTextBadgeImageLayout.setProgress(percent);
+    }
+
     @Override
     public void setSelected(boolean selected) {
         super.setSelected(selected);

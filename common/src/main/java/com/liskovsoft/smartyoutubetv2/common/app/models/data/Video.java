@@ -24,7 +24,7 @@ public final class Video implements Parcelable {
     public String badge;
     public String previewUrl;
     public int playlistIndex;
-    public int percentWatched;
+    public int percentWatched = -1;
     public MediaItem mediaItem;
     public MediaItem nextMediaItem;
 
