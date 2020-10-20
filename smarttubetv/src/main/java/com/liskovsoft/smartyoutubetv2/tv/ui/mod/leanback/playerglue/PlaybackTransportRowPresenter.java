@@ -79,11 +79,13 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         final ViewGroup mSecondaryControlsDock;
         final TextView mTotalTime;
         final TextView mCurrentTime;
+        final TextView mEndingTime;
         final TextView mQualityInfo;
         final TextView mCurrentDate;
         final ViewGroup mAdditionalInfo;
         final SeekBar mProgressBar;
         final ThumbsBar mThumbsBar;
+        final String mEndingTimeFormat;
         long mTotalTimeInMs = Long.MIN_VALUE;
         long mCurrentTimeInMs = Long.MIN_VALUE;
         long mSecondaryProgressInMs;
@@ -113,6 +115,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             @Override
             public void onCurrentPositionChanged(PlaybackControlsRow row, long ms) {
                 setCurrentPosition(ms);
+                setEndingTime(ms);
             }
 
             @Override
@@ -320,6 +323,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             mTotalTime = (TextView) rootView.findViewById(R.id.total_time);
             mQualityInfo = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.quality_info);
             mCurrentDate = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.current_date);
+            mEndingTime = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.ending_time);
+            mEndingTimeFormat = rootView.getContext().getString(com.liskovsoft.smartyoutubetv2.tv.R.string.view_einding_time);
             mAdditionalInfo = (ViewGroup) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.additional_info);
             updateDateLabel();
             mProgressBar = (SeekBar) rootView.findViewById(R.id.playback_progress);
@@ -580,6 +585,17 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                     progressRatio = (int) (ratio * Integer.MAX_VALUE);  // Could safely cast to int
                 }
                 mProgressBar.setProgress((int) progressRatio);
+            }
+        }
+
+        void setEndingTime(long currentTimeMs) {
+            if (mEndingTime != null) {
+                long endingTimeMs = mTotalTimeInMs - currentTimeMs;
+
+                if (endingTimeMs >= 0) {
+                    formatTime(endingTimeMs, mTempBuilder);
+                    mEndingTime.setText(String.format(mEndingTimeFormat, mTempBuilder.toString()));
+                }
             }
         }
 

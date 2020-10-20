@@ -5,12 +5,12 @@
     <!-- Example: width in dp = width in pixle / (dpi/160) dp = 1440/(560/160) =~ 411 -->
     <!-- Create drawable-w411dp -->
 
-    <dimen name="card_width">286dp</dimen>
-    <dimen name="card_height">165dp</dimen>
+    <dimen name="card_width">275dp</dimen>
+    <dimen name="card_height">160dp</dimen>
 
     <!-- Increase card view text size for some low dpi devices -->
-    <dimen name="lb_basic_card_title_text_size">17sp</dimen>
-    <dimen name="lb_basic_card_content_text_size">15sp</dimen>
+    <dimen name="lb_basic_card_title_text_size">19sp</dimen>
+    <dimen name="lb_basic_card_content_text_size">17sp</dimen>
 
     <!-- Elements below aren't used in the app -->
 
