@@ -89,6 +89,7 @@ public class CardPresenter extends Presenter {
         cardView.setContentText(video.description);
         cardView.setBadgeText(video.badge);
         cardView.setPreviewUrl(video.previewUrl);
+        cardView.setProgress(video.percentWatched);
 
         if (video.cardImageUrl != null) {
             // Set card size from dimension resources.

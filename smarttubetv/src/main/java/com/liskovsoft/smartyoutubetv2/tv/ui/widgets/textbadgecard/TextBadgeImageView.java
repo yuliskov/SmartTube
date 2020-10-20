@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
@@ -21,8 +22,10 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 public class TextBadgeImageView extends RelativeLayout {
     private ImageView mMainImage;
     private ImageView mPreviewImage;
+    private ProgressBar mProgressBar;
     private TextView mBadgeText;
     private String mPreviewUrl;
+    private ViewGroup mProgressContainer;
 
     public TextBadgeImageView(Context context) {
         super(context);
@@ -44,6 +47,8 @@ public class TextBadgeImageView extends RelativeLayout {
         mMainImage = findViewById(R.id.main_image);
         mPreviewImage = findViewById(R.id.preview_image);
         mBadgeText = findViewById(R.id.extra_text_badge);
+        mProgressBar = findViewById(R.id.clip_progress);
+        mProgressContainer = findViewById(R.id.clip_info);
     }
 
     /**
@@ -65,11 +70,26 @@ public class TextBadgeImageView extends RelativeLayout {
         if (mBadgeText == null) {
             return;
         }
-        mBadgeText.setText(text);
         if (text != null) {
+            mBadgeText.setText(text);
             mBadgeText.setVisibility(View.VISIBLE);
         } else {
-            mBadgeText.setVisibility(View.GONE);
+            mBadgeText.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    /**
+     * Sets the progress.
+     */
+    public void setProgress(int percent) {
+        if (mProgressBar == null) {
+            return;
+        }
+        if (percent > 0) {
+            mProgressBar.setProgress(percent);
+            mProgressBar.setVisibility(View.VISIBLE);
+        } else {
+            mProgressBar.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -113,6 +133,17 @@ public class TextBadgeImageView extends RelativeLayout {
     }
 
     public void setMainImageDimensions(int width, int height) {
+        setPreviewDimensions(width, height);
+        setProgressDimensions(width, height);
+    }
+
+    private void setProgressDimensions(int width, int height) {
+        ViewGroup.LayoutParams lp = mProgressContainer.getLayoutParams();
+        lp.width = width;
+        mProgressContainer.setLayoutParams(lp);
+    }
+
+    private void setPreviewDimensions(int width, int height) {
         ViewGroup.LayoutParams lp = mPreviewImage.getLayoutParams();
         lp.width = width;
         lp.height = height;
