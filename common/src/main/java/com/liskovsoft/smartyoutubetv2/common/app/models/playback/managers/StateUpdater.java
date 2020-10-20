@@ -10,12 +10,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
-import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,16 +27,16 @@ public class StateUpdater extends PlayerEventListenerHelper {
     // As one video might correspond to multiple Video objects.
     private final Map<String, State> mStates = Utils.createLRUMap(MAX_PERSISTENT_STATE_SIZE);
     private float mLastSpeed = -1;
+    private AppPrefs mPrefs;
 
     @Override
     public void onInitDone() {
-        AppPrefs prefs = AppPrefs.instance(mActivity);
-        mVideoFormat = prefs.getFormat(FormatItem.TYPE_VIDEO, FormatItem.VIDEO_HD_AVC);
-        mAudioFormat = prefs.getFormat(FormatItem.TYPE_AUDIO, FormatItem.AUDIO_HQ_MP4A);
-        mSubtitleFormat = prefs.getFormat(FormatItem.TYPE_SUBTITLE, null);
+        mPrefs = AppPrefs.instance(mActivity);
+        mVideoFormat = mPrefs.getFormat(FormatItem.TYPE_VIDEO, FormatItem.VIDEO_HD_AVC);
+        mAudioFormat = mPrefs.getFormat(FormatItem.TYPE_AUDIO, FormatItem.AUDIO_HQ_MP4A);
+        mSubtitleFormat = mPrefs.getFormat(FormatItem.TYPE_SUBTITLE, null);
 
-        String data = prefs.getStateUpdaterData();
-        restoreState(data);
+        restoreState();
     }
 
     /**
@@ -133,7 +130,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         }
 
         if (!mController.isInPIPMode()) {
-            AppPrefs.instance(mActivity).setFormat(track);
+            mPrefs.setFormat(track);
         }
     }
 
@@ -174,12 +171,21 @@ public class StateUpdater extends PlayerEventListenerHelper {
         mLastSpeed = mController.getSpeed();
     }
 
+    private void restoreState() {
+        restoreClipData();
+        restoreParams();
+    }
+
     private void persistState() {
+        persistClipData();
+        persistParams();
+    }
+
+    private void persistClipData() {
         if (mController.getLengthMs() <= MUSIC_VIDEO_LENGTH_MS) {
             return;
         }
 
-        AppPrefs prefs = AppPrefs.instance(mActivity);
         StringBuilder sb = new StringBuilder();
 
         for (State state : mStates.values()) {
@@ -194,22 +200,34 @@ public class StateUpdater extends PlayerEventListenerHelper {
             sb.append(state);
         }
 
-        prefs.setStateUpdaterData(sb.toString());
+        mPrefs.setStateUpdaterClipData(sb.toString());
     }
 
-    private void restoreState(String data) {
-        if (data == null) {
-            return;
-        }
+    private void restoreClipData() {
+        String data = mPrefs.getStateUpdaterClipData();
 
-        String[] split = data.split("\\|");
+        if (data != null) {
+            String[] split = data.split("\\|");
 
-        for (String spec : split) {
-            State state = State.from(spec);
+            for (String spec : split) {
+                State state = State.from(spec);
 
-            if (state != null) {
-                mStates.put(state.videoId, state);
+                if (state != null) {
+                    mStates.put(state.videoId, state);
+                }
             }
+        }
+    }
+
+    private void persistParams() {
+        mPrefs.setStateUpdaterParams(String.format("%s", mLastSpeed));
+    }
+
+    private void restoreParams() {
+        String params = mPrefs.getStateUpdaterParams();
+
+        if (params != null) {
+            mLastSpeed = Helpers.parseFloat(params);
         }
     }
 
