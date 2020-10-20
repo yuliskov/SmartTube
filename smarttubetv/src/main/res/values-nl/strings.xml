@@ -5,4 +5,5 @@
     <string name="signin_view_action_text">Klaar</string>
     <string name="require_checked">Vereist \"%s\"</string>
     <string name="msg_press_again_to_exit">Nogmaals drukken om af te sluiten</string>
+    <string name="view_einding_time">Einde: %s</string>
 </resources>
