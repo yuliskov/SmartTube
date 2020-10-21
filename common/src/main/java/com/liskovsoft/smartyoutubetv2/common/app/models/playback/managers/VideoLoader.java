@@ -119,6 +119,10 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 // close player
                 mController.exit();
                 break;
+            case PlaybackUiController.REPEAT_PAUSE:
+                // pause player
+                mController.showControls(true);
+                break;
         }
 
         Log.e(TAG, "Undetected repeat mode " + mRepeatMode);
