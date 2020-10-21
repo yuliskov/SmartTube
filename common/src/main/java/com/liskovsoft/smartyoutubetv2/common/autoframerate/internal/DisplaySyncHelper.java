@@ -32,6 +32,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
     private boolean mSwitchToFHD;
     private int mModeLength = -1;
     private AutoFrameRateListener mListener;
+    private boolean mIsResolutionSwitchEnabled;
 
     public interface AutoFrameRateListener {
         void onModeStart(Mode newMode);
@@ -58,6 +59,29 @@ public class DisplaySyncHelper implements UhdHelperListener {
             if (mode.getPhysicalHeight() == currentMode.getPhysicalHeight() && mode.getPhysicalWidth() == currentMode.getPhysicalWidth()) {
                 newModes.add(mode);
             }
+        }
+
+        return newModes;
+    }
+
+    private ArrayList<Mode> filterModesByWidth(Mode[] allModes, int videoWidth) {
+        ArrayList<Mode> newModes = new ArrayList<>();
+
+        if (videoWidth == -1) {
+            return newModes;
+        }
+
+        for (Mode mode : allModes) {
+            int width = mode.getPhysicalWidth();
+            if (width >= (videoWidth - 100) && width <= (videoWidth + 100)) {
+                newModes.add(mode);
+            }
+        }
+
+        if (newModes.isEmpty()) {
+            Log.i(TAG, "MODE CANDIDATES NOT FOUND!! Old modes: " + Arrays.asList(allModes));
+        } else {
+            Log.i(TAG, "FOUND MODE CANDIDATES! New modes: " + newModes);
         }
 
         return newModes;
@@ -265,26 +289,30 @@ public class DisplaySyncHelper implements UhdHelperListener {
 
             boolean needResolutionSwitch = false;
 
-            List<Mode> resultModes;
+            List<Mode> resultModes = new ArrayList<>();
 
-            int minHeight = -1;
-            int maxHeight = -1;
-
-            if (mSwitchToUHD) { // switch not only framerate but resolution too
-                if (videoWidth > 1920) {
-                    minHeight = 2160;
-                    maxHeight = 5000;
-                }
+            if (mIsResolutionSwitchEnabled) {
+                resultModes = filterModesByWidth(modes, Math.max(videoWidth, 1200));
             }
 
-            if (mSwitchToFHD) { // switch not only framerate but resolution too
-                if (videoWidth <= 1920) {
-                    minHeight = 1080;
-                    maxHeight = 1080;
-                }
-            }
+            //int minHeight = -1;
+            //int maxHeight = -1;
 
-            resultModes = filterModes(modes, minHeight, maxHeight);
+            //if (mSwitchToUHD) { // switch not only framerate but resolution too
+            //    if (videoWidth > 1920) {
+            //        minHeight = 2160;
+            //        maxHeight = 5000;
+            //    }
+            //}
+            //
+            //if (mSwitchToFHD) { // switch not only framerate but resolution too
+            //    if (videoWidth <= 1920) {
+            //        minHeight = 1080;
+            //        maxHeight = 1080;
+            //    }
+            //}
+
+            //resultModes = filterModes(modes, minHeight, maxHeight);
 
             if (!resultModes.isEmpty()) {
                 needResolutionSwitch = true;
@@ -303,9 +331,6 @@ public class DisplaySyncHelper implements UhdHelperListener {
             if (closerMode == null) {
                 String msg = "Could not find closer refresh rate for " + videoFramerate + "fps";
                 Log.i(TAG, msg);
-
-                // NOTE: changed
-                //CommonApplication.getPreferences().setCurrentDisplayMode(String.format("%s (%s)", UhdHelper.formatMode(currentMode), msg));
                 return false;
             }
 
@@ -462,14 +487,16 @@ public class DisplaySyncHelper implements UhdHelperListener {
     }
 
     public void setResolutionSwitchEnabled(boolean enabled) {
-        mSwitchToUHD = enabled;
+        //mSwitchToUHD = enabled;
 
-        //mSwitchToFHD = !Build.BRAND.equals("Sasvlad"); // Ugoos custom firmware fix
-        mSwitchToFHD = enabled;
+        //mSwitchToFHD = enabled;
+
+        mIsResolutionSwitchEnabled = enabled;
     }
 
     public boolean isResolutionSwitchEnabled() {
-        return mSwitchToUHD || mSwitchToFHD;
+        //return mSwitchToUHD || mSwitchToFHD;
+        return mIsResolutionSwitchEnabled;
     }
 
     public void setContext(Context context) {

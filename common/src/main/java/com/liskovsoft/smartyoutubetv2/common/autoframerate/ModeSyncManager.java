@@ -37,7 +37,7 @@ public class ModeSyncManager {
         if (mFormatItem != null) {
             mFrameRateHelper.apply(mFormatItem, activity);
         } else {
-            mFrameRateHelper.restoreOriginalState(activity);
+            //mFrameRateHelper.restoreOriginalState(activity);
         }
     }
 
