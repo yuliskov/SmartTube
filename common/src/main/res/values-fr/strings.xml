@@ -14,8 +14,8 @@
     <string name="library_signin_to_show_more">Regardez les vidéos que vous avez aimées, enregistrées ou souscrites</string>
     <string name="library_signin_subtitle">Connectez-vous pour voir votre bibliothéque</string>
     <string name="action_signin">CONNEXION</string>
-    <string name="video_formats_title">Formats vidéo</string>
-    <string name="audio_formats_title">Formats audio</string>
+    <string name="title_video_formats">Formats vidéo</string>
+    <string name="title_audio_formats">Formats audio</string>
     <string name="subtitle_formats_title">Sous-titres</string>
     <string name="default_video_option">Auto (qualité maximale)</string>
     <string name="default_audio_option">Auto (qualité maximale)</string>

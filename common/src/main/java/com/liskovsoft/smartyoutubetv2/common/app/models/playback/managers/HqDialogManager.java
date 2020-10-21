@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import android.os.Build.VERSION;
+import androidx.core.util.Pair;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -9,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.Preset;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 
 import java.util.ArrayList;
@@ -33,12 +35,36 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         mController.setBuffer(AppPrefs.instance(mActivity).getVideoBufferType(PlaybackEngineController.BUFFER_LOW));
     }
 
+    @Override
+    public void onEngineInitialized() {
+        updateBackgroundPlayback();
+    }
+
+    @Override
+    public void onHighQualityClicked() {
+        if (VERSION.SDK_INT < 25) {
+            // Old Android fix: don't destroy player while dialog is open
+            mController.blockEngine(true);
+        }
+
+        mSettingsPresenter.clear();
+
+        addQualityCategories();
+        addPresetsCategory();
+        addBackgroundPlaybackCategory();
+        addVideoBufferCategory();
+
+        internalStuff();
+
+        mSettingsPresenter.showDialog(mActivity.getString(R.string.playback_settings), this::onDialogHide);
+    }
+
     private void addQualityCategories() {
         List<FormatItem> videoFormats = mController.getVideoFormats();
-        String videoFormatsTitle = mActivity.getString(R.string.video_formats_title);
+        String videoFormatsTitle = mActivity.getString(R.string.title_video_formats);
 
         List<FormatItem> audioFormats = mController.getAudioFormats();
-        String audioFormatsTitle = mActivity.getString(R.string.audio_formats_title);
+        String audioFormatsTitle = mActivity.getString(R.string.title_audio_formats);
 
         addRadioCategory(videoFormatsTitle,
                 UiOptionItem.from(videoFormats,
@@ -70,29 +96,10 @@ public class HqDialogManager extends PlayerEventListenerHelper {
                 mController.getBuffer() == val);
     }
 
-    @Override
-    public void onEngineInitialized() {
-        updateBackgroundPlayback();
-    }
-
-    @Override
-    public void onHighQualityClicked() {
-        if (VERSION.SDK_INT < 25) {
-            // Old Android fix: don't destroy player while dialog is open
-            mController.blockEngine(true);
-        }
-
-        mSettingsPresenter.clear();
-
-        addQualityCategories();
-        addBackgroundPlaybackCategory();
-        addVideoBufferCategory();
-
+    private void internalStuff() {
         appendRadioOptions();
         appendCheckedOptions();
         appendSingleOptions();
-
-        mSettingsPresenter.showDialog(mActivity.getString(R.string.playback_settings), this::onDialogHide);
     }
 
     private void onDialogHide() {
@@ -139,6 +146,49 @@ public class HqDialogManager extends PlayerEventListenerHelper {
                 }, mEnableBackgroundAudio && !mEnablePIP));
 
         addRadioCategory(categoryTitle, options);
+    }
+
+    private void addPresetsCategory() {
+        Preset[] presets = {
+                new Preset("SD     30fps    avc", "360|30|avc"),
+                new Preset("SD     30fps    vp9", "360|30|vp9"),
+                new Preset("SD     60fps    avc", "360|60|avc"),
+                new Preset("SD     60fps    vp9", "360|60|vp9"),
+                new Preset("HD     30fps    avc", "720|30|avc"),
+                new Preset("HD     30fps    vp9", "720|30|vp9"),
+                new Preset("HD     60fps    avc", "720|60|avc"),
+                new Preset("HD     60fps    vp9", "720|60|vp9"),
+                new Preset("FHD    30fps    avc", "1080|30|avc"),
+                new Preset("FHD    30fps    vp9", "1080|30|vp9"),
+                new Preset("FHD    60fps    avc", "1080|60|avc"),
+                new Preset("FHD    60fps    vp9", "1080|60|vp9"),
+                new Preset("2K     30fps    vp9", "1440|30|vp9"),
+                new Preset("2K     30fps    vp9+hdr", "1440|30|vp9|hdr"),
+                new Preset("2K     60fps    vp9", "1440|60|vp9"),
+                new Preset("2K     60fps    vp9+hdr", "1440|60|vp9|hdr"),
+                new Preset("4K     30fps    vp9", "2160|30|vp9"),
+                new Preset("4K     30fps    vp9+hdr", "2160|30|vp9|hdr"),
+                new Preset("4K     60fps    vp9", "2160|60|vp9"),
+                new Preset("4K     60fps    vp9+hdr", "2160|60|vp9|hdr"),
+                new Preset("8K     30fps    vp9", "4320|30|vp9"),
+                new Preset("8K     30fps    vp9+hdr", "4320|30|vp9|hdr"),
+                new Preset("8K     60fps    vp9", "4320|60|vp9"),
+                new Preset("8K     60fps    vp9+hdr", "4320|60|vp9|hdr")
+        };
+
+        addRadioCategory(mActivity.getString(R.string.title_video_presets), fromPresets(presets));
+    }
+
+    private List<OptionItem> fromPresets(Preset[] presets) {
+        List<OptionItem> result = new ArrayList<>();
+
+        for (Preset preset : presets) {
+            result.add(UiOptionItem.from(preset.name,
+                    option -> mController.selectFormat(preset.format),
+                    mController.getVideoFormat().equals(preset.format)));
+        }
+
+        return result;
     }
 
     public void addSingleOption(OptionItem option) {

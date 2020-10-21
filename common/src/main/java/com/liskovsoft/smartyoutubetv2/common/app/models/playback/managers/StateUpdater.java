@@ -32,7 +32,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     @Override
     public void onInitDone() {
         mPrefs = AppPrefs.instance(mActivity);
-        mVideoFormat = mPrefs.getFormat(FormatItem.TYPE_VIDEO, FormatItem.VIDEO_HD_AVC);
+        mVideoFormat = mPrefs.getFormat(FormatItem.TYPE_VIDEO, FormatItem.VIDEO_HD_AVC_30);
         mAudioFormat = mPrefs.getFormat(FormatItem.TYPE_AUDIO, FormatItem.AUDIO_HQ_MP4A);
         mSubtitleFormat = mPrefs.getFormat(FormatItem.TYPE_SUBTITLE, null);
 
@@ -233,7 +233,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     private void restoreVideoFormat() {
         if (mController.isInPIPMode()) {
-            mController.selectFormat(FormatItem.VIDEO_SD_AVC);
+            mController.selectFormat(FormatItem.VIDEO_SD_AVC_30);
         } else if (mVideoFormat != null) {
             mController.selectFormat(mVideoFormat);
         }
