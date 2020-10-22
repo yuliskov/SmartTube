@@ -20,19 +20,15 @@ import java.util.List;
 public class DisplaySyncHelper implements UhdHelperListener {
     private static final String TAG = DisplaySyncHelper.class.getSimpleName();
     private static final int STATE_ORIGINAL = 1;
-    private static final int STATE_CURRENT = 2;
     protected Context mContext;
     private boolean mDisplaySyncInProgress = false;
     private UhdHelper mUhdHelper;
     protected Mode mOriginalMode;
     private Mode mNewMode;
-    private Mode mCurrentMode;
     // switch not only framerate but resolution too
-    private boolean mSwitchToUHD;
-    private boolean mSwitchToFHD;
+    private boolean mIsResolutionSwitchEnabled;
     private int mModeLength = -1;
     private AutoFrameRateListener mListener;
-    private boolean mIsResolutionSwitchEnabled;
 
     public interface AutoFrameRateListener {
         void onModeStart(Mode newMode);
@@ -40,6 +36,14 @@ public class DisplaySyncHelper implements UhdHelperListener {
 
     public DisplaySyncHelper(Context context) {
         mContext = context;
+    }
+
+    public Mode getOriginalMode() {
+        return mOriginalMode;
+    }
+
+    public Mode getNewMode() {
+        return mNewMode;
     }
 
     private List<Mode> filterSameResolutionModes(Mode[] oldModes, Mode currentMode) {
@@ -378,24 +382,12 @@ public class DisplaySyncHelper implements UhdHelperListener {
         saveState(STATE_ORIGINAL);
     }
 
-    public void saveCurrentState() {
-        saveState(STATE_CURRENT);
-    }
-
     public boolean restoreOriginalState(Window window, boolean force) {
         return restoreState(window, STATE_ORIGINAL, force);
     }
 
     public boolean restoreOriginalState(Window window) {
         return restoreOriginalState(window, false);
-    }
-
-    public boolean restoreCurrentState(Window window, boolean force) {
-        return restoreState(window, STATE_CURRENT, force);
-    }
-
-    public boolean restoreCurrentState(Window window) {
-        return restoreState(window, STATE_CURRENT, false);
     }
 
     private void saveState(int state) {
@@ -410,9 +402,6 @@ public class DisplaySyncHelper implements UhdHelperListener {
 
                     AppPrefs.instance(mContext).setDefaultDisplayMode(UhdHelper.formatMode(mode));
                     break;
-                case STATE_CURRENT:
-                    mCurrentMode = mode;
-                    break;
             }
         }
     }
@@ -425,9 +414,6 @@ public class DisplaySyncHelper implements UhdHelperListener {
         switch (state) {
             case STATE_ORIGINAL:
                 modeTmp = mOriginalMode;
-                break;
-            case STATE_CURRENT:
-                modeTmp = mCurrentMode;
                 break;
         }
 
@@ -487,15 +473,10 @@ public class DisplaySyncHelper implements UhdHelperListener {
     }
 
     public void setResolutionSwitchEnabled(boolean enabled) {
-        //mSwitchToUHD = enabled;
-
-        //mSwitchToFHD = enabled;
-
         mIsResolutionSwitchEnabled = enabled;
     }
 
     public boolean isResolutionSwitchEnabled() {
-        //return mSwitchToUHD || mSwitchToFHD;
         return mIsResolutionSwitchEnabled;
     }
 

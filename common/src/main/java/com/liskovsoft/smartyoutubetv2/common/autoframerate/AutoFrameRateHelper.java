@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.autoframerate;
 
 import android.app.Activity;
+import android.util.Pair;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolder.Mode;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncHelper;
@@ -17,6 +18,7 @@ public class AutoFrameRateHelper {
     private long mPrevCall;
     private HashMap<Float, Float> mFrameRateMapping;
     private boolean mIsFpsCorrectionEnabled;
+    private Pair<Integer, Float> mCurrentFormat;
 
     public AutoFrameRateHelper() {
         this(null);
@@ -28,42 +30,6 @@ public class AutoFrameRateHelper {
 
         initFrameRateMapping();
         saveOriginalState();
-    }
-
-    private void initFrameRateMapping() {
-        mFrameRateMapping = new HashMap<>();
-        mFrameRateMapping.put(30f, 29.97f);
-        mFrameRateMapping.put(60f, 59.94f);
-    }
-
-    private void apply(FormatItem format, boolean force) {
-        if (mActivity == null) {
-            Log.e(TAG, "Activity in null. exiting...");
-            return;
-        }
-
-        if (!isSupported()) {
-            Log.d(TAG, "Autoframerate not supported. Exiting...");
-            return;
-        }
-
-        if (format == null) {
-            Log.e(TAG, "Can't apply mode change: format is null");
-            return;
-        }
-
-        if (System.currentTimeMillis() - mPrevCall < THROTTLE_INTERVAL_MS) {
-            Log.e(TAG, "Throttling afr calls...");
-            return;
-        } else {
-            mPrevCall = System.currentTimeMillis();
-        }
-
-        float frameRate = correctFps(format.getFrameRate());
-        int width = format.getWidth();
-
-        Log.d(TAG, String.format("Applying mode change... Video fps: %s, width: %s, height: %s", frameRate, width, format.getHeight()));
-        mSyncHelper.syncDisplayMode(mActivity.getWindow(), width, frameRate, force);
     }
 
     public void apply(FormatItem format, Activity activity) {
@@ -83,13 +49,84 @@ public class AutoFrameRateHelper {
         return mSyncHelper.isResolutionSwitchEnabled();
     }
 
-    public void setResolutionSwitchEnabled(boolean enabled) {
-        mSyncHelper.setResolutionSwitchEnabled(enabled);
+    public void setResolutionSwitchEnabled(boolean enabled, boolean force) {
+        if (force) {
+            Mode originalMode = mSyncHelper.getOriginalMode();
+            Mode newMode = mSyncHelper.getNewMode();
+
+            if (originalMode != null && newMode != null) {
+                if (enabled) {
+                    mSyncHelper.setResolutionSwitchEnabled(true);
+                    syncMode(mCurrentFormat.first, mCurrentFormat.second);
+                } else {
+                    syncMode(originalMode.getPhysicalWidth(), newMode.getRefreshRate());
+                    mSyncHelper.setResolutionSwitchEnabled(false);
+                }
+            }
+        } else {
+            mSyncHelper.setResolutionSwitchEnabled(enabled);
+        }
     }
 
     public void saveOriginalState(Activity activity) {
         setActivity(activity);
         saveOriginalState();
+    }
+
+    private void initFrameRateMapping() {
+        mFrameRateMapping = new HashMap<>();
+        mFrameRateMapping.put(30f, 29.97f);
+        mFrameRateMapping.put(60f, 59.94f);
+    }
+
+    private void apply(FormatItem format, boolean force) {
+        if (mActivity == null) {
+            Log.e(TAG, "Activity in null. exiting...");
+            return;
+        }
+
+        if (!isSupported()) {
+            Log.e(TAG, "Autoframerate not supported. Exiting...");
+            return;
+        }
+
+        if (format == null) {
+            Log.e(TAG, "Can't apply mode change: format is null");
+            return;
+        }
+
+        if (System.currentTimeMillis() - mPrevCall < THROTTLE_INTERVAL_MS) {
+            Log.e(TAG, "Throttling afr calls...");
+            return;
+        } else {
+            mPrevCall = System.currentTimeMillis();
+        }
+
+        int width = format.getWidth();
+        float frameRate = correctFrameRate(format.getFrameRate());
+
+        mCurrentFormat = new Pair<>(width, frameRate);
+
+        Log.d(TAG, String.format("Applying mode change... Video fps: %s, width: %s, height: %s", frameRate, width, format.getHeight()));
+        syncMode(width, frameRate, force);
+    }
+
+    private void syncMode(int width, float frameRate) {
+        syncMode(width, frameRate, false);
+    }
+
+    private void syncMode(int width, float frameRate, boolean force) {
+        if (mActivity == null) {
+            Log.e(TAG, "Activity in null. exiting...");
+            return;
+        }
+
+        if (!isSupported()) {
+            Log.e(TAG, "Autoframerate not supported. Exiting...");
+            return;
+        }
+
+        mSyncHelper.syncDisplayMode(mActivity.getWindow(), width, frameRate, force);
     }
 
     private void saveOriginalState() {
@@ -143,7 +180,7 @@ public class AutoFrameRateHelper {
         mSyncHelper.resetStats();
     }
 
-    private float correctFps(float frameRate) {
+    private float correctFrameRate(float frameRate) {
         if (mIsFpsCorrectionEnabled && mFrameRateMapping.containsKey(frameRate)) {
             return mFrameRateMapping.get(frameRate);
         }

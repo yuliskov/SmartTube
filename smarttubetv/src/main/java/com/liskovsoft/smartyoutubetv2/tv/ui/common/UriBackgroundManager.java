@@ -56,9 +56,7 @@ public class UriBackgroundManager {
     }
 
     public void setBackgroundFrom(Video item) {
-        // ignore
-        // startBackgroundTimer(item.bgImageUrl);
-        setDefaultBackground();
+        // Selectively change background picture
     }
 
     public void onStart() {

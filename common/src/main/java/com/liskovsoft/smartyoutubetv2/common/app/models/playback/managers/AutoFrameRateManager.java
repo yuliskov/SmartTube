@@ -70,7 +70,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         addUiOptions();
         mAutoFrameRateHelper.saveOriginalState(mActivity);
         mAutoFrameRateHelper.setFpsCorrectionEnabled(mAfrData.afrFpsCorrectionEnabled);
-        mAutoFrameRateHelper.setResolutionSwitchEnabled(mAfrData.afrResSwitchEnabled);
+        mAutoFrameRateHelper.setResolutionSwitchEnabled(mAfrData.afrResSwitchEnabled, false);
     }
 
     @Override
@@ -102,8 +102,10 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     }
 
     private void onResolutionSwitchClick(OptionItem optionItem) {
+        boolean force = mAfrData.afrEnabled;
+
         mAfrData.afrResSwitchEnabled = optionItem.isSelected();
-        mAutoFrameRateHelper.setResolutionSwitchEnabled(mAfrData.afrResSwitchEnabled);
+        mAutoFrameRateHelper.setResolutionSwitchEnabled(mAfrData.afrResSwitchEnabled, force);
         persistAfrData();
     }
 

@@ -8,6 +8,7 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -225,6 +226,7 @@ public class ViewManager {
     }
 
     private void clearCache() {
+        YouTubeMediaService.instance().invalidateCache();
         FileHelpers.deleteCache(mContext);
     }
 }
