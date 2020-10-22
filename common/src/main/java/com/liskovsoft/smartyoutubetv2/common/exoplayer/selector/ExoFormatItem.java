@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -29,6 +30,8 @@ public class ExoFormatItem implements FormatItem {
     private float mFrameRate;
     private int mWidth;
     private int mHeight;
+    private String mCodecs;
+    private String mFormatId;
 
     public static List<FormatItem> from(Set<MediaTrack> mediaTracks) {
         if (mediaTracks == null) {
@@ -49,22 +52,7 @@ public class ExoFormatItem implements FormatItem {
             return null;
         }
 
-        ExoFormatItem videoFormatItem = new ExoFormatItem();
-
-        Format format = track.format;
-
-        if (format != null) {
-            videoFormatItem.mTitle = TrackSelectorUtil.buildTrackNameShort(format);
-            videoFormatItem.mFrameRate = format.frameRate;
-            videoFormatItem.mHeight = format.height;
-            videoFormatItem.mWidth = format.width;
-
-            if (format.id != null) {
-                videoFormatItem.mId = format.id.hashCode();
-            }
-        } else {
-            videoFormatItem.mIsDefault = true; // fake auto track
-        }
+        ExoFormatItem videoFormatItem = from(track.format);
 
         videoFormatItem.mType = track.rendererIndex;
         videoFormatItem.mIsSelected = track.isSelected;
@@ -81,13 +69,24 @@ public class ExoFormatItem implements FormatItem {
         return null;
     }
 
-    public static FormatItem from(Format format) {
+    public static ExoFormatItem from(Format format) {
         ExoFormatItem formatItem = new ExoFormatItem();
-        formatItem.mFrameRate = format.frameRate;
-        formatItem.mWidth = format.width;
-        formatItem.mHeight = format.height;
-        formatItem.mTitle = TrackSelectorUtil.buildTrackNameShort(format);
-        formatItem.mType = getType(format);
+
+        if (format != null) {
+            formatItem.mTitle = TrackSelectorUtil.buildTrackNameShort(format);
+            formatItem.mFrameRate = format.frameRate;
+            formatItem.mWidth = format.width;
+            formatItem.mHeight = format.height;
+            formatItem.mCodecs = format.codecs;
+            formatItem.mType = getType(format);
+
+            if (format.id != null) {
+                formatItem.mId = format.id.hashCode();
+                formatItem.mFormatId = format.id;
+            }
+        } else {
+            formatItem.mIsDefault = true; // fake auto track
+        }
 
         return formatItem;
     }
@@ -126,32 +125,26 @@ public class ExoFormatItem implements FormatItem {
         return String.format("%s,%s,%s,%s,%s,%s,%s,%s", mType, rendererIndex, id, codecs, width, height, frameRate, language);
     }
 
-    public static FormatItem from(String spec) {
-        if (spec == null) {
-            return null;
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj instanceof ExoFormatItem) {
+            ExoFormatItem formatItem = (ExoFormatItem) obj;
+
+            return mType == formatItem.mType &&
+                    mFrameRate == formatItem.mFrameRate &&
+                    mWidth == formatItem.mWidth &&
+                    mHeight == formatItem.mHeight &&
+                    mCodecs != null && mCodecs.equals(formatItem.mCodecs);
         }
 
+        return super.equals(obj);
+    }
+
+    public static FormatItem from(int type, int rendererIndex, String id, String codecs, int width, int height, float frameRate, String language) {
         ExoFormatItem formatItem = new ExoFormatItem();
-
-        String[] split = spec.split(",");
-
-        if (split.length != 8) {
-            return null;
-        }
-
-        int type = Helpers.parseInt(split[0]);
         formatItem.mType = type;
-
-        int rendererIndex = Helpers.parseInt(split[1]);
         MediaTrack mediaTrack = MediaTrack.forRendererIndex(rendererIndex);
         formatItem.mTrack = mediaTrack;
-
-        String id = split[2];
-        String codecs = split[3];
-        int width = Helpers.parseInt(split[4]);
-        int height = Helpers.parseInt(split[5]);
-        float frameRate = Helpers.parseFloat(split[6]);
-        String language = split[7];
 
         switch (type) {
             case TYPE_VIDEO:
@@ -174,7 +167,52 @@ public class ExoFormatItem implements FormatItem {
         return formatItem;
     }
 
-    public static FormatItem createFakeVideoFormat(int resolution, int format, int frameRate) {
+    public static FormatItem from(String spec) {
+        if (spec == null) {
+            return null;
+        }
+
+        String[] split = spec.split(",");
+
+        if (split.length != 8) {
+            return null;
+        }
+
+        int type = Helpers.parseInt(split[0]);
+        int rendererIndex = Helpers.parseInt(split[1]);
+        String id = split[2];
+        String codecs = split[3];
+        int width = Helpers.parseInt(split[4]);
+        int height = Helpers.parseInt(split[5]);
+        float frameRate = Helpers.parseFloat(split[6]);
+        String language = split[7];
+
+        return from(type, rendererIndex, id, codecs, width, height, frameRate, language);
+    }
+
+    /**
+     * "2560,1440,30,vp9"
+     */
+    public static FormatItem fromVideoPreset(String spec) {
+        if (spec == null) {
+            return null;
+        }
+
+        String[] split = spec.split(",");
+
+        if (split.length != 4) {
+            return null;
+        }
+
+        int width = Helpers.parseInt(split[0]);
+        int height = Helpers.parseInt(split[1]);
+        float frameRate = Helpers.parseFloat(split[2]);
+        String codec = split[3];
+
+        return from(TYPE_VIDEO, TrackSelectorManager.RENDERER_INDEX_VIDEO, null, codec, width, height, frameRate, null);
+    }
+
+    public static FormatItem fromConstants(int resolution, int format, int frameRate) {
         ExoFormatItem formatItem = new ExoFormatItem();
         MediaTrack mediaTrack = MediaTrack.forRendererIndex(TrackSelectorManager.RENDERER_INDEX_VIDEO);
         formatItem.mTrack = mediaTrack;

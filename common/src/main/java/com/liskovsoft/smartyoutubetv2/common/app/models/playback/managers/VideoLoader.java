@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import android.os.Handler;
+import android.os.Looper;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
@@ -13,6 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.Play
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -21,15 +24,19 @@ import io.reactivex.schedulers.Schedulers;
 public class VideoLoader extends PlayerEventListenerHelper {
     private static final String TAG = VideoLoader.class.getSimpleName();
     private final Playlist mPlaylist;
+    private final Handler mHandler;
     private Video mLastVideo;
     private Video mErrorVideo;
     private Disposable mMetadataAction;
     private Disposable mFormatInfoAction;
+    private Disposable mMpdStreamAction;
     private boolean mEngineInitialized;
     private int mRepeatMode = PlaybackUiController.REPEAT_ALL;
+    private final Runnable mReloadVideoHandler = () -> loadVideo(mLastVideo);
 
     public VideoLoader() {
         mPlaylist = Playlist.instance();
+        mHandler = new Handler(Looper.myLooper());
     }
 
     @Override
@@ -147,13 +154,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     private void disposeActions() {
-        if (mMetadataAction != null && !mMetadataAction.isDisposed()) {
-            mMetadataAction.dispose();
-        }
-
-        if (mFormatInfoAction != null && !mFormatInfoAction.isDisposed()) {
-            mFormatInfoAction.dispose();
-        }
+        RxUtils.disposeActions(mMetadataAction, mFormatInfoAction, mMpdStreamAction);
+        mHandler.removeCallbacks(mReloadVideoHandler);
     }
 
     private void loadVideo(Video item) {
@@ -195,6 +197,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     private void loadFormatInfo(Video video) {
+        disposeActions();
+
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
         mFormatInfoAction = mediaItemManager.getFormatInfoObserve(video.videoId)
@@ -211,7 +215,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         } else if (formatInfo.containsDashInfo()) {
             Log.d(TAG, "Found dash video. Loading...");
 
-            Disposable action = formatInfo.createMpdStreamObservable()
+            mMpdStreamAction = formatInfo.createMpdStreamObservable()
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(mController::openDash, error -> Log.e(TAG, "createMpdStream error: " + error));
@@ -219,8 +223,14 @@ public class VideoLoader extends PlayerEventListenerHelper {
             Log.d(TAG, "Found url list video. Loading...");
             mController.openUrlList(formatInfo.createUrlList());
         } else {
-            Log.e(TAG, "Empty format info received. No video data to pass to the player.");
-            mController.showControls(true);
+            Log.d(TAG, "Empty format info received. Seems future translation. No video data to pass to the player.");
+            scheduleReloadVideoTimer();
         }
+    }
+
+    private void scheduleReloadVideoTimer() {
+        Log.d(TAG, "Starting check for the future stream...");
+        mController.showControls(true);
+        mHandler.postDelayed(mReloadVideoHandler, 30 * 1_000);
     }
 }
