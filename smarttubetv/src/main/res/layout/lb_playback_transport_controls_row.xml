@@ -65,10 +65,10 @@
         android:clipToPadding="false" >
 
         <!-- MOD: hide player controls on UP button -->
-        <LinearLayout android:id="@+id/hide_dock"
+        <LinearLayout android:id="@+id/top_edge"
                       android:orientation="horizontal"
                       android:layout_width="match_parent"
-                      android:focusable="false"
+                      android:focusable="true"
                       android:layout_height="0dp"/>
 
         <!-- Original top player row -->

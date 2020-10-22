@@ -428,6 +428,11 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         public void onVideoSpeed() {
             mEventListener.onVideoSpeedClicked();
         }
+
+        @Override
+        public void onTopEdgeFocused() {
+            showControls(false);
+        }
     }
 
     // Begin Ui events

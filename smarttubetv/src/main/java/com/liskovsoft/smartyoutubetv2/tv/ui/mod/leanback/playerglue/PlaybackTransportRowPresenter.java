@@ -44,7 +44,7 @@ import androidx.leanback.widget.ThumbsBar;
 import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.ControlBarPresenter.OnControlClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.ControlBarPresenter.OnControlSelectedListener;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.MaxIconNumVideoPlayerGlue.OnQualityInfoCallback;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.MaxIconNumVideoPlayerGlue.QualityInfoListener;
 
 import java.util.Arrays;
 
@@ -60,9 +60,12 @@ import java.util.Arrays;
  * </p>
  */
 public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
-
     static class BoundData extends PlaybackControlsPresenter.BoundData {
         ViewHolder mRowViewHolder;
+    }
+
+    public interface TopEdgeFocusListener {
+        void onTopEdgeFocused();
     }
 
     /**
@@ -83,6 +86,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         final TextView mQualityInfo;
         final TextView mCurrentDate;
         final ViewGroup mAdditionalInfo;
+        final ViewGroup mTopEdge;
         final SeekBar mProgressBar;
         final ThumbsBar mThumbsBar;
         final String mEndingTimeFormat;
@@ -108,7 +112,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         long mSeekStartTimeMs;
 
         // MOD: update quality info
-        final OnQualityInfoCallback mQualityListener = this::setQualityInfo;
+        final QualityInfoListener mQualityListener = this::setQualityInfo;
+        TopEdgeFocusListener mTopEdgeFocusListener = null;
 
         final PlaybackControlsRow.OnPlaybackProgressCallback mListener =
                 new PlaybackControlsRow.OnPlaybackProgressCallback() {
@@ -326,6 +331,16 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             mEndingTime = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.ending_time);
             mEndingTimeFormat = rootView.getContext().getString(com.liskovsoft.smartyoutubetv2.tv.R.string.view_einding_time);
             mAdditionalInfo = (ViewGroup) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.additional_info);
+            mTopEdge = (ViewGroup) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.top_edge);
+            mTopEdge.setOnFocusChangeListener((v, hasFocus) -> {
+                if (hasFocus) {
+                    mTopEdge.clearFocus();
+
+                    if (mTopEdgeFocusListener != null) {
+                        mTopEdgeFocusListener.onTopEdgeFocused();
+                    }
+                }
+            });
             updateDateLabel();
             mProgressBar = (SeekBar) rootView.findViewById(R.id.playback_progress);
             mProgressBar.setOnClickListener(new View.OnClickListener() {

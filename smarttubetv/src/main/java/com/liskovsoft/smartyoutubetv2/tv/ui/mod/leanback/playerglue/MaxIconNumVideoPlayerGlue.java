@@ -8,8 +8,10 @@ import androidx.leanback.widget.AbstractDetailsDescriptionPresenter;
 import androidx.leanback.widget.PlaybackRowPresenter;
 import androidx.leanback.widget.RowPresenter;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.PlaybackTransportRowPresenter.TopEdgeFocusListener;
 
-public abstract class MaxIconNumVideoPlayerGlue<T extends PlayerAdapter> extends PlaybackTransportControlGlue<T> {
+public abstract class MaxIconNumVideoPlayerGlue<T extends PlayerAdapter>
+        extends PlaybackTransportControlGlue<T> implements TopEdgeFocusListener {
     /**
      * Constructor for the glue.
      *
@@ -42,7 +44,10 @@ public abstract class MaxIconNumVideoPlayerGlue<T extends PlayerAdapter> extends
                 super.onBindRowViewHolder(vh, item);
                 vh.setOnKeyListener(MaxIconNumVideoPlayerGlue.this);
 
-                onQualityInfoListener(((ViewHolder) vh).mQualityListener);
+                ViewHolder viewHolder = (ViewHolder) vh;
+
+                addQualityInfoListener(viewHolder.mQualityListener);
+                viewHolder.mTopEdgeFocusListener = MaxIconNumVideoPlayerGlue.this;
             }
             @Override
             protected void onUnbindRowViewHolder(RowPresenter.ViewHolder vh) {
@@ -54,9 +59,11 @@ public abstract class MaxIconNumVideoPlayerGlue<T extends PlayerAdapter> extends
         return rowPresenter;
     }
 
-    public interface OnQualityInfoCallback {
+    public interface QualityInfoListener {
         void onQualityInfoChanged(String content);
     }
 
-    protected abstract void onQualityInfoListener(OnQualityInfoCallback listener);
+    protected abstract void addQualityInfoListener(QualityInfoListener listener);
+
+    public abstract void onTopEdgeFocused();
 }

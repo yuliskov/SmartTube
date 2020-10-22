@@ -65,7 +65,7 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
     private final VideoStatsAction mVideoStatsAction;
     private final VideoSpeedAction mVideoSpeedAction;
     private String mQualityInfo;
-    private OnQualityInfoCallback mQualityInfoListener;
+    private QualityInfoListener mQualityInfoListener;
 
     public VideoPlayerGlue(
             Activity context,
@@ -366,12 +366,17 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
     }
 
     @Override
-    protected void onQualityInfoListener(OnQualityInfoCallback listener) {
+    protected void addQualityInfoListener(QualityInfoListener listener) {
         mQualityInfoListener = listener;
 
         if (mQualityInfo != null) {
             mQualityInfoListener.onQualityInfoChanged(mQualityInfo);
         }
+    }
+
+    @Override
+    public void onTopEdgeFocused() {
+        mActionListener.onTopEdgeFocused();
     }
 
     /** Listens for when skip to next and previous actions have been dispatched. */
@@ -407,5 +412,7 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
         void onVideoStats(boolean enabled);
 
         void onVideoSpeed();
+
+        void onTopEdgeFocused();
     }
 }
