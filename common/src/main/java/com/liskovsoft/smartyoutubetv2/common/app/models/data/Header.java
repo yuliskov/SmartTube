@@ -3,7 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 public class Header {
     public static final int TYPE_GRID = 0;
     public static final int TYPE_ROW = 1;
-    public static final int TYPE_SIMPLE_ROW = 2;
+    public static final int TYPE_TEXT_GRID = 2;
     private final int mId;
     private final String mTitle;
     private final int mType;

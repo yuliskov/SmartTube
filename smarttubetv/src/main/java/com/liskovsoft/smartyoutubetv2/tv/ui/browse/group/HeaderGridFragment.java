@@ -1,59 +1,58 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.browse.row;
+package com.liskovsoft.smartyoutubetv2.tv.ui.browse.group;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
-import androidx.leanback.app.RowsSupportFragment;
-import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.FocusHighlight;
-import androidx.leanback.widget.HeaderItem;
-import androidx.leanback.widget.ListRow;
-import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.OnItemViewClickedListener;
 import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
+import androidx.leanback.widget.VerticalGridPresenter;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.VideoGroupFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.GridFragment;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public abstract class DynamicRowsFragment extends RowsSupportFragment implements VideoGroupFragment {
-    private static final String TAG = DynamicRowsFragment.class.getSimpleName();
+public class HeaderGridFragment extends GridFragment implements VideoGroupFragment {
+    private static final String TAG = HeaderGridFragment.class.getSimpleName();
+    private static final int COLUMNS_NUM = 4;
     private static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
-    private UriBackgroundManager mBackgroundManager;
-    private Handler mHandler;
-    private ArrayObjectAdapter mRowsAdapter;
-    private Map<Integer, VideoGroupObjectAdapter> mVideoGroupAdapters;
+    private static final int CHECK_SCROLL_ITEMS_NUM = 15;
+    private VideoGroupObjectAdapter mGridAdapter;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
-    private VideoGroupPresenter<?> mMainPresenter;
+    private UriBackgroundManager mBackgroundManager;
+    private BrowsePresenter mMainPresenter;
     private boolean mInvalidate;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mHandler = new Handler();
-        mMainPresenter = getMainPresenter();
+        mMainPresenter = BrowsePresenter.instance(getContext());
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
 
         setupAdapter();
         setupEventListeners();
         applyPendingUpdates();
+
+        if (getMainFragmentAdapter().getFragmentHost() != null) {
+            getMainFragmentAdapter().getFragmentHost().notifyDataReady(getMainFragmentAdapter());
+        }
     }
 
-    protected abstract VideoGroupPresenter<?> getMainPresenter();
+    private void setupEventListeners() {
+        setOnItemViewClickedListener(new ItemViewClickedListener());
+        setOnItemViewSelectedListener(new ItemViewSelectedListener());
+    }
 
     private void applyPendingUpdates() {
         for (VideoGroup group : mPendingUpdates) {
@@ -64,19 +63,29 @@ public abstract class DynamicRowsFragment extends RowsSupportFragment implements
     }
 
     private void setupAdapter() {
-        if (mVideoGroupAdapters == null) {
-            mVideoGroupAdapters = new HashMap<>();
-        }
+        VerticalGridPresenter presenter = new VerticalGridPresenter(ZOOM_FACTOR, false);
+        presenter.setNumberOfColumns(COLUMNS_NUM);
+        setGridPresenter(presenter);
 
-        if (mRowsAdapter == null) {
-            mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter(ZOOM_FACTOR));
-            setAdapter(mRowsAdapter);
+        if (mGridAdapter == null) {
+            mGridAdapter = new VideoGroupObjectAdapter();
+            setAdapter(mGridAdapter);
         }
     }
 
-    private void setupEventListeners() {
-        setOnItemViewClickedListener(new ItemViewClickedListener());
-        setOnItemViewSelectedListener(new ItemViewSelectedListener());
+    @Override
+    public void update(VideoGroup group) {
+        if (mGridAdapter == null) {
+            mPendingUpdates.add(group);
+            return;
+        }
+
+        if (mInvalidate) {
+            clear();
+            mInvalidate = false;
+        }
+        
+        mGridAdapter.append(group);
     }
 
     @Override
@@ -86,51 +95,18 @@ public abstract class DynamicRowsFragment extends RowsSupportFragment implements
 
     @Override
     public void clear() {
-        if (mRowsAdapter != null) {
-            mRowsAdapter.clear();
-        }
-
-        if (mVideoGroupAdapters != null) {
-            mVideoGroupAdapters.clear();
+        if (mGridAdapter != null) {
+            mGridAdapter.clear();
         }
     }
 
     @Override
     public boolean isEmpty() {
-        if (mRowsAdapter == null) {
+        if (mGridAdapter == null) {
             return false;
         }
 
-        return mRowsAdapter.size() == 0;
-    }
-
-    @Override
-    public void update(VideoGroup group) {
-        if (mVideoGroupAdapters == null) {
-            mPendingUpdates.add(group);
-            return;
-        }
-
-        if (mInvalidate) {
-            clear();
-            mInvalidate = false;
-        }
-
-        HeaderItem rowHeader = new HeaderItem(group.getTitle());
-        int mediaGroupId = group.getId(); // Create unique int from category.
-
-        VideoGroupObjectAdapter existingAdapter = mVideoGroupAdapters.get(mediaGroupId);
-
-        if (existingAdapter == null) {
-            VideoGroupObjectAdapter mediaGroupAdapter = new VideoGroupObjectAdapter(group);
-
-            mVideoGroupAdapters.put(mediaGroupId, mediaGroupAdapter);
-
-            ListRow row = new ListRow(rowHeader, mediaGroupAdapter);
-            mRowsAdapter.add(row);
-        } else {
-            existingAdapter.append(group); // continue row
-        }
+        return mGridAdapter.size() == 0;
     }
 
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
@@ -162,21 +138,16 @@ public abstract class DynamicRowsFragment extends RowsSupportFragment implements
             if (item instanceof Video) {
                 mBackgroundManager.setBackgroundFrom((Video) item);
 
-                checkScrollEnd((Video)item);
+                checkScrollEnd((Video) item);
             }
         }
 
         private void checkScrollEnd(Video item) {
-            for (VideoGroupObjectAdapter adapter : mVideoGroupAdapters.values()) {
-                int index = adapter.indexOf(item);
+            int size = mGridAdapter.size();
+            int index = mGridAdapter.indexOf(item);
 
-                if (index != -1) {
-                    int size = adapter.size();
-                    if (index > (size - 4)) {
-                        mMainPresenter.onScrollEnd(adapter.getGroup());
-                    }
-                    break;
-                }
+            if (index > (size - CHECK_SCROLL_ITEMS_NUM)) {
+                mMainPresenter.onScrollEnd(mGridAdapter.getGroup());
             }
         }
     }

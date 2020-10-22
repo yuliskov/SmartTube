@@ -89,7 +89,7 @@ public class BrowsePresenter implements HeaderPresenter<BrowseView> {
         mHeaders.add(new Header(MediaGroup.TYPE_SUBSCRIPTIONS, mContext.getString(R.string.header_subscriptions), Header.TYPE_GRID, R.drawable.icon_subscriptions, true));
         mHeaders.add(new Header(MediaGroup.TYPE_HISTORY, mContext.getString(R.string.header_history), Header.TYPE_GRID, R.drawable.icon_history, true));
         mHeaders.add(new Header(MediaGroup.TYPE_PLAYLISTS, mContext.getString(R.string.header_playlists), Header.TYPE_ROW, R.drawable.icon_playlist, true));
-        mHeaders.add(new Header(MediaGroup.TYPE_SETTINGS, mContext.getString(R.string.header_settings), Header.TYPE_SIMPLE_ROW, R.drawable.icon_settings));
+        mHeaders.add(new Header(MediaGroup.TYPE_SETTINGS, mContext.getString(R.string.header_settings), Header.TYPE_TEXT_GRID, R.drawable.icon_settings));
 
         mRowMapping.put(MediaGroup.TYPE_HOME, mediaGroupManager.getHomeObserve());
         mRowMapping.put(MediaGroup.TYPE_NEWS, mediaGroupManager.getNewsObserve());

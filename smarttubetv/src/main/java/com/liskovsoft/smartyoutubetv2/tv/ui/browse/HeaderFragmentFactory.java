@@ -8,8 +8,10 @@ import androidx.leanback.widget.Row;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Header;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.grid.HeaderGridFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.row.HeaderRowsFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.group.HeaderGridFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.group.HeaderRowsFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.group.VideoGroupFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.settings.HeaderTextGridFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +51,8 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
                 fragment = new HeaderRowsFragment();
             } else if (type == Header.TYPE_GRID) {
                 fragment = new HeaderGridFragment();
+            } else if (type == Header.TYPE_TEXT_GRID) {
+                fragment = new HeaderTextGridFragment();
             }
         }
 

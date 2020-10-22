@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
+package com.liskovsoft.smartyoutubetv2.tv.ui.browse.group;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 

@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.browse.row;
+package com.liskovsoft.smartyoutubetv2.tv.ui.browse.group;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;

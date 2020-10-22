@@ -7,7 +7,7 @@ import androidx.leanback.app.ProgressBarManager;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.row.DynamicRowsFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.group.DynamicRowsFragment;
 
 public class ChannelFragment extends DynamicRowsFragment implements ChannelView {
     private static final String TAG = ChannelFragment.class.getSimpleName();

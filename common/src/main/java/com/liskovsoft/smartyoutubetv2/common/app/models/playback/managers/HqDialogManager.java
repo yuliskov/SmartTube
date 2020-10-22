@@ -188,7 +188,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
         if (mStateUpdater.getVideoPreset() != null) {
             for (Preset preset : presets) {
-                result.add(UiOptionItem.from(preset.name,
+                result.add(0, UiOptionItem.from(preset.name,
                         option -> mController.selectFormat(preset.format),
                         mStateUpdater.getVideoPreset().equals(preset.format)));
             }
