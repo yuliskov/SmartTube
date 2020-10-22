@@ -313,6 +313,10 @@ public class StateUpdater extends PlayerEventListenerHelper {
         settingsPresenter.showDialog();
     }
 
+    public FormatItem getVideoPreset() {
+        return mVideoFormat;
+    }
+
     private void intSpeedItems(List<OptionItem> items, float[] speedValues) {
         for (float speed : speedValues) {
             items.add(UiOptionItem.from(

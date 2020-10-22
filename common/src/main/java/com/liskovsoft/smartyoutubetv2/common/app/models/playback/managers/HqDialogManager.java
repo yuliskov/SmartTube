@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import android.os.Build.VERSION;
-import androidx.core.util.Pair;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -28,6 +27,11 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     private boolean mEnableBackgroundAudio;
     private boolean mEnablePIP;
     private final List<Runnable> mHideListeners = new ArrayList<>();
+    private final StateUpdater mStateUpdater;
+
+    public HqDialogManager(StateUpdater stateUpdater) {
+        mStateUpdater = stateUpdater;
+    }
 
     @Override
     public void onInitDone() {
@@ -50,9 +54,9 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         mSettingsPresenter.clear();
 
         addQualityCategories();
-        addPresetsCategory();
         addBackgroundPlaybackCategory();
         addVideoBufferCategory();
+        addPresetsCategory();
 
         internalStuff();
 
@@ -182,10 +186,12 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     private List<OptionItem> fromPresets(Preset[] presets) {
         List<OptionItem> result = new ArrayList<>();
 
-        for (Preset preset : presets) {
-            result.add(UiOptionItem.from(preset.name,
-                    option -> mController.selectFormat(preset.format),
-                    mController.getVideoFormat().equals(preset.format)));
+        if (mStateUpdater.getVideoPreset() != null) {
+            for (Preset preset : presets) {
+                result.add(UiOptionItem.from(preset.name,
+                        option -> mController.selectFormat(preset.format),
+                        mStateUpdater.getVideoPreset().equals(preset.format)));
+            }
         }
 
         return result;

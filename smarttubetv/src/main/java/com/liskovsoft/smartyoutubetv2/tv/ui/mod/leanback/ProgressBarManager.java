@@ -41,7 +41,7 @@ public final class ProgressBarManager {
                     FrameLayout.LayoutParams progressBarParams = new FrameLayout.LayoutParams(
                             FrameLayout.LayoutParams.WRAP_CONTENT,
                             FrameLayout.LayoutParams.WRAP_CONTENT);
-                    progressBarParams.gravity = Gravity.BOTTOM | Gravity.RIGHT; // MOD: custom align
+                    progressBarParams.gravity = Gravity.BOTTOM | Gravity.CENTER; // MOD: custom align
                     rootView.addView(mProgressBarView, progressBarParams);
                 } else if (mUserProvidedProgressBar) {
                     mProgressBarView.setVisibility(View.VISIBLE);

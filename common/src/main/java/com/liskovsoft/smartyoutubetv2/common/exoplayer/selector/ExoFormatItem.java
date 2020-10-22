@@ -141,10 +141,7 @@ public class ExoFormatItem implements FormatItem {
     }
 
     public static FormatItem from(int type, int rendererIndex, String id, String codecs, int width, int height, float frameRate, String language) {
-        ExoFormatItem formatItem = new ExoFormatItem();
-        formatItem.mType = type;
         MediaTrack mediaTrack = MediaTrack.forRendererIndex(rendererIndex);
-        formatItem.mTrack = mediaTrack;
 
         switch (type) {
             case TYPE_VIDEO:
@@ -164,7 +161,7 @@ public class ExoFormatItem implements FormatItem {
                 break;
         }
 
-        return formatItem;
+        return from(mediaTrack);
     }
 
     public static FormatItem from(String spec) {
