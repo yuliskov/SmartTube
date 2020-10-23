@@ -8,12 +8,13 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.leanback.widget.Presenter;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
-public class GridItemPresenter extends Presenter {
+public class SettingsItemPresenter extends Presenter {
     private final Fragment mainFragment;
 
-    public GridItemPresenter(Fragment mainFragment) {
+    public SettingsItemPresenter(Fragment mainFragment) {
         this.mainFragment = mainFragment;
     }
 
@@ -29,7 +30,7 @@ public class GridItemPresenter extends Presenter {
         view.setFocusable(true);
         view.setFocusableInTouchMode(true);
         view.setBackgroundColor(ContextCompat.getColor(parent.getContext(),
-                R.color.card_default_background));
+                R.color.card_default_background_dark));
         view.setTextColor(Color.WHITE);
         view.setGravity(Gravity.CENTER);
         return new ViewHolder(view);
@@ -37,7 +38,7 @@ public class GridItemPresenter extends Presenter {
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {
-        ((TextView) viewHolder.view).setText((String) item);
+        ((TextView) viewHolder.view).setText(((SettingsItem) item).title);
     }
 
     @Override

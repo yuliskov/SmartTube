@@ -1,6 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 
-public class Header {
+public class Category {
     public static final int TYPE_GRID = 0;
     public static final int TYPE_ROW = 1;
     public static final int TYPE_TEXT_GRID = 2;
@@ -10,11 +10,11 @@ public class Header {
     private final int mResId;
     private final boolean mIsAuthOnly;
 
-    public Header(int id, String title, int type, int resId) {
+    public Category(int id, String title, int type, int resId) {
         this(id, title, type, resId, false);
     }
 
-    public Header(int id, String title, int type, int resId, boolean isAuthOnly) {
+    public Category(int id, String title, int type, int resId, boolean isAuthOnly) {
         mId = id;
         mTitle = title;
         mType = type;

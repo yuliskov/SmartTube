@@ -7,9 +7,9 @@ import androidx.leanback.app.ProgressBarManager;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.group.DynamicRowsFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.MultipleRowsFragment;
 
-public class ChannelFragment extends DynamicRowsFragment implements ChannelView {
+public class ChannelFragment extends MultipleRowsFragment implements ChannelView {
     private static final String TAG = ChannelFragment.class.getSimpleName();
     private ChannelPresenter mChannelPresenter;
     private ProgressBarManager mProgressBarManager;
@@ -34,7 +34,7 @@ public class ChannelFragment extends DynamicRowsFragment implements ChannelView 
     }
 
     @Override
-    protected VideoGroupPresenter<?> getMainPresenter() {
+    protected VideoGroupPresenter getMainPresenter() {
         return ChannelPresenter.instance(getContext());
     }
 

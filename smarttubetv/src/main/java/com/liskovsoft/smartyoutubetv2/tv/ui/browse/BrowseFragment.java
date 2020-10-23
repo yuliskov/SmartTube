@@ -17,7 +17,8 @@ import androidx.leanback.widget.PageRow;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.PresenterSelector;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.Header;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Category;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
@@ -38,8 +39,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private static final String TAG = BrowseFragment.class.getSimpleName();
     private ArrayObjectAdapter mCategoryRowAdapter;
     private BrowsePresenter mBrowsePresenter;
-    private Map<Integer, Header> mHeaders;
-    private HeaderFragmentFactory mHeaderFragmentFactory;
+    private Map<Integer, Category> mCategories;
+    private CategoryFragmentFactory mCategoryFragmentFactory;
     private Handler mHandler;
     private boolean mCreateAlreadyCalled;
     private ProgressBarManager mProgressBarManager;
@@ -48,7 +49,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mHeaders = new LinkedHashMap<>();
+        mCategories = new LinkedHashMap<>();
         mHandler = new Handler();
         mBrowsePresenter = BrowsePresenter.instance(getContext());
         mBrowsePresenter.register(this);
@@ -87,9 +88,9 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mCategoryRowAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         setAdapter(mCategoryRowAdapter);
 
-        mHeaderFragmentFactory = new HeaderFragmentFactory(
-                (viewHolder, row) -> mBrowsePresenter.onHeaderFocused(row.getHeaderItem().getId()));
-        getMainFragmentRegistry().registerFragment(PageRow.class, mHeaderFragmentFactory);
+        mCategoryFragmentFactory = new CategoryFragmentFactory(
+                (viewHolder, row) -> mBrowsePresenter.onCategoryFocused(row.getHeaderItem().getId()));
+        getMainFragmentRegistry().registerFragment(PageRow.class, mCategoryFragmentFactory);
     }
 
     private void setupUi() {
@@ -114,7 +115,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     private int getHeaderResId(Object o) {
         if (o instanceof PageRow) {
-            return ((FragmentHeaderItem) ((PageRow) o).getHeaderItem()).getResId();
+            return ((CategoryHeaderItem) ((PageRow) o).getHeaderItem()).getResId();
         }
 
         return -1;
@@ -123,7 +124,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private void setupEventListeners() {
         getHeadersSupportFragment().setOnHeaderClickedListener(
                 (viewHolder, row) -> {
-                    mBrowsePresenter.onHeaderFocused(row.getHeaderItem().getId());
+                    mBrowsePresenter.onCategoryFocused(row.getHeaderItem().getId());
                 });
 
         setOnSearchClickedListener(view -> {
@@ -138,7 +139,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private void showErrorIfEmpty(ErrorFragmentData data) {
-        if (mHeaderFragmentFactory.isEmpty()) {
+        if (mCategoryFragmentFactory.isEmpty()) {
             replaceMainFragment(new LoginDialogFragment(data));
         }
     }
@@ -156,37 +157,49 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     @Override
-    public void updateHeader(VideoGroup group) {
-        Header header = group.getHeader();
-
-        if (mHeaders.get(header.getId()) == null) {
-            mHeaders.put(header.getId(), header);
-            createHeader(header);
+    public void addCategory(Category category) {
+        if (category == null) {
+            return;
         }
 
+        if (mCategories.get(category.getId()) == null) {
+            mCategories.put(category.getId(), category);
+            createHeader(category);
+        }
+    }
+
+    @Override
+    public void updateCategory(VideoGroup group) {
         restoreMainFragment();
 
-        mHeaderFragmentFactory.updateFragment(group);
+        mCategoryFragmentFactory.updateFragment(group);
+    }
+
+    @Override
+    public void updateCategory(SettingsGroup group) {
+        restoreMainFragment();
+
+        mCategoryFragmentFactory.updateFragment(group);
     }
 
     private void restoreMainFragment() {
-        Fragment currentFragment = mHeaderFragmentFactory.getCurrentFragment();
+        Fragment currentFragment = mCategoryFragmentFactory.getCurrentFragment();
 
         if (currentFragment != null) {
             replaceMainFragment(currentFragment);
         }
     }
 
-    private void createHeader(Header header) {
-        HeaderItem headerItem = new FragmentHeaderItem(header.getId(), header.getTitle(), header.getType(), header.getResId());;
+    private void createHeader(Category header) {
+        HeaderItem headerItem = new CategoryHeaderItem(header.getId(), header.getTitle(), header.getType(), header.getResId());;
 
         PageRow pageRow = new PageRow(headerItem);
         mCategoryRowAdapter.add(pageRow);
     }
 
     @Override
-    public void clearHeader(Header header) {
-        mHeaderFragmentFactory.clearFragment();
+    public void clearCategory(Category category) {
+        mCategoryFragmentFactory.clearCurrentFragment();
     }
 
     @Override

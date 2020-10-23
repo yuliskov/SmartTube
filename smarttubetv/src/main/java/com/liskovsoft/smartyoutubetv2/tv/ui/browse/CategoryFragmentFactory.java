@@ -6,27 +6,29 @@ import androidx.leanback.app.HeadersSupportFragment.OnHeaderViewSelectedListener
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.Row;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.Header;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Category;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.group.HeaderGridFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.group.HeaderRowsFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.group.VideoGroupFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.settings.HeaderTextGridFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.settings.SettingsGroupFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.VideoGridFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.VideoRowsFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.VideoGroupFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.settings.SettingsGridFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory<Fragment> {
-    private static final String TAG = HeaderFragmentFactory.class.getSimpleName();
+public class CategoryFragmentFactory extends BrowseSupportFragment.FragmentFactory<Fragment> {
+    private static final String TAG = CategoryFragmentFactory.class.getSimpleName();
     private final OnHeaderViewSelectedListener mViewSelectedListener;
     private final List<VideoGroup> mCachedData;
     private Fragment mCurrentFragment;
 
-    public HeaderFragmentFactory() {
+    public CategoryFragmentFactory() {
         this(null);
     }
 
-    public HeaderFragmentFactory(OnHeaderViewSelectedListener viewSelectedListener) {
+    public CategoryFragmentFactory(OnHeaderViewSelectedListener viewSelectedListener) {
         mViewSelectedListener = viewSelectedListener;
         mCachedData = new ArrayList<>();
     }
@@ -44,15 +46,15 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
         HeaderItem header = row.getHeaderItem();
         Fragment fragment = null;
 
-        if (header instanceof FragmentHeaderItem) {
-            int type = ((FragmentHeaderItem) header).getType();
+        if (header instanceof CategoryHeaderItem) {
+            int type = ((CategoryHeaderItem) header).getType();
 
-            if (type == Header.TYPE_ROW) {
-                fragment = new HeaderRowsFragment();
-            } else if (type == Header.TYPE_GRID) {
-                fragment = new HeaderGridFragment();
-            } else if (type == Header.TYPE_TEXT_GRID) {
-                fragment = new HeaderTextGridFragment();
+            if (type == Category.TYPE_ROW) {
+                fragment = new VideoRowsFragment();
+            } else if (type == Category.TYPE_GRID) {
+                fragment = new VideoGridFragment();
+            } else if (type == Category.TYPE_TEXT_GRID) {
+                fragment = new SettingsGridFragment();
             }
         }
 
@@ -70,6 +72,23 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
         }
 
         throw new IllegalArgumentException(String.format("Invalid row %s", rowObj));
+    }
+
+    public void updateFragment(SettingsGroup group) {
+        if (group == null || group.isEmpty()) {
+            return;
+        }
+
+        if (mCurrentFragment == null) {
+            Log.e(TAG, "Page row fragment not initialized for group: " + group.getTitle());
+            return;
+        }
+
+        if (mCurrentFragment instanceof SettingsGroupFragment) {
+            ((SettingsGroupFragment) mCurrentFragment).update(group);
+        } else {
+            Log.e(TAG, "updateFragment: Page group fragment has incompatible type: " + mCurrentFragment.getClass().getSimpleName());
+        }
     }
 
     public void updateFragment(VideoGroup group) {
@@ -101,7 +120,7 @@ public class HeaderFragmentFactory extends BrowseSupportFragment.FragmentFactory
         }
     }
 
-    public void clearFragment() {
+    public void clearCurrentFragment() {
         mCachedData.clear();
 
         if (mCurrentFragment != null) {

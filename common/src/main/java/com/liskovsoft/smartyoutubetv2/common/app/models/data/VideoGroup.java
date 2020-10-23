@@ -13,19 +13,19 @@ public class VideoGroup {
     private String mTitle;
     private List<Video> mVideos;
     private MediaGroup mMediaGroup;
-    private Header mHeader;
+    private Category mCategory;
 
-    public static VideoGroup from(Header header) {
-        return from(null, header);
+    public static VideoGroup from(Category category) {
+        return from(null, category);
     }
 
     public static VideoGroup from(MediaGroup mediaGroup) {
         return from(mediaGroup, null);
     }
 
-    public static VideoGroup from(MediaGroup mediaGroup, Header header) {
+    public static VideoGroup from(MediaGroup mediaGroup, Category category) {
         VideoGroup videoGroup = new VideoGroup();
-        videoGroup.mHeader = header;
+        videoGroup.mCategory = category;
 
         if (mediaGroup == null) {
             return videoGroup;
@@ -80,8 +80,8 @@ public class VideoGroup {
         mMediaGroup = group;
     }
 
-    public Header getHeader() {
-        return mHeader;
+    public Category getCategory() {
+        return mCategory;
     }
 
     public boolean isEmpty() {
