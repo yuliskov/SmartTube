@@ -172,14 +172,14 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     public void updateCategory(VideoGroup group) {
         restoreMainFragment();
 
-        mCategoryFragmentFactory.updateFragment(group);
+        mCategoryFragmentFactory.updateCurrentFragment(group);
     }
 
     @Override
     public void updateCategory(SettingsGroup group) {
         restoreMainFragment();
 
-        mCategoryFragmentFactory.updateFragment(group);
+        mCategoryFragmentFactory.updateCurrentFragment(group);
     }
 
     private void restoreMainFragment() {

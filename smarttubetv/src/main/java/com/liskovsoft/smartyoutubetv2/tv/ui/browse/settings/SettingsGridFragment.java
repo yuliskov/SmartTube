@@ -12,9 +12,9 @@ import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.VerticalGridPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.SettingsItemPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.SettingsCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.GridFragment;
@@ -22,7 +22,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.GridFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingsGridFragment extends GridFragment implements SettingsGroupFragment {
+public class SettingsGridFragment extends GridFragment implements SettingsCategoryFragment {
     private static final String TAG = SettingsGridFragment.class.getSimpleName();
     private static final int COLUMNS_NUM = 4;
     private static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
@@ -98,6 +98,11 @@ public class SettingsGridFragment extends GridFragment implements SettingsGroupF
         if (mSettingsAdapter == null) {
             mPendingUpdates.add(group);
             return;
+        }
+
+        if (mInvalidate) {
+            clear();
+            mInvalidate = false;
         }
 
         if (group != null) {

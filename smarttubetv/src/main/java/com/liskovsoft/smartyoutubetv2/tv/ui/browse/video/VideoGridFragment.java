@@ -15,6 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.GridFragment;
@@ -22,7 +23,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.GridFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VideoGridFragment extends GridFragment implements VideoGroupFragment {
+public class VideoGridFragment extends GridFragment implements VideoCategoryFragment {
     private static final String TAG = VideoGridFragment.class.getSimpleName();
     private static final int COLUMNS_NUM = 4;
     private static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;

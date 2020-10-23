@@ -43,4 +43,10 @@
     <string name="msg_cant_load_content">Невозможно загрузить содержимое</string>
     <string name="title_video_presets">Видео пресеты</string>
     <string name="settings_accounts">Аккаунты</string>
+    <string name="settings_left_panel">Настроить категории</string>
+    <string name="settings_themes">Темы</string>
+    <string name="settings_other">Разное</string>
+    <string name="settings_player">Настройки плеера</string>
+    <string name="settings_language">Язык</string>
+    <string name="settings_linked_devices">Привязанные устройства</string>
 </resources>

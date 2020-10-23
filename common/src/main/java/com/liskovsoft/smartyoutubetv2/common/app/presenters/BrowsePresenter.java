@@ -94,16 +94,6 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         initSettingsCategories();
     }
 
-    private void initSettingsCategories() {
-        List<SettingsItem> settingItems = new ArrayList<>();
-
-        SettingsItem accounts = new SettingsItem(
-                mContext.getString(R.string.settings_accounts), () -> MessageHelpers.showMessage(mContext, "Add account clicked"));
-        settingItems.add(accounts);
-
-        mTextGridMapping.put(MediaGroup.TYPE_SETTINGS, settingItems);
-    }
-
     private void initCategoryHeaders() {
         mCategories.add(new Category(MediaGroup.TYPE_HOME, mContext.getString(R.string.header_home), Category.TYPE_ROW, R.drawable.icon_home));
         mCategories.add(new Category(MediaGroup.TYPE_GAMING, mContext.getString(R.string.header_gaming), Category.TYPE_ROW, R.drawable.icon_gaming));
@@ -126,6 +116,27 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
 
         mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mediaGroupManager.getSubscriptionsObserve());
         mGridMapping.put(MediaGroup.TYPE_HISTORY, mediaGroupManager.getHistoryObserve());
+    }
+
+    private void initSettingsCategories() {
+        List<SettingsItem> settingItems = new ArrayList<>();
+        
+        settingItems.add(new SettingsItem(
+                mContext.getString(R.string.settings_accounts), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
+        settingItems.add(new SettingsItem(
+                mContext.getString(R.string.settings_language), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
+        settingItems.add(new SettingsItem(
+                mContext.getString(R.string.settings_linked_devices), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
+        settingItems.add(new SettingsItem(
+                mContext.getString(R.string.settings_left_panel), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
+        settingItems.add(new SettingsItem(
+                mContext.getString(R.string.settings_themes), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
+        settingItems.add(new SettingsItem(
+                mContext.getString(R.string.settings_player), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
+        settingItems.add(new SettingsItem(
+                mContext.getString(R.string.settings_other), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
+
+        mTextGridMapping.put(MediaGroup.TYPE_SETTINGS, settingItems);
     }
 
     private void addHeaders() {
@@ -233,13 +244,13 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
             case Category.TYPE_TEXT_GRID:
                 List<SettingsItem> items = mTextGridMapping.get(category.getId());
                 updateTextGrid(category, items);
-                mView.showProgressBar(false);
                 break;
         }
     }
 
     private void updateTextGrid(Category category, List<SettingsItem> items) {
         mView.updateCategory(SettingsGroup.from(items, category));
+        mView.showProgressBar(false);
     }
 
     private void updateVideoRows(Category category, Observable<List<MediaGroup>> groups, boolean authCheck) {

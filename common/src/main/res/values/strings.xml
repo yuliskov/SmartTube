@@ -43,4 +43,10 @@
     <string name="msg_cant_load_content">Oops. Can\'t load content.</string>
     <string name="title_video_presets">Video presets</string>
     <string name="settings_accounts">Accounts</string>
+    <string name="settings_left_panel">Edit categories</string>
+    <string name="settings_themes">Themes</string>
+    <string name="settings_other">Other</string>
+    <string name="settings_player">Player settings</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_linked_devices">Linked devices</string>
 </resources>

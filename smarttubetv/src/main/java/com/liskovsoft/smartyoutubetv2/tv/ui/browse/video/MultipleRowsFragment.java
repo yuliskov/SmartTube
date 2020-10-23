@@ -20,6 +20,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 
@@ -28,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class MultipleRowsFragment extends RowsSupportFragment implements VideoGroupFragment {
+public abstract class MultipleRowsFragment extends RowsSupportFragment implements VideoCategoryFragment {
     private static final String TAG = MultipleRowsFragment.class.getSimpleName();
     private static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
     private UriBackgroundManager mBackgroundManager;
