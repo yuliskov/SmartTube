@@ -135,6 +135,8 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
                 mContext.getString(R.string.settings_player), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
         settingItems.add(new SettingsItem(
                 mContext.getString(R.string.settings_other), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
+        settingItems.add(new SettingsItem(
+                mContext.getString(R.string.settings_about), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
 
         mTextGridMapping.put(MediaGroup.TYPE_SETTINGS, settingItems);
     }
