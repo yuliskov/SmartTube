@@ -50,4 +50,8 @@
     <string name="settings_language">Язык</string>
     <string name="settings_linked_devices">Привязанные устройства</string>
     <string name="settings_about">О программе</string>
+    <string name="dialog_account_list">Выбрать аккаунт</string>
+    <string name="dialog_account_none">Не выбран</string>
+    <string name="dialog_remove_account">Удалить аккаунт</string>
+    <string name="dialog_add_account">Добавить аккаунт</string>
 </resources>

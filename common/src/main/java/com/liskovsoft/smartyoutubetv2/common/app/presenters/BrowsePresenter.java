@@ -122,19 +122,19 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         List<SettingsItem> settingItems = new ArrayList<>();
         
         settingItems.add(new SettingsItem(
-                mContext.getString(R.string.settings_accounts), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
-        settingItems.add(new SettingsItem(
-                mContext.getString(R.string.settings_language), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
-        settingItems.add(new SettingsItem(
-                mContext.getString(R.string.settings_linked_devices), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
-        settingItems.add(new SettingsItem(
-                mContext.getString(R.string.settings_left_panel), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
-        settingItems.add(new SettingsItem(
-                mContext.getString(R.string.settings_themes), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
-        settingItems.add(new SettingsItem(
-                mContext.getString(R.string.settings_player), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
-        settingItems.add(new SettingsItem(
-                mContext.getString(R.string.settings_other), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
+                mContext.getString(R.string.settings_accounts), () -> AccountSettingsPresenter.instance(mContext).show()));
+        //settingItems.add(new SettingsItem(
+        //        mContext.getString(R.string.settings_language), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
+        //settingItems.add(new SettingsItem(
+        //        mContext.getString(R.string.settings_linked_devices), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
+        //settingItems.add(new SettingsItem(
+        //        mContext.getString(R.string.settings_left_panel), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
+        //settingItems.add(new SettingsItem(
+        //        mContext.getString(R.string.settings_themes), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
+        //settingItems.add(new SettingsItem(
+        //        mContext.getString(R.string.settings_player), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
+        //settingItems.add(new SettingsItem(
+        //        mContext.getString(R.string.settings_other), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
         settingItems.add(new SettingsItem(
                 mContext.getString(R.string.settings_about), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
 

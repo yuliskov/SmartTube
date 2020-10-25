@@ -52,6 +52,10 @@ public class UiOptionItem implements OptionItem {
         return uiOptionItem;
     }
 
+    public static OptionItem from(String title, OptionCallback callback) {
+        return from(title, callback, false);
+    }
+
     public static OptionItem from(String title, OptionCallback callback, boolean isChecked) {
         return from(title, callback, isChecked, null);
     }

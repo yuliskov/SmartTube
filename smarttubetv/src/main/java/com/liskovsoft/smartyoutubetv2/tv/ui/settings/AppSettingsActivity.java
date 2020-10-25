@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.settings;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build.VERSION;
 import android.os.Bundle;

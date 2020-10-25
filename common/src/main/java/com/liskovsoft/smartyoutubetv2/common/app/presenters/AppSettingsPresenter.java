@@ -83,6 +83,7 @@ public class AppSettingsPresenter implements Presenter<AppSettingsView> {
     @Override
     public void unregister(AppSettingsView view) {
         mView = null;
+        clear();
     }
 
     public void onClose() {
@@ -98,6 +99,9 @@ public class AppSettingsPresenter implements Presenter<AppSettingsView> {
     }
 
     public void clear() {
+        if (mView != null) {
+            mView.clear();
+        }
         mCategories.clear();
     }
 
@@ -122,11 +126,16 @@ public class AppSettingsPresenter implements Presenter<AppSettingsView> {
     public void showDialog(String dialogTitle, Runnable onClose) {
         mTitle = dialogTitle;
         mOnClose = onClose;
-        ViewManager.instance(mContext).startView(AppSettingsView.class);
 
         if (mUiManager != null) {
             mUiManager.disableUiAutoHideTimeout();
         }
+
+        if (mView != null) {
+            onInitDone();
+        }
+
+        ViewManager.instance(mContext).startView(AppSettingsView.class);
     }
 
     public void appendRadioCategory(String categoryTitle, List<OptionItem> items) {

@@ -1,9 +1,12 @@
 package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -13,6 +16,10 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class SettingsItemPresenter extends Presenter {
     private final Fragment mainFragment;
+    private int mDefaultBackgroundColor;
+    private int mDefaultTextColor;
+    private int mSelectedBackgroundColor;
+    private int mSelectedTextColor;
 
     public SettingsItemPresenter(Fragment mainFragment) {
         this.mainFragment = mainFragment;
@@ -20,25 +27,66 @@ public class SettingsItemPresenter extends Presenter {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
-        TextView view = new TextView(parent.getContext());
+        mDefaultBackgroundColor =
+                ContextCompat.getColor(parent.getContext(), R.color.card_default_background_dark);
+        mDefaultTextColor =
+                ContextCompat.getColor(parent.getContext(), R.color.card_default_text);
+        mSelectedBackgroundColor =
+                ContextCompat.getColor(parent.getContext(), R.color.card_selected_background_white);
+        mSelectedTextColor =
+                ContextCompat.getColor(parent.getContext(), R.color.card_selected_text_grey);
 
         Resources res = parent.getResources();
         int width = res.getDimensionPixelSize(R.dimen.grid_item_width);
         int height = res.getDimensionPixelSize(R.dimen.grid_item_height);
 
-        view.setLayoutParams(new ViewGroup.LayoutParams(width, height));
-        view.setFocusable(true);
-        view.setFocusableInTouchMode(true);
-        view.setBackgroundColor(ContextCompat.getColor(parent.getContext(),
-                R.color.card_default_background_dark));
-        view.setTextColor(Color.WHITE);
-        view.setGravity(Gravity.CENTER);
-        return new ViewHolder(view);
+        LinearLayout container = new LinearLayout(parent.getContext());
+        container.setOrientation(LinearLayout.VERTICAL);
+        container.setLayoutParams(new LayoutParams(width, height));
+        container.setFocusable(true);
+        container.setFocusableInTouchMode(true);
+        container.setBackgroundColor(mDefaultBackgroundColor);
+
+        ImageView imageView = new ImageView(parent.getContext());
+        imageView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        imageView.setVisibility(View.GONE);
+        imageView.setTag("Image");
+
+        TextView textView = new TextView(parent.getContext());
+        textView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+        textView.setBackgroundColor(mDefaultBackgroundColor);
+        textView.setTextColor(mDefaultTextColor);
+        textView.setGravity(Gravity.CENTER);
+        textView.setTag("Text");
+
+        container.addView(imageView);
+        container.addView(textView);
+
+        container.setOnFocusChangeListener((v, hasFocus) -> {
+            int backgroundColor = hasFocus ? mSelectedBackgroundColor : mDefaultBackgroundColor;
+            int textColor = hasFocus ? mSelectedTextColor : mDefaultTextColor;
+
+            container.setBackgroundColor(backgroundColor);
+            textView.setBackgroundColor(backgroundColor);
+            textView.setTextColor(textColor);
+        });
+
+        return new ViewHolder(container);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {
-        ((TextView) viewHolder.view).setText(((SettingsItem) item).title);
+        SettingsItem settingsItem = (SettingsItem) item;
+
+        TextView textView = viewHolder.view.findViewWithTag("Text");
+
+        textView.setText(settingsItem.title);
+
+        if (settingsItem.imageResId > 0) {
+            ImageView imageView = viewHolder.view.findViewWithTag("Image");
+            imageView.setImageDrawable(viewHolder.view.getContext().getDrawable(settingsItem.imageResId));
+            imageView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

@@ -6,6 +6,8 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -38,7 +40,8 @@ public class SignInPresenter implements Presenter<SignInView> {
         return sInstance;
     }
 
-    public static void unhold() {
+    public void unhold() {
+        RxUtils.disposeActions(mSignInAction);
         sInstance = null;
     }
 
@@ -55,18 +58,12 @@ public class SignInPresenter implements Presenter<SignInView> {
 
     @Override
     public void onInitDone() {
-        disposeActions();
+        RxUtils.disposeActions(mSignInAction);
         updateUserCode();
     }
 
     public void onActionClicked() {
         mView.close();
-    }
-
-    private void disposeActions() {
-        if (mSignInAction != null && !mSignInAction.isDisposed()) {
-            mSignInAction.dispose();
-        }
     }
 
     private void updateUserCode() {
@@ -84,5 +81,10 @@ public class SignInPresenter implements Presenter<SignInView> {
                             }
                             mSplashPresenter.updateChannels();
                         });
+    }
+
+    public void start() {
+        RxUtils.disposeActions(mSignInAction);
+        ViewManager.instance(mContext).startView(SignInView.class);
     }
 }

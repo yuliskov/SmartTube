@@ -38,13 +38,6 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        mSettingsPresenter.onInitDone(); // should run before onActivityCreated
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
@@ -55,6 +48,8 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
     public void onPreferenceStartInitialScreen() {
         mPreferenceFragment = buildPreferenceFragment();
         startPreferenceFragment(mPreferenceFragment);
+
+        mSettingsPresenter.onInitDone();
     }
 
     @Override
@@ -88,6 +83,13 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
     @Override
     public void setTitle(String title) {
         mPreferenceFragment.setTitle(title);
+    }
+
+    @Override
+    public void clear() {
+        if (mPreferenceFragment != null) {
+            mPreferenceFragment.clear();
+        }
     }
 
     @Override
@@ -128,6 +130,10 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
             mExtractedContext = (Context) Helpers.getField(this, "mStyledContext");
             mManager = new AppSettingsFragmentHelper(mExtractedContext);
 
+            initPrefs();
+        }
+
+        private void initPrefs() {
             PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(mExtractedContext);
             screen.setTitle(mTitle);
 
@@ -173,10 +179,18 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
 
         public void addCategories(List<SettingsCategory> categories) {
             mCategories = categories;
+
+            if (mExtractedContext != null) { // already running (destroy performed)
+                initPrefs();
+            }
         }
 
         public void setTitle(String title) {
             mTitle = title;
+        }
+
+        public void clear() {
+            setPreferenceScreen(getPreferenceManager().createPreferenceScreen(mExtractedContext));
         }
     }
 }
