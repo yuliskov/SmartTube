@@ -19,5 +19,6 @@
         android:layout_gravity="center"
         android:layout_width="@dimen/grid_item_width"
         android:layout_height="wrap_content"
+        android:padding="@dimen/lb_basic_card_info_padding"
         android:textAlignment="center"/>
 </LinearLayout>
