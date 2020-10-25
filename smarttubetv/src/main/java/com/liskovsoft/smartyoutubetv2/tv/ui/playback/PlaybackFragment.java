@@ -111,7 +111,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         // ProgressBar.setRootView is called in this moment
-        ProgressBarManager.setup(getProgressBarManager());
+        ProgressBarManager.setup(getProgressBarManager(), (ViewGroup) view);
 
         return view;
     }

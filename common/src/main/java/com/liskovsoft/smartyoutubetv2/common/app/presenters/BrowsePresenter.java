@@ -314,25 +314,20 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mediaGroups -> updateVideoRows(category, mediaGroups)
+                        mediaGroups -> {
+                            updateView(category, mediaGroups);
+                            updateRefreshTime();
+
+                            // Hide loading as long as first group received
+                            if (!mediaGroups.isEmpty()) {
+                                mView.showProgressBar(false);
+                            }
+                        }
                         , error -> Log.e(TAG, "updateRowsHeader error: " + error)
                         , () -> {
                             mView.showProgressBar(false);
                             mView.updateErrorIfEmpty(new CategoryEmptyError(mContext));
                         });
-    }
-
-    private void updateVideoRows(Category category, List<MediaGroup> mediaGroups) {
-        for (MediaGroup mediaGroup : mediaGroups) {
-            if (mediaGroup.getMediaItems() == null) {
-                Log.e(TAG, "loadRowsHeader: MediaGroup is empty. Group Name: " + mediaGroup.getTitle());
-                continue;
-            }
-
-            mView.updateCategory(VideoGroup.from(mediaGroup, category));
-
-            updateRefreshTime();
-        }
     }
 
     private void updateVideoGrid(Category category, Observable<MediaGroup> group) {
@@ -345,11 +340,27 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
                         mediaGroup -> {
                             mView.updateCategory(VideoGroup.from(mediaGroup, category));
                             updateRefreshTime();
+
+                            // Hide loading as long as first group received
+                            if (mediaGroup.getMediaItems() != null) {
+                                mView.showProgressBar(false);
+                            }
                         }
                         , error -> Log.e(TAG, "updateGridHeader error: " + error)
                         , () -> {
                             mView.showProgressBar(false);
                             mView.updateErrorIfEmpty(new CategoryEmptyError(mContext));
                         });
+    }
+
+    private void updateView(Category category, List<MediaGroup> mediaGroups) {
+        for (MediaGroup mediaGroup : mediaGroups) {
+            if (mediaGroup.getMediaItems() == null) {
+                Log.e(TAG, "loadRowsHeader: MediaGroup is empty. Group Name: " + mediaGroup.getTitle());
+                continue;
+            }
+
+            mView.updateCategory(VideoGroup.from(mediaGroup, category));
+        }
     }
 }

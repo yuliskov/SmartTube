@@ -60,7 +60,7 @@ public class AccountSettingsPresenter {
 
         createSelectAccountSection(accounts, settingsPresenter);
         createRemoveAccountSection(accounts, settingsPresenter);
-        createAddAccountSection(settingsPresenter);
+        createAddAccountButton(settingsPresenter);
 
         settingsPresenter.showDialog(mContext.getString(R.string.settings_accounts), () -> {
             for (Account account : mPendingRemove) {
@@ -86,7 +86,7 @@ public class AccountSettingsPresenter {
             }
 
             optionItems.add(UiOptionItem.from(
-                    account.getName(), option -> mSelectedAccount = account, account.isSelected()
+                    formatAccount(account), option -> mSelectedAccount = account, account.isSelected()
             ));
         }
 
@@ -98,7 +98,7 @@ public class AccountSettingsPresenter {
 
         for (Account account : accounts) {
             optionItems.add(UiOptionItem.from(
-                    account.getName(), option -> {
+                    formatAccount(account), option -> {
                         if (option.isSelected()) {
                             mPendingRemove.add(account);
                         } else {
@@ -111,8 +111,20 @@ public class AccountSettingsPresenter {
         settingsPresenter.appendCheckedCategory(mContext.getString(R.string.dialog_remove_account), optionItems);
     }
 
-    private void createAddAccountSection(AppSettingsPresenter settingsPresenter) {
+    private void createAddAccountButton(AppSettingsPresenter settingsPresenter) {
         settingsPresenter.appendSingleButton(UiOptionItem.from(
                 mContext.getString(R.string.dialog_add_account), option -> SignInPresenter.instance(mContext).start()));
+    }
+
+    private String formatAccount(Account account) {
+        String format;
+
+        if (account.getEmail() != null) {
+            format = String.format("%s (%s)", account.getName(), account.getEmail());
+        } else {
+            format = account.getName();
+        }
+
+        return format;
     }
 }

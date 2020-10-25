@@ -151,9 +151,7 @@ public final class ProgressBarManager {
         mPosition = position;
     }
 
-    public static void setup(androidx.leanback.app.ProgressBarManager manager) {
-        ViewGroup rootView = (ViewGroup) Helpers.getField(manager, "rootView");
-
+    public static void setup(androidx.leanback.app.ProgressBarManager manager, ViewGroup rootView) {
         if (rootView != null) {
             manager.setProgressBarView(createProgressBar(rootView, Gravity.CENTER));
         }
