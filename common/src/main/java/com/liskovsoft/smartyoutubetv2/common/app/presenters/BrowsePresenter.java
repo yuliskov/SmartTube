@@ -122,7 +122,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         List<SettingsItem> settingItems = new ArrayList<>();
         
         settingItems.add(new SettingsItem(
-                mContext.getString(R.string.settings_accounts), () -> AccountSettingsPresenter.instance(mContext).show()));
+                mContext.getString(R.string.settings_accounts), () -> AccountSettingsPresenter.instance(mContext).show(), R.drawable.action_channel));
         //settingItems.add(new SettingsItem(
         //        mContext.getString(R.string.settings_language), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
         //settingItems.add(new SettingsItem(
@@ -136,7 +136,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         //settingItems.add(new SettingsItem(
         //        mContext.getString(R.string.settings_other), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
         settingItems.add(new SettingsItem(
-                mContext.getString(R.string.settings_about), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
+                mContext.getString(R.string.settings_about), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented), R.mipmap.app_icon));
 
         mTextGridMapping.put(MediaGroup.TYPE_SETTINGS, settingItems);
     }
