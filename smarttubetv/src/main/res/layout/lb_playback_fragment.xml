@@ -27,8 +27,8 @@
                  android:layout_height="wrap_content"
                  android:padding="4sp"
                  android:visibility="gone"
-                 android:layout_gravity="bottom|right"
-                 android:background="#000000"
+                 android:layout_gravity="top|right"
+                 android:background="#80000000"
                  tools:ignore="RtlHardcoded"/>
 
     <androidx.leanback.widget.NonOverlappingFrameLayout
