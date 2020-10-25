@@ -99,9 +99,6 @@ public class AppSettingsPresenter implements Presenter<AppSettingsView> {
     }
 
     public void clear() {
-        if (mView != null) {
-            mView.clear();
-        }
         mCategories.clear();
     }
 

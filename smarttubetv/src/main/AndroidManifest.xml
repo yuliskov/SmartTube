@@ -132,7 +132,9 @@
                   android:screenOrientation="landscape"
                   android:theme="@style/App.Theme.Leanback.GuidedStep"/>
 
+        <!-- noHistory is essential for dialogs. Because otherwise you'll see previous dialog content when opening. -->
         <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.settings.AppSettingsActivity"
+                  android:noHistory="true"
                   android:launchMode="singleInstance"
                   android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
                   android:theme="@style/LeanbackPreferences"/>
