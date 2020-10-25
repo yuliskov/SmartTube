@@ -4,7 +4,10 @@ import android.annotation.TargetApi;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.app.RowsSupportFragment;
@@ -47,6 +50,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.ProgressBarManager;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -100,6 +104,16 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         setupPlayerBackground();
 
         mPlaybackPresenter.onInitDone();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+
+        // ProgressBar.setRootView is called in this moment
+        ProgressBarManager.setup(getProgressBarManager());
+
+        return view;
     }
 
     private void setupPlayerBackground() {

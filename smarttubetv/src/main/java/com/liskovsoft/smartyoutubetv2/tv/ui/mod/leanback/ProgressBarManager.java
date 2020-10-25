@@ -1,13 +1,17 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback;
 
+import android.content.Context;
 import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import androidx.core.content.ContextCompat;
 import androidx.leanback.app.BrowseFragment;
 import androidx.leanback.app.VerticalGridFragment;
+import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /**
  * Manager for showing/hiding progress bar widget. This class lets user specify an initial
@@ -26,6 +30,7 @@ public final class ProgressBarManager {
     boolean mEnableProgressBar = true;
     boolean mUserProvidedProgressBar;
     boolean mIsShowing;
+    private int mPosition = Gravity.CENTER;
 
     private Runnable runnable = new Runnable() {
         @Override
@@ -36,19 +41,29 @@ public final class ProgressBarManager {
 
             if (mIsShowing) {
                 if (mProgressBarView == null) {
-                    mProgressBarView = new ProgressBar(
-                            rootView.getContext(), null, android.R.attr.progressBarStyleLarge);
-                    FrameLayout.LayoutParams progressBarParams = new FrameLayout.LayoutParams(
-                            FrameLayout.LayoutParams.WRAP_CONTENT,
-                            FrameLayout.LayoutParams.WRAP_CONTENT);
-                    progressBarParams.gravity = Gravity.BOTTOM | Gravity.CENTER; // MOD: custom align
-                    rootView.addView(mProgressBarView, progressBarParams);
+                    mProgressBarView = createProgressBar(rootView, mPosition);
                 } else if (mUserProvidedProgressBar) {
                     mProgressBarView.setVisibility(View.VISIBLE);
                 }
             }
         }
     };
+
+    private static View createProgressBar(ViewGroup rootView, int position) {
+        ProgressBar progressBarView = new ProgressBar(
+                rootView.getContext(), null, android.R.attr.progressBarStyleLarge);
+        progressBarView.setIndeterminate(true);
+        progressBarView.setIndeterminateDrawable(
+                ContextCompat.getDrawable(rootView.getContext(), R.drawable.progress_large_holo));
+
+        FrameLayout.LayoutParams progressBarParams = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT);
+        progressBarParams.gravity = position;
+        rootView.addView(progressBarView, progressBarParams);
+
+        return progressBarView;
+    }
 
     /**
      * Sets the root view on which the progress bar will be attached. This class assumes the
@@ -130,5 +145,17 @@ public final class ProgressBarManager {
      */
     public void enableProgressBar() {
         mEnableProgressBar = true;
+    }
+
+    public void setPosition(int position) {
+        mPosition = position;
+    }
+
+    public static void setup(androidx.leanback.app.ProgressBarManager manager) {
+        ViewGroup rootView = (ViewGroup) Helpers.getField(manager, "rootView");
+
+        if (rootView != null) {
+            manager.setProgressBarView(createProgressBar(rootView, Gravity.CENTER));
+        }
     }
 }
