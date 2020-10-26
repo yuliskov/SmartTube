@@ -37,7 +37,7 @@ import java.util.Map;
  */
 public class BrowseFragment extends BrowseSupportFragment implements BrowseView {
     private static final String TAG = BrowseFragment.class.getSimpleName();
-    private static final String DEFAULT_FRAGMENT_TYPE = "DefaultFragmentType";
+    private static final String SELECTED_POSITION = "SelectedPosition";
     private ArrayObjectAdapter mCategoryRowAdapter;
     private BrowsePresenter mBrowsePresenter;
     private Map<Integer, Category> mCategories;
@@ -45,11 +45,13 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private Handler mHandler;
     private ProgressBarManager mProgressBarManager;
     private boolean mIsFragmentCreated;
+    private int mSelectedPosition;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
 
+        mSelectedPosition = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_POSITION, -1) : -1;
         mIsFragmentCreated = true;
 
         mCategories = new LinkedHashMap<>();
@@ -65,24 +67,13 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         enableMainFragmentScaling(false);
     }
 
-    private Bundle createFakeStateBundle() {
-        Bundle result = new Bundle();
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
-        result.putBoolean("titleShow", true);
-        result.putBoolean("isPageRow", true);
-        result.putInt("currentSelectedPosition", 5);
-        result.putInt("headerStackIndex", 0);
-        result.putInt(DEFAULT_FRAGMENT_TYPE, Category.TYPE_GRID);
-
-        return result;
+        // Store position in case activity is crashed
+        outState.putInt(SELECTED_POSITION, getSelectedPosition());
     }
-
-    //@Override
-    //public void onSaveInstanceState(Bundle outState) {
-    //    super.onSaveInstanceState(outState);
-    //
-    //    outState.putInt(DEFAULT_FRAGMENT_TYPE, mCategoryFragmentFactory.getDefaultFragmentType());
-    //}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -102,6 +93,11 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         prepareEntranceTransition();
 
         mBrowsePresenter.onInitDone();
+
+        // Restore state after crash
+        if (mSelectedPosition != -1) {
+            setSelectedPosition(mSelectedPosition);
+        }
     }
 
     private void setupAdapter() {
@@ -117,10 +113,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         );
 
         getMainFragmentRegistry().registerFragment(PageRow.class, mCategoryFragmentFactory);
-
-        //if (state != null && state.containsKey(DEFAULT_FRAGMENT_TYPE)) {
-        //    mCategoryFragmentFactory.setDefaultFragmentType(state.getInt(DEFAULT_FRAGMENT_TYPE));
-        //}
     }
 
     private void setupUi() {

@@ -24,7 +24,7 @@ public class CategoryFragmentFactory extends BrowseSupportFragment.FragmentFacto
     private final OnHeaderViewSelectedListener mViewSelectedListener;
     private final List<VideoGroup> mCachedData;
     private Fragment mCurrentFragment;
-    private int mDefaultFragmentType = Category.TYPE_GRID;
+    private int mFragmentType = Category.TYPE_GRID;
 
     public CategoryFragmentFactory() {
         this(null);
@@ -49,14 +49,14 @@ public class CategoryFragmentFactory extends BrowseSupportFragment.FragmentFacto
         Fragment fragment = null;
 
         if (header instanceof CategoryHeaderItem) {
-            mDefaultFragmentType = ((CategoryHeaderItem) header).getType();
+            mFragmentType = ((CategoryHeaderItem) header).getType();
         }
 
-        if (mDefaultFragmentType == Category.TYPE_ROW) {
+        if (mFragmentType == Category.TYPE_ROW) {
             fragment = new VideoRowsFragment();
-        } else if (mDefaultFragmentType == Category.TYPE_GRID) {
+        } else if (mFragmentType == Category.TYPE_GRID) {
             fragment = new VideoGridFragment();
-        } else if (mDefaultFragmentType == Category.TYPE_TEXT_GRID) {
+        } else if (mFragmentType == Category.TYPE_TEXT_GRID) {
             fragment = new SettingsGridFragment();
         }
 
@@ -148,13 +148,5 @@ public class CategoryFragmentFactory extends BrowseSupportFragment.FragmentFacto
 
     public Fragment getCurrentFragment() {
         return mCurrentFragment;
-    }
-
-    public void setDefaultFragmentType(int type) {
-        mDefaultFragmentType = type;
-    }
-
-    public int getDefaultFragmentType() {
-        return mDefaultFragmentType;
     }
 }
