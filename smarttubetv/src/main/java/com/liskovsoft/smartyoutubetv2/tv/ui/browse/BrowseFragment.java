@@ -56,7 +56,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mBrowsePresenter.register(this);
         mCreateAlreadyCalled = true;
         mProgressBarManager = new ProgressBarManager();
-        //mProgressBarManager.setPosition(Gravity.BOTTOM | Gravity.CENTER);
 
         setupAdapter();
         setupUi();
@@ -216,6 +215,11 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
         if (!mCreateAlreadyCalled) {
             mBrowsePresenter.onViewResumed();
+
+            // In case an error happen after exiting from the video
+            if (mCategoryFragmentFactory.isEmpty()) {
+                mBrowsePresenter.refresh();
+            }
         }
 
         mCreateAlreadyCalled = false;
