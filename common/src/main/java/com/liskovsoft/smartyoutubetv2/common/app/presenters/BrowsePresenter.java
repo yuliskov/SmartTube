@@ -53,7 +53,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
     private Disposable mSignCheckAction;
-    private long mCurrentCategoryId = -1;
+    private int mCurrentCategoryIndex;
     private long mLastUpdateTimeMs;
 
     private BrowsePresenter(Context context) {
@@ -203,34 +203,31 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
     }
 
     @Override
-    public void onCategoryFocused(long categoryId) {
-        updateCategory(categoryId);
+    public void onCategoryFocused(int categoryIndex) {
+        updateCategory(categoryIndex);
     }
 
     public void refresh() {
-        updateCategory(mCurrentCategoryId);
+        updateCategory(mCurrentCategoryIndex);
     }
 
     private void updateRefreshTime() {
         mLastUpdateTimeMs = System.currentTimeMillis();
     }
 
-    private void updateCategory(long categoryId) {
-        mCurrentCategoryId = categoryId;
+    private void updateCategory(int categoryIndex) {
+        mCurrentCategoryIndex = categoryIndex;
 
-        if (categoryId == -1 || mView == null) {
+        if (mView == null || categoryIndex < 0 || mCategories.size() <= categoryIndex) {
             return;
         }
 
         RxUtils.disposeActions(mUpdateAction, mScrollAction, mSignCheckAction);
 
-        for (Category category : mCategories) {
-            if (category.getId() == categoryId) {
-                mView.showProgressBar(true);
-                mView.clearCategory(category);
-                updateCategory(category);
-            }
-        }
+        Category category = mCategories.get(categoryIndex);
+        mView.showProgressBar(true);
+        mView.clearCategory(category);
+        updateCategory(category);
     }
 
     private void updateCategory(Category category) {

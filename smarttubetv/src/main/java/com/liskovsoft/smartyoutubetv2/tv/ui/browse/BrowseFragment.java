@@ -42,13 +42,16 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private Map<Integer, Category> mCategories;
     private CategoryFragmentFactory mCategoryFragmentFactory;
     private Handler mHandler;
-    private boolean mIsFragmentCreated;
     private ProgressBarManager mProgressBarManager;
+    private boolean mIsFragmentRestored;
+    private boolean mIsFragmentCreated;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(null);
+        super.onCreate(savedInstanceState);
 
+        // BrowseSupportFragment restores header state after crash
+        mIsFragmentRestored = savedInstanceState != null;
         mIsFragmentCreated = true;
 
         mCategories = new LinkedHashMap<>();
@@ -81,6 +84,10 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         prepareEntranceTransition();
 
         mBrowsePresenter.onInitDone();
+
+        if (mIsFragmentRestored) {
+            mBrowsePresenter.onCategoryFocused(getSelectedPosition());
+        }
     }
 
     private void setupAdapter() {
@@ -89,8 +96,16 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mCategoryRowAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         setAdapter(mCategoryRowAdapter);
 
+        //mCategoryFragmentFactory = new CategoryFragmentFactory(
+        //        (viewHolder, row) -> {
+        //            mBrowsePresenter.onCategoryFocused(row.getHeaderItem().getId());
+        //            Log.d(TAG, "onCategoryFragment: index: " + getSelectedPosition());
+        //        });
+
         mCategoryFragmentFactory = new CategoryFragmentFactory(
-                (viewHolder, row) -> mBrowsePresenter.onCategoryFocused(row.getHeaderItem().getId()));
+                (viewHolder, row) -> mBrowsePresenter.onCategoryFocused(getSelectedPosition())
+        );
+
         getMainFragmentRegistry().registerFragment(PageRow.class, mCategoryFragmentFactory);
     }
 
@@ -123,10 +138,14 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private void setupEventListeners() {
+        //getHeadersSupportFragment().setOnHeaderClickedListener(
+        //        (viewHolder, row) -> {
+        //            mBrowsePresenter.onCategoryFocused(row.getHeaderItem().getId());
+        //        });
+
         getHeadersSupportFragment().setOnHeaderClickedListener(
-                (viewHolder, row) -> {
-                    mBrowsePresenter.onCategoryFocused(row.getHeaderItem().getId());
-                });
+                (viewHolder, row) -> mBrowsePresenter.onCategoryFocused(getSelectedPosition())
+        );
 
         setOnSearchClickedListener(view -> {
             Intent intent = new Intent(getActivity(), SearchActivity.class);
