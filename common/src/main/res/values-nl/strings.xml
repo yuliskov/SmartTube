@@ -50,4 +50,8 @@
     <string name="settings_language">Taal</string>
     <string name="settings_linked_devices">Gekoppelde apparaten</string>
     <string name="settings_about">Over</string>
+    <string name="dialog_account_list">Account selecteren</string>
+    <string name="dialog_account_none">Geen</string>
+    <string name="dialog_remove_account">Account verwijderen</string>
+    <string name="dialog_add_account">Account toevoegen</string>
 </resources>
