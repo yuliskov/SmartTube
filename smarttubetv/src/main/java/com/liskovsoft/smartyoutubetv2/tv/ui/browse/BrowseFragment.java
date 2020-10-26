@@ -48,10 +48,10 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(null);
 
         // BrowseSupportFragment restores header state after crash
-        mIsFragmentRestored = savedInstanceState != null;
+        //mIsFragmentRestored = savedInstanceState != null;
         mIsFragmentCreated = true;
 
         mCategories = new LinkedHashMap<>();
@@ -84,6 +84,10 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         prepareEntranceTransition();
 
         mBrowsePresenter.onInitDone();
+
+        if (mIsFragmentRestored) {
+            mBrowsePresenter.onCategoryFocused(getSelectedPosition());
+        }
     }
 
     private void setupAdapter() {
@@ -228,11 +232,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     public void onResume() {
         super.onResume();
 
-        if (mIsFragmentCreated) {
-            if (mIsFragmentRestored) {
-                mBrowsePresenter.onCategoryFocused(getSelectedPosition());
-            }
-        } else {
+        if (!mIsFragmentCreated) {
             mBrowsePresenter.onViewResumed();
         }
 
