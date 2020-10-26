@@ -84,10 +84,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         prepareEntranceTransition();
 
         mBrowsePresenter.onInitDone();
-
-        if (mIsFragmentRestored) {
-            mBrowsePresenter.onCategoryFocused(getSelectedPosition());
-        }
     }
 
     private void setupAdapter() {
@@ -232,7 +228,11 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     public void onResume() {
         super.onResume();
 
-        if (!mIsFragmentCreated) {
+        if (mIsFragmentCreated) {
+            if (mIsFragmentRestored) {
+                mBrowsePresenter.onCategoryFocused(getSelectedPosition());
+            }
+        } else {
             mBrowsePresenter.onViewResumed();
         }
 
