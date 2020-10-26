@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,18 +42,19 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private Map<Integer, Category> mCategories;
     private CategoryFragmentFactory mCategoryFragmentFactory;
     private Handler mHandler;
-    private boolean mCreateAlreadyCalled;
+    private boolean mIsFragmentCreated;
     private ProgressBarManager mProgressBarManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(null);
+
+        mIsFragmentCreated = true;
 
         mCategories = new LinkedHashMap<>();
         mHandler = new Handler();
         mBrowsePresenter = BrowsePresenter.instance(getContext());
         mBrowsePresenter.register(this);
-        mCreateAlreadyCalled = true;
         mProgressBarManager = new ProgressBarManager();
 
         setupAdapter();
@@ -213,16 +213,11 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     public void onResume() {
         super.onResume();
 
-        if (!mCreateAlreadyCalled) {
+        if (!mIsFragmentCreated) {
             mBrowsePresenter.onViewResumed();
-
-            // In case an error happen after exiting from the video
-            if (mCategoryFragmentFactory.isEmpty()) {
-                mBrowsePresenter.refresh();
-            }
         }
 
-        mCreateAlreadyCalled = false;
+        mIsFragmentCreated = false;
     }
 
     @Override
