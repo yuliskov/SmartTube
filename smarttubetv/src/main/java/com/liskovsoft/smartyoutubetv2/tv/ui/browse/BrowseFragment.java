@@ -37,21 +37,19 @@ import java.util.Map;
  */
 public class BrowseFragment extends BrowseSupportFragment implements BrowseView {
     private static final String TAG = BrowseFragment.class.getSimpleName();
+    private static final String DEFAULT_FRAGMENT_TYPE = "DefaultFragmentType";
     private ArrayObjectAdapter mCategoryRowAdapter;
     private BrowsePresenter mBrowsePresenter;
     private Map<Integer, Category> mCategories;
     private CategoryFragmentFactory mCategoryFragmentFactory;
     private Handler mHandler;
     private ProgressBarManager mProgressBarManager;
-    private boolean mIsFragmentRestored;
     private boolean mIsFragmentCreated;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
 
-        // BrowseSupportFragment restores header state after crash
-        //mIsFragmentRestored = savedInstanceState != null;
         mIsFragmentCreated = true;
 
         mCategories = new LinkedHashMap<>();
@@ -61,10 +59,30 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mProgressBarManager = new ProgressBarManager();
 
         setupAdapter();
+        setupFragmentFactory();
         setupUi();
 
         enableMainFragmentScaling(false);
     }
+
+    private Bundle createFakeStateBundle() {
+        Bundle result = new Bundle();
+
+        result.putBoolean("titleShow", true);
+        result.putBoolean("isPageRow", true);
+        result.putInt("currentSelectedPosition", 5);
+        result.putInt("headerStackIndex", 0);
+        result.putInt(DEFAULT_FRAGMENT_TYPE, Category.TYPE_GRID);
+
+        return result;
+    }
+
+    //@Override
+    //public void onSaveInstanceState(Bundle outState) {
+    //    super.onSaveInstanceState(outState);
+    //
+    //    outState.putInt(DEFAULT_FRAGMENT_TYPE, mCategoryFragmentFactory.getDefaultFragmentType());
+    //}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -84,10 +102,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         prepareEntranceTransition();
 
         mBrowsePresenter.onInitDone();
-
-        if (mIsFragmentRestored) {
-            mBrowsePresenter.onCategoryFocused(getSelectedPosition());
-        }
     }
 
     private void setupAdapter() {
@@ -95,18 +109,18 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         // This Adapter is used to render the MainFragment sidebar labels.
         mCategoryRowAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         setAdapter(mCategoryRowAdapter);
+    }
 
-        //mCategoryFragmentFactory = new CategoryFragmentFactory(
-        //        (viewHolder, row) -> {
-        //            mBrowsePresenter.onCategoryFocused(row.getHeaderItem().getId());
-        //            Log.d(TAG, "onCategoryFragment: index: " + getSelectedPosition());
-        //        });
-
+    private void setupFragmentFactory() {
         mCategoryFragmentFactory = new CategoryFragmentFactory(
                 (viewHolder, row) -> mBrowsePresenter.onCategoryFocused(getSelectedPosition())
         );
 
         getMainFragmentRegistry().registerFragment(PageRow.class, mCategoryFragmentFactory);
+
+        //if (state != null && state.containsKey(DEFAULT_FRAGMENT_TYPE)) {
+        //    mCategoryFragmentFactory.setDefaultFragmentType(state.getInt(DEFAULT_FRAGMENT_TYPE));
+        //}
     }
 
     private void setupUi() {
