@@ -155,6 +155,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
     @Override
     public void unregister(BrowseView view) {
         mView = null;
+        RxUtils.disposeActions(mUpdateAction, mScrollAction, mSignCheckAction);
     }
 
     @Override
