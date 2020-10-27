@@ -679,29 +679,33 @@ public class SearchSupportFragment extends Fragment {
     }
 
     void updateSearchBarNextFocusId() {
-        //if (mSearchBar == null || mResultAdapter == null) {
-        //    return;
-        //}
-        //final int viewId = (mResultAdapter.size() == 0 || mRowsSupportFragment == null
-        //        || mRowsSupportFragment.getVerticalGridView() == null)
-        //                ? 0 : mRowsSupportFragment.getVerticalGridView().getId();
+        if (mSearchBar == null || mResultAdapter == null) {
+            return;
+        }
+        final int viewId = (mResultAdapter.size() == 0 || mRowsSupportFragment == null
+                || mRowsSupportFragment.getVerticalGridView() == null)
+                        ? 0 : mRowsSupportFragment.getVerticalGridView().getId();
+
+        // MOD: hide kbd on back properly
         //mSearchBar.setNextFocusDownId(viewId);
     }
 
     void updateFocus() {
-        //if (mResultAdapter != null && mResultAdapter.size() > 0
-        //        && mRowsSupportFragment != null && mRowsSupportFragment.getAdapter() == mResultAdapter) {
-        //    focusOnResults();
-        //} else {
-        //    mSearchBar.requestFocus();
-        //}
+        if (mResultAdapter != null && mResultAdapter.size() > 0
+                && mRowsSupportFragment != null && mRowsSupportFragment.getAdapter() == mResultAdapter) {
+            focusOnResults();
+        } else {
+            mSearchBar.requestFocus();
+        }
     }
 
     private void focusOnResults() {
-        //if (mRowsSupportFragment == null || mRowsSupportFragment.getVerticalGridView() == null
-        //        || mResultAdapter.size() == 0) {
-        //    return;
-        //}
+        if (mRowsSupportFragment == null || mRowsSupportFragment.getVerticalGridView() == null
+                || mResultAdapter.size() == 0) {
+            return;
+        }
+
+        // MOD: hide kbd on back properly
         //if (mRowsSupportFragment.getVerticalGridView().requestFocus()) {
         //    mStatus &= ~RESULTS_CHANGED;
         //}
