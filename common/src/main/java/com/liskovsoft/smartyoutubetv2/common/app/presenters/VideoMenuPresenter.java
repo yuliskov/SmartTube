@@ -8,7 +8,6 @@ import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
@@ -25,6 +24,7 @@ public class VideoMenuPresenter {
     private final Context mContext;
     private final MediaItemManager mItemManager;
     private final SignInManager mAuthManager;
+    private final AppSettingsPresenter mSettingsPresenter;
     private Disposable mPlaylistAction;
     private Disposable mAddAction;
     private Disposable mSignCheckAction;
@@ -35,6 +35,7 @@ public class VideoMenuPresenter {
         MediaService service = YouTubeMediaService.instance();
         mItemManager = service.getMediaItemManager();
         mAuthManager = service.getSignInManager();
+        mSettingsPresenter = AppSettingsPresenter.instance(context);
     }
 
     public static VideoMenuPresenter instance(Context context) {
@@ -69,9 +70,9 @@ public class VideoMenuPresenter {
                     playlistInfo.isSelected()));
         }
 
-        AppSettingsPresenter appSettingsPresenter = AppSettingsPresenter.instance(mContext);
-        appSettingsPresenter.appendCheckedCategory(mContext.getString(R.string.dialog_add_to_playlist), options);
-        appSettingsPresenter.showDialog(() -> RxUtils.disposeActions(mPlaylistAction, mAddAction, mSignCheckAction));
+        mSettingsPresenter.clear();
+        mSettingsPresenter.appendCheckedCategory(mContext.getString(R.string.dialog_add_to_playlist), options);
+        mSettingsPresenter.showDialog(() -> RxUtils.disposeActions(mPlaylistAction, mAddAction, mSignCheckAction));
     }
 
     private void addToPlaylist(String playlistId, boolean checked) {
