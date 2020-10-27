@@ -63,7 +63,6 @@ public class SearchFragment extends SearchSupportFragment
 
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         mProgressBarManager = new ProgressBarManager();
-        //mProgressBarManager.setPosition(Gravity.BOTTOM | Gravity.CENTER);
 
         setSearchResultProvider(this);
         setupEventListeners();
@@ -95,8 +94,6 @@ public class SearchFragment extends SearchSupportFragment
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        //mProgressBarManager.setRootView((ViewGroup) getActivity().findViewById(android.R.id.content).getRootView());
 
         mSearchPresenter.onInitDone();
     }
