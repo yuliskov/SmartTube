@@ -23,7 +23,7 @@
     <string name="auto_frame_rate">Fréquence d\'images automatique</string>
     <string name="frame_rate_correction">Correction fps:\n%s</string>
     <string name="category_background_playback">Lecture en arriére-plan</string>
-    <string name="not_implemented">Non mis en oeuvre</string>
+    <string name="not_implemented">Non exécutable</string>
     <string name="option_background_playback_off">Désactivé</string>
     <string name="option_background_playback_all">Vidéo et audio</string>
     <string name="option_background_playback_only_audio">Uniquement l\'audio</string>
@@ -39,4 +39,18 @@
     <string name="msg_category_is_empty">Oups! Il n\'y a rien ici.</string>
     <string name="dialog_add_to_playlist">Ajouter à la playlist</string>
     <string name="msg_signed_users_only">Utilisateurs enregistrés uniquement</string>
+    <string name="msg_cant_load_content">Oups. Impossible de charger le contenu.</string>
+    <string name="title_video_presets">Préréglages vidéo</string>
+    <string name="settings_accounts">Comptes</string>
+    <string name="settings_left_panel">Modifier catégories</string>
+    <string name="settings_themes">Thèmes</string>
+    <string name="settings_other">Autres</string>
+    <string name="settings_player">Paramètres du lecteur</string>
+    <string name="settings_language">Langue</string>
+    <string name="settings_linked_devices">Appareils liés</string>
+    <string name="settings_about">A propos de</string>
+    <string name="dialog_account_list">Sélectionnez un compte</string>
+    <string name="dialog_account_none">Aucun</string>
+    <string name="dialog_remove_account">Supprimer compte</string>
+    <string name="dialog_add_account">Ajouter un compte</string>
 </resources>
