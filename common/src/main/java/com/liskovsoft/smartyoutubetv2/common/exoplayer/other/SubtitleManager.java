@@ -57,12 +57,12 @@ public class SubtitleManager implements TextOutput {
 
             int textColor = ContextCompat.getColor(mContext, R.color.light_grey);
             int outlineColor = ContextCompat.getColor(mContext, R.color.black);
-            int backgroundColor = ContextCompat.getColor(mContext, R.color.transparent);
+            int backgroundColor = ContextCompat.getColor(mContext, R.color.semi_grey);
 
             CaptionStyleCompat style =
                     new CaptionStyleCompat(textColor,
                             backgroundColor, Color.TRANSPARENT,
-                            CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW,
+                            CaptionStyleCompat.EDGE_TYPE_OUTLINE,
                             outlineColor, Typeface.DEFAULT_BOLD);
             mSubtitleView.setStyle(style);
 
