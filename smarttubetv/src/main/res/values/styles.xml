@@ -3,6 +3,9 @@
     <!-- Base application theme. -->
     <style name="App.Theme.Leanback" parent="Theme.Leanback">
         <item name="android:windowBackground">@null</item>
+        <item name="playbackProgressPrimaryColor">@color/red</item>
+        <item name="playbackProgressSecondaryColor">@color/light_red</item>
+        <item name="playbackControlsIconHighlightColor">@color/red</item>
     </style>
     <style name="App.Theme.Leanback.Browse" parent="Theme.Leanback.Browse">
         <item name="android:windowBackground">@color/shelf_background_black</item>
@@ -16,5 +19,8 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:colorPrimary" tools:targetApi="21">@color/fastlane_background</item>
+    </style>
+    <style name="ProgressBarHorizontal" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_bar_drawable</item>
     </style>
 </resources>

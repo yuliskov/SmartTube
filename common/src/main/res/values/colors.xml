@@ -5,6 +5,7 @@
     <color name="white_70">#b2ffffff</color>
     <color name="black">#000000</color>
     <color name="red">#ff0000</color>
+    <color name="light_red">#ff8080</color>
     <color name="transparent">#00ffffff</color>
     <color name="light_blue">#2793e6</color>
     <color name="color_yellow">#CDDC39</color>
