@@ -98,7 +98,7 @@ public class DoubleBackManager {
 
     private void showMsg() {
         if (mRepeatCount == (DEFAULT_REPEAT_COUNT - 1)) {
-            MessageHelpers.showMessageThrottled(mContext, R.string.msg_press_again_to_exit);
+            MessageHelpers.showMessageThrottled(mContext, mContext.getString(R.string.msg_press_again_to_exit));
         }
     }
 
