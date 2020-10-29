@@ -40,6 +40,10 @@ public class LanguageSettingsPresenter {
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
         settingsPresenter.clear();
         settingsPresenter.appendRadioCategory(mContext.getString(R.string.dialog_select_language), options);
-        settingsPresenter.showDialog(() -> ViewManager.instance(mContext).restartApp(mContext));
+        settingsPresenter.showDialog(() -> {
+            if (!language.equals(mLangUpdater.getPreferredLocale())) {
+                ViewManager.instance(mContext).restartApp();
+            }
+        });
     }
 }

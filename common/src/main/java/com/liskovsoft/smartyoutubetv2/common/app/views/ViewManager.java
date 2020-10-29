@@ -69,13 +69,7 @@ public class ViewManager {
         Class<?> activityClass = mViewMapping.get(viewClass);
 
         if (activityClass != null) {
-            Intent intent = new Intent(mContext, activityClass);
-
-            // Fix: Calling startActivity() from outside of an Activity  context requires the FLAG_ACTIVITY_NEW_TASK flag
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            Log.d(TAG, "Launching activity view: " + activityClass.getSimpleName());
-            mContext.startActivity(intent);
+            startActivity(activityClass);
         } else {
             Log.e(TAG, "Activity not registered for view " + viewClass.getSimpleName());
         }
@@ -144,7 +138,13 @@ public class ViewManager {
 
         Log.d(TAG, "Launching default activity: " + lastActivity.getSimpleName());
 
-        Intent intent = new Intent(mContext, lastActivity);
+        startActivity(lastActivity);
+    }
+
+    private void startActivity(Class<?> activityClass) {
+        Log.d(TAG, "Launching activity: " + activityClass.getSimpleName());
+
+        Intent intent = new Intent(mContext, activityClass);
 
         // Fix: Calling startActivity() from outside of an Activity  context requires the FLAG_ACTIVITY_NEW_TASK flag
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -230,23 +230,7 @@ public class ViewManager {
         FileHelpers.deleteCache(mContext);
     }
 
-    public void restartApp(Context context) {
-        //Intent intent = new Intent();
-        //
-        //intent.setClass(context, BootstrapActivity.class);
-        //
-        //if (toBootstrap) {
-        //    intent.putExtra(BootstrapActivity.SKIP_RESTORE, true);
-        //}
-        //
-        //context.startActivity(intent);
-        //
-        //if (context instanceof Activity) {
-        //    ((Activity)context).finish();
-        //}
-        //
-        //System.exit(0);
-
-        //new Handler(mActivity.getMainLooper()).postDelayed(() -> SmartUtils.restartToBootstrap(mActivity), 1_000);
+    public void restartApp() {
+        System.exit(0);
     }
 }

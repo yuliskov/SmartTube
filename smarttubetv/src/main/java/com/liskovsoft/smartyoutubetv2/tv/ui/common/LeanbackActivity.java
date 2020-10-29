@@ -114,7 +114,9 @@ public abstract class LeanbackActivity extends FragmentActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        String langCode = new LangUpdater(newBase).getUpdatedLocale();
+        LangUpdater updater = new LangUpdater(newBase);
+        updater.update();
+        String langCode = updater.getUpdatedLocale();
         super.attachBaseContext(LocaleContextWrapper.wrap(newBase, LangHelper.parseLangCode(langCode)));
     }
 
