@@ -54,4 +54,6 @@
     <string name="dialog_account_none">Не выбран</string>
     <string name="dialog_remove_account">Удалить аккаунт</string>
     <string name="dialog_add_account">Добавить аккаунт</string>
+    <string name="default_lang">По-умолчанию</string>
+    <string name="dialog_select_language">Язык приложения</string>
 </resources>

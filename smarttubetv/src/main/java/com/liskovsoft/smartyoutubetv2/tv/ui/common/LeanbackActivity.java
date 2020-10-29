@@ -1,15 +1,19 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.common;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import androidx.fragment.app.FragmentActivity;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.locale.LangHelper;
+import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.language.LangUpdater;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.DoubleBackManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.LongClickManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
@@ -106,6 +110,12 @@ public abstract class LeanbackActivity extends FragmentActivity {
             // super.finish();
             mDoubleBackManager.enableDoubleBackExit();
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        String langCode = new LangUpdater(newBase).getUpdatedLocale();
+        super.attachBaseContext(LocaleContextWrapper.wrap(newBase, LangHelper.parseLangCode(langCode)));
     }
 
     public void destroyActivity() {

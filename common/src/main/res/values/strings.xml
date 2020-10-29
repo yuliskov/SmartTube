@@ -54,4 +54,6 @@
     <string name="dialog_account_none">None</string>
     <string name="dialog_remove_account">Remove account</string>
     <string name="dialog_add_account">Add account</string>
+    <string name="default_lang">Default</string>
+    <string name="dialog_select_language">App language</string>
 </resources>

@@ -1,5 +1,9 @@
 package com.liskovsoft.smartyoutubetv2.common.utils;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;

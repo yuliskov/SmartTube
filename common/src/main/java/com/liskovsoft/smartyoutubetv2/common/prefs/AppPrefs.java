@@ -18,6 +18,7 @@ public class AppPrefs extends SharedPreferencesBase {
     private static final String VIDEO_LOADER_DATA = "video_loader_data";
     private static final String STATE_UPDATER_DATA = "state_updater_data";
     private static final String STATE_UPDATER_PARAMS = "state_updater_params";
+    private static final String PREFERRED_LANGUAGE_DATA = "preferred_language_data";
     private String mDefaultDisplayMode;
     private String mCurrentDisplayMode;
 
@@ -112,5 +113,13 @@ public class AppPrefs extends SharedPreferencesBase {
 
     public void setStateUpdaterParams(String data) {
         putString(STATE_UPDATER_PARAMS, data);
+    }
+
+    public void setPreferredLanguage(String langData) {
+        putString(PREFERRED_LANGUAGE_DATA, langData);
+    }
+
+    public String getPreferredLanguage() {
+        return getString(PREFERRED_LANGUAGE_DATA, null);
     }
 }

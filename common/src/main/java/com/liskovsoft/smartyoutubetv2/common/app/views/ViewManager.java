@@ -229,4 +229,24 @@ public class ViewManager {
         YouTubeMediaService.instance().invalidateCache();
         FileHelpers.deleteCache(mContext);
     }
+
+    public void restartApp(Context context) {
+        //Intent intent = new Intent();
+        //
+        //intent.setClass(context, BootstrapActivity.class);
+        //
+        //if (toBootstrap) {
+        //    intent.putExtra(BootstrapActivity.SKIP_RESTORE, true);
+        //}
+        //
+        //context.startActivity(intent);
+        //
+        //if (context instanceof Activity) {
+        //    ((Activity)context).finish();
+        //}
+        //
+        //System.exit(0);
+
+        //new Handler(mActivity.getMainLooper()).postDelayed(() -> SmartUtils.restartToBootstrap(mActivity), 1_000);
+    }
 }
