@@ -54,4 +54,6 @@
     <string name="dialog_account_none">Geen</string>
     <string name="dialog_remove_account">Account verwijderen</string>
     <string name="dialog_add_account">Account toevoegen</string>
+    <string name="default_lang">Standaard</string>
+    <string name="dialog_select_language">Taal</string>
 </resources>
