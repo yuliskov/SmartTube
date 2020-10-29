@@ -7,7 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
 import java.util.HashMap;
@@ -22,6 +24,7 @@ public class ViewManager {
     private final Map<Class<?>, Class<? extends Activity>> mViewMapping;
     private final Map<Class<? extends Activity>, Class<? extends Activity>> mParentMapping;
     private final Stack<Class<?>> mActivityStack;
+    private final AppPrefs mPrefs;
     private Class<?> mRootActivity;
     private Class<?> mDefaultTop;
     private long mPrevThrottleTimeMS;
@@ -33,6 +36,9 @@ public class ViewManager {
         mViewMapping = new HashMap<>();
         mParentMapping = new HashMap<>();
         mActivityStack = new Stack<>();
+        mPrefs = AppPrefs.instance(context);
+
+        restoreState();
     }
 
     public static ViewManager instance(Context context) {
@@ -231,7 +237,27 @@ public class ViewManager {
     }
 
     public void restartApp() {
-        startActivity(SplashView.class);
+        mMoveViewsToBack = true;
+
+        persistState();
+
+        //startActivity(SplashView.class);
+
         System.exit(0);
+    }
+
+    private void persistState() {
+        mPrefs.setViewManagerData(String.format("%s,%s", mMoveViewsToBack, mIsSinglePlayerMode));
+    }
+
+    private void restoreState() {
+        String data = mPrefs.getViewManagerData();
+
+        if (data != null) {
+            String[] split = data.split(",");
+
+            mMoveViewsToBack = Helpers.parseBoolean(split, 0);
+            mIsSinglePlayerMode = Helpers.parseBoolean(split, 1);
+        }
     }
 }

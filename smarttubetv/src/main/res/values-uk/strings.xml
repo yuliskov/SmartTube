@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="signin_view_title">Код завантажується…</string>
+    <string name="signin_view_description">Шоб увійти в обліковий запис введіть цей код на сторінці %s</string>
+    <string name="signin_view_action_text">Готово</string>
+    <string name="require_checked">Потрібно \"%s\"</string>
+    <string name="msg_press_again_to_exit">Натисніть ще раз для виходу</string>
+    <string name="view_einding_time">Закінчення: %s</string>
+</resources>

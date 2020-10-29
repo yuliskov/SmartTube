@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.content.Context;
+import android.text.TextUtils.TruncateAt;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,12 @@ public class SettingsItemPresenter extends Presenter {
             
             textView.setBackgroundColor(backgroundColor);
             textView.setTextColor(textColor);
+
+            if (hasFocus) {
+                enableMarquee(textView);
+            } else {
+                disableMarquee(textView);
+            }
         });
 
         return new ViewHolder(container);
@@ -70,5 +77,27 @@ public class SettingsItemPresenter extends Presenter {
 
     @Override
     public void onUnbindViewHolder(ViewHolder viewHolder) {
+    }
+
+    private void disableMarquee(TextView... textViews) {
+        if (textViews == null || textViews.length == 0) {
+            return;
+        }
+
+        for (TextView textView : textViews) {
+            textView.setEllipsize(TruncateAt.END);
+        }
+    }
+
+    private void enableMarquee(TextView... textViews) {
+        if (textViews == null || textViews.length == 0) {
+            return;
+        }
+
+        for (TextView textView : textViews) {
+            textView.setEllipsize(TruncateAt.MARQUEE);
+            textView.setMarqueeRepeatLimit(-1);
+            textView.setHorizontallyScrolling(true);
+        }
     }
 }
