@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import androidx.annotation.NonNull;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -104,8 +106,6 @@ public class ViewManager {
                     activity.moveTaskToBack(true);
                     return true;
                 }
-
-                clearCache();
 
                 return false;
             }
@@ -231,19 +231,23 @@ public class ViewManager {
         mIsSinglePlayerMode = enable;
     }
 
-    private void clearCache() {
+    public void clearCaches() {
         YouTubeMediaService.instance().invalidateCache();
         FileHelpers.deleteCache(mContext);
     }
 
-    public void restartApp() {
+    public void killApp() {
         mMoveViewsToBack = true;
 
         persistState();
 
-        //startActivity(SplashView.class);
-
         System.exit(0);
+    }
+
+    public void restartApp() {
+        startView(SplashView.class);
+
+        killApp();
     }
 
     private void persistState() {

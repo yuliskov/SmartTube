@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import androidx.fragment.app.FragmentActivity;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.locale.LangHelper;
 import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -53,7 +52,7 @@ public abstract class LeanbackActivity extends FragmentActivity {
         mLongClickManager.dispatchKeyEvent(event);
 
         if (mDoubleBackManager.checkDoubleBack(event)) {
-            super.finish();
+            properlyFinishTheApp();
         }
 
         return super.dispatchKeyEvent(event);
@@ -87,7 +86,7 @@ public abstract class LeanbackActivity extends FragmentActivity {
         // We can't do it in the ViewManager because activity may be started from outside
         if (!mViewManager.addTop(this)) {
             // not added, probably move task to back is active
-            super.finish();
+            destroyActivity();
         }
     }
 
@@ -107,7 +106,6 @@ public abstract class LeanbackActivity extends FragmentActivity {
     public void finish() {
         // user pressed back key
         if (!mViewManager.startParentView(this)) {
-            // super.finish();
             mDoubleBackManager.enableDoubleBackExit();
         }
     }
@@ -122,5 +120,11 @@ public abstract class LeanbackActivity extends FragmentActivity {
 
     public void destroyActivity() {
         super.finish();
+    }
+
+    private void properlyFinishTheApp() {
+        destroyActivity();
+        mViewManager.clearCaches();
+        mViewManager.killApp();
     }
 }
