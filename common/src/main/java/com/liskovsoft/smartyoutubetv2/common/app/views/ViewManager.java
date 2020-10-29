@@ -231,6 +231,7 @@ public class ViewManager {
     }
 
     public void restartApp() {
+        startActivity(SplashView.class);
         System.exit(0);
     }
 }
