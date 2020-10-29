@@ -4,7 +4,9 @@ import android.app.Activity;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerHandlerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
 public abstract class PlayerEventListenerHelper implements PlayerHandlerEventListener {
@@ -14,6 +16,10 @@ public abstract class PlayerEventListenerHelper implements PlayerHandlerEventLis
     @Override
     public void onController(PlaybackController controller) {
         mController = controller;
+    }
+
+    public PlaybackController getController() {
+        return mController;
     }
 
     @Override

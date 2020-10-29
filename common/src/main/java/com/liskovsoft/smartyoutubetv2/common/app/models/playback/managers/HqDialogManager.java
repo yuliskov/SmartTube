@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
-import android.os.Build.VERSION;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -46,11 +45,6 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
     @Override
     public void onHighQualityClicked() {
-        if (VERSION.SDK_INT < 25) {
-            // Old Android fix: don't destroy player while dialog is open
-            mController.blockEngine(true);
-        }
-
         mSettingsPresenter.clear();
 
         addQualityCategories();

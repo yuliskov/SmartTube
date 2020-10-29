@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build.VERSION;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
@@ -20,6 +21,7 @@ public class AppSettingsPresenter implements Presenter<AppSettingsView> {
     private String mTitle;
     private Runnable mOnClose;
     private PlayerUiManager mUiManager;
+    private boolean mIsEngineBlocked;
 
     public static class SettingsCategory {
         public static SettingsCategory radioList(String title, List<OptionItem> items) {
@@ -89,9 +91,8 @@ public class AppSettingsPresenter implements Presenter<AppSettingsView> {
     public void onClose() {
         clear();
 
-        if (mUiManager != null) {
-            mUiManager.enableUiAutoHideTimeout();
-        }
+        enablePlayerUiAutoHide(true);
+        enableOldAndroidFix(false);
 
         if (mOnClose != null) {
             mOnClose.run();
@@ -124,9 +125,8 @@ public class AppSettingsPresenter implements Presenter<AppSettingsView> {
         mTitle = dialogTitle;
         mOnClose = onClose;
 
-        if (mUiManager != null) {
-            mUiManager.disableUiAutoHideTimeout();
-        }
+        enablePlayerUiAutoHide(false);
+        enableOldAndroidFix(true);
 
         if (mView != null) {
             onInitDone();
@@ -153,5 +153,29 @@ public class AppSettingsPresenter implements Presenter<AppSettingsView> {
 
     public void appendSingleButton(OptionItem optionItem) {
         mCategories.add(SettingsCategory.singleButton(optionItem));
+    }
+
+    private void enableOldAndroidFix(boolean enable) {
+        if (mUiManager != null) {
+            // Old Android fix: don't destroy player while dialog is open
+            if (VERSION.SDK_INT < 25) {
+                if (enable) {
+                    mIsEngineBlocked = mUiManager.getController().isEngineBlocked();
+                    mUiManager.getController().blockEngine(true);
+                } else {
+                    mUiManager.getController().blockEngine(mIsEngineBlocked);
+                }
+            }
+        }
+    }
+
+    private void enablePlayerUiAutoHide(boolean enable) {
+        if (mUiManager != null) {
+            if (enable) {
+                mUiManager.enableUiAutoHideTimeout();
+            } else {
+                mUiManager.disableUiAutoHideTimeout();
+            }
+        }
     }
 }
