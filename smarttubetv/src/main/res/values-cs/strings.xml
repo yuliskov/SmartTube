@@ -1,0 +1,14 @@
+<resources>
+    
+    <string name="signin_view_title">Uživatelský kód se načítá ...</string>
+    <string name="signin_view_description">Chcete-li se přihlásit, zadejte tento kód na stránce %s</string>
+    <string name="signin_view_action_text">Hotovo</string>
+    <string name="action_subscribe_off">Přihlásit se k odběru</string>
+    <string name="action_subscribe_on">Přihlaste se k odběru</string>
+    <string name="action_channel">Otevřít kanál</string>
+    <string name="action_playlist_add">Přidat do seznamu skladeb</string>
+    <string name="action_video_stats">Statistiky videa</string>
+    <string name="require_checked">Requires \"%s\"</string>
+    <string name="msg_press_again_to_exit">Opětovným stisknutím opustíte nabídku</string>
+    <string name="view_einding_time">Konec: %s</string>
+</resources>

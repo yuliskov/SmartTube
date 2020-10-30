@@ -1,0 +1,14 @@
+<resources>
+    
+    <string name="signin_view_title">User Code is loading…</string>
+    <string name="signin_view_description">Per accedere, inserisci questo codice nella pagina %s</string>
+    <string name="signin_view_action_text">Done</string>
+    <string name="action_subscribe_off">Abbonati</string>
+    <string name="action_subscribe_on">Iscriviti su</string>
+    <string name="action_channel">Apri canale</string>
+    <string name="action_playlist_add">Aggiungi a playlist</string>
+    <string name="action_video_stats">Statistiche video</string>
+    <string name="require_checked">Richiede \" %s \"</string>
+    <string name="msg_press_again_to_exit">Premerlo di nuovo per uscire</string>
+    <string name="view_einding_time">Fine: %s</string>
+</resources>

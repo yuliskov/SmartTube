@@ -1,0 +1,14 @@
+<resources>
+    
+    <string name="signin_view_title">O código do usuário está carregando ...</string>
+    <string name="signin_view_description">To sign-in enter this code on page %s</string>
+    <string name="signin_view_action_text">Done</string>
+    <string name="action_subscribe_off">Assinar fora</string>
+    <string name="action_subscribe_on">Assinar em</string>
+    <string name="action_channel">Canal aberto</string>
+    <string name="action_playlist_add">Adicionar à Playlist</string>
+    <string name="action_video_stats">Estatísticas de vídeo</string>
+    <string name="require_checked">Requer \" %s \"</string>
+    <string name="msg_press_again_to_exit">Pressione novamente para sair</string>
+    <string name="view_einding_time">Terminações</string>
+</resources>

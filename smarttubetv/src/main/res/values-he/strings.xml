@@ -1,0 +1,14 @@
+<resources>
+    
+    <string name="signin_view_title">קוד המשתמש נטען ...</string>
+    <string name="signin_view_description">כדי להיכנס, הזן קוד זה בעמוד %s</string>
+    <string name="signin_view_action_text">בוצע</string>
+    <string name="action_subscribe_off">הירשם כבוי</string>
+    <string name="action_subscribe_on">הירשם כמנוי</string>
+    <string name="action_channel">ערוץ פתוח</string>
+    <string name="action_playlist_add">Add to Playlist</string>
+    <string name="action_video_stats">סטטיסטיקות וידאו</string>
+    <string name="require_checked">מחייב \" %s \"</string>
+    <string name="msg_press_again_to_exit">לחץ שוב כדי לצאת</string>
+    <string name="view_einding_time">סיום: %s</string>
+</resources>

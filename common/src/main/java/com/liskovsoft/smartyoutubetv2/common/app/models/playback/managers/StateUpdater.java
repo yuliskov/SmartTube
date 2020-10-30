@@ -1,7 +1,10 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import androidx.annotation.NonNull;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
@@ -10,13 +13,19 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class StateUpdater extends PlayerEventListenerHelper {
+    private static final String TAG = StateUpdater.class.getSimpleName();
     private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
     private static final int MAX_PERSISTENT_STATE_SIZE = 30;
     private boolean mIsPlaying;
@@ -28,6 +37,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private final Map<String, State> mStates = Utils.createLRUMap(MAX_PERSISTENT_STATE_SIZE);
     private float mLastSpeed = -1;
     private AppPrefs mPrefs;
+    private Disposable mHistoryAction;
 
     @Override
     public void onInitDone() {
@@ -177,6 +187,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void persistState() {
+        updateHistory();
         persistClipData();
         persistParams();
     }
@@ -301,6 +312,28 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     public FormatItem getVideoPreset() {
         return mVideoFormat;
+    }
+
+    private void updateHistory() {
+        RxUtils.disposeActions(mHistoryAction);
+
+        Video item = mController.getVideo();
+        MediaService service = YouTubeMediaService.instance();
+        MediaItemManager mediaItemManager = service.getMediaItemManager();
+
+        Observable<Void> historyObservable;
+
+        long positionSec = mController.getPositionMs() / 1_000;
+
+        if (item.mediaItem != null) {
+            historyObservable = mediaItemManager.updateHistoryPositionObserve(item.mediaItem, positionSec);
+        } else { // video launched form ATV channels
+            historyObservable = mediaItemManager.updateHistoryPositionObserve(item.videoId, positionSec);
+        }
+
+        mHistoryAction = historyObservable
+                .subscribeOn(Schedulers.newThread())
+                .subscribe((Void v) -> {}, error -> Log.e(TAG, "History update error: " + error));
     }
 
     private static class State {
