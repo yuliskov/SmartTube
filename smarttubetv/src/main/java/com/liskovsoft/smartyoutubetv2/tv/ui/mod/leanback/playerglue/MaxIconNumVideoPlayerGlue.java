@@ -29,12 +29,25 @@ public abstract class MaxIconNumVideoPlayerGlue<T extends PlayerAdapter>
                     @Override
                     protected void onBindDescription(ViewHolder
                                                              viewHolder, Object obj) {
-                        // Mod: fix clipped title on videos with embedded icons
-                        Helpers.setField(viewHolder, "mTitleMargin", 0);
+                        fixClippedTitle(viewHolder);
+                        fixOverlappedTitle(viewHolder);
 
                         PlaybackBaseControlGlue<?> glue = (PlaybackBaseControlGlue<?>) obj;
                         viewHolder.getTitle().setText(glue.getTitle());
                         viewHolder.getSubtitle().setText(glue.getSubtitle());
+                    }
+
+                    private void fixOverlappedTitle(ViewHolder viewHolder) {
+                        // Fix overlapped title on big size fonts
+                        Integer titleLineSpacing = (Integer) Helpers.getField(viewHolder, "mTitleLineSpacing");
+                        if (titleLineSpacing != null) {
+                            Helpers.setField(viewHolder, "mTitleLineSpacing", titleLineSpacing * 1.2);
+                        }
+                    }
+
+                    private void fixClippedTitle(ViewHolder viewHolder) {
+                        // Fix clipped title on videos with embedded icons
+                        Helpers.setField(viewHolder, "mTitleMargin", 0);
                     }
                 };
 
