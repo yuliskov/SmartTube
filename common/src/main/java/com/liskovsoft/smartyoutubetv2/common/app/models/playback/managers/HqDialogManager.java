@@ -67,11 +67,11 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         addRadioCategory(videoFormatsTitle,
                 UiOptionItem.from(videoFormats,
                         option -> mController.selectFormat(UiOptionItem.toFormat(option)),
-                        mActivity.getString(R.string.default_video_option)));
+                        mActivity.getString(R.string.video_max_quality)));
         addRadioCategory(audioFormatsTitle,
                 UiOptionItem.from(audioFormats,
                         option -> mController.selectFormat(UiOptionItem.toFormat(option)),
-                        mActivity.getString(R.string.default_audio_option)));
+                        mActivity.getString(R.string.audio_max_quality)));
     }
 
     private void addVideoBufferCategory() {

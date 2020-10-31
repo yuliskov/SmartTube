@@ -19,9 +19,9 @@
     <string name="title_video_formats">Video kwaliteit</string>
     <string name="title_audio_formats">Audio kwaliteit</string>
     <string name="subtitle_category_title">Ondertitels</string>
-    <string name="default_video_option">Auto (max kwaliteit)</string>
-    <string name="default_audio_option">Auto (max kwaliteit)</string>
-    <string name="default_subtitle_option">Uit</string>
+    <string name="video_max_quality">Auto (max kwaliteit)</string>
+    <string name="audio_max_quality">Auto (max kwaliteit)</string>
+    <string name="subtitles_disabled">Uit</string>
     <string name="auto_frame_rate">Auto frame rate</string>
     <string name="frame_rate_correction">Fix fps:\n%s</string>
     <string name="category_background_playback">Weergave op achtergrond</string>

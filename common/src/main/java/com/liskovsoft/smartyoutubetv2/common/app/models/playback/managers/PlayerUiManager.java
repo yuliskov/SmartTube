@@ -92,7 +92,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         settingsPresenter.appendRadioCategory(subtitleFormatsTitle,
                 UiOptionItem.from(subtitleFormats,
                         option -> mController.selectFormat(UiOptionItem.toFormat(option)),
-                        mActivity.getString(R.string.default_subtitle_option)));
+                        mActivity.getString(R.string.subtitles_disabled)));
 
         settingsPresenter.appendRadioCategory(subtitleStyleTitle, fromSubtitleStyles(subtitleStyles));
 

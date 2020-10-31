@@ -17,9 +17,9 @@
     <string name="title_video_formats">Video formáty</string>
     <string name="title_audio_formats">Zvukové formáty</string>
     <string name="subtitle_category_title">Titulky</string>
-    <string name="default_video_option">Auto (maximální kvalita)</string>
-    <string name="default_audio_option">Auto (maximální kvalita)</string>
-    <string name="default_subtitle_option">Zakázáno</string>
+    <string name="video_max_quality">Auto (maximální kvalita)</string>
+    <string name="audio_max_quality">Auto (maximální kvalita)</string>
+    <string name="subtitles_disabled">Zakázáno</string>
     <string name="auto_frame_rate">Automatická frekvence snímků</string>
     <string name="frame_rate_correction">Opravit fps: \n%s</string>
     <string name="category_background_playback">Přehrávání na pozadí</string>

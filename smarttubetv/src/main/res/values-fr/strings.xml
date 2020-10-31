@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string translatable="false" name="app_name"><![CDATA[SmartTube Next]></string>
-    <string translatable="false" name="browse_title"><![CDATA[SmartTube Next]></string>
+    <string translatable="false" name="app_name"><![CDATA[SmartTube Next]]></string>
+    <string translatable="false" name="browse_title"><![CDATA[SmartTube Next]]></string>
     <string name="related_movies">Vidéos relatées</string>
-    <string name="vertical_grid_title"><![CDATA[Grille vidéo en mode verticale]></string>
+    <string name="vertical_grid_title"><![CDATA[Grille vidéo en mode verticale]]></string>
 
     <string name="popular_header">Vidéos populaires</string>
     <string name="more_samples">Plus d\'échantillons</string>

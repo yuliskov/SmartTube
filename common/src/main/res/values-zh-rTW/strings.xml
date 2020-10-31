@@ -18,9 +18,9 @@
     <string name="title_video_formats">影片格式</string>
     <string name="title_audio_formats">音訊格式</string>
     <string name="subtitle_formats_title">字幕</string>
-    <string name="default_video_option">自動（最高畫質）</string>
-    <string name="default_audio_option">自動（最高音質）</string>
-    <string name="default_subtitle_option">已關閉</string>
+    <string name="video_max_quality">自動（最高畫質）</string>
+    <string name="audio_max_quality">自動（最高音質）</string>
+    <string name="subtitles_disabled">已關閉</string>
     <string name="auto_frame_rate">自動幀率</string>
     <string name="frame_rate_correction">修正 fps：\n%s</string>
     <string name="category_background_playback">背景播放</string>

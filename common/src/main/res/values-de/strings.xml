@@ -17,9 +17,9 @@
     <string name="title_video_formats">Video formats</string>
     <string name="title_audio_formats">Audioformate</string>
     <string name="subtitle_category_title">Untertitel</string>
-    <string name="default_video_option">Auto (maximale Qualität)</string>
-    <string name="default_audio_option">Auto (maximale Qualität)</string>
-    <string name="default_subtitle_option">Behindert</string>
+    <string name="video_max_quality">Auto (maximale Qualität)</string>
+    <string name="audio_max_quality">Auto (maximale Qualität)</string>
+    <string name="subtitles_disabled">Behindert</string>
     <string name="auto_frame_rate">Automatische Bildrate</string>
     <string name="frame_rate_correction">Fix fps: \n%s</string>
     <string name="category_background_playback">Background playback</string>

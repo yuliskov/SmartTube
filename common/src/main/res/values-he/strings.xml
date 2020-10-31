@@ -17,9 +17,9 @@
     <string name="title_video_formats">פורמטים של וידאו</string>
     <string name="title_audio_formats">פורמטי שמע</string>
     <string name="subtitle_category_title">כתוביות</string>
-    <string name="default_video_option">אוטומטי (איכות מקסימלית)</string>
-    <string name="default_audio_option">אוטומטי (איכות מקסימלית)</string>
-    <string name="default_subtitle_option">נָכֶה</string>
+    <string name="video_max_quality">אוטומטי (איכות מקסימלית)</string>
+    <string name="audio_max_quality">אוטומטי (איכות מקסימלית)</string>
+    <string name="subtitles_disabled">נָכֶה</string>
     <string name="auto_frame_rate">קצב פריימים אוטומטי</string>
     <string name="frame_rate_correction">תקן fps: \n%s</string>
     <string name="category_background_playback">השמעת רקע</string>

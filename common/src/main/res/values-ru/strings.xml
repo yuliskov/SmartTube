@@ -18,9 +18,9 @@
     <string name="title_video_formats">Видео форматы</string>
     <string name="title_audio_formats">Аудио форматы</string>
     <string name="subtitle_category_title">Субтитры</string>
-    <string name="default_video_option">Авто (макс. качество)</string>
-    <string name="default_audio_option">Авто (макс. качество)</string>
-    <string name="default_subtitle_option">Отключены</string>
+    <string name="video_max_quality">Авто (макс. качество)</string>
+    <string name="audio_max_quality">Авто (макс. качество)</string>
+    <string name="subtitles_disabled">Субтитры отключены</string>
     <string name="auto_frame_rate">Автофреймрейт</string>
     <string name="frame_rate_correction">Исправлять fps:\n%s</string>
     <string name="category_background_playback">Фоновое воспроизведение</string>
