@@ -61,4 +61,5 @@
     <string name="sub_semi_grey">Transparant</string>
     <string name="subtitle_style">Stijl ondertitels</string>
     <string name="subtitle_language">Taal ondertitels</string>
+    <string name="action_search">Zoeken</string>
 </resources>
