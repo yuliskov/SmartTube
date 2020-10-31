@@ -18,7 +18,7 @@
     <string name="header_settings">Налаштування</string>
     <string name="title_video_formats">Відео формати</string>
     <string name="title_audio_formats">Аудіо формати</string>
-    <string name="subtitle_formats_title">Субтитри</string>
+    <string name="subtitle_category_title">Субтитри</string>
     <string name="default_video_option">Авто (макс. якість)</string>
     <string name="default_audio_option">Авто (макс. якість)</string>
     <string name="default_subtitle_option">Відключені</string>
@@ -57,4 +57,8 @@
     <string name="dialog_add_account">Додати обліковий запис</string>
     <string name="default_lang">За замовчуванням</string>
     <string name="dialog_select_language">Мова додатку</string>
+    <string name="sub_default">Звичайні</string>
+    <string name="sub_semi_grey">Напівпрозорі</string>
+    <string name="subtitle_style">Стиль субтитрів</string>
+    <string name="subtitle_language">Мова субтитрів</string>
 </resources>

@@ -17,7 +17,7 @@
     <string name="action_signin">ВОЙТИ</string>
     <string name="title_video_formats">Видео форматы</string>
     <string name="title_audio_formats">Аудио форматы</string>
-    <string name="subtitle_formats_title">Субтитры</string>
+    <string name="subtitle_category_title">Субтитры</string>
     <string name="default_video_option">Авто (макс. качество)</string>
     <string name="default_audio_option">Авто (макс. качество)</string>
     <string name="default_subtitle_option">Отключены</string>
@@ -57,4 +57,8 @@
     <string name="default_lang">По-умолчанию</string>
     <string name="dialog_select_language">Язык приложения</string>
     <string name="header_channels">Каналы</string>
+    <string name="sub_default">Обычные</string>
+    <string name="sub_semi_grey">Полупрозрачные</string>
+    <string name="subtitle_style">Стиль субтитров</string>
+    <string name="subtitle_language">Язык субтитров</string>
 </resources>

@@ -151,6 +151,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         // In case we start to watch the video again
         if (video != null) {
             mStates.remove(video.videoId);
+            updateHistory();
         }
     }
 

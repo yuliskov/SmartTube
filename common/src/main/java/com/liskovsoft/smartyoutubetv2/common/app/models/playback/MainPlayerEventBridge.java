@@ -257,8 +257,8 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
-    public void onClosedCaptionsClicked() {
-        process(PlayerUiEventListener::onClosedCaptionsClicked);
+    public void onSubtitlesClicked() {
+        process(PlayerUiEventListener::onSubtitlesClicked);
     }
 
     @Override

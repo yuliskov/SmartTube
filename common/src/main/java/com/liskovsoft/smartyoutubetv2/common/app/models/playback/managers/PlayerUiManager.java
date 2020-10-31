@@ -18,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
@@ -76,9 +77,13 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     }
 
     @Override
-    public void onClosedCaptionsClicked() {
+    public void onSubtitlesClicked() {
         List<FormatItem> subtitleFormats = mController.getSubtitleFormats();
-        String subtitleFormatsTitle = mActivity.getString(R.string.subtitle_formats_title);
+        List<SubtitleStyle> subtitleStyles = mController.getSubtitleStyles();
+
+        String subtitlesCategoryTitle = mActivity.getString(R.string.subtitle_category_title);
+        String subtitleFormatsTitle = mActivity.getString(R.string.subtitle_language);
+        String subtitleStyleTitle = mActivity.getString(R.string.subtitle_style);
 
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mActivity);
 
@@ -89,7 +94,22 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
                         option -> mController.selectFormat(UiOptionItem.toFormat(option)),
                         mActivity.getString(R.string.default_subtitle_option)));
 
-        settingsPresenter.showDialog();
+        settingsPresenter.appendRadioCategory(subtitleStyleTitle, fromSubtitleStyles(subtitleStyles));
+
+        settingsPresenter.showDialog(subtitlesCategoryTitle);
+    }
+    
+    private List<OptionItem> fromSubtitleStyles(List<SubtitleStyle> subtitleStyles) {
+        List<OptionItem> styleOptions = new ArrayList<>();
+
+        for (SubtitleStyle subtitleStyle : subtitleStyles) {
+            styleOptions.add(UiOptionItem.from(
+                    mActivity.getString(subtitleStyle.nameResId),
+                    option -> mController.setSubtitleStyle(subtitleStyle),
+                    subtitleStyle.equals(mController.getSubtitleStyle())));
+        }
+
+        return styleOptions;
     }
 
     @Override

@@ -16,7 +16,7 @@
     <string name="action_signin">登入</string>
     <string name="title_video_formats">影片格式</string>
     <string name="title_audio_formats">音讯格式</string>
-    <string name="subtitle_formats_title">字幕</string>
+    <string name="subtitle_category_title">字幕</string>
     <string name="default_video_option">自动（最高画质）</string>
     <string name="default_audio_option">自动（最高画质）</string>
     <string name="default_subtitle_option">残障人士</string>

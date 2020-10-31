@@ -180,7 +180,7 @@ public abstract class PlayerEventListenerHelper implements PlayerHandlerEventLis
     }
 
     @Override
-    public void onClosedCaptionsClicked() {
+    public void onSubtitlesClicked() {
         // NOP
     }
 

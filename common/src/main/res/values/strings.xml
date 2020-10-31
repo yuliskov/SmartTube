@@ -18,7 +18,7 @@
     <string name="action_signin">SIGN IN</string>
     <string name="title_video_formats">Video formats</string>
     <string name="title_audio_formats">Audio formats</string>
-    <string name="subtitle_formats_title">Subtitles</string>
+    <string name="subtitle_category_title">Subtitles</string>
     <string name="default_video_option">Auto (max quality)</string>
     <string name="default_audio_option">Auto (max quality)</string>
     <string name="default_subtitle_option">Disabled</string>
@@ -57,4 +57,8 @@
     <string name="dialog_add_account">Add account</string>
     <string name="default_lang">Default</string>
     <string name="dialog_select_language">App language</string>
+    <string name="sub_default">Default</string>
+    <string name="sub_semi_grey">Semitransparent</string>
+    <string name="subtitle_style">Subtitle style</string>
+    <string name="subtitle_language">Subtitle language</string>
 </resources>

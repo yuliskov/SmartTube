@@ -114,7 +114,11 @@ public class AppSettingsPresenter implements Presenter<AppSettingsView> {
     }
 
     public void showDialog() {
-        showDialog(null);
+        showDialog(null, null);
+    }
+
+    public void showDialog(String dialogTitle) {
+        showDialog(dialogTitle, null);
     }
 
     public void showDialog(Runnable onClose) {

@@ -20,6 +20,7 @@ public class AppPrefs extends SharedPreferencesBase {
     private static final String STATE_UPDATER_PARAMS = "state_updater_params";
     private static final String PREFERRED_LANGUAGE_DATA = "preferred_language_data";
     private static final String VIEW_MANAGER_DATA = "view_manager_data";
+    private static final String SUBTITLE_MANAGER_DATA = "subtitle_manager_data";
     private String mDefaultDisplayMode;
     private String mCurrentDisplayMode;
 
@@ -130,5 +131,13 @@ public class AppPrefs extends SharedPreferencesBase {
 
     public String getViewManagerData() {
         return getString(VIEW_MANAGER_DATA, null);
+    }
+
+    public void setSubtitleManagerData(String data) {
+        putString(SUBTITLE_MANAGER_DATA, data);
+    }
+
+    public String getSubtitleManagerData() {
+        return getString(SUBTITLE_MANAGER_DATA, null);
     }
 }

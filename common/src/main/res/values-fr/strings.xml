@@ -16,7 +16,7 @@
     <string name="action_signin">CONNEXION</string>
     <string name="title_video_formats">Formats vidéo</string>
     <string name="title_audio_formats">Formats audio</string>
-    <string name="subtitle_formats_title">Sous-titres</string>
+    <string name="subtitle_category_title">Sous-titres</string>
     <string name="default_video_option">Auto (qualité maximale)</string>
     <string name="default_audio_option">Auto (qualité maximale)</string>
     <string name="default_subtitle_option">Désactivé</string>

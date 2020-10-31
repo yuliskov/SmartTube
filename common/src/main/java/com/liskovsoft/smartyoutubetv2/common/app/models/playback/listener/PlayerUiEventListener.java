@@ -23,7 +23,7 @@ public interface PlayerUiEventListener {
     void onThumbsUpClicked(boolean thumbsUp);
     void onChannelClicked();
     void onTrackSelected(FormatItem track);
-    void onClosedCaptionsClicked();
+    void onSubtitlesClicked();
     void onPlaylistAddClicked();
     void onVideoStatsClicked(boolean enabled);
     void onVideoSpeedClicked();

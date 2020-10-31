@@ -1,13 +1,11 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
 import android.annotation.TargetApi;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.app.RowsSupportFragment;
@@ -45,6 +43,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.AudioDelayRenderers
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.DebugInfoManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ExoPlayerInitializer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
@@ -425,7 +424,7 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
 
         @Override
         public void onClosedCaptions() {
-            mEventListener.onClosedCaptionsClicked();
+            mEventListener.onSubtitlesClicked();
         }
 
         @Override
@@ -690,6 +689,21 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public void showDebugView(boolean show) {
         mDebugInfoManager.show(show);
+    }
+
+    @Override
+    public List<SubtitleStyle> getSubtitleStyles() {
+        return mSubtitleManager.getSubtitleStyles();
+    }
+
+    @Override
+    public void setSubtitleStyle(SubtitleStyle subtitleStyle) {
+        mSubtitleManager.setSubtitleStyle(subtitleStyle);
+    }
+
+    @Override
+    public SubtitleStyle getSubtitleStyle() {
+        return mSubtitleManager.getSubtitleStyle();
     }
 
     @Override

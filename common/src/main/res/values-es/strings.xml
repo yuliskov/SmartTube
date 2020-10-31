@@ -16,7 +16,7 @@
     <string name="action_signin">REGISTRARSE</string>
     <string name="title_video_formats">Video formats</string>
     <string name="title_audio_formats">Audio formats</string>
-    <string name="subtitle_formats_title">Subtítulos</string>
+    <string name="subtitle_category_title">Subtítulos</string>
     <string name="default_video_option">Auto (calidad máxima)</string>
     <string name="default_audio_option">Auto (calidad máxima)</string>
     <string name="default_subtitle_option">Discapacitado</string>

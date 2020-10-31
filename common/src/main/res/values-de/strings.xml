@@ -16,7 +16,7 @@
     <string name="action_signin">EINLOGGEN</string>
     <string name="title_video_formats">Video formats</string>
     <string name="title_audio_formats">Audioformate</string>
-    <string name="subtitle_formats_title">Untertitel</string>
+    <string name="subtitle_category_title">Untertitel</string>
     <string name="default_video_option">Auto (maximale Qualität)</string>
     <string name="default_audio_option">Auto (maximale Qualität)</string>
     <string name="default_subtitle_option">Behindert</string>

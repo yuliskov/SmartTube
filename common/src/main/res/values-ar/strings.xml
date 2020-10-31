@@ -16,7 +16,7 @@
     <string name="action_signin">تسجيل الدخول</string>
     <string name="title_video_formats">تنسيقات الفيديو</string>
     <string name="title_audio_formats">تنسيقات الصوت</string>
-    <string name="subtitle_formats_title">ترجمات</string>
+    <string name="subtitle_category_title">ترجمات</string>
     <string name="default_video_option">تلقائي (أقصى جودة)</string>
     <string name="default_audio_option">Auto (max quality)</string>
     <string name="default_subtitle_option">معاق</string>

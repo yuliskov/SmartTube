@@ -16,7 +16,7 @@
     <string name="action_signin">REGISTRATI</string>
     <string name="title_video_formats">Formati video</string>
     <string name="title_audio_formats">Formati audio</string>
-    <string name="subtitle_formats_title">Sottotitoli</string>
+    <string name="subtitle_category_title">Sottotitoli</string>
     <string name="default_video_option">Auto (max quality)</string>
     <string name="default_audio_option">Auto (max quality)</string>
     <string name="default_subtitle_option">Disabilitato</string>

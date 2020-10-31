@@ -17,7 +17,7 @@
     <string name="action_signin">AANMELDEN</string>
     <string name="title_video_formats">Video kwaliteit</string>
     <string name="title_audio_formats">Audio kwaliteit</string>
-    <string name="subtitle_formats_title">Ondertitels</string>
+    <string name="subtitle_category_title">Ondertitels</string>
     <string name="default_video_option">Auto (max kwaliteit)</string>
     <string name="default_audio_option">Auto (max kwaliteit)</string>
     <string name="default_subtitle_option">Uit</string>

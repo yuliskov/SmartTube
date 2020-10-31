@@ -16,7 +16,7 @@
     <string name="action_signin">ASSINAR EM</string>
     <string name="title_video_formats">Formatos de vídeo</string>
     <string name="title_audio_formats">Formatos de áudio</string>
-    <string name="subtitle_formats_title">Subtitles</string>
+    <string name="subtitle_category_title">Subtitles</string>
     <string name="default_video_option">Auto (qualidade máxima)</string>
     <string name="default_audio_option">Auto (qualidade máxima)</string>
     <string name="default_subtitle_option">Desativado</string>
