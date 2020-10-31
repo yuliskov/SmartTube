@@ -281,5 +281,10 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         process(PlayerUiEventListener::onVideoSpeedClicked);
     }
 
+    @Override
+    public void onSearchClicked() {
+        process(PlayerUiEventListener::onSearchClicked);
+    }
+
     // End UI events
 }

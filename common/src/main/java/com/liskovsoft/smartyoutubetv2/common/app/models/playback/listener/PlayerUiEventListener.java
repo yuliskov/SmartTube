@@ -27,4 +27,5 @@ public interface PlayerUiEventListener {
     void onPlaylistAddClicked();
     void onVideoStatsClicked(boolean enabled);
     void onVideoSpeedClicked();
+    void onSearchClicked();
 }

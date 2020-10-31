@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
@@ -66,6 +67,8 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
         if (KeyHelpers.isBackKey(keyCode)) {
             enableSuggestionsResetTimeout();
+        } else if (KeyHelpers.isMenuKey(keyCode)) {
+            mController.showControls(!mController.isControlsShown());
         }
 
         enableUiAutoHideTimeout();
@@ -201,6 +204,11 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         settingsPresenter.clear();
         settingsPresenter.appendRadioCategory(mActivity.getString(R.string.video_speed), items);
         settingsPresenter.showDialog();
+    }
+
+    @Override
+    public void onSearchClicked() {
+        SearchPresenter.instance(mActivity).openSearch(null);
     }
 
     private void intSpeedItems(List<OptionItem> items, float[] speedValues) {

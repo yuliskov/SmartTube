@@ -13,6 +13,7 @@ import androidx.leanback.widget.PlaybackControlsRow;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.MaxIconNumVideoPlayerGlue;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SearchAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsDownAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsUpAction;
@@ -64,8 +65,10 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
     private final PlaylistAddAction mPlaylistAddAction;
     private final VideoStatsAction mVideoStatsAction;
     private final VideoSpeedAction mVideoSpeedAction;
+    private final SearchAction mSearchAction;
     private String mQualityInfo;
     private QualityInfoListener mQualityInfoListener;
+    private int mPreviousAction = KeyEvent.ACTION_UP;
 
     public VideoPlayerGlue(
             Activity context,
@@ -92,6 +95,7 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
         mPlaylistAddAction = new PlaylistAddAction(context);
         mVideoStatsAction = new VideoStatsAction(context);
         mVideoSpeedAction = new VideoSpeedAction(context);
+        mSearchAction = new SearchAction(context);
     }
 
     @Override
@@ -107,6 +111,7 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
         adapter.add(mSkipNextAction);
         adapter.add(mRepeatAction);
         adapter.add(mVideoSpeedAction);
+        adapter.add(mSearchAction);
     }
 
     @Override
@@ -204,7 +209,7 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
 
         Action action = findAction(keyCode);
 
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+        if (isSingleKeyDown(event.getAction())) {
             handled = dispatchAction(action);
 
             if (!handled) {
@@ -221,6 +226,16 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
         // Ignore result to give a chance to handle this event in
         // com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.PlaybackTransportRowPresenter.ViewHolder
         return handled || super.onKey(v, keyCode, event);
+    }
+
+    /**
+     * Notify key down only when there are paired action available.
+     */
+    private boolean isSingleKeyDown(int action) {
+        boolean isDown = action == KeyEvent.ACTION_DOWN && mPreviousAction == KeyEvent.ACTION_UP;
+        mPreviousAction = action;
+
+        return isDown;
     }
 
     private boolean dispatchAction(Action action) {
@@ -271,6 +286,9 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
             handled = true;
         } else if (action == mVideoSpeedAction) {
             mActionListener.onVideoSpeed();
+            handled = true;
+        } else if (action == mSearchAction) {
+            mActionListener.onSearch();
             handled = true;
         }
 
@@ -412,6 +430,8 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
         void onVideoStats(boolean enabled);
 
         void onVideoSpeed();
+
+        void onSearch();
 
         void onTopEdgeFocused();
     }

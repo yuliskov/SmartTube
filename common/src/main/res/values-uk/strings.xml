@@ -61,4 +61,5 @@
     <string name="sub_semi_grey">Напівпрозорі</string>
     <string name="subtitle_style">Стиль субтитрів</string>
     <string name="subtitle_language">Мова субтитрів</string>
+    <string name="action_search">Почати пошук</string>
 </resources>

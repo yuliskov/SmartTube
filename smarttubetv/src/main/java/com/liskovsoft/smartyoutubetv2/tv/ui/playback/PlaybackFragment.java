@@ -443,6 +443,11 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
         }
 
         @Override
+        public void onSearch() {
+            mEventListener.onSearchClicked();
+        }
+
+        @Override
         public void onTopEdgeFocused() {
             showControls(false);
         }
@@ -650,6 +655,11 @@ public class PlaybackFragment extends VideoSupportFragment implements PlaybackVi
     @Override
     public boolean isSuggestionsShown() {
         return isControlsOverlayVisible() && getSuggestedRowIndex() != 0;
+    }
+
+    @Override
+    public boolean isControlsShown() {
+        return isControlsOverlayVisible();
     }
 
     @Override

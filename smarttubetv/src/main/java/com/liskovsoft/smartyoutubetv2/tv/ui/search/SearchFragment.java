@@ -268,6 +268,10 @@ public class SearchFragment extends SearchSupportFragment
 
     @Override
     public void startSearch(String searchText) {
-        setSearchQuery(searchText, true);
+        if (searchText != null) {
+            setSearchQuery(searchText, true);
+        } else {
+            startRecognition();
+        }
     }
 }
