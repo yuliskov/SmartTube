@@ -157,6 +157,10 @@ public final class Video implements Parcelable {
         return videoId == null && channelId != null;
     }
 
+    public boolean isChannelUpd() {
+        return mediaItem != null && mediaItem.getType() == MediaItem.TYPE_CHANNEL_SUB;
+    }
+
     public boolean isPlaylistItem() {
         return playlistIndex > 0;
     }

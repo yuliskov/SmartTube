@@ -43,7 +43,7 @@ public class VideoMenuPresenter {
     }
 
     public void showMenu(Video video) {
-        if (video == null) {
+        if (video == null || !video.isVideo()) {
             return;
         }
 

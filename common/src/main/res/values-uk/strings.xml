@@ -8,6 +8,7 @@
     <string name="header_news">Новини</string>
     <string name="header_gaming">Ігри</string>
     <string name="header_playlists">Плейлисти</string>
+    <string name="header_channels">Канали</string>
     <string name="subscriptions_signin_title">Переглядайте найновіші відео з улюблених каналів</string>
     <string name="subscriptions_signin_subtitle">Увійдіть, щоб побачити свої підписки</string>
     <string name="subscriptions_signin_button_text">УВІЙТИ</string>

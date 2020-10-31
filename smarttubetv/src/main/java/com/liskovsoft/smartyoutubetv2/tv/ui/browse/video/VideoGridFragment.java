@@ -14,6 +14,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
@@ -31,14 +32,14 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
     private VideoGroupObjectAdapter mGridAdapter;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private UriBackgroundManager mBackgroundManager;
-    private BrowsePresenter mMainPresenter;
+    private VideoGroupPresenter mMainPresenter;
     private boolean mInvalidate;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mMainPresenter = BrowsePresenter.instance(getContext());
+        mMainPresenter = getMainPresenter();
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
 
         setupAdapter();
@@ -48,6 +49,10 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
         if (getMainFragmentAdapter().getFragmentHost() != null) {
             getMainFragmentAdapter().getFragmentHost().notifyDataReady(getMainFragmentAdapter());
         }
+    }
+
+    protected VideoGroupPresenter getMainPresenter() {
+        return BrowsePresenter.instance(getContext());
     }
 
     private void setupEventListeners() {

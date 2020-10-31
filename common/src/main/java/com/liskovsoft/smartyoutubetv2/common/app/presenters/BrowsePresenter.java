@@ -102,6 +102,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         mCategories.add(new Category(MediaGroup.TYPE_NEWS, mContext.getString(R.string.header_news), Category.TYPE_ROW, R.drawable.icon_news));
         mCategories.add(new Category(MediaGroup.TYPE_MUSIC, mContext.getString(R.string.header_music), Category.TYPE_ROW, R.drawable.icon_music));
         mCategories.add(new Category(MediaGroup.TYPE_SUBSCRIPTIONS, mContext.getString(R.string.header_subscriptions), Category.TYPE_GRID, R.drawable.icon_subscriptions, true));
+        mCategories.add(new Category(MediaGroup.TYPE_CHANNELS_SUB, mContext.getString(R.string.header_channels), Category.TYPE_GRID, R.drawable.icon_channels, true));
         mCategories.add(new Category(MediaGroup.TYPE_HISTORY, mContext.getString(R.string.header_history), Category.TYPE_GRID, R.drawable.icon_history, true));
         mCategories.add(new Category(MediaGroup.TYPE_PLAYLISTS, mContext.getString(R.string.header_playlists), Category.TYPE_ROW, R.drawable.icon_playlist, true));
         mCategories.add(new Category(MediaGroup.TYPE_SETTINGS, mContext.getString(R.string.header_settings), Category.TYPE_TEXT_GRID, R.drawable.icon_settings));
@@ -118,6 +119,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
 
         mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mediaGroupManager.getSubscriptionsObserve());
         mGridMapping.put(MediaGroup.TYPE_HISTORY, mediaGroupManager.getHistoryObserve());
+        mGridMapping.put(MediaGroup.TYPE_CHANNELS_SUB, mediaGroupManager.getSubscribedChannelsObserve());
     }
 
     private void initSettingsCategories() {
@@ -170,6 +172,8 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
             mPlaybackPresenter.openVideo(item);
         } else if (item.isChannel()) {
             ChannelPresenter.instance(mContext).openChannel(item);
+        } else if (item.isChannelUpd()) {
+            ChannelSubPresenter.instance(mContext).openChannel(item);
         }
 
         updateRefreshTime();

@@ -56,4 +56,5 @@
     <string name="dialog_add_account">Добавить аккаунт</string>
     <string name="default_lang">По-умолчанию</string>
     <string name="dialog_select_language">Язык приложения</string>
+    <string name="header_channels">Каналы</string>
 </resources>

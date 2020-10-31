@@ -118,7 +118,7 @@ public class GridFragment extends Fragment implements BrowseSupportFragment.Main
 
     private void showOrHideTitle() {
         if (mGridViewHolder.getGridView().findViewHolderForAdapterPosition(mSelectedPosition)
-                == null) {
+                == null || mMainFragmentAdapter.getFragmentHost() == null) {
             return;
         }
         if (!mGridViewHolder.getGridView().hasPreviousViewInSameRow(mSelectedPosition)) {
@@ -166,9 +166,11 @@ public class GridFragment extends Fragment implements BrowseSupportFragment.Main
             }
         });
 
-        getMainFragmentAdapter().getFragmentHost().notifyViewCreated(mMainFragmentAdapter);
-        updateAdapter();
+        if (getMainFragmentAdapter().getFragmentHost() != null) {
+            getMainFragmentAdapter().getFragmentHost().notifyViewCreated(mMainFragmentAdapter);
+        }
 
+        updateAdapter();
     }
 
     @Override

@@ -9,6 +9,7 @@
     <string name="header_gaming">Gaming</string>
     <string name="header_playlists">Playlists</string>
     <string name="header_settings">Settings</string>
+    <string name="header_channels">Channels</string>
     <string name="subscriptions_signin_title">See the latest from channels you love</string>
     <string name="subscriptions_signin_subtitle">Sign in to see your subscriptions</string>
     <string name="subscriptions_signin_button_text">SIGN IN</string>
