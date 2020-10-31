@@ -55,6 +55,8 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer:' + amazonExoplayerVersion
     implementation 'androidx.media:media:' + mediaXLibraryVersion // exoplayer fix
 
+    implementation 'com.github.bumptech.glide:glide:' + glideVersion
+
     stbetaImplementation project(path: ':leanbackassistant')
     stbetaImplementation project(path: ':appupdatechecker2')
 }
