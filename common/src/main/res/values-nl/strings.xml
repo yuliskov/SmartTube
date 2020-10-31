@@ -9,6 +9,7 @@
     <string name="header_gaming">Games</string>
     <string name="header_playlists">Playlists</string>
     <string name="header_settings">Instellingen</string>
+    <string name="header_channels">Kanalen</string>
     <string name="subscriptions_signin_title">Bekijk je kanalen</string>
     <string name="subscriptions_signin_subtitle">Aanmelden om je abonnementen te bekijken</string>
     <string name="subscriptions_signin_button_text">AANMELDEN</string>
