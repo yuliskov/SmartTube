@@ -10,8 +10,10 @@ import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.PlaybackControlsRow;
+import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerView;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.MaxIconNumVideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SearchAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsAction;
@@ -66,6 +68,7 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
     private final VideoStatsAction mVideoStatsAction;
     private final VideoSpeedAction mVideoSpeedAction;
     private final SearchAction mSearchAction;
+    private final PlayerData mPlayerData;
     private String mQualityInfo;
     private QualityInfoListener mQualityInfoListener;
     private int mPreviousAction = KeyEvent.ACTION_UP;
@@ -97,6 +100,8 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
         mVideoStatsAction = new VideoStatsAction(context);
         mVideoSpeedAction = new VideoSpeedAction(context);
         mSearchAction = new SearchAction(context);
+
+        mPlayerData = PlayerData.instance(context);
     }
 
     @Override
@@ -359,7 +364,8 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
     private boolean dispatchKey(int keyCode) {
         boolean handled = false;
 
-        if (keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) {
+        if (KeyHelpers.isTogglePlaybackKey(keyCode) ||
+           (KeyHelpers.isConfirmKey(keyCode) && !mPlayerData.isUIShownOnPause())) {
             if (mIsSingleKeyDown) {
                 togglePlayback();
             }

@@ -62,10 +62,12 @@
     <string name="subtitle_style">Subtitle style</string>
     <string name="subtitle_language">Subtitle language</string>
     <string name="action_search">Start search</string>
-    <string name="settings_ui">User interface</string>
-    <string name="dialog_ui">User interface</string>
+    <string name="settings_main_ui">User interface</string>
+    <string name="dialog_main_ui">User interface</string>
     <string name="animated_previews">Animated previews</string>
     <string name="web_site">Web site</string>
     <string name="donation">Donation</string>
     <string name="dialog_about">About</string>
+    <string name="dialog_player_ui">Video player</string>
+    <string name="player_show_ui_on_pause">Show UI on pause</string>
 </resources>

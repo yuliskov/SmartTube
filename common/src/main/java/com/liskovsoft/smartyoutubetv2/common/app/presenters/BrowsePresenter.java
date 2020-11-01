@@ -7,7 +7,6 @@ import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
-import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -24,7 +23,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGrou
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AboutPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.LanguageSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.UISettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.MainUISettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.PlayerSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
@@ -132,15 +132,13 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         settingItems.add(new SettingsItem(
                 mContext.getString(R.string.settings_language), () -> LanguageSettingsPresenter.instance(mContext).show(), R.drawable.settings_language));
         settingItems.add(new SettingsItem(
-                mContext.getString(R.string.settings_ui), () -> UISettingsPresenter.instance(mContext).show(), R.drawable.settings_ui));
+                mContext.getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(mContext).show(), R.drawable.settings_main_ui));
+        settingItems.add(new SettingsItem(
+                mContext.getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(mContext).show(), R.drawable.settings_player));
         //settingItems.add(new SettingsItem(
         //        mContext.getString(R.string.settings_linked_devices), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
         //settingItems.add(new SettingsItem(
         //        mContext.getString(R.string.settings_left_panel), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
-        //settingItems.add(new SettingsItem(
-        //        mContext.getString(R.string.settings_themes), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
-        //settingItems.add(new SettingsItem(
-        //        mContext.getString(R.string.settings_player), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
         //settingItems.add(new SettingsItem(
         //        mContext.getString(R.string.settings_other), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
         settingItems.add(new SettingsItem(

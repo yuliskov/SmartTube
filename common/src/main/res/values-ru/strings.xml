@@ -62,10 +62,12 @@
     <string name="subtitle_style">Стиль субтитров</string>
     <string name="subtitle_language">Язык субтитров</string>
     <string name="action_search">Начать поиск</string>
-    <string name="settings_ui">Интерфейс</string>
-    <string name="dialog_ui">Интерфейс приложения</string>
+    <string name="settings_main_ui">Интерфейс</string>
+    <string name="dialog_main_ui">Интерфейс приложения</string>
     <string name="animated_previews">Анимированные превью</string>
     <string name="web_site">Веб-сайт</string>
     <string name="donation">Помочь проекту</string>
     <string name="dialog_about">О приложении</string>
+    <string name="dialog_player_ui">Видеоплеер</string>
+    <string name="player_show_ui_on_pause">Показать интерфейс на паузе</string>
 </resources>

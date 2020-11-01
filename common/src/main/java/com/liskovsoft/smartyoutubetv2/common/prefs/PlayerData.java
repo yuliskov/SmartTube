@@ -4,47 +4,47 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
-public class UIPrefs {
+public class PlayerData {
     @SuppressLint("StaticFieldLeak")
-    private static UIPrefs sInstance;
+    private static PlayerData sInstance;
     private final Context mContext;
     private final AppPrefs mPrefs;
-    private boolean mIsAnimatedPreviewsEnabled = true;
+    private boolean mIsUIShownOnPause = true;
 
-    public UIPrefs(Context context) {
+    public PlayerData(Context context) {
         mContext = context;
         mPrefs = AppPrefs.instance(context);
         restoreData();
     }
 
-    public static UIPrefs instance(Context context) {
+    public static PlayerData instance(Context context) {
         if (sInstance == null) {
-            sInstance = new UIPrefs(context.getApplicationContext());
+            sInstance = new PlayerData(context.getApplicationContext());
         }
 
         return sInstance;
     }
 
-    public void enableAnimatedPreviews(boolean enable) {
-        mIsAnimatedPreviewsEnabled = enable;
+    public void showUIOnPause(boolean enable) {
+        mIsUIShownOnPause = enable;
         persistData();
     }
 
-    public boolean isAnimatedPreviewsEnabled() {
-        return mIsAnimatedPreviewsEnabled;
+    public boolean isUIShownOnPause() {
+        return mIsUIShownOnPause;
     }
 
     private void restoreData() {
-        String data = mPrefs.getUIData();
+        String data = mPrefs.getPlayerData();
 
         if (data != null) {
             String[] split = data.split(",");
 
-            mIsAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0);
+            mIsUIShownOnPause = Helpers.parseBoolean(split, 0);
         }
     }
 
     private void persistData() {
-        mPrefs.setUIData(String.format("%s", mIsAnimatedPreviewsEnabled));
+        mPrefs.setPlayerData(String.format("%s", mIsUIShownOnPause));
     }
 }

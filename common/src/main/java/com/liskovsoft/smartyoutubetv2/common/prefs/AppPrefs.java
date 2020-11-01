@@ -21,7 +21,8 @@ public class AppPrefs extends SharedPreferencesBase {
     private static final String PREFERRED_LANGUAGE_DATA = "preferred_language_data";
     private static final String VIEW_MANAGER_DATA = "view_manager_data";
     private static final String SUBTITLE_MANAGER_DATA = "subtitle_manager_data";
-    private static final String USER_INTERFACE_DATA = "user_interface_data";
+    private static final String MAIN_UI_DATA = "main_ui_data";
+    private static final String VIDEO_PLAYER_DATA = "video_player_data";
     private String mDefaultDisplayMode;
     private String mCurrentDisplayMode;
 
@@ -142,11 +143,19 @@ public class AppPrefs extends SharedPreferencesBase {
         return getString(SUBTITLE_MANAGER_DATA, null);
     }
 
-    public String getUIData() {
-        return getString(USER_INTERFACE_DATA, null);
+    public String getMainUIData() {
+        return getString(MAIN_UI_DATA, null);
     }
 
-    public void setUIData(String data) {
-        putString(USER_INTERFACE_DATA, data);
+    public void setMainUIData(String data) {
+        putString(MAIN_UI_DATA, data);
+    }
+
+    public String getPlayerData() {
+        return getString(VIDEO_PLAYER_DATA, null);
+    }
+
+    public void setPlayerData(String data) {
+        putString(VIDEO_PLAYER_DATA, data);
     }
 }

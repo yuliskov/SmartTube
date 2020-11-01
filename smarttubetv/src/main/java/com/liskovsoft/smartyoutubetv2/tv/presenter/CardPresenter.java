@@ -16,7 +16,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.prefs.UIPrefs;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.textbadgecard.TextBadgeImageCardView;
@@ -46,7 +46,7 @@ public class CardPresenter extends Presenter {
                 ContextCompat.getColor(parent.getContext(), R.color.card_selected_text_grey);
         mDefaultCardImage = ContextCompat.getDrawable(parent.getContext(), R.drawable.movie);
 
-        mIsAnimatedPreviewsEnabled = UIPrefs.instance(parent.getContext()).isAnimatedPreviewsEnabled();
+        mIsAnimatedPreviewsEnabled = MainUIData.instance(parent.getContext()).isAnimatedPreviewsEnabled();
 
         TextBadgeImageCardView cardView = new TextBadgeImageCardView(parent.getContext()) {
             @Override
