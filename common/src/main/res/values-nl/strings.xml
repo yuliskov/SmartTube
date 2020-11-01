@@ -62,10 +62,12 @@
     <string name="subtitle_style">Stijl ondertitels</string>
     <string name="subtitle_language">Taal ondertitels</string>
     <string name="action_search">Zoeken</string>
-    <string name="settings_ui">Gebruikersinterface</string>
-    <string name="dialog_ui">Gebruikersinterface</string>
+    <string name="settings_main_ui">Gebruikersinterface</string>
+    <string name="dialog_main_ui">Gebruikersinterface</string>
     <string name="animated_previews">Geanimeerde previews</string>
     <string name="web_site">Website</string>
     <string name="donation">Donatie</string>
     <string name="dialog_about">Over</string>
+    <string name="dialog_player_ui">Video player</string>
+    <string name="player_show_ui_on_pause">UI weergeven bij pauze</string>
 </resources>
