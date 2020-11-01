@@ -230,9 +230,9 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
             mActionListener.onKeyDown(keyCode);
         }
 
-        //if (!handled) {
-        //    handled = dispatchKey(keyCode);
-        //}
+        if (!handled) {
+            handled = dispatchKey(keyCode);
+        }
 
         // Ignore result to give a chance to handle this event in
         // com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.PlaybackTransportRowPresenter.ViewHolder
@@ -358,13 +358,12 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
     private boolean dispatchKey(int keyCode) {
         boolean handled = false;
 
-        if (KeyHelpers.isTogglePlaybackKey(keyCode) ||
-            (KeyHelpers.isConfirmKey(keyCode) && !mPlayerData.isUIShownOnPause())) {
-            if (mIsSingleKeyDown) {
-                togglePlayback();
-            }
-            handled = true;
-        }
+        //if (KeyHelpers.isConfirmKey(keyCode) && !mPlayerData.isUIShownOnPause()) {
+        //    if (mIsSingleKeyDown) {
+        //        togglePlayback();
+        //    }
+        //    handled = true;
+        //}
 
         return handled;
     }
