@@ -57,8 +57,8 @@
     <string name="dialog_add_account">Thêm tài khoản</string>
     <string name="default_lang">Mặc định</string>
     <string name="dialog_select_language">Ngôn ngữ ứng dụng</string>
-    <string name="sub_default">Mặc định</string>
-    <string name="sub_semi_grey">Nửa trong suốt</string>
+    <string name="subtitle_default">Mặc định</string>
+    <string name="subtitle_semi_transparent_bg">Nửa trong suốt</string>
     <string name="subtitle_style">Kiểu phụ đề</string>
     <string name="subtitle_language">Ngôn ngữ phụ đề</string>
     <string name="action_search">Bắt đầu tìm kiếm</string>

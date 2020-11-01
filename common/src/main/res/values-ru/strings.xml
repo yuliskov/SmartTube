@@ -57,8 +57,8 @@
     <string name="default_lang">По-умолчанию</string>
     <string name="dialog_select_language">Язык приложения</string>
     <string name="header_channels">Каналы</string>
-    <string name="sub_default">Обычные</string>
-    <string name="sub_semi_grey">Полупрозрачные</string>
+    <string name="subtitle_default">Обычные</string>
+    <string name="subtitle_semi_transparent_bg">Полупрозрачный фон</string>
     <string name="subtitle_style">Стиль субтитров</string>
     <string name="subtitle_language">Язык субтитров</string>
     <string name="action_search">Начать поиск</string>

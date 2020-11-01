@@ -57,8 +57,8 @@
     <string name="dialog_add_account">Account toevoegen</string>
     <string name="default_lang">Standaard</string>
     <string name="dialog_select_language">Taal</string>
-    <string name="sub_default">Standaard</string>
-    <string name="sub_semi_grey">Transparant</string>
+    <string name="subtitle_default">Standaard</string>
+    <string name="subtitle_semi_transparent_bg">Transparant</string>
     <string name="subtitle_style">Stijl ondertitels</string>
     <string name="subtitle_language">Taal ondertitels</string>
     <string name="action_search">Zoeken</string>

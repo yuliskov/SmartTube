@@ -57,8 +57,8 @@
     <string name="dialog_add_account">Add account</string>
     <string name="default_lang">Default</string>
     <string name="dialog_select_language">App language</string>
-    <string name="sub_default">Default</string>
-    <string name="sub_semi_grey">Semitransparent</string>
+    <string name="subtitle_default">Default</string>
+    <string name="subtitle_semi_transparent_bg">Semitransparent background</string>
     <string name="subtitle_style">Subtitle style</string>
     <string name="subtitle_language">Subtitle language</string>
     <string name="action_search">Start search</string>

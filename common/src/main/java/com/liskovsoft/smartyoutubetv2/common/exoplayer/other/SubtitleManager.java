@@ -106,8 +106,8 @@ public class SubtitleManager implements TextOutput {
     }
 
     private void initDefaultStyles() {
-        mSubtitleStyles.add(new SubtitleStyle(R.string.sub_default, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
-        mSubtitleStyles.add(new SubtitleStyle(R.string.sub_semi_grey, R.color.semi_grey, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
+        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_default, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
+        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_semi_transparent_bg, R.color.semi_grey, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
 
         restoreData();
 

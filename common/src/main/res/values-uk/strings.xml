@@ -57,8 +57,8 @@
     <string name="dialog_add_account">Додати обліковий запис</string>
     <string name="default_lang">За замовчуванням</string>
     <string name="dialog_select_language">Мова додатку</string>
-    <string name="sub_default">Звичайні</string>
-    <string name="sub_semi_grey">Напівпрозорі</string>
+    <string name="subtitle_default">Звичайні</string>
+    <string name="subtitle_semi_transparent_bg">Напівпрозорий фон</string>
     <string name="subtitle_style">Стиль субтитрів</string>
     <string name="subtitle_language">Мова субтитрів</string>
     <string name="action_search">Почати пошук</string>
