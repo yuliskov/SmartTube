@@ -58,16 +58,17 @@
     <string name="default_lang">Standaard</string>
     <string name="dialog_select_language">Taal</string>
     <string name="subtitle_default">Standaard</string>
-    <string name="subtitle_semi_transparent_bg">Transparant</string>
+    <string name="subtitle_semi_transparent_bg">Transparante achtergrond</string>
     <string name="subtitle_style">Stijl ondertitels</string>
     <string name="subtitle_language">Taal ondertitels</string>
     <string name="action_search">Zoeken</string>
     <string name="settings_main_ui">Gebruikersinterface</string>
-    <string name="dialog_main_ui">Gebruikersinterface</string>
+    <string name="dialog_main_ui">Interface</string>
     <string name="animated_previews">Geanimeerde previews</string>
     <string name="web_site">Website</string>
-    <string name="donation">Donatie</string>
-    <string name="dialog_about">Over</string>
+    <string name="donation">Steun dit project</string>
+    <string name="dialog_about">Informatie</string>
     <string name="dialog_player_ui">Video player</string>
-    <string name="player_show_ui_on_pause">Interface weergeven bij pauze</string>
+    <string name="player_show_ui_on_pause">UI weergeven met OK-toets</string>
+    <string name="player_pause_on_ok">Video pauzeren met OK-toets</string>
 </resources>
