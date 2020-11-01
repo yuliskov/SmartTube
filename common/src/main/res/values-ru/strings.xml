@@ -66,7 +66,7 @@
     <string name="dialog_main_ui">Интерфейс приложения</string>
     <string name="animated_previews">Анимированные превью</string>
     <string name="web_site">Веб-сайт</string>
-    <string name="donation">Помочь проекту</string>
+    <string name="donation">Поддержать проект</string>
     <string name="dialog_about">О приложении</string>
     <string name="dialog_player_ui">Видеоплеер</string>
     <string name="player_show_ui_on_pause">Показать интерфейс на паузе</string>

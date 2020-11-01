@@ -11,8 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AboutPresenter {
-    private static final String DONATE_URL = "https://www.donationalerts.com/r/firsthash";
     private static final String WEB_SITE_URL = "https://github.com/yuliskov/SmartTubeNext";
+    private static final String DONATIONALERTS_URL = "https://www.donationalerts.com/r/firsthash";
+    private static final String QIWI_URL = "https://qiwi.com/n/GUESS025";
+    private static final String PRIVATBANK_URL = "https://privatbank.ua/ru/sendmoney?payment=9e46a6ef78";
     private final Context mContext;
 
     public AboutPresenter(Context context) {
@@ -27,12 +29,24 @@ public class AboutPresenter {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(
-                mContext.getString(R.string.web_site),
+                String.format("%s (GitHub)", mContext.getString(R.string.web_site)),
                 option -> Helpers.openLink(WEB_SITE_URL, mContext)));
 
         options.add(UiOptionItem.from(
-                mContext.getString(R.string.donation),
-                option -> Helpers.openLink(DONATE_URL, mContext)));
+                String.format("%s (PrivatBank (UA))", mContext.getString(R.string.donation)),
+                option -> Helpers.openLink(PRIVATBANK_URL, mContext)));
+
+        options.add(UiOptionItem.from(
+                String.format("%s (QIWI (RU))", mContext.getString(R.string.donation)),
+                option -> Helpers.openLink(QIWI_URL, mContext)));
+
+        options.add(UiOptionItem.from(
+                String.format("%s (PayPal)", mContext.getString(R.string.donation)),
+                option -> Helpers.openLink(DONATIONALERTS_URL, mContext)));
+
+        options.add(UiOptionItem.from(
+                String.format("%s\n(BTC: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx)", mContext.getString(R.string.donation)),
+                null));
 
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
         settingsPresenter.clear();
