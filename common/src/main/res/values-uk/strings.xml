@@ -70,4 +70,5 @@
     <string name="dialog_about">Про додаток</string>
     <string name="dialog_player_ui">Відеоплеєр</string>
     <string name="player_show_ui_on_pause">Відображати інтерфейс на паузі</string>
+    <string name="player_pause_on_ok">Клавіша OK зупиняє відтворення</string>
 </resources>

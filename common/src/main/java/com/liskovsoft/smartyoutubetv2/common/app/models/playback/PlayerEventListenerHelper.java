@@ -145,8 +145,9 @@ public abstract class PlayerEventListenerHelper implements PlayerHandlerEventLis
     }
 
     @Override
-    public void onKeyDown(int keyCode) {
+    public boolean onKeyDown(int keyCode) {
         // NOP
+        return false;
     }
 
     @Override

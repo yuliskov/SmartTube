@@ -68,7 +68,6 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
     private final VideoStatsAction mVideoStatsAction;
     private final VideoSpeedAction mVideoSpeedAction;
     private final SearchAction mSearchAction;
-    private final PlayerData mPlayerData;
     private String mQualityInfo;
     private QualityInfoListener mQualityInfoListener;
     private int mPreviousAction = KeyEvent.ACTION_UP;
@@ -100,8 +99,6 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
         mVideoStatsAction = new VideoStatsAction(context);
         mVideoSpeedAction = new VideoSpeedAction(context);
         mSearchAction = new SearchAction(context);
-
-        mPlayerData = PlayerData.instance(context);
     }
 
     @Override
@@ -223,15 +220,13 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
         isSingleKeyDown(event.getAction());
 
         if (mIsSingleKeyDown) {
-            Action action = findAction(keyCode);
+            handled = mActionListener.onKeyDown(keyCode);
 
-            handled = dispatchAction(action);
+            if (!handled) {
+                Action action = findAction(keyCode);
 
-            mActionListener.onKeyDown(keyCode);
-        }
-
-        if (!handled) {
-            handled = dispatchKey(keyCode);
+                handled = dispatchAction(action);
+            }
         }
 
         // Ignore result to give a chance to handle this event in
@@ -355,19 +350,6 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
         }
     }
 
-    private boolean dispatchKey(int keyCode) {
-        boolean handled = false;
-
-        //if (KeyHelpers.isConfirmKey(keyCode) && !mPlayerData.isUIShownOnPause()) {
-        //    if (mIsSingleKeyDown) {
-        //        togglePlayback();
-        //    }
-        //    handled = true;
-        //}
-
-        return handled;
-    }
-
     private Action findAction(int keyCode) {
         Action action = null;
         PlaybackControlsRow controlsRow = getControlsRow();
@@ -427,8 +409,6 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
 
         void onPause();
 
-        void onKeyDown(int keyCode);
-
         void setRepeatMode(int modeIndex);
 
         void onHighQuality();
@@ -452,5 +432,7 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
         void onSearch();
 
         void onTopEdgeFocused();
+
+        boolean onKeyDown(int keyCode);
     }
 }

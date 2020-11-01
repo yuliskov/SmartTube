@@ -29,7 +29,12 @@ public class PlayerSettingsPresenter {
         options.add(UiOptionItem.from(
                 mContext.getString(R.string.player_show_ui_on_pause),
                 option -> mPlayerUIData.showUIOnPause(option.isSelected()),
-                mPlayerUIData.isUIShownOnPause()));
+                mPlayerUIData.isShowUIOnPauseEnabled()));
+
+        options.add(UiOptionItem.from(
+                mContext.getString(R.string.player_pause_on_ok),
+                option -> mPlayerUIData.pauseOnOK(option.isSelected()),
+                mPlayerUIData.isPauseOnOKEnabled()));
 
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
         settingsPresenter.clear();

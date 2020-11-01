@@ -9,7 +9,8 @@ public class PlayerData {
     private static PlayerData sInstance;
     private final Context mContext;
     private final AppPrefs mPrefs;
-    private boolean mIsUIShownOnPause = true;
+    private boolean mIsShowUIOnPauseEnabled = true;
+    private boolean mIsPauseOnOKEnabled;
 
     public PlayerData(Context context) {
         mContext = context;
@@ -26,12 +27,21 @@ public class PlayerData {
     }
 
     public void showUIOnPause(boolean enable) {
-        mIsUIShownOnPause = enable;
+        mIsShowUIOnPauseEnabled = enable;
         persistData();
     }
 
-    public boolean isUIShownOnPause() {
-        return mIsUIShownOnPause;
+    public void pauseOnOK(boolean enable) {
+        mIsPauseOnOKEnabled = enable;
+        persistData();
+    }
+
+    public boolean isPauseOnOKEnabled() {
+        return mIsPauseOnOKEnabled;
+    }
+
+    public boolean isShowUIOnPauseEnabled() {
+        return mIsShowUIOnPauseEnabled;
     }
 
     private void restoreData() {
@@ -40,11 +50,12 @@ public class PlayerData {
         if (data != null) {
             String[] split = data.split(",");
 
-            mIsUIShownOnPause = Helpers.parseBoolean(split, 0);
+            mIsShowUIOnPauseEnabled = Helpers.parseBoolean(split, 0);
+            mIsPauseOnOKEnabled = Helpers.parseBoolean(split, 1);
         }
     }
 
     private void persistData() {
-        mPrefs.setPlayerData(String.format("%s", mIsUIShownOnPause));
+        mPrefs.setPlayerData(String.format("%s,%s", mIsShowUIOnPauseEnabled, mIsPauseOnOKEnabled));
     }
 }

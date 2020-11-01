@@ -183,8 +183,8 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
-    public void onKeyDown(int keyCode) {
-        process(listener -> listener.onKeyDown(keyCode));
+    public boolean onKeyDown(int keyCode) {
+        return chainProcess(listener -> listener.onKeyDown(keyCode));
     }
 
     @Override

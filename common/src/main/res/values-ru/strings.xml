@@ -70,4 +70,5 @@
     <string name="dialog_about">О приложении</string>
     <string name="dialog_player_ui">Видеоплеер</string>
     <string name="player_show_ui_on_pause">Показать интерфейс на паузе</string>
+    <string name="player_pause_on_ok">Клавиша OK останавливает воспроизведение</string>
 </resources>

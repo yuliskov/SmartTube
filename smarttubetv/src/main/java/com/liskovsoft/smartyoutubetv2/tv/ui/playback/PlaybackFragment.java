@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.app.RowsSupportFragment;
-import androidx.leanback.app.VideoSupportFragment;
 import androidx.leanback.app.VideoSupportFragmentGlueHost;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ClassPresenterSelector;
@@ -60,7 +59,7 @@ import java.util.Map;
  * Plays selected video, loads playlist and related videos, and delegates playback to
  * {@link VideoPlayerGlue}.
  */
-public class PlaybackFragment extends PlaybackEventsFragment implements PlaybackView, PlaybackController {
+public class PlaybackFragment extends VideoEventsInterceptorFragment implements PlaybackView, PlaybackController {
     private static final String TAG = PlaybackFragment.class.getSimpleName();
     private static final int UPDATE_DELAY = 16;
     private VideoPlayerGlue mPlayerGlue;
@@ -388,11 +387,6 @@ public class PlaybackFragment extends PlaybackEventsFragment implements Playback
         }
 
         @Override
-        public void onKeyDown(int keyCode) {
-            mEventListener.onKeyDown(keyCode);
-        }
-
-        @Override
         public void setRepeatMode(int modeIndex) {
             mEventListener.onRepeatModeClicked(modeIndex);
         }
@@ -450,6 +444,11 @@ public class PlaybackFragment extends PlaybackEventsFragment implements Playback
         @Override
         public void onTopEdgeFocused() {
             showControls(false);
+        }
+
+        @Override
+        public boolean onKeyDown(int keyCode) {
+            return mEventListener.onKeyDown(keyCode);
         }
     }
 

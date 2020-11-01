@@ -70,4 +70,5 @@
     <string name="dialog_about">About</string>
     <string name="dialog_player_ui">Video player</string>
     <string name="player_show_ui_on_pause">Show UI on pause</string>
+    <string name="player_pause_on_ok">OK key pauses playback</string>
 </resources>

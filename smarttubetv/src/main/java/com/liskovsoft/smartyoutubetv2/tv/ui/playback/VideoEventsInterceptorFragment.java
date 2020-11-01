@@ -13,7 +13,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
  *  Every successfully handled event invokes {@link PlaybackSupportFragment#tickle} that makes ui to appear.
  *  Fixing that for keys.
  */
-public class PlaybackEventsFragment extends VideoSupportFragment {
+public class VideoEventsInterceptorFragment extends VideoSupportFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +42,7 @@ public class PlaybackEventsFragment extends VideoSupportFragment {
             keyCode = ((KeyEvent) event).getKeyCode();
             keyAction = ((KeyEvent) event).getAction();
             if (getInputEventHandler() != null) {
+                // VideoPlayerGlue handler
                 consumeEvent = getInputEventHandler().onKey(getView(), keyCode, (KeyEvent) event);
             }
         }

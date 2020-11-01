@@ -20,6 +20,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
@@ -35,6 +36,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     private final MediaItemManager mMediaItemManager;
     private boolean mEngineReady;
     private boolean mDebugViewEnabled;
+    private PlayerData mPlayerData;
     private final Runnable mSuggestionsResetHandler = () -> mController.resetSuggestedPosition();
     private final Runnable mUiAutoHideHandler = () -> {
         if (mController.isPlaying()) {
@@ -58,10 +60,11 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onInitDone() {
         AppSettingsPresenter.instance(mActivity).setPlayerUiManager(this);
+        mPlayerData = PlayerData.instance(mActivity);
     }
 
     @Override
-    public void onKeyDown(int keyCode) {
+    public boolean onKeyDown(int keyCode) {
         disableUiAutoHideTimeout();
         disableSuggestionsResetTimeout();
 
@@ -69,12 +72,21 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
             enableSuggestionsResetTimeout();
         } else if (KeyHelpers.isMenuKey(keyCode)) {
             mController.showControls(!mController.isControlsShown());
+        } else if (KeyHelpers.isConfirmKey(keyCode) && !mController.isControlsShown()) {
+            if (!mPlayerData.isShowUIOnPauseEnabled()) {
+                mController.setPlay(!mController.isPlaying());
+                return true; // don't show ui
+            } else if (mPlayerData.isPauseOnOKEnabled()) {
+                mController.setPlay(false);
+            }
         } else if (KeyHelpers.isStopKey(keyCode)) {
             mController.exit();
-            return;
+            return true;
         }
 
         enableUiAutoHideTimeout();
+
+        return false;
     }
 
     @Override
