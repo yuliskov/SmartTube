@@ -222,23 +222,17 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
         boolean handled = false;
         isSingleKeyDown(event.getAction());
 
-        Action action = findAction(keyCode);
-
         if (mIsSingleKeyDown) {
+            Action action = findAction(keyCode);
+
             handled = dispatchAction(action);
 
             mActionListener.onKeyDown(keyCode);
         }
 
-        if (!handled) {
-            handled = dispatchKey(keyCode);
-
-            // Every successfully handled event invokes {@link PlaybackSupportFragment#tickle} that makes ui to appear.
-            // Fixing that for keys.
-            if (handled) {
-                return false;
-            }
-        }
+        //if (!handled) {
+        //    handled = dispatchKey(keyCode);
+        //}
 
         // Ignore result to give a chance to handle this event in
         // com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.PlaybackTransportRowPresenter.ViewHolder
@@ -365,7 +359,7 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
         boolean handled = false;
 
         if (KeyHelpers.isTogglePlaybackKey(keyCode) ||
-           (KeyHelpers.isConfirmKey(keyCode) && !mPlayerData.isUIShownOnPause())) {
+            (KeyHelpers.isConfirmKey(keyCode) && !mPlayerData.isUIShownOnPause())) {
             if (mIsSingleKeyDown) {
                 togglePlayback();
             }

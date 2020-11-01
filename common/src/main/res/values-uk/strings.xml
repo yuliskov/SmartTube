@@ -47,7 +47,7 @@
     <string name="settings_left_panel">Налаштувати категорії</string>
     <string name="settings_themes">Теми</string>
     <string name="settings_other">Різне</string>
-    <string name="settings_player">Налаштування плеера</string>
+    <string name="settings_player">Відеоплеєр</string>
     <string name="settings_language">Мова</string>
     <string name="settings_linked_devices">Прив`язані пристрої</string>
     <string name="settings_about">Про додаток</string>
@@ -69,5 +69,5 @@
     <string name="donation">Допомогти проекту</string>
     <string name="dialog_about">Про додаток</string>
     <string name="dialog_player_ui">Відеоплеєр</string>
-    <string name="player_show_ui_on_pause">Відображати інтерфейс на пузі</string>
+    <string name="player_show_ui_on_pause">Відображати інтерфейс на паузі</string>
 </resources>
