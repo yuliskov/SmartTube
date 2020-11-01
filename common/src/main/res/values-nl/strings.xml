@@ -47,10 +47,10 @@
     <string name="settings_left_panel">Rubrieken</string>
     <string name="settings_themes">Thema</string>
     <string name="settings_other">Andere</string>
-    <string name="settings_player">Player instellingen</string>
+    <string name="settings_player">Video player</string>
     <string name="settings_language">Taal</string>
     <string name="settings_linked_devices">Gekoppelde apparaten</string>
-    <string name="settings_about">Over</string>
+    <string name="settings_about">Over deze app</string>
     <string name="dialog_account_list">Account selecteren</string>
     <string name="dialog_account_none">Geen</string>
     <string name="dialog_remove_account">Account verwijderen</string>
@@ -62,4 +62,12 @@
     <string name="subtitle_style">Stijl ondertitels</string>
     <string name="subtitle_language">Taal ondertitels</string>
     <string name="action_search">Zoeken</string>
+    <string name="settings_main_ui">Gebruikersinterface</string>
+    <string name="dialog_main_ui">Gebruikersinterface</string>
+    <string name="animated_previews">Geanimeerde previews</string>
+    <string name="web_site">Website</string>
+    <string name="donation">Donatie</string>
+    <string name="dialog_about">Over</string>
+    <string name="dialog_player_ui">Video player</string>
+    <string name="player_show_ui_on_pause">Interface weergeven bij pauze</string>
 </resources>
