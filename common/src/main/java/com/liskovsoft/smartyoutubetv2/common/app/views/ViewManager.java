@@ -236,18 +236,14 @@ public class ViewManager {
         FileHelpers.deleteCache(mContext);
     }
 
-    public void killApp() {
+    public void restartApp() {
+        startView(SplashView.class);
+
         mMoveViewsToBack = true;
 
         persistState();
 
         System.exit(0);
-    }
-
-    public void restartApp() {
-        startView(SplashView.class);
-
-        killApp();
     }
 
     private void persistState() {

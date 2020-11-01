@@ -123,8 +123,8 @@ public abstract class LeanbackActivity extends FragmentActivity {
     }
 
     private void properlyFinishTheApp() {
-        destroyActivity();
         mViewManager.clearCaches();
-        mViewManager.killApp();
+        destroyActivity();
+        //mViewManager.killApp();
     }
 }
