@@ -69,6 +69,6 @@
     <string name="donation">Steun dit project</string>
     <string name="dialog_about">Informatie</string>
     <string name="dialog_player_ui">Video player</string>
-    <string name="player_show_ui_on_pause">UI weergeven met OK-toets</string>
+    <string name="player_show_ui_on_pause">Player weergeven met OK-toets</string>
     <string name="player_pause_on_ok">Video pauzeren met OK-toets</string>
 </resources>
