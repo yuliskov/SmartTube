@@ -69,6 +69,7 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
     private String mQualityInfo;
     private QualityInfoListener mQualityInfoListener;
     private int mPreviousAction = KeyEvent.ACTION_UP;
+    private boolean mIsSingleKeyDown;
 
     public VideoPlayerGlue(
             Activity context,
@@ -160,6 +161,14 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
         mActionListener.onPrevious();
     }
 
+    public void togglePlayback() {
+        if (isPlaying()) {
+            pause();
+        } else {
+            play();
+        }
+    }
+
     /** Skips backwards 10 seconds. */
     public void rewind() {
         long newPosition = getCurrentPosition() - TEN_SECONDS;
@@ -206,22 +215,25 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
     @Override
     public boolean onKey(View v, int keyCode, KeyEvent event) {
         boolean handled = false;
+        isSingleKeyDown(event.getAction());
 
         Action action = findAction(keyCode);
 
-        if (isSingleKeyDown(event.getAction())) {
+        if (mIsSingleKeyDown) {
             handled = dispatchAction(action);
-
-            if (!handled) {
-                handled = dispatchKey(keyCode);
-            }
 
             mActionListener.onKeyDown(keyCode);
         }
 
-        //if (!handled) {
-        //    super.onKey(v, keyCode, event);
-        //}
+        if (!handled) {
+            handled = dispatchKey(keyCode);
+
+            // Every successfully handled event invokes {@link PlaybackSupportFragment#tickle} that makes ui to appear.
+            // Fixing that for keys.
+            if (handled) {
+                return false;
+            }
+        }
 
         // Ignore result to give a chance to handle this event in
         // com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.PlaybackTransportRowPresenter.ViewHolder
@@ -231,11 +243,9 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
     /**
      * Notify key down only when there are paired action available.
      */
-    private boolean isSingleKeyDown(int action) {
-        boolean isDown = action == KeyEvent.ACTION_DOWN && mPreviousAction == KeyEvent.ACTION_UP;
+    private void isSingleKeyDown(int action) {
+        mIsSingleKeyDown = action == KeyEvent.ACTION_DOWN && mPreviousAction == KeyEvent.ACTION_UP;
         mPreviousAction = action;
-
-        return isDown;
     }
 
     private boolean dispatchAction(Action action) {
@@ -347,7 +357,16 @@ public class VideoPlayerGlue extends MaxIconNumVideoPlayerGlue<PlayerAdapter>
     }
 
     private boolean dispatchKey(int keyCode) {
-        return false;
+        boolean handled = false;
+
+        if (keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) {
+            if (mIsSingleKeyDown) {
+                togglePlayback();
+            }
+            handled = true;
+        }
+
+        return handled;
     }
 
     private Action findAction(int keyCode) {
