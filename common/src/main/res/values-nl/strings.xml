@@ -69,5 +69,5 @@
     <string name="donation">Donatie</string>
     <string name="dialog_about">Over</string>
     <string name="dialog_player_ui">Video player</string>
-    <string name="player_show_ui_on_pause">UI weergeven bij pauze</string>
+    <string name="player_show_ui_on_pause">Interface weergeven bij pauze</string>
 </resources>
