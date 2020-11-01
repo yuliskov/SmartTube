@@ -45,7 +45,7 @@ public class AboutPresenter {
                 option -> Helpers.openLink(DONATIONALERTS_URL, mContext)));
 
         options.add(UiOptionItem.from(
-                String.format("%s\n(BTC: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx)", mContext.getString(R.string.donation)),
+                String.format("%s (BTC: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx)", mContext.getString(R.string.donation)),
                 null));
 
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
