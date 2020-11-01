@@ -61,7 +61,7 @@ public class SplashPresenter implements Presenter<SplashView> {
 
     private void checkForUpdates() {
         AppUpdateManager updatePresenter = AppUpdateManager.instance(mContext);
-        updatePresenter.start();
+        updatePresenter.start(false);
         updatePresenter.unhold();
     }
 

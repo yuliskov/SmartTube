@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.appupdatechecker2.AppUpdateChecker;
 import com.liskovsoft.appupdatechecker2.AppUpdateCheckerListener;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -21,6 +22,7 @@ public class AppUpdateManager implements AppUpdateCheckerListener {
     private final AppUpdateChecker mUpdateChecker;
     private final AppSettingsPresenter mSettingsPresenter;
     private boolean mUpdateInstalled;
+    private boolean mForceCheck;
 
     public AppUpdateManager(Context context) {
         mContext = context;
@@ -40,9 +42,15 @@ public class AppUpdateManager implements AppUpdateCheckerListener {
         sInstance = null;
     }
 
-    public void start() {
+    public void start(boolean forceCheck) {
         mUpdateInstalled = false;
-        mUpdateChecker.checkForUpdates(UPDATE_MANIFEST_URL);
+        mForceCheck = forceCheck;
+
+        if (forceCheck) {
+            mUpdateChecker.forceCheckForUpdates(UPDATE_MANIFEST_URL);
+        } else {
+            mUpdateChecker.checkForUpdates(UPDATE_MANIFEST_URL);
+        }
     }
 
     @Override
@@ -76,6 +84,8 @@ public class AppUpdateManager implements AppUpdateCheckerListener {
 
     @Override
     public void onError(Exception error) {
-        // NOP
+        if (mForceCheck) {
+            MessageHelpers.showMessage(mContext, R.string.update_not_found);
+        }
     }
 }

@@ -75,4 +75,6 @@
     <string name="player_only_ui">Only UI</string>
     <string name="player_ui_and_pause">UI and pause</string>
     <string name="player_only_pause">Only pause</string>
+    <string name="check_for_updates">Check for updates</string>
+    <string name="update_not_found">You\'re using the latest version</string>
 </resources>

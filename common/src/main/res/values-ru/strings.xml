@@ -75,4 +75,6 @@
     <string name="player_only_ui">Только интерфейс</string>
     <string name="player_ui_and_pause">Интерфейс и пауза</string>
     <string name="player_only_pause">Только пауза</string>
+    <string name="check_for_updates">Проверить обновление</string>
+    <string name="update_not_found">Ваша версия не требует обновления</string>
 </resources>

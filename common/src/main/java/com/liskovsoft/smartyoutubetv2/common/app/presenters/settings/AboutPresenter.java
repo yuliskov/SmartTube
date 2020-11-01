@@ -1,10 +1,12 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
+import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.update.AppUpdateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 
 import java.util.ArrayList;
@@ -29,6 +31,10 @@ public class AboutPresenter {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(
+                mContext.getString(R.string.check_for_updates),
+                option -> AppUpdateManager.instance(mContext).start(true)));
+
+        options.add(UiOptionItem.from(
                 String.format("%s (GitHub)", mContext.getString(R.string.web_site)),
                 option -> Helpers.openLink(WEB_SITE_URL, mContext)));
 
@@ -50,7 +56,10 @@ public class AboutPresenter {
 
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
         settingsPresenter.clear();
-        settingsPresenter.appendStringsCategory(mContext.getString(R.string.dialog_about), options);
-        settingsPresenter.showDialog();
+        String mainTitle = String.format("%s %s",
+                mContext.getString(R.string.app_name),
+                AppInfoHelpers.getAppVersionName(mContext));
+        settingsPresenter.appendStringsCategory(mainTitle, options);
+        settingsPresenter.showDialog(mainTitle);
     }
 }
