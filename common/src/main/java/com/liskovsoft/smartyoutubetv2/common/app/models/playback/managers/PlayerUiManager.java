@@ -69,6 +69,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
             enableSuggestionsResetTimeout();
         } else if (KeyHelpers.isMenuKey(keyCode)) {
             mController.showControls(!mController.isControlsShown());
+        } else if (KeyHelpers.isStopKey(keyCode)) {
+            mController.exit();
+            return;
         }
 
         enableUiAutoHideTimeout();

@@ -21,8 +21,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.CategoryPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AboutPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.LanguageSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.UISettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
@@ -129,6 +131,8 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
                 mContext.getString(R.string.settings_accounts), () -> AccountSettingsPresenter.instance(mContext).show(), R.drawable.settings_account));
         settingItems.add(new SettingsItem(
                 mContext.getString(R.string.settings_language), () -> LanguageSettingsPresenter.instance(mContext).show(), R.drawable.settings_language));
+        settingItems.add(new SettingsItem(
+                mContext.getString(R.string.settings_ui), () -> UISettingsPresenter.instance(mContext).show(), R.drawable.settings_ui));
         //settingItems.add(new SettingsItem(
         //        mContext.getString(R.string.settings_linked_devices), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
         //settingItems.add(new SettingsItem(
@@ -140,7 +144,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         //settingItems.add(new SettingsItem(
         //        mContext.getString(R.string.settings_other), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
         settingItems.add(new SettingsItem(
-                mContext.getString(R.string.settings_about), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented), R.drawable.settings_about));
+                mContext.getString(R.string.settings_about), () -> AboutPresenter.instance(mContext).show(), R.drawable.settings_about));
 
         mTextGridMapping.put(MediaGroup.TYPE_SETTINGS, settingItems);
     }
@@ -186,6 +190,8 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         }
 
         VideoMenuPresenter.instance(mContext).showMenu(item);
+
+        updateRefreshTime();
     }
 
     @Override
@@ -252,6 +258,8 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
                 updateTextGrid(category, items);
                 break;
         }
+
+        updateRefreshTime();
     }
 
     private void updateTextGrid(Category category, List<SettingsItem> items) {
@@ -320,7 +328,6 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
                 .subscribe(
                         mediaGroups -> {
                             updateView(category, mediaGroups);
-                            updateRefreshTime();
 
                             // Hide loading as long as first group received
                             if (!mediaGroups.isEmpty()) {
@@ -343,7 +350,6 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
                 .subscribe(
                         mediaGroup -> {
                             mView.updateCategory(VideoGroup.from(mediaGroup, category));
-                            updateRefreshTime();
 
                             // Hide loading as long as first group received
                             if (mediaGroup.getMediaItems() != null) {

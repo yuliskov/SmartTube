@@ -49,7 +49,7 @@
     <string name="settings_player">Настройки плеера</string>
     <string name="settings_language">Язык</string>
     <string name="settings_linked_devices">Привязанные устройства</string>
-    <string name="settings_about">О программе</string>
+    <string name="settings_about">О приложении</string>
     <string name="dialog_account_list">Выбрать аккаунт</string>
     <string name="dialog_account_none">Не выбран</string>
     <string name="dialog_remove_account">Удалить аккаунт</string>
@@ -62,4 +62,10 @@
     <string name="subtitle_style">Стиль субтитров</string>
     <string name="subtitle_language">Язык субтитров</string>
     <string name="action_search">Начать поиск</string>
+    <string name="settings_ui">Интерфейс</string>
+    <string name="dialog_ui">Интерфейс приложения</string>
+    <string name="animated_previews">Анимированные превью</string>
+    <string name="web_site">Веб-сайт</string>
+    <string name="donation">Помочь проекту</string>
+    <string name="dialog_about">О приложении</string>
 </resources>
