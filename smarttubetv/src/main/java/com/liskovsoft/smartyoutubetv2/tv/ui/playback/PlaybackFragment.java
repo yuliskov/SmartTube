@@ -59,7 +59,7 @@ import java.util.Map;
  * Plays selected video, loads playlist and related videos, and delegates playback to
  * {@link VideoPlayerGlue}.
  */
-public class PlaybackFragment extends VideoEventsInterceptorFragment implements PlaybackView, PlaybackController {
+public class PlaybackFragment extends VideoEventsOverrideFragment implements PlaybackView, PlaybackController {
     private static final String TAG = PlaybackFragment.class.getSimpleName();
     private static final int UPDATE_DELAY = 16;
     private VideoPlayerGlue mPlayerGlue;

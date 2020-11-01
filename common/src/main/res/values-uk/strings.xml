@@ -71,4 +71,8 @@
     <string name="dialog_player_ui">Відеоплеєр</string>
     <string name="player_show_ui_on_pause">Відображати інтерфейс на паузі</string>
     <string name="player_pause_on_ok">Клавіша OK зупиняє відтворення</string>
+    <string name="player_ok_button_behavior">Поводження кнопки OK</string>
+    <string name="player_only_ui">Тільки інтерфейс</string>
+    <string name="player_ui_and_pause">Інтерфейс та пауза</string>
+    <string name="player_only_pause">Тільки пауза</string>
 </resources>

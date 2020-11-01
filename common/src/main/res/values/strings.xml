@@ -71,4 +71,8 @@
     <string name="dialog_player_ui">Video player</string>
     <string name="player_show_ui_on_pause">Show UI on pause</string>
     <string name="player_pause_on_ok">OK key pauses playback</string>
+    <string name="player_ok_button_behavior">OK button behavior</string>
+    <string name="player_only_ui">Only UI</string>
+    <string name="player_ui_and_pause">UI and pause</string>
+    <string name="player_only_pause">Only pause</string>
 </resources>

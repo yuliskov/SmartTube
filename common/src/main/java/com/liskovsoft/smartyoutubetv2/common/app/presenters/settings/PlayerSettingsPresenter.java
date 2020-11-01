@@ -27,18 +27,23 @@ public class PlayerSettingsPresenter {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(
-                mContext.getString(R.string.player_show_ui_on_pause),
-                option -> mPlayerUIData.showUIOnPause(option.isSelected()),
-                mPlayerUIData.isShowUIOnPauseEnabled()));
+                mContext.getString(R.string.player_only_ui),
+                option -> mPlayerUIData.setOKButtonBehavior(PlayerData.ONLY_UI),
+                mPlayerUIData.getOKButtonBehavior() == PlayerData.ONLY_UI));
 
         options.add(UiOptionItem.from(
-                mContext.getString(R.string.player_pause_on_ok),
-                option -> mPlayerUIData.pauseOnOK(option.isSelected()),
-                mPlayerUIData.isPauseOnOKEnabled()));
+                mContext.getString(R.string.player_ui_and_pause),
+                option -> mPlayerUIData.setOKButtonBehavior(PlayerData.UI_AND_PAUSE),
+                mPlayerUIData.getOKButtonBehavior() == PlayerData.UI_AND_PAUSE));
+
+        options.add(UiOptionItem.from(
+                mContext.getString(R.string.player_only_pause),
+                option -> mPlayerUIData.setOKButtonBehavior(PlayerData.ONLY_PAUSE),
+                mPlayerUIData.getOKButtonBehavior() == PlayerData.ONLY_PAUSE));
 
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
         settingsPresenter.clear();
-        settingsPresenter.appendCheckedCategory(mContext.getString(R.string.dialog_player_ui), options);
-        settingsPresenter.showDialog();
+        settingsPresenter.appendRadioCategory(mContext.getString(R.string.player_ok_button_behavior), options);
+        settingsPresenter.showDialog(mContext.getString(R.string.dialog_player_ui));
     }
 }

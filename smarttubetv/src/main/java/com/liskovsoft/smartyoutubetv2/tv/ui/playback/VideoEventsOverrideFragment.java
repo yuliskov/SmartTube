@@ -13,7 +13,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
  *  Every successfully handled event invokes {@link PlaybackSupportFragment#tickle} that makes ui to appear.
  *  Fixing that for keys.
  */
-public class VideoEventsInterceptorFragment extends VideoSupportFragment {
+public class VideoEventsOverrideFragment extends VideoSupportFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

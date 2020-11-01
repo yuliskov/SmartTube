@@ -5,12 +5,14 @@ import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class PlayerData {
+    public static final int ONLY_UI = 0;
+    public static final int UI_AND_PAUSE = 1;
+    public static final int ONLY_PAUSE = 2;
     @SuppressLint("StaticFieldLeak")
     private static PlayerData sInstance;
     private final Context mContext;
     private final AppPrefs mPrefs;
-    private boolean mIsShowUIOnPauseEnabled = true;
-    private boolean mIsPauseOnOKEnabled;
+    private int mOKButtonBehavior = ONLY_UI;
 
     public PlayerData(Context context) {
         mContext = context;
@@ -26,22 +28,13 @@ public class PlayerData {
         return sInstance;
     }
 
-    public void showUIOnPause(boolean enable) {
-        mIsShowUIOnPauseEnabled = enable;
+    public void setOKButtonBehavior(int option) {
+        mOKButtonBehavior = option;
         persistData();
     }
 
-    public void pauseOnOK(boolean enable) {
-        mIsPauseOnOKEnabled = enable;
-        persistData();
-    }
-
-    public boolean isPauseOnOKEnabled() {
-        return mIsPauseOnOKEnabled;
-    }
-
-    public boolean isShowUIOnPauseEnabled() {
-        return mIsShowUIOnPauseEnabled;
+    public int getOKButtonBehavior() {
+        return mOKButtonBehavior;
     }
 
     private void restoreData() {
@@ -50,12 +43,11 @@ public class PlayerData {
         if (data != null) {
             String[] split = data.split(",");
 
-            mIsShowUIOnPauseEnabled = Helpers.parseBoolean(split, 0);
-            mIsPauseOnOKEnabled = Helpers.parseBoolean(split, 1);
+            mOKButtonBehavior = Helpers.parseInt(split, 0);
         }
     }
 
     private void persistData() {
-        mPrefs.setPlayerData(String.format("%s,%s", mIsShowUIOnPauseEnabled, mIsPauseOnOKEnabled));
+        mPrefs.setPlayerData(String.format("%s", mOKButtonBehavior));
     }
 }

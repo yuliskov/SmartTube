@@ -73,11 +73,16 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         } else if (KeyHelpers.isMenuKey(keyCode)) {
             mController.showControls(!mController.isControlsShown());
         } else if (KeyHelpers.isConfirmKey(keyCode) && !mController.isControlsShown()) {
-            if (!mPlayerData.isShowUIOnPauseEnabled()) {
-                mController.setPlay(!mController.isPlaying());
-                return true; // don't show ui
-            } else if (mPlayerData.isPauseOnOKEnabled()) {
-                mController.setPlay(false);
+            switch (mPlayerData.getOKButtonBehavior()) {
+                case PlayerData.ONLY_UI:
+                    // NOP
+                    break;
+                case PlayerData.UI_AND_PAUSE:
+                    mController.setPlay(false);
+                    break;
+                case PlayerData.ONLY_PAUSE:
+                    mController.setPlay(!mController.isPlaying());
+                    return true; // don't show ui
             }
         } else if (KeyHelpers.isStopKey(keyCode)) {
             mController.exit();
