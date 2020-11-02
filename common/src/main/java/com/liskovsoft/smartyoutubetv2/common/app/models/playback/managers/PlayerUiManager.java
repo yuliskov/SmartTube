@@ -30,7 +30,6 @@ import java.util.List;
 
 public class PlayerUiManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = PlayerUiManager.class.getSimpleName();
-    private static final long UI_AUTO_HIDE_TIMEOUT_MS = 3_000;
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
     private final Handler mHandler;
     private final MediaItemManager mMediaItemManager;
@@ -247,8 +246,8 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     public void enableUiAutoHideTimeout() {
         Log.d(TAG, "Starting auto hide ui timer...");
-        if (mEngineReady) {
-            mHandler.postDelayed(mUiAutoHideHandler, UI_AUTO_HIDE_TIMEOUT_MS);
+        if (mEngineReady && mPlayerData.getUIHideTimoutSec() > 0) {
+            mHandler.postDelayed(mUiAutoHideHandler, mPlayerData.getUIHideTimoutSec() * 1_000);
         }
     }
 

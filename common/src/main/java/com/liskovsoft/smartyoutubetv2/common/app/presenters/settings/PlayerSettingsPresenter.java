@@ -24,6 +24,16 @@ public class PlayerSettingsPresenter {
     }
 
     public void show() {
+        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
+        settingsPresenter.clear();
+
+        appendOKButtonCategory(settingsPresenter);
+        appendUIAutoHideCategory(settingsPresenter);
+
+        settingsPresenter.showDialog(mContext.getString(R.string.dialog_player_ui));
+    }
+
+    private void appendOKButtonCategory(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(
@@ -41,9 +51,25 @@ public class PlayerSettingsPresenter {
                 option -> mPlayerUIData.setOKButtonBehavior(PlayerData.ONLY_PAUSE),
                 mPlayerUIData.getOKButtonBehavior() == PlayerData.ONLY_PAUSE));
 
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
-        settingsPresenter.clear();
         settingsPresenter.appendRadioCategory(mContext.getString(R.string.player_ok_button_behavior), options);
-        settingsPresenter.showDialog(mContext.getString(R.string.dialog_player_ui));
+    }
+
+    private void appendUIAutoHideCategory(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(
+                mContext.getString(R.string.player_ui_hide_never),
+                option -> mPlayerUIData.setUIHideTimoutSec(PlayerData.AUTO_HIDE_NEVER),
+                mPlayerUIData.getUIHideTimoutSec() == PlayerData.AUTO_HIDE_NEVER));
+
+        for (int i = 1; i <= 10; i++) {
+            int timeoutSec = i;
+            options.add(UiOptionItem.from(
+                    String.format("%s sec", i),
+                    option -> mPlayerUIData.setUIHideTimoutSec(timeoutSec),
+                    mPlayerUIData.getUIHideTimoutSec() == i));
+        }
+
+        settingsPresenter.appendRadioCategory(mContext.getString(R.string.player_ui_hide_behavior), options);
     }
 }

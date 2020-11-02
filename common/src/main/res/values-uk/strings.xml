@@ -78,4 +78,6 @@
     <string name="check_for_updates">Перевірити оновлення</string>
     <string name="update_not_found">Ваша версія не потребує оновлення</string>
     <string name="update_in_progess">Хвилинку…</string>
+    <string name="player_ui_hide_behavior">Приховувати інтерфейс</string>
+    <string name="player_ui_hide_never">Ніколи</string>
 </resources>

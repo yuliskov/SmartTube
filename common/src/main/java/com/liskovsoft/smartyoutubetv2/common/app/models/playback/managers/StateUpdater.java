@@ -5,12 +5,8 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
@@ -20,8 +16,6 @@ import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class StateUpdater extends PlayerEventListenerHelper {
@@ -216,7 +210,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void restoreClipData() {
-        String data = mPrefs.getStateUpdaterClipData();
+        String data = mPrefs.getStateUpdaterItemsData();
 
         if (data != null) {
             String[] split = data.split("\\|");
@@ -292,11 +286,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         boolean isLive = mController.getLengthMs() - mController.getPositionMs() < 30_000;
 
         if (!isLive) {
-            State state = mStates.get(item.videoId);
-
-            if (state != null) {
-                mController.setSpeed(state.speed);
-            } else if (mLastSpeed != -1) {
+            if (mLastSpeed != -1) {
                 mController.setSpeed(mLastSpeed);
             } else {
                 mController.setSpeed(1.0f); // speed may be changed before, so do reset to default

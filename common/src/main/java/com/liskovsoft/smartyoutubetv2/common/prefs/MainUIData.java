@@ -9,7 +9,7 @@ public class MainUIData {
     private static MainUIData sInstance;
     private final Context mContext;
     private final AppPrefs mPrefs;
-    private boolean mIsAnimatedPreviewsEnabled = true;
+    private boolean mIsAnimatedPreviewsEnabled;
 
     public MainUIData(Context context) {
         mContext = context;
@@ -40,7 +40,7 @@ public class MainUIData {
         if (data != null) {
             String[] split = data.split(",");
 
-            mIsAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0);
+            mIsAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0, true);
         }
     }
 

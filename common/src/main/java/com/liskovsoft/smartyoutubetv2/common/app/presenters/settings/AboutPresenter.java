@@ -28,38 +28,43 @@ public class AboutPresenter {
     }
 
     public void show() {
-        List<OptionItem> options = new ArrayList<>();
-
-        options.add(UiOptionItem.from(
-                mContext.getString(R.string.check_for_updates),
-                option -> AppUpdateManager.instance(mContext).start(true)));
-
-        options.add(UiOptionItem.from(
-                String.format("%s (GitHub)", mContext.getString(R.string.web_site)),
-                option -> Helpers.openLink(WEB_SITE_URL, mContext)));
-
-        options.add(UiOptionItem.from(
-                String.format("%s (PrivatBank (UA))", mContext.getString(R.string.donation)),
-                option -> Helpers.openLink(PRIVATBANK_URL, mContext)));
-
-        options.add(UiOptionItem.from(
-                String.format("%s (QIWI (RU))", mContext.getString(R.string.donation)),
-                option -> Helpers.openLink(QIWI_URL, mContext)));
-
-        options.add(UiOptionItem.from(
-                String.format("%s (PayPal)", mContext.getString(R.string.donation)),
-                option -> Helpers.openLink(DONATIONALERTS_URL, mContext)));
-
-        options.add(UiOptionItem.from(
-                String.format("%s (BTC: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx)", mContext.getString(R.string.donation)),
-                null));
-
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
-        settingsPresenter.clear();
         String mainTitle = String.format("%s %s",
                 mContext.getString(R.string.app_name),
                 AppInfoHelpers.getAppVersionName(mContext));
-        settingsPresenter.appendStringsCategory(mainTitle, options);
+
+        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
+        settingsPresenter.clear();
+        
+        OptionItem updateCheckOption = UiOptionItem.from(
+                mContext.getString(R.string.check_for_updates),
+                option -> AppUpdateManager.instance(mContext).start(true));
+        
+        OptionItem webSiteOption = UiOptionItem.from(String.format("%s (GitHub)", mContext.getString(R.string.web_site)),
+                option -> Helpers.openLink(WEB_SITE_URL, mContext));
+
+        settingsPresenter.appendSingleButton(updateCheckOption);
+        settingsPresenter.appendSingleButton(webSiteOption);
+        
+        List<OptionItem> donateOptions = new ArrayList<>();
+
+        donateOptions.add(UiOptionItem.from(
+                "PrivatBank (UA)",
+                option -> Helpers.openLink(PRIVATBANK_URL, mContext)));
+
+        donateOptions.add(UiOptionItem.from(
+                "QIWI (RU)",
+                option -> Helpers.openLink(QIWI_URL, mContext)));
+
+        donateOptions.add(UiOptionItem.from(
+                "PayPal",
+                option -> Helpers.openLink(DONATIONALERTS_URL, mContext)));
+
+        donateOptions.add(UiOptionItem.from(
+                "BTC: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx",
+                null));
+
+        settingsPresenter.appendStringsCategory(mContext.getString(R.string.donation), donateOptions);
+
         settingsPresenter.showDialog(mainTitle);
     }
 }

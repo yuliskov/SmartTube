@@ -103,7 +103,7 @@ public class AppPrefs extends SharedPreferencesBase {
         putInt(VIDEO_LOADER_DATA, data);
     }
 
-    public String getStateUpdaterClipData() {
+    public String getStateUpdaterItemsData() {
         return getString(STATE_UPDATER_DATA, null);
     }
 
