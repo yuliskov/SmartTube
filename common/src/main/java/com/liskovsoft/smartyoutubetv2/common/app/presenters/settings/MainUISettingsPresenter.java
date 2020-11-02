@@ -31,6 +31,11 @@ public class MainUISettingsPresenter {
                 option -> mMainUIData.enableAnimatedPreviews(option.isSelected()),
                 mMainUIData.isAnimatedPreviewsEnabled()));
 
+        options.add(UiOptionItem.from(
+                mContext.getString(R.string.large_previews),
+                option -> mMainUIData.enableLargePreviews(option.isSelected()),
+                mMainUIData.isLargePreviewsEnabled()));
+
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
         settingsPresenter.clear();
         settingsPresenter.appendCheckedCategory(mContext.getString(R.string.dialog_main_ui), options);

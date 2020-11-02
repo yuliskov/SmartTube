@@ -33,6 +33,7 @@ public class CardPresenter extends Presenter {
     private int mSelectedTextColor = -1;
     private Drawable mDefaultCardImage;
     private boolean mIsAnimatedPreviewsEnabled;
+    private boolean mIsLargePreviewsEnabled;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
@@ -47,6 +48,7 @@ public class CardPresenter extends Presenter {
         mDefaultCardImage = ContextCompat.getDrawable(parent.getContext(), R.drawable.movie);
 
         mIsAnimatedPreviewsEnabled = MainUIData.instance(parent.getContext()).isAnimatedPreviewsEnabled();
+        mIsLargePreviewsEnabled = MainUIData.instance(parent.getContext()).isLargePreviewsEnabled();
 
         TextBadgeImageCardView cardView = new TextBadgeImageCardView(parent.getContext()) {
             @Override
@@ -101,8 +103,10 @@ public class CardPresenter extends Presenter {
         if (video.cardImageUrl != null) {
             // Set card size from dimension resources.
             Resources res = cardView.getResources();
-            int width = res.getDimensionPixelSize(R.dimen.card_width);
-            int height = res.getDimensionPixelSize(R.dimen.card_height);
+
+            double zoomRatio = mIsLargePreviewsEnabled ? 1.35 : 1;
+            int width = (int) (res.getDimensionPixelSize(R.dimen.card_width) * zoomRatio);
+            int height = (int) (res.getDimensionPixelSize(R.dimen.card_height) * zoomRatio);
             cardView.setMainImageDimensions(width, height);
 
             Glide.with(cardView.getContext())

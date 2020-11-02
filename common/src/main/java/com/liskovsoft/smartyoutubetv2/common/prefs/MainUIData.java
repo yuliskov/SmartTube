@@ -10,6 +10,7 @@ public class MainUIData {
     private final Context mContext;
     private final AppPrefs mPrefs;
     private boolean mIsAnimatedPreviewsEnabled = true;
+    private boolean mIsLargePreviewsEnabled = false;
 
     public MainUIData(Context context) {
         mContext = context;
@@ -34,6 +35,15 @@ public class MainUIData {
         return mIsAnimatedPreviewsEnabled;
     }
 
+    public void enableLargePreviews(boolean enable) {
+        mIsLargePreviewsEnabled = enable;
+        persistData();
+    }
+
+    public boolean isLargePreviewsEnabled() {
+        return mIsLargePreviewsEnabled;
+    }
+
     private void restoreData() {
         String data = mPrefs.getMainUIData();
 
@@ -41,10 +51,11 @@ public class MainUIData {
             String[] split = data.split(",");
 
             mIsAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0);
+            mIsLargePreviewsEnabled = Helpers.parseBoolean(split, 1);
         }
     }
 
     private void persistData() {
-        mPrefs.setMainUIData(String.format("%s", mIsAnimatedPreviewsEnabled));
+        mPrefs.setMainUIData(String.format("%s,%s", mIsAnimatedPreviewsEnabled, mIsLargePreviewsEnabled));
     }
 }

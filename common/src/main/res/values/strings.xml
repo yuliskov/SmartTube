@@ -65,6 +65,7 @@
     <string name="settings_main_ui">User interface</string>
     <string name="dialog_main_ui">User interface</string>
     <string name="animated_previews">Animated previews</string>
+    <string name="large_previews">Larger previews</string>
     <string name="web_site">Web site</string>
     <string name="donation">Donation</string>
     <string name="dialog_about">About</string>
