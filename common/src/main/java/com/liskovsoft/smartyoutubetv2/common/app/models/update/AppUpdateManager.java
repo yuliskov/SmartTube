@@ -85,7 +85,11 @@ public class AppUpdateManager implements AppUpdateCheckerListener {
     @Override
     public void onError(Exception error) {
         if (mForceCheck) {
-            MessageHelpers.showMessage(mContext, R.string.update_not_found);
+            if (AppUpdateCheckerListener.LATEST_VERSION.equals(error.getMessage())) {
+                MessageHelpers.showMessage(mContext, R.string.update_not_found);
+            } else {
+                MessageHelpers.showMessage(mContext, R.string.update_in_progess);
+            }
         }
     }
 }

@@ -77,4 +77,5 @@
     <string name="player_only_pause">Тільки пауза</string>
     <string name="check_for_updates">Перевірити оновлення</string>
     <string name="update_not_found">Ваша версія не потребує оновлення</string>
+    <string name="update_in_progess">Хвилинку…</string>
 </resources>

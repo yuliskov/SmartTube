@@ -77,4 +77,5 @@
     <string name="player_only_pause">Only pause</string>
     <string name="check_for_updates">Check for updates</string>
     <string name="update_not_found">You\'re using the latest version</string>
+    <string name="update_in_progess">Wait…</string>
 </resources>
