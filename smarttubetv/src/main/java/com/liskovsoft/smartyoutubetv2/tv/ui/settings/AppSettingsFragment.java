@@ -91,7 +91,7 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
 
     @Override
     public void clear() {
-        onPreferenceStartInitialScreen();
+        getActivity().runOnUiThread(this::onPreferenceStartInitialScreen);
     }
 
     @Override
