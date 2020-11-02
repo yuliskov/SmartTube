@@ -78,4 +78,6 @@
     <string name="check_for_updates">Controleren op updates</string>
     <string name="update_not_found">Je gebruikt de recentste versie</string>
     <string name="update_in_progess">Even geduld…</string>
+    <string name="player_ui_hide_behavior">UI player verbergen</string>
+    <string name="player_ui_hide_never">Nooit</string>
 </resources>
