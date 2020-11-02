@@ -51,15 +51,13 @@ public class PlayerData {
     private void restoreData() {
         String data = mPrefs.getPlayerData();
 
-        if (data != null) {
-            String[] split = data.split(",");
+        String[] split = Helpers.split(data);
 
-            mOKButtonBehavior = Helpers.parseInt(split, 0, ONLY_UI);
-            mUIHideTimeoutSec = Helpers.parseInt(split, 1, 3);
-        }
+        mOKButtonBehavior = Helpers.parseInt(split, 0, ONLY_UI);
+        mUIHideTimeoutSec = Helpers.parseInt(split, 1, 3);
     }
 
     private void persistData() {
-        mPrefs.setPlayerData(String.format("%s,%s", mOKButtonBehavior, mUIHideTimeoutSec));
+        mPrefs.setPlayerData(Helpers.merge(mOKButtonBehavior, mUIHideTimeoutSec));
     }
 }

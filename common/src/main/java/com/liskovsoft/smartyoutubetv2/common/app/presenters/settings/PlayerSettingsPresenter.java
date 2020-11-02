@@ -62,7 +62,7 @@ public class PlayerSettingsPresenter {
                 option -> mPlayerUIData.setUIHideTimoutSec(PlayerData.AUTO_HIDE_NEVER),
                 mPlayerUIData.getUIHideTimoutSec() == PlayerData.AUTO_HIDE_NEVER));
 
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= 15; i++) {
             int timeoutSec = i;
             options.add(UiOptionItem.from(
                     String.format("%s sec", i),

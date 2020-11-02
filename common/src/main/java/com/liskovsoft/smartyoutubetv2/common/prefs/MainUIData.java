@@ -37,14 +37,12 @@ public class MainUIData {
     private void restoreData() {
         String data = mPrefs.getMainUIData();
 
-        if (data != null) {
-            String[] split = data.split(",");
+        String[] split = Helpers.split(data);
 
-            mIsAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0, true);
-        }
+        mIsAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0, true);
     }
 
     private void persistData() {
-        mPrefs.setMainUIData(String.format("%s", mIsAnimatedPreviewsEnabled));
+        mPrefs.setMainUIData(Helpers.merge(mIsAnimatedPreviewsEnabled));
     }
 }
