@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.settings;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -79,13 +80,18 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
     }
 
     @Override
+    public void setTitle(String title) {
+        mPreferenceFragment.setTitle(title);
+    }
+
+    @Override
     public void addCategories(List<SettingsCategory> categories) {
         mPreferenceFragment.addCategories(categories);
     }
 
     @Override
-    public void setTitle(String title) {
-        mPreferenceFragment.setTitle(title);
+    public void clear() {
+        onPreferenceStartInitialScreen();
     }
 
     @Override
@@ -133,11 +139,11 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
 
         private void initPrefs() {
             PreferenceScreen screen = getPreferenceManager().createPreferenceScreen(mExtractedContext);
+            setPreferenceScreen(screen);
+
             screen.setTitle(mTitle);
 
             addCategories(screen);
-
-            setPreferenceScreen(screen);
 
             setSingleCategoryAsRoot(screen);
         }

@@ -133,6 +133,7 @@ public class AppSettingsPresenter implements Presenter<AppSettingsView> {
         enableOldAndroidFix(true);
 
         if (mView != null) {
+            mView.clear();
             onInitDone();
         }
 
