@@ -1,5 +1,5 @@
 <resources>
-<string name="header_home">Główna</string>
+    <string name="header_home">Główna</string>
     <string name="title_search">Szukaj</string>
     <string name="header_subscriptions">Subskrypcje</string>
     <string name="header_history">Historia</string>
@@ -17,7 +17,7 @@
     <string name="action_signin">ZALOGUJ SIĘ</string>
     <string name="title_video_formats">Formaty wideo</string>
     <string name="title_audio_formats">Formaty audio</string>
-    <string name="subtitle_category_title">Napisy na filmie obcojęzycznym</string>
+    <string name="subtitle_category_title">Napisy</string>
     <string name="video_max_quality">Auto (maksymalna jakość)</string>
     <string name="audio_max_quality">Auto (maksymalna jakość)</string>
     <string name="subtitles_disabled">Napisy wyłączone</string>
@@ -31,7 +31,7 @@
     <string name="playback_settings">Ustawienia odtwarzania</string>
     <string name="video_speed">Prędkość wideo</string>
     <string name="resolution_switch">Przełącz rozdzielczość</string>
-    <string name="video_buffer">Video buffer</string>
+    <string name="video_buffer">Bufor wideo</string>
     <string name="video_buffer_size_low">Niski</string>
     <string name="video_buffer_size_med">Średni</string>
     <string name="video_buffer_size_high">Wysoki</string>
@@ -54,17 +54,17 @@
     <string name="dialog_account_none">Żaden</string>
     <string name="dialog_remove_account">Usuń konto</string>
     <string name="dialog_add_account">Dodaj konto</string>
-    <string name="default_lang">Domyślna</string>
+    <string name="default_lang">Domyślny</string>
     <string name="dialog_select_language">Język aplikacji</string>
-    <string name="subtitle_default">Domyślna</string>
+    <string name="subtitle_default">Domyślny    </string>
     <string name="subtitle_semi_transparent_bg">Półprzeźroczyste tło</string>
     <string name="subtitle_style">Styl napisów</string>
     <string name="subtitle_language">Język napisów</string>
     <string name="action_search">Zacznij szukać</string>
-    <string name="settings_main_ui">User interface</string>
+    <string name="settings_main_ui">Interfejs użytkownika</string>
     <string name="dialog_main_ui">Interfejs użytkownika</string>
     <string name="animated_previews">Animowane podglądy</string>
-    <string name="web_site">Stronie internetowej</string>
+    <string name="web_site">Strona internetowa</string>
     <string name="donation">Darowizna</string>
     <string name="dialog_about">O</string>
     <string name="dialog_player_ui">Odtwarzacz wideo</string>
@@ -76,7 +76,7 @@
     <string name="player_only_pause">Tylko pauza</string>
     <string name="check_for_updates">Sprawdź aktualizacje</string>
     <string name="update_not_found">Używasz najnowszej wersji</string>
-    <string name="update_in_progess">Wait…</string>
+    <string name="update_in_progess">Czekaj…</string>
     <string name="player_ui_hide_behavior">Automatyczne ukrywanie interfejsu użytkownika</string>
     <string name="player_ui_hide_never">Nigdy</string>
 </resources>
