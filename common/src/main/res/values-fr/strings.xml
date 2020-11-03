@@ -8,6 +8,8 @@
     <string name="header_news">Actualités</string>
     <string name="header_gaming">Jeux Video</string>
     <string name="header_playlists">Playlists</string>
+    <string name="header_settings">Paramètres</string>
+    <string name="header_channels">Chaînes</string>
     <string name="subscriptions_signin_title">Voir les derniéres chaines que vous aimez</string>
     <string name="subscriptions_signin_subtitle">Connectez-vous pour voir vos Abonnements</string>
     <string name="subscriptions_signin_button_text">CONNEXION</string>
