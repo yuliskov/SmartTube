@@ -27,6 +27,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.MainUISetti
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.PlayerSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
@@ -38,6 +39,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, Presenter<BrowseView> {
     private static final String TAG = BrowsePresenter.class.getSimpleName();
@@ -49,6 +51,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
     private final PlaybackPresenter mPlaybackPresenter;
     private final MediaService mMediaService;
     private final ViewManager mViewManager;
+    private final MainUIData mMainUIData;
     private BrowseView mView;
     private final List<Category> mCategories;
     private final Map<Integer, Observable<MediaGroup>> mGridMapping;
@@ -70,6 +73,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         mGridMapping = new HashMap<>();
         mRowMapping = new HashMap<>();
         mTextGridMapping = new HashMap<>();
+        mMainUIData = MainUIData.instance(mContext);
         initCategories();
     }
 
@@ -93,9 +97,9 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
     private void initCategories() {
         initCategoryHeaders();
 
-        initVideoCategories();
+        initCategoryCallbacks();
 
-        initSettingsCategories();
+        initSettingsSubCategories();
     }
 
     private void initCategoryHeaders() {
@@ -110,7 +114,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         mCategories.add(new Category(MediaGroup.TYPE_SETTINGS, mContext.getString(R.string.header_settings), Category.TYPE_TEXT_GRID, R.drawable.icon_settings));
     }
 
-    private void initVideoCategories() {
+    private void initCategoryCallbacks() {
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
         mRowMapping.put(MediaGroup.TYPE_HOME, mediaGroupManager.getHomeObserve());
@@ -124,7 +128,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         mGridMapping.put(MediaGroup.TYPE_CHANNELS_SUB, mediaGroupManager.getSubscribedChannelsObserve());
     }
 
-    private void initSettingsCategories() {
+    private void initSettingsSubCategories() {
         List<SettingsItem> settingItems = new ArrayList<>();
         
         settingItems.add(new SettingsItem(

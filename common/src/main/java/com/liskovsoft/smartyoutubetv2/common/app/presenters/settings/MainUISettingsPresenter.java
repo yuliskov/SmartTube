@@ -9,6 +9,8 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class MainUISettingsPresenter {
     private final Context mContext;
@@ -24,16 +26,33 @@ public class MainUISettingsPresenter {
     }
 
     public void show() {
-        List<OptionItem> options = new ArrayList<>();
-
-        options.add(UiOptionItem.from(
-                mContext.getString(R.string.animated_previews),
-                option -> mMainUIData.enableAnimatedPreviews(option.isSelected()),
-                mMainUIData.isAnimatedPreviewsEnabled()));
-
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
         settingsPresenter.clear();
-        settingsPresenter.appendCheckedCategory(mContext.getString(R.string.dialog_main_ui), options);
-        settingsPresenter.showDialog();
+
+        appendAnimatedPreviews(settingsPresenter);
+        appendLeftPanelCategories(settingsPresenter);
+
+        settingsPresenter.showDialog(mContext.getString(R.string.dialog_main_ui));
+    }
+
+    private void appendAnimatedPreviews(AppSettingsPresenter settingsPresenter) {
+        OptionItem animatedPreviewsOption = UiOptionItem.from(mContext.getString(R.string.animated_previews),
+                option -> mMainUIData.enableAnimatedPreviews(option.isSelected()), mMainUIData.isAnimatedPreviewsEnabled());
+
+        settingsPresenter.appendSingleSwitch(animatedPreviewsOption);
+    }
+
+    private void appendLeftPanelCategories(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        Map<Integer, Integer> leftPanelCategories = mMainUIData.getLeftPanelCategories();
+
+        for (Entry<Integer, Integer> category : leftPanelCategories.entrySet()) {
+             options.add(UiOptionItem.from(mContext.getString(category.getKey()), optionItem -> {
+                 mMainUIData.setLeftPanelCategoryIdState(category.getValue(), optionItem.isSelected());
+             }, mMainUIData.isCategoryIdSelected(category.getValue())));
+        }
+
+        settingsPresenter.appendCheckedCategory(mContext.getString(R.string.left_panel_categories), options);
     }
 }
