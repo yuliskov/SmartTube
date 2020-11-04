@@ -18,7 +18,7 @@ public class MainUIData {
     private final AppPrefs mPrefs;
     private boolean mIsAnimatedPreviewsEnabled;
     private final Map<Integer, Integer> mLeftPanelCategories = new HashMap<>();
-    private final Set<Integer> mLeftPanelSelectedCategories = new HashSet<>();
+    private final Set<Integer> mEnabledLeftPanelCategories = new HashSet<>();
 
     public MainUIData(Context context) {
         mContext = context;
@@ -48,22 +48,22 @@ public class MainUIData {
         return mLeftPanelCategories;
     }
 
-    public void setLeftPanelCategoryIdState(int categoryId, boolean isSelected) {
-        if (isSelected) {
-            mLeftPanelSelectedCategories.add(categoryId);
+    public void setLeftPanelCategoryEnabled(int categoryId, boolean enabled) {
+        if (enabled) {
+            mEnabledLeftPanelCategories.add(categoryId);
         } else {
-            mLeftPanelSelectedCategories.remove(categoryId);
+            mEnabledLeftPanelCategories.remove(categoryId);
         }
 
         persistState();
     }
 
-    public boolean isCategoryIdSelected(int categoryId) {
-        return mLeftPanelSelectedCategories.contains(categoryId);
+    public boolean isCategoryEnabled(int categoryId) {
+        return mEnabledLeftPanelCategories.contains(categoryId);
     }
 
     private void persistState() {
-        String selectedCategories = Helpers.mergeArray(mLeftPanelSelectedCategories.toArray());
+        String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
         mPrefs.setMainUIData(Helpers.mergeObject(mIsAnimatedPreviewsEnabled, selectedCategories));
     }
 
@@ -79,10 +79,10 @@ public class MainUIData {
             String[] selectedCategoriesArr = Helpers.splitArray(selectedCategories);
 
             for (String categoryId : selectedCategoriesArr) {
-                mLeftPanelSelectedCategories.add(Helpers.parseInt(categoryId));
+                mEnabledLeftPanelCategories.add(Helpers.parseInt(categoryId));
             }
         } else {
-            mLeftPanelSelectedCategories.addAll(mLeftPanelCategories.values());
+            mEnabledLeftPanelCategories.addAll(mLeftPanelCategories.values());
         }
     }
 

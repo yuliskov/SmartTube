@@ -9,6 +9,7 @@ public class Category {
     private final int mType;
     private final int mResId;
     private final boolean mIsAuthOnly;
+    private boolean mEnabled;
 
     public Category(int id, String title, int type, int resId) {
         this(id, title, type, resId, false);
@@ -40,5 +41,13 @@ public class Category {
 
     public boolean isAuthOnly() {
         return mIsAuthOnly;
+    }
+
+    public void setEnabled(boolean enabled) {
+        mEnabled = enabled;
+    }
+
+    public boolean isEnabled() {
+        return mEnabled;
     }
 }

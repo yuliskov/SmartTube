@@ -39,7 +39,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, Presenter<BrowseView> {
     private static final String TAG = BrowsePresenter.class.getSimpleName();
@@ -112,6 +111,10 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         mCategories.add(new Category(MediaGroup.TYPE_HISTORY, mContext.getString(R.string.header_history), Category.TYPE_GRID, R.drawable.icon_history, true));
         mCategories.add(new Category(MediaGroup.TYPE_PLAYLISTS, mContext.getString(R.string.header_playlists), Category.TYPE_ROW, R.drawable.icon_playlist, true));
         mCategories.add(new Category(MediaGroup.TYPE_SETTINGS, mContext.getString(R.string.header_settings), Category.TYPE_TEXT_GRID, R.drawable.icon_settings));
+
+        for (Category category : mCategories) {
+            category.setEnabled(mMainUIData.isCategoryEnabled(category.getId()));
+        }
     }
 
     private void initCategoryCallbacks() {
@@ -153,7 +156,9 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
 
     private void addHeaders() {
         for (Category category : mCategories) {
-            mView.addCategory(category);
+            if (category.isEnabled()) {
+                mView.addCategory(category);
+            }
         }
     }
 

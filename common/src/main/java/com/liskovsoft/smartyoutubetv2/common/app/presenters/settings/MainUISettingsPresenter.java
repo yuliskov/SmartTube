@@ -49,8 +49,8 @@ public class MainUISettingsPresenter {
 
         for (Entry<Integer, Integer> category : leftPanelCategories.entrySet()) {
              options.add(UiOptionItem.from(mContext.getString(category.getKey()), optionItem -> {
-                 mMainUIData.setLeftPanelCategoryIdState(category.getValue(), optionItem.isSelected());
-             }, mMainUIData.isCategoryIdSelected(category.getValue())));
+                 mMainUIData.setLeftPanelCategoryEnabled(category.getValue(), optionItem.isSelected());
+             }, mMainUIData.isCategoryEnabled(category.getValue())));
         }
 
         settingsPresenter.appendCheckedCategory(mContext.getString(R.string.left_panel_categories), options);
