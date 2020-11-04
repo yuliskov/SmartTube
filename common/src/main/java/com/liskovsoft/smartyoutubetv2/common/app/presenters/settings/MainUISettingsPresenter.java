@@ -55,6 +55,6 @@ public class MainUISettingsPresenter {
              }, mMainUIData.isCategoryEnabled(category.getValue())));
         }
 
-        settingsPresenter.appendCheckedCategory(mContext.getString(R.string.content_categories), options);
+        settingsPresenter.appendCheckedCategory(mContext.getString(R.string.side_panel_categories), options);
     }
 }
