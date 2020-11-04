@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="header_home">Accueil</string>
-    <string name="title_search">Rechercher</string>
+    <string name="title_search">Recherche</string>
     <string name="header_subscriptions">Abonnements</string>
     <string name="header_history">Historique</string>
     <string name="header_music">Musique</string>
     <string name="header_news">Actualités</string>
-    <string name="header_gaming">Jeux Video</string>
-    <string name="header_playlists">Playlists</string>
+    <string name="header_gaming">Jeux vidéo</string>
+    <string name="header_playlists">Bibliothèque</string>
+    <string name="header_settings">Paramètres</string>
+    <string name="header_channels">Chaînes</string>
     <string name="subscriptions_signin_title">Voir les derniéres chaines que vous aimez</string>
     <string name="subscriptions_signin_subtitle">Connectez-vous pour voir vos Abonnements</string>
     <string name="subscriptions_signin_button_text">CONNEXION</string>
@@ -37,7 +39,7 @@
     <string name="update_changelog">Journal des modifications</string>
     <string name="install_update">Installer la mise à jour</string>
     <string name="msg_category_is_empty">Oups! Il n\'y a rien ici.</string>
-    <string name="dialog_add_to_playlist">Ajouter à la playlist</string>
+    <string name="dialog_add_to_playlist">Ajouter à la bibliothèque</string>
     <string name="msg_signed_users_only">Utilisateurs enregistrés uniquement</string>
     <string name="msg_cant_load_content">Oups. Impossible de charger le contenu.</string>
     <string name="title_video_presets">Préréglages vidéo</string>
@@ -48,9 +50,34 @@
     <string name="settings_player">Paramètres du lecteur</string>
     <string name="settings_language">Langue</string>
     <string name="settings_linked_devices">Appareils liés</string>
-    <string name="settings_about">A propos de</string>
+    <string name="settings_about">A propos</string>
     <string name="dialog_account_list">Sélectionnez un compte</string>
     <string name="dialog_account_none">Aucun</string>
     <string name="dialog_remove_account">Supprimer compte</string>
     <string name="dialog_add_account">Ajouter un compte</string>
+    <string name="default_lang">Par défaut</string>
+    <string name="dialog_select_language">Langue de l\'application</string>
+    <string name="subtitle_default">Par défaut</string>
+    <string name="subtitle_semi_transparent_bg">Arrière-plan semi-transparent</string>
+    <string name="subtitle_style">Style de sous-titre</string>
+    <string name="subtitle_language">Langue des sous-titres</string>
+    <string name="action_search">Commencer recherche</string>
+    <string name="settings_main_ui">Interface utilisateur</string>
+    <string name="dialog_main_ui">Interface utilisateur</string>
+    <string name="animated_previews">Aperçus animés</string>
+    <string name="web_site">Site Web</string>
+    <string name="donation">Contribution</string>
+    <string name="dialog_about">A propos</string>
+    <string name="dialog_player_ui">Lecteur vidéo</string>
+    <string name="player_show_ui_on_pause">Afficher l\'interface utilisateur en pause</string>
+    <string name="player_pause_on_ok">La touche OK met la lecture en pause</string>
+    <string name="player_ok_button_behavior">Comportement du bouton OK</string>
+    <string name="player_only_ui">Seulement l\'interface utilisateur</string>
+    <string name="player_ui_and_pause">Interface utilisateur et pause</string>
+    <string name="player_only_pause">Seulement pause</string>
+    <string name="check_for_updates">Rechercher les mises à jour</string>
+    <string name="update_not_found">Vous utilisez la dernière version</string>
+    <string name="update_in_progess">Attendre…</string>
+    <string name="player_ui_hide_behavior">Interface utilisateur de saisie automatique</string>
+    <string name="player_ui_hide_never">Jamais</string>
 </resources>
