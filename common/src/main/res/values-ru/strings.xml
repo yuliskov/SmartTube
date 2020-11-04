@@ -80,5 +80,5 @@
     <string name="update_in_progess">Подождите…</string>
     <string name="player_ui_hide_behavior">Скрывать интерфейс</string>
     <string name="player_ui_hide_never">Никогда</string>
-    <string name="left_panel_categories">Категории панели слева</string>
+    <string name="content_categories">Катергории контента</string>
 </resources>

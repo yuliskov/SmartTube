@@ -14,7 +14,7 @@ import java.util.List;
 
 public class SignInFragment extends GuidedStepSupportFragment implements SignInView {
     private static final int CONTINUE = 2;
-    private static final String SIGN_IN_URL = "https://youtube.com/activate";
+    private static final String SIGN_IN_URL = "https://m.youtube.com/activate";
     private SignInPresenter mSignInPresenter;
 
     @Override

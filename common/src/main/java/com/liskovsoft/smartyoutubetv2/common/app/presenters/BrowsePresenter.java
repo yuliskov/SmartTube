@@ -59,7 +59,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
     private Disposable mSignCheckAction;
-    private int mCurrentCategoryIndex;
+    private int mCurrentCategoryId;
     private long mLastUpdateTimeMs;
 
     private BrowsePresenter(Context context) {
@@ -90,7 +90,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
             return;
         }
 
-        addHeaders();
+        updateCategories();
     }
 
     private void initCategories() {
@@ -111,10 +111,6 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         mCategories.add(new Category(MediaGroup.TYPE_HISTORY, mContext.getString(R.string.header_history), Category.TYPE_GRID, R.drawable.icon_history, true));
         mCategories.add(new Category(MediaGroup.TYPE_PLAYLISTS, mContext.getString(R.string.header_playlists), Category.TYPE_ROW, R.drawable.icon_playlist, true));
         mCategories.add(new Category(MediaGroup.TYPE_SETTINGS, mContext.getString(R.string.header_settings), Category.TYPE_TEXT_GRID, R.drawable.icon_settings));
-
-        for (Category category : mCategories) {
-            category.setEnabled(mMainUIData.isCategoryEnabled(category.getId()));
-        }
     }
 
     private void initCategoryCallbacks() {
@@ -154,10 +150,16 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         mTextGridMapping.put(MediaGroup.TYPE_SETTINGS, settingItems);
     }
 
-    private void addHeaders() {
+    public void updateCategories() {
+        int index = 0;
+
         for (Category category : mCategories) {
+            category.setEnabled(category.getId() == MediaGroup.TYPE_SETTINGS || mMainUIData.isCategoryEnabled(category.getId()));
+
             if (category.isEnabled()) {
-                mView.addCategory(category);
+                mView.addCategory(index++, category);
+            } else {
+                mView.removeCategory(category);
             }
         }
     }
@@ -223,31 +225,44 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
     }
 
     @Override
-    public void onCategoryFocused(int categoryIndex) {
-        updateCategory(categoryIndex);
+    public void onCategoryFocused(int categoryId) {
+        updateCategory(categoryId);
     }
 
     public void refresh() {
-        updateCategory(mCurrentCategoryIndex);
+        updateCategory(mCurrentCategoryId);
     }
 
     private void updateRefreshTime() {
         mLastUpdateTimeMs = System.currentTimeMillis();
     }
 
-    private void updateCategory(int categoryIndex) {
-        mCurrentCategoryIndex = categoryIndex;
+    private void updateCategory(int categoryId) {
+        mCurrentCategoryId = categoryId;
 
-        if (mView == null || categoryIndex < 0 || mCategories.size() <= categoryIndex) {
+        if (mView == null || categoryId < 0) {
             return;
         }
 
         RxUtils.disposeActions(mUpdateAction, mScrollAction, mSignCheckAction);
 
-        Category category = mCategories.get(categoryIndex);
-        mView.showProgressBar(true);
-        mView.clearCategory(category);
-        updateCategory(category);
+        Category category = getCategory(categoryId);
+
+        if (category != null) {
+            mView.showProgressBar(true);
+            mView.clearCategory(category);
+            updateCategory(category);
+        }
+    }
+
+    private Category getCategory(int categoryId) {
+        for (Category category : mCategories) {
+            if (category.getId() == categoryId) {
+                return category;
+            }
+        }
+
+        return null;
     }
 
     private void updateCategory(Category category) {

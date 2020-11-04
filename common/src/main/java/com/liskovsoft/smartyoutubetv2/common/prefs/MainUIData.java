@@ -6,8 +6,8 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,7 +17,7 @@ public class MainUIData {
     private final Context mContext;
     private final AppPrefs mPrefs;
     private boolean mIsAnimatedPreviewsEnabled;
-    private final Map<Integer, Integer> mLeftPanelCategories = new HashMap<>();
+    private final Map<Integer, Integer> mLeftPanelCategories = new LinkedHashMap<>();
     private final Set<Integer> mEnabledLeftPanelCategories = new HashSet<>();
 
     public MainUIData(Context context) {
@@ -44,11 +44,11 @@ public class MainUIData {
         return mIsAnimatedPreviewsEnabled;
     }
 
-    public Map<Integer, Integer> getLeftPanelCategories() {
+    public Map<Integer, Integer> getCategories() {
         return mLeftPanelCategories;
     }
 
-    public void setLeftPanelCategoryEnabled(int categoryId, boolean enabled) {
+    public void setCategoryEnabled(int categoryId, boolean enabled) {
         if (enabled) {
             mEnabledLeftPanelCategories.add(categoryId);
         } else {

@@ -109,7 +109,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     private void setupFragmentFactory() {
         mCategoryFragmentFactory = new CategoryFragmentFactory(
-                (viewHolder, row) -> mBrowsePresenter.onCategoryFocused(getSelectedPosition())
+                (viewHolder, row) -> mBrowsePresenter.onCategoryFocused(getSelectedHeaderId())
         );
 
         getMainFragmentRegistry().registerFragment(PageRow.class, mCategoryFragmentFactory);
@@ -150,13 +150,17 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         //        });
 
         getHeadersSupportFragment().setOnHeaderClickedListener(
-                (viewHolder, row) -> mBrowsePresenter.onCategoryFocused(getSelectedPosition())
+                (viewHolder, row) -> mBrowsePresenter.onCategoryFocused(getSelectedHeaderId())
         );
 
         setOnSearchClickedListener(view -> {
             Intent intent = new Intent(getActivity(), SearchActivity.class);
             startActivity(intent);
         });
+    }
+
+    private int getSelectedHeaderId() {
+        return (int) ((PageRow) mCategoryRowAdapter.get(getSelectedPosition())).getHeaderItem().getId();
     }
 
     @Override
@@ -183,15 +187,25 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     @Override
-    public void addCategory(Category category) {
+    public void addCategory(int index, Category category) {
         if (category == null) {
             return;
         }
 
         if (mCategories.get(category.getId()) == null) {
             mCategories.put(category.getId(), category);
-            createHeader(category);
+            createHeader(index, category);
         }
+    }
+
+    @Override
+    public void removeCategory(Category category) {
+        if (category == null) {
+            return;
+        }
+
+        mCategories.remove(category.getId());
+        removeHeader(category);
     }
 
     @Override
@@ -216,11 +230,26 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         }
     }
 
-    private void createHeader(Category header) {
+    private void createHeader(int index, Category header) {
         HeaderItem headerItem = new CategoryHeaderItem(header.getId(), header.getTitle(), header.getType(), header.getResId());;
 
         PageRow pageRow = new PageRow(headerItem);
-        mCategoryRowAdapter.add(pageRow);
+        mCategoryRowAdapter.add(index, pageRow);
+    }
+
+    private void removeHeader(Category header) {
+        Object foundHeader = null;
+
+        for (Object item : mCategoryRowAdapter.unmodifiableList()) {
+            if (((PageRow) item).getHeaderItem().getId() == header.getId()) {
+                foundHeader = item;
+                break;
+            }
+        }
+
+        if (foundHeader != null) {
+            mCategoryRowAdapter.remove(foundHeader);
+        }
     }
 
     @Override
