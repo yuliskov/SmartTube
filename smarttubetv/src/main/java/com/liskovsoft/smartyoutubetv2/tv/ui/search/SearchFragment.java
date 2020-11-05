@@ -268,18 +268,12 @@ public class SearchFragment extends SearchSupportFragment
 
     @Override
     public void startSearch(String searchText) {
-        if (isAdded()) {
-            startSearchInt(searchText);
-        } else { // SearchFragment not attached to Activity
-            mHandler.postDelayed(() -> startSearchInt(searchText), 1_000);
-        }
-    }
-
-    private void startSearchInt(String searchText) {
-        if (searchText != null) {
-            setSearchQuery(searchText, true);
-        } else {
-            startRecognition();
+        if (!isDetached()) {
+            if (searchText != null) {
+                setSearchQuery(searchText, true);
+            } else {
+                startRecognition();
+            }
         }
     }
 }

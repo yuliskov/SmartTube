@@ -685,9 +685,8 @@ public class SearchSupportFragment extends Fragment {
         final int viewId = (mResultAdapter.size() == 0 || mRowsSupportFragment == null
                 || mRowsSupportFragment.getVerticalGridView() == null)
                         ? 0 : mRowsSupportFragment.getVerticalGridView().getId();
-
-        // MOD: hide kbd on back properly
-        //mSearchBar.setNextFocusDownId(viewId);
+        
+        mSearchBar.setNextFocusDownId(viewId);
     }
 
     void updateFocus() {

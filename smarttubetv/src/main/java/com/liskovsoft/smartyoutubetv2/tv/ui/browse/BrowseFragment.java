@@ -160,6 +160,10 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private int getSelectedHeaderId() {
+        if (getSelectedPosition() >= mCategoryRowAdapter.size()) {
+            return -1;
+        }
+
         return (int) ((PageRow) mCategoryRowAdapter.get(getSelectedPosition())).getHeaderItem().getId();
     }
 
