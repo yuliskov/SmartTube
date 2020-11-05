@@ -38,7 +38,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerController;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.AudioDelayRenderersFactoryV2;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.V2.CustomOverridesRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.DebugInfoManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ExoPlayerInitializer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager;
@@ -247,7 +247,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         TrackSelection.Factory videoTrackSelectionFactory =
                 new AdaptiveTrackSelection.Factory();
         mTrackSelector = new RestoreTrackSelector(videoTrackSelectionFactory);
-        mRenderersFactory = new AudioDelayRenderersFactoryV2(getActivity());
+        mRenderersFactory = new CustomOverridesRenderersFactory(getActivity());
 
         // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
         mPlayer = mPlayerInitializer.createPlayer(getActivity(), mRenderersFactory, mTrackSelector);

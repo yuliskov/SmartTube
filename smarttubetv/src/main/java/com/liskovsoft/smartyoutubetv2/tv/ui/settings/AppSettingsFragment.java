@@ -157,14 +157,14 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
                 }
             }
         }
-
+        
         private void setSingleCategoryAsRoot(PreferenceScreen screen) {
             // auto expand single list preference
             if (mCategories != null && mCategories.size() == 1 && screen.getPreferenceCount() > 0) {
                 onDisplayPreferenceDialog(screen.getPreference(0));
 
                 getFragmentManager().addOnBackStackChangedListener(() -> {
-                    if (getFragmentManager().getBackStackEntryCount() == 0) {
+                    if (getFragmentManager() != null && getFragmentManager().getBackStackEntryCount() == 0) {
                         getActivity().onBackPressed();
                     }
                 });

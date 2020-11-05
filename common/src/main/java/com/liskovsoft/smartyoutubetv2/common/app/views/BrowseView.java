@@ -8,7 +8,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 public interface BrowseView {
     void updateCategory(VideoGroup group);
     void updateCategory(SettingsGroup group);
-    void addCategory(Category category);
+    void addCategory(int index, Category category);
+    void removeCategory(Category category);
     void clearCategory(Category category);
     void updateErrorIfEmpty(ErrorFragmentData data);
     void showProgressBar(boolean show);

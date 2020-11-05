@@ -157,13 +157,13 @@ public class SearchPresenter implements VideoGroupPresenter, Presenter<SearchVie
     }
 
     public void openSearch(String searchText) {
+        mSearchText = searchText;
+
         if (mView == null) {
             mViewManager.startView(SearchView.class);
-            mSearchText = searchText;
-            return;
+        } else {
+            mViewManager.startView(SearchView.class);
+            mView.startSearch(searchText);
         }
-
-        mViewManager.startView(SearchView.class);
-        mView.startSearch(searchText);
     }
 }
