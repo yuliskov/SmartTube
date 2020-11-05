@@ -79,4 +79,5 @@
     <string name="update_in_progess">Czekaj…</string>
     <string name="player_ui_hide_behavior">Automatyczne ukrywanie interfejsu użytkownika</string>
     <string name="player_ui_hide_never">Nigdy</string>
+    <string name="side_panel_categories">Ustawienia sekcji</string>
 </resources>
