@@ -80,5 +80,5 @@
     <string name="update_in_progess">Xin hãy đợi…</string>
     <string name="player_ui_hide_behavior">Tự động ẩn giao diện</string>
     <string name="player_ui_hide_never">Không bao giờ</string>
-    <string name="side_panel_categories">Các cài đặt khác</string>
+    <string name="side_panel_sections">Các cài đặt khác</string>
 </resources>

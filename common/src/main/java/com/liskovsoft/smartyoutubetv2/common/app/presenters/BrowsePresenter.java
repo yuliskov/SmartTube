@@ -61,6 +61,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
     private Disposable mSignCheckAction;
     private int mCurrentCategoryId;
     private long mLastUpdateTimeMs;
+    private int mBootToIndex;
 
     private BrowsePresenter(Context context) {
         GlobalPreferences.instance(context); // auth token storage
@@ -91,6 +92,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         }
 
         updateCategories();
+        mView.selectCategory(mBootToIndex);
     }
 
     private void initCategories() {
@@ -157,6 +159,9 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
             category.setEnabled(category.getId() == MediaGroup.TYPE_SETTINGS || mMainUIData.isCategoryEnabled(category.getId()));
 
             if (category.isEnabled()) {
+                if (category.getId() == mMainUIData.getBootToCategoryId()) {
+                    mBootToIndex = index;
+                }
                 mView.addCategory(index++, category);
             } else {
                 mView.removeCategory(category);

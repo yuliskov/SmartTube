@@ -95,9 +95,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mBrowsePresenter.onInitDone();
 
         // Restore state after crash
-        if (mSelectedPosition != -1) {
-            setSelectedPosition(mSelectedPosition);
-        }
+        selectCategory(mSelectedPosition);
     }
 
     private void setupAdapter() {
@@ -224,6 +222,13 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         restoreMainFragment();
 
         mCategoryFragmentFactory.updateCurrentFragment(group);
+    }
+
+    @Override
+    public void selectCategory(int index) {
+        if (index >= 0 && index < mCategoryRowAdapter.size()) {
+            setSelectedPosition(index);
+        }
     }
 
     private void restoreMainFragment() {

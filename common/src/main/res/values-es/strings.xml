@@ -79,5 +79,5 @@
     <string name="update_in_progess">Espera…</string>
     <string name="player_ui_hide_behavior">Auto-ocultar interfaz</string>
     <string name="player_ui_hide_never">Nunca</string>
-    <string name="side_panel_categories">Secciones configuración</string>
+    <string name="side_panel_sections">Secciones configuración</string>
 </resources>

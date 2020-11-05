@@ -80,5 +80,5 @@
     <string name="update_in_progess">Even geduld…</string>
     <string name="player_ui_hide_behavior">Player verbergen</string>
     <string name="player_ui_hide_never">Nooit</string>
-    <string name="side_panel_categories">Rubrieken</string>
+    <string name="side_panel_sections">Rubrieken</string>
 </resources>

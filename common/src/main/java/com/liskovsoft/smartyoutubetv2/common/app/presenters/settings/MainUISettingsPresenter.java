@@ -32,6 +32,7 @@ public class MainUISettingsPresenter {
 
         appendAnimatedPreviews(settingsPresenter);
         appendLeftPanelCategories(settingsPresenter);
+        appendBootToCategory(settingsPresenter);
 
         settingsPresenter.showDialog(mContext.getString(R.string.dialog_main_ui));
     }
@@ -55,6 +56,20 @@ public class MainUISettingsPresenter {
              }, mMainUIData.isCategoryEnabled(category.getValue())));
         }
 
-        settingsPresenter.appendCheckedCategory(mContext.getString(R.string.side_panel_categories), options);
+        settingsPresenter.appendCheckedCategory(mContext.getString(R.string.side_panel_sections), options);
+    }
+
+    private void appendBootToCategory(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        Map<Integer, Integer> leftPanelCategories = mMainUIData.getCategories();
+
+        for (Entry<Integer, Integer> category : leftPanelCategories.entrySet()) {
+            options.add(UiOptionItem.from(mContext.getString(category.getKey()),
+            optionItem -> mMainUIData.setBootToCategoryId(category.getValue()),
+            category.getValue().equals(mMainUIData.getBootToCategoryId())));
+        }
+
+        settingsPresenter.appendRadioCategory(mContext.getString(R.string.boot_to_section), options);
     }
 }

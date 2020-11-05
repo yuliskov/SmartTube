@@ -80,5 +80,6 @@
     <string name="update_in_progess">Хвилинку…</string>
     <string name="player_ui_hide_behavior">Приховувати інтерфейс</string>
     <string name="player_ui_hide_never">Ніколи</string>
-    <string name="side_panel_categories">Налаштувати розділи</string>
+    <string name="side_panel_sections">Налаштувати розділи</string>
+    <string name="boot_to_section">Завантажуватися у розділ</string>
 </resources>

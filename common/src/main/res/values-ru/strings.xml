@@ -80,5 +80,6 @@
     <string name="update_in_progess">Подождите…</string>
     <string name="player_ui_hide_behavior">Скрывать интерфейс</string>
     <string name="player_ui_hide_never">Никогда</string>
-    <string name="side_panel_categories">Настроить разделы</string>
+    <string name="side_panel_sections">Настроить разделы</string>
+    <string name="boot_to_section">Загружаться в раздел</string>
 </resources>

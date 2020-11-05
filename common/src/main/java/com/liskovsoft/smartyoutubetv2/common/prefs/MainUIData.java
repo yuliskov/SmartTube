@@ -17,6 +17,7 @@ public class MainUIData {
     private final Context mContext;
     private final AppPrefs mPrefs;
     private boolean mIsAnimatedPreviewsEnabled;
+    private int mBootToCategoryId;
     private final Map<Integer, Integer> mLeftPanelCategories = new LinkedHashMap<>();
     private final Set<Integer> mEnabledLeftPanelCategories = new HashSet<>();
 
@@ -62,28 +63,14 @@ public class MainUIData {
         return mEnabledLeftPanelCategories.contains(categoryId);
     }
 
-    private void persistState() {
-        String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
-        mPrefs.setMainUIData(Helpers.mergeObject(mIsAnimatedPreviewsEnabled, selectedCategories));
+    public void setBootToCategoryId(int categoryId) {
+        mBootToCategoryId = categoryId;
+
+        persistState();
     }
 
-    private void restoreState() {
-        String data = mPrefs.getMainUIData();
-
-        String[] split = Helpers.splitObject(data);
-
-        mIsAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0, true);
-        String selectedCategories = Helpers.parseStr(split, 1);
-
-        if (selectedCategories != null) {
-            String[] selectedCategoriesArr = Helpers.splitArray(selectedCategories);
-
-            for (String categoryId : selectedCategoriesArr) {
-                mEnabledLeftPanelCategories.add(Helpers.parseInt(categoryId));
-            }
-        } else {
-            mEnabledLeftPanelCategories.addAll(mLeftPanelCategories.values());
-        }
+    public int getBootToCategoryId() {
+        return mBootToCategoryId;
     }
 
     private void initLeftPanelCategories() {
@@ -95,5 +82,30 @@ public class MainUIData {
         mLeftPanelCategories.put(R.string.header_channels, MediaGroup.TYPE_CHANNELS_SUB);
         mLeftPanelCategories.put(R.string.header_history, MediaGroup.TYPE_HISTORY);
         mLeftPanelCategories.put(R.string.header_playlists, MediaGroup.TYPE_PLAYLISTS);
+    }
+
+    private void persistState() {
+        String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
+        mPrefs.setMainUIData(Helpers.mergeObject(mIsAnimatedPreviewsEnabled, selectedCategories, mBootToCategoryId));
+    }
+
+    private void restoreState() {
+        String data = mPrefs.getMainUIData();
+
+        String[] split = Helpers.splitObject(data);
+
+        mIsAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0, true);
+        String selectedCategories = Helpers.parseStr(split, 1);
+        mBootToCategoryId = Helpers.parseInt(split, 2, MediaGroup.TYPE_HOME);
+
+        if (selectedCategories != null) {
+            String[] selectedCategoriesArr = Helpers.splitArray(selectedCategories);
+
+            for (String categoryId : selectedCategoriesArr) {
+                mEnabledLeftPanelCategories.add(Helpers.parseInt(categoryId));
+            }
+        } else {
+            mEnabledLeftPanelCategories.addAll(mLeftPanelCategories.values());
+        }
     }
 }
