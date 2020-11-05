@@ -83,10 +83,11 @@ public class VideoLoader extends PlayerEventListenerHelper {
         // restart once per video
         if (mErrorVideo != mLastVideo) {
             Log.e(TAG, "Player error occurred. Restarting engine once...");
+            mErrorVideo = mLastVideo;
             mController.restartEngine();
+        } else {
+            mController.showControls(true);
         }
-
-        mErrorVideo = mLastVideo;
     }
 
     @Override
@@ -213,17 +214,17 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
         if (formatInfo.containsHlsInfo()) {
-            Log.d(TAG, "Found hls video. Loading...");
+            Log.d(TAG, "Found hls video. Live translation. Loading...");
             mController.openHls(formatInfo.getHlsManifestUrl());
         } else if (formatInfo.containsDashInfo()) {
-            Log.d(TAG, "Found dash video. Loading...");
+            Log.d(TAG, "Found dash video. Main video format. Loading...");
 
             mMpdStreamAction = formatInfo.createMpdStreamObservable()
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(mController::openDash, error -> Log.e(TAG, "createMpdStream error: " + error));
         } else if (formatInfo.containsUrlListInfo()) {
-            Log.d(TAG, "Found url list video. Loading...");
+            Log.d(TAG, "Found url list video. This is always LQ. Loading...");
             mController.openUrlList(formatInfo.createUrlList());
         } else {
             Log.d(TAG, "Empty format info received. Seems future translation. No video data to pass to the player.");
