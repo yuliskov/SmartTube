@@ -66,7 +66,7 @@
     <string name="animated_previews">Animowane podglądy</string>
     <string name="web_site">Strona internetowa</string>
     <string name="donation">Darowizna</string>
-    <string name="dialog_about">O</string>
+    <string name="dialog_about">Informacje</string>
     <string name="dialog_player_ui">Odtwarzacz wideo</string>
     <string name="player_show_ui_on_pause">Pokaż interfejs użytkownika podczas wstrzymania</string>
     <string name="player_pause_on_ok">Klawisz OK wstrzymuje odtwarzanie</string>
@@ -79,4 +79,5 @@
     <string name="update_in_progess">Czekaj…</string>
     <string name="player_ui_hide_behavior">Automatyczne ukrywanie interfejsu użytkownika</string>
     <string name="player_ui_hide_never">Nigdy</string>
+    <string name="side_panel_categories">Ustawienia sekcji</string>
 </resources>
