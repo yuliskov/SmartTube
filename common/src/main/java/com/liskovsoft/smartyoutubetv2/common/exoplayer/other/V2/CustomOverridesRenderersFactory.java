@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.other;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.other.V2;
 
 import android.content.Context;
 import android.os.Handler;
@@ -18,16 +18,20 @@ import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
 import java.util.ArrayList;
 
 /**
- * My wrapper<br/>
  * Main intent: override audio delay
  */
-public class AudioDelayRenderersFactoryV2 extends DefaultRenderersFactory {
-    private static final String TAG = AudioDelayRenderersFactoryV2.class.getSimpleName();
+public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
+    private static final String TAG = CustomOverridesRenderersFactory.class.getSimpleName();
 
-    public AudioDelayRenderersFactoryV2(FragmentActivity activity) {
+    public CustomOverridesRenderersFactory(FragmentActivity activity) {
         super(activity);
+        setExtensionRendererMode(EXTENSION_RENDERER_MODE_ON);
     }
 
+    /**
+     * Delay audio<br/>
+     * All real delay happens in {@link AudioDelayMediaCodecAudioRenderer}
+     */
     @Override
     protected void buildAudioRenderers(
             Context context,
@@ -66,7 +70,7 @@ public class AudioDelayRenderersFactoryV2 extends DefaultRenderersFactory {
         if (index != -1) {
             out.remove(mediaCodecAudioRenderer);
             out.add(index,
-                    new AudioDelayMediaCodecAudioRendererV2(
+                    new AudioDelayMediaCodecAudioRenderer(
                             context,
                             mediaCodecSelector,
                             drmSessionManager,

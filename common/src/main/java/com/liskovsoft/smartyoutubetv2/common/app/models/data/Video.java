@@ -165,6 +165,17 @@ public final class Video implements Parcelable {
         return playlistIndex > 0;
     }
 
+    public void sync(MediaItemMetadata metadata) {
+        if (metadata == null) {
+            return;
+        }
+
+        title = metadata.getTitle();
+        description = metadata.getDescription();
+        channelId = metadata.getChannelId();
+        nextMediaItem = metadata.getNextVideo();
+    }
+
     // Builder for Video object.
     public static class VideoBuilder {
         private long id;
