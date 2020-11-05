@@ -79,6 +79,11 @@ public class SearchFragment extends SearchSupportFragment
             setSpeechRecognitionCallback(new SpeechRecognitionCallback() {
                 @Override
                 public void recognizeSpeech() {
+                    if (isDetached()) {
+                        Log.e(TAG, "Can't perform search. Fragment is detached.");
+                        return;
+                    }
+
                     try {
                         startActivityForResult(getRecognizerIntent(), REQUEST_SPEECH);
                     } catch (ActivityNotFoundException e) {
@@ -268,12 +273,10 @@ public class SearchFragment extends SearchSupportFragment
 
     @Override
     public void startSearch(String searchText) {
-        if (!isDetached()) {
-            if (searchText != null) {
-                setSearchQuery(searchText, true);
-            } else {
-                startRecognition();
-            }
+        if (searchText != null) {
+            setSearchQuery(searchText, true);
+        } else {
+            startRecognition();
         }
     }
 }
