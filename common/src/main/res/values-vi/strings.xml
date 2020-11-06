@@ -76,7 +76,7 @@
     <string name="player_ui_and_pause">Giao diện và tạm dừng</string>
     <string name="player_only_pause">Chỉ tạm dừng</string>
     <string name="check_for_updates">Kiểm tra cập nhật</string>
-    <string name="update_not_found">Phiên bản bạn đang sử dụng là mới nhất</string>
+    <string name="update_not_found">Phiên bản hiện tại là mới nhất</string>
     <string name="update_in_progess">Xin hãy đợi…</string>
     <string name="player_ui_hide_behavior">Tự động ẩn giao diện</string>
     <string name="player_ui_hide_never">Không bao giờ</string>
