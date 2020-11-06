@@ -84,7 +84,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
         if (mErrorVideo != mLastVideo) {
             Log.e(TAG, "Player error occurred. Restarting engine once...");
             mErrorVideo = mLastVideo;
-            mController.restartEngine();
+            YouTubeMediaService.instance().invalidateCache(); // some data might be stalled
+            mController.restartEngine(); // re-download video data
         } else {
             mController.showControls(true);
         }
