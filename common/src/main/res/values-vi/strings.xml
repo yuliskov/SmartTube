@@ -68,10 +68,10 @@
     <string name="web_site">Trang web</string>
     <string name="donation">Ủng hộ</string>
     <string name="dialog_about">Giới thiệu</string>
-    <string name="dialog_player_ui">Trình chơi video</string>
+    <string name="dialog_player_ui">Trình phát video</string>
     <string name="player_show_ui_on_pause">Hiện giao diện khi tạm dừng</string>
     <string name="player_pause_on_ok">Nhấn OK để tạm dừng</string>
-    <string name="player_ok_button_behavior">Hành vi nút OK</string>
+    <string name="player_ok_button_behavior">Chức năng phím OK</string>
     <string name="player_only_ui">Chỉ Giao diện</string>
     <string name="player_ui_and_pause">Giao diện và tạm dừng</string>
     <string name="player_only_pause">Chỉ tạm dừng</string>
