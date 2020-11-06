@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,15 +78,14 @@ public class SearchFragment extends SearchSupportFragment
             setSpeechRecognitionCallback(new SpeechRecognitionCallback() {
                 @Override
                 public void recognizeSpeech() {
-                    if (isDetached()) {
+                    if (isAdded()) {
+                        try {
+                            startActivityForResult(getRecognizerIntent(), REQUEST_SPEECH);
+                        } catch (ActivityNotFoundException e) {
+                            Log.e(TAG, "Cannot find activity for speech recognizer", e);
+                        }
+                    } else {
                         Log.e(TAG, "Can't perform search. Fragment is detached.");
-                        return;
-                    }
-
-                    try {
-                        startActivityForResult(getRecognizerIntent(), REQUEST_SPEECH);
-                    } catch (ActivityNotFoundException e) {
-                        Log.e(TAG, "Cannot find activity for speech recognizer", e);
                     }
                 }
             });

@@ -107,9 +107,9 @@ dependencies {
     implementation 'com.zlc.glide:webpdecoder:2.0.' + glideVersion
 
     implementation 'com.amazon.android:exoplayer:' + amazonExoplayerVersion
-    // implementation 'com.google.android.exoplayer:exoplayer:' + amazonExoplayerVersion
+    // implementation 'com.google.android.exoplayer:exoplayer:' + exoplayerVersion
     implementation 'com.amazon.android:extension-leanback:' + amazonExoplayerVersion
-    // implementation 'com.google.android.exoplayer:extension-leanback:' + amazonExoplayerVersion
+    // implementation 'com.google.android.exoplayer:extension-leanback:' + exoplayerVersion
     implementation 'androidx.media:media:' + mediaXLibraryVersion // exoplayer fix
 
     testImplementation 'junit:junit:' + junitVersion
