@@ -80,5 +80,6 @@
     <string name="update_in_progess">请稍等……</string>
     <string name="player_ui_hide_behavior">自动隐藏用户接口</string>
     <string name="player_ui_hide_never">从不</string>
-    <string name="side_panel_sections">设置区段</string>
+    <string name="side_panel_sections">设置侧边菜单</string>
+    <string name="boot_to_section">预设打开页面</string>
 </resources>
