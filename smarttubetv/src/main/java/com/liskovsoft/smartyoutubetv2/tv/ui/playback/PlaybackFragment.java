@@ -28,6 +28,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -140,6 +141,10 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         if ((Util.SDK_INT <= 23 || mPlayer == null)) {
             initializePlayer();
             mEventListener.onViewResumed();
+        }
+
+        if (getSurfaceView() != null && !getSurfaceView().isHardwareAccelerated()) {
+            MessageHelpers.showMessage(getContext(), "Oops. Seems that video hardware acceleration is disabled!");
         }
     }
 
