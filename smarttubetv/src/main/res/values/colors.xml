@@ -30,6 +30,10 @@
     <color name="icon_alt_background">#2A2F51</color>
     <color name="player_background">#FF000000</color>
 
-    <!-- Vine widget color -->
+    <!-- Vineyard -->
     <color name="black_87pc">#77000000</color>
+    <color name="primary_dark">#00796B</color>
+    <color name="primary_light">#B2DFDB</color>
+    <color name="primary">#009688</color>
+    <color name="white_87pc">#DDFFFFFF</color>
 </resources>

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.videocard.LoopingVideoView
+    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.vineyard.videoview.LoopingVideoView
         android:id="@+id/main_video"
         android:layout_width="175dp"
         android:layout_height="175dp"

@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.videocard;
+package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.vineyard.videoview;
 
 import android.content.Context;
 import android.util.AttributeSet;

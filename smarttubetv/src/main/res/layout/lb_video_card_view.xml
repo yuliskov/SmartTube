@@ -2,7 +2,7 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:lb="http://schemas.android.com/apk/res-auto">
 
-    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.videocard.PreviewCardView
+    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.vineyard.videoview.PreviewCardView
         android:id="@+id/layout_preview_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
