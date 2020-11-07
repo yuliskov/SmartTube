@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
@@ -27,12 +28,14 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.textbadgecard.TextBadgeImage
  */
 public class CardPresenter extends Presenter {
     private static final String TAG = CardPresenter.class.getSimpleName();
+    private static final float ZOOM_RATIO = 1.35f;
     private int mDefaultBackgroundColor = -1;
     private int mDefaultTextColor = -1;
     private int mSelectedBackgroundColor = -1;
     private int mSelectedTextColor = -1;
     private Drawable mDefaultCardImage;
     private boolean mIsAnimatedPreviewsEnabled;
+    private boolean mIsLargePreviewsEnabled;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
@@ -88,7 +91,11 @@ public class CardPresenter extends Presenter {
     public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object item) {
         Video video = (Video) item;
 
+        float zoomRatio = mIsLargePreviewsEnabled ? ZOOM_RATIO : 1;
+
         TextBadgeImageCardView cardView = (TextBadgeImageCardView) viewHolder.view;
+        Resources res = cardView.getResources();
+
         cardView.setTitleText(video.title);
         cardView.setContentText(video.description);
         cardView.setBadgeText(video.badge);
@@ -98,11 +105,30 @@ public class CardPresenter extends Presenter {
             cardView.setPreviewUrl(video.previewUrl);
         }
 
+        if (mIsLargePreviewsEnabled) {
+            float titleSize = res.getDimension(R.dimen.lb_basic_card_title_text_size);
+            float contentSize = res.getDimension(R.dimen.lb_basic_card_content_text_size);
+
+            TextView titleText = cardView.findViewById(R.id.title_text);
+            if (titleText != null) {
+                titleText.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize * zoomRatio);
+            }
+            TextView contentText = cardView.findViewById(R.id.content_text);
+            if (contentText != null) {
+                contentText.setTextSize(TypedValue.COMPLEX_UNIT_PX, contentSize * zoomRatio);
+            }
+        }
+
         if (video.cardImageUrl != null) {
             // Set card size from dimension resources.
-            Resources res = cardView.getResources();
             int width = res.getDimensionPixelSize(R.dimen.card_width);
             int height = res.getDimensionPixelSize(R.dimen.card_height);
+
+            if (mIsLargePreviewsEnabled) {
+                width *= zoomRatio;
+                height *= zoomRatio;
+            }
+
             cardView.setMainImageDimensions(width, height);
 
             Glide.with(cardView.getContext())

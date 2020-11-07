@@ -35,6 +35,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
     private VideoGroupPresenter mMainPresenter;
     private boolean mInvalidate;
     private int mSelectedItemIndex = -1;
+    private boolean mIsLargePreviewsEnabled;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,7 +72,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
 
     private void setupAdapter() {
         VerticalGridPresenter presenter = new VerticalGridPresenter(ZOOM_FACTOR, false);
-        presenter.setNumberOfColumns(COLUMNS_NUM);
+        presenter.setNumberOfColumns(mIsLargePreviewsEnabled ? 3 : COLUMNS_NUM);
         setGridPresenter(presenter);
 
         if (mGridAdapter == null) {
