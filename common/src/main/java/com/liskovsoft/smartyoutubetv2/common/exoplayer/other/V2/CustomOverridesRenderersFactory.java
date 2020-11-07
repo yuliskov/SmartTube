@@ -14,6 +14,8 @@ import com.google.android.exoplayer2.audio.MediaCodecAudioRenderer;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
+import com.google.android.exoplayer2.video.MediaCodecVideoRenderer;
+import com.google.android.exoplayer2.video.VideoRendererEventListener;
 
 import java.util.ArrayList;
 
@@ -56,19 +58,20 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
                 eventListener,
                 out);
 
-        Renderer mediaCodecAudioRenderer = null;
+        Renderer originMediaCodecAudioRenderer = null;
+        int index = 0;
 
         for (Renderer renderer : out) {
             if (renderer instanceof MediaCodecAudioRenderer) {
-                mediaCodecAudioRenderer = renderer;
+                originMediaCodecAudioRenderer = renderer;
                 break;
             }
+            index++;
         }
 
-        int index = out.indexOf(mediaCodecAudioRenderer);
-
-        if (index != -1) {
-            out.remove(mediaCodecAudioRenderer);
+        if (originMediaCodecAudioRenderer != null) {
+            // replace origin with custom
+            out.remove(originMediaCodecAudioRenderer);
             out.add(index,
                     new AudioDelayMediaCodecAudioRenderer(
                             context,
@@ -79,6 +82,57 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
                             eventHandler,
                             eventListener,
                             new DefaultAudioSink(AudioCapabilities.getCapabilities(context), audioProcessors)));
+        }
+    }
+
+    @Override
+    protected void buildVideoRenderers(Context context,
+                                       int extensionRendererMode,
+                                       MediaCodecSelector mediaCodecSelector,
+                                       @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager,
+                                       boolean playClearSamplesWithoutKeys,
+                                       boolean enableDecoderFallback,
+                                       Handler eventHandler,
+                                       VideoRendererEventListener eventListener,
+                                       long allowedVideoJoiningTimeMs,
+                                       ArrayList<Renderer> out) {
+        super.buildVideoRenderers(
+                context,
+                extensionRendererMode,
+                mediaCodecSelector,
+                drmSessionManager,
+                playClearSamplesWithoutKeys,
+                enableDecoderFallback,
+                eventHandler,
+                eventListener,
+                allowedVideoJoiningTimeMs,
+                out);
+
+        Renderer originMediaCodecVideoRenderer = null;
+        int index = 0;
+
+        for (Renderer renderer : out) {
+            if (renderer instanceof MediaCodecVideoRenderer) {
+                originMediaCodecVideoRenderer = renderer;
+                break;
+            }
+            index++;
+        }
+
+        if (originMediaCodecVideoRenderer != null) {
+            // replace origin with custom
+            out.remove(originMediaCodecVideoRenderer);
+            out.add(index,
+                    new FrameDropFixMediaCodecVideoRenderer(
+                            context,
+                            mediaCodecSelector,
+                            allowedVideoJoiningTimeMs,
+                            drmSessionManager,
+                            playClearSamplesWithoutKeys,
+                            enableDecoderFallback,
+                            eventHandler,
+                            eventListener,
+                            MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY));
         }
     }
 }
