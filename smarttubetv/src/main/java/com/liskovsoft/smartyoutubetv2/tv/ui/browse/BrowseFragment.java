@@ -37,7 +37,8 @@ import java.util.Map;
  */
 public class BrowseFragment extends BrowseSupportFragment implements BrowseView {
     private static final String TAG = BrowseFragment.class.getSimpleName();
-    private static final String SELECTED_POSITION = "SelectedPosition";
+    private static final String SELECTED_HEADER_INDEX = "SelectedHeaderIndex";
+    private static final String SELECTED_ITEM_INDEX = "SelectedItemIndex";
     private ArrayObjectAdapter mCategoryRowAdapter;
     private BrowsePresenter mBrowsePresenter;
     private Map<Integer, Category> mCategories;
@@ -45,13 +46,15 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private Handler mHandler;
     private ProgressBarManager mProgressBarManager;
     private boolean mIsFragmentCreated;
-    private int mSelectedPosition;
+    private int mSelectedHeaderIndex;
+    private int mSelectedItemIndex;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
 
-        mSelectedPosition = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_POSITION, -1) : -1;
+        mSelectedHeaderIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_HEADER_INDEX, -1) : -1;
+        mSelectedItemIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_ITEM_INDEX, -1) : -1;
         mIsFragmentCreated = true;
 
         mCategories = new LinkedHashMap<>();
@@ -72,7 +75,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         super.onSaveInstanceState(outState);
 
         // Store position in case activity is crashed
-        outState.putInt(SELECTED_POSITION, getSelectedPosition());
+        outState.putInt(SELECTED_HEADER_INDEX, getSelectedPosition());
+        outState.putInt(SELECTED_ITEM_INDEX, mCategoryFragmentFactory.getCurrentFragmentItemIndex());
     }
 
     @Override
@@ -95,7 +99,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mBrowsePresenter.onInitDone();
 
         // Restore state after crash
-        selectCategory(mSelectedPosition);
+        selectCategory(mSelectedHeaderIndex);
+        selectItem(mSelectedItemIndex);
     }
 
     private void setupAdapter() {
@@ -228,6 +233,13 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     public void selectCategory(int index) {
         if (index >= 0 && index < mCategoryRowAdapter.size()) {
             setSelectedPosition(index);
+        }
+    }
+
+    @Override
+    public void selectItem(int index) {
+        if (index >= 0) {
+            mCategoryFragmentFactory.setCurrentFragmentItemIndex(index);
         }
     }
 

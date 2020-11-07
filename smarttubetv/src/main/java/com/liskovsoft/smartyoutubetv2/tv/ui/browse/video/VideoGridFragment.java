@@ -34,6 +34,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
     private UriBackgroundManager mBackgroundManager;
     private VideoGroupPresenter mMainPresenter;
     private boolean mInvalidate;
+    private int mSelectedItemIndex = -1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,6 +81,24 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
     }
 
     @Override
+    public int getItemIndex() {
+        return getSelectedPosition();
+    }
+
+    @Override
+    public void setItemIndex(int index) {
+        if (index < 0) {
+            return;
+        }
+
+        if (mGridAdapter != null && index < mGridAdapter.size()) {
+            setSelectedPosition(index);
+        } else {
+            mSelectedItemIndex = index;
+        }
+    }
+
+    @Override
     public void update(VideoGroup group) {
         if (mGridAdapter == null) {
             mPendingUpdates.add(group);
@@ -92,6 +111,8 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
         }
         
         mGridAdapter.append(group);
+
+        setItemIndex(mSelectedItemIndex);
     }
 
     @Override

@@ -25,6 +25,7 @@ public class CategoryFragmentFactory extends BrowseSupportFragment.FragmentFacto
     private final List<VideoGroup> mCachedData;
     private Fragment mCurrentFragment;
     private int mFragmentType = Category.TYPE_GRID;
+    private int mSelectedItemIndex = -1;
 
     public CategoryFragmentFactory() {
         this(null);
@@ -68,7 +69,8 @@ public class CategoryFragmentFactory extends BrowseSupportFragment.FragmentFacto
                 mViewSelectedListener.onHeaderSelected(null, row);
             }
 
-            updateVideoFragmentFromCache(fragment);
+            updateCurrentFragmentFromCache();
+            restoreItemIndex();
 
             return fragment;
         }
@@ -108,33 +110,11 @@ public class CategoryFragmentFactory extends BrowseSupportFragment.FragmentFacto
         updateVideoFragment(mCurrentFragment, group);
     }
 
-    private void updateVideoFragment(Fragment fragment, VideoGroup group) {
-        if (fragment instanceof VideoCategoryFragment) {
-            ((VideoCategoryFragment) fragment).update(group);
-        } else {
-            Log.e(TAG, "updateFragment: Page group fragment has incompatible type: " + fragment.getClass().getSimpleName());
-        }
-    }
-
-    private void updateVideoFragmentFromCache(Fragment fragment) {
-        for (VideoGroup group : mCachedData) {
-            updateVideoFragment(fragment, group);
-        }
-    }
-
     public void clearCurrentFragment() {
         mCachedData.clear();
 
         if (mCurrentFragment != null) {
             clearFragment(mCurrentFragment);
-        }
-    }
-
-    private void clearFragment(Fragment fragment) {
-        if (fragment instanceof CategoryFragment) {
-            ((CategoryFragment) fragment).invalidate();
-        } else {
-            Log.e(TAG, "clearFragment: Page group fragment has incompatible type: " + fragment.getClass().getSimpleName());
         }
     }
 
@@ -148,5 +128,52 @@ public class CategoryFragmentFactory extends BrowseSupportFragment.FragmentFacto
 
     public Fragment getCurrentFragment() {
         return mCurrentFragment;
+    }
+
+    public int getCurrentFragmentItemIndex() {
+        if (mCurrentFragment instanceof VideoCategoryFragment) {
+            return ((VideoCategoryFragment) mCurrentFragment).getItemIndex();
+        }
+
+        return -1;
+    }
+
+    public void setCurrentFragmentItemIndex(int index) {
+        if (mCurrentFragment instanceof VideoCategoryFragment) {
+            ((VideoCategoryFragment) mCurrentFragment).setItemIndex(index);
+        } else {
+            mSelectedItemIndex = index;
+        }
+    }
+
+    private void updateVideoFragment(Fragment fragment, VideoGroup group) {
+        if (fragment instanceof VideoCategoryFragment) {
+            ((VideoCategoryFragment) fragment).update(group);
+        } else {
+            Log.e(TAG, "updateFragment: Page group fragment has incompatible type: " + fragment.getClass().getSimpleName());
+        }
+    }
+
+    private void updateCurrentFragmentFromCache() {
+        if (mCurrentFragment == null) {
+            return;
+        }
+
+        for (VideoGroup group : mCachedData) {
+            updateVideoFragment(mCurrentFragment, group);
+        }
+    }
+
+    private void clearFragment(Fragment fragment) {
+        if (fragment instanceof CategoryFragment) {
+            ((CategoryFragment) fragment).invalidate();
+        } else {
+            Log.e(TAG, "clearFragment: Page group fragment has incompatible type: " + fragment.getClass().getSimpleName());
+        }
+    }
+
+    private void restoreItemIndex() {
+        setCurrentFragmentItemIndex(mSelectedItemIndex);
+        mSelectedItemIndex = -1;
     }
 }
