@@ -109,7 +109,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        // ProgressBar.setRootView is called in this moment
+        // ProgressBar.setRootView already called at this moment
         ProgressBarManager.setup(getProgressBarManager(), (ViewGroup) view);
 
         return view;
@@ -141,10 +141,6 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         if ((Util.SDK_INT <= 23 || mPlayer == null)) {
             initializePlayer();
             mEventListener.onViewResumed();
-        }
-
-        if (getSurfaceView() != null && !getSurfaceView().isHardwareAccelerated()) {
-            MessageHelpers.showMessage(getContext(), "Oops. Seems that video hardware acceleration is disabled!");
         }
     }
 
@@ -228,9 +224,17 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             return;
         }
 
+        //testHardwareAcceleration();
+
         createPlayerObjects();
 
         mEventListener.onEngineInitialized();
+    }
+
+    private void testHardwareAcceleration() {
+        if (getSurfaceView() != null && !getSurfaceView().isHardwareAccelerated()) {
+            MessageHelpers.showMessage(getContext(), "Oops. Seems that video hardware acceleration is disabled!");
+        }
     }
 
     private void destroyPlayerObjects() {
