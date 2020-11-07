@@ -58,7 +58,7 @@
     <string name="default_lang">Mặc định</string>
     <string name="dialog_select_language">Ngôn ngữ ứng dụng</string>
     <string name="subtitle_default">Mặc định</string>
-    <string name="subtitle_semi_transparent_bg">Nửa trong suốt</string>
+    <string name="subtitle_semi_transparent_bg">Nền nửa trong suốt</string>
     <string name="subtitle_style">Kiểu phụ đề</string>
     <string name="subtitle_language">Ngôn ngữ phụ đề</string>
     <string name="action_search">Bắt đầu tìm kiếm</string>
@@ -68,17 +68,18 @@
     <string name="web_site">Trang web</string>
     <string name="donation">Ủng hộ</string>
     <string name="dialog_about">Giới thiệu</string>
-    <string name="dialog_player_ui">Trình chơi video</string>
+    <string name="dialog_player_ui">Trình phát video</string>
     <string name="player_show_ui_on_pause">Hiện giao diện khi tạm dừng</string>
     <string name="player_pause_on_ok">Nhấn OK để tạm dừng</string>
-    <string name="player_ok_button_behavior">Hành vi nút OK</string>
+    <string name="player_ok_button_behavior">Chức năng phím OK</string>
     <string name="player_only_ui">Chỉ Giao diện</string>
     <string name="player_ui_and_pause">Giao diện và tạm dừng</string>
     <string name="player_only_pause">Chỉ tạm dừng</string>
     <string name="check_for_updates">Kiểm tra cập nhật</string>
-    <string name="update_not_found">Phiên bản bạn đang sử dụng là mới nhất</string>
+    <string name="update_not_found">Phiên bản hiện tại là mới nhất</string>
     <string name="update_in_progess">Xin hãy đợi…</string>
     <string name="player_ui_hide_behavior">Tự động ẩn giao diện</string>
     <string name="player_ui_hide_never">Không bao giờ</string>
-    <string name="side_panel_sections">Các cài đặt khác</string>
+    <string name="side_panel_sections">Cài đặt khác</string>
+    <string name="boot_to_section">Mặc định khi khởi động</string>
 </resources>
