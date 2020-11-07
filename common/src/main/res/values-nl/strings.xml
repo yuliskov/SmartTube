@@ -82,4 +82,5 @@
     <string name="player_ui_hide_never">Nooit</string>
     <string name="side_panel_sections">Rubrieken</string>
     <string name="boot_to_section">Starten bij rubriek</string>
+    <string name="large_ui">Grotere weergave</string>
 </resources>
