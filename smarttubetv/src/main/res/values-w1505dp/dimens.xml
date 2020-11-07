@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 1080p TV with 280dpi -->
-    <!-- Example: width in dp = width in pixle / (dpi/160) dp = 1920/(280/160) =~ 1097 -->
-    <!-- Create drawable-w1097dp -->
+    <!-- 1080p TV with 204dpi -->
+    <!-- Example: width in dp = width in pixle / (dpi/160) dp = 1920/(204/160) =~ 1505 -->
 
-    <dimen name="card_width">231dp</dimen>
-    <dimen name="card_height">133dp</dimen>
+    <dimen name="card_width">280dp</dimen>
+    <dimen name="card_height">165dp</dimen>
 
     <!-- Increase card view text size for some low dpi devices -->
-    <dimen name="lb_basic_card_title_text_size">20sp</dimen>
-    <dimen name="lb_basic_card_content_text_size">18sp</dimen>
+    <dimen name="lb_basic_card_title_text_size">23sp</dimen>
+    <dimen name="lb_basic_card_content_text_size">20sp</dimen>
 
     <!-- Elements below aren't used in the app -->
 
