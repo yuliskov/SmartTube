@@ -15,6 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
@@ -35,7 +36,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
     private VideoGroupPresenter mMainPresenter;
     private boolean mInvalidate;
     private int mSelectedItemIndex = -1;
-    private boolean mIsLargePreviewsEnabled;
+    private boolean mIsLargeUIEnabled;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
 
         mMainPresenter = getMainPresenter();
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
+        mIsLargeUIEnabled = MainUIData.instance(getActivity()).isLargeUIEnabled();
 
         setupAdapter();
         setupEventListeners();
@@ -72,7 +74,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
 
     private void setupAdapter() {
         VerticalGridPresenter presenter = new VerticalGridPresenter(ZOOM_FACTOR, false);
-        presenter.setNumberOfColumns(mIsLargePreviewsEnabled ? 3 : COLUMNS_NUM);
+        presenter.setNumberOfColumns(mIsLargeUIEnabled ? 3 : COLUMNS_NUM);
         setGridPresenter(presenter);
 
         if (mGridAdapter == null) {

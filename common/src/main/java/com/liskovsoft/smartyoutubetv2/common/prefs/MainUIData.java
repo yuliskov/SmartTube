@@ -17,9 +17,10 @@ public class MainUIData {
     private final Context mContext;
     private final AppPrefs mPrefs;
     private boolean mIsAnimatedPreviewsEnabled;
-    private int mBootToCategoryId;
+    private int mBootCategoryId;
     private final Map<Integer, Integer> mLeftPanelCategories = new LinkedHashMap<>();
     private final Set<Integer> mEnabledLeftPanelCategories = new HashSet<>();
+    private boolean mIsLargeUIEnabled;
 
     public MainUIData(Context context) {
         mContext = context;
@@ -49,7 +50,7 @@ public class MainUIData {
         return mLeftPanelCategories;
     }
 
-    public void setCategoryEnabled(int categoryId, boolean enabled) {
+    public void enableCategory(int categoryId, boolean enabled) {
         if (enabled) {
             mEnabledLeftPanelCategories.add(categoryId);
         } else {
@@ -63,14 +64,24 @@ public class MainUIData {
         return mEnabledLeftPanelCategories.contains(categoryId);
     }
 
-    public void setBootToCategoryId(int categoryId) {
-        mBootToCategoryId = categoryId;
+    public void setBootCategoryId(int categoryId) {
+        mBootCategoryId = categoryId;
 
         persistState();
     }
 
-    public int getBootToCategoryId() {
-        return mBootToCategoryId;
+    public int getBootCategoryId() {
+        return mBootCategoryId;
+    }
+
+    public void enableLargeUI(boolean enabled) {
+        mIsLargeUIEnabled = enabled;
+
+        persistState();
+    }
+
+    public boolean isLargeUIEnabled() {
+        return mIsLargeUIEnabled;
     }
 
     private void initLeftPanelCategories() {
@@ -86,7 +97,7 @@ public class MainUIData {
 
     private void persistState() {
         String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
-        mPrefs.setMainUIData(Helpers.mergeObject(mIsAnimatedPreviewsEnabled, selectedCategories, mBootToCategoryId));
+        mPrefs.setMainUIData(Helpers.mergeObject(mIsAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mIsLargeUIEnabled));
     }
 
     private void restoreState() {
@@ -96,7 +107,8 @@ public class MainUIData {
 
         mIsAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0, true);
         String selectedCategories = Helpers.parseStr(split, 1);
-        mBootToCategoryId = Helpers.parseInt(split, 2, MediaGroup.TYPE_HOME);
+        mBootCategoryId = Helpers.parseInt(split, 2, MediaGroup.TYPE_HOME);
+        mIsLargeUIEnabled = Helpers.parseBoolean(split, 3, false);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArray(selectedCategories);

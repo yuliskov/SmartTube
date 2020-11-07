@@ -31,6 +31,7 @@ public class MainUISettingsPresenter {
         settingsPresenter.clear();
 
         appendAnimatedPreviews(settingsPresenter);
+        appendLargeUI(settingsPresenter);
         appendLeftPanelCategories(settingsPresenter);
         appendBootToCategory(settingsPresenter);
 
@@ -44,6 +45,13 @@ public class MainUISettingsPresenter {
         settingsPresenter.appendSingleSwitch(animatedPreviewsOption);
     }
 
+    private void appendLargeUI(AppSettingsPresenter settingsPresenter) {
+        OptionItem animatedPreviewsOption = UiOptionItem.from(mContext.getString(R.string.large_ui),
+                option -> mMainUIData.enableLargeUI(option.isSelected()), mMainUIData.isLargeUIEnabled());
+
+        settingsPresenter.appendSingleSwitch(animatedPreviewsOption);
+    }
+
     private void appendLeftPanelCategories(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
@@ -51,7 +59,7 @@ public class MainUISettingsPresenter {
 
         for (Entry<Integer, Integer> category : leftPanelCategories.entrySet()) {
              options.add(UiOptionItem.from(mContext.getString(category.getKey()), optionItem -> {
-                 mMainUIData.setCategoryEnabled(category.getValue(), optionItem.isSelected());
+                 mMainUIData.enableCategory(category.getValue(), optionItem.isSelected());
                  BrowsePresenter.instance(mContext).updateCategories();
              }, mMainUIData.isCategoryEnabled(category.getValue())));
         }
@@ -66,8 +74,8 @@ public class MainUISettingsPresenter {
 
         for (Entry<Integer, Integer> category : leftPanelCategories.entrySet()) {
             options.add(UiOptionItem.from(mContext.getString(category.getKey()),
-            optionItem -> mMainUIData.setBootToCategoryId(category.getValue()),
-            category.getValue().equals(mMainUIData.getBootToCategoryId())));
+            optionItem -> mMainUIData.setBootCategoryId(category.getValue()),
+            category.getValue().equals(mMainUIData.getBootCategoryId())));
         }
 
         settingsPresenter.appendRadioCategory(mContext.getString(R.string.boot_to_section), options);

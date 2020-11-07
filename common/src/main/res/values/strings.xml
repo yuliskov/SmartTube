@@ -82,4 +82,5 @@
     <string name="player_ui_hide_never">Never</string>
     <string name="side_panel_sections">Set-up sections</string>
     <string name="boot_to_section">Boot to section</string>
+    <string name="large_ui">Large UI</string>
 </resources>

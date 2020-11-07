@@ -159,7 +159,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
             category.setEnabled(category.getId() == MediaGroup.TYPE_SETTINGS || mMainUIData.isCategoryEnabled(category.getId()));
 
             if (category.isEnabled()) {
-                if (category.getId() == mMainUIData.getBootToCategoryId()) {
+                if (category.getId() == mMainUIData.getBootCategoryId()) {
                     mBootToIndex = index;
                 }
                 mView.addCategory(index++, category);

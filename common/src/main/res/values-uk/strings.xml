@@ -82,4 +82,5 @@
     <string name="player_ui_hide_never">Ніколи</string>
     <string name="side_panel_sections">Налаштувати розділи</string>
     <string name="boot_to_section">Завантажуватися у розділ</string>
+    <string name="large_ui">Збільшений інтерфейс</string>
 </resources>
