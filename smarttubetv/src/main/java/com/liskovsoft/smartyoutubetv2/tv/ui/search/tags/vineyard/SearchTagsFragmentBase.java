@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +18,10 @@ import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.SpeechRecognitionCallback;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.models.search.SearchTagsProvider;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.PaginationAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.TagAdapter;
-import com.liskovsoft.smartyoutubetv2.common.app.models.search.SearchTagsProvider;
-import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
-import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.ProgressBarManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.SearchSupportFragment;
 import com.liskovsoft.smartyoutubetv2.tv.util.vineyard.NetworkUtil;
@@ -34,33 +31,26 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         implements SearchSupportFragment.SearchResultProvider, SearchView {
     private static final String TAG = SearchTagsFragmentBase.class.getSimpleName();
     private static final int REQUEST_SPEECH = 0x00000010;
-
-    private DisplayMetrics mMetrics;
+    
     private Handler mHandler;
-    private Object mSelectedTag;
     private TagAdapter mSearchTagsAdapter;
     private ObjectAdapter mItemResultsAdapter;
     private ArrayObjectAdapter mResultsAdapter;
 
     private String mSearchQuery;
-    private String mTagSearchAnchor;
-    private String mUserSearchAnchor;
     private boolean mIsStopping;
     private SearchTagsProvider mSearchTagsProvider;
-    private UriBackgroundManager mBackgroundManager;
     private ProgressBarManager mProgressBarManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
+        mProgressBarManager = new ProgressBarManager();
         mResultsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         mSearchTagsAdapter = new TagAdapter(getActivity(), "");
-        mProgressBarManager = new ProgressBarManager();
         mHandler = new Handler();
         setSearchResultProvider(this);
-        setupMetrics();
         setupListeners();
     }
 
@@ -147,11 +137,6 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         return mResultsAdapter.size() > 0;
     }
 
-    private void setupMetrics() {
-        mMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(mMetrics);
-    }
-
     private void setupListeners() {
         setOnItemViewClickedListener((itemViewHolder, item, rowViewHolder, row) -> onItemViewClicked(item));
         setOnItemViewSelectedListener((itemViewHolder, item, rowViewHolder, row) -> onItemViewSelected(item));
@@ -159,10 +144,14 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
             setSpeechRecognitionCallback(new SpeechRecognitionCallback() {
                 @Override
                 public void recognizeSpeech() {
-                    try {
-                        startActivityForResult(getRecognizerIntent(), REQUEST_SPEECH);
-                    } catch (ActivityNotFoundException e) {
-                        Log.e(TAG, "Cannot find activity for speech recognizer", e);
+                    if (isAdded()) {
+                        try {
+                            startActivityForResult(getRecognizerIntent(), REQUEST_SPEECH);
+                        } catch (ActivityNotFoundException e) {
+                            Log.e(TAG, "Cannot find activity for speech recognizer", e);
+                        }
+                    } else {
+                        Log.e(TAG, "Can't perform search. Fragment is detached.");
                     }
                 }
             });
@@ -202,263 +191,4 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         String query = adapter.getAdapterOptions().get(PaginationAdapter.KEY_TAG);
         mSearchTagsProvider.search(query, adapter::addAllItems);
     }
-
-    //private void performSearch(final PaginationAdapter adapter) {
-    //    if (adapter.shouldShowLoadingIndicator()) {
-    //        adapter.showLoadingIndicator();
-    //    }
-    //    if (mPostResultsAdapter != null) mPostResultsAdapter.clear();
-    //    adapter.clear();
-    //
-    //    Map<String, String> options = adapter.getAdapterOptions();
-    //    String tag = options.get(PaginationAdapter.KEY_TAG);
-    //    String nextPage = options.get(PaginationAdapter.KEY_NEXT_PAGE);
-    //
-    //    Observable<VineyardService.KeywordSearchResponse> observable =
-    //            mDataManager.search(
-    //                    tag, nextPage, mTagSearchAnchor, nextPage, mUserSearchAnchor);
-    //
-    //    mSearchResultsSubscription = observable
-    //            .observeOn(AndroidSchedulers.mainThread())
-    //            .subscribeOn(Schedulers.io())
-    //            .unsubscribeOn(Schedulers.io())
-    //            .subscribe(new Subscriber<VineyardService.KeywordSearchResponse>() {
-    //                @Override
-    //                public void onCompleted() {
-    //                    adapter.removeLoadingIndicator();
-    //                }
-    //
-    //                @Override
-    //                public void onError(Throwable e) {
-    //                    //TODO: Handle error
-    //                    adapter.removeLoadingIndicator();
-    //                    Toast.makeText(
-    //                            getActivity(),
-    //                            getString(R.string.error_message_retrieving_results),
-    //                            Toast.LENGTH_SHORT
-    //                    ).show();
-    //                    Timber.e("There was an error loading the videos", e);
-    //                }
-    //
-    //                @Override
-    //                public void onNext(VineyardService.KeywordSearchResponse dualResponse) {
-    //                    if (dualResponse.list.isEmpty()) {
-    //                        mResultsAdapter.clear();
-    //                        mResultsHeader = new HeaderItem(0, getString(R.string.text_no_results));
-    //                        mResultsAdapter.add(new ListRow(mResultsHeader, adapter));
-    //                        mTagSearchAnchor = "";
-    //                        mUserSearchAnchor = "";
-    //                    } else {
-    //                        adapter.addAllItems(dualResponse.list);
-    //                        mTagSearchAnchor = dualResponse.tagSearchAnchor;
-    //                        mUserSearchAnchor = dualResponse.userSearchAnchor;
-    //                    }
-    //                }
-    //            });
-    //}
-
-    //private void addPageLoadSubscriptionByTag(final PaginationAdapter adapter) {
-    //    if (adapter.shouldShowLoadingIndicator()) adapter.showLoadingIndicator();
-    //
-    //    Map<String, String> options = adapter.getAdapterOptions();
-    //    String tag = options.get(PaginationAdapter.KEY_TAG);
-    //    String anchor = options.get(PaginationAdapter.KEY_ANCHOR);
-    //    String nextPage = options.get(PaginationAdapter.KEY_NEXT_PAGE);
-    //
-    //    mTagSubscription = mDataManager.getPostsByTag(tag, nextPage, anchor)
-    //            .observeOn(AndroidSchedulers.mainThread())
-    //            .subscribeOn(Schedulers.io())
-    //            .unsubscribeOn(Schedulers.io())
-    //            .subscribe(new Subscriber<VineyardService.PostResponse>() {
-    //                @Override
-    //                public void onCompleted() {
-    //                }
-    //
-    //                @Override
-    //                public void onError(Throwable e) {
-    //                    adapter.removeLoadingIndicator();
-    //                    if (adapter.size() == 0) {
-    //                        adapter.showTryAgainCard();
-    //                    } else {
-    //                        Toast.makeText(
-    //                                getActivity(),
-    //                                getString(R.string.error_message_loading_more_posts),
-    //                                Toast.LENGTH_SHORT
-    //                        ).show();
-    //                    }
-    //                    Timber.e("There was an error loading the posts", e);
-    //                }
-    //
-    //                @Override
-    //                public void onNext(VineyardService.PostResponse postResponse) {
-    //                    adapter.removeLoadingIndicator();
-    //                    if (adapter.size() == 0 && postResponse.data.records.isEmpty()) {
-    //                        adapter.showReloadCard();
-    //                    } else {
-    //                        adapter.setAnchor(postResponse.data.anchorStr);
-    //                        adapter.setNextPage(postResponse.data.nextPage);
-    //                        adapter.addAllItems(postResponse.data.records);
-    //                    }
-    //                }
-    //            });
-    //}
-
-    //private void addPageLoadSubscriptionByUser(final PaginationAdapter adapter) {
-    //    if (adapter.shouldShowLoadingIndicator()) adapter.showLoadingIndicator();
-    //
-    //    Map<String, String> options = adapter.getAdapterOptions();
-    //    String tag = options.get(PaginationAdapter.KEY_TAG);
-    //    String anchor = options.get(PaginationAdapter.KEY_ANCHOR);
-    //    String nextPage = options.get(PaginationAdapter.KEY_NEXT_PAGE);
-    //
-    //    mUserSubscription = mDataManager.getPostsByUser(tag, nextPage, anchor)
-    //            .observeOn(AndroidSchedulers.mainThread())
-    //            .subscribeOn(Schedulers.io())
-    //            .unsubscribeOn(Schedulers.io())
-    //            .subscribe(new Subscriber<VineyardService.PostResponse>() {
-    //                @Override
-    //                public void onCompleted() {
-    //                }
-    //
-    //                @Override
-    //                public void onError(Throwable e) {
-    //                    adapter.removeLoadingIndicator();
-    //                    if (adapter.size() == 0) {
-    //                        adapter.showTryAgainCard();
-    //                    } else {
-    //                        Toast.makeText(
-    //                                getActivity(),
-    //                                getString(R.string.error_message_loading_more_posts),
-    //                                Toast.LENGTH_SHORT
-    //                        ).show();
-    //                    }
-    //                    Timber.e("There was an error loading the posts", e);
-    //                }
-    //
-    //                @Override
-    //                public void onNext(VineyardService.PostResponse postResponse) {
-    //                    adapter.removeLoadingIndicator();
-    //                    if (adapter.size() == 0 && postResponse.data.records.isEmpty()) {
-    //                        adapter.showReloadCard();
-    //                    } else {
-    //                        adapter.setAnchor(postResponse.data.anchorStr);
-    //                        adapter.setNextPage(postResponse.data.nextPage);
-    //                        adapter.addAllItems(postResponse.data.records);
-    //                    }
-    //                }
-    //            });
-    //}
-
-    //private void showNetworkUnavailableToast() {
-    //    ToastFactory.createWifiErrorToast(getActivity()).show();
-    //}
-    //
-    //private void setListAdapterData(String title, String tag) {
-    //    if (mPostResultsAdapter != null) {
-    //        mResultsAdapter.remove(mPostResultsAdapter);
-    //    }
-    //    if (mPostResultsAdapter == null) {
-    //        mPostResultsAdapter = new PostAdapter(getActivity(), tag);
-    //    }
-    //    mResultsAdapter.removeItems(1, 1);
-    //    final HeaderItem postResultsHeader = new HeaderItem(1, getString(R.string.text_post_results_title, title));
-    //    new Handler().post(new Runnable() {
-    //        @Override
-    //        public void run() {
-    //            mResultsAdapter.add(new ListRow(postResultsHeader, mPostResultsAdapter));
-    //        }
-    //    });
-    //
-    //    mPostResultsAdapter.setTag(tag);
-    //    mPostResultsAdapter.setAnchor("");
-    //    mPostResultsAdapter.setNextPage(1);
-    //    if (!mPostResultsAdapter.shouldShowLoadingIndicator()) {
-    //        mPostResultsAdapter.removeItems(1, mPostResultsAdapter.size() - 2);
-    //    } else {
-    //        mPostResultsAdapter.clear();
-    //    }
-    //}
-
-    //private OnItemViewClickedListener mOnItemViewClickedListener = new OnItemViewClickedListener() {
-    //    @Override
-    //    public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
-    //                              RowPresenter.ViewHolder rowViewHolder, Row row) {
-    //        if (item instanceof Post) {
-    //            if (NetworkUtil.isNetworkConnected(getActivity())) {
-    //                Post post = (Post) item;
-    //                int index = mResultsAdapter.indexOf(row);
-    //                PostAdapter arrayObjectAdapter =
-    //                        ((PostAdapter) ((ListRow) mResultsAdapter.get(index)).getAdapter());
-    //                ArrayList<Post> postList = (ArrayList<Post>) arrayObjectAdapter.getAllItems();
-    //                startActivity(PlaybackActivity.newStartIntent(getActivity(), post, postList));
-    //            } else {
-    //                showNetworkUnavailableToast();
-    //            }
-    //        } else if (item instanceof Tag) {
-    //            if (NetworkUtil.isNetworkConnected(getActivity())) {
-    //                Tag tag = (Tag) item;
-    //                startActivity(PostGridActivity.getStartIntent(getActivity(), tag));
-    //            } else {
-    //                showNetworkUnavailableToast();
-    //            }
-    //        } else if (item instanceof User) {
-    //            if (NetworkUtil.isNetworkConnected(getActivity())) {
-    //                User user = (User) item;
-    //                startActivity(PostGridActivity.getStartIntent(getActivity(), user));
-    //            } else {
-    //                showNetworkUnavailableToast();
-    //            }
-    //        } else if (item instanceof Option) {
-    //            Option option = (Option) item;
-    //            if (option.title.equals(getString(R.string.message_check_again)) ||
-    //                    option.title.equals(getString(R.string.message_try_again))) {
-    //                int index = mResultsAdapter.indexOf(row);
-    //                PostAdapter adapter =
-    //                        ((PostAdapter) ((ListRow) mResultsAdapter.get(index)).getAdapter());
-    //                adapter.removeReloadCard();
-    //                if (mSelectedTag instanceof Tag) {
-    //                    addPageLoadSubscriptionByTag(adapter);
-    //                } else if (mSelectedTag instanceof User) {
-    //                    addPageLoadSubscriptionByUser(adapter);
-    //                }
-    //            }
-    //        }
-    //    }
-    //};
-
-    //private OnItemViewSelectedListener mOnItemViewSelectedListener = new OnItemViewSelectedListener() {
-    //    @Override
-    //    public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
-    //                               RowPresenter.ViewHolder rowViewHolder, Row row) {
-    //        if (item instanceof Tag || item instanceof User) {
-    //            boolean isValid = true;
-    //            if (mSelectedTag != null && mSelectedTag.equals(item)) isValid = false;
-    //            mSelectedTag = item;
-    //            if (isValid) {
-    //                int index = mResultsAdapter.indexOf(row);
-    //                PaginationAdapter adapter =
-    //                        ((PaginationAdapter) ((ListRow) mResultsAdapter.get(index)).getAdapter());
-    //
-    //                if (item instanceof Tag) {
-    //                    Tag tagOne = (Tag) item;
-    //                    String tag = tagOne.tag;
-    //                    adapter.setTag(tag);
-    //
-    //                    setListAdapterData(tag, tag);
-    //                    addPageLoadSubscriptionByTag(mPostResultsAdapter);
-    //                } else {
-    //                    User user = (User) item;
-    //                    String userId = user.userId;
-    //                    adapter.setTag(userId);
-    //
-    //                    setListAdapterData(user.username, userId);
-    //                    addPageLoadSubscriptionByUser(mPostResultsAdapter);
-    //                }
-    //            }
-    //        } else if (item instanceof Post) {
-    //            String backgroundUrl = ((Post) item).thumbnailUrl;
-    //            if (backgroundUrl != null) startBackgroundTimer(URI.create(backgroundUrl));
-    //        }
-    //    }
-    //};
 }
