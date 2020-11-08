@@ -85,54 +85,54 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
         }
     }
 
-    @Override
-    protected void buildVideoRenderers(Context context,
-                                       int extensionRendererMode,
-                                       MediaCodecSelector mediaCodecSelector,
-                                       @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager,
-                                       boolean playClearSamplesWithoutKeys,
-                                       boolean enableDecoderFallback,
-                                       Handler eventHandler,
-                                       VideoRendererEventListener eventListener,
-                                       long allowedVideoJoiningTimeMs,
-                                       ArrayList<Renderer> out) {
-        super.buildVideoRenderers(
-                context,
-                extensionRendererMode,
-                mediaCodecSelector,
-                drmSessionManager,
-                playClearSamplesWithoutKeys,
-                enableDecoderFallback,
-                eventHandler,
-                eventListener,
-                allowedVideoJoiningTimeMs,
-                out);
-
-        Renderer originMediaCodecVideoRenderer = null;
-        int index = 0;
-
-        for (Renderer renderer : out) {
-            if (renderer instanceof MediaCodecVideoRenderer) {
-                originMediaCodecVideoRenderer = renderer;
-                break;
-            }
-            index++;
-        }
-
-        if (originMediaCodecVideoRenderer != null) {
-            // replace origin with custom
-            out.remove(originMediaCodecVideoRenderer);
-            out.add(index,
-                    new FrameDropFixMediaCodecVideoRenderer(
-                            context,
-                            mediaCodecSelector,
-                            allowedVideoJoiningTimeMs,
-                            drmSessionManager,
-                            playClearSamplesWithoutKeys,
-                            enableDecoderFallback,
-                            eventHandler,
-                            eventListener,
-                            MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY));
-        }
-    }
+    //@Override
+    //protected void buildVideoRenderers(Context context,
+    //                                   int extensionRendererMode,
+    //                                   MediaCodecSelector mediaCodecSelector,
+    //                                   @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager,
+    //                                   boolean playClearSamplesWithoutKeys,
+    //                                   boolean enableDecoderFallback,
+    //                                   Handler eventHandler,
+    //                                   VideoRendererEventListener eventListener,
+    //                                   long allowedVideoJoiningTimeMs,
+    //                                   ArrayList<Renderer> out) {
+    //    super.buildVideoRenderers(
+    //            context,
+    //            extensionRendererMode,
+    //            mediaCodecSelector,
+    //            drmSessionManager,
+    //            playClearSamplesWithoutKeys,
+    //            enableDecoderFallback,
+    //            eventHandler,
+    //            eventListener,
+    //            allowedVideoJoiningTimeMs,
+    //            out);
+    //
+    //    Renderer originMediaCodecVideoRenderer = null;
+    //    int index = 0;
+    //
+    //    for (Renderer renderer : out) {
+    //        if (renderer instanceof MediaCodecVideoRenderer) {
+    //            originMediaCodecVideoRenderer = renderer;
+    //            break;
+    //        }
+    //        index++;
+    //    }
+    //
+    //    if (originMediaCodecVideoRenderer != null) {
+    //        // replace origin with custom
+    //        out.remove(originMediaCodecVideoRenderer);
+    //        out.add(index,
+    //                new FrameDropFixMediaCodecVideoRenderer(
+    //                        context,
+    //                        mediaCodecSelector,
+    //                        allowedVideoJoiningTimeMs,
+    //                        drmSessionManager,
+    //                        playClearSamplesWithoutKeys,
+    //                        enableDecoderFallback,
+    //                        eventHandler,
+    //                        eventListener,
+    //                        MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY));
+    //    }
+    //}
 }
