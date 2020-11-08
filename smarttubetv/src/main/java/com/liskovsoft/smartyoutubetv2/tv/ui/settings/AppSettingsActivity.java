@@ -3,11 +3,11 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.settings;
 import android.content.pm.ActivityInfo;
 import android.os.Build.VERSION;
 import android.os.Bundle;
-import androidx.fragment.app.FragmentActivity;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.ui.common.MotherActivity;
 
-public class AppSettingsActivity extends FragmentActivity {
+public class AppSettingsActivity extends MotherActivity {
     private static final String TAG = AppSettingsActivity.class.getSimpleName();
     private AppSettingsFragment mFragment;
 

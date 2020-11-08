@@ -2,27 +2,23 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.common;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import androidx.fragment.app.FragmentActivity;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.locale.LangHelper;
 import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
 import com.liskovsoft.smartyoutubetv2.common.language.LangUpdater;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.DoubleBackManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.LongClickManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
 
 /**
  * This parent class contains common methods that run in every activity such as search.
  */
-public abstract class LeanbackActivity extends FragmentActivity {
+public abstract class LeanbackActivity extends MotherActivity {
     private static final String TAG = LeanbackActivity.class.getSimpleName();
     private LongClickManager mLongClickManager;
     private UriBackgroundManager mBackgroundManager;
