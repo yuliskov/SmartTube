@@ -42,7 +42,7 @@
     <string name="dialog_add_to_playlist">Toevoegen aan playlist</string>
     <string name="msg_signed_users_only">Enkel voor aangemelde gebruikers</string>
     <string name="msg_cant_load_content">Kan inhoud niet laden</string>
-    <string name="title_video_presets">Video presets</string>
+    <string name="title_video_presets">Video preset</string>
     <string name="settings_accounts">Accounts</string>
     <string name="settings_left_panel">Rubrieken</string>
     <string name="settings_themes">Thema</string>
@@ -82,4 +82,5 @@
     <string name="player_ui_hide_never">Nooit</string>
     <string name="side_panel_sections">Rubrieken</string>
     <string name="boot_to_section">Starten bij rubriek</string>
+    <string name="large_ui">Grote weergave</string>
 </resources>
