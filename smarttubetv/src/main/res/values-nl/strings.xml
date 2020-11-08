@@ -16,7 +16,7 @@
     <string name="title_no_videos">Geen video\'s</string>
     <string name="message_try_again">Opnieuw proberen ?</string>
     <string name="message_check_again">Opnieuw controleren ?</string>
-    <string name="text_search_results">Zoekresultaten</string>
+    <string name="text_search_results">Zoekresultaten voor %s</string>
     <string name="text_post_results_title">Resultaten voor %s</string>
     <string name="text_no_results">Geen resultaten</string>
     <string name="error_message_network_needed">Je hebt hiervoor een netwerkverbinding nodig</string>
