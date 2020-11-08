@@ -2,11 +2,13 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.search;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 
 public class SearchTagsActivity extends LeanbackActivity {
     private SearchTagsFragment mFragment;
+    private boolean mDownPressed;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,5 +26,14 @@ public class SearchTagsActivity extends LeanbackActivity {
             mFragment.startRecognition();
         }
         return true;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // If there are no results found, press the left key to reselect the microphone
+        if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT && !mFragment.hasResults()) {
+            mFragment.focusOnSearch();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

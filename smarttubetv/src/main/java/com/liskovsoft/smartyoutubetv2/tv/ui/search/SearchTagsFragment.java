@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import androidx.annotation.Nullable;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.vineyard.SearchTagsFragmentBase;
 
@@ -62,5 +63,9 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         if (!TextUtils.isEmpty(query) && !query.equals("nil")) {
             mSearchPresenter.onSearchText(query);
         }
+    }
+
+    public void focusOnSearch() {
+        getView().findViewById(R.id.lb_search_bar).requestFocus();
     }
 }

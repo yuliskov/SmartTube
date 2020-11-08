@@ -134,8 +134,8 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
 
     @Override
     public void clearSearch() {
-        mResultsAdapter.clear();
-        mSearchTagsAdapter.clear();
+        //mResultsAdapter.clear();
+        //mSearchTagsAdapter.clear();
     }
 
     protected void setItemResultsAdapter(ObjectAdapter adapter) {
