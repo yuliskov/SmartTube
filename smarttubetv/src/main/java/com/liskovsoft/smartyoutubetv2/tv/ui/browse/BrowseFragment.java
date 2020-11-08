@@ -45,15 +45,13 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private Handler mHandler;
     private ProgressBarManager mProgressBarManager;
     private boolean mIsFragmentCreated;
-    private int mSelectedHeaderIndex;
-    private int mSelectedItemIndex;
+    private int mSelectedHeaderIndex = -1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
 
         mSelectedHeaderIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_HEADER_INDEX, -1) : -1;
-        mSelectedItemIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_ITEM_INDEX, -1) : -1;
         mIsFragmentCreated = true;
 
         mCategories = new LinkedHashMap<>();
@@ -75,6 +73,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
         // Store position in case activity is crashed
         outState.putInt(SELECTED_HEADER_INDEX, getSelectedPosition());
+        // Not robust. Because tab content often changed after reloading.
         outState.putInt(SELECTED_ITEM_INDEX, mCategoryFragmentFactory.getCurrentFragmentItemIndex());
     }
 
@@ -99,7 +98,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
         // Restore state after crash
         selectCategory(mSelectedHeaderIndex);
-        selectItem(mSelectedItemIndex);
     }
 
     private void setupAdapter() {
