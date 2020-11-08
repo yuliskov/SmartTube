@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard;
 
 import android.content.Context;
 
-import com.liskovsoft.smartyoutubetv2.tv.model.vineyard.Tag;
+import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.vineyard.TagPresenter;
 
 import java.util.ArrayList;

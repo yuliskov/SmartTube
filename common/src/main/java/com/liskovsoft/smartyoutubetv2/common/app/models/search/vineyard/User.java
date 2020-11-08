@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.model.vineyard;
+package com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard;
 
 import android.os.Parcel;
 import android.os.Parcelable;

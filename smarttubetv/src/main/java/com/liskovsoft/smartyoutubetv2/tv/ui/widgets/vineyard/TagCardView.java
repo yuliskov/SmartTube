@@ -49,6 +49,7 @@ public class TagCardView extends BaseCardView {
     }
 
     public void setCardIcon(int resource) {
+        mResultImage.setVisibility(View.VISIBLE);
         mResultImage.setImageDrawable(ContextCompat.getDrawable(getContext(), resource));
     }
 

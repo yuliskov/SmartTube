@@ -1,13 +1,19 @@
-package com.liskovsoft.smartyoutubetv2.tv.model.vineyard;
+package com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Tag implements Comparable<Tag>, Parcelable {
     public long tagId;
     public String tag;
     public long postCount;
+
+    public Tag() {
+    }
 
     @Override
     public int compareTo(@NonNull Tag another) {
@@ -24,9 +30,6 @@ public class Tag implements Comparable<Tag>, Parcelable {
         dest.writeLong(this.tagId);
         dest.writeString(this.tag);
         dest.writeLong(this.postCount);
-    }
-
-    public Tag() {
     }
 
     public Tag(String tag) {
@@ -67,6 +70,20 @@ public class Tag implements Comparable<Tag>, Parcelable {
         int result = (int) (tagId ^ (tagId >>> 32));
         result = 31 * result + (tag != null ? tag.hashCode() : 0);
         result = 31 * result + (int) (postCount ^ (postCount >>> 32));
+        return result;
+    }
+
+    public static List<Tag> from(List<String> tags) {
+        if (tags == null || tags.isEmpty()) {
+            return null;
+        }
+
+        List<Tag> result = new ArrayList<>();
+
+        for (String tag : tags) {
+            result.add(new Tag(tag));
+        }
+
         return result;
     }
 }

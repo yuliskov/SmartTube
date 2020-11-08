@@ -14,17 +14,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.leanback.widget.ArrayObjectAdapter;
-import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.SpeechRecognitionCallback;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
-import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.PaginationAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.TagAdapter;
-import com.liskovsoft.smartyoutubetv2.tv.model.SearchTagsProvider;
+import com.liskovsoft.smartyoutubetv2.common.app.models.search.SearchTagsProvider;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.ProgressBarManager;
@@ -39,7 +37,6 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
 
     private DisplayMetrics mMetrics;
     private Handler mHandler;
-    private HeaderItem mResultsHeader;
     private Object mSelectedTag;
     private TagAdapter mSearchTagsAdapter;
     private ObjectAdapter mItemResultsAdapter;
@@ -195,9 +192,8 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         mSearchTagsAdapter.setTag(tag);
         mResultsAdapter.clear();
         mSearchTagsAdapter.clear();
-        mResultsHeader = new HeaderItem(0, getString(R.string.text_search_results, tag));
-        ListRow listRow = new ListRow(mResultsHeader, mSearchTagsAdapter);
-        mResultsAdapter.add(listRow);
+        //mResultsHeader = new HeaderItem(0, getString(R.string.text_search_results, tag));
+        mResultsAdapter.add(new ListRow(mSearchTagsAdapter));
         mResultsAdapter.add(new ListRow(mItemResultsAdapter));
         performSearch(mSearchTagsAdapter);
     }

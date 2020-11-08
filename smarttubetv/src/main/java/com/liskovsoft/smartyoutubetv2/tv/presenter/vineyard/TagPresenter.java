@@ -5,8 +5,8 @@ import android.view.ViewGroup;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.Presenter;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.model.vineyard.Tag;
-import com.liskovsoft.smartyoutubetv2.tv.model.vineyard.User;
+import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
+import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.User;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.vineyard.TagCardView;
 
 public class TagPresenter extends Presenter {
@@ -44,7 +44,7 @@ public class TagPresenter extends Presenter {
 
             if (post.tag != null) {
                 cardView.setCardText(post.tag);
-                cardView.setCardIcon(R.drawable.ic_tag);
+                //cardView.setCardIcon(R.drawable.ic_tag);
             }
         } else if (item instanceof User) {
             User post = (User) item;

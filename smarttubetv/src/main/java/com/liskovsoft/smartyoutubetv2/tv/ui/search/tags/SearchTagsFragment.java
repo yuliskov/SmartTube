@@ -6,11 +6,11 @@ import androidx.annotation.Nullable;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.models.search.MediaServiceSearchTagProvider;
+import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
-import com.liskovsoft.smartyoutubetv2.tv.model.PrefsSearchTagsProvider;
-import com.liskovsoft.smartyoutubetv2.tv.model.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.vineyard.SearchTagsFragmentBase;
 
@@ -28,7 +28,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         mItemResultsAdapter = new VideoGroupObjectAdapter();
 
         setItemResultsAdapter(mItemResultsAdapter);
-        setSearchTagsProvider(new PrefsSearchTagsProvider());
+        setSearchTagsProvider(new MediaServiceSearchTagProvider());
     }
 
     @Override

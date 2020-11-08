@@ -1,6 +1,6 @@
-package com.liskovsoft.smartyoutubetv2.tv.model;
+package com.liskovsoft.smartyoutubetv2.common.app.models.search;
 
-import com.liskovsoft.smartyoutubetv2.tv.model.vineyard.Tag;
+import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 
 import java.util.List;
 

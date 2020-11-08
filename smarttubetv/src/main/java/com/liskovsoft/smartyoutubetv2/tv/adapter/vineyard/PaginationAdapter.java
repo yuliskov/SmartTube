@@ -7,7 +7,7 @@ import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.PresenterSelector;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.model.vineyard.Option;
+import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Option;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.vineyard.IconItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.vineyard.LoadingPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.vineyard.LoadingCardView;
@@ -95,6 +95,10 @@ public abstract class PaginationAdapter extends ArrayObjectAdapter {
     }
 
     public void addPosts(List<?> posts) {
+        if (posts == null) {
+            return;
+        }
+
         if (posts.size() > 0) {
             addAll(size(), posts);
         } else {
