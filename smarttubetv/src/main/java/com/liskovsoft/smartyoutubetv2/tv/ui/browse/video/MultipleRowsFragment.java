@@ -149,6 +149,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
 
         if (mRowsAdapter != null && index < mRowsAdapter.size()) {
             setSelectedPosition(index);
+            mSelectedItemIndex = -1;
         } else {
             mSelectedItemIndex = index;
         }

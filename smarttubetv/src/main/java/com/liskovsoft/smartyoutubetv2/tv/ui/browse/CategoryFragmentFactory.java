@@ -70,7 +70,7 @@ public class CategoryFragmentFactory extends BrowseSupportFragment.FragmentFacto
             }
 
             updateCurrentFragmentFromCache();
-            restoreItemIndex();
+            setCurrentFragmentItemIndex(mSelectedItemIndex);
 
             return fragment;
         }
@@ -141,6 +141,7 @@ public class CategoryFragmentFactory extends BrowseSupportFragment.FragmentFacto
     public void setCurrentFragmentItemIndex(int index) {
         if (mCurrentFragment instanceof VideoCategoryFragment) {
             ((VideoCategoryFragment) mCurrentFragment).setItemIndex(index);
+            mSelectedItemIndex = -1;
         } else {
             mSelectedItemIndex = index;
         }
@@ -170,10 +171,5 @@ public class CategoryFragmentFactory extends BrowseSupportFragment.FragmentFacto
         } else {
             Log.e(TAG, "clearFragment: Page group fragment has incompatible type: " + fragment.getClass().getSimpleName());
         }
-    }
-
-    private void restoreItemIndex() {
-        setCurrentFragmentItemIndex(mSelectedItemIndex);
-        mSelectedItemIndex = -1;
     }
 }

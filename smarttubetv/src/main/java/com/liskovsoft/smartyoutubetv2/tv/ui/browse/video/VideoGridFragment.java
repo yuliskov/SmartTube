@@ -96,6 +96,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
 
         if (mGridAdapter != null && index < mGridAdapter.size()) {
             setSelectedPosition(index);
+            mSelectedItemIndex = -1;
         } else {
             mSelectedItemIndex = index;
         }
