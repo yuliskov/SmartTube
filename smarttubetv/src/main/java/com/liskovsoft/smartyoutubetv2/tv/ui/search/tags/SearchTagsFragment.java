@@ -61,6 +61,10 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         } else {
             startRecognition();
         }
+
+        if (getRowsSupportFragment() != null) {
+            getRowsSupportFragment().setSelectedPosition(0);
+        }
     }
 
     @Override
