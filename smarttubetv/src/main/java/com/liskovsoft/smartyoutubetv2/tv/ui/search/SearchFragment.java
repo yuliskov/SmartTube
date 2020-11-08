@@ -161,7 +161,7 @@ public class SearchFragment extends SearchSupportFragment
     private void loadQuery(String query) {
         if (!TextUtils.isEmpty(query) && !query.equals("nil")) {
             mQuery = query;
-            mSearchPresenter.onSearchText(query);
+            mSearchPresenter.onSearch(query);
         }
     }
 

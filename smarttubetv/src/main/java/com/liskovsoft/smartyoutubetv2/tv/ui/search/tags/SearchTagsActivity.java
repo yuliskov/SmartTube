@@ -1,6 +1,5 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.search;
+package com.liskovsoft.smartyoutubetv2.tv.ui.search.tags;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import com.liskovsoft.smartyoutubetv2.tv.R;
@@ -16,16 +15,6 @@ public class SearchTagsActivity extends LeanbackActivity {
         setContentView(R.layout.fragment_search_tags);
         mFragment = (SearchTagsFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.search_tags_fragment);
-    }
-
-    @Override
-    public boolean onSearchRequested() {
-        if (mFragment.hasResults()) {
-            startActivity(new Intent(this, SearchTagsActivity.class));
-        } else {
-            mFragment.startRecognition();
-        }
-        return true;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.search.vineyard;
+package com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.vineyard;
 
 import android.Manifest;
 import android.app.Activity;
@@ -24,7 +24,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.PaginationAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.TagAdapter;
-import com.liskovsoft.smartyoutubetv2.tv.model.PrefsSearchTagsProvider;
 import com.liskovsoft.smartyoutubetv2.tv.model.SearchTagsProvider;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
@@ -61,7 +60,6 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
         mResultsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         mSearchTagsAdapter = new TagAdapter(getActivity(), "");
-        mSearchTagsProvider = new PrefsSearchTagsProvider();
         mProgressBarManager = new ProgressBarManager();
         mHandler = new Handler();
         setSearchResultProvider(this);
@@ -132,14 +130,16 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         }
     }
 
-    @Override
-    public void clearSearch() {
-        //mResultsAdapter.clear();
-        //mSearchTagsAdapter.clear();
-    }
+    protected abstract void onItemViewSelected(Object item);
+    
+    protected abstract void onItemViewClicked(Object item);
 
     protected void setItemResultsAdapter(ObjectAdapter adapter) {
         mItemResultsAdapter = adapter;
+    }
+
+    protected void setSearchTagsProvider(SearchTagsProvider provider) {
+        mSearchTagsProvider = provider;
     }
 
     public boolean isStopping() {
@@ -156,8 +156,8 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     }
 
     private void setupListeners() {
-        //setOnItemViewClickedListener(mOnItemViewClickedListener);
-        //setOnItemViewSelectedListener(mOnItemViewSelectedListener);
+        setOnItemViewClickedListener((itemViewHolder, item, rowViewHolder, row) -> onItemViewClicked(item));
+        setOnItemViewSelectedListener((itemViewHolder, item, rowViewHolder, row) -> onItemViewSelected(item));
         if (!hasPermission(Manifest.permission.RECORD_AUDIO)) {
             setSpeechRecognitionCallback(new SpeechRecognitionCallback() {
                 @Override
@@ -194,7 +194,8 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     private void searchTaggedPosts(String tag) {
         mSearchTagsAdapter.setTag(tag);
         mResultsAdapter.clear();
-        mResultsHeader = new HeaderItem(0, getString(R.string.text_search_results));
+        mSearchTagsAdapter.clear();
+        mResultsHeader = new HeaderItem(0, getString(R.string.text_search_results, tag));
         ListRow listRow = new ListRow(mResultsHeader, mSearchTagsAdapter);
         mResultsAdapter.add(listRow);
         mResultsAdapter.add(new ListRow(mItemResultsAdapter));
@@ -464,5 +465,4 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     //        }
     //    }
     //};
-
 }

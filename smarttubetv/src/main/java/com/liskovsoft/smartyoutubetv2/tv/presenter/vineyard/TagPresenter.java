@@ -10,14 +10,13 @@ import com.liskovsoft.smartyoutubetv2.tv.model.vineyard.User;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.vineyard.TagCardView;
 
 public class TagPresenter extends Presenter {
-
     private static int sSelectedBackgroundColor;
     private static int sDefaultBackgroundColor;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
-        sDefaultBackgroundColor = ContextCompat.getColor(parent.getContext(), R.color.primary);
-        sSelectedBackgroundColor = ContextCompat.getColor(parent.getContext(), R.color.primary_dark);
+        sDefaultBackgroundColor = ContextCompat.getColor(parent.getContext(), R.color.fastlane_background_dark);
+        sSelectedBackgroundColor = ContextCompat.getColor(parent.getContext(), R.color.fastlane_background_dark);
 
         TagCardView cardView = new TagCardView(parent.getContext()) {
             @Override

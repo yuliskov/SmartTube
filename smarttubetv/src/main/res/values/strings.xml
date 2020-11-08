@@ -113,7 +113,7 @@
     <string name="title_no_videos">No videos</string>
     <string name="message_try_again">Try again?</string>
     <string name="message_check_again">Check again?</string>
-    <string name="text_search_results">Search results</string>
+    <string name="text_search_results">Search results for %s</string>
     <string name="text_post_results_title">Posts for %s</string>
     <string name="text_no_results">No results</string>
     <string name="error_message_network_needed">Oops, you need a network connection to do that!</string>

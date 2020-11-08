@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -22,12 +21,12 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.LoginDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.ProgressBarManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -156,10 +155,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
                 (viewHolder, row) -> mBrowsePresenter.onCategoryFocused(getSelectedHeaderId())
         );
 
-        setOnSearchClickedListener(view -> {
-            Intent intent = new Intent(getActivity(), SearchActivity.class);
-            startActivity(intent);
-        });
+        setOnSearchClickedListener(view -> SearchPresenter.instance(getActivity()).startSearch(null));
     }
 
     private int getSelectedHeaderId() {

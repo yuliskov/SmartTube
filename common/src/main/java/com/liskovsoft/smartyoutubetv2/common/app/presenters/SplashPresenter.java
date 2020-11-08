@@ -115,7 +115,7 @@ public class SplashPresenter implements Presenter<SplashView> {
 
             if (searchText != null) {
                 SearchPresenter searchPresenter = SearchPresenter.instance(mContext);
-                searchPresenter.openSearch(searchText);
+                searchPresenter.startSearch(searchText);
             } else {
                 String backupData = getBackupDataOnce();
                 if (backupData != null) {

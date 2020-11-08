@@ -227,7 +227,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onSearchClicked() {
-        SearchPresenter.instance(mActivity).openSearch(null);
+        SearchPresenter.instance(mActivity).startSearch(null);
     }
 
     private void intSpeedItems(List<OptionItem> items, float[] speedValues) {
