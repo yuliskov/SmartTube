@@ -10,62 +10,72 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.widget.Toast;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.ObjectAdapter;
-import androidx.leanback.widget.OnItemViewClickedListener;
-import androidx.leanback.widget.OnItemViewSelectedListener;
-import androidx.leanback.widget.Presenter;
-import androidx.leanback.widget.Row;
-import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.SpeechRecognitionCallback;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.PaginationAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.TagAdapter;
+import com.liskovsoft.smartyoutubetv2.tv.model.PrefsSearchTagsProvider;
 import com.liskovsoft.smartyoutubetv2.tv.model.SearchTagsProvider;
-import com.liskovsoft.smartyoutubetv2.tv.model.vineyard.Option;
-import com.liskovsoft.smartyoutubetv2.tv.model.vineyard.Tag;
-import com.liskovsoft.smartyoutubetv2.tv.model.vineyard.User;
+import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.ProgressBarManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.SearchSupportFragment;
 import com.liskovsoft.smartyoutubetv2.tv.util.vineyard.NetworkUtil;
 import com.liskovsoft.smartyoutubetv2.tv.util.vineyard.ToastFactory;
 
-import java.net.URI;
-import java.util.Map;
-import java.util.Stack;
-
-public abstract class SearchTagsFragment extends SearchSupportFragment
+public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         implements SearchSupportFragment.SearchResultProvider, SearchView {
-    private static final String TAG = SearchTagsFragment.class.getSimpleName();
+    private static final String TAG = SearchTagsFragmentBase.class.getSimpleName();
     private static final int REQUEST_SPEECH = 0x00000010;
 
     private DisplayMetrics mMetrics;
     private Handler mHandler;
     private HeaderItem mResultsHeader;
     private Object mSelectedTag;
+    private TagAdapter mSearchTagsAdapter;
+    private ObjectAdapter mItemResultsAdapter;
     private ArrayObjectAdapter mResultsAdapter;
-    private TagAdapter mSearchResultsAdapter;
 
     private String mSearchQuery;
     private String mTagSearchAnchor;
     private String mUserSearchAnchor;
     private boolean mIsStopping;
     private SearchTagsProvider mSearchTagsProvider;
+    private UriBackgroundManager mBackgroundManager;
+    private ProgressBarManager mProgressBarManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
         mResultsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
-        mSearchResultsAdapter = new TagAdapter(getActivity(), "");
+        mSearchTagsAdapter = new TagAdapter(getActivity(), "");
+        mSearchTagsProvider = new PrefsSearchTagsProvider();
+        mProgressBarManager = new ProgressBarManager();
         mHandler = new Handler();
         setSearchResultProvider(this);
         setupMetrics();
-        setListeners();
+        setupListeners();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View root = super.onCreateView(inflater, container, savedInstanceState);
+
+        mProgressBarManager.setRootView((ViewGroup) root);
+
+        return root;
     }
 
     @Override
@@ -113,6 +123,25 @@ public abstract class SearchTagsFragment extends SearchSupportFragment
         return true;
     }
 
+    @Override
+    public void showProgressBar(boolean show) {
+        if (show) {
+            mProgressBarManager.show();
+        } else {
+            mProgressBarManager.hide();
+        }
+    }
+
+    @Override
+    public void clearSearch() {
+        mResultsAdapter.clear();
+        mSearchTagsAdapter.clear();
+    }
+
+    protected void setItemResultsAdapter(ObjectAdapter adapter) {
+        mItemResultsAdapter = adapter;
+    }
+
     public boolean isStopping() {
         return mIsStopping;
     }
@@ -126,7 +155,7 @@ public abstract class SearchTagsFragment extends SearchSupportFragment
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(mMetrics);
     }
 
-    private void setListeners() {
+    private void setupListeners() {
         //setOnItemViewClickedListener(mOnItemViewClickedListener);
         //setOnItemViewSelectedListener(mOnItemViewSelectedListener);
         if (!hasPermission(Manifest.permission.RECORD_AUDIO)) {
@@ -149,7 +178,7 @@ public abstract class SearchTagsFragment extends SearchSupportFragment
                 permission, context.getPackageName());
     }
 
-    private void loadQuery(String query) {
+    protected void loadQuery(String query) {
         if ((mSearchQuery != null && !mSearchQuery.equals(query))
                 && query.trim().length() > 0
                 || (!TextUtils.isEmpty(query) && !query.equals("nil"))) {
@@ -163,13 +192,13 @@ public abstract class SearchTagsFragment extends SearchSupportFragment
     }
 
     private void searchTaggedPosts(String tag) {
-        mSearchResultsAdapter.setTag(tag);
+        mSearchTagsAdapter.setTag(tag);
         mResultsAdapter.clear();
         mResultsHeader = new HeaderItem(0, getString(R.string.text_search_results));
-        ListRow listRow = new ListRow(mResultsHeader, mSearchResultsAdapter);
-        Log.e(TAG, listRow.getId() + "");
+        ListRow listRow = new ListRow(mResultsHeader, mSearchTagsAdapter);
         mResultsAdapter.add(listRow);
-        performSearch(mSearchResultsAdapter);
+        mResultsAdapter.add(new ListRow(mItemResultsAdapter));
+        performSearch(mSearchTagsAdapter);
     }
 
     private void performSearch(PaginationAdapter adapter) {

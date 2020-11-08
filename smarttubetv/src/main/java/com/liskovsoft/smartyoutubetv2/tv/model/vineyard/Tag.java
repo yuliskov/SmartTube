@@ -29,6 +29,10 @@ public class Tag implements Comparable<Tag>, Parcelable {
     public Tag() {
     }
 
+    public Tag(String tag) {
+        this.tag = tag;
+    }
+
     protected Tag(Parcel in) {
         this.tagId = in.readLong();
         this.tag = in.readString();
