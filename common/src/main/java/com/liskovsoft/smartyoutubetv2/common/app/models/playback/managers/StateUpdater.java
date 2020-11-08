@@ -168,7 +168,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         Video video = mController.getVideo();
 
         if (video != null) {
-            if (mController.getLengthMs() > MUSIC_VIDEO_LENGTH_MS) {
+            if (mController.getLengthMs() - mController.getPositionMs() > 500) { // don't save position of ended track
                 mStates.put(video.videoId, new State(video.videoId, mController.getPositionMs(), mController.getLengthMs(), mController.getSpeed()));
             }
 
