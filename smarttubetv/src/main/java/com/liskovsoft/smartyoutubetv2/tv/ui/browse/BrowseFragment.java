@@ -45,13 +45,14 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private Handler mHandler;
     private ProgressBarManager mProgressBarManager;
     private boolean mIsFragmentCreated;
-    private int mSelectedHeaderIndex = -1;
+    private int mRestoredHeaderIndex = -1;
+    private boolean mFocusOnChildFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
 
-        mSelectedHeaderIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_HEADER_INDEX, -1) : -1;
+        mRestoredHeaderIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_HEADER_INDEX, -1) : -1;
         mIsFragmentCreated = true;
 
         mCategories = new LinkedHashMap<>();
@@ -97,7 +98,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mBrowsePresenter.onInitDone();
 
         // Restore state after crash
-        selectCategory(mSelectedHeaderIndex);
+        selectCategory(mRestoredHeaderIndex);
+        mRestoredHeaderIndex = -1;
     }
 
     private void setupAdapter() {
@@ -109,7 +111,10 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     private void setupFragmentFactory() {
         mCategoryFragmentFactory = new CategoryFragmentFactory(
-                (viewHolder, row) -> mBrowsePresenter.onCategoryFocused(getSelectedHeaderId())
+                (viewHolder, row) -> {
+                    focusOnChildFragment();
+                    mBrowsePresenter.onCategoryFocused(getSelectedHeaderId());
+                }
         );
 
         getMainFragmentRegistry().registerFragment(PageRow.class, mCategoryFragmentFactory);
@@ -227,6 +232,14 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     public void selectCategory(int index) {
         if (index >= 0 && index < mCategoryRowAdapter.size()) {
             setSelectedPosition(index);
+            mFocusOnChildFragment = true;
+        }
+    }
+
+    private void focusOnChildFragment() {
+        if (mFocusOnChildFragment) {
+            startHeadersTransition(false);
+            mFocusOnChildFragment = false;
         }
     }
 
