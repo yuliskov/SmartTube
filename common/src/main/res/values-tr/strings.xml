@@ -76,7 +76,7 @@
     <string name="player_ui_and_pause">Arayüz ve Durdurma</string>
     <string name="player_only_pause">Yalnız durdurma</string>
     <string name="check_for_updates">Güncellemeleri kontrol et</string>
-    <string name="update_not_found">Eski versiyonu kullanıyorsunuz</string>
+    <string name="update_not_found">Güncel versiyonu kullanıyorsunuz</string>
     <string name="update_in_progess">Bekleyin…</string>
     <string name="player_ui_hide_behavior">Arayüzü otomatik gizle</string>
     <string name="player_ui_hide_never">Asla</string>

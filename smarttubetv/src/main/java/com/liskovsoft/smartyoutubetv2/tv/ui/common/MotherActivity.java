@@ -7,25 +7,27 @@ import androidx.fragment.app.FragmentActivity;
 
 public class MotherActivity extends FragmentActivity {
     private static final float DEFAULT_DENSITY = 2.0f; // xhdpi
+    private static final float DEFAULT_WIDTH = 1920f; // xhdpi
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //forceDpi2();
+        forceDpi1();
     }
 
     private void forceDpi1() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        displayMetrics.density = DEFAULT_DENSITY;
-        displayMetrics.scaledDensity = DEFAULT_DENSITY;
+        float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
+        displayMetrics.density = DEFAULT_DENSITY / widthRatio;
+        displayMetrics.scaledDensity = DEFAULT_DENSITY / widthRatio;
         getResources().getDisplayMetrics().setTo(displayMetrics);
     }
 
     private void forceDpi2() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
-        //getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         displayMetrics.density = 2.0f;
         displayMetrics.densityDpi = 320;
         displayMetrics.heightPixels = 1080;

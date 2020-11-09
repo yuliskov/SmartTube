@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Default, same as xhdpi -->
+    <!-- 320dpi, Amazon Fire TV Stick -->
 
     <dimen name="card_width">205dp</dimen>
     <dimen name="card_height">115dp</dimen>
+
+    <!-- Card view default size -->
+    <!--
+    <dimen name="lb_basic_card_title_text_size">14sp</dimen>
+    <dimen name="lb_basic_card_content_text_size">12sp</dimen>
+    -->
 
     <!-- Increase player time text size -->
     <dimen name="lb_playback_controls_time_text_size">16sp</dimen>
