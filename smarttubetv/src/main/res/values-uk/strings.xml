@@ -5,5 +5,5 @@
     <string name="signin_view_action_text">Готово</string>
     <string name="require_checked">Потрібно \"%s\"</string>
     <string name="msg_press_again_to_exit">Натисніть ще раз для виходу</string>
-    <string name="view_einding_time">Залишилось: %s</string>
+    <string name="player_remaining_time">Залишилось: %s</string>
 </resources>

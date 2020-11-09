@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
@@ -35,7 +34,7 @@ public class CardPresenter extends Presenter {
     private int mSelectedTextColor = -1;
     private Drawable mDefaultCardImage;
     private boolean mIsAnimatedPreviewsEnabled;
-    private boolean mIsLargeUIEnabled;
+    private boolean mIsLargeGridEnabled;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
@@ -50,7 +49,7 @@ public class CardPresenter extends Presenter {
         mDefaultCardImage = ContextCompat.getDrawable(parent.getContext(), R.drawable.movie);
 
         mIsAnimatedPreviewsEnabled = MainUIData.instance(parent.getContext()).isAnimatedPreviewsEnabled();
-        mIsLargeUIEnabled = MainUIData.instance(parent.getContext()).isLargeUIEnabled();
+        mIsLargeGridEnabled = MainUIData.instance(parent.getContext()).isLargeGridEnabled();
 
         TextBadgeImageCardView cardView = new TextBadgeImageCardView(parent.getContext()) {
             @Override
@@ -92,7 +91,7 @@ public class CardPresenter extends Presenter {
     public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object item) {
         Video video = (Video) item;
 
-        float zoomRatio = mIsLargeUIEnabled ? ZOOM_RATIO : 1;
+        float zoomRatio = mIsLargeGridEnabled ? ZOOM_RATIO : 1;
 
         TextBadgeImageCardView cardView = (TextBadgeImageCardView) viewHolder.view;
         Resources res = cardView.getResources();
@@ -106,26 +105,26 @@ public class CardPresenter extends Presenter {
             cardView.setPreviewUrl(video.previewUrl);
         }
 
-        if (mIsLargeUIEnabled) {
-            float titleSize = res.getDimension(R.dimen.lb_basic_card_title_text_size);
-            float contentSize = res.getDimension(R.dimen.lb_basic_card_content_text_size);
-
-            TextView titleText = cardView.findViewById(R.id.title_text);
-            if (titleText != null) {
-                titleText.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize * zoomRatio);
-            }
-            TextView contentText = cardView.findViewById(R.id.content_text);
-            if (contentText != null) {
-                contentText.setTextSize(TypedValue.COMPLEX_UNIT_PX, contentSize * zoomRatio);
-            }
-        }
+        //if (mIsLargeUIEnabled) {
+        //    float titleSize = res.getDimension(R.dimen.lb_basic_card_title_text_size);
+        //    float contentSize = res.getDimension(R.dimen.lb_basic_card_content_text_size);
+        //
+        //    TextView titleText = cardView.findViewById(R.id.title_text);
+        //    if (titleText != null) {
+        //        titleText.setTextSize(TypedValue.COMPLEX_UNIT_PX, titleSize * zoomRatio);
+        //    }
+        //    TextView contentText = cardView.findViewById(R.id.content_text);
+        //    if (contentText != null) {
+        //        contentText.setTextSize(TypedValue.COMPLEX_UNIT_PX, contentSize * zoomRatio);
+        //    }
+        //}
 
         if (video.cardImageUrl != null) {
             // Set card size from dimension resources.
             int width = res.getDimensionPixelSize(R.dimen.card_width);
             int height = res.getDimensionPixelSize(R.dimen.card_height);
 
-            if (mIsLargeUIEnabled) {
+            if (mIsLargeGridEnabled) {
                 width *= zoomRatio;
                 height *= zoomRatio;
             }

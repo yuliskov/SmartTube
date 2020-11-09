@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 
 public class MotherActivity extends FragmentActivity {
     private static final float DEFAULT_DENSITY = 2.0f; // xhdpi
@@ -17,11 +18,12 @@ public class MotherActivity extends FragmentActivity {
     }
 
     private void forceDpi1() {
+        float uiScale = MainUIData.instance(this).getUIScale();
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
-        displayMetrics.density = DEFAULT_DENSITY / widthRatio;
-        displayMetrics.scaledDensity = DEFAULT_DENSITY / widthRatio;
+        displayMetrics.density = DEFAULT_DENSITY / widthRatio * uiScale;
+        displayMetrics.scaledDensity = DEFAULT_DENSITY / widthRatio * uiScale;
         getResources().getDisplayMetrics().setTo(displayMetrics);
     }
 

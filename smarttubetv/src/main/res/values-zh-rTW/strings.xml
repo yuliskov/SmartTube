@@ -116,5 +116,5 @@
     <string name="action_video_stats">影片統計</string>
     <string name="require_checked">需要 \"%s\"</string>
     <string name="msg_press_again_to_exit">再按一次離開</string>
-    <string name="view_einding_time">結束：%s</string>
+    <string name="player_remaining_time">結束：%s</string>
 </resources>

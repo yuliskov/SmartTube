@@ -20,7 +20,8 @@ public class MainUIData {
     private int mBootCategoryId;
     private final Map<Integer, Integer> mLeftPanelCategories = new LinkedHashMap<>();
     private final Set<Integer> mEnabledLeftPanelCategories = new HashSet<>();
-    private boolean mIsLargeUIEnabled;
+    private boolean mIsLargeGridEnabled;
+    private float mUIScale;
 
     public MainUIData(Context context) {
         mContext = context;
@@ -74,14 +75,24 @@ public class MainUIData {
         return mBootCategoryId;
     }
 
-    public void enableLargeUI(boolean enabled) {
-        mIsLargeUIEnabled = enabled;
+    public void enableLargeGrid(boolean enabled) {
+        mIsLargeGridEnabled = enabled;
 
         persistState();
     }
 
-    public boolean isLargeUIEnabled() {
-        return mIsLargeUIEnabled;
+    public boolean isLargeGridEnabled() {
+        return mIsLargeGridEnabled;
+    }
+
+    public void setUIScale(float scale) {
+        mUIScale = scale;
+
+        persistState();
+    }
+
+    public float getUIScale() {
+        return mUIScale;
     }
 
     private void initLeftPanelCategories() {
@@ -97,7 +108,7 @@ public class MainUIData {
 
     private void persistState() {
         String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
-        mPrefs.setMainUIData(Helpers.mergeObject(mIsAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mIsLargeUIEnabled));
+        mPrefs.setMainUIData(Helpers.mergeObject(mIsAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mIsLargeGridEnabled, mUIScale));
     }
 
     private void restoreState() {
@@ -108,7 +119,8 @@ public class MainUIData {
         mIsAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0, true);
         String selectedCategories = Helpers.parseStr(split, 1);
         mBootCategoryId = Helpers.parseInt(split, 2, MediaGroup.TYPE_HOME);
-        mIsLargeUIEnabled = Helpers.parseBoolean(split, 3, false);
+        mIsLargeGridEnabled = Helpers.parseBoolean(split, 3, false);
+        mUIScale = Helpers.parseFloat(split, 4, 1.0f);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArray(selectedCategories);

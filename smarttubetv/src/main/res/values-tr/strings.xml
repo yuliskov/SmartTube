@@ -121,5 +121,5 @@
     <string name="action_video_stats">Video İstatikleri</string>
     <string name="require_checked">Gerekir \"%s\"</string>
     <string name="msg_press_again_to_exit">Çıkmak için tekrar basın</string>
-    <string name="view_einding_time">Bitiriş: %s</string>
+    <string name="player_remaining_time">Bitiriş: %s</string>
 </resources>

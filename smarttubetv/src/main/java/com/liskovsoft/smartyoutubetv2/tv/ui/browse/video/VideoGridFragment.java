@@ -36,7 +36,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
     private VideoGroupPresenter mMainPresenter;
     private boolean mInvalidate;
     private int mSelectedItemIndex = -1;
-    private boolean mIsLargeUIEnabled;
+    private boolean mIsLargeGridEnabled;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,7 +44,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
 
         mMainPresenter = getMainPresenter();
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
-        mIsLargeUIEnabled = MainUIData.instance(getActivity()).isLargeUIEnabled();
+        mIsLargeGridEnabled = MainUIData.instance(getActivity()).isLargeGridEnabled();
 
         setupAdapter();
         setupEventListeners();
@@ -74,7 +74,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
 
     private void setupAdapter() {
         VerticalGridPresenter presenter = new VerticalGridPresenter(ZOOM_FACTOR, false);
-        presenter.setNumberOfColumns(mIsLargeUIEnabled ? 3 : COLUMNS_NUM);
+        presenter.setNumberOfColumns(mIsLargeGridEnabled ? 3 : COLUMNS_NUM);
         setGridPresenter(presenter);
 
         if (mGridAdapter == null) {

@@ -10,5 +10,5 @@
     <string name="action_video_stats">Statistiky videa</string>
     <string name="require_checked">Requires \"%s\"</string>
     <string name="msg_press_again_to_exit">Opětovným stisknutím opustíte nabídku</string>
-    <string name="view_einding_time">Konec: %s</string>
+    <string name="player_remaining_time">Konec: %s</string>
 </resources>

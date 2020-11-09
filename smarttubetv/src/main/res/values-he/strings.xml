@@ -10,5 +10,5 @@
     <string name="action_video_stats">סטטיסטיקות וידאו</string>
     <string name="require_checked">מחייב \" %s \"</string>
     <string name="msg_press_again_to_exit">לחץ שוב כדי לצאת</string>
-    <string name="view_einding_time">סיום: %s</string>
+    <string name="player_remaining_time">סיום: %s</string>
 </resources>
