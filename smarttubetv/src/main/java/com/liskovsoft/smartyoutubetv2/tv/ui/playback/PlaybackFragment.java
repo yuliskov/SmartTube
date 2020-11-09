@@ -193,14 +193,14 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void restartEngine() {
-        //if (mPlayer != null) {
-        //    mEventListener.onEngineReleased();
-        //}
-        //destroyPlayerObjects();
-        //createPlayerObjects();
-
         if (mPlayer != null) {
             mEventListener.onEngineReleased();
+        }
+
+        destroyPlayerObjects();
+        createPlayerObjects();
+
+        if (mPlayer != null) {
             mEventListener.onEngineInitialized();
         }
     }
@@ -223,8 +223,6 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             Log.d(TAG, "Skip player initialization.");
             return;
         }
-
-        //testHardwareAcceleration();
 
         createPlayerObjects();
 
