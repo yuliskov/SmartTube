@@ -93,11 +93,11 @@
     <string name="onboarding_description_design">The Leanback sample shows how to quickly design apps designed for a 10-foot user interface</string>
     <string name="onboarding_description_simple">You can include the Leanback library through gradle in your own apps</string>
     <string name="onboarding_description_project">Are you looking for guidance? This sample is available on GitHub so you can see how we built this.</string>
-    <string name="pref_title_settings">Setari Aplicație</string>
+    <string name="pref_title_settings">Setări Aplicație</string>
     <string name="pref_title_recommendations">Recomandări</string>
     <string name="pref_key_recommendations">pref_recommendations</string>
     <string name="pref_key_screen_general">general_settings</string>
-    <string name="pref_title_screen_general">Setari Generale</string>
+    <string name="pref_title_screen_general">Setări Generale</string>
     <string name="pref_key_screen_signin">signin</string>
     <string name="pref_title_screen_signin">Please Login</string>
     <string name="pref_title_login_description">Please enter your username and password</string>
@@ -114,7 +114,7 @@
     <string name="message_try_again">Încearcă din nou?</string>
     <string name="message_check_again">Verifică din nou?</string>
     <string name="text_search_results">Rezultate Căutare pentru %s</string>
-    <string name="text_post_results_title">Postari pentru %s</string>
+    <string name="text_post_results_title">Postări pentru %s</string>
     <string name="text_no_results">Nici un rezultat</string>
     <string name="error_message_network_needed">Oops, trebuie sa fi conectat la internet ca să faci asta!</string>
 
