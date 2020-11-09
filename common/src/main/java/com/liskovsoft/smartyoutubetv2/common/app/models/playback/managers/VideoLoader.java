@@ -74,7 +74,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     public void onTrackSelected(FormatItem track) {
         if (mController.hasNoMedia()) {
             Log.e(TAG, "Engine lost his track. Is user selected unsupported format? Restarting...");
-            mController.restartEngine();
+            mController.reloadPlayback();
         }
     }
 
@@ -85,7 +85,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
             Log.e(TAG, "Player error occurred. Restarting engine once...");
             mErrorVideo = mLastVideo;
             YouTubeMediaService.instance().invalidateCache(); // some data might be stalled
-            mController.restartEngine(); // re-download video data
+            mController.reloadPlayback(); // re-download video data
         } else {
             mController.showControls(true);
         }

@@ -205,6 +205,14 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         }
     }
 
+    @Override
+    public void reloadPlayback() {
+        if (mPlayer != null) {
+            mEventListener.onEngineReleased();
+            mEventListener.onEngineInitialized();
+        }
+    }
+
     private void releasePlayer() {
         if (isEngineBlocked()) {
             Log.d(TAG, "releasePlayer: Engine release is blocked. Exiting...");

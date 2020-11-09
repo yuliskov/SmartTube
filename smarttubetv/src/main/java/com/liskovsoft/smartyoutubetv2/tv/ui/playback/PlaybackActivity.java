@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
 import android.app.PictureInPictureParams;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -111,7 +110,7 @@ public class PlaybackActivity extends LeanbackActivity {
     public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode);
 
-        mPlaybackFragment.restartEngine();
+        mPlaybackFragment.reloadPlayback();
     }
 
     @Override
