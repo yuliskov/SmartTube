@@ -86,4 +86,9 @@ public class TagCardView extends BaseCardView {
         return false;
     }
 
+    public void setTextColor(int color) {
+        if (mTagNameText != null) {
+            mTagNameText.setTextColor(color);
+        }
+    }
 }
