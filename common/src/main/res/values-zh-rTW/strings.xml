@@ -79,6 +79,8 @@
     <string name="update_not_found">已經是最新版本</string>
     <string name="update_in_progess">請稍等……</string>
     <string name="player_ui_hide_behavior">自動隱藏使用者介面</string>
+    <string name="player_ui_hide_never">從不</string>
     <string name="side_panel_sections">設定側邊選單</string>
     <string name="boot_to_section">預設開啟頁面</string>
+    <string name="large_ui">大使用者介面</string>
 </resources>
