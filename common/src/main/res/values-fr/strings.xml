@@ -66,7 +66,7 @@
     <string name="dialog_main_ui">Interface utilisateur</string>
     <string name="animated_previews">Aperçus animés</string>
     <string name="web_site">Site Web</string>
-    <string name="donation">Contribution</string>
+    <string name="donation">Contribuer</string>
     <string name="dialog_about">A propos</string>
     <string name="dialog_player_ui">Lecteur vidéo</string>
     <string name="player_show_ui_on_pause">Afficher l\'interface utilisateur en pause</string>
@@ -81,4 +81,8 @@
     <string name="player_ui_hide_behavior">Interface utilisateur de saisie automatique</string>
     <string name="player_ui_hide_never">Jamais</string>
     <string name="side_panel_sections">Organisation de sections</string>
+    <string name="boot_to_section">Démarrer à la section</string>
+    <string name="large_ui">Grande interface utilisateur</string>
+    <string name="video_grid_scale">Échelle de grille vidéo</string>
+    <string name="scale_ui">Échelle d’interface utilisateur</string>
 </resources>
