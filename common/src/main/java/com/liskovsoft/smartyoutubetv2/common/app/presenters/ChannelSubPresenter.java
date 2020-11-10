@@ -5,6 +5,7 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -107,6 +108,12 @@ public class ChannelSubPresenter implements VideoGroupPresenter, Presenter<Chann
         }
     }
 
+    public void obtainVideoGroup(Video item, VideoGroupCallback callback) {
+        if (item != null) {
+            updateVideoGrid(item.mediaItem, callback);
+        }
+    }
+
     private void updateGrid(Video item) {
         updateVideoGrid(mGroupManager.getGroupObserve(item.mediaItem));
     }
@@ -138,7 +145,7 @@ public class ChannelSubPresenter implements VideoGroupPresenter, Presenter<Chann
     }
 
     private void updateVideoGrid(Observable<MediaGroup> group) {
-        Log.d(TAG, "updateGridHeader: Start loading group...");
+        Log.d(TAG, "updateVideoGrid: Start loading group...");
 
         mView.showProgressBar(true);
 
@@ -158,5 +165,20 @@ public class ChannelSubPresenter implements VideoGroupPresenter, Presenter<Chann
                         , () -> {
                             mView.showProgressBar(false);
                         });
+    }
+
+    private void updateVideoGrid(MediaItem mediaItem, VideoGroupCallback callback) {
+        Log.d(TAG, "updateVideoGrid: Start loading group...");
+
+        Observable<MediaGroup> group = mGroupManager.getGroupObserve(mediaItem);
+
+        mUpdateAction = group
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(callback::onGroup, error -> Log.e(TAG, "updateVideoGrid error: " + error));
+    }
+
+    public interface VideoGroupCallback {
+        void onGroup(MediaGroup mediaGroup);
     }
 }
