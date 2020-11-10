@@ -188,10 +188,8 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
 
         if (item.isVideo()) {
             mPlaybackPresenter.openVideo(item);
-        } else if (item.isChannel()) {
+        } else if (item.isChannel() || item.isChannelSub()) {
             ChannelPresenter.instance(mContext).openChannel(item);
-        } else if (item.isChannelUpd()) {
-            ChannelSubPresenter.instance(mContext).openChannel(item);
         }
 
         updateRefreshTime();

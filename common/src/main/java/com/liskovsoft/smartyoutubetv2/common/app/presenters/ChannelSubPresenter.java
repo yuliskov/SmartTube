@@ -91,7 +91,7 @@ public class ChannelSubPresenter implements VideoGroupPresenter, Presenter<Chann
     }
 
     public void openChannel(Video item) {
-        if (item == null || !item.isChannelUpd()) {
+        if (item == null || !item.isChannelSub()) {
             return;
         }
 
