@@ -14,8 +14,6 @@ import com.google.android.exoplayer2.audio.MediaCodecAudioRenderer;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
-import com.google.android.exoplayer2.video.MediaCodecVideoRenderer;
-import com.google.android.exoplayer2.video.VideoRendererEventListener;
 
 import java.util.ArrayList;
 
@@ -27,7 +25,7 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
 
     public CustomOverridesRenderersFactory(FragmentActivity activity) {
         super(activity);
-        setExtensionRendererMode(EXTENSION_RENDERER_MODE_ON);
+        //setExtensionRendererMode(EXTENSION_RENDERER_MODE_ON);
     }
 
     /**
