@@ -262,7 +262,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         TrackSelection.Factory videoTrackSelectionFactory =
                 new AdaptiveTrackSelection.Factory();
         mTrackSelector = new RestoreTrackSelector(videoTrackSelectionFactory);
-        mRenderersFactory = new CustomOverridesRenderersFactory(getActivity());
+        //mRenderersFactory = new CustomOverridesRenderersFactory(getActivity());
+        mRenderersFactory = new DefaultRenderersFactory(getActivity());
 
         // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
         mPlayer = mPlayerInitializer.createPlayer(getActivity(), mRenderersFactory, mTrackSelector);
