@@ -16,6 +16,7 @@ import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
 import com.google.android.exoplayer2.video.MediaCodecVideoRenderer;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import java.util.ArrayList;
 
@@ -24,6 +25,7 @@ import java.util.ArrayList;
  */
 public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
     private static final String TAG = CustomOverridesRenderersFactory.class.getSimpleName();
+    private static final String[] FRAME_DROP_OVERRIDE_LIST = {"T95ZPLUS (q201_3GB)"};
 
     public CustomOverridesRenderersFactory(FragmentActivity activity) {
         super(activity);
@@ -107,6 +109,10 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
                 eventListener,
                 allowedVideoJoiningTimeMs,
                 out);
+
+        if (!Helpers.contains(FRAME_DROP_OVERRIDE_LIST, Helpers.getDeviceName())) {
+            return;
+        }
 
         Renderer originMediaCodecVideoRenderer = null;
         int index = 0;
