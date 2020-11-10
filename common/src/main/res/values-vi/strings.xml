@@ -82,4 +82,7 @@
     <string name="player_ui_hide_never">Không bao giờ</string>
     <string name="side_panel_sections">Cài đặt khác</string>
     <string name="boot_to_section">Mặc định khi khởi động</string>
+    <string name="large_ui">Giao diên lớn</string>
+    <string name="video_grid_scale">Tỷ lệ lưới Video</string>
+    <string name="scale_ui">Tỷ lệ giao diện</string>
 </resources>
