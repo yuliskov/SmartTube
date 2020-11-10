@@ -23,6 +23,6 @@ public class LongClickManager {
     }
 
     public boolean isLongClick() {
-        return mEventRepeatNums > 3;
+        return mEventRepeatNums > 5;
     }
 }

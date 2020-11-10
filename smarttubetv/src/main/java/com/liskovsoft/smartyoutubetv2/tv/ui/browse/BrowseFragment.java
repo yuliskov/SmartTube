@@ -2,7 +2,10 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.core.content.ContextCompat;
@@ -16,6 +19,7 @@ import androidx.leanback.widget.PageRow;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.PresenterSelector;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Category;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -47,6 +51,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private boolean mIsFragmentCreated;
     private int mRestoredHeaderIndex = -1;
     private boolean mFocusOnChildFragment;
+    private GestureDetector mGestureDetector;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,6 +107,19 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mRestoredHeaderIndex = -1;
     }
 
+    private void setupEventListeners() {
+        //getHeadersSupportFragment().setOnHeaderClickedListener(
+        //        (viewHolder, row) -> {
+        //            mBrowsePresenter.onCategoryFocused(row.getHeaderItem().getId());
+        //        });
+
+        getHeadersSupportFragment().setOnHeaderClickedListener(
+                (viewHolder, row) -> mBrowsePresenter.onCategoryFocused(getSelectedHeaderId())
+        );
+
+        setOnSearchClickedListener(view -> SearchPresenter.instance(getActivity()).startSearch(null));
+    }
+
     private void setupAdapter() {
         // Map category results from the database to ListRow objects.
         // This Adapter is used to render the MainFragment sidebar labels.
@@ -146,19 +164,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         }
 
         return -1;
-    }
-
-    private void setupEventListeners() {
-        //getHeadersSupportFragment().setOnHeaderClickedListener(
-        //        (viewHolder, row) -> {
-        //            mBrowsePresenter.onCategoryFocused(row.getHeaderItem().getId());
-        //        });
-
-        getHeadersSupportFragment().setOnHeaderClickedListener(
-                (viewHolder, row) -> mBrowsePresenter.onCategoryFocused(getSelectedHeaderId())
-        );
-
-        setOnSearchClickedListener(view -> SearchPresenter.instance(getActivity()).startSearch(null));
     }
 
     private int getSelectedHeaderId() {
