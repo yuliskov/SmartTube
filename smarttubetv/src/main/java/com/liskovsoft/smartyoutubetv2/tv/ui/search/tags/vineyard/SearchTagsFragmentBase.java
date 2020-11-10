@@ -98,7 +98,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
 
     @Override
     public boolean onQueryTextChange(String newQuery) {
-        loadQuery(newQuery);
+        loadSuggestions(newQuery);
         return true;
     }
 
@@ -164,7 +164,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
                 permission, context.getPackageName());
     }
 
-    protected void loadQuery(String query) {
+    protected void loadSuggestions(String query) {
         //if ((mSearchQuery != null && !mSearchQuery.equals(query))
         //        && query.trim().length() > 0
         //        || (!TextUtils.isEmpty(query) && !query.equals("nil"))) {
@@ -178,6 +178,10 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
 
         mSearchQuery = query;
         searchTaggedPosts(query);
+    }
+
+    protected void loadQuery(String searchQuery) {
+
     }
 
     private void searchTaggedPosts(String tag) {

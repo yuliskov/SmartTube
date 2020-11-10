@@ -59,7 +59,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         if (searchText != null) {
             setSearchQuery(searchText, true);
         } else {
-            loadQuery("");
+            loadSuggestions("");
             startRecognition();
         }
 
