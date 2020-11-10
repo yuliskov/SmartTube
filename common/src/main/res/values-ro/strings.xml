@@ -83,6 +83,6 @@
     <string name="side_panel_sections">Setează secțiunile</string>
     <string name="boot_to_section">Pornește în secțiunea</string>
     <string name="large_ui">Interfață mare</string>
-    <string name="video_grid_size">Dimensiunea grilei video</string>
+    <string name="video_grid_scale">Dimensiunea grilei video</string>
     <string name="scale_ui">Scală interfață</string>
 </resources>
