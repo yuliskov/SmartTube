@@ -25,7 +25,7 @@ import java.util.ArrayList;
  */
 public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
     private static final String TAG = CustomOverridesRenderersFactory.class.getSimpleName();
-    private static final String[] FRAME_DROP_OVERRIDE_LIST = {"T95ZPLUS (q201_3GB)"};
+    private static final String[] FRAME_DROP_FIX_LIST = {"T95ZPLUS (q201_3GB)"};
 
     public CustomOverridesRenderersFactory(FragmentActivity activity) {
         super(activity);
@@ -110,7 +110,7 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
                 allowedVideoJoiningTimeMs,
                 out);
 
-        if (!Helpers.contains(FRAME_DROP_OVERRIDE_LIST, Helpers.getDeviceName())) {
+        if (!Helpers.contains(FRAME_DROP_FIX_LIST, Helpers.getDeviceName())) {
             return;
         }
 
