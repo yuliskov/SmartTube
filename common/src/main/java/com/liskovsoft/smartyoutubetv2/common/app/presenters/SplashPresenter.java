@@ -117,13 +117,20 @@ public class SplashPresenter implements Presenter<SplashView> {
                 SearchPresenter searchPresenter = SearchPresenter.instance(mContext);
                 searchPresenter.startSearch(searchText);
             } else {
-                String backupData = getBackupDataOnce();
-                if (backupData != null) {
-                    PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(mContext);
-                    playbackPresenter.openVideo(backupData);
+                String channelId = IntentExtractor.extractChannelId(intent);
+
+                if (channelId != null) {
+                    ChannelPresenter channelPresenter = ChannelPresenter.instance(mContext);
+                    channelPresenter.openChannel(channelId);
                 } else {
-                    ViewManager viewManager = ViewManager.instance(mContext);
-                    viewManager.startDefaultView();
+                    String backupData = getBackupDataOnce();
+                    if (backupData != null) {
+                        PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(mContext);
+                        playbackPresenter.openVideo(backupData);
+                    } else {
+                        ViewManager viewManager = ViewManager.instance(mContext);
+                        viewManager.startDefaultView();
+                    }
                 }
             }
         }
