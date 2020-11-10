@@ -165,16 +165,19 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     }
 
     protected void loadQuery(String query) {
-        if ((mSearchQuery != null && !mSearchQuery.equals(query))
-                && query.trim().length() > 0
-                || (!TextUtils.isEmpty(query) && !query.equals("nil"))) {
-            if (NetworkUtil.isNetworkConnected(getActivity())) {
-                mSearchQuery = query;
-                searchTaggedPosts(query);
-            } else {
-                ToastFactory.createWifiErrorToast(getActivity()).show();
-            }
-        }
+        //if ((mSearchQuery != null && !mSearchQuery.equals(query))
+        //        && query.trim().length() > 0
+        //        || (!TextUtils.isEmpty(query) && !query.equals("nil"))) {
+        //    if (NetworkUtil.isNetworkConnected(getActivity())) {
+        //        mSearchQuery = query;
+        //        searchTaggedPosts(query);
+        //    } else {
+        //        ToastFactory.createWifiErrorToast(getActivity()).show();
+        //    }
+        //}
+
+        mSearchQuery = query;
+        searchTaggedPosts(query);
     }
 
     private void searchTaggedPosts(String tag) {
