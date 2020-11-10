@@ -84,5 +84,5 @@
     <string name="boot_to_section">Starten bij rubriek</string>
     <string name="large_ui">Grote weergave</string>
     <string name="video_grid_scale">Videoraster formaat</string>
-    <string name="scale_ui">Display schaal</string>
+    <string name="scale_ui">Display formaat</string>
 </resources>
