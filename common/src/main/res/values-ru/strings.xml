@@ -83,6 +83,6 @@
     <string name="side_panel_sections">Настроить разделы</string>
     <string name="boot_to_section">Загружаться в раздел</string>
     <string name="large_ui">Увеличенный интерфейс</string>
-    <string name="video_grid_size">Размер сетки роликов</string>
+    <string name="video_grid_scale">Масштаб сетки роликов</string>
     <string name="scale_ui">Масштаб интерфейса</string>
 </resources>

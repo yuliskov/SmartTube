@@ -20,8 +20,8 @@ public class MainUIData {
     private int mBootCategoryId;
     private final Map<Integer, Integer> mLeftPanelCategories = new LinkedHashMap<>();
     private final Set<Integer> mEnabledLeftPanelCategories = new HashSet<>();
-    private boolean mIsLargeGridEnabled;
     private float mUIScale;
+    private float mVideoGridScale;
 
     public MainUIData(Context context) {
         mContext = context;
@@ -75,14 +75,14 @@ public class MainUIData {
         return mBootCategoryId;
     }
 
-    public void enableLargeGrid(boolean enabled) {
-        mIsLargeGridEnabled = enabled;
+    public void setVideoGridScale(float scale) {
+        mVideoGridScale = scale;
 
         persistState();
     }
 
-    public boolean isLargeGridEnabled() {
-        return mIsLargeGridEnabled;
+    public float getVideoGridScale() {
+        return mVideoGridScale;
     }
 
     public void setUIScale(float scale) {
@@ -108,7 +108,8 @@ public class MainUIData {
 
     private void persistState() {
         String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
-        mPrefs.setMainUIData(Helpers.mergeObject(mIsAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mIsLargeGridEnabled, mUIScale));
+        mPrefs.setMainUIData(Helpers.mergeObject(
+                mIsAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale));
     }
 
     private void restoreState() {
@@ -119,7 +120,7 @@ public class MainUIData {
         mIsAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0, true);
         String selectedCategories = Helpers.parseStr(split, 1);
         mBootCategoryId = Helpers.parseInt(split, 2, MediaGroup.TYPE_HOME);
-        mIsLargeGridEnabled = Helpers.parseBoolean(split, 3, false);
+        mVideoGridScale = Helpers.parseFloat(split, 3, 1.0f);
         mUIScale = Helpers.parseFloat(split, 4, 1.0f);
 
         if (selectedCategories != null) {

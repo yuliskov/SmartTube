@@ -34,7 +34,7 @@ public class MainUISettingsPresenter {
         settingsPresenter.clear();
 
         appendAnimatedPreviews(settingsPresenter);
-        appendVideoGridSize(settingsPresenter);
+        appendVideoGridScale(settingsPresenter);
         appendScaleUI(settingsPresenter);
         appendLeftPanelCategories(settingsPresenter);
         appendBootToCategory(settingsPresenter);
@@ -54,24 +54,22 @@ public class MainUISettingsPresenter {
         settingsPresenter.appendSingleSwitch(animatedPreviewsOption);
     }
 
-    private void appendVideoGridSize(AppSettingsPresenter settingsPresenter) {
+    private void appendVideoGridScale(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from("4x3",
-                optionItem -> mMainUIData.enableLargeGrid(false),
-                !mMainUIData.isLargeGridEnabled()));
+        for (float scale : new float[] {1.0f, 1.35f}) {
+            options.add(UiOptionItem.from(String.format("%sx", scale),
+                    optionItem -> mMainUIData.setVideoGridScale(scale),
+                    Helpers.floatEquals(scale, mMainUIData.getVideoGridScale())));
+        }
 
-        options.add(UiOptionItem.from("3x2",
-                optionItem -> mMainUIData.enableLargeGrid(true),
-                mMainUIData.isLargeGridEnabled()));
-
-        settingsPresenter.appendRadioCategory(mContext.getString(R.string.video_grid_size), options);
+        settingsPresenter.appendRadioCategory(mContext.getString(R.string.video_grid_scale), options);
     }
 
     private void appendScaleUI(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        for (float scale : new float[] {0.7f, 0.75f, 0.8f, 0.85f, 0.9f, 0.95f, 1.0f}) {
+        for (float scale : new float[] {0.6f, 0.65f, 0.7f, 0.75f, 0.8f, 0.85f, 0.9f, 0.95f, 1.0f}) {
             options.add(UiOptionItem.from(String.format("%sx", scale),
                     optionItem -> {
                         mMainUIData.setUIScale(scale);
@@ -81,13 +79,6 @@ public class MainUISettingsPresenter {
         }
 
         settingsPresenter.appendRadioCategory(mContext.getString(R.string.scale_ui), options);
-    }
-
-    private void appendLargeUI(AppSettingsPresenter settingsPresenter) {
-        OptionItem animatedPreviewsOption = UiOptionItem.from(mContext.getString(R.string.large_ui),
-                option -> mMainUIData.enableLargeGrid(option.isSelected()), mMainUIData.isLargeGridEnabled());
-
-        settingsPresenter.appendSingleSwitch(animatedPreviewsOption);
     }
 
     private void appendLeftPanelCategories(AppSettingsPresenter settingsPresenter) {

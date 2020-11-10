@@ -83,6 +83,6 @@
     <string name="side_panel_sections">Налаштувати розділи</string>
     <string name="boot_to_section">Завантажуватися у розділ</string>
     <string name="large_ui">Збільшений інтерфейс</string>
-    <string name="video_grid_size">Розмір сітки відео</string>
+    <string name="video_grid_scale">Масштаб сітки відео</string>
     <string name="scale_ui">Масштаб інтерфейсу</string>
 </resources>

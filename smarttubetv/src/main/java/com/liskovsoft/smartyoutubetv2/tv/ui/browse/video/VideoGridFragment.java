@@ -36,7 +36,8 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
     private VideoGroupPresenter mMainPresenter;
     private boolean mInvalidate;
     private int mSelectedItemIndex = -1;
-    private boolean mIsLargeGridEnabled;
+    private float mVideoGridScale;
+    private float mUIScale;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,7 +45,8 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
 
         mMainPresenter = getMainPresenter();
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
-        mIsLargeGridEnabled = MainUIData.instance(getActivity()).isLargeGridEnabled();
+        mVideoGridScale = MainUIData.instance(getActivity()).getVideoGridScale();
+        mUIScale = MainUIData.instance(getActivity()).getUIScale();
 
         setupAdapter();
         setupEventListeners();
@@ -74,13 +76,31 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
 
     private void setupAdapter() {
         VerticalGridPresenter presenter = new VerticalGridPresenter(ZOOM_FACTOR, false);
-        presenter.setNumberOfColumns(mIsLargeGridEnabled ? 3 : COLUMNS_NUM);
+        presenter.setNumberOfColumns(getNumColumns());
         setGridPresenter(presenter);
 
         if (mGridAdapter == null) {
             mGridAdapter = new VideoGroupObjectAdapter();
             setAdapter(mGridAdapter);
         }
+    }
+
+    private int getNumColumns() {
+        int result = COLUMNS_NUM;
+
+        if (mVideoGridScale > 1.3f) {
+            result--;
+        }
+
+        if (mUIScale < 1.0f) {
+            result += (int) Math.ceil((1.0f - mUIScale) / 0.15f);
+
+            if (mVideoGridScale > 1.3f) {
+                result--;
+            }
+        }
+
+        return result;
     }
 
     @Override

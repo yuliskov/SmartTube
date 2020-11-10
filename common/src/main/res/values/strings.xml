@@ -83,6 +83,6 @@
     <string name="side_panel_sections">Set-up sections</string>
     <string name="boot_to_section">Boot to section</string>
     <string name="large_ui">Large UI</string>
-    <string name="video_grid_size">Video grid size</string>
+    <string name="video_grid_scale">Video grid scale</string>
     <string name="scale_ui">UI scale</string>
 </resources>
