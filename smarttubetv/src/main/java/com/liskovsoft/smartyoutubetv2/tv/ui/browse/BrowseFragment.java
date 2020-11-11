@@ -27,6 +27,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
+import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.LoginDialogFragment;
@@ -108,16 +109,25 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private void setupEventListeners() {
-        //getHeadersSupportFragment().setOnHeaderClickedListener(
-        //        (viewHolder, row) -> {
-        //            mBrowsePresenter.onCategoryFocused(row.getHeaderItem().getId());
-        //        });
-
         getHeadersSupportFragment().setOnHeaderClickedListener(
-                (viewHolder, row) -> mBrowsePresenter.onCategoryFocused(getSelectedHeaderId())
+                (viewHolder, row) -> {
+                    getHeadersSupportFragment().setSelectedPosition(indexOf(row.getHeaderItem().getId()));
+                }
         );
 
         setOnSearchClickedListener(view -> SearchPresenter.instance(getActivity()).startSearch(null));
+    }
+
+    private int indexOf(long headerId) {
+        int index = 0;
+        for (Integer id : mCategories.keySet()) {
+            if (id == headerId) {
+                return index;
+            }
+            index++;
+        }
+
+        return 0;
     }
 
     private void setupAdapter() {

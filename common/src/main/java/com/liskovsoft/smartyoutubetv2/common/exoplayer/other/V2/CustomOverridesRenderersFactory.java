@@ -25,7 +25,7 @@ import java.util.ArrayList;
  */
 public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
     private static final String TAG = CustomOverridesRenderersFactory.class.getSimpleName();
-    private static final String[] FRAME_DROP_FIX_LIST = {"T95ZPLUS (q201_3GB)"};
+    private static final String[] FRAME_DROP_FIX_LIST = {"T95ZPLUS (q201_3GB)", "UGOOS (UGOOS)"};
 
     public CustomOverridesRenderersFactory(FragmentActivity activity) {
         super(activity);
