@@ -80,4 +80,8 @@
     <string name="player_ui_hide_behavior">Automatyczne ukrywanie interfejsu użytkownika</string>
     <string name="player_ui_hide_never">Nigdy</string>
     <string name="side_panel_categories">Ustawienia sekcji</string>
+    <string name="boot_to_section">Sekcja startowa</string>
+    <string name="large_ui">Duży interfejs</string>
+    <string name="video_grid_scale">Skalowanie siatki wiedo</string>
+    <string name="scale_ui">Skalowanie interfejsu</string>
 </resources>
