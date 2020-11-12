@@ -35,51 +35,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     private final Renderer[] mRenderers = new Renderer[3];
     private final MediaTrack[] mSelectedTracks = new MediaTrack[3];
 
-    public void invalidate() {
-        Arrays.fill(mRenderers, null);
-    }
-
-    private static class Renderer {
-        public TrackGroupArray trackGroups;
-        public TreeSet<MediaTrack> sortedTracks;
-        public boolean[] trackGroupsAdaptive;
-        public boolean isDisabled;
-        public SelectionOverride override;
-        public MediaTrack[][] mediaTracks;
-        public MediaTrack selectedTrack;
-    }
-
-    private static class MediaTrackFormatComparator implements Comparator<MediaTrack> {
-        @Override
-        public int compare(MediaTrack mediaTrack1, MediaTrack mediaTrack2) {
-            Format format1 = mediaTrack1.format;
-            Format format2 = mediaTrack2.format;
-
-            if (format1 == null) { // assume it's auto option
-                return -1;
-            }
-
-            if (format2 == null) { // assume it's auto option
-                return 1;
-            }
-
-            // sort subtitles by language code
-            if (format1.language != null && format2.language != null) {
-                return format1.language.compareTo(format2.language);
-            }
-
-            int leftVal = format2.width + (int) format2.frameRate + (format2.codecs != null && format2.codecs.contains("avc") ? 31 : 0);
-            int rightVal = format1.width + (int) format1.frameRate + (format1.codecs != null && format1.codecs.contains("avc") ? 31 : 0);
-
-            int delta = leftVal - rightVal;
-            if (delta == 0) {
-                return format2.bitrate - format1.bitrate;
-            }
-
-            return leftVal - rightVal;
-        }
-    }
-
     public TrackSelectorManager(DefaultTrackSelector selector) {
         this(selector, null);
     }
@@ -96,6 +51,10 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         if (selector instanceof RestoreTrackSelector) {
             ((RestoreTrackSelector) selector).setTrackSelectCallback(this);
         }
+    }
+
+    public void invalidate() {
+        Arrays.fill(mRenderers, null);
     }
 
     /**
@@ -500,5 +459,46 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             }
         }
         return offset;
+    }
+
+    private static class Renderer {
+        public TrackGroupArray trackGroups;
+        public TreeSet<MediaTrack> sortedTracks;
+        public boolean[] trackGroupsAdaptive;
+        public boolean isDisabled;
+        public SelectionOverride override;
+        public MediaTrack[][] mediaTracks;
+        public MediaTrack selectedTrack;
+    }
+
+    private static class MediaTrackFormatComparator implements Comparator<MediaTrack> {
+        @Override
+        public int compare(MediaTrack mediaTrack1, MediaTrack mediaTrack2) {
+            Format format1 = mediaTrack1.format;
+            Format format2 = mediaTrack2.format;
+
+            if (format1 == null) { // assume it's auto option
+                return -1;
+            }
+
+            if (format2 == null) { // assume it's auto option
+                return 1;
+            }
+
+            // sort subtitles by language code
+            if (format1.language != null && format2.language != null) {
+                return format1.language.compareTo(format2.language);
+            }
+
+            int leftVal = format2.width + (int) format2.frameRate + (format2.codecs != null && format2.codecs.contains("avc") ? 31 : 0);
+            int rightVal = format1.width + (int) format1.frameRate + (format1.codecs != null && format1.codecs.contains("avc") ? 31 : 0);
+
+            int delta = leftVal - rightVal;
+            if (delta == 0) {
+                return format2.bitrate - format1.bitrate;
+            }
+
+            return leftVal - rightVal;
+        }
     }
 }

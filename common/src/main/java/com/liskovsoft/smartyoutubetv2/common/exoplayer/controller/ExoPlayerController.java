@@ -45,6 +45,9 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         mTrackSelector = trackSelector;
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
         mTrackSelectorManager = new TrackSelectorManager(trackSelector);
+
+        // fallback selection (in case listener == null)
+        mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(FormatItem.VIDEO_HD_AVC_30));
     }
 
     @Override
