@@ -93,18 +93,6 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     }
 
     @Override
-    public boolean onQueryTextChange(String newQuery) {
-        loadSearchTags(newQuery);
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        loadSearchResult(query);
-        return true;
-    }
-
-    @Override
     public void showProgressBar(boolean show) {
         if (show) {
             mProgressBarManager.show();
@@ -162,10 +150,6 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
 
     protected void loadSearchTags(String searchQuery) {
         searchTaggedPosts(searchQuery);
-    }
-
-    protected void loadSearchResult(String searchQuery) {
-
     }
 
     private void searchTaggedPosts(String tag) {

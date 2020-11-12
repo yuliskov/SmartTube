@@ -18,7 +18,8 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     private static final String TAG = SearchTagsFragment.class.getSimpleName();
     private SearchPresenter mSearchPresenter;
     private VideoGroupObjectAdapter mItemResultsAdapter;
-    private int mPrevSearchLength;
+    private String mSearchQuery;
+    private int mNewQueryLength;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,32 +72,38 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     }
 
     @Override
-    protected void loadSearchTags(String searchQuery) {
-        super.loadSearchTags(searchQuery);
+    public boolean onQueryTextChange(String newQuery) {
+        loadSearchTags(newQuery);
 
-        if (isChanged(searchQuery)) {
-            loadSearchResult(searchQuery);
+        if (isNewQueryChanged(newQuery)) {
+            loadSearchResult(newQuery);
         }
+
+        return true;
     }
 
     @Override
-    protected void loadSearchResult(String searchQuery) {
-        super.loadSearchResult(searchQuery);
+    public boolean onQueryTextSubmit(String query) {
+        loadSearchResult(query);
+        return true;
+    }
 
-        if (!TextUtils.isEmpty(searchQuery)) {
+    private void loadSearchResult(String searchQuery) {
+        if (!TextUtils.isEmpty(searchQuery) && !searchQuery.equals(mSearchQuery)) {
+            mSearchQuery = searchQuery;
             mSearchPresenter.onSearch(searchQuery);
         }
     }
 
-    private boolean isChanged(String searchQuery) {
+    private boolean isNewQueryChanged(String searchQuery) {
         if (TextUtils.isEmpty(searchQuery)) {
-            mPrevSearchLength = 0;
+            mNewQueryLength = 0;
             return false;
         }
 
-        int searchLength = searchQuery.length();
-        boolean isChanged = Math.abs(searchLength - mPrevSearchLength) != 1;
-        mPrevSearchLength = searchLength;
+        int newLength = searchQuery.length();
+        boolean isChanged = Math.abs(newLength - mNewQueryLength) != 1;
+        mNewQueryLength = newLength;
 
         return isChanged;
     }
