@@ -25,7 +25,9 @@ import androidx.leanback.widget.Presenter.ViewHolder;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.SearchBar;
+import androidx.leanback.widget.SearchEditText;
 import androidx.leanback.widget.SearchOrbView;
+import androidx.leanback.widget.SpeechOrbView;
 import androidx.leanback.widget.SpeechRecognitionCallback;
 import androidx.leanback.widget.VerticalGridView;
 
@@ -197,6 +199,8 @@ public class SearchSupportFragment extends Fragment {
 
     RowsSupportFragment mRowsSupportFragment;
     SearchBar mSearchBar;
+    SearchEditText mSearchTextEditor;
+    SpeechOrbView mSpeechOrbView;
     SearchResultProvider mProvider;
     String mPendingQuery = null;
 
@@ -283,6 +287,9 @@ public class SearchSupportFragment extends Fragment {
 
         FrameLayout searchFrame = (FrameLayout) root.findViewById(R.id.lb_search_frame);
         mSearchBar = (SearchBar) searchFrame.findViewById(R.id.lb_search_bar);
+        mSearchBar.setOnFocusChangeListener((v, focused) -> {
+            Log.d(TAG, "search bar focused");
+        });
         mSearchBar.setSearchBarListener(new SearchBar.SearchBarListener() {
             @Override
             public void onSearchQueryChange(String query) {
@@ -304,12 +311,27 @@ public class SearchSupportFragment extends Fragment {
             @Override
             public void onKeyboardDismiss(String query) {
                 if (DEBUG) Log.v(TAG, String.format("onKeyboardDismiss %s", query));
-                queryComplete();
+                // MOD: don't focus on results row after hiding keyboard
+                //queryComplete();
             }
         });
         mSearchBar.setSpeechRecognitionCallback(mSpeechRecognitionCallback);
         mSearchBar.setPermissionListener(mPermissionListener);
         applyExternalQuery();
+
+        // MOD: inner search bar views for improved focus handling
+
+        mSearchTextEditor = mSearchBar.findViewById(R.id.lb_search_text_editor);
+        mSearchTextEditor.setOnFocusChangeListener((v, focused) -> {
+            Log.d(TAG, "on search field focused");
+            if (focused && mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
+                mRowsSupportFragment.getVerticalGridView().clearFocus();
+            }
+        });
+
+        mSpeechOrbView = mSearchBar.findViewById(R.id.lb_search_bar_speech_orb);
+
+        // End MOD
 
         readArguments(getArguments());
         if (null != mBadgeDrawable) {
@@ -386,6 +408,8 @@ public class SearchSupportFragment extends Fragment {
         }
         if (mPendingStartRecognitionWhenPaused) {
             mPendingStartRecognitionWhenPaused = false;
+            // MOD: remove focus from other fields when doing voice search
+            mSpeechOrbView.requestFocus();
             mSearchBar.startRecognition();
         } else {
             // Ensure search bar state consistency when using external recognizer
@@ -698,16 +722,16 @@ public class SearchSupportFragment extends Fragment {
         }
     }
 
-    private void focusOnResults() {
+    protected void focusOnResults() {
         if (mRowsSupportFragment == null || mRowsSupportFragment.getVerticalGridView() == null
                 || mResultAdapter.size() == 0) {
             return;
         }
 
         // MOD: hide kbd on back properly
-        //if (mRowsSupportFragment.getVerticalGridView().requestFocus()) {
-        //    mStatus &= ~RESULTS_CHANGED;
-        //}
+        if (mRowsSupportFragment.getVerticalGridView().requestFocus()) {
+            mStatus &= ~RESULTS_CHANGED;
+        }
     }
 
     private void onSetSearchResultProvider() {

@@ -53,11 +53,14 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
 
     @Override
     public void clearSearch() {
+        mSearchQuery = null;
         mItemResultsAdapter.clear();
     }
 
     @Override
     public void startSearch(String searchText) {
+        mNewQuery = null;
+
         if (searchText != null) {
             setSearchQuery(searchText, true);
         } else {
@@ -86,6 +89,17 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     public boolean onQueryTextSubmit(String query) {
         loadSearchResult(query);
         return true;
+    }
+
+    @Override
+    protected void focusOnResults() {
+        if (!TextUtils.isEmpty(mNewQuery)) {
+            super.focusOnResults();
+            if (getRowsSupportFragment() != null) {
+                // Move selection to the top
+                getRowsSupportFragment().setSelectedPosition(1);
+            }
+        }
     }
 
     private void loadSearchResult(String searchQuery) {
