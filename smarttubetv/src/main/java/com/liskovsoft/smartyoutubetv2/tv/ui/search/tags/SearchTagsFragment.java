@@ -19,7 +19,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     private SearchPresenter mSearchPresenter;
     private VideoGroupObjectAdapter mItemResultsAdapter;
     private String mSearchQuery;
-    private int mNewQueryLength;
+    private String mNewQuery;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,9 +75,11 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     public boolean onQueryTextChange(String newQuery) {
         loadSearchTags(newQuery);
 
-        if (isNewQueryChanged(newQuery)) {
+        if (TextUtils.isEmpty(mNewQuery)) {
             loadSearchResult(newQuery);
         }
+
+        mNewQuery = newQuery;
 
         return true;
     }
@@ -93,19 +95,6 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
             mSearchQuery = searchQuery;
             mSearchPresenter.onSearch(searchQuery);
         }
-    }
-
-    private boolean isNewQueryChanged(String searchQuery) {
-        if (TextUtils.isEmpty(searchQuery)) {
-            mNewQueryLength = 0;
-            return false;
-        }
-
-        int newLength = searchQuery.length();
-        boolean isChanged = Math.abs(newLength - mNewQueryLength) != 1;
-        mNewQueryLength = newLength;
-
-        return isChanged;
     }
 
     public void focusOnSearch() {
