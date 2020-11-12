@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +23,6 @@ import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.PaginationAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.TagAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.ProgressBarManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.SearchSupportFragment;
-import com.liskovsoft.smartyoutubetv2.tv.util.vineyard.NetworkUtil;
-import com.liskovsoft.smartyoutubetv2.tv.util.vineyard.ToastFactory;
 
 public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         implements SearchSupportFragment.SearchResultProvider, SearchView {
@@ -36,8 +33,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     private TagAdapter mSearchTagsAdapter;
     private ObjectAdapter mItemResultsAdapter;
     private ArrayObjectAdapter mResultsAdapter;
-
-    private String mSearchQuery;
+    
     private boolean mIsStopping;
     private SearchTagsProvider mSearchTagsProvider;
     private ProgressBarManager mProgressBarManager;
@@ -98,13 +94,13 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
 
     @Override
     public boolean onQueryTextChange(String newQuery) {
-        loadSuggestions(newQuery);
+        loadSearchTags(newQuery);
         return true;
     }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        loadQuery(query);
+        loadSearchResult(query);
         return true;
     }
 
@@ -164,23 +160,11 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
                 permission, context.getPackageName());
     }
 
-    protected void loadSuggestions(String query) {
-        //if ((mSearchQuery != null && !mSearchQuery.equals(query))
-        //        && query.trim().length() > 0
-        //        || (!TextUtils.isEmpty(query) && !query.equals("nil"))) {
-        //    if (NetworkUtil.isNetworkConnected(getActivity())) {
-        //        mSearchQuery = query;
-        //        searchTaggedPosts(query);
-        //    } else {
-        //        ToastFactory.createWifiErrorToast(getActivity()).show();
-        //    }
-        //}
-
-        mSearchQuery = query;
-        searchTaggedPosts(query);
+    protected void loadSearchTags(String searchQuery) {
+        searchTaggedPosts(searchQuery);
     }
 
-    protected void loadQuery(String searchQuery) {
+    protected void loadSearchResult(String searchQuery) {
 
     }
 

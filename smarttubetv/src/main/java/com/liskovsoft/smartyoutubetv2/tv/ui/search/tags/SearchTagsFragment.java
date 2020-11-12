@@ -18,6 +18,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     private static final String TAG = SearchTagsFragment.class.getSimpleName();
     private SearchPresenter mSearchPresenter;
     private VideoGroupObjectAdapter mItemResultsAdapter;
+    private int mPrevSearchLength;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,22 +60,45 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         if (searchText != null) {
             setSearchQuery(searchText, true);
         } else {
-            loadSuggestions("");
+            loadSearchTags("");
             startRecognition();
         }
 
         if (getRowsSupportFragment() != null) {
+            // Move selection to the top
             getRowsSupportFragment().setSelectedPosition(0);
         }
     }
 
     @Override
-    protected void loadQuery(String query) {
-        super.loadQuery(query);
+    protected void loadSearchTags(String searchQuery) {
+        super.loadSearchTags(searchQuery);
 
-        if (!TextUtils.isEmpty(query) && !query.equals("nil")) {
-            mSearchPresenter.onSearch(query);
+        if (isChanged(searchQuery)) {
+            loadSearchResult(searchQuery);
         }
+    }
+
+    @Override
+    protected void loadSearchResult(String searchQuery) {
+        super.loadSearchResult(searchQuery);
+
+        if (!TextUtils.isEmpty(searchQuery)) {
+            mSearchPresenter.onSearch(searchQuery);
+        }
+    }
+
+    private boolean isChanged(String searchQuery) {
+        if (TextUtils.isEmpty(searchQuery)) {
+            mPrevSearchLength = 0;
+            return false;
+        }
+
+        int searchLength = searchQuery.length();
+        boolean isChanged = Math.abs(searchLength - mPrevSearchLength) != 1;
+        mPrevSearchLength = searchLength;
+
+        return isChanged;
     }
 
     public void focusOnSearch() {
