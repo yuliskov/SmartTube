@@ -75,11 +75,9 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     public boolean onQueryTextChange(String newQuery) {
         loadSearchTags(newQuery);
 
-        if (TextUtils.isEmpty(mNewQuery)) {
+        if (isVoiceQuery(newQuery)) {
             loadSearchResult(newQuery);
         }
-
-        mNewQuery = newQuery;
 
         return true;
     }
@@ -95,6 +93,19 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
             mSearchQuery = searchQuery;
             mSearchPresenter.onSearch(searchQuery);
         }
+    }
+
+    private boolean isVoiceQuery(String newQuery) {
+        if (TextUtils.isEmpty(newQuery)) {
+            mNewQuery = null;
+            return false;
+        }
+
+        boolean isVoice = mNewQuery == null && newQuery.length() > 1;
+
+        mNewQuery = newQuery;
+
+        return isVoice;
     }
 
     public void focusOnSearch() {
