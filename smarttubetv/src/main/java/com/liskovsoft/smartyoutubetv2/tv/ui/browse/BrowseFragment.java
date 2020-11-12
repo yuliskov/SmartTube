@@ -111,7 +111,16 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private void setupEventListeners() {
         getHeadersSupportFragment().setOnHeaderClickedListener(
                 (viewHolder, row) -> {
-                    getHeadersSupportFragment().setSelectedPosition(indexOf(row.getHeaderItem().getId()));
+                    long headerId = row.getHeaderItem().getId();
+                    int newPosition = indexOf(headerId);
+
+                    if (getHeadersSupportFragment().getSelectedPosition() != newPosition) {
+                        // touch screen support
+                        getHeadersSupportFragment().setSelectedPosition(newPosition);
+                    } else {
+                        // update section when clicked or pressed
+                        mBrowsePresenter.onCategoryFocused((int) headerId);
+                    }
                 }
         );
 
