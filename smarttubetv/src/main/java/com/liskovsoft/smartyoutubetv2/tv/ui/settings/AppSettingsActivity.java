@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.MotherActivity;
 
@@ -13,10 +14,18 @@ public class AppSettingsActivity extends MotherActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        initSettingTheme();
         setupActivity();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_app_settings);
         mFragment = (AppSettingsFragment) getFragmentManager().findFragmentById(R.id.app_settings_fragment);
+    }
+
+    private void initSettingTheme() {
+        int settingsThemeResId = MainUIData.instance(this).getColorScheme().settingsThemeResId;
+        if (settingsThemeResId > 0) {
+            setTheme(settingsThemeResId);
+        }
     }
 
     private void setupActivity() {
