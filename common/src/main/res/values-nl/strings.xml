@@ -88,4 +88,5 @@
     <string name="color_scheme">Kleuren</string>
     <string name="color_scheme_default">Standaard</string>
     <string name="color_scheme_red_grey">Rood-grijs</string>
+    <string name="color_scheme_red">Rood</string>
 </resources>
