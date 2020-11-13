@@ -1,14 +1,14 @@
 <resources>
     
     <string name="signin_view_title">用户代码正在加载…</string>
-    <string name="signin_view_description">要登录，请在第％s页上输入此代码</string>
+    <string name="signin_view_description">要登录，请在第%s页上输入此代码</string>
     <string name="signin_view_action_text">Done</string>
     <string name="action_subscribe_off">订阅关闭</string>
     <string name="action_subscribe_on">订阅</string>
     <string name="action_channel">公开频道</string>
     <string name="action_playlist_add">添加到播放列表</string>
     <string name="action_video_stats">视频统计</string>
-    <string name="require_checked">需要\“％s \”</string>
+    <string name="require_checked">需要\“%s \”</string>
     <string name="msg_press_again_to_exit">再按一次退出</string>
-    <string name="player_remaining_time">结束：％s</string>
+    <string name="player_remaining_time">结束：%s</string>
 </resources>
