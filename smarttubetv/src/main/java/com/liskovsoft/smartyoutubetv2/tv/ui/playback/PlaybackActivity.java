@@ -29,13 +29,20 @@ public class PlaybackActivity extends LeanbackActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        setTheme(MainUIData.instance(this).getColorScheme().themeResId);
+        initPlayerTheme();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playback);
         Fragment fragment =
                 getSupportFragmentManager().findFragmentByTag(getString(R.string.playback_tag));
         if (fragment instanceof PlaybackFragment) {
             mPlaybackFragment = (PlaybackFragment) fragment;
+        }
+    }
+
+    private void initPlayerTheme() {
+        int playerThemeResId = MainUIData.instance(this).getColorScheme().playerThemeResId;
+        if (playerThemeResId > 0) {
+            setTheme(playerThemeResId);
         }
     }
 

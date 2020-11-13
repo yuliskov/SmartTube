@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class UriBackgroundManager {
@@ -37,7 +38,8 @@ public class UriBackgroundManager {
     private void prepareBackgroundManager() {
         mBackgroundManager = BackgroundManager.getInstance(mActivity);
         mBackgroundManager.attach(mActivity.getWindow());
-        mDefaultBackground = ContextCompat.getDrawable(mActivity, R.color.shelf_background_black);
+        int shelfBackgroundColorId = MainUIData.instance(mActivity).getColorScheme().shelfBackgroundColorId;
+        mDefaultBackground = ContextCompat.getDrawable(mActivity, shelfBackgroundColorId > 0 ? shelfBackgroundColorId : R.color.shelf_background_dark);
         mBackgroundTask = new UpdateBackgroundTask();
         mMetrics = new DisplayMetrics();
         mActivity.getWindowManager().getDefaultDisplay().getMetrics(mMetrics);

@@ -27,6 +27,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
@@ -163,8 +164,10 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         setHeadersState(HEADERS_ENABLED);
         setHeadersTransitionOnBackEnabled(true);
 
+        int brandColorId = MainUIData.instance(getActivity()).getColorScheme().brandColorId;
+
         // Set fastLane (or headers) background color
-        setBrandColor(ContextCompat.getColor(getActivity(), R.color.fastlane_background_dark));
+        setBrandColor(ContextCompat.getColor(getActivity(), brandColorId > 0 ? brandColorId : R.color.fastlane_background_dark));
 
         // Set search icon color.
         setSearchAffordanceColor(ContextCompat.getColor(getActivity(), R.color.search_opaque));

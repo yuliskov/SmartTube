@@ -125,8 +125,22 @@ public class MainUIData {
     }
 
     private void initColorSchemes() {
-        mColorSchemes.add(new ColorScheme(R.string.color_scheme_default, Helpers.getResourceId("App.Theme.Leanback", "style", mContext), R.color.transparent, 0));
-        mColorSchemes.add(new ColorScheme(R.string.color_scheme_red_grey, Helpers.getResourceId("App.Theme.RedGrey", "style", mContext), R.color.transparent, 0));
+        mColorSchemes.add(new ColorScheme(
+                R.string.color_scheme_default,
+                -1,
+                -1,
+                -1,
+                -1,
+                -1,
+                -1));
+        mColorSchemes.add(new ColorScheme(
+                R.string.color_scheme_red_grey,
+                Helpers.getResourceId("App.Theme.RedGrey", "style", mContext),
+                Helpers.getResourceId("text_badge_image_view_red", "layout", mContext),
+                Helpers.getResourceId("scheme_red_grey_background_dark", "color", mContext),
+                Helpers.getResourceId("App.Theme.Leanback.Browse.RedGrey", "style", mContext),
+                Helpers.getResourceId("scheme_red_grey_shelf_background_dark", "color", mContext),
+                Helpers.getResourceId("scheme_red_grey_card_background_dark", "color", mContext)));
     }
 
     private void persistState() {
@@ -160,15 +174,21 @@ public class MainUIData {
 
     public static class ColorScheme {
         public final int nameResId;
-        public final int themeResId;
-        public final int backgroundColorResId;
-        public final int captionStyle;
+        public final int playerThemeResId;
+        public final int cardLayoutResId;
+        public final int brandColorId;
+        public final int browseThemeResId;
+        public final int shelfBackgroundColorId;
+        public final int cardColorId;
 
-        public ColorScheme(int nameResId, int themeResId, int backgroundColorResId, int captionStyle) {
+        public ColorScheme(int nameResId, int playerThemeResId, int cardLayoutResId, int brandColorId, int browseThemeResId, int shelfBackgroundColorId, int cardColorId) {
             this.nameResId = nameResId;
-            this.themeResId = themeResId;
-            this.backgroundColorResId = backgroundColorResId;
-            this.captionStyle = captionStyle;
+            this.playerThemeResId = playerThemeResId;
+            this.cardLayoutResId = cardLayoutResId;
+            this.brandColorId = brandColorId;
+            this.browseThemeResId = browseThemeResId;
+            this.shelfBackgroundColorId = shelfBackgroundColorId;
+            this.cardColorId = cardColorId;
         }
     }
 }

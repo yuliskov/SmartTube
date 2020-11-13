@@ -38,8 +38,10 @@ public class CardPresenter extends Presenter {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
+        int cardColorId = MainUIData.instance(parent.getContext()).getColorScheme().cardColorId;
+
         mDefaultBackgroundColor =
-            ContextCompat.getColor(parent.getContext(), R.color.card_default_background_dark);
+            ContextCompat.getColor(parent.getContext(), cardColorId > 0 ? cardColorId : R.color.card_default_background_dark);
         mDefaultTextColor =
                 ContextCompat.getColor(parent.getContext(), R.color.card_default_text);
         mSelectedBackgroundColor =

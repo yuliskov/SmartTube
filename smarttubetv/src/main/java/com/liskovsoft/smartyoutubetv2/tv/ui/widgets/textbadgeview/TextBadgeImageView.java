@@ -11,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class TextBadgeImageView extends RelativeLayout {
@@ -37,7 +38,9 @@ public class TextBadgeImageView extends RelativeLayout {
     }
 
     private void init() {
-        inflate(getContext(), R.layout.text_badge_image_view, this);
+        int layoutResId = MainUIData.instance(getContext()).getColorScheme().cardLayoutResId;
+
+        inflate(getContext(), layoutResId > 0 ? layoutResId : R.layout.text_badge_image_view, this);
         mMainImage = findViewById(R.id.main_image);
         mPreviewImage = findViewById(R.id.preview_image);
         mBadgeText = findViewById(R.id.extra_text_badge);
