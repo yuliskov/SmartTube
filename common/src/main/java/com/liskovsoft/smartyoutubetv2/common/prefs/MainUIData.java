@@ -2,12 +2,15 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import com.google.android.exoplayer2.text.CaptionStyleCompat;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,11 +25,14 @@ public class MainUIData {
     private final Set<Integer> mEnabledLeftPanelCategories = new HashSet<>();
     private float mUIScale;
     private float mVideoGridScale;
+    private final List<ColorScheme> mColorSchemes = new ArrayList<>();
+    private int mColorSchemeIndex;
 
     public MainUIData(Context context) {
         mContext = context;
         mPrefs = AppPrefs.instance(context);
         initLeftPanelCategories();
+        initColorSchemes();
         restoreState();
     }
 
@@ -95,6 +101,19 @@ public class MainUIData {
         return mUIScale;
     }
 
+    public List<ColorScheme> getColorSchemes() {
+        return mColorSchemes;
+    }
+
+    public void setColorScheme(ColorScheme scheme) {
+        mColorSchemeIndex = mColorSchemes.indexOf(scheme);
+        persistState();
+    }
+
+    public ColorScheme getColorScheme() {
+        return mColorSchemes.get(mColorSchemeIndex);
+    }
+
     private void initLeftPanelCategories() {
         mLeftPanelCategories.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mLeftPanelCategories.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
@@ -106,10 +125,15 @@ public class MainUIData {
         mLeftPanelCategories.put(R.string.header_playlists, MediaGroup.TYPE_PLAYLISTS);
     }
 
+    private void initColorSchemes() {
+        mColorSchemes.add(new ColorScheme(R.string.subtitle_default, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
+        mColorSchemes.add(new ColorScheme(R.string.subtitle_semi_transparent_bg, R.color.semi_grey, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
+    }
+
     private void persistState() {
         String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
         mPrefs.setMainUIData(Helpers.mergeObject(
-                mIsAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale));
+                mIsAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale, mColorSchemeIndex));
     }
 
     private void restoreState() {
@@ -122,6 +146,7 @@ public class MainUIData {
         mBootCategoryId = Helpers.parseInt(split, 2, MediaGroup.TYPE_HOME);
         mVideoGridScale = Helpers.parseFloat(split, 3, 1.0f);
         mUIScale = Helpers.parseFloat(split, 4, 1.0f);
+        mColorSchemeIndex = Helpers.parseInt(split, 5, 0);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArray(selectedCategories);
@@ -131,6 +156,18 @@ public class MainUIData {
             }
         } else {
             mEnabledLeftPanelCategories.addAll(mLeftPanelCategories.values());
+        }
+    }
+
+    public static class ColorScheme {
+        public final int nameResId;
+        public final int backgroundColorResId;
+        public final int captionStyle;
+
+        public ColorScheme(int nameResId, int backgroundColorResId, int captionStyle) {
+            this.nameResId = nameResId;
+            this.backgroundColorResId = backgroundColorResId;
+            this.captionStyle = captionStyle;
         }
     }
 }

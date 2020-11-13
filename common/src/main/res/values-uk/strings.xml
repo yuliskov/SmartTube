@@ -85,4 +85,5 @@
     <string name="large_ui">Збільшений інтерфейс</string>
     <string name="video_grid_scale">Масштаб сітки відео</string>
     <string name="scale_ui">Масштаб інтерфейсу</string>
+    <string name="color_scheme">Схема кольорів</string>
 </resources>

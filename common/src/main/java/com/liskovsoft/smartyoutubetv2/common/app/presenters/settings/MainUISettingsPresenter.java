@@ -8,7 +8,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData.ColorScheme;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,7 @@ public class MainUISettingsPresenter {
         appendScaleUI(settingsPresenter);
         appendLeftPanelCategories(settingsPresenter);
         appendBootToCategory(settingsPresenter);
+        appendColorScheme(settingsPresenter);
 
         settingsPresenter.showDialog(mContext.getString(R.string.dialog_main_ui), () -> {
             if (mRestartApp) {
@@ -108,5 +111,24 @@ public class MainUISettingsPresenter {
         }
 
         settingsPresenter.appendRadioCategory(mContext.getString(R.string.boot_to_section), options);
+    }
+
+    private void appendColorScheme(AppSettingsPresenter settingsPresenter) {
+        List<ColorScheme> colorSchemes = mMainUIData.getColorSchemes();
+
+        settingsPresenter.appendRadioCategory(mContext.getString(R.string.color_scheme), fromColorSchemes(colorSchemes));
+    }
+
+    private List<OptionItem> fromColorSchemes(List<ColorScheme> colorSchemes) {
+        List<OptionItem> styleOptions = new ArrayList<>();
+
+        for (ColorScheme colorScheme : colorSchemes) {
+            styleOptions.add(UiOptionItem.from(
+                    mContext.getString(colorScheme.nameResId),
+                    option -> mMainUIData.setColorScheme(colorScheme),
+                    colorScheme.equals(mMainUIData.getColorScheme())));
+        }
+
+        return styleOptions;
     }
 }

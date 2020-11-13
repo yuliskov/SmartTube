@@ -85,4 +85,5 @@
     <string name="large_ui">Large UI</string>
     <string name="video_grid_scale">Video grid scale</string>
     <string name="scale_ui">UI scale</string>
+    <string name="color_scheme">Color scheme</string>
 </resources>
