@@ -86,4 +86,6 @@
     <string name="video_grid_scale">Масштаб сітки відео</string>
     <string name="scale_ui">Масштаб інтерфейсу</string>
     <string name="color_scheme">Схема кольорів</string>
+    <string name="color_scheme_default">За замовчуванням</string>
+    <string name="color_scheme_red_grey">Червоно-сіра</string>
 </resources>

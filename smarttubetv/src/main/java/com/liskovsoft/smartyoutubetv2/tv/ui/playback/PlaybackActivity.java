@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 
@@ -28,6 +29,7 @@ public class PlaybackActivity extends LeanbackActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setTheme(MainUIData.instance(this).getColorScheme().themeResId);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playback);
         Fragment fragment =

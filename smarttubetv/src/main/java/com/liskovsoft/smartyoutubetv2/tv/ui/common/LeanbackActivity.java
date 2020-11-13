@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.locale.LangHelper;
 import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
@@ -37,18 +36,7 @@ public abstract class LeanbackActivity extends MotherActivity {
         mViewManager = ViewManager.instance(this);
         mModeSyncManager = ModeSyncManager.instance();
         mDoubleBackManager = new DoubleBackManager(this);
-
-        //mGestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
-        //    public void onLongPress(MotionEvent e) {
-        //        Log.e("", "Longpress detected");
-        //    }
-        //});
     }
-
-    //@Override
-    //public boolean onTouchEvent(MotionEvent event) {
-    //    return mGestureDetector.onTouchEvent(event);
-    //};
 
     @Override
     public boolean onSearchRequested() {

@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.google.android.exoplayer2.text.CaptionStyleCompat;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -126,8 +125,8 @@ public class MainUIData {
     }
 
     private void initColorSchemes() {
-        mColorSchemes.add(new ColorScheme(R.string.subtitle_default, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
-        mColorSchemes.add(new ColorScheme(R.string.subtitle_semi_transparent_bg, R.color.semi_grey, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
+        mColorSchemes.add(new ColorScheme(R.string.color_scheme_default, Helpers.getResourceId("App.Theme.Leanback", "style", mContext), R.color.transparent, 0));
+        mColorSchemes.add(new ColorScheme(R.string.color_scheme_red_grey, Helpers.getResourceId("App.Theme.RedGrey", "style", mContext), R.color.transparent, 0));
     }
 
     private void persistState() {
@@ -161,11 +160,13 @@ public class MainUIData {
 
     public static class ColorScheme {
         public final int nameResId;
+        public final int themeResId;
         public final int backgroundColorResId;
         public final int captionStyle;
 
-        public ColorScheme(int nameResId, int backgroundColorResId, int captionStyle) {
+        public ColorScheme(int nameResId, int themeResId, int backgroundColorResId, int captionStyle) {
             this.nameResId = nameResId;
+            this.themeResId = themeResId;
             this.backgroundColorResId = backgroundColorResId;
             this.captionStyle = captionStyle;
         }

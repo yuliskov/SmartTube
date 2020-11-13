@@ -86,4 +86,6 @@
     <string name="video_grid_scale">Масштаб сетки роликов</string>
     <string name="scale_ui">Масштаб интерфейса</string>
     <string name="color_scheme">Цветовая схема</string>
+    <string name="color_scheme_default">По-умолчанию</string>
+    <string name="color_scheme_red_grey">Красно-серая</string>
 </resources>

@@ -17,4 +17,16 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:colorPrimary" tools:targetApi="21">@color/fastlane_background</item>
     </style>
+
+    <!--  Color scheme: Red with grey  -->
+    <style name="App.Theme.RedGrey" parent="Theme.Leanback">
+        <item name="android:windowBackground">@null</item>
+        <item name="playbackProgressPrimaryColor">@color/red</item>
+        <item name="playbackProgressSecondaryColor">@color/light_red</item>
+        <item name="playbackControlsIconHighlightColor">@color/red</item>
+    </style>
+    <style name="ProgressBarHorizontal.RedGrey" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_bar_drawable</item>
+    </style>
+    <!--  End Color scheme: Red with grey  -->
 </resources>
