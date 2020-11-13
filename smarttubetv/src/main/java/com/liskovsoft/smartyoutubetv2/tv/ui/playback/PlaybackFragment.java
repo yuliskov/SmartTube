@@ -62,7 +62,7 @@ import java.util.Map;
  */
 public class PlaybackFragment extends VideoEventsOverrideFragment implements PlaybackView, PlaybackController {
     private static final String TAG = PlaybackFragment.class.getSimpleName();
-    private static final int UPDATE_DELAY = 16;
+    private static final int UPDATE_DELAY_MS = 16;
     private VideoPlayerGlue mPlayerGlue;
     private LeanbackPlayerAdapter mPlayerAdapter;
     private SimpleExoPlayer mPlayer;
@@ -270,7 +270,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mExoPlayerController = new ExoPlayerController(mPlayer, mTrackSelector, getActivity());
         mExoPlayerController.setEventListener(mEventListener);
 
-        mPlayerAdapter = new LeanbackPlayerAdapter(getActivity(), mPlayer, UPDATE_DELAY);
+        mPlayerAdapter = new LeanbackPlayerAdapter(getActivity(), mPlayer, UPDATE_DELAY_MS);
 
         mPlaylistActionListener = new PlayerActionListener();
         mPlayerGlue = new VideoPlayerGlue(getActivity(), mPlayerAdapter, mPlaylistActionListener);
