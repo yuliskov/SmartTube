@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.CompletionInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import androidx.fragment.app.Fragment;
 import androidx.leanback.R;
@@ -326,6 +328,16 @@ public class SearchSupportFragment extends Fragment {
             Log.d(TAG, "on search field focused");
             if (focused && mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
                 mRowsSupportFragment.getVerticalGridView().clearFocus();
+            }
+        });
+        
+        mSearchTextEditor.setOnClickListener(v -> {
+            Log.d(TAG, "on search field clicked");
+
+            if (getContext() != null) {
+                // https://stackoverflow.com/questions/5105354/how-to-show-soft-keyboard-when-edittext-is-focused
+                InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
             }
         });
 
