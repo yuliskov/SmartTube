@@ -6,12 +6,15 @@
               android:orientation="vertical"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content">
+
     <ImageView
         android:id="@+id/settings_image"
-        android:layout_width="@dimen/grid_item_width"
-        android:layout_height="@dimen/grid_item_height"
+        android:layout_width="@dimen/grid_image_size"
+        android:layout_height="@dimen/grid_image_size"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/grid_image_padding"
         android:visibility="invisible"
-        tools:ignore="ContentDescription"/>
+        tools:ignore="ContentDescription" />
     <TextView
         android:id="@+id/settings_title"
         android:singleLine="true"

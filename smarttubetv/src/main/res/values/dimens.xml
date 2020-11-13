@@ -27,6 +27,8 @@
 
     <!-- Elements below aren't used in the app -->
 
+    <dimen name="grid_image_size">70dp</dimen>
+    <dimen name="grid_image_padding">15dp</dimen>
     <dimen name="grid_item_width">100dp</dimen>
     <dimen name="grid_item_height">100dp</dimen>
     <dimen name="spinner_width">50dp</dimen>
