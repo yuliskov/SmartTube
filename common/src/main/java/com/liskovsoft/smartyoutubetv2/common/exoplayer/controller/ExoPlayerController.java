@@ -47,7 +47,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         mTrackSelectorManager = new TrackSelectorManager(trackSelector);
 
         // fallback selection (in case listener == null)
-        mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(FormatItem.VIDEO_HD_AVC_30));
+        selectFormatSilent(FormatItem.VIDEO_HD_AVC_30);
     }
 
     @Override
@@ -149,8 +149,14 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     @Override
+    public void selectFormatSilent(FormatItem option) {
+        mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(option));
+    }
+
+    @Override
     public void selectFormat(FormatItem option) {
         mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(option));
+        // TODO: move to the {@link #onTrackChanged()} somehow
         mEventListener.onTrackSelected(option);
     }
 

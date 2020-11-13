@@ -84,6 +84,11 @@ public class NullPlayerController implements PlayerController {
     }
 
     @Override
+    public void selectFormatSilent(FormatItem option) {
+        
+    }
+
+    @Override
     public FormatItem getVideoFormat() {
         return null;
     }
