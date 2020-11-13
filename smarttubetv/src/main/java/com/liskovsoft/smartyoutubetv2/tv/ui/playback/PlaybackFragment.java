@@ -85,7 +85,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(null); // trying to fix bug with presets
 
         mMediaGroupAdapters = new HashMap<>();
         mBackgroundManager = getLeanbackActivity().getBackgroundManager();
