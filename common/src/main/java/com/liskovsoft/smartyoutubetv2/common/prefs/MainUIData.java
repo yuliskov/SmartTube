@@ -139,6 +139,15 @@ public class MainUIData {
                 Helpers.getResourceId("scheme_red_grey_background_dark", "color", mContext),
                 Helpers.getResourceId("scheme_red_grey_shelf_background_dark", "color", mContext),
                 Helpers.getResourceId("scheme_red_grey_card_background_dark", "color", mContext)));
+        mColorSchemes.add(new ColorScheme(
+                R.string.color_scheme_red,
+                Helpers.getResourceId("App.Theme.Red", "style", mContext),
+                Helpers.getResourceId("App.Theme.Leanback.Browse.Red", "style", mContext),
+                Helpers.getResourceId("LeanbackPreferences.Red", "style", mContext),
+                Helpers.getResourceId("text_badge_image_view_red", "layout", mContext),
+                Helpers.getResourceId("scheme_red_background_dark", "color", mContext),
+                Helpers.getResourceId("scheme_red_shelf_background_dark", "color", mContext),
+                Helpers.getResourceId("scheme_red_card_background_dark", "color", mContext)));
     }
 
     private void persistState() {

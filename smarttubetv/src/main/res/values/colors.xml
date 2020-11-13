@@ -34,7 +34,13 @@
     <color name="scheme_red_grey_background">#181818</color>
     <color name="scheme_red_grey_background_dark">#181818</color>
     <color name="scheme_red_grey_shelf_background_dark">#000000</color>
-    <color name="scheme_red_grey_card_background_dark">#000000</color>
+    <color name="scheme_red_grey_card_background_dark">#181818</color>
+
+    <!-- Red color scheme -->
+    <color name="scheme_red_background">#131313</color>
+    <color name="scheme_red_background_dark">@color/dark_red</color>
+    <color name="scheme_red_shelf_background_dark">#131313</color>
+    <color name="scheme_red_card_background_dark">#36474f</color>
 
     <!-- Vineyard -->
     <color name="black_87pc">#77000000</color>
