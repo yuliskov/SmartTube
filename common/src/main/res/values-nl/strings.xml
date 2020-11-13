@@ -85,4 +85,7 @@
     <string name="large_ui">Grote weergave</string>
     <string name="video_grid_scale">Videoraster formaat</string>
     <string name="scale_ui">Display formaat</string>
+    <string name="color_scheme">Kleuren</string>
+    <string name="color_scheme_default">Standaard</string>
+    <string name="color_scheme_red_grey">Rood-grijs</string>
 </resources>
