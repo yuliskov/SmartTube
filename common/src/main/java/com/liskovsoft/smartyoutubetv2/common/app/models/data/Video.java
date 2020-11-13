@@ -27,6 +27,7 @@ public final class Video implements Parcelable {
     public int percentWatched = -1;
     public MediaItem mediaItem;
     public MediaItem nextMediaItem;
+    public boolean hasNewContent;
 
     public Video() {
         
@@ -80,6 +81,7 @@ public final class Video implements Parcelable {
         video.studio = item.getAuthor();
         video.percentWatched = item.getPercentWatched();
         video.badge = item.getBadgeText();
+        video.hasNewContent = item.hasNewContent();
         video.previewUrl = item.getVideoPreviewUrl();
         video.playlistIndex = item.getPlaylistIndex();
         video.mediaItem = item;

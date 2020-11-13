@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -91,11 +92,12 @@ public class CardPresenter extends Presenter {
         Video video = (Video) item;
 
         TextBadgeImageCardView cardView = (TextBadgeImageCardView) viewHolder.view;
+        Context context = cardView.getContext();
         Resources res = cardView.getResources();
 
         cardView.setTitleText(video.title);
         cardView.setContentText(video.description);
-        cardView.setBadgeText(video.badge);
+        cardView.setBadgeText(video.hasNewContent ? context.getString(R.string.badge_new_content) : video.badge);
         cardView.setProgress(video.percentWatched);
 
         if (mIsAnimatedPreviewsEnabled) {
@@ -114,7 +116,7 @@ public class CardPresenter extends Presenter {
 
             cardView.setMainImageDimensions(width, height);
 
-            Glide.with(cardView.getContext())
+            Glide.with(context)
                     .load(video.cardImageUrl)
                     .apply(RequestOptions.errorOf(mDefaultCardImage))
                     .listener(mErrorListener)
