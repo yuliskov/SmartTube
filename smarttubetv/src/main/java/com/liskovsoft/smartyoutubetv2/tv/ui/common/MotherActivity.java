@@ -15,6 +15,7 @@ public class MotherActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         forceDpi1();
+        initTheme();
     }
 
     private void forceDpi1() {
@@ -45,5 +46,12 @@ public class MotherActivity extends FragmentActivity {
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         displayMetrics.densityDpi = DisplayMetrics.DENSITY_XHIGH;
         getResources().getDisplayMetrics().setTo(displayMetrics);
+    }
+
+    protected void initTheme() {
+        int rootThemeResId = MainUIData.instance(this).getColorScheme().browseThemeResId;
+        if (rootThemeResId > 0) {
+            setTheme(rootThemeResId);
+        }
     }
 }

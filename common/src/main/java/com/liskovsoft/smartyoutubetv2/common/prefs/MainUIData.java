@@ -127,34 +127,25 @@ public class MainUIData {
     private void initColorSchemes() {
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_default,
-                -1,
-                -1,
-                -1,
-                -1,
-                -1,
-                -1,
-                -1,
-                -1));
+                null,
+                null,
+                null,
+                null,
+                mContext));
         mColorSchemes.add(new ColorScheme(
-                R.string.color_scheme_red_grey,
-                Helpers.getResourceId("App.Theme.RedGrey", "style", mContext),
-                Helpers.getResourceId("App.Theme.Leanback.Browse.RedGrey", "style", mContext),
-                Helpers.getResourceId("LeanbackPreferences.RedGrey", "style", mContext),
-                Helpers.getResourceId("text_badge_image_view_red", "layout", mContext),
-                Helpers.getResourceId("scheme_red_grey_background_dark", "color", mContext),
-                Helpers.getResourceId("semi_red", "color", mContext),
-                Helpers.getResourceId("scheme_red_grey_shelf_background_dark", "color", mContext),
-                Helpers.getResourceId("scheme_red_grey_card_background_dark", "color", mContext)));
+                R.string.color_scheme_dark,
+                "App.Theme.Dark.Player",
+                "App.Theme.Dark.Browse",
+                "App.Theme.Dark.Preferences",
+                "text_badge_image_view_red",
+                mContext));
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_red,
-                Helpers.getResourceId("App.Theme.Red", "style", mContext),
-                Helpers.getResourceId("App.Theme.Leanback.Browse.Red", "style", mContext),
-                Helpers.getResourceId("LeanbackPreferences.Red", "style", mContext),
-                Helpers.getResourceId("text_badge_image_view_red", "layout", mContext),
-                Helpers.getResourceId("scheme_red_background_dark", "color", mContext),
-                Helpers.getResourceId("semi_red", "color", mContext),
-                Helpers.getResourceId("scheme_red_shelf_background_dark", "color", mContext),
-                Helpers.getResourceId("scheme_red_card_background_dark", "color", mContext)));
+                "App.Theme.Red.Player",
+                "App.Theme.Red.Browse",
+                "App.Theme.Red.Preferences",
+                "text_badge_image_view_red",
+                mContext));
     }
 
     private void persistState() {
@@ -189,32 +180,21 @@ public class MainUIData {
     public static class ColorScheme {
         public final int nameResId;
         public final int playerThemeResId;
-        public final int cardLayoutResId;
         public final int browseThemeResId;
         public final int settingsThemeResId;
-        public final int brandColorId;
-        public final int brandAccentColorId;
-        public final int shelfBackgroundColorId;
-        public final int cardColorId;
+        public final int cardLayoutResId;
 
         public ColorScheme(int nameResId,
-                           int playerThemeResId,
-                           int browseThemeResId,
-                           int settingsThemeResId,
-                           int cardLayoutResId,
-                           int brandColorId,
-                           int brandAccentColorId,
-                           int shelfBackgroundColorId,
-                           int cardColorId) {
+                           String playerTheme,
+                           String browseTheme,
+                           String settingsTheme,
+                           String cardLayout,
+                           Context context) {
             this.nameResId = nameResId;
-            this.playerThemeResId = playerThemeResId;
-            this.cardLayoutResId = cardLayoutResId;
-            this.brandColorId = brandColorId;
-            this.browseThemeResId = browseThemeResId;
-            this.brandAccentColorId = brandAccentColorId;
-            this.shelfBackgroundColorId = shelfBackgroundColorId;
-            this.cardColorId = cardColorId;
-            this.settingsThemeResId = settingsThemeResId;
+            this.playerThemeResId = Helpers.getResourceId(playerTheme, "style", context);
+            this.browseThemeResId = Helpers.getResourceId(browseTheme, "style", context);
+            this.settingsThemeResId = Helpers.getResourceId(settingsTheme, "style", context);
+            this.cardLayoutResId = Helpers.getResourceId(cardLayout, "layout", context);
         }
     }
 }

@@ -10,12 +10,12 @@ public class BrowseActivity extends LeanbackActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        initBrowseTheme();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_main);
     }
 
-    private void initBrowseTheme() {
+    @Override
+    protected void initTheme() {
         int browseThemeResId = MainUIData.instance(this).getColorScheme().browseThemeResId;
         if (browseThemeResId > 0) {
             setTheme(browseThemeResId);

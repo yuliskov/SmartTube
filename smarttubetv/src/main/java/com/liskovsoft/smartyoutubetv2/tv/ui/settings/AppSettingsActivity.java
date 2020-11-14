@@ -14,14 +14,14 @@ public class AppSettingsActivity extends MotherActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        initSettingTheme();
         setupActivity();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_app_settings);
         mFragment = (AppSettingsFragment) getFragmentManager().findFragmentById(R.id.app_settings_fragment);
     }
 
-    private void initSettingTheme() {
+    @Override
+    protected void initTheme() {
         int settingsThemeResId = MainUIData.instance(this).getColorScheme().settingsThemeResId;
         if (settingsThemeResId > 0) {
             setTheme(settingsThemeResId);

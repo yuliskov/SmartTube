@@ -1,76 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="App.Theme.Leanback" parent="Theme.Leanback">
+    <attr name="brandColor" format="reference"/>
+    <attr name="brandAccentColor" format="reference"/>
+    <attr name="shelfBackground" format="reference"/>
+    <attr name="cardDefaultBackground" format="reference"/>
+    <attr name="customProgressStyle" format="reference"/>
+
+    <!-- Default theme. -->
+    <style name="App.Theme.Leanback.Player" parent="Theme.Leanback">
         <item name="android:windowBackground">@null</item>
+        <item name="shelfBackground">@color/shelf_background_dark</item>
     </style>
     <style name="App.Theme.Leanback.Browse" parent="Theme.Leanback.Browse">
         <item name="android:windowBackground">@color/shelf_background_dark</item>
-        <item name="customProgressStyle">@style/ProgressBarHorizontal.RedGrey</item>
+        <item name="brandColor">@color/fastlane_background_dark</item>
+        <item name="brandAccentColor">@color/search_opaque</item>
+        <item name="shelfBackground">@color/shelf_background_dark</item>
+        <item name="cardDefaultBackground">@color/card_default_background_dark</item>
     </style>
     <style name="App.Theme.Leanback.GuidedStep" parent="Theme.Leanback.GuidedStep">
         <item name="android:windowBackground">@color/shelf_background_dark</item>
     </style>
-    <style name="LeanbackPreferences" parent="Theme.Leanback">
+    <style name="App.Theme.Leanback.Preferences" parent="Theme.Leanback">
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Leanback</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:colorPrimary" tools:targetApi="21">@color/fastlane_background</item>
     </style>
+    <!-- End Default theme -->
 
     <!--  Color scheme: Red with grey  -->
-    <attr name="customProgressStyle" format="reference"/>
-    <style name="App.Theme.RedGrey" parent="Theme.Leanback">
+    <style name="App.Theme.Dark.Player" parent="Theme.Leanback">
         <item name="android:windowBackground">@null</item>
         <item name="playbackProgressPrimaryColor">@color/red</item>
         <item name="playbackProgressSecondaryColor">@color/light_red</item>
         <item name="playbackControlsIconHighlightColor">@color/red</item>
-        <item name="customProgressStyle">@style/ProgressBarHorizontal.RedGrey</item>
+        <item name="customProgressStyle">@style/ProgressBarHorizontal.Dark</item>
+        <item name="shelfBackground">@color/scheme_red_grey_shelf_background_dark</item>
     </style>
-    <style name="ProgressBarHorizontal.RedGrey" parent="@android:style/Widget.ProgressBar.Horizontal">
+    <style name="App.Theme.Dark.Browse" parent="Theme.Leanback.Browse">
+        <item name="android:windowBackground">@color/scheme_red_grey_shelf_background_dark</item>
+        <item name="brandColor">@color/scheme_red_grey_background_dark</item>
+        <item name="brandAccentColor">@color/semi_red</item>
+        <item name="customProgressStyle">@style/ProgressBarHorizontal.Dark</item>
+        <item name="shelfBackground">@color/scheme_red_grey_shelf_background_dark</item>
+        <item name="cardDefaultBackground">@color/scheme_red_grey_card_background_dark</item>
+    </style>
+    <style name="ProgressBarHorizontal.Dark" parent="@android:style/Widget.ProgressBar.Horizontal">
         <item name="android:progressDrawable">@drawable/progress_bar_drawable</item>
     </style>
-    <style name="LeanbackPreferences.RedGrey" parent="Theme.Leanback">
+    <style name="App.Theme.Dark.Preferences" parent="Theme.Leanback">
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Leanback</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:colorPrimary" tools:targetApi="21">@color/scheme_red_grey_background</item>
     </style>
-    <style name="App.Theme.Leanback.Browse.RedGrey" parent="Theme.Leanback.Browse">
-        <item name="android:windowBackground">@color/scheme_red_grey_shelf_background_dark</item>
-        <item name="customProgressStyle">@style/ProgressBarHorizontal.RedGrey</item>
-    </style>
-    <style name="App.Theme.Leanback.GuidedStep.RedGrey" parent="Theme.Leanback.GuidedStep">
+    <style name="App.Theme.Dark.GuidedStep" parent="Theme.Leanback.GuidedStep">
         <item name="android:windowBackground">@color/scheme_red_grey_shelf_background_dark</item>
     </style>
     <!--  End Color scheme: Red with grey  -->
 
     <!--  Color scheme: Red -->
-    <style name="App.Theme.Red" parent="Theme.Leanback">
+    <style name="App.Theme.Red.Playback" parent="Theme.Leanback">
         <item name="android:windowBackground">@null</item>
         <item name="playbackProgressPrimaryColor">@color/semi_red</item>
         <item name="playbackProgressSecondaryColor">@color/light_red</item>
         <item name="playbackControlsIconHighlightColor">@color/semi_red</item>
         <item name="customProgressStyle">@style/ProgressBarHorizontal.Red</item>
+        <item name="shelfBackground">@color/scheme_red_shelf_background_dark</item>
     </style>
-    <style name="ProgressBarHorizontal.Red" parent="@android:style/Widget.ProgressBar.Horizontal">
-        <item name="android:progressDrawable">@drawable/progress_bar_red</item>
+    <style name="App.Theme.Red.Browse" parent="Theme.Leanback.Browse">
+        <item name="android:windowBackground">@color/scheme_red_shelf_background_dark</item>
+        <item name="brandColor">@color/scheme_red_background_dark</item>
+        <item name="brandAccentColor">@color/semi_red</item>
+        <item name="customProgressStyle">@style/ProgressBarHorizontal.Red</item>
+        <item name="shelfBackground">@color/scheme_red_shelf_background_dark</item>
+        <item name="cardDefaultBackground">@color/scheme_red_card_background_dark</item>
     </style>
-    <style name="LeanbackPreferences.Red" parent="Theme.Leanback">
+    <style name="App.Theme.Red.Preferences" parent="Theme.Leanback">
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Leanback</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:colorPrimary" tools:targetApi="21">@color/scheme_red_background_dark</item>
     </style>
-    <style name="App.Theme.Leanback.Browse.Red" parent="Theme.Leanback.Browse">
+    <style name="App.Theme.Red.GuidedStep" parent="Theme.Leanback.GuidedStep">
         <item name="android:windowBackground">@color/scheme_red_shelf_background_dark</item>
-        <item name="customProgressStyle">@style/ProgressBarHorizontal.Red</item>
     </style>
-    <style name="App.Theme.Leanback.GuidedStep.Red" parent="Theme.Leanback.GuidedStep">
-        <item name="android:windowBackground">@color/scheme_red_shelf_background_dark</item>
+    <style name="ProgressBarHorizontal.Red" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_bar_red</item>
     </style>
     <!--  End Color scheme: Red -->
 </resources>

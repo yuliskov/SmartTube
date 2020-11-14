@@ -10,8 +10,8 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.leanback.widget.Presenter;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
-import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class SettingsItemPresenter extends Presenter {
@@ -27,10 +27,8 @@ public class SettingsItemPresenter extends Presenter {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
-        int cardColorId = MainUIData.instance(parent.getContext()).getColorScheme().cardColorId;
-
         mDefaultBackgroundColor =
-                ContextCompat.getColor(parent.getContext(), cardColorId > 0 ? cardColorId : R.color.card_default_background_dark);
+                ContextCompat.getColor(parent.getContext(), Helpers.getThemeAttr(parent.getContext(), R.attr.cardDefaultBackground));
         mDefaultTextColor =
                 ContextCompat.getColor(parent.getContext(), R.color.card_default_text);
         mSelectedBackgroundColor =

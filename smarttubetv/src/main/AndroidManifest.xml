@@ -119,7 +119,7 @@
             android:supportsPictureInPicture="true"
             android:resizeableActivity="true"
             android:screenOrientation="landscape"
-            android:theme="@style/App.Theme.Leanback"/>
+            android:theme="@style/App.Theme.Leanback.Player"/>
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity"
@@ -150,7 +150,7 @@
                   android:noHistory="true"
                   android:launchMode="singleInstance"
                   android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
-                  android:theme="@style/LeanbackPreferences"/>
+                  android:theme="@style/App.Theme.Leanback.Preferences"/>
 
         <meta-data android:name="android.app.default_searchable"
             android:value="com.liskovsoft.smartyoutubetv2.tv.ui.details.VideoDetailsActivity"/>
@@ -200,7 +200,7 @@
         <activity android:name="com.liskovsoft.smartyoutubetv2.tv.old.ui.SettingsActivity"
             android:exported="true"
             android:screenOrientation="landscape"
-            android:theme="@style/LeanbackPreferences"
+            android:theme="@style/App.Theme.Leanback.Preferences"
             />
 
         <activity

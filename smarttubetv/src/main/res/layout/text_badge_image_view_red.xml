@@ -40,6 +40,6 @@
             android:layout_height="@dimen/lb_basic_card_info_badge_margin"
             android:max="100"
             android:progress="45"
-            style="@style/ProgressBarHorizontal.RedGrey"/>
+            style="@style/ProgressBarHorizontal.Dark"/>
     </LinearLayout>
 </merge>

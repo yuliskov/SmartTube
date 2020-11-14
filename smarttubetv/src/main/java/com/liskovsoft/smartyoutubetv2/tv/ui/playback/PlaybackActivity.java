@@ -29,7 +29,6 @@ public class PlaybackActivity extends LeanbackActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        initPlayerTheme();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playback);
         Fragment fragment =
@@ -39,7 +38,8 @@ public class PlaybackActivity extends LeanbackActivity {
         }
     }
 
-    private void initPlayerTheme() {
+    @Override
+    protected void initTheme() {
         int playerThemeResId = MainUIData.instance(this).getColorScheme().playerThemeResId;
         if (playerThemeResId > 0) {
             setTheme(playerThemeResId);

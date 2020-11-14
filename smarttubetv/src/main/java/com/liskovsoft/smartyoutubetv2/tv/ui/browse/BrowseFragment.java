@@ -3,9 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.core.content.ContextCompat;
@@ -19,7 +17,6 @@ import androidx.leanback.widget.PageRow;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.PresenterSelector;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Category;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -28,7 +25,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
-import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.LoginDialogFragment;
@@ -164,14 +160,11 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         setHeadersState(HEADERS_ENABLED);
         setHeadersTransitionOnBackEnabled(true);
 
-        int brandColorId = MainUIData.instance(getActivity()).getColorScheme().brandColorId;
-        int brandAccentColorId = MainUIData.instance(getActivity()).getColorScheme().brandAccentColorId;
-
         // Set fastLane (or headers) background color
-        setBrandColor(ContextCompat.getColor(getActivity(), brandColorId > 0 ? brandColorId : R.color.fastlane_background_dark));
+        setBrandColor(ContextCompat.getColor(getActivity(), Helpers.getThemeAttr(getActivity(), R.attr.brandColor)));
 
         // Set search icon color.
-        setSearchAffordanceColor(ContextCompat.getColor(getActivity(), brandAccentColorId > 0 ? brandAccentColorId : R.color.search_opaque));
+        setSearchAffordanceColor(ContextCompat.getColor(getActivity(), Helpers.getThemeAttr(getActivity(), R.attr.brandAccentColor)));
 
         setHeaderPresenterSelector(new PresenterSelector() {
             @Override

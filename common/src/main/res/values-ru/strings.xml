@@ -89,4 +89,5 @@
     <string name="color_scheme_default">По-умолчанию</string>
     <string name="color_scheme_red_grey">Красно-серая</string>
     <string name="color_scheme_red">Красная</string>
+    <string name="color_scheme_dark">Тёмная</string>
 </resources>

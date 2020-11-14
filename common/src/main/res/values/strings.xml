@@ -89,4 +89,5 @@
     <string name="color_scheme_default">Default</string>
     <string name="color_scheme_red_grey">Red-grey</string>
     <string name="color_scheme_red">Red</string>
+    <string name="color_scheme_dark">Dark</string>
 </resources>
