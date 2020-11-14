@@ -24,7 +24,7 @@
     <string name="subtitles_disabled">Uit</string>
     <string name="auto_frame_rate">Auto frame rate</string>
     <string name="frame_rate_correction">Fix fps:\n%s</string>
-    <string name="category_background_playback">Weergave op achtergrond</string>
+    <string name="category_background_playback">Afspelen op achtergrond</string>
     <string name="not_implemented">Niet geïmplementeerd</string>
     <string name="option_background_playback_off">Uit</string>
     <string name="option_background_playback_all">Video en audio</string>
@@ -71,7 +71,7 @@
     <string name="dialog_player_ui">Video Player</string>
     <string name="player_show_ui_on_pause">Player weergeven met OK-toets</string>
     <string name="player_pause_on_ok">Video pauzeren met OK-toets</string>
-    <string name="player_ok_button_behavior">OK-toets</string>
+    <string name="player_ok_button_behavior">OK toets</string>
     <string name="player_only_ui">Player weergeven</string>
     <string name="player_ui_and_pause">Player weergeven en pauzeren</string>
     <string name="player_only_pause">Pauzeren</string>
@@ -81,11 +81,17 @@
     <string name="player_ui_hide_behavior">Player verbergen</string>
     <string name="player_ui_hide_never">Nooit</string>
     <string name="side_panel_sections">Rubrieken</string>
-    <string name="boot_to_section">Starten bij rubriek</string>
+    <string name="boot_to_section">Opstarten met rubriek</string>
     <string name="large_ui">Grote weergave</string>
     <string name="video_grid_scale">Videoraster formaat</string>
     <string name="scale_ui">Display formaat</string>
-    <string name="color_scheme">Kleuren</string>
+    <string name="color_scheme">Thema</string>
     <string name="color_scheme_default">Standaard</string>
     <string name="color_scheme_red_grey">Rood-grijs</string>
+    <string name="color_scheme_red">Rood</string>
+    <string name="color_scheme_dark">Donker</string>
+    <string name="disable_update_check">Update controle uitschakelen</string>
+    <string name="show_again">Niet meer weergeven</string>
+    <string name="check_updates_auto">Update automatisch controleren</string>
+    <string name="select_account_on_boot">Account selecteren bij opstarten</string>
 </resources>
