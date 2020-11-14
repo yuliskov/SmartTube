@@ -328,18 +328,24 @@ public class SearchSupportFragment extends Fragment {
             Log.d(TAG, "on search field focused");
             if (focused && mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
                 mRowsSupportFragment.getVerticalGridView().clearFocus();
+
+                if (getContext() != null) {
+                    // https://stackoverflow.com/questions/5105354/how-to-show-soft-keyboard-when-edittext-is-focused
+                    InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                }
             }
         });
         
-        mSearchTextEditor.setOnClickListener(v -> {
-            Log.d(TAG, "on search field clicked");
-
-            if (getContext() != null) {
-                // https://stackoverflow.com/questions/5105354/how-to-show-soft-keyboard-when-edittext-is-focused
-                InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-            }
-        });
+        //mSearchTextEditor.setOnClickListener(v -> {
+        //    Log.d(TAG, "on search field clicked");
+        //
+        //    if (getContext() != null) {
+        //        // https://stackoverflow.com/questions/5105354/how-to-show-soft-keyboard-when-edittext-is-focused
+        //        InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        //        inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        //    }
+        //});
 
         mSpeechOrbView = mSearchBar.findViewById(R.id.lb_search_bar_speech_orb);
 
