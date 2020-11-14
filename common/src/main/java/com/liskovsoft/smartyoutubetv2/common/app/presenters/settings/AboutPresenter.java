@@ -36,9 +36,9 @@ public class AboutPresenter {
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
         settingsPresenter.clear();
 
-        appendDisableUpdateCheck(settingsPresenter);
+        appendUpdateCheckSwitch(settingsPresenter);
 
-        appendUpdateCheck(settingsPresenter);
+        appendUpdateCheckButton(settingsPresenter);
 
         appendSiteLink(settingsPresenter);
 
@@ -47,15 +47,15 @@ public class AboutPresenter {
         settingsPresenter.showDialog(mainTitle);
     }
 
-    private void appendDisableUpdateCheck(AppSettingsPresenter settingsPresenter) {
+    private void appendUpdateCheckSwitch(AppSettingsPresenter settingsPresenter) {
         AppUpdateChecker mUpdateChecker = new AppUpdateChecker(mContext, null);
 
-        settingsPresenter.appendSingleSwitch(UiOptionItem.from(mContext.getString(R.string.disable_update_check), optionItem -> {
-            mUpdateChecker.disableUpdateCheck(optionItem.isSelected());
-        }, mUpdateChecker.isUpdateCheckDisabled()));
+        settingsPresenter.appendSingleSwitch(UiOptionItem.from(mContext.getString(R.string.check_updates_auto), optionItem -> {
+            mUpdateChecker.enableUpdateCheck(optionItem.isSelected());
+        }, mUpdateChecker.isUpdateCheckEnabled()));
     }
 
-    private void appendUpdateCheck(AppSettingsPresenter settingsPresenter) {
+    private void appendUpdateCheckButton(AppSettingsPresenter settingsPresenter) {
         OptionItem updateCheckOption = UiOptionItem.from(
                 mContext.getString(R.string.check_for_updates),
                 option -> AppUpdateManager.instance(mContext).start(true));

@@ -8,6 +8,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.Account;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -62,7 +63,8 @@ public class AccountSelectionPresenter {
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
         settingsPresenter.clear();
 
-        createSelectAccountSection(accounts, settingsPresenter);
+        appendAccountSelection(accounts, settingsPresenter);
+        appendShowAgain(settingsPresenter);
 
         settingsPresenter.showDialog(mContext.getString(R.string.settings_accounts), () -> {
             if (mSelectedAccount != mOriginAccount) {
@@ -74,7 +76,7 @@ public class AccountSelectionPresenter {
         });
     }
 
-    private void createSelectAccountSection(List<Account> accounts, AppSettingsPresenter settingsPresenter) {
+    private void appendAccountSelection(List<Account> accounts, AppSettingsPresenter settingsPresenter) {
         List<OptionItem> optionItems = new ArrayList<>();
 
         optionItems.add(UiOptionItem.from(
@@ -93,6 +95,12 @@ public class AccountSelectionPresenter {
         }
 
         settingsPresenter.appendRadioCategory(mContext.getString(R.string.dialog_account_list), optionItems);
+    }
+
+    private void appendShowAgain(AppSettingsPresenter settingsPresenter) {
+        settingsPresenter.appendSingleSwitch(UiOptionItem.from(mContext.getString(R.string.show_again), optionItem -> {
+            AccountsData.instance(mContext).selectAccountOnBoot(optionItem.isSelected());
+        }, AccountsData.instance(mContext).isSelectAccountOnBootEnabled()));
     }
 
     private String formatAccount(Account account) {

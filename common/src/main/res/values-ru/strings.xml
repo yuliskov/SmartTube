@@ -91,4 +91,7 @@
     <string name="color_scheme_red">Красная</string>
     <string name="color_scheme_dark">Тёмная</string>
     <string name="disable_update_check">Не проверять обновления</string>
+    <string name="show_again">Больше не показывать</string>
+    <string name="check_updates_auto">Проверять автоматически</string>
+    <string name="select_account_on_boot">Выбирать на старте</string>
 </resources>

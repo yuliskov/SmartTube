@@ -68,9 +68,9 @@ public class AppUpdateManager implements AppUpdateCheckerListener {
                     SplashPresenter.instance(mContext).saveBackupData();
                     mUpdateInstalled = true;
                 }, false));
-        mSettingsPresenter.appendSingleSwitch(UiOptionItem.from(mContext.getString(R.string.disable_update_check), optionItem -> {
-            mUpdateChecker.disableUpdateCheck(optionItem.isSelected());
-        }, mUpdateChecker.isUpdateCheckDisabled()));
+        mSettingsPresenter.appendSingleSwitch(UiOptionItem.from(mContext.getString(R.string.show_again), optionItem -> {
+            mUpdateChecker.enableUpdateCheck(optionItem.isSelected());
+        }, mUpdateChecker.isUpdateCheckEnabled()));
 
         mSettingsPresenter.showDialog(String.format("%s %s", mContext.getString(R.string.app_name), versionName), this::unhold);
     }

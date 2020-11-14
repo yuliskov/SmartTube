@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SignInPresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -60,9 +61,10 @@ public class AccountSettingsPresenter {
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
         settingsPresenter.clear();
 
-        createSelectAccountSection(accounts, settingsPresenter);
-        createRemoveAccountSection(accounts, settingsPresenter);
-        createAddAccountButton(settingsPresenter);
+        appendSelectAccountSection(accounts, settingsPresenter);
+        appendRemoveAccountSection(accounts, settingsPresenter);
+        appendAddAccountButton(settingsPresenter);
+        appendSelectAccountOnBoot(settingsPresenter);
 
         settingsPresenter.showDialog(mContext.getString(R.string.settings_accounts), () -> {
             for (Account account : mPendingRemove) {
@@ -75,7 +77,7 @@ public class AccountSettingsPresenter {
         });
     }
 
-    private void createSelectAccountSection(List<Account> accounts, AppSettingsPresenter settingsPresenter) {
+    private void appendSelectAccountSection(List<Account> accounts, AppSettingsPresenter settingsPresenter) {
         List<OptionItem> optionItems = new ArrayList<>();
 
         optionItems.add(UiOptionItem.from(
@@ -95,7 +97,7 @@ public class AccountSettingsPresenter {
         settingsPresenter.appendRadioCategory(mContext.getString(R.string.dialog_account_list), optionItems);
     }
 
-    private void createRemoveAccountSection(List<Account> accounts, AppSettingsPresenter settingsPresenter) {
+    private void appendRemoveAccountSection(List<Account> accounts, AppSettingsPresenter settingsPresenter) {
         List<OptionItem> optionItems = new ArrayList<>();
 
         for (Account account : accounts) {
@@ -113,9 +115,15 @@ public class AccountSettingsPresenter {
         settingsPresenter.appendCheckedCategory(mContext.getString(R.string.dialog_remove_account), optionItems);
     }
 
-    private void createAddAccountButton(AppSettingsPresenter settingsPresenter) {
+    private void appendAddAccountButton(AppSettingsPresenter settingsPresenter) {
         settingsPresenter.appendSingleButton(UiOptionItem.from(
                 mContext.getString(R.string.dialog_add_account), option -> SignInPresenter.instance(mContext).start()));
+    }
+
+    private void appendSelectAccountOnBoot(AppSettingsPresenter settingsPresenter) {
+        settingsPresenter.appendSingleSwitch(UiOptionItem.from(mContext.getString(R.string.select_account_on_boot), optionItem -> {
+            AccountsData.instance(mContext).selectAccountOnBoot(optionItem.isSelected());
+        }, AccountsData.instance(mContext).isSelectAccountOnBootEnabled()));
     }
 
     private String formatAccount(Account account) {
