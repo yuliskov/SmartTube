@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="header_home">Home</string>
     <string name="title_search">Suchen</string>
@@ -39,7 +40,7 @@
     <string name="install_update">Update installieren</string>
     <string name="msg_category_is_empty">Hoppla! Hier ist nichts drin.</string>
     <string name="dialog_add_to_playlist">Zur Wiedergabeliste hinzufügen</string>
-    <string name="msg_signed_users_only">Nur registrierte Benutzer</string>
+    <string name="msg_signed_users_only">Nur für eingeloggte Nutzer</string>
     <string name="msg_cant_load_content">Hoppla. Inhalt kann nicht geladen werden.</string>
     <string name="title_video_presets">Video-Voreinstellungen</string>
     <string name="settings_accounts">Konten</string>
@@ -82,4 +83,12 @@
     <string name="side_panel_sections">Kategorien einrichten</string>
     <string name="boot_to_section">Starte in Kategorie</string>
     <string name="large_ui">Große Benutzeroberfläche</string>
+    <string name="video_grid_scale">Video-Raster skalieren</string>
+    <string name="scale_ui">Benutzeroberfläche skalieren</string>
+    <string name="color_scheme">Farbschema</string>
+    <string name="color_scheme_default">Standard</string>
+    <string name="color_scheme_red_grey">Rot-Grau</string>
+    <string name="color_scheme_red">Rot</string>
+    <string name="color_scheme_dark">Dunkel</string>
+    <string name="disable_update_check">Update-Prüfung deaktivieren</string>
 </resources>
