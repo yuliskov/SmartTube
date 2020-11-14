@@ -91,4 +91,7 @@
     <string name="color_scheme_red">Rot</string>
     <string name="color_scheme_dark">Dunkel</string>
     <string name="disable_update_check">Update-Prüfung deaktivieren</string>
+    <string name="show_again">Erneut anzeigen</string>
+    <string name="check_updates_auto">Automatisch prüfen</string>
+    <string name="select_account_on_boot">Konto beim Start auswählen</string>
 </resources>
