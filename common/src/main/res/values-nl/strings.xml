@@ -71,7 +71,7 @@
     <string name="dialog_player_ui">Video Player</string>
     <string name="player_show_ui_on_pause">Player weergeven met OK-toets</string>
     <string name="player_pause_on_ok">Video pauzeren met OK-toets</string>
-    <string name="player_ok_button_behavior">OK-toets</string>
+    <string name="player_ok_button_behavior">OK toets</string>
     <string name="player_only_ui">Player weergeven</string>
     <string name="player_ui_and_pause">Player weergeven en pauzeren</string>
     <string name="player_only_pause">Pauzeren</string>
@@ -85,9 +85,10 @@
     <string name="large_ui">Grote weergave</string>
     <string name="video_grid_scale">Videoraster formaat</string>
     <string name="scale_ui">Display formaat</string>
-    <string name="color_scheme">Kleuren</string>
+    <string name="color_scheme">Thema</string>
     <string name="color_scheme_default">Standaard</string>
     <string name="color_scheme_red_grey">Rood-grijs</string>
     <string name="color_scheme_red">Rood</string>
     <string name="color_scheme_dark">Donker</string>
+    <string name="disable_update_check">Update controle uitschakelen</string>
 </resources>
