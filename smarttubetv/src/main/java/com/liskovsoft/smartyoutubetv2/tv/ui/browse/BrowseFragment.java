@@ -165,12 +165,13 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         setHeadersTransitionOnBackEnabled(true);
 
         int brandColorId = MainUIData.instance(getActivity()).getColorScheme().brandColorId;
+        int brandAccentColorId = MainUIData.instance(getActivity()).getColorScheme().brandAccentColorId;
 
         // Set fastLane (or headers) background color
         setBrandColor(ContextCompat.getColor(getActivity(), brandColorId > 0 ? brandColorId : R.color.fastlane_background_dark));
 
         // Set search icon color.
-        setSearchAffordanceColor(ContextCompat.getColor(getActivity(), brandColorId > 0 ? brandColorId : R.color.search_opaque));
+        setSearchAffordanceColor(ContextCompat.getColor(getActivity(), brandAccentColorId > 0 ? brandAccentColorId : R.color.search_opaque));
 
         setHeaderPresenterSelector(new PresenterSelector() {
             @Override

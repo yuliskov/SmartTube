@@ -127,8 +127,13 @@ public class MainUIData {
     private void initColorSchemes() {
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_default,
-                -1, -1, -1, -1,
-                -1, -1,
+                -1,
+                -1,
+                -1,
+                -1,
+                -1,
+                -1,
+                -1,
                 -1));
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_red_grey,
@@ -137,6 +142,7 @@ public class MainUIData {
                 Helpers.getResourceId("LeanbackPreferences.RedGrey", "style", mContext),
                 Helpers.getResourceId("text_badge_image_view_red", "layout", mContext),
                 Helpers.getResourceId("scheme_red_grey_background_dark", "color", mContext),
+                Helpers.getResourceId("semi_red", "color", mContext),
                 Helpers.getResourceId("scheme_red_grey_shelf_background_dark", "color", mContext),
                 Helpers.getResourceId("scheme_red_grey_card_background_dark", "color", mContext)));
         mColorSchemes.add(new ColorScheme(
@@ -146,6 +152,7 @@ public class MainUIData {
                 Helpers.getResourceId("LeanbackPreferences.Red", "style", mContext),
                 Helpers.getResourceId("text_badge_image_view_red", "layout", mContext),
                 Helpers.getResourceId("scheme_red_background_dark", "color", mContext),
+                Helpers.getResourceId("semi_red", "color", mContext),
                 Helpers.getResourceId("scheme_red_shelf_background_dark", "color", mContext),
                 Helpers.getResourceId("scheme_red_card_background_dark", "color", mContext)));
     }
@@ -183,18 +190,28 @@ public class MainUIData {
         public final int nameResId;
         public final int playerThemeResId;
         public final int cardLayoutResId;
-        public final int brandColorId;
         public final int browseThemeResId;
+        public final int settingsThemeResId;
+        public final int brandColorId;
+        public final int brandAccentColorId;
         public final int shelfBackgroundColorId;
         public final int cardColorId;
-        public final int settingsThemeResId;
 
-        public ColorScheme(int nameResId, int playerThemeResId, int browseThemeResId, int settingsThemeResId, int cardLayoutResId, int brandColorId, int shelfBackgroundColorId, int cardColorId) {
+        public ColorScheme(int nameResId,
+                           int playerThemeResId,
+                           int browseThemeResId,
+                           int settingsThemeResId,
+                           int cardLayoutResId,
+                           int brandColorId,
+                           int brandAccentColorId,
+                           int shelfBackgroundColorId,
+                           int cardColorId) {
             this.nameResId = nameResId;
             this.playerThemeResId = playerThemeResId;
             this.cardLayoutResId = cardLayoutResId;
             this.brandColorId = brandColorId;
             this.browseThemeResId = browseThemeResId;
+            this.brandAccentColorId = brandAccentColorId;
             this.shelfBackgroundColorId = shelfBackgroundColorId;
             this.cardColorId = cardColorId;
             this.settingsThemeResId = settingsThemeResId;
