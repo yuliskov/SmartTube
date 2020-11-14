@@ -64,7 +64,6 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
     private int mBootToIndex;
 
     private BrowsePresenter(Context context) {
-        GlobalPreferences.instance(context); // auth token storage
         mContext = context;
         mPlaybackPresenter = PlaybackPresenter.instance(context);
         mMediaService = YouTubeMediaService.instance();

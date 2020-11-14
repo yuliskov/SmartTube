@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.models.update.AppUpdateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
@@ -22,6 +23,7 @@ public class SplashPresenter implements Presenter<SplashView> {
 
     private SplashPresenter(Context context) {
         mContext = context;
+        GlobalPreferences.instance(context); // auth token storage
     }
 
     public static SplashPresenter instance(Context context) {
@@ -53,10 +55,15 @@ public class SplashPresenter implements Presenter<SplashView> {
 
     private void applyRunOnceTasks() {
         if (!mRunOnce) {
+            showAccountSelection();
             updateChannels();
             getBackupDataOnce();
             mRunOnce = true;
         }
+    }
+
+    private void showAccountSelection() {
+        AccountSelectionPresenter.instance(mContext).show();
     }
 
     private void checkForUpdates() {
