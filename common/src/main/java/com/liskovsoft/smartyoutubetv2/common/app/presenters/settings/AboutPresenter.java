@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
+import com.liskovsoft.appupdatechecker2.AppUpdateChecker;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -34,17 +35,42 @@ public class AboutPresenter {
 
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
         settingsPresenter.clear();
-        
+
+        appendDisableUpdateCheck(settingsPresenter);
+
+        appendUpdateCheck(settingsPresenter);
+
+        appendSiteLink(settingsPresenter);
+
+        appendDonation(settingsPresenter);
+
+        settingsPresenter.showDialog(mainTitle);
+    }
+
+    private void appendDisableUpdateCheck(AppSettingsPresenter settingsPresenter) {
+        AppUpdateChecker mUpdateChecker = new AppUpdateChecker(mContext, null);
+
+        settingsPresenter.appendSingleSwitch(UiOptionItem.from(mContext.getString(R.string.disable_update_check), optionItem -> {
+            mUpdateChecker.disableUpdateCheck(optionItem.isSelected());
+        }, mUpdateChecker.isUpdateCheckDisabled()));
+    }
+
+    private void appendUpdateCheck(AppSettingsPresenter settingsPresenter) {
         OptionItem updateCheckOption = UiOptionItem.from(
                 mContext.getString(R.string.check_for_updates),
                 option -> AppUpdateManager.instance(mContext).start(true));
-        
+
+        settingsPresenter.appendSingleButton(updateCheckOption);
+    }
+
+    private void appendSiteLink(AppSettingsPresenter settingsPresenter) {
         OptionItem webSiteOption = UiOptionItem.from(String.format("%s (GitHub)", mContext.getString(R.string.web_site)),
                 option -> Helpers.openLink(WEB_SITE_URL, mContext));
 
-        settingsPresenter.appendSingleButton(updateCheckOption);
         settingsPresenter.appendSingleButton(webSiteOption);
-        
+    }
+
+    private void appendDonation(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> donateOptions = new ArrayList<>();
 
         donateOptions.add(UiOptionItem.from(
@@ -64,7 +90,5 @@ public class AboutPresenter {
                 null));
 
         settingsPresenter.appendStringsCategory(mContext.getString(R.string.donation), donateOptions);
-
-        settingsPresenter.showDialog(mainTitle);
     }
 }
