@@ -24,6 +24,7 @@ public class AccountSelectionPresenter {
     private final SignInManager mSignInManager;
     private Disposable mAccountsAction;
     private Account mSelectedAccount;
+    private Account mOriginAccount;
 
     public AccountSelectionPresenter(Context context) {
         mContext = context;
@@ -49,6 +50,7 @@ public class AccountSelectionPresenter {
     public void unhold() {
         RxUtils.disposeActions(mAccountsAction);
         mSelectedAccount = null;
+        mOriginAccount = null;
         sInstance = null;
     }
 
@@ -63,8 +65,10 @@ public class AccountSelectionPresenter {
         createSelectAccountSection(accounts, settingsPresenter);
 
         settingsPresenter.showDialog(mContext.getString(R.string.settings_accounts), () -> {
-            mSignInManager.selectAccount(mSelectedAccount);
-            BrowsePresenter.instance(mContext).refresh();
+            if (mSelectedAccount != mOriginAccount) {
+                mSignInManager.selectAccount(mSelectedAccount);
+                BrowsePresenter.instance(mContext).refresh();
+            }
 
             unhold();
         });
@@ -80,6 +84,7 @@ public class AccountSelectionPresenter {
         for (Account account : accounts) {
             if (account.isSelected()) {
                 mSelectedAccount = account;
+                mOriginAccount = account;
             }
 
             optionItems.add(UiOptionItem.from(

@@ -10,6 +10,7 @@ import com.liskovsoft.sharedutils.locale.LangHelper;
 import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
 import com.liskovsoft.smartyoutubetv2.common.language.LangUpdater;
@@ -123,6 +124,7 @@ public abstract class LeanbackActivity extends MotherActivity {
     }
 
     private void properlyFinishTheApp() {
+        SplashPresenter.instance(this).unhold();
         mViewManager.clearCaches();
         destroyActivity();
         //mViewManager.killApp();

@@ -137,7 +137,7 @@ public class AppSettingsPresenter implements Presenter<AppSettingsView> {
             onInitDone();
         }
 
-        ViewManager.instance(mContext).startView(AppSettingsView.class);
+        ViewManager.instance(mContext).startView(AppSettingsView.class, true);
     }
 
     public void appendRadioCategory(String categoryTitle, List<OptionItem> items) {

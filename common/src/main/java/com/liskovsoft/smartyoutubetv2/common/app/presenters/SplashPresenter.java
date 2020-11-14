@@ -44,6 +44,11 @@ public class SplashPresenter implements Presenter<SplashView> {
         mView = null;
     }
 
+    public void unhold() {
+        mRunOnce = false;
+        sInstance = null;
+    }
+
     @Override
     public void onInitDone() {
         applyRunOnceTasks();
