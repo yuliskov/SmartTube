@@ -40,7 +40,7 @@
     <string name="install_update">Update installieren</string>
     <string name="msg_category_is_empty">Hoppla! Hier ist nichts drin.</string>
     <string name="dialog_add_to_playlist">Zur Wiedergabeliste hinzufügen</string>
-    <string name="msg_signed_users_only">Nur für eingeloggte Nutzer</string>
+    <string name="msg_signed_users_only">Nur angemeldete Nutzer</string>
     <string name="msg_cant_load_content">Hoppla. Inhalt kann nicht geladen werden.</string>
     <string name="title_video_presets">Video-Voreinstellungen</string>
     <string name="settings_accounts">Konten</string>
