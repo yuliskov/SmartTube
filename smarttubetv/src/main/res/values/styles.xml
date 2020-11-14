@@ -11,6 +11,7 @@
         <item name="android:windowBackground">@null</item>
         <item name="shelfBackground">@color/shelf_background_dark</item>
         <item name="cardDefaultBackground">@color/card_default_background_dark</item>
+        <item name="customProgressStyle">?android:attr/progressBarStyleHorizontal</item>
     </style>
     <style name="App.Theme.Leanback.Browse" parent="Theme.Leanback.Browse">
         <item name="android:windowBackground">@color/shelf_background_dark</item>
@@ -18,9 +19,11 @@
         <item name="brandAccentColor">@color/search_opaque</item>
         <item name="shelfBackground">@color/shelf_background_dark</item>
         <item name="cardDefaultBackground">@color/card_default_background_dark</item>
+        <item name="customProgressStyle">?android:attr/progressBarStyleHorizontal</item>
     </style>
     <style name="App.Theme.Leanback.GuidedStep" parent="Theme.Leanback.GuidedStep">
         <item name="android:windowBackground">@color/shelf_background_dark</item>
+        <item name="shelfBackground">@color/shelf_background_dark</item>
     </style>
     <style name="App.Theme.Leanback.Preferences" parent="Theme.Leanback">
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Leanback</item>
@@ -38,16 +41,16 @@
         <item name="playbackProgressSecondaryColor">@color/light_red</item>
         <item name="playbackControlsIconHighlightColor">@color/red</item>
         <item name="customProgressStyle">@style/ProgressBarHorizontal.Dark</item>
-        <item name="shelfBackground">@color/scheme_red_grey_shelf_background_dark</item>
-        <item name="cardDefaultBackground">@color/scheme_red_grey_card_background_dark</item>
+        <item name="shelfBackground">@color/scheme_dark_grey_shelf_background_dark</item>
+        <item name="cardDefaultBackground">@color/scheme_dark_grey_card_background_dark</item>
     </style>
     <style name="App.Theme.Dark.Browse" parent="Theme.Leanback.Browse">
-        <item name="android:windowBackground">@color/scheme_red_grey_shelf_background_dark</item>
-        <item name="brandColor">@color/scheme_red_grey_background_dark</item>
+        <item name="android:windowBackground">@color/scheme_dark_grey_shelf_background_dark</item>
+        <item name="brandColor">@color/scheme_dark_grey_background_dark</item>
         <item name="brandAccentColor">@color/semi_red</item>
         <item name="customProgressStyle">@style/ProgressBarHorizontal.Dark</item>
-        <item name="shelfBackground">@color/scheme_red_grey_shelf_background_dark</item>
-        <item name="cardDefaultBackground">@color/scheme_red_grey_card_background_dark</item>
+        <item name="shelfBackground">@color/scheme_dark_grey_shelf_background_dark</item>
+        <item name="cardDefaultBackground">@color/scheme_dark_grey_card_background_dark</item>
     </style>
     <style name="ProgressBarHorizontal.Dark" parent="@android:style/Widget.ProgressBar.Horizontal">
         <item name="android:progressDrawable">@drawable/progress_bar_drawable</item>
@@ -57,10 +60,10 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:colorPrimary" tools:targetApi="21">@color/scheme_red_grey_background</item>
+        <item name="android:colorPrimary" tools:targetApi="21">@color/scheme_dark_grey_background</item>
     </style>
     <style name="App.Theme.Dark.GuidedStep" parent="Theme.Leanback.GuidedStep">
-        <item name="android:windowBackground">@color/scheme_red_grey_shelf_background_dark</item>
+        <item name="android:windowBackground">@color/scheme_dark_grey_shelf_background_dark</item>
     </style>
     <!--  End Color scheme: Red with grey  -->
 

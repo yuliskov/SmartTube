@@ -33,13 +33,12 @@
                   android:paddingStart="@dimen/lb_details_description_title_padding_adjust_bottom"
                   android:paddingEnd="@dimen/lb_details_description_title_padding_adjust_bottom"
                   style="@style/TextAppearance.Leanback.ImageCardView.Content" />
-        <ProgressBar
+        <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.styled.StyledProgressBar
             android:id="@+id/clip_progress"
             android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="@dimen/lb_basic_card_info_badge_margin"
             android:max="100"
-            android:progress="45"
-            style="?android:attr/progressBarStyleHorizontal"/>
+            android:progress="45"/>
     </LinearLayout>
 </merge>

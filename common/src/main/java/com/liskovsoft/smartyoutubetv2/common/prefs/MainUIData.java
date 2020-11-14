@@ -130,21 +130,18 @@ public class MainUIData {
                 null,
                 null,
                 null,
-                null,
                 mContext));
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_dark,
                 "App.Theme.Dark.Player",
                 "App.Theme.Dark.Browse",
                 "App.Theme.Dark.Preferences",
-                "text_badge_image_view_red",
                 mContext));
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_red,
                 "App.Theme.Red.Player",
                 "App.Theme.Red.Browse",
                 "App.Theme.Red.Preferences",
-                "text_badge_image_view_red",
                 mContext));
     }
 
@@ -182,19 +179,16 @@ public class MainUIData {
         public final int playerThemeResId;
         public final int browseThemeResId;
         public final int settingsThemeResId;
-        public final int cardLayoutResId;
 
         public ColorScheme(int nameResId,
                            String playerTheme,
                            String browseTheme,
                            String settingsTheme,
-                           String cardLayout,
                            Context context) {
             this.nameResId = nameResId;
             this.playerThemeResId = Helpers.getResourceId(playerTheme, "style", context);
             this.browseThemeResId = Helpers.getResourceId(browseTheme, "style", context);
             this.settingsThemeResId = Helpers.getResourceId(settingsTheme, "style", context);
-            this.cardLayoutResId = Helpers.getResourceId(cardLayout, "layout", context);
         }
     }
 }

@@ -38,9 +38,7 @@ public class TextBadgeImageView extends RelativeLayout {
     }
 
     private void init() {
-        int layoutResId = MainUIData.instance(getContext()).getColorScheme().cardLayoutResId;
-
-        inflate(getContext(), layoutResId > 0 ? layoutResId : R.layout.text_badge_image_view, this);
+        inflate(getContext(), R.layout.text_badge_image_view, this);
         mMainImage = findViewById(R.id.main_image);
         mPreviewImage = findViewById(R.id.preview_image);
         mBadgeText = findViewById(R.id.extra_text_badge);

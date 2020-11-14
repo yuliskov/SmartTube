@@ -27,14 +27,4 @@ public class StyledProgressBar extends ProgressBar {
     public StyledProgressBar(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, R.attr.customProgressStyle, defStyleRes);
     }
-
-    private static int getStyle(Context context, int defStyleAttr) {
-        // https://stackoverflow.com/questions/5051753/how-do-i-apply-a-style-programmatically
-
-        int themeResId = MainUIData.instance(context).getColorScheme().cardLayoutResId;
-
-        Log.d(TAG, "Setting progress style %s/%s", themeResId, defStyleAttr);
-
-        return themeResId > 0 ? themeResId : defStyleAttr;
-    }
 }

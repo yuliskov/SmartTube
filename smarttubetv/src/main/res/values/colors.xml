@@ -30,11 +30,11 @@
     <color name="icon_alt_background">#2A2F51</color>
     <color name="player_background">#FF000000</color>
 
-    <!-- Red-grey color scheme -->
-    <color name="scheme_red_grey_background">#181818</color>
-    <color name="scheme_red_grey_background_dark">#181818</color>
-    <color name="scheme_red_grey_shelf_background_dark">#000000</color>
-    <color name="scheme_red_grey_card_background_dark">#000000</color>
+    <!-- Dark color scheme -->
+    <color name="scheme_dark_grey_background">#181818</color>
+    <color name="scheme_dark_grey_background_dark">#181818</color>
+    <color name="scheme_dark_grey_shelf_background_dark">#000000</color>
+    <color name="scheme_dark_grey_card_background_dark">#121212</color>
 
     <!-- Red color scheme -->
     <color name="scheme_red_background">#131313</color>
