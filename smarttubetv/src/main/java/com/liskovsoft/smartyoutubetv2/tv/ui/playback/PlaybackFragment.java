@@ -81,6 +81,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private final boolean mIsAnimationEnabled = true;
     private boolean mIsEngineBlocked;
     private boolean mIsPIPEnabled;
+    private boolean mIsHOMEnabled;
     private ExoPlayerInitializer mPlayerInitializer;
 
     @Override
@@ -602,6 +603,16 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         // Old api fix
         return playbackActivity.isInPIPMode();
+    }
+
+    @Override
+    public void enableHOME(boolean enable) {
+        mIsHOMEnabled = enable;
+    }
+
+    @Override
+    public boolean isHOMEnabled() {
+        return mIsHOMEnabled;
     }
 
     @Override

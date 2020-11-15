@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import android.os.Build;
+
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -25,6 +27,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     private final Map<CharSequence, OptionItem> mSingleOptions = new LinkedHashMap<>();
     private boolean mEnableBackgroundAudio;
     private boolean mEnablePIP;
+    private boolean mEnableHOME;
     private final List<Runnable> mHideListeners = new ArrayList<>();
     private final StateUpdater mStateUpdater;
 
@@ -48,9 +51,9 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         mSettingsPresenter.clear();
 
         addQualityCategories();
-        addBackgroundPlaybackCategory();
         addVideoBufferCategory();
         addPresetsCategory();
+        addBackgroundPlaybackCategory();
 
         internalStuff();
 
@@ -109,7 +112,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     }
 
     private void updateBackgroundPlayback() {
-        if (mEnableBackgroundAudio || mEnablePIP) {
+        if (mEnableBackgroundAudio || mEnablePIP || mEnableHOME) {
             // return to the player regardless the last activity user watched in moment exiting to HOME
             ViewManager.instance(mActivity).blockTop(mActivity);
         } else {
@@ -118,6 +121,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
         mController.blockEngine(mEnableBackgroundAudio);
         mController.enablePIP(mEnablePIP);
+        mController.enableHOME(mEnableHOME);
     }
 
     private void addBackgroundPlaybackCategory() {
@@ -128,20 +132,32 @@ public class HqDialogManager extends PlayerEventListenerHelper {
                 optionItem -> {
                     mEnableBackgroundAudio = false;
                     mEnablePIP = false;
+                    mEnableHOME = false;
                     updateBackgroundPlayback();
-                }, !mEnableBackgroundAudio && !mEnablePIP));
+                }, !mEnableBackgroundAudio && !mEnablePIP && !mEnableHOME));
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) { // useful only for pre-Oreo UI
+            options.add(UiOptionItem.from(mActivity.getString(R.string.option_background_playback_home),
+                    optionItem -> {
+                        mEnableBackgroundAudio = false;
+                        mEnablePIP = false;
+                        mEnableHOME = true;
+                        updateBackgroundPlayback();
+                    }, mEnableHOME && !mEnablePIP && !mEnableBackgroundAudio));
+        }
         options.add(UiOptionItem.from(mActivity.getString(R.string.option_background_playback_all),
                 optionItem -> {
                     mEnableBackgroundAudio = false;
                     mEnablePIP = true;
+                    mEnableHOME = false;
                     updateBackgroundPlayback();
-                }, mEnablePIP && !mEnableBackgroundAudio));
+                }, mEnablePIP && !mEnableHOME && !mEnableBackgroundAudio));
         options.add(UiOptionItem.from(mActivity.getString(R.string.option_background_playback_only_audio),
                 optionItem -> {
                     mEnableBackgroundAudio = true;
                     mEnablePIP = false;
+                    mEnableHOME = false;
                     updateBackgroundPlayback();
-                }, mEnableBackgroundAudio && !mEnablePIP));
+                }, mEnableBackgroundAudio && !mEnablePIP && !mEnableHOME));
 
         addRadioCategory(categoryTitle, options);
     }

@@ -112,7 +112,7 @@ public class PlaybackActivity extends LeanbackActivity {
     }
 
     private boolean wannaEnterToPIP() {
-        return !isInPictureInPictureMode() && mPlaybackFragment.isPIPEnabled();
+        return !isInPictureInPictureMode() && mPlaybackFragment.isPIPEnabled() && !mPlaybackFragment.isHOMEnabled();
     }
 
     @Override
@@ -139,7 +139,36 @@ public class PlaybackActivity extends LeanbackActivity {
         if (Build.VERSION.SDK_INT < 24) {
             return false;
         }
-
         return isInPictureInPictureMode();
     }
+
+    private void enterBackgroundPlayMode() {
+        if (mPlaybackFragment.isPlaying()) {
+            // Argument equals true to notify the system that the activity
+            // wishes to be visible behind other translucent activities
+            if (!requestVisibleBehind(true)) {
+                // App-specific method to stop playback and release resources
+                // because call to requestVisibleBehind(true) failed
+                mPlaybackFragment.exit();
+            }
+        } else {
+            // Argument equals false because the activity is not playing
+            requestVisibleBehind(false);
+        }
+    }
+
+    @Override
+    public void onVisibleBehindCanceled() {
+        // App-specific method to stop playback and release resources
+        mPlaybackFragment.exit();
+        super.onVisibleBehindCanceled();
+    }
+
+    @Override
+    public void onUserLeaveHint () {
+        if (mPlaybackFragment.isHOMEnabled()) {
+            enterBackgroundPlayMode();
+        }
+    }
+
 }
