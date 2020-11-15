@@ -24,8 +24,6 @@ public class AccountSelectionPresenter {
     private final Context mContext;
     private final SignInManager mSignInManager;
     private Disposable mAccountsAction;
-    private Account mSelectedAccount;
-    private Account mOriginAccount;
 
     public AccountSelectionPresenter(Context context) {
         mContext = context;
@@ -50,13 +48,11 @@ public class AccountSelectionPresenter {
 
     public void unhold() {
         RxUtils.disposeActions(mAccountsAction);
-        mSelectedAccount = null;
-        mOriginAccount = null;
         sInstance = null;
     }
 
     private void createAndShowDialog(List<Account> accounts) {
-        if (accounts == null || accounts.size() <= 1) {
+        if (accounts == null || accounts.size() <= 1 || AccountsData.instance(mContext).isSelectAccountOnBootEnabled()) {
             return;
         }
 
@@ -64,43 +60,29 @@ public class AccountSelectionPresenter {
         settingsPresenter.clear();
 
         appendAccountSelection(accounts, settingsPresenter);
-        appendShowAgain(settingsPresenter);
 
-        settingsPresenter.showDialog(mContext.getString(R.string.settings_accounts), () -> {
-            if (mSelectedAccount != mOriginAccount) {
-                mSignInManager.selectAccount(mSelectedAccount);
-                BrowsePresenter.instance(mContext).refresh();
-            }
-
-            unhold();
-        });
+        settingsPresenter.showDialog(mContext.getString(R.string.settings_accounts), this::unhold);
     }
 
     private void appendAccountSelection(List<Account> accounts, AppSettingsPresenter settingsPresenter) {
         List<OptionItem> optionItems = new ArrayList<>();
 
         optionItems.add(UiOptionItem.from(
-                mContext.getString(R.string.dialog_account_none), optionItem -> mSelectedAccount = null, true
+                mContext.getString(R.string.dialog_account_none), optionItem -> selectAccount(null), true
         ));
 
         for (Account account : accounts) {
-            if (account.isSelected()) {
-                mSelectedAccount = account;
-                mOriginAccount = account;
-            }
-
             optionItems.add(UiOptionItem.from(
-                    formatAccount(account), option -> mSelectedAccount = account, account.isSelected()
+                    formatAccount(account), option -> selectAccount(account), account.isSelected()
             ));
         }
 
         settingsPresenter.appendRadioCategory(mContext.getString(R.string.dialog_account_list), optionItems);
     }
 
-    private void appendShowAgain(AppSettingsPresenter settingsPresenter) {
-        settingsPresenter.appendSingleSwitch(UiOptionItem.from(mContext.getString(R.string.show_again), optionItem -> {
-            AccountsData.instance(mContext).selectAccountOnBoot(optionItem.isSelected());
-        }, AccountsData.instance(mContext).isSelectAccountOnBootEnabled()));
+    private void selectAccount(Account account) {
+        mSignInManager.selectAccount(account);
+        BrowsePresenter.instance(mContext).refresh();
     }
 
     private String formatAccount(Account account) {
