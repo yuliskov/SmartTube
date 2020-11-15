@@ -94,4 +94,6 @@
     <string name="show_again">Больше не показывать</string>
     <string name="check_updates_auto">Проверять автоматически</string>
     <string name="select_account_on_boot">Выбирать на старте</string>
+    <string name="player_other">Other</string>
+    <string name="player_full_date">Точная дата в описании</string>
 </resources>

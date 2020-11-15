@@ -15,6 +15,7 @@ public class PlayerData {
     private final AppPrefs mPrefs;
     private int mOKButtonBehavior;
     private int mUIHideTimeoutSec;
+    private boolean mIsShowFullDateEnabled;
 
     public PlayerData(Context context) {
         mContext = context;
@@ -48,6 +49,15 @@ public class PlayerData {
         return mUIHideTimeoutSec;
     }
 
+    public void showFullDate(boolean show) {
+        mIsShowFullDateEnabled = show;
+        persistData();
+    }
+
+    public boolean isShowFullDateEnabled() {
+        return mIsShowFullDateEnabled;
+    }
+
     private void restoreData() {
         String data = mPrefs.getPlayerData();
 
@@ -55,9 +65,10 @@ public class PlayerData {
 
         mOKButtonBehavior = Helpers.parseInt(split, 0, ONLY_UI);
         mUIHideTimeoutSec = Helpers.parseInt(split, 1, 3);
+        mIsShowFullDateEnabled = Helpers.parseBoolean(split, 2, false);
     }
 
     private void persistData() {
-        mPrefs.setPlayerData(Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec));
+        mPrefs.setPlayerData(Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec, mIsShowFullDateEnabled));
     }
 }
