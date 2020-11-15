@@ -168,7 +168,7 @@ public class PlaybackActivity extends LeanbackActivity {
     public void onUserLeaveHint () {
         if (mPlaybackFragment.isHOMEnabled()) {
             enterBackgroundPlayMode();
-        } else if (mPlaybackFragment.isPIPEnabled()) {
+        } else if (mPlaybackFragment.isPIPEnabled() && !mPlaybackFragment.isControlsShown()) {
             enterPIPMode();
         }
     }
