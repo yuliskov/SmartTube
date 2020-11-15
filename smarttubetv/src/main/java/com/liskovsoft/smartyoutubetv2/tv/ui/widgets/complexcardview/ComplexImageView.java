@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.textbadgeview;
+package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -11,10 +11,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
-public class TextBadgeImageView extends RelativeLayout {
+public class ComplexImageView extends RelativeLayout {
     private ImageView mMainImage;
     private ImageView mPreviewImage;
     private ProgressBar mProgressBar;
@@ -22,17 +21,17 @@ public class TextBadgeImageView extends RelativeLayout {
     private String mPreviewUrl;
     private ViewGroup mProgressContainer;
 
-    public TextBadgeImageView(Context context) {
+    public ComplexImageView(Context context) {
         super(context);
         init();
     }
 
-    public TextBadgeImageView(Context context, AttributeSet attrs) {
+    public ComplexImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public TextBadgeImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ComplexImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -71,6 +70,14 @@ public class TextBadgeImageView extends RelativeLayout {
         } else {
             mBadgeText.setVisibility(View.INVISIBLE);
         }
+    }
+
+    public void setBadgeColor(int color) {
+        if (mBadgeText == null) {
+            return;
+        }
+
+        mBadgeText.setBackgroundColor(color);
     }
 
     /**
