@@ -75,7 +75,7 @@
     <string name="player_only_ui">Player weergeven</string>
     <string name="player_ui_and_pause">Player weergeven en pauzeren</string>
     <string name="player_only_pause">Pauzeren</string>
-    <string name="check_for_updates">Controleren op updates</string>
+    <string name="check_for_updates">Controleren op update</string>
     <string name="update_not_found">Je gebruikt de recentste versie</string>
     <string name="update_in_progess">Even geduld…</string>
     <string name="player_ui_hide_behavior">Player verbergen</string>
@@ -90,8 +90,10 @@
     <string name="color_scheme_red_grey">Rood-grijs</string>
     <string name="color_scheme_red">Rood</string>
     <string name="color_scheme_dark">Donker</string>
-    <string name="disable_update_check">Update controle uitschakelen</string>
+    <string name="disable_update_check">Automatische update uitschakelen</string>
     <string name="show_again">Niet meer weergeven</string>
-    <string name="check_updates_auto">Update automatisch controleren</string>
+    <string name="check_updates_auto">Automatische update</string>
     <string name="select_account_on_boot">Account selecteren bij opstarten</string>
+    <string name="player_other">Diverse</string>
+    <string name="player_full_date">Publicatiedatum weergeven</string>
 </resources>
