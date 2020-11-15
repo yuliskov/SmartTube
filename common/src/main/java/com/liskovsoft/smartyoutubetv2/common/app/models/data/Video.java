@@ -167,13 +167,13 @@ public final class Video implements Parcelable {
         return playlistIndex > 0;
     }
 
-    public void sync(MediaItemMetadata metadata) {
+    public void sync(MediaItemMetadata metadata, boolean useAlt) {
         if (metadata == null) {
             return;
         }
 
         title = metadata.getTitle();
-        description = metadata.getDescription();
+        description = useAlt ? metadata.getDescriptionAlt() : metadata.getDescription();
         channelId = metadata.getChannelId();
         nextMediaItem = metadata.getNextVideo();
     }

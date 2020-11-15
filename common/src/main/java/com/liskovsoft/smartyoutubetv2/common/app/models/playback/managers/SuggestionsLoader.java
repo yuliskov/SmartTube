@@ -8,6 +8,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
@@ -84,7 +85,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
     private void syncCurrentVideo(MediaItemMetadata mediaItemMetadata) {
         Video video = mController.getVideo();
-        video.sync(mediaItemMetadata);
+        video.sync(mediaItemMetadata, PlayerData.instance(mActivity).isShowFullDateEnabled());
         mController.setVideo(video);
     }
 
