@@ -21,7 +21,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.textbadgeview.TextBadgeImageCardView;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview.ComplexImageCardView;
 
 /*
  * A CardPresenter is used to generate Views and bind Objects to them on demand.
@@ -52,7 +52,7 @@ public class CardPresenter extends Presenter {
         mIsAnimatedPreviewsEnabled = MainUIData.instance(parent.getContext()).isAnimatedPreviewsEnabled();
         mVideoGridScale = MainUIData.instance(parent.getContext()).getVideoGridScale();
 
-        TextBadgeImageCardView cardView = new TextBadgeImageCardView(parent.getContext()) {
+        ComplexImageCardView cardView = new ComplexImageCardView(parent.getContext()) {
             @Override
             public void setSelected(boolean selected) {
                 updateCardBackgroundColor(this, selected);
@@ -66,7 +66,7 @@ public class CardPresenter extends Presenter {
         return new ViewHolder(cardView);
     }
 
-    private void updateCardBackgroundColor(TextBadgeImageCardView view, boolean selected) {
+    private void updateCardBackgroundColor(ComplexImageCardView view, boolean selected) {
         int backgroundColor = selected ? mSelectedBackgroundColor : mDefaultBackgroundColor;
         int textColor = selected ? mSelectedTextColor : mDefaultTextColor;
 
@@ -92,14 +92,16 @@ public class CardPresenter extends Presenter {
     public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object item) {
         Video video = (Video) item;
 
-        TextBadgeImageCardView cardView = (TextBadgeImageCardView) viewHolder.view;
+        ComplexImageCardView cardView = (ComplexImageCardView) viewHolder.view;
         Context context = cardView.getContext();
         Resources res = cardView.getResources();
 
         cardView.setTitleText(video.title);
         cardView.setContentText(video.description);
-        cardView.setBadgeText(video.hasNewContent ? context.getString(R.string.badge_new_content) : video.badge);
         cardView.setProgress(video.percentWatched);
+        cardView.setBadgeText(video.hasNewContent ? context.getString(R.string.badge_new_content) : video.badge);
+        cardView.setBadgeColor(video.hasNewContent || video.isLive || video.isUpcoming ?
+                ContextCompat.getColor(context, R.color.dark_red) : ContextCompat.getColor(context, R.color.black));
 
         if (mIsAnimatedPreviewsEnabled) {
             cardView.setPreviewUrl(video.previewUrl);
@@ -127,7 +129,7 @@ public class CardPresenter extends Presenter {
 
     @Override
     public void onUnbindViewHolder(Presenter.ViewHolder viewHolder) {
-        TextBadgeImageCardView cardView = (TextBadgeImageCardView) viewHolder.view;
+        ComplexImageCardView cardView = (ComplexImageCardView) viewHolder.view;
 
         // Remove references to images so that the garbage collector can free up memory.
         cardView.setBadgeImage(null);

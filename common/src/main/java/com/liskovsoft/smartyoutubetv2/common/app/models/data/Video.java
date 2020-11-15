@@ -28,6 +28,8 @@ public final class Video implements Parcelable {
     public MediaItem mediaItem;
     public MediaItem nextMediaItem;
     public boolean hasNewContent;
+    public boolean isLive;
+    public boolean isUpcoming;
 
     public Video() {
         
@@ -84,6 +86,8 @@ public final class Video implements Parcelable {
         video.hasNewContent = item.hasNewContent();
         video.previewUrl = item.getVideoPreviewUrl();
         video.playlistIndex = item.getPlaylistIndex();
+        video.isLive = item.isLive();
+        video.isUpcoming = item.isUpcoming();
         video.mediaItem = item;
 
         return video;

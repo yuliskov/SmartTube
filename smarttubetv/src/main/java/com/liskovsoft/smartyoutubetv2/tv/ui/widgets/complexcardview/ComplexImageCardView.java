@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.textbadgeview;
+package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview;
 
 import android.content.Context;
 import android.os.Handler;
@@ -10,31 +10,31 @@ import android.widget.TextView;
 import androidx.leanback.widget.ImageCardView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
-public class TextBadgeImageCardView extends ImageCardView {
-    private TextBadgeImageView mTextBadgeImageLayout;
+public class ComplexImageCardView extends ImageCardView {
+    private ComplexImageView mComplexImageView;
     private Handler mHandler;
     private Runnable mEnableMarquee;
 
-    public TextBadgeImageCardView(Context context) {
+    public ComplexImageCardView(Context context) {
         super(context);
 
         init();
     }
 
-    public TextBadgeImageCardView(Context context, AttributeSet attrs) {
+    public ComplexImageCardView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         init();
     }
 
-    public TextBadgeImageCardView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ComplexImageCardView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         init();
     }
 
     private void init() {
-        mTextBadgeImageLayout = findViewById(R.id.main_image_wrapper);
+        mComplexImageView = findViewById(R.id.main_image_wrapper);
         mHandler = new Handler(Looper.getMainLooper());
     }
 
@@ -86,14 +86,18 @@ public class TextBadgeImageCardView extends ImageCardView {
      * Sets the badge text.
      */
     public void setBadgeText(String text) {
-        mTextBadgeImageLayout.setBadgeText(text);
+        mComplexImageView.setBadgeText(text);
+    }
+
+    public void setBadgeColor(int color) {
+        mComplexImageView.setBadgeColor(color);
     }
 
     /**
      * Sets the progress.
      */
     public void setProgress(int percent) {
-        mTextBadgeImageLayout.setProgress(percent);
+        mComplexImageView.setProgress(percent);
     }
 
     @Override
@@ -106,14 +110,14 @@ public class TextBadgeImageCardView extends ImageCardView {
 
     private void enableVideoPreview(boolean selected) {
         if (selected) {
-            mTextBadgeImageLayout.startPlayback();
+            mComplexImageView.startPlayback();
         } else {
-            mTextBadgeImageLayout.stopPlayback();
+            mComplexImageView.stopPlayback();
         }
     }
 
     public void setPreviewUrl(String previewUrl) {
-        mTextBadgeImageLayout.setPreviewUrl(previewUrl);
+        mComplexImageView.setPreviewUrl(previewUrl);
     }
 
     /**
@@ -122,7 +126,7 @@ public class TextBadgeImageCardView extends ImageCardView {
     @Override
     public void setMainImageAdjustViewBounds(boolean adjustViewBounds) {
         super.setMainImageAdjustViewBounds(adjustViewBounds);
-        mTextBadgeImageLayout.setMainImageAdjustViewBounds(adjustViewBounds);
+        mComplexImageView.setMainImageAdjustViewBounds(adjustViewBounds);
     }
 
     /**
@@ -131,7 +135,7 @@ public class TextBadgeImageCardView extends ImageCardView {
     @Override
     public void setMainImageScaleType(ScaleType scaleType) {
         super.setMainImageScaleType(scaleType);
-        mTextBadgeImageLayout.setMainImageScaleType(scaleType);
+        mComplexImageView.setMainImageScaleType(scaleType);
     }
 
     /**
@@ -140,6 +144,6 @@ public class TextBadgeImageCardView extends ImageCardView {
     @Override
     public void setMainImageDimensions(int width, int height) {
         super.setMainImageDimensions(width, height);
-        mTextBadgeImageLayout.setMainImageDimensions(width, height);
+        mComplexImageView.setMainImageDimensions(width, height);
     }
 }
