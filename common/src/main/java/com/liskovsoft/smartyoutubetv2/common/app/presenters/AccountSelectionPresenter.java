@@ -52,7 +52,7 @@ public class AccountSelectionPresenter {
     }
 
     private void createAndShowDialog(List<Account> accounts) {
-        if (accounts == null || accounts.size() <= 1 || AccountsData.instance(mContext).isSelectAccountOnBootEnabled()) {
+        if (accounts == null || accounts.size() <= 1 || !AccountsData.instance(mContext).isSelectAccountOnBootEnabled()) {
             return;
         }
 
