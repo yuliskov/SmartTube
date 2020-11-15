@@ -149,7 +149,7 @@ public class PlaybackActivity extends LeanbackActivity {
             if (!requestVisibleBehind(true)) {
                 // App-specific method to stop playback and release resources
                 // because call to requestVisibleBehind(true) failed
-                mPlaybackFragment.exit();
+                mPlaybackFragment.onDestroy();
             }
         } else {
             // Argument equals false because the activity is not playing
@@ -160,7 +160,7 @@ public class PlaybackActivity extends LeanbackActivity {
     @Override
     public void onVisibleBehindCanceled() {
         // App-specific method to stop playback and release resources
-        mPlaybackFragment.exit();
+        mPlaybackFragment.onDestroy();
         super.onVisibleBehindCanceled();
     }
 
@@ -168,6 +168,8 @@ public class PlaybackActivity extends LeanbackActivity {
     public void onUserLeaveHint () {
         if (mPlaybackFragment.isHOMEnabled()) {
             enterBackgroundPlayMode();
+        } else if (mPlaybackFragment.isPIPEnabled()) {
+            enterPIPMode();
         }
     }
 
