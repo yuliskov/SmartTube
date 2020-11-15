@@ -36,7 +36,7 @@ public class AboutPresenter {
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
         settingsPresenter.clear();
 
-        appendUpdateCheckSwitch(settingsPresenter);
+        appendAutoUpdateSwitch(settingsPresenter);
 
         appendUpdateCheckButton(settingsPresenter);
 
@@ -47,7 +47,7 @@ public class AboutPresenter {
         settingsPresenter.showDialog(mainTitle);
     }
 
-    private void appendUpdateCheckSwitch(AppSettingsPresenter settingsPresenter) {
+    private void appendAutoUpdateSwitch(AppSettingsPresenter settingsPresenter) {
         AppUpdateChecker mUpdateChecker = new AppUpdateChecker(mContext, null);
 
         settingsPresenter.appendSingleSwitch(UiOptionItem.from(mContext.getString(R.string.check_updates_auto), optionItem -> {

@@ -61,10 +61,10 @@ public class AccountSettingsPresenter {
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
         settingsPresenter.clear();
 
+        appendSelectAccountOnBoot(settingsPresenter);
         appendSelectAccountSection(accounts, settingsPresenter);
         appendRemoveAccountSection(accounts, settingsPresenter);
         appendAddAccountButton(settingsPresenter);
-        appendSelectAccountOnBoot(settingsPresenter);
 
         settingsPresenter.showDialog(mContext.getString(R.string.settings_accounts), () -> {
             for (Account account : mPendingRemove) {
