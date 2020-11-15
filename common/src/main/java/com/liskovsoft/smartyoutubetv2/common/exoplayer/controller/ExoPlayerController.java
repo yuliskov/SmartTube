@@ -11,6 +11,7 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -78,6 +79,8 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             mTrackSelectorManager.invalidate();
             mOnSourceChanged = true;
             mEventListener.onSourceChanged(mVideo);
+        } else {
+            MessageHelpers.showMessage(mContext, "Oops. Event listener didn't initialized yet");
         }
     }
 
