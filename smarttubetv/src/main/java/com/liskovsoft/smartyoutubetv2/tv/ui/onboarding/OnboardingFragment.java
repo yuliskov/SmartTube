@@ -64,7 +64,7 @@ public class OnboardingFragment extends OnboardingSupportFragment implements Onb
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Set the logo to display a splash animation
-        setLogoResourceId(R.mipmap.app_logo);
+        setLogoResourceId(R.drawable.app_logo);
         mPresenter = OnboardingPresenter.instance(getContext());
         mPresenter.register(this);
         return super.onCreateView(inflater, container, savedInstanceState);
