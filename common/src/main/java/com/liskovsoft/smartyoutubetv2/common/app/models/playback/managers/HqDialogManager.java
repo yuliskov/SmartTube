@@ -135,7 +135,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
                     mEnableHOME = false;
                     updateBackgroundPlayback();
                 }, !mEnableBackgroundAudio && !mEnablePIP && !mEnableHOME));
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) { // useful only for pre-Oreo UI
+        if (Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 26) { // useful only for pre-Oreo UI
             options.add(UiOptionItem.from(mActivity.getString(R.string.option_background_playback_home),
                     optionItem -> {
                         mEnableBackgroundAudio = false;

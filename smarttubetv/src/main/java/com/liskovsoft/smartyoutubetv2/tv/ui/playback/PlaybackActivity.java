@@ -143,17 +143,19 @@ public class PlaybackActivity extends LeanbackActivity {
     }
 
     private void enterBackgroundPlayMode() {
-        if (mPlaybackFragment.isPlaying()) {
-            // Argument equals true to notify the system that the activity
-            // wishes to be visible behind other translucent activities
-            if (!requestVisibleBehind(true)) {
-                // App-specific method to stop playback and release resources
-                // because call to requestVisibleBehind(true) failed
-                mPlaybackFragment.onDestroy();
+        if (Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 26) {
+            if (mPlaybackFragment.isPlaying()) {
+                // Argument equals true to notify the system that the activity
+                // wishes to be visible behind other translucent activities
+                if (!requestVisibleBehind(true)) {
+                    // App-specific method to stop playback and release resources
+                    // because call to requestVisibleBehind(true) failed
+                    mPlaybackFragment.onDestroy();
+                }
+            } else {
+                // Argument equals false because the activity is not playing
+                requestVisibleBehind(false);
             }
-        } else {
-            // Argument equals false because the activity is not playing
-            requestVisibleBehind(false);
         }
     }
 
