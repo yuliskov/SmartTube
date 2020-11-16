@@ -78,6 +78,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
         if (mEventListener != null) {
             mTrackSelectorManager.invalidate();
+            mTrackSelectorManager.fixSelection();
             mOnSourceChanged = true;
             mEventListener.onSourceChanged(mVideo);
         } else {
@@ -172,11 +173,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     @Override
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
         Log.d(TAG, "onTracksChanged: start: groups length: " + trackGroups.length);
-
-        if (mTrackSelectorManager.fixSelection()) {
-            MessageHelpers.showMessage(mContext, "Hmm. Strange. No track selected");
-            return;
-        }
 
         notifyOnVideoLoad();
 

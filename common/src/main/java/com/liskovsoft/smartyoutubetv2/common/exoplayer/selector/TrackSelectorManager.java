@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Pair;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.source.TrackGroup;
@@ -351,13 +353,12 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         return renderer.selectedTrack;
     }
 
-    public boolean fixSelection() {
-        if (!hasSelection(RENDERER_INDEX_VIDEO)) {
-            selectTrack(mSelectedTracks[RENDERER_INDEX_VIDEO]);
-            return true;
-        }
-
-        return false;
+    public void fixSelection() {
+        new Handler(Looper.myLooper()).postDelayed(() -> {
+            if (!hasSelection(RENDERER_INDEX_VIDEO)) {
+                selectTrack(mSelectedTracks[RENDERER_INDEX_VIDEO]);
+            }
+        }, 3_000);
     }
 
     private MediaTrack findBestMatch(MediaTrack track) {
