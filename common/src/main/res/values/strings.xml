@@ -88,7 +88,6 @@
     <string name="scale_ui">UI scale</string>
     <string name="color_scheme">Color scheme</string>
     <string name="color_scheme_default">Default</string>
-    <string name="color_scheme_red_grey">Red-grey</string>
     <string name="color_scheme_red">Red</string>
     <string name="color_scheme_dark">Dark</string>
     <string name="disable_update_check">Disable update check</string>

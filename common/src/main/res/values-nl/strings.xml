@@ -87,7 +87,6 @@
     <string name="scale_ui">Display formaat</string>
     <string name="color_scheme">Thema</string>
     <string name="color_scheme_default">Standaard</string>
-    <string name="color_scheme_red_grey">Rood-grijs</string>
     <string name="color_scheme_red">Rood</string>
     <string name="color_scheme_dark">Donker</string>
     <string name="disable_update_check">Update controle uitschakelen</string>

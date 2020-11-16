@@ -86,7 +86,6 @@
     <string name="scale_ui">Skalowanie interfejsu</string>
     <string name="color_scheme">Schemat kolorów</string>
     <string name="color_scheme_default">Domyślny</string>
-    <string name="color_scheme_red_grey">Czerwono-szary</string>
     <string name="color_scheme_red">Czerwony</string>
     <string name="color_scheme_dark">Ciemny</string>
     <string name="disable_update_check">Wyłącz automatyczne sprawdzanie aktualizacji</string>

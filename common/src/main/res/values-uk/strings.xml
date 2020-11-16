@@ -87,7 +87,6 @@
     <string name="scale_ui">Масштаб інтерфейсу</string>
     <string name="color_scheme">Схема кольорів</string>
     <string name="color_scheme_default">За замовчуванням</string>
-    <string name="color_scheme_red_grey">Червоно-сіра</string>
     <string name="color_scheme_red">Червона</string>
     <string name="color_scheme_dark">Темна</string>
     <string name="disable_update_check">Не перевіряти оновлення</string>
