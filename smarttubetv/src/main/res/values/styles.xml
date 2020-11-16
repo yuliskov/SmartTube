@@ -8,13 +8,14 @@
 
     <!-- Default theme. -->
     <style name="App.Theme.Leanback.Player" parent="Theme.Leanback">
+        <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
         <item name="android:windowBackground">@null</item>
         <item name="shelfBackground">@color/shelf_background_dark</item>
         <item name="cardDefaultBackground">@color/card_default_background_dark</item>
         <item name="customProgressStyle">?android:attr/progressBarStyleHorizontal</item>
-        <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
     </style>
     <style name="App.Theme.Leanback.Browse" parent="Theme.Leanback.Browse">
+        <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
         <item name="android:windowBackground">@color/shelf_background_dark</item>
         <item name="brandColor">@color/fastlane_background_dark</item>
         <item name="brandAccentColor">@color/search_opaque</item>
