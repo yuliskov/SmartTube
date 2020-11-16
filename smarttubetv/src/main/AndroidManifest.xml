@@ -42,7 +42,7 @@
         android:hardwareAccelerated="true"
         android:largeHeap="true"
         android:banner="@mipmap/app_banner"
-        android:logo="@drawable/app_logo"
+        android:logo="@mipmap/app_logo"
         android:icon="@mipmap/app_icon"
         android:label="@string/app_name"
         android:theme="@style/App.Theme.Leanback.Browse"
