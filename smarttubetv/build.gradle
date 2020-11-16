@@ -54,6 +54,9 @@ android {
         // More info: http://myhexaville.com/2017/03/10/android-multidex/
         // Additionally, you should extend your application from MultiDexApplication
         multiDexEnabled = true
+        
+        // Use SupportLibrary for vectors
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -101,6 +104,7 @@ dependencies {
     implementation 'androidx.recommendation:recommendation:' + leanbackXLibraryVersion
     implementation 'androidx.annotation:annotation:' + appCompatXLibraryVersion
     implementation 'androidx.recyclerview:recyclerview:' + appCompatXLibraryVersion
+    implementation 'androidx.palette:palette:' + appCompatXLibraryVersion
 
     implementation 'com.github.bumptech.glide:glide:' + glideVersion
     annotationProcessor 'com.github.bumptech.glide:compiler:' + glideVersion
