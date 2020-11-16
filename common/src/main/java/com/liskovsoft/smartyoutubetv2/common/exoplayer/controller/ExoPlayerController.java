@@ -38,8 +38,9 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private boolean mOnSourceChanged;
     private PlayerView mPlayerView;
 
-    public ExoPlayerController(ExoPlayer player, DefaultTrackSelector trackSelector, Context context) {
+    public ExoPlayerController(ExoPlayer player, DefaultTrackSelector trackSelector, PlayerEventListener eventListener, Context context) {
         mPlayer = player;
+        mEventListener = eventListener;
         mContext = context;
         player.addListener(this);
 

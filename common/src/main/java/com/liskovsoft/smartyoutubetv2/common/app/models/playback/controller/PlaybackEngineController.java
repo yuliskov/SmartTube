@@ -31,6 +31,7 @@ public interface PlaybackEngineController {
      */
     void blockEngine(boolean block);
     boolean isEngineBlocked();
+    boolean isEngineInitialized();
     void restartEngine();
     void reloadPlayback();
     void enablePIP(boolean enable);
