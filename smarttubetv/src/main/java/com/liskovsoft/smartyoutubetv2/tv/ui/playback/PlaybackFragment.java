@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.app.RowsSupportFragment;
 import androidx.leanback.app.VideoSupportFragmentGlueHost;
+import androidx.leanback.media.PlayerAdapter;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ClassPresenterSelector;
 import androidx.leanback.widget.HeaderItem;
@@ -50,6 +51,7 @@ import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.ProgressBarManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.VideoPlayerGlue.OnActionClickedListener;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -64,11 +66,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private static final String TAG = PlaybackFragment.class.getSimpleName();
     private static final int UPDATE_DELAY_MS = 16;
     private VideoPlayerGlue mPlayerGlue;
-    private LeanbackPlayerAdapter mPlayerAdapter;
     private SimpleExoPlayer mPlayer;
-    private DefaultTrackSelector mTrackSelector;
-    private DefaultRenderersFactory mRenderersFactory;
-    private PlayerActionListener mPlaylistActionListener;
     private PlaybackPresenter mPlaybackPresenter;
     private ArrayObjectAdapter mRowsAdapter;
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
@@ -248,32 +246,26 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             mPlayer.release();
         }
         mPlayer = null;
-        mTrackSelector = null;
         mPlayerGlue = null;
-        mPlayerAdapter = null;
-        mPlaylistActionListener = null;
-        mRenderersFactory = null;
         mSubtitleManager = null;
         mDebugInfoManager = null;
+        // Fix access calls when player isn't initialized
         mExoPlayerController = PlayerController.NULL_CONTROLLER;
     }
 
     private void createPlayerObjects() {
-        TrackSelection.Factory videoTrackSelectionFactory =
-                new AdaptiveTrackSelection.Factory();
-        mTrackSelector = new RestoreTrackSelector(videoTrackSelectionFactory);
-        mRenderersFactory = new CustomOverridesRenderersFactory(getActivity());
+        DefaultTrackSelector trackSelector = new RestoreTrackSelector(new AdaptiveTrackSelection.Factory());
+        DefaultRenderersFactory renderersFactory = new CustomOverridesRenderersFactory(getActivity());
 
         // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
-        mPlayer = mPlayerInitializer.createPlayer(getActivity(), mRenderersFactory, mTrackSelector);
+        mPlayer = mPlayerInitializer.createPlayer(getActivity(), renderersFactory, trackSelector);
 
-        mExoPlayerController = new ExoPlayerController(mPlayer, mTrackSelector, getActivity());
-        mExoPlayerController.setEventListener(mEventListener);
+        mExoPlayerController = new ExoPlayerController(mPlayer, trackSelector, mEventListener, getActivity());
 
-        mPlayerAdapter = new LeanbackPlayerAdapter(getActivity(), mPlayer, UPDATE_DELAY_MS);
+        PlayerAdapter playerAdapter = new LeanbackPlayerAdapter(getActivity(), mPlayer, UPDATE_DELAY_MS);
 
-        mPlaylistActionListener = new PlayerActionListener();
-        mPlayerGlue = new VideoPlayerGlue(getActivity(), mPlayerAdapter, mPlaylistActionListener);
+        OnActionClickedListener playerActionListener = new PlayerActionListener();
+        mPlayerGlue = new VideoPlayerGlue(getActivity(), playerAdapter, playerActionListener);
         mPlayerGlue.setHost(new VideoSupportFragmentGlueHost(this));
         mPlayerGlue.setSeekEnabled(true);
         mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end
@@ -583,6 +575,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
+    public boolean isEngineInitialized() {
+        return mPlayer != null;
+    }
+
+    @Override
     public void enablePIP(boolean enable) {
         mIsPIPEnabled = enable;
     }
@@ -634,6 +631,9 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     @Override
     public void setEventListener(PlayerEventListener listener) {
         mEventListener = listener;
+        if (mExoPlayerController != null) {
+            mExoPlayerController.setEventListener(listener);
+        }
     }
 
     @Override

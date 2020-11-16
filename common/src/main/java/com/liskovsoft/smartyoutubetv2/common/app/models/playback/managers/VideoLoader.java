@@ -30,7 +30,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private Disposable mMetadataAction;
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
-    private boolean mEngineInitialized;
     private int mRepeatMode = PlaybackUiController.REPEAT_ALL;
     private final Runnable mReloadVideoHandler = () -> loadVideo(mLastVideo);
 
@@ -48,7 +47,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     public void openVideo(Video item) {
         mPlaylist.add(item);
 
-        if (mEngineInitialized) { // player is initialized
+        if (mController != null && mController.isEngineInitialized()) { // player is initialized
             if (!item.equals(mLastVideo)) {
                 loadVideo(item); // play immediately
             }
@@ -59,14 +58,12 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onEngineInitialized() {
-        mEngineInitialized = true;
         loadVideo(mLastVideo);
         mController.setRepeatButtonState(mRepeatMode);
     }
 
     @Override
     public void onEngineReleased() {
-        mEngineInitialized = false;
         disposeActions();
     }
 
