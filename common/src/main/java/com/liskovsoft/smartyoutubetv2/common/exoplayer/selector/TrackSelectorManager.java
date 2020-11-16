@@ -351,6 +351,15 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         return renderer.selectedTrack;
     }
 
+    public boolean fixSelection() {
+        if (!hasSelection(RENDERER_INDEX_VIDEO)) {
+            selectTrack(mSelectedTracks[RENDERER_INDEX_VIDEO]);
+            return true;
+        }
+
+        return false;
+    }
+
     private MediaTrack findBestMatch(MediaTrack track) {
         Log.d(TAG, "findBestMatch: Starting: " + track.format);
 
@@ -410,6 +419,14 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         }
 
         mRenderers[rendererIndex].override = new SelectionOverride(groupIndex, trackIndexes);
+    }
+
+    private boolean hasSelection(int rendererIndex) {
+        if (mSelectedTracks[rendererIndex] == null) {
+            return true;
+        }
+
+        return mRenderers[rendererIndex].selectedTrack != null;
     }
 
     private void setOverride(int rendererIndex, int group, int[] tracks, boolean enableRandomAdaptation) {
