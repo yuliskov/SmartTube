@@ -30,7 +30,8 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:colorPrimary" tools:targetApi="21">@color/fastlane_background</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
+        <item name="android:colorPrimary" tools:targetApi="21">@color/fastlane_background_dark</item>
     </style>
     <!-- End Default theme -->
 
@@ -60,6 +61,7 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/red</item>
         <item name="android:colorPrimary" tools:targetApi="21">@color/scheme_dark_grey_background</item>
     </style>
     <style name="App.Theme.Dark.GuidedStep" parent="Theme.Leanback.GuidedStep">
@@ -90,6 +92,7 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/semi_red</item>
         <item name="android:colorPrimary" tools:targetApi="21">@color/scheme_red_background_dark</item>
     </style>
     <style name="App.Theme.Red.GuidedStep" parent="Theme.Leanback.GuidedStep">
