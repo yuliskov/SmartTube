@@ -173,6 +173,11 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
         Log.d(TAG, "onTracksChanged: start: groups length: " + trackGroups.length);
 
+        if (mTrackSelectorManager.fixSelection()) {
+            MessageHelpers.showMessage(mContext, "Hmm. Strange. No track selected");
+            return;
+        }
+
         notifyOnVideoLoad();
 
         if (trackGroups.length == 0) {
