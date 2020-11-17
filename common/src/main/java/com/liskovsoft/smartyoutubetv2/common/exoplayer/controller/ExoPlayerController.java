@@ -186,6 +186,10 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
                 }
             }
         }
+
+        if (mTrackSelectorManager.fixVideoTrackSelection()) {
+            mEventListener.onTrackSelected(ExoFormatItem.from(mTrackSelectorManager.getVideoTrack()));
+        }
     }
 
     private void notifyOnVideoLoad() {
@@ -219,11 +223,11 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             mEventListener.onPlayEnd();
         }
 
-        if (playbackState == Player.STATE_BUFFERING) {
-            if (mTrackSelectorManager.fixVideoTrackSelection()) {
-                mEventListener.onTrackChanged(ExoFormatItem.from(mTrackSelectorManager.getVideoTrack()));
-            }
-        }
+        //if (playbackState == Player.STATE_BUFFERING) {
+        //    if (mTrackSelectorManager.fixVideoTrackSelection()) {
+        //        mEventListener.onTrackSelected(ExoFormatItem.from(mTrackSelectorManager.getVideoTrack()));
+        //    }
+        //}
     }
 
     @Override
