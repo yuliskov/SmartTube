@@ -47,9 +47,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         mTrackSelector = trackSelector;
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
         mTrackSelectorManager = new TrackSelectorManager(trackSelector);
-
-        // fallback selection (in case listener == null)
-        selectFormatSilent(FormatItem.VIDEO_HD_AVC_30);
     }
 
     @Override
@@ -78,7 +75,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
         if (mEventListener != null) {
             mTrackSelectorManager.invalidate();
-            mTrackSelectorManager.fixSelection();
             mOnSourceChanged = true;
             mEventListener.onSourceChanged(mVideo);
         } else {
@@ -221,6 +217,10 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             mEventListener.onPause();
         } else if (playbackEnded) {
             mEventListener.onPlayEnd();
+        }
+
+        if (playbackState == Player.STATE_BUFFERING) {
+            mTrackSelectorManager.fixSelection();
         }
     }
 

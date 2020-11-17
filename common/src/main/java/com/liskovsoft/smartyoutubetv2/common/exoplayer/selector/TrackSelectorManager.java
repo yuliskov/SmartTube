@@ -354,11 +354,9 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     }
 
     public void fixSelection() {
-        new Handler(Looper.myLooper()).postDelayed(() -> {
-            if (!hasSelection(RENDERER_INDEX_VIDEO)) {
-                selectTrack(mSelectedTracks[RENDERER_INDEX_VIDEO]);
-            }
-        }, 3_000);
+        if (!hasSelection(RENDERER_INDEX_VIDEO)) {
+            selectTrack(mSelectedTracks[RENDERER_INDEX_VIDEO]);
+        }
     }
 
     private MediaTrack findBestMatch(MediaTrack track) {
