@@ -1,7 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Pair;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.source.TrackGroup;
@@ -31,29 +29,32 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     private static final TrackSelection.Factory RANDOM_FACTORY = new RandomTrackSelection.Factory();
     private static final String TAG = TrackSelectorManager.class.getSimpleName();
 
-    private final DefaultTrackSelector mSelector;
-    private final TrackSelection.Factory mTrackSelectionFactory;
+    private DefaultTrackSelector mTrackSelector;
+    private TrackSelection.Factory mTrackSelectionFactory;
 
     private final Renderer[] mRenderers = new Renderer[3];
     private final MediaTrack[] mSelectedTracks = new MediaTrack[3];
 
-    public TrackSelectorManager(DefaultTrackSelector selector) {
-        this(selector, null);
+    public TrackSelectorManager() {
     }
 
-    /**
-     * @param selector The track selector.
-     * @param trackSelectionFactory A factory for adaptive {@link TrackSelection}s, or null
-     *                              if the selection helper should not support adaptive tracks.
-     */
-    public TrackSelectorManager(DefaultTrackSelector selector, TrackSelection.Factory trackSelectionFactory) {
-        mSelector = selector;
-        mTrackSelectionFactory = trackSelectionFactory;
-
-        if (selector instanceof RestoreTrackSelector) {
-            ((RestoreTrackSelector) selector).setTrackSelectCallback(this);
-        }
-    }
+    //public TrackSelectorManager(DefaultTrackSelector selector) {
+    //    this(selector, null);
+    //}
+    //
+    ///**
+    // * @param selector The track selector.
+    // * @param trackSelectionFactory A factory for adaptive {@link TrackSelection}s, or null
+    // *                              if the selection helper should not support adaptive tracks.
+    // */
+    //public TrackSelectorManager(DefaultTrackSelector selector, TrackSelection.Factory trackSelectionFactory) {
+    //    mTrackSelector = selector;
+    //    mTrackSelectionFactory = trackSelectionFactory;
+    //
+    //    if (selector instanceof RestoreTrackSelector) {
+    //        ((RestoreTrackSelector) selector).setTrackSelectCallback(this);
+    //    }
+    //}
 
     public void invalidate() {
         Arrays.fill(mRenderers, null);
@@ -84,7 +85,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             return;
         }
 
-        initTrackGroups(rendererIndex, mSelector.getCurrentMappedTrackInfo(), mSelector.getParameters());
+        initTrackGroups(rendererIndex, mTrackSelector.getCurrentMappedTrackInfo(), mTrackSelector.getParameters());
         initMediaTracks(rendererIndex);
     }
 
@@ -363,6 +364,25 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         return true;
     }
 
+    public void setTrackSelector(DefaultTrackSelector selector) {
+        mTrackSelector = selector;
+
+        if (selector instanceof RestoreTrackSelector) {
+            ((RestoreTrackSelector) selector).setOnTrackSelectCallback(this);
+        }
+    }
+
+    public void release() {
+        if (mTrackSelector != null) {
+            if (mTrackSelector instanceof RestoreTrackSelector) {
+                ((RestoreTrackSelector) mTrackSelector).setOnTrackSelectCallback(null);
+            }
+            mTrackSelector = null;
+        }
+
+        invalidate();
+    }
+
     private MediaTrack findBestMatch(MediaTrack track) {
         Log.d(TAG, "findBestMatch: Starting: " + track.format);
 
@@ -398,12 +418,12 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
     private void applyOverride(int rendererIndex) {
         Renderer renderer = mRenderers[rendererIndex];
-        mSelector.setParameters(mSelector.buildUponParameters().setRendererDisabled(rendererIndex, renderer.isDisabled));
+        mTrackSelector.setParameters(mTrackSelector.buildUponParameters().setRendererDisabled(rendererIndex, renderer.isDisabled));
 
         if (renderer.override != null) {
-            mSelector.setParameters(mSelector.buildUponParameters().setSelectionOverride(rendererIndex, renderer.trackGroups, renderer.override));
+            mTrackSelector.setParameters(mTrackSelector.buildUponParameters().setSelectionOverride(rendererIndex, renderer.trackGroups, renderer.override));
         } else {
-            mSelector.setParameters(mSelector.buildUponParameters().clearSelectionOverrides(rendererIndex)); // Auto quality button selected
+            mTrackSelector.setParameters(mTrackSelector.buildUponParameters().clearSelectionOverrides(rendererIndex)); // Auto quality button selected
         }
     }
 
