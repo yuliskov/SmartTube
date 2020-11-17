@@ -353,10 +353,14 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         return renderer.selectedTrack;
     }
 
-    public void fixSelection() {
-        if (!hasSelection(RENDERER_INDEX_VIDEO)) {
-            selectTrack(mSelectedTracks[RENDERER_INDEX_VIDEO]);
+    public boolean fixVideoTrackSelection() {
+        // track already properly selected
+        if (hasSelection(RENDERER_INDEX_VIDEO)) {
+            return false;
         }
+
+        selectTrack(mSelectedTracks[RENDERER_INDEX_VIDEO]);
+        return true;
     }
 
     private MediaTrack findBestMatch(MediaTrack track) {
@@ -425,7 +429,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             return true;
         }
 
-        return mRenderers[rendererIndex].selectedTrack != null;
+        return mRenderers[rendererIndex] != null && mRenderers[rendererIndex].selectedTrack != null;
     }
 
     private void setOverride(int rendererIndex, int group, int[] tracks, boolean enableRandomAdaptation) {

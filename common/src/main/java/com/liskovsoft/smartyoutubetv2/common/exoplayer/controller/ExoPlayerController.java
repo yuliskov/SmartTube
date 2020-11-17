@@ -220,7 +220,9 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         }
 
         if (playbackState == Player.STATE_BUFFERING) {
-            mTrackSelectorManager.fixSelection();
+            if (mTrackSelectorManager.fixVideoTrackSelection()) {
+                mEventListener.onTrackChanged(ExoFormatItem.from(mTrackSelectorManager.getVideoTrack()));
+            }
         }
     }
 
