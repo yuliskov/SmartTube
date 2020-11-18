@@ -132,12 +132,13 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
     @Override
     public void release() {
+        mTrackSelectorManager.release();
+
         if (mPlayer != null) {
             mPlayer.removeListener(this);
+            mPlayer.release();
             mPlayer = null;
         }
-
-        mTrackSelectorManager.release();
     }
 
     @Override

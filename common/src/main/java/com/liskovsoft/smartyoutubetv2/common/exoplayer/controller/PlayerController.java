@@ -10,7 +10,6 @@ import java.io.InputStream;
 import java.util.List;
 
 public interface PlayerController {
-    //PlayerController NULL_CONTROLLER = new NullPlayerController();
     int BUFFER_LOW = 0;
     int BUFFER_MED = 1;
     int BUFFER_HIGH = 2;

@@ -35,27 +35,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     private final Renderer[] mRenderers = new Renderer[3];
     private final MediaTrack[] mSelectedTracks = new MediaTrack[3];
 
-    public TrackSelectorManager() {
-    }
-
-    //public TrackSelectorManager(DefaultTrackSelector selector) {
-    //    this(selector, null);
-    //}
-    //
-    ///**
-    // * @param selector The track selector.
-    // * @param trackSelectionFactory A factory for adaptive {@link TrackSelection}s, or null
-    // *                              if the selection helper should not support adaptive tracks.
-    // */
-    //public TrackSelectorManager(DefaultTrackSelector selector, TrackSelection.Factory trackSelectionFactory) {
-    //    mTrackSelector = selector;
-    //    mTrackSelectionFactory = trackSelectionFactory;
-    //
-    //    if (selector instanceof RestoreTrackSelector) {
-    //        ((RestoreTrackSelector) selector).setTrackSelectCallback(this);
-    //    }
-    //}
-
     public void invalidate() {
         Arrays.fill(mRenderers, null);
     }

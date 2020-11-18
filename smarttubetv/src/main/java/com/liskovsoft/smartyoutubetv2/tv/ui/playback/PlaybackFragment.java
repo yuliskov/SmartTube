@@ -244,9 +244,6 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     private void destroyPlayerObjects() {
-        if (mPlayer != null) {
-            mPlayer.release();
-        }
         // Fix access calls when player isn't initialized
         mExoPlayerController.release();
         mPlayer = null;
