@@ -415,7 +415,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     }
 
     private void setOverride(int rendererIndex, int groupIndex, int... trackIndexes) {
-        if (groupIndex == -1) {
+        if (groupIndex == -1 || mRenderers[rendererIndex] == null) {
             mRenderers[rendererIndex].override = null; // auto option selected
             return;
         }
