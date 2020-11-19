@@ -97,4 +97,6 @@
     <string name="player_other">Sonstige</string>
     <string name="player_full_date">Genaues Datum in der Beschreibung</string>
     <string name="open_channel">Kanal öffnen</string>
+    <string name="not_interested">Kein Interesse</string>
+    <string name="you_wont_see_this_video">Video wurde aus den Empfehlungen entfernt</string>
 </resources>
