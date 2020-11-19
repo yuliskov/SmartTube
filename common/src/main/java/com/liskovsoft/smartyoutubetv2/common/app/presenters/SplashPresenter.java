@@ -23,7 +23,7 @@ public class SplashPresenter implements Presenter<SplashView> {
 
     private SplashPresenter(Context context) {
         mContext = context;
-        GlobalPreferences.instance(context); // auth token storage
+        GlobalPreferences.instance(context); // auth token storage init
     }
 
     public static SplashPresenter instance(Context context) {
