@@ -95,4 +95,5 @@
     <string name="select_account_on_boot">Vyberte účet při spuštění</string>
     <string name="player_other">Různé</string>
     <string name="player_full_date">Přesné datum v popisku</string>
+    <string name="open_channel">Otevřít kanál</string>
 </resources>
