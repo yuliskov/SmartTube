@@ -96,5 +96,5 @@
     <string name="select_account_on_boot">Account selecteren bij opstarten</string>
     <string name="player_other">Diverse</string>
     <string name="player_full_date">Publicatiedatum weergeven</string>
-    <string name="open_channel">Ga naar kanaal</string>
+    <string name="open_channel">Naar kanaal</string>
 </resources>
