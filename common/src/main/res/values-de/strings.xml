@@ -96,4 +96,5 @@
     <string name="select_account_on_boot">Konto beim Start auswählen</string>
     <string name="player_other">Sonstige</string>
     <string name="player_full_date">Genaues Datum in der Beschreibung</string>
+    <string name="open_channel">Kanal öffnen</string>
 </resources>
