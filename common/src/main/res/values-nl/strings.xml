@@ -97,4 +97,6 @@
     <string name="player_other">Diverse</string>
     <string name="player_full_date">Publicatiedatum weergeven</string>
     <string name="open_channel">Naar kanaal</string>
+    <string name="not_interested">Geen interesse</string>
+    <string name="you_wont_see_this_video">Video verwijderd uit Aanbevolen</string>
 </resources>
