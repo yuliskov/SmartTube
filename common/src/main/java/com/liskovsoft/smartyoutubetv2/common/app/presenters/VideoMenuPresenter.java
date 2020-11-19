@@ -28,7 +28,10 @@ public class VideoMenuPresenter {
     private Disposable mPlaylistAction;
     private Disposable mAddAction;
     private Disposable mSignCheckAction;
+    private Disposable mNotInterestedAction;
     private Video mVideo;
+    private boolean mIsNotInterestedButtonEnabled;
+    private boolean mIsOpenChannelButtonEnabled;
 
     private VideoMenuPresenter(Context context) {
         mContext = context;
@@ -42,19 +45,29 @@ public class VideoMenuPresenter {
         return new VideoMenuPresenter(context.getApplicationContext());
     }
 
+    public void showShortMenu(Video video) {
+        showMenu(video, false, false);
+    }
+
     public void showMenu(Video video) {
+        showMenu(video, true, true);
+    }
+
+    private void showMenu(Video video, boolean isOpenChannelButtonEnabled, boolean isNotInterestedButtonEnabled) {
         if (video == null || !video.isVideo()) {
             return;
         }
 
-        authCheck(() -> obtainPlaylistsAndShow(video),
+        mVideo = video;
+        mIsOpenChannelButtonEnabled = isOpenChannelButtonEnabled;
+        mIsNotInterestedButtonEnabled = isNotInterestedButtonEnabled;
+
+        authCheck(this::obtainPlaylistsAndShow,
                   () -> MessageHelpers.showMessage(mContext, R.string.msg_signed_users_only));;
     }
 
-    private void obtainPlaylistsAndShow(Video video) {
-        mVideo = video;
-
-        mPlaylistAction = mItemManager.getVideoPlaylistsInfosObserve(video.videoId)
+    private void obtainPlaylistsAndShow() {
+        mPlaylistAction = mItemManager.getVideoPlaylistsInfosObserve(mVideo.videoId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::prepareAndShowDialog);
@@ -63,10 +76,11 @@ public class VideoMenuPresenter {
     private void prepareAndShowDialog(List<VideoPlaylistInfo> videoPlaylistInfos) {
         mSettingsPresenter.clear();
 
+        appendNotInterestedButton();
         appendOpenChannelButton();
         appendAddToPlaylist(videoPlaylistInfos);
 
-        mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction, mAddAction, mSignCheckAction));
+        mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction, mAddAction, mSignCheckAction, mNotInterestedAction));
     }
 
     private void appendAddToPlaylist(List<VideoPlaylistInfo> videoPlaylistInfos) {
@@ -83,12 +97,28 @@ public class VideoMenuPresenter {
     }
 
     private void appendOpenChannelButton() {
-        if (mVideo == null || mVideo.channelId == null) {
+        if (!mIsOpenChannelButtonEnabled || mVideo == null || mVideo.channelId == null) {
             return;
         }
 
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(mContext.getString(R.string.open_channel), optionItem -> ChannelPresenter.instance(mContext).openChannel(mVideo)));
+    }
+
+    private void appendNotInterestedButton() {
+        if (!mIsNotInterestedButtonEnabled || mVideo == null || mVideo.mediaItem == null) {
+            return;
+        }
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(mContext.getString(R.string.not_interested), optionItem -> {
+                    mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem)
+                            .subscribeOn(Schedulers.newThread())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe((var) -> {}, (err) -> {}, () -> {
+                                MessageHelpers.showMessage(mContext, R.string.you_wont_see_this_video);
+                            });
+                }));
     }
 
     private void addToPlaylist(String playlistId, boolean checked) {
