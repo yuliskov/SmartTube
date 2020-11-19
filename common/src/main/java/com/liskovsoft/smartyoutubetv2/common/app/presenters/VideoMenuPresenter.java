@@ -106,7 +106,7 @@ public class VideoMenuPresenter {
     }
 
     private void appendNotInterestedButton() {
-        if (!mIsNotInterestedButtonEnabled || mVideo == null || mVideo.mediaItem == null) {
+        if (!mIsNotInterestedButtonEnabled || mVideo == null || mVideo.mediaItem == null || mVideo.mediaItem.getFeedbackToken() == null) {
             return;
         }
 
