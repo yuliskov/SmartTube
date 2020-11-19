@@ -61,6 +61,15 @@ public class VideoMenuPresenter {
     }
 
     private void prepareAndShowDialog(List<VideoPlaylistInfo> videoPlaylistInfos) {
+        mSettingsPresenter.clear();
+
+        appendOpenChannelButton();
+        appendAddToPlaylist(videoPlaylistInfos);
+
+        mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction, mAddAction, mSignCheckAction));
+    }
+
+    private void appendAddToPlaylist(List<VideoPlaylistInfo> videoPlaylistInfos) {
         List<OptionItem> options = new ArrayList<>();
 
         for (VideoPlaylistInfo playlistInfo : videoPlaylistInfos) {
@@ -70,9 +79,16 @@ public class VideoMenuPresenter {
                     playlistInfo.isSelected()));
         }
 
-        mSettingsPresenter.clear();
         mSettingsPresenter.appendCheckedCategory(mContext.getString(R.string.dialog_add_to_playlist), options);
-        mSettingsPresenter.showDialog(() -> RxUtils.disposeActions(mPlaylistAction, mAddAction, mSignCheckAction));
+    }
+
+    private void appendOpenChannelButton() {
+        if (mVideo == null || mVideo.channelId == null) {
+            return;
+        }
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(mContext.getString(R.string.open_channel), optionItem -> ChannelPresenter.instance(mContext).openChannel(mVideo)));
     }
 
     private void addToPlaylist(String playlistId, boolean checked) {

@@ -96,4 +96,5 @@
     <string name="select_account_on_boot">Обирати на старті</string>
     <string name="player_other">Різне</string>
     <string name="player_full_date">Точна дата в описі</string>
+    <string name="open_channel">Перейти до каналу</string>
 </resources>
