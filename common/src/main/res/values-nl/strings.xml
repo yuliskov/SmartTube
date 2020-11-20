@@ -99,4 +99,7 @@
     <string name="open_channel">Naar kanaal</string>
     <string name="not_interested">Geen interesse</string>
     <string name="you_wont_see_this_video">Video verwijderd uit Aanbevolen</string>
+    <string name="settings_search">Zoeken</string>
+    <string name="dialog_search">Zoeken</string>
+    <string name="instant_voice_search">Directe voice search</string>
 </resources>
