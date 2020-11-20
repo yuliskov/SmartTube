@@ -73,6 +73,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         mRowMapping = new HashMap<>();
         mTextGridMapping = new HashMap<>();
         mMainUIData = MainUIData.instance(mContext);
+        GlobalPreferences.instance(context); // auth token storage init (in case activity restored after crash)
         initCategories();
     }
 

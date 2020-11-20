@@ -40,6 +40,11 @@ public class AccountSelectionPresenter {
     }
 
     public void show() {
+        if (!AccountsData.instance(mContext).isSelectAccountOnBootEnabled()) {
+            // user don't want to see selection dialog
+            return;
+        }
+
         mAccountsAction = mSignInManager.getAccountsObserve()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -52,7 +57,7 @@ public class AccountSelectionPresenter {
     }
 
     private void createAndShowDialog(List<Account> accounts) {
-        if (accounts == null || accounts.size() <= 1 || !AccountsData.instance(mContext).isSelectAccountOnBootEnabled()) {
+        if (accounts == null || accounts.size() <= 1) {
             return;
         }
 

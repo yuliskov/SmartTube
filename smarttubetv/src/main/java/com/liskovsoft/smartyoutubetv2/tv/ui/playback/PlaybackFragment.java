@@ -25,6 +25,7 @@ import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection.Factory;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.util.Util;
@@ -72,6 +73,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
     private PlayerEventListener mEventListener;
     private PlayerController mExoPlayerController;
+    private ExoPlayerInitializer mPlayerInitializer;
     private SubtitleManager mSubtitleManager;
     private DebugInfoManager mDebugInfoManager;
     private UriBackgroundManager mBackgroundManager;
@@ -80,7 +82,6 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private boolean mIsEngineBlocked;
     private boolean mIsPIPEnabled;
     private boolean mIsHOMEnabled;
-    private ExoPlayerInitializer mPlayerInitializer;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -90,6 +91,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mBackgroundManager = getLeanbackActivity().getBackgroundManager();
         mBackgroundManager.setBackgroundColor(ContextCompat.getColor(getLeanbackActivity(), R.color.player_background));
         mPlayerInitializer = new ExoPlayerInitializer(getActivity());
+        mExoPlayerController = new ExoPlayerController(getActivity());
 
         mPlaybackPresenter = PlaybackPresenter.instance(getContext());
         mPlaybackPresenter.register(this);
@@ -243,25 +245,20 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     private void destroyPlayerObjects() {
-        if (mPlayer != null) {
-            mPlayer.release();
-        }
+        // Fix access calls when player isn't initialized
+        mExoPlayerController.release();
         mPlayer = null;
         mPlayerGlue = null;
         mSubtitleManager = null;
         mDebugInfoManager = null;
-        // Fix access calls when player isn't initialized
-        mExoPlayerController = PlayerController.NULL_CONTROLLER;
     }
 
     private void createPlayerObjects() {
-        DefaultTrackSelector trackSelector = new RestoreTrackSelector(new AdaptiveTrackSelection.Factory());
         DefaultRenderersFactory renderersFactory = new CustomOverridesRenderersFactory(getActivity());
 
         // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
+        DefaultTrackSelector trackSelector = new RestoreTrackSelector(new Factory());
         mPlayer = mPlayerInitializer.createPlayer(getActivity(), renderersFactory, trackSelector);
-
-        mExoPlayerController = new ExoPlayerController(mPlayer, trackSelector, mEventListener, getActivity());
 
         PlayerAdapter playerAdapter = new LeanbackPlayerAdapter(getActivity(), mPlayer, UPDATE_DELAY_MS);
 
@@ -272,6 +269,9 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end
         hideControlsOverlay(mIsAnimationEnabled); // hide controls upon fragment creation
 
+        mExoPlayerController.setPlayer(mPlayer);
+        mExoPlayerController.setTrackSelector(trackSelector);
+        mExoPlayerController.setEventListener(mEventListener);
         mExoPlayerController.setPlayerView(mPlayerGlue);
 
         mSubtitleManager = new SubtitleManager(getActivity(), R.id.leanback_subtitles);
@@ -642,9 +642,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     @Override
     public void setEventListener(PlayerEventListener listener) {
         mEventListener = listener;
-        if (mExoPlayerController != null) {
-            mExoPlayerController.setEventListener(listener);
-        }
+        mExoPlayerController.setEventListener(listener);
     }
 
     @Override

@@ -28,28 +28,19 @@ import java.util.List;
 
 public class ExoPlayerController implements Player.EventListener, PlayerController {
     private static final String TAG = ExoPlayerController.class.getSimpleName();
-    private final ExoPlayer mPlayer;
     private final Context mContext;
-    private final DefaultTrackSelector mTrackSelector;
     private final ExoMediaSourceFactory mMediaSourceFactory;
     private final TrackSelectorManager mTrackSelectorManager;
     private PlayerEventListener mEventListener;
     private Video mVideo;
     private boolean mOnSourceChanged;
+    private ExoPlayer mPlayer;
     private PlayerView mPlayerView;
 
-    public ExoPlayerController(ExoPlayer player, DefaultTrackSelector trackSelector, PlayerEventListener eventListener, Context context) {
-        mPlayer = player;
-        mEventListener = eventListener;
+    public ExoPlayerController(Context context) {
         mContext = context;
-        player.addListener(this);
-
-        mTrackSelector = trackSelector;
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
-        mTrackSelectorManager = new TrackSelectorManager(trackSelector);
-
-        // fallback selection (in case listener == null)
-        selectFormatSilent(FormatItem.VIDEO_HD_AVC_30);
+        mTrackSelectorManager = new TrackSelectorManager();
     }
 
     @Override
@@ -74,6 +65,10 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     private void openMediaSource(MediaSource mediaSource) {
+        if (mPlayer == null) {
+            return;
+        }
+
         mPlayer.prepare(mediaSource);
 
         if (mEventListener != null) {
@@ -87,34 +82,69 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
     @Override
     public long getPositionMs() {
+        if (mPlayer == null) {
+            return -1;
+        }
+
         return mPlayer.getCurrentPosition();
     }
 
     @Override
     public void setPositionMs(long positionMs) {
-        if (positionMs >= 0) {
+        if (positionMs >= 0 && mPlayer != null) {
             mPlayer.seekTo(positionMs);
         }
     }
 
     @Override
     public long getLengthMs() {
+        if (mPlayer == null) {
+            return -1;
+        }
+
         return mPlayer.getDuration();
     }
 
     @Override
     public void setPlay(boolean isPlaying) {
-        mPlayer.setPlayWhenReady(isPlaying);
+        if (mPlayer != null) {
+            mPlayer.setPlayWhenReady(isPlaying);
+        }
     }
 
     @Override
     public boolean isPlaying() {
+        if (mPlayer == null) {
+            return false;
+        }
+
         return mPlayer.isPlaying();
     }
 
     @Override
     public boolean hasNoMedia() {
+        if (mPlayer == null) {
+            return true;
+        }
+
         return mPlayer.getPlaybackState() == Player.STATE_IDLE;
+    }
+
+    @Override
+    public void release() {
+        mTrackSelectorManager.release();
+
+        if (mPlayer != null) {
+            mPlayer.removeListener(this);
+            mPlayer.release();
+            mPlayer = null;
+        }
+    }
+
+    @Override
+    public void setPlayer(ExoPlayer player) {
+        mPlayer = player;
+        player.addListener(this);
     }
 
     @Override
@@ -125,6 +155,11 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     @Override
     public void setPlayerView(PlayerView playerView) {
         mPlayerView = playerView;
+    }
+
+    @Override
+    public void setTrackSelector(DefaultTrackSelector trackSelector) {
+        mTrackSelectorManager.setTrackSelector(trackSelector);
     }
 
     @Override
@@ -173,11 +208,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
         Log.d(TAG, "onTracksChanged: start: groups length: " + trackGroups.length);
 
-        if (mTrackSelectorManager.fixSelection()) {
-            MessageHelpers.showMessage(mContext, "Hmm. Strange. No track selected");
-            return;
-        }
-
         notifyOnVideoLoad();
 
         if (trackGroups.length == 0) {
@@ -194,6 +224,10 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
                 }
             }
         }
+
+        //if (mTrackSelectorManager.fixVideoTrackSelection()) {
+        //    mEventListener.onTrackSelected(ExoFormatItem.from(mTrackSelectorManager.getVideoTrack()));
+        //}
     }
 
     private void notifyOnVideoLoad() {

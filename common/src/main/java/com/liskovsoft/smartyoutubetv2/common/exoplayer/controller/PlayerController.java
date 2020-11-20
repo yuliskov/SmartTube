@@ -1,15 +1,15 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.controller;
 
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
-import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
 import java.io.InputStream;
 import java.util.List;
 
 public interface PlayerController {
-    PlayerController NULL_CONTROLLER = new NullPlayerController();
     int BUFFER_LOW = 0;
     int BUFFER_MED = 1;
     int BUFFER_HIGH = 2;
@@ -22,7 +22,11 @@ public interface PlayerController {
     long getLengthMs();
     void setPlay(boolean isPlaying);
     boolean isPlaying();
+    void release();
+    void setPlayer(ExoPlayer player);
     void setEventListener(PlayerEventListener eventListener);
+    void setPlayerView(PlayerView playerView);
+    void setTrackSelector(DefaultTrackSelector trackSelector);
     void setVideo(Video video);
     Video getVideo();
     List<FormatItem> getVideoFormats();
@@ -34,5 +38,4 @@ public interface PlayerController {
     boolean hasNoMedia();
     void setSpeed(float speed);
     float getSpeed();
-    void setPlayerView(PlayerView playerView);
 }

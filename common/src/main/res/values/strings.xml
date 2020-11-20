@@ -96,4 +96,7 @@
     <string name="select_account_on_boot">Select on boot</string>
     <string name="player_other">Misc</string>
     <string name="player_full_date">Precise date in description</string>
+    <string name="open_channel">Open channel</string>
+    <string name="not_interested">Not interested</string>
+    <string name="you_wont_see_this_video">Video has been removed from recommended</string>
 </resources>
