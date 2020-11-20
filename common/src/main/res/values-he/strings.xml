@@ -95,4 +95,10 @@
     <string name="select_account_on_boot">בחר באתחול</string>
     <string name="player_other">שונות</string>
     <string name="player_full_date">תאריך מדוייק בתיאור</string>
+    <string name="open_channel">פתח ערוץ</string>
+    <string name="not_interested">לא מעוניין</string>
+    <string name="you_wont_see_this_video">וידאו הוסר ממעודפים</string>
+    <string name="settings_search">חיפוש</string>
+    <string name="dialog_search">חיפוש</string>
+    <string name="instant_voice_search">חיפוש קולי מהיר</string>
 </resources>
