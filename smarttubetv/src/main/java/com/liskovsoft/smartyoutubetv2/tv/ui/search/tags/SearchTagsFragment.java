@@ -77,6 +77,8 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
 
             if (enableRecognition) {
                 startRecognition();
+            } else {
+                focusOnSearchField();
             }
         }
 
@@ -132,10 +134,6 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         mNewQuery = newQuery;
 
         return isVoice;
-    }
-
-    public void focusOnSearch() {
-        getView().findViewById(R.id.lb_search_bar).requestFocus();
     }
 
     @Override

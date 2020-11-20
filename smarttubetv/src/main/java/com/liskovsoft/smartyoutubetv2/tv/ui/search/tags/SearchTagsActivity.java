@@ -21,7 +21,7 @@ public class SearchTagsActivity extends LeanbackActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // If there are no results found, press the left key to reselect the microphone
         if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT && !mFragment.hasResults()) {
-            mFragment.focusOnSearch();
+            mFragment.focusOnSearchField();
         }
         return super.onKeyDown(keyCode, event);
     }
