@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="header_home">Start</string>
-    <string name="title_search">Suchen</string>
+    <string name="title_search">Suche</string>
     <string name="header_subscriptions">Abos</string>
     <string name="header_history">Verlauf</string>
     <string name="header_music">Musik</string>
@@ -99,7 +99,7 @@
     <string name="open_channel">Kanal öffnen</string>
     <string name="not_interested">Kein Interesse</string>
     <string name="you_wont_see_this_video">Video wurde aus den Empfehlungen entfernt</string>
-    <string name="settings_search">Suchen</string>
-    <string name="dialog_search">Suchen</string>
+    <string name="settings_search">Suche</string>
+    <string name="dialog_search">Suche</string>
     <string name="instant_voice_search">Sofortige Sprachsuche</string>
 </resources>
