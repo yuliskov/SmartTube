@@ -99,4 +99,7 @@
     <string name="open_channel">Open channel</string>
     <string name="not_interested">Not interested</string>
     <string name="you_wont_see_this_video">Video has been removed from recommended</string>
+    <string name="settings_search">Search</string>
+    <string name="dialog_search">Search</string>
+    <string name="instant_voice_search">Instant voice search</string>
 </resources>

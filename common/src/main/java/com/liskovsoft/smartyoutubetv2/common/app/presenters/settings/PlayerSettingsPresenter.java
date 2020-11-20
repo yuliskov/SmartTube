@@ -29,7 +29,7 @@ public class PlayerSettingsPresenter {
 
         appendOKButtonCategory(settingsPresenter);
         appendUIAutoHideCategory(settingsPresenter);
-        appendOtherCategory(settingsPresenter);
+        appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(mContext.getString(R.string.dialog_player_ui));
     }
@@ -74,7 +74,7 @@ public class PlayerSettingsPresenter {
         settingsPresenter.appendRadioCategory(mContext.getString(R.string.player_ui_hide_behavior), options);
     }
 
-    private void appendOtherCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(mContext.getString(R.string.player_full_date),

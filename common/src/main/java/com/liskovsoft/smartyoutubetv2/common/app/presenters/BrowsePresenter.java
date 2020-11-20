@@ -25,6 +25,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSett
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.LanguageSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.MainUISettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.PlayerSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SearchSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -140,12 +141,8 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
                 mContext.getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(mContext).show(), R.drawable.settings_main_ui));
         settingItems.add(new SettingsItem(
                 mContext.getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(mContext).show(), R.drawable.settings_player));
-        //settingItems.add(new SettingsItem(
-        //        mContext.getString(R.string.settings_linked_devices), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
-        //settingItems.add(new SettingsItem(
-        //        mContext.getString(R.string.settings_left_panel), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
-        //settingItems.add(new SettingsItem(
-        //        mContext.getString(R.string.settings_other), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
+        settingItems.add(new SettingsItem(
+                mContext.getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(mContext).show(), R.drawable.settings_search));
         settingItems.add(new SettingsItem(
                 mContext.getString(R.string.settings_about), () -> AboutPresenter.instance(mContext).show(), R.drawable.settings_about));
 
