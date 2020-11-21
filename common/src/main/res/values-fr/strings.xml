@@ -85,4 +85,21 @@
     <string name="large_ui">Grande interface utilisateur</string>
     <string name="video_grid_scale">Échelle de grille vidéo</string>
     <string name="scale_ui">Échelle d’interface utilisateur</string>
+    <string name="color_scheme">Couleur schéma</string>
+    <string name="color_scheme_default">Défaut</string>
+    <string name="color_scheme_red_grey">Rouge-gris</string>
+    <string name="color_scheme_red">Rouge</string>
+    <string name="color_scheme_dark">Sombre</string>
+    <string name="disable_update_check">Désactiver la vérification des mises à jour</string>
+    <string name="show_again">Afficher à nouveau</string>
+    <string name="check_updates_auto">Mise à jour automatique</string>
+    <string name="select_account_on_boot">Sélectionnez au démarrage</string>
+    <string name="player_other">Divers</string>
+    <string name="player_full_date">Date précise dans la description</string>
+    <string name="open_channel">Ouvrir chaine</string>
+    <string name="not_interested">Pas intéressé</string>
+    <string name="you_wont_see_this_video">La vidéo a été supprimée de la recommandation</string>
+    <string name="settings_search">Rechercher</string>
+    <string name="dialog_search">Rechercher</string>
+    <string name="instant_voice_search">Recherche vocale instantanée</string>
 </resources>
