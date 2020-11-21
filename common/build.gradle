@@ -35,6 +35,7 @@ android {
     productFlavors {
         stbeta {}
         storig {}
+        strtarmenia {}
     }
 }
 
@@ -60,4 +61,5 @@ dependencies {
 
     stbetaImplementation project(path: ':leanbackassistant')
     stbetaImplementation project(path: ':appupdatechecker2')
+    strtarmeniaImplementation project(path: ':appupdatechecker2')
 }

@@ -23,11 +23,13 @@ buildscript {
 
 apply plugin: 'com.android.application'
 
-// Google Services Gradle plugin (transforms google-services.json file)
-apply plugin: 'com.google.gms.google-services'
+if (getGradle().getStartParameter().getTaskRequests().toString().contains("stbeta")) {
+    // Google Services Gradle plugin (transforms google-services.json file)
+    apply plugin: 'com.google.gms.google-services'
 
-// Apply the Crashlytics Gradle plugin
-apply plugin: 'com.google.firebase.crashlytics'
+    // Apply the Crashlytics Gradle plugin
+    apply plugin: 'com.google.firebase.crashlytics'
+}
 
 android {
     // FIX: Default interface methods are only supported starting with Android N (--min-api 24)
@@ -73,6 +75,10 @@ android {
         }
         storig {
             // matchingFallbacks = ['lite']
+        }
+        strtarmenia {
+            // matchingFallbacks = ['lite']
+            applicationIdSuffix ".rtarmenia"
         }
     }
 
