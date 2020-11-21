@@ -1,11 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="header_home">Home</string>
-    <string name="title_search">Suchen</string>
+    <string name="header_home">Start</string>
+    <string name="title_search">Suche</string>
     <string name="header_subscriptions">Abos</string>
     <string name="header_history">Verlauf</string>
     <string name="header_music">Musik</string>
     <string name="header_news">Nachrichten</string>
-    <string name="header_gaming">Gaming</string>
+    <string name="header_gaming">Spiele</string>
     <string name="header_playlists">Wiedergabelisten</string>
     <string name="header_settings">Einstellungen</string>
     <string name="header_channels">Kanäle</string>
@@ -39,7 +40,7 @@
     <string name="install_update">Update installieren</string>
     <string name="msg_category_is_empty">Hoppla! Hier ist nichts drin.</string>
     <string name="dialog_add_to_playlist">Zur Wiedergabeliste hinzufügen</string>
-    <string name="msg_signed_users_only">Nur registrierte Benutzer</string>
+    <string name="msg_signed_users_only">Nur angemeldete Nutzer</string>
     <string name="msg_cant_load_content">Hoppla. Inhalt kann nicht geladen werden.</string>
     <string name="title_video_presets">Video-Voreinstellungen</string>
     <string name="settings_accounts">Konten</string>
@@ -82,4 +83,23 @@
     <string name="side_panel_sections">Kategorien einrichten</string>
     <string name="boot_to_section">Starte in Kategorie</string>
     <string name="large_ui">Große Benutzeroberfläche</string>
+    <string name="video_grid_scale">Video-Raster skalieren</string>
+    <string name="scale_ui">Benutzeroberfläche skalieren</string>
+    <string name="color_scheme">Farbschema</string>
+    <string name="color_scheme_default">Standard</string>
+    <string name="color_scheme_red_grey">Rot-Grau</string>
+    <string name="color_scheme_red">Rot</string>
+    <string name="color_scheme_dark">Dunkel</string>
+    <string name="disable_update_check">Update-Prüfung deaktivieren</string>
+    <string name="show_again">Erneut anzeigen</string>
+    <string name="check_updates_auto">Automatische Updates</string>
+    <string name="select_account_on_boot">Konto beim Start auswählen</string>
+    <string name="player_other">Sonstige</string>
+    <string name="player_full_date">Genaues Datum in der Beschreibung</string>
+    <string name="open_channel">Kanal öffnen</string>
+    <string name="not_interested">Kein Interesse</string>
+    <string name="you_wont_see_this_video">Video wurde aus den Empfehlungen entfernt</string>
+    <string name="settings_search">Suche</string>
+    <string name="dialog_search">Suche</string>
+    <string name="instant_voice_search">Sofortige Sprachsuche</string>
 </resources>
