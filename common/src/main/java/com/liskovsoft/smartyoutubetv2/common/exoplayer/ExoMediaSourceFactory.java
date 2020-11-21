@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
 import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -29,6 +30,8 @@ import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.okhttp.OkHttpHelpers;
+import com.liskovsoft.youtubeapi.app.AppConstants;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -223,14 +226,14 @@ public class ExoMediaSourceFactory {
     }
 
     //public static HttpDataSource.Factory buildHttpDataSourceFactory(Context context, DefaultBandwidthMeter bandwidthMeter) {
-    //    OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(OkHttpHelpers.getOkHttpClient(), USER_AGENT_MANAGER.getUA(),
+    //    OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(OkHttpHelpers.getOkHttpClient(), AppConstants.APP_USER_AGENT,
     //            bandwidthMeter);
-    //    addCommonHeaders(context, dataSourceFactory);
+    //    //addCommonHeaders(context, dataSourceFactory);
     //    return dataSourceFactory;
     //}
 
     private static HttpDataSource.Factory buildHttpDataSourceFactory(Context context, DefaultBandwidthMeter bandwidthMeter) {
-        DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(SAMSUNG_SMART_TV_UA, bandwidthMeter);
+        DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(AppConstants.APP_USER_AGENT, bandwidthMeter);
         //addCommonHeaders(context, dataSourceFactory); // cause troubles for some users
         return dataSourceFactory;
     }
