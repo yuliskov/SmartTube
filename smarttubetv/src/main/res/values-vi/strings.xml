@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="signin_view_title">Đang tải Mã người dùng…</string>
+    <string name="signin_view_description">Để đăng nhập, hãy nhập mã này trên trang %s</string>
+    <string name="signin_view_action_text">Đã xong</string>
+    <string name="action_subscribe_off">Tắt đăng ký</string>
+    <string name="action_subscribe_on">Bật đăng ký</string>
+    <string name="action_channel">Mở kênh</string>
+    <string name="action_playlist_add">Thêm vào danh sách</string>
+    <string name="action_video_stats">Thống kê Video</string>
+    <string name="require_checked">Yêu cầu \"%s\"</string>
+    <string name="msg_press_again_to_exit">Nhấn 1 lần nữa để thoát</string>
+    <string name="player_remaining_time">Còn lại: %s</string>
+    <string name="badge_new_content">NỘI DUNG MỚI</string>
+</resources>

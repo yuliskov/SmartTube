@@ -80,9 +80,20 @@
     <string name="update_in_progess">Xin hãy đợi…</string>
     <string name="player_ui_hide_behavior">Tự động ẩn giao diện</string>
     <string name="player_ui_hide_never">Không bao giờ</string>
-    <string name="side_panel_sections">Cài đặt khác</string>
+    <string name="side_panel_sections">Cài đặt bảng điều khiển cạnh</string>
     <string name="boot_to_section">Mặc định khi khởi động</string>
     <string name="large_ui">Giao diên lớn</string>
     <string name="video_grid_scale">Tỷ lệ lưới Video</string>
     <string name="scale_ui">Tỷ lệ giao diện</string>
+    <string name="color_scheme">Màu giao diện</string>
+    <string name="color_scheme_default">Mặc định</string>
+    <string name="color_scheme_red_grey">Đỏ - Xám</string>
+    <string name="color_scheme_red">Đỏ</string>
+    <string name="color_scheme_dark">Tối</string>
+    <string name="disable_update_check">Vô hiệu tự động kiểm tra phiên bản mới</string>
+    <string name="show_again">Hiện lại</string>
+    <string name="check_updates_auto">Tự động cập nhật</string>
+    <string name="select_account_on_boot">Lựa chọn khi khởi động</string>
+    <string name="player_other">Cài đặt khác</string>
+    <string name="player_full_date">Ngày chính xác trong mô tả</string>
 </resources>
