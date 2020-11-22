@@ -26,7 +26,7 @@
     <string name="category_background_playback">Фоновое воспроизведение</string>
     <string name="not_implemented">Пока не готово</string>
     <string name="option_background_playback_off">Отключено</string>
-    <string name="option_background_playback_all">Видео и аудио</string>
+    <string name="option_background_playback_pip">Картинка в картинке</string>
     <string name="option_background_playback_only_audio">Только аудио</string>
     <string name="playback_settings">Настройки воспроизведения</string>
     <string name="video_speed">Скорость видео</string>
@@ -102,4 +102,5 @@
     <string name="settings_search">Поиск</string>
     <string name="dialog_search">Поиск</string>
     <string name="instant_voice_search">Сразу запускать голосовой поиск</string>
+    <string name="option_background_playback_behind">Играть позади</string>
 </resources>

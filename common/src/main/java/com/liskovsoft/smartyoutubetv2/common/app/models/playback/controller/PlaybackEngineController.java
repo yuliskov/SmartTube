@@ -33,6 +33,8 @@ public interface PlaybackEngineController {
     void enablePIP(boolean enable);
     boolean isPIPEnabled();
     boolean isInPIPMode();
+    void enablePlayBehind(boolean enable);
+    boolean isPlayBehindEnabled();
     boolean hasNoMedia();
     void setSpeed(float speed);
     float getSpeed();

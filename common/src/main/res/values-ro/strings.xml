@@ -27,7 +27,7 @@
     <string name="category_background_playback">Redare în fundal</string>
     <string name="not_implemented">Neimplementat</string>
     <string name="option_background_playback_off">Oprit</string>
-    <string name="option_background_playback_all">Video și audio</string>
+    <string name="option_background_playback_pip">Video și audio</string>
     <string name="option_background_playback_only_audio">Doar audio</string>
     <string name="playback_settings">Setări redare</string>
     <string name="video_speed">Viteză de redare</string>

@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import android.os.Build;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -25,6 +26,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     private final Map<CharSequence, OptionItem> mSingleOptions = new LinkedHashMap<>();
     private boolean mEnableBackgroundAudio;
     private boolean mEnablePIP;
+    private boolean mEnablePlayBehind;
     private final List<Runnable> mHideListeners = new ArrayList<>();
     private final StateUpdater mStateUpdater;
 
@@ -48,9 +50,9 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         mSettingsPresenter.clear();
 
         addQualityCategories();
-        addBackgroundPlaybackCategory();
         addVideoBufferCategory();
         addPresetsCategory();
+        addBackgroundPlaybackCategory();
 
         internalStuff();
 
@@ -109,7 +111,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     }
 
     private void updateBackgroundPlayback() {
-        if (mEnableBackgroundAudio || mEnablePIP) {
+        if (mEnableBackgroundAudio || mEnablePIP || mEnablePlayBehind) {
             // return to the player regardless the last activity user watched in moment exiting to HOME
             ViewManager.instance(mActivity).blockTop(mActivity);
         } else {
@@ -118,6 +120,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
         mController.blockEngine(mEnableBackgroundAudio);
         mController.enablePIP(mEnablePIP);
+        mController.enablePlayBehind(mEnablePlayBehind);
     }
 
     private void addBackgroundPlaybackCategory() {
@@ -128,20 +131,32 @@ public class HqDialogManager extends PlayerEventListenerHelper {
                 optionItem -> {
                     mEnableBackgroundAudio = false;
                     mEnablePIP = false;
+                    mEnablePlayBehind = false;
                     updateBackgroundPlayback();
-                }, !mEnableBackgroundAudio && !mEnablePIP));
-        options.add(UiOptionItem.from(mActivity.getString(R.string.option_background_playback_all),
+                }, !mEnableBackgroundAudio && !mEnablePIP && !mEnablePlayBehind));
+        if (Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 26) { // useful only for pre-Oreo UI
+            options.add(UiOptionItem.from(mActivity.getString(R.string.option_background_playback_behind) + " (Android 5,6,7)",
+                    optionItem -> {
+                        mEnableBackgroundAudio = false;
+                        mEnablePIP = false;
+                        mEnablePlayBehind = true;
+                        updateBackgroundPlayback();
+                    }, mEnablePlayBehind && !mEnablePIP && !mEnableBackgroundAudio));
+        }
+        options.add(UiOptionItem.from(mActivity.getString(R.string.option_background_playback_pip),
                 optionItem -> {
                     mEnableBackgroundAudio = false;
                     mEnablePIP = true;
+                    mEnablePlayBehind = false;
                     updateBackgroundPlayback();
-                }, mEnablePIP && !mEnableBackgroundAudio));
+                }, mEnablePIP && !mEnableBackgroundAudio && !mEnablePlayBehind));
         options.add(UiOptionItem.from(mActivity.getString(R.string.option_background_playback_only_audio),
                 optionItem -> {
                     mEnableBackgroundAudio = true;
                     mEnablePIP = false;
+                    mEnablePlayBehind = false;
                     updateBackgroundPlayback();
-                }, mEnableBackgroundAudio && !mEnablePIP));
+                }, mEnableBackgroundAudio && !mEnablePIP && !mEnablePlayBehind));
 
         addRadioCategory(categoryTitle, options);
     }

@@ -27,7 +27,7 @@
     <string name="category_background_playback">Chạy ngầm</string>
     <string name="not_implemented">Không thực hiện được</string>
     <string name="option_background_playback_off">Đã tắt</string>
-    <string name="option_background_playback_all">Video và âm thanh</string>
+    <string name="option_background_playback_pip">Video và âm thanh</string>
     <string name="option_background_playback_only_audio">Chỉ âm thanh</string>
     <string name="playback_settings">Cài đặt phát lại</string>
     <string name="video_speed">Tốc độ video</string>

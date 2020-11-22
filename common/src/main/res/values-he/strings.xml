@@ -26,7 +26,7 @@
     <string name="category_background_playback">השמעת רקע</string>
     <string name="not_implemented">לא מיושם</string>
     <string name="option_background_playback_off">כבוי</string>
-    <string name="option_background_playback_all">וידאו ושמע</string>
+    <string name="option_background_playback_pip">וידאו ושמע</string>
     <string name="option_background_playback_only_audio">רק שמע</string>
     <string name="playback_settings">הגדרות השמעה</string>
     <string name="video_speed">מהירות הוידאו</string>

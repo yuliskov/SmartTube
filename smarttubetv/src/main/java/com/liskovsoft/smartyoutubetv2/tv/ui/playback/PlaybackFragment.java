@@ -24,10 +24,8 @@ import androidx.leanback.widget.RowPresenter;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection.Factory;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -81,6 +79,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private final boolean mIsAnimationEnabled = true;
     private boolean mIsEngineBlocked;
     private boolean mIsPIPEnabled;
+    private boolean mIsPlayBehindEnabled;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -594,6 +593,16 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         // Old api fix
         return playbackActivity.isInPIPMode();
+    }
+
+    @Override
+    public void enablePlayBehind(boolean enable) {
+        mIsPlayBehindEnabled = enable;
+    }
+
+    @Override
+    public boolean isPlayBehindEnabled() {
+        return mIsPlayBehindEnabled;
     }
 
     @Override

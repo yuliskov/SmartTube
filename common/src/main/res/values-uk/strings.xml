@@ -27,7 +27,7 @@
     <string name="category_background_playback">Фонове відтворення</string>
     <string name="not_implemented">Поки не зроблено</string>
     <string name="option_background_playback_off">Відключено</string>
-    <string name="option_background_playback_all">Відео і аудіо</string>
+    <string name="option_background_playback_pip">Картинка в картинці</string>
     <string name="option_background_playback_only_audio">Тільки аудіо</string>
     <string name="playback_settings">Налаштування відтворення</string>
     <string name="video_speed">Швидкість відео</string>
@@ -102,4 +102,5 @@
     <string name="settings_search">Пошук</string>
     <string name="dialog_search">Пошук</string>
     <string name="instant_voice_search">Відразу запускати голосови пошук</string>
+    <string name="option_background_playback_behind">Грати позаду</string>
 </resources>

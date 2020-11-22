@@ -27,7 +27,7 @@
     <string name="category_background_playback">Hintergrund-Wiedergabe</string>
     <string name="not_implemented">Nicht implementiert</string>
     <string name="option_background_playback_off">Deaktiviert</string>
-    <string name="option_background_playback_all">Video und Audio</string>
+    <string name="option_background_playback_pip">Video und Audio</string>
     <string name="option_background_playback_only_audio">Nur Audio</string>
     <string name="playback_settings">Wiedergabe-Einstellungen</string>
     <string name="video_speed">Video-Geschwindigkeit</string>
