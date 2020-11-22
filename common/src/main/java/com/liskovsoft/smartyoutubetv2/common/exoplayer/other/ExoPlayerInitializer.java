@@ -29,7 +29,7 @@ public class ExoPlayerInitializer {
     public SimpleExoPlayer createPlayer(Activity activity, DefaultRenderersFactory renderersFactory, DefaultTrackSelector trackSelector) {
         DefaultLoadControl loadControl = createLoadControl();
 
-        SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(activity, renderersFactory, trackSelector, loadControl, null, new DefaultBandwidthMeter());
+        SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(activity, renderersFactory, trackSelector, loadControl);
         enableAudioFocus(player);
 
         return player;
@@ -70,6 +70,8 @@ public class ExoPlayerInitializer {
                             DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS / 3,
                             DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS / 3);
         }
+
+        // Normal buffer is a default one
 
         return baseBuilder.createDefaultLoadControl();
     }
