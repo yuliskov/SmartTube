@@ -5,16 +5,14 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
-import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
+import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -29,6 +27,7 @@ public class SearchPresenter implements VideoGroupPresenter, Presenter<SearchVie
     private final PlaybackPresenter mPlaybackPresenter;
     private final ViewManager mViewManager;
     private final DetailsPresenter mDetailsPresenter;
+    private final SearchData mSearchData;
     private SearchView mView;
     private Disposable mScrollAction;
     private Disposable mLoadAction;
@@ -40,6 +39,7 @@ public class SearchPresenter implements VideoGroupPresenter, Presenter<SearchVie
         mPlaybackPresenter = PlaybackPresenter.instance(context);
         mDetailsPresenter = DetailsPresenter.instance(context);
         mViewManager = ViewManager.instance(context);
+        mSearchData = SearchData.instance(context);
     }
 
     public static SearchPresenter instance(Context context) {
@@ -76,7 +76,7 @@ public class SearchPresenter implements VideoGroupPresenter, Presenter<SearchVie
     public void onInitDone() {
         loadSuggestedKeywords();
 
-        mView.startSearch(mSearchText);
+        startSearchInt(mSearchText);
         mSearchText = null;
     }
 
@@ -162,6 +162,14 @@ public class SearchPresenter implements VideoGroupPresenter, Presenter<SearchVie
             mViewManager.startView(SearchView.class);
         } else {
             mViewManager.startView(SearchView.class);
+            startSearchInt(searchText);
+        }
+    }
+
+    private void startSearchInt(String searchText) {
+        if (mSearchData.isInstantVoiceSearchEnabled() && searchText == null) {
+            mView.startVoiceRecognition();
+        } else {
             mView.startSearch(searchText);
         }
     }

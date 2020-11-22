@@ -6,8 +6,10 @@ import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.upstream.DefaultAllocator;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerController;
 
@@ -27,11 +29,21 @@ public class ExoPlayerInitializer {
     public SimpleExoPlayer createPlayer(Activity activity, DefaultRenderersFactory renderersFactory, DefaultTrackSelector trackSelector) {
         DefaultLoadControl loadControl = createLoadControl();
 
-        if (loadControl != null) {
-           return ExoPlayerFactory.newSimpleInstance(activity, renderersFactory, trackSelector, loadControl);
-        }
+        SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(activity, renderersFactory, trackSelector, loadControl);
+        enableAudioFocus(player);
 
-        return ExoPlayerFactory.newSimpleInstance(activity, renderersFactory, trackSelector);
+        return player;
+    }
+
+    private void enableAudioFocus(SimpleExoPlayer player) {
+        if (player != null) {
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setUsage(C.USAGE_MEDIA)
+                    .setContentType(C.CONTENT_TYPE_MOVIE)
+                    .build();
+
+            player.setAudioAttributes(audioAttributes, true);
+        }
     }
 
     /**
@@ -57,10 +69,9 @@ public class ExoPlayerInitializer {
                             DefaultLoadControl.DEFAULT_MAX_BUFFER_MS / 3,
                             DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS / 3,
                             DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS / 3);
-        } else {
-            // medium buffer by default
-            return null;
         }
+
+        // Normal buffer is a default one
 
         return baseBuilder.createDefaultLoadControl();
     }

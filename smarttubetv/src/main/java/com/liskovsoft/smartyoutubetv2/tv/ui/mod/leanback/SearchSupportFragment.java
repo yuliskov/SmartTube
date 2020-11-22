@@ -191,6 +191,10 @@ public class SearchSupportFragment extends Fragment {
         }
     };
 
+    public void focusOnSearchField() {
+        mSearchTextEditor.requestFocus(); // MOD: focus on search field
+    }
+
     final Runnable mStartRecognitionRunnable = new Runnable() {
         @Override
         public void run() {
@@ -218,7 +222,7 @@ public class SearchSupportFragment extends Fragment {
     private SpeechRecognizer mSpeechRecognizer;
 
     int mStatus;
-    boolean mAutoStartRecognition = true;
+    boolean mAutoStartRecognition = false; // MOD: don't start search immediately
 
     private boolean mIsPaused;
     private boolean mPendingStartRecognitionWhenPaused;

@@ -59,13 +59,27 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
 
     @Override
     public void startSearch(String searchText) {
+        startSearch(searchText, false);
+    }
+
+    @Override
+    public void startVoiceRecognition() {
+        startSearch(null, true);
+    }
+    
+    private void startSearch(String searchText, boolean enableRecognition) {
         mNewQuery = null;
 
         if (searchText != null) {
             setSearchQuery(searchText, true);
         } else {
             loadSearchTags("");
-            startRecognition();
+
+            if (enableRecognition) {
+                startRecognition();
+            } else {
+                focusOnSearchField();
+            }
         }
 
         if (getRowsSupportFragment() != null) {
@@ -122,10 +136,6 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         return isVoice;
     }
 
-    public void focusOnSearch() {
-        getView().findViewById(R.id.lb_search_bar).requestFocus();
-    }
-
     @Override
     protected void onItemViewClicked(Object item) {
         if (item instanceof Video) {
@@ -140,7 +150,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
                 }
             }
         } else if (item instanceof Tag) {
-            startSearch(((Tag) item).tag);
+            startSearch(((Tag) item).tag, false);
         }
     }
 

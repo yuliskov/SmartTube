@@ -24,7 +24,7 @@ import java.util.List;
 
 public class SettingsGridFragment extends GridFragment implements SettingsCategoryFragment {
     private static final String TAG = SettingsGridFragment.class.getSimpleName();
-    private static final int COLUMNS_NUM = 5;
+    private static final int COLUMNS_NUM = 6;
     private static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
     private ArrayObjectAdapter mSettingsAdapter;
     private BrowsePresenter mMainPresenter;

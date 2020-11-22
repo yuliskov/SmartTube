@@ -25,6 +25,7 @@ public class AppPrefs extends SharedPreferencesBase {
     private static final String UI_STYLE_DATA = "ui_style_data";
     private static final String VIDEO_PLAYER_DATA = "video_player_data";
     private static final String ACCOUNTS_DATA = "accounts_data";
+    private static final String SEARCH_DATA = "search_data";
     private String mDefaultDisplayMode;
     private String mCurrentDisplayMode;
 
@@ -175,5 +176,13 @@ public class AppPrefs extends SharedPreferencesBase {
 
     public String getAccountsData() {
         return getString(ACCOUNTS_DATA, null);
+    }
+
+    public void setSearchData(String data) {
+        putString(SEARCH_DATA, data);
+    }
+
+    public String getSearchData() {
+        return getString(SEARCH_DATA, null);
     }
 }

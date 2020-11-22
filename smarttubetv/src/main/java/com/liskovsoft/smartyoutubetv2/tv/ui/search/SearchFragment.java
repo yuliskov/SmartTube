@@ -271,9 +271,18 @@ public class SearchFragment extends SearchSupportFragment
 
     @Override
     public void startSearch(String searchText) {
+        startSearch(searchText, false);
+    }
+
+    @Override
+    public void startVoiceRecognition() {
+        startSearch(null, true);
+    }
+
+    private void startSearch(String searchText, boolean enableRecognition) {
         if (searchText != null) {
             setSearchQuery(searchText, true);
-        } else {
+        } else if (enableRecognition) {
             startRecognition();
         }
     }
