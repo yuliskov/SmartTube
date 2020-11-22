@@ -21,10 +21,6 @@ public interface PlaybackEngineController {
     List<FormatItem> getAudioFormats();
     List<FormatItem> getSubtitleFormats();
     void selectFormat(FormatItem option);
-    /**
-     * Silent: not callback events produces
-     */
-    void selectFormatSilent(FormatItem option);
     FormatItem getVideoFormat();
     /**
      * Block engine from destroying

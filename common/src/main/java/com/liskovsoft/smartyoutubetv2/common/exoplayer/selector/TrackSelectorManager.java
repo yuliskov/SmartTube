@@ -238,6 +238,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 definitionPair = new Pair<>(definition, selectedTrack);
                 setOverride(matchedTrack.rendererIndex, matchedTrack.groupIndex, matchedTrack.trackIndex);
                 updateSelection(matchedTrack.rendererIndex);
+            } else {
+                Log.e(TAG, "Oops. Can't find match for track %s", selectedTrack);
             }
         }
         
@@ -377,8 +379,9 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                     int compare = track.compare(mediaTrack);
 
                     if (compare == 0) {
-                        Log.d(TAG, "findBestMatch: Found exact match: " + mediaTrack.format);
-                        return mediaTrack;
+                        Log.d(TAG, "findBestMatch: Found exact match in this track list: " + mediaTrack.format);
+                        result = mediaTrack;
+                        break;
                     } else if (compare > 0 && mediaTrack.compare(result) > 0) { // select track with higher possible quality
                         result = mediaTrack;
                     }

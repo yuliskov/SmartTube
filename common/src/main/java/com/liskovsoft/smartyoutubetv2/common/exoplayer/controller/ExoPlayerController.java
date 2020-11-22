@@ -188,11 +188,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     @Override
-    public void selectFormatSilent(FormatItem option) {
-        mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(option));
-    }
-
-    @Override
     public void selectFormat(FormatItem option) {
         mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(option));
         // TODO: move to the {@link #onTrackChanged()} somehow

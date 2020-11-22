@@ -555,11 +555,6 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
-    public void selectFormatSilent(FormatItem option) {
-        mExoPlayerController.selectFormatSilent(option);
-    }
-
-    @Override
     public FormatItem getVideoFormat() {
         return mExoPlayerController.getVideoFormat();
     }

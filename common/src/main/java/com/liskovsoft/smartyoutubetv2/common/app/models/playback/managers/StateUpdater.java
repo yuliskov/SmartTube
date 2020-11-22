@@ -90,13 +90,13 @@ public class StateUpdater extends PlayerEventListenerHelper {
         saveState();
     }
 
-    @Override
-    public void onEngineInitialized() {
-        // This is a backup place for format restoration.
-        // Usually you don't need to use it.
-        // There is rare bug when format didn't restore at all.
-        restoreVideoFormatSilent();
-    }
+    //@Override
+    //public void onEngineInitialized() {
+    //    // This is a backup place for format restoration.
+    //    // Usually you don't need to use it.
+    //    // There is rare bug when format didn't restore at all.
+    //    restoreVideoFormatSilent();
+    //}
 
     @Override
     public void onEngineReleased() {
@@ -247,16 +247,16 @@ public class StateUpdater extends PlayerEventListenerHelper {
         }
     }
 
-    /**
-     * Mirrors {@link #restoreVideoFormat()} to be sure that selection perfroms in any case
-     */
-    private void restoreVideoFormatSilent() {
-        if (mController.isInPIPMode()) {
-            mController.selectFormatSilent(FormatItem.VIDEO_SD_AVC_30);
-        } else if (mVideoFormat != null) {
-            mController.selectFormatSilent(mVideoFormat);
-        }
-    }
+    ///**
+    // * Mirrors {@link #restoreVideoFormat()} to be sure that selection perfroms in any case
+    // */
+    //private void restoreVideoFormatSilent() {
+    //    if (mController.isInPIPMode()) {
+    //        mController.selectFormatSilent(FormatItem.VIDEO_SD_AVC_30);
+    //    } else if (mVideoFormat != null) {
+    //        mController.selectFormatSilent(mVideoFormat);
+    //    }
+    //}
 
     private void restoreVideoFormat() {
         if (mController.isInPIPMode()) {
