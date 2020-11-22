@@ -119,6 +119,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
             switch (mRepeatMode) {
                 case PlaybackUiController.REPEAT_ALL:
                     onNextClicked();
+                    mController.showControls(true);
                     break;
                 case PlaybackUiController.REPEAT_ONE:
                     loadVideo(mLastVideo);

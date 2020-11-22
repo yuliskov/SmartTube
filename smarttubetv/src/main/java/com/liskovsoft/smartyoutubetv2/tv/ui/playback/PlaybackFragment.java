@@ -681,6 +681,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         } else {
             hideControlsOverlay(mIsAnimationEnabled);
         }
+
+        mEventListener.onControlsShown(show);
     }
 
     @Override

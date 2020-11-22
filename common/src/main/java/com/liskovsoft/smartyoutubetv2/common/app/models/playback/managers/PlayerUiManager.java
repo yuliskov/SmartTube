@@ -63,6 +63,15 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     }
 
     @Override
+    public void onControlsShown(boolean shown) {
+        disableUiAutoHideTimeout();
+
+        if (shown) {
+            enableUiAutoHideTimeout();
+        }
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode) {
         disableUiAutoHideTimeout();
         disableSuggestionsResetTimeout();
