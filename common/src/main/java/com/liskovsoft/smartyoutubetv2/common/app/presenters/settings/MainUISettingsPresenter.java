@@ -55,7 +55,7 @@ public class MainUISettingsPresenter {
         OptionItem animatedPreviewsOption = UiOptionItem.from(mContext.getString(R.string.animated_previews),
                 option -> mMainUIData.enableAnimatedPreviews(option.isSelected()), mMainUIData.isAnimatedPreviewsEnabled());
 
-        OptionItem dontCutTextOnCards = UiOptionItem.from(mContext.getString(R.string.multiline_tiles),
+        OptionItem dontCutTextOnCards = UiOptionItem.from(mContext.getString(R.string.multiline_titles),
                 option -> mMainUIData.enableMultilineTitles(option.isSelected()), mMainUIData.isMultilineTitlesEnabled());
 
         options.add(animatedPreviewsOption);

@@ -104,6 +104,6 @@
     <string name="instant_voice_search">Сразу запускать голосовой поиск</string>
     <string name="option_background_playback_behind">Играть позади</string>
     <string name="next_video_info_is_not_loaded_yet">Информация о следующем видео еще не загрузилась</string>
-    <string name="multiline_tiles">Не обрезать текст на карточках</string>
+    <string name="multiline_titles">Несколько строк в заголовках</string>
     <string name="cards_style">Стиль карточек</string>
 </resources>

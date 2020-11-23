@@ -40,16 +40,21 @@ public class ComplexImageCardView extends ImageCardView {
         mHandler = new Handler(Looper.getMainLooper());
     }
 
-    private void enableTextAnimation(boolean enable) {
-        TextView title = findViewById(R.id.title_text);
-        TextView content = findViewById(R.id.content_text);
+    private void enableTitleAnimation(boolean enable) {
+        enableTextAnimation(findViewById(R.id.title_text), enable);
+    }
 
-        if (title == null || content == null) {
+    private void enableContentAnimation(boolean enable) {
+        enableTextAnimation(findViewById(R.id.content_text), enable);
+    }
+
+    private void enableTextAnimation(TextView view, boolean enable) {
+        if (view == null) {
             return;
         }
 
         if (enable) {
-            mEnableMarquee = () -> enableMarquee(title, content);
+            mEnableMarquee = () -> enableMarquee(view);
 
             mHandler.postDelayed(mEnableMarquee, 1_000);
         } else {
@@ -58,7 +63,7 @@ public class ComplexImageCardView extends ImageCardView {
                 mEnableMarquee = null;
             }
 
-            disableMarquee(title, content);
+            disableMarquee(view);
         }
     }
 
@@ -107,8 +112,9 @@ public class ComplexImageCardView extends ImageCardView {
         super.setSelected(selected);
 
         if (!mIsMultilineTitlesEnabled) {
-            enableTextAnimation(selected);
+            enableTitleAnimation(selected);
         }
+        enableContentAnimation(selected);
         enableVideoPreview(selected);
     }
 
@@ -125,7 +131,7 @@ public class ComplexImageCardView extends ImageCardView {
     }
 
     public void enableMultilineTitles(boolean enable) {
-        TextView titleView = (TextView) Helpers.getField(this, "mTitleView");
+        TextView titleView = findViewById(R.id.title_text);
 
         if (titleView == null) {
             return;
@@ -133,8 +139,8 @@ public class ComplexImageCardView extends ImageCardView {
 
         mIsMultilineTitlesEnabled = enable;
 
-        titleView.setMaxLines(enable ? 2 : 1);
-        titleView.setLines(enable ? 2 : 1);
+        titleView.setMaxLines(enable ? 3 : 1);
+        titleView.setLines(enable ? 3 : 1);
     }
 
     /**
