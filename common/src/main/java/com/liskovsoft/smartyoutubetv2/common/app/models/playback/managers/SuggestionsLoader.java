@@ -48,18 +48,6 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
     }
 
     @Override
-    public boolean onNextClicked() {
-        RxUtils.disposeActions(mMetadataAction, mScrollAction);
-        return false;
-    }
-
-    @Override
-    public boolean onPreviousClicked() {
-        RxUtils.disposeActions(mMetadataAction, mScrollAction);
-        return false;
-    }
-
-    @Override
     public void onScrollEnd(VideoGroup group) {
         continueGroup(group);
     }
@@ -103,7 +91,14 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
             return;
         }
 
-        MediaService service = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(mContext));
+        if (video.mediaItem == null || video.videoId == null) {
+            Log.e(TAG, "loadSuggestions: next video id is null");
+            return;
+        }
+
+        RxUtils.disposeActions(mMetadataAction, mScrollAction);
+
+        MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
 
         Observable<MediaItemMetadata> observable;

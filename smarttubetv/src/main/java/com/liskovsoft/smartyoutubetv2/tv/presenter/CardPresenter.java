@@ -35,6 +35,7 @@ public class CardPresenter extends Presenter {
     private int mSelectedTextColor = -1;
     private Drawable mDefaultCardImage;
     private boolean mIsAnimatedPreviewsEnabled;
+    private boolean mIsMultilineTitlesEnabled;
     private float mVideoGridScale;
 
     @Override
@@ -49,8 +50,10 @@ public class CardPresenter extends Presenter {
                 ContextCompat.getColor(parent.getContext(), R.color.card_selected_text_grey);
         mDefaultCardImage = ContextCompat.getDrawable(parent.getContext(), R.drawable.movie);
 
-        mIsAnimatedPreviewsEnabled = MainUIData.instance(parent.getContext()).isAnimatedPreviewsEnabled();
-        mVideoGridScale = MainUIData.instance(parent.getContext()).getVideoGridScale();
+        MainUIData mainUIData = MainUIData.instance(parent.getContext());
+        mIsAnimatedPreviewsEnabled = mainUIData.isAnimatedPreviewsEnabled();
+        mVideoGridScale = mainUIData.getVideoGridScale();
+        mIsMultilineTitlesEnabled = mainUIData.isMultilineTitlesEnabled();
 
         ComplexImageCardView cardView = new ComplexImageCardView(parent.getContext()) {
             @Override
@@ -59,7 +62,8 @@ public class CardPresenter extends Presenter {
                 super.setSelected(selected);
             }
         };
-        
+
+        cardView.enableMultilineTitles(mIsMultilineTitlesEnabled);
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
         updateCardBackgroundColor(cardView, false);
