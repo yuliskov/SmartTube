@@ -29,6 +29,9 @@ public class ExoPlayerInitializer {
     public SimpleExoPlayer createPlayer(Activity activity, DefaultRenderersFactory renderersFactory, DefaultTrackSelector trackSelector) {
         DefaultLoadControl loadControl = createLoadControl();
 
+        // HDR fix?
+        //trackSelector.setParameters(trackSelector.buildUponParameters().setTunnelingAudioSessionId(C.generateAudioSessionIdV21(activity)));
+
         SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(activity, renderersFactory, trackSelector, loadControl);
         enableAudioFocus(player);
 
