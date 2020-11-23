@@ -99,8 +99,8 @@
     <string name="open_channel">Ouvrir chaine</string>
     <string name="not_interested">Pas intéressé</string>
     <string name="you_wont_see_this_video">La vidéo a été supprimée de la recommandation</string>
-    <string name="settings_search">Rechercher</string>
-    <string name="dialog_search">Rechercher</string>
+    <string name="settings_search">Recherche</string>
+    <string name="dialog_search">Recherche</string>
     <string name="instant_voice_search">Recherche vocale instantanée</string>
     <string name="option_background_playback_behind">Lecture en arrière-plan</string>
     <string name="next_video_info_is_not_loaded_yet">Les informations sur la vidéo suivante ne sont pas encore chargées</string>
