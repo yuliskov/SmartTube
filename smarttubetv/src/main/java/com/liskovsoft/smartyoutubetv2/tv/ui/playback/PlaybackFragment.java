@@ -50,7 +50,10 @@ import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.ProgressBarManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.VideoPlayerGlue.OnActionClickedListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.PlaybackSeekNetworkDataProvider;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoEventsOverrideFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue.OnActionClickedListener;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -265,6 +268,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mPlayerGlue.setHost(new VideoSupportFragmentGlueHost(this));
         mPlayerGlue.setSeekEnabled(true);
         mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end
+        PlaybackSeekNetworkDataProvider.setSeekProvider(mPlayerGlue);
         hideControlsOverlay(mIsAnimationEnabled); // hide controls upon fragment creation
 
         mExoPlayerController.setPlayer(mPlayer);
