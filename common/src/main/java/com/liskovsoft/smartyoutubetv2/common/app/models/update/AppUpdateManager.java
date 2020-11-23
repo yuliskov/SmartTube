@@ -46,11 +46,11 @@ public class AppUpdateManager implements AppUpdateCheckerListener {
         mUpdateInstalled = false;
         mForceCheck = forceCheck;
 
-        if (forceCheck) {
-            mUpdateChecker.forceCheckForUpdates(UPDATE_MANIFEST_URL);
-        } else {
-            mUpdateChecker.checkForUpdates(UPDATE_MANIFEST_URL);
-        }
+//        if (forceCheck) {
+//            mUpdateChecker.forceCheckForUpdates(UPDATE_MANIFEST_URL);
+//        } else {
+//            mUpdateChecker.checkForUpdates(UPDATE_MANIFEST_URL);
+//        }
     }
 
     @Override

@@ -36,9 +36,9 @@ public class AboutPresenter {
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
         settingsPresenter.clear();
 
-        appendAutoUpdateSwitch(settingsPresenter);
+//        appendAutoUpdateSwitch(settingsPresenter);
 
-        appendUpdateCheckButton(settingsPresenter);
+//        appendUpdateCheckButton(settingsPresenter);
 
         appendSiteLink(settingsPresenter);
 

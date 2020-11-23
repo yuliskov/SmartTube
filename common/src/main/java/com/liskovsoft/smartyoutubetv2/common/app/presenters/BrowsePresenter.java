@@ -136,14 +136,14 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         
         settingItems.add(new SettingsItem(
                 mContext.getString(R.string.settings_accounts), () -> AccountSettingsPresenter.instance(mContext).show(), R.drawable.settings_account));
-        settingItems.add(new SettingsItem(
-                mContext.getString(R.string.settings_language), () -> LanguageSettingsPresenter.instance(mContext).show(), R.drawable.settings_language));
-        settingItems.add(new SettingsItem(
-                mContext.getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(mContext).show(), R.drawable.settings_main_ui));
-        settingItems.add(new SettingsItem(
-                mContext.getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(mContext).show(), R.drawable.settings_player));
-        settingItems.add(new SettingsItem(
-                mContext.getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(mContext).show(), R.drawable.settings_search));
+//        settingItems.add(new SettingsItem(
+//                mContext.getString(R.string.settings_language), () -> LanguageSettingsPresenter.instance(mContext).show(), R.drawable.settings_language));
+//        settingItems.add(new SettingsItem(
+//                mContext.getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(mContext).show(), R.drawable.settings_main_ui));
+//        settingItems.add(new SettingsItem(
+//                mContext.getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(mContext).show(), R.drawable.settings_player));
+//        settingItems.add(new SettingsItem(
+//                mContext.getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(mContext).show(), R.drawable.settings_search));
         settingItems.add(new SettingsItem(
                 mContext.getString(R.string.settings_about), () -> AboutPresenter.instance(mContext).show(), R.drawable.settings_about));
 
