@@ -19,6 +19,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -60,6 +61,8 @@ import java.util.Arrays;
  * </p>
  */
 public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
+    private static final String TAG = "PlaybackTransportRow";
+
     static class BoundData extends PlaybackControlsPresenter.BoundData {
         ViewHolder mRowViewHolder;
     }
@@ -193,9 +196,14 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                     newPos = 0;
                 }
             }
+            Log.d(TAG, "updateProgressInSeek: delta: " + (newPos - pos));
+            if (newPos - pos < 1000) {
+                return;
+            }
             double ratio = (double) newPos / mTotalTimeInMs;     // Range: [0, 1]
             mProgressBar.setProgress((int) (ratio * Integer.MAX_VALUE)); // Could safely cast to int
             mSeekClient.onSeekPositionChanged(newPos);
+            Log.d(TAG, "updateProgressInSeek: " + newPos);
         }
 
         void resetSeekIncrement() {
@@ -299,7 +307,14 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                     }
         };
 
+        long lastTimeSeek = 0;
+
         boolean onForward() {
+//            if (System.currentTimeMillis() - lastTimeSeek < 1) {
+//                Log.d(TAG, "skip seek");
+//                return false;
+//            }
+            lastTimeSeek = System.currentTimeMillis();
             if (!startSeek()) {
                 return false;
             }
@@ -308,6 +323,11 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         }
 
         boolean onBackward() {
+//            if (System.currentTimeMillis() - lastTimeSeek < 1) {
+//                Log.d(TAG, "skip seek");
+//                return false;
+//            }
+            lastTimeSeek = System.currentTimeMillis();
             if (!startSeek()) {
                 return false;
             }
@@ -447,6 +467,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         }
 
         boolean startSeek() {
+//            Log.d(TAG, "startSeek(1) called " + System.currentTimeMillis());
             if (mInSeek) {
                 return true;
             }
@@ -468,11 +489,12 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             } else {
                 mPositionsLength = 0;
             }
-
+//            Log.d(TAG, "startSeek(2) called " + System.currentTimeMillis());
             return true;
         }
 
         void stopSeek(boolean cancelled) {
+            Log.d(TAG, "stopSeek() called with: cancelled = [" + cancelled + "]");
             if (!mInSeek) {
                 return;
             }
