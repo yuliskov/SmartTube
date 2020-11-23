@@ -93,7 +93,7 @@
     <string name="disable_update_check">Désactiver la vérification des mises à jour</string>
     <string name="show_again">Afficher à nouveau</string>
     <string name="check_updates_auto">Mise à jour automatique</string>
-    <string name="select_account_on_boot">Sélection au démarrage</string>
+    <string name="select_account_on_boot">Sélectionnez au démarrage</string>
     <string name="player_other">Divers</string>
     <string name="player_full_date">Date précise dans la description</string>
     <string name="open_channel">Ouvrir chaine</string>
