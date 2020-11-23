@@ -19,7 +19,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -61,8 +60,6 @@ import java.util.Arrays;
  * </p>
  */
 public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
-    private static final String TAG = "PlaybackTransportRow";
-
     static class BoundData extends PlaybackControlsPresenter.BoundData {
         ViewHolder mRowViewHolder;
     }
@@ -196,14 +193,9 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                     newPos = 0;
                 }
             }
-            Log.d(TAG, "updateProgressInSeek: delta: " + (newPos - pos));
-            if (newPos - pos < 1000) {
-                return;
-            }
             double ratio = (double) newPos / mTotalTimeInMs;     // Range: [0, 1]
             mProgressBar.setProgress((int) (ratio * Integer.MAX_VALUE)); // Could safely cast to int
             mSeekClient.onSeekPositionChanged(newPos);
-            Log.d(TAG, "updateProgressInSeek: " + newPos);
         }
 
         void resetSeekIncrement() {
@@ -286,11 +278,11 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             }
             // set thumb bitmaps outside (start , end) to null
             for (int childIndex = 0; childIndex < heroChildIndex - mThumbHeroIndex + start;
-                    childIndex++) {
+                 childIndex++) {
                 mThumbsBar.setThumbBitmap(childIndex, null);
             }
             for (int childIndex = heroChildIndex + end - mThumbHeroIndex + 1;
-                    childIndex < totalNum; childIndex++) {
+                 childIndex < totalNum; childIndex++) {
                 mThumbsBar.setThumbBitmap(childIndex, null);
             }
         }
@@ -305,16 +297,9 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                         }
                         mThumbsBar.setThumbBitmap(childIndex, bitmap);
                     }
-        };
-
-        long lastTimeSeek = 0;
+                };
 
         boolean onForward() {
-//            if (System.currentTimeMillis() - lastTimeSeek < 1) {
-//                Log.d(TAG, "skip seek");
-//                return false;
-//            }
-            lastTimeSeek = System.currentTimeMillis();
             if (!startSeek()) {
                 return false;
             }
@@ -323,11 +308,6 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         }
 
         boolean onBackward() {
-//            if (System.currentTimeMillis() - lastTimeSeek < 1) {
-//                Log.d(TAG, "skip seek");
-//                return false;
-//            }
-            lastTimeSeek = System.currentTimeMillis();
             if (!startSeek()) {
                 return false;
             }
@@ -467,7 +447,6 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         }
 
         boolean startSeek() {
-//            Log.d(TAG, "startSeek(1) called " + System.currentTimeMillis());
             if (mInSeek) {
                 return true;
             }
@@ -489,12 +468,11 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             } else {
                 mPositionsLength = 0;
             }
-//            Log.d(TAG, "startSeek(2) called " + System.currentTimeMillis());
+
             return true;
         }
 
         void stopSeek(boolean cancelled) {
-            Log.d(TAG, "stopSeek() called with: cancelled = [" + cancelled + "]");
             if (!mInSeek) {
                 return;
             }
@@ -692,33 +670,33 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
     private final OnControlSelectedListener mOnControlSelectedListener =
             new OnControlSelectedListener() {
-        @Override
-        public void onControlSelected(Presenter.ViewHolder itemViewHolder, Object item,
-                ControlBarPresenter.BoundData data) {
-            ViewHolder vh = ((BoundData) data).mRowViewHolder;
-            if (vh.mSelectedViewHolder != itemViewHolder || vh.mSelectedItem != item) {
-                vh.mSelectedViewHolder = itemViewHolder;
-                vh.mSelectedItem = item;
-                vh.dispatchItemSelection();
-            }
-        }
-    };
+                @Override
+                public void onControlSelected(Presenter.ViewHolder itemViewHolder, Object item,
+                                              ControlBarPresenter.BoundData data) {
+                    ViewHolder vh = ((BoundData) data).mRowViewHolder;
+                    if (vh.mSelectedViewHolder != itemViewHolder || vh.mSelectedItem != item) {
+                        vh.mSelectedViewHolder = itemViewHolder;
+                        vh.mSelectedItem = item;
+                        vh.dispatchItemSelection();
+                    }
+                }
+            };
 
     private final OnControlClickedListener mOnControlClickedListener =
             new OnControlClickedListener() {
-        @Override
-        public void onControlClicked(Presenter.ViewHolder itemViewHolder, Object item,
-                ControlBarPresenter.BoundData data) {
-            ViewHolder vh = ((BoundData) data).mRowViewHolder;
-            if (vh.getOnItemViewClickedListener() != null) {
-                vh.getOnItemViewClickedListener().onItemClicked(itemViewHolder, item,
-                        vh, vh.getRow());
-            }
-            if (mOnActionClickedListener != null && item instanceof Action) {
-                mOnActionClickedListener.onActionClicked((Action) item);
-            }
-        }
-    };
+                @Override
+                public void onControlClicked(Presenter.ViewHolder itemViewHolder, Object item,
+                                             ControlBarPresenter.BoundData data) {
+                    ViewHolder vh = ((BoundData) data).mRowViewHolder;
+                    if (vh.getOnItemViewClickedListener() != null) {
+                        vh.getOnItemViewClickedListener().onItemClicked(itemViewHolder, item,
+                                vh, vh.getRow());
+                    }
+                    if (mOnActionClickedListener != null && item instanceof Action) {
+                        mOnActionClickedListener.onActionClicked((Action) item);
+                    }
+                }
+            };
 
     public PlaybackTransportRowPresenter() {
         setHeaderPresenter(null);
@@ -846,16 +824,16 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         vh.mSecondaryControlsDock.addView(vh.mSecondaryControlsVh.view);
         ((PlaybackTransportRowView) vh.view.findViewById(R.id.transport_row))
                 .setOnUnhandledKeyListener(new PlaybackTransportRowView.OnUnhandledKeyListener() {
-                @Override
-                public boolean onUnhandledKey(KeyEvent event) {
-                    if (vh.getOnKeyListener() != null) {
-                        if (vh.getOnKeyListener().onKey(vh.view, event.getKeyCode(), event)) {
-                            return true;
+                    @Override
+                    public boolean onUnhandledKey(KeyEvent event) {
+                        if (vh.getOnKeyListener() != null) {
+                            if (vh.getOnKeyListener().onKey(vh.view, event.getKeyCode(), event)) {
+                                return true;
+                            }
                         }
+                        return false;
                     }
-                    return false;
-                }
-            });
+                });
     }
 
     @Override
