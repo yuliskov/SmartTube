@@ -105,5 +105,5 @@
     <string name="option_background_playback_behind">Lecture en arrière-plan</string>
     <string name="next_video_info_is_not_loaded_yet">Les informations sur la vidéo suivante ne sont pas encore chargées</string>
     <string name="multiline_titles">Titres multilignes</string>
-    <string name="cards_style">Style de cartes</string>
+    <string name="cards_style">Style de tuiles</string>
 </resources>
