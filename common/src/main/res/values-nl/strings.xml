@@ -59,8 +59,8 @@
     <string name="dialog_select_language">Taal</string>
     <string name="subtitle_default">Standaard</string>
     <string name="subtitle_semi_transparent_bg">Transparante achtergrond</string>
-    <string name="subtitle_style">Stijl ondertitels</string>
-    <string name="subtitle_language">Taal ondertitels</string>
+    <string name="subtitle_style">Stijl</string>
+    <string name="subtitle_language">Taal</string>
     <string name="action_search">Zoeken</string>
     <string name="settings_main_ui">Display</string>
     <string name="dialog_main_ui">Display</string>
