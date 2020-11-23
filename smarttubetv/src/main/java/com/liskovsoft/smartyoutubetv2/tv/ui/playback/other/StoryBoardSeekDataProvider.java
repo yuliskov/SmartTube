@@ -4,14 +4,14 @@ import androidx.leanback.media.PlaybackGlue;
 import androidx.leanback.media.PlaybackTransportControlGlue;
 import androidx.leanback.widget.PlaybackSeekDataProvider;
 
-public class PlaybackSeekNetworkDataProvider extends PlaybackSeekDataProvider {
-    public PlaybackSeekNetworkDataProvider(long duration, long interval) {
+public class StoryBoardSeekDataProvider extends PlaybackSeekDataProvider {
+    public StoryBoardSeekDataProvider(long duration, long interval) {
         
     }
 
     public static void setSeekProvider(PlaybackTransportControlGlue<?> glue) {
         if (glue.isPrepared()) {
-            glue.setSeekProvider(new PlaybackSeekNetworkDataProvider(
+            glue.setSeekProvider(new StoryBoardSeekDataProvider(
                     glue.getDuration(),
                     glue.getDuration() / 100));
         } else {
@@ -22,7 +22,7 @@ public class PlaybackSeekNetworkDataProvider extends PlaybackSeekDataProvider {
                         glue.removePlayerCallback(this);
                         PlaybackTransportControlGlue<?> transportControlGlue =
                                 (PlaybackTransportControlGlue<?>) glue;
-                        transportControlGlue.setSeekProvider(new PlaybackSeekNetworkDataProvider(
+                        transportControlGlue.setSeekProvider(new StoryBoardSeekDataProvider(
                                 transportControlGlue.getDuration(),
                                 transportControlGlue.getDuration() / 100));
                     }

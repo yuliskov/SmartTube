@@ -37,6 +37,7 @@ android {
         storig {}
         strtarmenia {}
         stbolshoetv {}
+        stredboxtv {}
     }
 }
 
