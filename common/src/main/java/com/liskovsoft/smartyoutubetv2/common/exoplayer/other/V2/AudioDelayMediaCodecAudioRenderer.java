@@ -20,40 +20,20 @@ public class AudioDelayMediaCodecAudioRenderer extends MediaCodecAudioRenderer {
         super(context, mediaCodecSelector);
     }
 
-    public AudioDelayMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector, @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys) {
-        super(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys);
-    }
-
-    public AudioDelayMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector, @Nullable Handler eventHandler,
-                                             @Nullable AudioRendererEventListener eventListener) {
+    public AudioDelayMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector, @Nullable Handler eventHandler, @Nullable AudioRendererEventListener eventListener) {
         super(context, mediaCodecSelector, eventHandler, eventListener);
     }
 
-    public AudioDelayMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector,
-                                             @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager,
-                                             boolean playClearSamplesWithoutKeys, @Nullable Handler eventHandler,
-                                             @Nullable AudioRendererEventListener eventListener) {
-        super(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, eventHandler, eventListener);
+    public AudioDelayMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector, @Nullable Handler eventHandler, @Nullable AudioRendererEventListener eventListener, @Nullable AudioCapabilities audioCapabilities, AudioProcessor... audioProcessors) {
+        super(context, mediaCodecSelector, eventHandler, eventListener, audioCapabilities, audioProcessors);
     }
 
-    public AudioDelayMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector,
-                                             @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager,
-                                             boolean playClearSamplesWithoutKeys, @Nullable Handler eventHandler,
-                                             @Nullable AudioRendererEventListener eventListener, @Nullable AudioCapabilities audioCapabilities,
-                                             AudioProcessor... audioProcessors) {
-        super(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, eventHandler, eventListener, audioCapabilities,
-                audioProcessors);
+    public AudioDelayMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector, @Nullable Handler eventHandler, @Nullable AudioRendererEventListener eventListener, AudioSink audioSink) {
+        super(context, mediaCodecSelector, eventHandler, eventListener, audioSink);
     }
 
-    public AudioDelayMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector,
-                                             @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager,
-                                             boolean playClearSamplesWithoutKeys, @Nullable Handler eventHandler,
-                                             @Nullable AudioRendererEventListener eventListener, AudioSink audioSink) {
-        super(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, eventHandler, eventListener, audioSink);
-    }
-
-    public AudioDelayMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector, @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, boolean enableDecoderFallback, @Nullable Handler eventHandler, @Nullable AudioRendererEventListener eventListener, AudioSink audioSink) {
-        super(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, audioSink);
+    public AudioDelayMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector, boolean enableDecoderFallback, @Nullable Handler eventHandler, @Nullable AudioRendererEventListener eventListener, AudioSink audioSink) {
+        super(context, mediaCodecSelector, enableDecoderFallback, eventHandler, eventListener, audioSink);
     }
 
     @Override
