@@ -158,28 +158,22 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private void setupUi() {
-        int brandColorRes = Helpers.getThemeAttr(getActivity(), R.attr.brandColor);
-        int brandAccentColorRes = Helpers.getThemeAttr(getActivity(), R.attr.brandAccentColor);
-        int brandColor = ContextCompat.getColor(getActivity(), brandColorRes);
-        int brandAccentColor = ContextCompat.getColor(getActivity(), brandAccentColorRes);
-
         setTitle(getString(R.string.browse_title)); // Badge, when set, takes precedent over title
         setHeadersState(HEADERS_ENABLED);
         setHeadersTransitionOnBackEnabled(true);
 
-        BitmapDrawable logoDrawable = (BitmapDrawable) ContextCompat.getDrawable(getActivity(), R.mipmap.app_logo);
+        int brandColorRes = Helpers.getThemeAttr(getActivity(), R.attr.brandColor);
+        int brandAccentColorRes = Helpers.getThemeAttr(getActivity(), R.attr.brandAccentColor);
+        int appLogoRes = Helpers.getThemeAttr(getActivity(), R.attr.appLogo);
 
-        //setBadgeDrawable(logoDrawable == null ? null : new BitmapDrawable(
-        //        getActivity().getResources(),
-        //        ActionHelpers.createBitmap(logoDrawable.getBitmap(), brandAccentColor)));
-
-        setBadgeDrawable(logoDrawable);
+        // Top right corner logo
+        setBadgeDrawable(ContextCompat.getDrawable(getActivity(), appLogoRes));
 
         // Set fastLane (or headers) background color
-        setBrandColor(brandColor);
+        setBrandColor(ContextCompat.getColor(getActivity(), brandColorRes));
 
         // Set search icon color.
-        setSearchAffordanceColor(brandAccentColor);
+        setSearchAffordanceColor(ContextCompat.getColor(getActivity(), brandAccentColorRes));
 
         setHeaderPresenterSelector(new PresenterSelector() {
             @Override
