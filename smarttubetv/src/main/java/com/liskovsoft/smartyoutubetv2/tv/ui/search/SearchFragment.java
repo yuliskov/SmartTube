@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,10 +78,14 @@ public class SearchFragment extends SearchSupportFragment
             setSpeechRecognitionCallback(new SpeechRecognitionCallback() {
                 @Override
                 public void recognizeSpeech() {
-                    try {
-                        startActivityForResult(getRecognizerIntent(), REQUEST_SPEECH);
-                    } catch (ActivityNotFoundException e) {
-                        Log.e(TAG, "Cannot find activity for speech recognizer", e);
+                    if (isAdded()) {
+                        try {
+                            startActivityForResult(getRecognizerIntent(), REQUEST_SPEECH);
+                        } catch (ActivityNotFoundException e) {
+                            Log.e(TAG, "Cannot find activity for speech recognizer", e);
+                        }
+                    } else {
+                        Log.e(TAG, "Can't perform search. Fragment is detached.");
                     }
                 }
             });
@@ -158,7 +161,7 @@ public class SearchFragment extends SearchSupportFragment
     private void loadQuery(String query) {
         if (!TextUtils.isEmpty(query) && !query.equals("nil")) {
             mQuery = query;
-            mSearchPresenter.onSearchText(query);
+            mSearchPresenter.onSearch(query);
         }
     }
 
@@ -268,12 +271,19 @@ public class SearchFragment extends SearchSupportFragment
 
     @Override
     public void startSearch(String searchText) {
-        if (!isDetached()) {
-            if (searchText != null) {
-                setSearchQuery(searchText, true);
-            } else {
-                startRecognition();
-            }
+        startSearch(searchText, false);
+    }
+
+    @Override
+    public void startVoiceRecognition() {
+        startSearch(null, true);
+    }
+
+    private void startSearch(String searchText, boolean enableRecognition) {
+        if (searchText != null) {
+            setSearchQuery(searchText, true);
+        } else if (enableRecognition) {
+            startRecognition();
         }
     }
 }

@@ -30,7 +30,7 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
         super(trackSelectionFactory);
     }
 
-    public void setTrackSelectCallback(TrackSelectorCallback callback) {
+    public void setOnTrackSelectCallback(TrackSelectorCallback callback) {
         mCallback = callback;
     }
 

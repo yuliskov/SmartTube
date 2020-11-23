@@ -4,4 +4,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 
 public interface VideoCategoryFragment extends CategoryFragment {
     void update(VideoGroup group);
+    int getItemIndex();
+    void setItemIndex(int index);
 }

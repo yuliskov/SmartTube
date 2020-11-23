@@ -6,9 +6,11 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Category;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 
 public interface BrowseView {
+    void selectCategory(int index);
+    void selectItem(int index);
+    void addCategory(int index, Category category);
     void updateCategory(VideoGroup group);
     void updateCategory(SettingsGroup group);
-    void addCategory(int index, Category category);
     void removeCategory(Category category);
     void clearCategory(Category category);
     void updateErrorIfEmpty(ErrorFragmentData data);

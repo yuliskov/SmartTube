@@ -7,7 +7,9 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
@@ -27,10 +29,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private final Handler mHandler;
     private Video mLastVideo;
     private Video mErrorVideo;
-    private Disposable mMetadataAction;
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
-    private boolean mEngineInitialized;
     private int mRepeatMode = PlaybackUiController.REPEAT_ALL;
     private final Runnable mReloadVideoHandler = () -> loadVideo(mLastVideo);
 
@@ -48,7 +48,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     public void openVideo(Video item) {
         mPlaylist.add(item);
 
-        if (mEngineInitialized) { // player is initialized
+        if (mController != null && mController.isEngineInitialized()) { // player is initialized
             if (!item.equals(mLastVideo)) {
                 loadVideo(item); // play immediately
             }
@@ -59,14 +59,12 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onEngineInitialized() {
-        mEngineInitialized = true;
         loadVideo(mLastVideo);
         mController.setRepeatButtonState(mRepeatMode);
     }
 
     @Override
     public void onEngineReleased() {
-        mEngineInitialized = false;
         disposeActions();
     }
 
@@ -74,7 +72,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     public void onTrackSelected(FormatItem track) {
         if (mController.hasNoMedia()) {
             Log.e(TAG, "Engine lost his track. Is user selected unsupported format? Restarting...");
-            mController.restartEngine();
+            mController.reloadPlayback();
         }
     }
 
@@ -83,16 +81,16 @@ public class VideoLoader extends PlayerEventListenerHelper {
         // restart once per video
         if (mErrorVideo != mLastVideo) {
             Log.e(TAG, "Player error occurred. Restarting engine once...");
-            mController.restartEngine();
+            mErrorVideo = mLastVideo;
+            YouTubeMediaService.instance().invalidateCache(); // some data might be stalled
+            mController.reloadPlayback(); // re-download video data
+        } else {
+            mController.showControls(true);
         }
-
-        mErrorVideo = mLastVideo;
     }
 
     @Override
     public boolean onPreviousClicked() {
-        disposeActions();
-
         loadVideo(mPlaylist.previous());
 
         return true;
@@ -100,8 +98,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public boolean onNextClicked() {
-        disposeActions();
-
         Video next = mPlaylist.next();
 
         if (next == null) {
@@ -120,6 +116,9 @@ public class VideoLoader extends PlayerEventListenerHelper {
             switch (mRepeatMode) {
                 case PlaybackUiController.REPEAT_ALL:
                     onNextClicked();
+                    if (!mController.isInPIPMode()) {
+                        mController.showControls(true);
+                    }
                     break;
                 case PlaybackUiController.REPEAT_ONE:
                     loadVideo(mLastVideo);
@@ -157,7 +156,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     private void disposeActions() {
-        RxUtils.disposeActions(mMetadataAction, mFormatInfoAction, mMpdStreamAction);
+        RxUtils.disposeActions(mFormatInfoAction, mMpdStreamAction);
         mHandler.removeCallbacks(mReloadVideoHandler);
     }
 
@@ -175,11 +174,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
         loadVideo(item);
     }
 
-    private void loadVideoFromMetadata(MediaItemMetadata metadata) {
-        MediaItem nextVideo = metadata.getNextVideo();
-        loadVideoFromNext(nextVideo);
-    }
-
     private void loadVideoFromMetadata(Video current) {
         if (current == null) {
             return;
@@ -188,15 +182,9 @@ public class VideoLoader extends PlayerEventListenerHelper {
         // Significantly improves next video loading time!
         if (current.nextMediaItem != null) {
             loadVideoFromNext(current.nextMediaItem);
-            return;
+        } else {
+            MessageHelpers.showMessageThrottled(mActivity, R.string.next_video_info_is_not_loaded_yet);
         }
-
-        MediaService service = YouTubeMediaService.instance();
-        MediaItemManager mediaItemManager = service.getMediaItemManager();
-        mMetadataAction = mediaItemManager.getMetadataObserve(current.mediaItem)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::loadVideoFromMetadata, error -> Log.e(TAG, "loadNextVideo error: " + error));
     }
 
     private void loadFormatInfo(Video video) {
@@ -213,17 +201,17 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
         if (formatInfo.containsHlsInfo()) {
-            Log.d(TAG, "Found hls video. Loading...");
+            Log.d(TAG, "Found hls video. Live translation. Loading...");
             mController.openHls(formatInfo.getHlsManifestUrl());
         } else if (formatInfo.containsDashInfo()) {
-            Log.d(TAG, "Found dash video. Loading...");
+            Log.d(TAG, "Found dash video. Main video format. Loading...");
 
             mMpdStreamAction = formatInfo.createMpdStreamObservable()
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(mController::openDash, error -> Log.e(TAG, "createMpdStream error: " + error));
         } else if (formatInfo.containsUrlListInfo()) {
-            Log.d(TAG, "Found url list video. Loading...");
+            Log.d(TAG, "Found url list video. This is always LQ. Loading...");
             mController.openUrlList(formatInfo.createUrlList());
         } else {
             Log.d(TAG, "Empty format info received. Seems future translation. No video data to pass to the player.");

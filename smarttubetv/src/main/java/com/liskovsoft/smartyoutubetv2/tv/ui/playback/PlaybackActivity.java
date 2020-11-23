@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
 import android.app.PictureInPictureParams;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -10,6 +9,7 @@ import android.view.MotionEvent;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 
@@ -35,6 +35,14 @@ public class PlaybackActivity extends LeanbackActivity {
                 getSupportFragmentManager().findFragmentByTag(getString(R.string.playback_tag));
         if (fragment instanceof PlaybackFragment) {
             mPlaybackFragment = (PlaybackFragment) fragment;
+        }
+    }
+
+    @Override
+    protected void initTheme() {
+        int playerThemeResId = MainUIData.instance(this).getColorScheme().playerThemeResId;
+        if (playerThemeResId > 0) {
+            setTheme(playerThemeResId);
         }
     }
 
@@ -104,14 +112,14 @@ public class PlaybackActivity extends LeanbackActivity {
     }
 
     private boolean wannaEnterToPIP() {
-        return !isInPictureInPictureMode() && mPlaybackFragment.isPIPEnabled();
+        return mPlaybackFragment.isPIPEnabled() && !isInPictureInPictureMode() && !mPlaybackFragment.isPlayBehindEnabled();
     }
 
     @Override
     public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode);
 
-        mPlaybackFragment.restartEngine();
+        mPlaybackFragment.reloadPlayback();
     }
 
     @Override
@@ -133,5 +141,40 @@ public class PlaybackActivity extends LeanbackActivity {
         }
 
         return isInPictureInPictureMode();
+    }
+
+    @SuppressWarnings("deprecation")
+    private void enterBackgroundPlayMode() {
+        if (Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 26) {
+            if (mPlaybackFragment.isPlaying()) {
+                // Argument equals true to notify the system that the activity
+                // wishes to be visible behind other translucent activities
+                if (!requestVisibleBehind(true)) {
+                    // App-specific method to stop playback and release resources
+                    // because call to requestVisibleBehind(true) failed
+                    mPlaybackFragment.onDestroy();
+                }
+            } else {
+                // Argument equals false because the activity is not playing
+                requestVisibleBehind(false);
+            }
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onVisibleBehindCanceled() {
+        // App-specific method to stop playback and release resources
+        mPlaybackFragment.onDestroy();
+        super.onVisibleBehindCanceled();
+    }
+
+    @Override
+    public void onUserLeaveHint () {
+        if (mPlaybackFragment.isPlayBehindEnabled()) {
+            enterBackgroundPlayMode();
+        } else if (mPlaybackFragment.isPIPEnabled() && !mPlaybackFragment.isControlsShown()) {
+            enterPIPMode();
+        }
     }
 }

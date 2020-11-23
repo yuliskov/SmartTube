@@ -15,6 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
@@ -34,6 +35,9 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
     private UriBackgroundManager mBackgroundManager;
     private VideoGroupPresenter mMainPresenter;
     private boolean mInvalidate;
+    private int mSelectedItemIndex = -1;
+    private float mVideoGridScale;
+    private float mUIScale;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,6 +45,8 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
 
         mMainPresenter = getMainPresenter();
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
+        mVideoGridScale = MainUIData.instance(getActivity()).getVideoGridScale();
+        mUIScale = MainUIData.instance(getActivity()).getUIScale();
 
         setupAdapter();
         setupEventListeners();
@@ -70,12 +76,49 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
 
     private void setupAdapter() {
         VerticalGridPresenter presenter = new VerticalGridPresenter(ZOOM_FACTOR, false);
-        presenter.setNumberOfColumns(COLUMNS_NUM);
+        presenter.setNumberOfColumns(getNumColumns());
         setGridPresenter(presenter);
 
         if (mGridAdapter == null) {
             mGridAdapter = new VideoGroupObjectAdapter();
             setAdapter(mGridAdapter);
+        }
+    }
+
+    private int getNumColumns() {
+        int result = COLUMNS_NUM;
+
+        if (mVideoGridScale > 1.3f) {
+            result--;
+        }
+
+        if (mUIScale < 1.0f) {
+            result += (int) Math.ceil((1.0f - mUIScale) / 0.15f);
+
+            if (mVideoGridScale > 1.3f) {
+                result--;
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public int getItemIndex() {
+        return getSelectedPosition();
+    }
+
+    @Override
+    public void setItemIndex(int index) {
+        if (index < 0) {
+            return;
+        }
+
+        if (mGridAdapter != null && index < mGridAdapter.size()) {
+            setSelectedPosition(index);
+            mSelectedItemIndex = -1;
+        } else {
+            mSelectedItemIndex = index;
         }
     }
 
@@ -92,6 +135,8 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
         }
         
         mGridAdapter.append(group);
+
+        setItemIndex(mSelectedItemIndex);
     }
 
     @Override

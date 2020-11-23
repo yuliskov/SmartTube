@@ -1,9 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.search;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import com.liskovsoft.sharedutils.helpers.KeyHelpers;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 
@@ -17,16 +16,6 @@ public class SearchActivity extends LeanbackActivity {
         setContentView(R.layout.fragment_search);
         mFragment = (SearchFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.search_fragment);
-    }
-
-    @Override
-    public boolean onSearchRequested() {
-        if (mFragment.hasResults()) {
-            startActivity(new Intent(this, SearchActivity.class));
-        } else {
-            mFragment.startRecognition();
-        }
-        return true;
     }
 
     @Override

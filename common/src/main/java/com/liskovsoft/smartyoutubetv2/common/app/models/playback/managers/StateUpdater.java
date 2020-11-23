@@ -90,6 +90,14 @@ public class StateUpdater extends PlayerEventListenerHelper {
         saveState();
     }
 
+    //@Override
+    //public void onEngineInitialized() {
+    //    // This is a backup place for format restoration.
+    //    // Usually you don't need to use it.
+    //    // There is rare bug when format didn't restore at all.
+    //    restoreVideoFormatSilent();
+    //}
+
     @Override
     public void onEngineReleased() {
         saveState();
@@ -145,7 +153,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         // In case we start to watch the video again
         if (video != null) {
             mStates.remove(video.videoId);
-            updateHistory();
+            saveState();
         }
     }
 
@@ -168,7 +176,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
         Video video = mController.getVideo();
 
         if (video != null) {
-            mStates.put(video.videoId, new State(video.videoId, mController.getPositionMs(), mController.getLengthMs(), mController.getSpeed()));
+            if (mController.getLengthMs() - mController.getPositionMs() > 500) { // don't save position if track is ended
+                mStates.put(video.videoId, new State(video.videoId, mController.getPositionMs(), mController.getLengthMs(), mController.getSpeed()));
+            }
 
             persistState();
         }
@@ -183,11 +193,11 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     private void persistState() {
         updateHistory();
-        persistClipData();
+        persistVideoState();
         persistParams();
     }
 
-    private void persistClipData() {
+    private void persistVideoState() {
         if (mController.getLengthMs() <= MUSIC_VIDEO_LENGTH_MS) {
             return;
         }
@@ -236,6 +246,17 @@ public class StateUpdater extends PlayerEventListenerHelper {
             mLastSpeed = Helpers.parseFloat(params);
         }
     }
+
+    ///**
+    // * Mirrors {@link #restoreVideoFormat()} to be sure that selection perfroms in any case
+    // */
+    //private void restoreVideoFormatSilent() {
+    //    if (mController.isInPIPMode()) {
+    //        mController.selectFormatSilent(FormatItem.VIDEO_SD_AVC_30);
+    //    } else if (mVideoFormat != null) {
+    //        mController.selectFormatSilent(mVideoFormat);
+    //    }
+    //}
 
     private void restoreVideoFormat() {
         if (mController.isInPIPMode()) {

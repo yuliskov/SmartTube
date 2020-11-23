@@ -27,7 +27,7 @@
     <string name="category_background_playback">背景播放</string>
     <string name="not_implemented">不可运行</string>
     <string name="option_background_playback_off">关闭</string>
-    <string name="option_background_playback_all">画面与声音</string>
+    <string name="option_background_playback_pip">画面与声音</string>
     <string name="option_background_playback_only_audio">只有声音</string>
     <string name="playback_settings">重播设置</string>
     <string name="video_speed">播放速度</string>
@@ -80,5 +80,6 @@
     <string name="update_in_progess">请稍等……</string>
     <string name="player_ui_hide_behavior">自动隐藏用户接口</string>
     <string name="player_ui_hide_never">从不</string>
-    <string name="side_panel_categories">设置区段</string>
+    <string name="side_panel_sections">设置侧边菜单</string>
+    <string name="boot_to_section">预设打开页面</string>
 </resources>

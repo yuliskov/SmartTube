@@ -25,11 +25,27 @@
 
     <!-- Browse fragment colors -->
     <color name="shelf_background">#282828</color>
-    <color name="shelf_background_black">#131313</color>
+    <color name="shelf_background_dark">#131313</color>
     <color name="icon_background">#4A4F51</color>
     <color name="icon_alt_background">#2A2F51</color>
     <color name="player_background">#FF000000</color>
 
-    <!-- Vine widget color -->
+    <!-- Dark color scheme -->
+    <color name="scheme_dark_grey_background">#181818</color>
+    <color name="scheme_dark_grey_background_dark">#181818</color>
+    <color name="scheme_dark_grey_shelf_background_dark">#000000</color>
+    <color name="scheme_dark_grey_card_background_dark">#121212</color>
+
+    <!-- Red color scheme -->
+    <color name="scheme_red_background">#131313</color>
+    <color name="scheme_red_background_dark">@color/dark_red</color>
+    <color name="scheme_red_shelf_background_dark">#131313</color>
+    <color name="scheme_red_card_background_dark">#36474f</color>
+
+    <!-- Vineyard -->
     <color name="black_87pc">#77000000</color>
+    <color name="primary_dark">#00796B</color>
+    <color name="primary_light">#B2DFDB</color>
+    <color name="primary">#009688</color>
+    <color name="white_87pc">#DDFFFFFF</color>
 </resources>

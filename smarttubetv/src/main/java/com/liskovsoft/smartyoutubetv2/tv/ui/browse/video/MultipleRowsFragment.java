@@ -39,6 +39,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private VideoGroupPresenter mMainPresenter;
     private boolean mInvalidate;
+    private int mSelectedItemIndex = -1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -130,6 +131,27 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             mRowsAdapter.add(row);
         } else {
             existingAdapter.append(group); // continue row
+        }
+
+        setItemIndex(mSelectedItemIndex);
+    }
+
+    @Override
+    public int getItemIndex() {
+        return getSelectedPosition();
+    }
+
+    @Override
+    public void setItemIndex(int index) {
+        if (index < 0) {
+            return;
+        }
+
+        if (mRowsAdapter != null && index < mRowsAdapter.size()) {
+            setSelectedPosition(index);
+            mSelectedItemIndex = -1;
+        } else {
+            mSelectedItemIndex = index;
         }
     }
 

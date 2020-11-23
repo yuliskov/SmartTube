@@ -3,11 +3,12 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.settings;
 import android.content.pm.ActivityInfo;
 import android.os.Build.VERSION;
 import android.os.Bundle;
-import androidx.fragment.app.FragmentActivity;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.ui.common.MotherActivity;
 
-public class AppSettingsActivity extends FragmentActivity {
+public class AppSettingsActivity extends MotherActivity {
     private static final String TAG = AppSettingsActivity.class.getSimpleName();
     private AppSettingsFragment mFragment;
 
@@ -17,6 +18,14 @@ public class AppSettingsActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_app_settings);
         mFragment = (AppSettingsFragment) getFragmentManager().findFragmentById(R.id.app_settings_fragment);
+    }
+
+    @Override
+    protected void initTheme() {
+        int settingsThemeResId = MainUIData.instance(this).getColorScheme().settingsThemeResId;
+        if (settingsThemeResId > 0) {
+            setTheme(settingsThemeResId);
+        }
     }
 
     private void setupActivity() {

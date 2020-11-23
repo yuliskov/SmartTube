@@ -27,7 +27,7 @@
     <string name="category_background_playback">Lecture en arriére-plan</string>
     <string name="not_implemented">Non exécutable</string>
     <string name="option_background_playback_off">Désactivé</string>
-    <string name="option_background_playback_all">Vidéo et audio</string>
+    <string name="option_background_playback_pip">Vidéo et audio</string>
     <string name="option_background_playback_only_audio">Uniquement l\'audio</string>
     <string name="playback_settings">Paramétres de lecture</string>
     <string name="video_speed">Vitesse de la vidéo</string>
@@ -66,7 +66,7 @@
     <string name="dialog_main_ui">Interface utilisateur</string>
     <string name="animated_previews">Aperçus animés</string>
     <string name="web_site">Site Web</string>
-    <string name="donation">Contribution</string>
+    <string name="donation">Contribuer</string>
     <string name="dialog_about">A propos</string>
     <string name="dialog_player_ui">Lecteur vidéo</string>
     <string name="player_show_ui_on_pause">Afficher l\'interface utilisateur en pause</string>
@@ -80,5 +80,26 @@
     <string name="update_in_progess">Attendre…</string>
     <string name="player_ui_hide_behavior">Interface utilisateur de saisie automatique</string>
     <string name="player_ui_hide_never">Jamais</string>
-    <string name="side_panel_categories">Organisation de sections</string>
+    <string name="side_panel_sections">Organisation de sections</string>
+    <string name="boot_to_section">Démarrer à la section</string>
+    <string name="large_ui">Grande interface utilisateur</string>
+    <string name="video_grid_scale">Échelle de grille vidéo</string>
+    <string name="scale_ui">Échelle d’interface utilisateur</string>
+    <string name="color_scheme">Couleur schéma</string>
+    <string name="color_scheme_default">Défaut</string>
+    <string name="color_scheme_red_grey">Rouge-gris</string>
+    <string name="color_scheme_red">Rouge</string>
+    <string name="color_scheme_dark">Sombre</string>
+    <string name="disable_update_check">Désactiver la vérification des mises à jour</string>
+    <string name="show_again">Afficher à nouveau</string>
+    <string name="check_updates_auto">Mise à jour automatique</string>
+    <string name="select_account_on_boot">Sélectionnez au démarrage</string>
+    <string name="player_other">Divers</string>
+    <string name="player_full_date">Date précise dans la description</string>
+    <string name="open_channel">Ouvrir chaine</string>
+    <string name="not_interested">Pas intéressé</string>
+    <string name="you_wont_see_this_video">La vidéo a été supprimée de la recommandation</string>
+    <string name="settings_search">Rechercher</string>
+    <string name="dialog_search">Rechercher</string>
+    <string name="instant_voice_search">Recherche vocale instantanée</string>
 </resources>

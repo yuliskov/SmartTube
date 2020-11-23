@@ -6,8 +6,10 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,13 +19,20 @@ public class MainUIData {
     private final Context mContext;
     private final AppPrefs mPrefs;
     private boolean mIsAnimatedPreviewsEnabled;
+    private boolean mIsMultilineTitlesEnabled;
+    private int mBootCategoryId;
     private final Map<Integer, Integer> mLeftPanelCategories = new LinkedHashMap<>();
     private final Set<Integer> mEnabledLeftPanelCategories = new HashSet<>();
+    private float mUIScale;
+    private float mVideoGridScale;
+    private final List<ColorScheme> mColorSchemes = new ArrayList<>();
+    private int mColorSchemeIndex;
 
     public MainUIData(Context context) {
         mContext = context;
         mPrefs = AppPrefs.instance(context);
         initLeftPanelCategories();
+        initColorSchemes();
         restoreState();
     }
 
@@ -44,11 +53,20 @@ public class MainUIData {
         return mIsAnimatedPreviewsEnabled;
     }
 
+    public void enableMultilineTitles(boolean enable) {
+        mIsMultilineTitlesEnabled = enable;
+        persistState();
+    }
+
+    public boolean isMultilineTitlesEnabled() {
+        return mIsMultilineTitlesEnabled;
+    }
+
     public Map<Integer, Integer> getCategories() {
         return mLeftPanelCategories;
     }
 
-    public void setCategoryEnabled(int categoryId, boolean enabled) {
+    public void enableCategory(int categoryId, boolean enabled) {
         if (enabled) {
             mEnabledLeftPanelCategories.add(categoryId);
         } else {
@@ -62,9 +80,85 @@ public class MainUIData {
         return mEnabledLeftPanelCategories.contains(categoryId);
     }
 
+    public void setBootCategoryId(int categoryId) {
+        mBootCategoryId = categoryId;
+
+        persistState();
+    }
+
+    public int getBootCategoryId() {
+        return mBootCategoryId;
+    }
+
+    public void setVideoGridScale(float scale) {
+        mVideoGridScale = scale;
+
+        persistState();
+    }
+
+    public float getVideoGridScale() {
+        return mVideoGridScale;
+    }
+
+    public void setUIScale(float scale) {
+        mUIScale = scale;
+
+        persistState();
+    }
+
+    public float getUIScale() {
+        return mUIScale;
+    }
+
+    public List<ColorScheme> getColorSchemes() {
+        return mColorSchemes;
+    }
+
+    public void setColorScheme(ColorScheme scheme) {
+        mColorSchemeIndex = mColorSchemes.indexOf(scheme);
+        persistState();
+    }
+
+    public ColorScheme getColorScheme() {
+        return mColorSchemes.get(mColorSchemeIndex);
+    }
+
+    private void initLeftPanelCategories() {
+        mLeftPanelCategories.put(R.string.header_home, MediaGroup.TYPE_HOME);
+        mLeftPanelCategories.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
+        mLeftPanelCategories.put(R.string.header_news, MediaGroup.TYPE_NEWS);
+        mLeftPanelCategories.put(R.string.header_music, MediaGroup.TYPE_MUSIC);
+        mLeftPanelCategories.put(R.string.header_channels, MediaGroup.TYPE_CHANNELS_SUB);
+        mLeftPanelCategories.put(R.string.header_subscriptions, MediaGroup.TYPE_SUBSCRIPTIONS);
+        mLeftPanelCategories.put(R.string.header_history, MediaGroup.TYPE_HISTORY);
+        mLeftPanelCategories.put(R.string.header_playlists, MediaGroup.TYPE_PLAYLISTS);
+    }
+
+    private void initColorSchemes() {
+        mColorSchemes.add(new ColorScheme(
+                R.string.color_scheme_default,
+                null,
+                null,
+                null,
+                mContext));
+        mColorSchemes.add(new ColorScheme(
+                R.string.color_scheme_dark,
+                "App.Theme.Dark.Player",
+                "App.Theme.Dark.Browse",
+                "App.Theme.Dark.Preferences",
+                mContext));
+        mColorSchemes.add(new ColorScheme(
+                R.string.color_scheme_red,
+                "App.Theme.Red.Player",
+                "App.Theme.Red.Browse",
+                "App.Theme.Red.Preferences",
+                mContext));
+    }
+
     private void persistState() {
         String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
-        mPrefs.setMainUIData(Helpers.mergeObject(mIsAnimatedPreviewsEnabled, selectedCategories));
+        mPrefs.setMainUIData(Helpers.mergeObject(
+                mIsAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale, mColorSchemeIndex, mIsMultilineTitlesEnabled));
     }
 
     private void restoreState() {
@@ -74,6 +168,11 @@ public class MainUIData {
 
         mIsAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0, true);
         String selectedCategories = Helpers.parseStr(split, 1);
+        mBootCategoryId = Helpers.parseInt(split, 2, MediaGroup.TYPE_HOME);
+        mVideoGridScale = Helpers.parseFloat(split, 3, 1.0f);
+        mUIScale = Helpers.parseFloat(split, 4, 1.0f);
+        mColorSchemeIndex = Helpers.parseInt(split, 5, 0);
+        mIsMultilineTitlesEnabled = Helpers.parseBoolean(split, 6, false);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArray(selectedCategories);
@@ -86,14 +185,21 @@ public class MainUIData {
         }
     }
 
-    private void initLeftPanelCategories() {
-        mLeftPanelCategories.put(R.string.header_home, MediaGroup.TYPE_HOME);
-        mLeftPanelCategories.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
-        mLeftPanelCategories.put(R.string.header_news, MediaGroup.TYPE_NEWS);
-        mLeftPanelCategories.put(R.string.header_music, MediaGroup.TYPE_MUSIC);
-        mLeftPanelCategories.put(R.string.header_subscriptions, MediaGroup.TYPE_SUBSCRIPTIONS);
-        mLeftPanelCategories.put(R.string.header_channels, MediaGroup.TYPE_CHANNELS_SUB);
-        mLeftPanelCategories.put(R.string.header_history, MediaGroup.TYPE_HISTORY);
-        mLeftPanelCategories.put(R.string.header_playlists, MediaGroup.TYPE_PLAYLISTS);
+    public static class ColorScheme {
+        public final int nameResId;
+        public final int playerThemeResId;
+        public final int browseThemeResId;
+        public final int settingsThemeResId;
+
+        public ColorScheme(int nameResId,
+                           String playerTheme,
+                           String browseTheme,
+                           String settingsTheme,
+                           Context context) {
+            this.nameResId = nameResId;
+            this.playerThemeResId = Helpers.getResourceId(playerTheme, "style", context);
+            this.browseThemeResId = Helpers.getResourceId(browseTheme, "style", context);
+            this.settingsThemeResId = Helpers.getResourceId(settingsTheme, "style", context);
+        }
     }
 }

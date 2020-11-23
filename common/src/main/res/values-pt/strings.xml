@@ -25,7 +25,7 @@
     <string name="category_background_playback">Reprodução de fundo</string>
     <string name="not_implemented">Não implementado</string>
     <string name="option_background_playback_off">Desativado</string>
-    <string name="option_background_playback_all">Video e audio</string>
+    <string name="option_background_playback_pip">Video e audio</string>
     <string name="option_background_playback_only_audio">Apenas áudio</string>
     <string name="playback_settings">Playback settings</string>
     <string name="video_speed">Velocidade do vídeo</string>

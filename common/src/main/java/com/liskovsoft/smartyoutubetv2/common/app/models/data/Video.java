@@ -27,6 +27,9 @@ public final class Video implements Parcelable {
     public int percentWatched = -1;
     public MediaItem mediaItem;
     public MediaItem nextMediaItem;
+    public boolean hasNewContent;
+    public boolean isLive;
+    public boolean isUpcoming;
 
     public Video() {
         
@@ -80,8 +83,11 @@ public final class Video implements Parcelable {
         video.studio = item.getAuthor();
         video.percentWatched = item.getPercentWatched();
         video.badge = item.getBadgeText();
+        video.hasNewContent = item.hasNewContent();
         video.previewUrl = item.getVideoPreviewUrl();
         video.playlistIndex = item.getPlaylistIndex();
+        video.isLive = item.isLive();
+        video.isUpcoming = item.isUpcoming();
         video.mediaItem = item;
 
         return video;
@@ -157,7 +163,7 @@ public final class Video implements Parcelable {
         return videoId == null && channelId != null;
     }
 
-    public boolean isChannelUpd() {
+    public boolean isChannelSub() {
         return mediaItem != null && mediaItem.getType() == MediaItem.TYPE_CHANNEL_SUB;
     }
 
@@ -165,13 +171,13 @@ public final class Video implements Parcelable {
         return playlistIndex > 0;
     }
 
-    public void sync(MediaItemMetadata metadata) {
+    public void sync(MediaItemMetadata metadata, boolean useAlt) {
         if (metadata == null) {
             return;
         }
 
         title = metadata.getTitle();
-        description = metadata.getDescription();
+        description = useAlt ? metadata.getDescriptionAlt() : metadata.getDescription();
         channelId = metadata.getChannelId();
         nextMediaItem = metadata.getNextVideo();
     }

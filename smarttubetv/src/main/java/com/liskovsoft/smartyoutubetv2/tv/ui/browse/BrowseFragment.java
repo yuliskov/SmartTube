@@ -1,8 +1,10 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 
-import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +24,14 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.LoginDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.ProgressBarManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ActionHelpers;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -37,7 +41,8 @@ import java.util.Map;
  */
 public class BrowseFragment extends BrowseSupportFragment implements BrowseView {
     private static final String TAG = BrowseFragment.class.getSimpleName();
-    private static final String SELECTED_POSITION = "SelectedPosition";
+    private static final String SELECTED_HEADER_INDEX = "SelectedHeaderIndex";
+    private static final String SELECTED_ITEM_INDEX = "SelectedItemIndex";
     private ArrayObjectAdapter mCategoryRowAdapter;
     private BrowsePresenter mBrowsePresenter;
     private Map<Integer, Category> mCategories;
@@ -45,13 +50,15 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private Handler mHandler;
     private ProgressBarManager mProgressBarManager;
     private boolean mIsFragmentCreated;
-    private int mSelectedPosition;
+    private int mRestoredHeaderIndex = -1;
+    private boolean mFocusOnChildFragment;
+    private GestureDetector mGestureDetector;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
 
-        mSelectedPosition = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_POSITION, -1) : -1;
+        mRestoredHeaderIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_HEADER_INDEX, -1) : -1;
         mIsFragmentCreated = true;
 
         mCategories = new LinkedHashMap<>();
@@ -72,7 +79,9 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         super.onSaveInstanceState(outState);
 
         // Store position in case activity is crashed
-        outState.putInt(SELECTED_POSITION, getSelectedPosition());
+        outState.putInt(SELECTED_HEADER_INDEX, getSelectedPosition());
+        // Not robust. Because tab content often changed after reloading.
+        outState.putInt(SELECTED_ITEM_INDEX, mCategoryFragmentFactory.getCurrentFragmentItemIndex());
     }
 
     @Override
@@ -95,9 +104,39 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mBrowsePresenter.onInitDone();
 
         // Restore state after crash
-        if (mSelectedPosition != -1) {
-            setSelectedPosition(mSelectedPosition);
+        selectCategory(mRestoredHeaderIndex);
+        mRestoredHeaderIndex = -1;
+    }
+
+    private void setupEventListeners() {
+        getHeadersSupportFragment().setOnHeaderClickedListener(
+                (viewHolder, row) -> {
+                    long headerId = row.getHeaderItem().getId();
+                    int newPosition = indexOf(headerId);
+
+                    if (getHeadersSupportFragment().getSelectedPosition() != newPosition) {
+                        // touch screen support
+                        getHeadersSupportFragment().setSelectedPosition(newPosition);
+                    } else {
+                        // update section when clicked or pressed
+                        mBrowsePresenter.onCategoryFocused((int) headerId);
+                    }
+                }
+        );
+
+        setOnSearchClickedListener(view -> SearchPresenter.instance(getActivity()).startSearch(null));
+    }
+
+    private int indexOf(long headerId) {
+        int index = 0;
+        for (Integer id : mCategories.keySet()) {
+            if (id == headerId) {
+                return index;
+            }
+            index++;
         }
+
+        return 0;
     }
 
     private void setupAdapter() {
@@ -109,23 +148,38 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     private void setupFragmentFactory() {
         mCategoryFragmentFactory = new CategoryFragmentFactory(
-                (viewHolder, row) -> mBrowsePresenter.onCategoryFocused(getSelectedHeaderId())
+                (viewHolder, row) -> {
+                    focusOnChildFragment();
+                    mBrowsePresenter.onCategoryFocused(getSelectedHeaderId());
+                }
         );
 
         getMainFragmentRegistry().registerFragment(PageRow.class, mCategoryFragmentFactory);
     }
 
     private void setupUi() {
-        setBadgeDrawable(ContextCompat.getDrawable(getActivity(), R.mipmap.app_logo));
+        int brandColorRes = Helpers.getThemeAttr(getActivity(), R.attr.brandColor);
+        int brandAccentColorRes = Helpers.getThemeAttr(getActivity(), R.attr.brandAccentColor);
+        int brandColor = ContextCompat.getColor(getActivity(), brandColorRes);
+        int brandAccentColor = ContextCompat.getColor(getActivity(), brandAccentColorRes);
+
         setTitle(getString(R.string.browse_title)); // Badge, when set, takes precedent over title
         setHeadersState(HEADERS_ENABLED);
         setHeadersTransitionOnBackEnabled(true);
 
+        BitmapDrawable logoDrawable = (BitmapDrawable) ContextCompat.getDrawable(getActivity(), R.mipmap.app_logo);
+
+        //setBadgeDrawable(logoDrawable == null ? null : new BitmapDrawable(
+        //        getActivity().getResources(),
+        //        ActionHelpers.createBitmap(logoDrawable.getBitmap(), brandAccentColor)));
+
+        setBadgeDrawable(logoDrawable);
+
         // Set fastLane (or headers) background color
-        setBrandColor(ContextCompat.getColor(getActivity(), R.color.fastlane_background_dark));
+        setBrandColor(brandColor);
 
         // Set search icon color.
-        setSearchAffordanceColor(ContextCompat.getColor(getActivity(), R.color.search_opaque));
+        setSearchAffordanceColor(brandAccentColor);
 
         setHeaderPresenterSelector(new PresenterSelector() {
             @Override
@@ -141,22 +195,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         }
 
         return -1;
-    }
-
-    private void setupEventListeners() {
-        //getHeadersSupportFragment().setOnHeaderClickedListener(
-        //        (viewHolder, row) -> {
-        //            mBrowsePresenter.onCategoryFocused(row.getHeaderItem().getId());
-        //        });
-
-        getHeadersSupportFragment().setOnHeaderClickedListener(
-                (viewHolder, row) -> mBrowsePresenter.onCategoryFocused(getSelectedHeaderId())
-        );
-
-        setOnSearchClickedListener(view -> {
-            Intent intent = new Intent(getActivity(), SearchActivity.class);
-            startActivity(intent);
-        });
     }
 
     private int getSelectedHeaderId() {
@@ -224,6 +262,28 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         restoreMainFragment();
 
         mCategoryFragmentFactory.updateCurrentFragment(group);
+    }
+
+    @Override
+    public void selectCategory(int index) {
+        if (index >= 0 && index < mCategoryRowAdapter.size()) {
+            setSelectedPosition(index);
+            mFocusOnChildFragment = true;
+        }
+    }
+
+    private void focusOnChildFragment() {
+        if (mFocusOnChildFragment) {
+            startHeadersTransition(false);
+            mFocusOnChildFragment = false;
+        }
+    }
+
+    @Override
+    public void selectItem(int index) {
+        if (index >= 0) {
+            mCategoryFragmentFactory.setCurrentFragmentItemIndex(index);
+        }
     }
 
     private void restoreMainFragment() {

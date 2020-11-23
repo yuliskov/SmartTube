@@ -194,6 +194,10 @@ public class GridFragment extends Fragment implements BrowseSupportFragment.Main
         }
     }
 
+    public int getSelectedPosition() {
+        return mSelectedPosition;
+    }
+
     private void updateAdapter() {
         if (mGridViewHolder != null) {
             mGridPresenter.onBindViewHolder(mGridViewHolder, mAdapter);

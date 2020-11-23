@@ -26,7 +26,7 @@
     <string name="category_background_playback">Reproducción de fondo</string>
     <string name="not_implemented">No se ha implementado</string>
     <string name="option_background_playback_off">Deshabilitado</string>
-    <string name="option_background_playback_all">Vídeo y audio</string>
+    <string name="option_background_playback_pip">Vídeo y audio</string>
     <string name="option_background_playback_only_audio">Sólo audio</string>
     <string name="playback_settings">Configuración de reproducción</string>
     <string name="video_speed">Velocidad de vídeo</string>
@@ -65,8 +65,8 @@
     <string name="dialog_main_ui">Interfaz de usuario</string>
     <string name="animated_previews">Previsualizaciones animadas</string>
     <string name="web_site">Sitio web</string>
-    <string name="donation">Donación</string>
-    <string name="dialog_about">Sobre</string>
+    <string name="donation">Donar</string>
+    <string name="dialog_about">Acerca de</string>
     <string name="dialog_player_ui">Reproductor de vídeo</string>
     <string name="player_show_ui_on_pause">Mostrar interfaz en pausa</string>
     <string name="player_pause_on_ok">Botón OK pausa reproducción</string>
@@ -74,10 +74,11 @@
     <string name="player_only_ui">Sólo interfaz</string>
     <string name="player_ui_and_pause">Interfaz y pausa</string>
     <string name="player_only_pause">Sólo pausa</string>
-    <string name="check_for_updates">Busca actualizaciones</string>
+    <string name="check_for_updates">Buscar actualizaciones</string>
     <string name="update_not_found">Estás usando la última versión</string>
     <string name="update_in_progess">Espera…</string>
     <string name="player_ui_hide_behavior">Auto-ocultar interfaz</string>
     <string name="player_ui_hide_never">Nunca</string>
-    <string name="side_panel_categories">Secciones configuración</string>
+    <string name="side_panel_sections">Secciones visibles</string>
+    <string name="boot_to_section">Iniciar en sección</string>
 </resources>

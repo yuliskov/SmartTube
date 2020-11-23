@@ -5,5 +5,6 @@
     <string name="signin_view_action_text">Готово</string>
     <string name="require_checked">Требуется \"%s\"</string>
     <string name="msg_press_again_to_exit">Нажмите еще раз для выхода</string>
-    <string name="view_einding_time">Окончание: %s</string>
+    <string name="player_remaining_time">Осталось: %s</string>
+    <string name="badge_new_content">НОВЫЙ КОНТЕНТ</string>
 </resources>

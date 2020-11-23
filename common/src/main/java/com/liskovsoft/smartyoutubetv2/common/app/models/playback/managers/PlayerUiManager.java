@@ -63,6 +63,15 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     }
 
     @Override
+    public void onControlsShown(boolean shown) {
+        disableUiAutoHideTimeout();
+
+        if (shown) {
+            enableUiAutoHideTimeout();
+        }
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode) {
         disableUiAutoHideTimeout();
         disableSuggestionsResetTimeout();
@@ -138,7 +147,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     public void onPlaylistAddClicked() {
         VideoMenuPresenter mp = VideoMenuPresenter.instance(mActivity);
 
-        mp.showMenu(mController.getVideo());
+        mp.showShortMenu(mController.getVideo());
     }
 
     @Override
@@ -227,7 +236,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onSearchClicked() {
-        SearchPresenter.instance(mActivity).openSearch(null);
+        SearchPresenter.instance(mActivity).startSearch(null);
     }
 
     private void intSpeedItems(List<OptionItem> items, float[] speedValues) {

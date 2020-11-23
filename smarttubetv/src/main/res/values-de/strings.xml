@@ -10,5 +10,5 @@
     <string name="action_video_stats">Videostatistiken</string>
     <string name="require_checked">Benötigt " %s"</string>
     <string name="msg_press_again_to_exit">Zum Beenden erneut drücken</string>
-    <string name="view_einding_time">Ende: %s</string>
+    <string name="player_remaining_time">Ende: %s</string>
 </resources>

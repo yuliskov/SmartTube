@@ -18,7 +18,7 @@ public class AudioTrack extends MediaTrack {
         if (Helpers.equals(format.id, track2.format.id)) {
             result = 0;
         } else if (codecEquals(format.codecs, track2.format.codecs)) {
-            return 0;
+            result = 1;
         }
 
         return result;

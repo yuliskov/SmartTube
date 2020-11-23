@@ -106,6 +106,16 @@
     <string name="pref_title_login">S\'identifier</string>
     <string name="playback_tag">ETIQUETTE LECTURE</string>
     <string name="no_title">Pas de titre</string>
+    
+        <!-- Vineyard -->
+    <string name="title_oops">Oups</string>
+    <string name="title_no_videos">Aucune vidéos</string>
+    <string name="message_try_again">Réessayer?</string>
+    <string name="message_check_again">Revérifier?</string>
+    <string name="text_search_results">Résultats de recherche pour %s</string>
+    <string name="text_post_results_title">Messages pour %s</string>
+    <string name="text_no_results">Aucun résultat</string>
+    <string name="error_message_network_needed">Oups, vous avez besoin d’une connexion réseau pour le faire!</string>
 
     <!--  NEW ITEMS  -->
     <string name="signin_view_title">Le code utilisateur est en cours de chargement?</string>
@@ -118,5 +128,5 @@
     <string name="action_video_stats">Statistiques vidéo</string>
     <string name="require_checked">Exige \"%s\"</string>
     <string name="msg_press_again_to_exit">Appuyez à nouveau pour sortir</string>
-    <string name="view_einding_time">Fini dans: %s</string>
+    <string name="player_remaining_time">Fini dans: %s</string>
 </resources>

@@ -262,6 +262,11 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
+    public void onControlsShown(boolean shown) {
+        process(listener -> listener.onControlsShown(shown));
+    }
+
+    @Override
     public void onTrackChanged(FormatItem track) {
         process(listener -> listener.onTrackChanged(track));
     }

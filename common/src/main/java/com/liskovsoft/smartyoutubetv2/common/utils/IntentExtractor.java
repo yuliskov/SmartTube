@@ -48,4 +48,17 @@ public class IntentExtractor {
 
         return null;
     }
+
+    /**
+     * Data: https://www.youtube.com/channel/UCtDjOV5nk982w35AIdVDuNw
+     */
+    public static String extractChannelId(Intent intent) {
+        if (intent == null || intent.getData() == null || !Intent.ACTION_VIEW.equals(intent.getAction())) {
+            return null;
+        }
+
+        String[] split = intent.getData().toString().split(CHANNEL_URL);
+
+        return split.length == 2 ? split[1] : null;
+    }
 }

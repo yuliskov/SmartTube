@@ -33,15 +33,14 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
-import android.view.View;
 
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.old.data.VideoContract;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.tv.old.model.VideoCursorMapper;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.details.VideoDetailsActivity;
-import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
 
 /*
  * VerticalGridFragment shows a grid of videos that can be scrolled vertically.
@@ -77,19 +76,9 @@ public class VerticalGridFragment extends VerticalGridSupportFragment
         getLoaderManager().initLoader(ALL_VIDEOS_LOADER, null, this);
 
         // After 500ms, start the animation to transition the cards into view.
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                startEntranceTransition();
-            }
-        }, 500);
+        new Handler().postDelayed(this::startEntranceTransition, 500);
 
-        setOnSearchClickedListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), SearchActivity.class);
-                startActivity(intent);
-            }
-        });
+        setOnSearchClickedListener(view -> SearchPresenter.instance(getActivity()).startSearch(null));
 
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());

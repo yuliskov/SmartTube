@@ -26,7 +26,7 @@
     <string name="category_background_playback">Odtwarzanie w tle</string>
     <string name="not_implemented">Nie zaimplementowano</string>
     <string name="option_background_playback_off">Wyłączone</string>
-    <string name="option_background_playback_all">Wideo i audio</string>
+    <string name="option_background_playback_pip">Wideo i audio</string>
     <string name="option_background_playback_only_audio">Tylko dźwięk</string>
     <string name="playback_settings">Ustawienia odtwarzania</string>
     <string name="video_speed">Prędkość wideo</string>
@@ -49,7 +49,7 @@
     <string name="settings_player">Odtwarzacz wideo</string>
     <string name="settings_language">Język</string>
     <string name="settings_linked_devices">Połączone urządzenia</string>
-    <string name="settings_about">O</string>
+    <string name="settings_about">Informacje</string>
     <string name="dialog_account_list">Wybierz konto</string>
     <string name="dialog_account_none">Żaden</string>
     <string name="dialog_remove_account">Usuń konto</string>
@@ -79,5 +79,15 @@
     <string name="update_in_progess">Czekaj…</string>
     <string name="player_ui_hide_behavior">Automatyczne ukrywanie interfejsu użytkownika</string>
     <string name="player_ui_hide_never">Nigdy</string>
-    <string name="side_panel_categories">Ustawienia sekcji</string>
+    <string name="side_panel_sections">Ustawienia sekcji</string>
+    <string name="boot_to_section">Sekcja startowa</string>
+    <string name="large_ui">Duży interfejs</string>
+    <string name="video_grid_scale">Skalowanie siatki wiedo</string>
+    <string name="scale_ui">Skalowanie interfejsu</string>
+    <string name="color_scheme">Schemat kolorów</string>
+    <string name="color_scheme_default">Domyślny</string>
+    <string name="color_scheme_red_grey">Czerwono-szary</string>
+    <string name="color_scheme_red">Czerwony</string>
+    <string name="color_scheme_dark">Ciemny</string>
+    <string name="disable_update_check">Wyłącz automatyczne sprawdzanie aktualizacji</string>
 </resources>

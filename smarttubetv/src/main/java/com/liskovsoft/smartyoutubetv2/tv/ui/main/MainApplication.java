@@ -18,8 +18,8 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.channelsub.ChannelSubActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.details.VideoDetailsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.onboarding.OnboardingActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
+import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.SearchTagsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.settings.AppSettingsActivity;
-import com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.signin.SignInActivity;
 
 public class MainApplication extends MultiDexApplication { // fix: Didn't find class "com.google.firebase.provider.FirebaseInitProvider"
@@ -36,7 +36,7 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         viewManager.register(AppSettingsView.class, AppSettingsActivity.class, PlaybackActivity.class);
         viewManager.register(OnboardingView.class, OnboardingActivity.class, BrowseActivity.class);
         viewManager.register(DetailsView.class, VideoDetailsActivity.class, BrowseActivity.class);
-        viewManager.register(SearchView.class, SearchActivity.class, BrowseActivity.class);
+        viewManager.register(SearchView.class, SearchTagsActivity.class, BrowseActivity.class);
         viewManager.register(SignInView.class, SignInActivity.class, BrowseActivity.class);
         viewManager.register(ChannelView.class, ChannelActivity.class, BrowseActivity.class);
         viewManager.register(ChannelSubView.class, ChannelSubActivity.class, BrowseActivity.class);

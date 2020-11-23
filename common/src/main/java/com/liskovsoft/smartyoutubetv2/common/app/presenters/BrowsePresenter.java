@@ -25,6 +25,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSett
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.LanguageSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.MainUISettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.PlayerSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SearchSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -61,9 +62,9 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
     private Disposable mSignCheckAction;
     private int mCurrentCategoryId;
     private long mLastUpdateTimeMs;
+    private int mBootToIndex;
 
     private BrowsePresenter(Context context) {
-        GlobalPreferences.instance(context); // auth token storage
         mContext = context;
         mPlaybackPresenter = PlaybackPresenter.instance(context);
         mMediaService = YouTubeMediaService.instance();
@@ -73,6 +74,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         mRowMapping = new HashMap<>();
         mTextGridMapping = new HashMap<>();
         mMainUIData = MainUIData.instance(mContext);
+        GlobalPreferences.instance(context); // auth token storage init (in case activity restored after crash)
         initCategories();
     }
 
@@ -91,6 +93,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         }
 
         updateCategories();
+        mView.selectCategory(mBootToIndex);
     }
 
     private void initCategories() {
@@ -106,8 +109,8 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         mCategories.add(new Category(MediaGroup.TYPE_GAMING, mContext.getString(R.string.header_gaming), Category.TYPE_ROW, R.drawable.icon_gaming));
         mCategories.add(new Category(MediaGroup.TYPE_NEWS, mContext.getString(R.string.header_news), Category.TYPE_ROW, R.drawable.icon_news));
         mCategories.add(new Category(MediaGroup.TYPE_MUSIC, mContext.getString(R.string.header_music), Category.TYPE_ROW, R.drawable.icon_music));
-        mCategories.add(new Category(MediaGroup.TYPE_SUBSCRIPTIONS, mContext.getString(R.string.header_subscriptions), Category.TYPE_GRID, R.drawable.icon_subscriptions, true));
         mCategories.add(new Category(MediaGroup.TYPE_CHANNELS_SUB, mContext.getString(R.string.header_channels), Category.TYPE_GRID, R.drawable.icon_channels, true));
+        mCategories.add(new Category(MediaGroup.TYPE_SUBSCRIPTIONS, mContext.getString(R.string.header_subscriptions), Category.TYPE_GRID, R.drawable.icon_subscriptions, true));
         mCategories.add(new Category(MediaGroup.TYPE_HISTORY, mContext.getString(R.string.header_history), Category.TYPE_GRID, R.drawable.icon_history, true));
         mCategories.add(new Category(MediaGroup.TYPE_PLAYLISTS, mContext.getString(R.string.header_playlists), Category.TYPE_ROW, R.drawable.icon_playlist, true));
         mCategories.add(new Category(MediaGroup.TYPE_SETTINGS, mContext.getString(R.string.header_settings), Category.TYPE_TEXT_GRID, R.drawable.icon_settings));
@@ -138,12 +141,8 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
                 mContext.getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(mContext).show(), R.drawable.settings_main_ui));
         settingItems.add(new SettingsItem(
                 mContext.getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(mContext).show(), R.drawable.settings_player));
-        //settingItems.add(new SettingsItem(
-        //        mContext.getString(R.string.settings_linked_devices), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
-        //settingItems.add(new SettingsItem(
-        //        mContext.getString(R.string.settings_left_panel), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
-        //settingItems.add(new SettingsItem(
-        //        mContext.getString(R.string.settings_other), () -> MessageHelpers.showMessage(mContext, R.string.not_implemented)));
+        settingItems.add(new SettingsItem(
+                mContext.getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(mContext).show(), R.drawable.settings_search));
         settingItems.add(new SettingsItem(
                 mContext.getString(R.string.settings_about), () -> AboutPresenter.instance(mContext).show(), R.drawable.settings_about));
 
@@ -157,6 +156,9 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
             category.setEnabled(category.getId() == MediaGroup.TYPE_SETTINGS || mMainUIData.isCategoryEnabled(category.getId()));
 
             if (category.isEnabled()) {
+                if (category.getId() == mMainUIData.getBootCategoryId()) {
+                    mBootToIndex = index;
+                }
                 mView.addCategory(index++, category);
             } else {
                 mView.removeCategory(category);
@@ -185,8 +187,8 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
             mPlaybackPresenter.openVideo(item);
         } else if (item.isChannel()) {
             ChannelPresenter.instance(mContext).openChannel(item);
-        } else if (item.isChannelUpd()) {
-            ChannelSubPresenter.instance(mContext).openChannel(item);
+        } else if (item.isChannelSub()) {
+            ChannelPresenter.instance(mContext).openChannel(item);
         }
 
         updateRefreshTime();

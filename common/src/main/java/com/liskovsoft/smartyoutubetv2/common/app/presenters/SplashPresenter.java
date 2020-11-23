@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.models.update.AppUpdateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
@@ -22,6 +23,7 @@ public class SplashPresenter implements Presenter<SplashView> {
 
     private SplashPresenter(Context context) {
         mContext = context;
+        GlobalPreferences.instance(context); // auth token storage init
     }
 
     public static SplashPresenter instance(Context context) {
@@ -42,6 +44,11 @@ public class SplashPresenter implements Presenter<SplashView> {
         mView = null;
     }
 
+    public void unhold() {
+        mRunOnce = false;
+        sInstance = null;
+    }
+
     @Override
     public void onInitDone() {
         applyRunOnceTasks();
@@ -53,10 +60,15 @@ public class SplashPresenter implements Presenter<SplashView> {
 
     private void applyRunOnceTasks() {
         if (!mRunOnce) {
+            showAccountSelection();
             updateChannels();
             getBackupDataOnce();
             mRunOnce = true;
         }
+    }
+
+    private void showAccountSelection() {
+        AccountSelectionPresenter.instance(mContext).show();
     }
 
     private void checkForUpdates() {
@@ -115,15 +127,22 @@ public class SplashPresenter implements Presenter<SplashView> {
 
             if (searchText != null) {
                 SearchPresenter searchPresenter = SearchPresenter.instance(mContext);
-                searchPresenter.openSearch(searchText);
+                searchPresenter.startSearch(searchText);
             } else {
-                String backupData = getBackupDataOnce();
-                if (backupData != null) {
-                    PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(mContext);
-                    playbackPresenter.openVideo(backupData);
+                String channelId = IntentExtractor.extractChannelId(intent);
+
+                if (channelId != null) {
+                    ChannelPresenter channelPresenter = ChannelPresenter.instance(mContext);
+                    channelPresenter.openChannel(channelId);
                 } else {
-                    ViewManager viewManager = ViewManager.instance(mContext);
-                    viewManager.startDefaultView();
+                    String backupData = getBackupDataOnce();
+                    if (backupData != null) {
+                        PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(mContext);
+                        playbackPresenter.openVideo(backupData);
+                    } else {
+                        ViewManager viewManager = ViewManager.instance(mContext);
+                        viewManager.startDefaultView();
+                    }
                 }
             }
         }

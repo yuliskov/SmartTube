@@ -5,9 +5,7 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
-import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
@@ -95,7 +93,13 @@ public class ChannelPresenter implements VideoGroupPresenter, Presenter<ChannelV
 
     public void openChannel(Video item) {
         if (item != null) {
-            openChannel(item.channelId);
+            if (item.channelId != null) {
+                openChannel(item.channelId);
+            } else {
+                // Maybe this is subscribed items view
+                ChannelSubPresenter.instance(mContext)
+                        .obtainVideoGroup(item, group -> openChannel(group.getChannelId()));
+            }
         }
     }
 

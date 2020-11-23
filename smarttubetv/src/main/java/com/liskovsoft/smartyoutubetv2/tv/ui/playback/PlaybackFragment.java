@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.app.RowsSupportFragment;
 import androidx.leanback.app.VideoSupportFragmentGlueHost;
+import androidx.leanback.media.PlayerAdapter;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ClassPresenterSelector;
 import androidx.leanback.widget.HeaderItem;
@@ -23,11 +24,11 @@ import androidx.leanback.widget.RowPresenter;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection.Factory;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -49,6 +50,7 @@ import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.ProgressBarManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.VideoPlayerGlue.OnActionClickedListener;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -61,18 +63,15 @@ import java.util.Map;
  */
 public class PlaybackFragment extends VideoEventsOverrideFragment implements PlaybackView, PlaybackController {
     private static final String TAG = PlaybackFragment.class.getSimpleName();
-    private static final int UPDATE_DELAY = 16;
+    private static final int UPDATE_DELAY_MS = 16;
     private VideoPlayerGlue mPlayerGlue;
-    private LeanbackPlayerAdapter mPlayerAdapter;
     private SimpleExoPlayer mPlayer;
-    private DefaultTrackSelector mTrackSelector;
-    private DefaultRenderersFactory mRenderersFactory;
-    private PlayerActionListener mPlaylistActionListener;
     private PlaybackPresenter mPlaybackPresenter;
     private ArrayObjectAdapter mRowsAdapter;
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
     private PlayerEventListener mEventListener;
     private PlayerController mExoPlayerController;
+    private ExoPlayerInitializer mPlayerInitializer;
     private SubtitleManager mSubtitleManager;
     private DebugInfoManager mDebugInfoManager;
     private UriBackgroundManager mBackgroundManager;
@@ -80,16 +79,17 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private final boolean mIsAnimationEnabled = true;
     private boolean mIsEngineBlocked;
     private boolean mIsPIPEnabled;
-    private ExoPlayerInitializer mPlayerInitializer;
+    private boolean mIsPlayBehindEnabled;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(null); // trying to fix bug with presets
 
         mMediaGroupAdapters = new HashMap<>();
         mBackgroundManager = getLeanbackActivity().getBackgroundManager();
         mBackgroundManager.setBackgroundColor(ContextCompat.getColor(getLeanbackActivity(), R.color.player_background));
         mPlayerInitializer = new ExoPlayerInitializer(getActivity());
+        mExoPlayerController = new ExoPlayerController(getActivity());
 
         mPlaybackPresenter = PlaybackPresenter.instance(getContext());
         mPlaybackPresenter.register(this);
@@ -108,7 +108,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        // ProgressBar.setRootView is called in this moment
+        // ProgressBar.setRootView already called at this moment
         ProgressBarManager.setup(getProgressBarManager(), (ViewGroup) view);
 
         return view;
@@ -192,12 +192,20 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void restartEngine() {
-        //if (mPlayer != null) {
-        //    mEventListener.onEngineReleased();
-        //}
-        //destroyPlayerObjects();
-        //createPlayerObjects();
+        if (mPlayer != null) {
+            mEventListener.onEngineReleased();
+        }
 
+        destroyPlayerObjects();
+        createPlayerObjects();
+
+        if (mPlayer != null) {
+            mEventListener.onEngineInitialized();
+        }
+    }
+
+    @Override
+    public void reloadPlayback() {
         if (mPlayer != null) {
             mEventListener.onEngineReleased();
             mEventListener.onEngineInitialized();
@@ -228,42 +236,40 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mEventListener.onEngineInitialized();
     }
 
-    private void destroyPlayerObjects() {
-        if (mPlayer != null) {
-            mPlayer.release();
+    private void testHardwareAcceleration() {
+        if (getSurfaceView() != null && !getSurfaceView().isHardwareAccelerated()) {
+            MessageHelpers.showMessage(getContext(), "Oops. Seems that video hardware acceleration is disabled!");
         }
+    }
+
+    private void destroyPlayerObjects() {
+        // Fix access calls when player isn't initialized
+        mExoPlayerController.release();
         mPlayer = null;
-        mTrackSelector = null;
         mPlayerGlue = null;
-        mPlayerAdapter = null;
-        mPlaylistActionListener = null;
-        mRenderersFactory = null;
         mSubtitleManager = null;
         mDebugInfoManager = null;
-        mExoPlayerController = PlayerController.NULL_CONTROLLER;
     }
 
     private void createPlayerObjects() {
-        TrackSelection.Factory videoTrackSelectionFactory =
-                new AdaptiveTrackSelection.Factory();
-        mTrackSelector = new RestoreTrackSelector(videoTrackSelectionFactory);
-        mRenderersFactory = new CustomOverridesRenderersFactory(getActivity());
+        DefaultRenderersFactory renderersFactory = new CustomOverridesRenderersFactory(getActivity());
 
         // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
-        mPlayer = mPlayerInitializer.createPlayer(getActivity(), mRenderersFactory, mTrackSelector);
+        DefaultTrackSelector trackSelector = new RestoreTrackSelector(new Factory());
+        mPlayer = mPlayerInitializer.createPlayer(getActivity(), renderersFactory, trackSelector);
 
-        mExoPlayerController = new ExoPlayerController(mPlayer, mTrackSelector, getActivity());
-        mExoPlayerController.setEventListener(mEventListener);
+        PlayerAdapter playerAdapter = new LeanbackPlayerAdapter(getActivity(), mPlayer, UPDATE_DELAY_MS);
 
-        mPlayerAdapter = new LeanbackPlayerAdapter(getActivity(), mPlayer, UPDATE_DELAY);
-
-        mPlaylistActionListener = new PlayerActionListener();
-        mPlayerGlue = new VideoPlayerGlue(getActivity(), mPlayerAdapter, mPlaylistActionListener);
+        OnActionClickedListener playerActionListener = new PlayerActionListener();
+        mPlayerGlue = new VideoPlayerGlue(getActivity(), playerAdapter, playerActionListener);
         mPlayerGlue.setHost(new VideoSupportFragmentGlueHost(this));
         mPlayerGlue.setSeekEnabled(true);
         mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end
         hideControlsOverlay(mIsAnimationEnabled); // hide controls upon fragment creation
 
+        mExoPlayerController.setPlayer(mPlayer);
+        mExoPlayerController.setTrackSelector(trackSelector);
+        mExoPlayerController.setEventListener(mEventListener);
         mExoPlayerController.setPlayerView(mPlayerGlue);
 
         mSubtitleManager = new SubtitleManager(getActivity(), R.id.leanback_subtitles);
@@ -563,6 +569,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
+    public boolean isEngineInitialized() {
+        return mPlayer != null;
+    }
+
+    @Override
     public void enablePIP(boolean enable) {
         mIsPIPEnabled = enable;
     }
@@ -582,6 +593,16 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         // Old api fix
         return playbackActivity.isInPIPMode();
+    }
+
+    @Override
+    public void enablePlayBehind(boolean enable) {
+        mIsPlayBehindEnabled = enable;
+    }
+
+    @Override
+    public boolean isPlayBehindEnabled() {
+        return mIsPlayBehindEnabled;
     }
 
     @Override
@@ -614,6 +635,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     @Override
     public void setEventListener(PlayerEventListener listener) {
         mEventListener = listener;
+        mExoPlayerController.setEventListener(listener);
     }
 
     @Override
@@ -668,6 +690,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         } else {
             hideControlsOverlay(mIsAnimationEnabled);
         }
+
+        mEventListener.onControlsShown(show);
     }
 
     @Override

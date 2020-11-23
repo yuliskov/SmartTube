@@ -4,11 +4,11 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:lb="http://schemas.android.com/apk/res-auto" >
 
-    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.textbadgecard.TextBadgeImageView
+    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview.ComplexImageView
         android:id="@+id/main_image_wrapper"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </com.liskovsoft.smartyoutubetv2.tv.ui.widgets.textbadgecard.TextBadgeImageView>
+    </com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview.ComplexImageView>
 
     <androidx.leanback.widget.NonOverlappingRelativeLayout
         android:id="@+id/info_field"

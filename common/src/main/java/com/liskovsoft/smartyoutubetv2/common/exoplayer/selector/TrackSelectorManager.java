@@ -29,73 +29,14 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     private static final TrackSelection.Factory RANDOM_FACTORY = new RandomTrackSelection.Factory();
     private static final String TAG = TrackSelectorManager.class.getSimpleName();
 
-    private final DefaultTrackSelector mSelector;
-    private final TrackSelection.Factory mTrackSelectionFactory;
+    private DefaultTrackSelector mTrackSelector;
+    private TrackSelection.Factory mTrackSelectionFactory;
 
     private final Renderer[] mRenderers = new Renderer[3];
     private final MediaTrack[] mSelectedTracks = new MediaTrack[3];
 
     public void invalidate() {
         Arrays.fill(mRenderers, null);
-    }
-
-    private static class Renderer {
-        public TrackGroupArray trackGroups;
-        public TreeSet<MediaTrack> sortedTracks;
-        public boolean[] trackGroupsAdaptive;
-        public boolean isDisabled;
-        public SelectionOverride override;
-        public MediaTrack[][] mediaTracks;
-        public MediaTrack selectedTrack;
-    }
-
-    private static class MediaTrackFormatComparator implements Comparator<MediaTrack> {
-        @Override
-        public int compare(MediaTrack mediaTrack1, MediaTrack mediaTrack2) {
-            Format format1 = mediaTrack1.format;
-            Format format2 = mediaTrack2.format;
-
-            if (format1 == null) { // assume it's auto option
-                return -1;
-            }
-
-            if (format2 == null) { // assume it's auto option
-                return 1;
-            }
-
-            // sort subtitles by language code
-            if (format1.language != null && format2.language != null) {
-                return format1.language.compareTo(format2.language);
-            }
-
-            int leftVal = format2.width + (int) format2.frameRate + (format2.codecs != null && format2.codecs.contains("avc") ? 31 : 0);
-            int rightVal = format1.width + (int) format1.frameRate + (format1.codecs != null && format1.codecs.contains("avc") ? 31 : 0);
-
-            int delta = leftVal - rightVal;
-            if (delta == 0) {
-                return format2.bitrate - format1.bitrate;
-            }
-
-            return leftVal - rightVal;
-        }
-    }
-
-    public TrackSelectorManager(DefaultTrackSelector selector) {
-        this(selector, null);
-    }
-
-    /**
-     * @param selector The track selector.
-     * @param trackSelectionFactory A factory for adaptive {@link TrackSelection}s, or null
-     *                              if the selection helper should not support adaptive tracks.
-     */
-    public TrackSelectorManager(DefaultTrackSelector selector, TrackSelection.Factory trackSelectionFactory) {
-        mSelector = selector;
-        mTrackSelectionFactory = trackSelectionFactory;
-
-        if (selector instanceof RestoreTrackSelector) {
-            ((RestoreTrackSelector) selector).setTrackSelectCallback(this);
-        }
     }
 
     /**
@@ -123,7 +64,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             return;
         }
 
-        initTrackGroups(rendererIndex, mSelector.getCurrentMappedTrackInfo(), mSelector.getParameters());
+        initTrackGroups(rendererIndex, mTrackSelector.getCurrentMappedTrackInfo(), mTrackSelector.getParameters());
         initMediaTracks(rendererIndex);
     }
 
@@ -297,6 +238,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 definitionPair = new Pair<>(definition, selectedTrack);
                 setOverride(matchedTrack.rendererIndex, matchedTrack.groupIndex, matchedTrack.trackIndex);
                 updateSelection(matchedTrack.rendererIndex);
+            } else {
+                Log.e(TAG, "Oops. Can't find match for track %s", selectedTrack);
             }
         }
         
@@ -392,6 +335,35 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         return renderer.selectedTrack;
     }
 
+    public boolean fixVideoTrackSelection() {
+        // track already properly selected
+        if (hasSelection(RENDERER_INDEX_VIDEO)) {
+            return false;
+        }
+
+        selectTrack(mSelectedTracks[RENDERER_INDEX_VIDEO]);
+        return true;
+    }
+
+    public void setTrackSelector(DefaultTrackSelector selector) {
+        mTrackSelector = selector;
+
+        if (selector instanceof RestoreTrackSelector) {
+            ((RestoreTrackSelector) selector).setOnTrackSelectCallback(this);
+        }
+    }
+
+    public void release() {
+        if (mTrackSelector != null) {
+            if (mTrackSelector instanceof RestoreTrackSelector) {
+                ((RestoreTrackSelector) mTrackSelector).setOnTrackSelectCallback(null);
+            }
+            mTrackSelector = null;
+        }
+
+        invalidate();
+    }
+
     private MediaTrack findBestMatch(MediaTrack track) {
         Log.d(TAG, "findBestMatch: Starting: " + track.format);
 
@@ -407,8 +379,9 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                     int compare = track.compare(mediaTrack);
 
                     if (compare == 0) {
-                        Log.d(TAG, "findBestMatch: Found exact match: " + mediaTrack.format);
-                        return mediaTrack;
+                        Log.d(TAG, "findBestMatch: Found exact match in this track list: " + mediaTrack.format);
+                        result = mediaTrack;
+                        break;
                     } else if (compare > 0 && mediaTrack.compare(result) > 0) { // select track with higher possible quality
                         result = mediaTrack;
                     }
@@ -427,12 +400,12 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
     private void applyOverride(int rendererIndex) {
         Renderer renderer = mRenderers[rendererIndex];
-        mSelector.setParameters(mSelector.buildUponParameters().setRendererDisabled(rendererIndex, renderer.isDisabled));
+        mTrackSelector.setParameters(mTrackSelector.buildUponParameters().setRendererDisabled(rendererIndex, renderer.isDisabled));
 
         if (renderer.override != null) {
-            mSelector.setParameters(mSelector.buildUponParameters().setSelectionOverride(rendererIndex, renderer.trackGroups, renderer.override));
+            mTrackSelector.setParameters(mTrackSelector.buildUponParameters().setSelectionOverride(rendererIndex, renderer.trackGroups, renderer.override));
         } else {
-            mSelector.setParameters(mSelector.buildUponParameters().clearSelectionOverrides(rendererIndex)); // Auto quality button selected
+            mTrackSelector.setParameters(mTrackSelector.buildUponParameters().clearSelectionOverrides(rendererIndex)); // Auto quality button selected
         }
     }
 
@@ -445,12 +418,20 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     }
 
     private void setOverride(int rendererIndex, int groupIndex, int... trackIndexes) {
-        if (groupIndex == -1) {
+        if (groupIndex == -1 || mRenderers[rendererIndex] == null) {
             mRenderers[rendererIndex].override = null; // auto option selected
             return;
         }
 
         mRenderers[rendererIndex].override = new SelectionOverride(groupIndex, trackIndexes);
+    }
+
+    private boolean hasSelection(int rendererIndex) {
+        if (mSelectedTracks[rendererIndex] == null) {
+            return true;
+        }
+
+        return mRenderers[rendererIndex] != null && mRenderers[rendererIndex].selectedTrack != null;
     }
 
     private void setOverride(int rendererIndex, int group, int[] tracks, boolean enableRandomAdaptation) {
@@ -500,5 +481,46 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             }
         }
         return offset;
+    }
+
+    private static class Renderer {
+        public TrackGroupArray trackGroups;
+        public TreeSet<MediaTrack> sortedTracks;
+        public boolean[] trackGroupsAdaptive;
+        public boolean isDisabled;
+        public SelectionOverride override;
+        public MediaTrack[][] mediaTracks;
+        public MediaTrack selectedTrack;
+    }
+
+    private static class MediaTrackFormatComparator implements Comparator<MediaTrack> {
+        @Override
+        public int compare(MediaTrack mediaTrack1, MediaTrack mediaTrack2) {
+            Format format1 = mediaTrack1.format;
+            Format format2 = mediaTrack2.format;
+
+            if (format1 == null) { // assume it's auto option
+                return -1;
+            }
+
+            if (format2 == null) { // assume it's auto option
+                return 1;
+            }
+
+            // sort subtitles by language code
+            if (format1.language != null && format2.language != null) {
+                return format1.language.compareTo(format2.language);
+            }
+
+            int leftVal = format2.width + (int) format2.frameRate + (format2.codecs != null && format2.codecs.contains("avc") ? 31 : 0);
+            int rightVal = format1.width + (int) format1.frameRate + (format1.codecs != null && format1.codecs.contains("avc") ? 31 : 0);
+
+            int delta = leftVal - rightVal;
+            if (delta == 0) {
+                return format2.bitrate - format1.bitrate;
+            }
+
+            return leftVal - rightVal;
+        }
     }
 }

@@ -68,9 +68,13 @@ public class ViewManager {
     }
     
     public void startView(Class<?> viewClass) {
+        startView(viewClass, false);
+    }
+
+    public void startView(Class<?> viewClass, boolean forceStart) {
         mMoveViewsToBack = false; // Essential part or new view will be pause immediately
 
-        if (doThrottle()) {
+        if (!forceStart && doThrottle()) {
             return;
         }
 

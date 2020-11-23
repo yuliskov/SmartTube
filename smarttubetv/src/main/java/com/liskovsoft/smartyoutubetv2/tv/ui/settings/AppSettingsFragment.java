@@ -32,6 +32,7 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
     private static final String TAG = AppSettingsFragment.class.getSimpleName();
     private AppPreferenceFragment mPreferenceFragment;
     private AppSettingsPresenter mSettingsPresenter;
+    private boolean mIsStateSaved;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,7 +50,18 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mIsStateSaved = true;
+    }
+
+    @Override
     public void onPreferenceStartInitialScreen() {
+        // FIX: Can not perform this action after onSaveInstanceState
+        if (mIsStateSaved) {
+            return;
+        }
+
         mPreferenceFragment = buildPreferenceFragment();
         startPreferenceFragment(mPreferenceFragment);
 

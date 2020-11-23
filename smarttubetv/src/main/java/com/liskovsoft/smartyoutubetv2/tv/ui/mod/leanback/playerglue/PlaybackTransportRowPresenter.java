@@ -329,7 +329,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             mQualityInfo = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.quality_info);
             mCurrentDate = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.current_date);
             mEndingTime = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.ending_time);
-            mEndingTimeFormat = rootView.getContext().getString(com.liskovsoft.smartyoutubetv2.tv.R.string.view_einding_time);
+            mEndingTimeFormat = rootView.getContext().getString(com.liskovsoft.smartyoutubetv2.tv.R.string.player_remaining_time);
             mAdditionalInfo = (ViewGroup) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.additional_info);
             mTopEdge = (ViewGroup) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.top_edge);
             mTopEdge.setOnFocusChangeListener((v, hasFocus) -> {
