@@ -85,7 +85,7 @@
     <string name="large_ui">Grande interface utilisateur</string>
     <string name="video_grid_scale">Échelle de grille vidéo</string>
     <string name="scale_ui">Échelle d’interface utilisateur</string>
-    <string name="color_scheme">Couleur schéma</string>
+    <string name="color_scheme">Couleur du thème</string>
     <string name="color_scheme_default">Défaut</string>
     <string name="color_scheme_red_grey">Rouge-gris</string>
     <string name="color_scheme_red">Rouge</string>
@@ -93,7 +93,7 @@
     <string name="disable_update_check">Désactiver la vérification des mises à jour</string>
     <string name="show_again">Afficher à nouveau</string>
     <string name="check_updates_auto">Mise à jour automatique</string>
-    <string name="select_account_on_boot">Sélection au émarrage</string>
+    <string name="select_account_on_boot">Sélection au démarrage</string>
     <string name="player_other">Divers</string>
     <string name="player_full_date">Date précise dans la description</string>
     <string name="open_channel">Ouvrir chaine</string>
