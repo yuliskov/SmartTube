@@ -98,7 +98,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
         RxUtils.disposeActions(mMetadataAction, mScrollAction);
 
-        MediaService service = YouTubeMediaService.instance();
+        MediaService service = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(mContext));
         MediaItemManager mediaItemManager = service.getMediaItemManager();
 
         Observable<MediaItemMetadata> observable;
