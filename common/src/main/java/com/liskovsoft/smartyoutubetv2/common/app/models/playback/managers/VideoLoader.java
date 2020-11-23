@@ -7,7 +7,9 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
@@ -177,11 +179,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
         loadVideo(item);
     }
 
-    private void loadVideoFromMetadata(MediaItemMetadata metadata) {
-        MediaItem nextVideo = metadata.getNextVideo();
-        loadVideoFromNext(nextVideo);
-    }
-
     private void loadVideoFromMetadata(Video current) {
         if (current == null) {
             return;
@@ -190,15 +187,9 @@ public class VideoLoader extends PlayerEventListenerHelper {
         // Significantly improves next video loading time!
         if (current.nextMediaItem != null) {
             loadVideoFromNext(current.nextMediaItem);
-            return;
+        } else {
+            MessageHelpers.showMessage(mActivity, R.string.next_video_info_is_not_loaded_yet);
         }
-
-        MediaService service = YouTubeMediaService.instance();
-        MediaItemManager mediaItemManager = service.getMediaItemManager();
-        mMetadataAction = mediaItemManager.getMetadataObserve(current.mediaItem)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::loadVideoFromMetadata, error -> Log.e(TAG, "loadNextVideo error: " + error));
     }
 
     private void loadFormatInfo(Video video) {

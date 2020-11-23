@@ -40,12 +40,6 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
     }
 
     @Override
-    public boolean onNextClicked() {
-        RxUtils.disposeActions(mMetadataAction, mScrollAction);
-        return false;
-    }
-
-    @Override
     public boolean onPreviousClicked() {
         RxUtils.disposeActions(mMetadataAction, mScrollAction);
         return false;

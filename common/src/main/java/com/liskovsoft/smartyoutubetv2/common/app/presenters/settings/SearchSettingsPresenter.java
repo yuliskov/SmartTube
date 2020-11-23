@@ -39,6 +39,6 @@ public class SearchSettingsPresenter {
                 option -> mSearchData.setInstantVoiceSearchEnabled(option.isSelected()),
                 mSearchData.isInstantVoiceSearchEnabled()));
 
-        settingsPresenter.appendCheckedCategory(mContext.getString(R.string.player_other), options);
+        settingsPresenter.appendCheckedCategory(mContext.getString(R.string.dialog_search), options);
     }
 }
