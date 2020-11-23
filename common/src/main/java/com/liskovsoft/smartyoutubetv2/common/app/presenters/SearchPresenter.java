@@ -5,6 +5,7 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
@@ -35,7 +36,7 @@ public class SearchPresenter implements VideoGroupPresenter, Presenter<SearchVie
 
     private SearchPresenter(Context context) {
         mContext = context;
-        mMediaService = YouTubeMediaService.instance();
+        mMediaService = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
         mPlaybackPresenter = PlaybackPresenter.instance(context);
         mDetailsPresenter = DetailsPresenter.instance(context);
         mViewManager = ViewManager.instance(context);

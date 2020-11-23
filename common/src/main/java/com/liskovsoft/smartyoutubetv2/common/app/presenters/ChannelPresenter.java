@@ -5,6 +5,7 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -34,7 +35,7 @@ public class ChannelPresenter implements VideoGroupPresenter, Presenter<ChannelV
 
     public ChannelPresenter(Context context) {
         mContext = context;
-        mMediaService = YouTubeMediaService.instance();
+        mMediaService = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
         mPlaybackPresenter = PlaybackPresenter.instance(context);
     }
 

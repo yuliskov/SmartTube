@@ -20,7 +20,7 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
     private PlaybackPresenter(Context context) {
         mContext = context;
         mViewManager = ViewManager.instance(context);
-        mMainPlayerEventBridge = MainPlayerEventBridge.instance();
+        mMainPlayerEventBridge = MainPlayerEventBridge.instance(context);
     }
 
     public static PlaybackPresenter instance(Context context) {

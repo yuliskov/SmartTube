@@ -5,11 +5,11 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Looper;
+
 import androidx.annotation.NonNull;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -236,7 +236,7 @@ public class ViewManager {
     }
 
     public void clearCaches() {
-        YouTubeMediaService.instance().invalidateCache();
+        YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(mContext)).invalidateCache();
         FileHelpers.deleteCache(mContext);
     }
 

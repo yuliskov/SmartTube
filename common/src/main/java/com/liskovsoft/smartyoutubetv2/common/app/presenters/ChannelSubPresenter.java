@@ -6,6 +6,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
+import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -33,7 +34,7 @@ public class ChannelSubPresenter implements VideoGroupPresenter, Presenter<Chann
 
     public ChannelSubPresenter(Context context) {
         mContext = context;
-        MediaService mediaService = YouTubeMediaService.instance();
+        MediaService mediaService = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
         mGroupManager = mediaService.getMediaGroupManager();
         mPlaybackPresenter = PlaybackPresenter.instance(context);
     }

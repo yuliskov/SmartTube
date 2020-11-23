@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
@@ -7,6 +8,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
+import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -49,10 +51,10 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         }
     };
 
-    public PlayerUiManager() {
+    public PlayerUiManager(Context context) {
         mHandler = new Handler(Looper.getMainLooper());
 
-        MediaService service = YouTubeMediaService.instance();
+        MediaService service = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
         mMediaItemManager = service.getMediaItemManager();
     }
 
