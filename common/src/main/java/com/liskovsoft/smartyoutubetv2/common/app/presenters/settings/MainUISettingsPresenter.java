@@ -34,7 +34,7 @@ public class MainUISettingsPresenter {
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
         settingsPresenter.clear();
 
-        appendAnimatedPreviews(settingsPresenter);
+        appendCardsStyle(settingsPresenter);
         appendColorScheme(settingsPresenter);
         appendVideoGridScale(settingsPresenter);
         appendScaleUI(settingsPresenter);
@@ -49,11 +49,19 @@ public class MainUISettingsPresenter {
         });
     }
 
-    private void appendAnimatedPreviews(AppSettingsPresenter settingsPresenter) {
+    private void appendCardsStyle(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
         OptionItem animatedPreviewsOption = UiOptionItem.from(mContext.getString(R.string.animated_previews),
                 option -> mMainUIData.enableAnimatedPreviews(option.isSelected()), mMainUIData.isAnimatedPreviewsEnabled());
 
-        settingsPresenter.appendSingleSwitch(animatedPreviewsOption);
+        OptionItem dontCutTextOnCards = UiOptionItem.from(mContext.getString(R.string.multiline_tiles),
+                option -> mMainUIData.enableMultilineTitles(option.isSelected()), mMainUIData.isMultilineTitlesEnabled());
+
+        options.add(animatedPreviewsOption);
+        options.add(dontCutTextOnCards);
+
+        settingsPresenter.appendCheckedCategory(mContext.getString(R.string.cards_style), options);
     }
 
     private void appendVideoGridScale(AppSettingsPresenter settingsPresenter) {

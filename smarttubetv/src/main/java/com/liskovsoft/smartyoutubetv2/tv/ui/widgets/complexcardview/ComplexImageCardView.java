@@ -8,12 +8,14 @@ import android.util.AttributeSet;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import androidx.leanback.widget.ImageCardView;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class ComplexImageCardView extends ImageCardView {
     private ComplexImageView mComplexImageView;
     private Handler mHandler;
     private Runnable mEnableMarquee;
+    private boolean mIsMultilineTitlesEnabled;
 
     public ComplexImageCardView(Context context) {
         super(context);
@@ -104,7 +106,9 @@ public class ComplexImageCardView extends ImageCardView {
     public void setSelected(boolean selected) {
         super.setSelected(selected);
 
-        enableTextAnimation(selected);
+        if (!mIsMultilineTitlesEnabled) {
+            enableTextAnimation(selected);
+        }
         enableVideoPreview(selected);
     }
 
@@ -118,6 +122,19 @@ public class ComplexImageCardView extends ImageCardView {
 
     public void setPreviewUrl(String previewUrl) {
         mComplexImageView.setPreviewUrl(previewUrl);
+    }
+
+    public void enableMultilineTitles(boolean enable) {
+        TextView titleView = (TextView) Helpers.getField(this, "mTitleView");
+
+        if (titleView == null) {
+            return;
+        }
+
+        mIsMultilineTitlesEnabled = enable;
+
+        titleView.setMaxLines(enable ? 2 : 1);
+        titleView.setLines(enable ? 2 : 1);
     }
 
     /**

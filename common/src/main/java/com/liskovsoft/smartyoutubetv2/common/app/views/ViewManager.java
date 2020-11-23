@@ -241,10 +241,6 @@ public class ViewManager {
     }
 
     public void restartApp() {
-        new Handler(Looper.getMainLooper()).postDelayed(this::restartAppInt, 1_000);
-    }
-
-    private void restartAppInt() {
         startView(SplashView.class);
 
         mMoveViewsToBack = true;
