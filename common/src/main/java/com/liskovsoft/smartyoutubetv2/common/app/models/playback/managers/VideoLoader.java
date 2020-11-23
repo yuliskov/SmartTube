@@ -29,7 +29,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private final Handler mHandler;
     private Video mLastVideo;
     private Video mErrorVideo;
-    private Disposable mMetadataAction;
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
     private int mRepeatMode = PlaybackUiController.REPEAT_ALL;
@@ -92,8 +91,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public boolean onPreviousClicked() {
-        disposeActions();
-
         loadVideo(mPlaylist.previous());
 
         return true;
@@ -101,8 +98,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public boolean onNextClicked() {
-        disposeActions();
-
         Video next = mPlaylist.next();
 
         if (next == null) {
@@ -161,7 +156,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     private void disposeActions() {
-        RxUtils.disposeActions(mMetadataAction, mFormatInfoAction, mMpdStreamAction);
+        RxUtils.disposeActions(mFormatInfoAction, mMpdStreamAction);
         mHandler.removeCallbacks(mReloadVideoHandler);
     }
 
