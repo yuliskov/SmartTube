@@ -188,7 +188,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         if (current.nextMediaItem != null) {
             loadVideoFromNext(current.nextMediaItem);
         } else {
-            MessageHelpers.showMessage(mActivity, R.string.next_video_info_is_not_loaded_yet);
+            MessageHelpers.showMessageThrottled(mActivity, R.string.next_video_info_is_not_loaded_yet);
         }
     }
 

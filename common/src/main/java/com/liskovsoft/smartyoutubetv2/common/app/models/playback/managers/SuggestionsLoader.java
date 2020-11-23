@@ -31,18 +31,13 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onSourceChanged(Video item) {
+        RxUtils.disposeActions(mMetadataAction, mScrollAction);
         loadSuggestions(item);
     }
 
     @Override
     public void onEngineReleased() {
         RxUtils.disposeActions(mMetadataAction, mScrollAction);
-    }
-
-    @Override
-    public boolean onPreviousClicked() {
-        RxUtils.disposeActions(mMetadataAction, mScrollAction);
-        return false;
     }
 
     @Override
