@@ -280,9 +280,9 @@ public class SearchSupportFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if (mAutoStartRecognition) {
-            mAutoStartRecognition = savedInstanceState == null;
-        }
+//        if (mAutoStartRecognition) {
+//            mAutoStartRecognition = savedInstanceState == null;
+//        }
         super.onCreate(savedInstanceState);
     }
 
@@ -352,7 +352,9 @@ public class SearchSupportFragment extends Fragment {
         //});
 
         mSpeechOrbView = mSearchBar.findViewById(R.id.lb_search_bar_speech_orb);
-
+        if (mSpeechOrbView != null) {
+            mSpeechOrbView.setVisibility(View.GONE);
+        }
         // End MOD
 
         readArguments(getArguments());
@@ -488,7 +490,7 @@ public class SearchSupportFragment extends Fragment {
      */
     public void startRecognition() {
         if (mIsPaused) {
-            mPendingStartRecognitionWhenPaused = true;
+            mPendingStartRecognitionWhenPaused = false;
         } else {
             mSearchBar.startRecognition();
         }
