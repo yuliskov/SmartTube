@@ -40,7 +40,6 @@ import androidx.leanback.widget.PlaybackSeekUi;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.SeekBar;
-import androidx.leanback.widget.ThumbsBar;
 import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.ControlBarPresenter.OnControlClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.ControlBarPresenter.OnControlSelectedListener;
@@ -75,7 +74,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         private static final long SPEED_INCREASE_PERIOD_MS = 1000;
         private static final double SPEED_INCREASE_FACTOR = 1.5;
         private static final long START_SEEK_INCREMENT_MS = 10_000;
-        private static final long MIN_INTERVAL_CLIENT_SEEK_TO_POSITION_MS = 500;
+        private static final long MIN_INTERVAL_CLIENT_SEEK_TO_POSITION_MS = 100;
         final Presenter.ViewHolder mDescriptionViewHolder;
         final ImageView mImageView;
         final ViewGroup mDescriptionDock;
@@ -112,6 +111,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         long mSeekIncrementMs = -1;
         long mSeekStartTimeMs;
         long mLastTimeSeekPosition = 0;
+        long mSkippedNewSeekToPos = 0;
 
         // MOD: update quality info
         final QualityInfoListener mQualityListener = this::setQualityInfo;
@@ -198,9 +198,12 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             double ratio = (double) newPos / mTotalTimeInMs;     // Range: [0, 1]
             mProgressBar.setProgress((int) (ratio * Integer.MAX_VALUE)); // Could safely cast to int
 
+            mSkippedNewSeekToPos = -1;
             if ((System.currentTimeMillis() - mLastTimeSeekPosition) > MIN_INTERVAL_CLIENT_SEEK_TO_POSITION_MS) {
                 mSeekClient.onSeekPositionChanged(newPos);
                 mLastTimeSeekPosition = System.currentTimeMillis();
+            } else {
+                mSkippedNewSeekToPos = newPos;
             }
         }
 
@@ -483,12 +486,16 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                 return;
             }
             mInSeek = false;
+            if (mSkippedNewSeekToPos > 0) {
+                mSeekClient.onSeekPositionChanged(mSkippedNewSeekToPos);
+            }
             mSeekClient.onSeekFinished(cancelled);
             if (mSeekDataProvider != null) {
                 mSeekDataProvider.reset();
             }
             mThumbHeroIndex = -1;
-            mThumbsBar.clearThumbBitmaps();
+            // MOD: always show storyboard
+            //mThumbsBar.clearThumbBitmaps();
             mSeekDataProvider = null;
             mPositions = null;
             mPositionsLength = 0;
@@ -499,9 +506,10 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         void enableCompactMode(boolean enable) {
             if (enable) {
                 mControlsVh.view.setVisibility(View.GONE);
-                mSecondaryControlsVh.view.setVisibility(View.INVISIBLE);
-                mDescriptionViewHolder.view.setVisibility(View.INVISIBLE);
-                mAdditionalInfo.setVisibility(View.INVISIBLE);
+                // MOD: use GONE to move previews closer to seek bar
+                mSecondaryControlsVh.view.setVisibility(View.GONE);
+                mDescriptionViewHolder.view.setVisibility(View.GONE);
+                mAdditionalInfo.setVisibility(View.GONE);
                 mThumbsBar.setVisibility(View.VISIBLE);
             } else {
                 mControlsVh.view.setVisibility(View.VISIBLE);

@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import android.os.Build;
+
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -134,8 +136,8 @@ public class HqDialogManager extends PlayerEventListenerHelper {
                     mEnablePlayBehind = false;
                     updateBackgroundPlayback();
                 }, !mEnableBackgroundAudio && !mEnablePIP && !mEnablePlayBehind));
-        if (Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 26) { // useful only for pre-Oreo UI
-            options.add(UiOptionItem.from(mActivity.getString(R.string.option_background_playback_behind) + " (Android 5,6,7)",
+        if (Helpers.isAndroidTV(mActivity) && Build.VERSION.SDK_INT < 26) { // useful only for pre-Oreo UI
+            options.add(UiOptionItem.from(mActivity.getString(R.string.option_background_playback_behind) + " (Android TV 5,6,7)",
                     optionItem -> {
                         mEnableBackgroundAudio = false;
                         mEnablePIP = false;

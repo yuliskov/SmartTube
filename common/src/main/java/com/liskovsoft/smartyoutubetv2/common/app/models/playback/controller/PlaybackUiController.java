@@ -27,4 +27,5 @@ public interface PlaybackUiController {
     List<SubtitleStyle> getSubtitleStyles();
     void setSubtitleStyle(SubtitleStyle subtitleStyle);
     SubtitleStyle getSubtitleStyle();
+    void loadStoryboard();
 }

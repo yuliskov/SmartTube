@@ -106,4 +106,10 @@
     <string name="next_video_info_is_not_loaded_yet">Інформація про наступне відео ще не завантажена</string>
     <string name="multiline_titles">Декілька рядків у заголовках</string>
     <string name="cards_style">Стиль карток</string>
+    <string name="repeat_mode_all">Грати усі відео один за одним</string>
+    <string name="repeat_mode_one">Повторювати поточне відео</string>
+    <string name="repeat_mode_pause">Ставити відтворення на паузу після кожного відео</string>
+    <string name="repeat_mode_none">Завершувати відтворення після одного відео</string>
+    <string name="subscribed_to_channel">Підписка на канал оформлена</string>
+    <string name="unsubscribed_to_channel">Підписка на канал скасована</string>
 </resources>
