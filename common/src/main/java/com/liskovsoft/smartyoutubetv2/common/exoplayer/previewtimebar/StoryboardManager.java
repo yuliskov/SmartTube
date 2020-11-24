@@ -13,6 +13,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.liskovsoft.appupdatechecker2.other.SettingsManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemStoryboard;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemStoryboard.Size;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
@@ -20,6 +21,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -31,6 +33,7 @@ public class StoryboardManager {
     private final MediaItemManager mMediaItemManager;
     private final Context mContext;
     private Video mVideo;
+    private long mLengthMs;
     private MediaItemStoryboard mStoryboard;
     private Disposable mFormatAction;
     private long[] mSeekPositions;
@@ -51,8 +54,9 @@ public class StoryboardManager {
         mMediaItemManager = mediaService.getMediaItemManager();
     }
 
-    public void setVideo(Video video) {
+    public void setVideo(Video video, long lengthMs) {
         mVideo = video;
+        mLengthMs = lengthMs;
         mSeekPositions = null;
         mCachedImageNums = new ArraySet<>();
 
@@ -62,7 +66,15 @@ public class StoryboardManager {
             return;
         }
 
-        mFormatAction = mMediaItemManager.getFormatInfoObserve(video.mediaItem)
+        Observable<MediaItemFormatInfo> infoObserve;
+
+        if (video.mediaItem != null) {
+            infoObserve = mMediaItemManager.getFormatInfoObserve(video.mediaItem);
+        } else {
+            infoObserve = mMediaItemManager.getFormatInfoObserve(video.videoId);
+        }
+
+        mFormatAction = infoObserve
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(formatInfo -> {
@@ -72,19 +84,18 @@ public class StoryboardManager {
     }
 
     private void initSeekPositions() {
-        if (mStoryboard == null || mVideo == null) {
+        if (mStoryboard == null || mLengthMs == 0) {
             return;
         }
-
-        long durationMs = mVideo.mediaItem.getDurationMs();
+        
         int groupDurationMS = mStoryboard.getGroupDurationMS();
         Size groupSize = mStoryboard.getGroupSize();
         int frameDurationMS = groupDurationMS / (groupSize.getRowCount() * groupSize.getColCount());
 
-        int size = (int) (durationMs / frameDurationMS) + 1;
+        int size = (int) (mLengthMs / frameDurationMS) + 1;
         mSeekPositions = new long[size];
         for (int i = 0; i < mSeekPositions.length; i++) {
-            mSeekPositions[i] = i * durationMs / mSeekPositions.length;
+            mSeekPositions[i] = i * mLengthMs / mSeekPositions.length;
         }
     }
 
