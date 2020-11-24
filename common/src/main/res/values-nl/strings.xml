@@ -83,7 +83,7 @@
     <string name="side_panel_sections">Rubrieken</string>
     <string name="boot_to_section">Opstarten met rubriek</string>
     <string name="large_ui">Grote weergave</string>
-    <string name="video_grid_scale">Videokaarten formaat</string>
+    <string name="video_grid_scale">Videokaart formaat</string>
     <string name="scale_ui">Display formaat</string>
     <string name="color_scheme">Thema</string>
     <string name="color_scheme_default">Standaard</string>
@@ -105,10 +105,10 @@
     <string name="option_background_playback_behind">Hierna afspelen</string>
     <string name="next_video_info_is_not_loaded_yet">Info volgende video nog niet geladen</string>
     <string name="multiline_titles">Meerregelige titels</string>
-    <string name="cards_style">Videokaarten stijl</string>
+    <string name="cards_style">Videokaart stijl</string>
     <string name="repeat_mode_all">Alles afspelen</string>
     <string name="repeat_mode_one">Deze video herhalen</string>
-    <string name="repeat_mode_pause">Pauzeren na iedere video</string>
+    <string name="repeat_mode_pause">Pauzeren na deze video</string>
     <string name="repeat_mode_none">Stoppen na deze video</string>
     <string name="subscribed_to_channel">Abonnement aan</string>
     <string name="unsubscribed_to_channel">Abonnement uit</string>
