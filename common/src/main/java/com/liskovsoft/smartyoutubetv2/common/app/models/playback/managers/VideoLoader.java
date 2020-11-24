@@ -153,6 +153,24 @@ public class VideoLoader extends PlayerEventListenerHelper {
     public void onRepeatModeClicked(int modeIndex) {
         mRepeatMode = modeIndex;
         AppPrefs.instance(mActivity).setVideoLoaderData(mRepeatMode);
+        showBriefInfo(modeIndex);
+    }
+
+    private void showBriefInfo(int modeIndex) {
+        switch (modeIndex) {
+            case PlaybackUiController.REPEAT_ALL:
+                MessageHelpers.showMessageThrottled(mActivity, R.string.repeat_mode_all);
+                break;
+            case PlaybackUiController.REPEAT_ONE:
+                MessageHelpers.showMessageThrottled(mActivity, R.string.repeat_mode_one);
+                break;
+            case PlaybackUiController.REPEAT_PAUSE:
+                MessageHelpers.showMessageThrottled(mActivity, R.string.repeat_mode_pause);
+                break;
+            case PlaybackUiController.REPEAT_NONE:
+                MessageHelpers.showMessageThrottled(mActivity, R.string.repeat_mode_none);
+                break;
+        }
     }
 
     private void disposeActions() {
