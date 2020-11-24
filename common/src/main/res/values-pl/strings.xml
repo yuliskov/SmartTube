@@ -105,4 +105,10 @@
     <string name="next_video_info_is_not_loaded_yet">Informacje o następnym wideo nie zostały jeszcze załadowane</string>
     <string name="multiline_titles">Wielowierszowe tytuły</string>
     <string name="cards_style">Styl kart</string>
+    <string name="repeat_mode_all">Odtwarzaj wszystkie filmy po kolei</string>
+    <string name="repeat_mode_one">Odtwarzaj ten film w pętli</string>
+    <string name="repeat_mode_pause">Pauzuj odtwarzanie po każdym filmie</string>
+    <string name="repeat_mode_none">Zakończ odtwarzanie po obejrzeniu</string>
+    <string name="subscribed_to_channel">Zasubksyrbowano kanał</string>
+    <string name="unsubscribed_to_channel">Odsubskrybowano kanał</string>
 </resources>
