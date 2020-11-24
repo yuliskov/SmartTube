@@ -87,7 +87,8 @@ android {
         }
         stredboxtv {
             // matchingFallbacks = ['lite']
-            applicationIdSuffix ".redboxtv"
+            //applicationIdSuffix ".redboxtv"
+            applicationId "com.redboxtv.smartyoutubetv"
         }
     }
 
