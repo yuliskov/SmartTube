@@ -208,9 +208,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     private void showBriefInfo(boolean subscribed) {
         if (subscribed) {
-            MessageHelpers.showMessageThrottled(mActivity, R.string.subscribed_to_channel);
+            MessageHelpers.showMessage(mActivity, R.string.subscribed_to_channel);
         } else {
-            MessageHelpers.showMessageThrottled(mActivity, R.string.unsubscribed_to_channel);
+            MessageHelpers.showMessage(mActivity, R.string.unsubscribed_to_channel);
         }
     }
 
