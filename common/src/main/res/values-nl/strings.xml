@@ -112,4 +112,6 @@
     <string name="repeat_mode_none">Stoppen na deze video</string>
     <string name="subscribed_to_channel">Abonnement aan</string>
     <string name="unsubscribed_to_channel">Abonnement uit</string>
+    <string name="subtitle_yellow">Geel</string>
+    <string name="subtitle_black_bg">Zwarte achtergrond</string>
 </resources>
