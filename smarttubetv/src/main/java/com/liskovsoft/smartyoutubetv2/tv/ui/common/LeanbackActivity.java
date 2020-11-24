@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
 import com.liskovsoft.smartyoutubetv2.common.language.LangUpdater;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.DoubleBackManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.LongClickManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.SearchTagsActivity;
 
 /**
  * This parent class contains common methods that run in every activity such as search.
@@ -41,7 +42,10 @@ public abstract class LeanbackActivity extends MotherActivity {
 
     @Override
     public boolean onSearchRequested() {
-        SearchPresenter.instance(this).startSearch(null);
+        // prevent start SearchTagsActivity from SearchTagsActivity
+        if (!(this instanceof SearchTagsActivity)) {
+            SearchPresenter.instance(this).startSearch(null);
+        }
         return true;
     }
     

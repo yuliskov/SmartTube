@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
+
 import androidx.fragment.app.Fragment;
 import androidx.leanback.R;
 import androidx.leanback.app.BrowseSupportFragment;
@@ -280,9 +281,9 @@ public class SearchSupportFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-//        if (mAutoStartRecognition) {
-//            mAutoStartRecognition = savedInstanceState == null;
-//        }
+        if (mAutoStartRecognition) {
+            mAutoStartRecognition = savedInstanceState == null;
+        }
         super.onCreate(savedInstanceState);
     }
 
@@ -352,9 +353,17 @@ public class SearchSupportFragment extends Fragment {
         //});
 
         mSpeechOrbView = mSearchBar.findViewById(R.id.lb_search_bar_speech_orb);
-        if (mSpeechOrbView != null) {
-            mSpeechOrbView.setVisibility(View.GONE);
-        }
+        mSpeechOrbView.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                mSpeechOrbView.showListening();
+                mSpeechOrbView.callOnClick();
+            } else {
+                mSpeechOrbView.showNotListening();
+                if (mSpeechRecognizer != null) {
+                    mSpeechRecognizer.stopListening();
+                }
+            }
+        });
         // End MOD
 
         readArguments(getArguments());
@@ -804,6 +813,13 @@ public class SearchSupportFragment extends Fragment {
 
     private void setSearchQuery(String query) {
         mSearchBar.setSearchQuery(query);
+    }
+
+    public void pressKeySearch() {
+        if (mSearchBar.hasFocus() && !mSearchBar.isRecognizing()) {
+            mSpeechOrbView.showListening();
+            mSpeechOrbView.callOnClick();
+        }
     }
 
     static class ExternalQuery {
