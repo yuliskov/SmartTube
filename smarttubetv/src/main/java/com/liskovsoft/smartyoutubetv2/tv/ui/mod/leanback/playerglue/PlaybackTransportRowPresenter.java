@@ -504,7 +504,6 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                 mDescriptionViewHolder.view.setVisibility(View.VISIBLE);
                 mAdditionalInfo.setVisibility(View.VISIBLE);
                 mThumbsBar.setVisibility(View.INVISIBLE);
-                mThumbsBar.clearThumbBitmaps(); // MOD: always show storyboard
             }
         }
 
