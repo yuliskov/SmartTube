@@ -40,7 +40,6 @@ import androidx.leanback.widget.PlaybackSeekUi;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.SeekBar;
-import androidx.leanback.widget.ThumbsBar;
 import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.ControlBarPresenter.OnControlClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.ControlBarPresenter.OnControlSelectedListener;
@@ -500,9 +499,10 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         void enableCompactMode(boolean enable) {
             if (enable) {
                 mControlsVh.view.setVisibility(View.GONE);
-                mSecondaryControlsVh.view.setVisibility(View.INVISIBLE);
-                mDescriptionViewHolder.view.setVisibility(View.INVISIBLE);
-                mAdditionalInfo.setVisibility(View.INVISIBLE);
+                // MOD: use GONE to move previews closer to seek bar
+                mSecondaryControlsVh.view.setVisibility(View.GONE);
+                mDescriptionViewHolder.view.setVisibility(View.GONE);
+                mAdditionalInfo.setVisibility(View.GONE);
                 mThumbsBar.setVisibility(View.VISIBLE);
             } else {
                 mControlsVh.view.setVisibility(View.VISIBLE);
@@ -510,7 +510,6 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                 mDescriptionViewHolder.view.setVisibility(View.VISIBLE);
                 mAdditionalInfo.setVisibility(View.VISIBLE);
                 mThumbsBar.setVisibility(View.INVISIBLE);
-                mThumbsBar.clearThumbBitmaps(); // MOD: always show storyboard
             }
         }
 
