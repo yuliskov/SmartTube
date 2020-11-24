@@ -83,11 +83,6 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
             return;
         }
 
-        if (video.mediaItem == null || video.videoId == null) {
-            Log.e(TAG, "loadSuggestions: next video id is null");
-            return;
-        }
-
         RxUtils.disposeActions(mMetadataAction, mScrollAction);
 
         MediaService service = YouTubeMediaService.instance();
