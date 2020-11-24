@@ -168,6 +168,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         // Next lines on engine initialized stage cause other listeners to disappear.
         mController.showDebugView(mDebugViewEnabled);
         mController.setDebugButtonState(mDebugViewEnabled);
+        mController.loadStoryboard();
     }
 
     @Override

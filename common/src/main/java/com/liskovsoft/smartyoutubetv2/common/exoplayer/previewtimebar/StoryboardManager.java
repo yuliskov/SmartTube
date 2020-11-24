@@ -30,6 +30,7 @@ public class StoryboardManager {
     private final MediaItemManager mMediaItemManager;
     private final Context mContext;
     private Video mVideo;
+    private long mLengthMs;
     private MediaItemStoryboard mStoryboard;
     private Disposable mFormatAction;
     private long[] mSeekPositions;
@@ -50,8 +51,9 @@ public class StoryboardManager {
         mMediaItemManager = mediaService.getMediaItemManager();
     }
 
-    public void setVideo(Video video) {
+    public void setVideo(Video video, long lengthMs) {
         mVideo = video;
+        mLengthMs = lengthMs;
         mSeekPositions = null;
         mCachedImageNums = new ArraySet<>();
 
@@ -71,19 +73,18 @@ public class StoryboardManager {
     }
 
     private void initSeekPositions() {
-        if (mStoryboard == null || mVideo == null) {
+        if (mStoryboard == null || mLengthMs == 0) {
             return;
         }
-
-        long durationMs = mVideo.mediaItem.getDurationMs();
+        
         int groupDurationMS = mStoryboard.getGroupDurationMS();
         Size groupSize = mStoryboard.getGroupSize();
         int frameDurationMS = groupDurationMS / (groupSize.getRowCount() * groupSize.getColCount());
 
-        int size = (int) (durationMs / frameDurationMS) + 1;
+        int size = (int) (mLengthMs / frameDurationMS) + 1;
         mSeekPositions = new long[size];
         for (int i = 0; i < mSeekPositions.length; i++) {
-            mSeekPositions[i] = i * durationMs / mSeekPositions.length;
+            mSeekPositions[i] = i * mLengthMs / mSeekPositions.length;
         }
     }
 

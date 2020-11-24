@@ -492,38 +492,30 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mPlayerGlue.setSubtitle(video.description);
     }
 
-    // End Ui events
-
-    private void loadStoryboard() {
+    @Override
+    public void loadStoryboard() {
         if (mPlayerGlue.getSeekProvider() instanceof StoryboardSeekDataProvider) {
-            ((StoryboardSeekDataProvider) mPlayerGlue.getSeekProvider()).setVideo(getVideo());
+            ((StoryboardSeekDataProvider) mPlayerGlue.getSeekProvider()).setVideo(getVideo(), mExoPlayerController.getLengthMs());
         }
     }
+
+    // End Ui events
 
     // Begin Engine Events
 
     @Override
     public void openDash(InputStream dashManifest) {
         mExoPlayerController.openDash(dashManifest);
-
-        // At this stage video info is cached
-        loadStoryboard();
     }
 
     @Override
     public void openHls(String hlsPlaylistUrl) {
         mExoPlayerController.openHls(hlsPlaylistUrl);
-
-        // At this stage video info is cached
-        loadStoryboard();
     }
 
     @Override
     public void openUrlList(List<String> urlList) {
         mExoPlayerController.openUrlList(urlList);
-
-        // At this stage video info is cached
-        loadStoryboard();
     }
 
     @Override
