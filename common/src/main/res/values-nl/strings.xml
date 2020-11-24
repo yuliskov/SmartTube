@@ -114,4 +114,5 @@
     <string name="unsubscribed_to_channel">Abonnement uit</string>
     <string name="subtitle_yellow">Geel</string>
     <string name="subtitle_black_bg">Zwarte achtergrond</string>
+    <string name="player_seek_preview">Preview tijdens zoeken</string>
 </resources>
