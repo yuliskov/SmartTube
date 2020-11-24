@@ -106,4 +106,10 @@
     <string name="next_video_info_is_not_loaded_yet">Informationen zum nächsten Video wurden noch nicht geladen</string>
     <string name="multiline_titles">Mehrzeilige Titel</string>
     <string name="cards_style">Karten-Stil</string>
+    <string name="repeat_mode_all">Alle Videos nacheinander abspielen</string>
+    <string name="repeat_mode_one">Aktuelles Video wiederholen</string>
+    <string name="repeat_mode_pause">Wiedergabe nach jedem Video pausieren</string>
+    <string name="repeat_mode_none">Wiedergabe nach einem Video stoppen</string>
+    <string name="subscribed_to_channel">Kanal wurde abonniert</string>
+    <string name="unsubscribed_to_channel">Kanal nicht mehr abonniert</string>
 </resources>
