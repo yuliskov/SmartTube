@@ -488,7 +488,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                 mSeekDataProvider.reset();
             }
             mThumbHeroIndex = -1;
-            mThumbsBar.clearThumbBitmaps();
+            // MOD: always show storyboard
+            //mThumbsBar.clearThumbBitmaps();
             mSeekDataProvider = null;
             mPositions = null;
             mPositionsLength = 0;
@@ -509,6 +510,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                 mDescriptionViewHolder.view.setVisibility(View.VISIBLE);
                 mAdditionalInfo.setVisibility(View.VISIBLE);
                 mThumbsBar.setVisibility(View.INVISIBLE);
+                mThumbsBar.clearThumbBitmaps(); // MOD: always show storyboard
             }
         }
 
