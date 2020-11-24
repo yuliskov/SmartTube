@@ -1,8 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.vineyard;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,11 +9,12 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.ObjectAdapter;
-import androidx.leanback.widget.SpeechRecognitionCallback;
+
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.SearchTagsProvider;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
@@ -124,22 +123,6 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     private void setupListeners() {
         setOnItemViewClickedListener((itemViewHolder, item, rowViewHolder, row) -> onItemViewClicked(item));
         setOnItemViewSelectedListener((itemViewHolder, item, rowViewHolder, row) -> onItemViewSelected(item));
-        if (!hasPermission(Manifest.permission.RECORD_AUDIO)) {
-            setSpeechRecognitionCallback(new SpeechRecognitionCallback() {
-                @Override
-                public void recognizeSpeech() {
-                    if (isAdded()) {
-                        try {
-                            startActivityForResult(getRecognizerIntent(), REQUEST_SPEECH);
-                        } catch (ActivityNotFoundException e) {
-                            Log.e(TAG, "Cannot find activity for speech recognizer", e);
-                        }
-                    } else {
-                        Log.e(TAG, "Can't perform search. Fragment is detached.");
-                    }
-                }
-            });
-        }
     }
 
     private boolean hasPermission(final String permission) {
