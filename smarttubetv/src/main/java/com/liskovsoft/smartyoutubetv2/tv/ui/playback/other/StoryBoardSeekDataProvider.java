@@ -1,19 +1,36 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback.other;
 
+import android.content.Context;
 import androidx.leanback.media.PlaybackGlue;
 import androidx.leanback.media.PlaybackTransportControlGlue;
 import androidx.leanback.widget.PlaybackSeekDataProvider;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.previewtimebar.StoryboardManager;
 
-public class StoryBoardSeekDataProvider extends PlaybackSeekDataProvider {
-    public StoryBoardSeekDataProvider(long duration, long interval) {
-        
+public class StoryboardSeekDataProvider extends PlaybackSeekDataProvider {
+    private final StoryboardManager mStoryboardManager;
+
+    public StoryboardSeekDataProvider(Context context) {
+        mStoryboardManager = new StoryboardManager(context);
+    }
+
+    public void setVideo(Video video) {
+        mStoryboardManager.setVideo(video);
+    }
+
+    @Override
+    public long[] getSeekPositions() {
+        return mStoryboardManager.getSeekPositions();
+    }
+
+    @Override
+    public void getThumbnail(int index, ResultCallback callback) {
+        mStoryboardManager.getBitmap(index, bitmap -> callback.onThumbnailLoaded(bitmap, index));
     }
 
     public static void setSeekProvider(PlaybackTransportControlGlue<?> glue) {
         if (glue.isPrepared()) {
-            glue.setSeekProvider(new StoryBoardSeekDataProvider(
-                    glue.getDuration(),
-                    glue.getDuration() / 100));
+            glue.setSeekProvider(new StoryboardSeekDataProvider(glue.getContext()));
         } else {
             glue.addPlayerCallback(new PlaybackGlue.PlayerCallback() {
                 @Override
@@ -22,9 +39,7 @@ public class StoryBoardSeekDataProvider extends PlaybackSeekDataProvider {
                         glue.removePlayerCallback(this);
                         PlaybackTransportControlGlue<?> transportControlGlue =
                                 (PlaybackTransportControlGlue<?>) glue;
-                        transportControlGlue.setSeekProvider(new StoryBoardSeekDataProvider(
-                                transportControlGlue.getDuration(),
-                                transportControlGlue.getDuration() / 100));
+                        transportControlGlue.setSeekProvider(new StoryboardSeekDataProvider(glue.getContext()));
                     }
                 }
             });
