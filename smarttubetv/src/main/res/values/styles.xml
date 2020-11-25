@@ -49,11 +49,11 @@
     <style name="App.Theme.Dark.Browse" parent="Theme.Leanback.Browse">
         <item name="android:windowBackground">@color/scheme_dark_grey_shelf_background_dark</item>
         <item name="brandColor">@color/scheme_dark_grey_background_dark</item>
-        <item name="brandAccentColor">@color/semi_red</item>
+        <item name="brandAccentColor">@color/semi_grey</item>
         <item name="customProgressStyle">@style/ProgressBarHorizontal.Dark</item>
         <item name="shelfBackground">@color/scheme_dark_grey_shelf_background_dark</item>
         <item name="cardDefaultBackground">@color/scheme_dark_grey_card_background_dark</item>
-        <item name="appLogo">@mipmap/app_logo_semi_red</item>
+        <item name="appLogo">@mipmap/app_logo_semi_grey</item>
     </style>
     <style name="ProgressBarHorizontal.Dark" parent="@android:style/Widget.ProgressBar.Horizontal">
         <item name="android:progressDrawable">@drawable/progress_bar_drawable</item>
