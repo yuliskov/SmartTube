@@ -114,5 +114,5 @@
     <string name="unsubscribed_to_channel">Kanal nicht mehr abonniert</string>
     <string name="subtitle_yellow">Gelb</string>
     <string name="subtitle_black_bg">Schwarzer Hintergrund</string>
-    <string name="player_seek_preview">Miniaturansicht über der Suchleiste in Videos anzeigen</string>
+    <string name="player_seek_preview">Miniaturansicht über der Suchleiste anzeigen</string>
 </resources>
