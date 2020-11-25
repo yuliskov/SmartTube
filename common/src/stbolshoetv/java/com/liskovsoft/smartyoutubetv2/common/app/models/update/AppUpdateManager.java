@@ -3,8 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.update;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-import java.util.List;
-
 public class AppUpdateManager implements IAppUpdateManager {
     @SuppressLint("StaticFieldLeak")
     private static AppUpdateManager sInstance;
@@ -26,13 +24,6 @@ public class AppUpdateManager implements IAppUpdateManager {
     }
 
     public void start(boolean forceCheck) {
-
-    }
-
-    public void onUpdateFound(String versionName, List<String> changelog, String apkPath) {
-    }
-
-    public void onError(Exception error) {
 
     }
 
