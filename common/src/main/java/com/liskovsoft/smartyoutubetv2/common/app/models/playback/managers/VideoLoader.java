@@ -69,14 +69,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onTrackSelected(FormatItem track) {
-        if (mController.hasNoMedia()) {
-            Log.e(TAG, "Engine lost his track. Is user selected unsupported format? Restarting...");
-            mController.reloadPlayback();
-        }
-    }
-
-    @Override
     public void onEngineError(int type) {
         // restart once per video
         if (mErrorVideo != mLastVideo) {
