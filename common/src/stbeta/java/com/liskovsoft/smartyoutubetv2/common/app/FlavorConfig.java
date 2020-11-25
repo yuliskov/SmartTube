@@ -6,7 +6,7 @@ public class FlavorConfig {
     }
 
     public static class AppPrefs {
-        public final static float VideoGridScale = 1.0f;
-        public final static int ColorSchemeIndex = 0;
+        public final static float VIDEO_GRID_SCALE = 1.0f;
+        public final static int COLOR_SCHEME_INDEX = 0;
     }
 }

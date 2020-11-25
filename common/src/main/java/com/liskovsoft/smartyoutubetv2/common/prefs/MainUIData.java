@@ -170,9 +170,9 @@ public class MainUIData {
         mIsAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0, true);
         String selectedCategories = Helpers.parseStr(split, 1);
         mBootCategoryId = Helpers.parseInt(split, 2, MediaGroup.TYPE_HOME);
-        mVideoGridScale = Helpers.parseFloat(split, 3, FlavorConfig.AppPrefs.VideoGridScale);
+        mVideoGridScale = Helpers.parseFloat(split, 3, FlavorConfig.AppPrefs.VIDEO_GRID_SCALE);
         mUIScale = Helpers.parseFloat(split, 4, 1.0f);
-        mColorSchemeIndex = Helpers.parseInt(split, 5, FlavorConfig.AppPrefs.ColorSchemeIndex);
+        mColorSchemeIndex = Helpers.parseInt(split, 5, FlavorConfig.AppPrefs.COLOR_SCHEME_INDEX);
         mIsMultilineTitlesEnabled = Helpers.parseBoolean(split, 6, false);
 
         if (selectedCategories != null) {
