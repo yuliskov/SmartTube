@@ -27,11 +27,13 @@ public class SubtitleManager implements TextOutput {
 
     public static class SubtitleStyle {
         public final int nameResId;
+        public final int subsColorResId;
         public final int backgroundColorResId;
         public final int captionStyle;
 
-        public SubtitleStyle(int nameResId, int backgroundColorResId, int captionStyle) {
+        public SubtitleStyle(int nameResId, int subsColorResId, int backgroundColorResId, int captionStyle) {
             this.nameResId = nameResId;
+            this.subsColorResId = subsColorResId;
             this.backgroundColorResId = backgroundColorResId;
             this.captionStyle = captionStyle;
         }
@@ -89,7 +91,7 @@ public class SubtitleManager implements TextOutput {
 
             SubtitleStyle subtitleStyle = getSubtitleStyle();
 
-            int textColor = ContextCompat.getColor(mContext, R.color.light_grey);
+            int textColor = ContextCompat.getColor(mContext, subtitleStyle.subsColorResId);
             int outlineColor = ContextCompat.getColor(mContext, R.color.black);
             int backgroundColor = ContextCompat.getColor(mContext, subtitleStyle.backgroundColorResId);
 
@@ -106,8 +108,10 @@ public class SubtitleManager implements TextOutput {
     }
 
     private void initDefaultStyles() {
-        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_default, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
-        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_semi_transparent_bg, R.color.semi_grey, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
+        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_default, R.color.light_grey, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
+        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_semi_transparent_bg, R.color.light_grey, R.color.semi_grey, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
+        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_black_bg, R.color.light_grey, R.color.black, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
+        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_yellow, R.color.yellow, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
 
         restoreData();
 

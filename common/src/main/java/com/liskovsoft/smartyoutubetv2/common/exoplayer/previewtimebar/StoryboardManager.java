@@ -30,6 +30,7 @@ import java.util.Set;
 
 public class StoryboardManager {
     private static final String TAG = SettingsManager.class.getSimpleName();
+    private static final long FRAME_DURATION_MS = 10_000;
     private final MediaItemManager mMediaItemManager;
     private final Context mContext;
     private Video mVideo;
@@ -84,15 +85,11 @@ public class StoryboardManager {
     }
 
     private void initSeekPositions() {
-        if (mStoryboard == null || mLengthMs == 0) {
+        if (mLengthMs <= 0) {
             return;
         }
-        
-        int groupDurationMS = mStoryboard.getGroupDurationMS();
-        Size groupSize = mStoryboard.getGroupSize();
-        int frameDurationMS = groupDurationMS / (groupSize.getRowCount() * groupSize.getColCount());
 
-        int size = (int) (mLengthMs / frameDurationMS) + 1;
+        int size = (int) (mLengthMs / FRAME_DURATION_MS) + 1;
         mSeekPositions = new long[size];
         for (int i = 0; i < mSeekPositions.length; i++) {
             mSeekPositions[i] = i * mLengthMs / mSeekPositions.length;

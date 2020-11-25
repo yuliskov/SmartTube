@@ -16,6 +16,7 @@ public class PlayerData {
     private int mOKButtonBehavior;
     private int mUIHideTimeoutSec;
     private boolean mIsShowFullDateEnabled;
+    private boolean mIsSeekPreviewEnabled;
 
     public PlayerData(Context context) {
         mContext = context;
@@ -58,6 +59,15 @@ public class PlayerData {
         return mIsShowFullDateEnabled;
     }
 
+    public void enableSeekPreview(boolean show) {
+        mIsSeekPreviewEnabled = show;
+        persistData();
+    }
+
+    public boolean isSeekPreviewEnabled() {
+        return mIsSeekPreviewEnabled;
+    }
+
     private void restoreData() {
         String data = mPrefs.getPlayerData();
 
@@ -66,6 +76,7 @@ public class PlayerData {
         mOKButtonBehavior = Helpers.parseInt(split, 0, ONLY_UI);
         mUIHideTimeoutSec = Helpers.parseInt(split, 1, 3);
         mIsShowFullDateEnabled = Helpers.parseBoolean(split, 2, false);
+        mIsSeekPreviewEnabled = Helpers.parseBoolean(split, 3, true);
     }
 
     private void persistData() {

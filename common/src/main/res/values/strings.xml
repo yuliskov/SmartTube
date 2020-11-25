@@ -112,4 +112,7 @@
     <string name="repeat_mode_none">Stop playback after one video</string>
     <string name="subscribed_to_channel">Subscribed to channel</string>
     <string name="unsubscribed_to_channel">Unsubscribed to channel</string>
+    <string name="subtitle_yellow">Yellow</string>
+    <string name="subtitle_black_bg">Black background</string>
+    <string name="player_seek_preview">Preview while seeking</string>
 </resources>

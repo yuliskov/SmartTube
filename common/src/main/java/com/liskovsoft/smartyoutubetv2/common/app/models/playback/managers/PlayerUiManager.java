@@ -24,6 +24,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
@@ -170,7 +171,10 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         // Next lines on engine initialized stage cause other listeners to disappear.
         mController.showDebugView(mDebugViewEnabled);
         mController.setDebugButtonState(mDebugViewEnabled);
-        mController.loadStoryboard();
+
+        if (mPlayerData.isSeekPreviewEnabled()) {
+            mController.loadStoryboard();
+        }
     }
 
     @Override

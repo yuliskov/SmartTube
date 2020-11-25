@@ -81,6 +81,10 @@ public class PlayerSettingsPresenter {
                 option -> mPlayerUIData.showFullDate(option.isSelected()),
                 mPlayerUIData.isShowFullDateEnabled()));
 
+        options.add(UiOptionItem.from(mContext.getString(R.string.player_seek_preview),
+                option -> mPlayerUIData.enableSeekPreview(option.isSelected()),
+                mPlayerUIData.isSeekPreviewEnabled()));
+
         settingsPresenter.appendCheckedCategory(mContext.getString(R.string.player_other), options);
     }
 }

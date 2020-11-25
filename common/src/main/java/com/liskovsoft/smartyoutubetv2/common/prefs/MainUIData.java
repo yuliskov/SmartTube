@@ -20,6 +20,7 @@ public class MainUIData {
     private final AppPrefs mPrefs;
     private boolean mIsAnimatedPreviewsEnabled;
     private boolean mIsMultilineTitlesEnabled;
+    private boolean mIsSettingsCategoryEnabled;
     private int mBootCategoryId;
     private final Map<Integer, Integer> mLeftPanelCategories = new LinkedHashMap<>();
     private final Set<Integer> mEnabledLeftPanelCategories = new HashSet<>();
@@ -90,6 +91,16 @@ public class MainUIData {
         return mBootCategoryId;
     }
 
+    public void enableSettingsCategory(boolean enabled) {
+        mIsSettingsCategoryEnabled = enabled;
+
+        persistState();
+    }
+
+    public boolean isSettingsCategoryEnabled() {
+        return mIsSettingsCategoryEnabled;
+    }
+
     public void setVideoGridScale(float scale) {
         mVideoGridScale = scale;
 
@@ -158,7 +169,7 @@ public class MainUIData {
     private void persistState() {
         String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
         mPrefs.setMainUIData(Helpers.mergeObject(
-                mIsAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale, mColorSchemeIndex, mIsMultilineTitlesEnabled));
+                mIsAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale, mColorSchemeIndex, mIsMultilineTitlesEnabled, mIsSettingsCategoryEnabled));
     }
 
     private void restoreState() {
@@ -173,6 +184,7 @@ public class MainUIData {
         mUIScale = Helpers.parseFloat(split, 4, 1.0f);
         mColorSchemeIndex = Helpers.parseInt(split, 5, 2);
         mIsMultilineTitlesEnabled = Helpers.parseBoolean(split, 6, false);
+        mIsSettingsCategoryEnabled = Helpers.parseBoolean(split, 7, true);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArray(selectedCategories);

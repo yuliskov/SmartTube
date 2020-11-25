@@ -112,4 +112,7 @@
     <string name="repeat_mode_none">Завершать воспроизведение после одного видео</string>
     <string name="subscribed_to_channel">Подписка на канал оформлена</string>
     <string name="unsubscribed_to_channel">Подписка на канал отменена</string>
+    <string name="subtitle_yellow">Желтые</string>
+    <string name="subtitle_black_bg">Черный фон</string>
+    <string name="player_seek_preview">Превью при перемотке</string>
 </resources>
