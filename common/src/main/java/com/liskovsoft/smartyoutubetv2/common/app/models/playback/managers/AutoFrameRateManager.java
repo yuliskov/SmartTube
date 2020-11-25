@@ -67,7 +67,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     @Override
     public void onInitDone() {
         restoreAfrData();
-        addUiOptions();
+//        addUiOptions();
         mAutoFrameRateHelper.saveOriginalState(mActivity);
         mAutoFrameRateHelper.setFpsCorrectionEnabled(mAfrData.afrFpsCorrectionEnabled);
         mAutoFrameRateHelper.setResolutionSwitchEnabled(mAfrData.afrResSwitchEnabled, false);

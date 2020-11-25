@@ -53,8 +53,8 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
         addQualityCategories();
         addVideoBufferCategory();
-        addPresetsCategory();
-        addBackgroundPlaybackCategory();
+//        addPresetsCategory();
+//        addBackgroundPlaybackCategory();
 
         internalStuff();
 
