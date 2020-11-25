@@ -6,6 +6,7 @@ import android.content.Intent;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.models.update.AppUpdateManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.update.IAppUpdateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -72,7 +73,7 @@ public class SplashPresenter implements Presenter<SplashView> {
     }
 
     private void checkForUpdates() {
-        AppUpdateManager updatePresenter = AppUpdateManager.instance(mContext);
+        IAppUpdateManager updatePresenter = AppUpdateManager.instance(mContext);
         updatePresenter.start(false);
         updatePresenter.unhold();
     }
