@@ -38,9 +38,9 @@ public class AboutPresenter {
         settingsPresenter.clear();
 
         if (!BuildConfig.FLAVOR.equals("stbolshoetv")) {
-                    appendAutoUpdateSwitch(settingsPresenter);
+            appendAutoUpdateSwitch(settingsPresenter);
 
-                    appendUpdateCheckButton(settingsPresenter);
+            appendUpdateCheckButton(settingsPresenter);
         }
         appendSiteLink(settingsPresenter);
 
