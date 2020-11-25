@@ -243,7 +243,7 @@ public class ViewManager {
     public void restartApp() {
         startView(SplashView.class);
 
-        mMoveViewsToBack = true;
+        mMoveViewsToBack = false;
 
         persistState();
 
