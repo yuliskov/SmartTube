@@ -29,6 +29,7 @@ import java.util.Set;
 
 public class StoryboardManager {
     private static final String TAG = StoryboardManager.class.getSimpleName();
+    private static final long FRAME_DURATION_MS = 10_000;
     private final MediaItemManager mMediaItemManager;
     private final Context mContext;
     private Video mVideo;
