@@ -117,7 +117,7 @@
     <string name="player_seek_preview">Preview tijdens zoeken</string>
     <string name="color_scheme_dark_oled">Donker (OLED)</string>
     <string name="channel_category_sorting">Kanalen sorteren</string>
-    <string name="sorting_by_new_content">Nieuwe inhoud</string>
+    <string name="sorting_by_new_content">Nieuwe video\'s</string>
     <string name="sorting_alphabetically">Alfabetisch</string>
     <string name="sorting_by_popularity">Populariteit</string>
 </resources>
