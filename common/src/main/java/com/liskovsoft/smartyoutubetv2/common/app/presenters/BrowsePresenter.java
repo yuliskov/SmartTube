@@ -131,7 +131,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
 
         mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mediaGroupManager.getSubscriptionsObserve());
         mGridMapping.put(MediaGroup.TYPE_HISTORY, mediaGroupManager.getHistoryObserve());
-        mGridMapping.put(MediaGroup.TYPE_CHANNELS_SUB, mediaGroupManager.getSubscribedChannelsTopObserve());
+        mGridMapping.put(MediaGroup.TYPE_CHANNELS_SUB, mediaGroupManager.getSubscribedChannelsUpdateObserve());
     }
 
     private void initSettingsSubCategories() {
@@ -176,14 +176,14 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         int sortingType = mMainUIData.getChannelCategorySorting();
 
         switch (sortingType) {
-            case MainUIData.CHANNEL_SORTING_TOP:
-                mGridMapping.put(MediaGroup.TYPE_CHANNELS_SUB, mediaGroupManager.getSubscribedChannelsTopObserve());
+            case MainUIData.CHANNEL_SORTING_UPDATE:
+                mGridMapping.put(MediaGroup.TYPE_CHANNELS_SUB, mediaGroupManager.getSubscribedChannelsUpdateObserve());
                 break;
             case MainUIData.CHANNEL_SORTING_AZ:
                 mGridMapping.put(MediaGroup.TYPE_CHANNELS_SUB, mediaGroupManager.getSubscribedChannelsAZObserve());
                 break;
-            case MainUIData.CHANNEL_SORTING_POPULAR:
-                mGridMapping.put(MediaGroup.TYPE_CHANNELS_SUB, mediaGroupManager.getSubscribedChannelsPopularObserve());
+            case MainUIData.CHANNEL_SORTING_LAST_VIEWED:
+                mGridMapping.put(MediaGroup.TYPE_CHANNELS_SUB, mediaGroupManager.getSubscribedChannelsLastViewedObserve());
                 break;
         }
     }
