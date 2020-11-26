@@ -13,15 +13,17 @@
         <item name="shelfBackground">@color/shelf_background_dark</item>
         <item name="cardDefaultBackground">@color/card_default_background_dark</item>
         <item name="customProgressStyle">?android:attr/progressBarStyleHorizontal</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
     </style>
     <style name="App.Theme.Leanback.Browse" parent="Theme.Leanback.Browse">
         <item name="android:windowBackground">@color/shelf_background_dark</item>
         <item name="brandColor">@color/fastlane_background_dark</item>
-        <item name="brandAccentColor">@color/search_opaque</item>
+        <item name="brandAccentColor">@color/fastlane_background</item>
         <item name="shelfBackground">@color/shelf_background_dark</item>
         <item name="cardDefaultBackground">@color/card_default_background_dark</item>
         <item name="customProgressStyle">?android:attr/progressBarStyleHorizontal</item>
         <item name="appLogo">@mipmap/app_logo</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
     </style>
     <style name="App.Theme.Leanback.GuidedStep" parent="Theme.Leanback.GuidedStep">
         <item name="android:windowBackground">@color/shelf_background_dark</item>
@@ -32,7 +34,8 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:colorPrimary" tools:targetApi="21">@color/fastlane_background</item>
+        <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
+        <item name="android:colorPrimary" tools:targetApi="21">@color/fastlane_background_dark</item>
     </style>
     <!-- End Default theme -->
 
