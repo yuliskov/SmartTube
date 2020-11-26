@@ -14,7 +14,7 @@
  * limitations under the License
  */
 
-package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback;
+package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc;
 
 import android.os.Bundle;
 import android.text.TextUtils;

@@ -94,6 +94,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
             return;
         }
 
+        updateChannelCategorySorting();
         updateCategories();
         mView.selectCategory(mBootToIndex);
     }
@@ -115,7 +116,10 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         mCategories.add(new Category(MediaGroup.TYPE_SUBSCRIPTIONS, mContext.getString(R.string.header_subscriptions), Category.TYPE_GRID, R.drawable.icon_subscriptions, true));
         mCategories.add(new Category(MediaGroup.TYPE_HISTORY, mContext.getString(R.string.header_history), Category.TYPE_GRID, R.drawable.icon_history, true));
         mCategories.add(new Category(MediaGroup.TYPE_PLAYLISTS, mContext.getString(R.string.header_playlists), Category.TYPE_ROW, R.drawable.icon_playlist, true));
-        mCategories.add(new Category(MediaGroup.TYPE_SETTINGS, mContext.getString(R.string.header_settings), Category.TYPE_TEXT_GRID, R.drawable.icon_settings));
+
+        if (mMainUIData.isSettingsCategoryEnabled()) {
+            mCategories.add(new Category(MediaGroup.TYPE_SETTINGS, mContext.getString(R.string.header_settings), Category.TYPE_TEXT_GRID, R.drawable.icon_settings));
+        }
     }
 
     private void initCategoryCallbacks() {
@@ -129,7 +133,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
 
         mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mediaGroupManager.getSubscriptionsObserve());
         mGridMapping.put(MediaGroup.TYPE_HISTORY, mediaGroupManager.getHistoryObserve());
-        mGridMapping.put(MediaGroup.TYPE_CHANNELS_SUB, mediaGroupManager.getSubscribedChannelsObserve());
+        mGridMapping.put(MediaGroup.TYPE_CHANNELS_SUB, mediaGroupManager.getSubscribedChannelsTopObserve());
     }
 
     private void initSettingsSubCategories() {
@@ -167,6 +171,24 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
             } else {
                 mView.removeCategory(category);
             }
+        }
+    }
+
+    public void updateChannelCategorySorting() {
+        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
+
+        int sortingType = mMainUIData.getChannelCategorySorting();
+
+        switch (sortingType) {
+            case MainUIData.CHANNEL_SORTING_TOP:
+                mGridMapping.put(MediaGroup.TYPE_CHANNELS_SUB, mediaGroupManager.getSubscribedChannelsTopObserve());
+                break;
+            case MainUIData.CHANNEL_SORTING_AZ:
+                mGridMapping.put(MediaGroup.TYPE_CHANNELS_SUB, mediaGroupManager.getSubscribedChannelsAZObserve());
+                break;
+            case MainUIData.CHANNEL_SORTING_POPULAR:
+                mGridMapping.put(MediaGroup.TYPE_CHANNELS_SUB, mediaGroupManager.getSubscribedChannelsPopularObserve());
+                break;
         }
     }
 
