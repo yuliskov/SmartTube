@@ -114,7 +114,7 @@
     <string name="unsubscribed_to_channel">Kanal nicht mehr abonniert</string>
     <string name="subtitle_yellow">Gelb</string>
     <string name="subtitle_black_bg">Schwarzer Hintergrund</string>
-    <string name="player_seek_preview">Vorschau über der Suchleiste anzeigen</string>
+    <string name="player_seek_preview">Vorschau beim Spulen anzeigen</string>
     <string name="color_scheme_dark_oled">Dunkel (OLED)</string>
     <string name="channel_category_sorting">Sortierung der Kanäle</string>
     <string name="sorting_by_new_content">Neue Videos</string>
