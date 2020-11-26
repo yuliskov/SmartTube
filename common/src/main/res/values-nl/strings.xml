@@ -120,4 +120,5 @@
     <string name="sorting_by_new_content">Nieuwe video\'s</string>
     <string name="sorting_alphabetically">Alfabetisch</string>
     <string name="sorting_by_popularity">Populariteit</string>
+    <string name="sorting_last_viewed">Laatst bekeken</string>
 </resources>
