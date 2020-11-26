@@ -164,6 +164,12 @@ public class MainUIData {
                 "App.Theme.Red.Browse",
                 "App.Theme.Red.Preferences",
                 mContext));
+        mColorSchemes.add(new ColorScheme(
+                R.string.color_scheme_dark_oled,
+                "App.Theme.Dark.Player",
+                "App.Theme.DarkOLED.Browse",
+                "App.Theme.Dark.Preferences",
+                mContext));
     }
 
     private void persistState() {

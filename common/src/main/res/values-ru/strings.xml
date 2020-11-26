@@ -115,4 +115,5 @@
     <string name="subtitle_yellow">Желтые</string>
     <string name="subtitle_black_bg">Черный фон</string>
     <string name="player_seek_preview">Превью при перемотке</string>
+    <string name="color_scheme_dark_oled">Темная (OLED)</string>
 </resources>
