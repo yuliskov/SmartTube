@@ -122,7 +122,7 @@
     <string name="signin_view_description">Pour vous connecter, entrez ce code dans la page %s</string>
     <string name="signin_view_action_text">Terminé</string>
     <string name="action_subscribe_off">Se désabonner</string>
-    <string name="action_subscribe_on">S'abonner</string>
+    <string name="action_subscribe_on">S\'abonner</string>
     <string name="action_channel">Chaine ouverte</string>
     <string name="action_playlist_add">Ajouter à la bibliothéque</string>
     <string name="action_video_stats">Statistiques vidéo</string>
