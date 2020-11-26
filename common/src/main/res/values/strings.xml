@@ -106,4 +106,18 @@
     <string name="next_video_info_is_not_loaded_yet">Next video info is not loaded yet</string>
     <string name="multiline_titles">Multiline titles</string>
     <string name="cards_style">Cards style</string>
+    <string name="repeat_mode_all">Play all videos one by one</string>
+    <string name="repeat_mode_one">Repeat current video</string>
+    <string name="repeat_mode_pause">Pause playback after each video</string>
+    <string name="repeat_mode_none">Stop playback after one video</string>
+    <string name="subscribed_to_channel">Subscribed to channel</string>
+    <string name="unsubscribed_to_channel">Unsubscribed to channel</string>
+    <string name="subtitle_yellow">Yellow</string>
+    <string name="subtitle_black_bg">Black background</string>
+    <string name="player_seek_preview">Preview while seeking</string>
+    <string name="color_scheme_dark_oled">Dark (OLED)</string>
+    <string name="channel_category_sorting">Channel section sorting</string>
+    <string name="sorting_by_new_content">New content</string>
+    <string name="sorting_alphabetically">Alphabetically</string>
+    <string name="sorting_by_popularity">Popular first</string>
 </resources>

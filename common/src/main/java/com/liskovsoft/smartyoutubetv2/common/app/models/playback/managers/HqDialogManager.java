@@ -1,6 +1,9 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import android.os.Build;
+
+import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -51,8 +54,10 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
         addQualityCategories();
         addVideoBufferCategory();
-        addPresetsCategory();
-        addBackgroundPlaybackCategory();
+        if (!BuildConfig.FLAVOR.equals("stbolshoetv")) {
+            addPresetsCategory();
+            addBackgroundPlaybackCategory();
+        }
 
         internalStuff();
 
@@ -67,13 +72,16 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         String audioFormatsTitle = mActivity.getString(R.string.title_audio_formats);
 
         addRadioCategory(videoFormatsTitle,
-                UiOptionItem.from(videoFormats,
-                        option -> mController.selectFormat(UiOptionItem.toFormat(option)),
-                        mActivity.getString(R.string.video_max_quality)));
+                UiOptionItem.from(videoFormats, this::selectFormatOption));
         addRadioCategory(audioFormatsTitle,
-                UiOptionItem.from(audioFormats,
-                        option -> mController.selectFormat(UiOptionItem.toFormat(option)),
-                        mActivity.getString(R.string.audio_max_quality)));
+                UiOptionItem.from(audioFormats, this::selectFormatOption));
+    }
+
+    private void selectFormatOption(OptionItem option) {
+        mController.selectFormat(UiOptionItem.toFormat(option));
+        if (mController.hasNoMedia()) {
+            mController.reloadPlayback();
+        }
     }
 
     private void addVideoBufferCategory() {
@@ -134,8 +142,8 @@ public class HqDialogManager extends PlayerEventListenerHelper {
                     mEnablePlayBehind = false;
                     updateBackgroundPlayback();
                 }, !mEnableBackgroundAudio && !mEnablePIP && !mEnablePlayBehind));
-        if (Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 26) { // useful only for pre-Oreo UI
-            options.add(UiOptionItem.from(mActivity.getString(R.string.option_background_playback_behind) + " (Android 5,6,7)",
+        if (Helpers.isAndroidTV(mActivity) && Build.VERSION.SDK_INT < 26) { // useful only for pre-Oreo UI
+            options.add(UiOptionItem.from(mActivity.getString(R.string.option_background_playback_behind) + " (Android TV 5,6,7)",
                     optionItem -> {
                         mEnableBackgroundAudio = false;
                         mEnablePIP = false;

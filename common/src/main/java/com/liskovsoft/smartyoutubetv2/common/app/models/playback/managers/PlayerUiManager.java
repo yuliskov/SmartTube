@@ -9,10 +9,12 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUiController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -22,6 +24,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
@@ -168,6 +171,10 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         // Next lines on engine initialized stage cause other listeners to disappear.
         mController.showDebugView(mDebugViewEnabled);
         mController.setDebugButtonState(mDebugViewEnabled);
+
+        if (mPlayerData.isSeekPreviewEnabled()) {
+            mController.loadStoryboard();
+        }
     }
 
     @Override
@@ -201,6 +208,16 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
             callMediaItemObservable(mMediaItemManager::subscribeObserve);
         } else {
             callMediaItemObservable(mMediaItemManager::unsubscribeObserve);
+        }
+
+        showBriefInfo(subscribed);
+    }
+
+    private void showBriefInfo(boolean subscribed) {
+        if (subscribed) {
+            MessageHelpers.showMessage(mActivity, R.string.subscribed_to_channel);
+        } else {
+            MessageHelpers.showMessage(mActivity, R.string.unsubscribed_to_channel);
         }
     }
 

@@ -106,4 +106,18 @@
     <string name="next_video_info_is_not_loaded_yet">Информация о следующем видео еще не загрузилась</string>
     <string name="multiline_titles">Несколько строк в заголовках</string>
     <string name="cards_style">Стиль карточек</string>
+    <string name="repeat_mode_all">Играть видео друг за другом</string>
+    <string name="repeat_mode_one">Повторять текущее видео</string>
+    <string name="repeat_mode_pause">Ставить плеер на паузу после каждого видео</string>
+    <string name="repeat_mode_none">Завершать воспроизведение после одного видео</string>
+    <string name="subscribed_to_channel">Подписка на канал оформлена</string>
+    <string name="unsubscribed_to_channel">Подписка на канал отменена</string>
+    <string name="subtitle_yellow">Желтые</string>
+    <string name="subtitle_black_bg">Черный фон</string>
+    <string name="player_seek_preview">Превью при перемотке</string>
+    <string name="color_scheme_dark_oled">Темная (OLED)</string>
+    <string name="channel_category_sorting">Сортировка раздела Каналы</string>
+    <string name="sorting_by_new_content">Новый контент</string>
+    <string name="sorting_alphabetically">По алфавиту</string>
+    <string name="sorting_by_popularity">Сначала популярные</string>
 </resources>

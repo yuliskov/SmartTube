@@ -30,7 +30,7 @@ public abstract class MaxIconNumVideoPlayerGlue<T extends PlayerAdapter>
                     protected void onBindDescription(ViewHolder
                                                              viewHolder, Object obj) {
                         fixClippedTitle(viewHolder);
-                        fixOverlappedTitle(viewHolder);
+                        //fixOverlappedTitle(viewHolder);
 
                         PlaybackBaseControlGlue<?> glue = (PlaybackBaseControlGlue<?>) obj;
                         viewHolder.getTitle().setText(glue.getTitle());

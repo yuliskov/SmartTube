@@ -1,13 +1,14 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
-import com.liskovsoft.appupdatechecker2.AppUpdateChecker;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.update.AppUpdateManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.update.IAppUpdateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 
 import java.util.ArrayList;
@@ -36,10 +37,11 @@ public class AboutPresenter {
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
         settingsPresenter.clear();
 
-//        appendAutoUpdateSwitch(settingsPresenter);
+        if (!BuildConfig.FLAVOR.equals("stbolshoetv")) {
+            appendAutoUpdateSwitch(settingsPresenter);
 
-//        appendUpdateCheckButton(settingsPresenter);
-
+            appendUpdateCheckButton(settingsPresenter);
+        }
         appendSiteLink(settingsPresenter);
 
         appendDonation(settingsPresenter);
@@ -47,12 +49,12 @@ public class AboutPresenter {
         settingsPresenter.showDialog(mainTitle);
     }
 
-    private void appendAutoUpdateSwitch(AppSettingsPresenter settingsPresenter) {
-        AppUpdateChecker mUpdateChecker = new AppUpdateChecker(mContext, null);
 
+    private void appendAutoUpdateSwitch(AppSettingsPresenter settingsPresenter) {
+        IAppUpdateManager updateManager = AppUpdateManager.instance(mContext);
         settingsPresenter.appendSingleSwitch(UiOptionItem.from(mContext.getString(R.string.check_updates_auto), optionItem -> {
-            mUpdateChecker.enableUpdateCheck(optionItem.isSelected());
-        }, mUpdateChecker.isUpdateCheckEnabled()));
+            updateManager.enableUpdateCheck(optionItem.isSelected());
+        }, updateManager.isUpdateCheckEnabled()));
     }
 
     private void appendUpdateCheckButton(AppSettingsPresenter settingsPresenter) {

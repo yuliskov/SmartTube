@@ -73,14 +73,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onTrackSelected(FormatItem track) {
-        if (mController.hasNoMedia()) {
-            Log.e(TAG, "Engine lost his track. Is user selected unsupported format? Restarting...");
-            mController.reloadPlayback();
-        }
-    }
-
-    @Override
     public void onEngineError(int type) {
         // restart once per video
         if (mErrorVideo != mLastVideo) {
@@ -157,6 +149,24 @@ public class VideoLoader extends PlayerEventListenerHelper {
     public void onRepeatModeClicked(int modeIndex) {
         mRepeatMode = modeIndex;
         AppPrefs.instance(mActivity).setVideoLoaderData(mRepeatMode);
+        showBriefInfo(modeIndex);
+    }
+
+    private void showBriefInfo(int modeIndex) {
+        switch (modeIndex) {
+            case PlaybackUiController.REPEAT_ALL:
+                MessageHelpers.showMessage(mActivity, R.string.repeat_mode_all);
+                break;
+            case PlaybackUiController.REPEAT_ONE:
+                MessageHelpers.showMessage(mActivity, R.string.repeat_mode_one);
+                break;
+            case PlaybackUiController.REPEAT_PAUSE:
+                MessageHelpers.showMessage(mActivity, R.string.repeat_mode_pause);
+                break;
+            case PlaybackUiController.REPEAT_NONE:
+                MessageHelpers.showMessage(mActivity, R.string.repeat_mode_none);
+                break;
+        }
     }
 
     private void disposeActions() {

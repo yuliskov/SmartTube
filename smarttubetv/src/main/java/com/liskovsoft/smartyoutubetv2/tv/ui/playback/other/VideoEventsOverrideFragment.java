@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
+package com.liskovsoft.smartyoutubetv2.tv.ui.playback.other;
 
 import android.os.Bundle;
 import android.view.InputEvent;

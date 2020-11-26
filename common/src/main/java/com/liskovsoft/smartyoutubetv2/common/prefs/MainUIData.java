@@ -5,6 +5,7 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.FlavorConfig;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,12 +15,16 @@ import java.util.Map;
 import java.util.Set;
 
 public class MainUIData {
+    public static final int CHANNEL_SORTING_TOP = 0;
+    public static final int CHANNEL_SORTING_AZ = 1;
+    public static final int CHANNEL_SORTING_POPULAR = 2;
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
     private final Context mContext;
     private final AppPrefs mPrefs;
     private boolean mIsAnimatedPreviewsEnabled;
     private boolean mIsMultilineTitlesEnabled;
+    private boolean mIsSettingsCategoryEnabled;
     private int mBootCategoryId;
     private final Map<Integer, Integer> mLeftPanelCategories = new LinkedHashMap<>();
     private final Set<Integer> mEnabledLeftPanelCategories = new HashSet<>();
@@ -27,6 +32,7 @@ public class MainUIData {
     private float mVideoGridScale;
     private final List<ColorScheme> mColorSchemes = new ArrayList<>();
     private int mColorSchemeIndex;
+    private int mChannelCategorySorting;
 
     public MainUIData(Context context) {
         mContext = context;
@@ -90,6 +96,16 @@ public class MainUIData {
         return mBootCategoryId;
     }
 
+    public void enableSettingsCategory(boolean enabled) {
+        mIsSettingsCategoryEnabled = enabled;
+
+        persistState();
+    }
+
+    public boolean isSettingsCategoryEnabled() {
+        return mIsSettingsCategoryEnabled;
+    }
+
     public void setVideoGridScale(float scale) {
         mVideoGridScale = scale;
 
@@ -123,6 +139,15 @@ public class MainUIData {
         return mColorSchemes.get(mColorSchemeIndex);
     }
 
+    public int getChannelCategorySorting() {
+        return mChannelCategorySorting;
+    }
+
+    public void setChannelCategorySorting(int type) {
+        mChannelCategorySorting = type;
+        persistState();
+    }
+
     private void initLeftPanelCategories() {
         mLeftPanelCategories.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mLeftPanelCategories.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
@@ -153,12 +178,18 @@ public class MainUIData {
                 "App.Theme.Red.Browse",
                 "App.Theme.Red.Preferences",
                 mContext));
+        mColorSchemes.add(new ColorScheme(
+                R.string.color_scheme_dark_oled,
+                "App.Theme.Dark.Player",
+                "App.Theme.DarkOLED.Browse",
+                "App.Theme.Dark.Preferences",
+                mContext));
     }
 
     private void persistState() {
         String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
         mPrefs.setMainUIData(Helpers.mergeObject(
-                mIsAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale, mColorSchemeIndex, mIsMultilineTitlesEnabled));
+                mIsAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale, mColorSchemeIndex, mIsMultilineTitlesEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting));
     }
 
     private void restoreState() {
@@ -169,10 +200,12 @@ public class MainUIData {
         mIsAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0, true);
         String selectedCategories = Helpers.parseStr(split, 1);
         mBootCategoryId = Helpers.parseInt(split, 2, MediaGroup.TYPE_HOME);
-        mVideoGridScale = Helpers.parseFloat(split, 3, 1.35f);
+        mVideoGridScale = Helpers.parseFloat(split, 3, FlavorConfig.AppPrefs.VIDEO_GRID_SCALE);
         mUIScale = Helpers.parseFloat(split, 4, 1.0f);
-        mColorSchemeIndex = Helpers.parseInt(split, 5, 2);
+        mColorSchemeIndex = Helpers.parseInt(split, 5, FlavorConfig.AppPrefs.COLOR_SCHEME_INDEX);
         mIsMultilineTitlesEnabled = Helpers.parseBoolean(split, 6, false);
+        mIsSettingsCategoryEnabled = Helpers.parseBoolean(split, 7, true);
+        mChannelCategorySorting = Helpers.parseInt(split, 8, CHANNEL_SORTING_TOP);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArray(selectedCategories);

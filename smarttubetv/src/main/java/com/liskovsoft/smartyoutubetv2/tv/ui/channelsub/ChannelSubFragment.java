@@ -7,7 +7,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelSubPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelSubView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.VideoGridFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.ProgressBarManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 
 public class ChannelSubFragment extends VideoGridFragment implements ChannelSubView {
     private ProgressBarManager mProgressBarManager;

@@ -13,6 +13,7 @@ import com.google.android.exoplayer2.trackselection.RandomTrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Definition;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.FlavorConfig;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.RestoreTrackSelector.TrackSelectorCallback;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 
@@ -161,6 +162,9 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 Format format = group.getFormat(trackIndex);
 
                 MediaTrack mediaTrack = MediaTrack.forRendererIndex(rendererIndex);
+                if (rendererIndex == RENDERER_INDEX_VIDEO) {
+                    mediaTrack.isHidden = format.height > FlavorConfig.Player.MAX_HEIGHT_VIDEO_RESOLUTION;
+                }
                 mediaTrack.format = format;
                 mediaTrack.groupIndex = groupIndex;
                 mediaTrack.trackIndex = trackIndex;

@@ -23,7 +23,8 @@ buildscript {
 
 apply plugin: 'com.android.application'
 
-if (getGradle().getStartParameter().getTaskRequests().toString().contains("stbeta")) {
+// First letter of flavor name must be in Uppercase
+if (getGradle().getStartParameter().getTaskRequests().toString().contains("Stbeta")) {
     // Google Services Gradle plugin (transforms google-services.json file)
     apply plugin: 'com.google.gms.google-services'
 
@@ -48,8 +49,8 @@ android {
         applicationId "com.liskovsoft.smarttubetv"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 160
-        versionName "10.20"
+        versionCode 167
+        versionName "10.27"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
@@ -82,7 +83,15 @@ android {
         }
         stbolshoetv {
             // matchingFallbacks = ['lite']
-            applicationIdSuffix ".bolshoetv"
+            // applicationIdSuffix ".bolshoetv"
+            versionCode 11000 + defaultConfig.versionCode
+            applicationId "com.liskovsoft.videomanager"
+        }
+        stredboxtv {
+            // matchingFallbacks = ['lite']
+            //applicationIdSuffix ".redboxtv"
+            versionCode 11000 + defaultConfig.versionCode
+            applicationId "com.redboxtv.smartyoutubetv"
         }
     }
 

@@ -37,6 +37,7 @@ android {
         storig {}
         strtarmenia {}
         stbolshoetv {}
+        stredboxtv {}
     }
 }
 
@@ -66,4 +67,5 @@ dependencies {
     stbetaImplementation project(path: ':leanbackassistant')
     stbetaImplementation project(path: ':appupdatechecker2')
     strtarmeniaImplementation project(path: ':appupdatechecker2')
+    stredboxtvImplementation project(path: ':appupdatechecker2')
 }
