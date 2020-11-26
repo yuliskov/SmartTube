@@ -107,16 +107,24 @@ public class StateUpdater extends PlayerEventListenerHelper {
     //}
 
     @Override
+    public void onEngineInitialized() {
+        // Fragment might be destroyed by system at this point.
+        // So, to be sure, repeat format selection.
+        restoreVideoFormat();
+        restoreAudioFormat();
+    }
+
+    @Override
     public void onEngineReleased() {
         saveState();
     }
 
-    @Override
-    public void onSourceChanged(Video item) {
-        // called before engine attempt to auto select track by itself
-        restoreVideoFormat();
-        restoreAudioFormat();
-    }
+    //@Override
+    //public void onSourceChanged(Video item) {
+    //    // called before engine attempt to auto select track by itself
+    //    restoreVideoFormat();
+    //    restoreAudioFormat();
+    //}
 
     @Override
     public void onVideoLoaded(Video item) {

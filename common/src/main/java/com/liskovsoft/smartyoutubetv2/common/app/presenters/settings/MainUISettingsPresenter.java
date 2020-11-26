@@ -40,6 +40,7 @@ public class MainUISettingsPresenter {
         appendScaleUI(settingsPresenter);
         appendLeftPanelCategories(settingsPresenter);
         appendBootToCategory(settingsPresenter);
+        appendChannelSortingCategory(settingsPresenter);
 
         settingsPresenter.showDialog(mContext.getString(R.string.dialog_main_ui), () -> {
             if (mRestartApp) {
@@ -118,6 +119,21 @@ public class MainUISettingsPresenter {
         }
 
         settingsPresenter.appendRadioCategory(mContext.getString(R.string.boot_to_section), options);
+    }
+
+    private void appendChannelSortingCategory(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.sorting_by_new_content, MainUIData.CHANNEL_SORTING_TOP},
+                {R.string.sorting_alphabetically, MainUIData.CHANNEL_SORTING_AZ}}) {
+            options.add(UiOptionItem.from(mContext.getString(pair[0]), optionItem -> {
+                mMainUIData.setChannelCategorySorting(pair[1]);
+                BrowsePresenter.instance(mContext).updateChannelCategorySorting();
+            }, mMainUIData.getChannelCategorySorting() == pair[1]));
+        }
+
+        settingsPresenter.appendRadioCategory(mContext.getString(R.string.channel_category_sorting), options);
     }
 
     private void appendColorScheme(AppSettingsPresenter settingsPresenter) {

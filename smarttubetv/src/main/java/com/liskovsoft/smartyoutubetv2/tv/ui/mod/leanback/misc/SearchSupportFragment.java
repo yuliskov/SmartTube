@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback;
+package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc;
 
 import android.Manifest;
 import android.content.Context;

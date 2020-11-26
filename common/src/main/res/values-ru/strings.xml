@@ -115,4 +115,9 @@
     <string name="subtitle_yellow">Желтые</string>
     <string name="subtitle_black_bg">Черный фон</string>
     <string name="player_seek_preview">Превью при перемотке</string>
+    <string name="color_scheme_dark_oled">Темная (OLED)</string>
+    <string name="channel_category_sorting">Сортировка раздела Каналы</string>
+    <string name="sorting_by_new_content">Новый контент</string>
+    <string name="sorting_alphabetically">По алфавиту</string>
+    <string name="sorting_by_popularity">Сначала популярные</string>
 </resources>

@@ -105,4 +105,16 @@
         <item name="android:progressDrawable">@drawable/progress_bar_red</item>
     </style>
     <!--  End Color scheme: Red -->
+
+    <!--  Color scheme: Dark (OLED)  -->
+    <style name="App.Theme.DarkOLED.Browse" parent="Theme.Leanback.Browse">
+        <item name="android:windowBackground">@color/scheme_dark_grey_shelf_background_dark</item>
+        <item name="brandColor">@color/scheme_dark_grey_background_dark</item>
+        <item name="brandAccentColor">@color/semi_grey</item>
+        <item name="customProgressStyle">@style/ProgressBarHorizontal.Dark</item>
+        <item name="shelfBackground">@color/scheme_dark_grey_shelf_background_dark</item>
+        <item name="cardDefaultBackground">@color/scheme_dark_grey_card_background_dark</item>
+        <item name="appLogo">@mipmap/app_logo_semi_grey</item>
+    </style>
+    <!--  End Color scheme: Dark  -->
 </resources>

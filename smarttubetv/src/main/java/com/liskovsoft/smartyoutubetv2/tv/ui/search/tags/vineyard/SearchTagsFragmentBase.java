@@ -20,8 +20,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.search.SearchTagsProvide
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.PaginationAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.TagAdapter;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.ProgressBarManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.SearchSupportFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SearchSupportFragment;
 
 public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         implements SearchSupportFragment.SearchResultProvider, SearchView {
