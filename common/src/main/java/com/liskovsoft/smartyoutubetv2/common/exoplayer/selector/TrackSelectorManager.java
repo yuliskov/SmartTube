@@ -13,10 +13,10 @@ import com.google.android.exoplayer2.trackselection.RandomTrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Definition;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.FlavorConfig;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.RestoreTrackSelector.TrackSelectorCallback;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Set;
@@ -29,7 +29,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     private static final TrackSelection.Factory FIXED_FACTORY = new FixedTrackSelection.Factory();
     private static final TrackSelection.Factory RANDOM_FACTORY = new RandomTrackSelection.Factory();
     private static final String TAG = TrackSelectorManager.class.getSimpleName();
-    private final static int MAX_HEIGHT_VIDEO_RESOLUTION = 2160;
 
     private DefaultTrackSelector mTrackSelector;
     private TrackSelection.Factory mTrackSelectionFactory;
@@ -154,23 +153,18 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
         for (int groupIndex = 0; groupIndex < renderer.trackGroups.length; groupIndex++) {
             TrackGroup group = renderer.trackGroups.get(groupIndex);
-            final ArrayList<Format> sortedGroup = new ArrayList<>();
-            for (int i = 0; i < group.length; i++) {
-                if (rendererIndex == RENDERER_INDEX_VIDEO
-                        && group.getFormat(i).height > MAX_HEIGHT_VIDEO_RESOLUTION) {
-                    continue;
-                }
-                sortedGroup.add(group.getFormat(i));
-            }
-            renderer.mediaTracks[groupIndex] = new MediaTrack[sortedGroup.size()];
+            renderer.mediaTracks[groupIndex] = new MediaTrack[group.length];
 
-            for (int trackIndex = 0; trackIndex < sortedGroup.size(); trackIndex++) {
+            for (int trackIndex = 0; trackIndex < group.length; trackIndex++) {
                 boolean groupIsAdaptive = renderer.trackGroupsAdaptive[groupIndex];
                 haveAdaptiveTracks |= groupIsAdaptive;
                 haveSupportedTracks = true;
-                Format format = sortedGroup.get(trackIndex);
+                Format format = group.getFormat(trackIndex);
 
                 MediaTrack mediaTrack = MediaTrack.forRendererIndex(rendererIndex);
+                if (rendererIndex == RENDERER_INDEX_VIDEO) {
+                    mediaTrack.isHidden = format.height > FlavorConfig.Player.MAX_HEIGHT_VIDEO_RESOLUTION;
+                }
                 mediaTrack.format = format;
                 mediaTrack.groupIndex = groupIndex;
                 mediaTrack.trackIndex = trackIndex;

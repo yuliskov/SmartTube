@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import androidx.annotation.NonNull;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -67,7 +68,9 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     @Override
     public void onInitDone() {
         restoreAfrData();
-//        addUiOptions();
+        if (!BuildConfig.FLAVOR.equals("stbolshoetv")) {
+            addUiOptions();
+        }
         mAutoFrameRateHelper.saveOriginalState(mActivity);
         mAutoFrameRateHelper.setFpsCorrectionEnabled(mAfrData.afrFpsCorrectionEnabled);
         mAutoFrameRateHelper.setResolutionSwitchEnabled(mAfrData.afrResSwitchEnabled, false);

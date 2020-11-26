@@ -41,7 +41,9 @@ public class ExoFormatItem implements FormatItem {
         List<FormatItem> formats = new ArrayList<>();
 
         for (MediaTrack track : mediaTracks) {
-            formats.add(from(track));
+            if (!track.isHidden) {
+                formats.add(from(track));
+            }
         }
 
         return formats;
