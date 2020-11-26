@@ -117,6 +117,6 @@
     <string name="color_scheme_dark_oled">Tmavé (OLED)</string>
     <string name="channel_category_sorting">Řazení sekce kanálu</string>
     <string name="sorting_by_new_content">Nový obsah</string>
-    <string name="sorting_alphabetically">Podle abecedy</string>
-    <string name="sorting_by_popularity">Nejprve oblíbené</string>
+    <string name="sorting_alphabetically">Abecedně</string>
+    <string name="sorting_last_viewed">Poslední zhlédnuté</string>
 </resources>
