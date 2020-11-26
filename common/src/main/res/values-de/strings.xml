@@ -116,7 +116,7 @@
     <string name="subtitle_black_bg">Schwarzer Hintergrund</string>
     <string name="player_seek_preview">Miniaturansicht über der Suchleiste anzeigen</string>
     <string name="color_scheme_dark_oled">Dunkel (OLED)</string>
-    <string name="channel_category_sorting">Kanäle sortieren</string>
+    <string name="channel_category_sorting">Sortierung der Kanäle</string>
     <string name="sorting_by_new_content">Neue Videos</string>
     <string name="sorting_alphabetically">Alphabetisch</string>
     <string name="sorting_last_viewed">Zuletzt angesehen</string>
