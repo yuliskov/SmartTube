@@ -204,7 +204,7 @@ public class MainUIData {
         mColorSchemeIndex = Helpers.parseInt(split, 5, 0);
         mIsMultilineTitlesEnabled = Helpers.parseBoolean(split, 6, false);
         mIsSettingsCategoryEnabled = Helpers.parseBoolean(split, 7, true);
-        mChannelCategorySorting = Helpers.parseInt(split, 8, CHANNEL_SORTING_LAST_VIEWED);
+        mChannelCategorySorting = Helpers.parseInt(split, 8, CHANNEL_SORTING_UPDATE);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArray(selectedCategories);
