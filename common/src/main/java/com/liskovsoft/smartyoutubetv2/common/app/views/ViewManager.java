@@ -7,14 +7,13 @@ import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.view.SurfaceView;
 import androidx.annotation.NonNull;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -245,7 +244,7 @@ public class ViewManager {
     public void restartApp() {
         persistState();
 
-        triggerRebirth(mContext, mViewMapping.get(SplashView.class));
+        triggerRebirth3(mContext, mViewMapping.get(SplashView.class));
     }
 
     private void persistState() {
@@ -286,5 +285,12 @@ public class ViewManager {
         AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
         System.exit(0);
+    }
+
+    public static void triggerRebirth3(Context context, Class<?> myClass) {
+        Intent intent = new Intent(context, myClass);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
+        Runtime.getRuntime().exit(0);
     }
 }
