@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.common;
+package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -53,5 +53,9 @@ public class MotherActivity extends FragmentActivity {
         if (rootThemeResId > 0) {
             setTheme(rootThemeResId);
         }
+    }
+
+    public void destroyActivity() {
+        super.finish();
     }
 }
