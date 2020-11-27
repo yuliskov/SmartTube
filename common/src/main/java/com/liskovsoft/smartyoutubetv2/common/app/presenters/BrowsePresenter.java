@@ -150,9 +150,9 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
                     mContext.getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(mContext).show(), R.drawable.settings_player));
             settingItems.add(new SettingsItem(
                     mContext.getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(mContext).show(), R.drawable.settings_search));
+            settingItems.add(new SettingsItem(
+                    mContext.getString(R.string.settings_about), () -> AboutPresenter.instance(mContext).show(), R.drawable.settings_about));
         }
-        settingItems.add(new SettingsItem(
-                mContext.getString(R.string.settings_about), () -> AboutPresenter.instance(mContext).show(), R.drawable.settings_about));
 
         mTextGridMapping.put(MediaGroup.TYPE_SETTINGS, settingItems);
     }
