@@ -34,6 +34,8 @@ import androidx.leanback.widget.SpeechOrbView;
 import androidx.leanback.widget.SpeechRecognitionCallback;
 import androidx.leanback.widget.VerticalGridView;
 
+import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -313,6 +315,10 @@ public class SearchSupportFragment extends Fragment {
             public void onSearchQuerySubmit(String query) {
                 if (DEBUG) Log.v(TAG, String.format("onSearchQuerySubmit %s", query));
                 submitQuery(query);
+                if (BuildConfig.FLAVOR.equals("stbolshoetv")) {
+                    InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(mSearchBar.getWindowToken(), 0);
+                }
             }
 
             @Override
