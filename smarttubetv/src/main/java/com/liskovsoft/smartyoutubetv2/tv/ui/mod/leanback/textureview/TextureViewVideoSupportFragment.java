@@ -11,12 +11,15 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.surface;
+package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.textureview;
 
+import android.graphics.SurfaceTexture;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.leanback.app.PlaybackSupportFragment;
@@ -26,11 +29,11 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
  * Subclass of {@link PlaybackSupportFragment} that is responsible for providing a {@link SurfaceView}
  * and rendering video.
  */
-public class VideoSupportFragment extends PlaybackSupportFragment {
+public class TextureViewVideoSupportFragment extends PlaybackSupportFragment implements TextureView.SurfaceTextureListener {
     static final int SURFACE_NOT_CREATED = 0;
     static final int SURFACE_CREATED = 1;
 
-    SurfaceView mVideoSurface;
+    TextureView mVideoSurface;
     SurfaceHolder.Callback mMediaPlaybackCallback;
 
     int mState = SURFACE_NOT_CREATED;
@@ -39,35 +42,10 @@ public class VideoSupportFragment extends PlaybackSupportFragment {
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) super.onCreateView(inflater, container, savedInstanceState);
-        //mVideoSurface = (SurfaceView) LayoutInflater.from(getContext()).inflate(
-        //        R.layout.lb_video_surface, root, false);
-        //root.addView(mVideoSurface, 0);
-        mVideoSurface = root.findViewById(R.id.video_surface);
-        mVideoSurface.getHolder().addCallback(new SurfaceHolder.Callback() {
-
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                if (mMediaPlaybackCallback != null) {
-                    mMediaPlaybackCallback.surfaceCreated(holder);
-                }
-                mState = SURFACE_CREATED;
-            }
-
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-                if (mMediaPlaybackCallback != null) {
-                    mMediaPlaybackCallback.surfaceChanged(holder, format, width, height);
-                }
-            }
-
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-                if (mMediaPlaybackCallback != null) {
-                    mMediaPlaybackCallback.surfaceDestroyed(holder);
-                }
-                mState = SURFACE_NOT_CREATED;
-            }
-        });
+        mVideoSurface = (TextureView) LayoutInflater.from(getContext()).inflate(
+                R.layout.lb_video_texture, root, false);
+        root.addView(mVideoSurface, 0);
+        mVideoSurface.setSurfaceTextureListener(this);
         setBackgroundType(PlaybackSupportFragment.BG_LIGHT);
         return root;
     }
@@ -80,7 +58,7 @@ public class VideoSupportFragment extends PlaybackSupportFragment {
 
         if (callback != null) {
             if (mState == SURFACE_CREATED) {
-                mMediaPlaybackCallback.surfaceCreated(mVideoSurface.getHolder());
+                mMediaPlaybackCallback.surfaceCreated(new TextureViewSurfaceHolder(new Surface(mVideoSurface.getSurfaceTexture())));
             }
         }
     }
@@ -106,7 +84,7 @@ public class VideoSupportFragment extends PlaybackSupportFragment {
     /**
      * Returns the surface view.
      */
-    public SurfaceView getSurfaceView() {
+    public View getSurfaceView() {
         return mVideoSurface;
     }
 
@@ -115,5 +93,35 @@ public class VideoSupportFragment extends PlaybackSupportFragment {
         mVideoSurface = null;
         mState = SURFACE_NOT_CREATED;
         super.onDestroyView();
+    }
+
+    @Override
+    public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
+        if (mMediaPlaybackCallback != null) {
+            mMediaPlaybackCallback.surfaceCreated(new TextureViewSurfaceHolder(new Surface(surface)));
+        }
+        mState = SURFACE_CREATED;
+    }
+
+    @Override
+    public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
+        if (mMediaPlaybackCallback != null) {
+            mMediaPlaybackCallback.surfaceChanged(new TextureViewSurfaceHolder(new Surface(surface)), 1, width, height);
+        }
+    }
+
+    @Override
+    public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
+        if (mMediaPlaybackCallback != null) {
+            mMediaPlaybackCallback.surfaceDestroyed(new TextureViewSurfaceHolder(new Surface(surface)));
+        }
+        mState = SURFACE_NOT_CREATED;
+
+        return true;
+    }
+
+    @Override
+    public void onSurfaceTextureUpdated(SurfaceTexture surface) {
+
     }
 }

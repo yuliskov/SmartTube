@@ -17,11 +17,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center">
-        <androidx.leanback.widget.VideoSurfaceView
-            android:id="@+id/video_surface"
-            android:layout_gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
         <com.google.android.exoplayer2.ui.SubtitleView
             android:id="@+id/leanback_subtitles"
             android:layout_width="match_parent"
