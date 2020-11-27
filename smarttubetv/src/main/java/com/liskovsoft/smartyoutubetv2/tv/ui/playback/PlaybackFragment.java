@@ -50,7 +50,6 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.surfaceview.VideoSupportFragmentGlueHost;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.textureview.TextureViewVideoSupportFragmentGlueHost;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.StoryboardSeekDataProvider;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoEventsOverrideFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue;
@@ -266,7 +265,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         OnActionClickedListener playerActionListener = new PlayerActionListener();
         mPlayerGlue = new VideoPlayerGlue(getActivity(), playerAdapter, playerActionListener);
-        mPlayerGlue.setHost(new TextureViewVideoSupportFragmentGlueHost(this));
+        mPlayerGlue.setHost(new VideoSupportFragmentGlueHost(this));
         mPlayerGlue.setSeekEnabled(true);
         mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end
         StoryboardSeekDataProvider.setSeekProvider(mPlayerGlue);

@@ -106,7 +106,7 @@ public class TextureViewVideoSupportFragment extends PlaybackSupportFragment imp
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
         if (mMediaPlaybackCallback != null) {
-            mMediaPlaybackCallback.surfaceChanged(new TextureViewSurfaceHolder(new Surface(surface)), 1, width, height);
+            mMediaPlaybackCallback.surfaceChanged(new TextureViewSurfaceHolder(new Surface(surface)), 4, width, height);
         }
     }
 

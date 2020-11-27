@@ -8,13 +8,12 @@ import androidx.leanback.app.PlaybackSupportFragment;
 import androidx.leanback.widget.VerticalGridView;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.surfaceview.VideoSupportFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.textureview.TextureViewVideoSupportFragment;
 
 /**
  *  Every successfully handled event invokes {@link PlaybackSupportFragment#tickle} that makes ui to appear.
  *  Fixing that for keys.
  */
-public class VideoEventsOverrideFragment extends TextureViewVideoSupportFragment {
+public class VideoEventsOverrideFragment extends VideoSupportFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
