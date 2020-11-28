@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.app.RowsSupportFragment;
+import androidx.leanback.app.VideoSupportFragmentGlueHost;
 import androidx.leanback.media.PlayerAdapter;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ClassPresenterSelector;
@@ -49,7 +50,6 @@ import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.surfaceview.VideoSupportFragmentGlueHost;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.StoryboardSeekDataProvider;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoEventsOverrideFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue;
@@ -695,14 +695,34 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
+    public void showControlsOverlay(boolean runAnimation) {
+        super.showControlsOverlay(runAnimation);
+
+        if (mPlayerGlue != null) {
+            mPlayerGlue.onControlsVisibilityChange(true);
+        }
+
+        mEventListener.onControlsShown(true);
+    }
+
+    @Override
+    public void hideControlsOverlay(boolean runAnimation) {
+        super.hideControlsOverlay(runAnimation);
+
+        if (mPlayerGlue != null) {
+            mPlayerGlue.onControlsVisibilityChange(false);
+        }
+
+        mEventListener.onControlsShown(false);
+    }
+
+    @Override
     public void showControls(boolean show) {
         if (show) {
             showControlsOverlay(mIsAnimationEnabled);
         } else {
             hideControlsOverlay(mIsAnimationEnabled);
         }
-
-        mEventListener.onControlsShown(show);
     }
 
     @Override

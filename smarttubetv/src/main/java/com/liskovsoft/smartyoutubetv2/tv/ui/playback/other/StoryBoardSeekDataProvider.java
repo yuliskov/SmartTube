@@ -2,10 +2,10 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.playback.other;
 
 import android.content.Context;
 import androidx.leanback.media.PlaybackGlue;
-import androidx.leanback.media.PlaybackTransportControlGlue;
 import androidx.leanback.widget.PlaybackSeekDataProvider;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.previewtimebar.StoryboardManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.framedrops.PlaybackTransportControlGlue;
 
 public class StoryboardSeekDataProvider extends PlaybackSeekDataProvider {
     private final StoryboardManager mStoryboardManager;
