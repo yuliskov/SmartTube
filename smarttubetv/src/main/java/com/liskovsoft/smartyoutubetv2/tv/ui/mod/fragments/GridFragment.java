@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.mod;
+package com.liskovsoft.smartyoutubetv2.tv.ui.mod.fragments;
 
 import android.os.Bundle;
 import android.util.Log;

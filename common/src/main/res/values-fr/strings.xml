@@ -106,4 +106,18 @@
     <string name="next_video_info_is_not_loaded_yet">Les informations sur la vidéo suivante ne sont pas encore chargées</string>
     <string name="multiline_titles">Titres multilignes</string>
     <string name="cards_style">Style de tuiles</string>
+    <string name="repeat_mode_all">Lire toutes les vidéos une par une</string>
+    <string name="repeat_mode_one">Répéter la vidéo en cours</string>
+    <string name="repeat_mode_pause">Pause lecture après chaque vidéo</string>
+    <string name="repeat_mode_none">Arrêtez la lecture après une vidéo</string>
+    <string name="subscribed_to_channel">S\'abonner à la chaîne</string>
+    <string name="unsubscribed_to_channel">Se désabonner de la chaîne</string>
+    <string name="subtitle_yellow">Jaune</string>
+    <string name="subtitle_black_bg">Fond noir</string>
+    <string name="player_seek_preview">Aperçu pendant la recherche</string>
+    <string name="color_scheme_dark_oled">Sombre (OLED)</string>
+    <string name="channel_category_sorting">Classement des sections de chaînes</string>
+    <string name="sorting_by_new_content">Nouveau contenu</string>
+    <string name="sorting_alphabetically">Alphabétiquement</string>
+    <string name="sorting_last_viewed">Populaire en premier</string>
 </resources>

@@ -105,4 +105,18 @@
     <string name="next_video_info_is_not_loaded_yet">Informace o dalším videu ještě nejsou načteny</string>
     <string name="multiline_titles">Víceřádkové názvy</string>
     <string name="cards_style">Styl karet</string>
+    <string name="repeat_mode_all">Přehrát vše po jednom</string>
+    <string name="repeat_mode_one">Opakovat aktuální video</string>
+    <string name="repeat_mode_pause">Po každém videu pozastavit přehrávání</string>
+    <string name="repeat_mode_none">Ukončit přehrávání po jednom videu</string>
+    <string name="subscribed_to_channel">Přihlášen k odběru kanálu</string>
+    <string name="unsubscribed_to_channel">Odhlášen z odběru kanálu</string>
+    <string name="subtitle_yellow">Žlutá</string>
+    <string name="subtitle_black_bg">Černé pozadí</string>
+    <string name="player_seek_preview">Náhledy při přeskakování</string>
+    <string name="color_scheme_dark_oled">Tmavé (OLED)</string>
+    <string name="channel_category_sorting">Řazení sekce kanálu</string>
+    <string name="sorting_by_new_content">Nový obsah</string>
+    <string name="sorting_alphabetically">Abecedně</string>
+    <string name="sorting_last_viewed">Poslední zhlédnuté</string>
 </resources>

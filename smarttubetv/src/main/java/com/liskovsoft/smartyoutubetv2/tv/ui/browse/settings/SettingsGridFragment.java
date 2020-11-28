@@ -17,7 +17,7 @@ import com.liskovsoft.smartyoutubetv2.tv.presenter.SettingsItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.SettingsCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.GridFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.fragments.GridFragment;
 
 import java.util.ArrayList;
 import java.util.List;

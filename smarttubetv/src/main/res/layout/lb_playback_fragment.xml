@@ -10,6 +10,8 @@
         android:layout_height="match_parent"
         tools:ignore="UnusedAttribute">
 
+    <!-- Original place for VideoSurfaceView -->
+
     <!-- Add subtitle view -->
     <com.google.android.exoplayer2.ui.AspectRatioFrameLayout
         android:layout_width="match_parent"

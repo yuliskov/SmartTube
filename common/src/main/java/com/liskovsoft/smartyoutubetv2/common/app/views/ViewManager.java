@@ -2,17 +2,18 @@ package com.liskovsoft.smartyoutubetv2.common.app.views;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Looper;
 import androidx.annotation.NonNull;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +26,7 @@ public class ViewManager {
     private final Context mContext;
     private final Map<Class<?>, Class<? extends Activity>> mViewMapping;
     private final Map<Class<? extends Activity>, Class<? extends Activity>> mParentMapping;
-    private final Stack<Class<?>> mActivityStack;
+    private final Stack<Activity> mActivityStack;
     private final AppPrefs mPrefs;
     private Class<?> mRootActivity;
     private Class<?> mDefaultTop;
@@ -66,7 +67,7 @@ public class ViewManager {
     public void unregister(Class<?> viewClass) {
         mViewMapping.remove(viewClass);
     }
-    
+
     public void startView(Class<?> viewClass) {
         startView(viewClass, false);
     }
@@ -95,7 +96,9 @@ public class ViewManager {
         if (activity.getIntent() != null) {
             removeTopActivity();
 
-            Class<?> parentActivity = getTopActivity();
+            Activity topActivity = getTopActivity();
+
+            Class<?> parentActivity = topActivity != null ? topActivity.getClass() : null;
 
             if (parentActivity == null && !mIsSinglePlayerMode) {
                 parentActivity = getDefaultParent(activity);
@@ -141,7 +144,7 @@ public class ViewManager {
         if (mDefaultTop != null) {
             lastActivity = mDefaultTop;
         } else if (!mActivityStack.isEmpty()) {
-            lastActivity = mActivityStack.peek();
+            lastActivity = mActivityStack.peek().getClass();
         } else {
             lastActivity = mRootActivity;
         }
@@ -176,11 +179,9 @@ public class ViewManager {
             return false;
         }
 
-        Class<?> activityClass = activity.getClass();
-
         // reorder activity
-        mActivityStack.remove(activityClass);
-        mActivityStack.push(activityClass);
+        mActivityStack.remove(activity);
+        mActivityStack.push(activity);
 
         return true;
     }
@@ -191,8 +192,8 @@ public class ViewManager {
         }
     }
 
-    private Class<?> getTopActivity() {
-        Class<?> result = null;
+    private Activity getTopActivity() {
+        Activity result = null;
 
         if (!mActivityStack.isEmpty()) {
             result = mActivityStack.peek();
@@ -241,13 +242,9 @@ public class ViewManager {
     }
 
     public void restartApp() {
-        startView(SplashView.class);
-
-        mMoveViewsToBack = true;
-
         persistState();
 
-        System.exit(0);
+        triggerRebirth3(mContext, mViewMapping.get(SplashView.class));
     }
 
     private void persistState() {
@@ -263,5 +260,37 @@ public class ViewManager {
             mMoveViewsToBack = Helpers.parseBoolean(split, 0);
             mIsSinglePlayerMode = Helpers.parseBoolean(split, 1);
         }
+    }
+
+    /**
+     * More info: https://stackoverflow.com/questions/6609414/how-do-i-programmatically-restart-an-android-app
+     */
+    private static void triggerRebirth(Context context, Class<?> rootActivity) {
+        Intent intent = new Intent(context, rootActivity);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+        if (context instanceof MotherActivity) {
+            ((MotherActivity) context).destroyActivity();
+        }
+        Runtime.getRuntime().exit(0);
+    }
+
+    /**
+     * More info: https://stackoverflow.com/questions/6609414/how-do-i-programmatically-restart-an-android-app
+     */
+    private static void triggerRebirth2(Context context, Class<?> rootActivity) {
+        Intent mStartActivity = new Intent(context, rootActivity);
+        int mPendingIntentId = 123456;
+        PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+        System.exit(0);
+    }
+
+    public static void triggerRebirth3(Context context, Class<?> myClass) {
+        Intent intent = new Intent(context, myClass);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
+        Runtime.getRuntime().exit(0);
     }
 }

@@ -4,7 +4,7 @@ import android.os.Bundle;
 import androidx.preference.ListPreference;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.LeanbackListPreferenceDialogFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.LeanbackListPreferenceDialogFragment;
 
 public class RadioListPreferenceDialogFragment extends LeanbackListPreferenceDialogFragment {
     @Override
