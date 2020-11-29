@@ -103,7 +103,8 @@ public class CardPresenter extends Presenter {
         cardView.setTitleText(video.title);
         cardView.setContentText(video.description);
         cardView.setProgress(video.percentWatched);
-        cardView.setBadgeText(video.hasNewContent ? context.getString(R.string.badge_new_content) : video.badge);
+        cardView.setBadgeText(video.hasNewContent ?
+                context.getString(R.string.badge_new_content) : video.isLive ? context.getString(R.string.badge_live) : video.badge);
         cardView.setBadgeColor(video.hasNewContent || video.isLive || video.isUpcoming ?
                 ContextCompat.getColor(context, R.color.dark_red) : ContextCompat.getColor(context, R.color.black));
 
