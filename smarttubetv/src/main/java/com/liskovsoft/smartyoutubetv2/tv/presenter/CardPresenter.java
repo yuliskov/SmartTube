@@ -45,7 +45,7 @@ public class CardPresenter extends Presenter {
         mDefaultTextColor =
                 ContextCompat.getColor(parent.getContext(), R.color.card_default_text);
         mSelectedBackgroundColor =
-                ContextCompat.getColor(parent.getContext(), R.color.card_selected_background_white);
+                ContextCompat.getColor(parent.getContext(), Helpers.getThemeAttr(parent.getContext(), R.attr.cardSelectedBackground));
         mSelectedTextColor =
                 ContextCompat.getColor(parent.getContext(), R.color.card_selected_text_grey);
         mDefaultCardImage = ContextCompat.getDrawable(parent.getContext(), R.drawable.movie);

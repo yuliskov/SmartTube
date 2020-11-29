@@ -15,6 +15,7 @@
 
     <!-- Card view colors -->
     <color name="card_selected_background_white">#FFFFFF</color>
+    <color name="card_selected_background_white_grey">#D3D3D3</color>
     <color name="card_selected_background_yellow">#ffaa3f</color>
     <color name="card_selected_background_grey">#343434</color>
     <color name="card_selected_text_black">#000000</color>

@@ -179,8 +179,8 @@ public class MainUIData {
                 mContext));
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_dark_oled,
-                "App.Theme.Dark.Player",
-                "App.Theme.DarkOLED.Browse",
+                "App.Theme.Dark.OLED.Player",
+                "App.Theme.Dark.OLED.Browse",
                 "App.Theme.Dark.Preferences",
                 mContext));
     }
