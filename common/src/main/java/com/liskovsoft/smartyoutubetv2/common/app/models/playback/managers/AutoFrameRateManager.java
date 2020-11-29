@@ -12,7 +12,6 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class AutoFrameRateManager extends PlayerEventListenerHelper {
     private static final String TAG = AutoFrameRateManager.class.getSimpleName();
@@ -21,6 +20,8 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     private final AutoFrameRateHelper mAutoFrameRateHelper;
     private final ModeSyncManager mModeSyncManager;
     private AfrData mAfrData = new AfrData();
+    private ArrayList<OptionItem> mOptions;
+    private final Runnable mApplyAfr = this::applyAfr;
 
     private static class AfrData {
         public boolean afrEnabled;
@@ -67,10 +68,15 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     @Override
     public void onInitDone() {
         restoreAfrData();
-        addUiOptions();
+        initUiOptions();
         mAutoFrameRateHelper.saveOriginalState(mActivity);
         mAutoFrameRateHelper.setFpsCorrectionEnabled(mAfrData.afrFpsCorrectionEnabled);
         mAutoFrameRateHelper.setResolutionSwitchEnabled(mAfrData.afrResSwitchEnabled, false);
+    }
+
+    @Override
+    public void onViewResumed() {
+        addUiOptions();
     }
 
     @Override
@@ -131,11 +137,11 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         }
     }
 
-    private void addUiOptions() {
+    private void initUiOptions() {
         String title = mActivity.getString(R.string.auto_frame_rate);
         String fpsCorrection = mActivity.getString(R.string.frame_rate_correction, "30->29.97, 60->59.94");
         String resolutionSwitch = mActivity.getString(R.string.resolution_switch);
-        List<OptionItem> options = new ArrayList<>();
+        mOptions = new ArrayList<>();
 
         OptionItem afrEnableOption = UiOptionItem.from(title, this::onAfrOptionClick, mAfrData.afrEnabled);
         OptionItem afrResSwitchOption = UiOptionItem.from(resolutionSwitch, this::onResolutionSwitchClick, mAfrData.afrResSwitchEnabled);
@@ -144,12 +150,24 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         afrResSwitchOption.setRequire(afrEnableOption);
         afrFpsCorrectionOption.setRequire(afrEnableOption);
 
-        options.add(afrEnableOption);
-        options.add(afrResSwitchOption);
-        options.add(afrFpsCorrectionOption);
+        mOptions.add(afrEnableOption);
+        mOptions.add(afrResSwitchOption);
+        mOptions.add(afrFpsCorrectionOption);
+    }
 
-        mUiManager.addCheckedCategory(title, options);
+    private void addUiOptions() {
+        if (mOptions == null) {
+            return;
+        }
 
-        mUiManager.setOnDialogHide(this::applyAfr);
+        String title = mActivity.getString(R.string.auto_frame_rate);
+
+        if (mAutoFrameRateHelper.isSupported()) {
+            mUiManager.addCheckedCategory(title, mOptions);
+            mUiManager.addOnDialogHide(mApplyAfr);
+        } else {
+            mUiManager.removeCategory(title);
+            mUiManager.removeOnDialogHide(mApplyAfr);
+        }
     }
 }

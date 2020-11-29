@@ -15,9 +15,11 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.Preset;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class HqDialogManager extends PlayerEventListenerHelper {
     private static final String TAG = HqDialogManager.class.getSimpleName();
@@ -29,7 +31,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     private boolean mEnableBackgroundAudio;
     private boolean mEnablePIP;
     private boolean mEnablePlayBehind;
-    private final List<Runnable> mHideListeners = new ArrayList<>();
+    private final Set<Runnable> mHideListeners = new HashSet<>();
     private final StateUpdater mStateUpdater;
 
     public HqDialogManager(StateUpdater stateUpdater) {
@@ -221,12 +223,20 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         mCheckedCategories.put(categoryTitle, options);
     }
 
+    public void removeCategory(String categoryTitle) {
+        mCheckedCategories.remove(categoryTitle);
+    }
+
     public void addRadioCategory(String categoryTitle, List<OptionItem> options) {
         mRadioCategories.put(categoryTitle, options);
     }
 
-    public void setOnDialogHide(Runnable listener) {
+    public void addOnDialogHide(Runnable listener) {
         mHideListeners.add(listener);
+    }
+
+    public void removeOnDialogHide(Runnable listener) {
+        mHideListeners.remove(listener);
     }
 
     private void appendSingleOptions() {

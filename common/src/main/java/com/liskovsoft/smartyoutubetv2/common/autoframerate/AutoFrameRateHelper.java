@@ -42,6 +42,7 @@ public class AutoFrameRateHelper {
     }
 
     public boolean isSupported() {
+        resetStats();
         return mSyncHelper.supportsDisplayModeChangeComplex();
     }
 
