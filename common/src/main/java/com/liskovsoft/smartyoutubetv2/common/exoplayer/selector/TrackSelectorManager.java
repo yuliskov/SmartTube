@@ -188,6 +188,10 @@ public class TrackSelectorManager implements TrackSelectorCallback {
      * We need to circle through the tracks to remove previously selected marks.
      */
     private void updateSelectionFromOverride(int rendererIndex) {
+        if (mRenderers[rendererIndex] == null) {
+            return;
+        }
+
         boolean hasSelected = false;
 
         Renderer renderer = mRenderers[rendererIndex];
@@ -416,7 +420,11 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     }
 
     private void setOverride(int rendererIndex, int groupIndex, int... trackIndexes) {
-        if (groupIndex == -1 || mRenderers[rendererIndex] == null) {
+        if (mRenderers[rendererIndex] == null) {
+            return;
+        }
+
+        if (groupIndex == -1) {
             mRenderers[rendererIndex].override = null; // auto option selected
         } else {
             mRenderers[rendererIndex].override = new SelectionOverride(groupIndex, trackIndexes);
