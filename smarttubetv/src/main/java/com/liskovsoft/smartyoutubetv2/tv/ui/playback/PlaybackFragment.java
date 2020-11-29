@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -164,6 +165,12 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         if (Util.SDK_INT > 23) {
             releasePlayer();
             mEventListener.onViewPaused();
+        }
+    }
+
+    public void onDispatchKeyEvent(KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            mPlayerGlue.syncControlsState();
         }
     }
 

@@ -434,6 +434,13 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
 
     // MOD: fix frame drops: don't update progress too often
 
+    public void syncControlsState() {
+        if (!mIsControlsVisible) {
+            updateProgress();
+            updateBufferedProgress();
+        }
+    }
+
     public void onControlsVisibilityChange(boolean show) {
         mIsControlsVisible = show;
     }
@@ -441,19 +448,27 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
     @CallSuper
     protected void onUpdateProgress() {
         if (mIsControlsVisible) {
-            if (mControlsRow != null) {
-                mControlsRow.setCurrentPosition(mPlayerAdapter.isPrepared()
-                        ? getCurrentPosition() : -1);
-            }
+            updateProgress();
+        }
+    }
+
+    private void updateProgress() {
+        if (mControlsRow != null) {
+            mControlsRow.setCurrentPosition(mPlayerAdapter.isPrepared()
+                    ? getCurrentPosition() : -1);
         }
     }
 
     @CallSuper
     protected void onUpdateBufferedProgress() {
         if (mIsControlsVisible) {
-            if (mControlsRow != null) {
-                mControlsRow.setBufferedPosition(mPlayerAdapter.getBufferedPosition());
-            }
+            updateBufferedProgress();
+        }
+    }
+
+    private void updateBufferedProgress() {
+        if (mControlsRow != null) {
+            mControlsRow.setBufferedPosition(mPlayerAdapter.getBufferedPosition());
         }
     }
 
