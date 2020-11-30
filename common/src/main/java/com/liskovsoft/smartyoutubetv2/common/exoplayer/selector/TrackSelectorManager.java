@@ -163,7 +163,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
                 MediaTrack mediaTrack = MediaTrack.forRendererIndex(rendererIndex);
                 if (rendererIndex == RENDERER_INDEX_VIDEO) {
-                    mediaTrack.isHidden = format.height > FlavorConfig.Player.MAX_HEIGHT_VIDEO_RESOLUTION;
+                    mediaTrack.isHidden = format.height > FlavorConfig.Player.MAX_HEIGHT_VIDEO_RESOLUTION ||
+                            TrackSelectorUtil.isHdrCodec(format.codecs);
                 }
                 mediaTrack.format = format;
                 mediaTrack.groupIndex = groupIndex;

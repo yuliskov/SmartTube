@@ -43,7 +43,6 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
 
         mProgressBarManager = new ProgressBarManager();
         mResultsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
-        mSearchTagsAdapter = new TagAdapter(getActivity(), "");
         mHandler = new Handler();
         setSearchResultProvider(this);
         setupListeners();
@@ -54,7 +53,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         View root = super.onCreateView(inflater, container, savedInstanceState);
 
         mProgressBarManager.setRootView((ViewGroup) root);
-
+        mSearchTagsAdapter = new TagAdapter(getActivity(), "", getSearchTextEditorId());
         return root;
     }
 
