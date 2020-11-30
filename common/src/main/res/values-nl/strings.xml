@@ -27,7 +27,7 @@
     <string name="category_background_playback">Afspelen op achtergrond</string>
     <string name="not_implemented">Niet geïmplementeerd</string>
     <string name="option_background_playback_off">Uit</string>
-    <string name="option_background_playback_pip">PiP</string>
+    <string name="option_background_playback_pip">Beeld-in-beeld</string>
     <string name="option_background_playback_only_audio">Enkel audio</string>
     <string name="playback_settings">HQ instellingen</string>
     <string name="video_speed">Video snelheid</string>
@@ -69,8 +69,8 @@
     <string name="donation">Steun dit project</string>
     <string name="dialog_about">Informatie</string>
     <string name="dialog_player_ui">Video Player</string>
-    <string name="player_show_ui_on_pause">Player weergeven met OK-toets</string>
-    <string name="player_pause_on_ok">Video pauzeren met OK-toets</string>
+    <string name="player_show_ui_on_pause">Player weergeven met OK toets</string>
+    <string name="player_pause_on_ok">Video pauzeren met OK toets</string>
     <string name="player_ok_button_behavior">OK toets</string>
     <string name="player_only_ui">Player weergeven</string>
     <string name="player_ui_and_pause">Player weergeven en pauzeren</string>
