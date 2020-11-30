@@ -77,7 +77,9 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
 
     @Override
     public void onViewResumed() {
-        addUiOptions();
+        if (!(BuildConfig.FLAVOR.equals("stbolshoetv"))) {
+            addUiOptions();
+        }
     }
 
     @Override
