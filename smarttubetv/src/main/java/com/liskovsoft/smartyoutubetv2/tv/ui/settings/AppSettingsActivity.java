@@ -6,7 +6,7 @@ import android.os.Bundle;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.ui.common.MotherActivity;
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 
 public class AppSettingsActivity extends MotherActivity {
     private static final String TAG = AppSettingsActivity.class.getSimpleName();

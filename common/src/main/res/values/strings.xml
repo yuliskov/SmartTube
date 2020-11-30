@@ -119,5 +119,5 @@
     <string name="channel_category_sorting">Channel section sorting</string>
     <string name="sorting_by_new_content">New content</string>
     <string name="sorting_alphabetically">Alphabetically</string>
-    <string name="sorting_by_popularity">Popular first</string>
+    <string name="sorting_last_viewed">Last viewed</string>
 </resources>

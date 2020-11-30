@@ -125,8 +125,9 @@ public class MainUISettingsPresenter {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
-                {R.string.sorting_by_new_content, MainUIData.CHANNEL_SORTING_TOP},
-                {R.string.sorting_alphabetically, MainUIData.CHANNEL_SORTING_AZ}}) {
+                {R.string.sorting_by_new_content, MainUIData.CHANNEL_SORTING_UPDATE},
+                {R.string.sorting_alphabetically, MainUIData.CHANNEL_SORTING_AZ},
+                {R.string.sorting_last_viewed, MainUIData.CHANNEL_SORTING_LAST_VIEWED}}) {
             options.add(UiOptionItem.from(mContext.getString(pair[0]), optionItem -> {
                 mMainUIData.setChannelCategorySorting(pair[1]);
                 BrowsePresenter.instance(mContext).updateChannelCategorySorting();

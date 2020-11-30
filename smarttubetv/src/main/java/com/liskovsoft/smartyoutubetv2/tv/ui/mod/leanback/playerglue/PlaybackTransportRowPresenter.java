@@ -43,7 +43,8 @@ import androidx.leanback.widget.SeekBar;
 import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.ControlBarPresenter.OnControlClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.ControlBarPresenter.OnControlSelectedListener;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.MaxIconNumVideoPlayerGlue.QualityInfoListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.MaxControlsVideoPlayerGlue.QualityInfoListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.seekpreview.ThumbsBar;
 
 import java.util.Arrays;
 

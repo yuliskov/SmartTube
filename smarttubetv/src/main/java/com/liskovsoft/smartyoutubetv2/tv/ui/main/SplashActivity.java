@@ -6,9 +6,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import com.liskovsoft.sharedutils.locale.LangHelper;
 import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
-import com.liskovsoft.smartyoutubetv2.common.language.LangUpdater;
+import com.liskovsoft.smartyoutubetv2.common.misc.LangUpdater;
 
 public class SplashActivity extends Activity implements SplashView {
     private static final String TAG = SplashActivity.class.getSimpleName();
@@ -18,6 +19,8 @@ public class SplashActivity extends Activity implements SplashView {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d(TAG, "Starting SplashView...");
 
         mNewIntent = getIntent();
 

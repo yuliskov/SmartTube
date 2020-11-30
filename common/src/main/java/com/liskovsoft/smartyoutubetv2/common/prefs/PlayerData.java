@@ -80,6 +80,6 @@ public class PlayerData {
     }
 
     private void persistData() {
-        mPrefs.setPlayerData(Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec, mIsShowFullDateEnabled));
+        mPrefs.setPlayerData(Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec, mIsShowFullDateEnabled, mIsSeekPreviewEnabled));
     }
 }

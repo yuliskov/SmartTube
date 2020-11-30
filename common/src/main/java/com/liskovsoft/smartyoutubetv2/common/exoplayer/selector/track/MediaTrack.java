@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track;
 
 import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.trackselection.TrackSelection.Definition;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
@@ -16,6 +18,19 @@ public abstract class MediaTrack {
 
     public MediaTrack(int rendererIndex) {
         this.rendererIndex = rendererIndex;
+    }
+
+    public static MediaTrack from(int rendererIndex, TrackGroupArray groups, Definition definition) {
+        MediaTrack mediaTrack = forRendererIndex(rendererIndex);
+
+        if (mediaTrack == null || groups == null || definition == null || definition.tracks == null) {
+            return null;
+        }
+
+        mediaTrack.groupIndex = groups.indexOf(definition.group);
+        mediaTrack.trackIndex = definition.tracks[0];
+
+        return mediaTrack;
     }
 
     public abstract int compare(MediaTrack track2);
