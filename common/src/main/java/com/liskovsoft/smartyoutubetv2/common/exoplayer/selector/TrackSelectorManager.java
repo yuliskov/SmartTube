@@ -12,6 +12,7 @@ import com.google.android.exoplayer2.trackselection.MappingTrackSelector.MappedT
 import com.google.android.exoplayer2.trackselection.RandomTrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Definition;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.RestoreTrackSelector.TrackSelectorCallback;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
@@ -143,12 +144,10 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         renderer.sortedTracks = new TreeSet<>(new MediaTrackFormatComparator());
 
         // AUTO OPTION: add disable subs option
-        MediaTrack autoTrack = MediaTrack.forRendererIndex(rendererIndex);
+        MediaTrack noSubsTrack = MediaTrack.forRendererIndex(rendererIndex);
         if (rendererIndex == RENDERER_INDEX_SUBTITLE) {
-            renderer.sortedTracks.add(autoTrack);
+            renderer.sortedTracks.add(noSubsTrack);
         }
-
-        boolean hasSelected = false;
 
         for (int groupIndex = 0; groupIndex < renderer.trackGroups.length; groupIndex++) {
             TrackGroup group = renderer.trackGroups.get(groupIndex);
@@ -168,7 +167,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         renderer.override != null && renderer.override.groupIndex == groupIndex && renderer.override.containsTrack(trackIndex);
 
                 if (mediaTrack.isSelected) {
-                    hasSelected = true;
                     renderer.selectedTrack = mediaTrack;
                 }
 
@@ -177,10 +175,41 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             }
         }
 
-        // AUTO OPTION: unselect auto if other is selected
-        autoTrack.isSelected = !hasSelected;
-        if (autoTrack.isSelected) {
-            renderer.selectedTrack = autoTrack;
+        if (rendererIndex == RENDERER_INDEX_SUBTITLE && renderer.selectedTrack == null) { // no subs selected
+            noSubsTrack.isSelected = true;
+            renderer.selectedTrack = noSubsTrack;
+        }
+    }
+
+    /**
+     * We need to circle through the tracks to remove previously selected marks
+     */
+    private void updateSelection(int rendererIndex, int trackGroupIndex, int[] trackIndexes) {
+        if (mRenderers[rendererIndex] == null) {
+            return;
+        }
+
+        // We need to circle through the tracks to remove previously selected marks.
+
+        Renderer renderer = mRenderers[rendererIndex];
+        renderer.selectedTrack = null;
+        for (int groupIndex = 0; groupIndex < renderer.mediaTracks.length; groupIndex++) {
+            for (int trackIndex = 0; trackIndex < renderer.mediaTracks[groupIndex].length; trackIndex++) {
+                MediaTrack mediaTrack = renderer.mediaTracks[groupIndex][trackIndex];
+                mediaTrack.isSelected = groupIndex == trackGroupIndex && Helpers.contains(trackIndexes, trackIndex);
+
+                if (mediaTrack.isSelected) {
+                    renderer.selectedTrack = mediaTrack;
+                }
+            }
+        }
+
+        // Special handling for tracks with auto option
+        if (rendererIndex == RENDERER_INDEX_SUBTITLE) { // no subs selected
+            MediaTrack noSubsTrack = renderer.sortedTracks.first();
+
+            noSubsTrack.isSelected = renderer.selectedTrack == null;
+            renderer.selectedTrack = renderer.selectedTrack != null ? renderer.selectedTrack : noSubsTrack;
         }
     }
 
@@ -430,7 +459,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             mRenderers[rendererIndex].override = new SelectionOverride(groupIndex, trackIndexes);
         }
 
-        updateSelectionFromOverride(rendererIndex);
+        updateSelection(rendererIndex, groupIndex, trackIndexes);
     }
 
     private boolean hasSelection(int rendererIndex) {
