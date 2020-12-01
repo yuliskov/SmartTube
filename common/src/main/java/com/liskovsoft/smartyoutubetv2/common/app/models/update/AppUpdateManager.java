@@ -31,11 +31,6 @@ public class AppUpdateManager implements AppUpdateCheckerListener {
         mContext = context;
         mUpdateChecker = new AppUpdateChecker(mContext, this);
         mSettingsPresenter = AppSettingsPresenter.instance(context);
-
-        // Workaround for Android 6 (cannot write to app cache dir)
-        if (Build.VERSION.SDK_INT == 23) {
-            PermissionHelpers.verifyStoragePermissions(context);
-        }
     }
 
     public static AppUpdateManager instance(Context context) {
