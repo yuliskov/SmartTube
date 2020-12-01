@@ -88,6 +88,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     @Override
     public void onSuggestionItemClicked(Video item) {
         saveState();
+        mIsPlaying = true; // autoplay video from suggestions
     }
 
     //@Override
