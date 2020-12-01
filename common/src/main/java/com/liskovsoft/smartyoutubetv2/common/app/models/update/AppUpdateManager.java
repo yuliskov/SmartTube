@@ -2,9 +2,12 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.update;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
+import android.os.Build.VERSION;
 import com.liskovsoft.appupdatechecker2.AppUpdateChecker;
 import com.liskovsoft.appupdatechecker2.AppUpdateCheckerListener;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -28,6 +31,11 @@ public class AppUpdateManager implements AppUpdateCheckerListener {
         mContext = context;
         mUpdateChecker = new AppUpdateChecker(mContext, this);
         mSettingsPresenter = AppSettingsPresenter.instance(context);
+
+        // Workaround for Android 6 (cannot write to app cache dir)
+        if (Build.VERSION.SDK_INT == 23) {
+            PermissionHelpers.verifyStoragePermissions(context);
+        }
     }
 
     public static AppUpdateManager instance(Context context) {

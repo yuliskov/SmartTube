@@ -17,6 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.CategoryEmptyError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
+import com.liskovsoft.smartyoutubetv2.common.app.models.update.AppUpdateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.CategoryPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
@@ -95,6 +96,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         updateChannelCategorySorting();
         updateCategories();
         mView.selectCategory(mBootToIndex);
+        checkForUpdates();
     }
 
     private void initCategories() {
@@ -242,15 +244,26 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
 
     @Override
     public void onViewResumed() {
+        maybeRefreshHeader();
+        checkForUpdates();
+    }
+
+    @Override
+    public void onCategoryFocused(int categoryId) {
+        updateCategory(categoryId);
+    }
+
+    private void maybeRefreshHeader() {
         long timeAfterPauseMs = System.currentTimeMillis() - mLastUpdateTimeMs;
         if (timeAfterPauseMs > HEADER_REFRESH_PERIOD_MS) { // update header every n minutes
             refresh();
         }
     }
 
-    @Override
-    public void onCategoryFocused(int categoryId) {
-        updateCategory(categoryId);
+    private void checkForUpdates() {
+        AppUpdateManager updatePresenter = AppUpdateManager.instance(mContext);
+        updatePresenter.start(false);
+        updatePresenter.unhold();
     }
 
     public void refresh() {

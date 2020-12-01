@@ -54,8 +54,6 @@ public class SplashPresenter implements Presenter<SplashView> {
         applyRunOnceTasks();
 
         applyNewIntent(mView.getNewIntent());
-
-        checkForUpdates();
     }
 
     private void applyRunOnceTasks() {
@@ -69,12 +67,6 @@ public class SplashPresenter implements Presenter<SplashView> {
 
     private void showAccountSelection() {
         AccountSelectionPresenter.instance(mContext).show();
-    }
-
-    private void checkForUpdates() {
-        AppUpdateManager updatePresenter = AppUpdateManager.instance(mContext);
-        updatePresenter.start(false);
-        updatePresenter.unhold();
     }
 
     public void saveBackupData() {
