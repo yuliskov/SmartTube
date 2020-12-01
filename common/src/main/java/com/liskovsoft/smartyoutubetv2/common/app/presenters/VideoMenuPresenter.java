@@ -76,9 +76,9 @@ public class VideoMenuPresenter {
     private void prepareAndShowDialog(List<VideoPlaylistInfo> videoPlaylistInfos) {
         mSettingsPresenter.clear();
 
-        appendNotInterestedButton();
-        appendOpenChannelButton();
         appendAddToPlaylist(videoPlaylistInfos);
+        appendOpenChannelButton();
+        appendNotInterestedButton();
 
         mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction, mAddAction, mSignCheckAction, mNotInterestedAction));
     }
