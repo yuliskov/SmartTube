@@ -319,6 +319,7 @@ public class SearchSupportFragment extends Fragment {
             public void onSearchQuerySubmit(String query) {
                 if (DEBUG) Log.v(TAG, String.format("onSearchQuerySubmit %s", query));
                 submitQuery(query);
+                mScrollToEndAfterTextChanged = true;
                 if (BuildConfig.FLAVOR.equals("stbolshoetv")) {
                     InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                     inputMethodManager.hideSoftInputFromWindow(mSearchBar.getWindowToken(), 0);
@@ -343,7 +344,7 @@ public class SearchSupportFragment extends Fragment {
             Log.d(TAG, "on search field focused");
             if (focused && mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
                 // scroll cursor to end after transition from lb_search_bar_speech_orb
-                mScrollToEndAfterTextChanged = true;
+                mScrollToEndAfterTextChanged = mSearchTextEditor.getText().length() == 0;
                 Selection.setSelection(mSearchTextEditor.getText(), mSearchTextEditor.length());
 
                 mRowsSupportFragment.getVerticalGridView().clearFocus();
