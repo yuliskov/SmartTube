@@ -20,8 +20,6 @@ public class SplashActivity extends MotherActivity implements SplashView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.d(TAG, "Starting SplashView...");
-
         mNewIntent = getIntent();
 
         mPresenter = SplashPresenter.instance(this);

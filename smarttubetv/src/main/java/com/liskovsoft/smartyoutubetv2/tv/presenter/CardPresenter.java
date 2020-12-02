@@ -112,24 +112,22 @@ public class CardPresenter extends Presenter {
             cardView.setPreviewUrl(video.previewUrl);
         }
 
-        if (video.cardImageUrl != null) {
-            // Set card size from dimension resources.
-            int width = res.getDimensionPixelSize(R.dimen.card_width);
-            int height = res.getDimensionPixelSize(R.dimen.card_height);
+        // Set card size from dimension resources.
+        int width = res.getDimensionPixelSize(R.dimen.card_width);
+        int height = res.getDimensionPixelSize(R.dimen.card_height);
 
-            if (mVideoGridScale > 1.0f) {
-                width *= mVideoGridScale;
-                height *= mVideoGridScale;
-            }
-
-            cardView.setMainImageDimensions(width, height);
-
-            Glide.with(context)
-                    .load(video.cardImageUrl)
-                    .apply(RequestOptions.errorOf(mDefaultCardImage))
-                    .listener(mErrorListener)
-                    .into(cardView.getMainImageView());
+        if (mVideoGridScale > 1.0f) {
+            width *= mVideoGridScale;
+            height *= mVideoGridScale;
         }
+
+        cardView.setMainImageDimensions(width, height);
+
+        Glide.with(context)
+                .load(video.cardImageUrl)
+                .apply(RequestOptions.errorOf(mDefaultCardImage))
+                .listener(mErrorListener)
+                .into(cardView.getMainImageView());
     }
 
     @Override
