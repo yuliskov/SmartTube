@@ -51,11 +51,11 @@ public class SplashActivity extends MotherActivity implements SplashView {
         return mNewIntent;
     }
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        LangUpdater updater = new LangUpdater(newBase);
-        updater.update();
-        String langCode = updater.getUpdatedLocale();
-        super.attachBaseContext(LocaleContextWrapper.wrap(newBase, LangHelper.parseLangCode(langCode)));
-    }
+    //@Override
+    //protected void attachBaseContext(Context newBase) {
+    //    LangUpdater updater = new LangUpdater(newBase);
+    //    updater.update();
+    //    String langCode = updater.getUpdatedLocale();
+    //    super.attachBaseContext(LocaleContextWrapper.wrap(newBase, LangHelper.parseLangCode(langCode)));
+    //}
 }
