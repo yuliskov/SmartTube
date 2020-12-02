@@ -1,9 +1,12 @@
 package com.liskovsoft.smartyoutubetv2.common.misc;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
+import com.liskovsoft.sharedutils.locale.LangHelper;
+import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 
 public class MotherActivity extends FragmentActivity {
@@ -57,5 +60,13 @@ public class MotherActivity extends FragmentActivity {
 
     public void destroyActivity() {
         super.finish();
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        LangUpdater updater = new LangUpdater(newBase);
+        updater.update();
+        String langCode = updater.getUpdatedLocale();
+        super.attachBaseContext(LocaleContextWrapper.wrap(newBase, LangHelper.parseLangCode(langCode)));
     }
 }
