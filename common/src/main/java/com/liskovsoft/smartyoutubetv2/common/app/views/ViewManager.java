@@ -250,6 +250,8 @@ public class ViewManager {
         //
         //System.exit(0);
 
+        mMoveViewsToBack = false;
+
         persistState();
 
         triggerRebirth3(mContext, mViewMapping.get(SplashView.class));
