@@ -189,7 +189,14 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         }
     }
 
-    private void updateSelection(int rendererIndex) {
+    /**
+     * We need to circle through the tracks to remove previously selected marks.
+     */
+    private void updateSelectionFromOverride(int rendererIndex) {
+        if (mRenderers[rendererIndex] == null) {
+            return;
+        }
+
         boolean hasSelected = false;
 
         Renderer renderer = mRenderers[rendererIndex];
@@ -242,12 +249,11 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 Definition definition = new Definition(groups.get(matchedTrack.groupIndex), matchedTrack.trackIndex);
                 definitionPair = new Pair<>(definition, selectedTrack);
                 setOverride(matchedTrack.rendererIndex, matchedTrack.groupIndex, matchedTrack.trackIndex);
-                updateSelection(matchedTrack.rendererIndex);
             } else {
                 Log.e(TAG, "Oops. Can't find match for track %s", selectedTrack);
             }
         }
-        
+
         return definitionPair;
     }
 
@@ -264,7 +270,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         initRenderer(rendererIndex, groups, params);
 
         setOverride(rendererIndex, groups.indexOf(definition.group), definition.tracks);
-        updateSelection(rendererIndex);
     }
 
     @Override
@@ -320,9 +325,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         MediaTrack matchedTrack = findBestMatch(track);
 
         setOverride(matchedTrack.rendererIndex, matchedTrack.groupIndex, matchedTrack.trackIndex);
-
-        // Update the items with the new state.
-        updateSelection(rendererIndex);
 
         // save immediately
         applyOverride(rendererIndex);
@@ -387,7 +389,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         Log.d(TAG, "findBestMatch: Found exact match in this track list: " + mediaTrack.format);
                         result = mediaTrack;
                         break;
-                    } else if (compare > 0 && mediaTrack.compare(result) > 0) { // select track with higher possible quality
+                    } else if (compare > 0 && mediaTrack.compare(result) >= 0) { // select track with higher possible quality
                         result = mediaTrack;
                     }
                 }
@@ -423,12 +425,17 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     }
 
     private void setOverride(int rendererIndex, int groupIndex, int... trackIndexes) {
-        if (groupIndex == -1 || mRenderers[rendererIndex] == null) {
-            mRenderers[rendererIndex].override = null; // auto option selected
+        if (mRenderers[rendererIndex] == null) {
             return;
         }
 
-        mRenderers[rendererIndex].override = new SelectionOverride(groupIndex, trackIndexes);
+        if (groupIndex == -1) {
+            mRenderers[rendererIndex].override = null; // auto option selected
+        } else {
+            mRenderers[rendererIndex].override = new SelectionOverride(groupIndex, trackIndexes);
+        }
+
+        updateSelectionFromOverride(rendererIndex);
     }
 
     private boolean hasSelection(int rendererIndex) {

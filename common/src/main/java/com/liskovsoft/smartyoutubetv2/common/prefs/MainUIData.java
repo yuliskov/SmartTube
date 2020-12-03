@@ -15,9 +15,9 @@ import java.util.Map;
 import java.util.Set;
 
 public class MainUIData {
-    public static final int CHANNEL_SORTING_TOP = 0;
+    public static final int CHANNEL_SORTING_UPDATE = 0;
     public static final int CHANNEL_SORTING_AZ = 1;
-    public static final int CHANNEL_SORTING_POPULAR = 2;
+    public static final int CHANNEL_SORTING_LAST_VIEWED = 2;
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
     private final Context mContext;
@@ -180,8 +180,8 @@ public class MainUIData {
                 mContext));
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_dark_oled,
-                "App.Theme.Dark.Player",
-                "App.Theme.DarkOLED.Browse",
+                "App.Theme.Dark.OLED.Player",
+                "App.Theme.Dark.OLED.Browse",
                 "App.Theme.Dark.Preferences",
                 mContext));
     }
@@ -205,7 +205,7 @@ public class MainUIData {
         mColorSchemeIndex = Helpers.parseInt(split, 5, FlavorConfig.AppPrefs.COLOR_SCHEME_INDEX);
         mIsMultilineTitlesEnabled = Helpers.parseBoolean(split, 6, false);
         mIsSettingsCategoryEnabled = Helpers.parseBoolean(split, 7, true);
-        mChannelCategorySorting = Helpers.parseInt(split, 8, CHANNEL_SORTING_TOP);
+        mChannelCategorySorting = Helpers.parseInt(split, 8, CHANNEL_SORTING_UPDATE);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArray(selectedCategories);

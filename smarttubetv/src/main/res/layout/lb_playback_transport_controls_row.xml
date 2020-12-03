@@ -44,7 +44,7 @@
                 android:clipToPadding="false"
                 android:gravity="bottom" />
         </LinearLayout>
-        <com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.ThumbsBar
+        <com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.seekpreview.ThumbsBar
             android:id="@+id/thumbs_row"
             android:orientation="horizontal"
             android:visibility="invisible"

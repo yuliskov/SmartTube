@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.language;
+package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.content.Context;
 import com.liskovsoft.sharedutils.locale.LangHelper;

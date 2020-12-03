@@ -26,6 +26,22 @@ public class VideoTrack extends MediaTrack {
         return height1 <= height2 || heightEquals(height1, height2);
     }
 
+    private static boolean widthEquals(int width1, int width2) {
+        if (width1 == -1 || width2 == -1) {
+            return false;
+        }
+
+        return Math.abs(width1 - width2) < HEIGHT_EQUITY_THRESHOLD_PX;
+    }
+
+    private static boolean widthLessOrEquals(int width1, int width2) {
+        if (width1 == -1 || width2 == -1) {
+            return false;
+        }
+
+        return width1 <= width2 || widthEquals(width1, width2);
+    }
+
     private static boolean fpsEquals(float fps1, float fps2) {
         if (fps1 == -1 || fps2 == -1) {
             return true;
@@ -106,6 +122,33 @@ public class VideoTrack extends MediaTrack {
     //    return result;
     //}
 
+    //@Override
+    //public int compare(MediaTrack track2) {
+    //    if (track2.format == null) {
+    //        return 1;
+    //    }
+    //
+    //    int result = -1;
+    //
+    //    if (Helpers.equals(format.id, track2.format.id)) {
+    //        result = 0;
+    //    } if (heightEquals(format.height, track2.format.height)) {
+    //        if (fpsLessOrEquals(track2.format.frameRate, format.frameRate)) {
+    //            if (TrackSelectorUtil.isHdrCodec(format.codecs) == TrackSelectorUtil.isHdrCodec(track2.format.codecs)) {
+    //                result = 0;
+    //            } else {
+    //                result = 1;
+    //            }
+    //        } else {
+    //            result = 1;
+    //        }
+    //    } else if (heightLessOrEquals(track2.format.height, format.height)) {
+    //        result = 1;
+    //    }
+    //
+    //    return result;
+    //}
+
     @Override
     public int compare(MediaTrack track2) {
         if (track2.format == null) {
@@ -116,7 +159,7 @@ public class VideoTrack extends MediaTrack {
 
         if (Helpers.equals(format.id, track2.format.id)) {
             result = 0;
-        } if (heightEquals(format.height, track2.format.height)) {
+        } if (widthEquals(format.width, track2.format.width)) {
             if (fpsLessOrEquals(track2.format.frameRate, format.frameRate)) {
                 if (TrackSelectorUtil.isHdrCodec(format.codecs) == TrackSelectorUtil.isHdrCodec(track2.format.codecs)) {
                     result = 0;
@@ -126,7 +169,7 @@ public class VideoTrack extends MediaTrack {
             } else {
                 result = 1;
             }
-        } else if (heightLessOrEquals(track2.format.height, format.height)) {
+        } else if (widthLessOrEquals(track2.format.width, format.width)) {
             result = 1;
         }
 

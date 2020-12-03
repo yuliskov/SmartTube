@@ -119,5 +119,5 @@
     <string name="channel_category_sorting">Сортування розділу Канали</string>
     <string name="sorting_by_new_content">Новий контент</string>
     <string name="sorting_alphabetically">За абеткою</string>
-    <string name="sorting_by_popularity">Популярні спочатку</string>
+    <string name="sorting_last_viewed">Останні переглянуті</string>
 </resources>

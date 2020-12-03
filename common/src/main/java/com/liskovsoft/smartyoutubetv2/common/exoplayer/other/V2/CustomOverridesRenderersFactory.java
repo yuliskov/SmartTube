@@ -35,6 +35,8 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
     public CustomOverridesRenderersFactory(FragmentActivity activity) {
         super(activity);
         setExtensionRendererMode(EXTENSION_RENDERER_MODE_ON);
+        setEnableDecoderFallback(true);
+        //setMediaCodecSelector(new BlackListMediaCodecSelector());
     }
 
     @Override

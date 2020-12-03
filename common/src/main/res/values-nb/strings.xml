@@ -26,7 +26,7 @@
     <string name="category_background_playback">Bakgrunnsavspilling</string>
     <string name="not_implemented">Ikke implementert</string>
     <string name="option_background_playback_off">Deaktivert</string>
-    <string name="option_background_playback_pip">Video og lyd</string>
+    <string name="option_background_playback_all">Video og lyd</string>
     <string name="option_background_playback_only_audio">Bare lyd</string>
     <string name="playback_settings">Avspillingsinnstillinger</string>
     <string name="video_speed">Videohastighet</string>
@@ -101,4 +101,22 @@
     <string name="settings_search">Søk</string>
     <string name="dialog_search">Søk</string>
     <string name="instant_voice_search">Talesøk først</string>
+    <string name="option_background_playback_behind">Spill Video i bakgrunnen</string>
+    <string name="next_video_info_is_not_loaded_yet">Neste videoinformasjon er ikke lastet inn ennå</string>
+    <string name="multiline_titles">Flerlinje titler</string>
+    <string name="cards_style">Rutenett stil</string>
+    <string name="repeat_mode_all">Spill av alle videoene en etter en</string>
+    <string name="repeat_mode_one">Gjenta gjeldende video</string>
+    <string name="repeat_mode_pause">Sett avspilling på pause etter hver video</string>
+    <string name="repeat_mode_none">Stopp avspilling etter en video</string>
+    <string name="subscribed_to_channel">Abonnerer på kanalen</string>
+    <string name="unsubscribed_to_channel">Avslutter abonnering på kanalen</string>
+    <string name="subtitle_yellow">Gul</string>
+    <string name="subtitle_black_bg">Svart bakgrunn</string>
+    <string name="player_seek_preview">Forhåndsvisning mens du søker</string>
+    <string name="color_scheme_dark_oled">Mørk (OLED)</string>
+    <string name="channel_category_sorting">Kanalseksjonssortering</string>
+    <string name="sorting_by_new_content">Nytt innhold</string>
+    <string name="sorting_alphabetically">Alfabetisk</string>
+    <string name="sorting_last_viewed">Sist sett</string>
 </resources>
