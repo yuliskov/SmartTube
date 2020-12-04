@@ -84,7 +84,7 @@ public class StoryboardManager {
     }
 
     private void initSeekPositions() {
-        if (mLengthMs <= 0) {
+        if (mLengthMs <= 0 || mStoryboard == null) {
             return;
         }
 
