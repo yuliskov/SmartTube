@@ -20,10 +20,9 @@ public class MotherActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         Log.d(TAG, "Starting %s...", this.getClass().getSimpleName());
-
+        
         forceDpi1();
         initTheme();
-        initLanguage();
     }
 
     private void forceDpi1() {
@@ -63,20 +62,14 @@ public class MotherActivity extends FragmentActivity {
         }
     }
 
-    private void initLanguage() {
-        LangUpdater updater = new LangUpdater(this);
-        updater.update();
-    }
-
     public void destroyActivity() {
         super.finish();
     }
 
-    //@Override
-    //protected void attachBaseContext(Context newBase) {
-    //    LangUpdater updater = new LangUpdater(newBase);
-    //    updater.update();
-    //    String langCode = updater.getUpdatedLocale();
-    //    super.attachBaseContext(LocaleContextWrapper.wrap(newBase, LangHelper.parseLangCode(langCode)));
-    //}
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        LangUpdater updater = new LangUpdater(newBase);
+        String langCode = updater.getUpdatedLocale();
+        super.attachBaseContext(LocaleContextWrapper.wrap(newBase, LangHelper.parseLangCode(langCode)));
+    }
 }
