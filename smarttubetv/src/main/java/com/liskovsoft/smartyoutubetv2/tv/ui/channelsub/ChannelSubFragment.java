@@ -18,7 +18,7 @@ public class ChannelSubFragment extends VideoGridFragment implements ChannelSubV
         super.onCreate(savedInstanceState);
 
         mPresenter = ChannelSubPresenter.instance(getContext());
-        mPresenter.register(this);
+        mPresenter.setView(this);
 
         mProgressBarManager = new ProgressBarManager();
     }
@@ -35,13 +35,13 @@ public class ChannelSubFragment extends VideoGridFragment implements ChannelSubV
         // Don't move to onCreateView
         mProgressBarManager.setRootView((ViewGroup) getActivity().findViewById(android.R.id.content).getRootView());
 
-        mPresenter.onInitDone();
+        mPresenter.onViewInitialized();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mPresenter.unregister(this);
+        mPresenter.onViewDestroyed();
     }
 
     @Override

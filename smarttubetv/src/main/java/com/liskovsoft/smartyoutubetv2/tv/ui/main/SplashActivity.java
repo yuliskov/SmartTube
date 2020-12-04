@@ -1,14 +1,9 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.main;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import com.liskovsoft.sharedutils.locale.LangHelper;
-import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
-import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
-import com.liskovsoft.smartyoutubetv2.common.misc.LangUpdater;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 
 public class SplashActivity extends MotherActivity implements SplashView {
@@ -23,8 +18,8 @@ public class SplashActivity extends MotherActivity implements SplashView {
         mNewIntent = getIntent();
 
         mPresenter = SplashPresenter.instance(this);
-        mPresenter.register(this);
-        mPresenter.onInitDone();
+        mPresenter.setView(this);
+        mPresenter.onViewInitialized();
 
         finish();
     }
@@ -35,13 +30,13 @@ public class SplashActivity extends MotherActivity implements SplashView {
 
         mNewIntent = intent;
 
-        mPresenter.onInitDone();
+        mPresenter.onViewInitialized();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPresenter.unregister(this);
+        mPresenter.onViewDestroyed();
     }
 
     @Override

@@ -5,18 +5,16 @@ import android.content.Context;
 import android.os.Build.VERSION;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppSettingsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppSettingsPresenter implements Presenter<AppSettingsView> {
+public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     @SuppressLint("StaticFieldLeak")
     private static AppSettingsPresenter sInstance;
-    private final Context mContext;
-    private AppSettingsView mView;
     private final List<SettingsCategory> mCategories;
     private String mTitle;
     private Runnable mOnClose;
@@ -65,26 +63,22 @@ public class AppSettingsPresenter implements Presenter<AppSettingsView> {
     }
 
     public AppSettingsPresenter(Context context) {
-        mContext = context;
+        super(context);
         mCategories = new ArrayList<>();
     }
 
     public static AppSettingsPresenter instance(Context context) {
         if (sInstance == null) {
-            sInstance = new AppSettingsPresenter(context.getApplicationContext());
+            sInstance = new AppSettingsPresenter(context);
         }
+
+        sInstance.setContext(context);
 
         return sInstance;
     }
 
     @Override
-    public void register(AppSettingsView view) {
-        mView = view;
-    }
-
-    @Override
-    public void unregister(AppSettingsView view) {
-        mView = null;
+    public void onViewDestroyed() {
         clear();
     }
 
@@ -104,9 +98,9 @@ public class AppSettingsPresenter implements Presenter<AppSettingsView> {
     }
 
     @Override
-    public void onInitDone() {
-        mView.setTitle(mTitle);
-        mView.addCategories(mCategories);
+    public void onViewInitialized() {
+        getView().setTitle(mTitle);
+        getView().addCategories(mCategories);
     }
 
     public void setPlayerUiManager(PlayerUiManager uiManager) {
@@ -132,12 +126,12 @@ public class AppSettingsPresenter implements Presenter<AppSettingsView> {
         enablePlayerUiAutoHide(false);
         enableOldAndroidFix(true);
 
-        if (mView != null) {
-            mView.clear();
-            onInitDone();
+        if (getView() != null) {
+            getView().clear();
+            onViewInitialized();
         }
 
-        ViewManager.instance(mContext).startView(AppSettingsView.class, true);
+        ViewManager.instance(getContext()).startView(AppSettingsView.class, true);
     }
 
     public void appendRadioCategory(String categoryTitle, List<OptionItem> items) {

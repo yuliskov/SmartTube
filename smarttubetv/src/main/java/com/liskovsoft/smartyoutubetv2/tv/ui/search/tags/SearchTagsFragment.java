@@ -9,7 +9,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.MediaServiceSearchTagProvider;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.vineyard.SearchTagsFragmentBase;
@@ -26,7 +25,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         super.onCreate(savedInstanceState);
 
         mSearchPresenter = SearchPresenter.instance(getContext());
-        mSearchPresenter.register(this);
+        mSearchPresenter.setView(this);
         mItemResultsAdapter = new VideoGroupObjectAdapter();
 
         setItemResultsAdapter(mItemResultsAdapter);
@@ -37,13 +36,13 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mSearchPresenter.onInitDone();
+        mSearchPresenter.onViewInitialized();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSearchPresenter.unregister(this);
+        mSearchPresenter.onViewDestroyed();
     }
 
     @Override
