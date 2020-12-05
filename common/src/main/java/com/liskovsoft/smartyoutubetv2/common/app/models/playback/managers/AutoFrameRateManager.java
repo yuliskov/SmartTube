@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import androidx.annotation.NonNull;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -139,8 +140,10 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
 
     private void applyAfr(FormatItem track, boolean force) {
         if (track != null) {
-            Log.d(TAG, "Applying afr: " + track.getFrameRate());
-            mAutoFrameRateHelper.apply(track, getActivity(), force);
+            String msg = String.format("Applying afr: %s, for activity: %s", track.getFrameRate(), getActivity().getClass().getSimpleName());
+            MessageHelpers.showMessage(getActivity(), msg);
+            Log.d(TAG, msg);
+            mAutoFrameRateHelper.apply(track, getActivity(), true);
             //mModeSyncManager.save(track);
         }
     }
