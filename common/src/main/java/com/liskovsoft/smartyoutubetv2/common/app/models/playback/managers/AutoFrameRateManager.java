@@ -69,7 +69,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     public void onInitDone() {
         restoreAfrData();
         initUiOptions();
-        mAutoFrameRateHelper.saveOriginalState(mActivity);
+        mAutoFrameRateHelper.saveOriginalState(getActivity());
         mAutoFrameRateHelper.setFpsCorrectionEnabled(mAfrData.afrFpsCorrectionEnabled);
         mAutoFrameRateHelper.setResolutionSwitchEnabled(mAfrData.afrResSwitchEnabled, false);
     }
@@ -89,11 +89,11 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     }
 
     private void persistAfrData() {
-        AppPrefs.instance(mActivity).setAfrData(mAfrData.toString());
+        AppPrefs.instance(getActivity()).setAfrData(mAfrData.toString());
     }
 
     private void restoreAfrData() {
-        mAfrData = AfrData.from(AppPrefs.instance(mActivity).getAfrData(null));
+        mAfrData = AfrData.from(AppPrefs.instance(getActivity()).getAfrData(null));
     }
 
     private void onAfrOptionClick(OptionItem optionItem) {
@@ -125,22 +125,22 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
 
     private void restoreAfr() {
         Log.d(TAG, "Restoring afr...");
-        mAutoFrameRateHelper.restoreOriginalState(mActivity);
+        mAutoFrameRateHelper.restoreOriginalState(getActivity());
         mModeSyncManager.save(null);
     }
 
     private void applyAfr(FormatItem track, boolean force) {
         if (track != null) {
             Log.d(TAG, "Applying afr: " + track.getFrameRate());
-            mAutoFrameRateHelper.apply(track, mActivity, force);
+            mAutoFrameRateHelper.apply(track, getActivity(), force);
             //mModeSyncManager.save(track);
         }
     }
 
     private void initUiOptions() {
-        String title = mActivity.getString(R.string.auto_frame_rate);
-        String fpsCorrection = mActivity.getString(R.string.frame_rate_correction, "30->29.97, 60->59.94");
-        String resolutionSwitch = mActivity.getString(R.string.resolution_switch);
+        String title = getActivity().getString(R.string.auto_frame_rate);
+        String fpsCorrection = getActivity().getString(R.string.frame_rate_correction, "30->29.97, 60->59.94");
+        String resolutionSwitch = getActivity().getString(R.string.resolution_switch);
         mOptions = new ArrayList<>();
 
         OptionItem afrEnableOption = UiOptionItem.from(title, this::onAfrOptionClick, mAfrData.afrEnabled);
@@ -160,7 +160,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
             return;
         }
 
-        String title = mActivity.getString(R.string.auto_frame_rate);
+        String title = getActivity().getString(R.string.auto_frame_rate);
 
         if (mAutoFrameRateHelper.isSupported()) {
             mUiManager.addCheckedCategory(title, mOptions);

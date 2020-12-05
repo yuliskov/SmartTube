@@ -41,14 +41,14 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onInitDone() {
-        mRepeatMode = AppPrefs.instance(mActivity).getVideoLoaderData(PlaybackUiController.REPEAT_ALL);
+        mRepeatMode = AppPrefs.instance(getActivity()).getVideoLoaderData(PlaybackUiController.REPEAT_ALL);
     }
 
     @Override
     public void openVideo(Video item) {
         mPlaylist.add(item);
 
-        if (mController != null && mController.isEngineInitialized()) { // player is initialized
+        if (getController() != null && getController().isEngineInitialized()) { // player is initialized
             if (!item.equals(mLastVideo)) {
                 loadVideo(item); // play immediately
             }
@@ -60,7 +60,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     @Override
     public void onEngineInitialized() {
         loadVideo(mLastVideo);
-        mController.setRepeatButtonState(mRepeatMode);
+        getController().setRepeatButtonState(mRepeatMode);
     }
 
     @Override
@@ -75,9 +75,9 @@ public class VideoLoader extends PlayerEventListenerHelper {
             Log.e(TAG, "Player error occurred. Restarting engine once...");
             mErrorVideo = mLastVideo;
             YouTubeMediaService.instance().invalidateCache(); // some data might be stalled
-            mController.reloadPlayback(); // re-download video data
+            getController().reloadPlayback(); // re-download video data
         } else {
-            mController.showControls(true);
+            getController().showControls(true);
         }
     }
 
@@ -93,7 +93,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         Video next = mPlaylist.next();
 
         if (next == null) {
-            loadVideoFromMetadata(mController.getVideo());
+            loadVideoFromMetadata(getController().getVideo());
         } else {
             loadVideo(next);
         }
@@ -104,12 +104,12 @@ public class VideoLoader extends PlayerEventListenerHelper {
     @Override
     public void onPlayEnd() {
         // Suggestions is opened. Seems that user want to stay here.
-        if (!mController.isSuggestionsShown()) {
+        if (!getController().isSuggestionsShown()) {
             switch (mRepeatMode) {
                 case PlaybackUiController.REPEAT_ALL:
                     onNextClicked();
-                    if (!mController.isInPIPMode()) {
-                        mController.showControls(true);
+                    if (!getController().isInPIPMode()) {
+                        getController().showControls(true);
                     }
                     break;
                 case PlaybackUiController.REPEAT_ONE:
@@ -117,11 +117,11 @@ public class VideoLoader extends PlayerEventListenerHelper {
                     break;
                 case PlaybackUiController.REPEAT_NONE:
                     // close player
-                    mController.exit();
+                    getController().exit();
                     break;
                 case PlaybackUiController.REPEAT_PAUSE:
                     // pause player
-                    mController.showControls(true);
+                    getController().showControls(true);
                     break;
             }
 
@@ -135,7 +135,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
             mPlaylist.add(item);
             loadVideo(item);
         } else if (item.isChannel()) {
-            ChannelPresenter.instance(mActivity).openChannel(item);
+            ChannelPresenter.instance(getActivity()).openChannel(item);
         } else {
             Log.e(TAG, "Video item doesn't contain needed data!");
         }
@@ -144,23 +144,23 @@ public class VideoLoader extends PlayerEventListenerHelper {
     @Override
     public void onRepeatModeClicked(int modeIndex) {
         mRepeatMode = modeIndex;
-        AppPrefs.instance(mActivity).setVideoLoaderData(mRepeatMode);
+        AppPrefs.instance(getActivity()).setVideoLoaderData(mRepeatMode);
         showBriefInfo(modeIndex);
     }
 
     private void showBriefInfo(int modeIndex) {
         switch (modeIndex) {
             case PlaybackUiController.REPEAT_ALL:
-                MessageHelpers.showMessage(mActivity, R.string.repeat_mode_all);
+                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_all);
                 break;
             case PlaybackUiController.REPEAT_ONE:
-                MessageHelpers.showMessage(mActivity, R.string.repeat_mode_one);
+                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_one);
                 break;
             case PlaybackUiController.REPEAT_PAUSE:
-                MessageHelpers.showMessage(mActivity, R.string.repeat_mode_pause);
+                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_pause);
                 break;
             case PlaybackUiController.REPEAT_NONE:
-                MessageHelpers.showMessage(mActivity, R.string.repeat_mode_none);
+                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_none);
                 break;
         }
     }
@@ -173,7 +173,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private void loadVideo(Video item) {
         if (item != null) {
             mLastVideo = item;
-            mController.setVideo(item);
+            getController().setVideo(item);
             loadFormatInfo(item);
         }
     }
@@ -193,7 +193,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         if (current.nextMediaItem != null) {
             loadVideoFromNext(current.nextMediaItem);
         } else {
-            MessageHelpers.showMessageThrottled(mActivity, R.string.next_video_info_is_not_loaded_yet);
+            MessageHelpers.showMessageThrottled(getActivity(), R.string.next_video_info_is_not_loaded_yet);
         }
     }
 
@@ -212,17 +212,17 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
         if (formatInfo.containsHlsInfo()) {
             Log.d(TAG, "Found hls video. Live translation. Loading...");
-            mController.openHls(formatInfo.getHlsManifestUrl());
+            getController().openHls(formatInfo.getHlsManifestUrl());
         } else if (formatInfo.containsDashInfo()) {
             Log.d(TAG, "Found dash video. Main video format. Loading...");
 
             mMpdStreamAction = formatInfo.createMpdStreamObservable()
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(mController::openDash, error -> Log.e(TAG, "createMpdStream error: " + error));
+                    .subscribe(getController()::openDash, error -> Log.e(TAG, "createMpdStream error: " + error));
         } else if (formatInfo.containsUrlListInfo()) {
             Log.d(TAG, "Found url list video. This is always LQ. Loading...");
-            mController.openUrlList(formatInfo.createUrlList());
+            getController().openUrlList(formatInfo.createUrlList());
         } else {
             Log.d(TAG, "Empty format info received. Seems future translation. No video data to pass to the player.");
             scheduleReloadVideoTimer();
@@ -231,7 +231,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     private void scheduleReloadVideoTimer() {
         Log.d(TAG, "Starting check for the future stream...");
-        mController.showControls(true);
+        getController().showControls(true);
         mHandler.postDelayed(mReloadVideoHandler, 30 * 1_000);
     }
 }
