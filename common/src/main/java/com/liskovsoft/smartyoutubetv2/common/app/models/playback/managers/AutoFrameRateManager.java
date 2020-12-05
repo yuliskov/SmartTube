@@ -92,21 +92,21 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     //    }
     //}
 
-    @Override
-    public boolean onNextClicked() {
-        getController().restartEngine();
-        return false;
-    }
+    //@Override
+    //public boolean onNextClicked() {
+    //    getController().restartEngine();
+    //    return false;
+    //}
+    //
+    //@Override
+    //public void onPlayEnd() {
+    //    getController().restartEngine();
+    //}
 
-    @Override
-    public void onPlayEnd() {
-        getController().restartEngine();
-    }
-
-    @Override
-    public void onSuggestionItemClicked(Video item) {
-        getController().restartEngine();
-    }
+    //@Override
+    //public void onSuggestionItemClicked(Video item) {
+    //    getController().restartEngine();
+    //}
 
     @Override
     public void onVideoLoaded(Video item) {
