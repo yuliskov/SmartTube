@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 import androidx.annotation.NonNull;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 public class AutoFrameRateManager extends PlayerEventListenerHelper {
     private static final String TAG = AutoFrameRateManager.class.getSimpleName();
     private final HqDialogManager mUiManager;
-    private FormatItem mSelectedVideoTrack;
+    //private FormatItem mSelectedVideoTrack;
     private final AutoFrameRateHelper mAutoFrameRateHelper;
     private final ModeSyncManager mModeSyncManager;
     private AfrData mAfrData = new AfrData();
@@ -79,13 +80,20 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         addUiOptions();
     }
 
-    @Override
-    public void onTrackChanged(FormatItem track) {
-        if (track.getType() == FormatItem.TYPE_VIDEO) {
-            mSelectedVideoTrack = track;
+    //@Override
+    //public void onTrackChanged(FormatItem track) {
+    //    if (track.getType() == FormatItem.TYPE_VIDEO) {
+    //        mSelectedVideoTrack = track;
+    //
+    //        //applyAfr();
+    //
+    //        Log.d(TAG, "onTrackChanged");
+    //    }
+    //}
 
-            applyAfr();
-        }
+    @Override
+    public void onVideoLoaded(Video item) {
+        applyAfr();
     }
 
     private void persistAfrData() {
@@ -117,7 +125,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
 
     private void applyAfr() {
         if (mAfrData.afrEnabled) {
-            applyAfr(mSelectedVideoTrack, false);
+            applyAfr(getController().getVideoFormat(), false);
         } else {
             restoreAfr();
         }
