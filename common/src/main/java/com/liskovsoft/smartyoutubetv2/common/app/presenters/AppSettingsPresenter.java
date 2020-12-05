@@ -3,6 +3,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build.VERSION;
+import android.os.Handler;
+import android.os.Looper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
@@ -152,6 +154,16 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
 
     public void appendSingleButton(OptionItem optionItem) {
         mCategories.add(SettingsCategory.singleButton(optionItem));
+    }
+
+    public void showDialogMessage(String dialogTitle, Runnable onClose, int timeoutMs) {
+        showDialog(dialogTitle, onClose);
+
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            if (getView() != null) {
+                getView().finish();
+            }
+        }, timeoutMs);
     }
 
     private void enableOldAndroidFix(boolean enable) {

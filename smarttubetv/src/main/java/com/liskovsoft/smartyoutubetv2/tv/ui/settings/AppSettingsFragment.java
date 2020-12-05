@@ -125,6 +125,13 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
         return super.onPreferenceDisplayDialog(caller, pref);
     }
 
+    @Override
+    public void finish() {
+        if (getActivity() != null) {
+            getActivity().finish();
+        }
+    }
+
     public void onFinish() {
         mSettingsPresenter.onClose();
     }

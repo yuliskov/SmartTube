@@ -1,13 +1,13 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import androidx.annotation.NonNull;
-import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.AutoFrameRateHelper;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
@@ -94,7 +94,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
 
     @Override
     public void onVideoLoaded(Video item) {
-        applyAfr();
+        applyAfrWrapper();
     }
 
     private void persistAfrData() {
@@ -122,6 +122,12 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         mAfrData.afrResSwitchEnabled = optionItem.isSelected();
         mAutoFrameRateHelper.setResolutionSwitchEnabled(mAfrData.afrResSwitchEnabled, force);
         persistAfrData();
+    }
+
+    private void applyAfrWrapper() {
+        if (mAfrData.afrEnabled) {
+            AppSettingsPresenter.instance(getActivity()).showDialogMessage("Applying AFR...", this::applyAfr, 1_000);
+        }
     }
 
     private void applyAfr() {
