@@ -97,16 +97,6 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         applyAfr();
     }
 
-    @Override
-    public void onSourceChanged(Video item) {
-        restoreAfr();
-    }
-
-    @Override
-    public void onPlayEnd() {
-        restoreAfr();
-    }
-
     private void persistAfrData() {
         AppPrefs.instance(getActivity()).setAfrData(mAfrData.toString());
     }
@@ -154,9 +144,8 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         if (track != null) {
             String msg = String.format("Applying afr... fps: %s, resolution: %sx%s, activity: %s",
                     track.getFrameRate(), track.getWidth(), track.getHeight(), getActivity().getClass().getSimpleName());
-            MessageHelpers.showMessage(getActivity(), msg);
             Log.d(TAG, msg);
-            mAutoFrameRateHelper.apply(track, getActivity(), true);
+            mAutoFrameRateHelper.apply(track, getActivity(), force);
             //mModeSyncManager.save(track);
         }
     }
