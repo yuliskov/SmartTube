@@ -120,4 +120,5 @@
     <string name="sorting_by_new_content">Neue Videos</string>
     <string name="sorting_alphabetically">Alphabetisch</string>
     <string name="sorting_last_viewed">Zuletzt angesehen</string>
+    <string name="player_pause_when_seek">Pause beim Spulen</string>
 </resources>
