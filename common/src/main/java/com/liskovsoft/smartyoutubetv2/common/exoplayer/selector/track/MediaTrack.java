@@ -33,6 +33,7 @@ public abstract class MediaTrack {
     }
 
     public abstract int compare(MediaTrack track2);
+    public abstract int inBounds(MediaTrack track2);
 
     public static MediaTrack forRendererIndex(int rendererIndex) {
         switch (rendererIndex) {

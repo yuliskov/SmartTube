@@ -407,7 +407,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 for (int trackIndex = 0; trackIndex < renderer.mediaTracks[groupIndex].length; trackIndex++) {
                     MediaTrack mediaTrack = renderer.mediaTracks[groupIndex][trackIndex];
 
-                    int compare = track.compare(mediaTrack);
+                    int compare = track.inBounds(mediaTrack);
 
                     if (compare == 0) {
                         Log.d(TAG, "findBestMatch: Found exact match in this track list: " + mediaTrack.format);
