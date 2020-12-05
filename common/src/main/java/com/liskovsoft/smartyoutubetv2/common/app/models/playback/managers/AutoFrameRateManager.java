@@ -134,7 +134,6 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
 
     private void restoreAfr() {
         String msg = "Restoring original frame rate...";
-        MessageHelpers.showMessage(getActivity(), msg);
         Log.d(TAG, msg);
         mAutoFrameRateHelper.restoreOriginalState(getActivity());
         mModeSyncManager.save(null);
