@@ -85,6 +85,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerUIData.enableSeekPreview(option.isSelected()),
                 mPlayerUIData.isSeekPreviewEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_pause_when_seek),
+                option -> mPlayerUIData.enablePauseOnSeek(option.isSelected()),
+                mPlayerUIData.isPauseOnSeekEnabled()));
+
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 }

@@ -120,4 +120,5 @@
     <string name="sorting_by_new_content">Новый контент</string>
     <string name="sorting_alphabetically">По алфавиту</string>
     <string name="sorting_last_viewed">Последние просмотренные</string>
+    <string name="player_pause_when_seek">Пауза при перемотке</string>
 </resources>
