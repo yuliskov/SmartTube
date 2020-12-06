@@ -107,7 +107,7 @@
             android:screenOrientation="landscape"/>
 
         <activity
-            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.channelsub.ChannelSubActivity"
+            android:name="com.liskovsoft.smartyoutubetv2.tv.ui.channeluploads.ChannelUploadsActivity"
             android:launchMode="singleInstance"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:screenOrientation="landscape"/>

@@ -1,23 +1,23 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.channelsub;
+package com.liskovsoft.smartyoutubetv2.tv.ui.channeluploads;
 
 import android.os.Bundle;
 import android.view.ViewGroup;
 import androidx.annotation.Nullable;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelSubPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelSubView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.VideoGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 
-public class ChannelSubFragment extends VideoGridFragment implements ChannelSubView {
+public class ChannelUploadsFragment extends VideoGridFragment implements ChannelUploadsView {
     private ProgressBarManager mProgressBarManager;
-    private ChannelSubPresenter mPresenter;
+    private ChannelUploadsPresenter mPresenter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mPresenter = ChannelSubPresenter.instance(getContext());
+        mPresenter = ChannelUploadsPresenter.instance(getContext());
         mPresenter.setView(this);
 
         mProgressBarManager = new ProgressBarManager();
@@ -25,7 +25,7 @@ public class ChannelSubFragment extends VideoGridFragment implements ChannelSubV
 
     @Override
     protected VideoGroupPresenter getMainPresenter() {
-        return ChannelSubPresenter.instance(getContext());
+        return ChannelUploadsPresenter.instance(getContext());
     }
 
     @Override

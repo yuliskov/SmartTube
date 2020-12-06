@@ -11,7 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelSubView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
@@ -19,26 +19,26 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class ChannelSubPresenter extends BasePresenter<ChannelSubView> implements VideoGroupPresenter {
-    private static final String TAG = ChannelSubPresenter.class.getSimpleName();
+public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> implements VideoGroupPresenter {
+    private static final String TAG = ChannelUploadsPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
-    private static ChannelSubPresenter sInstance;
+    private static ChannelUploadsPresenter sInstance;
     private final PlaybackPresenter mPlaybackPresenter;
     private final MediaGroupManager mGroupManager;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
     private Video mVideoItem;
 
-    public ChannelSubPresenter(Context context) {
+    public ChannelUploadsPresenter(Context context) {
         super(context);
         MediaService mediaService = YouTubeMediaService.instance();
         mGroupManager = mediaService.getMediaGroupManager();
         mPlaybackPresenter = PlaybackPresenter.instance(context);
     }
 
-    public static ChannelSubPresenter instance(Context context) {
+    public static ChannelUploadsPresenter instance(Context context) {
         if (sInstance == null) {
-            sInstance = new ChannelSubPresenter(context);
+            sInstance = new ChannelUploadsPresenter(context);
         }
 
         sInstance.setContext(context);
@@ -90,7 +90,7 @@ public class ChannelSubPresenter extends BasePresenter<ChannelSubView> implement
         }
 
         disposeActions();
-        ViewManager.instance(getContext()).startView(ChannelSubView.class);
+        ViewManager.instance(getContext()).startView(ChannelUploadsView.class);
 
         if (getView() != null) {
             mVideoItem = null;

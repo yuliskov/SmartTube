@@ -90,7 +90,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                 openChannel(item.channelId);
             } else {
                 // Maybe this is subscribed items view
-                ChannelSubPresenter.instance(getContext())
+                ChannelUploadsPresenter.instance(getContext())
                         .obtainVideoGroup(item, group -> openChannel(group.getChannelId()));
             }
         }
