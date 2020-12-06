@@ -81,33 +81,6 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         addUiOptions();
     }
 
-    //@Override
-    //public void onTrackChanged(FormatItem track) {
-    //    if (track.getType() == FormatItem.TYPE_VIDEO) {
-    //        mSelectedVideoTrack = track;
-    //
-    //        //applyAfr();
-    //
-    //        Log.d(TAG, "onTrackChanged");
-    //    }
-    //}
-
-    //@Override
-    //public boolean onNextClicked() {
-    //    getController().restartEngine();
-    //    return false;
-    //}
-    //
-    //@Override
-    //public void onPlayEnd() {
-    //    getController().restartEngine();
-    //}
-
-    //@Override
-    //public void onSuggestionItemClicked(Video item) {
-    //    getController().restartEngine();
-    //}
-
     @Override
     public void onVideoLoaded(Video item) {
         applyAfr();
@@ -166,7 +139,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
             String msg = String.format("Applying afr... fps: %s, resolution: %sx%s, activity: %s",
                     track.getFrameRate(), track.getWidth(), track.getHeight(), getActivity().getClass().getSimpleName());
             Log.d(TAG, msg);
-            mAutoFrameRateHelper.apply(track, getActivity(), force);
+            mAutoFrameRateHelper.apply(getActivity(), track, force);
             //mModeSyncManager.save(track);
         }
     }
