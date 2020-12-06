@@ -205,8 +205,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             mPlaybackPresenter.openVideo(item);
         } else if (item.isChannel()) {
             ChannelPresenter.instance(getContext()).openChannel(item);
-        } else if (item.isChannelSub()) {
+        } else if (item.isChannelSection()) {
             ChannelPresenter.instance(getContext()).openChannel(item);
+        } else if (item.isPlaylist()) {
+            ChannelUploadsPresenter.instance(getContext()).openChannel(item);
         }
 
         updateRefreshTime();
