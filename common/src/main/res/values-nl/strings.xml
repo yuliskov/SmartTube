@@ -45,7 +45,7 @@
     <string name="title_video_presets">Video preset</string>
     <string name="settings_accounts">Accounts</string>
     <string name="settings_left_panel">Rubrieken</string>
-    <string name="settings_themes">Thema</string>
+    <string name="settings_themes">Display thema</string>
     <string name="settings_other">Andere</string>
     <string name="settings_player">Video Player</string>
     <string name="settings_language">Taal</string>
@@ -85,7 +85,7 @@
     <string name="large_ui">Grote weergave</string>
     <string name="video_grid_scale">Video\'s formaat</string>
     <string name="scale_ui">Display formaat</string>
-    <string name="color_scheme">Thema</string>
+    <string name="color_scheme">Display thema</string>
     <string name="color_scheme_default">Standaard</string>
     <string name="color_scheme_red_grey">Rood-grijs</string>
     <string name="color_scheme_red">Rood</string>
