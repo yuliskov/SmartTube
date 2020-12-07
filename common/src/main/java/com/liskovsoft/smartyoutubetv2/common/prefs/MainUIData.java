@@ -167,7 +167,7 @@ public class MainUIData {
         mLeftPanelCategories.put(R.string.header_channels, MediaGroup.TYPE_CHANNELS_SECTION);
         mLeftPanelCategories.put(R.string.header_subscriptions, MediaGroup.TYPE_SUBSCRIPTIONS);
         mLeftPanelCategories.put(R.string.header_history, MediaGroup.TYPE_HISTORY);
-        mLeftPanelCategories.put(R.string.header_playlists, MediaGroup.TYPE_PLAYLISTS);
+        mLeftPanelCategories.put(R.string.header_playlists, MediaGroup.TYPE_PLAYLISTS_SECTION);
     }
 
     private void initColorSchemes() {
@@ -218,7 +218,7 @@ public class MainUIData {
         mIsMultilineTitlesEnabled = Helpers.parseBoolean(split, 6, false);
         mIsSettingsCategoryEnabled = Helpers.parseBoolean(split, 7, true);
         mChannelCategorySorting = Helpers.parseInt(split, 8, CHANNEL_SORTING_UPDATE);
-        mPlaylistsStyle = Helpers.parseInt(split, 9, PLAYLISTS_STYLE_GRID);
+        mPlaylistsStyle = Helpers.parseInt(split, 9, PLAYLISTS_STYLE_ROWS);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArray(selectedCategories);

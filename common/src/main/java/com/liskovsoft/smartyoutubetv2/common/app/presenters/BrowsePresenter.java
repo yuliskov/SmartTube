@@ -116,7 +116,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         mCategories.add(new Category(MediaGroup.TYPE_CHANNELS_SECTION, getContext().getString(R.string.header_channels), Category.TYPE_GRID, R.drawable.icon_channels, true));
         mCategories.add(new Category(MediaGroup.TYPE_SUBSCRIPTIONS, getContext().getString(R.string.header_subscriptions), Category.TYPE_GRID, R.drawable.icon_subscriptions, true));
         mCategories.add(new Category(MediaGroup.TYPE_HISTORY, getContext().getString(R.string.header_history), Category.TYPE_GRID, R.drawable.icon_history, true));
-        mCategories.add(new Category(MediaGroup.TYPE_PLAYLISTS, getContext().getString(R.string.header_playlists), Category.TYPE_ROW, R.drawable.icon_playlist, true));
+        mCategories.add(new Category(MediaGroup.TYPE_PLAYLISTS_SECTION, getContext().getString(R.string.header_playlists), Category.TYPE_ROW, R.drawable.icon_playlist, true));
 
         if (mMainUIData.isSettingsCategoryEnabled()) {
             mCategories.add(new Category(MediaGroup.TYPE_SETTINGS, getContext().getString(R.string.header_settings), Category.TYPE_TEXT_GRID, R.drawable.icon_settings));
@@ -130,7 +130,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         mRowMapping.put(MediaGroup.TYPE_NEWS, mediaGroupManager.getNewsObserve());
         mRowMapping.put(MediaGroup.TYPE_MUSIC, mediaGroupManager.getMusicObserve());
         mRowMapping.put(MediaGroup.TYPE_GAMING, mediaGroupManager.getGamingObserve());
-        mRowMapping.put(MediaGroup.TYPE_PLAYLISTS, mediaGroupManager.getPlaylistsObserve());
+        mRowMapping.put(MediaGroup.TYPE_PLAYLISTS_SECTION, mediaGroupManager.getPlaylistsObserve());
 
         mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mediaGroupManager.getSubscriptionsObserve());
         mGridMapping.put(MediaGroup.TYPE_HISTORY, mediaGroupManager.getHistoryObserve());
@@ -199,13 +199,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
         switch (playlistsStyle) {
             case MainUIData.PLAYLISTS_STYLE_GRID:
-                mRowMapping.remove(MediaGroup.TYPE_PLAYLISTS);
-                mGridMapping.put(MediaGroup.TYPE_PLAYLISTS, mediaGroupManager.getEmptyPlaylistsObserve());
+                mRowMapping.remove(MediaGroup.TYPE_PLAYLISTS_SECTION);
+                mGridMapping.put(MediaGroup.TYPE_PLAYLISTS_SECTION, mediaGroupManager.getEmptyPlaylistsObserve());
                 categoryType = Category.TYPE_GRID;
                 break;
             case MainUIData.PLAYLISTS_STYLE_ROWS:
-                mGridMapping.remove(MediaGroup.TYPE_PLAYLISTS);
-                mRowMapping.put(MediaGroup.TYPE_PLAYLISTS, mediaGroupManager.getPlaylistsObserve());
+                mGridMapping.remove(MediaGroup.TYPE_PLAYLISTS_SECTION);
+                mRowMapping.put(MediaGroup.TYPE_PLAYLISTS_SECTION, mediaGroupManager.getPlaylistsObserve());
                 categoryType = Category.TYPE_ROW;
                 break;
         }
@@ -213,7 +213,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         if (categoryType != -1) {
             int index = 0;
             for (Category category : mCategories) {
-                if (category.getId() == MediaGroup.TYPE_PLAYLISTS) {
+                if (category.getId() == MediaGroup.TYPE_PLAYLISTS_SECTION) {
                     category.setType(categoryType);
 
                     if (reAdd) {

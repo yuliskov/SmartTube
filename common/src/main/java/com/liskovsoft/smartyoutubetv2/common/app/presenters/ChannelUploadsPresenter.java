@@ -85,7 +85,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     public void openChannel(Video item) {
-        if (item == null || !item.isChannelSection()) {
+        if (item == null) {
             return;
         }
 

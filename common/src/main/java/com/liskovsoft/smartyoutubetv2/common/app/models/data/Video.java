@@ -172,7 +172,7 @@ public final class Video implements Parcelable {
     }
 
     public boolean isPlaylist() {
-        return false;
+        return mediaItem != null && mediaItem.getType() == MediaItem.TYPE_PLAYLISTS_SECTION;
     }
 
     public void sync(MediaItemMetadata metadata, boolean useAlt) {
