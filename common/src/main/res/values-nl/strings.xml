@@ -45,7 +45,7 @@
     <string name="title_video_presets">Video preset</string>
     <string name="settings_accounts">Accounts</string>
     <string name="settings_left_panel">Rubrieken</string>
-    <string name="settings_themes">Thema</string>
+    <string name="settings_themes">Display thema</string>
     <string name="settings_other">Andere</string>
     <string name="settings_player">Video Player</string>
     <string name="settings_language">Taal</string>
@@ -59,7 +59,7 @@
     <string name="dialog_select_language">Taal</string>
     <string name="subtitle_default">Standaard</string>
     <string name="subtitle_semi_transparent_bg">Transparante achtergrond</string>
-    <string name="subtitle_style">Stijl</string>
+    <string name="subtitle_style">Lay-out</string>
     <string name="subtitle_language">Taal</string>
     <string name="action_search">Zoeken</string>
     <string name="settings_main_ui">Display</string>
@@ -83,9 +83,9 @@
     <string name="side_panel_sections">Rubrieken</string>
     <string name="boot_to_section">Opstarten met rubriek</string>
     <string name="large_ui">Grote weergave</string>
-    <string name="video_grid_scale">Videokaart formaat</string>
+    <string name="video_grid_scale">Video\'s formaat</string>
     <string name="scale_ui">Display formaat</string>
-    <string name="color_scheme">Thema</string>
+    <string name="color_scheme">Display thema</string>
     <string name="color_scheme_default">Standaard</string>
     <string name="color_scheme_red_grey">Rood-grijs</string>
     <string name="color_scheme_red">Rood</string>
@@ -102,10 +102,10 @@
     <string name="settings_search">Zoeken</string>
     <string name="dialog_search">Zoeken</string>
     <string name="instant_voice_search">Instant voice search</string>
-    <string name="option_background_playback_behind">Hierna afspelen</string>
+    <string name="option_background_playback_behind">Afspelen op achtergrond</string>
     <string name="next_video_info_is_not_loaded_yet">Info volgende video nog niet geladen</string>
     <string name="multiline_titles">Uitgebreide titels</string>
-    <string name="cards_style">Videokaart stijl</string>
+    <string name="cards_style">Video\'s lay-out</string>
     <string name="repeat_mode_all">Alles afspelen</string>
     <string name="repeat_mode_one">Deze video herhalen</string>
     <string name="repeat_mode_pause">Pauzeren na deze video</string>
@@ -121,4 +121,7 @@
     <string name="sorting_alphabetically">Alfabetisch</string>
     <string name="sorting_last_viewed">Laatst bekeken</string>
     <string name="player_pause_when_seek">Pauzeren tijdens snel zoeken</string>
+    <string name="playlists_style">Playlists lay-out</string>
+    <string name="playlists_style_grid">Raster</string>
+    <string name="playlists_style_rows">Lijst</string>
 </resources>
