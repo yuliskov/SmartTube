@@ -238,7 +238,7 @@ public class ViewManager {
     }
 
     public void clearCaches() {
-        YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(mContext)).invalidateCache();
+        YouTubeMediaService.instance().invalidateCache();
         FileHelpers.deleteCache(mContext);
     }
 

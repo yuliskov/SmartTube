@@ -25,12 +25,10 @@ import java.util.List;
 public class SuggestionsLoader extends PlayerEventListenerHelper {
     private static final String TAG = SuggestionsLoader.class.getSimpleName();
     private final List<MetadataListener> mListeners = new ArrayList<>();
-    private final Context mContext;
     private Disposable mMetadataAction;
     private Disposable mScrollAction;
 
-    public SuggestionsLoader(Context context) {
-        mContext = context;
+    public SuggestionsLoader() {
     }
 
     public interface MetadataListener {
@@ -69,7 +67,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        MediaItemManager mediaItemManager = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(mContext)).getMediaItemManager();
+        MediaItemManager mediaItemManager = YouTubeMediaService.instance().getMediaItemManager();
 
         mScrollAction = mediaItemManager.continueGroupObserve(mediaGroup)
                 .subscribeOn(Schedulers.newThread())
@@ -93,7 +91,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
         RxUtils.disposeActions(mMetadataAction, mScrollAction);
 
-        MediaService service = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(mContext));
+        MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
 
         Observable<MediaItemMetadata> observable;

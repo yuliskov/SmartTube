@@ -33,7 +33,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         mItemResultsAdapter = new VideoGroupObjectAdapter();
 
         setItemResultsAdapter(mItemResultsAdapter);
-        setSearchTagsProvider(new MediaServiceSearchTagProvider(LocaleUtility.getCurrentLocale(getContext())));
+        setSearchTagsProvider(new MediaServiceSearchTagProvider());
     }
 
     @Override

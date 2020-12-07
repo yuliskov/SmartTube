@@ -32,8 +32,8 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private Disposable mScrollAction;
 
     public ChannelPresenter(Context context) {
-        mContext = context;
-        mMediaService = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
+        super(context);
+        mMediaService = YouTubeMediaService.instance();
         mPlaybackPresenter = PlaybackPresenter.instance(context);
     }
 

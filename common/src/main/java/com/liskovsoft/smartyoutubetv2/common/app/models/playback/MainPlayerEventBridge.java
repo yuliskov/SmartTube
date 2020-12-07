@@ -55,9 +55,9 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         mEventListeners.add(videoLoader);
     }
 
-    public static MainPlayerEventBridge instance(Context context) {
+    public static MainPlayerEventBridge instance() {
         if (sInstance == null) {
-            sInstance = new MainPlayerEventBridge(context);
+            sInstance = new MainPlayerEventBridge();
         }
 
         return sInstance;

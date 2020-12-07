@@ -50,7 +50,7 @@ public class StoryboardManager {
 
     public StoryboardManager(Context context) {
         mContext = context;
-        MediaService mediaService = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(mContext));
+        MediaService mediaService = YouTubeMediaService.instance();
         mMediaItemManager = mediaService.getMediaItemManager();
     }
 

@@ -31,8 +31,8 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
     private Account mSelectedAccount = null;
 
     public AccountSettingsPresenter(Context context) {
-        mContext = context;
-        MediaService service = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
+        super(context);
+        MediaService service = YouTubeMediaService.instance();
         mSignInManager = service.getSignInManager();
     }
 

@@ -20,6 +20,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.CategoryEmptyError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.update.AppUpdateManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.update.IAppUpdateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.CategoryPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
@@ -68,7 +69,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private BrowsePresenter(Context context) {
         super(context);
         mPlaybackPresenter = PlaybackPresenter.instance(context);
-        mMediaService = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
+        mMediaService = YouTubeMediaService.instance();
         mViewManager = ViewManager.instance(context);
         mCategories = new ArrayList<>();
         mGridMapping = new HashMap<>();
@@ -292,7 +293,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void checkForUpdates() {
-        AppUpdateManager updatePresenter = AppUpdateManager.instance(getContext());
+        IAppUpdateManager updatePresenter = AppUpdateManager.instance(getContext());
         updatePresenter.start(false);
         updatePresenter.unhold();
     }

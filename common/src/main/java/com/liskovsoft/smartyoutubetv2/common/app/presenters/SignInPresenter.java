@@ -24,8 +24,8 @@ public class SignInPresenter extends BasePresenter<SignInView> {
     private Disposable mSignInAction;
 
     private SignInPresenter(Context context) {
-        mContext = context;
-        mMediaService = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
+        super(context);
+        mMediaService = YouTubeMediaService.instance();
         mBrowsePresenter = BrowsePresenter.instance(context);
         mSplashPresenter = SplashPresenter.instance(context);
     }

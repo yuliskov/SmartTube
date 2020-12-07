@@ -28,7 +28,7 @@ public class AccountSelectionPresenter {
 
     public AccountSelectionPresenter(Context context) {
         mContext = context;
-        MediaService service = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
+        MediaService service = YouTubeMediaService.instance();
         mSignInManager = service.getSignInManager();
     }
 

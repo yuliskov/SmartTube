@@ -19,7 +19,7 @@ public class SignInActivity extends LeanbackActivity implements SignInView {
         setContentView(R.layout.acitivity_sign_in);
 
         mSignInPresenter = SignInPresenter.instance(this);
-        mSignInPresenter.register(this);
+        mSignInPresenter.setView(this);
         mUserCode = findViewById(R.id.user_code);
 
 //
@@ -44,7 +44,7 @@ public class SignInActivity extends LeanbackActivity implements SignInView {
     @Override
     protected void onStart() {
         super.onStart();
-        mSignInPresenter.onInitDone();
+        mSignInPresenter.onViewInitialized();
     }
 
     @Override
@@ -62,6 +62,6 @@ public class SignInActivity extends LeanbackActivity implements SignInView {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mSignInPresenter.unregister(this);
+        mSignInPresenter.onViewDestroyed();
     }
 }

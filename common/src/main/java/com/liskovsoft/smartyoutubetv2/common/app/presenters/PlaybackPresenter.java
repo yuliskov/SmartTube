@@ -18,7 +18,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     private PlaybackPresenter(Context context) {
         super(context);
         mViewManager = ViewManager.instance(context);
-        mMainPlayerEventBridge = MainPlayerEventBridge.instance(context);
+        mMainPlayerEventBridge = MainPlayerEventBridge.instance();
     }
 
     public static PlaybackPresenter instance(Context context) {

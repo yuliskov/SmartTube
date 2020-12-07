@@ -51,8 +51,8 @@ public class AboutPresenter extends BasePresenter<Void> {
 
 
     private void appendAutoUpdateSwitch(AppSettingsPresenter settingsPresenter) {
-        IAppUpdateManager updateManager = AppUpdateManager.instance(mContext);
-        settingsPresenter.appendSingleSwitch(UiOptionItem.from(mContext.getString(R.string.check_updates_auto), optionItem -> {
+        IAppUpdateManager updateManager = AppUpdateManager.instance(getContext());
+        settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.check_updates_auto), optionItem -> {
             updateManager.enableUpdateCheck(optionItem.isSelected());
         }, updateManager.isUpdateCheckEnabled()));
     }

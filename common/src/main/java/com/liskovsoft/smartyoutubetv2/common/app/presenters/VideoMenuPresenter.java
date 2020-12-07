@@ -36,8 +36,8 @@ public class VideoMenuPresenter extends BasePresenter<SplashView> {
     private boolean mIsOpenChannelButtonEnabled;
 
     private VideoMenuPresenter(Context context) {
-        mContext = context;
-        MediaService service = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
+        super(context);
+        MediaService service = YouTubeMediaService.instance();
         mItemManager = service.getMediaItemManager();
         mAuthManager = service.getSignInManager();
         mSettingsPresenter = AppSettingsPresenter.instance(context);

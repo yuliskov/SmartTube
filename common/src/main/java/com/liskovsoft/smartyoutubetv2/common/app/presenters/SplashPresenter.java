@@ -58,12 +58,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         AccountSelectionPresenter.instance(getContext()).show();
     }
 
-    private void checkForUpdates() {
-        IAppUpdateManager updatePresenter = AppUpdateManager.instance(mContext);
-        updatePresenter.start(false);
-        updatePresenter.unhold();
-    }
-
     public void saveBackupData() {
         PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(null);
         AppPrefs prefs = AppPrefs.instance(null);

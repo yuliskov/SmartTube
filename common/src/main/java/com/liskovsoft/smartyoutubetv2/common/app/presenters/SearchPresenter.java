@@ -32,8 +32,8 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     private String mSearchText;
 
     private SearchPresenter(Context context) {
-        mContext = context;
-        mMediaService = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
+        super(context);
+        mMediaService = YouTubeMediaService.instance();
         mPlaybackPresenter = PlaybackPresenter.instance(context);
         mViewManager = ViewManager.instance(context);
         mSearchData = SearchData.instance(context);

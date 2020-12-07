@@ -54,10 +54,10 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         }
     };
 
-    public PlayerUiManager(Context context) {
+    public PlayerUiManager() {
         mHandler = new Handler(Looper.getMainLooper());
 
-        MediaService service = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
+        MediaService service = YouTubeMediaService.instance();
         mMediaItemManager = service.getMediaItemManager();
     }
 

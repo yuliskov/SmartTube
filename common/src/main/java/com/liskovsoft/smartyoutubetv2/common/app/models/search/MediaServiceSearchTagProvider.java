@@ -17,8 +17,8 @@ public class MediaServiceSearchTagProvider implements SearchTagsProvider {
     private final MediaGroupManager mGroupManager;
     private Disposable mTagsAction;
 
-    public MediaServiceSearchTagProvider(Locale currentLocale) {
-        MediaService mediaService = YouTubeMediaService.instance(currentLocale);
+    public MediaServiceSearchTagProvider() {
+        MediaService mediaService = YouTubeMediaService.instance();
         mGroupManager = mediaService.getMediaGroupManager();
     }
 

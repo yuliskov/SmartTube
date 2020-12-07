@@ -29,7 +29,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private static final String TAG = VideoLoader.class.getSimpleName();
     private final Playlist mPlaylist;
     private final Handler mHandler;
-    private final Context mContext;
     private Video mLastVideo;
     private Video mErrorVideo;
     private Disposable mFormatInfoAction;
@@ -37,8 +36,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private int mRepeatMode = PlaybackUiController.REPEAT_ALL;
     private final Runnable mReloadVideoHandler = () -> loadVideo(mLastVideo);
 
-    public VideoLoader(Context context) {
-        mContext = context;
+    public VideoLoader() {
         mPlaylist = Playlist.instance();
         mHandler = new Handler(Looper.myLooper());
     }
@@ -78,7 +76,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         if (mErrorVideo != mLastVideo) {
             Log.e(TAG, "Player error occurred. Restarting engine once...");
             mErrorVideo = mLastVideo;
-            YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(mContext)).invalidateCache(); // some data might be stalled
+            YouTubeMediaService.instance().invalidateCache(); // some data might be stalled
             getController().reloadPlayback(); // re-download video data
         } else {
             getController().showControls(true);
@@ -204,7 +202,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private void loadFormatInfo(Video video) {
         disposeActions();
 
-        MediaService service = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(mContext));
+        MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
         mFormatInfoAction = mediaItemManager.getFormatInfoObserve(video.videoId)
                 .subscribeOn(Schedulers.newThread())

@@ -25,7 +25,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private static final String TAG = StateUpdater.class.getSimpleName();
     private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
     private static final int MAX_PERSISTENT_STATE_SIZE = 30;
-    private final Context mContext;
     private boolean mIsPlaying;
     private FormatItem mVideoFormat;
     private FormatItem mAudioFormat;
@@ -37,8 +36,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private AppPrefs mPrefs;
     private Disposable mHistoryAction;
 
-    public StateUpdater(Context context) {
-        mContext = context;
+    public StateUpdater() {
     }
 
     @Override
@@ -354,8 +352,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private void updateHistory() {
         RxUtils.disposeActions(mHistoryAction);
 
-        Video item = mController.getVideo();
-        MediaService service = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(mContext));
+        Video item = getController().getVideo();
+        MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
 
         Observable<Void> historyObservable;
