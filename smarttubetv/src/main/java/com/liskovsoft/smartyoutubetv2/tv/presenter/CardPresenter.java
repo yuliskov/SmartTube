@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.TextView;
@@ -48,7 +49,7 @@ public class CardPresenter extends Presenter {
                 ContextCompat.getColor(parent.getContext(), Helpers.getThemeAttr(parent.getContext(), R.attr.cardSelectedBackground));
         mSelectedTextColor =
                 ContextCompat.getColor(parent.getContext(), R.color.card_selected_text_grey);
-        mDefaultCardImage = ContextCompat.getDrawable(parent.getContext(), R.drawable.movie);
+        mDefaultCardImage = new ColorDrawable(ContextCompat.getColor(parent.getContext(), R.color.lb_grey));
 
         MainUIData mainUIData = MainUIData.instance(parent.getContext());
         mIsAnimatedPreviewsEnabled = mainUIData.isAnimatedPreviewsEnabled();
@@ -112,24 +113,22 @@ public class CardPresenter extends Presenter {
             cardView.setPreviewUrl(video.previewUrl);
         }
 
-        if (video.cardImageUrl != null) {
-            // Set card size from dimension resources.
-            int width = res.getDimensionPixelSize(R.dimen.card_width);
-            int height = res.getDimensionPixelSize(R.dimen.card_height);
+        // Set card size from dimension resources.
+        int width = res.getDimensionPixelSize(R.dimen.card_width);
+        int height = res.getDimensionPixelSize(R.dimen.card_height);
 
-            if (mVideoGridScale > 1.0f) {
-                width *= mVideoGridScale;
-                height *= mVideoGridScale;
-            }
-
-            cardView.setMainImageDimensions(width, height);
-
-            Glide.with(context)
-                    .load(video.cardImageUrl)
-                    .apply(RequestOptions.errorOf(mDefaultCardImage))
-                    .listener(mErrorListener)
-                    .into(cardView.getMainImageView());
+        if (mVideoGridScale > 1.0f) {
+            width *= mVideoGridScale;
+            height *= mVideoGridScale;
         }
+
+        cardView.setMainImageDimensions(width, height);
+
+        Glide.with(context)
+                .load(video.cardImageUrl)
+                .apply(RequestOptions.errorOf(mDefaultCardImage))
+                .listener(mErrorListener)
+                .into(cardView.getMainImageView());
     }
 
     @Override

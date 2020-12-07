@@ -119,4 +119,5 @@
     <string name="sorting_by_new_content">Nový obsah</string>
     <string name="sorting_alphabetically">Abecedně</string>
     <string name="sorting_last_viewed">Poslední zhlédnuté</string>
+    <string name="player_pause_when_seek">Pozastav video při přeskakování</string>
 </resources>

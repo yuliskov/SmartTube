@@ -6,13 +6,12 @@ import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
-import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelSubView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
@@ -20,37 +19,37 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class ChannelSubPresenter implements VideoGroupPresenter, Presenter<ChannelSubView> {
-    private static final String TAG = ChannelSubPresenter.class.getSimpleName();
+public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> implements VideoGroupPresenter {
+    private static final String TAG = ChannelUploadsPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
-    private static ChannelSubPresenter sInstance;
-    private final Context mContext;
+    private static ChannelUploadsPresenter sInstance;
     private final PlaybackPresenter mPlaybackPresenter;
     private final MediaGroupManager mGroupManager;
-    private ChannelSubView mView;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
     private Video mVideoItem;
 
-    public ChannelSubPresenter(Context context) {
-        mContext = context;
-        MediaService mediaService = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
+    public ChannelUploadsPresenter(Context context) {
+        super(context);
+        MediaService mediaService = YouTubeMediaService.instance();
         mGroupManager = mediaService.getMediaGroupManager();
         mPlaybackPresenter = PlaybackPresenter.instance(context);
     }
 
-    public static ChannelSubPresenter instance(Context context) {
+    public static ChannelUploadsPresenter instance(Context context) {
         if (sInstance == null) {
-            sInstance = new ChannelSubPresenter(context.getApplicationContext());
+            sInstance = new ChannelUploadsPresenter(context);
         }
+
+        sInstance.setContext(context);
 
         return sInstance;
     }
 
     @Override
-    public void onInitDone() {
+    public void onViewInitialized() {
         if (mVideoItem != null) {
-            mView.clear();
+            getView().clear();
             updateGrid(mVideoItem);
         }
     }
@@ -66,7 +65,7 @@ public class ChannelSubPresenter implements VideoGroupPresenter, Presenter<Chann
 
     @Override
     public void onVideoItemLongClicked(Video item) {
-        VideoMenuPresenter.instance(mContext).showMenu(item);
+        VideoMenuPresenter.instance(getContext()).showMenu(item);
     }
 
     @Override
@@ -81,28 +80,21 @@ public class ChannelSubPresenter implements VideoGroupPresenter, Presenter<Chann
     }
 
     @Override
-    public void register(ChannelSubView view) {
-        mView = view;
-    }
-
-    @Override
-    public void unregister(ChannelSubView view) {
-        mView = null;
-
+    public void onViewDestroyed() {
         disposeActions();
     }
 
     public void openChannel(Video item) {
-        if (item == null || !item.isChannelSub()) {
+        if (item == null) {
             return;
         }
 
         disposeActions();
-        ViewManager.instance(mContext).startView(ChannelSubView.class);
+        ViewManager.instance(getContext()).startView(ChannelUploadsView.class);
 
-        if (mView != null) {
+        if (getView() != null) {
             mVideoItem = null;
-            mView.clear();
+            getView().clear();
             updateGrid(item);
         } else {
             mVideoItem = item;
@@ -132,7 +124,7 @@ public class ChannelSubPresenter implements VideoGroupPresenter, Presenter<Chann
     private void continueVideoGroup(VideoGroup group) {
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
-        mView.showProgressBar(true);
+        getView().showProgressBar(true);
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
@@ -140,31 +132,31 @@ public class ChannelSubPresenter implements VideoGroupPresenter, Presenter<Chann
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(continueMediaGroup -> {
-                            mView.update(VideoGroup.from(continueMediaGroup));
+                            getView().update(VideoGroup.from(continueMediaGroup));
                         }, error -> Log.e(TAG, "continueGroup error: " + error),
-                        () -> mView.showProgressBar(false));
+                        () -> getView().showProgressBar(false));
     }
 
     private void updateVideoGrid(Observable<MediaGroup> group) {
         Log.d(TAG, "updateVideoGrid: Start loading group...");
 
-        mView.showProgressBar(true);
+        getView().showProgressBar(true);
 
         mUpdateAction = group
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mediaGroup -> {
-                            mView.update(VideoGroup.from(mediaGroup));
+                            getView().update(VideoGroup.from(mediaGroup));
 
                             // Hide loading as long as first group received
                             if (mediaGroup.getMediaItems() != null) {
-                                mView.showProgressBar(false);
+                                getView().showProgressBar(false);
                             }
                         }
                         , error -> Log.e(TAG, "updateGridHeader error: " + error)
                         , () -> {
-                            mView.showProgressBar(false);
+                            getView().showProgressBar(false);
                         });
     }
 

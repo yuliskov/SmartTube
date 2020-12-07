@@ -42,16 +42,18 @@ public class TrackInfoFormatter {
     private static String extractResolutionLabel(Format format) {
         String qualityLabel = "";
 
-        if (format.height <= 480) {
+        if (format.width <= 854) { // 854x480
             qualityLabel = "SD";
-        } else if (format.height <= 720) {
+        } else if (format.width <= 1280) { // 1280x720
             qualityLabel = "HD";
-        } else if (format.height <= 1080) {
+        } else if (format.width <= 1920) { // 1920x1080
             qualityLabel = "FHD";
-        } else if (format.height <= 1440) {
+        } else if (format.width <= 2560) { // 2560x1440
             qualityLabel = "QHD";
-        } else if (format.height <= 2160) {
+        } else if (format.width <= 3840) { // 3840x2160
             qualityLabel = "4K";
+        } else if (format.width <= 7680) { // 7680x4320
+            qualityLabel = "8K";
         }
 
         return qualityLabel;

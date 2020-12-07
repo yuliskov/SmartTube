@@ -5,40 +5,40 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchSettingsPresenter {
-    private final Context mContext;
+public class SearchSettingsPresenter extends BasePresenter<Void> {
     private final SearchData mSearchData;
 
     public SearchSettingsPresenter(Context context) {
-        mContext = context;
+        super(context);
         mSearchData = SearchData.instance(context);
     }
 
     public static SearchSettingsPresenter instance(Context context) {
-        return new SearchSettingsPresenter(context.getApplicationContext());
+        return new SearchSettingsPresenter(context);
     }
 
     public void show() {
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
+        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
         settingsPresenter.clear();
         
         appendMiscCategory(settingsPresenter);
 
-        settingsPresenter.showDialog(mContext.getString(R.string.dialog_search));
+        settingsPresenter.showDialog(getContext().getString(R.string.dialog_search));
     }
 
     private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from(mContext.getString(R.string.instant_voice_search),
+        options.add(UiOptionItem.from(getContext().getString(R.string.instant_voice_search),
                 option -> mSearchData.setInstantVoiceSearchEnabled(option.isSelected()),
                 mSearchData.isInstantVoiceSearchEnabled()));
 
-        settingsPresenter.appendCheckedCategory(mContext.getString(R.string.dialog_search), options);
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.dialog_search), options);
     }
 }

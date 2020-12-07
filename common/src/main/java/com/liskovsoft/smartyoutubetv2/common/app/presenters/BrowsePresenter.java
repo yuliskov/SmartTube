@@ -19,8 +19,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.CategoryEmptyError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
+import com.liskovsoft.smartyoutubetv2.common.app.models.update.AppUpdateManager;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.CategoryPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AboutPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
@@ -43,18 +44,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, Presenter<BrowseView> {
+public class BrowsePresenter extends BasePresenter<BrowseView> implements CategoryPresenter, VideoGroupPresenter {
     private static final String TAG = BrowsePresenter.class.getSimpleName();
     private static final long HEADER_REFRESH_PERIOD_MS = 120 * 60 * 1_000;
     @SuppressLint("StaticFieldLeak")
     private static BrowsePresenter sInstance;
     private final Handler mHandler = new Handler();
-    private final Context mContext;
     private final PlaybackPresenter mPlaybackPresenter;
     private final MediaService mMediaService;
     private final ViewManager mViewManager;
     private final MainUIData mMainUIData;
-    private BrowseView mView;
     private final List<Category> mCategories;
     private final Map<Integer, Observable<MediaGroup>> mGridMapping;
     private final Map<Integer, Observable<List<MediaGroup>>> mRowMapping;
@@ -67,7 +66,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
     private int mBootToIndex;
 
     private BrowsePresenter(Context context) {
-        mContext = context;
+        super(context);
         mPlaybackPresenter = PlaybackPresenter.instance(context);
         mMediaService = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
         mViewManager = ViewManager.instance(context);
@@ -75,28 +74,32 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         mGridMapping = new HashMap<>();
         mRowMapping = new HashMap<>();
         mTextGridMapping = new HashMap<>();
-        mMainUIData = MainUIData.instance(mContext);
+        mMainUIData = MainUIData.instance(context);
         GlobalPreferences.instance(context); // auth token storage init (in case activity restored after crash)
         initCategories();
     }
 
     public static BrowsePresenter instance(Context context) {
         if (sInstance == null) {
-            sInstance = new BrowsePresenter(context.getApplicationContext());
+            sInstance = new BrowsePresenter(context);
         }
+
+        sInstance.setContext(context);
 
         return sInstance;
     }
 
     @Override
-    public void onInitDone() {
-        if (mView == null) {
+    public void onViewInitialized() {
+        if (getView() == null) {
             return;
         }
 
         updateChannelCategorySorting();
+        updatePlaylistsStyle();
         updateCategories();
-        mView.selectCategory(mBootToIndex);
+        getView().selectCategory(mBootToIndex);
+        checkForUpdates();
     }
 
     private void initCategories() {
@@ -108,17 +111,17 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
     }
 
     private void initCategoryHeaders() {
-        mCategories.add(new Category(MediaGroup.TYPE_HOME, mContext.getString(R.string.header_home), Category.TYPE_ROW, R.drawable.icon_home));
-        mCategories.add(new Category(MediaGroup.TYPE_GAMING, mContext.getString(R.string.header_gaming), Category.TYPE_ROW, R.drawable.icon_gaming));
-        mCategories.add(new Category(MediaGroup.TYPE_NEWS, mContext.getString(R.string.header_news), Category.TYPE_ROW, R.drawable.icon_news));
-        mCategories.add(new Category(MediaGroup.TYPE_MUSIC, mContext.getString(R.string.header_music), Category.TYPE_ROW, R.drawable.icon_music));
-        mCategories.add(new Category(MediaGroup.TYPE_CHANNELS_SUB, mContext.getString(R.string.header_channels), Category.TYPE_GRID, R.drawable.icon_channels, true));
-        mCategories.add(new Category(MediaGroup.TYPE_SUBSCRIPTIONS, mContext.getString(R.string.header_subscriptions), Category.TYPE_GRID, R.drawable.icon_subscriptions, true));
-        mCategories.add(new Category(MediaGroup.TYPE_HISTORY, mContext.getString(R.string.header_history), Category.TYPE_GRID, R.drawable.icon_history, true));
-        mCategories.add(new Category(MediaGroup.TYPE_PLAYLISTS, mContext.getString(R.string.header_playlists), Category.TYPE_ROW, R.drawable.icon_playlist, true));
+        mCategories.add(new Category(MediaGroup.TYPE_HOME, getContext().getString(R.string.header_home), Category.TYPE_ROW, R.drawable.icon_home));
+        mCategories.add(new Category(MediaGroup.TYPE_GAMING, getContext().getString(R.string.header_gaming), Category.TYPE_ROW, R.drawable.icon_gaming));
+        mCategories.add(new Category(MediaGroup.TYPE_NEWS, getContext().getString(R.string.header_news), Category.TYPE_ROW, R.drawable.icon_news));
+        mCategories.add(new Category(MediaGroup.TYPE_MUSIC, getContext().getString(R.string.header_music), Category.TYPE_ROW, R.drawable.icon_music));
+        mCategories.add(new Category(MediaGroup.TYPE_CHANNELS_SECTION, getContext().getString(R.string.header_channels), Category.TYPE_GRID, R.drawable.icon_channels, true));
+        mCategories.add(new Category(MediaGroup.TYPE_SUBSCRIPTIONS, getContext().getString(R.string.header_subscriptions), Category.TYPE_GRID, R.drawable.icon_subscriptions, true));
+        mCategories.add(new Category(MediaGroup.TYPE_HISTORY, getContext().getString(R.string.header_history), Category.TYPE_GRID, R.drawable.icon_history, true));
+        mCategories.add(new Category(MediaGroup.TYPE_PLAYLISTS_SECTION, getContext().getString(R.string.header_playlists), Category.TYPE_ROW, R.drawable.icon_playlist, true));
 
         if (mMainUIData.isSettingsCategoryEnabled()) {
-            mCategories.add(new Category(MediaGroup.TYPE_SETTINGS, mContext.getString(R.string.header_settings), Category.TYPE_TEXT_GRID, R.drawable.icon_settings));
+            mCategories.add(new Category(MediaGroup.TYPE_SETTINGS, getContext().getString(R.string.header_settings), Category.TYPE_TEXT_GRID, R.drawable.icon_settings));
         }
     }
 
@@ -129,30 +132,28 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         mRowMapping.put(MediaGroup.TYPE_NEWS, mediaGroupManager.getNewsObserve());
         mRowMapping.put(MediaGroup.TYPE_MUSIC, mediaGroupManager.getMusicObserve());
         mRowMapping.put(MediaGroup.TYPE_GAMING, mediaGroupManager.getGamingObserve());
-        mRowMapping.put(MediaGroup.TYPE_PLAYLISTS, mediaGroupManager.getPlaylistsObserve());
+        mRowMapping.put(MediaGroup.TYPE_PLAYLISTS_SECTION, mediaGroupManager.getPlaylistsObserve());
 
         mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mediaGroupManager.getSubscriptionsObserve());
         mGridMapping.put(MediaGroup.TYPE_HISTORY, mediaGroupManager.getHistoryObserve());
-        mGridMapping.put(MediaGroup.TYPE_CHANNELS_SUB, mediaGroupManager.getSubscribedChannelsUpdateObserve());
+        mGridMapping.put(MediaGroup.TYPE_CHANNELS_SECTION, mediaGroupManager.getSubscribedChannelsUpdateObserve());
     }
 
     private void initSettingsSubCategories() {
         List<SettingsItem> settingItems = new ArrayList<>();
         
         settingItems.add(new SettingsItem(
-                mContext.getString(R.string.settings_accounts), () -> AccountSettingsPresenter.instance(mContext).show(), R.drawable.settings_account));
-        if (!BuildConfig.FLAVOR.equals("stbolshoetv")) {
-            settingItems.add(new SettingsItem(
-                    mContext.getString(R.string.settings_language), () -> LanguageSettingsPresenter.instance(mContext).show(), R.drawable.settings_language));
-            settingItems.add(new SettingsItem(
-                    mContext.getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(mContext).show(), R.drawable.settings_main_ui));
-            settingItems.add(new SettingsItem(
-                    mContext.getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(mContext).show(), R.drawable.settings_player));
-            settingItems.add(new SettingsItem(
-                    mContext.getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(mContext).show(), R.drawable.settings_search));
-            settingItems.add(new SettingsItem(
-                    mContext.getString(R.string.settings_about), () -> AboutPresenter.instance(mContext).show(), R.drawable.settings_about));
-        }
+                getContext().getString(R.string.settings_accounts), () -> AccountSettingsPresenter.instance(getContext()).show(), R.drawable.settings_account));
+        settingItems.add(new SettingsItem(
+                getContext().getString(R.string.settings_language), () -> LanguageSettingsPresenter.instance(getContext()).show(), R.drawable.settings_language));
+        settingItems.add(new SettingsItem(
+                getContext().getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(getContext()).show(), R.drawable.settings_main_ui));
+        settingItems.add(new SettingsItem(
+                getContext().getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(getContext()).show(), R.drawable.settings_player));
+        settingItems.add(new SettingsItem(
+                getContext().getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(getContext()).show(), R.drawable.settings_search));
+        settingItems.add(new SettingsItem(
+                getContext().getString(R.string.settings_about), () -> AboutPresenter.instance(getContext()).show(), R.drawable.settings_about));
 
         mTextGridMapping.put(MediaGroup.TYPE_SETTINGS, settingItems);
     }
@@ -167,9 +168,9 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
                 if (category.getId() == mMainUIData.getBootCategoryId()) {
                     mBootToIndex = index;
                 }
-                mView.addCategory(index++, category);
+                getView().addCategory(index++, category);
             } else {
-                mView.removeCategory(category);
+                getView().removeCategory(category);
             }
         }
     }
@@ -181,40 +182,68 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
 
         switch (sortingType) {
             case MainUIData.CHANNEL_SORTING_UPDATE:
-                mGridMapping.put(MediaGroup.TYPE_CHANNELS_SUB, mediaGroupManager.getSubscribedChannelsUpdateObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNELS_SECTION, mediaGroupManager.getSubscribedChannelsUpdateObserve());
                 break;
             case MainUIData.CHANNEL_SORTING_AZ:
-                mGridMapping.put(MediaGroup.TYPE_CHANNELS_SUB, mediaGroupManager.getSubscribedChannelsAZObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNELS_SECTION, mediaGroupManager.getSubscribedChannelsAZObserve());
                 break;
             case MainUIData.CHANNEL_SORTING_LAST_VIEWED:
-                mGridMapping.put(MediaGroup.TYPE_CHANNELS_SUB, mediaGroupManager.getSubscribedChannelsLastViewedObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNELS_SECTION, mediaGroupManager.getSubscribedChannelsLastViewedObserve());
                 break;
         }
     }
 
-    @Override
-    public void register(BrowseView view) {
-        mView = view;
+    public void updatePlaylistsStyle() {
+        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
+
+        int playlistsStyle = mMainUIData.getPlaylistsStyle();
+
+        switch (playlistsStyle) {
+            case MainUIData.PLAYLISTS_STYLE_GRID:
+                mRowMapping.remove(MediaGroup.TYPE_PLAYLISTS_SECTION);
+                mGridMapping.put(MediaGroup.TYPE_PLAYLISTS_SECTION, mediaGroupManager.getEmptyPlaylistsObserve());
+                updateCategoryType(MediaGroup.TYPE_PLAYLISTS_SECTION, Category.TYPE_GRID);
+                break;
+            case MainUIData.PLAYLISTS_STYLE_ROWS:
+                mGridMapping.remove(MediaGroup.TYPE_PLAYLISTS_SECTION);
+                mRowMapping.put(MediaGroup.TYPE_PLAYLISTS_SECTION, mediaGroupManager.getPlaylistsObserve());
+                updateCategoryType(MediaGroup.TYPE_PLAYLISTS_SECTION, Category.TYPE_ROW);
+                break;
+        }
+    }
+
+    private void updateCategoryType(int categoryId, int categoryType) {
+        if (categoryType == -1 || categoryId == -1 || mCategories == null) {
+            return;
+        }
+
+        for (Category category : mCategories) {
+            if (category.getId() == categoryId) {
+                category.setType(categoryType);
+                break;
+            }
+        }
     }
 
     @Override
-    public void unregister(BrowseView view) {
-        mView = null;
+    public void onViewDestroyed() {
         RxUtils.disposeActions(mUpdateAction, mScrollAction, mSignCheckAction);
     }
 
     @Override
     public void onVideoItemClicked(Video item) {
-        if (mView == null) {
+        if (getView() == null) {
             return;
         }
 
         if (item.isVideo()) {
             mPlaybackPresenter.openVideo(item);
         } else if (item.isChannel()) {
-            ChannelPresenter.instance(mContext).openChannel(item);
-        } else if (item.isChannelSub()) {
-            ChannelPresenter.instance(mContext).openChannel(item);
+            ChannelPresenter.instance(getContext()).openChannel(item);
+        } else if (item.isChannelSection()) {
+            ChannelPresenter.instance(getContext()).openChannel(item);
+        } else if (item.isPlaylist()) {
+            ChannelUploadsPresenter.instance(getContext()).openChannel(item);
         }
 
         updateRefreshTime();
@@ -222,11 +251,11 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
 
     @Override
     public void onVideoItemLongClicked(Video item) {
-        if (mView == null) {
+        if (getView() == null) {
             return;
         }
 
-        VideoMenuPresenter.instance(mContext).showMenu(item);
+        VideoMenuPresenter.instance(getContext()).showMenu(item);
 
         updateRefreshTime();
     }
@@ -246,15 +275,26 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
 
     @Override
     public void onViewResumed() {
+        maybeRefreshHeader();
+        checkForUpdates();
+    }
+
+    @Override
+    public void onCategoryFocused(int categoryId) {
+        updateCategory(categoryId);
+    }
+
+    private void maybeRefreshHeader() {
         long timeAfterPauseMs = System.currentTimeMillis() - mLastUpdateTimeMs;
         if (timeAfterPauseMs > HEADER_REFRESH_PERIOD_MS) { // update header every n minutes
             refresh();
         }
     }
 
-    @Override
-    public void onCategoryFocused(int categoryId) {
-        updateCategory(categoryId);
+    private void checkForUpdates() {
+        AppUpdateManager updatePresenter = AppUpdateManager.instance(getContext());
+        updatePresenter.start(false);
+        updatePresenter.unhold();
     }
 
     public void refresh() {
@@ -268,7 +308,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
     private void updateCategory(int categoryId) {
         mCurrentCategoryId = categoryId;
 
-        if (mView == null || categoryId < 0) {
+        if (getView() == null || categoryId < 0) {
             return;
         }
 
@@ -277,8 +317,8 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
         Category category = getCategory(categoryId);
 
         if (category != null) {
-            mView.showProgressBar(true);
-            mView.clearCategory(category);
+            getView().showProgressBar(true);
+            getView().clearCategory(category);
             updateCategory(category);
         }
     }
@@ -313,8 +353,8 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
     }
 
     private void updateTextGrid(Category category, List<SettingsItem> items) {
-        mView.updateCategory(SettingsGroup.from(items, category));
-        mView.showProgressBar(false);
+        getView().updateCategory(SettingsGroup.from(items, category));
+        getView().showProgressBar(false);
     }
 
     private void updateVideoRows(Category category, Observable<List<MediaGroup>> groups, boolean authCheck) {
@@ -340,9 +380,9 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        continueMediaGroup -> mView.updateCategory(VideoGroup.from(continueMediaGroup, group.getCategory()))
+                        continueMediaGroup -> getView().updateCategory(VideoGroup.from(continueMediaGroup, group.getCategory()))
                         , error -> Log.e(TAG, "continueGroup error: " + error)
-                        , () -> mView.showProgressBar(false));
+                        , () -> getView().showProgressBar(false));
     }
 
     private void authCheck(boolean check, Runnable callback) {
@@ -361,8 +401,8 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
                             if (isSigned) {
                                 callback.run();
                             } else {
-                                mView.updateErrorIfEmpty(new SignInError(mContext));
-                                mView.showProgressBar(false);
+                                getView().updateErrorIfEmpty(new SignInError(getContext()));
+                                getView().showProgressBar(false);
                             }
                         }
                 );
@@ -381,13 +421,13 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
 
                             // Hide loading as long as first group received
                             if (!mediaGroups.isEmpty()) {
-                                mView.showProgressBar(false);
+                                getView().showProgressBar(false);
                             }
                         }
                         , error -> Log.e(TAG, "updateRowsHeader error: " + error)
                         , () -> {
-                            mView.showProgressBar(false);
-                            mView.updateErrorIfEmpty(new CategoryEmptyError(mContext));
+                            getView().showProgressBar(false);
+                            getView().updateErrorIfEmpty(new CategoryEmptyError(getContext()));
                         });
     }
 
@@ -399,17 +439,17 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mediaGroup -> {
-                            mView.updateCategory(VideoGroup.from(mediaGroup, category));
+                            getView().updateCategory(VideoGroup.from(mediaGroup, category));
 
                             // Hide loading as long as first group received
                             if (mediaGroup.getMediaItems() != null) {
-                                mView.showProgressBar(false);
+                                getView().showProgressBar(false);
                             }
                         }
                         , error -> Log.e(TAG, "updateGridHeader error: " + error)
                         , () -> {
-                            mView.showProgressBar(false);
-                            mView.updateErrorIfEmpty(new CategoryEmptyError(mContext));
+                            getView().showProgressBar(false);
+                            getView().updateErrorIfEmpty(new CategoryEmptyError(getContext()));
                         });
     }
 
@@ -420,7 +460,7 @@ public class BrowsePresenter implements CategoryPresenter, VideoGroupPresenter, 
                 continue;
             }
 
-            mView.updateCategory(VideoGroup.from(mediaGroup, category));
+            getView().updateCategory(VideoGroup.from(mediaGroup, category));
         }
     }
 }

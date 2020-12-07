@@ -66,7 +66,7 @@ public class OnboardingFragment extends OnboardingSupportFragment implements Onb
         // Set the logo to display a splash animation
         setLogoResourceId(R.mipmap.app_logo);
         mPresenter = OnboardingPresenter.instance(getContext());
-        mPresenter.register(this);
+        mPresenter.setView(this);
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 

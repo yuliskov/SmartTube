@@ -84,15 +84,25 @@ public class StoryboardManager {
     }
 
     private void initSeekPositions() {
-        if (mLengthMs <= 0) {
+        if (mLengthMs <= 0 || mStoryboard == null) {
             return;
         }
 
-        int size = (int) (mLengthMs / FRAME_DURATION_MS) + 1;
+        int size = (int) (mLengthMs / getFrameDurationMsAlt());
         mSeekPositions = new long[size];
         for (int i = 0; i < mSeekPositions.length; i++) {
-            mSeekPositions[i] = i * mLengthMs / mSeekPositions.length;
+            mSeekPositions[i] = i * (mLengthMs / mSeekPositions.length);
         }
+    }
+
+    private long getFrameDurationMs() {
+        return FRAME_DURATION_MS;
+    }
+
+    private long getFrameDurationMsAlt() {
+        Size groupSize = mStoryboard.getGroupSize();
+
+        return mStoryboard.getGroupDurationMS() / (groupSize.getRowCount() * groupSize.getColCount());
     }
 
     public long[] getSeekPositions() {

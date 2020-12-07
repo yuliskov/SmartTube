@@ -19,7 +19,7 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
         super.onCreate(savedInstanceState);
 
         mChannelPresenter = ChannelPresenter.instance(getContext());
-        mChannelPresenter.register(this);
+        mChannelPresenter.setView(this);
 
         mProgressBarManager = new ProgressBarManager();
     }
@@ -31,7 +31,7 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
         // Don't move to onCreateView
         mProgressBarManager.setRootView((ViewGroup) getActivity().findViewById(android.R.id.content).getRootView());
 
-        mChannelPresenter.onInitDone();
+        mChannelPresenter.onViewInitialized();
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mChannelPresenter.unregister(this);
+        mChannelPresenter.onViewDestroyed();
     }
 
     @Override
