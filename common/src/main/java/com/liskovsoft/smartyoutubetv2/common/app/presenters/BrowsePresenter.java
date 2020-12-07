@@ -94,6 +94,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         }
 
         updateChannelCategorySorting();
+        updatePlaylistsStyle(false);
         updateCategories();
         getView().selectCategory(mBootToIndex);
         checkForUpdates();
@@ -112,7 +113,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         mCategories.add(new Category(MediaGroup.TYPE_GAMING, getContext().getString(R.string.header_gaming), Category.TYPE_ROW, R.drawable.icon_gaming));
         mCategories.add(new Category(MediaGroup.TYPE_NEWS, getContext().getString(R.string.header_news), Category.TYPE_ROW, R.drawable.icon_news));
         mCategories.add(new Category(MediaGroup.TYPE_MUSIC, getContext().getString(R.string.header_music), Category.TYPE_ROW, R.drawable.icon_music));
-        mCategories.add(new Category(MediaGroup.TYPE_CHANNELS_SUB, getContext().getString(R.string.header_channels), Category.TYPE_GRID, R.drawable.icon_channels, true));
+        mCategories.add(new Category(MediaGroup.TYPE_CHANNELS_SECTION, getContext().getString(R.string.header_channels), Category.TYPE_GRID, R.drawable.icon_channels, true));
         mCategories.add(new Category(MediaGroup.TYPE_SUBSCRIPTIONS, getContext().getString(R.string.header_subscriptions), Category.TYPE_GRID, R.drawable.icon_subscriptions, true));
         mCategories.add(new Category(MediaGroup.TYPE_HISTORY, getContext().getString(R.string.header_history), Category.TYPE_GRID, R.drawable.icon_history, true));
         mCategories.add(new Category(MediaGroup.TYPE_PLAYLISTS, getContext().getString(R.string.header_playlists), Category.TYPE_ROW, R.drawable.icon_playlist, true));
@@ -133,7 +134,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
         mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mediaGroupManager.getSubscriptionsObserve());
         mGridMapping.put(MediaGroup.TYPE_HISTORY, mediaGroupManager.getHistoryObserve());
-        mGridMapping.put(MediaGroup.TYPE_CHANNELS_SUB, mediaGroupManager.getSubscribedChannelsUpdateObserve());
+        mGridMapping.put(MediaGroup.TYPE_CHANNELS_SECTION, mediaGroupManager.getSubscribedChannelsUpdateObserve());
     }
 
     private void initSettingsSubCategories() {
@@ -179,14 +180,51 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
         switch (sortingType) {
             case MainUIData.CHANNEL_SORTING_UPDATE:
-                mGridMapping.put(MediaGroup.TYPE_CHANNELS_SUB, mediaGroupManager.getSubscribedChannelsUpdateObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNELS_SECTION, mediaGroupManager.getSubscribedChannelsUpdateObserve());
                 break;
             case MainUIData.CHANNEL_SORTING_AZ:
-                mGridMapping.put(MediaGroup.TYPE_CHANNELS_SUB, mediaGroupManager.getSubscribedChannelsAZObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNELS_SECTION, mediaGroupManager.getSubscribedChannelsAZObserve());
                 break;
             case MainUIData.CHANNEL_SORTING_LAST_VIEWED:
-                mGridMapping.put(MediaGroup.TYPE_CHANNELS_SUB, mediaGroupManager.getSubscribedChannelsLastViewedObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNELS_SECTION, mediaGroupManager.getSubscribedChannelsLastViewedObserve());
                 break;
+        }
+    }
+
+    public void updatePlaylistsStyle(boolean reAdd) {
+        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
+
+        int playlistsStyle = mMainUIData.getPlaylistsStyle();
+        int categoryType = -1;
+
+        switch (playlistsStyle) {
+            case MainUIData.PLAYLISTS_STYLE_GRID:
+                mRowMapping.remove(MediaGroup.TYPE_PLAYLISTS);
+                mGridMapping.put(MediaGroup.TYPE_PLAYLISTS, mediaGroupManager.getEmptyPlaylistsObserve());
+                categoryType = Category.TYPE_GRID;
+                break;
+            case MainUIData.PLAYLISTS_STYLE_ROWS:
+                mGridMapping.remove(MediaGroup.TYPE_PLAYLISTS);
+                mRowMapping.put(MediaGroup.TYPE_PLAYLISTS, mediaGroupManager.getPlaylistsObserve());
+                categoryType = Category.TYPE_ROW;
+                break;
+        }
+
+        if (categoryType != -1) {
+            int index = 0;
+            for (Category category : mCategories) {
+                if (category.getId() == MediaGroup.TYPE_PLAYLISTS) {
+                    category.setType(categoryType);
+
+                    if (reAdd) {
+                        getView().removeCategory(category);
+                        getView().addCategory(index, category);
+                    }
+
+                    break;
+                }
+                index++;
+            }
         }
     }
 

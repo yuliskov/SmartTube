@@ -41,6 +41,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         appendLeftPanelCategories(settingsPresenter);
         appendBootToCategory(settingsPresenter);
         appendChannelSortingCategory(settingsPresenter);
+        appendPlaylistsStyle(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_main_ui), () -> {
             if (mRestartApp) {
@@ -135,6 +136,21 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.channel_category_sorting), options);
+    }
+
+    private void appendPlaylistsStyle(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.playlists_style_grid, MainUIData.PLAYLISTS_STYLE_GRID},
+                {R.string.playlists_style_rows, MainUIData.PLAYLISTS_STYLE_ROWS}}) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
+                mMainUIData.setPlaylistsStyle(pair[1]);
+                BrowsePresenter.instance(getContext()).updatePlaylistsStyle(true);
+            }, mMainUIData.getPlaylistsStyle() == pair[1]));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.playlists_style), options);
     }
 
     private void appendColorScheme(AppSettingsPresenter settingsPresenter) {

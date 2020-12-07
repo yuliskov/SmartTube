@@ -121,4 +121,7 @@
     <string name="sorting_alphabetically">За абеткою</string>
     <string name="sorting_last_viewed">Останні переглянуті</string>
     <string name="player_pause_when_seek">Пауза при перемотуванні</string>
+    <string name="playlists_style">Стиль плейлистів</string>
+    <string name="playlists_style_grid">Сітка</string>
+    <string name="playlists_style_rows">Рядки</string>
 </resources>
