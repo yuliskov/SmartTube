@@ -285,7 +285,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private void createHeader(int index, Category header) {
-        HeaderItem headerItem = new CategoryHeaderItem(header.getId(), header.getTitle(), header.getType(), header.getResId());;
+        HeaderItem headerItem = new CategoryHeaderItem(header);
 
         PageRow pageRow = new PageRow(headerItem);
         mCategoryRowAdapter.add(index, pageRow);

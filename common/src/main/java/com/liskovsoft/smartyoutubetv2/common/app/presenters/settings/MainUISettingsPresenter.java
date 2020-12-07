@@ -146,7 +146,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
                 {R.string.playlists_style_rows, MainUIData.PLAYLISTS_STYLE_ROWS}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
                 mMainUIData.setPlaylistsStyle(pair[1]);
-                BrowsePresenter.instance(getContext()).updatePlaylistsStyle(true);
+                BrowsePresenter.instance(getContext()).updatePlaylistsStyle();
             }, mMainUIData.getPlaylistsStyle() == pair[1]));
         }
 

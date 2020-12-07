@@ -94,7 +94,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         }
 
         updateChannelCategorySorting();
-        updatePlaylistsStyle(false);
+        updatePlaylistsStyle();
         updateCategories();
         getView().selectCategory(mBootToIndex);
         checkForUpdates();
@@ -191,39 +191,34 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         }
     }
 
-    public void updatePlaylistsStyle(boolean reAdd) {
+    public void updatePlaylistsStyle() {
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
         int playlistsStyle = mMainUIData.getPlaylistsStyle();
-        int categoryType = -1;
 
         switch (playlistsStyle) {
             case MainUIData.PLAYLISTS_STYLE_GRID:
                 mRowMapping.remove(MediaGroup.TYPE_PLAYLISTS_SECTION);
                 mGridMapping.put(MediaGroup.TYPE_PLAYLISTS_SECTION, mediaGroupManager.getEmptyPlaylistsObserve());
-                categoryType = Category.TYPE_GRID;
+                updateCategoryType(MediaGroup.TYPE_PLAYLISTS_SECTION, Category.TYPE_GRID);
                 break;
             case MainUIData.PLAYLISTS_STYLE_ROWS:
                 mGridMapping.remove(MediaGroup.TYPE_PLAYLISTS_SECTION);
                 mRowMapping.put(MediaGroup.TYPE_PLAYLISTS_SECTION, mediaGroupManager.getPlaylistsObserve());
-                categoryType = Category.TYPE_ROW;
+                updateCategoryType(MediaGroup.TYPE_PLAYLISTS_SECTION, Category.TYPE_ROW);
                 break;
         }
+    }
 
-        if (categoryType != -1) {
-            int index = 0;
-            for (Category category : mCategories) {
-                if (category.getId() == MediaGroup.TYPE_PLAYLISTS_SECTION) {
-                    category.setType(categoryType);
+    private void updateCategoryType(int categoryId, int categoryType) {
+        if (categoryType == -1 || categoryId == -1 || mCategories == null) {
+            return;
+        }
 
-                    if (reAdd) {
-                        getView().removeCategory(category);
-                        getView().addCategory(index, category);
-                    }
-
-                    break;
-                }
-                index++;
+        for (Category category : mCategories) {
+            if (category.getId() == categoryId) {
+                category.setType(categoryType);
+                break;
             }
         }
     }
