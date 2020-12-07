@@ -129,5 +129,6 @@
     <string name="require_checked">Exige \"%s\"</string>
     <string name="msg_press_again_to_exit">Appuyez à nouveau pour sortir</string>
     <string name="player_remaining_time">Fini dans: %s</string>
-    <string name="badge_new_content">NOUVEAU CONTENU</string>   
+    <string name="badge_new_content">NOUVEAU CONTENU</string>
+    <string name="badge_live">EN DIRECT</string>
 </resources>
