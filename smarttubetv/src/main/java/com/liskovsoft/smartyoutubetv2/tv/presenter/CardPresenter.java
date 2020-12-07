@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.TextView;
@@ -48,7 +49,7 @@ public class CardPresenter extends Presenter {
                 ContextCompat.getColor(parent.getContext(), Helpers.getThemeAttr(parent.getContext(), R.attr.cardSelectedBackground));
         mSelectedTextColor =
                 ContextCompat.getColor(parent.getContext(), R.color.card_selected_text_grey);
-        mDefaultCardImage = ContextCompat.getDrawable(parent.getContext(), R.drawable.movie);
+        mDefaultCardImage = new ColorDrawable(ContextCompat.getColor(parent.getContext(), R.color.lb_grey));
 
         MainUIData mainUIData = MainUIData.instance(parent.getContext());
         mIsAnimatedPreviewsEnabled = mainUIData.isAnimatedPreviewsEnabled();
