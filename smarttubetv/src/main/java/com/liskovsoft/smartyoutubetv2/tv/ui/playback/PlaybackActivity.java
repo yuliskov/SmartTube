@@ -153,7 +153,10 @@ public class PlaybackActivity extends LeanbackActivity {
     @SuppressWarnings("deprecation")
     private void enterBackgroundPlayMode() {
         if (Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 26) {
-            mPlaybackFragment.showControls(true);
+            if (Build.VERSION.SDK_INT == 21) {
+                // Playback pause fix?
+                mPlaybackFragment.showControls(true);
+            }
 
             if (mPlaybackFragment.isPlaying()) {
                 // Argument equals true to notify the system that the activity
