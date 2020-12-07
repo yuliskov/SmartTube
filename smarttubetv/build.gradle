@@ -79,7 +79,8 @@ android {
         }
         strtarmenia {
             // matchingFallbacks = ['lite']
-            applicationIdSuffix ".rtarmenia"
+            versionCode 9400 + defaultConfig.versionCode
+            applicationId "com.google.android.youtube.tv"
         }
         stbolshoetv {
             // matchingFallbacks = ['lite']
