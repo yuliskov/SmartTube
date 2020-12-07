@@ -79,7 +79,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
             Log.e(TAG, "Player error occurred. Restarting engine once...");
             mErrorVideo = mLastVideo;
             YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(mContext)).invalidateCache(); // some data might be stalled
-            mController.reloadPlayback(); // re-download video data
+            getController().reloadPlayback(); // re-download video data
         } else {
             getController().showControls(true);
         }
