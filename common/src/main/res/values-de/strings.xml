@@ -123,5 +123,5 @@
     <string name="player_pause_when_seek">Pause beim Spulen</string>
     <string name="playlists_style">Wiedergabelisten-Stil</string>
     <string name="playlists_style_grid">Gitter</string>
-    <string name="playlists_style_rows">Zeilen</string>
+    <string name="playlists_style_rows">Reihe</string>
 </resources>
