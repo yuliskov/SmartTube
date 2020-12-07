@@ -5,11 +5,10 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
-import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -21,36 +20,36 @@ import io.reactivex.schedulers.Schedulers;
 
 import java.util.List;
 
-public class ChannelPresenter implements VideoGroupPresenter, Presenter<ChannelView> {
+public class ChannelPresenter extends BasePresenter<ChannelView> implements VideoGroupPresenter {
     private static final String TAG = ChannelPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static ChannelPresenter sInstance;
-    private final Context mContext;
     private final MediaService mMediaService;
     private final PlaybackPresenter mPlaybackPresenter;
-    private ChannelView mView;
     private String mChannelId;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
 
     public ChannelPresenter(Context context) {
-        mContext = context;
-        mMediaService = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
+        super(context);
+        mMediaService = YouTubeMediaService.instance();
         mPlaybackPresenter = PlaybackPresenter.instance(context);
     }
 
     public static ChannelPresenter instance(Context context) {
         if (sInstance == null) {
-            sInstance = new ChannelPresenter(context.getApplicationContext());
+            sInstance = new ChannelPresenter(context);
         }
+
+        sInstance.setContext(context);
 
         return sInstance;
     }
 
     @Override
-    public void onInitDone() {
+    public void onViewInitialized() {
         if (mChannelId != null) {
-            mView.clear();
+            getView().clear();
             updateRows(mChannelId);
         }
     }
@@ -66,7 +65,7 @@ public class ChannelPresenter implements VideoGroupPresenter, Presenter<ChannelV
 
     @Override
     public void onVideoItemLongClicked(Video item) {
-        VideoMenuPresenter.instance(mContext).showMenu(item);
+        VideoMenuPresenter.instance(getContext()).showMenu(item);
     }
 
     @Override
@@ -81,14 +80,7 @@ public class ChannelPresenter implements VideoGroupPresenter, Presenter<ChannelV
     }
 
     @Override
-    public void register(ChannelView view) {
-        mView = view;
-    }
-
-    @Override
-    public void unregister(ChannelView view) {
-        mView = null;
-
+    public void onViewDestroyed() {
         disposeActions();
     }
 
@@ -98,7 +90,7 @@ public class ChannelPresenter implements VideoGroupPresenter, Presenter<ChannelV
                 openChannel(item.channelId);
             } else {
                 // Maybe this is subscribed items view
-                ChannelSubPresenter.instance(mContext)
+                ChannelUploadsPresenter.instance(getContext())
                         .obtainVideoGroup(item, group -> openChannel(group.getChannelId()));
             }
         }
@@ -110,10 +102,10 @@ public class ChannelPresenter implements VideoGroupPresenter, Presenter<ChannelV
         }
 
         disposeActions();
-        ViewManager.instance(mContext).startView(ChannelView.class);
+        ViewManager.instance(getContext()).startView(ChannelView.class);
 
-        if (mView != null) {
-            mView.clear();
+        if (getView() != null) {
+            getView().clear();
             updateRows(channelId);
         } else {
             mChannelId = channelId;
@@ -137,7 +129,7 @@ public class ChannelPresenter implements VideoGroupPresenter, Presenter<ChannelV
 
         Log.d(TAG, "updateRows: Start loading...");
 
-        mView.showProgressBar(true);
+        getView().showProgressBar(true);
 
         Observable<List<MediaGroup>> channelObserve = mMediaService.getMediaGroupManager().getChannelObserve(channelId);
 
@@ -146,7 +138,7 @@ public class ChannelPresenter implements VideoGroupPresenter, Presenter<ChannelV
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::updateRowsHeader
                         , error -> Log.e(TAG, "updateRows error: " + error)
-                        , () -> mView.showProgressBar(false));
+                        , () -> getView().showProgressBar(false));
     }
 
     private void updateRowsHeader(List<MediaGroup> mediaGroups) {
@@ -156,14 +148,14 @@ public class ChannelPresenter implements VideoGroupPresenter, Presenter<ChannelV
                 continue;
             }
 
-            mView.update(VideoGroup.from(mediaGroup));
+            getView().update(VideoGroup.from(mediaGroup));
         }
     }
 
     private void continueGroup(VideoGroup group) {
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
-        mView.showProgressBar(true);
+        getView().showProgressBar(true);
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
@@ -173,8 +165,8 @@ public class ChannelPresenter implements VideoGroupPresenter, Presenter<ChannelV
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(continueMediaGroup -> {
-                            mView.update(VideoGroup.from(continueMediaGroup));
+                            getView().update(VideoGroup.from(continueMediaGroup));
                         }, error -> Log.e(TAG, "continueGroup error: " + error),
-                        () -> mView.showProgressBar(false));
+                        () -> getView().showProgressBar(false));
     }
 }

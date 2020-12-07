@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler;
 import android.view.KeyEvent;
 
 public class LongClickManager {
+    private static final int EVENT_REPEAT_NUMS = 10;
     private int mEventRepeatNums;
     private int mLastEventCode;
     private long mLastEventTimeMs;
@@ -23,6 +24,6 @@ public class LongClickManager {
     }
 
     public boolean isLongClick() {
-        return mEventRepeatNums > 5;
+        return mEventRepeatNums > EVENT_REPEAT_NUMS;
     }
 }

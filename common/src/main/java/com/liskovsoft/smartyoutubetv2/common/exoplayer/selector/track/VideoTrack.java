@@ -150,7 +150,7 @@ public class VideoTrack extends MediaTrack {
     //}
 
     @Override
-    public int compare(MediaTrack track2) {
+    public int inBounds(MediaTrack track2) {
         if (track2.format == null) {
             return 1;
         }
@@ -171,6 +171,29 @@ public class VideoTrack extends MediaTrack {
             }
         } else if (widthLessOrEquals(track2.format.width, format.width)) {
             result = 1;
+        }
+
+        return result;
+    }
+
+    @Override
+    public int compare(MediaTrack track2) {
+        if (track2.format == null) {
+            return 1;
+        }
+
+        int result = -1;
+
+        if (Helpers.equals(format.id, track2.format.id)) {
+            result = 0;
+        } if (widthLessOrEquals(track2.format.width, format.width)) {
+            if (fpsLessOrEquals(track2.format.frameRate, format.frameRate)) {
+                if (TrackSelectorUtil.isHdrCodec(format.codecs) == TrackSelectorUtil.isHdrCodec(track2.format.codecs)) {
+                    result = 0;
+                } else {
+                    result = 1;
+                }
+            }
         }
 
         return result;

@@ -6,7 +6,6 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
-import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -25,12 +24,10 @@ import java.util.List;
 public class SuggestionsLoader extends PlayerEventListenerHelper {
     private static final String TAG = SuggestionsLoader.class.getSimpleName();
     private final List<MetadataListener> mListeners = new ArrayList<>();
-    private final Context mContext;
     private Disposable mMetadataAction;
     private Disposable mScrollAction;
 
-    public SuggestionsLoader(Context context) {
-        mContext = context;
+    public SuggestionsLoader() {
     }
 
     public interface MetadataListener {
@@ -55,7 +52,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
     @Override
     public void onSuggestionItemClicked(Video item) {
         // Visual response to user clicks
-        mController.resetSuggestedPosition();
+        getController().resetSuggestedPosition();
     }
 
     private void continueGroup(VideoGroup group) {
@@ -69,20 +66,20 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        MediaItemManager mediaItemManager = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(mContext)).getMediaItemManager();
+        MediaItemManager mediaItemManager = YouTubeMediaService.instance().getMediaItemManager();
 
         mScrollAction = mediaItemManager.continueGroupObserve(mediaGroup)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        continueMediaGroup -> mController.updateSuggestions(VideoGroup.from(continueMediaGroup, group.getCategory()))
+                        continueMediaGroup -> getController().updateSuggestions(VideoGroup.from(continueMediaGroup, group.getCategory()))
                         , error -> Log.e(TAG, "continueGroup error: " + error));
     }
 
     private void syncCurrentVideo(MediaItemMetadata mediaItemMetadata) {
-        Video video = mController.getVideo();
-        video.sync(mediaItemMetadata, PlayerData.instance(mActivity).isShowFullDateEnabled());
-        mController.setVideo(video);
+        Video video = getController().getVideo();
+        video.sync(mediaItemMetadata, PlayerData.instance(getActivity()).isShowFullDateEnabled());
+        getController().setVideo(video);
     }
 
     private void loadSuggestions(Video video) {
@@ -93,7 +90,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
         RxUtils.disposeActions(mMetadataAction, mScrollAction);
 
-        MediaService service = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(mContext));
+        MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
 
         Observable<MediaItemMetadata> observable;
@@ -120,19 +117,19 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
         List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
 
         if (suggestions == null) {
-            Log.e(TAG, "loadSuggestions: Can't obtain suggestions for video: " + mController.getVideo().title);
+            Log.e(TAG, "loadSuggestions: Can't obtain suggestions for video: " + getController().getVideo().title);
             return;
         }
 
         // Don't reload suggestions when watching playlist items
-        if (mController.getVideo().isPlaylistItem() && !mController.isSuggestionsEmpty()) {
+        if (getController().getVideo().isPlaylistItem() && !getController().isSuggestionsEmpty()) {
             return;
         }
 
-        mController.clearSuggestions(); // clear previous videos
+        getController().clearSuggestions(); // clear previous videos
 
         for (MediaGroup group : suggestions) {
-            mController.updateSuggestions(VideoGroup.from(group));
+            getController().updateSuggestions(VideoGroup.from(group));
         }
     }
 

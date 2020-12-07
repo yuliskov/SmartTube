@@ -5,7 +5,6 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.Account;
-import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -28,7 +27,7 @@ public class AccountSelectionPresenter {
 
     public AccountSelectionPresenter(Context context) {
         mContext = context;
-        MediaService service = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
+        MediaService service = YouTubeMediaService.instance();
         mSignInManager = service.getSignInManager();
     }
 

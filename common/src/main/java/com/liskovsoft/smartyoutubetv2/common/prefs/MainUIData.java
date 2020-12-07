@@ -18,6 +18,8 @@ public class MainUIData {
     public static final int CHANNEL_SORTING_UPDATE = 0;
     public static final int CHANNEL_SORTING_AZ = 1;
     public static final int CHANNEL_SORTING_LAST_VIEWED = 2;
+    public static final int PLAYLISTS_STYLE_GRID = 0;
+    public static final int PLAYLISTS_STYLE_ROWS = 1;
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
     private final Context mContext;
@@ -33,6 +35,7 @@ public class MainUIData {
     private final List<ColorScheme> mColorSchemes = new ArrayList<>();
     private int mColorSchemeIndex;
     private int mChannelCategorySorting;
+    private int mPlaylistsStyle;
 
     public MainUIData(Context context) {
         mContext = context;
@@ -148,15 +151,24 @@ public class MainUIData {
         persistState();
     }
 
+    public int getPlaylistsStyle() {
+        return mPlaylistsStyle;
+    }
+
+    public void setPlaylistsStyle(int type) {
+        mPlaylistsStyle = type;
+        persistState();
+    }
+
     private void initLeftPanelCategories() {
         mLeftPanelCategories.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mLeftPanelCategories.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
         mLeftPanelCategories.put(R.string.header_news, MediaGroup.TYPE_NEWS);
         mLeftPanelCategories.put(R.string.header_music, MediaGroup.TYPE_MUSIC);
-        mLeftPanelCategories.put(R.string.header_channels, MediaGroup.TYPE_CHANNELS_SUB);
+        mLeftPanelCategories.put(R.string.header_channels, MediaGroup.TYPE_CHANNELS_SECTION);
         mLeftPanelCategories.put(R.string.header_subscriptions, MediaGroup.TYPE_SUBSCRIPTIONS);
         mLeftPanelCategories.put(R.string.header_history, MediaGroup.TYPE_HISTORY);
-        mLeftPanelCategories.put(R.string.header_playlists, MediaGroup.TYPE_PLAYLISTS);
+        mLeftPanelCategories.put(R.string.header_playlists, MediaGroup.TYPE_PLAYLISTS_SECTION);
     }
 
     private void initColorSchemes() {
@@ -189,7 +201,8 @@ public class MainUIData {
     private void persistState() {
         String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
         mPrefs.setMainUIData(Helpers.mergeObject(
-                mIsAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale, mColorSchemeIndex, mIsMultilineTitlesEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting));
+                mIsAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale,
+                mColorSchemeIndex, mIsMultilineTitlesEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting, mPlaylistsStyle));
     }
 
     private void restoreState() {
@@ -206,6 +219,7 @@ public class MainUIData {
         mIsMultilineTitlesEnabled = Helpers.parseBoolean(split, 6, false);
         mIsSettingsCategoryEnabled = Helpers.parseBoolean(split, 7, true);
         mChannelCategorySorting = Helpers.parseInt(split, 8, CHANNEL_SORTING_UPDATE);
+        mPlaylistsStyle = Helpers.parseInt(split, 9, PLAYLISTS_STYLE_GRID);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArray(selectedCategories);

@@ -2,20 +2,18 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.OnboardingView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
-import com.liskovsoft.smartyoutubetv2.common.app.views.OnboardingView;
 
-public class OnboardingPresenter implements Presenter<OnboardingView> {
+public class OnboardingPresenter extends BasePresenter<OnboardingView> {
     @SuppressLint("StaticFieldLeak")
     private static OnboardingPresenter sInstance;
-    private final Context mContext;
     private final ViewManager mViewManager;
-    private OnboardingView mView;
 
     private OnboardingPresenter(Context context) {
-        mContext = context;
+        super(context);
         mViewManager = ViewManager.instance(context);
     }
 
@@ -23,6 +21,8 @@ public class OnboardingPresenter implements Presenter<OnboardingView> {
         if (sInstance == null) {
             sInstance = new OnboardingPresenter(context);
         }
+
+        sInstance.setContext(context);
 
         return sInstance;
     }
@@ -34,33 +34,23 @@ public class OnboardingPresenter implements Presenter<OnboardingView> {
     public void onFinish() {
         completeOnboarding();
 
-        if (mView != null) {
-            mView.finishOnboarding();
+        if (getView() != null) {
+            getView().finishOnboarding();
         }
     }
 
     private void completeOnboarding() {
-        AppPrefs.instance(mContext).setCompletedOnboarding(true);
+        AppPrefs.instance(getContext()).setCompletedOnboarding(true);
         sInstance = null;
     }
 
     @Override
-    public void onInitDone() {
+    public void onViewInitialized() {
         // NOP
     }
 
-    @Override
-    public void register(OnboardingView view) {
-        mView = view;
-    }
-
-    @Override
-    public void unregister(OnboardingView view) {
-        mView = null;
-    }
-
     public void showOnboarding() {
-        if (!AppPrefs.instance(mContext).getCompletedOnboarding()) {
+        if (!AppPrefs.instance(getContext()).getCompletedOnboarding()) {
             // This is the first time running the app, let's go to onboarding
             mViewManager.startView(OnboardingView.class);
         }

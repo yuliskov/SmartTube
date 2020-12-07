@@ -60,7 +60,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mCategories = new LinkedHashMap<>();
         mHandler = new Handler();
         mBrowsePresenter = BrowsePresenter.instance(getContext());
-        mBrowsePresenter.register(this);
+        mBrowsePresenter.setView(this);
         mProgressBarManager = new ProgressBarManager();
 
         setupAdapter();
@@ -97,7 +97,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
         prepareEntranceTransition();
 
-        mBrowsePresenter.onInitDone();
+        mBrowsePresenter.onViewInitialized();
 
         // Restore state after crash
         selectCategory(mRestoredHeaderIndex);
@@ -285,7 +285,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private void createHeader(int index, Category header) {
-        HeaderItem headerItem = new CategoryHeaderItem(header.getId(), header.getTitle(), header.getType(), header.getResId());;
+        HeaderItem headerItem = new CategoryHeaderItem(header);
 
         PageRow pageRow = new PageRow(headerItem);
         mCategoryRowAdapter.add(index, pageRow);
@@ -314,7 +314,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mBrowsePresenter.unregister(this);
+        mBrowsePresenter.onViewDestroyed();
     }
 
     @Override

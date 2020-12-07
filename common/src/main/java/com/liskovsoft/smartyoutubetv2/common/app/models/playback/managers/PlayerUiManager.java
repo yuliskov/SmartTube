@@ -8,7 +8,6 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
-import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -41,11 +40,11 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     private boolean mEngineReady;
     private boolean mDebugViewEnabled;
     private PlayerData mPlayerData;
-    private final Runnable mSuggestionsResetHandler = () -> mController.resetSuggestedPosition();
+    private final Runnable mSuggestionsResetHandler = () -> getController().resetSuggestedPosition();
     private final Runnable mUiAutoHideHandler = () -> {
-        if (mController.isPlaying()) {
-            if (!mController.isSuggestionsShown()) { // don't hide when suggestions is shown
-                mController.showControls(false);
+        if (getController().isPlaying()) {
+            if (!getController().isSuggestionsShown()) { // don't hide when suggestions is shown
+                getController().showControls(false);
             }
         } else {
             // in seeking state? doing recheck...
@@ -54,17 +53,17 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         }
     };
 
-    public PlayerUiManager(Context context) {
+    public PlayerUiManager() {
         mHandler = new Handler(Looper.getMainLooper());
 
-        MediaService service = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
+        MediaService service = YouTubeMediaService.instance();
         mMediaItemManager = service.getMediaItemManager();
     }
 
     @Override
     public void onInitDone() {
-        AppSettingsPresenter.instance(mActivity).setPlayerUiManager(this);
-        mPlayerData = PlayerData.instance(mActivity);
+        AppSettingsPresenter.instance(getActivity()).setPlayerUiManager(this);
+        mPlayerData = PlayerData.instance(getActivity());
     }
 
     @Override
@@ -84,21 +83,21 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         if (KeyHelpers.isBackKey(keyCode)) {
             enableSuggestionsResetTimeout();
         } else if (KeyHelpers.isMenuKey(keyCode)) {
-            mController.showControls(!mController.isControlsShown());
-        } else if (KeyHelpers.isConfirmKey(keyCode) && !mController.isControlsShown()) {
+            getController().showControls(!getController().isControlsShown());
+        } else if (KeyHelpers.isConfirmKey(keyCode) && !getController().isControlsShown()) {
             switch (mPlayerData.getOKButtonBehavior()) {
                 case PlayerData.ONLY_UI:
                     // NOP
                     break;
                 case PlayerData.UI_AND_PAUSE:
-                    mController.setPlay(false);
+                    getController().setPlay(false);
                     break;
                 case PlayerData.ONLY_PAUSE:
-                    mController.setPlay(!mController.isPlaying());
+                    getController().setPlay(!getController().isPlaying());
                     return true; // don't show ui
             }
         } else if (KeyHelpers.isStopKey(keyCode)) {
-            mController.exit();
+            getController().exit();
             return true;
         }
 
@@ -109,26 +108,26 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onChannelClicked() {
-        ChannelPresenter.instance(mActivity).openChannel(mController.getVideo());
+        ChannelPresenter.instance(getActivity()).openChannel(getController().getVideo());
     }
 
     @Override
     public void onSubtitlesClicked() {
-        List<FormatItem> subtitleFormats = mController.getSubtitleFormats();
-        List<SubtitleStyle> subtitleStyles = mController.getSubtitleStyles();
+        List<FormatItem> subtitleFormats = getController().getSubtitleFormats();
+        List<SubtitleStyle> subtitleStyles = getController().getSubtitleStyles();
 
-        String subtitlesCategoryTitle = mActivity.getString(R.string.subtitle_category_title);
-        String subtitleFormatsTitle = mActivity.getString(R.string.subtitle_language);
-        String subtitleStyleTitle = mActivity.getString(R.string.subtitle_style);
+        String subtitlesCategoryTitle = getActivity().getString(R.string.subtitle_category_title);
+        String subtitleFormatsTitle = getActivity().getString(R.string.subtitle_language);
+        String subtitleStyleTitle = getActivity().getString(R.string.subtitle_style);
 
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mActivity);
+        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getActivity());
 
         settingsPresenter.clear();
 
         settingsPresenter.appendRadioCategory(subtitleFormatsTitle,
                 UiOptionItem.from(subtitleFormats,
-                        option -> mController.selectFormat(UiOptionItem.toFormat(option)),
-                        mActivity.getString(R.string.subtitles_disabled)));
+                        option -> getController().selectFormat(UiOptionItem.toFormat(option)),
+                        getActivity().getString(R.string.subtitles_disabled)));
 
         settingsPresenter.appendRadioCategory(subtitleStyleTitle, fromSubtitleStyles(subtitleStyles));
 
@@ -140,9 +139,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
         for (SubtitleStyle subtitleStyle : subtitleStyles) {
             styleOptions.add(UiOptionItem.from(
-                    mActivity.getString(subtitleStyle.nameResId),
-                    option -> mController.setSubtitleStyle(subtitleStyle),
-                    subtitleStyle.equals(mController.getSubtitleStyle())));
+                    getActivity().getString(subtitleStyle.nameResId),
+                    option -> getController().setSubtitleStyle(subtitleStyle),
+                    subtitleStyle.equals(getController().getSubtitleStyle())));
         }
 
         return styleOptions;
@@ -150,15 +149,15 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onPlaylistAddClicked() {
-        VideoMenuPresenter mp = VideoMenuPresenter.instance(mActivity);
+        VideoMenuPresenter mp = VideoMenuPresenter.instance(getActivity());
 
-        mp.showShortMenu(mController.getVideo());
+        mp.showShortMenu(getController().getVideo());
     }
 
     @Override
     public void onVideoStatsClicked(boolean enabled) {
         mDebugViewEnabled = enabled;
-        mController.showDebugView(enabled);
+        getController().showDebugView(enabled);
     }
 
     @Override
@@ -169,11 +168,11 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onVideoLoaded(Video item) {
         // Next lines on engine initialized stage cause other listeners to disappear.
-        mController.showDebugView(mDebugViewEnabled);
-        mController.setDebugButtonState(mDebugViewEnabled);
+        getController().showDebugView(mDebugViewEnabled);
+        getController().setDebugButtonState(mDebugViewEnabled);
 
         if (mPlayerData.isSeekPreviewEnabled()) {
-            mController.loadStoryboard();
+            getController().loadStoryboard();
         }
     }
 
@@ -187,19 +186,19 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     //@Override
     //public void onRepeatModeClicked(int modeIndex) {
-    //    //mController.setRepeatMode(modeIndex);
+    //    //getController().setRepeatMode(modeIndex);
     //}
 
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
-        mController.setLikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_LIKE);
-        mController.setDislikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_DISLIKE);
-        mController.setSubscribeButtonState(metadata.isSubscribed());
+        getController().setLikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_LIKE);
+        getController().setDislikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_DISLIKE);
+        getController().setSubscribeButtonState(metadata.isSubscribed());
     }
 
     @Override
     public void onSuggestionItemLongClicked(Video item) {
-        VideoMenuPresenter.instance(mActivity).showMenu(item);
+        VideoMenuPresenter.instance(getActivity()).showMenu(item);
     }
 
     @Override
@@ -215,9 +214,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     private void showBriefInfo(boolean subscribed) {
         if (subscribed) {
-            MessageHelpers.showMessage(mActivity, R.string.subscribed_to_channel);
+            MessageHelpers.showMessage(getActivity(), R.string.subscribed_to_channel);
         } else {
-            MessageHelpers.showMessage(mActivity, R.string.unsubscribed_to_channel);
+            MessageHelpers.showMessage(getActivity(), R.string.unsubscribed_to_channel);
         }
     }
 
@@ -247,23 +246,23 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
         intSpeedItems(items, new float[]{0.25f, 0.5f, 0.75f, 1.0f, 1.1f, 1.15f, 1.25f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f, 3.0f});
 
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mActivity);
+        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getActivity());
         settingsPresenter.clear();
-        settingsPresenter.appendRadioCategory(mActivity.getString(R.string.video_speed), items);
+        settingsPresenter.appendRadioCategory(getActivity().getString(R.string.video_speed), items);
         settingsPresenter.showDialog();
     }
 
     @Override
     public void onSearchClicked() {
-        SearchPresenter.instance(mActivity).startSearch(null);
+        SearchPresenter.instance(getActivity()).startSearch(null);
     }
 
     private void intSpeedItems(List<OptionItem> items, float[] speedValues) {
         for (float speed : speedValues) {
             items.add(UiOptionItem.from(
                     String.valueOf(speed),
-                    optionItem -> mController.setSpeed(speed),
-                    mController.getSpeed() == speed));
+                    optionItem -> getController().setSpeed(speed),
+                    getController().getSpeed() == speed));
         }
     }
 
@@ -297,7 +296,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     }
 
     private void callMediaItemObservable(MediaItemObservable callable) {
-        Video video = mController.getVideo();
+        Video video = getController().getVideo();
 
         if (video == null || video.mediaItem == null) {
             Log.e(TAG, "Seems that video isn't initialized yet. Cancelling...");

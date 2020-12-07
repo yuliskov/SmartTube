@@ -31,7 +31,7 @@ public class SignInFragmentOld extends ErrorSupportFragment implements SignInVie
         super.onAttach(context);
 
         mSignInPresenter = SignInPresenter.instance(context);
-        mSignInPresenter.register(this);
+        mSignInPresenter.setView(this);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class SignInFragmentOld extends ErrorSupportFragment implements SignInVie
 
         setupUi();
 
-        mSignInPresenter.onInitDone();
+        mSignInPresenter.onViewInitialized();
     }
 
     @Override
@@ -61,7 +61,7 @@ public class SignInFragmentOld extends ErrorSupportFragment implements SignInVie
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSignInPresenter.unregister(this);
+        mSignInPresenter.onViewDestroyed();
     }
 
     @Override

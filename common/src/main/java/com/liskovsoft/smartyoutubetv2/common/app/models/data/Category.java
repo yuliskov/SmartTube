@@ -6,10 +6,10 @@ public class Category {
     public static final int TYPE_TEXT_GRID = 2;
     private final int mId;
     private final String mTitle;
-    private final int mType;
     private final int mResId;
     private final boolean mIsAuthOnly;
     private boolean mEnabled;
+    private int mType;
 
     public Category(int id, String title, int type, int resId) {
         this(id, title, type, resId, false);
@@ -33,6 +33,10 @@ public class Category {
 
     public int getType() {
         return mType;
+    }
+
+    public void setType(int type) {
+        mType = type;
     }
 
     public int getResId() {

@@ -82,7 +82,7 @@ public class VideoDetailsFragment extends DetailsSupportFragment implements Deta
         super.onCreate(savedInstanceState);
 
         mDetailsPresenter = DetailsPresenter.instance(getContext());
-        mDetailsPresenter.register(this);
+        mDetailsPresenter.setView(this);
 
         prepareBackgroundManager();
     }
@@ -91,7 +91,7 @@ public class VideoDetailsFragment extends DetailsSupportFragment implements Deta
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mDetailsPresenter.onInitDone();
+        mDetailsPresenter.onViewInitialized();
     }
 
     private void init() {
@@ -125,7 +125,7 @@ public class VideoDetailsFragment extends DetailsSupportFragment implements Deta
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mDetailsPresenter.unregister(this);
+        mDetailsPresenter.onViewDestroyed();
     }
 
     /**

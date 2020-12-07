@@ -96,7 +96,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mExoPlayerController = new ExoPlayerController(getActivity());
 
         mPlaybackPresenter = PlaybackPresenter.instance(getContext());
-        mPlaybackPresenter.register(this);
+        mPlaybackPresenter.setView(this);
     }
 
     @Override
@@ -105,7 +105,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         setupPlayerBackground();
 
-        mPlaybackPresenter.onInitDone();
+        mPlaybackPresenter.onViewInitialized();
     }
 
     @Override
@@ -678,7 +678,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         blockEngine(false);
         releasePlayer();
 
-        mPlaybackPresenter.unregister(this);
+        mPlaybackPresenter.onViewDestroyed();
     }
 
     @Override

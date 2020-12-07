@@ -40,6 +40,7 @@ import androidx.leanback.widget.PlaybackSeekUi;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.SeekBar;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.ControlBarPresenter.OnControlClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.ControlBarPresenter.OnControlSelectedListener;
@@ -359,6 +360,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                     onProgressBarClicked(ViewHolder.this);
                 }
             });
+            PlayerData playerData = PlayerData.instance(rootView.getContext());
             mProgressBar.setOnKeyListener(new View.OnKeyListener() {
 
                 @Override
@@ -381,7 +383,9 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                                 onBackward();
                             } else {
                                 // MOD: resume immediately after seeking
-                                stopSeek(false);
+                                if (!playerData.isPauseOnSeekEnabled()) {
+                                    stopSeek(false);
+                                }
                             }
                             return true;
                         case KeyEvent.KEYCODE_DPAD_RIGHT:
@@ -392,7 +396,9 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                                 onForward();
                             } else {
                                 // MOD: resume immediately after seeking
-                                stopSeek(false);
+                                if (!playerData.isPauseOnSeekEnabled()) {
+                                    stopSeek(false);
+                                }
                             }
                             return true;
                         case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE: // MOD: act as OK?

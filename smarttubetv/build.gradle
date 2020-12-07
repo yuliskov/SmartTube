@@ -49,8 +49,8 @@ android {
         applicationId "com.liskovsoft.smarttubetv"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 173
-        versionName "10.33"
+        versionCode 183
+        versionName "10.43"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
@@ -79,7 +79,8 @@ android {
         }
         strtarmenia {
             // matchingFallbacks = ['lite']
-            applicationIdSuffix ".rtarmenia"
+            versionCode 11000 + defaultConfig.versionCode
+            applicationId "com.google.android.youtube.tv"
         }
         stbolshoetv {
             // matchingFallbacks = ['lite']

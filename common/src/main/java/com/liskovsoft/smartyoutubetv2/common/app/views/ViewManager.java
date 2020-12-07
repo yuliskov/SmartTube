@@ -10,7 +10,6 @@ import android.content.Intent;
 import androidx.annotation.NonNull;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
@@ -238,7 +237,7 @@ public class ViewManager {
     }
 
     public void clearCaches() {
-        YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(mContext)).invalidateCache();
+        YouTubeMediaService.instance().invalidateCache();
         FileHelpers.deleteCache(mContext);
     }
 
@@ -250,6 +249,8 @@ public class ViewManager {
         //persistState();
         //
         //System.exit(0);
+
+        mMoveViewsToBack = false;
 
         persistState();
 

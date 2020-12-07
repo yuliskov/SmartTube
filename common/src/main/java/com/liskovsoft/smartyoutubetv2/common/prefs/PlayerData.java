@@ -11,15 +11,14 @@ public class PlayerData {
     public static final int AUTO_HIDE_NEVER = 0;
     @SuppressLint("StaticFieldLeak")
     private static PlayerData sInstance;
-    private final Context mContext;
     private final AppPrefs mPrefs;
     private int mOKButtonBehavior;
     private int mUIHideTimeoutSec;
     private boolean mIsShowFullDateEnabled;
     private boolean mIsSeekPreviewEnabled;
+    private boolean mIsPauseOnSeekEnabled;
 
     public PlayerData(Context context) {
-        mContext = context;
         mPrefs = AppPrefs.instance(context);
         restoreData();
     }
@@ -68,6 +67,15 @@ public class PlayerData {
         return mIsSeekPreviewEnabled;
     }
 
+    public void enablePauseOnSeek(boolean enable) {
+        mIsPauseOnSeekEnabled = enable;
+        persistData();
+    }
+
+    public boolean isPauseOnSeekEnabled() {
+        return mIsPauseOnSeekEnabled;
+    }
+
     private void restoreData() {
         String data = mPrefs.getPlayerData();
 
@@ -77,9 +85,10 @@ public class PlayerData {
         mUIHideTimeoutSec = Helpers.parseInt(split, 1, 3);
         mIsShowFullDateEnabled = Helpers.parseBoolean(split, 2, false);
         mIsSeekPreviewEnabled = Helpers.parseBoolean(split, 3, true);
+        mIsPauseOnSeekEnabled = Helpers.parseBoolean(split, 4, false);
     }
 
     private void persistData() {
-        mPrefs.setPlayerData(Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec, mIsShowFullDateEnabled, mIsSeekPreviewEnabled));
+        mPrefs.setPlayerData(Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec, mIsShowFullDateEnabled, mIsSeekPreviewEnabled, mIsPauseOnSeekEnabled));
     }
 }

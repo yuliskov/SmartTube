@@ -21,4 +21,5 @@
     <string name="msg_press_again_to_exit">Opětovným stisknutím opustíte nabídku</string>
     <string name="player_remaining_time">Zbývá: %s</string>
     <string name="badge_new_content">NOVÝ OBSAH</string>
+    <string name="badge_live">ŽIVĚ</string>
 </resources>

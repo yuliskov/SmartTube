@@ -481,7 +481,10 @@ public class DisplaySyncHelper implements UhdHelperListener {
     }
 
     public void setContext(Context context) {
-        mContext = context;
+        if (context != null) {
+            mContext = context.getApplicationContext();
+        }
+
         mUhdHelper = null; // uhd helper uses context, so do re-init
     }
 }

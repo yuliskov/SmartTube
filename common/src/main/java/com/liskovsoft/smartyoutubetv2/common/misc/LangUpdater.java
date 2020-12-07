@@ -14,7 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 public class LangUpdater {
     private static final String TAG = LangUpdater.class.getSimpleName();
     private final AppPrefs mPrefs;
-    private Context mContext;
+    private final Context mContext;
 
     public LangUpdater(Context ctx) {
         mContext = ctx;

@@ -12,33 +12,20 @@ import java.util.HashMap;
 
 public class AutoFrameRateHelper {
     private static final String TAG = AutoFrameRateHelper.class.getSimpleName();
-    private Activity mActivity;
     private final DisplaySyncHelper mSyncHelper;
     private static final long THROTTLE_INTERVAL_MS = 5_000;
     private long mPrevCall;
     private HashMap<Float, Float> mFrameRateMapping;
     private boolean mIsFpsCorrectionEnabled;
-    private Pair<Integer, Float> mCurrentFormat;
 
     public AutoFrameRateHelper() {
-        this(null);
-    }
-
-    private AutoFrameRateHelper(Activity activity) {
-        mActivity = activity;
-        mSyncHelper = new DisplaySyncHelperAlt(activity);
+        mSyncHelper = new DisplaySyncHelperAlt(null);
 
         initFrameRateMapping();
-        saveOriginalState();
     }
 
-    public void apply(FormatItem format, Activity activity) {
-        apply(format, activity, false);
-    }
-
-    public void apply(FormatItem format, Activity activity, boolean force) {
-        setActivity(activity);
-        apply(format, force);
+    public void apply(Activity activity, FormatItem format) {
+        apply(activity, format, false);
     }
 
     public boolean isSupported() {
@@ -58,9 +45,9 @@ public class AutoFrameRateHelper {
             if (originalMode != null && newMode != null) {
                 if (enabled) {
                     mSyncHelper.setResolutionSwitchEnabled(true);
-                    syncMode(mCurrentFormat.first, mCurrentFormat.second);
+                    //syncMode(mCurrentFormat.first, mCurrentFormat.second);
                 } else {
-                    syncMode(originalMode.getPhysicalWidth(), newMode.getRefreshRate());
+                    //syncMode(originalMode.getPhysicalWidth(), newMode.getRefreshRate());
                     mSyncHelper.setResolutionSwitchEnabled(false);
                 }
             }
@@ -71,7 +58,17 @@ public class AutoFrameRateHelper {
 
     public void saveOriginalState(Activity activity) {
         setActivity(activity);
-        saveOriginalState();
+
+        if (activity == null) {
+            Log.e(TAG, "Activity in null. exiting...");
+            return;
+        }
+
+        if (!isSupported()) {
+            return;
+        }
+
+        mSyncHelper.saveOriginalState();
     }
 
     private void initFrameRateMapping() {
@@ -80,8 +77,10 @@ public class AutoFrameRateHelper {
         mFrameRateMapping.put(60f, 59.94f);
     }
 
-    private void apply(FormatItem format, boolean force) {
-        if (mActivity == null) {
+    public void apply(Activity activity, FormatItem format, boolean force) {
+        setActivity(activity);
+
+        if (activity == null) {
             Log.e(TAG, "Activity in null. exiting...");
             return;
         }
@@ -106,18 +105,18 @@ public class AutoFrameRateHelper {
         int width = format.getWidth();
         float frameRate = correctFrameRate(format.getFrameRate());
 
-        mCurrentFormat = new Pair<>(width, frameRate);
+        Pair<Integer, Float> currentFormat = new Pair<>(width, frameRate);
 
         Log.d(TAG, String.format("Applying mode change... Video fps: %s, width: %s, height: %s", frameRate, width, format.getHeight()));
-        syncMode(width, frameRate, force);
+        syncMode(activity, width, frameRate, force);
     }
 
-    private void syncMode(int width, float frameRate) {
-        syncMode(width, frameRate, false);
-    }
+    //private void syncMode(int width, float frameRate) {
+    //    syncMode(width, frameRate, false);
+    //}
 
-    private void syncMode(int width, float frameRate, boolean force) {
-        if (mActivity == null) {
+    private void syncMode(Activity activity, int width, float frameRate, boolean force) {
+        if (activity == null) {
             Log.e(TAG, "Activity in null. exiting...");
             return;
         }
@@ -127,32 +126,14 @@ public class AutoFrameRateHelper {
             return;
         }
 
-        mSyncHelper.syncDisplayMode(mActivity.getWindow(), width, frameRate, force);
-    }
-
-    private void saveOriginalState() {
-        if (mActivity == null) {
-            Log.e(TAG, "Activity in null. exiting...");
-            return;
-        }
-
-        if (!isSupported()) {
-            return;
-        }
-
-        mSyncHelper.saveOriginalState();
+        mSyncHelper.syncDisplayMode(activity.getWindow(), width, frameRate, force);
     }
 
     public void restoreOriginalState(Activity activity) {
-        setActivity(activity);
-        restoreOriginalState();
+        restoreOriginalState(activity, false);
     }
 
-    private void restoreOriginalState() {
-        restoreOriginalState(false);
-    }
-
-    private void restoreOriginalState(boolean force) {
+    private void restoreOriginalState(Activity activity, boolean force) {
         if (!isSupported()) {
             Log.d(TAG, "restoreOriginalState: autoframerate not enabled... exiting...");
             return;
@@ -160,7 +141,7 @@ public class AutoFrameRateHelper {
 
         Log.d(TAG, "Restoring original mode...");
 
-        boolean result = mSyncHelper.restoreOriginalState(mActivity.getWindow(), force);
+        boolean result = mSyncHelper.restoreOriginalState(activity.getWindow(), force);
 
         Log.d(TAG, "Restore mode result: " + result);
     }
@@ -189,23 +170,22 @@ public class AutoFrameRateHelper {
         return frameRate;
     }
 
-    /**
-     * UGOOS mode change fix. DEPRECATED!
-     */
-    private void applyModeChangeFix() {
-        if (!isSupported()) {
-            return;
-        }
+    ///**
+    // * UGOOS mode change fix. DEPRECATED!
+    // */
+    //private void applyModeChangeFix() {
+    //    if (!isSupported()) {
+    //        return;
+    //    }
+    //
+    //    mSyncHelper.applyModeChangeFix(mActivity.getWindow());
+    //}
 
-        mSyncHelper.applyModeChangeFix(mActivity.getWindow());
-    }
-
-    private void resetState() {
-        mSyncHelper.resetMode(mActivity.getWindow());
-    }
+    //private void resetState() {
+    //    mSyncHelper.resetMode(mActivity.getWindow());
+    //}
 
     private void setActivity(Activity activity) {
-        mActivity = activity;
         mSyncHelper.setContext(activity);
     }
 }

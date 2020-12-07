@@ -1,30 +1,21 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 
 import androidx.leanback.widget.HeaderItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Category;
 
 public class CategoryHeaderItem extends HeaderItem {
-    private int mType = -1;
-    private int mResId = -1;
+    private final Category mHeader;
 
-    public CategoryHeaderItem(long id, String name, int type, int resId) {
-        super(id, name);
-        mType = type;
-        mResId = resId;
-    }
-
-    public CategoryHeaderItem(long id, String name) {
-        super(id, name);
-    }
-
-    public CategoryHeaderItem(String name) {
-        super(name);
+    public CategoryHeaderItem(Category header) {
+        super(header.getId(), header.getTitle());
+        mHeader = header;
     }
 
     public int getType() {
-        return mType;
+        return mHeader.getType();
     }
 
     public int getResId() {
-        return mResId;
+        return mHeader.getResId();
     }
 }

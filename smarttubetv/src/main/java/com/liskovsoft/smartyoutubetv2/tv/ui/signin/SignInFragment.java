@@ -22,20 +22,20 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
         super.onCreate(savedInstanceState);
 
         mSignInPresenter = SignInPresenter.instance(getContext());
-        mSignInPresenter.register(this);
+        mSignInPresenter.setView(this);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mSignInPresenter.onInitDone();
+        mSignInPresenter.onViewInitialized();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSignInPresenter.unregister(this);
+        mSignInPresenter.onViewDestroyed();
     }
 
     @Override
