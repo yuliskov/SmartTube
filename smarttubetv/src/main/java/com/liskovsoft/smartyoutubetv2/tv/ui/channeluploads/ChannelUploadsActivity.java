@@ -10,6 +10,6 @@ public class ChannelUploadsActivity extends LeanbackActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_channel_sub);
+        setContentView(R.layout.fragment_channel_uploads);
     }
 }
