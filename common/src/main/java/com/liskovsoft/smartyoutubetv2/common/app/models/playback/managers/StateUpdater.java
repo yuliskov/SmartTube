@@ -166,7 +166,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
             saveState();
         }
 
-        // Take in account different playback states
+        // Take into account different playback states
         Helpers.enableScreensaver(getActivity());
     }
 
