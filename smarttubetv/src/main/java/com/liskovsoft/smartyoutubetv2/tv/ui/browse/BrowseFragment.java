@@ -116,6 +116,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
                     } else {
                         // update section when clicked or pressed
                         mBrowsePresenter.onCategoryFocused((int) headerId);
+                        startHeadersTransition(false);
                     }
                 }
         );
