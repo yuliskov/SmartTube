@@ -66,9 +66,9 @@ public class BlackListMediaCodecSelector implements MediaCodecSelector {
         return filteredCodecInfos;
     }
 
-//    @Nullable
-//    @Override
-//    public MediaCodecInfo getPassthroughDecoderInfo() throws MediaCodecUtil.DecoderQueryException {
-//        return MediaCodecUtil.getPassthroughDecoderInfo();
-//    }
+    @Nullable
+    @Override
+    public MediaCodecInfo getPassthroughDecoderInfo() throws MediaCodecUtil.DecoderQueryException {
+        return MediaCodecUtil.getPassthroughDecoderInfo();
+    }
 }
