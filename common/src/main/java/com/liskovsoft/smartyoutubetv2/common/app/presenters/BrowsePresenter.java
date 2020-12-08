@@ -398,8 +398,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                             if (isSigned) {
                                 callback.run();
                             } else {
-                                getView().updateErrorIfEmpty(new SignInError(getContext()));
-                                getView().showProgressBar(false);
+                                if (getView().isProgressBarShowing()) {
+                                    getView().showProgressBar(false);
+                                    getView().showError(new SignInError(getContext()));
+                                }
                             }
                         }
                 );
@@ -423,8 +425,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                         }
                         , error -> Log.e(TAG, "updateRowsHeader error: " + error)
                         , () -> {
-                            getView().showProgressBar(false);
-                            getView().updateErrorIfEmpty(new CategoryEmptyError(getContext()));
+                            if (getView().isProgressBarShowing()) {
+                                getView().showProgressBar(false);
+                                getView().showError(new CategoryEmptyError(getContext()));
+                            }
                         });
     }
 
@@ -445,8 +449,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                         }
                         , error -> Log.e(TAG, "updateGridHeader error: " + error)
                         , () -> {
-                            getView().showProgressBar(false);
-                            getView().updateErrorIfEmpty(new CategoryEmptyError(getContext()));
+                            if (getView().isProgressBarShowing()) {
+                                getView().showProgressBar(false);
+                                getView().showError(new CategoryEmptyError(getContext()));
+                            }
                         });
     }
 

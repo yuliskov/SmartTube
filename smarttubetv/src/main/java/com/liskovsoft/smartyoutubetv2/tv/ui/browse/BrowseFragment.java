@@ -194,10 +194,14 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
         return (int) ((PageRow) mCategoryRowAdapter.get(getSelectedPosition())).getHeaderItem().getId();
     }
+    
+    public void updateErrorIfEmpty(ErrorFragmentData data) {
+        mHandler.postDelayed(() -> showErrorIfEmpty(data), 500); // need delay because header may be not updated
+    }
 
     @Override
-    public void updateErrorIfEmpty(ErrorFragmentData data) {
-        mHandler.postDelayed(() -> showErrorIfEmpty(data), 1_000); // need delay because header may be not updated
+    public void showError(ErrorFragmentData data) {
+        replaceMainFragment(new LoginDialogFragment(data));
     }
 
     private void showErrorIfEmpty(ErrorFragmentData data) {
@@ -335,5 +339,10 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         } else {
             mProgressBarManager.hide();
         }
+    }
+
+    @Override
+    public boolean isProgressBarShowing() {
+        return mProgressBarManager.isShowing();
     }
 }
