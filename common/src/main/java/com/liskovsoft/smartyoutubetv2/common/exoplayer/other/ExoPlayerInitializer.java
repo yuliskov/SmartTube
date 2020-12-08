@@ -1,6 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.other;
 
-import android.app.Activity;
+import android.content.Context;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -9,7 +9,6 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.upstream.DefaultAllocator;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerController;
 
@@ -17,7 +16,7 @@ public class ExoPlayerInitializer {
     private final int mDeviceRam;
     private int mBufferType = PlayerController.BUFFER_MED;
 
-    public ExoPlayerInitializer(Activity activity) {
+    public ExoPlayerInitializer(Context activity) {
         int deviceRam = Helpers.getDeviceRam(activity);
 
         // If ram is too big, bigger then max int value DeviceRam will return a negative number...
@@ -26,7 +25,7 @@ public class ExoPlayerInitializer {
         mDeviceRam = deviceRam < 0 ? 196000000 : deviceRam;
     }
 
-    public SimpleExoPlayer createPlayer(Activity activity, DefaultRenderersFactory renderersFactory, DefaultTrackSelector trackSelector) {
+    public SimpleExoPlayer createPlayer(Context activity, DefaultRenderersFactory renderersFactory, DefaultTrackSelector trackSelector) {
         DefaultLoadControl loadControl = createLoadControl();
 
         // HDR fix?

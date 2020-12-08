@@ -86,9 +86,11 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         }
 
         if (clazz != null) {
-            Log.d(TAG, "Starting channels receiver...");
-            Intent intent = new Intent(getContext(), clazz);
-            getContext().sendBroadcast(intent);
+            if (getContext() != null) {
+                Log.d(TAG, "Starting channels receiver...");
+                Intent intent = new Intent(getContext(), clazz);
+                getContext().sendBroadcast(intent);
+            }
         } else {
             Log.e(TAG, "Channels receiver class not found: " + CHANNELS_RECEIVER_CLASS_NAME);
         }

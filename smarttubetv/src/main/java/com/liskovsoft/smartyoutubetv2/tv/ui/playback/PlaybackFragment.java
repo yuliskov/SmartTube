@@ -92,8 +92,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mMediaGroupAdapters = new HashMap<>();
         mBackgroundManager = getLeanbackActivity().getBackgroundManager();
         mBackgroundManager.setBackgroundColor(ContextCompat.getColor(getLeanbackActivity(), R.color.player_background));
-        mPlayerInitializer = new ExoPlayerInitializer(getActivity());
-        mExoPlayerController = new ExoPlayerController(getActivity());
+        mPlayerInitializer = new ExoPlayerInitializer(getContext());
+        mExoPlayerController = new ExoPlayerController(getContext());
 
         mPlaybackPresenter = PlaybackPresenter.instance(getContext());
         mPlaybackPresenter.setView(this);
@@ -170,7 +170,9 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     public void onDispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            mPlayerGlue.syncControlsState();
+            if (mPlayerGlue != null) {
+                mPlayerGlue.syncControlsState();
+            }
         }
     }
 

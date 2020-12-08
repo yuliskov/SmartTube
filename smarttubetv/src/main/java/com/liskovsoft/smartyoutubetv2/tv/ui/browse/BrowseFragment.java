@@ -197,7 +197,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     @Override
     public void updateErrorIfEmpty(ErrorFragmentData data) {
-        mHandler.postDelayed(() -> showErrorIfEmpty(data), 500); // need delay because header may be not updated
+        mHandler.postDelayed(() -> showErrorIfEmpty(data), 1_000); // need delay because header may be not updated
     }
 
     private void showErrorIfEmpty(ErrorFragmentData data) {

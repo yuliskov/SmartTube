@@ -7,7 +7,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.models.update.AppUpdateManager;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppUpdatePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 
@@ -58,7 +58,7 @@ public class AboutPresenter extends BasePresenter<Void> {
     private void appendUpdateCheckButton(AppSettingsPresenter settingsPresenter) {
         OptionItem updateCheckOption = UiOptionItem.from(
                 getContext().getString(R.string.check_for_updates),
-                option -> AppUpdateManager.instance(getContext()).start(true));
+                option -> AppUpdatePresenter.instance(getContext()).start(true));
 
         settingsPresenter.appendSingleButton(updateCheckOption);
     }
