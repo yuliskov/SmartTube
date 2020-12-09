@@ -292,7 +292,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
     private void checkForUpdates() {
         AppUpdatePresenter updatePresenter = AppUpdatePresenter.instance(getContext());
-        updatePresenter.start(true);
+        updatePresenter.start(false);
         updatePresenter.unhold();
     }
 

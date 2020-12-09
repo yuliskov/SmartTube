@@ -58,7 +58,7 @@ public class AboutPresenter extends BasePresenter<Void> {
     private void appendUpdateCheckButton(AppSettingsPresenter settingsPresenter) {
         OptionItem updateCheckOption = UiOptionItem.from(
                 getContext().getString(R.string.check_for_updates),
-                option -> AppUpdatePresenter.instance(getContext()).start(true, true));
+                option -> AppUpdatePresenter.instance(getContext()).start(true));
 
         settingsPresenter.appendSingleButton(updateCheckOption);
     }

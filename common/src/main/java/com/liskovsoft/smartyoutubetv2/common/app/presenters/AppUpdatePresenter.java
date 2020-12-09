@@ -20,7 +20,7 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
     private final AppSettingsPresenter mSettingsPresenter;
     private final String mUpdateManifestUrl;
     private boolean mUpdateInstalled;
-    private boolean mIsVerbose;
+    private boolean mIsForceCheck;
 
     public AppUpdatePresenter(Context context) {
         super(context);
@@ -44,11 +44,7 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
     }
 
     public void start(boolean forceCheck) {
-        start(forceCheck, false);
-    }
-
-    public void start(boolean forceCheck, boolean isVerbose) {
-        mIsVerbose = isVerbose;
+        mIsForceCheck = forceCheck;
         mUpdateInstalled = false;
 
         if (forceCheck) {
@@ -92,7 +88,7 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
 
     @Override
     public void onError(Exception error) {
-        if (mIsVerbose) {
+        if (mIsForceCheck) {
             if (AppUpdateCheckerListener.LATEST_VERSION.equals(error.getMessage())) {
                 MessageHelpers.showMessage(getContext(), R.string.update_not_found);
             } else {
