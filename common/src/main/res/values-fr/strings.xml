@@ -120,4 +120,8 @@
     <string name="sorting_by_new_content">Nouveau contenu</string>
     <string name="sorting_alphabetically">Alphabétiquement</string>
     <string name="sorting_last_viewed">Populaire en premier</string>
+    <string name="player_pause_when_seek">Pause lors de la recherche</string>
+    <string name="playlists_style">Style de bibliothèque</string>
+    <string name="playlists_style_grid">Grille</string>
+    <string name="playlists_style_rows">Lignes</string>
 </resources>
