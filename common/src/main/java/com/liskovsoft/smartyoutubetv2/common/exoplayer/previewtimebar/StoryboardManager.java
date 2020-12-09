@@ -87,7 +87,13 @@ public class StoryboardManager {
             return;
         }
 
-        int size = (int) (mLengthMs / getFrameDurationMsAlt());
+        long frameDurationMS = getFrameDurationMsAlt();
+
+        if (frameDurationMS <= 1_000) {
+            return;
+        }
+
+        int size = (int) (mLengthMs / frameDurationMS);
         mSeekPositions = new long[size];
         for (int i = 0; i < mSeekPositions.length; i++) {
             mSeekPositions[i] = i * (mLengthMs / mSeekPositions.length);
@@ -99,6 +105,10 @@ public class StoryboardManager {
     }
 
     private long getFrameDurationMsAlt() {
+        if (mStoryboard == null) {
+            return -1;
+        }
+
         Size groupSize = mStoryboard.getGroupSize();
 
         return mStoryboard.getGroupDurationMS() / (groupSize.getRowCount() * groupSize.getColCount());

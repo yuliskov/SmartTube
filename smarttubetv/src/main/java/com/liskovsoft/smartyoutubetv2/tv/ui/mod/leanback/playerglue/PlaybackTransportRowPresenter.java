@@ -76,7 +76,6 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         private static final long SPEED_INCREASE_PERIOD_MS = 1000;
         private static final double SPEED_INCREASE_FACTOR = 1.5;
         private static final long START_SEEK_INCREMENT_MS = 10_000;
-        private static final long MIN_INTERVAL_CLIENT_SEEK_TO_POSITION_MS = 100;
         final Presenter.ViewHolder mDescriptionViewHolder;
         final ImageView mImageView;
         final ViewGroup mDescriptionDock;
@@ -112,8 +111,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         int mPositionsLength;
         long mSeekIncrementMs = -1;
         long mSeekStartTimeMs;
-        long mLastTimeSeekPosition = 0;
-        long mSkippedNewSeekToPos = 0;
+        final PlayerData mPlayerData;
 
         // MOD: update quality info
         final QualityInfoListener mQualityListener = this::setQualityInfo;
@@ -121,22 +119,22 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
         final PlaybackControlsRow.OnPlaybackProgressCallback mListener =
                 new PlaybackControlsRow.OnPlaybackProgressCallback() {
-            @Override
-            public void onCurrentPositionChanged(PlaybackControlsRow row, long ms) {
-                setCurrentPosition(ms);
-                setEndingTime(ms);
-            }
+                    @Override
+                    public void onCurrentPositionChanged(PlaybackControlsRow row, long ms) {
+                        setCurrentPosition(ms);
+                        setEndingTime(ms);
+                    }
 
-            @Override
-            public void onDurationChanged(PlaybackControlsRow row, long ms) {
-                setTotalTime(ms);
-            }
+                    @Override
+                    public void onDurationChanged(PlaybackControlsRow row, long ms) {
+                        setTotalTime(ms);
+                    }
 
-            @Override
-            public void onBufferedPositionChanged(PlaybackControlsRow row, long ms) {
-                setBufferedPosition(ms);
-            }
-        };
+                    @Override
+                    public void onBufferedPositionChanged(PlaybackControlsRow row, long ms) {
+                        setBufferedPosition(ms);
+                    }
+                };
 
         void updateProgressInSeek(boolean forward) {
             long newPos;
@@ -199,14 +197,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             }
             double ratio = (double) newPos / mTotalTimeInMs;     // Range: [0, 1]
             mProgressBar.setProgress((int) (ratio * Integer.MAX_VALUE)); // Could safely cast to int
-
-            mSkippedNewSeekToPos = -1;
-            if ((System.currentTimeMillis() - mLastTimeSeekPosition) > MIN_INTERVAL_CLIENT_SEEK_TO_POSITION_MS) {
-                mSeekClient.onSeekPositionChanged(newPos);
-                mLastTimeSeekPosition = System.currentTimeMillis();
-            } else {
-                mSkippedNewSeekToPos = newPos;
-            }
+            mSeekClient.onSeekPositionChanged(newPos);
         }
 
         void resetSeekIncrement() {
@@ -220,7 +211,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         long calculateSeekIncrement() {
             if (mSeekIncrementMs == -1) {
                 mSeekStartTimeMs = System.currentTimeMillis();
-                mSeekIncrementMs = Math.max(mTotalTimeInMs / 550, START_SEEK_INCREMENT_MS);
+                mSeekIncrementMs = START_SEEK_INCREMENT_MS;
             } else {
                 // increase seek speed by 1.5 every 1 second
                 long timePassed = System.currentTimeMillis() - mSeekStartTimeMs;
@@ -333,6 +324,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
          */
         public ViewHolder(View rootView, Presenter descriptionPresenter) {
             super(rootView);
+            mPlayerData = PlayerData.instance(rootView.getContext());
             mImageView = (ImageView) rootView.findViewById(R.id.image);
             mDescriptionDock = (ViewGroup) rootView.findViewById(R.id.description_dock);
             mCurrentTime = (TextView) rootView.findViewById(R.id.current_time);
@@ -360,7 +352,6 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                     onProgressBarClicked(ViewHolder.this);
                 }
             });
-            PlayerData playerData = PlayerData.instance(rootView.getContext());
             mProgressBar.setOnKeyListener(new View.OnKeyListener() {
 
                 @Override
@@ -383,7 +374,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                                 onBackward();
                             } else {
                                 // MOD: resume immediately after seeking
-                                if (!playerData.isPauseOnSeekEnabled()) {
+                                if (!mPlayerData.isPauseOnSeekEnabled()) {
                                     stopSeek(false);
                                 }
                             }
@@ -396,7 +387,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                                 onForward();
                             } else {
                                 // MOD: resume immediately after seeking
-                                if (!playerData.isPauseOnSeekEnabled()) {
+                                if (!mPlayerData.isPauseOnSeekEnabled()) {
                                     stopSeek(false);
                                 }
                             }
@@ -493,9 +484,6 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                 return;
             }
             mInSeek = false;
-            if (mSkippedNewSeekToPos > 0) {
-                mSeekClient.onSeekPositionChanged(mSkippedNewSeekToPos);
-            }
             mSeekClient.onSeekFinished(cancelled);
             if (mSeekDataProvider != null) {
                 mSeekDataProvider.reset();
@@ -626,11 +614,17 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
         void setEndingTime(long currentTimeMs) {
             if (mEndingTime != null) {
-                long endingTimeMs = mTotalTimeInMs - currentTimeMs;
+                if (mPlayerData.isRemainingTimeEnabled()) {
+                    long endingTimeMs = mTotalTimeInMs - currentTimeMs;
 
-                if (endingTimeMs >= 0) {
-                    formatTime(endingTimeMs, mTempBuilder);
-                    mEndingTime.setText(String.format(mEndingTimeFormat, mTempBuilder.toString()));
+                    if (endingTimeMs >= 0) {
+                        formatTime(endingTimeMs, mTempBuilder);
+                        mEndingTime.setText(String.format(mEndingTimeFormat, mTempBuilder.toString()));
+                    }
+
+                    mEndingTime.setVisibility(View.VISIBLE);
+                } else {
+                    mEndingTime.setVisibility(View.GONE);
                 }
             }
         }
@@ -650,7 +644,12 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         }
 
         void updateDateLabel() {
-            mCurrentDate.setText(DateFormatter.getCurrentDateShort(mCurrentDate.getContext()));
+            if (mPlayerData.isClockEnabled()) {
+                mCurrentDate.setText(DateFormatter.getCurrentDateShort(mCurrentDate.getContext()));
+                mCurrentDate.setVisibility(View.VISIBLE);
+            } else {
+                mCurrentDate.setVisibility(View.GONE);
+            }
         }
     }
 

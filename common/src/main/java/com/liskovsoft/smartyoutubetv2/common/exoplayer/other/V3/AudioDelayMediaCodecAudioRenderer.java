@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.other.V2;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.other.V3;
 
 import android.content.Context;
 import android.os.Handler;
@@ -8,8 +8,6 @@ import com.google.android.exoplayer2.audio.AudioProcessor;
 import com.google.android.exoplayer2.audio.AudioRendererEventListener;
 import com.google.android.exoplayer2.audio.AudioSink;
 import com.google.android.exoplayer2.audio.MediaCodecAudioRenderer;
-import com.google.android.exoplayer2.drm.DrmSessionManager;
-import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
 
 public class AudioDelayMediaCodecAudioRenderer extends MediaCodecAudioRenderer {
@@ -20,15 +18,22 @@ public class AudioDelayMediaCodecAudioRenderer extends MediaCodecAudioRenderer {
         super(context, mediaCodecSelector);
     }
 
-    public AudioDelayMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector, @Nullable Handler eventHandler, @Nullable AudioRendererEventListener eventListener) {
+    public AudioDelayMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector,
+                                             @Nullable Handler eventHandler,
+                                             @Nullable AudioRendererEventListener eventListener) {
         super(context, mediaCodecSelector, eventHandler, eventListener);
     }
 
-    public AudioDelayMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector, @Nullable Handler eventHandler, @Nullable AudioRendererEventListener eventListener, @Nullable AudioCapabilities audioCapabilities, AudioProcessor... audioProcessors) {
+    public AudioDelayMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector,
+                                             @Nullable Handler eventHandler,
+                                             @Nullable AudioRendererEventListener eventListener,
+                                             @Nullable AudioCapabilities audioCapabilities,
+                                             AudioProcessor... audioProcessors) {
         super(context, mediaCodecSelector, eventHandler, eventListener, audioCapabilities, audioProcessors);
     }
 
-    public AudioDelayMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector, @Nullable Handler eventHandler, @Nullable AudioRendererEventListener eventListener, AudioSink audioSink) {
+    public AudioDelayMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector,
+                                             @Nullable Handler eventHandler, @Nullable AudioRendererEventListener eventListener, AudioSink audioSink) {
         super(context, mediaCodecSelector, eventHandler, eventListener, audioSink);
     }
 

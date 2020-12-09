@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="header_home">בית</string>
     <string name="title_search">חיפוש</string>
@@ -101,4 +102,26 @@
     <string name="settings_search">חיפוש</string>
     <string name="dialog_search">חיפוש</string>
     <string name="instant_voice_search">חיפוש קולי מהיר</string>
+    <string name="option_background_playback_behind">הפעל מאחור</string>
+    <string name="next_video_info_is_not_loaded_yet">מידע הוידאו הבא טרם נטען</string>
+    <string name="multiline_titles">כותרות מרובות שורות</string>
+    <string name="cards_style">סגנון כרטיסיה</string>
+    <string name="repeat_mode_all">הפעל את כל הוידאו אחד אחרי השני</string>
+    <string name="repeat_mode_one">חזור על וידאו נוכחי</string>
+    <string name="repeat_mode_pause">השהה את ההפעלה לאחר כל וידאו</string>
+    <string name="repeat_mode_none">הפסק הפעלה לאחר סרטון אחד</string>
+    <string name="subscribed_to_channel">הרשם לערוץ</string>
+    <string name="unsubscribed_to_channel">ביטול רישום לערוץ</string>
+    <string name="subtitle_yellow">צהוב</string>
+    <string name="subtitle_black_bg">רקע שחור</string>
+    <string name="player_seek_preview">תצוגה מקדימה בעת חיפוש</string>
+    <string name="color_scheme_dark_oled">כהה (OLED)</string>
+    <string name="channel_category_sorting">מיון מקטעי ערוץ</string>
+    <string name="sorting_by_new_content">תוכן חדש</string>
+    <string name="sorting_alphabetically">אלפאבתית</string>
+    <string name="sorting_last_viewed">נראה לאחרונה</string>
+    <string name="player_pause_when_seek">השהה בעת חיפוש</string>
+    <string name="playlists_style">סגנון רשימת השמעה</string>
+    <string name="playlists_style_grid">רשת</string>
+    <string name="playlists_style_rows">שורות</string>
 </resources>

@@ -89,6 +89,14 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerUIData.enablePauseOnSeek(option.isSelected()),
                 mPlayerUIData.isPauseOnSeekEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_clock),
+                option -> mPlayerUIData.enableClock(option.isSelected()),
+                mPlayerUIData.isClockEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_remaining_time),
+                option -> mPlayerUIData.enableRemainingTime(option.isSelected()),
+                mPlayerUIData.isRemainingTimeEnabled()));
+
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 }
