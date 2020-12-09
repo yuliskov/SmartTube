@@ -68,4 +68,5 @@ dependencies {
     stbetaImplementation project(path: ':appupdatechecker2')
     strtarmeniaImplementation project(path: ':appupdatechecker2')
     stredboxtvImplementation project(path: ':appupdatechecker2')
+    stbolshoetvImplementation project(path: ':appupdatechecker2')
 }
