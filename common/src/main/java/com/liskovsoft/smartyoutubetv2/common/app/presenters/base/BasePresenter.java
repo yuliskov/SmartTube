@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.base;
 
 import android.content.Context;
+import androidx.fragment.app.Fragment;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
 
 import java.lang.ref.WeakReference;
@@ -30,7 +31,17 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public Context getContext() {
-        return mContext.get();
+        Context context = mContext.get();
+
+        // View could also hold a context
+        if (context == null) {
+            T view = mView.get();
+            if (view instanceof Fragment) {
+                context = ((Fragment) view).getContext();
+            }
+        }
+
+        return context;
     }
 
     @Override
@@ -40,6 +51,11 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void onViewDestroyed() {
+        // NOP
+    }
+
+    @Override
+    public void onViewResumed() {
         // NOP
     }
 }

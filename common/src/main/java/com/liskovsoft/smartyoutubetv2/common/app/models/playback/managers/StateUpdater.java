@@ -170,6 +170,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
             mStates.put(video.videoId, new State(video.videoId, 0));
             saveState();
         }
+
+        // Take into account different playback states
+        Helpers.enableScreensaver(getActivity());
     }
 
     private void clearStateOfNextVideo() {

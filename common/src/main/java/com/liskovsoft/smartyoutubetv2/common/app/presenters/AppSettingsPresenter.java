@@ -167,7 +167,7 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     }
 
     private void enableOldAndroidFix(boolean enable) {
-        if (mUiManager != null) {
+        if (mUiManager != null && mUiManager.getController() != null) {
             // Old Android fix: don't destroy player while dialog is open
             if (VERSION.SDK_INT < 25) {
                 if (enable) {

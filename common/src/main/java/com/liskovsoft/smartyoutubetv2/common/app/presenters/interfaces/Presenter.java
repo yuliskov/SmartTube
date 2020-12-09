@@ -9,4 +9,5 @@ public interface Presenter<T> {
     Context getContext();
     void onViewInitialized();
     void onViewDestroyed();
+    void onViewResumed();
 }

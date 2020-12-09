@@ -18,8 +18,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.CategoryEmptyError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
-import com.liskovsoft.smartyoutubetv2.common.app.models.update.AppUpdateManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.update.IAppUpdateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.CategoryPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
@@ -274,10 +272,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         continueGroup(group);
     }
 
+    /**
+     * Called even when closing dialog window
+     */
     @Override
     public void onViewResumed() {
         maybeRefreshHeader();
-        checkForUpdates();
     }
 
     @Override
@@ -293,7 +293,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void checkForUpdates() {
-        IAppUpdateManager updatePresenter = AppUpdateManager.instance(getContext());
+        AppUpdatePresenter updatePresenter = AppUpdatePresenter.instance(getContext());
         updatePresenter.start(false);
         updatePresenter.unhold();
     }
@@ -402,8 +402,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                             if (isSigned) {
                                 callback.run();
                             } else {
-                                getView().updateErrorIfEmpty(new SignInError(getContext()));
-                                getView().showProgressBar(false);
+                                if (getView().isProgressBarShowing()) {
+                                    getView().showProgressBar(false);
+                                    getView().showError(new SignInError(getContext()));
+                                }
                             }
                         }
                 );
@@ -427,8 +429,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                         }
                         , error -> Log.e(TAG, "updateRowsHeader error: " + error)
                         , () -> {
-                            getView().showProgressBar(false);
-                            getView().updateErrorIfEmpty(new CategoryEmptyError(getContext()));
+                            if (getView().isProgressBarShowing()) {
+                                getView().showProgressBar(false);
+                                getView().showError(new CategoryEmptyError(getContext()));
+                            }
                         });
     }
 
@@ -449,8 +453,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                         }
                         , error -> Log.e(TAG, "updateGridHeader error: " + error)
                         , () -> {
-                            getView().showProgressBar(false);
-                            getView().updateErrorIfEmpty(new CategoryEmptyError(getContext()));
+                            if (getView().isProgressBarShowing()) {
+                                getView().showProgressBar(false);
+                                getView().showError(new CategoryEmptyError(getContext()));
+                            }
                         });
     }
 

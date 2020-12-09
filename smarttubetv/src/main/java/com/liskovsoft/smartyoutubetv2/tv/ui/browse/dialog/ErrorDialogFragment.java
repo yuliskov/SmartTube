@@ -8,12 +8,12 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.app.BrowseSupportFragment.MainFragmentAdapter;
-import androidx.leanback.app.ErrorSupportFragment;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.fragments.ErrorSupportFragment;
 
-public class LoginDialogFragment extends ErrorSupportFragment implements BrowseSupportFragment.MainFragmentAdapterProvider {
+public class ErrorDialogFragment extends ErrorSupportFragment implements BrowseSupportFragment.MainFragmentAdapterProvider {
     private static final boolean TRANSLUCENT = true;
     private static final int TIMER_DELAY = 1000;
 
@@ -27,12 +27,12 @@ public class LoginDialogFragment extends ErrorSupportFragment implements BrowseS
                 }
             };
 
-    public LoginDialogFragment() {
+    public ErrorDialogFragment() {
         // "could not find Fragment constructor" fix
         this(null);
     }
 
-    public LoginDialogFragment(ErrorFragmentData dialogData) {
+    public ErrorDialogFragment(ErrorFragmentData dialogData) {
         mDialogData = dialogData;
     }
 
