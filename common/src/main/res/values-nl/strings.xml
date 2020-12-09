@@ -91,7 +91,7 @@
     <string name="color_scheme_red">Rood</string>
     <string name="color_scheme_dark">Donker</string>
     <string name="disable_update_check">Automatisch bijwerken uitschakelen</string>
-    <string name="show_again">Niet meer weergeven</string>
+    <string name="show_again">Altijd weergeven</string>
     <string name="check_updates_auto">App automatisch bijwerken</string>
     <string name="select_account_on_boot">Account selecteren bij opstarten</string>
     <string name="player_other">Diverse</string>
