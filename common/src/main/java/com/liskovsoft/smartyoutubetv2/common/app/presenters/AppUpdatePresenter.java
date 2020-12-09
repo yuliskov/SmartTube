@@ -14,14 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdateCheckerListener {
-    //private static final String UPDATE_MANIFEST_URL = "https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json";
     @SuppressLint("StaticFieldLeak")
     private static AppUpdatePresenter sInstance;
     private final AppUpdateChecker mUpdateChecker;
     private final AppSettingsPresenter mSettingsPresenter;
     private final String mUpdateManifestUrl;
     private boolean mUpdateInstalled;
-    private boolean mForceCheck;
+    private boolean mIsVerbose;
 
     public AppUpdatePresenter(Context context) {
         super(context);
@@ -45,8 +44,12 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
     }
 
     public void start(boolean forceCheck) {
+        start(forceCheck, false);
+    }
+
+    public void start(boolean forceCheck, boolean isVerbose) {
+        mIsVerbose = isVerbose;
         mUpdateInstalled = false;
-        mForceCheck = forceCheck;
 
         if (forceCheck) {
             mUpdateChecker.forceCheckForUpdates(mUpdateManifestUrl);
@@ -89,7 +92,7 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
 
     @Override
     public void onError(Exception error) {
-        if (mForceCheck) {
+        if (mIsVerbose) {
             if (AppUpdateCheckerListener.LATEST_VERSION.equals(error.getMessage())) {
                 MessageHelpers.showMessage(getContext(), R.string.update_not_found);
             } else {
