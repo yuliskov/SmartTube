@@ -123,4 +123,6 @@
     <string name="playlists_style">Styl playlistů</string>
     <string name="playlists_style_grid">Mřížka</string>
     <string name="playlists_style_rows">Řady</string>
+    <string name="player_show_clock">Zobraz hodiny</string>
+    <string name="player_show_remaining_time">Ukaž zbývající čas</string>
 </resources>
