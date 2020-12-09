@@ -56,7 +56,9 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
 
     @Override
     public void onUpdateFound(String versionName, List<String> changelog, String apkPath) {
-        showUpdateDialog(versionName, changelog, apkPath);
+        if (getContext() != null) {
+            showUpdateDialog(versionName, changelog, apkPath);
+        }
     }
 
     private void showUpdateDialog(String versionName, List<String> changelog, String apkPath) {
