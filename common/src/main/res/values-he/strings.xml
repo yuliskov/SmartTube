@@ -123,4 +123,7 @@
     <string name="playlists_style">סגנון רשימת השמעה</string>
     <string name="playlists_style_grid">רשת</string>
     <string name="playlists_style_rows">שורות</string>
+    <string name="player_show_clock">הצג שעון</string>
+    <string name="player_show_remaining_time">הצג זמן שנותר</string>
+    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
 </resources>
