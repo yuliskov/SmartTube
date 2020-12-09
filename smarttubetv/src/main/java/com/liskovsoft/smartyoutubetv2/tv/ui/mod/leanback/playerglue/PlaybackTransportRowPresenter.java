@@ -111,6 +111,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         int mPositionsLength;
         long mSeekIncrementMs = -1;
         long mSeekStartTimeMs;
+        final PlayerData mPlayerData;
 
         // MOD: update quality info
         final QualityInfoListener mQualityListener = this::setQualityInfo;
@@ -323,6 +324,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
          */
         public ViewHolder(View rootView, Presenter descriptionPresenter) {
             super(rootView);
+            mPlayerData = PlayerData.instance(rootView.getContext());
             mImageView = (ImageView) rootView.findViewById(R.id.image);
             mDescriptionDock = (ViewGroup) rootView.findViewById(R.id.description_dock);
             mCurrentTime = (TextView) rootView.findViewById(R.id.current_time);
@@ -350,7 +352,6 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                     onProgressBarClicked(ViewHolder.this);
                 }
             });
-            PlayerData playerData = PlayerData.instance(rootView.getContext());
             mProgressBar.setOnKeyListener(new View.OnKeyListener() {
 
                 @Override
@@ -373,7 +374,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                                 onBackward();
                             } else {
                                 // MOD: resume immediately after seeking
-                                if (!playerData.isPauseOnSeekEnabled()) {
+                                if (!mPlayerData.isPauseOnSeekEnabled()) {
                                     stopSeek(false);
                                 }
                             }
@@ -386,7 +387,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                                 onForward();
                             } else {
                                 // MOD: resume immediately after seeking
-                                if (!playerData.isPauseOnSeekEnabled()) {
+                                if (!mPlayerData.isPauseOnSeekEnabled()) {
                                     stopSeek(false);
                                 }
                             }
@@ -613,11 +614,17 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
         void setEndingTime(long currentTimeMs) {
             if (mEndingTime != null) {
-                long endingTimeMs = mTotalTimeInMs - currentTimeMs;
+                if (mPlayerData.isRemainingTimeEnabled()) {
+                    long endingTimeMs = mTotalTimeInMs - currentTimeMs;
 
-                if (endingTimeMs >= 0) {
-                    formatTime(endingTimeMs, mTempBuilder);
-                    mEndingTime.setText(String.format(mEndingTimeFormat, mTempBuilder.toString()));
+                    if (endingTimeMs >= 0) {
+                        formatTime(endingTimeMs, mTempBuilder);
+                        mEndingTime.setText(String.format(mEndingTimeFormat, mTempBuilder.toString()));
+                    }
+
+                    mEndingTime.setVisibility(View.VISIBLE);
+                } else {
+                    mEndingTime.setVisibility(View.GONE);
                 }
             }
         }
@@ -637,7 +644,12 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         }
 
         void updateDateLabel() {
-            mCurrentDate.setText(DateFormatter.getCurrentDateShort(mCurrentDate.getContext()));
+            if (mPlayerData.isClockEnabled()) {
+                mCurrentDate.setText(DateFormatter.getCurrentDateShort(mCurrentDate.getContext()));
+                mCurrentDate.setVisibility(View.VISIBLE);
+            } else {
+                mCurrentDate.setVisibility(View.GONE);
+            }
         }
     }
 
