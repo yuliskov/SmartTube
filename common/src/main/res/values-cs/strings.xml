@@ -120,4 +120,7 @@
     <string name="sorting_alphabetically">Abecedně</string>
     <string name="sorting_last_viewed">Poslední zhlédnuté</string>
     <string name="player_pause_when_seek">Pozastav video při přeskakování</string>
+    <string name="playlists_style">Styl playlistů</string>
+    <string name="playlists_style_grid">Mřížka</string>
+    <string name="playlists_style_rows">Řady</string>
 </resources>
