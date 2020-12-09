@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="header_home">בית</string>
     <string name="title_search">חיפוש</string>
@@ -9,7 +8,7 @@
     <string name="header_gaming">משחקים</string>
     <string name="header_playlists">פלייליסטים</string>
     <string name="header_settings">הגדרות</string>
-    <string name="header_channels">ערוצים</string>												
+    <string name="header_channels">ערוצים</string>
     <string name="subscriptions_signin_title">ראה את החדשים מהערוצים שהינך אוהב</string>
     <string name="subscriptions_signin_subtitle">היכנס כדי לראות את המינויים שלך</string>
     <string name="subscriptions_signin_button_text">התחבר</string>
