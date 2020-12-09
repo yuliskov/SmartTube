@@ -124,4 +124,6 @@
     <string name="playlists_style">Wiedergabelisten-Stil</string>
     <string name="playlists_style_grid">Gitter</string>
     <string name="playlists_style_rows">Reihe</string>
+    <string name="player_show_clock">Uhr anzeigen</string>
+    <string name="player_show_remaining_time">Verbleibende Zeit anzeigen</string>
 </resources>
