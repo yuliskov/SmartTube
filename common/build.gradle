@@ -64,6 +64,8 @@ dependencies {
 
     implementation 'com.github.bumptech.glide:glide:' + glideVersion
 
+    storigImplementation project(path: ':leanbackassistant')
+    storigImplementation project(path: ':appupdatechecker2')
     stbetaImplementation project(path: ':leanbackassistant')
     stbetaImplementation project(path: ':appupdatechecker2')
     strtarmeniaImplementation project(path: ':appupdatechecker2')
