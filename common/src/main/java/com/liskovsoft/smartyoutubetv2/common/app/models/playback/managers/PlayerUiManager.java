@@ -86,10 +86,10 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         } else if (KeyHelpers.isConfirmKey(keyCode) && !getController().isControlsShown()) {
             switch (mPlayerData.getOKButtonBehavior()) {
                 case PlayerData.ONLY_UI:
-                    // NOP
-                    break;
+                    getController().showControls(true);
+                    return true; // don't show ui
                 case PlayerData.UI_AND_PAUSE:
-                    getController().setPlay(false);
+                    // NOP
                     break;
                 case PlayerData.ONLY_PAUSE:
                     getController().setPlay(!getController().isPlaying());

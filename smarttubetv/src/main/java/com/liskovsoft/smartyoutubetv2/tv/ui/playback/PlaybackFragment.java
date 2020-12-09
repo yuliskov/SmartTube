@@ -544,15 +544,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void setPlay(boolean play) {
-        if (mPlayerGlue != null) {
-            if (play) {
-                mPlayerGlue.getPlayerAdapter().play();
-            } else {
-                mPlayerGlue.getPlayerAdapter().pause();
-            }
-        } else {
-            mExoPlayerController.setPlay(play);
-        }
+        mExoPlayerController.setPlay(play);
     }
 
     @Override
