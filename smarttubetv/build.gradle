@@ -127,8 +127,11 @@ dependencies {
 
     implementation 'com.amazon.android:exoplayer:' + amazonExoplayerVersion
     implementation 'com.amazon.android:extension-leanback:' + amazonExoplayerVersion
+
     // implementation 'com.google.android.exoplayer:exoplayer:' + exoplayerVersion
     // implementation 'com.google.android.exoplayer:extension-leanback:' + exoplayerVersion
+
+    // implementation 'com.github.amzn:exoplayer-amazon-port:' + amazonExoplayerJitpackVersion
 
     testImplementation 'junit:junit:' + junitVersion
     testImplementation 'org.robolectric:robolectric:' + robolectricVersion

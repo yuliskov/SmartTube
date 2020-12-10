@@ -57,8 +57,11 @@ dependencies {
 
     implementation 'com.amazon.android:exoplayer:' + amazonExoplayerVersion
     implementation 'com.amazon.android:extension-okhttp:' + amazonExoplayerVersion
+
     // implementation 'com.google.android.exoplayer:exoplayer:' + exoplayerVersion
     // implementation 'com.google.android.exoplayer:extension-okhttp:' + exoplayerVersion
+
+    // implementation 'com.github.amzn:exoplayer-amazon-port:' + amazonExoplayerJitpackVersion
 
     implementation 'androidx.media:media:' + mediaXLibraryVersion // exoplayer fix
 
