@@ -62,8 +62,8 @@
     <string name="subtitle_style">Untertitel-Stil</string>
     <string name="subtitle_language">Untertitel-Sprache</string>
     <string name="action_search">Suche starten</string>
-    <string name="settings_main_ui">Benutzeroberfläche</string>
-    <string name="dialog_main_ui">Benutzeroberfläche</string>
+    <string name="settings_main_ui">Oberfläche</string>
+    <string name="dialog_main_ui">Oberfläche</string>
     <string name="animated_previews">Animierte Vorschau</string>
     <string name="web_site">Webseite</string>
     <string name="donation">Spende</string>
