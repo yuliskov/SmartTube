@@ -306,7 +306,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
             }
         }
 
-        if (state != null) {
+        if (state != null && !item.isLive) {
             boolean isVideoEnded = Math.abs(getController().getLengthMs() - state.positionMs) < 1_000;
             if (!isVideoEnded) {
                 getController().setPositionMs(state.positionMs);
