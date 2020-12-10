@@ -103,30 +103,27 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onPlayEnd() {
-        // Suggestions is opened. Seems that user want to stay here.
-        if (!getController().isSuggestionsShown()) {
-            switch (mRepeatMode) {
-                case PlaybackUiController.REPEAT_ALL:
-                    onNextClicked();
-                    if (!getController().isInPIPMode()) {
-                        getController().showControls(true);
-                    }
-                    break;
-                case PlaybackUiController.REPEAT_ONE:
-                    loadVideo(mLastVideo);
-                    break;
-                case PlaybackUiController.REPEAT_NONE:
-                    // close player
-                    getController().exit();
-                    break;
-                case PlaybackUiController.REPEAT_PAUSE:
-                    // pause player
+        switch (mRepeatMode) {
+            case PlaybackUiController.REPEAT_ALL:
+                onNextClicked();
+                if (!getController().isInPIPMode()) {
                     getController().showControls(true);
-                    break;
-            }
-
-            Log.e(TAG, "Undetected repeat mode " + mRepeatMode);
+                }
+                break;
+            case PlaybackUiController.REPEAT_ONE:
+                loadVideo(mLastVideo);
+                break;
+            case PlaybackUiController.REPEAT_NONE:
+                // close player
+                getController().exit();
+                break;
+            case PlaybackUiController.REPEAT_PAUSE:
+                // pause player
+                getController().showControls(true);
+                break;
         }
+
+        Log.e(TAG, "Undetected repeat mode " + mRepeatMode);
     }
 
     @Override
