@@ -65,9 +65,12 @@ public class VideoEventsOverrideFragment extends VideoSupportFragment {
             case KeyEvent.KEYCODE_DPAD_RIGHT:
                 // Event may be consumed; regardless, if controls are hidden then these keys will
                 // bring up the controls.
-                if (controlsHidden) {
-                    consumeEvent = true;
-                }
+
+                // MOD: show ui and apply key immediately
+                //if (controlsHidden) {
+                //    consumeEvent = true;
+                //}
+
                 if (keyAction == KeyEvent.ACTION_DOWN) {
                     tickle();
                 }
