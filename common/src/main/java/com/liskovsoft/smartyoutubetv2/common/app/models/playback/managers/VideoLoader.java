@@ -6,7 +6,6 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -15,7 +14,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUiController;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -207,11 +205,14 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
-        if (formatInfo.containsHlsInfo()) {
-            Log.d(TAG, "Found hls video. Live translation. Loading...");
-            getController().openHls(formatInfo.getHlsManifestUrl());
+        if (formatInfo.containsDashUrl()) {
+            Log.d(TAG, "Found live video in dash format. Loading...");
+            getController().openDashUrl(formatInfo.getDashManifestUrl());
+        } else if (formatInfo.containsHlsUrl()) {
+            Log.d(TAG, "Found live video in hls format. Loading...");
+            getController().openHlsUrl(formatInfo.getHlsManifestUrl());
         } else if (formatInfo.containsDashInfo()) {
-            Log.d(TAG, "Found dash video. Main video format. Loading...");
+            Log.d(TAG, "Found regular video in dash format. Loading...");
 
             mMpdStreamAction = formatInfo.createMpdStreamObservable()
                     .subscribeOn(Schedulers.newThread())

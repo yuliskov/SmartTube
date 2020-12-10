@@ -51,7 +51,14 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     @Override
-    public void openHls(String hlsPlaylistUrl) {
+    public void openDashUrl(String dashManifestUrl) {
+        //String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
+        MediaSource mediaSource = mMediaSourceFactory.fromDashManifestUrl(dashManifestUrl);
+        openMediaSource(mediaSource);
+    }
+
+    @Override
+    public void openHlsUrl(String hlsPlaylistUrl) {
         //String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
         MediaSource mediaSource = mMediaSourceFactory.fromHlsPlaylist(hlsPlaylistUrl);
         openMediaSource(mediaSource);

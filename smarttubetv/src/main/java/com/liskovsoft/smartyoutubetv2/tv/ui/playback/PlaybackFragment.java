@@ -518,8 +518,13 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
-    public void openHls(String hlsPlaylistUrl) {
-        mExoPlayerController.openHls(hlsPlaylistUrl);
+    public void openDashUrl(String dashManifestUrl) {
+        mExoPlayerController.openDashUrl(dashManifestUrl);
+    }
+
+    @Override
+    public void openHlsUrl(String hlsPlaylistUrl) {
+        mExoPlayerController.openHlsUrl(hlsPlaylistUrl);
     }
 
     @Override

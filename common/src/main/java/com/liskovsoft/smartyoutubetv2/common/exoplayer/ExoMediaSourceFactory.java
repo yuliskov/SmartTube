@@ -83,8 +83,8 @@ public class ExoMediaSourceFactory {
         return buildMPDMediaSource(DASH_MANIFEST_URI, dashManifest);
     }
 
-    public MediaSource fromDashManifest(String dashManifest) {
-        return buildMediaSource(Uri.parse(dashManifest), DASH_MANIFEST_EXTENSION);
+    public MediaSource fromDashManifestUrl(String dashManifestUrl) {
+        return buildMediaSource(Uri.parse(dashManifestUrl), DASH_MANIFEST_EXTENSION);
     }
 
     public MediaSource fromHlsPlaylist(String hlsPlaylist) {
