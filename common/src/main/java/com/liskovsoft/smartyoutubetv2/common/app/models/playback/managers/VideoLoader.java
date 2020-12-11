@@ -205,6 +205,10 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
+        if (formatInfo.isUnplayable()) {
+            MessageHelpers.showLongMessage(getActivity(), formatInfo.getPlayabilityStatus());
+        }
+
         if (formatInfo.containsDashUrl() && getController().getVideo().isLive) {
             Log.d(TAG, "Found live video in dash format. Loading...");
             getController().openDashUrl(formatInfo.getDashManifestUrl());
