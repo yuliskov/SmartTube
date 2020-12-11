@@ -192,6 +192,8 @@ public class VideoTrack extends MediaTrack {
             if (fpsLessOrEquals(track2.format.frameRate, format.frameRate)) {
                 if (TrackSelectorUtil.isHdrCodec(format.codecs) == TrackSelectorUtil.isHdrCodec(track2.format.codecs)) {
                     result = 0;
+                } else if (TrackSelectorUtil.isHdrCodec(track2.format.codecs)) {
+                    result = -1;
                 } else {
                     result = 1;
                 }
