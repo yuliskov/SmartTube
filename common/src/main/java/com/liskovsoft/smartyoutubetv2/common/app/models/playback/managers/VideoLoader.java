@@ -6,6 +6,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -208,8 +209,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
         if (formatInfo.isUnplayable()) {
             getController().showError(formatInfo.getPlayabilityStatus());
         }
-
-        if (formatInfo.containsDashUrl() && getController().getVideo().isLive) {
+        
+        if (formatInfo.containsDashUrl() && formatInfo.isLive()) {
             Log.d(TAG, "Found live video in dash format. Loading...");
             getController().openDashUrl(formatInfo.getDashManifestUrl());
         } else if (formatInfo.containsHlsUrl()) {
