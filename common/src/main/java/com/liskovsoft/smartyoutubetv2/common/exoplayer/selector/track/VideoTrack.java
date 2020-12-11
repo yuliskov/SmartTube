@@ -160,12 +160,14 @@ public class VideoTrack extends MediaTrack {
         if (Helpers.equals(format.id, track2.format.id)) {
             result = 0;
         } if (widthEquals(format.width, track2.format.width)) {
-            if (fpsLessOrEquals(track2.format.frameRate, format.frameRate)) {
+            if (fpsEquals(track2.format.frameRate, format.frameRate)) {
                 if (TrackSelectorUtil.isHdrCodec(format.codecs) == TrackSelectorUtil.isHdrCodec(track2.format.codecs)) {
                     result = 0;
                 } else {
                     result = 1;
                 }
+            } else if (fpsLessOrEquals(track2.format.frameRate, format.frameRate)) {
+                result = 1;
             } else {
                 result = 1;
             }

@@ -40,7 +40,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerController;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.V2.CustomOverridesRenderersFactory;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.V3.CustomOverridesRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.DebugInfoManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ExoPlayerInitializer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager;
@@ -518,8 +518,13 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
-    public void openHls(String hlsPlaylistUrl) {
-        mExoPlayerController.openHls(hlsPlaylistUrl);
+    public void openDashUrl(String dashManifestUrl) {
+        mExoPlayerController.openDashUrl(dashManifestUrl);
+    }
+
+    @Override
+    public void openHlsUrl(String hlsPlaylistUrl) {
+        mExoPlayerController.openHlsUrl(hlsPlaylistUrl);
     }
 
     @Override

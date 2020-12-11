@@ -15,7 +15,8 @@ public interface PlayerController {
     int BUFFER_HIGH = 2;
     int BUFFER_MAX = 3;
     void openDash(InputStream dashManifest);
-    void openHls(String hlsPlaylistUrl);
+    void openHlsUrl(String hlsPlaylistUrl);
+    void openDashUrl(String dashManifestUrl);
     void openUrlList(List<String> urlList);
     long getPositionMs();
     void setPositionMs(long positionMs);
