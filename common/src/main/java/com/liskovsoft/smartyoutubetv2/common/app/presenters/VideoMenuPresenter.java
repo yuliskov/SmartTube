@@ -33,6 +33,7 @@ public class VideoMenuPresenter extends BasePresenter<SplashView> {
     private Video mVideo;
     private boolean mIsNotInterestedButtonEnabled;
     private boolean mIsOpenChannelButtonEnabled;
+    private boolean mIsOpenChannelUploadsButtonEnabled;
 
     private VideoMenuPresenter(Context context) {
         super(context);
@@ -47,20 +48,21 @@ public class VideoMenuPresenter extends BasePresenter<SplashView> {
     }
 
     public void showShortMenu(Video video) {
-        showMenu(video, false, false);
+        showMenu(video, false, false, false);
     }
 
     public void showMenu(Video video) {
-        showMenu(video, true, true);
+        showMenu(video, true, true, true);
     }
 
-    private void showMenu(Video video, boolean isOpenChannelButtonEnabled, boolean isNotInterestedButtonEnabled) {
+    private void showMenu(Video video, boolean isOpenChannelButtonEnabled, boolean isOpenChannelUploadsButtonEnabled, boolean isNotInterestedButtonEnabled) {
         if (video == null || !video.isVideo()) {
             return;
         }
 
         mVideo = video;
         mIsOpenChannelButtonEnabled = isOpenChannelButtonEnabled;
+        mIsOpenChannelUploadsButtonEnabled = isOpenChannelUploadsButtonEnabled;
         mIsNotInterestedButtonEnabled = isNotInterestedButtonEnabled;
 
         authCheck(this::obtainPlaylistsAndShow,
@@ -79,6 +81,7 @@ public class VideoMenuPresenter extends BasePresenter<SplashView> {
 
         appendAddToPlaylist(videoPlaylistInfos);
         appendOpenChannelButton();
+        //appendOpenChannelUploadsButton();
         appendNotInterestedButton();
 
         mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction, mAddAction, mSignCheckAction, mNotInterestedAction));
@@ -104,6 +107,15 @@ public class VideoMenuPresenter extends BasePresenter<SplashView> {
 
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.open_channel), optionItem -> ChannelPresenter.instance(getContext()).openChannel(mVideo)));
+    }
+
+    private void appendOpenChannelUploadsButton() {
+        if (!mIsOpenChannelUploadsButtonEnabled || mVideo == null) {
+            return;
+        }
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.open_channel_uploads), optionItem -> ChannelUploadsPresenter.instance(getContext()).openChannel(mVideo)));
     }
 
     private void appendNotInterestedButton() {

@@ -126,4 +126,5 @@
     <string name="playlists_style_rows">Строки</string>
     <string name="player_show_clock">Отображать часы</string>
     <string name="player_show_remaining_time">Отображать оставшееся время</string>
+    <string name="open_channel_uploads">Все видео на канале</string>
 </resources>

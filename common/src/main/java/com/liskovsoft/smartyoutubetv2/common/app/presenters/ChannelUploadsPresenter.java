@@ -85,7 +85,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     public void openChannel(Video item) {
-        if (item == null) {
+        if (item == null || item.mediaItem == null || !item.mediaItem.hasUploads()) {
             return;
         }
 
@@ -102,7 +102,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     public void obtainVideoGroup(Video item, VideoGroupCallback callback) {
-        if (item != null) {
+        if (item != null && item.mediaItem != null) {
             updateVideoGrid(item.mediaItem, callback);
         }
     }
