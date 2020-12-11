@@ -62,8 +62,8 @@
     <string name="subtitle_style">Untertitel-Stil</string>
     <string name="subtitle_language">Untertitel-Sprache</string>
     <string name="action_search">Suche starten</string>
-    <string name="settings_main_ui">Benutzeroberfläche</string>
-    <string name="dialog_main_ui">Benutzeroberfläche</string>
+    <string name="settings_main_ui">Oberfläche</string>
+    <string name="dialog_main_ui">Oberfläche</string>
     <string name="animated_previews">Animierte Vorschau</string>
     <string name="web_site">Webseite</string>
     <string name="donation">Spende</string>
@@ -124,4 +124,7 @@
     <string name="playlists_style">Wiedergabelisten-Stil</string>
     <string name="playlists_style_grid">Gitter</string>
     <string name="playlists_style_rows">Reihe</string>
+    <string name="player_show_clock">Uhr anzeigen</string>
+    <string name="player_show_remaining_time">Verbleibende Zeit anzeigen</string>
+    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
 </resources>
