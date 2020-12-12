@@ -3,6 +3,8 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager.AfrData;
 
 public class PlayerData {
     public static final int ONLY_UI = 0;
@@ -24,6 +26,7 @@ public class PlayerData {
     private boolean mIsClockEnabled;
     private boolean mIsRemainingTimeEnabled;
     private int mBackgroundPlaybackType;
+    private AfrData mAfrData;
 
     public PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -110,6 +113,15 @@ public class PlayerData {
         return mBackgroundPlaybackType;
     }
 
+    public AfrData getAfrData() {
+        return mAfrData;
+    }
+
+    public void setAfrData(AfrData afrData) {
+        mAfrData = afrData;
+        persistData();
+    }
+
     private void restoreData() {
         String data = mPrefs.getPlayerData();
 
@@ -123,11 +135,12 @@ public class PlayerData {
         mIsClockEnabled = Helpers.parseBoolean(split, 5, true);
         mIsRemainingTimeEnabled = Helpers.parseBoolean(split, 6, true);
         mBackgroundPlaybackType = Helpers.parseInt(split, 7, BACKGROUND_PLAYBACK_NONE);
+        mAfrData = AfrData.from(Helpers.parseStr(split, 8));
     }
 
     private void persistData() {
         mPrefs.setPlayerData(Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec,
                 mIsShowFullDateEnabled, mIsSeekPreviewEnabled, mIsPauseOnSeekEnabled,
-                mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundPlaybackType));
+                mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundPlaybackType, mAfrData.toString()));
     }
 }

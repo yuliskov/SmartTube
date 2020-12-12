@@ -14,7 +14,6 @@ public class AppPrefs extends SharedPreferencesBase {
     private static final String VIDEO_FORMAT = "video_format";
     private static final String COMPLETED_ONBOARDING = "completed_onboarding";
     private static final String VIDEO_BUFFER_TYPE = "video_buffer_type";
-    private static final String AUTO_FRAME_RATE_DATA = "auto_frame_rate_data";
     private static final String BACKUP_DATA = "backup_data";
     private static final String VIDEO_LOADER_DATA = "video_loader_data";
     private static final String STATE_UPDATER_DATA = "state_updater_data";
@@ -81,14 +80,6 @@ public class AppPrefs extends SharedPreferencesBase {
 
     public String getCurrentDisplayMode() {
         return mCurrentDisplayMode;
-    }
-
-    public String getAfrData(String defaultData) {
-        return getString(AUTO_FRAME_RATE_DATA, defaultData);
-    }
-
-    public void setAfrData(String afrData) {
-        putString(AUTO_FRAME_RATE_DATA, afrData);
     }
 
     public void setBackupData(String backupData) {
