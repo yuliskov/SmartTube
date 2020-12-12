@@ -418,7 +418,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mediaGroups -> {
-                            updateView(category, mediaGroups);
+                            updateRowView(category, mediaGroups);
 
                             // Hide loading as long as first group received
                             if (!mediaGroups.isEmpty()) {
@@ -458,14 +458,21 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                         });
     }
 
-    private void updateView(Category category, List<MediaGroup> mediaGroups) {
+    private void updateRowView(Category category, List<MediaGroup> mediaGroups) {
         for (MediaGroup mediaGroup : mediaGroups) {
             if (mediaGroup.getMediaItems() == null) {
                 Log.e(TAG, "loadRowsHeader: MediaGroup is empty. Group Name: " + mediaGroup.getTitle());
                 continue;
             }
 
-            getView().updateCategory(VideoGroup.from(mediaGroup, category));
+            VideoGroup group = VideoGroup.from(mediaGroup, category);
+
+            getView().updateCategory(group);
+
+            // Most tiny ui has 8 cards in a row
+            if (mMainUIData.getUIScale() < 0.8f && group.getVideos().size() < 8) {
+                continueGroup(group);
+            }
         }
     }
 }
