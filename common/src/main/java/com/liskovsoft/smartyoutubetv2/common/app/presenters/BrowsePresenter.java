@@ -470,9 +470,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             getView().updateCategory(group);
 
             // Most tiny ui has 8 cards in a row
-            //if (mMainUIData.getUIScale() < 0.8f && group.getVideos().size() < 8) {
-            //    continueGroup(group);
-            //}
+            if (mMainUIData.getUIScale() < 0.8f && group.getVideos().size() < 8) {
+                continueGroup(group);
+            }
         }
     }
 }
