@@ -26,7 +26,6 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     private final AutoFrameRateHelper mAutoFrameRateHelper;
     private final ModeSyncManager mModeSyncManager;
     private final Runnable mApplyAfr = this::applyAfr;
-    private OptionCategory mCategory;
     private PlayerData mPlayerData;
 
     public static class AfrData {
@@ -74,15 +73,15 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     @Override
     public void onInitDone() {
         mPlayerData = PlayerData.instance(getActivity());
-        AfrData afrData = mPlayerData.getAfrData();
-        initUiOptions();
-        mAutoFrameRateHelper.saveOriginalState(getActivity());
-        mAutoFrameRateHelper.setFpsCorrectionEnabled(afrData.afrFpsCorrectionEnabled);
-        mAutoFrameRateHelper.setResolutionSwitchEnabled(afrData.afrResSwitchEnabled, false);
     }
 
     @Override
     public void onViewResumed() {
+        AfrData afrData = mPlayerData.getAfrData();
+        mAutoFrameRateHelper.saveOriginalState(getActivity());
+        mAutoFrameRateHelper.setFpsCorrectionEnabled(afrData.afrFpsCorrectionEnabled);
+        mAutoFrameRateHelper.setResolutionSwitchEnabled(afrData.afrResSwitchEnabled, false);
+
         addUiOptions();
     }
 
@@ -137,18 +136,13 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         }
     }
 
-    private void initUiOptions() {
-        mCategory = createAutoFrameRateCategory(
-                getActivity(), PlayerData.instance(getActivity()), () -> {}, this::onResolutionSwitchClick, this::onFpsCorrectionClick);
-    }
-
     private void addUiOptions() {
-        if (mCategory == null) {
-            return;
-        }
-
         if (mAutoFrameRateHelper.isSupported()) {
-            mUiManager.addCheckedCategory(mCategory);
+            OptionCategory category = createAutoFrameRateCategory(
+                    getActivity(), PlayerData.instance(getActivity()),
+                    () -> {}, this::onResolutionSwitchClick, this::onFpsCorrectionClick);
+
+            mUiManager.addCheckedCategory(category);
             mUiManager.addOnDialogHide(mApplyAfr);
         } else {
             mUiManager.removeCategory(AUTO_FRAME_RATE_ID);
