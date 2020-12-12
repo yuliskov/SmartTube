@@ -28,4 +28,5 @@ public interface PlaybackUiController {
     void setSubtitleStyle(SubtitleStyle subtitleStyle);
     SubtitleStyle getSubtitleStyle();
     void loadStoryboard();
+    void showError(String errorInfo);
 }

@@ -508,6 +508,12 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         }
     }
 
+    @Override
+    public void showError(String errorMessage) {
+        mPlayerGlue.setTitle(errorMessage);
+        showControls(true);
+    }
+
     // End Ui events
 
     // Begin Engine Events

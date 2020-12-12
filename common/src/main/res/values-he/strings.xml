@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="header_home">בית</string>
     <string name="title_search">חיפוש</string>
@@ -9,7 +8,7 @@
     <string name="header_gaming">משחקים</string>
     <string name="header_playlists">פלייליסטים</string>
     <string name="header_settings">הגדרות</string>
-    <string name="header_channels">ערוצים</string>												
+    <string name="header_channels">ערוצים</string>
     <string name="subscriptions_signin_title">ראה את החדשים מהערוצים שהינך אוהב</string>
     <string name="subscriptions_signin_subtitle">היכנס כדי לראות את המינויים שלך</string>
     <string name="subscriptions_signin_button_text">התחבר</string>
@@ -124,4 +123,7 @@
     <string name="playlists_style">סגנון רשימת השמעה</string>
     <string name="playlists_style_grid">רשת</string>
     <string name="playlists_style_rows">שורות</string>
+    <string name="player_show_clock">הצג שעון</string>
+    <string name="player_show_remaining_time">הצג זמן שנותר</string>
+    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
 </resources>
