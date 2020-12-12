@@ -9,6 +9,10 @@ public class PlayerData {
     public static final int UI_AND_PAUSE = 1;
     public static final int ONLY_PAUSE = 2;
     public static final int AUTO_HIDE_NEVER = 0;
+    public static final int BACKGROUND_PLAYBACK_NONE = 0;
+    public static final int BACKGROUND_PLAYBACK_AUDIO = 1;
+    public static final int BACKGROUND_PLAYBACK_PIP = 2;
+    public static final int BACKGROUND_PLAYBACK_BEHIND = 3;
     @SuppressLint("StaticFieldLeak")
     private static PlayerData sInstance;
     private final AppPrefs mPrefs;
@@ -19,6 +23,7 @@ public class PlayerData {
     private boolean mIsPauseOnSeekEnabled;
     private boolean mIsClockEnabled;
     private boolean mIsRemainingTimeEnabled;
+    private int mBackgroundPlaybackType;
 
     public PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -96,6 +101,15 @@ public class PlayerData {
         return mIsPauseOnSeekEnabled;
     }
 
+    public void setBackgroundPlaybackType(int type) {
+        mBackgroundPlaybackType = type;
+        persistData();
+    }
+
+    public int getBackgroundPlaybackType() {
+        return mBackgroundPlaybackType;
+    }
+
     private void restoreData() {
         String data = mPrefs.getPlayerData();
 
@@ -108,10 +122,12 @@ public class PlayerData {
         mIsPauseOnSeekEnabled = Helpers.parseBoolean(split, 4, false);
         mIsClockEnabled = Helpers.parseBoolean(split, 5, true);
         mIsRemainingTimeEnabled = Helpers.parseBoolean(split, 6, true);
+        mBackgroundPlaybackType = Helpers.parseInt(split, 7, BACKGROUND_PLAYBACK_NONE);
     }
 
     private void persistData() {
         mPrefs.setPlayerData(Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec,
-                mIsShowFullDateEnabled, mIsSeekPreviewEnabled, mIsPauseOnSeekEnabled, mIsClockEnabled, mIsRemainingTimeEnabled));
+                mIsShowFullDateEnabled, mIsSeekPreviewEnabled, mIsPauseOnSeekEnabled,
+                mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundPlaybackType));
     }
 }
