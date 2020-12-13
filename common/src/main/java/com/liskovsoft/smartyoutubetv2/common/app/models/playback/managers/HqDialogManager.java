@@ -147,40 +147,6 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         addRadioCategory(category);
     }
 
-    public static OptionCategory createBackgroundPlaybackCategory(Context context, PlayerData playerData) {
-        return createBackgroundPlaybackCategory(context, playerData, () -> {});
-    }
-
-    public static OptionCategory createBackgroundPlaybackCategory(Context context, PlayerData playerData, Runnable onSetCallback) {
-        String categoryTitle = context.getString(R.string.category_background_playback);
-
-        List<OptionItem> options = new ArrayList<>();
-        options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_off),
-                optionItem -> {
-                    playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_NONE);
-                    onSetCallback.run();
-                }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_NONE));
-        if (Helpers.isAndroidTV(context) && Build.VERSION.SDK_INT < 26) { // useful only for pre-Oreo UI
-            options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_behind) + " (Android TV 5,6,7)",
-                    optionItem -> {
-                        playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_BEHIND);
-                        onSetCallback.run();
-                    }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_BEHIND));
-        }
-        options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_pip),
-                optionItem -> {
-                    playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_PIP);
-                    onSetCallback.run();
-                }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_PIP));
-        options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_only_audio),
-                optionItem -> {
-                    playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_AUDIO);
-                    onSetCallback.run();
-                }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_AUDIO));
-
-        return OptionCategory.from(BACKGROUND_PLAYBACK_ID, categoryTitle, options);
-    }
-
     private void addPresetsCategory() {
         Preset[] presets = {
                 new Preset("SD     30fps    avc", "640,360,30,avc"),
@@ -271,5 +237,39 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         for (OptionCategory category : mRadioCategories.values()) {
             mSettingsPresenter.appendRadioCategory(category.title, category.options);
         }
+    }
+
+    public static OptionCategory createBackgroundPlaybackCategory(Context context, PlayerData playerData) {
+        return createBackgroundPlaybackCategory(context, playerData, () -> {});
+    }
+
+    private static OptionCategory createBackgroundPlaybackCategory(Context context, PlayerData playerData, Runnable onSetCallback) {
+        String categoryTitle = context.getString(R.string.category_background_playback);
+
+        List<OptionItem> options = new ArrayList<>();
+        options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_off),
+                optionItem -> {
+                    playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_NONE);
+                    onSetCallback.run();
+                }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_NONE));
+        if (Helpers.isAndroidTV(context) && Build.VERSION.SDK_INT < 26) { // useful only for pre-Oreo UI
+            options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_behind) + " (Android TV 5,6,7)",
+                    optionItem -> {
+                        playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_BEHIND);
+                        onSetCallback.run();
+                    }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_BEHIND));
+        }
+        options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_pip),
+                optionItem -> {
+                    playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_PIP);
+                    onSetCallback.run();
+                }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_PIP));
+        options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_only_audio),
+                optionItem -> {
+                    playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_AUDIO);
+                    onSetCallback.run();
+                }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_AUDIO));
+
+        return OptionCategory.from(BACKGROUND_PLAYBACK_ID, categoryTitle, options);
     }
 }
