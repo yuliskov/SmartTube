@@ -44,7 +44,8 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
 
         @NonNull
         public String toString() {
-            return String.format("%s,%s,%s", afrEnabled, afrFpsCorrectionEnabled, afrResSwitchEnabled);
+            return String.format("%s,%s,%s", afrEnabled, afrFpsCorrectionEnabled, afrResSwitchEnabled)
+                    .replace(",", "%2C");
         }
 
         public static AfrData from(String data) {
@@ -52,7 +53,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
                 return new AfrData();
             }
 
-            String[] split = data.split(",");
+            String[] split = data.replace("%2C", ",").split(",");
 
             if (split.length < 3) {
                 return new AfrData();
