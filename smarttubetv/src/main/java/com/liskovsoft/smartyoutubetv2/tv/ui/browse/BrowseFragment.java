@@ -24,11 +24,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
-import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.LoginDialogFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.ProgressBarManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -155,16 +154,22 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private void setupUi() {
-        setBadgeDrawable(ContextCompat.getDrawable(getActivity(), R.mipmap.app_logo));
         setTitle(getString(R.string.browse_title)); // Badge, when set, takes precedent over title
         setHeadersState(HEADERS_ENABLED);
         setHeadersTransitionOnBackEnabled(true);
 
+        int brandColorRes = Helpers.getThemeAttr(getActivity(), R.attr.brandColor);
+        int brandAccentColorRes = Helpers.getThemeAttr(getActivity(), R.attr.brandAccentColor);
+        int appLogoRes = Helpers.getThemeAttr(getActivity(), R.attr.appLogo);
+
+        // Top right corner logo
+        setBadgeDrawable(ContextCompat.getDrawable(getActivity(), appLogoRes));
+
         // Set fastLane (or headers) background color
-        setBrandColor(ContextCompat.getColor(getActivity(), Helpers.getThemeAttr(getActivity(), R.attr.brandColor)));
+        setBrandColor(ContextCompat.getColor(getActivity(), brandColorRes));
 
         // Set search icon color.
-        setSearchAffordanceColor(ContextCompat.getColor(getActivity(), Helpers.getThemeAttr(getActivity(), R.attr.brandAccentColor)));
+        setSearchAffordanceColor(ContextCompat.getColor(getActivity(), brandAccentColorRes));
 
         setHeaderPresenterSelector(new PresenterSelector() {
             @Override

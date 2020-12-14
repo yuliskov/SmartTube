@@ -1,16 +1,16 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue;
 
 import android.content.Context;
-import androidx.leanback.media.PlaybackBaseControlGlue;
-import androidx.leanback.media.PlaybackTransportControlGlue;
 import androidx.leanback.media.PlayerAdapter;
 import androidx.leanback.widget.AbstractDetailsDescriptionPresenter;
 import androidx.leanback.widget.PlaybackRowPresenter;
 import androidx.leanback.widget.RowPresenter;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.PlaybackTransportRowPresenter.TopEdgeFocusListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.framedrops.PlaybackBaseControlGlue;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.framedrops.PlaybackTransportControlGlue;
 
-public abstract class MaxIconNumVideoPlayerGlue<T extends PlayerAdapter>
+public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
         extends PlaybackTransportControlGlue<T> implements TopEdgeFocusListener {
     /**
      * Constructor for the glue.
@@ -18,7 +18,7 @@ public abstract class MaxIconNumVideoPlayerGlue<T extends PlayerAdapter>
      * @param context
      * @param impl    Implementation to underlying media player.
      */
-    public MaxIconNumVideoPlayerGlue(Context context, T impl) {
+    public MaxControlsVideoPlayerGlue(Context context, T impl) {
         super(context, impl);
     }
 
@@ -30,7 +30,7 @@ public abstract class MaxIconNumVideoPlayerGlue<T extends PlayerAdapter>
                     protected void onBindDescription(ViewHolder
                                                              viewHolder, Object obj) {
                         fixClippedTitle(viewHolder);
-                        fixOverlappedTitle(viewHolder);
+                        //fixOverlappedTitle(viewHolder);
 
                         PlaybackBaseControlGlue<?> glue = (PlaybackBaseControlGlue<?>) obj;
                         viewHolder.getTitle().setText(glue.getTitle());
@@ -55,12 +55,12 @@ public abstract class MaxIconNumVideoPlayerGlue<T extends PlayerAdapter>
             @Override
             protected void onBindRowViewHolder(RowPresenter.ViewHolder vh, Object item) {
                 super.onBindRowViewHolder(vh, item);
-                vh.setOnKeyListener(MaxIconNumVideoPlayerGlue.this);
+                vh.setOnKeyListener(MaxControlsVideoPlayerGlue.this);
 
                 ViewHolder viewHolder = (ViewHolder) vh;
 
                 addQualityInfoListener(viewHolder.mQualityListener);
-                viewHolder.mTopEdgeFocusListener = MaxIconNumVideoPlayerGlue.this;
+                viewHolder.mTopEdgeFocusListener = MaxControlsVideoPlayerGlue.this;
             }
             @Override
             protected void onUnbindRowViewHolder(RowPresenter.ViewHolder vh) {

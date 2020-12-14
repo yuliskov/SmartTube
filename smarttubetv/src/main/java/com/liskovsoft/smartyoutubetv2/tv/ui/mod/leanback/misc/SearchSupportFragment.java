@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback;
+package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc;
 
 import android.Manifest;
 import android.content.Context;
@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.text.Editable;
+import android.text.Selection;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
+
 import androidx.fragment.app.Fragment;
 import androidx.leanback.R;
 import androidx.leanback.app.BrowseSupportFragment;
@@ -32,6 +36,8 @@ import androidx.leanback.widget.SearchOrbView;
 import androidx.leanback.widget.SpeechOrbView;
 import androidx.leanback.widget.SpeechRecognitionCallback;
 import androidx.leanback.widget.VerticalGridView;
+
+import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -220,6 +226,7 @@ public class SearchSupportFragment extends Fragment {
     private ExternalQuery mExternalQuery;
 
     private SpeechRecognizer mSpeechRecognizer;
+    private boolean mScrollToEndAfterTextChanged;
 
     int mStatus;
     boolean mAutoStartRecognition = false; // MOD: don't start search immediately
@@ -312,6 +319,11 @@ public class SearchSupportFragment extends Fragment {
             public void onSearchQuerySubmit(String query) {
                 if (DEBUG) Log.v(TAG, String.format("onSearchQuerySubmit %s", query));
                 submitQuery(query);
+                mScrollToEndAfterTextChanged = true;
+                if (BuildConfig.FLAVOR.equals("stbolshoetv")) {
+                    InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputMethodManager.hideSoftInputFromWindow(mSearchBar.getWindowToken(), 0);
+                }
             }
 
             @Override
@@ -331,6 +343,10 @@ public class SearchSupportFragment extends Fragment {
         mSearchTextEditor.setOnFocusChangeListener((v, focused) -> {
             Log.d(TAG, "on search field focused");
             if (focused && mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
+                // scroll cursor to end after transition from lb_search_bar_speech_orb
+                mScrollToEndAfterTextChanged = mSearchTextEditor.getText().length() == 0;
+                Selection.setSelection(mSearchTextEditor.getText(), mSearchTextEditor.length());
+
                 mRowsSupportFragment.getVerticalGridView().clearFocus();
 
                 if (getContext() != null) {
@@ -340,7 +356,26 @@ public class SearchSupportFragment extends Fragment {
                 }
             }
         });
-        
+
+        mSearchTextEditor.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (mScrollToEndAfterTextChanged) {
+                    Selection.setSelection(mSearchTextEditor.getText(), mSearchTextEditor.length());
+                    mScrollToEndAfterTextChanged = false;
+                }
+            }
+        });
         //mSearchTextEditor.setOnClickListener(v -> {
         //    Log.d(TAG, "on search field clicked");
         //
@@ -352,7 +387,18 @@ public class SearchSupportFragment extends Fragment {
         //});
 
         mSpeechOrbView = mSearchBar.findViewById(R.id.lb_search_bar_speech_orb);
-
+        mSpeechOrbView.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                mSpeechOrbView.showListening();
+                mSpeechOrbView.callOnClick();
+            } else {
+                mSpeechOrbView.showNotListening();
+                if (mSpeechRecognizer != null) {
+                    mSpeechRecognizer.stopListening();
+                }
+            }
+        });
+        mSpeechOrbView.setClickable(false);
         // End MOD
 
         readArguments(getArguments());
@@ -488,7 +534,7 @@ public class SearchSupportFragment extends Fragment {
      */
     public void startRecognition() {
         if (mIsPaused) {
-            mPendingStartRecognitionWhenPaused = true;
+            mPendingStartRecognitionWhenPaused = false;
         } else {
             mSearchBar.startRecognition();
         }
@@ -804,6 +850,13 @@ public class SearchSupportFragment extends Fragment {
         mSearchBar.setSearchQuery(query);
     }
 
+    public void pressKeySearch() {
+        if (mSearchBar.hasFocus() && !mSearchBar.isRecognizing()) {
+            mSpeechOrbView.showListening();
+            mSpeechOrbView.callOnClick();
+        }
+    }
+
     static class ExternalQuery {
         String mQuery;
         boolean mSubmit;
@@ -812,5 +865,9 @@ public class SearchSupportFragment extends Fragment {
             mQuery = query;
             mSubmit = submit;
         }
+    }
+
+    protected int getSearchTextEditorId() {
+        return mSearchTextEditor != null ? mSearchTextEditor.getId() : 0;
     }
 }

@@ -23,7 +23,8 @@ buildscript {
 
 apply plugin: 'com.android.application'
 
-if (getGradle().getStartParameter().getTaskRequests().toString().contains("stbeta")) {
+// First letter of flavor name must be in Uppercase
+if (getGradle().getStartParameter().getTaskRequests().toString().contains("Stbeta")) {
     // Google Services Gradle plugin (transforms google-services.json file)
     apply plugin: 'com.google.gms.google-services'
 
@@ -48,8 +49,8 @@ android {
         applicationId "com.liskovsoft.smarttubetv"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 157
-        versionName "10.17"
+        versionCode 173
+        versionName "10.33"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
@@ -79,6 +80,18 @@ android {
         strtarmenia {
             // matchingFallbacks = ['lite']
             applicationIdSuffix ".rtarmenia"
+        }
+        stbolshoetv {
+            // matchingFallbacks = ['lite']
+            // applicationIdSuffix ".bolshoetv"
+            versionCode 11000 + defaultConfig.versionCode
+            applicationId "com.liskovsoft.videomanager"
+        }
+        stredboxtv {
+            // matchingFallbacks = ['lite']
+            //applicationIdSuffix ".redboxtv"
+            versionCode 11000 + defaultConfig.versionCode
+            applicationId "com.redboxtv.smartyoutubetv"
         }
     }
 
@@ -113,10 +126,10 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:' + glideVersion
     implementation 'com.zlc.glide:webpdecoder:2.0.' + glideVersion
 
-    implementation 'com.amazon.android:exoplayer:' + amazonExoplayerVersion
-    implementation 'com.amazon.android:extension-leanback:' + amazonExoplayerVersion
-    // implementation 'com.google.android.exoplayer:exoplayer:' + exoplayerVersion
-    // implementation 'com.google.android.exoplayer:extension-leanback:' + exoplayerVersion
+//    implementation 'com.amazon.android:exoplayer:' + amazonExoplayerVersion
+//    implementation 'com.amazon.android:extension-leanback:' + amazonExoplayerVersion
+     implementation 'com.google.android.exoplayer:exoplayer:' + exoplayerVersion
+     implementation 'com.google.android.exoplayer:extension-leanback:' + exoplayerVersion
 
     testImplementation 'junit:junit:' + junitVersion
     testImplementation 'org.robolectric:robolectric:' + robolectricVersion

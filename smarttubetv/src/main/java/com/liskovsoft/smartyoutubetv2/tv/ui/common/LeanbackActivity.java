@@ -13,9 +13,11 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
-import com.liskovsoft.smartyoutubetv2.common.language.LangUpdater;
+import com.liskovsoft.smartyoutubetv2.common.misc.LangUpdater;
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.DoubleBackManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.LongClickManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.SearchTagsActivity;
 
 /**
  * This parent class contains common methods that run in every activity such as search.
@@ -41,7 +43,10 @@ public abstract class LeanbackActivity extends MotherActivity {
 
     @Override
     public boolean onSearchRequested() {
-        SearchPresenter.instance(this).startSearch(null);
+        // prevent start SearchTagsActivity from SearchTagsActivity
+        if (!(this instanceof SearchTagsActivity)) {
+            SearchPresenter.instance(this).startSearch(null);
+        }
         return true;
     }
     
@@ -119,14 +124,9 @@ public abstract class LeanbackActivity extends MotherActivity {
         super.attachBaseContext(LocaleContextWrapper.wrap(newBase, LangHelper.parseLangCode(langCode)));
     }
 
-    public void destroyActivity() {
-        super.finish();
-    }
-
     private void properlyFinishTheApp() {
         SplashPresenter.instance(this).unhold();
         mViewManager.clearCaches();
         destroyActivity();
-        //mViewManager.killApp();
     }
 }

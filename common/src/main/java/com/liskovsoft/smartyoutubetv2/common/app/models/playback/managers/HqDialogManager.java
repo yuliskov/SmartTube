@@ -1,6 +1,9 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import android.os.Build;
+
+import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -13,9 +16,11 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.Preset;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class HqDialogManager extends PlayerEventListenerHelper {
     private static final String TAG = HqDialogManager.class.getSimpleName();
@@ -27,7 +32,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     private boolean mEnableBackgroundAudio;
     private boolean mEnablePIP;
     private boolean mEnablePlayBehind;
-    private final List<Runnable> mHideListeners = new ArrayList<>();
+    private final Set<Runnable> mHideListeners = new HashSet<>();
     private final StateUpdater mStateUpdater;
 
     public HqDialogManager(StateUpdater stateUpdater) {
@@ -51,8 +56,10 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
         addQualityCategories();
         addVideoBufferCategory();
-        addPresetsCategory();
-        addBackgroundPlaybackCategory();
+        if (!BuildConfig.FLAVOR.equals("stbolshoetv")) {
+            addPresetsCategory();
+            addBackgroundPlaybackCategory();
+        }
 
         internalStuff();
 
@@ -67,13 +74,16 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         String audioFormatsTitle = mActivity.getString(R.string.title_audio_formats);
 
         addRadioCategory(videoFormatsTitle,
-                UiOptionItem.from(videoFormats,
-                        option -> mController.selectFormat(UiOptionItem.toFormat(option)),
-                        mActivity.getString(R.string.video_max_quality)));
+                UiOptionItem.from(videoFormats, this::selectFormatOption));
         addRadioCategory(audioFormatsTitle,
-                UiOptionItem.from(audioFormats,
-                        option -> mController.selectFormat(UiOptionItem.toFormat(option)),
-                        mActivity.getString(R.string.audio_max_quality)));
+                UiOptionItem.from(audioFormats, this::selectFormatOption));
+    }
+
+    private void selectFormatOption(OptionItem option) {
+        mController.selectFormat(UiOptionItem.toFormat(option));
+        if (mController.hasNoMedia()) {
+            mController.reloadPlayback();
+        }
     }
 
     private void addVideoBufferCategory() {
@@ -134,8 +144,8 @@ public class HqDialogManager extends PlayerEventListenerHelper {
                     mEnablePlayBehind = false;
                     updateBackgroundPlayback();
                 }, !mEnableBackgroundAudio && !mEnablePIP && !mEnablePlayBehind));
-        if (Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 26) { // useful only for pre-Oreo UI
-            options.add(UiOptionItem.from(mActivity.getString(R.string.option_background_playback_behind) + " (Android 5,6,7)",
+        if (Helpers.isAndroidTV(mActivity) && Build.VERSION.SDK_INT < 26) { // useful only for pre-Oreo UI
+            options.add(UiOptionItem.from(mActivity.getString(R.string.option_background_playback_behind) + " (Android TV 5,6,7)",
                     optionItem -> {
                         mEnableBackgroundAudio = false;
                         mEnablePIP = false;
@@ -216,12 +226,20 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         mCheckedCategories.put(categoryTitle, options);
     }
 
+    public void removeCategory(String categoryTitle) {
+        mCheckedCategories.remove(categoryTitle);
+    }
+
     public void addRadioCategory(String categoryTitle, List<OptionItem> options) {
         mRadioCategories.put(categoryTitle, options);
     }
 
-    public void setOnDialogHide(Runnable listener) {
+    public void addOnDialogHide(Runnable listener) {
         mHideListeners.add(listener);
+    }
+
+    public void removeOnDialogHide(Runnable listener) {
+        mHideListeners.remove(listener);
     }
 
     private void appendSingleOptions() {

@@ -1,9 +1,12 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import android.content.Context;
+
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -22,8 +25,13 @@ import java.util.List;
 public class SuggestionsLoader extends PlayerEventListenerHelper {
     private static final String TAG = SuggestionsLoader.class.getSimpleName();
     private final List<MetadataListener> mListeners = new ArrayList<>();
+    private final Context mContext;
     private Disposable mMetadataAction;
     private Disposable mScrollAction;
+
+    public SuggestionsLoader(Context context) {
+        mContext = context;
+    }
 
     public interface MetadataListener {
         void onMetadata(MediaItemMetadata metadata);
@@ -37,18 +45,6 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
     @Override
     public void onEngineReleased() {
         RxUtils.disposeActions(mMetadataAction, mScrollAction);
-    }
-
-    @Override
-    public boolean onNextClicked() {
-        RxUtils.disposeActions(mMetadataAction, mScrollAction);
-        return false;
-    }
-
-    @Override
-    public boolean onPreviousClicked() {
-        RxUtils.disposeActions(mMetadataAction, mScrollAction);
-        return false;
     }
 
     @Override
@@ -73,7 +69,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        MediaItemManager mediaItemManager = YouTubeMediaService.instance().getMediaItemManager();
+        MediaItemManager mediaItemManager = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(mContext)).getMediaItemManager();
 
         mScrollAction = mediaItemManager.continueGroupObserve(mediaGroup)
                 .subscribeOn(Schedulers.newThread())
@@ -95,7 +91,9 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
             return;
         }
 
-        MediaService service = YouTubeMediaService.instance();
+        RxUtils.disposeActions(mMetadataAction, mScrollAction);
+
+        MediaService service = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(mContext));
         MediaItemManager mediaItemManager = service.getMediaItemManager();
 
         Observable<MediaItemMetadata> observable;

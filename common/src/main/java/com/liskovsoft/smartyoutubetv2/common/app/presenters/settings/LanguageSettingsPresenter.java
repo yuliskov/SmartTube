@@ -6,7 +6,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.smartyoutubetv2.common.language.LangUpdater;
+import com.liskovsoft.smartyoutubetv2.common.misc.LangUpdater;
 
 import java.util.ArrayList;
 import java.util.HashMap;

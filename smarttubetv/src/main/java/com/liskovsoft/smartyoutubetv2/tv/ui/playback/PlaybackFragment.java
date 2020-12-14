@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,8 +50,11 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.ProgressBarManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.VideoPlayerGlue.OnActionClickedListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.StoryboardSeekDataProvider;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoEventsOverrideFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue.OnActionClickedListener;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -164,6 +168,12 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         }
     }
 
+    public void onDispatchKeyEvent(KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            mPlayerGlue.syncControlsState();
+        }
+    }
+
     public void skipToNext() {
         mPlayerGlue.next();
     }
@@ -265,6 +275,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mPlayerGlue.setHost(new VideoSupportFragmentGlueHost(this));
         mPlayerGlue.setSeekEnabled(true);
         mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end
+        StoryboardSeekDataProvider.setSeekProvider(mPlayerGlue);
         hideControlsOverlay(mIsAnimationEnabled); // hide controls upon fragment creation
 
         mExoPlayerController.setPlayer(mPlayer);
@@ -488,6 +499,13 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mPlayerGlue.setSubtitle(video.description);
     }
 
+    @Override
+    public void loadStoryboard() {
+        if (mPlayerGlue.getSeekProvider() instanceof StoryboardSeekDataProvider) {
+            ((StoryboardSeekDataProvider) mPlayerGlue.getSeekProvider()).setVideo(getVideo(), mExoPlayerController.getLengthMs());
+        }
+    }
+
     // End Ui events
 
     // Begin Engine Events
@@ -684,14 +702,34 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
+    public void showControlsOverlay(boolean runAnimation) {
+        super.showControlsOverlay(runAnimation);
+
+        if (mPlayerGlue != null) {
+            mPlayerGlue.onControlsVisibilityChange(true);
+        }
+
+        mEventListener.onControlsShown(true);
+    }
+
+    @Override
+    public void hideControlsOverlay(boolean runAnimation) {
+        super.hideControlsOverlay(runAnimation);
+
+        if (mPlayerGlue != null) {
+            mPlayerGlue.onControlsVisibilityChange(false);
+        }
+
+        mEventListener.onControlsShown(false);
+    }
+
+    @Override
     public void showControls(boolean show) {
         if (show) {
             showControlsOverlay(mIsAnimationEnabled);
         } else {
             hideControlsOverlay(mIsAnimationEnabled);
         }
-
-        mEventListener.onControlsShown(show);
     }
 
     @Override

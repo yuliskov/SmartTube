@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.sharedutils.prefs.SharedPreferencesBase;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 
@@ -30,7 +31,7 @@ public class AppPrefs extends SharedPreferencesBase {
     private String mCurrentDisplayMode;
 
     private AppPrefs(Context context) {
-        super(context);
+        super(context, R.xml.app_prefs);
     }
 
     public static AppPrefs instance(Context context) {

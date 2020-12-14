@@ -34,12 +34,13 @@ public class MainUISettingsPresenter {
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
         settingsPresenter.clear();
 
-        appendAnimatedPreviews(settingsPresenter);
+        appendCardsStyle(settingsPresenter);
         appendColorScheme(settingsPresenter);
         appendVideoGridScale(settingsPresenter);
         appendScaleUI(settingsPresenter);
         appendLeftPanelCategories(settingsPresenter);
         appendBootToCategory(settingsPresenter);
+        appendChannelSortingCategory(settingsPresenter);
 
         settingsPresenter.showDialog(mContext.getString(R.string.dialog_main_ui), () -> {
             if (mRestartApp) {
@@ -49,11 +50,19 @@ public class MainUISettingsPresenter {
         });
     }
 
-    private void appendAnimatedPreviews(AppSettingsPresenter settingsPresenter) {
+    private void appendCardsStyle(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
         OptionItem animatedPreviewsOption = UiOptionItem.from(mContext.getString(R.string.animated_previews),
                 option -> mMainUIData.enableAnimatedPreviews(option.isSelected()), mMainUIData.isAnimatedPreviewsEnabled());
 
-        settingsPresenter.appendSingleSwitch(animatedPreviewsOption);
+        OptionItem dontCutTextOnCards = UiOptionItem.from(mContext.getString(R.string.multiline_titles),
+                option -> mMainUIData.enableMultilineTitles(option.isSelected()), mMainUIData.isMultilineTitlesEnabled());
+
+        options.add(animatedPreviewsOption);
+        options.add(dontCutTextOnCards);
+
+        settingsPresenter.appendCheckedCategory(mContext.getString(R.string.cards_style), options);
     }
 
     private void appendVideoGridScale(AppSettingsPresenter settingsPresenter) {
@@ -110,6 +119,22 @@ public class MainUISettingsPresenter {
         }
 
         settingsPresenter.appendRadioCategory(mContext.getString(R.string.boot_to_section), options);
+    }
+
+    private void appendChannelSortingCategory(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.sorting_by_new_content, MainUIData.CHANNEL_SORTING_UPDATE},
+                {R.string.sorting_alphabetically, MainUIData.CHANNEL_SORTING_AZ},
+                {R.string.sorting_last_viewed, MainUIData.CHANNEL_SORTING_LAST_VIEWED}}) {
+            options.add(UiOptionItem.from(mContext.getString(pair[0]), optionItem -> {
+                mMainUIData.setChannelCategorySorting(pair[1]);
+                BrowsePresenter.instance(mContext).updateChannelCategorySorting();
+            }, mMainUIData.getChannelCategorySorting() == pair[1]));
+        }
+
+        settingsPresenter.appendRadioCategory(mContext.getString(R.string.channel_category_sorting), options);
     }
 
     private void appendColorScheme(AppSettingsPresenter settingsPresenter) {

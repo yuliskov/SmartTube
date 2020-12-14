@@ -8,12 +8,14 @@ import android.util.AttributeSet;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import androidx.leanback.widget.ImageCardView;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class ComplexImageCardView extends ImageCardView {
     private ComplexImageView mComplexImageView;
     private Handler mHandler;
     private Runnable mEnableMarquee;
+    private boolean mIsMultilineTitlesEnabled;
 
     public ComplexImageCardView(Context context) {
         super(context);
@@ -38,16 +40,21 @@ public class ComplexImageCardView extends ImageCardView {
         mHandler = new Handler(Looper.getMainLooper());
     }
 
-    private void enableTextAnimation(boolean enable) {
-        TextView title = findViewById(R.id.title_text);
-        TextView content = findViewById(R.id.content_text);
+    private void enableTitleAnimation(boolean enable) {
+        enableTextAnimation(findViewById(R.id.title_text), enable);
+    }
 
-        if (title == null || content == null) {
+    private void enableContentAnimation(boolean enable) {
+        enableTextAnimation(findViewById(R.id.content_text), enable);
+    }
+
+    private void enableTextAnimation(TextView view, boolean enable) {
+        if (view == null) {
             return;
         }
 
         if (enable) {
-            mEnableMarquee = () -> enableMarquee(title, content);
+            mEnableMarquee = () -> enableMarquee(view);
 
             mHandler.postDelayed(mEnableMarquee, 1_000);
         } else {
@@ -56,7 +63,7 @@ public class ComplexImageCardView extends ImageCardView {
                 mEnableMarquee = null;
             }
 
-            disableMarquee(title, content);
+            disableMarquee(view);
         }
     }
 
@@ -104,7 +111,10 @@ public class ComplexImageCardView extends ImageCardView {
     public void setSelected(boolean selected) {
         super.setSelected(selected);
 
-        enableTextAnimation(selected);
+        if (!mIsMultilineTitlesEnabled) {
+            enableTitleAnimation(selected);
+        }
+        enableContentAnimation(selected);
         enableVideoPreview(selected);
     }
 
@@ -118,6 +128,19 @@ public class ComplexImageCardView extends ImageCardView {
 
     public void setPreviewUrl(String previewUrl) {
         mComplexImageView.setPreviewUrl(previewUrl);
+    }
+
+    public void enableMultilineTitles(boolean enable) {
+        TextView titleView = findViewById(R.id.title_text);
+
+        if (titleView == null) {
+            return;
+        }
+
+        mIsMultilineTitlesEnabled = enable;
+
+        titleView.setMaxLines(enable ? 3 : 1);
+        titleView.setLines(enable ? 3 : 1);
     }
 
     /**

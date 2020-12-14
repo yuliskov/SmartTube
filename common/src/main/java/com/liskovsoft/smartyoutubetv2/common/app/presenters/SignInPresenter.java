@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
@@ -27,7 +28,7 @@ public class SignInPresenter implements Presenter<SignInView> {
 
     private SignInPresenter(Context context) {
         mContext = context;
-        mMediaService = YouTubeMediaService.instance();
+        mMediaService = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
         mBrowsePresenter = BrowsePresenter.instance(context);
         mSplashPresenter = SplashPresenter.instance(context);
     }

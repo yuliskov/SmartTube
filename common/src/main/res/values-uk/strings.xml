@@ -103,4 +103,21 @@
     <string name="dialog_search">Пошук</string>
     <string name="instant_voice_search">Відразу запускати голосови пошук</string>
     <string name="option_background_playback_behind">Грати позаду</string>
+    <string name="next_video_info_is_not_loaded_yet">Інформація про наступне відео ще не завантажена</string>
+    <string name="multiline_titles">Декілька рядків у заголовках</string>
+    <string name="cards_style">Стиль карток</string>
+    <string name="repeat_mode_all">Грати усі відео один за одним</string>
+    <string name="repeat_mode_one">Повторювати поточне відео</string>
+    <string name="repeat_mode_pause">Ставити відтворення на паузу після кожного відео</string>
+    <string name="repeat_mode_none">Завершувати відтворення після одного відео</string>
+    <string name="subscribed_to_channel">Підписка на канал оформлена</string>
+    <string name="unsubscribed_to_channel">Підписка на канал скасована</string>
+    <string name="subtitle_yellow">Жовті</string>
+    <string name="subtitle_black_bg">Чорний фон</string>
+    <string name="player_seek_preview">Прев\'ю при перемотуванні</string>
+    <string name="color_scheme_dark_oled">Темна (OLED)</string>
+    <string name="channel_category_sorting">Сортування розділу Канали</string>
+    <string name="sorting_by_new_content">Новий контент</string>
+    <string name="sorting_alphabetically">За абеткою</string>
+    <string name="sorting_last_viewed">Останні переглянуті</string>
 </resources>

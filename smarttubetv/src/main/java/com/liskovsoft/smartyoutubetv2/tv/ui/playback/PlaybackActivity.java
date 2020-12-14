@@ -30,7 +30,7 @@ public class PlaybackActivity extends LeanbackActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_playback);
+        setContentView(R.layout.fragment_playback);
         Fragment fragment =
                 getSupportFragmentManager().findFragmentByTag(getString(R.string.playback_tag));
         if (fragment instanceof PlaybackFragment) {
@@ -44,6 +44,13 @@ public class PlaybackActivity extends LeanbackActivity {
         if (playerThemeResId > 0) {
             setTheme(playerThemeResId);
         }
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        mPlaybackFragment.onDispatchKeyEvent(event);
+
+        return super.dispatchKeyEvent(event);
     }
 
     @Override

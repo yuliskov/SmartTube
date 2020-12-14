@@ -2,15 +2,17 @@ package com.liskovsoft.smartyoutubetv2.common.app.views;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Looper;
 import androidx.annotation.NonNull;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
@@ -236,18 +238,22 @@ public class ViewManager {
     }
 
     public void clearCaches() {
-        YouTubeMediaService.instance().invalidateCache();
+        YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(mContext)).invalidateCache();
         FileHelpers.deleteCache(mContext);
     }
 
     public void restartApp() {
-        startView(SplashView.class);
-
-        mMoveViewsToBack = true;
+        //startView(SplashView.class);
+        //
+        //mMoveViewsToBack = true;
+        //
+        //persistState();
+        //
+        //System.exit(0);
 
         persistState();
 
-        System.exit(0);
+        triggerRebirth3(mContext, mViewMapping.get(SplashView.class));
     }
 
     private void persistState() {
@@ -263,5 +269,37 @@ public class ViewManager {
             mMoveViewsToBack = Helpers.parseBoolean(split, 0);
             mIsSinglePlayerMode = Helpers.parseBoolean(split, 1);
         }
+    }
+
+    /**
+     * More info: https://stackoverflow.com/questions/6609414/how-do-i-programmatically-restart-an-android-app
+     */
+    private static void triggerRebirth(Context context, Class<?> rootActivity) {
+        Intent intent = new Intent(context, rootActivity);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+        if (context instanceof MotherActivity) {
+            ((MotherActivity) context).destroyActivity();
+        }
+        Runtime.getRuntime().exit(0);
+    }
+
+    /**
+     * More info: https://stackoverflow.com/questions/6609414/how-do-i-programmatically-restart-an-android-app
+     */
+    private static void triggerRebirth2(Context context, Class<?> rootActivity) {
+        Intent mStartActivity = new Intent(context, rootActivity);
+        int mPendingIntentId = 123456;
+        PendingIntent mPendingIntent = PendingIntent.getActivity(context, mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager mgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+        System.exit(0);
+    }
+
+    public static void triggerRebirth3(Context context, Class<?> myClass) {
+        Intent intent = new Intent(context, myClass);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
+        Runtime.getRuntime().exit(0);
     }
 }

@@ -27,8 +27,8 @@
     <string name="category_background_playback">Afspelen op achtergrond</string>
     <string name="not_implemented">Niet geïmplementeerd</string>
     <string name="option_background_playback_off">Uit</string>
-    <string name="option_background_playback_pip">Video en audio</string>
-    <string name="option_background_playback_only_audio">Audio</string>
+    <string name="option_background_playback_pip">PiP</string>
+    <string name="option_background_playback_only_audio">Enkel audio</string>
     <string name="playback_settings">HQ instellingen</string>
     <string name="video_speed">Video snelheid</string>
     <string name="resolution_switch">Resolutie aanpassen</string>
@@ -59,8 +59,8 @@
     <string name="dialog_select_language">Taal</string>
     <string name="subtitle_default">Standaard</string>
     <string name="subtitle_semi_transparent_bg">Transparante achtergrond</string>
-    <string name="subtitle_style">Stijl ondertitels</string>
-    <string name="subtitle_language">Taal ondertitels</string>
+    <string name="subtitle_style">Stijl</string>
+    <string name="subtitle_language">Taal</string>
     <string name="action_search">Zoeken</string>
     <string name="settings_main_ui">Display</string>
     <string name="dialog_main_ui">Display</string>
@@ -83,7 +83,7 @@
     <string name="side_panel_sections">Rubrieken</string>
     <string name="boot_to_section">Opstarten met rubriek</string>
     <string name="large_ui">Grote weergave</string>
-    <string name="video_grid_scale">Videoraster formaat</string>
+    <string name="video_grid_scale">Videokaart formaat</string>
     <string name="scale_ui">Display formaat</string>
     <string name="color_scheme">Thema</string>
     <string name="color_scheme_default">Standaard</string>
@@ -102,4 +102,23 @@
     <string name="settings_search">Zoeken</string>
     <string name="dialog_search">Zoeken</string>
     <string name="instant_voice_search">Instant voice search</string>
+    <string name="option_background_playback_behind">Hierna afspelen</string>
+    <string name="next_video_info_is_not_loaded_yet">Info volgende video nog niet geladen</string>
+    <string name="multiline_titles">Meerregelige titels</string>
+    <string name="cards_style">Videokaart stijl</string>
+    <string name="repeat_mode_all">Alles afspelen</string>
+    <string name="repeat_mode_one">Deze video herhalen</string>
+    <string name="repeat_mode_pause">Pauzeren na deze video</string>
+    <string name="repeat_mode_none">Stoppen na deze video</string>
+    <string name="subscribed_to_channel">Abonnement aan</string>
+    <string name="unsubscribed_to_channel">Abonnement uit</string>
+    <string name="subtitle_yellow">Geel</string>
+    <string name="subtitle_black_bg">Zwarte achtergrond</string>
+    <string name="player_seek_preview">Preview tijdens zoeken</string>
+    <string name="color_scheme_dark_oled">Donker (OLED)</string>
+    <string name="channel_category_sorting">Kanalen sorteren</string>
+    <string name="sorting_by_new_content">Nieuwe video\'s</string>
+    <string name="sorting_alphabetically">Alfabetisch</string>
+    <string name="sorting_by_popularity">Populariteit</string>
+    <string name="sorting_last_viewed">Laatst bekeken</string>
 </resources>

@@ -58,7 +58,7 @@
     <string name="default_lang">Standard</string>
     <string name="dialog_select_language">App-Sprache</string>
     <string name="subtitle_default">Standard</string>
-    <string name="subtitle_semi_transparent_bg">Semitransparenter Hintergrund</string>
+    <string name="subtitle_semi_transparent_bg">Halbtransparenter Hintergrund</string>
     <string name="subtitle_style">Untertitel-Stil</string>
     <string name="subtitle_language">Untertitel-Sprache</string>
     <string name="action_search">Suche starten</string>
@@ -102,4 +102,22 @@
     <string name="settings_search">Suche</string>
     <string name="dialog_search">Suche</string>
     <string name="instant_voice_search">Sofortige Sprachsuche</string>
+    <string name="option_background_playback_behind">Im Hintergrund abspielen</string>
+    <string name="next_video_info_is_not_loaded_yet">Informationen zum nächsten Video wurden noch nicht geladen</string>
+    <string name="multiline_titles">Mehrzeilige Titel</string>
+    <string name="cards_style">Karten-Stil</string>
+    <string name="repeat_mode_all">Alle Videos nacheinander abspielen</string>
+    <string name="repeat_mode_one">Wiederhole dieses Video</string>
+    <string name="repeat_mode_pause">Pause nach diesem Video</string>
+    <string name="repeat_mode_none">Stoppen nach diesem Video</string>
+    <string name="subscribed_to_channel">Kanal abonniert</string>
+    <string name="unsubscribed_to_channel">Kanal nicht mehr abonniert</string>
+    <string name="subtitle_yellow">Gelb</string>
+    <string name="subtitle_black_bg">Schwarzer Hintergrund</string>
+    <string name="player_seek_preview">Vorschau beim Spulen anzeigen</string>
+    <string name="color_scheme_dark_oled">Dunkel (OLED)</string>
+    <string name="channel_category_sorting">Kanäle-Kategorie sortieren</string>
+    <string name="sorting_by_new_content">Neue Videos</string>
+    <string name="sorting_alphabetically">Alphabetisch</string>
+    <string name="sorting_last_viewed">Zuletzt angesehen</string>
 </resources>

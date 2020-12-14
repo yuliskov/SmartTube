@@ -115,18 +115,19 @@
     <string name="text_search_results">Résultats de recherche pour %s</string>
     <string name="text_post_results_title">Messages pour %s</string>
     <string name="text_no_results">Aucun résultat</string>
-    <string name="error_message_network_needed">Oups, vous avez besoin d’une connexion réseau pour le faire!</string>
+    <string name="error_message_network_needed">Oups, vous avez besoin d’une connexion réseau!</string>
 
     <!--  NEW ITEMS  -->
-    <string name="signin_view_title">Le code utilisateur est en cours de chargement?</string>
+    <string name="signin_view_title">Le code utilisateur est en cours de chargement…</string>
     <string name="signin_view_description">Pour vous connecter, entrez ce code dans la page %s</string>
     <string name="signin_view_action_text">Terminé</string>
     <string name="action_subscribe_off">Se désabonner</string>
-    <string name="action_subscribe_on">Abonnez-vous</string>
+    <string name="action_subscribe_on">S\'abonner</string>
     <string name="action_channel">Chaine ouverte</string>
-    <string name="action_playlist_add">Ajouter à la playlist</string>
+    <string name="action_playlist_add">Ajouter à la bibliothéque</string>
     <string name="action_video_stats">Statistiques vidéo</string>
     <string name="require_checked">Exige \"%s\"</string>
     <string name="msg_press_again_to_exit">Appuyez à nouveau pour sortir</string>
     <string name="player_remaining_time">Fini dans: %s</string>
+    <string name="badge_new_content">NOUVEAU CONTENU</string>   
 </resources>

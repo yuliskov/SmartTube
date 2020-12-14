@@ -1,9 +1,12 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
@@ -22,6 +25,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private static final String TAG = StateUpdater.class.getSimpleName();
     private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
     private static final int MAX_PERSISTENT_STATE_SIZE = 30;
+    private final Context mContext;
     private boolean mIsPlaying;
     private FormatItem mVideoFormat;
     private FormatItem mAudioFormat;
@@ -32,6 +36,10 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private float mLastSpeed = -1;
     private AppPrefs mPrefs;
     private Disposable mHistoryAction;
+
+    public StateUpdater(Context context) {
+        mContext = context;
+    }
 
     @Override
     public void onInitDone() {
@@ -99,16 +107,24 @@ public class StateUpdater extends PlayerEventListenerHelper {
     //}
 
     @Override
+    public void onEngineInitialized() {
+        // Fragment might be destroyed by system at this point.
+        // So, to be sure, repeat format selection.
+        restoreVideoFormat();
+        restoreAudioFormat();
+    }
+
+    @Override
     public void onEngineReleased() {
         saveState();
     }
 
-    @Override
-    public void onSourceChanged(Video item) {
-        // called before engine attempt to auto select track by itself
-        restoreVideoFormat();
-        restoreAudioFormat();
-    }
+    //@Override
+    //public void onSourceChanged(Video item) {
+    //    // called before engine attempt to auto select track by itself
+    //    restoreVideoFormat();
+    //    restoreAudioFormat();
+    //}
 
     @Override
     public void onVideoLoaded(Video item) {
@@ -337,7 +353,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         RxUtils.disposeActions(mHistoryAction);
 
         Video item = mController.getVideo();
-        MediaService service = YouTubeMediaService.instance();
+        MediaService service = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(mContext));
         MediaItemManager mediaItemManager = service.getMediaItemManager();
 
         Observable<Void> historyObservable;

@@ -6,6 +6,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -35,7 +36,7 @@ public class VideoMenuPresenter {
 
     private VideoMenuPresenter(Context context) {
         mContext = context;
-        MediaService service = YouTubeMediaService.instance();
+        MediaService service = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
         mItemManager = service.getMediaItemManager();
         mAuthManager = service.getSignInManager();
         mSettingsPresenter = AppSettingsPresenter.instance(context);

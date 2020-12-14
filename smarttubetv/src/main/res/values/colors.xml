@@ -15,6 +15,7 @@
 
     <!-- Card view colors -->
     <color name="card_selected_background_white">#FFFFFF</color>
+    <color name="card_selected_background_white_grey">#D3D3D3</color>
     <color name="card_selected_background_yellow">#ffaa3f</color>
     <color name="card_selected_background_grey">#343434</color>
     <color name="card_selected_text_black">#000000</color>
@@ -31,10 +32,10 @@
     <color name="player_background">#FF000000</color>
 
     <!-- Dark color scheme -->
-    <color name="scheme_dark_grey_background">#181818</color>
-    <color name="scheme_dark_grey_background_dark">#181818</color>
-    <color name="scheme_dark_grey_shelf_background_dark">#000000</color>
-    <color name="scheme_dark_grey_card_background_dark">#121212</color>
+    <color name="scheme_dark_background">#181818</color>
+    <color name="scheme_dark_background_dark">#181818</color>
+    <color name="scheme_dark_shelf_background_dark">#000000</color>
+    <color name="scheme_dark_card_background_dark">#121212</color>
 
     <!-- Red color scheme -->
     <color name="scheme_red_background">#131313</color>

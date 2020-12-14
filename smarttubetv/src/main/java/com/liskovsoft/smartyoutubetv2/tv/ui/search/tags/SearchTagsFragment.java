@@ -3,6 +3,8 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.search.tags;
 import android.os.Bundle;
 import android.text.TextUtils;
 import androidx.annotation.Nullable;
+
+import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -13,6 +15,8 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.vineyard.SearchTagsFragmentBase;
+
+import java.util.Locale;
 
 public class SearchTagsFragment extends SearchTagsFragmentBase {
     private static final String TAG = SearchTagsFragment.class.getSimpleName();
@@ -30,7 +34,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         mItemResultsAdapter = new VideoGroupObjectAdapter();
 
         setItemResultsAdapter(mItemResultsAdapter);
-        setSearchTagsProvider(new MediaServiceSearchTagProvider());
+        setSearchTagsProvider(new MediaServiceSearchTagProvider(LocaleUtility.getCurrentLocale(getContext())));
     }
 
     @Override
