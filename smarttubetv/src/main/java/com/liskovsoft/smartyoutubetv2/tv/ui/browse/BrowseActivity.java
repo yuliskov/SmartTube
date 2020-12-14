@@ -5,7 +5,6 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.Analytics;
 import com.liskovsoft.smartyoutubetv2.tv.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.UncaughtExceptionHandler;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 
 public class BrowseActivity extends LeanbackActivity {

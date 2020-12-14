@@ -126,4 +126,5 @@
     <string name="playlists_style_rows">Рядки</string>
     <string name="player_show_clock">Відображати годинник</string>
     <string name="player_show_remaining_time">Відображати час, що залишився</string>
+    <string name="open_channel_uploads">Усі відео на каналі</string>
 </resources>
