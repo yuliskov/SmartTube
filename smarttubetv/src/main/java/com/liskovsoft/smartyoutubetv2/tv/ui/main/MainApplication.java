@@ -12,6 +12,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppSettingsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.tv.BuildConfig;
+import com.liskovsoft.smartyoutubetv2.tv.UncaughtExceptionHandler;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.channel.ChannelActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.channeluploads.ChannelUploadsActivity;
@@ -40,5 +42,10 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         viewManager.register(SignInView.class, SignInActivity.class, BrowseActivity.class);
         viewManager.register(ChannelView.class, ChannelActivity.class, BrowseActivity.class);
         viewManager.register(ChannelUploadsView.class, ChannelUploadsActivity.class, BrowseActivity.class);
+
+        if ("stbolshoetv".equals(BuildConfig.FLAVOR)) {
+            Thread.setDefaultUncaughtExceptionHandler(
+                    new UncaughtExceptionHandler(getApplicationContext(), true));
+        }
     }
 }

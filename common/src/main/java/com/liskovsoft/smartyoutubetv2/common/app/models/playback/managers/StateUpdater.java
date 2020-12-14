@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
@@ -32,6 +34,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private float mLastSpeed = -1;
     private AppPrefs mPrefs;
     private Disposable mHistoryAction;
+
+    public StateUpdater() {
+    }
 
     @Override
     public void onInitDone() {

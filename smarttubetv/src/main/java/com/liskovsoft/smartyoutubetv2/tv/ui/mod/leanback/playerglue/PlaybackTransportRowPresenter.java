@@ -119,22 +119,22 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
         final PlaybackControlsRow.OnPlaybackProgressCallback mListener =
                 new PlaybackControlsRow.OnPlaybackProgressCallback() {
-            @Override
-            public void onCurrentPositionChanged(PlaybackControlsRow row, long ms) {
-                setCurrentPosition(ms);
-                setEndingTime(ms);
-            }
+                    @Override
+                    public void onCurrentPositionChanged(PlaybackControlsRow row, long ms) {
+                        setCurrentPosition(ms);
+                        setEndingTime(ms);
+                    }
 
-            @Override
-            public void onDurationChanged(PlaybackControlsRow row, long ms) {
-                setTotalTime(ms);
-            }
+                    @Override
+                    public void onDurationChanged(PlaybackControlsRow row, long ms) {
+                        setTotalTime(ms);
+                    }
 
-            @Override
-            public void onBufferedPositionChanged(PlaybackControlsRow row, long ms) {
-                setBufferedPosition(ms);
-            }
-        };
+                    @Override
+                    public void onBufferedPositionChanged(PlaybackControlsRow row, long ms) {
+                        setBufferedPosition(ms);
+                    }
+                };
 
         void updateProgressInSeek(boolean forward) {
             long newPos;
@@ -280,11 +280,11 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             }
             // set thumb bitmaps outside (start , end) to null
             for (int childIndex = 0; childIndex < heroChildIndex - mThumbHeroIndex + start;
-                    childIndex++) {
+                 childIndex++) {
                 mThumbsBar.setThumbBitmap(childIndex, null);
             }
             for (int childIndex = heroChildIndex + end - mThumbHeroIndex + 1;
-                    childIndex < totalNum; childIndex++) {
+                 childIndex < totalNum; childIndex++) {
                 mThumbsBar.setThumbBitmap(childIndex, null);
             }
         }
@@ -299,7 +299,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                         }
                         mThumbsBar.setThumbBitmap(childIndex, bitmap);
                     }
-        };
+                };
 
         boolean onForward() {
             if (!startSeek()) {
@@ -690,33 +690,33 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
     private final OnControlSelectedListener mOnControlSelectedListener =
             new OnControlSelectedListener() {
-        @Override
-        public void onControlSelected(Presenter.ViewHolder itemViewHolder, Object item,
-                ControlBarPresenter.BoundData data) {
-            ViewHolder vh = ((BoundData) data).mRowViewHolder;
-            if (vh.mSelectedViewHolder != itemViewHolder || vh.mSelectedItem != item) {
-                vh.mSelectedViewHolder = itemViewHolder;
-                vh.mSelectedItem = item;
-                vh.dispatchItemSelection();
-            }
-        }
-    };
+                @Override
+                public void onControlSelected(Presenter.ViewHolder itemViewHolder, Object item,
+                                              ControlBarPresenter.BoundData data) {
+                    ViewHolder vh = ((BoundData) data).mRowViewHolder;
+                    if (vh.mSelectedViewHolder != itemViewHolder || vh.mSelectedItem != item) {
+                        vh.mSelectedViewHolder = itemViewHolder;
+                        vh.mSelectedItem = item;
+                        vh.dispatchItemSelection();
+                    }
+                }
+            };
 
     private final OnControlClickedListener mOnControlClickedListener =
             new OnControlClickedListener() {
-        @Override
-        public void onControlClicked(Presenter.ViewHolder itemViewHolder, Object item,
-                ControlBarPresenter.BoundData data) {
-            ViewHolder vh = ((BoundData) data).mRowViewHolder;
-            if (vh.getOnItemViewClickedListener() != null) {
-                vh.getOnItemViewClickedListener().onItemClicked(itemViewHolder, item,
-                        vh, vh.getRow());
-            }
-            if (mOnActionClickedListener != null && item instanceof Action) {
-                mOnActionClickedListener.onActionClicked((Action) item);
-            }
-        }
-    };
+                @Override
+                public void onControlClicked(Presenter.ViewHolder itemViewHolder, Object item,
+                                             ControlBarPresenter.BoundData data) {
+                    ViewHolder vh = ((BoundData) data).mRowViewHolder;
+                    if (vh.getOnItemViewClickedListener() != null) {
+                        vh.getOnItemViewClickedListener().onItemClicked(itemViewHolder, item,
+                                vh, vh.getRow());
+                    }
+                    if (mOnActionClickedListener != null && item instanceof Action) {
+                        mOnActionClickedListener.onActionClicked((Action) item);
+                    }
+                }
+            };
 
     public PlaybackTransportRowPresenter() {
         setHeaderPresenter(null);
@@ -844,16 +844,16 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         vh.mSecondaryControlsDock.addView(vh.mSecondaryControlsVh.view);
         ((PlaybackTransportRowView) vh.view.findViewById(R.id.transport_row))
                 .setOnUnhandledKeyListener(new PlaybackTransportRowView.OnUnhandledKeyListener() {
-                @Override
-                public boolean onUnhandledKey(KeyEvent event) {
-                    if (vh.getOnKeyListener() != null) {
-                        if (vh.getOnKeyListener().onKey(vh.view, event.getKeyCode(), event)) {
-                            return true;
+                    @Override
+                    public boolean onUnhandledKey(KeyEvent event) {
+                        if (vh.getOnKeyListener() != null) {
+                            if (vh.getOnKeyListener().onKey(vh.view, event.getKeyCode(), event)) {
+                                return true;
+                            }
                         }
+                        return false;
                     }
-                    return false;
-                }
-            });
+                });
     }
 
     @Override

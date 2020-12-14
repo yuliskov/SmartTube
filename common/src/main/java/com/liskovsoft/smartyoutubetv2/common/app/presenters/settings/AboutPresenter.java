@@ -4,6 +4,7 @@ import android.content.Context;
 import com.liskovsoft.appupdatechecker2.AppUpdateChecker;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -36,10 +37,11 @@ public class AboutPresenter extends BasePresenter<Void> {
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
         settingsPresenter.clear();
 
-        appendAutoUpdateSwitch(settingsPresenter);
+        if (!BuildConfig.FLAVOR.equals("stbolshoetv")) {
+            appendAutoUpdateSwitch(settingsPresenter);
 
-        appendUpdateCheckButton(settingsPresenter);
-
+            appendUpdateCheckButton(settingsPresenter);
+        }
         appendSiteLink(settingsPresenter);
 
         appendDonation(settingsPresenter);

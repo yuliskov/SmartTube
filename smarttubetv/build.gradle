@@ -84,7 +84,9 @@ android {
         }
         stbolshoetv {
             // matchingFallbacks = ['lite']
-            applicationIdSuffix ".bolshoetv"
+            // applicationIdSuffix ".bolshoetv"
+            versionCode 11000 + defaultConfig.versionCode
+            applicationId "com.liskovsoft.videomanager"
         }
         stredboxtv {
             // matchingFallbacks = ['lite']

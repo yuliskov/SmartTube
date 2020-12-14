@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import android.content.Context;
+
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
@@ -24,6 +26,9 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
     private final List<MetadataListener> mListeners = new ArrayList<>();
     private Disposable mMetadataAction;
     private Disposable mScrollAction;
+
+    public SuggestionsLoader() {
+    }
 
     public interface MetadataListener {
         void onMetadata(MediaItemMetadata metadata);

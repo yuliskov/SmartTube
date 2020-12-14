@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 import android.content.Context;
 import android.os.Build;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -61,8 +62,10 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
         addQualityCategories();
         addVideoBufferCategory();
-        addPresetsCategory();
-        addBackgroundPlaybackCategory();
+        if (!BuildConfig.FLAVOR.equals("stbolshoetv")) {
+            addPresetsCategory();
+            addBackgroundPlaybackCategory();
+        }
 
         internalStuff();
 
