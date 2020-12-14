@@ -41,4 +41,7 @@ public interface PlaybackEngineController {
     float getSpeed();
     void setBuffer(int bufferType);
     int getBuffer();
+    interface OnBufferSelected {
+        void onBufferSelected(int type);
+    }
 }

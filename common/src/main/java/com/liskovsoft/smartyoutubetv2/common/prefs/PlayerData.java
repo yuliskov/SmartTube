@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager.AfrData;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
@@ -31,6 +32,7 @@ public class PlayerData {
     private FormatItem mVideoFormat;
     private FormatItem mAudioFormat;
     private FormatItem mSubtitleFormat;
+    private int mVideoBufferType;
 
     public PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -153,6 +155,15 @@ public class PlayerData {
         persistData();
     }
 
+    public void setVideoBufferType(int type) {
+        mVideoBufferType = type;
+        persistData();
+    }
+
+    public int getVideoBufferType() {
+        return mVideoBufferType;
+    }
+
     private void restoreData() {
         String data = mPrefs.getPlayerData();
 
@@ -170,12 +181,14 @@ public class PlayerData {
         mVideoFormat = ExoFormatItem.from(Helpers.parseStr(split, 9));
         mAudioFormat = ExoFormatItem.from(Helpers.parseStr(split, 10));
         mSubtitleFormat = ExoFormatItem.from(Helpers.parseStr(split, 11));
+        mVideoBufferType = Helpers.parseInt(split, 12, PlaybackEngineController.BUFFER_LOW);
     }
 
     private void persistData() {
         mPrefs.setPlayerData(Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec,
                 mIsShowFullDateEnabled, mIsSeekPreviewEnabled, mIsPauseOnSeekEnabled,
                 mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundPlaybackType, Helpers.toString(mAfrData),
-                Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mVideoFormat)));
+                Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mVideoFormat),
+                mVideoBufferType));
     }
 }

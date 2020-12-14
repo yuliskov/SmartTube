@@ -30,6 +30,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
         settingsPresenter.clear();
 
+        appendVideoBufferCategory(settingsPresenter);
         appendVideoPresetsCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
         appendAutoFrameRateCategory(settingsPresenter);
@@ -78,6 +79,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_ui_hide_behavior), options);
+    }
+
+    private void appendVideoBufferCategory(AppSettingsPresenter settingsPresenter) {
+        OptionCategory category = HqDialogManager.createVideoBufferCategory(getContext(), mPlayerUIData);
+        settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
     private void appendVideoPresetsCategory(AppSettingsPresenter settingsPresenter) {

@@ -11,9 +11,7 @@ public class AppPrefs extends SharedPreferencesBase {
     private static final String TAG = AppPrefs.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static AppPrefs sInstance;
-    private static final String VIDEO_FORMAT = "video_format";
     private static final String COMPLETED_ONBOARDING = "completed_onboarding";
-    private static final String VIDEO_BUFFER_TYPE = "video_buffer_type";
     private static final String BACKUP_DATA = "backup_data";
     private static final String VIDEO_LOADER_DATA = "video_loader_data";
     private static final String STATE_UPDATER_DATA = "state_updater_data";
@@ -47,14 +45,6 @@ public class AppPrefs extends SharedPreferencesBase {
 
     public boolean getCompletedOnboarding() {
         return getBoolean(COMPLETED_ONBOARDING, false);
-    }
-
-    public int getVideoBufferType(int defaultBufferType) {
-        return getInt(VIDEO_BUFFER_TYPE, defaultBufferType);
-    }
-
-    public void setVideoBufferType(int bufferType) {
-        putInt(VIDEO_BUFFER_TYPE, bufferType);
     }
 
     public void setDefaultDisplayMode(String mode) {

@@ -6,6 +6,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController.OnBufferSelected;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -47,7 +48,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     @Override
     public void onInitDone() {
         mSettingsPresenter = AppSettingsPresenter.instance(getActivity());
-        getController().setBuffer(AppPrefs.instance(getActivity()).getVideoBufferType(PlaybackEngineController.BUFFER_LOW));
+        getController().setBuffer(mPlayerData.getVideoBufferType());
         mPlayerData = PlayerData.instance(getActivity());
     }
 
@@ -95,23 +96,10 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     }
 
     private void addVideoBufferCategory() {
-        String videoBuffer = getActivity().getString(R.string.video_buffer);
-        List<OptionItem> optionItems = new ArrayList<>();
-        optionItems.add(createBufferOption(R.string.video_buffer_size_low, PlaybackEngineController.BUFFER_LOW));
-        optionItems.add(createBufferOption(R.string.video_buffer_size_med, PlaybackEngineController.BUFFER_MED));
-        optionItems.add(createBufferOption(R.string.video_buffer_size_high, PlaybackEngineController.BUFFER_HIGH));
-        addRadioCategory(OptionCategory.from(VIDEO_BUFFER_ID, videoBuffer, optionItems));
-    }
-
-    private OptionItem createBufferOption(int titleResId, int val) {
-        return UiOptionItem.from(
-                getActivity().getString(titleResId),
-                optionItem -> {
-                    getController().setBuffer(val);
-                    AppPrefs.instance(getActivity()).setVideoBufferType(val);
-                    getController().restartEngine();
-                },
-                getController().getBuffer() == val);
+        addRadioCategory(createVideoBufferCategory(getActivity(), mPlayerData, type -> {
+            getController().setBuffer(type);
+            getController().restartEngine();
+        }));
     }
 
     private void internalStuff() {
@@ -281,5 +269,28 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         }
 
         return result;
+    }
+
+    public static OptionCategory createVideoBufferCategory(Context context, PlayerData playerData) {
+        return createVideoBufferCategory(context, playerData, type -> {});
+    }
+
+    private static OptionCategory createVideoBufferCategory(Context context, PlayerData playerData, OnBufferSelected onBufferSelected) {
+        String videoBuffer = context.getString(R.string.video_buffer);
+        List<OptionItem> optionItems = new ArrayList<>();
+        optionItems.add(createBufferOption(context, playerData, R.string.video_buffer_size_low, PlaybackEngineController.BUFFER_LOW, onBufferSelected));
+        optionItems.add(createBufferOption(context, playerData, R.string.video_buffer_size_med, PlaybackEngineController.BUFFER_MED, onBufferSelected));
+        optionItems.add(createBufferOption(context, playerData, R.string.video_buffer_size_high, PlaybackEngineController.BUFFER_HIGH, onBufferSelected));
+        return OptionCategory.from(VIDEO_BUFFER_ID, videoBuffer, optionItems);
+    }
+
+    private static OptionItem createBufferOption(Context context, PlayerData playerData, int titleResId, int type, OnBufferSelected onBufferSelected) {
+        return UiOptionItem.from(
+                context.getString(titleResId),
+                optionItem -> {
+                    playerData.setVideoBufferType(type);
+                    onBufferSelected.onBufferSelected(type);
+                },
+                playerData.getVideoBufferType() == type);
     }
 }
