@@ -652,13 +652,16 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
-    public void setBuffer(int bufferType) {
-        mPlayerInitializer.setBuffer(bufferType);
+    public void setBufferType(int bufferType) {
+        if (mPlayerInitializer.getBufferType() != bufferType) {
+            mPlayerInitializer.setBufferType(bufferType);
+            restartEngine();
+        }
     }
 
     @Override
-    public int getBuffer() {
-        return mPlayerInitializer.getBuffer();
+    public int getBufferType() {
+        return mPlayerInitializer.getBufferType();
     }
 
     // End Engine Events

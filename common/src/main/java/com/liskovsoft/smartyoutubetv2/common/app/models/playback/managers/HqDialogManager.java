@@ -48,7 +48,11 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     public void onInitDone() {
         mPlayerData = PlayerData.instance(getActivity());
         mSettingsPresenter = AppSettingsPresenter.instance(getActivity());
-        getController().setBuffer(mPlayerData.getVideoBufferType());
+    }
+
+    @Override
+    public void onViewResumed() {
+        getController().setBufferType(mPlayerData.getVideoBufferType());
     }
 
     @Override
@@ -96,8 +100,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
     private void addVideoBufferCategory() {
         addRadioCategory(createVideoBufferCategory(getActivity(), mPlayerData, type -> {
-            getController().setBuffer(type);
-            getController().restartEngine();
+            getController().setBufferType(type);
         }));
     }
 

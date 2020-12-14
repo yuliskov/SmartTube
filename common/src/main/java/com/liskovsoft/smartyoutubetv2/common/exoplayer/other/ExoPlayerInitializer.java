@@ -78,11 +78,11 @@ public class ExoPlayerInitializer {
         return baseBuilder.createDefaultLoadControl();
     }
 
-    public void setBuffer(int bufferType) {
-        mBufferType = bufferType;
+    public void setBufferType(int type) {
+        mBufferType = type;
     }
 
-    public int getBuffer() {
+    public int getBufferType() {
         return mBufferType;
     }
 }
