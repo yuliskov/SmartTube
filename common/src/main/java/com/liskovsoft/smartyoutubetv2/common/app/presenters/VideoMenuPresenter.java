@@ -81,7 +81,7 @@ public class VideoMenuPresenter extends BasePresenter<SplashView> {
 
         appendAddToPlaylist(videoPlaylistInfos);
         appendOpenChannelButton();
-        //appendOpenChannelUploadsButton();
+        appendOpenChannelUploadsButton();
         appendNotInterestedButton();
 
         mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction, mAddAction, mSignCheckAction, mNotInterestedAction));
