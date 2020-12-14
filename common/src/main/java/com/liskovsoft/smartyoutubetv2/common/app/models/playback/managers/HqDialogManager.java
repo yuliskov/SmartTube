@@ -15,7 +15,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.OnFormatSelected;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.Preset;
-import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.ArrayList;
@@ -47,9 +46,9 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
     @Override
     public void onInitDone() {
+        mPlayerData = PlayerData.instance(getActivity());
         mSettingsPresenter = AppSettingsPresenter.instance(getActivity());
         getController().setBuffer(mPlayerData.getVideoBufferType());
-        mPlayerData = PlayerData.instance(getActivity());
     }
 
     @Override
