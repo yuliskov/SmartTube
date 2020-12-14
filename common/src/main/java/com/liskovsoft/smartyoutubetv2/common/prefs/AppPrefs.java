@@ -49,15 +49,6 @@ public class AppPrefs extends SharedPreferencesBase {
         return getBoolean(COMPLETED_ONBOARDING, false);
     }
 
-    public void setFormat(FormatItem track) {
-        putString(VIDEO_FORMAT + track.getType(), track.toString());
-    }
-
-    public FormatItem getFormat(int type, FormatItem defaultFormat) {
-        FormatItem formatItem = ExoFormatItem.from(getString(VIDEO_FORMAT + type, null));
-        return formatItem != null ? formatItem : defaultFormat;
-    }
-
     public int getVideoBufferType(int defaultBufferType) {
         return getInt(VIDEO_BUFFER_TYPE, defaultBufferType);
     }

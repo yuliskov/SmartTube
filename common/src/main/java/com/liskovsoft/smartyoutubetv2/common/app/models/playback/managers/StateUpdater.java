@@ -9,6 +9,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -32,13 +33,16 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private float mLastSpeed = -1;
     private AppPrefs mPrefs;
     private Disposable mHistoryAction;
+    private PlayerData mPlayerData;
 
     @Override
     public void onInitDone() {
         mPrefs = AppPrefs.instance(getActivity());
-        mVideoFormat = mPrefs.getFormat(FormatItem.TYPE_VIDEO, FormatItem.VIDEO_HD_AVC_30);
-        mAudioFormat = mPrefs.getFormat(FormatItem.TYPE_AUDIO, FormatItem.AUDIO_HQ_MP4A);
-        mSubtitleFormat = mPrefs.getFormat(FormatItem.TYPE_SUBTITLE, null);
+        mPlayerData = PlayerData.instance(getActivity());
+
+        mVideoFormat = Helpers.get(mPlayerData.getVideoFormat(), FormatItem.VIDEO_HD_AVC_30);
+        mAudioFormat = Helpers.get(mPlayerData.getAudioFormat(), FormatItem.AUDIO_HQ_MP4A);
+        mSubtitleFormat = Helpers.get(mPlayerData.getSubtitleFormat(), null);
 
         restoreState();
     }
@@ -144,14 +148,13 @@ public class StateUpdater extends PlayerEventListenerHelper {
     public void onTrackSelected(FormatItem track) {
         if (track.getType() == FormatItem.TYPE_VIDEO && !getController().isInPIPMode()) {
             mVideoFormat = track;
+            mPlayerData.setVideoFormat(track);
         } else if (track.getType() == FormatItem.TYPE_AUDIO) {
             mAudioFormat = track;
+            mPlayerData.setAudioFormat(track);
         } else if (track.getType() == FormatItem.TYPE_SUBTITLE) {
             mSubtitleFormat = track;
-        }
-
-        if (!getController().isInPIPMode()) {
-            mPrefs.setFormat(track);
+            mPlayerData.setSubtitleFormat(track);
         }
     }
 
@@ -342,7 +345,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         return newPositionMs;
     }
 
-    public FormatItem getVideoPreset() {
+    public FormatItem getVideoFormat() {
         return mVideoFormat;
     }
 

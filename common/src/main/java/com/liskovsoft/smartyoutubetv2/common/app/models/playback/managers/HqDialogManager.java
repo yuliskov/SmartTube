@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.OnFormatSelected;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.Preset;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -148,53 +149,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     }
 
     private void addPresetsCategory() {
-        Preset[] presets = {
-                new Preset("SD     30fps    avc", "640,360,30,avc"),
-                new Preset("SD     30fps    vp9", "640,360,30,vp9"),
-                new Preset("SD     60fps    avc", "640,360,60,avc"),
-                new Preset("SD     60fps    vp9", "640,360,60,vp9"),
-                new Preset("HD     30fps    avc", "1280,720,30,avc"),
-                new Preset("HD     30fps    vp9", "1280,720,30,vp9"),
-                new Preset("HD     60fps    avc", "1280,720,60,avc"),
-                new Preset("HD     60fps    vp9", "1280,720,60,vp9"),
-                new Preset("FHD    30fps    avc", "1920,1080,30,avc"),
-                new Preset("FHD    30fps    vp9", "1920,1080,30,vp9"),
-                new Preset("FHD    30fps    vp9+hdr", "1920,1080,30,vp9.2"),
-                new Preset("FHD    60fps    avc", "1920,1080,60,avc"),
-                new Preset("FHD    60fps    vp9", "1920,1080,60,vp9"),
-                new Preset("FHD    60fps    vp9+hdr", "1920,1080,60,vp9.2"),
-                new Preset("2K     30fps    vp9", "2560,1440,30,vp9"),
-                new Preset("2K     30fps    vp9+hdr", "2560,1440,30,vp9.2"),
-                new Preset("2K     60fps    vp9", "2560,1440,60,vp9"),
-                new Preset("2K     60fps    vp9+hdr", "2560,1440,60,vp9.2"),
-                new Preset("4K     30fps    vp9", "3840,2160,30,vp9"),
-                new Preset("4K     30fps    vp9+hdr", "3840,2160,30,vp9.2"),
-                new Preset("4K     60fps    vp9", "3840,2160,60,vp9"),
-                new Preset("4K     60fps    vp9+hdr", "3840,2160,60,vp9.2"),
-                new Preset("8K     30fps    vp9", "7680,4320,30,vp9"),
-                new Preset("8K     30fps    vp9+hdr", "7680,4320,30,vp9.2"),
-                new Preset("8K     60fps    vp9", "7680,4320,60,vp9"),
-                new Preset("8K     60fps    vp9+hdr", "7680,4320,60,vp9.2")
-        };
-
-        addRadioCategory(OptionCategory.from(
-                VIDEO_PRESETS_ID,
-                getActivity().getString(R.string.title_video_presets),
-                fromPresets(presets)));
-    }
-
-    private List<OptionItem> fromPresets(Preset[] presets) {
-        List<OptionItem> result = new ArrayList<>();
-
-        if (mStateUpdater.getVideoPreset() != null) {
-            for (Preset preset : presets) {
-                result.add(0, UiOptionItem.from(preset.name,
-                        option -> getController().selectFormat(preset.format),
-                        mStateUpdater.getVideoPreset().equals(preset.format)));
-            }
-        }
-
-        return result;
+        addRadioCategory(createVideoPresetsCategory(getActivity(), mPlayerData, format -> getController().selectFormat(format)));
     }
 
     public void addSingleOption(OptionCategory category) {
@@ -271,5 +226,60 @@ public class HqDialogManager extends PlayerEventListenerHelper {
                 }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_AUDIO));
 
         return OptionCategory.from(BACKGROUND_PLAYBACK_ID, categoryTitle, options);
+    }
+
+    public static OptionCategory createVideoPresetsCategory(Context context, PlayerData playerData) {
+        return createVideoPresetsCategory(context, playerData, format -> {});
+    }
+
+    private static OptionCategory createVideoPresetsCategory(Context context, PlayerData playerData, OnFormatSelected onFormatSelected) {
+        Preset[] presets = {
+                new Preset("SD     30fps    avc", "640,360,30,avc"),
+                new Preset("SD     30fps    vp9", "640,360,30,vp9"),
+                new Preset("SD     60fps    avc", "640,360,60,avc"),
+                new Preset("SD     60fps    vp9", "640,360,60,vp9"),
+                new Preset("HD     30fps    avc", "1280,720,30,avc"),
+                new Preset("HD     30fps    vp9", "1280,720,30,vp9"),
+                new Preset("HD     60fps    avc", "1280,720,60,avc"),
+                new Preset("HD     60fps    vp9", "1280,720,60,vp9"),
+                new Preset("FHD    30fps    avc", "1920,1080,30,avc"),
+                new Preset("FHD    30fps    vp9", "1920,1080,30,vp9"),
+                new Preset("FHD    30fps    vp9+hdr", "1920,1080,30,vp9.2"),
+                new Preset("FHD    60fps    avc", "1920,1080,60,avc"),
+                new Preset("FHD    60fps    vp9", "1920,1080,60,vp9"),
+                new Preset("FHD    60fps    vp9+hdr", "1920,1080,60,vp9.2"),
+                new Preset("2K     30fps    vp9", "2560,1440,30,vp9"),
+                new Preset("2K     30fps    vp9+hdr", "2560,1440,30,vp9.2"),
+                new Preset("2K     60fps    vp9", "2560,1440,60,vp9"),
+                new Preset("2K     60fps    vp9+hdr", "2560,1440,60,vp9.2"),
+                new Preset("4K     30fps    vp9", "3840,2160,30,vp9"),
+                new Preset("4K     30fps    vp9+hdr", "3840,2160,30,vp9.2"),
+                new Preset("4K     60fps    vp9", "3840,2160,60,vp9"),
+                new Preset("4K     60fps    vp9+hdr", "3840,2160,60,vp9.2"),
+                new Preset("8K     30fps    vp9", "7680,4320,30,vp9"),
+                new Preset("8K     30fps    vp9+hdr", "7680,4320,30,vp9.2"),
+                new Preset("8K     60fps    vp9", "7680,4320,60,vp9"),
+                new Preset("8K     60fps    vp9+hdr", "7680,4320,60,vp9.2")
+        };
+
+        return OptionCategory.from(
+                VIDEO_PRESETS_ID,
+                context.getString(R.string.title_video_presets),
+                fromPresets(presets, playerData, onFormatSelected));
+    }
+
+    private static List<OptionItem> fromPresets(Preset[] presets, PlayerData playerData, OnFormatSelected onFormatSelected) {
+        List<OptionItem> result = new ArrayList<>();
+
+        for (Preset preset : presets) {
+            result.add(0, UiOptionItem.from(preset.name,
+                    option -> {
+                        playerData.setVideoFormat(preset.format);
+                        onFormatSelected.onFormatSelected(preset.format);
+                    },
+                    preset.format.equals(playerData.getVideoFormat())));
+        }
+
+        return result;
     }
 }

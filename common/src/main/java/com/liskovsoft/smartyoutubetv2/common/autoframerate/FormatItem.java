@@ -29,4 +29,7 @@ public interface FormatItem {
             this.format = ExoFormatItem.fromVideoPreset(presetSpec);
         }
     }
+    interface OnFormatSelected {
+        void onFormatSelected(FormatItem format);
+    }
 }
