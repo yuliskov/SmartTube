@@ -79,12 +79,11 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
 
     @Override
     public void onViewResumed() {
-        AfrData afrData = mPlayerData.getAfrData();
-        mAutoFrameRateHelper.setFpsCorrectionEnabled(afrData.afrFpsCorrectionEnabled);
-        mAutoFrameRateHelper.setResolutionSwitchEnabled(afrData.afrResSwitchEnabled, false);
-
-        addUiOptions();
         if (!(BuildConfig.FLAVOR.equals("stbolshoetv"))) {
+            AfrData afrData = mPlayerData.getAfrData();
+            mAutoFrameRateHelper.setFpsCorrectionEnabled(afrData.afrFpsCorrectionEnabled);
+            mAutoFrameRateHelper.setResolutionSwitchEnabled(afrData.afrResSwitchEnabled, false);
+
             addUiOptions();
         }
     }

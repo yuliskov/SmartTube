@@ -37,11 +37,10 @@ public class AboutPresenter extends BasePresenter<Void> {
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
         settingsPresenter.clear();
 
-        if (!BuildConfig.FLAVOR.equals("stbolshoetv")) {
-            appendAutoUpdateSwitch(settingsPresenter);
+        appendAutoUpdateSwitch(settingsPresenter);
 
-            appendUpdateCheckButton(settingsPresenter);
-        }
+        appendUpdateCheckButton(settingsPresenter);
+
         appendSiteLink(settingsPresenter);
 
         appendDonation(settingsPresenter);
