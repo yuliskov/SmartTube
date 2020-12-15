@@ -7,14 +7,15 @@ import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController.OnBufferSelected;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.OnFormatSelected;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.Preset;
-import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.ArrayList;
@@ -46,9 +47,13 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
     @Override
     public void onInitDone() {
-        mSettingsPresenter = AppSettingsPresenter.instance(getActivity());
-        getController().setBuffer(AppPrefs.instance(getActivity()).getVideoBufferType(PlaybackEngineController.BUFFER_LOW));
         mPlayerData = PlayerData.instance(getActivity());
+        mSettingsPresenter = AppSettingsPresenter.instance(getActivity());
+    }
+
+    @Override
+    public void onViewResumed() {
+        getController().setBufferType(mPlayerData.getVideoBufferType());
     }
 
     @Override
@@ -97,23 +102,9 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     }
 
     private void addVideoBufferCategory() {
-        String videoBuffer = getActivity().getString(R.string.video_buffer);
-        List<OptionItem> optionItems = new ArrayList<>();
-        optionItems.add(createBufferOption(R.string.video_buffer_size_low, PlaybackEngineController.BUFFER_LOW));
-        optionItems.add(createBufferOption(R.string.video_buffer_size_med, PlaybackEngineController.BUFFER_MED));
-        optionItems.add(createBufferOption(R.string.video_buffer_size_high, PlaybackEngineController.BUFFER_HIGH));
-        addRadioCategory(OptionCategory.from(VIDEO_BUFFER_ID, videoBuffer, optionItems));
-    }
-
-    private OptionItem createBufferOption(int titleResId, int val) {
-        return UiOptionItem.from(
-                getActivity().getString(titleResId),
-                optionItem -> {
-                    getController().setBuffer(val);
-                    AppPrefs.instance(getActivity()).setVideoBufferType(val);
-                    getController().restartEngine();
-                },
-                getController().getBuffer() == val);
+        addRadioCategory(createVideoBufferCategory(getActivity(), mPlayerData, type -> {
+            getController().setBufferType(type);
+        }));
     }
 
     private void internalStuff() {
@@ -150,88 +141,8 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         addRadioCategory(category);
     }
 
-    public static OptionCategory createBackgroundPlaybackCategory(Context context, PlayerData playerData) {
-        return createBackgroundPlaybackCategory(context, playerData, () -> {});
-    }
-
-    public static OptionCategory createBackgroundPlaybackCategory(Context context, PlayerData playerData, Runnable onSetCallback) {
-        String categoryTitle = context.getString(R.string.category_background_playback);
-
-        List<OptionItem> options = new ArrayList<>();
-        options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_off),
-                optionItem -> {
-                    playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_NONE);
-                    onSetCallback.run();
-                }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_NONE));
-        if (Helpers.isAndroidTV(context) && Build.VERSION.SDK_INT < 26) { // useful only for pre-Oreo UI
-            options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_behind) + " (Android TV 5,6,7)",
-                    optionItem -> {
-                        playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_BEHIND);
-                        onSetCallback.run();
-                    }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_BEHIND));
-        }
-        options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_pip),
-                optionItem -> {
-                    playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_PIP);
-                    onSetCallback.run();
-                }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_PIP));
-        options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_only_audio),
-                optionItem -> {
-                    playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_AUDIO);
-                    onSetCallback.run();
-                }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_AUDIO));
-
-        return OptionCategory.from(BACKGROUND_PLAYBACK_ID, categoryTitle, options);
-    }
-
     private void addPresetsCategory() {
-        Preset[] presets = {
-                new Preset("SD     30fps    avc", "640,360,30,avc"),
-                new Preset("SD     30fps    vp9", "640,360,30,vp9"),
-                new Preset("SD     60fps    avc", "640,360,60,avc"),
-                new Preset("SD     60fps    vp9", "640,360,60,vp9"),
-                new Preset("HD     30fps    avc", "1280,720,30,avc"),
-                new Preset("HD     30fps    vp9", "1280,720,30,vp9"),
-                new Preset("HD     60fps    avc", "1280,720,60,avc"),
-                new Preset("HD     60fps    vp9", "1280,720,60,vp9"),
-                new Preset("FHD    30fps    avc", "1920,1080,30,avc"),
-                new Preset("FHD    30fps    vp9", "1920,1080,30,vp9"),
-                new Preset("FHD    30fps    vp9+hdr", "1920,1080,30,vp9.2"),
-                new Preset("FHD    60fps    avc", "1920,1080,60,avc"),
-                new Preset("FHD    60fps    vp9", "1920,1080,60,vp9"),
-                new Preset("FHD    60fps    vp9+hdr", "1920,1080,60,vp9.2"),
-                new Preset("2K     30fps    vp9", "2560,1440,30,vp9"),
-                new Preset("2K     30fps    vp9+hdr", "2560,1440,30,vp9.2"),
-                new Preset("2K     60fps    vp9", "2560,1440,60,vp9"),
-                new Preset("2K     60fps    vp9+hdr", "2560,1440,60,vp9.2"),
-                new Preset("4K     30fps    vp9", "3840,2160,30,vp9"),
-                new Preset("4K     30fps    vp9+hdr", "3840,2160,30,vp9.2"),
-                new Preset("4K     60fps    vp9", "3840,2160,60,vp9"),
-                new Preset("4K     60fps    vp9+hdr", "3840,2160,60,vp9.2"),
-                new Preset("8K     30fps    vp9", "7680,4320,30,vp9"),
-                new Preset("8K     30fps    vp9+hdr", "7680,4320,30,vp9.2"),
-                new Preset("8K     60fps    vp9", "7680,4320,60,vp9"),
-                new Preset("8K     60fps    vp9+hdr", "7680,4320,60,vp9.2")
-        };
-
-        addRadioCategory(OptionCategory.from(
-                VIDEO_PRESETS_ID,
-                getActivity().getString(R.string.title_video_presets),
-                fromPresets(presets)));
-    }
-
-    private List<OptionItem> fromPresets(Preset[] presets) {
-        List<OptionItem> result = new ArrayList<>();
-
-        if (mStateUpdater.getVideoPreset() != null) {
-            for (Preset preset : presets) {
-                result.add(0, UiOptionItem.from(preset.name,
-                        option -> getController().selectFormat(preset.format),
-                        mStateUpdater.getVideoPreset().equals(preset.format)));
-            }
-        }
-
-        return result;
+        addRadioCategory(createVideoPresetsCategory(getActivity(), mPlayerData, format -> getController().selectFormat(format)));
     }
 
     public void addSingleOption(OptionCategory category) {
@@ -274,5 +185,117 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         for (OptionCategory category : mRadioCategories.values()) {
             mSettingsPresenter.appendRadioCategory(category.title, category.options);
         }
+    }
+
+    public static OptionCategory createBackgroundPlaybackCategory(Context context, PlayerData playerData) {
+        return createBackgroundPlaybackCategory(context, playerData, () -> {});
+    }
+
+    private static OptionCategory createBackgroundPlaybackCategory(Context context, PlayerData playerData, Runnable onSetCallback) {
+        String categoryTitle = context.getString(R.string.category_background_playback);
+
+        List<OptionItem> options = new ArrayList<>();
+        options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_off),
+                optionItem -> {
+                    playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_NONE);
+                    onSetCallback.run();
+                }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_NONE));
+        if (Helpers.isAndroidTV(context) && Build.VERSION.SDK_INT < 26) { // useful only for pre-Oreo UI
+            options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_behind) + " (Android TV 5,6,7)",
+                    optionItem -> {
+                        playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_BEHIND);
+                        onSetCallback.run();
+                    }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_BEHIND));
+        }
+        options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_pip),
+                optionItem -> {
+                    playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_PIP);
+                    onSetCallback.run();
+                }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_PIP));
+        options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_only_audio),
+                optionItem -> {
+                    playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_AUDIO);
+                    onSetCallback.run();
+                }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_AUDIO));
+
+        return OptionCategory.from(BACKGROUND_PLAYBACK_ID, categoryTitle, options);
+    }
+
+    public static OptionCategory createVideoPresetsCategory(Context context, PlayerData playerData) {
+        return createVideoPresetsCategory(context, playerData, format -> {});
+    }
+
+    private static OptionCategory createVideoPresetsCategory(Context context, PlayerData playerData, OnFormatSelected onFormatSelected) {
+        Preset[] presets = {
+                new Preset("SD     30fps    avc", "640,360,30,avc"),
+                new Preset("SD     30fps    vp9", "640,360,30,vp9"),
+                new Preset("SD     60fps    avc", "640,360,60,avc"),
+                new Preset("SD     60fps    vp9", "640,360,60,vp9"),
+                new Preset("HD     30fps    avc", "1280,720,30,avc"),
+                new Preset("HD     30fps    vp9", "1280,720,30,vp9"),
+                new Preset("HD     60fps    avc", "1280,720,60,avc"),
+                new Preset("HD     60fps    vp9", "1280,720,60,vp9"),
+                new Preset("FHD    30fps    avc", "1920,1080,30,avc"),
+                new Preset("FHD    30fps    vp9", "1920,1080,30,vp9"),
+                new Preset("FHD    30fps    vp9+hdr", "1920,1080,30,vp9.2"),
+                new Preset("FHD    60fps    avc", "1920,1080,60,avc"),
+                new Preset("FHD    60fps    vp9", "1920,1080,60,vp9"),
+                new Preset("FHD    60fps    vp9+hdr", "1920,1080,60,vp9.2"),
+                new Preset("2K     30fps    vp9", "2560,1440,30,vp9"),
+                new Preset("2K     30fps    vp9+hdr", "2560,1440,30,vp9.2"),
+                new Preset("2K     60fps    vp9", "2560,1440,60,vp9"),
+                new Preset("2K     60fps    vp9+hdr", "2560,1440,60,vp9.2"),
+                new Preset("4K     30fps    vp9", "3840,2160,30,vp9"),
+                new Preset("4K     30fps    vp9+hdr", "3840,2160,30,vp9.2"),
+                new Preset("4K     60fps    vp9", "3840,2160,60,vp9"),
+                new Preset("4K     60fps    vp9+hdr", "3840,2160,60,vp9.2"),
+                new Preset("8K     30fps    vp9", "7680,4320,30,vp9"),
+                new Preset("8K     30fps    vp9+hdr", "7680,4320,30,vp9.2"),
+                new Preset("8K     60fps    vp9", "7680,4320,60,vp9"),
+                new Preset("8K     60fps    vp9+hdr", "7680,4320,60,vp9.2")
+        };
+
+        return OptionCategory.from(
+                VIDEO_PRESETS_ID,
+                context.getString(R.string.title_video_presets),
+                fromPresets(presets, playerData, onFormatSelected));
+    }
+
+    private static List<OptionItem> fromPresets(Preset[] presets, PlayerData playerData, OnFormatSelected onFormatSelected) {
+        List<OptionItem> result = new ArrayList<>();
+
+        for (Preset preset : presets) {
+            result.add(0, UiOptionItem.from(preset.name,
+                    option -> {
+                        playerData.setVideoFormat(preset.format);
+                        onFormatSelected.onFormatSelected(preset.format);
+                    },
+                    preset.format.equals(playerData.getVideoFormat())));
+        }
+
+        return result;
+    }
+
+    public static OptionCategory createVideoBufferCategory(Context context, PlayerData playerData) {
+        return createVideoBufferCategory(context, playerData, type -> {});
+    }
+
+    private static OptionCategory createVideoBufferCategory(Context context, PlayerData playerData, OnBufferSelected onBufferSelected) {
+        String videoBuffer = context.getString(R.string.video_buffer);
+        List<OptionItem> optionItems = new ArrayList<>();
+        optionItems.add(createBufferOption(context, playerData, R.string.video_buffer_size_low, PlaybackEngineController.BUFFER_LOW, onBufferSelected));
+        optionItems.add(createBufferOption(context, playerData, R.string.video_buffer_size_med, PlaybackEngineController.BUFFER_MED, onBufferSelected));
+        optionItems.add(createBufferOption(context, playerData, R.string.video_buffer_size_high, PlaybackEngineController.BUFFER_HIGH, onBufferSelected));
+        return OptionCategory.from(VIDEO_BUFFER_ID, videoBuffer, optionItems);
+    }
+
+    private static OptionItem createBufferOption(Context context, PlayerData playerData, int titleResId, int type, OnBufferSelected onBufferSelected) {
+        return UiOptionItem.from(
+                context.getString(titleResId),
+                optionItem -> {
+                    playerData.setVideoBufferType(type);
+                    onBufferSelected.onBufferSelected(type);
+                },
+                playerData.getVideoBufferType() == type);
     }
 }

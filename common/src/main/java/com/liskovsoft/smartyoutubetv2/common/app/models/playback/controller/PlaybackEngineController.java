@@ -39,6 +39,9 @@ public interface PlaybackEngineController {
     boolean hasNoMedia();
     void setSpeed(float speed);
     float getSpeed();
-    void setBuffer(int bufferType);
-    int getBuffer();
+    void setBufferType(int bufferType);
+    int getBufferType();
+    interface OnBufferSelected {
+        void onBufferSelected(int type);
+    }
 }

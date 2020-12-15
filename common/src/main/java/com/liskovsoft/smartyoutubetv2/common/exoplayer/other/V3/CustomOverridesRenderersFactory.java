@@ -8,6 +8,7 @@ import com.google.android.exoplayer2.Renderer;
 import com.google.android.exoplayer2.audio.AudioRendererEventListener;
 import com.google.android.exoplayer2.audio.AudioSink;
 import com.google.android.exoplayer2.audio.MediaCodecAudioRenderer;
+import com.google.android.exoplayer2.mediacodec.MediaCodecRenderer;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
 import com.google.android.exoplayer2.video.MediaCodecVideoRenderer;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
@@ -29,7 +30,7 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
     public CustomOverridesRenderersFactory(FragmentActivity activity) {
         super(activity);
         setExtensionRendererMode(EXTENSION_RENDERER_MODE_ON);
-        //experimentalSetVideoMediaCodecOperationMode(MediaCodecRenderer.OPERATION_MODE_ASYNCHRONOUS_DEDICATED_THREAD);
+        experimentalSetVideoMediaCodecOperationMode(MediaCodecRenderer.OPERATION_MODE_ASYNCHRONOUS_DEDICATED_THREAD_ASYNCHRONOUS_QUEUEING);
     }
 
     @Override

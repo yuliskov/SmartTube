@@ -3,8 +3,10 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager.AfrData;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 
 public class PlayerData {
     public static final int ONLY_UI = 0;
@@ -27,6 +29,10 @@ public class PlayerData {
     private boolean mIsRemainingTimeEnabled;
     private int mBackgroundPlaybackType;
     private AfrData mAfrData;
+    private FormatItem mVideoFormat;
+    private FormatItem mAudioFormat;
+    private FormatItem mSubtitleFormat;
+    private int mVideoBufferType;
 
     public PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -122,6 +128,42 @@ public class PlayerData {
         persistData();
     }
 
+    public FormatItem getVideoFormat() {
+        return mVideoFormat;
+    }
+
+    public void setVideoFormat(FormatItem format) {
+        mVideoFormat = format;
+        persistData();
+    }
+
+    public FormatItem getAudioFormat() {
+        return mAudioFormat;
+    }
+
+    public void setAudioFormat(FormatItem format) {
+        mAudioFormat = format;
+        persistData();
+    }
+
+    public FormatItem getSubtitleFormat() {
+        return mSubtitleFormat;
+    }
+
+    public void setSubtitleFormat(FormatItem format) {
+        mSubtitleFormat = format;
+        persistData();
+    }
+
+    public void setVideoBufferType(int type) {
+        mVideoBufferType = type;
+        persistData();
+    }
+
+    public int getVideoBufferType() {
+        return mVideoBufferType;
+    }
+
     private void restoreData() {
         String data = mPrefs.getPlayerData();
 
@@ -136,11 +178,17 @@ public class PlayerData {
         mIsRemainingTimeEnabled = Helpers.parseBoolean(split, 6, true);
         mBackgroundPlaybackType = Helpers.parseInt(split, 7, BACKGROUND_PLAYBACK_NONE);
         mAfrData = AfrData.from(Helpers.parseStr(split, 8));
+        mVideoFormat = ExoFormatItem.from(Helpers.parseStr(split, 9));
+        mAudioFormat = ExoFormatItem.from(Helpers.parseStr(split, 10));
+        mSubtitleFormat = ExoFormatItem.from(Helpers.parseStr(split, 11));
+        mVideoBufferType = Helpers.parseInt(split, 12, PlaybackEngineController.BUFFER_LOW);
     }
 
     private void persistData() {
         mPrefs.setPlayerData(Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec,
                 mIsShowFullDateEnabled, mIsSeekPreviewEnabled, mIsPauseOnSeekEnabled,
-                mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundPlaybackType, mAfrData.toString()));
+                mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundPlaybackType, Helpers.toString(mAfrData),
+                Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mVideoFormat),
+                mVideoBufferType));
     }
 }
