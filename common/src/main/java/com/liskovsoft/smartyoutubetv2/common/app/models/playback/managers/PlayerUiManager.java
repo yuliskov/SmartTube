@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
@@ -14,6 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUiController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader.MetadataListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
@@ -21,6 +23,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.OnSelectSubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -34,6 +37,7 @@ import java.util.List;
 public class PlayerUiManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = PlayerUiManager.class.getSimpleName();
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
+    private static final int SUBTITLE_STYLES_ID = 45;
     private final Handler mHandler;
     private final MediaItemManager mMediaItemManager;
     private boolean mEngineReady;
@@ -113,11 +117,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onSubtitlesClicked() {
         List<FormatItem> subtitleFormats = getController().getSubtitleFormats();
-        List<SubtitleStyle> subtitleStyles = getController().getSubtitleStyles();
 
         String subtitlesCategoryTitle = getActivity().getString(R.string.subtitle_category_title);
         String subtitleFormatsTitle = getActivity().getString(R.string.subtitle_language);
-        String subtitleStyleTitle = getActivity().getString(R.string.subtitle_style);
 
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getActivity());
 
@@ -128,22 +130,13 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
                         option -> getController().selectFormat(UiOptionItem.toFormat(option)),
                         getActivity().getString(R.string.subtitles_disabled)));
 
-        settingsPresenter.appendRadioCategory(subtitleStyleTitle, fromSubtitleStyles(subtitleStyles));
+        OptionCategory category = createSubtitleStylesCategory(
+                getActivity(), mPlayerData,
+                style -> getController().setSubtitleStyle(style));
+
+        settingsPresenter.appendRadioCategory(category.title, category.options);
 
         settingsPresenter.showDialog(subtitlesCategoryTitle);
-    }
-    
-    private List<OptionItem> fromSubtitleStyles(List<SubtitleStyle> subtitleStyles) {
-        List<OptionItem> styleOptions = new ArrayList<>();
-
-        for (SubtitleStyle subtitleStyle : subtitleStyles) {
-            styleOptions.add(UiOptionItem.from(
-                    getActivity().getString(subtitleStyle.nameResId),
-                    option -> getController().setSubtitleStyle(subtitleStyle),
-                    subtitleStyle.equals(getController().getSubtitleStyle())));
-        }
-
-        return styleOptions;
     }
 
     @Override
@@ -311,5 +304,33 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     private interface MediaItemObservable {
         Observable<Void> call(MediaItem item);
+    }
+
+    public static OptionCategory createSubtitleStylesCategory(Context context, PlayerData playerData) {
+        return createSubtitleStylesCategory(context, playerData, style -> {});
+    }
+
+    private static OptionCategory createSubtitleStylesCategory(Context context, PlayerData playerData, OnSelectSubtitleStyle onSelectSubtitleStyle) {
+        List<SubtitleStyle> subtitleStyles = playerData.getSubtitleStyles();
+        
+        String subtitleStyleTitle = context.getString(R.string.subtitle_style);
+
+        return OptionCategory.from(SUBTITLE_STYLES_ID, subtitleStyleTitle, fromSubtitleStyles(context, playerData, subtitleStyles, onSelectSubtitleStyle));
+    }
+
+    private static List<OptionItem> fromSubtitleStyles(Context context, PlayerData playerData, List<SubtitleStyle> subtitleStyles, OnSelectSubtitleStyle onSelectSubtitleStyle) {
+        List<OptionItem> styleOptions = new ArrayList<>();
+
+        for (SubtitleStyle subtitleStyle : subtitleStyles) {
+            styleOptions.add(UiOptionItem.from(
+                    context.getString(subtitleStyle.nameResId),
+                    option -> {
+                        playerData.setSubtitleStyle(subtitleStyle);
+                        onSelectSubtitleStyle.onSelectSubtitleStyle(subtitleStyle);
+                    },
+                    subtitleStyle.equals(playerData.getSubtitleStyle())));
+        }
+
+        return styleOptions;
     }
 }

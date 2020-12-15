@@ -4,6 +4,7 @@ import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HqDialogManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -34,6 +35,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendVideoPresetsCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
         appendAutoFrameRateCategory(settingsPresenter);
+        appendSubtitleStyleCategory(settingsPresenter);
         appendOKButtonCategory(settingsPresenter);
         appendUIAutoHideCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
@@ -99,6 +101,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendAutoFrameRateCategory(AppSettingsPresenter settingsPresenter) {
         OptionCategory category = AutoFrameRateManager.createAutoFrameRateCategory(getContext(), mPlayerUIData);
         settingsPresenter.appendCheckedCategory(category.title, category.options);
+    }
+
+    private void appendSubtitleStyleCategory(AppSettingsPresenter settingsPresenter) {
+        OptionCategory category = PlayerUiManager.createSubtitleStylesCategory(getContext(), mPlayerUIData);
+        settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
     private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {

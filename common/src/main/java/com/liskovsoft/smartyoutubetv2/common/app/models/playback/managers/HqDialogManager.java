@@ -278,12 +278,12 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     }
 
     private static OptionCategory createVideoBufferCategory(Context context, PlayerData playerData, OnBufferSelected onBufferSelected) {
-        String videoBuffer = context.getString(R.string.video_buffer);
+        String videoBufferTitle = context.getString(R.string.video_buffer);
         List<OptionItem> optionItems = new ArrayList<>();
         optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_low, PlaybackEngineController.BUFFER_LOW, onBufferSelected));
         optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_med, PlaybackEngineController.BUFFER_MED, onBufferSelected));
         optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_high, PlaybackEngineController.BUFFER_HIGH, onBufferSelected));
-        return OptionCategory.from(VIDEO_BUFFER_ID, videoBuffer, optionItems);
+        return OptionCategory.from(VIDEO_BUFFER_ID, videoBufferTitle, optionItems);
     }
 
     private static OptionItem createVideoBufferOption(Context context, PlayerData playerData, int titleResId, int type, OnBufferSelected onBufferSelected) {

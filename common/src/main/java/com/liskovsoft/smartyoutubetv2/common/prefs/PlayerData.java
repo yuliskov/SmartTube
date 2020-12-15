@@ -2,11 +2,17 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import com.google.android.exoplayer2.text.CaptionStyleCompat;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager.AfrData;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerData {
     public static final int ONLY_UI = 0;
@@ -33,9 +39,12 @@ public class PlayerData {
     private FormatItem mAudioFormat;
     private FormatItem mSubtitleFormat;
     private int mVideoBufferType;
+    private final List<SubtitleStyle> mSubtitleStyles = new ArrayList<>();
+    private int mSubtitleStyleIndex;
 
     public PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
+        initSubtitleStyles();
         restoreData();
     }
 
@@ -175,6 +184,26 @@ public class PlayerData {
         return mVideoBufferType;
     }
 
+    public List<SubtitleStyle> getSubtitleStyles() {
+        return mSubtitleStyles;
+    }
+
+    public SubtitleStyle getSubtitleStyle() {
+        return mSubtitleStyles.get(mSubtitleStyleIndex);
+    }
+
+    public void setSubtitleStyle(SubtitleStyle subtitleStyle) {
+        mSubtitleStyleIndex = mSubtitleStyles.indexOf(subtitleStyle);
+        persistData();
+    }
+
+    private void initSubtitleStyles() {
+        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_default, R.color.light_grey, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
+        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_semi_transparent_bg, R.color.light_grey, R.color.semi_grey, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
+        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_black_bg, R.color.light_grey, R.color.black, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
+        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_yellow, R.color.yellow, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
+    }
+
     private void restoreData() {
         String data = mPrefs.getPlayerData();
 
@@ -193,6 +222,7 @@ public class PlayerData {
         mAudioFormat = ExoFormatItem.from(Helpers.parseStr(split, 10));
         mSubtitleFormat = ExoFormatItem.from(Helpers.parseStr(split, 11));
         mVideoBufferType = Helpers.parseInt(split, 12, PlaybackEngineController.BUFFER_LOW);
+        mSubtitleStyleIndex = Helpers.parseInt(split, 13, 1);
     }
 
     private void persistData() {
@@ -200,6 +230,6 @@ public class PlayerData {
                 mIsShowFullDateEnabled, mIsSeekPreviewEnabled, mIsPauseOnSeekEnabled,
                 mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundPlaybackType, Helpers.toString(mAfrData),
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
-                mVideoBufferType));
+                mVideoBufferType, mSubtitleStyleIndex));
     }
 }
