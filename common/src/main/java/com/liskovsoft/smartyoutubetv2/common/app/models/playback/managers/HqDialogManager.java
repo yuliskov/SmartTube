@@ -264,10 +264,10 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         for (Preset preset : presets) {
             result.add(0, UiOptionItem.from(preset.name,
                     option -> {
-                        playerData.setVideoFormat(preset.format);
+                        playerData.setFormat(preset.format);
                         onFormatSelected.onFormatSelected(preset.format);
                     },
-                    preset.format.equals(playerData.getVideoFormat())));
+                    preset.format.equals(playerData.getFormat(FormatItem.TYPE_VIDEO))));
         }
 
         return result;

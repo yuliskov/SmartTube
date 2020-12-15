@@ -32,4 +32,7 @@ public interface FormatItem {
     interface OnFormatSelected {
         void onFormatSelected(FormatItem format);
     }
+    static FormatItem checkFormat(FormatItem format, int type) {
+        return format != null && format.getType() == type ? format : null;
+    }
 }

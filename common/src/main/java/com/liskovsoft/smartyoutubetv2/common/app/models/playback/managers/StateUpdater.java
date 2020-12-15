@@ -40,9 +40,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
         mPrefs = AppPrefs.instance(getActivity());
         mPlayerData = PlayerData.instance(getActivity());
 
-        mVideoFormat = Helpers.get(mPlayerData.getVideoFormat(), FormatItem.VIDEO_HD_AVC_30);
-        mAudioFormat = Helpers.get(mPlayerData.getAudioFormat(), FormatItem.AUDIO_HQ_MP4A);
-        mSubtitleFormat = Helpers.get(mPlayerData.getSubtitleFormat(), null);
+        mVideoFormat = Helpers.get(mPlayerData.getFormat(FormatItem.TYPE_VIDEO), FormatItem.VIDEO_HD_AVC_30);
+        mAudioFormat = Helpers.get(mPlayerData.getFormat(FormatItem.TYPE_AUDIO), FormatItem.AUDIO_HQ_MP4A);
+        mSubtitleFormat = Helpers.get(mPlayerData.getFormat(FormatItem.TYPE_SUBTITLE), null);
 
         restoreState();
     }
@@ -128,7 +128,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         // In this state video length is not undefined.
         restorePosition(item);
         restoreSpeed(item);
-        // Player thinks that subs not enabled if did it too early (e.g. on source change event).
+        // Player thinks that subs not enabled if I enable it too early (e.g. on source change event).
         restoreSubtitleFormat();
     }
 
@@ -148,13 +148,14 @@ public class StateUpdater extends PlayerEventListenerHelper {
     public void onTrackSelected(FormatItem track) {
         if (track.getType() == FormatItem.TYPE_VIDEO && !getController().isInPIPMode()) {
             mVideoFormat = track;
-            mPlayerData.setVideoFormat(track);
         } else if (track.getType() == FormatItem.TYPE_AUDIO) {
             mAudioFormat = track;
-            mPlayerData.setAudioFormat(track);
         } else if (track.getType() == FormatItem.TYPE_SUBTITLE) {
             mSubtitleFormat = track;
-            mPlayerData.setSubtitleFormat(track);
+        }
+
+        if (!getController().isInPIPMode()) {
+            mPlayerData.setFormat(track);
         }
     }
 
@@ -262,17 +263,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
             mLastSpeed = Helpers.parseFloat(params);
         }
     }
-
-    ///**
-    // * Mirrors {@link #restoreVideoFormat()} to be sure that selection perfroms in any case
-    // */
-    //private void restoreVideoFormatSilent() {
-    //    if (getController().isInPIPMode()) {
-    //        getController().selectFormatSilent(FormatItem.VIDEO_SD_AVC_30);
-    //    } else if (mVideoFormat != null) {
-    //        getController().selectFormatSilent(mVideoFormat);
-    //    }
-    //}
 
     private void restoreVideoFormat() {
         if (getController().isInPIPMode()) {
