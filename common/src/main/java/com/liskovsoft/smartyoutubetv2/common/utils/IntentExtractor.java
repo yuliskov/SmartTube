@@ -29,6 +29,10 @@ public class IntentExtractor {
             videoId = intent.getData().getLastPathSegment();
         }
 
+        if (!isValid(videoId)) {
+            return null;
+        }
+
         return videoId;
     }
 
@@ -66,5 +70,9 @@ public class IntentExtractor {
         String[] split = intent.getData().toString().split(CHANNEL_URL);
 
         return split.length == 2 ? split[1] : null;
+    }
+
+    private static boolean isValid(String videoId) {
+        return videoId != null && videoId.length() == 11;
     }
 }
