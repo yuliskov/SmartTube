@@ -112,6 +112,9 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             return;
         }
 
+        onTransitionStart();
+        onTransitionPrepare();
+
         if (mInvalidate) {
             clear();
             mInvalidate = false;
@@ -133,6 +136,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             existingAdapter.append(group); // continue row
         }
 
+        onTransitionEnd();
         setItemIndex(mSelectedItemIndex);
     }
 
