@@ -21,7 +21,7 @@
     <string name="subtitle_category_title">Ondertitels</string>
     <string name="video_max_quality">Auto (max kwaliteit)</string>
     <string name="audio_max_quality">Auto (max kwaliteit)</string>
-    <string name="subtitles_disabled">Uit</string>
+    <string name="subtitles_disabled">Geen ondertitels</string>
     <string name="auto_frame_rate">Auto frame rate</string>
     <string name="frame_rate_correction">Fix fps:\n%s</string>
     <string name="category_background_playback">Afspelen op achtergrond</string>
