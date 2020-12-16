@@ -40,10 +40,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
         mPrefs = AppPrefs.instance(getActivity());
         mPlayerData = PlayerData.instance(getActivity());
 
-        mVideoFormat = Helpers.get(mPlayerData.getFormat(FormatItem.TYPE_VIDEO), FormatItem.VIDEO_HD_AVC_30);
-        mAudioFormat = Helpers.get(mPlayerData.getFormat(FormatItem.TYPE_AUDIO), FormatItem.AUDIO_HQ_MP4A);
-        mSubtitleFormat = Helpers.get(mPlayerData.getFormat(FormatItem.TYPE_SUBTITLE), null);
-
         restoreState();
     }
 
@@ -95,33 +91,20 @@ public class StateUpdater extends PlayerEventListenerHelper {
         mIsPlaying = true; // autoplay video from suggestions
     }
 
-    //@Override
-    //public void onEngineInitialized() {
-    //    // This is a backup place for format restoration.
-    //    // Usually you don't need to use it.
-    //    // There is rare bug when format didn't restore at all.
-    //    restoreVideoFormatSilent();
-    //}
-
     @Override
     public void onEngineInitialized() {
         // Fragment might be destroyed by system at this point.
         // So, to be sure, repeat format selection.
+        initFormats();
         restoreVideoFormat();
         restoreAudioFormat();
+        restoreSubtitleFormat();
     }
 
     @Override
     public void onEngineReleased() {
         saveState();
     }
-
-    //@Override
-    //public void onSourceChanged(Video item) {
-    //    // called before engine attempt to auto select track by itself
-    //    restoreVideoFormat();
-    //    restoreAudioFormat();
-    //}
 
     @Override
     public void onVideoLoaded(Video item) {
@@ -359,6 +342,12 @@ public class StateUpdater extends PlayerEventListenerHelper {
         mHistoryAction = historyObservable
                 .subscribeOn(Schedulers.newThread())
                 .subscribe((Void v) -> {}, error -> Log.e(TAG, "History update error: " + error));
+    }
+
+    private void initFormats() {
+        mVideoFormat = Helpers.get(mPlayerData.getFormat(FormatItem.TYPE_VIDEO), FormatItem.VIDEO_HD_AVC_30);
+        mAudioFormat = Helpers.get(mPlayerData.getFormat(FormatItem.TYPE_AUDIO), FormatItem.AUDIO_HQ_MP4A);
+        mSubtitleFormat = Helpers.get(mPlayerData.getFormat(FormatItem.TYPE_SUBTITLE), null);
     }
 
     private static class State {

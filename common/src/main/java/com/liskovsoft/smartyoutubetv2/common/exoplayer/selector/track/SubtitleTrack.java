@@ -22,7 +22,7 @@ public class SubtitleTrack extends MediaTrack {
 
         if (Helpers.equals(format.id, track2.format.id)) {
             result = 0;
-        } else if (Helpers.equals(format.language, track2.format.language)) {
+        } else if (Helpers.contains(format.language, track2.format.language)) {
             return 0;
         }
 

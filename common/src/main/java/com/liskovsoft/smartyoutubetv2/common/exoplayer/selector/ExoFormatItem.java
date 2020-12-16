@@ -31,6 +31,7 @@ public class ExoFormatItem implements FormatItem {
     private int mWidth;
     private int mHeight;
     private String mCodecs;
+    private String mLanguage;
     private String mFormatId;
 
     public static List<FormatItem> from(Set<MediaTrack> mediaTracks) {
@@ -78,6 +79,7 @@ public class ExoFormatItem implements FormatItem {
             formatItem.mWidth = format.width;
             formatItem.mHeight = format.height;
             formatItem.mCodecs = format.codecs;
+            formatItem.mLanguage = format.language;
             formatItem.mType = getType(format);
 
             if (format.id != null) {
@@ -130,11 +132,19 @@ public class ExoFormatItem implements FormatItem {
         if (obj instanceof ExoFormatItem) {
             ExoFormatItem formatItem = (ExoFormatItem) obj;
 
-            return mType == formatItem.mType &&
-                    mFrameRate == formatItem.mFrameRate &&
-                    mWidth == formatItem.mWidth &&
-                    mHeight == formatItem.mHeight &&
-                    mCodecs != null && mCodecs.equals(formatItem.mCodecs);
+            switch (mType) {
+                case TYPE_VIDEO:
+                case TYPE_AUDIO:
+                    return mType == formatItem.mType &&
+                            mFrameRate == formatItem.mFrameRate &&
+                            mWidth == formatItem.mWidth &&
+                            mHeight == formatItem.mHeight &&
+                            Helpers.equals(mCodecs, formatItem.mCodecs) &&
+                            Helpers.contains(mLanguage, formatItem.mLanguage);
+                case TYPE_SUBTITLE:
+                    return mType == formatItem.mType &&
+                            Helpers.contains(mLanguage, formatItem.mLanguage);
+            }
         }
 
         return super.equals(obj);
@@ -177,12 +187,12 @@ public class ExoFormatItem implements FormatItem {
 
         int type = Helpers.parseInt(split[0]);
         int rendererIndex = Helpers.parseInt(split[1]);
-        String id = split[2];
-        String codecs = split[3];
+        String id = Helpers.parseStr(split[2]);
+        String codecs = Helpers.parseStr(split[3]);
         int width = Helpers.parseInt(split[4]);
         int height = Helpers.parseInt(split[5]);
         float frameRate = Helpers.parseFloat(split[6]);
-        String language = split[7];
+        String language = Helpers.parseStr(split[7]);
 
         return from(type, rendererIndex, id, codecs, width, height, frameRate, language);
     }
@@ -281,10 +291,17 @@ public class ExoFormatItem implements FormatItem {
     }
 
     public static FormatItem fromSubtitleData(String langCode) {
+        if (langCode != null) {
+            // Only first part or lang code is accepted.
+            // E.g.: en, ru...
+            langCode = langCode.split("_")[0];
+        }
+
         ExoFormatItem formatItem = new ExoFormatItem();
         MediaTrack mediaTrack = MediaTrack.forRendererIndex(TrackSelectorManager.RENDERER_INDEX_SUBTITLE);
         formatItem.mTrack = mediaTrack;
         formatItem.mType = TYPE_SUBTITLE;
+        formatItem.mLanguage = langCode;
 
         mediaTrack.format = Format.createTextSampleFormat(null, null, -1, langCode);
 
