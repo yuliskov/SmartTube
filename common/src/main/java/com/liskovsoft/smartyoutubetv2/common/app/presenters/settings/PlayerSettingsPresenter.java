@@ -123,6 +123,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 currentFormat == null || currentFormat.equals(FormatItem.fromLanguage(null))));
 
         for (Entry<String, String> entry : locales.entrySet()) {
+            if (entry.getValue().isEmpty()) {
+                // Remove default language entry
+                continue;
+            }
+
             options.add(UiOptionItem.from(
                     entry.getKey(), option -> mPlayerData.setFormat(FormatItem.fromLanguage(entry.getValue())),
                     FormatItem.fromLanguage(entry.getValue()).equals(currentFormat)));

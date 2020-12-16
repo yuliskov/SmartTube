@@ -209,7 +209,7 @@ public class ExoFormatItem implements FormatItem {
         return from(TYPE_VIDEO, TrackSelectorManager.RENDERER_INDEX_VIDEO, null, codec, width, height, frameRate, null);
     }
 
-    public static FormatItem fromConstants(int resolution, int format, int frameRate) {
+    public static FormatItem fromVideoData(int resolution, int format, int frameRate) {
         ExoFormatItem formatItem = new ExoFormatItem();
         MediaTrack mediaTrack = MediaTrack.forRendererIndex(TrackSelectorManager.RENDERER_INDEX_VIDEO);
         formatItem.mTrack = mediaTrack;
@@ -258,7 +258,7 @@ public class ExoFormatItem implements FormatItem {
         return formatItem;
     }
 
-    public static FormatItem createFakeAudioFormat(int format) {
+    public static FormatItem fromAudioData(int format) {
         ExoFormatItem formatItem = new ExoFormatItem();
         MediaTrack mediaTrack = MediaTrack.forRendererIndex(TrackSelectorManager.RENDERER_INDEX_AUDIO);
         formatItem.mTrack = mediaTrack;
@@ -276,6 +276,17 @@ public class ExoFormatItem implements FormatItem {
         // Fake format. It's used in app internal comparison routine.
         mediaTrack.format = Format.createAudioSampleFormat(
                 null, null, codec, -1, -1,0, 0, null, null, 0, null);
+
+        return formatItem;
+    }
+
+    public static FormatItem fromSubtitleData(String langCode) {
+        ExoFormatItem formatItem = new ExoFormatItem();
+        MediaTrack mediaTrack = MediaTrack.forRendererIndex(TrackSelectorManager.RENDERER_INDEX_SUBTITLE);
+        formatItem.mTrack = mediaTrack;
+        formatItem.mType = TYPE_SUBTITLE;
+
+        mediaTrack.format = Format.createTextSampleFormat(null, null, -1, langCode);
 
         return formatItem;
     }
