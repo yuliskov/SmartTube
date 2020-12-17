@@ -129,6 +129,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         }
     }
 
+    // NOTE: depending of SDK version Start/Stop may be called with delay (SDK_INT > 23) or not called at all (PIP mode)!
+
     @Override
     public void onResume() {
         super.onResume();

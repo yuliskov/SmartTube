@@ -66,6 +66,9 @@ public class ThumbsBar extends LinearLayout {
         // According to the spec, the margin between thumbs to be 4dp
         mMeasuredMarginInPixel = context.getResources().getDimensionPixelSize(
                 R.dimen.lb_playback_transport_thumbs_margin);
+
+        // View carousel is useless if we're not using seeking by key frames.
+        setNumberOfThumbs(1);
     }
 
     /**

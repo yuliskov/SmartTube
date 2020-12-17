@@ -189,10 +189,10 @@ public class PlaybackActivity extends LeanbackActivity {
     public void onUserLeaveHint () {
         if (mPlaybackFragment.getEngineBlockType() == PlaybackEngineController.ENGINE_BLOCK_TYPE_BEHIND) {
             enterBackgroundPlayMode();
-            ViewManager.instance(this).removeTop(this);
+            ViewManager.instance(this).removeTop(this); // return to browser instead of player
         } else if (mPlaybackFragment.getEngineBlockType() == PlaybackEngineController.ENGINE_BLOCK_TYPE_PIP && !mPlaybackFragment.isControlsShown()) {
             enterPIPMode();
-            ViewManager.instance(this).removeTop(this);
+            ViewManager.instance(this).removeTop(this); // return to browser instead of player
         }
     }
 }
