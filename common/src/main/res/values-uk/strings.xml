@@ -89,7 +89,7 @@
     <string name="color_scheme_default">За замовчуванням</string>
     <string name="color_scheme_red_grey">Червоно-сіра</string>
     <string name="color_scheme_red">Червона</string>
-    <string name="color_scheme_grey">Сіра</string>
+    <string name="color_scheme_dark_grey">Темно-сіра</string>
     <string name="disable_update_check">Не перевіряти оновлення</string>
     <string name="show_again">Нагадувати постійно</string>
     <string name="check_updates_auto">Автоматичне оновлення</string>
@@ -115,7 +115,7 @@
     <string name="subtitle_yellow">Жовті</string>
     <string name="subtitle_black_bg">Чорний фон</string>
     <string name="player_seek_preview">Прев\'ю при перемотуванні</string>
-    <string name="color_scheme_grey_oled">Сіра (OLED)</string>
+    <string name="color_scheme_dark_grey_oled">Темно-сіра (OLED)</string>
     <string name="channel_category_sorting">Сортування розділу Канали</string>
     <string name="sorting_by_new_content">Новий контент</string>
     <string name="sorting_alphabetically">За абеткою</string>

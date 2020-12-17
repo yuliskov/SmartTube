@@ -42,8 +42,8 @@
     </style>
     <!-- End Color scheme: Teal (Default) -->
 
-    <!--  Color scheme: Grey  -->
-    <style name="App.Theme.Grey.Player" parent="App.Theme.Leanback.Player">
+    <!--  Color scheme: Dark Grey  -->
+    <style name="App.Theme.DarkGrey.Player" parent="App.Theme.Leanback.Player">
         <item name="playbackProgressPrimaryColor">@color/red</item>
         <item name="playbackProgressSecondaryColor">@color/light_red</item>
         <item name="playbackControlsIconHighlightColor">@color/red</item>
@@ -52,7 +52,7 @@
         <item name="cardDefaultBackground">@color/scheme_grey_card_background_dark</item>
         <item name="android:colorAccent" tools:targetApi="21">@color/semi_red</item>
     </style>
-    <style name="App.Theme.Grey.Browse" parent="App.Theme.Leanback.Browse">
+    <style name="App.Theme.DarkGrey.Browse" parent="App.Theme.Leanback.Browse">
         <item name="android:windowBackground">@color/scheme_grey_shelf_background_dark</item>
         <item name="brandColor">@color/scheme_grey_background_dark</item>
         <item name="brandAccentColor">@color/semi_red</item>
@@ -64,15 +64,15 @@
     <style name="ProgressBarHorizontal.Dark" parent="@android:style/Widget.ProgressBar.Horizontal">
         <item name="android:progressDrawable">@drawable/progress_bar_drawable</item>
     </style>
-    <style name="App.Theme.Grey.Preferences" parent="App.Theme.Leanback.Preferences">
+    <style name="App.Theme.DarkGrey.Preferences" parent="App.Theme.Leanback.Preferences">
         <item name="android:colorPrimary" tools:targetApi="21">@color/scheme_grey_background</item>
         <item name="android:colorAccent" tools:targetApi="21">@color/semi_red</item>
     </style>
-    <style name="App.Theme.Grey.GuidedStep" parent="App.Theme.Leanback.GuidedStep">
+    <style name="App.Theme.DarkGrey.GuidedStep" parent="App.Theme.Leanback.GuidedStep">
         <item name="android:windowBackground">@color/scheme_grey_shelf_background_dark</item>
         <item name="shelfBackground">@color/scheme_grey_shelf_background_dark</item>
     </style>
-    <!--  End Color scheme: Grey  -->
+    <!--  End Color scheme: Dark Grey  -->
 
     <!--  Color scheme: Red -->
     <style name="App.Theme.Red.Player" parent="App.Theme.Leanback.Player">
@@ -106,16 +106,16 @@
     </style>
     <!--  End Color scheme: Red -->
 
-    <!--  Color scheme: Grey (OLED)  -->
-    <style name="App.Theme.Grey.OLED.Browse" parent="App.Theme.Grey.Browse">
+    <!--  Color scheme: Dark Grey (OLED)  -->
+    <style name="App.Theme.DarkGrey.OLED.Browse" parent="App.Theme.DarkGrey.Browse">
         <item name="brandAccentColor">@color/semi_grey</item>
         <item name="cardSelectedBackground">@color/card_selected_background_white_grey</item>
         <item name="appLogo">@mipmap/app_logo_semi_grey</item>
     </style>
-    <style name="App.Theme.Grey.OLED.Player" parent="App.Theme.Grey.Player">
+    <style name="App.Theme.DarkGrey.OLED.Player" parent="App.Theme.DarkGrey.Player">
         <item name="cardSelectedBackground">@color/card_selected_background_white_grey</item>
     </style>
-    <!--  End Color scheme: Grey (OLED)  -->
+    <!--  End Color scheme: Dark Grey (OLED)  -->
 
     <!--  Color scheme: Teal (OLED)  -->
     <style name="App.Theme.Leanback.OLED.Browse" parent="App.Theme.Leanback.Browse">

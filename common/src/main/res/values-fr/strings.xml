@@ -89,7 +89,7 @@
     <string name="color_scheme_default">Défaut</string>
     <string name="color_scheme_red_grey">Rouge-gris</string>
     <string name="color_scheme_red">Rouge</string>
-    <string name="color_scheme_grey">Sombre</string>
+    <string name="color_scheme_dark_grey">Sombre</string>
     <string name="disable_update_check">Désactiver la vérification des mises à jour</string>
     <string name="show_again">Afficher à nouveau</string>
     <string name="check_updates_auto">Mise à jour automatique</string>
@@ -115,7 +115,7 @@
     <string name="subtitle_yellow">Jaune</string>
     <string name="subtitle_black_bg">Fond noir</string>
     <string name="player_seek_preview">Aperçu pendant la recherche</string>
-    <string name="color_scheme_grey_oled">Sombre (OLED)</string>
+    <string name="color_scheme_dark_grey_oled">Sombre (OLED)</string>
     <string name="channel_category_sorting">Classement des sections de chaînes</string>
     <string name="sorting_by_new_content">Nouveau contenu</string>
     <string name="sorting_alphabetically">Alphabétiquement</string>

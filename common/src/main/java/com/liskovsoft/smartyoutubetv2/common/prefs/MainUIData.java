@@ -190,10 +190,10 @@ public class MainUIData {
                 null,
                 mContext));
         mColorSchemes.add(new ColorScheme(
-                R.string.color_scheme_grey,
-                "App.Theme.Grey.Player",
-                "App.Theme.Grey.Browse",
-                "App.Theme.Grey.Preferences",
+                R.string.color_scheme_dark_grey,
+                "App.Theme.DarkGrey.Player",
+                "App.Theme.DarkGrey.Browse",
+                "App.Theme.DarkGrey.Preferences",
                 mContext));
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_red,
@@ -202,10 +202,10 @@ public class MainUIData {
                 "App.Theme.Red.Preferences",
                 mContext));
         mColorSchemes.add(new ColorScheme(
-                R.string.color_scheme_grey_oled,
-                "App.Theme.Grey.OLED.Player",
-                "App.Theme.Grey.OLED.Browse",
-                "App.Theme.Grey.Preferences",
+                R.string.color_scheme_dark_grey_oled,
+                "App.Theme.DarkGrey.OLED.Player",
+                "App.Theme.DarkGrey.OLED.Browse",
+                "App.Theme.DarkGrey.Preferences",
                 mContext));
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_teal_oled,

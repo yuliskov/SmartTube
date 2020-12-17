@@ -89,7 +89,7 @@
     <string name="color_scheme_default">Standaard</string>
     <string name="color_scheme_red_grey">Rood-grijs</string>
     <string name="color_scheme_red">Rood</string>
-    <string name="color_scheme_grey">Donker</string>
+    <string name="color_scheme_dark_grey">Donker</string>
     <string name="disable_update_check">Automatisch bijwerken uitschakelen</string>
     <string name="show_again">Altijd weergeven</string>
     <string name="check_updates_auto">App automatisch bijwerken</string>
@@ -115,7 +115,7 @@
     <string name="subtitle_yellow">Geel</string>
     <string name="subtitle_black_bg">Zwarte achtergrond</string>
     <string name="player_seek_preview">Preview tijdens snel zoeken</string>
-    <string name="color_scheme_grey_oled">Donker (OLED)</string>
+    <string name="color_scheme_dark_grey_oled">Donker (OLED)</string>
     <string name="channel_category_sorting">Kanalen sorteren</string>
     <string name="sorting_by_new_content">Nieuwe video\'s</string>
     <string name="sorting_alphabetically">Alfabetisch</string>
