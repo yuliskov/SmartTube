@@ -15,6 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.LangUpdater;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.DoubleBackManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.LongClickManager;
 
@@ -29,6 +30,7 @@ public abstract class LeanbackActivity extends MotherActivity {
     private ModeSyncManager mModeSyncManager;
     private DoubleBackManager mDoubleBackManager;
     private GestureDetector mGestureDetector;
+    private MainUIData mMainUiData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,7 @@ public abstract class LeanbackActivity extends MotherActivity {
         mViewManager = ViewManager.instance(this);
         mModeSyncManager = ModeSyncManager.instance();
         mDoubleBackManager = new DoubleBackManager(this);
+        mMainUiData = MainUIData.instance(this);
     }
 
     @Override
@@ -108,7 +111,11 @@ public abstract class LeanbackActivity extends MotherActivity {
     public void finish() {
         // user pressed back key
         if (!mViewManager.startParentView(this)) {
-            mDoubleBackManager.enableDoubleBackExit();
+            if (mMainUiData.isDoubleBackExitEnabled()) {
+                mDoubleBackManager.enableDoubleBackExit();
+            } else {
+                properlyFinishTheApp();
+            }
         }
     }
 
