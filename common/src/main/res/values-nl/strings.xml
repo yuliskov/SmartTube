@@ -21,7 +21,7 @@
     <string name="subtitle_category_title">Ondertitels</string>
     <string name="video_max_quality">Auto (max kwaliteit)</string>
     <string name="audio_max_quality">Auto (max kwaliteit)</string>
-    <string name="subtitles_disabled">Uit</string>
+    <string name="subtitles_disabled">Geen ondertitels</string>
     <string name="auto_frame_rate">Auto frame rate</string>
     <string name="frame_rate_correction">Fix fps:\n%s</string>
     <string name="category_background_playback">Afspelen op achtergrond</string>
@@ -59,8 +59,8 @@
     <string name="dialog_select_language">Taal</string>
     <string name="subtitle_default">Standaard</string>
     <string name="subtitle_semi_transparent_bg">Transparante achtergrond</string>
-    <string name="subtitle_style">Lay-out</string>
-    <string name="subtitle_language">Taal</string>
+    <string name="subtitle_style">Ondertitels lay-out</string>
+    <string name="subtitle_language">Ondertitels taal</string>
     <string name="action_search">Zoeken</string>
     <string name="settings_main_ui">Display</string>
     <string name="dialog_main_ui">Display</string>
@@ -133,4 +133,8 @@
     <string name="video_zoom_fit_height">Hoogte aanpassen</string>
     <string name="video_zoom_fit_both">Breedte en hoogte aanpassen</string>
     <string name="video_zoom_stretch">Uitrekken</string>
+    <string name="app_exit_shortcut">App afsluiten</string>
+    <string name="app_exit_none">Niet afsluiten</string>
+    <string name="app_double_back_exit">2x BACK toets</string>
+    <string name="app_single_back_exit">1x BACK toets</string>
 </resources>
