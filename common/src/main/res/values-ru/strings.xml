@@ -54,7 +54,7 @@
     <string name="dialog_account_none">Не выбран</string>
     <string name="dialog_remove_account">Удалить аккаунт</string>
     <string name="dialog_add_account">Добавить аккаунт</string>
-    <string name="default_lang">По-умолчанию</string>
+    <string name="default_lang">По умолчанию</string>
     <string name="dialog_select_language">Язык приложения</string>
     <string name="header_channels">Каналы</string>
     <string name="subtitle_default">Обычные</string>
@@ -86,7 +86,7 @@
     <string name="video_grid_scale">Масштаб сетки роликов</string>
     <string name="scale_ui">Масштаб интерфейса</string>
     <string name="color_scheme">Цветовая схема</string>
-    <string name="color_scheme_default">По-умолчанию</string>
+    <string name="color_scheme_default">По умолчанию</string>
     <string name="color_scheme_red_grey">Красно-серая</string>
     <string name="color_scheme_red">Красная</string>
     <string name="color_scheme_dark">Тёмная</string>
@@ -138,4 +138,6 @@
     <string name="video_zoom_fit_both">По ширине или высоте</string>
     <string name="video_zoom_stretch">Растянуть</string>
     <string name="video_zoom">Видео зум</string>
+    <string name="color_scheme_teal">Бирюзовая</string>
+    <string name="color_scheme_teal_oled">Бирюзовая (OLED)</string>
 </resources>

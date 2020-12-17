@@ -138,4 +138,6 @@
     <string name="video_zoom_fit_height">По висоті</string>
     <string name="video_zoom_fit_both">По ширині та висоті</string>
     <string name="video_zoom_stretch">Розтягнути</string>
+    <string name="color_scheme_teal">Бірюзова</string>
+    <string name="color_scheme_teal_oled">Бірюзова (OLED)</string>
 </resources>

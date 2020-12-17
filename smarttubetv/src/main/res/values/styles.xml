@@ -115,5 +115,14 @@
     <style name="App.Theme.Dark.OLED.Player" parent="App.Theme.Dark.Player">
         <item name="cardSelectedBackground">@color/card_selected_background_white_grey</item>
     </style>
-    <!--  End Color scheme: Dark  -->
+    <!--  End Color scheme: Dark (OLED)  -->
+
+    <!--  Color scheme: Teal (OLED)  -->
+    <style name="App.Theme.Leanback.OLED.Browse" parent="App.Theme.Leanback.Browse">
+        <item name="shelfBackground">@color/scheme_dark_shelf_background_dark</item>
+    </style>
+    <style name="App.Theme.Leanback.OLED.Player" parent="App.Theme.Leanback.Player">
+        <item name="shelfBackground">@color/scheme_dark_shelf_background_dark</item>
+    </style>
+    <!--  End Color scheme: Teal (OLED)  -->
 </resources>

@@ -184,7 +184,7 @@ public class MainUIData {
 
     private void initColorSchemes() {
         mColorSchemes.add(new ColorScheme(
-                R.string.color_scheme_default,
+                R.string.color_scheme_teal,
                 null,
                 null,
                 null,
@@ -206,6 +206,12 @@ public class MainUIData {
                 "App.Theme.Dark.OLED.Player",
                 "App.Theme.Dark.OLED.Browse",
                 "App.Theme.Dark.Preferences",
+                mContext));
+        mColorSchemes.add(new ColorScheme(
+                R.string.color_scheme_teal_oled,
+                "App.Theme.Leanback.OLED.Player",
+                "App.Theme.Leanback.OLED.Browse",
+                null,
                 mContext));
     }
 
