@@ -7,6 +7,10 @@ import java.io.InputStream;
 import java.util.List;
 
 public interface PlaybackEngineController {
+    int ENGINE_BLOCK_TYPE_NONE = 0;
+    int ENGINE_BLOCK_TYPE_AUDIO = 1;
+    int ENGINE_BLOCK_TYPE_PIP = 2;
+    int ENGINE_BLOCK_TYPE_BEHIND = 3;
     int BUFFER_LOW = 0;
     int BUFFER_MED = 1;
     int BUFFER_HIGH = 2;
@@ -29,19 +33,12 @@ public interface PlaybackEngineController {
     List<FormatItem> getSubtitleFormats();
     void selectFormat(FormatItem option);
     FormatItem getVideoFormat();
-    /**
-     * Block engine from destroying
-     */
-    void blockEngine(boolean block);
-    boolean isEngineBlocked();
     boolean isEngineInitialized();
     void restartEngine();
     void reloadPlayback();
-    void enablePIP(boolean enable);
-    boolean isPIPEnabled();
+    void setEngineBlockType(int type);
+    int getEngineBlockType();
     boolean isInPIPMode();
-    void enablePlayBehind(boolean enable);
-    boolean isPlayBehindEnabled();
     boolean hasNoMedia();
     void setSpeed(float speed);
     float getSpeed();

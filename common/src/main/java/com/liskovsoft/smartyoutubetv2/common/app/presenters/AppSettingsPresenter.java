@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.Looper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
@@ -21,7 +22,7 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     private String mTitle;
     private Runnable mOnClose;
     private PlayerUiManager mUiManager;
-    private boolean mIsEngineBlocked;
+    private int mEngineBlockType;
 
     public static class SettingsCategory {
         public static SettingsCategory radioList(String title, List<OptionItem> items) {
@@ -169,13 +170,20 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     private void enableOldAndroidFix(boolean enable) {
         if (mUiManager != null && mUiManager.getController() != null) {
             // Old Android fix: don't destroy player while dialog is open
-            if (VERSION.SDK_INT < 25) {
-                if (enable) {
-                    mIsEngineBlocked = mUiManager.getController().isEngineBlocked();
-                    mUiManager.getController().blockEngine(true);
-                } else {
-                    mUiManager.getController().blockEngine(mIsEngineBlocked);
-                }
+            //if (VERSION.SDK_INT < 25) {
+            //    if (enable) {
+            //        mEngineBlockType = mUiManager.getController().getEngineBlockType(); // save orig value for later restoration
+            //        mUiManager.getController().setEngineBlockType(PlaybackEngineController.ENGINE_BLOCK_TYPE_AUDIO);
+            //    } else {
+            //        mUiManager.getController().setEngineBlockType(mEngineBlockType);
+            //    }
+            //}
+
+            if (enable) {
+                mEngineBlockType = mUiManager.getController().getEngineBlockType(); // save orig value for later restoration
+                mUiManager.getController().setEngineBlockType(PlaybackEngineController.ENGINE_BLOCK_TYPE_AUDIO);
+            } else {
+                mUiManager.getController().setEngineBlockType(mEngineBlockType);
             }
         }
     }

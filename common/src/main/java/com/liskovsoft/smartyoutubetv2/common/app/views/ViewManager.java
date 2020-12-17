@@ -222,6 +222,10 @@ public class ViewManager {
         mDefaultTop = activity == null ? null : activity.getClass();
     }
 
+    public void removeTop(Activity activity) {
+        mActivityStack.remove(activity.getClass());
+    }
+
     private boolean checkMoveViewsToBack(Activity activity) {
         if (mMoveViewsToBack) {
             activity.moveTaskToBack(true);

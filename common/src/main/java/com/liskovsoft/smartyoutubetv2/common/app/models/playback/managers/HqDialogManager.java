@@ -119,16 +119,16 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     }
 
     private void updateBackgroundPlayback() {
-        if (mPlayerData.getBackgroundPlaybackType() != PlayerData.BACKGROUND_PLAYBACK_NONE) {
-            // return to the player regardless the last activity user watched in moment exiting to HOME
-            ViewManager.instance(getActivity()).blockTop(getActivity());
-        } else {
-            ViewManager.instance(getActivity()).blockTop(null);
-        }
+        //if (mPlayerData.getBackgroundPlaybackType() != PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE) {
+        //    // return to the player regardless the last activity user watched in moment exiting to HOME
+        //    ViewManager.instance(getActivity()).blockTop(getActivity());
+        //} else {
+        //    ViewManager.instance(getActivity()).blockTop(null);
+        //}
 
-        getController().blockEngine(mPlayerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_AUDIO);
-        getController().enablePIP(mPlayerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_PIP);
-        getController().enablePlayBehind(mPlayerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_BEHIND);
+        ViewManager.instance(getActivity()).blockTop(null);
+
+        getController().setEngineBlockType(mPlayerData.getBackgroundPlaybackType());
     }
 
     private void addBackgroundPlaybackCategory() {
@@ -194,26 +194,26 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         List<OptionItem> options = new ArrayList<>();
         options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_off),
                 optionItem -> {
-                    playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_NONE);
+                    playerData.setBackgroundPlaybackType(PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE);
                     onSetCallback.run();
-                }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_NONE));
+                }, playerData.getBackgroundPlaybackType() == PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE));
         if (Helpers.isAndroidTV(context) && Build.VERSION.SDK_INT < 26) { // useful only for pre-Oreo UI
             options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_behind) + " (Android TV 5,6,7)",
                     optionItem -> {
-                        playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_BEHIND);
+                        playerData.setBackgroundPlaybackType(PlaybackEngineController.ENGINE_BLOCK_TYPE_BEHIND);
                         onSetCallback.run();
-                    }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_BEHIND));
+                    }, playerData.getBackgroundPlaybackType() == PlaybackEngineController.ENGINE_BLOCK_TYPE_BEHIND));
         }
         options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_pip),
                 optionItem -> {
-                    playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_PIP);
+                    playerData.setBackgroundPlaybackType(PlaybackEngineController.ENGINE_BLOCK_TYPE_PIP);
                     onSetCallback.run();
-                }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_PIP));
+                }, playerData.getBackgroundPlaybackType() == PlaybackEngineController.ENGINE_BLOCK_TYPE_PIP));
         options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_only_audio),
                 optionItem -> {
-                    playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_AUDIO);
+                    playerData.setBackgroundPlaybackType(PlaybackEngineController.ENGINE_BLOCK_TYPE_AUDIO);
                     onSetCallback.run();
-                }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_AUDIO));
+                }, playerData.getBackgroundPlaybackType() == PlaybackEngineController.ENGINE_BLOCK_TYPE_AUDIO));
 
         return OptionCategory.from(BACKGROUND_PLAYBACK_ID, categoryTitle, options);
     }

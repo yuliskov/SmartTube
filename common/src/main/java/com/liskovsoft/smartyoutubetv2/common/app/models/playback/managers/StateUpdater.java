@@ -7,6 +7,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -56,7 +57,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         mIsPlaying = true; // video just added
 
         // Ensure that we aren't running on presenter init stage
-        if (getController() != null && getController().isEngineBlocked()) {
+        if (getController() != null && getController().getEngineBlockType() != PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE) {
             // In background mode some event not called.
             // So, for proper state persistence, we need to save state here.
             saveState();

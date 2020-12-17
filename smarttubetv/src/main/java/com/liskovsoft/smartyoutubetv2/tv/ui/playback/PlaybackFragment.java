@@ -1,7 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -26,13 +24,13 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection.Factory;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
@@ -81,9 +79,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private UriBackgroundManager mBackgroundManager;
     private RowsSupportFragment mRowsSupportFragment;
     private final boolean mIsAnimationEnabled = true;
-    private boolean mIsEngineBlocked;
-    private boolean mIsPIPEnabled;
-    private boolean mIsPlayBehindEnabled;
+    private int mEngineBlockType = PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,6 +102,10 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         setupPlayerBackground();
 
         mPlaybackPresenter.onViewInitialized();
+
+        // Fix controls pop-up upon fragment creation.
+        // Should be called after player's background setup.
+        hideControlsOverlay(mIsAnimationEnabled);
     }
 
     @Override
@@ -130,43 +130,63 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        if (Util.SDK_INT > 23) {
-            initializePlayer();
-            mEventListener.onViewResumed();
-        }
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
-        if ((Util.SDK_INT <= 23 || mPlayer == null)) {
+
+        if (getEngineBlockType() == PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE) {
             initializePlayer();
             mEventListener.onViewResumed();
         }
     }
 
-    /** Pauses the player. */
-    @TargetApi(Build.VERSION_CODES.N)
     @Override
     public void onPause() {
         super.onPause();
 
-        if (Util.SDK_INT <= 23) {
+        if (getEngineBlockType() == PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE) {
             releasePlayer();
             mEventListener.onViewPaused();
         }
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (Util.SDK_INT > 23) {
-            releasePlayer();
-            mEventListener.onViewPaused();
-        }
-    }
+    //@Override
+    //public void onStart() {
+    //    super.onStart();
+    //    if (Util.SDK_INT > 23) {
+    //        initializePlayer();
+    //        mEventListener.onViewResumed();
+    //    }
+    //}
+    //
+    //@Override
+    //public void onResume() {
+    //    super.onResume();
+    //    if ((Util.SDK_INT <= 23 || mPlayer == null)) {
+    //        initializePlayer();
+    //        mEventListener.onViewResumed();
+    //    }
+    //}
+    //
+    ///** Pauses the player. */
+    //@TargetApi(Build.VERSION_CODES.N)
+    //@Override
+    //public void onPause() {
+    //    super.onPause();
+    //
+    //    if (Util.SDK_INT <= 23) {
+    //        releasePlayer();
+    //        mEventListener.onViewPaused();
+    //    }
+    //}
+    //
+    //@Override
+    //public void onStop() {
+    //    super.onStop();
+    //    if (Util.SDK_INT > 23) {
+    //        releasePlayer();
+    //        mEventListener.onViewPaused();
+    //    }
+    //}
 
     public void onDispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -225,7 +245,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     private void releasePlayer() {
-        if (isEngineBlocked()) {
+        if (getEngineBlockType() != PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE) {
             Log.d(TAG, "releasePlayer: Engine release is blocked. Exiting...");
             return;
         }
@@ -278,7 +298,6 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mPlayerGlue.setSeekEnabled(true);
         mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end
         StoryboardSeekDataProvider.setSeekProvider(mPlayerGlue);
-        hideControlsOverlay(mIsAnimationEnabled); // hide controls upon fragment creation
 
         mExoPlayerController.setPlayer(mPlayer);
         mExoPlayerController.setTrackSelector(trackSelector);
@@ -595,28 +614,18 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
-    public void blockEngine(boolean block) {
-        mIsEngineBlocked = block;
-    }
-
-    @Override
-    public boolean isEngineBlocked() {
-        return mIsEngineBlocked;
-    }
-
-    @Override
     public boolean isEngineInitialized() {
         return mPlayer != null;
     }
 
     @Override
-    public void enablePIP(boolean enable) {
-        mIsPIPEnabled = enable;
+    public void setEngineBlockType(int type) {
+        mEngineBlockType = type;
     }
 
     @Override
-    public boolean isPIPEnabled() {
-        return mIsPIPEnabled;
+    public int getEngineBlockType() {
+        return mEngineBlockType;
     }
 
     @Override
@@ -629,16 +638,6 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         // Old api fix
         return playbackActivity.isInPIPMode();
-    }
-
-    @Override
-    public void enablePlayBehind(boolean enable) {
-        mIsPlayBehindEnabled = enable;
-    }
-
-    @Override
-    public boolean isPlayBehindEnabled() {
-        return mIsPlayBehindEnabled;
     }
 
     @Override
@@ -706,7 +705,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         // Fix situations when engine didn't properly destroyed.
         // E.g. after closing dialogs.
-        blockEngine(false);
+        setEngineBlockType(PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE);
         releasePlayer();
 
         mPlaybackPresenter.onViewDestroyed();
@@ -751,7 +750,9 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             mPlayerGlue.onControlsVisibilityChange(false);
         }
 
-        mEventListener.onControlsShown(false);
+        if (mEventListener != null) {
+            mEventListener.onControlsShown(false);
+        }
     }
 
     @Override

@@ -19,10 +19,6 @@ public class PlayerData {
     public static final int UI_AND_PAUSE = 1;
     public static final int ONLY_PAUSE = 2;
     public static final int AUTO_HIDE_NEVER = 0;
-    public static final int BACKGROUND_PLAYBACK_NONE = 0;
-    public static final int BACKGROUND_PLAYBACK_AUDIO = 1;
-    public static final int BACKGROUND_PLAYBACK_PIP = 2;
-    public static final int BACKGROUND_PLAYBACK_BEHIND = 3;
     @SuppressLint("StaticFieldLeak")
     private static PlayerData sInstance;
     private final AppPrefs mPrefs;
@@ -225,7 +221,7 @@ public class PlayerData {
         mIsPauseOnSeekEnabled = Helpers.parseBoolean(split, 4, false);
         mIsClockEnabled = Helpers.parseBoolean(split, 5, true);
         mIsRemainingTimeEnabled = Helpers.parseBoolean(split, 6, true);
-        mBackgroundPlaybackType = Helpers.parseInt(split, 7, BACKGROUND_PLAYBACK_NONE);
+        mBackgroundPlaybackType = Helpers.parseInt(split, 7, PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE);
         mAfrData = AfrData.from(Helpers.parseStr(split, 8));
         mVideoFormat = ExoFormatItem.from(Helpers.parseStr(split, 9));
         mAudioFormat = ExoFormatItem.from(Helpers.parseStr(split, 10));
