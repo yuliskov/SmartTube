@@ -127,6 +127,7 @@
     <string name="player_show_clock">Klok weergeven</string>
     <string name="player_show_remaining_time">Resterende tijd weergeven</string>
     <string name="open_channel_uploads">Video\'s van kanaal weergeven</string>
+    <string name="action_video_zoom">Video zoom</string>
     <string name="video_zoom">Zoom</string>
     <string name="video_zoom_default">Standaard</string>
     <string name="video_zoom_fit_width">Breedte aanpassen</string>
