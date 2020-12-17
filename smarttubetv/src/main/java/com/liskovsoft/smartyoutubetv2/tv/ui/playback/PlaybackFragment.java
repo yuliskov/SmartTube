@@ -129,7 +129,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         }
     }
 
-    // NOTE: depending of SDK version Start/Stop may be called with delay (SDK_INT > 23) or not called at all (PIP mode)!
+    // NOTE: depending of SDK version Start/Stop may be called with delay (SDK_INT > 23) or not called at all (PIP/Dialogs)!
 
     @Override
     public void onResume() {
@@ -149,6 +149,9 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             releasePlayer();
             mEventListener.onViewPaused();
         }
+
+        // Fix controls pop-up upon player initialization.
+        hideControlsOverlay(mIsAnimationEnabled);
     }
 
     //@Override
