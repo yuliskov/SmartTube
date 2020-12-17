@@ -42,6 +42,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         appendBootToCategory(settingsPresenter);
         appendChannelSortingCategory(settingsPresenter);
         appendPlaylistsStyle(settingsPresenter);
+        appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_main_ui), () -> {
             if (mRestartApp) {
@@ -157,6 +158,16 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         List<ColorScheme> colorSchemes = mMainUIData.getColorSchemes();
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.color_scheme), fromColorSchemes(colorSchemes));
+    }
+
+    private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.app_double_back_exit),
+                option -> mMainUIData.enableDoubleBackExit(option.isSelected()),
+                mMainUIData.isDoubleBackExitEnabled()));
+
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 
     private List<OptionItem> fromColorSchemes(List<ColorScheme> colorSchemes) {

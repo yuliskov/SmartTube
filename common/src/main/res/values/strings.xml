@@ -128,4 +128,5 @@
     <string name="player_show_remaining_time">Show remaining time</string>
     <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Open channel videos</string>
+    <string name="app_double_back_exit">Double back to exit from the app</string>
 </resources>

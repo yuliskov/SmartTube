@@ -35,6 +35,7 @@ public class MainUIData {
     private int mColorSchemeIndex;
     private int mChannelCategorySorting;
     private int mPlaylistsStyle;
+    private boolean mIsDoubleBackExitEnabled;
 
     public MainUIData(Context context) {
         mContext = context;
@@ -159,6 +160,14 @@ public class MainUIData {
         persistState();
     }
 
+    public boolean isDoubleBackExitEnabled() {
+        return mIsDoubleBackExitEnabled;
+    }
+
+    public void enableDoubleBackExit(boolean enabled) {
+        mIsDoubleBackExitEnabled = enabled;
+    }
+
     private void initLeftPanelCategories() {
         mLeftPanelCategories.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mLeftPanelCategories.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
@@ -201,7 +210,8 @@ public class MainUIData {
         String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
         mPrefs.setMainUIData(Helpers.mergeObject(
                 mIsAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale,
-                mColorSchemeIndex, mIsMultilineTitlesEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting, mPlaylistsStyle));
+                mColorSchemeIndex, mIsMultilineTitlesEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting,
+                mPlaylistsStyle, mIsDoubleBackExitEnabled));
     }
 
     private void restoreState() {
@@ -219,6 +229,7 @@ public class MainUIData {
         mIsSettingsCategoryEnabled = Helpers.parseBoolean(split, 7, true);
         mChannelCategorySorting = Helpers.parseInt(split, 8, CHANNEL_SORTING_UPDATE);
         mPlaylistsStyle = Helpers.parseInt(split, 9, PLAYLISTS_STYLE_GRID);
+        mIsDoubleBackExitEnabled = Helpers.parseBoolean(split, 10, true);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArray(selectedCategories);

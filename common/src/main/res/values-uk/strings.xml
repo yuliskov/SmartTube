@@ -127,4 +127,5 @@
     <string name="player_show_clock">Відображати годинник</string>
     <string name="player_show_remaining_time">Відображати час, що залишився</string>
     <string name="open_channel_uploads">Усі відео на каналі</string>
+    <string name="app_double_back_exit">Подвійне назад, щоб вийти з додатку</string>
 </resources>
