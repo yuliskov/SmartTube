@@ -88,7 +88,7 @@
     <string name="color_scheme_default">Standard</string>
     <string name="color_scheme_red_grey">Rød-grå</string>
     <string name="color_scheme_red">Rød</string>
-    <string name="color_scheme_dark">Mørk</string>
+    <string name="color_scheme_grey">Mørk</string>
     <string name="disable_update_check">Deaktiver oppdaterings sjekk</string>
     <string name="show_again">Vis igjen</string>
     <string name="check_updates_auto">Automatisk oppdatering</string>
@@ -114,7 +114,7 @@
     <string name="subtitle_yellow">Gul</string>
     <string name="subtitle_black_bg">Svart bakgrunn</string>
     <string name="player_seek_preview">Forhåndsvisning mens du søker</string>
-    <string name="color_scheme_dark_oled">Mørk (OLED)</string>
+    <string name="color_scheme_grey_oled">Mørk (OLED)</string>
     <string name="channel_category_sorting">Kanalseksjonssortering</string>
     <string name="sorting_by_new_content">Nytt innhold</string>
     <string name="sorting_alphabetically">Alfabetisk</string>

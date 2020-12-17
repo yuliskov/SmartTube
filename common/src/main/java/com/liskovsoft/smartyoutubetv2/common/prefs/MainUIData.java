@@ -190,7 +190,7 @@ public class MainUIData {
                 null,
                 mContext));
         mColorSchemes.add(new ColorScheme(
-                R.string.color_scheme_dark,
+                R.string.color_scheme_grey,
                 "App.Theme.Dark.Player",
                 "App.Theme.Dark.Browse",
                 "App.Theme.Dark.Preferences",
@@ -202,7 +202,7 @@ public class MainUIData {
                 "App.Theme.Red.Preferences",
                 mContext));
         mColorSchemes.add(new ColorScheme(
-                R.string.color_scheme_dark_oled,
+                R.string.color_scheme_grey_oled,
                 "App.Theme.Dark.OLED.Player",
                 "App.Theme.Dark.OLED.Browse",
                 "App.Theme.Dark.Preferences",

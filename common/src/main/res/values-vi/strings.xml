@@ -89,7 +89,7 @@
     <string name="color_scheme_default">Mặc định</string>
     <string name="color_scheme_red_grey">Đỏ - Xám</string>
     <string name="color_scheme_red">Đỏ</string>
-    <string name="color_scheme_dark">Tối</string>
+    <string name="color_scheme_grey">Tối</string>
     <string name="disable_update_check">Vô hiệu tự động kiểm tra phiên bản mới</string>
     <string name="show_again">Hiện lại</string>
     <string name="check_updates_auto">Tự động cập nhật</string>

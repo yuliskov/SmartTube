@@ -88,7 +88,7 @@
     <string name="color_scheme_default">Por defecto</string>
     <string name="color_scheme_red_grey">Rojo-gris</string>
     <string name="color_scheme_red">Rojo</string>
-    <string name="color_scheme_dark">Oscuro</string>
+    <string name="color_scheme_grey">Oscuro</string>
     <string name="disable_update_check">Desactiva comprobar actualización</string>
     <string name="show_again">Mostrar de nuevo</string>
     <string name="check_updates_auto">Auto-actualizar</string>
@@ -114,7 +114,7 @@
     <string name="subtitle_yellow">Amarillo</string>
     <string name="subtitle_black_bg">Fondo negro</string>
     <string name="player_seek_preview">Previsualizar mientras busca</string>
-    <string name="color_scheme_dark_oled">Oscuro (OLED)</string>
+    <string name="color_scheme_grey_oled">Oscuro (OLED)</string>
     <string name="channel_category_sorting">Orden sección canales</string>
     <string name="sorting_by_new_content">Nuevo contenido</string>
     <string name="sorting_alphabetically">Alfabéticamente</string>

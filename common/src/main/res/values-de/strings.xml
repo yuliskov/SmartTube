@@ -89,7 +89,7 @@
     <string name="color_scheme_default">Standard</string>
     <string name="color_scheme_red_grey">Rot-Grau</string>
     <string name="color_scheme_red">Rot</string>
-    <string name="color_scheme_dark">Dunkel</string>
+    <string name="color_scheme_grey">Dunkel</string>
     <string name="disable_update_check">Update-Prüfung deaktivieren</string>
     <string name="show_again">Erneut anzeigen</string>
     <string name="check_updates_auto">Automatische Updates</string>
@@ -115,7 +115,7 @@
     <string name="subtitle_yellow">Gelb</string>
     <string name="subtitle_black_bg">Schwarzer Hintergrund</string>
     <string name="player_seek_preview">Vorschau beim Spulen anzeigen</string>
-    <string name="color_scheme_dark_oled">Dunkel (OLED)</string>
+    <string name="color_scheme_grey_oled">Dunkel (OLED)</string>
     <string name="channel_category_sorting">Kanäle-Kategorie sortieren</string>
     <string name="sorting_by_new_content">Neue Videos</string>
     <string name="sorting_alphabetically">Alphabetisch</string>

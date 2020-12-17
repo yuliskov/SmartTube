@@ -88,7 +88,7 @@
     <string name = "color_scheme_default"> Numatytasis </string>
     <string name = "color_scheme_red_grey"> Raudonai pilka </string>
     <string name = "color_scheme_red"> Raudona </string>
-    <string name = "color_scheme_dark"> Tamsus </string>
+    <string name = "color_scheme_grey"> Tamsus </string>
     <string name = "disable_update_check"> Išjungti atnaujinimo patikrą </string>
     <string name = "show_again"> Rodyti dar kartą </string>
     <string name = "check_updates_auto"> Automatinis atnaujinimas </string>
@@ -114,7 +114,7 @@
     <string name = "subtitle_yellow"> Geltona </string>
     <string name = "subtitle_black_bg"> Juodas fonas </string>
     <string name = "player_seek_preview"> Peržiūra ieškant </string>
-    <string name = "color_scheme_dark_oled"> Tamsus (OLED) </string>
+    <string name = "color_scheme_grey_oled"> Tamsus (OLED) </string>
     <string name = "channel_category_sorting"> Kanalų sekcijų rūšiavimas </string>
     <string name = "sorting_by_new_content"> Naujas turinys </string>
     <string name = "sorting_alphabetically"> Abėcėlės tvarka </string>

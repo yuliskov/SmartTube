@@ -88,7 +88,7 @@
     <string name="color_scheme_default">Výchozí</string>
     <string name="color_scheme_red_grey">Červeno-šedé</string>
     <string name="color_scheme_red">Červené</string>
-    <string name="color_scheme_dark">Tmavé</string>
+    <string name="color_scheme_grey">Tmavé</string>
     <string name="disable_update_check">Zakázat kontrolu aktualizací</string>
     <string name="show_again">Ukaž znovu</string>
     <string name="check_updates_auto">Automatická aktualizace</string>
@@ -114,7 +114,7 @@
     <string name="subtitle_yellow">Žlutá</string>
     <string name="subtitle_black_bg">Černé pozadí</string>
     <string name="player_seek_preview">Náhledy při přeskakování</string>
-    <string name="color_scheme_dark_oled">Tmavé (OLED)</string>
+    <string name="color_scheme_grey_oled">Tmavé (OLED)</string>
     <string name="channel_category_sorting">Řazení sekce kanálu</string>
     <string name="sorting_by_new_content">Nový obsah</string>
     <string name="sorting_alphabetically">Abecedně</string>
