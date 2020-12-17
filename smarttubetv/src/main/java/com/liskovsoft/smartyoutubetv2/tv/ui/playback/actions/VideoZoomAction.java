@@ -9,13 +9,13 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 /**
  * An action for displaying a channel icon.
  */
-public class ChannelAction extends Action {
-    public ChannelAction(Context context) {
+public class VideoZoomAction extends Action {
+    public VideoZoomAction(Context context) {
         super(R.id.action_video_zoom);
-        Drawable uncoloredDrawable = ContextCompat.getDrawable(context, R.drawable.action_channel);
+        Drawable uncoloredDrawable = ContextCompat.getDrawable(context, R.drawable.action_video_zoom);
 
         setIcon(uncoloredDrawable);
         setLabel1(context.getString(
-                R.string.action_channel));
+                R.string.action_video_zoom));
     }
 }

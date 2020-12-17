@@ -209,4 +209,9 @@ public abstract class PlayerEventListenerHelper implements PlayerHandlerEventLis
     public void onSearchClicked() {
         // NOP
     }
+
+    @Override
+    public void onVideoZoomClicked() {
+        // NOP
+    }
 }

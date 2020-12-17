@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.app.RowsSupportFragment;
-import androidx.leanback.app.VideoSupportFragmentGlueHost;
 import androidx.leanback.media.PlayerAdapter;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ClassPresenterSelector;
@@ -51,6 +50,7 @@ import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.videoscale.VideoSupportFragmentGlueHost;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.StoryboardSeekDataProvider;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoEventsOverrideFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue;
@@ -461,6 +461,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         }
 
         @Override
+        public void onVideoZoom() {
+            mEventListener.onVideoZoomClicked();
+        }
+
+        @Override
         public void onTopEdgeFocused() {
             showControls(false);
         }
@@ -662,6 +667,16 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     @Override
     public int getBufferType() {
         return mPlayerInitializer.getBufferType();
+    }
+
+    @Override
+    public void setVideoZoomMode(int mode) {
+        setResizeMode(mode);
+    }
+
+    @Override
+    public int getVideoZoomMode() {
+        return getResizeMode();
     }
 
     // End Engine Events

@@ -126,6 +126,11 @@
     <string name="playlists_style_rows">Lijst</string>
     <string name="player_show_clock">Klok weergeven</string>
     <string name="player_show_remaining_time">Resterende tijd weergeven</string>
-    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Video\'s van kanaal weergeven</string>
+    <string name="video_zoom">Zoom</string>
+    <string name="video_zoom_default">Standaard</string>
+    <string name="video_zoom_fit_width">Breedte aanpassen</string>
+    <string name="video_zoom_fit_height">Hoogte aanpassen</string>
+    <string name="video_zoom_fit_both">Breedte en hoogte aanpassen</string>
+    <string name="video_zoom_stretch">Uitrekken</string>
 </resources>

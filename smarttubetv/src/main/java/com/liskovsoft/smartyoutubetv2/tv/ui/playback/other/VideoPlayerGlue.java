@@ -13,6 +13,7 @@ import androidx.leanback.widget.PlaybackControlsRow;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.MaxControlsVideoPlayerGlue;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoZoomAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SearchAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsDownAction;
@@ -66,6 +67,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter>
     private final VideoStatsAction mVideoStatsAction;
     private final VideoSpeedAction mVideoSpeedAction;
     private final SearchAction mSearchAction;
+    private final VideoZoomAction mVideoZoomAction;
     private String mQualityInfo;
     private QualityInfoListener mQualityInfoListener;
     private int mPreviousAction = KeyEvent.ACTION_UP;
@@ -97,6 +99,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter>
         mVideoStatsAction = new VideoStatsAction(context);
         mVideoSpeedAction = new VideoSpeedAction(context);
         mSearchAction = new SearchAction(context);
+        mVideoZoomAction = new VideoZoomAction(context);
     }
 
     @Override
@@ -112,6 +115,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter>
         adapter.add(mSkipNextAction);
         adapter.add(mRepeatAction);
         adapter.add(mVideoSpeedAction);
+        adapter.add(mVideoZoomAction);
         adapter.add(mSearchAction);
     }
 
@@ -292,6 +296,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter>
         } else if (action == mSearchAction) {
             mActionListener.onSearch();
             handled = true;
+        } else if (action == mVideoZoomAction) {
+            mActionListener.onVideoZoom();
+            handled = true;
         }
 
         if (handled) {
@@ -428,6 +435,8 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter>
         void onVideoSpeed();
 
         void onSearch();
+
+        void onVideoZoom();
 
         void onTopEdgeFocused();
 

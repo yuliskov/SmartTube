@@ -131,4 +131,11 @@
     <string name="app_exit_none">Не виходити</string>
     <string name="app_double_back_exit">Подвійне назад</string>
     <string name="app_single_back_exit">Одиночне назад</string>
+    <string name="action_video_zoom">Відео зум</string>
+    <string name="video_zoom">Відео зум</string>
+    <string name="video_zoom_default">За замовчуванням</string>
+    <string name="video_zoom_fit_width">По ширині</string>
+    <string name="video_zoom_fit_height">По висоті</string>
+    <string name="video_zoom_fit_both">По ширині та висоті</string>
+    <string name="video_zoom_stretch">Розтягнути</string>
 </resources>

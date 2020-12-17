@@ -132,4 +132,11 @@
     <string name="app_exit_none">Don\'t exit</string>
     <string name="app_double_back_exit">Double back</string>
     <string name="app_single_back_exit">Single back</string>
+    <string name="action_video_zoom">Video zoom</string>
+    <string name="video_zoom">Video zoom</string>
+    <string name="video_zoom_default">Default</string>
+    <string name="video_zoom_fit_width">Fit width</string>
+    <string name="video_zoom_fit_height">Fit height</string>
+    <string name="video_zoom_fit_both">Fit either width or height</string>
+    <string name="video_zoom_stretch">Stretch</string>
 </resources>

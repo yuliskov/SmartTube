@@ -14,9 +14,11 @@
 
     <!-- Add subtitle view -->
     <com.google.android.exoplayer2.ui.AspectRatioFrameLayout
+        android:id="@+id/surface_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center">
+        <!-- Modified place for VideoSurfaceView -->
         <com.google.android.exoplayer2.ui.SubtitleView
             android:id="@+id/leanback_subtitles"
             android:layout_width="match_parent"

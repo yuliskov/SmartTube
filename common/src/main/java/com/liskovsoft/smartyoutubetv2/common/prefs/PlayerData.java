@@ -41,6 +41,7 @@ public class PlayerData {
     private int mVideoBufferType;
     private final List<SubtitleStyle> mSubtitleStyles = new ArrayList<>();
     private int mSubtitleStyleIndex;
+    private int mVideoZoomMode;
 
     public PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -197,6 +198,14 @@ public class PlayerData {
         persistData();
     }
 
+    public void setVideoZoomMode(int mode) {
+        mVideoZoomMode = mode;
+    }
+
+    public int getVideoZoomMode() {
+        return mVideoZoomMode;
+    }
+
     private void initSubtitleStyles() {
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_default, R.color.light_grey, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_semi_transparent_bg, R.color.light_grey, R.color.semi_grey, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
@@ -223,6 +232,7 @@ public class PlayerData {
         mSubtitleFormat = ExoFormatItem.from(Helpers.parseStr(split, 11));
         mVideoBufferType = Helpers.parseInt(split, 12, PlaybackEngineController.BUFFER_LOW);
         mSubtitleStyleIndex = Helpers.parseInt(split, 13, 1);
+        mVideoZoomMode = Helpers.parseInt(split, 14, PlaybackEngineController.ZOOM_MODE_DEFAULT);
     }
 
     private void persistData() {
@@ -230,6 +240,6 @@ public class PlayerData {
                 mIsShowFullDateEnabled, mIsSeekPreviewEnabled, mIsPauseOnSeekEnabled,
                 mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundPlaybackType, Helpers.toString(mAfrData),
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
-                mVideoBufferType, mSubtitleStyleIndex));
+                mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode));
     }
 }

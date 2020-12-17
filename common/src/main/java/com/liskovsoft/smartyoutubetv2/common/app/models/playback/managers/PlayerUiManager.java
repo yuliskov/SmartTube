@@ -13,7 +13,8 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUiController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController.OnSelectZoomMode;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -25,7 +26,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.OnSelectSubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
-import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
@@ -67,6 +67,11 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     public void onInitDone() {
         AppSettingsPresenter.instance(getActivity()).setPlayerUiManager(this);
         mPlayerData = PlayerData.instance(getActivity());
+    }
+
+    @Override
+    public void onViewResumed() {
+        getController().setVideoZoomMode(mPlayerData.getVideoZoomMode());
     }
 
     @Override
@@ -249,6 +254,16 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         SearchPresenter.instance(getActivity()).startSearch(null);
     }
 
+    @Override
+    public void onVideoZoomClicked() {
+        OptionCategory videoZoomCategory = createVideoZoomCategory(getActivity(), mPlayerData, mode -> getController().setVideoZoomMode(mode));
+
+        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getActivity());
+        settingsPresenter.clear();
+        settingsPresenter.appendRadioCategory(videoZoomCategory.title, videoZoomCategory.options);
+        settingsPresenter.showDialog();
+    }
+
     private void intSpeedItems(List<OptionItem> items, float[] speedValues) {
         for (float speed : speedValues) {
             items.add(UiOptionItem.from(
@@ -332,5 +347,31 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         }
 
         return styleOptions;
+    }
+
+    public static OptionCategory createVideoZoomCategory(Context context, PlayerData playerData) {
+        return createVideoZoomCategory(context, playerData, mode -> {});
+    }
+
+    private static OptionCategory createVideoZoomCategory(Context context, PlayerData playerData, OnSelectZoomMode onSelectZoomMode) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.video_zoom_default, PlaybackEngineController.ZOOM_MODE_DEFAULT},
+                {R.string.video_zoom_fit_width, PlaybackEngineController.ZOOM_MODE_FIT_WIDTH},
+                {R.string.video_zoom_fit_height, PlaybackEngineController.ZOOM_MODE_FIT_HEIGHT},
+                {R.string.video_zoom_fit_both, PlaybackEngineController.ZOOM_MODE_FIT_BOTH},
+                {R.string.video_zoom_stretch, PlaybackEngineController.ZOOM_MODE_STRETCH}}) {
+            options.add(UiOptionItem.from(context.getString(pair[0]),
+                    optionItem -> {
+                        playerData.setVideoZoomMode(pair[1]);
+                        onSelectZoomMode.onSelectZoomMode(pair[1]);
+                    },
+                    playerData.getVideoZoomMode() == pair[1]));
+        }
+
+        String videoZoomTitle = context.getString(R.string.video_zoom);
+
+        return OptionCategory.from(SUBTITLE_STYLES_ID, videoZoomTitle, options);
     }
 }

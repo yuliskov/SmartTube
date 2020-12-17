@@ -39,6 +39,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendVideoPresetsCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
         appendAutoFrameRateCategory(settingsPresenter);
+        appendVideoZoomCategory(settingsPresenter);
         appendSubtitleLanguageCategory(settingsPresenter);
         appendSubtitleStyleCategory(settingsPresenter);
         appendOKButtonCategory(settingsPresenter);
@@ -106,6 +107,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendAutoFrameRateCategory(AppSettingsPresenter settingsPresenter) {
         OptionCategory category = AutoFrameRateManager.createAutoFrameRateCategory(getContext(), mPlayerData);
         settingsPresenter.appendCheckedCategory(category.title, category.options);
+    }
+
+    private void appendVideoZoomCategory(AppSettingsPresenter settingsPresenter) {
+        OptionCategory category = PlayerUiManager.createVideoZoomCategory(getContext(), mPlayerData);
+        settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
     private void appendSubtitleLanguageCategory(AppSettingsPresenter settingsPresenter) {
