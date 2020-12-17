@@ -42,7 +42,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         appendBootToCategory(settingsPresenter);
         appendChannelSortingCategory(settingsPresenter);
         appendPlaylistsStyle(settingsPresenter);
-        appendMiscCategory(settingsPresenter);
+        appendAppExitCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_main_ui), () -> {
             if (mRestartApp) {
@@ -160,14 +160,19 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.color_scheme), fromColorSchemes(colorSchemes));
     }
 
-    private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendAppExitCategory(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.app_double_back_exit),
-                option -> mMainUIData.enableDoubleBackExit(option.isSelected()),
-                mMainUIData.isDoubleBackExitEnabled()));
+        for (int[] pair : new int[][] {
+                {R.string.app_exit_none, MainUIData.EXIT_NONE},
+                {R.string.app_double_back_exit, MainUIData.EXIT_DOUBLE_BACK},
+                {R.string.app_single_back_exit, MainUIData.EXIT_SINGLE_BACK}}) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]),
+                    optionItem -> mMainUIData.setAppExitShortcut(pair[1]),
+                    mMainUIData.getAppExitShortcut() == pair[1]));
+        }
 
-        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.app_exit_shortcut), options);
     }
 
     private List<OptionItem> fromColorSchemes(List<ColorScheme> colorSchemes) {

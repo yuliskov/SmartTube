@@ -1,19 +1,15 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.common;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.sharedutils.locale.LangHelper;
-import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
-import com.liskovsoft.smartyoutubetv2.common.misc.LangUpdater;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.DoubleBackManager;
@@ -111,10 +107,13 @@ public abstract class LeanbackActivity extends MotherActivity {
     public void finish() {
         // user pressed back key
         if (!mViewManager.startParentView(this)) {
-            if (mMainUiData.isDoubleBackExitEnabled()) {
-                mDoubleBackManager.enableDoubleBackExit();
-            } else {
-                properlyFinishTheApp();
+            switch (mMainUiData.getAppExitShortcut()) {
+                case MainUIData.EXIT_DOUBLE_BACK:
+                    mDoubleBackManager.enableDoubleBackExit();
+                    break;
+                case MainUIData.EXIT_SINGLE_BACK:
+                    properlyFinishTheApp();
+                    break;
             }
         }
     }

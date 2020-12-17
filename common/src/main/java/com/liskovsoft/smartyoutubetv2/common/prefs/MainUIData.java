@@ -19,6 +19,9 @@ public class MainUIData {
     public static final int CHANNEL_SORTING_LAST_VIEWED = 2;
     public static final int PLAYLISTS_STYLE_GRID = 0;
     public static final int PLAYLISTS_STYLE_ROWS = 1;
+    public static final int EXIT_NONE = 0;
+    public static final int EXIT_DOUBLE_BACK = 1;
+    public static final int EXIT_SINGLE_BACK = 2;
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
     private final Context mContext;
@@ -35,7 +38,7 @@ public class MainUIData {
     private int mColorSchemeIndex;
     private int mChannelCategorySorting;
     private int mPlaylistsStyle;
-    private boolean mIsDoubleBackExitEnabled;
+    private int mAppExitShortcut;
 
     public MainUIData(Context context) {
         mContext = context;
@@ -160,12 +163,12 @@ public class MainUIData {
         persistState();
     }
 
-    public boolean isDoubleBackExitEnabled() {
-        return mIsDoubleBackExitEnabled;
+    public int getAppExitShortcut() {
+        return mAppExitShortcut;
     }
 
-    public void enableDoubleBackExit(boolean enabled) {
-        mIsDoubleBackExitEnabled = enabled;
+    public void setAppExitShortcut(int type) {
+        mAppExitShortcut = type;
     }
 
     private void initLeftPanelCategories() {
@@ -211,7 +214,7 @@ public class MainUIData {
         mPrefs.setMainUIData(Helpers.mergeObject(
                 mIsAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale,
                 mColorSchemeIndex, mIsMultilineTitlesEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting,
-                mPlaylistsStyle, mIsDoubleBackExitEnabled));
+                mPlaylistsStyle, mAppExitShortcut));
     }
 
     private void restoreState() {
@@ -229,7 +232,7 @@ public class MainUIData {
         mIsSettingsCategoryEnabled = Helpers.parseBoolean(split, 7, true);
         mChannelCategorySorting = Helpers.parseInt(split, 8, CHANNEL_SORTING_UPDATE);
         mPlaylistsStyle = Helpers.parseInt(split, 9, PLAYLISTS_STYLE_GRID);
-        mIsDoubleBackExitEnabled = Helpers.parseBoolean(split, 10, true);
+        mAppExitShortcut = Helpers.parseInt(split, 10, EXIT_DOUBLE_BACK);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArray(selectedCategories);

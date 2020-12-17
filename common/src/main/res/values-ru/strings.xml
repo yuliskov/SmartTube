@@ -127,5 +127,8 @@
     <string name="player_show_clock">Отображать часы</string>
     <string name="player_show_remaining_time">Отображать оставшееся время</string>
     <string name="open_channel_uploads">Все видео на канале</string>
-    <string name="app_double_back_exit">Двойное назад, чтоб выйти из приложения</string>
+    <string name="app_exit_shortcut">Выход из приложения</string>
+    <string name="app_exit_none">Не выходить</string>
+    <string name="app_double_back_exit">Двойное назад</string>
+    <string name="app_single_back_exit">Одинарное назад</string>
 </resources>
