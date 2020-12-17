@@ -130,6 +130,6 @@
     <string name="open_channel_uploads">Video\'s van kanaal weergeven</string>
     <string name="app_exit_shortcut">App afsluiten</string>
     <string name="app_exit_none">Niet afsluiten</string>
-    <string name="app_double_back_exit">2x BACK toets drukken</string>
-    <string name="app_single_back_exit">1x BACK toets drukken</string>
+    <string name="app_double_back_exit">2x BACK toets</string>
+    <string name="app_single_back_exit">1x BACK toets</string>
 </resources>
