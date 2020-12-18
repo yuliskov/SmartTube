@@ -89,7 +89,9 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
             // User pressed HOME button while dialog was open.
             onClose();
             // Stop player from running in background
-            mUiManager.getController().releasePlayer();
+            if (mUiManager != null && mUiManager.getController() != null) {
+                mUiManager.getController().releasePlayer();
+            }
         }
 
         mIsClosed = false;
