@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.Looper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -23,6 +22,7 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     private Runnable mOnClose;
     private PlayerUiManager mUiManager;
     private int mEngineBlockType;
+    private boolean mIsClosed;
 
     public static class SettingsCategory {
         public static SettingsCategory radioList(String title, List<OptionItem> items) {
@@ -80,20 +80,35 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
         return sInstance;
     }
 
+    /**
+     * Called after {@link #onClose}
+     */
     @Override
     public void onViewDestroyed() {
-        clear();
+        if (!mIsClosed) {
+            // User pressed HOME button while dialog was open.
+            onClose();
+            // Stop player from running in background
+            mUiManager.getController().releasePlayer();
+        }
+
+        mIsClosed = false;
     }
 
+    /**
+     * Called when user pressed back button.
+     */
     public void onClose() {
         clear();
 
         enablePlayerUiAutoHide(true);
-        enableOldAndroidFix(false);
+        blockPlayerEngine(false);
 
         if (mOnClose != null) {
             mOnClose.run();
         }
+
+        mIsClosed = true;
     }
 
     public void clear() {
@@ -127,7 +142,7 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
         mOnClose = onClose;
 
         enablePlayerUiAutoHide(false);
-        enableOldAndroidFix(true);
+        blockPlayerEngine(true);
 
         if (getView() != null) {
             getView().clear();
@@ -167,11 +182,11 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
         }, timeoutMs);
     }
 
-    private void enableOldAndroidFix(boolean enable) {
+    private void blockPlayerEngine(boolean block) {
         if (mUiManager != null && mUiManager.getController() != null) {
             // Old Android fix: don't destroy player while dialog is open
             //if (VERSION.SDK_INT < 25) {
-            //    if (enable) {
+            //    if (block) {
             //        mEngineBlockType = mUiManager.getController().getEngineBlockType(); // save orig value for later restoration
             //        mUiManager.getController().setEngineBlockType(PlaybackEngineController.ENGINE_BLOCK_TYPE_AUDIO);
             //    } else {
@@ -179,7 +194,7 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
             //    }
             //}
 
-            if (enable) {
+            if (block) {
                 mEngineBlockType = mUiManager.getController().getEngineBlockType(); // save orig value for later restoration
                 mUiManager.getController().setEngineBlockType(PlaybackEngineController.ENGINE_BLOCK_TYPE_AUDIO);
             } else {

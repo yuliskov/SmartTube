@@ -102,10 +102,6 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         setupPlayerBackground();
 
         mPlaybackPresenter.onViewInitialized();
-
-        // Fix controls pop-up upon fragment creation.
-        // Should be called after player's background setup.
-        hideControlsOverlay(mIsAnimationEnabled);
     }
 
     @Override
@@ -132,6 +128,15 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     // NOTE: depending of SDK version Start/Stop may be called with delay (SDK_INT > 23) or not called at all (PIP/Dialogs)!
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        // Fix controls pop-up on start.
+        // Should be set before player initialization.
+        hideControlsOverlay(mIsAnimationEnabled);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
 
@@ -149,9 +154,6 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             releasePlayer();
             mEventListener.onViewPaused();
         }
-
-        // Fix controls pop-up upon player initialization.
-        hideControlsOverlay(mIsAnimationEnabled);
     }
 
     //@Override
@@ -249,7 +251,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         }
     }
 
-    private void releasePlayer() {
+    @Override
+    public void releasePlayer() {
         if (getEngineBlockType() != PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE) {
             Log.d(TAG, "releasePlayer: Engine release is blocked. Exiting...");
             return;
@@ -625,6 +628,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void setEngineBlockType(int type) {
+        Log.d(TAG, "Setting engine block type to %s...", type);
         mEngineBlockType = type;
     }
 
