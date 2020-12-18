@@ -127,4 +127,18 @@
     <string name="player_show_clock">Uhr anzeigen</string>
     <string name="player_show_remaining_time">Verbleibende Zeit anzeigen</string>
     <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
+    <string name="open_channel_uploads">Kanalvideos öffnen</string>
+    <string name="app_exit_shortcut">App beenden</string>
+    <string name="app_exit_none">Nicht beenden</string>
+    <string name="app_double_back_exit">2x Zurück-Taste</string>
+    <string name="app_single_back_exit">1x Zurück-Taste</string>
+    <string name="action_video_zoom">Video-Zoom</string>
+    <string name="video_zoom">Video-Zoom</string>
+    <string name="video_zoom_default">Standard</string>
+    <string name="video_zoom_fit_width">Breite anpassen</string>
+    <string name="video_zoom_fit_height">Höhe anpassen</string>
+    <string name="video_zoom_fit_both">Breite und Höhe anpassen</string>
+    <string name="video_zoom_stretch">Strecken</string>
+    <string name="color_scheme_teal">Blaugrün</string>
+    <string name="color_scheme_teal_oled">Blaugrün (OLED)</string>
 </resources>
