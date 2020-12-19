@@ -168,7 +168,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         getController().showDebugView(mDebugViewEnabled);
         getController().setDebugButtonState(mDebugViewEnabled);
 
-        if (mPlayerData.isSeekPreviewEnabled()) {
+        if (mPlayerData.getSeekPreviewMode() != PlayerData.SEEK_PREVIEW_NONE) {
             getController().loadStoryboard();
         }
     }

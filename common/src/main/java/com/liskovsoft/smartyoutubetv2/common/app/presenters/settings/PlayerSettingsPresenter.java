@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.LangUpdater;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendSubtitleStyleCategory(settingsPresenter);
         appendOKButtonCategory(settingsPresenter);
         appendUIAutoHideCategory(settingsPresenter);
+        appendSeekingPreviewCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_player_ui));
@@ -147,16 +149,27 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
+    private void appendSeekingPreviewCategory(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.player_seek_preview_none, PlayerData.SEEK_PREVIEW_NONE},
+                {R.string.player_seek_preview_single, PlayerData.SEEK_PREVIEW_SINGLE},
+                {R.string.player_seek_preview_carousel, PlayerData.SEEK_PREVIEW_CAROUSEL}}) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]),
+                    optionItem -> mPlayerData.setSeekPreviewMode(pair[1]),
+                    mPlayerData.getSeekPreviewMode() == pair[1]));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_seek_preview), options);
+    }
+
     private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_full_date),
                 option -> mPlayerData.showFullDate(option.isSelected()),
                 mPlayerData.isShowFullDateEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_seek_preview),
-                option -> mPlayerData.enableSeekPreview(option.isSelected()),
-                mPlayerData.isSeekPreviewEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_pause_when_seek),
                 option -> mPlayerData.enablePauseOnSeek(option.isSelected()),

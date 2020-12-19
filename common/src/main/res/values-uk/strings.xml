@@ -140,4 +140,7 @@
     <string name="video_zoom_stretch">Розтягнути</string>
     <string name="color_scheme_teal">Бірюзова</string>
     <string name="color_scheme_teal_oled">Бірюзова (OLED)</string>
+    <string name="player_seek_preview_none">Відключено</string>
+    <string name="player_seek_preview_single">Один кадр</string>
+    <string name="player_seek_preview_carousel">Карусель</string>
 </resources>

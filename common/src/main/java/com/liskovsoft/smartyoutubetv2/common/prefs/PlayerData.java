@@ -19,13 +19,15 @@ public class PlayerData {
     public static final int UI_AND_PAUSE = 1;
     public static final int ONLY_PAUSE = 2;
     public static final int AUTO_HIDE_NEVER = 0;
+    public static final int SEEK_PREVIEW_NONE = 0;
+    public static final int SEEK_PREVIEW_SINGLE = 1;
+    public static final int SEEK_PREVIEW_CAROUSEL = 2;
     @SuppressLint("StaticFieldLeak")
     private static PlayerData sInstance;
     private final AppPrefs mPrefs;
     private int mOKButtonBehavior;
     private int mUIHideTimeoutSec;
     private boolean mIsShowFullDateEnabled;
-    private boolean mIsSeekPreviewEnabled;
     private boolean mIsPauseOnSeekEnabled;
     private boolean mIsClockEnabled;
     private boolean mIsRemainingTimeEnabled;
@@ -38,6 +40,7 @@ public class PlayerData {
     private final List<SubtitleStyle> mSubtitleStyles = new ArrayList<>();
     private int mSubtitleStyleIndex;
     private int mVideoZoomMode;
+    private int mSeekPreviewMode;
 
     public PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -80,13 +83,13 @@ public class PlayerData {
         return mIsShowFullDateEnabled;
     }
 
-    public void enableSeekPreview(boolean show) {
-        mIsSeekPreviewEnabled = show;
+    public void setSeekPreviewMode(int mode) {
+        mSeekPreviewMode = mode;
         persistData();
     }
 
-    public boolean isSeekPreviewEnabled() {
-        return mIsSeekPreviewEnabled;
+    public int getSeekPreviewMode() {
+        return mSeekPreviewMode;
     }
 
     public void enablePauseOnSeek(boolean enable) {
@@ -217,7 +220,7 @@ public class PlayerData {
         mOKButtonBehavior = Helpers.parseInt(split, 0, ONLY_UI);
         mUIHideTimeoutSec = Helpers.parseInt(split, 1, 3);
         mIsShowFullDateEnabled = Helpers.parseBoolean(split, 2, false);
-        mIsSeekPreviewEnabled = Helpers.parseBoolean(split, 3, true);
+        mSeekPreviewMode = Helpers.parseInt(split, 3, SEEK_PREVIEW_SINGLE);
         mIsPauseOnSeekEnabled = Helpers.parseBoolean(split, 4, false);
         mIsClockEnabled = Helpers.parseBoolean(split, 5, true);
         mIsRemainingTimeEnabled = Helpers.parseBoolean(split, 6, true);
@@ -233,7 +236,7 @@ public class PlayerData {
 
     private void persistData() {
         mPrefs.setPlayerData(Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec,
-                mIsShowFullDateEnabled, mIsSeekPreviewEnabled, mIsPauseOnSeekEnabled,
+                mIsShowFullDateEnabled, mSeekPreviewMode, mIsPauseOnSeekEnabled,
                 mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundPlaybackType, Helpers.toString(mAfrData),
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode));
