@@ -198,7 +198,10 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
 
             if (block) {
                 mEngineBlockType = mUiManager.getController().getEngineBlockType(); // save orig value for later restoration
-                mUiManager.getController().setEngineBlockType(PlaybackEngineController.ENGINE_BLOCK_TYPE_AUDIO);
+
+                if (mEngineBlockType == PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE) {
+                    mUiManager.getController().setEngineBlockType(PlaybackEngineController.ENGINE_BLOCK_TYPE_AUDIO);
+                }
             } else {
                 mUiManager.getController().setEngineBlockType(mEngineBlockType);
             }

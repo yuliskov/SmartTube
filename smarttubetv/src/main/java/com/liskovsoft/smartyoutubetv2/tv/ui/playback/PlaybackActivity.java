@@ -187,12 +187,18 @@ public class PlaybackActivity extends LeanbackActivity {
 
     @Override
     public void onUserLeaveHint () {
-        if (mPlaybackFragment.getEngineBlockType() == PlaybackEngineController.ENGINE_BLOCK_TYPE_BEHIND) {
-            enterBackgroundPlayMode();
-            ViewManager.instance(this).removeTop(this); // return to browser instead of player
-        } else if (mPlaybackFragment.getEngineBlockType() == PlaybackEngineController.ENGINE_BLOCK_TYPE_PIP && !mPlaybackFragment.isControlsShown()) {
-            enterPIPMode();
-            ViewManager.instance(this).removeTop(this); // return to browser instead of player
+        // Check that user not open dialog instead of really leaving the activity
+        if (!mPlaybackFragment.isControlsShown()) {
+            switch (mPlaybackFragment.getEngineBlockType()) {
+                case PlaybackEngineController.ENGINE_BLOCK_TYPE_BEHIND:
+                    enterBackgroundPlayMode();
+                    ViewManager.instance(this).removeTop(this); // return to browser instead of player
+                    break;
+                case PlaybackEngineController.ENGINE_BLOCK_TYPE_PIP:
+                    enterPIPMode();
+                    ViewManager.instance(this).removeTop(this); // return to browser instead of player
+                    break;
+            }
         }
     }
 }

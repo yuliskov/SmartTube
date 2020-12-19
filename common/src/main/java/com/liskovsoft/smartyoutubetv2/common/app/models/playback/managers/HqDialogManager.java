@@ -119,13 +119,6 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     }
 
     private void updateBackgroundPlayback() {
-        //if (mPlayerData.getBackgroundPlaybackType() != PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE) {
-        //    // return to the player regardless the last activity user watched in moment exiting to HOME
-        //    ViewManager.instance(getActivity()).blockTop(getActivity());
-        //} else {
-        //    ViewManager.instance(getActivity()).blockTop(null);
-        //}
-
         ViewManager.instance(getActivity()).blockTop(null);
 
         getController().setEngineBlockType(mPlayerData.getBackgroundPlaybackType());
