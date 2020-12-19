@@ -26,11 +26,11 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private final Playlist mPlaylist;
     private final Handler mHandler;
     private Video mLastVideo;
-    private Video mErrorVideo;
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
     private int mRepeatMode = PlaybackUiController.REPEAT_ALL;
     private final Runnable mReloadVideoHandler = () -> loadVideo(mLastVideo);
+    private long mPrevErrorTimeMs;
 
     public VideoLoader() {
         mPlaylist = Playlist.instance();
@@ -68,10 +68,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onEngineError(int type) {
-        // restart once per video
-        if (mErrorVideo != mLastVideo) {
+        if (isWithinTimeWindow()) {
             Log.e(TAG, "Player error occurred. Restarting engine once...");
-            mErrorVideo = mLastVideo;
             YouTubeMediaService.instance().invalidateCache(); // some data might be stalled
             getController().reloadPlayback(); // re-download video data
         } else {
@@ -259,5 +257,14 @@ public class VideoLoader extends PlayerEventListenerHelper {
         Log.d(TAG, "Starting check for the future stream...");
         getController().showControls(true);
         mHandler.postDelayed(mReloadVideoHandler, 30 * 1_000);
+    }
+
+    private boolean isWithinTimeWindow() {
+        // Restart once per n seconds
+        long currentTimeMillis = System.currentTimeMillis();
+        boolean withinTimeWindow = currentTimeMillis - mPrevErrorTimeMs > 10_000;
+        mPrevErrorTimeMs = currentTimeMillis;
+
+        return withinTimeWindow;
     }
 }
