@@ -140,4 +140,7 @@
     <string name="video_zoom_stretch">Roztáhnout</string>
     <string name="color_scheme_teal">Šedozelená</string>
     <string name="color_scheme_teal_oled">Šedozelená (OLED)</string>
+    <string name="player_seek_preview_none">Vypnuto</string>
+    <string name="player_seek_preview_single">Jeden snímek</string>
+    <string name="player_seek_preview_carousel">Několik snímků</string>
 </resources>
