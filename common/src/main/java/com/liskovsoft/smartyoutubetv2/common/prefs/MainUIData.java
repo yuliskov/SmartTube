@@ -169,6 +169,7 @@ public class MainUIData {
 
     public void setAppExitShortcut(int type) {
         mAppExitShortcut = type;
+        persistState();
     }
 
     private void initLeftPanelCategories() {
