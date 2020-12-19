@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection.Factory;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -127,73 +130,55 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     // NOTE: depending of SDK version Start/Stop may be called with delay (SDK_INT > 23) or not called at all (PIP/Dialogs)!
 
+    /**
+     * Not called when using PIP or Dialogs on API >= 24
+     */
     @Override
     public void onStart() {
         super.onStart();
 
-        // Fix controls pop-up on start.
-        // Should be set before player initialization.
+        // Fix controls pop-up on Activity start/resume.
+        // Should be called on earlier stage.
         hideControlsOverlay(mIsAnimationEnabled);
+
+        if (Util.SDK_INT > 23) {
+            initializePlayer();
+        }
+    }
+
+    /**
+     * Not called when using PIP or Dialogs on API >= 24
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        if (getEngineBlockType() == PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE) {
+        if ((Util.SDK_INT <= 23 || mPlayer == null)) {
             initializePlayer();
-            mEventListener.onViewResumed();
         }
+
+        mEventListener.onViewResumed();
     }
 
     @Override
     public void onPause() {
         super.onPause();
 
-        if (getEngineBlockType() == PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE) {
+        if (Util.SDK_INT <= 23) {
             releasePlayer();
-            mEventListener.onViewPaused();
         }
-    }
 
-    //@Override
-    //public void onStart() {
-    //    super.onStart();
-    //    if (Util.SDK_INT > 23) {
-    //        initializePlayer();
-    //        mEventListener.onViewResumed();
-    //    }
-    //}
-    //
-    //@Override
-    //public void onResume() {
-    //    super.onResume();
-    //    if ((Util.SDK_INT <= 23 || mPlayer == null)) {
-    //        initializePlayer();
-    //        mEventListener.onViewResumed();
-    //    }
-    //}
-    //
-    ///** Pauses the player. */
-    //@TargetApi(Build.VERSION_CODES.N)
-    //@Override
-    //public void onPause() {
-    //    super.onPause();
-    //
-    //    if (Util.SDK_INT <= 23) {
-    //        releasePlayer();
-    //        mEventListener.onViewPaused();
-    //    }
-    //}
-    //
-    //@Override
-    //public void onStop() {
-    //    super.onStop();
-    //    if (Util.SDK_INT > 23) {
-    //        releasePlayer();
-    //        mEventListener.onViewPaused();
-    //    }
-    //}
+        mEventListener.onViewPaused();
+    }
 
     public void onDispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
