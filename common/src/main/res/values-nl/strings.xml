@@ -140,4 +140,7 @@
     <string name="app_single_back_exit">1x BACK toets</string>
     <string name="color_scheme_teal">Blauw-groen</string>
     <string name="color_scheme_teal_oled">Blauw-groen (OLED)</string>
+    <string name="player_seek_preview_none">Geen preview</string>
+    <string name="player_seek_preview_single">Single-frame</string>
+    <string name="player_seek_preview_carousel">Multi-frame</string>
 </resources>
