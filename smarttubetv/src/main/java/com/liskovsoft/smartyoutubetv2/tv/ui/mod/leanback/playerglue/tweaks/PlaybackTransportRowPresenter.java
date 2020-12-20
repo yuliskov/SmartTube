@@ -136,74 +136,74 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             }
         };
 
-        //void updateProgressInSeek(boolean forward) {
-        //    long newPos;
-        //    long pos = mCurrentTimeInMs;
-        //    if (mPositionsLength > 0) {
-        //        int index = Arrays.binarySearch(mPositions, 0, mPositionsLength, pos);
-        //        int thumbHeroIndex;
-        //        if (forward) {
-        //            if (index >= 0) {
-        //                // found it, seek to neighbour key position at higher side
-        //                if (index < mPositionsLength - 1) {
-        //                    newPos = mPositions[index + 1];
-        //                    thumbHeroIndex = index + 1;
-        //                } else {
-        //                    newPos = mTotalTimeInMs;
-        //                    thumbHeroIndex = index;
-        //                }
-        //            } else {
-        //                // not found, seek to neighbour key position at higher side.
-        //                int insertIndex = -1 - index;
-        //                if (insertIndex <= mPositionsLength - 1) {
-        //                    newPos = mPositions[insertIndex];
-        //                    thumbHeroIndex = insertIndex;
-        //                } else {
-        //                    newPos = mTotalTimeInMs;
-        //                    thumbHeroIndex = insertIndex > 0 ? insertIndex - 1 : 0;
-        //                }
-        //            }
-        //        } else {
-        //            if (index >= 0) {
-        //                // found it, seek to neighbour key position at lower side.
-        //                if (index > 0) {
-        //                    newPos = mPositions[index - 1];
-        //                    thumbHeroIndex = index - 1;
-        //                } else {
-        //                    newPos = 0;
-        //                    thumbHeroIndex = 0;
-        //                }
-        //            } else {
-        //                // not found, seek to neighbour key position at lower side.
-        //                int insertIndex = -1 - index;
-        //                if (insertIndex > 0) {
-        //                    newPos = mPositions[insertIndex - 1];
-        //                    thumbHeroIndex = insertIndex - 1;
-        //                } else {
-        //                    newPos = 0;
-        //                    thumbHeroIndex = 0;
-        //                }
-        //            }
-        //        }
-        //        updateThumbsInSeek(thumbHeroIndex, forward);
-        //    } else {
-        //        long interval = calculateSeekIncrement();
-        //        newPos = pos + (forward ? interval : -interval);
-        //        if (newPos > mTotalTimeInMs) {
-        //            newPos = mTotalTimeInMs;
-        //        } else if (newPos < 0) {
-        //            newPos = 0;
-        //        }
-        //    }
-        //    double ratio = (double) newPos / mTotalTimeInMs;     // Range: [0, 1]
-        //    mProgressBar.setProgress((int) (ratio * Integer.MAX_VALUE)); // Could safely cast to int
-        //    mSeekClient.onSeekPositionChanged(newPos);
-        //}
+        void updateProgressInSeek(boolean forward) {
+            long newPos;
+            long pos = mCurrentTimeInMs;
+            if (mPositionsLength > 0) {
+                int index = Arrays.binarySearch(mPositions, 0, mPositionsLength, pos);
+                int thumbHeroIndex;
+                if (forward) {
+                    if (index >= 0) {
+                        // found it, seek to neighbour key position at higher side
+                        if (index < mPositionsLength - 1) {
+                            newPos = mPositions[index + 1];
+                            thumbHeroIndex = index + 1;
+                        } else {
+                            newPos = mTotalTimeInMs;
+                            thumbHeroIndex = index;
+                        }
+                    } else {
+                        // not found, seek to neighbour key position at higher side.
+                        int insertIndex = -1 - index;
+                        if (insertIndex <= mPositionsLength - 1) {
+                            newPos = mPositions[insertIndex];
+                            thumbHeroIndex = insertIndex;
+                        } else {
+                            newPos = mTotalTimeInMs;
+                            thumbHeroIndex = insertIndex > 0 ? insertIndex - 1 : 0;
+                        }
+                    }
+                } else {
+                    if (index >= 0) {
+                        // found it, seek to neighbour key position at lower side.
+                        if (index > 0) {
+                            newPos = mPositions[index - 1];
+                            thumbHeroIndex = index - 1;
+                        } else {
+                            newPos = 0;
+                            thumbHeroIndex = 0;
+                        }
+                    } else {
+                        // not found, seek to neighbour key position at lower side.
+                        int insertIndex = -1 - index;
+                        if (insertIndex > 0) {
+                            newPos = mPositions[insertIndex - 1];
+                            thumbHeroIndex = insertIndex - 1;
+                        } else {
+                            newPos = 0;
+                            thumbHeroIndex = 0;
+                        }
+                    }
+                }
+                updateThumbsInSeek(thumbHeroIndex, forward);
+            } else {
+                long interval = calculateSeekIncrement();
+                newPos = pos + (forward ? interval : -interval);
+                if (newPos > mTotalTimeInMs) {
+                    newPos = mTotalTimeInMs;
+                } else if (newPos < 0) {
+                    newPos = 0;
+                }
+            }
+            double ratio = (double) newPos / mTotalTimeInMs;     // Range: [0, 1]
+            mProgressBar.setProgress((int) (ratio * Integer.MAX_VALUE)); // Could safely cast to int
+            mSeekClient.onSeekPositionChanged(newPos);
+        }
 
         /**
          * MOD: implement fast seeking for videos with storyboard (indexed thumbnails)
          */
-        void updateProgressInSeek(boolean forward) {
+        void updateProgressInSeekMod(boolean forward) {
             long newPos;
             long pos = mCurrentTimeInMs;
 
@@ -361,20 +361,31 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         };
 
         boolean onForward() {
-            if (!startSeek()) {
-                return false;
-            }
-            updateProgressInSeek(true);
-            return true;
+            return onForward(true);
         }
 
         boolean onBackward() {
+            return onForward(false);
+        }
+
+        boolean onForward(boolean forward) {
             if (!startSeek()) {
                 return false;
             }
-            updateProgressInSeek(false);
+
+            if (mPlayerData.getSeekPreviewMode() == PlayerData.SEEK_PREVIEW_CAROUSEL) {
+                // Auto thumbs size
+                mThumbsBar.setNumberOfThumbs(-1);
+                updateProgressInSeek(forward);
+            } else {
+                // View carousel is useless if we're not using seeking by key frames.
+                mThumbsBar.setNumberOfThumbs(1);
+                updateProgressInSeekMod(forward);
+            }
+
             return true;
         }
+
         /**
          * Constructor of ViewHolder of PlaybackTransportRowPresenter
          * @param rootView Root view of the ViewHolder.

@@ -37,6 +37,7 @@ public class ThumbsBar extends LinearLayout {
 
     // initial value for Thumb's number before measuring the screen size
     int mNumOfThumbs = -1;
+    int mMeasuredNumOfThumbs;
     int mThumbWidthInPixel;
     int mThumbHeightInPixel;
     int mHeroThumbWidthInPixel;
@@ -66,9 +67,6 @@ public class ThumbsBar extends LinearLayout {
         // According to the spec, the margin between thumbs to be 4dp
         mMeasuredMarginInPixel = context.getResources().getDimensionPixelSize(
                 R.dimen.lb_playback_transport_thumbs_margin);
-
-        // View carousel is useless if we're not using seeking by key frames.
-        setNumberOfThumbs(1);
     }
 
     /**
@@ -144,8 +142,14 @@ public class ThumbsBar extends LinearLayout {
      * Set number of thumb views.
      */
     public void setNumberOfThumbs(int numOfThumbs) {
+        int newNumOfThumbs = numOfThumbs != -1 ? numOfThumbs : mMeasuredNumOfThumbs;
+
+        if (newNumOfThumbs == mNumOfThumbs) {
+            return;
+        }
+
         mIsUserSets = true;
-        mNumOfThumbs = numOfThumbs;
+        mNumOfThumbs = newNumOfThumbs;
         setNumberOfThumbsInternal();
     }
 
@@ -228,6 +232,7 @@ public class ThumbsBar extends LinearLayout {
             // Set new number of thumbs when calculation result is different with current number
             if (mNumOfThumbs != numOfThumbs) {
                 mNumOfThumbs = numOfThumbs;
+                mMeasuredNumOfThumbs = numOfThumbs;
                 setNumberOfThumbsInternal();
             }
         }
