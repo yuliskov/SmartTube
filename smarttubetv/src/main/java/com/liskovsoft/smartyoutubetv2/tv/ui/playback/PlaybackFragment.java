@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.Nullable;
@@ -181,11 +182,23 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     public void onDispatchKeyEvent(KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            if (mPlayerGlue != null) {
-                mPlayerGlue.syncControlsState();
-            }
+        //if (event.getAction() == KeyEvent.ACTION_DOWN) {
+        //    if (mPlayerGlue != null) {
+        //        mPlayerGlue.syncControlsState();
+        //    }
+        //}
+
+        if (mPlayerGlue != null) {
+            mPlayerGlue.syncControlsState();
         }
+    }
+
+    public void onDispatchTouchEvent(MotionEvent event) {
+        //if (event.getAction() == MotionEvent.ACTION_POINTER_DOWN) {
+        //    if (mPlayerGlue != null) {
+        //        mPlayerGlue.syncControlsState();
+        //    }
+        //}
     }
 
     public void skipToNext() {

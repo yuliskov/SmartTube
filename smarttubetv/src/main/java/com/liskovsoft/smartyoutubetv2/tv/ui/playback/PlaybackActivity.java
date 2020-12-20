@@ -58,6 +58,15 @@ public class PlaybackActivity extends LeanbackActivity {
     }
 
     @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (mPlaybackFragment != null) {
+            mPlaybackFragment.onDispatchTouchEvent(event);
+        }
+
+        return super.dispatchTouchEvent(event);
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BUTTON_R1) {
             mPlaybackFragment.skipToNext();
