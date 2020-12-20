@@ -251,7 +251,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                         }
                     }
                 }
-                updateThumbsInSeek(thumbHeroIndex, forward);
+                updateThumbsInSeek(forward ? thumbHeroIndex - 1 : thumbHeroIndex, forward);
             }
 
             double ratio = (double) newPos / mTotalTimeInMs;     // Range: [0, 1]
