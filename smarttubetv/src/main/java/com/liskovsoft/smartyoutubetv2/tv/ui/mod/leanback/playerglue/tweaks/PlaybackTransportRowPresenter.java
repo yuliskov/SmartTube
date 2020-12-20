@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue;
+package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -42,9 +42,9 @@ import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.SeekBar;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.ControlBarPresenter.OnControlClickedListener;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.ControlBarPresenter.OnControlSelectedListener;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.MaxControlsVideoPlayerGlue.QualityInfoListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.OnControlClickedListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.OnControlSelectedListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue.QualityInfoListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.seekpreview.ThumbsBar;
 
 import java.util.Arrays;

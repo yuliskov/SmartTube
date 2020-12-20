@@ -54,7 +54,7 @@
             android:layout_marginBottom="@dimen/lb_playback_transport_thumbs_bottom_margin" />
     </FrameLayout>
 
-    <com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.PlaybackTransportRowView
+    <com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.PlaybackTransportRowView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/transport_row"
@@ -221,5 +221,5 @@
         </RelativeLayout>
 
 
-    </com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.PlaybackTransportRowView>
+    </com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.PlaybackTransportRowView>
 </LinearLayout>

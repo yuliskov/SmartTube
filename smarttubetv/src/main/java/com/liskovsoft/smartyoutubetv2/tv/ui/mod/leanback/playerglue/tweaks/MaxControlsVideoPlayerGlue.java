@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue;
+package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks;
 
 import android.content.Context;
 import androidx.leanback.media.PlayerAdapter;
@@ -6,7 +6,7 @@ import androidx.leanback.widget.AbstractDetailsDescriptionPresenter;
 import androidx.leanback.widget.PlaybackRowPresenter;
 import androidx.leanback.widget.RowPresenter;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.PlaybackTransportRowPresenter.TopEdgeFocusListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.PlaybackTransportRowPresenter.TopEdgeFocusListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.framedrops.PlaybackBaseControlGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.framedrops.PlaybackTransportControlGlue;
 

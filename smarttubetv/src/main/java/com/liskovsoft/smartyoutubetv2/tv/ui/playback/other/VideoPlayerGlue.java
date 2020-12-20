@@ -12,7 +12,7 @@ import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.PlaybackControlsRow;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerView;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.MaxControlsVideoPlayerGlue;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoZoomAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SearchAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsAction;
@@ -232,7 +232,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter>
         }
 
         // Ignore result to give a chance to handle this event in
-        // com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.PlaybackTransportRowPresenter.ViewHolder
+        // com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.maxcontrols.PlaybackTransportRowPresenter.ViewHolder
         return handled || super.onKey(v, keyCode, event);
     }
 

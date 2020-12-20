@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue;
+package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks;
 
 import android.content.Context;
 import android.util.SparseArray;
@@ -32,7 +32,7 @@ import androidx.leanback.widget.Presenter;
  */
 class ControlBarPresenter extends Presenter {
 
-    // NOTE: modified. Origin: 7. Leanback version 1.0.0
+    // MOD: increase player's controls number. Origin: 7. Leanback version 1.0.0
     static final int MAX_CONTROLS = 10;
 
     /**
