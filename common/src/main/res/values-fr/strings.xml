@@ -124,4 +124,21 @@
     <string name="playlists_style">Style de bibliothèque</string>
     <string name="playlists_style_grid">Grille</string>
     <string name="playlists_style_rows">Lignes</string>
+    <string name="player_show_clock">Afficher l’horloge</string>
+    <string name="player_show_remaining_time">Afficher le temps restant</string>
+    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
+    <string name="open_channel_uploads">Ouvrir les vidéos de la chaîne</string>
+    <string name="app_exit_shortcut">Sortir de l’application</string>
+    <string name="app_exit_none">Ne pas sortir</string>
+    <string name="app_double_back_exit">2 fois sur retour</string>
+    <string name="app_single_back_exit">1 fois sur retour</string>
+    <string name="action_video_zoom">Zoom vidéo</string>
+    <string name="video_zoom">Zoom vidéo</string>
+    <string name="video_zoom_default">Par défaut</string>
+    <string name="video_zoom_fit_width">Ajustement de la largeur</string>
+    <string name="video_zoom_fit_height">Ajustement de la hauteur</string>
+    <string name="video_zoom_fit_both">Ajustement de la largeur ou de la hauteur</string>
+    <string name="video_zoom_stretch">Étirer</string>
+    <string name="color_scheme_teal">Sarcelle</string>
+    <string name="color_scheme_teal_oled">Sarcelle (OLED)</string>
 </resources>
