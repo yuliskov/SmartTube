@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.browse.video;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.leanback.app.RowsSupportFragment;
@@ -31,9 +30,9 @@ import java.util.Map;
 
 public abstract class MultipleRowsFragment extends RowsSupportFragment implements VideoCategoryFragment {
     private static final String TAG = MultipleRowsFragment.class.getSimpleName();
-    private static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_XSMALL;
+    private static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
+    private static final boolean USE_FOCUS_DIMMER = false;
     private UriBackgroundManager mBackgroundManager;
-    private Handler mHandler;
     private ArrayObjectAdapter mRowsAdapter;
     private Map<Integer, VideoGroupObjectAdapter> mVideoGroupAdapters;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
@@ -44,8 +43,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mHandler = new Handler();
+        
         mMainPresenter = getMainPresenter();
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
 
@@ -70,7 +68,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         }
 
         if (mRowsAdapter == null) {
-            mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter(ZOOM_FACTOR));
+            mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter(ZOOM_FACTOR, USE_FOCUS_DIMMER));
             setAdapter(mRowsAdapter);
         }
     }

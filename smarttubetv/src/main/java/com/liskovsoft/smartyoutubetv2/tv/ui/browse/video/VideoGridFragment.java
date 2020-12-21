@@ -28,7 +28,8 @@ import java.util.List;
 public class VideoGridFragment extends GridFragment implements VideoCategoryFragment {
     private static final String TAG = VideoGridFragment.class.getSimpleName();
     private static final int COLUMNS_NUM = 4;
-    private static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_XSMALL;
+    private static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
+    private static final boolean USE_FOCUS_DIMMER = false;
     private static final int CHECK_SCROLL_ITEMS_NUM = 15;
     private VideoGroupObjectAdapter mGridAdapter;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
@@ -75,7 +76,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
     }
 
     private void setupAdapter() {
-        VerticalGridPresenter presenter = new VerticalGridPresenter(ZOOM_FACTOR, false);
+        VerticalGridPresenter presenter = new VerticalGridPresenter(ZOOM_FACTOR, USE_FOCUS_DIMMER);
         presenter.setNumberOfColumns(getNumColumns());
         setGridPresenter(presenter);
 
