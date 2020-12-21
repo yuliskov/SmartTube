@@ -21,7 +21,7 @@ import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VideoMenuPresenter extends BasePresenter<Void> {
+public class ChannelMenuPresenter extends BasePresenter<Void> {
     private final MediaItemManager mItemManager;
     private final SignInManager mAuthManager;
     private final AppSettingsPresenter mSettingsPresenter;
@@ -34,7 +34,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     private boolean mIsOpenChannelButtonEnabled;
     private boolean mIsOpenChannelUploadsButtonEnabled;
 
-    private VideoMenuPresenter(Context context) {
+    private ChannelMenuPresenter(Context context) {
         super(context);
         MediaService service = YouTubeMediaService.instance();
         mItemManager = service.getMediaItemManager();
@@ -42,8 +42,8 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mSettingsPresenter = AppSettingsPresenter.instance(context);
     }
 
-    public static VideoMenuPresenter instance(Context context) {
-        return new VideoMenuPresenter(context);
+    public static ChannelMenuPresenter instance(Context context) {
+        return new ChannelMenuPresenter(context);
     }
 
     public void showShortMenu(Video video) {
