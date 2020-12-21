@@ -187,10 +187,6 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         //        mPlayerGlue.syncControlsState();
         //    }
         //}
-
-        if (mPlayerGlue != null) {
-            mPlayerGlue.syncControlsState();
-        }
     }
 
     public void onDispatchTouchEvent(MotionEvent event) {
@@ -740,6 +736,10 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void showControlsOverlay(boolean runAnimation) {
+        if (mPlayerGlue != null) {
+            mPlayerGlue.syncControlsState();
+        }
+
         super.showControlsOverlay(runAnimation);
 
         if (mPlayerGlue != null) {

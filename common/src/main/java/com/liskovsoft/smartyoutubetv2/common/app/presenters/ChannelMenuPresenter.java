@@ -30,9 +30,6 @@ public class ChannelMenuPresenter extends BasePresenter<Void> {
     private Disposable mSignCheckAction;
     private Disposable mNotInterestedAction;
     private Video mVideo;
-    private boolean mIsNotInterestedButtonEnabled;
-    private boolean mIsOpenChannelButtonEnabled;
-    private boolean mIsOpenChannelUploadsButtonEnabled;
 
     private ChannelMenuPresenter(Context context) {
         super(context);
@@ -46,23 +43,15 @@ public class ChannelMenuPresenter extends BasePresenter<Void> {
         return new ChannelMenuPresenter(context);
     }
 
-    public void showShortMenu(Video video) {
-        showMenu(video, false, false, false);
-    }
-
     public void showMenu(Video video) {
-        showMenu(video, true, true, true);
-    }
-
-    private void showMenu(Video video, boolean isOpenChannelButtonEnabled, boolean isOpenChannelUploadsButtonEnabled, boolean isNotInterestedButtonEnabled) {
-        if (video == null || !video.isVideo()) {
+        if (video == null) {
             return;
         }
 
         mVideo = video;
-        mIsOpenChannelButtonEnabled = isOpenChannelButtonEnabled;
-        mIsOpenChannelUploadsButtonEnabled = isOpenChannelUploadsButtonEnabled;
-        mIsNotInterestedButtonEnabled = isNotInterestedButtonEnabled;
+
+        // Add show uploads
+        // Add unsubscribe
 
         authCheck(this::obtainPlaylistsAndShow,
                   () -> MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only));;
@@ -100,7 +89,7 @@ public class ChannelMenuPresenter extends BasePresenter<Void> {
     }
 
     private void appendOpenChannelButton() {
-        if (!mIsOpenChannelButtonEnabled || mVideo == null || mVideo.channelId == null) {
+        if (mVideo == null || mVideo.channelId == null) {
             return;
         }
 
@@ -109,7 +98,7 @@ public class ChannelMenuPresenter extends BasePresenter<Void> {
     }
 
     private void appendOpenChannelUploadsButton() {
-        if (!mIsOpenChannelUploadsButtonEnabled || mVideo == null) {
+        if (mVideo == null) {
             return;
         }
 
@@ -118,7 +107,7 @@ public class ChannelMenuPresenter extends BasePresenter<Void> {
     }
 
     private void appendNotInterestedButton() {
-        if (!mIsNotInterestedButtonEnabled || mVideo == null || mVideo.mediaItem == null || mVideo.mediaItem.getFeedbackToken() == null) {
+        if (mVideo == null || mVideo.mediaItem == null || mVideo.mediaItem.getFeedbackToken() == null) {
             return;
         }
 
