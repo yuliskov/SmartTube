@@ -255,7 +255,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         if (item.isVideo()) {
             VideoMenuPresenter.instance(getContext()).showMenu(item);
         } else if (item.isChannelUploads()) {
-            ChannelMenuPresenter.instance(getContext()).showMenu(item);
+            ChannelUploadsMenuPresenter.instance(getContext()).showMenu(item);
         }
 
         updateRefreshTime();

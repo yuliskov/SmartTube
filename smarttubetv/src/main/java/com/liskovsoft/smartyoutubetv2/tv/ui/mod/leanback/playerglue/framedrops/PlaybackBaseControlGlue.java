@@ -441,7 +441,7 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
         }
     }
 
-    public void onControlsVisibilityChange(boolean show) {
+    public void setControlsVisibility(boolean show) {
         mIsControlsVisible = show;
     }
 

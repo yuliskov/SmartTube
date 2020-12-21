@@ -21,7 +21,7 @@ import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChannelMenuPresenter extends BasePresenter<Void> {
+public class ChannelUploadsMenuPresenter extends BasePresenter<Void> {
     private final MediaItemManager mItemManager;
     private final SignInManager mAuthManager;
     private final AppSettingsPresenter mSettingsPresenter;
@@ -31,7 +31,7 @@ public class ChannelMenuPresenter extends BasePresenter<Void> {
     private Disposable mNotInterestedAction;
     private Video mVideo;
 
-    private ChannelMenuPresenter(Context context) {
+    private ChannelUploadsMenuPresenter(Context context) {
         super(context);
         MediaService service = YouTubeMediaService.instance();
         mItemManager = service.getMediaItemManager();
@@ -39,12 +39,12 @@ public class ChannelMenuPresenter extends BasePresenter<Void> {
         mSettingsPresenter = AppSettingsPresenter.instance(context);
     }
 
-    public static ChannelMenuPresenter instance(Context context) {
-        return new ChannelMenuPresenter(context);
+    public static ChannelUploadsMenuPresenter instance(Context context) {
+        return new ChannelUploadsMenuPresenter(context);
     }
 
     public void showMenu(Video video) {
-        if (video == null) {
+        if (video == null || !video.isChannelUploads()) {
             return;
         }
 
@@ -53,8 +53,9 @@ public class ChannelMenuPresenter extends BasePresenter<Void> {
         // Add show uploads
         // Add unsubscribe
 
-        authCheck(this::obtainPlaylistsAndShow,
-                  () -> MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only));;
+        // Maybe this is subscribed items view
+        //ChannelUploadsPresenter.instance(getContext())
+        //        .obtainVideoGroup(video, group -> openChannel(group.getChannelId()));
     }
 
     private void obtainPlaylistsAndShow() {

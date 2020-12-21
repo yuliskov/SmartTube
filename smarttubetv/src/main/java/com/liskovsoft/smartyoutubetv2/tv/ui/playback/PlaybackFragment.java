@@ -1,7 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
-import android.annotation.TargetApi;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -182,11 +180,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     public void onDispatchKeyEvent(KeyEvent event) {
-        //if (event.getAction() == KeyEvent.ACTION_DOWN) {
-        //    if (mPlayerGlue != null) {
-        //        mPlayerGlue.syncControlsState();
-        //    }
-        //}
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (mPlayerGlue != null) {
+                mPlayerGlue.syncControlsState();
+            }
+        }
     }
 
     public void onDispatchTouchEvent(MotionEvent event) {
@@ -737,25 +735,21 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     @Override
     public void showControlsOverlay(boolean runAnimation) {
         if (mPlayerGlue != null) {
-            mPlayerGlue.syncControlsState();
+            mPlayerGlue.setControlsVisibility(true);
         }
 
         super.showControlsOverlay(runAnimation);
-
-        if (mPlayerGlue != null) {
-            mPlayerGlue.onControlsVisibilityChange(true);
-        }
 
         mEventListener.onControlsShown(true);
     }
 
     @Override
     public void hideControlsOverlay(boolean runAnimation) {
-        super.hideControlsOverlay(runAnimation);
-
         if (mPlayerGlue != null) {
-            mPlayerGlue.onControlsVisibilityChange(false);
+            mPlayerGlue.setControlsVisibility(false);
         }
+
+        super.hideControlsOverlay(runAnimation);
 
         if (mEventListener != null) {
             mEventListener.onControlsShown(false);
