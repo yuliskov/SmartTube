@@ -29,10 +29,13 @@
     Space between cards. Origin: 8dp More info:
     https://stackoverflow.com/questions/32402209/set-margins-between-items-on-browsefragment
     -->
+    <!--<dimen name="lb_browse_item_horizontal_spacing">15dp</dimen>-->
+    <!--<dimen name="lb_browse_item_vertical_spacing">15dp</dimen>-->
     <dimen name="grid_item_horizontal_spacing">15dp</dimen>
     <dimen name="grid_item_vertical_spacing">15dp</dimen>
 
     <!-- Browse headers spacing. Origin: 21dp -->
+    <!--<dimen name="lb_browse_headers_vertical_spacing">10dp</dimen>-->
     <dimen name="browse_headers_vertical_spacing">10dp</dimen>
 
     <!-- Vine card widget values -->
