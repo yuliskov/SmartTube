@@ -3,8 +3,8 @@
     <!-- Default, same as xhdpi -->
     <!-- 320dpi, Amazon Fire TV Stick -->
 
-    <dimen name="card_width">205dp</dimen>
-    <dimen name="card_height">115dp</dimen>
+    <dimen name="card_width">200dp</dimen>
+    <dimen name="card_height">110dp</dimen>
 
     <!-- Card view default size -->
     <!--
@@ -24,6 +24,16 @@
     ListRowPresenter which gives you some ability to change corner radius and focused and unfocused z.
     -->
     <!--<dimen name="lb_rounded_rect_corner_radius">5dp</dimen>-->
+
+    <!--
+    Space between cards. Origin: 8dp More info:
+    https://stackoverflow.com/questions/32402209/set-margins-between-items-on-browsefragment
+    -->
+    <dimen name="grid_item_horizontal_spacing">15dp</dimen>
+    <dimen name="grid_item_vertical_spacing">15dp</dimen>
+
+    <!-- Browse headers spacing. Origin: 21dp -->
+    <dimen name="browse_headers_vertical_spacing">10dp</dimen>
 
     <!-- Vine card widget values -->
     <dimen name="lb_basic_card_main_width">140dp</dimen>

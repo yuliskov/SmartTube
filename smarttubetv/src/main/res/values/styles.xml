@@ -8,6 +8,22 @@
     <attr name="customProgressStyle" format="reference"/>
     <attr name="appLogo" format="reference"/>
 
+    <!-- Increase spacing between items in GridView -->
+    <style name="GridViewStyle" parent="Widget.Leanback.GridItems.VerticalGridView">
+        <item name="android:horizontalSpacing">@dimen/grid_item_horizontal_spacing</item>
+        <item name="android:verticalSpacing">@dimen/grid_item_vertical_spacing</item>
+    </style>
+
+    <!-- Increase spacing between items in RowView -->
+    <style name="RowViewStyle" parent="Widget.Leanback.Row.HorizontalGridView">
+        <item name="android:horizontalSpacing">@dimen/grid_item_horizontal_spacing</item>
+    </style>
+
+    <!-- Decrease header spacing in BrowseView -->
+    <style name="BrowseHeaderStyle" parent="Widget.Leanback.Headers.VerticalGridView">
+        <item name="android:verticalSpacing">@dimen/browse_headers_vertical_spacing</item>
+    </style>
+
     <!-- Color scheme: Teal (Default) -->
     <style name="App.Theme.Leanback.Player" parent="Theme.Leanback">
         <item name="android:windowBackground">@null</item>
@@ -16,6 +32,8 @@
         <item name="cardSelectedBackground">@color/card_selected_background_white</item>
         <item name="customProgressStyle">?android:attr/progressBarStyleHorizontal</item>
         <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
+        <item name="itemsVerticalGridStyle">@style/GridViewStyle</item>
+        <item name="rowHorizontalGridStyle">@style/RowViewStyle</item>
     </style>
     <style name="App.Theme.Leanback.Browse" parent="Theme.Leanback.Browse">
         <item name="android:windowBackground">@color/shelf_background_dark</item>
@@ -27,6 +45,9 @@
         <item name="customProgressStyle">?android:attr/progressBarStyleHorizontal</item>
         <item name="appLogo">@mipmap/app_logo</item>
         <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
+        <item name="itemsVerticalGridStyle">@style/GridViewStyle</item>
+        <item name="rowHorizontalGridStyle">@style/RowViewStyle</item>
+        <item name="headersVerticalGridStyle">@style/BrowseHeaderStyle</item>
     </style>
     <style name="App.Theme.Leanback.GuidedStep" parent="Theme.Leanback.GuidedStep">
         <item name="android:windowBackground">@color/shelf_background_dark</item>
