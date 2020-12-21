@@ -180,19 +180,14 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     public void onDispatchKeyEvent(KeyEvent event) {
-        //if (event.getAction() == KeyEvent.ACTION_DOWN) {
-        //    if (mPlayerGlue != null) {
-        //        mPlayerGlue.syncControlsStateIfNeeded();
-        //    }
-        //}
+        // Fix seeking with remote when ui not visible yet
+        if (mPlayerGlue != null) {
+            mPlayerGlue.syncControlsStateIfNeeded();
+        }
     }
 
     public void onDispatchTouchEvent(MotionEvent event) {
-        //if (event.getAction() == MotionEvent.ACTION_POINTER_DOWN) {
-        //    if (mPlayerGlue != null) {
-        //        mPlayerGlue.syncControlsState();
-        //    }
-        //}
+        // NOP
     }
 
     public void skipToNext() {
@@ -734,23 +729,24 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void showControlsOverlay(boolean runAnimation) {
+        super.showControlsOverlay(runAnimation);
+
         if (mPlayerGlue != null) {
-            mPlayerGlue.syncControlsStateIfNeeded(); // fix seeking when ui not visible yet
             mPlayerGlue.setControlsVisibility(true);
         }
 
-        super.showControlsOverlay(runAnimation);
-
-        mEventListener.onControlsShown(true);
+        if (mEventListener != null) {
+            mEventListener.onControlsShown(true);
+        }
     }
 
     @Override
     public void hideControlsOverlay(boolean runAnimation) {
+        super.hideControlsOverlay(runAnimation);
+
         if (mPlayerGlue != null) {
             mPlayerGlue.setControlsVisibility(false);
         }
-
-        super.hideControlsOverlay(runAnimation);
 
         if (mEventListener != null) {
             mEventListener.onControlsShown(false);
