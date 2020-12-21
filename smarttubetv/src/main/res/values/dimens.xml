@@ -14,6 +14,16 @@
 
     <!-- Increase player time text size -->
     <dimen name="lb_playback_controls_time_text_size">16sp</dimen>
+    
+    <!--
+    Making my card's corner rounded. More info:
+    https://stackoverflow.com/questions/42623677/android-tv-verticalgridfragment-shadow-dimension-and-color
+    https://developer.android.com/reference/androidx/leanback/widget/ShadowOverlayHelper
+    https://developer.android.com/reference/kotlin/androidx/leanback/widget/ListRowPresenter#arechildroundedcornersenabled
+    You can also override ShadowOverlayHelper.Options createShadowOverlayOptions() in
+    ListRowPresenter which gives you some ability to change corner radius and focused and unfocused z.
+    -->
+    <!--<dimen name="lb_rounded_rect_corner_radius">5dp</dimen>-->
 
     <!-- Vine card widget values -->
     <dimen name="lb_basic_card_main_width">140dp</dimen>

@@ -31,7 +31,7 @@ import java.util.Map;
 
 public abstract class MultipleRowsFragment extends RowsSupportFragment implements VideoCategoryFragment {
     private static final String TAG = MultipleRowsFragment.class.getSimpleName();
-    private static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
+    private static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_XSMALL;
     private UriBackgroundManager mBackgroundManager;
     private Handler mHandler;
     private ArrayObjectAdapter mRowsAdapter;
