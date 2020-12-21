@@ -116,14 +116,6 @@ public abstract class LeanbackActivity extends MotherActivity {
         }
     }
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        LangUpdater updater = new LangUpdater(newBase);
-        updater.update();
-        String langCode = updater.getUpdatedLocale();
-        super.attachBaseContext(LocaleContextWrapper.wrap(newBase, LangHelper.parseLangCode(langCode)));
-    }
-
     private void properlyFinishTheApp() {
         SplashPresenter.instance(this).unhold();
         mViewManager.clearCaches();

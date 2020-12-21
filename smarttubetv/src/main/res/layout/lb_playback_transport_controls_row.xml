@@ -101,6 +101,7 @@
                             android:layoutDirection="ltr"
                             android:layout_gravity="bottom"
                             android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
                             android:focusable="false" >
                 <TextView
                     android:id="@+id/quality_info"
@@ -142,6 +143,7 @@
                             android:layoutDirection="ltr"
                             android:layout_gravity="bottom"
                             android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
                             android:focusable="false" >
                 <TextView
                     android:id="@+id/ending_time"

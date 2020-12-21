@@ -10,8 +10,9 @@
     <string name="action_video_stats">Video Stats</string>
     <string name="require_checked">Vereist \"%s\"</string>
     <string name="msg_press_again_to_exit">Nogmaals drukken om af te sluiten</string>
-    <string name="player_remaining_time">Nog %s</string>
+    <string name="player_remaining_time">%s</string>
     <string name="badge_new_content">NIEUW</string>
+    <string name="badge_live">LIVE</string>
     <!-- Vineyard -->
     <string name="title_oops">Oeps</string>
     <string name="title_no_videos">Geen video\'s</string>

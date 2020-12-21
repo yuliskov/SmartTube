@@ -48,7 +48,9 @@ public class PlaybackActivity extends LeanbackActivity {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        mPlaybackFragment.onDispatchKeyEvent(event);
+        if (mPlaybackFragment != null) {
+            mPlaybackFragment.onDispatchKeyEvent(event);
+        }
 
         return super.dispatchKeyEvent(event);
     }
@@ -153,6 +155,11 @@ public class PlaybackActivity extends LeanbackActivity {
     @SuppressWarnings("deprecation")
     private void enterBackgroundPlayMode() {
         if (Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 26) {
+            if (Build.VERSION.SDK_INT == 21) {
+                // Playback pause fix?
+                mPlaybackFragment.showControls(true);
+            }
+
             if (mPlaybackFragment.isPlaying()) {
                 // Argument equals true to notify the system that the activity
                 // wishes to be visible behind other translucent activities

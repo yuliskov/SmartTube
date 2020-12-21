@@ -5,44 +5,32 @@ import android.content.Context;
 import android.content.Intent;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
-import com.liskovsoft.smartyoutubetv2.common.app.models.update.AppUpdateManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.update.IAppUpdateManager;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
 
-public class SplashPresenter implements Presenter<SplashView> {
+public class SplashPresenter extends BasePresenter<SplashView> {
     private static final String CHANNELS_RECEIVER_CLASS_NAME = "com.liskovsoft.leanbackassistant.channels.RunOnInstallReceiver";
     private static final String TAG = SplashPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static SplashPresenter sInstance;
-    private final Context mContext;
-    private SplashView mView;
     private static boolean mRunOnce;
 
     private SplashPresenter(Context context) {
-        mContext = context;
+        super(context);
         GlobalPreferences.instance(context); // auth token storage init
     }
 
     public static SplashPresenter instance(Context context) {
         if (sInstance == null) {
-            sInstance = new SplashPresenter(context.getApplicationContext());
+            sInstance = new SplashPresenter(context);
         }
 
+        sInstance.setContext(context);
+
         return sInstance;
-    }
-
-    @Override
-    public void register(SplashView view) {
-        mView = view;
-    }
-
-    @Override
-    public void unregister(SplashView view) {
-        mView = null;
     }
 
     public void unhold() {
@@ -51,12 +39,10 @@ public class SplashPresenter implements Presenter<SplashView> {
     }
 
     @Override
-    public void onInitDone() {
+    public void onViewInitialized() {
         applyRunOnceTasks();
 
-        applyNewIntent(mView.getNewIntent());
-
-        checkForUpdates();
+        applyNewIntent(getView().getNewIntent());
     }
 
     private void applyRunOnceTasks() {
@@ -69,13 +55,7 @@ public class SplashPresenter implements Presenter<SplashView> {
     }
 
     private void showAccountSelection() {
-        AccountSelectionPresenter.instance(mContext).show();
-    }
-
-    private void checkForUpdates() {
-        IAppUpdateManager updatePresenter = AppUpdateManager.instance(mContext);
-        updatePresenter.start(false);
-        updatePresenter.unhold();
+        AccountSelectionPresenter.instance(getContext()).show();
     }
 
     public void saveBackupData() {
@@ -90,7 +70,7 @@ public class SplashPresenter implements Presenter<SplashView> {
     }
 
     private String getBackupDataOnce() {
-        AppPrefs prefs = AppPrefs.instance(mContext);
+        AppPrefs prefs = AppPrefs.instance(getContext());
         String mBackupVideoId = prefs.getBackupData();
         prefs.setBackupData(null);
         return mBackupVideoId;
@@ -106,9 +86,11 @@ public class SplashPresenter implements Presenter<SplashView> {
         }
 
         if (clazz != null) {
-            Log.d(TAG, "Starting channels receiver...");
-            Intent intent = new Intent(mContext, clazz);
-            mContext.sendBroadcast(intent);
+            if (getContext() != null) {
+                Log.d(TAG, "Starting channels receiver...");
+                Intent intent = new Intent(getContext(), clazz);
+                getContext().sendBroadcast(intent);
+            }
         } else {
             Log.e(TAG, "Channels receiver class not found: " + CHANNELS_RECEIVER_CLASS_NAME);
         }
@@ -118,30 +100,30 @@ public class SplashPresenter implements Presenter<SplashView> {
         String videoId = IntentExtractor.extractVideoId(intent);
 
         if (videoId != null) {
-            PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(mContext);
+            PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
             playbackPresenter.openVideo(videoId);
 
-            ViewManager viewManager = ViewManager.instance(mContext);
+            ViewManager viewManager = ViewManager.instance(getContext());
             viewManager.setSinglePlayerMode(true);
         } else {
             String searchText = IntentExtractor.extractSearchText(intent);
 
             if (searchText != null) {
-                SearchPresenter searchPresenter = SearchPresenter.instance(mContext);
+                SearchPresenter searchPresenter = SearchPresenter.instance(getContext());
                 searchPresenter.startSearch(searchText);
             } else {
                 String channelId = IntentExtractor.extractChannelId(intent);
 
                 if (channelId != null) {
-                    ChannelPresenter channelPresenter = ChannelPresenter.instance(mContext);
+                    ChannelPresenter channelPresenter = ChannelPresenter.instance(getContext());
                     channelPresenter.openChannel(channelId);
                 } else {
                     String backupData = getBackupDataOnce();
                     if (backupData != null) {
-                        PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(mContext);
+                        PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
                         playbackPresenter.openVideo(backupData);
                     } else {
-                        ViewManager viewManager = ViewManager.instance(mContext);
+                        ViewManager viewManager = ViewManager.instance(getContext());
                         viewManager.startDefaultView();
                     }
                 }

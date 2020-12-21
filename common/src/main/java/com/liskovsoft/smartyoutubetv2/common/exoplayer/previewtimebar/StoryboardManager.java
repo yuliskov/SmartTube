@@ -15,7 +15,6 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemStoryboard;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemStoryboard.Size;
-import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
@@ -50,7 +49,7 @@ public class StoryboardManager {
 
     public StoryboardManager(Context context) {
         mContext = context;
-        MediaService mediaService = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(mContext));
+        MediaService mediaService = YouTubeMediaService.instance();
         mMediaItemManager = mediaService.getMediaItemManager();
     }
 
@@ -84,15 +83,35 @@ public class StoryboardManager {
     }
 
     private void initSeekPositions() {
-        if (mLengthMs <= 0) {
+        if (mLengthMs <= 0 || mStoryboard == null) {
             return;
         }
 
-        int size = (int) (mLengthMs / FRAME_DURATION_MS) + 1;
+        long frameDurationMS = getFrameDurationMsAlt();
+
+        if (frameDurationMS <= 1_000) {
+            return;
+        }
+
+        int size = (int) (mLengthMs / frameDurationMS);
         mSeekPositions = new long[size];
         for (int i = 0; i < mSeekPositions.length; i++) {
-            mSeekPositions[i] = i * mLengthMs / mSeekPositions.length;
+            mSeekPositions[i] = i * (mLengthMs / mSeekPositions.length);
         }
+    }
+
+    private long getFrameDurationMs() {
+        return FRAME_DURATION_MS;
+    }
+
+    private long getFrameDurationMsAlt() {
+        if (mStoryboard == null) {
+            return -1;
+        }
+
+        Size groupSize = mStoryboard.getGroupSize();
+
+        return mStoryboard.getGroupDurationMS() / (groupSize.getRowCount() * groupSize.getColCount());
     }
 
     public long[] getSeekPositions() {

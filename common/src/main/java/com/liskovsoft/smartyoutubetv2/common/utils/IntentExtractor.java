@@ -22,8 +22,14 @@ public class IntentExtractor {
 
         // Don't Uri directly or you might get UnsupportedOperationException on some urls.
         UrlQueryString parser = UrlQueryStringFactory.parse(intent.getData());
+        String videoId = parser.get(VIDEO_ID_KEY);
 
-        return parser.get(VIDEO_ID_KEY);
+        if (videoId == null) {
+            // Suppose that link type is https://youtu.be/lBeMDqcWTG8
+            videoId = intent.getData().getLastPathSegment();
+        }
+
+        return videoId;
     }
 
     /**

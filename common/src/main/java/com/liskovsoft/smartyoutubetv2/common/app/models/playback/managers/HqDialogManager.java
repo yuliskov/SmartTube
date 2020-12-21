@@ -1,19 +1,22 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import android.content.Context;
 import android.os.Build;
-
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController.OnBufferSelected;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.OnFormatSelected;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.Preset;
-import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,16 +27,19 @@ import java.util.Set;
 
 public class HqDialogManager extends PlayerEventListenerHelper {
     private static final String TAG = HqDialogManager.class.getSimpleName();
+    private static final int VIDEO_FORMATS_ID = 132;
+    private static final int AUDIO_FORMATS_ID = 133;
+    private static final int VIDEO_BUFFER_ID = 134;
+    private static final int BACKGROUND_PLAYBACK_ID = 135;
+    private static final int VIDEO_PRESETS_ID = 136;
     private AppSettingsPresenter mSettingsPresenter;
     // NOTE: using map, because same item could be changed time to time
-    private final Map<String, List<OptionItem>> mCheckedCategories = new LinkedHashMap<>();
-    private final Map<String, List<OptionItem>> mRadioCategories = new LinkedHashMap<>();
-    private final Map<CharSequence, OptionItem> mSingleOptions = new LinkedHashMap<>();
-    private boolean mEnableBackgroundAudio;
-    private boolean mEnablePIP;
-    private boolean mEnablePlayBehind;
+    private final Map<Integer, OptionCategory> mCheckedCategories = new LinkedHashMap<>();
+    private final Map<Integer, OptionCategory> mRadioCategories = new LinkedHashMap<>();
+    private final Map<Integer, OptionCategory> mSingleOptions = new LinkedHashMap<>();
     private final Set<Runnable> mHideListeners = new HashSet<>();
     private final StateUpdater mStateUpdater;
+    private PlayerData mPlayerData;
 
     public HqDialogManager(StateUpdater stateUpdater) {
         mStateUpdater = stateUpdater;
@@ -41,8 +47,13 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
     @Override
     public void onInitDone() {
-        mSettingsPresenter = AppSettingsPresenter.instance(mActivity);
-        mController.setBuffer(AppPrefs.instance(mActivity).getVideoBufferType(PlaybackEngineController.BUFFER_LOW));
+        mPlayerData = PlayerData.instance(getActivity());
+        mSettingsPresenter = AppSettingsPresenter.instance(getActivity());
+    }
+
+    @Override
+    public void onViewResumed() {
+        getController().setBufferType(mPlayerData.getVideoBufferType());
     }
 
     @Override
@@ -63,47 +74,37 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
         internalStuff();
 
-        mSettingsPresenter.showDialog(mActivity.getString(R.string.playback_settings), this::onDialogHide);
+        mSettingsPresenter.showDialog(getActivity().getString(R.string.playback_settings), this::onDialogHide);
     }
 
     private void addQualityCategories() {
-        List<FormatItem> videoFormats = mController.getVideoFormats();
-        String videoFormatsTitle = mActivity.getString(R.string.title_video_formats);
+        List<FormatItem> videoFormats = getController().getVideoFormats();
+        String videoFormatsTitle = getActivity().getString(R.string.title_video_formats);
 
-        List<FormatItem> audioFormats = mController.getAudioFormats();
-        String audioFormatsTitle = mActivity.getString(R.string.title_audio_formats);
+        List<FormatItem> audioFormats = getController().getAudioFormats();
+        String audioFormatsTitle = getActivity().getString(R.string.title_audio_formats);
 
-        addRadioCategory(videoFormatsTitle,
-                UiOptionItem.from(videoFormats, this::selectFormatOption));
-        addRadioCategory(audioFormatsTitle,
-                UiOptionItem.from(audioFormats, this::selectFormatOption));
+        addRadioCategory(OptionCategory.from(
+                VIDEO_FORMATS_ID,
+                videoFormatsTitle,
+                UiOptionItem.from(videoFormats, this::selectFormatOption)));
+        addRadioCategory(OptionCategory.from(
+                AUDIO_FORMATS_ID,
+                audioFormatsTitle,
+                UiOptionItem.from(audioFormats, this::selectFormatOption)));
     }
 
     private void selectFormatOption(OptionItem option) {
-        mController.selectFormat(UiOptionItem.toFormat(option));
-        if (mController.hasNoMedia()) {
-            mController.reloadPlayback();
+        getController().selectFormat(UiOptionItem.toFormat(option));
+        if (getController().hasNoMedia()) {
+            getController().reloadPlayback();
         }
     }
 
     private void addVideoBufferCategory() {
-        String videoBuffer = mActivity.getString(R.string.video_buffer);
-        List<OptionItem> optionItems = new ArrayList<>();
-        optionItems.add(createBufferOption(R.string.video_buffer_size_low, PlaybackEngineController.BUFFER_LOW));
-        optionItems.add(createBufferOption(R.string.video_buffer_size_med, PlaybackEngineController.BUFFER_MED));
-        optionItems.add(createBufferOption(R.string.video_buffer_size_high, PlaybackEngineController.BUFFER_HIGH));
-        addRadioCategory(videoBuffer, optionItems);
-    }
-
-    private OptionItem createBufferOption(int titleResId, int val) {
-        return UiOptionItem.from(
-                mActivity.getString(titleResId),
-                optionItem -> {
-                    mController.setBuffer(val);
-                    AppPrefs.instance(mActivity).setVideoBufferType(val);
-                    mController.restartEngine();
-                },
-                mController.getBuffer() == val);
+        addRadioCategory(createVideoBufferCategory(getActivity(), mPlayerData, type -> {
+            getController().setBufferType(type);
+        }));
     }
 
     private void internalStuff() {
@@ -121,57 +122,110 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     }
 
     private void updateBackgroundPlayback() {
-        if (mEnableBackgroundAudio || mEnablePIP || mEnablePlayBehind) {
+        if (mPlayerData.getBackgroundPlaybackType() != PlayerData.BACKGROUND_PLAYBACK_NONE) {
             // return to the player regardless the last activity user watched in moment exiting to HOME
-            ViewManager.instance(mActivity).blockTop(mActivity);
+            ViewManager.instance(getActivity()).blockTop(getActivity());
         } else {
-            ViewManager.instance(mActivity).blockTop(null);
+            ViewManager.instance(getActivity()).blockTop(null);
         }
 
-        mController.blockEngine(mEnableBackgroundAudio);
-        mController.enablePIP(mEnablePIP);
-        mController.enablePlayBehind(mEnablePlayBehind);
+        getController().blockEngine(mPlayerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_AUDIO);
+        getController().enablePIP(mPlayerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_PIP);
+        getController().enablePlayBehind(mPlayerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_BEHIND);
     }
 
     private void addBackgroundPlaybackCategory() {
-        String categoryTitle = mActivity.getString(R.string.category_background_playback);
+        OptionCategory category =
+                createBackgroundPlaybackCategory(getActivity(), mPlayerData, this::updateBackgroundPlayback);
 
-        List<OptionItem> options = new ArrayList<>();
-        options.add(UiOptionItem.from(mActivity.getString(R.string.option_background_playback_off),
-                optionItem -> {
-                    mEnableBackgroundAudio = false;
-                    mEnablePIP = false;
-                    mEnablePlayBehind = false;
-                    updateBackgroundPlayback();
-                }, !mEnableBackgroundAudio && !mEnablePIP && !mEnablePlayBehind));
-        if (Helpers.isAndroidTV(mActivity) && Build.VERSION.SDK_INT < 26) { // useful only for pre-Oreo UI
-            options.add(UiOptionItem.from(mActivity.getString(R.string.option_background_playback_behind) + " (Android TV 5,6,7)",
-                    optionItem -> {
-                        mEnableBackgroundAudio = false;
-                        mEnablePIP = false;
-                        mEnablePlayBehind = true;
-                        updateBackgroundPlayback();
-                    }, mEnablePlayBehind && !mEnablePIP && !mEnableBackgroundAudio));
-        }
-        options.add(UiOptionItem.from(mActivity.getString(R.string.option_background_playback_pip),
-                optionItem -> {
-                    mEnableBackgroundAudio = false;
-                    mEnablePIP = true;
-                    mEnablePlayBehind = false;
-                    updateBackgroundPlayback();
-                }, mEnablePIP && !mEnableBackgroundAudio && !mEnablePlayBehind));
-        options.add(UiOptionItem.from(mActivity.getString(R.string.option_background_playback_only_audio),
-                optionItem -> {
-                    mEnableBackgroundAudio = true;
-                    mEnablePIP = false;
-                    mEnablePlayBehind = false;
-                    updateBackgroundPlayback();
-                }, mEnableBackgroundAudio && !mEnablePIP && !mEnablePlayBehind));
-
-        addRadioCategory(categoryTitle, options);
+        addRadioCategory(category);
     }
 
     private void addPresetsCategory() {
+        addRadioCategory(createVideoPresetsCategory(getActivity(), mPlayerData, format -> getController().selectFormat(format)));
+    }
+
+    public void addSingleOption(OptionCategory category) {
+        mSingleOptions.put(category.id, category);
+    }
+
+    public void addCheckedCategory(OptionCategory category) {
+        mCheckedCategories.put(category.id, category);
+    }
+
+    public void removeCategory(int id) {
+        mCheckedCategories.remove(id);
+    }
+
+    public void addRadioCategory(OptionCategory category) {
+        mRadioCategories.put(category.id, category);
+    }
+
+    public void addOnDialogHide(Runnable listener) {
+        mHideListeners.add(listener);
+    }
+
+    public void removeOnDialogHide(Runnable listener) {
+        mHideListeners.remove(listener);
+    }
+
+    private void appendSingleOptions() {
+        for (OptionCategory category : mSingleOptions.values()) {
+            mSettingsPresenter.appendSingleSwitch(category.option);
+        }
+    }
+
+    private void appendCheckedOptions() {
+        for (OptionCategory category : mCheckedCategories.values()) {
+            mSettingsPresenter.appendCheckedCategory(category.title, category.options);
+        }
+    }
+
+    private void appendRadioOptions() {
+        for (OptionCategory category : mRadioCategories.values()) {
+            mSettingsPresenter.appendRadioCategory(category.title, category.options);
+        }
+    }
+
+    public static OptionCategory createBackgroundPlaybackCategory(Context context, PlayerData playerData) {
+        return createBackgroundPlaybackCategory(context, playerData, () -> {});
+    }
+
+    private static OptionCategory createBackgroundPlaybackCategory(Context context, PlayerData playerData, Runnable onSetCallback) {
+        String categoryTitle = context.getString(R.string.category_background_playback);
+
+        List<OptionItem> options = new ArrayList<>();
+        options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_off),
+                optionItem -> {
+                    playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_NONE);
+                    onSetCallback.run();
+                }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_NONE));
+        if (Helpers.isAndroidTV(context) && Build.VERSION.SDK_INT < 26) { // useful only for pre-Oreo UI
+            options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_behind) + " (Android TV 5,6,7)",
+                    optionItem -> {
+                        playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_BEHIND);
+                        onSetCallback.run();
+                    }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_BEHIND));
+        }
+        options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_pip),
+                optionItem -> {
+                    playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_PIP);
+                    onSetCallback.run();
+                }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_PIP));
+        options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_only_audio),
+                optionItem -> {
+                    playerData.setBackgroundPlaybackType(PlayerData.BACKGROUND_PLAYBACK_AUDIO);
+                    onSetCallback.run();
+                }, playerData.getBackgroundPlaybackType() == PlayerData.BACKGROUND_PLAYBACK_AUDIO));
+
+        return OptionCategory.from(BACKGROUND_PLAYBACK_ID, categoryTitle, options);
+    }
+
+    public static OptionCategory createVideoPresetsCategory(Context context, PlayerData playerData) {
+        return createVideoPresetsCategory(context, playerData, format -> {});
+    }
+
+    private static OptionCategory createVideoPresetsCategory(Context context, PlayerData playerData, OnFormatSelected onFormatSelected) {
         Preset[] presets = {
                 new Preset("SD     30fps    avc", "640,360,30,avc"),
                 new Preset("SD     30fps    vp9", "640,360,30,vp9"),
@@ -201,62 +255,47 @@ public class HqDialogManager extends PlayerEventListenerHelper {
                 new Preset("8K     60fps    vp9+hdr", "7680,4320,60,vp9.2")
         };
 
-        addRadioCategory(mActivity.getString(R.string.title_video_presets), fromPresets(presets));
+        return OptionCategory.from(
+                VIDEO_PRESETS_ID,
+                context.getString(R.string.title_video_presets),
+                fromPresets(presets, playerData, onFormatSelected));
     }
 
-    private List<OptionItem> fromPresets(Preset[] presets) {
+    private static List<OptionItem> fromPresets(Preset[] presets, PlayerData playerData, OnFormatSelected onFormatSelected) {
         List<OptionItem> result = new ArrayList<>();
 
-        if (mStateUpdater.getVideoPreset() != null) {
-            for (Preset preset : presets) {
-                result.add(0, UiOptionItem.from(preset.name,
-                        option -> mController.selectFormat(preset.format),
-                        mStateUpdater.getVideoPreset().equals(preset.format)));
-            }
+        for (Preset preset : presets) {
+            result.add(0, UiOptionItem.from(preset.name,
+                    option -> {
+                        playerData.setVideoFormat(preset.format);
+                        onFormatSelected.onFormatSelected(preset.format);
+                    },
+                    preset.format.equals(playerData.getVideoFormat())));
         }
 
         return result;
     }
 
-    public void addSingleOption(OptionItem option) {
-        mSingleOptions.put(option.getTitle(), option);
+    public static OptionCategory createVideoBufferCategory(Context context, PlayerData playerData) {
+        return createVideoBufferCategory(context, playerData, type -> {});
     }
 
-    public void addCheckedCategory(String categoryTitle, List<OptionItem> options) {
-        mCheckedCategories.put(categoryTitle, options);
+    private static OptionCategory createVideoBufferCategory(Context context, PlayerData playerData, OnBufferSelected onBufferSelected) {
+        String videoBuffer = context.getString(R.string.video_buffer);
+        List<OptionItem> optionItems = new ArrayList<>();
+        optionItems.add(createBufferOption(context, playerData, R.string.video_buffer_size_low, PlaybackEngineController.BUFFER_LOW, onBufferSelected));
+        optionItems.add(createBufferOption(context, playerData, R.string.video_buffer_size_med, PlaybackEngineController.BUFFER_MED, onBufferSelected));
+        optionItems.add(createBufferOption(context, playerData, R.string.video_buffer_size_high, PlaybackEngineController.BUFFER_HIGH, onBufferSelected));
+        return OptionCategory.from(VIDEO_BUFFER_ID, videoBuffer, optionItems);
     }
 
-    public void removeCategory(String categoryTitle) {
-        mCheckedCategories.remove(categoryTitle);
-    }
-
-    public void addRadioCategory(String categoryTitle, List<OptionItem> options) {
-        mRadioCategories.put(categoryTitle, options);
-    }
-
-    public void addOnDialogHide(Runnable listener) {
-        mHideListeners.add(listener);
-    }
-
-    public void removeOnDialogHide(Runnable listener) {
-        mHideListeners.remove(listener);
-    }
-
-    private void appendSingleOptions() {
-        for (OptionItem option : mSingleOptions.values()) {
-            mSettingsPresenter.appendSingleSwitch(option);
-        }
-    }
-
-    private void appendCheckedOptions() {
-        for (String key : mCheckedCategories.keySet()) {
-            mSettingsPresenter.appendCheckedCategory(key, mCheckedCategories.get(key));
-        }
-    }
-
-    private void appendRadioOptions() {
-        for (String key : mRadioCategories.keySet()) {
-            mSettingsPresenter.appendRadioCategory(key, mRadioCategories.get(key));
-        }
+    private static OptionItem createBufferOption(Context context, PlayerData playerData, int titleResId, int type, OnBufferSelected onBufferSelected) {
+        return UiOptionItem.from(
+                context.getString(titleResId),
+                optionItem -> {
+                    playerData.setVideoBufferType(type);
+                    onBufferSelected.onBufferSelected(type);
+                },
+                playerData.getVideoBufferType() == type);
     }
 }

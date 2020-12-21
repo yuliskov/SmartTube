@@ -3,9 +3,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
@@ -14,29 +13,28 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class SignInPresenter implements Presenter<SignInView> {
+public class SignInPresenter extends BasePresenter<SignInView> {
     private static final String TAG = SignInPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static SignInPresenter sInstance;
     private final MediaService mMediaService;
-    private final Context mContext;
     private final BrowsePresenter mBrowsePresenter;
     private final SplashPresenter mSplashPresenter;
-    private SignInView mView;
-    private String mUserCode;
     private Disposable mSignInAction;
 
     private SignInPresenter(Context context) {
-        mContext = context;
-        mMediaService = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
+        super(context);
+        mMediaService = YouTubeMediaService.instance();
         mBrowsePresenter = BrowsePresenter.instance(context);
         mSplashPresenter = SplashPresenter.instance(context);
     }
 
     public static SignInPresenter instance(Context context) {
         if (sInstance == null) {
-            sInstance = new SignInPresenter(context.getApplicationContext());
+            sInstance = new SignInPresenter(context);
         }
+
+        sInstance.setContext(context);
 
         return sInstance;
     }
@@ -47,24 +45,18 @@ public class SignInPresenter implements Presenter<SignInView> {
     }
 
     @Override
-    public void register(SignInView view) {
-        mView = view;
-    }
-
-    @Override
-    public void unregister(SignInView view) {
-        mView = null;
+    public void onViewDestroyed() {
         unhold();
     }
 
     @Override
-    public void onInitDone() {
+    public void onViewInitialized() {
         RxUtils.disposeActions(mSignInAction);
         updateUserCode();
     }
 
     public void onActionClicked() {
-        mView.close();
+        getView().close();
     }
 
     private void updateUserCode() {
@@ -72,13 +64,13 @@ public class SignInPresenter implements Presenter<SignInView> {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        userCode -> mView.showCode(userCode),
+                        userCode -> getView().showCode(userCode),
                         error -> Log.e(TAG, error),
                         () -> {
                             // Success
                             mBrowsePresenter.refresh();
-                            if (mView != null) {
-                                mView.close();
+                            if (getView() != null) {
+                                getView().close();
                             }
                             mSplashPresenter.updateChannels();
                         });
@@ -86,6 +78,6 @@ public class SignInPresenter implements Presenter<SignInView> {
 
     public void start() {
         RxUtils.disposeActions(mSignInAction);
-        ViewManager.instance(mContext).startView(SignInView.class);
+        ViewManager.instance(getContext()).startView(SignInView.class);
     }
 }

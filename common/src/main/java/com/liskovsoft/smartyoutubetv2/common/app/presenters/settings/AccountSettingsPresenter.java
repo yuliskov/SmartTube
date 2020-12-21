@@ -5,12 +5,12 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.Account;
-import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SignInPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -21,25 +21,26 @@ import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccountSettingsPresenter {
+public class AccountSettingsPresenter extends BasePresenter<Void> {
     @SuppressLint("StaticFieldLeak")
     private static AccountSettingsPresenter sInstance;
-    private final Context mContext;
     private final SignInManager mSignInManager;
     private Disposable mAccountsAction;
-    private List<Account> mPendingRemove = new ArrayList<>();
+    private final List<Account> mPendingRemove = new ArrayList<>();
     private Account mSelectedAccount = null;
 
     public AccountSettingsPresenter(Context context) {
-        mContext = context;
-        MediaService service = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
+        super(context);
+        MediaService service = YouTubeMediaService.instance();
         mSignInManager = service.getSignInManager();
     }
 
     public static AccountSettingsPresenter instance(Context context) {
         if (sInstance == null) {
-            sInstance = new AccountSettingsPresenter(context.getApplicationContext());
+            sInstance = new AccountSettingsPresenter(context);
         }
+
+        sInstance.setContext(context);
 
         return sInstance;
     }
@@ -59,7 +60,7 @@ public class AccountSettingsPresenter {
     }
 
     private void createAndShowDialog(List<Account> accounts) {
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
+        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
         settingsPresenter.clear();
 
         appendSelectAccountOnBoot(settingsPresenter);
@@ -67,7 +68,7 @@ public class AccountSettingsPresenter {
         appendRemoveAccountSection(accounts, settingsPresenter);
         appendAddAccountButton(settingsPresenter);
 
-        settingsPresenter.showDialog(mContext.getString(R.string.settings_accounts), () -> {
+        settingsPresenter.showDialog(getContext().getString(R.string.settings_accounts), () -> {
             for (Account account : mPendingRemove) {
                 mSignInManager.removeAccount(account);
             }
@@ -82,7 +83,7 @@ public class AccountSettingsPresenter {
         List<OptionItem> optionItems = new ArrayList<>();
 
         optionItems.add(UiOptionItem.from(
-                mContext.getString(R.string.dialog_account_none), optionItem -> mSelectedAccount = null, true
+                getContext().getString(R.string.dialog_account_none), optionItem -> mSelectedAccount = null, true
         ));
 
         for (Account account : accounts) {
@@ -95,7 +96,7 @@ public class AccountSettingsPresenter {
             ));
         }
 
-        settingsPresenter.appendRadioCategory(mContext.getString(R.string.dialog_account_list), optionItems);
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.dialog_account_list), optionItems);
     }
 
     private void appendRemoveAccountSection(List<Account> accounts, AppSettingsPresenter settingsPresenter) {
@@ -113,18 +114,18 @@ public class AccountSettingsPresenter {
             ));
         }
 
-        settingsPresenter.appendCheckedCategory(mContext.getString(R.string.dialog_remove_account), optionItems);
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.dialog_remove_account), optionItems);
     }
 
     private void appendAddAccountButton(AppSettingsPresenter settingsPresenter) {
         settingsPresenter.appendSingleButton(UiOptionItem.from(
-                mContext.getString(R.string.dialog_add_account), option -> SignInPresenter.instance(mContext).start()));
+                getContext().getString(R.string.dialog_add_account), option -> SignInPresenter.instance(getContext()).start()));
     }
 
     private void appendSelectAccountOnBoot(AppSettingsPresenter settingsPresenter) {
-        settingsPresenter.appendSingleSwitch(UiOptionItem.from(mContext.getString(R.string.select_account_on_boot), optionItem -> {
-            AccountsData.instance(mContext).selectAccountOnBoot(optionItem.isSelected());
-        }, AccountsData.instance(mContext).isSelectAccountOnBootEnabled()));
+        settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.select_account_on_boot), optionItem -> {
+            AccountsData.instance(getContext()).selectAccountOnBoot(optionItem.isSelected());
+        }, AccountsData.instance(getContext()).isSelectAccountOnBootEnabled()));
     }
 
     private String formatAccount(Account account) {

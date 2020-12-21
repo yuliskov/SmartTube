@@ -2,64 +2,56 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
-import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class SearchPresenter implements VideoGroupPresenter, Presenter<SearchView> {
+public class SearchPresenter extends BasePresenter<SearchView> implements VideoGroupPresenter {
     private static final String TAG = SearchPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static SearchPresenter sInstance;
-    private final Context mContext;
     private final MediaService mMediaService;
     private final PlaybackPresenter mPlaybackPresenter;
     private final ViewManager mViewManager;
-    private final DetailsPresenter mDetailsPresenter;
     private final SearchData mSearchData;
-    private SearchView mView;
     private Disposable mScrollAction;
     private Disposable mLoadAction;
     private String mSearchText;
 
     private SearchPresenter(Context context) {
-        mContext = context;
-        mMediaService = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
+        super(context);
+        mMediaService = YouTubeMediaService.instance();
         mPlaybackPresenter = PlaybackPresenter.instance(context);
-        mDetailsPresenter = DetailsPresenter.instance(context);
         mViewManager = ViewManager.instance(context);
         mSearchData = SearchData.instance(context);
     }
 
     public static SearchPresenter instance(Context context) {
         if (sInstance == null) {
-            sInstance = new SearchPresenter(context.getApplicationContext());
+            sInstance = new SearchPresenter(context);
         }
+
+        sInstance.setContext(context);
 
         return sInstance;
     }
 
     @Override
-    public void register(SearchView view) {
-        mView = view;
-    }
-
-    @Override
-    public void unregister(SearchView view) {
-        mView = null;
-
+    public void onViewDestroyed() {
         disposeActions();
     }
 
@@ -74,7 +66,7 @@ public class SearchPresenter implements VideoGroupPresenter, Presenter<SearchVie
     }
 
     @Override
-    public void onInitDone() {
+    public void onViewInitialized() {
         loadSuggestedKeywords();
 
         startSearchInt(mSearchText);
@@ -87,24 +79,24 @@ public class SearchPresenter implements VideoGroupPresenter, Presenter<SearchVie
 
     @Override
     public void onVideoItemClicked(Video item) {
-        if (mView == null) {
+        if (getView() == null) {
             return;
         }
 
         if (item.isVideo()) {
             mPlaybackPresenter.openVideo(item);
         } else if (item.isChannel()) {
-            ChannelPresenter.instance(mContext).openChannel(item);
+            ChannelPresenter.instance(getContext()).openChannel(item);
         }
     }
 
     @Override
     public void onVideoItemLongClicked(Video item) {
-        if (mView == null) {
+        if (getView() == null) {
             return;
         }
 
-        VideoMenuPresenter.instance(mContext).showMenu(item);
+        VideoMenuPresenter.instance(getContext()).showMenu(item);
     }
 
     public void onSearch(String searchText) {
@@ -112,25 +104,25 @@ public class SearchPresenter implements VideoGroupPresenter, Presenter<SearchVie
     }
     
     private void loadSearchResult(String searchText) {
-        mView.showProgressBar(true);
+        getView().showProgressBar(true);
 
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
-        mView.clearSearch();
+        getView().clearSearch();
 
         mLoadAction = mediaGroupManager.getSearchObserve(searchText)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mediaGroup -> {
-                    mView.updateSearch(VideoGroup.from(mediaGroup));
+                    getView().updateSearch(VideoGroup.from(mediaGroup));
                 }, error -> Log.e(TAG, "loadSearchData error: " + error),
-                   () -> mView.showProgressBar(false));
+                   () -> getView().showProgressBar(false));
     }
     
     private void continueGroup(VideoGroup group) {
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
-        mView.showProgressBar(true);
+        getView().showProgressBar(true);
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
@@ -140,9 +132,9 @@ public class SearchPresenter implements VideoGroupPresenter, Presenter<SearchVie
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(continueMediaGroup -> {
-                    mView.updateSearch(VideoGroup.from(continueMediaGroup));
+                    getView().updateSearch(VideoGroup.from(continueMediaGroup));
                 }, error -> Log.e(TAG, "continueGroup error: " + error),
-                   () -> mView.showProgressBar(false));
+                   () -> getView().showProgressBar(false));
     }
 
     @Override
@@ -159,7 +151,7 @@ public class SearchPresenter implements VideoGroupPresenter, Presenter<SearchVie
     public void startSearch(String searchText) {
         mSearchText = searchText;
 
-        if (mView == null) {
+        if (getView() == null) {
             mViewManager.startView(SearchView.class);
         } else {
             mViewManager.startView(SearchView.class);
@@ -169,9 +161,9 @@ public class SearchPresenter implements VideoGroupPresenter, Presenter<SearchVie
 
     private void startSearchInt(String searchText) {
         if (mSearchData.isInstantVoiceSearchEnabled() && searchText == null) {
-            mView.startVoiceRecognition();
+            getView().startVoiceRecognition();
         } else {
-            mView.startSearch(searchText);
+            getView().startSearch(searchText);
         }
     }
 }

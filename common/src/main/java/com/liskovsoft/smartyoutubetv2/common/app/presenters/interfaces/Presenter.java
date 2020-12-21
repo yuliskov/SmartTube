@@ -1,7 +1,13 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces;
 
+import android.content.Context;
+
 public interface Presenter<T> {
-    void register(T view);
-    void unregister(T view);
-    void onInitDone();
+    void setView(T view);
+    T getView();
+    void setContext(Context context);
+    Context getContext();
+    void onViewInitialized();
+    void onViewDestroyed();
+    void onViewResumed();
 }

@@ -101,6 +101,10 @@ public final class ProgressBarManager {
         mHandler.removeCallbacks(runnable);
     }
 
+    public boolean isShowing() {
+        return mIsShowing;
+    }
+
     /**
      * Sets a custom view to be shown in place of the default {@link ProgressBar}. This
      * view must have a parent. Once set, we maintain the visibility property of this view.

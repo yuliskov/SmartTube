@@ -49,8 +49,8 @@ android {
         applicationId "com.liskovsoft.smarttubetv"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 173
-        versionName "10.33"
+        versionCode 197
+        versionName "10.57"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
@@ -79,7 +79,8 @@ android {
         }
         strtarmenia {
             // matchingFallbacks = ['lite']
-            applicationIdSuffix ".rtarmenia"
+            versionCode 11000 + defaultConfig.versionCode
+            applicationId "com.google.android.youtube.tv"
         }
         stbolshoetv {
             // matchingFallbacks = ['lite']
@@ -126,10 +127,13 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:' + glideVersion
     implementation 'com.zlc.glide:webpdecoder:2.0.' + glideVersion
 
-//    implementation 'com.amazon.android:exoplayer:' + amazonExoplayerVersion
-//    implementation 'com.amazon.android:extension-leanback:' + amazonExoplayerVersion
-     implementation 'com.google.android.exoplayer:exoplayer:' + exoplayerVersion
-     implementation 'com.google.android.exoplayer:extension-leanback:' + exoplayerVersion
+    // implementation 'com.amazon.android:exoplayer:' + amazonExoplayerVersion
+    // implementation 'com.amazon.android:extension-leanback:' + amazonExoplayerVersion
+
+    implementation 'com.google.android.exoplayer:exoplayer:' + exoplayerVersion
+    implementation 'com.google.android.exoplayer:extension-leanback:' + exoplayerVersion
+
+    // implementation 'com.github.amzn:exoplayer-amazon-port:' + amazonExoplayerJitpackVersion
 
     testImplementation 'junit:junit:' + junitVersion
     testImplementation 'org.robolectric:robolectric:' + robolectricVersion

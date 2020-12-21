@@ -8,21 +8,18 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.Player
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
 public abstract class PlayerEventListenerHelper implements PlayerHandlerEventListener {
-    protected PlaybackController mController;
-    protected Activity mActivity;
+    private MainPlayerEventBridge mEventBridge;
 
-    @Override
-    public void onController(PlaybackController controller) {
-        mController = controller;
+    public void setBridge(MainPlayerEventBridge eventBridge) {
+        mEventBridge = eventBridge;
     }
 
     public PlaybackController getController() {
-        return mController;
+        return mEventBridge.getController();
     }
 
-    @Override
-    public void onActivity(Activity activity) {
-        mActivity = activity;
+    public Activity getActivity() {
+        return mEventBridge.getActivity();
     }
 
     @Override

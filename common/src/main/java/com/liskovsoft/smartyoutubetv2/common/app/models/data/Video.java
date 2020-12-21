@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 import android.media.MediaDescription;
 import android.os.Parcel;
 import android.os.Parcelable;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
@@ -112,15 +113,32 @@ public final class Video implements Parcelable {
         }
     };
 
+    /**
+     * Don't change the logic from equality by reference!<br/>
+     * Or adapters won't work properly.
+     */
     @Override
-    public boolean equals(Object m) {
-        if (m instanceof Video) {
-            if (videoId != null) {
-                return videoId.equals(((Video) m).videoId);
-            }
+    public boolean equals(@Nullable Object obj) {
+        return super.equals(obj);
+    }
+
+    /**
+     * Equality that intended for playlists or other not strong cases.
+     */
+    public static boolean equals(Video video1, Video video2) {
+        if (video1 == null || video2 == null) {
+            return false;
         }
 
-        return false;
+        if (video1.videoId == null) {
+            return false;
+        }
+
+        return video1.videoId.equals(video2.videoId);
+    }
+
+    public static boolean isEmpty(Video video) {
+        return video == null || video.videoId == null;
     }
 
     public int describeContents() {
@@ -163,12 +181,16 @@ public final class Video implements Parcelable {
         return videoId == null && channelId != null;
     }
 
-    public boolean isChannelSub() {
-        return mediaItem != null && mediaItem.getType() == MediaItem.TYPE_CHANNEL_SUB;
+    public boolean isChannelSection() {
+        return mediaItem != null && mediaItem.getType() == MediaItem.TYPE_CHANNELS_SECTION;
     }
 
     public boolean isPlaylistItem() {
         return playlistIndex > 0;
+    }
+
+    public boolean isPlaylist() {
+        return mediaItem != null && mediaItem.getType() == MediaItem.TYPE_PLAYLISTS_SECTION;
     }
 
     public void sync(MediaItemMetadata metadata, boolean useAlt) {

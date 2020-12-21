@@ -6,12 +6,12 @@ import androidx.annotation.NonNull;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -25,7 +25,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private static final String TAG = StateUpdater.class.getSimpleName();
     private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
     private static final int MAX_PERSISTENT_STATE_SIZE = 30;
-    private final Context mContext;
     private boolean mIsPlaying;
     private FormatItem mVideoFormat;
     private FormatItem mAudioFormat;
@@ -36,17 +35,19 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private float mLastSpeed = -1;
     private AppPrefs mPrefs;
     private Disposable mHistoryAction;
+    private PlayerData mPlayerData;
 
-    public StateUpdater(Context context) {
-        mContext = context;
+    public StateUpdater() {
     }
 
     @Override
     public void onInitDone() {
-        mPrefs = AppPrefs.instance(mActivity);
-        mVideoFormat = mPrefs.getFormat(FormatItem.TYPE_VIDEO, FormatItem.VIDEO_HD_AVC_30);
-        mAudioFormat = mPrefs.getFormat(FormatItem.TYPE_AUDIO, FormatItem.AUDIO_HQ_MP4A);
-        mSubtitleFormat = mPrefs.getFormat(FormatItem.TYPE_SUBTITLE, null);
+        mPrefs = AppPrefs.instance(getActivity());
+        mPlayerData = PlayerData.instance(getActivity());
+
+        mVideoFormat = Helpers.get(mPlayerData.getVideoFormat(), FormatItem.VIDEO_HD_AVC_30);
+        mAudioFormat = Helpers.get(mPlayerData.getAudioFormat(), FormatItem.AUDIO_HQ_MP4A);
+        mSubtitleFormat = Helpers.get(mPlayerData.getSubtitleFormat(), null);
 
         restoreState();
     }
@@ -64,7 +65,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         mIsPlaying = true; // video just added
 
         // Ensure that we aren't running on presenter init stage
-        if (mController != null && mController.isEngineBlocked()) {
+        if (getController() != null && getController().isEngineBlocked()) {
             // In background mode some event not called.
             // So, for proper state persistence, we need to save state here.
             saveState();
@@ -73,11 +74,11 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public boolean onPreviousClicked() {
-        boolean isFarFromStart = mController.getPositionMs() > 10_000;
+        boolean isFarFromStart = getController().getPositionMs() > 10_000;
 
         if (isFarFromStart) {
             saveState(); // in case user want to go to previous video
-            mController.setPositionMs(0);
+            getController().setPositionMs(0);
             return true;
         }
 
@@ -96,6 +97,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     @Override
     public void onSuggestionItemClicked(Video item) {
         saveState();
+        mIsPlaying = true; // autoplay video from suggestions
     }
 
     //@Override
@@ -138,44 +140,47 @@ public class StateUpdater extends PlayerEventListenerHelper {
     @Override
     public void onPlay() {
         mIsPlaying = true;
-        Helpers.disableScreensaver(mActivity);
+        Helpers.disableScreensaver(getActivity());
     }
 
     @Override
     public void onPause() {
         mIsPlaying = false;
-        Helpers.enableScreensaver(mActivity);
+        Helpers.enableScreensaver(getActivity());
     }
 
     @Override
     public void onTrackSelected(FormatItem track) {
-        if (track.getType() == FormatItem.TYPE_VIDEO && !mController.isInPIPMode()) {
+        if (track.getType() == FormatItem.TYPE_VIDEO && !getController().isInPIPMode()) {
             mVideoFormat = track;
+            mPlayerData.setVideoFormat(track);
         } else if (track.getType() == FormatItem.TYPE_AUDIO) {
             mAudioFormat = track;
+            mPlayerData.setAudioFormat(track);
         } else if (track.getType() == FormatItem.TYPE_SUBTITLE) {
             mSubtitleFormat = track;
-        }
-
-        if (!mController.isInPIPMode()) {
-            mPrefs.setFormat(track);
+            mPlayerData.setSubtitleFormat(track);
         }
     }
 
     @Override
     public void onPlayEnd() {
-        Video video = mController.getVideo();
+        Video video = getController().getVideo();
 
         // In case we start to watch the video again
         if (video != null) {
-            mStates.remove(video.videoId);
+            // Add null state to prevent restore position from history
+            mStates.put(video.videoId, new State(video.videoId, 0));
             saveState();
         }
+
+        // Take into account different playback states
+        Helpers.enableScreensaver(getActivity());
     }
 
     private void clearStateOfNextVideo() {
-        if (mController.getVideo() != null && mController.getVideo().nextMediaItem != null) {
-            mStates.remove(mController.getVideo().nextMediaItem.getVideoId());
+        if (getController().getVideo() != null && getController().getVideo().nextMediaItem != null) {
+            mStates.remove(getController().getVideo().nextMediaItem.getVideoId());
         }
     }
 
@@ -189,17 +194,17 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void saveState() {
-        Video video = mController.getVideo();
+        Video video = getController().getVideo();
 
         if (video != null) {
-            if (mController.getLengthMs() - mController.getPositionMs() > 500) { // don't save position if track is ended
-                mStates.put(video.videoId, new State(video.videoId, mController.getPositionMs(), mController.getLengthMs(), mController.getSpeed()));
+            if (getController().getLengthMs() - getController().getPositionMs() > 500) { // don't save position if track is ended
+                mStates.put(video.videoId, new State(video.videoId, getController().getPositionMs(), getController().getLengthMs(), getController().getSpeed()));
             }
 
             persistState();
         }
 
-        mLastSpeed = mController.getSpeed();
+        mLastSpeed = getController().getSpeed();
     }
 
     private void restoreState() {
@@ -214,7 +219,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void persistVideoState() {
-        if (mController.getLengthMs() <= MUSIC_VIDEO_LENGTH_MS) {
+        if (getController().getLengthMs() <= MUSIC_VIDEO_LENGTH_MS) {
             return;
         }
 
@@ -267,30 +272,30 @@ public class StateUpdater extends PlayerEventListenerHelper {
     // * Mirrors {@link #restoreVideoFormat()} to be sure that selection perfroms in any case
     // */
     //private void restoreVideoFormatSilent() {
-    //    if (mController.isInPIPMode()) {
-    //        mController.selectFormatSilent(FormatItem.VIDEO_SD_AVC_30);
+    //    if (getController().isInPIPMode()) {
+    //        getController().selectFormatSilent(FormatItem.VIDEO_SD_AVC_30);
     //    } else if (mVideoFormat != null) {
-    //        mController.selectFormatSilent(mVideoFormat);
+    //        getController().selectFormatSilent(mVideoFormat);
     //    }
     //}
 
     private void restoreVideoFormat() {
-        if (mController.isInPIPMode()) {
-            mController.selectFormat(FormatItem.VIDEO_SD_AVC_30);
+        if (getController().isInPIPMode()) {
+            getController().selectFormat(FormatItem.VIDEO_SD_AVC_30);
         } else if (mVideoFormat != null) {
-            mController.selectFormat(mVideoFormat);
+            getController().selectFormat(mVideoFormat);
         }
     }
 
     private void restoreAudioFormat() {
         if (mAudioFormat != null) {
-            mController.selectFormat(mAudioFormat);
+            getController().selectFormat(mAudioFormat);
         }
     }
 
     private void restoreSubtitleFormat() {
         if (mSubtitleFormat != null) {
-            mController.selectFormat(mSubtitleFormat);
+            getController().selectFormat(mSubtitleFormat);
         }
     }
 
@@ -302,41 +307,41 @@ public class StateUpdater extends PlayerEventListenerHelper {
             boolean containsWebPosition = item.percentWatched > 0 && item.percentWatched < 100;
             if (containsWebPosition) {
                 // Web state is buggy on short videos (e.g. video clips)
-                boolean isLongVideo = mController.getLengthMs() > MUSIC_VIDEO_LENGTH_MS;
+                boolean isLongVideo = getController().getLengthMs() > MUSIC_VIDEO_LENGTH_MS;
                 if (isLongVideo) {
                     state = new State(item.videoId, getNewPosition(item.percentWatched));
                 }
             }
         }
 
-        if (state != null) {
-            boolean isVideoEnded = Math.abs(mController.getLengthMs() - state.positionMs) < 1_000;
+        if (state != null && !item.isLive) {
+            boolean isVideoEnded = Math.abs(getController().getLengthMs() - state.positionMs) < 1_000;
             if (!isVideoEnded) {
-                mController.setPositionMs(state.positionMs);
+                getController().setPositionMs(state.positionMs);
             }
         }
 
-        mController.setPlay(mIsPlaying);
+        getController().setPlay(mIsPlaying);
     }
 
     private void restoreSpeed(Video item) {
-        boolean isLive = mController.getLengthMs() - mController.getPositionMs() < 30_000;
+        boolean isLive = getController().getLengthMs() - getController().getPositionMs() < 30_000;
 
         if (!isLive) {
             if (mLastSpeed != -1) {
-                mController.setSpeed(mLastSpeed);
+                getController().setSpeed(mLastSpeed);
             } else {
-                mController.setSpeed(1.0f); // speed may be changed before, so do reset to default
+                getController().setSpeed(1.0f); // speed may be changed before, so do reset to default
             }
         } else {
-            mController.setSpeed(1.0f); // speed may be changed before, so do reset to default
+            getController().setSpeed(1.0f); // speed may be changed before, so do reset to default
         }
     }
 
     private long getNewPosition(int percentWatched) {
-        long newPositionMs = mController.getLengthMs() / 100 * percentWatched;
+        long newPositionMs = getController().getLengthMs() / 100 * percentWatched;
 
-        boolean samePositions = Math.abs(newPositionMs - mController.getPositionMs()) < 10_000;
+        boolean samePositions = Math.abs(newPositionMs - getController().getPositionMs()) < 10_000;
 
         if (samePositions) {
             newPositionMs = -1;
@@ -345,20 +350,20 @@ public class StateUpdater extends PlayerEventListenerHelper {
         return newPositionMs;
     }
 
-    public FormatItem getVideoPreset() {
+    public FormatItem getVideoFormat() {
         return mVideoFormat;
     }
 
     private void updateHistory() {
         RxUtils.disposeActions(mHistoryAction);
 
-        Video item = mController.getVideo();
-        MediaService service = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(mContext));
+        Video item = getController().getVideo();
+        MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
 
         Observable<Void> historyObservable;
 
-        long positionSec = mController.getPositionMs() / 1_000;
+        long positionSec = getController().getPositionMs() / 1_000;
 
         if (item.mediaItem != null) {
             historyObservable = mediaItemManager.updateHistoryPositionObserve(item.mediaItem, positionSec);

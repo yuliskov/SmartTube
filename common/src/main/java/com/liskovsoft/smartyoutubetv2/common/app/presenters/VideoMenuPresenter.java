@@ -6,11 +6,12 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
-import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
@@ -21,8 +22,7 @@ import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VideoMenuPresenter {
-    private final Context mContext;
+public class VideoMenuPresenter extends BasePresenter<SplashView> {
     private final MediaItemManager mItemManager;
     private final SignInManager mAuthManager;
     private final AppSettingsPresenter mSettingsPresenter;
@@ -33,38 +33,40 @@ public class VideoMenuPresenter {
     private Video mVideo;
     private boolean mIsNotInterestedButtonEnabled;
     private boolean mIsOpenChannelButtonEnabled;
+    private boolean mIsOpenChannelUploadsButtonEnabled;
 
     private VideoMenuPresenter(Context context) {
-        mContext = context;
-        MediaService service = YouTubeMediaService.instance(LocaleUtility.getCurrentLocale(context));
+        super(context);
+        MediaService service = YouTubeMediaService.instance();
         mItemManager = service.getMediaItemManager();
         mAuthManager = service.getSignInManager();
         mSettingsPresenter = AppSettingsPresenter.instance(context);
     }
 
     public static VideoMenuPresenter instance(Context context) {
-        return new VideoMenuPresenter(context.getApplicationContext());
+        return new VideoMenuPresenter(context);
     }
 
     public void showShortMenu(Video video) {
-        showMenu(video, false, false);
+        showMenu(video, false, false, false);
     }
 
     public void showMenu(Video video) {
-        showMenu(video, true, true);
+        showMenu(video, true, true, true);
     }
 
-    private void showMenu(Video video, boolean isOpenChannelButtonEnabled, boolean isNotInterestedButtonEnabled) {
+    private void showMenu(Video video, boolean isOpenChannelButtonEnabled, boolean isOpenChannelUploadsButtonEnabled, boolean isNotInterestedButtonEnabled) {
         if (video == null || !video.isVideo()) {
             return;
         }
 
         mVideo = video;
         mIsOpenChannelButtonEnabled = isOpenChannelButtonEnabled;
+        mIsOpenChannelUploadsButtonEnabled = isOpenChannelUploadsButtonEnabled;
         mIsNotInterestedButtonEnabled = isNotInterestedButtonEnabled;
 
         authCheck(this::obtainPlaylistsAndShow,
-                  () -> MessageHelpers.showMessage(mContext, R.string.msg_signed_users_only));;
+                  () -> MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only));;
     }
 
     private void obtainPlaylistsAndShow() {
@@ -77,9 +79,10 @@ public class VideoMenuPresenter {
     private void prepareAndShowDialog(List<VideoPlaylistInfo> videoPlaylistInfos) {
         mSettingsPresenter.clear();
 
-        appendNotInterestedButton();
-        appendOpenChannelButton();
         appendAddToPlaylist(videoPlaylistInfos);
+        appendOpenChannelButton();
+        appendOpenChannelUploadsButton();
+        appendNotInterestedButton();
 
         mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction, mAddAction, mSignCheckAction, mNotInterestedAction));
     }
@@ -94,7 +97,7 @@ public class VideoMenuPresenter {
                     playlistInfo.isSelected()));
         }
 
-        mSettingsPresenter.appendCheckedCategory(mContext.getString(R.string.dialog_add_to_playlist), options);
+        mSettingsPresenter.appendCheckedCategory(getContext().getString(R.string.dialog_add_to_playlist), options);
     }
 
     private void appendOpenChannelButton() {
@@ -103,7 +106,16 @@ public class VideoMenuPresenter {
         }
 
         mSettingsPresenter.appendSingleButton(
-                UiOptionItem.from(mContext.getString(R.string.open_channel), optionItem -> ChannelPresenter.instance(mContext).openChannel(mVideo)));
+                UiOptionItem.from(getContext().getString(R.string.open_channel), optionItem -> ChannelPresenter.instance(getContext()).openChannel(mVideo)));
+    }
+
+    private void appendOpenChannelUploadsButton() {
+        if (!mIsOpenChannelUploadsButtonEnabled || mVideo == null) {
+            return;
+        }
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.open_channel_uploads), optionItem -> ChannelUploadsPresenter.instance(getContext()).openChannel(mVideo)));
     }
 
     private void appendNotInterestedButton() {
@@ -112,12 +124,12 @@ public class VideoMenuPresenter {
         }
 
         mSettingsPresenter.appendSingleButton(
-                UiOptionItem.from(mContext.getString(R.string.not_interested), optionItem -> {
+                UiOptionItem.from(getContext().getString(R.string.not_interested), optionItem -> {
                     mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem)
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe((var) -> {}, (err) -> {}, () -> {
-                                MessageHelpers.showMessage(mContext, R.string.you_wont_see_this_video);
+                                MessageHelpers.showMessage(getContext(), R.string.you_wont_see_this_video);
                             });
                 }));
     }

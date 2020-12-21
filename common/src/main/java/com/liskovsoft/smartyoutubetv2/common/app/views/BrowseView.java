@@ -13,6 +13,7 @@ public interface BrowseView {
     void updateCategory(SettingsGroup group);
     void removeCategory(Category category);
     void clearCategory(Category category);
-    void updateErrorIfEmpty(ErrorFragmentData data);
+    void showError(ErrorFragmentData data);
     void showProgressBar(boolean show);
+    boolean isProgressBarShowing();
 }

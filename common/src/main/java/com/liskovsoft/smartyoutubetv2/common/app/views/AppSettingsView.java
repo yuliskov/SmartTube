@@ -8,4 +8,5 @@ public interface AppSettingsView {
     void addCategories(List<SettingsCategory> categories);
     void setTitle(String title);
     void clear();
+    void finish();
 }

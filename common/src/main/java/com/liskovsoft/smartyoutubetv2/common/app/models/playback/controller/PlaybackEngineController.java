@@ -10,7 +10,8 @@ public interface PlaybackEngineController {
     int BUFFER_MED = 1;
     int BUFFER_HIGH = 2;
     void openDash(InputStream dashManifest);
-    void openHls(String hlsPlaylistUrl);
+    void openDashUrl(String dashManifestUrl);
+    void openHlsUrl(String hlsPlaylistUrl);
     void openUrlList(List<String> urlList);
     long getPositionMs();
     void setPositionMs(long positionMs);
@@ -38,6 +39,9 @@ public interface PlaybackEngineController {
     boolean hasNoMedia();
     void setSpeed(float speed);
     float getSpeed();
-    void setBuffer(int bufferType);
-    int getBuffer();
+    void setBufferType(int bufferType);
+    int getBufferType();
+    interface OnBufferSelected {
+        void onBufferSelected(int type);
+    }
 }

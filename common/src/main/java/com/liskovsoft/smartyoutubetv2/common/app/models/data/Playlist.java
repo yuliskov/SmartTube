@@ -39,7 +39,11 @@ public class Playlist {
      * @param video to be added to the playlist.
      */
     public void add(Video video) {
-        if (video.equals(getCurrent())) {
+        if (Video.isEmpty(video)) {
+            return;
+        }
+
+        if (Video.equals(video, getCurrent())) {
             mPlaylist.set(mCurrentPosition, video);
         } else {
             mPlaylist.add(++mCurrentPosition, video);

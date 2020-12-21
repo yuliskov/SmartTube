@@ -8,6 +8,11 @@ public class AudioTrack extends MediaTrack {
     }
 
     @Override
+    public int inBounds(MediaTrack track2) {
+        return compare(track2);
+    }
+
+    @Override
     public int compare(MediaTrack track2) {
         if (track2.format == null) {
             return 1;

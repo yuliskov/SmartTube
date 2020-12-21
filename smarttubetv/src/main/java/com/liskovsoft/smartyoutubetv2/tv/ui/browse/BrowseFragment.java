@@ -26,7 +26,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.LoginDialogFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.ErrorDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 
 import java.util.LinkedHashMap;
@@ -60,7 +60,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mCategories = new LinkedHashMap<>();
         mHandler = new Handler();
         mBrowsePresenter = BrowsePresenter.instance(getContext());
-        mBrowsePresenter.register(this);
+        mBrowsePresenter.setView(this);
         mProgressBarManager = new ProgressBarManager();
 
         setupAdapter();
@@ -97,7 +97,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
         prepareEntranceTransition();
 
-        mBrowsePresenter.onInitDone();
+        mBrowsePresenter.onViewInitialized();
 
         // Restore state after crash
         selectCategory(mRestoredHeaderIndex);
@@ -116,6 +116,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
                     } else {
                         // update section when clicked or pressed
                         mBrowsePresenter.onCategoryFocused((int) headerId);
+                        startHeadersTransition(false);
                     }
                 }
         );
@@ -194,15 +195,19 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
         return (int) ((PageRow) mCategoryRowAdapter.get(getSelectedPosition())).getHeaderItem().getId();
     }
-
-    @Override
+    
     public void updateErrorIfEmpty(ErrorFragmentData data) {
         mHandler.postDelayed(() -> showErrorIfEmpty(data), 500); // need delay because header may be not updated
     }
 
+    @Override
+    public void showError(ErrorFragmentData data) {
+        replaceMainFragment(new ErrorDialogFragment(data));
+    }
+
     private void showErrorIfEmpty(ErrorFragmentData data) {
         if (mCategoryFragmentFactory.isEmpty()) {
-            replaceMainFragment(new LoginDialogFragment(data));
+            replaceMainFragment(new ErrorDialogFragment(data));
         }
     }
 
@@ -285,7 +290,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private void createHeader(int index, Category header) {
-        HeaderItem headerItem = new CategoryHeaderItem(header.getId(), header.getTitle(), header.getType(), header.getResId());;
+        HeaderItem headerItem = new CategoryHeaderItem(header);
 
         PageRow pageRow = new PageRow(headerItem);
         mCategoryRowAdapter.add(index, pageRow);
@@ -314,7 +319,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mBrowsePresenter.unregister(this);
+        mBrowsePresenter.onViewDestroyed();
     }
 
     @Override
@@ -335,5 +340,10 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         } else {
             mProgressBarManager.hide();
         }
+    }
+
+    @Override
+    public boolean isProgressBarShowing() {
+        return mProgressBarManager.isShowing();
     }
 }

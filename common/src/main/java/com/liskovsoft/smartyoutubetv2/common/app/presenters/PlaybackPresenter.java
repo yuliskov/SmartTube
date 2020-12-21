@@ -2,49 +2,39 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.MainPlayerEventBridge;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 
-public class PlaybackPresenter implements Presenter<PlaybackView> {
+public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     private static final String TAG = PlaybackPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static PlaybackPresenter sInstance;
-    private final Context mContext;
     private final ViewManager mViewManager;
-    private PlaybackView mView;
     private final MainPlayerEventBridge mMainPlayerEventBridge;
 
     private PlaybackPresenter(Context context) {
-        mContext = context;
+        super(context);
         mViewManager = ViewManager.instance(context);
-        mMainPlayerEventBridge = MainPlayerEventBridge.instance(context);
+        mMainPlayerEventBridge = MainPlayerEventBridge.instance();
     }
 
     public static PlaybackPresenter instance(Context context) {
         if (sInstance == null) {
-            sInstance = new PlaybackPresenter(context.getApplicationContext());
+            sInstance = new PlaybackPresenter(context);
         }
+
+        sInstance.setContext(context);
 
         return sInstance;
     }
 
     @Override
-    public void onInitDone() {
-        mMainPlayerEventBridge.setController(mView.getController());
-        mView.setEventListener(mMainPlayerEventBridge);
-    }
-
-    @Override
-    public void register(PlaybackView view) {
-        mView = view;
-    }
-
-    @Override
-    public void unregister(PlaybackView view) {
-        mView = null;
+    public void onViewInitialized() {
+        mMainPlayerEventBridge.setController(getView().getController());
+        getView().setEventListener(mMainPlayerEventBridge);
     }
 
     /**
@@ -64,7 +54,7 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
     }
 
     private void focusView() {
-        //if (mView != null && (mView.getController().isInPIPMode() || mView.getController().isEngineBlocked())) {
+        //if (getView() != null && (getView().getController().isInPIPMode() || getView().getController().isEngineBlocked())) {
         //    return;
         //}
 
@@ -72,10 +62,10 @@ public class PlaybackPresenter implements Presenter<PlaybackView> {
     }
 
     public Video getVideo() {
-        if (mView == null || mView.getController() == null) {
+        if (getView() == null || getView().getController() == null) {
             return null;
         }
 
-        return mView.getController().getVideo();
+        return getView().getController().getVideo();
     }
 }

@@ -20,22 +20,29 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.Player
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.ViewEventListener;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class MainPlayerEventBridge implements PlayerEventListener {
     private static final String TAG = MainPlayerEventBridge.class.getSimpleName();
-    private final ArrayList<PlayerHandlerEventListener> mEventListeners;
+    private final ArrayList<PlayerHandlerEventListener> mEventListeners = new ArrayList<PlayerHandlerEventListener>() {
+        @Override
+        public boolean add(PlayerHandlerEventListener listener) {
+            ((PlayerEventListenerHelper) listener).setBridge(MainPlayerEventBridge.this);
+
+            return super.add(listener);
+        }
+    };
     @SuppressLint("StaticFieldLeak")
     private static MainPlayerEventBridge sInstance;
-    private PlaybackController mController;
+    private WeakReference<PlaybackController> mController = new WeakReference<>(null);
+    private WeakReference<Activity> mActivity = new WeakReference<>(null);
 
-    public MainPlayerEventBridge(Context context) {
-        mEventListeners = new ArrayList<>();
-
-        PlayerUiManager uiManager = new PlayerUiManager(context);
-        VideoLoader videoLoader = new VideoLoader(context);
-        StateUpdater stateUpdater = new StateUpdater(context);
-        SuggestionsLoader suggestionsLoader = new SuggestionsLoader(context);
+    public MainPlayerEventBridge() {
+        PlayerUiManager uiManager = new PlayerUiManager();
+        VideoLoader videoLoader = new VideoLoader();
+        StateUpdater stateUpdater = new StateUpdater();
+        SuggestionsLoader suggestionsLoader = new SuggestionsLoader();
         HqDialogManager hqDialogManager = new HqDialogManager(stateUpdater);
         suggestionsLoader.addMetadataListener(uiManager);
 
@@ -48,9 +55,9 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         mEventListeners.add(videoLoader);
     }
 
-    public static MainPlayerEventBridge instance(Context context) {
+    public static MainPlayerEventBridge instance() {
         if (sInstance == null) {
-            sInstance = new MainPlayerEventBridge(context);
+            sInstance = new MainPlayerEventBridge();
         }
 
         return sInstance;
@@ -58,17 +65,20 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     
     public void setController(PlaybackController controller) {
         if (controller != null) {
-            Fragment fragment = (Fragment) controller;
-            Activity mainActivity = fragment.getActivity();
-
-            process(listener -> listener.onActivity(mainActivity));
-            process(listener -> listener.onController(controller));
-
-            if (mController != controller) { // Be ready to re-init after app exit
-                mController = controller;
+            if (mController.get() != controller) { // Be ready to re-init after app exit
+                mController = new WeakReference<>(controller);
+                mActivity = new WeakReference<>(((Fragment) controller).getActivity());
                 process(PlayerHandlerEventListener::onInitDone);
             }
         }
+    }
+
+    public PlaybackController getController() {
+        return mController.get();
+    }
+
+    public Activity getActivity() {
+        return mActivity.get();
     }
 
     @Override
