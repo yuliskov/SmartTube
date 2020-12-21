@@ -64,7 +64,7 @@ public class ChannelUploadsMenuPresenter extends BasePresenter<Void> {
         }
 
         mSettingsPresenter.appendSingleButton(
-                UiOptionItem.from(getContext().getString(R.string.unsubscribe), optionItem -> {
+                UiOptionItem.from(getContext().getString(R.string.unsubscribe_from_channel), optionItem -> {
                     // Maybe this is subscribed items view
                     ChannelUploadsPresenter.instance(getContext())
                             .obtainVideoGroup(mVideo, group -> unsubscribe(group.getChannelId()));

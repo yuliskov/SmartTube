@@ -143,5 +143,5 @@
     <string name="player_seek_preview_none">Відключено</string>
     <string name="player_seek_preview_single">Один кадр</string>
     <string name="player_seek_preview_carousel">Карусель</string>
-    <string name="unsubscribe">Відписатися</string>
+    <string name="unsubscribe_from_channel">Відписатися від каналу</string>
 </resources>
