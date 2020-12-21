@@ -111,7 +111,7 @@
     <string name="repeat_mode_pause">Pause lecture après chaque vidéo</string>
     <string name="repeat_mode_none">Arrêtez la lecture après une vidéo</string>
     <string name="subscribed_to_channel">S\'abonner à la chaîne</string>
-    <string name="unsubscribed_to_channel">Se désabonner de la chaîne</string>
+    <string name="unsubscribed_from_channel">Se désabonner de la chaîne</string>
     <string name="subtitle_yellow">Jaune</string>
     <string name="subtitle_black_bg">Fond noir</string>
     <string name="player_seek_preview">Aperçu pendant la recherche</string>

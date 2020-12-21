@@ -213,7 +213,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         if (subscribed) {
             MessageHelpers.showMessage(getActivity(), R.string.subscribed_to_channel);
         } else {
-            MessageHelpers.showMessage(getActivity(), R.string.unsubscribed_to_channel);
+            MessageHelpers.showMessage(getActivity(), R.string.unsubscribed_from_channel);
         }
     }
 

@@ -111,7 +111,7 @@
     <string name="repeat_mode_pause">Pause playback after each video</string>
     <string name="repeat_mode_none">Stop playback after one video</string>
     <string name="subscribed_to_channel">Subscribed to channel</string>
-    <string name="unsubscribed_to_channel">Unsubscribed to channel</string>
+    <string name="unsubscribed_from_channel">Unsubscribed from channel</string>
     <string name="subtitle_yellow">Yellow</string>
     <string name="subtitle_black_bg">Black background</string>
     <string name="player_seek_preview">Preview while seeking</string>
@@ -127,7 +127,7 @@
     <string name="player_show_clock">Show clock</string>
     <string name="player_show_remaining_time">Show remaining time</string>
     <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
-    <string name="open_channel_uploads">Open channel videos</string>
+    <string name="open_channel_uploads">Open channel uploads</string>
     <string name="app_exit_shortcut">Exit from the app</string>
     <string name="app_exit_none">Don\'t exit</string>
     <string name="app_double_back_exit">Double back</string>
@@ -144,4 +144,5 @@
     <string name="player_seek_preview_none">Disabled</string>
     <string name="player_seek_preview_single">Single frame</string>
     <string name="player_seek_preview_carousel">Carousel</string>
+    <string name="unsubscribe">Unsubscribe</string>
 </resources>

@@ -111,7 +111,7 @@
     <string name="repeat_mode_pause">Ставить плеер на паузу после каждого видео</string>
     <string name="repeat_mode_none">Завершать воспроизведение после одного видео</string>
     <string name="subscribed_to_channel">Подписка на канал оформлена</string>
-    <string name="unsubscribed_to_channel">Подписка на канал отменена</string>
+    <string name="unsubscribed_from_channel">Подписка на канал отменена</string>
     <string name="subtitle_yellow">Желтые</string>
     <string name="subtitle_black_bg">Черный фон</string>
     <string name="player_seek_preview">Превью при перемотке</string>
@@ -126,7 +126,7 @@
     <string name="playlists_style_rows">Строки</string>
     <string name="player_show_clock">Отображать часы</string>
     <string name="player_show_remaining_time">Отображать оставшееся время</string>
-    <string name="open_channel_uploads">Все видео на канале</string>
+    <string name="open_channel_uploads">Открыть загрузки</string>
     <string name="app_exit_shortcut">Выход из приложения</string>
     <string name="app_exit_none">Не выходить</string>
     <string name="app_double_back_exit">Двойное назад</string>
@@ -143,4 +143,5 @@
     <string name="player_seek_preview_none">Отключено</string>
     <string name="player_seek_preview_single">Один кадр</string>
     <string name="player_seek_preview_carousel">Карусель</string>
+    <string name="unsubscribe">Отписаться</string>
 </resources>

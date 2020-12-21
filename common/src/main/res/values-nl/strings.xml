@@ -111,7 +111,7 @@
     <string name="repeat_mode_pause">Pauzeren na deze video</string>
     <string name="repeat_mode_none">Stoppen na deze video</string>
     <string name="subscribed_to_channel">Abonnement aan</string>
-    <string name="unsubscribed_to_channel">Abonnement uit</string>
+    <string name="unsubscribed_from_channel">Abonnement uit</string>
     <string name="subtitle_yellow">Geel</string>
     <string name="subtitle_black_bg">Zwarte achtergrond</string>
     <string name="player_seek_preview">Preview tijdens snel zoeken</string>

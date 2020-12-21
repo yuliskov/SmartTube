@@ -110,7 +110,7 @@
     <string name="repeat_mode_pause">השהה את ההפעלה לאחר כל וידאו</string>
     <string name="repeat_mode_none">הפסק הפעלה לאחר סרטון אחד</string>
     <string name="subscribed_to_channel">הרשם לערוץ</string>
-    <string name="unsubscribed_to_channel">ביטול רישום לערוץ</string>
+    <string name="unsubscribed_from_channel">ביטול רישום לערוץ</string>
     <string name="subtitle_yellow">צהוב</string>
     <string name="subtitle_black_bg">רקע שחור</string>
     <string name="player_seek_preview">תצוגה מקדימה בעת חיפוש</string>

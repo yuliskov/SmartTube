@@ -110,7 +110,7 @@
     <string name="repeat_mode_pause">Pārtraukt atskaņošanu pēc katra videoklipa</string>
     <string name="repeat_mode_none">Pārtraukt atskaņošanu pēc viena videoklipa</string>
     <string name="subscribed_to_channel">Tu esi pierakstījies</string>
-    <string name="unsubscribed_to_channel">Tu esi atrakstījies</string>
+    <string name="unsubscribed_from_channel">Tu esi atrakstījies</string>
     <string name="subtitle_yellow">Dzeltens</string>
     <string name="subtitle_black_bg">Melns fons</string>
     <string name="player_seek_preview">Priekšskatīt, kamēr meklējat</string>

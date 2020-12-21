@@ -110,7 +110,7 @@
     <string name="repeat_mode_pause">Pristabdyti atkūrimą po kiekvieno vaizdo įrašo</string>
     <string name="repeat_mode_none">Sustabdyti atkūrimą po vieno vaizdo įrašo</string>
     <string name="subscribed_to_channel">Užsiprenumeravote kanalą</string>
-    <string name="unsubscribed_to_channel">Kanalo prenumerata</string>
+    <string name="unsubscribed_from_channel">Kanalo prenumerata</string>
     <string name="subtitle_yellow">Geltona</string>
     <string name="subtitle_black_bg">Juodas fonas</string>
     <string name="player_seek_preview">Peržiūra ieškant</string>

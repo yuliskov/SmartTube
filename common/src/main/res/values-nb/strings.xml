@@ -110,7 +110,7 @@
     <string name="repeat_mode_pause">Sett avspilling på pause etter hver video</string>
     <string name="repeat_mode_none">Stopp avspilling etter en video</string>
     <string name="subscribed_to_channel">Abonnerer på kanalen</string>
-    <string name="unsubscribed_to_channel">Avslutter abonnering på kanalen</string>
+    <string name="unsubscribed_from_channel">Avslutter abonnering på kanalen</string>
     <string name="subtitle_yellow">Gul</string>
     <string name="subtitle_black_bg">Svart bakgrunn</string>
     <string name="player_seek_preview">Forhåndsvisning mens du søker</string>

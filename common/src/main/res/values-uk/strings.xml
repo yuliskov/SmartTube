@@ -111,7 +111,7 @@
     <string name="repeat_mode_pause">Ставити відтворення на паузу після кожного відео</string>
     <string name="repeat_mode_none">Завершувати відтворення після одного відео</string>
     <string name="subscribed_to_channel">Підписка на канал оформлена</string>
-    <string name="unsubscribed_to_channel">Підписка на канал скасована</string>
+    <string name="unsubscribed_from_channel">Підписка на канал скасована</string>
     <string name="subtitle_yellow">Жовті</string>
     <string name="subtitle_black_bg">Чорний фон</string>
     <string name="player_seek_preview">Прев\'ю при перемотуванні</string>
@@ -126,7 +126,7 @@
     <string name="playlists_style_rows">Рядки</string>
     <string name="player_show_clock">Відображати годинник</string>
     <string name="player_show_remaining_time">Відображати час, що залишився</string>
-    <string name="open_channel_uploads">Усі відео на каналі</string>
+    <string name="open_channel_uploads">Відкрити завантаження</string>
     <string name="app_exit_shortcut">Вихід з додатку</string>
     <string name="app_exit_none">Не виходити</string>
     <string name="app_double_back_exit">Подвійне назад</string>
@@ -143,4 +143,5 @@
     <string name="player_seek_preview_none">Відключено</string>
     <string name="player_seek_preview_single">Один кадр</string>
     <string name="player_seek_preview_carousel">Карусель</string>
+    <string name="unsubscribe">Відписатися</string>
 </resources>

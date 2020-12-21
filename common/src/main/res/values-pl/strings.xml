@@ -110,7 +110,7 @@
     <string name="repeat_mode_pause">Pauzuj odtwarzanie po każdym filmie</string>
     <string name="repeat_mode_none">Zakończ odtwarzanie po obejrzeniu</string>
     <string name="subscribed_to_channel">Zasubksyrbowano kanał</string>
-    <string name="unsubscribed_to_channel">Odsubskrybowano kanał</string>
+    <string name="unsubscribed_from_channel">Odsubskrybowano kanał</string>
     <string name="subtitle_yellow">Zółty</string>
     <string name="subtitle_black_bg">Czarne tło</string>
 	<string name="player_seek_preview">Podgląd podczas przewijania</string>
