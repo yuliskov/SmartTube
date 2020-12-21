@@ -30,7 +30,9 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
     public CustomOverridesRenderersFactory(FragmentActivity activity) {
         super(activity);
         setExtensionRendererMode(EXTENSION_RENDERER_MODE_ON);
-        //experimentalSetVideoMediaCodecOperationMode(MediaCodecRenderer.OPERATION_MODE_ASYNCHRONOUS_DEDICATED_THREAD_ASYNCHRONOUS_QUEUEING);
+
+        experimentalSetVideoMediaCodecOperationMode(MediaCodecRenderer.OPERATION_MODE_ASYNCHRONOUS_DEDICATED_THREAD_ASYNCHRONOUS_QUEUEING);
+        experimentalSetAudioMediaCodecOperationMode(MediaCodecRenderer.OPERATION_MODE_ASYNCHRONOUS_DEDICATED_THREAD_ASYNCHRONOUS_QUEUEING);
     }
 
     @Override
