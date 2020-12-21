@@ -180,11 +180,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     public void onDispatchKeyEvent(KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            if (mPlayerGlue != null) {
-                mPlayerGlue.syncControlsState();
-            }
-        }
+        //if (event.getAction() == KeyEvent.ACTION_DOWN) {
+        //    if (mPlayerGlue != null) {
+        //        mPlayerGlue.syncControlsStateIfNeeded();
+        //    }
+        //}
     }
 
     public void onDispatchTouchEvent(MotionEvent event) {
