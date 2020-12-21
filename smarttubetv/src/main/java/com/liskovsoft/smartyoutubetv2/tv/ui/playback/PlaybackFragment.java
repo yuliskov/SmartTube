@@ -735,6 +735,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     @Override
     public void showControlsOverlay(boolean runAnimation) {
         if (mPlayerGlue != null) {
+            mPlayerGlue.syncControlsStateIfNeeded(); // fix seeking when ui not visible yet
             mPlayerGlue.setControlsVisibility(true);
         }
 
