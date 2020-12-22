@@ -23,7 +23,6 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     private Runnable mOnClose;
     private PlayerUiManager mUiManager;
     private int mEnginePlaybackMode;
-    private boolean mIsClosed;
 
     public static class SettingsCategory {
         public static SettingsCategory radioList(String title, List<OptionItem> items) {
@@ -86,16 +85,7 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
      */
     @Override
     public void onViewDestroyed() {
-        if (!mIsClosed) {
-            // User pressed HOME button while dialog was open.
-            onClose();
-            // Stop player from running in background
-            if (mUiManager != null && mUiManager.getController() != null) {
-                mUiManager.getController().releasePlayer();
-            }
-        }
-
-        mIsClosed = false;
+        clear();
     }
 
     /**
@@ -110,8 +100,6 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
         if (mOnClose != null) {
             mOnClose.run();
         }
-
-        mIsClosed = true;
     }
 
     public void clear() {

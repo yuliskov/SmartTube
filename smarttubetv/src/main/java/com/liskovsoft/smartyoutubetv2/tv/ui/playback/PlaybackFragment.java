@@ -238,8 +238,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         }
     }
 
-    @Override
-    public void releasePlayer() {
+    private void releasePlayer() {
         if (getPlaybackMode() == PlaybackEngineController.PLAYBACK_MODE_BACKGROUND_PLAY) {
             Log.d(TAG, "releasePlayer: Engine release is blocked. Exiting...");
             return;

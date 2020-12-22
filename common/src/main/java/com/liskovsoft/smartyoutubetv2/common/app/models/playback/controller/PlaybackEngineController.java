@@ -46,7 +46,6 @@ public interface PlaybackEngineController {
     int getBufferType();
     void setVideoZoomMode(int mode);
     int getVideoZoomMode();
-    void releasePlayer();
     interface OnBufferSelected {
         void onBufferSelected(int type);
     }
