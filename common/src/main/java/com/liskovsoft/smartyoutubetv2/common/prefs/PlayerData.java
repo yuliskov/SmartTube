@@ -31,7 +31,7 @@ public class PlayerData {
     private boolean mIsPauseOnSeekEnabled;
     private boolean mIsClockEnabled;
     private boolean mIsRemainingTimeEnabled;
-    private int mBackgroundPlaybackType;
+    private int mPlaybackMode;
     private AfrData mAfrData;
     private FormatItem mVideoFormat;
     private FormatItem mAudioFormat;
@@ -119,13 +119,13 @@ public class PlayerData {
         return mIsPauseOnSeekEnabled;
     }
 
-    public void setBackgroundPlaybackType(int type) {
-        mBackgroundPlaybackType = type;
+    public void setPlaybackMode(int type) {
+        mPlaybackMode = type;
         persistData();
     }
 
-    public int getBackgroundPlaybackType() {
-        return mBackgroundPlaybackType;
+    public int getPlaybackMode() {
+        return mPlaybackMode;
     }
 
     public AfrData getAfrData() {
@@ -224,7 +224,7 @@ public class PlayerData {
         mIsPauseOnSeekEnabled = Helpers.parseBoolean(split, 4, false);
         mIsClockEnabled = Helpers.parseBoolean(split, 5, true);
         mIsRemainingTimeEnabled = Helpers.parseBoolean(split, 6, true);
-        mBackgroundPlaybackType = Helpers.parseInt(split, 7, PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE);
+        mPlaybackMode = Helpers.parseInt(split, 7, PlaybackEngineController.PLAYBACK_MODE_DEFAULT);
         mAfrData = AfrData.from(Helpers.parseStr(split, 8));
         mVideoFormat = ExoFormatItem.from(Helpers.parseStr(split, 9));
         mAudioFormat = ExoFormatItem.from(Helpers.parseStr(split, 10));
@@ -237,7 +237,7 @@ public class PlayerData {
     private void persistData() {
         mPrefs.setPlayerData(Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec,
                 mIsShowFullDateEnabled, mSeekPreviewMode, mIsPauseOnSeekEnabled,
-                mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundPlaybackType, Helpers.toString(mAfrData),
+                mIsClockEnabled, mIsRemainingTimeEnabled, mPlaybackMode, Helpers.toString(mAfrData),
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode));
     }

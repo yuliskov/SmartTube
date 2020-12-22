@@ -81,7 +81,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private UriBackgroundManager mBackgroundManager;
     private RowsSupportFragment mRowsSupportFragment;
     private final boolean mIsAnimationEnabled = true;
-    private int mEngineBlockType = PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE;
+    private int mPlaybackMode = PlaybackEngineController.PLAYBACK_MODE_DEFAULT;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -240,7 +240,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void releasePlayer() {
-        if (getEngineBlockType() != PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE) {
+        if (getPlaybackMode() == PlaybackEngineController.PLAYBACK_MODE_BACKGROUND_PLAY) {
             Log.d(TAG, "releasePlayer: Engine release is blocked. Exiting...");
             return;
         }
@@ -614,14 +614,14 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
-    public void setEngineBlockType(int type) {
+    public void setPlaybackMode(int type) {
         Log.d(TAG, "Setting engine block type to %s...", type);
-        mEngineBlockType = type;
+        mPlaybackMode = type;
     }
 
     @Override
-    public int getEngineBlockType() {
-        return mEngineBlockType;
+    public int getPlaybackMode() {
+        return mPlaybackMode;
     }
 
     @Override
@@ -701,7 +701,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         // Fix situations when engine didn't properly destroyed.
         // E.g. after closing dialogs.
-        setEngineBlockType(PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE);
+        setPlaybackMode(PlaybackEngineController.PLAYBACK_MODE_DEFAULT);
         releasePlayer();
 
         mPlaybackPresenter.onViewDestroyed();

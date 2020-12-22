@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.Looper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -21,7 +22,7 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     private String mTitle;
     private Runnable mOnClose;
     private PlayerUiManager mUiManager;
-    private int mEngineBlockType;
+    private int mEnginePlaybackMode;
     private boolean mIsClosed;
 
     public static class SettingsCategory {
@@ -187,23 +188,13 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     private void blockPlayerEngine(boolean block) {
         if (mUiManager != null && mUiManager.getController() != null) {
             // Old Android fix: don't destroy player while dialog is open
-            //if (VERSION.SDK_INT < 25) {
-            //    if (block) {
-            //        mEngineBlockType = mUiManager.getController().getEngineBlockType(); // save orig value for later restoration
-            //        mUiManager.getController().setEngineBlockType(PlaybackEngineController.ENGINE_BLOCK_TYPE_AUDIO);
-            //    } else {
-            //        mUiManager.getController().setEngineBlockType(mEngineBlockType);
-            //    }
-            //}
-
-            if (block) {
-                mEngineBlockType = mUiManager.getController().getEngineBlockType(); // save orig value for later restoration
-
-                if (mEngineBlockType == PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE) {
-                    mUiManager.getController().setEngineBlockType(PlaybackEngineController.ENGINE_BLOCK_TYPE_AUDIO);
+            if (VERSION.SDK_INT < 25) {
+                if (block) {
+                    mEnginePlaybackMode = mUiManager.getController().getPlaybackMode(); // save orig value for later restoration
+                    mUiManager.getController().setPlaybackMode(PlaybackEngineController.PLAYBACK_MODE_BACKGROUND_PLAY);
+                } else {
+                    mUiManager.getController().setPlaybackMode(mEnginePlaybackMode);
                 }
-            } else {
-                mUiManager.getController().setEngineBlockType(mEngineBlockType);
             }
         }
     }

@@ -7,10 +7,10 @@ import java.io.InputStream;
 import java.util.List;
 
 public interface PlaybackEngineController {
-    int ENGINE_BLOCK_TYPE_NONE = 0;
-    int ENGINE_BLOCK_TYPE_AUDIO = 1;
-    int ENGINE_BLOCK_TYPE_PIP = 2;
-    int ENGINE_BLOCK_TYPE_BEHIND = 3;
+    int PLAYBACK_MODE_DEFAULT = 0;
+    int PLAYBACK_MODE_BACKGROUND_PLAY = 1;
+    int PLAYBACK_MODE_PIP = 2;
+    int PLAYBACK_MODE_PLAY_BEHIND = 3;
     int BUFFER_LOW = 0;
     int BUFFER_MED = 1;
     int BUFFER_HIGH = 2;
@@ -36,8 +36,8 @@ public interface PlaybackEngineController {
     boolean isEngineInitialized();
     void restartEngine();
     void reloadPlayback();
-    void setEngineBlockType(int type);
-    int getEngineBlockType();
+    void setPlaybackMode(int type);
+    int getPlaybackMode();
     boolean isInPIPMode();
     boolean hasNoMedia();
     void setSpeed(float speed);

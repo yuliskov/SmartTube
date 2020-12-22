@@ -121,7 +121,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     private void updateBackgroundPlayback() {
         ViewManager.instance(getActivity()).blockTop(null);
 
-        getController().setEngineBlockType(mPlayerData.getBackgroundPlaybackType());
+        getController().setPlaybackMode(mPlayerData.getPlaybackMode());
     }
 
     private void addBackgroundPlaybackCategory() {
@@ -187,26 +187,26 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         List<OptionItem> options = new ArrayList<>();
         options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_off),
                 optionItem -> {
-                    playerData.setBackgroundPlaybackType(PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE);
+                    playerData.setPlaybackMode(PlaybackEngineController.PLAYBACK_MODE_DEFAULT);
                     onSetCallback.run();
-                }, playerData.getBackgroundPlaybackType() == PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE));
+                }, playerData.getPlaybackMode() == PlaybackEngineController.PLAYBACK_MODE_DEFAULT));
         if (Helpers.isAndroidTV(context) && Build.VERSION.SDK_INT < 26) { // useful only for pre-Oreo UI
             options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_behind) + " (Android TV 5,6,7)",
                     optionItem -> {
-                        playerData.setBackgroundPlaybackType(PlaybackEngineController.ENGINE_BLOCK_TYPE_BEHIND);
+                        playerData.setPlaybackMode(PlaybackEngineController.PLAYBACK_MODE_PLAY_BEHIND);
                         onSetCallback.run();
-                    }, playerData.getBackgroundPlaybackType() == PlaybackEngineController.ENGINE_BLOCK_TYPE_BEHIND));
+                    }, playerData.getPlaybackMode() == PlaybackEngineController.PLAYBACK_MODE_PLAY_BEHIND));
         }
         options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_pip),
                 optionItem -> {
-                    playerData.setBackgroundPlaybackType(PlaybackEngineController.ENGINE_BLOCK_TYPE_PIP);
+                    playerData.setPlaybackMode(PlaybackEngineController.PLAYBACK_MODE_PIP);
                     onSetCallback.run();
-                }, playerData.getBackgroundPlaybackType() == PlaybackEngineController.ENGINE_BLOCK_TYPE_PIP));
+                }, playerData.getPlaybackMode() == PlaybackEngineController.PLAYBACK_MODE_PIP));
         options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_only_audio),
                 optionItem -> {
-                    playerData.setBackgroundPlaybackType(PlaybackEngineController.ENGINE_BLOCK_TYPE_AUDIO);
+                    playerData.setPlaybackMode(PlaybackEngineController.PLAYBACK_MODE_BACKGROUND_PLAY);
                     onSetCallback.run();
-                }, playerData.getBackgroundPlaybackType() == PlaybackEngineController.ENGINE_BLOCK_TYPE_AUDIO));
+                }, playerData.getPlaybackMode() == PlaybackEngineController.PLAYBACK_MODE_BACKGROUND_PLAY));
 
         return OptionCategory.from(BACKGROUND_PLAYBACK_ID, categoryTitle, options);
     }

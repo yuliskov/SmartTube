@@ -57,7 +57,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         mIsPlaying = true; // video just added
 
         // Ensure that we aren't running on presenter init stage
-        if (getController() != null && getController().getEngineBlockType() != PlaybackEngineController.ENGINE_BLOCK_TYPE_NONE) {
+        if (getController() != null && getController().getPlaybackMode() == PlaybackEngineController.PLAYBACK_MODE_BACKGROUND_PLAY) {
             // In background mode some event not called.
             // So, for proper state persistence, we need to save state here.
             saveState();
