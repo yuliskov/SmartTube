@@ -24,7 +24,7 @@
     <string name="audio_max_quality">Ավտոմատ (առավելագույն որակ)</string>
     <string name="subtitles_disabled">Ենթագրերն անջատված են</string>
     <string name="auto_frame_rate">Ավտոմատ շրջանակի արագություն</string>
-    <string name="frame_rate_correction">Ուղղել + fps.% 5Cn %s</string>
+    <string name="frame_rate_correction">Ուղղել + fps:\n%s</string>
     <string name="category_background_playback">Ֆոնի նվագարկումը</string>
     <string name="not_implemented">Իրականացված չէ</string>
     <string name="option_background_playback_off">Անաշխատունակ</string>

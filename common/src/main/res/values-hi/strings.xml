@@ -24,7 +24,7 @@
     <string name="audio_max_quality">ऑटो (अधिकतम गुणवत्ता)</string>
     <string name="subtitles_disabled">उपशीर्षक अक्षम किया गया</string>
     <string name="auto_frame_rate">ऑटो फ्रेम दर</string>
-    <string name="frame_rate_correction">फिक्स + एफपीएस:% 5Cn %s</string>
+    <string name="frame_rate_correction">फिक्स + एफपीएस:\n%s</string>
     <string name="category_background_playback">पृष्ठभूमि प्लेबैक</string>
     <string name="not_implemented">कार्यान्वित नहीं</string>
     <string name="option_background_playback_off">विकलांग</string>
