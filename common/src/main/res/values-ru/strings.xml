@@ -142,6 +142,7 @@
     <string name="color_scheme_teal_oled">Бирюзовая (OLED)</string>
     <string name="player_seek_preview_none">Отключено</string>
     <string name="player_seek_preview_single">Один кадр</string>
+    <string name="player_seek_preview_carousel">Карусель</string>
     <string name="player_seek_preview_carousel_slow">Карусель (медленно)</string>
     <string name="player_seek_preview_carousel_fast">Карусель (быстро)</string>
     <string name="unsubscribe_from_channel">Отписаться от канала</string>

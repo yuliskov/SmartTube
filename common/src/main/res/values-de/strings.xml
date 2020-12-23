@@ -143,5 +143,5 @@
     <string name="color_scheme_teal_oled">Blaugrün (OLED)</string>
     <string name="player_seek_preview_none">Keine Vorschau</string>
     <string name="player_seek_preview_single">Einzelbild</string>
-    <string name="player_seek_preview_carousel_slow">Mehrere Bilder</string>
+    <string name="player_seek_preview_carousel">Mehrere Bilder</string>
 </resources>
