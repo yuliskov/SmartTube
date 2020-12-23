@@ -96,7 +96,7 @@
     <string name="select_account_on_boot">Account selecteren bij opstarten</string>
     <string name="player_other">Diverse</string>
     <string name="player_full_date">Publicatiedatum weergeven</string>
-    <string name="open_channel">Naar kanaal</string>
+    <string name="open_channel">Kanaal weergeven</string>
     <string name="not_interested">Geen interesse</string>
     <string name="you_wont_see_this_video">Video verwijderd uit Aanbevolen</string>
     <string name="settings_search">Zoeken</string>
@@ -127,7 +127,7 @@
     <string name="player_show_clock">Klok weergeven</string>
     <string name="player_show_remaining_time">Resterende tijd weergeven</string>
     <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
-    <string name="open_channel_uploads">Uploads weergeven</string>
+    <string name="open_channel_uploads">Recente uploads</string>
     <string name="action_video_zoom">Video zoom</string>
     <string name="video_zoom">Video zoom</string>
     <string name="video_zoom_default">Standaard</string>
@@ -144,5 +144,7 @@
     <string name="player_seek_preview_none">Geen preview</string>
     <string name="player_seek_preview_single">Single-frame</string>
     <string name="player_seek_preview_carousel">Multi-frame</string>
+    <string name="player_seek_preview_carousel_slow">Multi-frame (traag)</string>
+    <string name="player_seek_preview_carousel_fast">Multi-frame (snel)</string>
     <string name="unsubscribe_from_channel">Abonnement uit</string>
 </resources>
