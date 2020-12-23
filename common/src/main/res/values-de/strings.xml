@@ -128,7 +128,7 @@
     <string name="player_show_remaining_time">Verbleibende Zeit anzeigen</string>
     <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Kanal-Videos öffnen</string>
-    <string name="app_exit_shortcut">App beenden Verhalten</string>
+    <string name="app_exit_shortcut">App beenden</string>
     <string name="app_exit_none">Nicht beenden</string>
     <string name="app_double_back_exit">2x Zurück-Taste</string>
     <string name="app_single_back_exit">1x Zurück-Taste</string>
