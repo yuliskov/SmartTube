@@ -35,6 +35,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.clear();
 
         appendCardsStyle(settingsPresenter);
+        //appendCardTitleLines(settingsPresenter);
         appendColorScheme(settingsPresenter);
         appendVideoGridScale(settingsPresenter);
         appendScaleUI(settingsPresenter);
@@ -56,15 +57,27 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         OptionItem animatedPreviewsOption = UiOptionItem.from(getContext().getString(R.string.animated_previews),
-                option -> mMainUIData.enableAnimatedPreviews(option.isSelected()), mMainUIData.isAnimatedPreviewsEnabled());
+                option -> mMainUIData.enableCardAnimatedPreviews(option.isSelected()), mMainUIData.isCardAnimatedPreviewsEnabled());
 
         OptionItem dontCutTextOnCards = UiOptionItem.from(getContext().getString(R.string.multiline_titles),
-                option -> mMainUIData.enableMultilineTitles(option.isSelected()), mMainUIData.isMultilineTitlesEnabled());
+                option -> mMainUIData.enableCardMultilineTitle(option.isSelected()), mMainUIData.isCardMultilineTitleEnabled());
 
         options.add(animatedPreviewsOption);
         options.add(dontCutTextOnCards);
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.cards_style), options);
+    }
+
+    private void appendCardTitleLines(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int linesNum : new int[] {1, 2, 3, 4}) {
+            options.add(UiOptionItem.from(String.format("%s", linesNum),
+                    optionItem -> mMainUIData.setCartTitleLinesNum(linesNum),
+                    linesNum == mMainUIData.getCardTitleLinesNum()));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.card_title_lines_num), options);
     }
 
     private void appendVideoGridScale(AppSettingsPresenter settingsPresenter) {

@@ -27,8 +27,9 @@ public class MainUIData {
     private final Context mContext;
     private final AppPrefs mPrefs;
     private boolean mIsAnimatedPreviewsEnabled;
-    private boolean mIsMultilineTitlesEnabled;
     private boolean mIsSettingsCategoryEnabled;
+    private boolean mIsMultilineTitlesEnabled;
+    private int mCardTitleLinesNum;
     private int mBootCategoryId;
     private final Map<Integer, Integer> mLeftPanelCategories = new LinkedHashMap<>();
     private final Set<Integer> mEnabledLeftPanelCategories = new HashSet<>();
@@ -56,22 +57,31 @@ public class MainUIData {
         return sInstance;
     }
 
-    public void enableAnimatedPreviews(boolean enable) {
+    public void enableCardAnimatedPreviews(boolean enable) {
         mIsAnimatedPreviewsEnabled = enable;
         persistState();
     }
 
-    public boolean isAnimatedPreviewsEnabled() {
+    public boolean isCardAnimatedPreviewsEnabled() {
         return mIsAnimatedPreviewsEnabled;
     }
 
-    public void enableMultilineTitles(boolean enable) {
+    public void enableCardMultilineTitle(boolean enable) {
         mIsMultilineTitlesEnabled = enable;
         persistState();
     }
 
-    public boolean isMultilineTitlesEnabled() {
+    public boolean isCardMultilineTitleEnabled() {
         return mIsMultilineTitlesEnabled;
+    }
+
+    public void setCartTitleLinesNum(int lines) {
+        mCardTitleLinesNum = lines;
+        persistState();
+    }
+
+    public int getCardTitleLinesNum() {
+        return mCardTitleLinesNum;
     }
 
     public Map<Integer, Integer> getCategories() {
@@ -221,7 +231,7 @@ public class MainUIData {
         mPrefs.setMainUIData(Helpers.mergeObject(
                 mIsAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale,
                 mColorSchemeIndex, mIsMultilineTitlesEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting,
-                mPlaylistsStyle, mAppExitShortcut));
+                mPlaylistsStyle, mAppExitShortcut, mCardTitleLinesNum));
     }
 
     private void restoreState() {
@@ -240,6 +250,7 @@ public class MainUIData {
         mChannelCategorySorting = Helpers.parseInt(split, 8, CHANNEL_SORTING_UPDATE);
         mPlaylistsStyle = Helpers.parseInt(split, 9, PLAYLISTS_STYLE_GRID);
         mAppExitShortcut = Helpers.parseInt(split, 10, EXIT_DOUBLE_BACK);
+        mCardTitleLinesNum = Helpers.parseInt(split, 11, 1);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArray(selectedCategories);

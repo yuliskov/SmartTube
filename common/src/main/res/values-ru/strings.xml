@@ -146,4 +146,6 @@
     <string name="player_seek_preview_carousel_slow">Карусель (медленно)</string>
     <string name="player_seek_preview_carousel_fast">Карусель (быстро)</string>
     <string name="unsubscribe_from_channel">Отписаться от канала</string>
+    <string name="card_title_lines_num">Количество строк в карточках</string>
+    <string name="card_title_auto_scroll">Прокручивать обрезанный заголовок</string>
 </resources>
