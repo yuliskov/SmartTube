@@ -146,5 +146,7 @@
     <string name="player_seek_preview_carousel">Mehrere Bilder</string>
     <string name="player_seek_preview_carousel_slow">Mehrere Bilder (langsam)</string>
     <string name="player_seek_preview_carousel_fast">Mehrere Bilder (schnell)</string>
-    <string name="unsubscribe_from_channel">Kanal-Abo beenden</string
+    <string name="unsubscribe_from_channel">Kanal-Abo beenden</string>
+    <string name="card_title_lines_num">Zeilenanzahl in Titeln</string>
+    <string name="card_title_auto_scroll">Auto-Scrollen in Titeln</string>
 </resources>
