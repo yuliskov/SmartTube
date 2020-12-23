@@ -21,7 +21,8 @@ public class PlayerData {
     public static final int AUTO_HIDE_NEVER = 0;
     public static final int SEEK_PREVIEW_NONE = 0;
     public static final int SEEK_PREVIEW_SINGLE = 1;
-    public static final int SEEK_PREVIEW_CAROUSEL = 2;
+    public static final int SEEK_PREVIEW_CAROUSEL_SLOW = 2;
+    public static final int SEEK_PREVIEW_CAROUSEL_FAST = 3;
     @SuppressLint("StaticFieldLeak")
     private static PlayerData sInstance;
     private final AppPrefs mPrefs;

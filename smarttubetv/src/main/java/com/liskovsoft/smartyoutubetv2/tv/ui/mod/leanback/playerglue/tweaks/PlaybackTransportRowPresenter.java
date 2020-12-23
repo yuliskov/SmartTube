@@ -373,14 +373,21 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                 return false;
             }
 
-            if (mPlayerData.getSeekPreviewMode() == PlayerData.SEEK_PREVIEW_CAROUSEL) {
-                // Auto thumbs size
-                mThumbsBar.setNumberOfThumbs(-1);
-                updateProgressInSeek(forward);
-            } else {
-                // View carousel is useless if we're not using seeking by key frames.
-                mThumbsBar.setNumberOfThumbs(1);
-                updateProgressInSeekMod(forward);
+            switch (mPlayerData.getSeekPreviewMode()) {
+                case PlayerData.SEEK_PREVIEW_CAROUSEL_SLOW:
+                    // Calculate thumbs size based on width
+                    mThumbsBar.setNumberOfThumbs(-1);
+                    updateProgressInSeek(forward);
+                    break;
+                case PlayerData.SEEK_PREVIEW_CAROUSEL_FAST:
+                    // Calculate thumbs size based on width
+                    mThumbsBar.setNumberOfThumbs(-1);
+                    updateProgressInSeekMod(forward);
+                    break;
+                default:
+                    mThumbsBar.setNumberOfThumbs(1);
+                    updateProgressInSeekMod(forward);
+                    break;
             }
 
             return true;

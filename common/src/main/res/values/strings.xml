@@ -143,6 +143,7 @@
     <string name="color_scheme_teal_oled">Teal (OLED)</string>
     <string name="player_seek_preview_none">Disabled</string>
     <string name="player_seek_preview_single">Single frame</string>
-    <string name="player_seek_preview_carousel">Carousel</string>
+    <string name="player_seek_preview_carousel_slow">Carousel (slow)</string>
+    <string name="player_seek_preview_carousel_fast">Carousel (fast)</string>
     <string name="unsubscribe_from_channel">Unsubscribe from channel</string>
 </resources>

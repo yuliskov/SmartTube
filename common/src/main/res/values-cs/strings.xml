@@ -142,6 +142,6 @@
     <string name="color_scheme_teal_oled">Šedozelená (OLED)</string>
     <string name="player_seek_preview_none">Vypnuto</string>
     <string name="player_seek_preview_single">Jeden snímek</string>
-    <string name="player_seek_preview_carousel">Několik snímků</string>
+    <string name="player_seek_preview_carousel_slow">Několik snímků</string>
     <string name="unsubscribe_from_channel">Odhlásit z odběru kanálu</string>
 </resources>
