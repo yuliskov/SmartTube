@@ -13,6 +13,7 @@
     <string name="player_remaining_time">%s</string>
     <string name="badge_new_content">NIEUW</string>
     <string name="badge_live">LIVE</string>
+    <string name="action_pip">Beeld-in-beeld starten</string>
     <!-- Vineyard -->
     <string name="title_oops">Oeps</string>
     <string name="title_no_videos">Geen video\'s</string>
