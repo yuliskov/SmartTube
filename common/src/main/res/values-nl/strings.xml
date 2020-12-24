@@ -149,4 +149,5 @@
     <string name="unsubscribe_from_channel">Abonnement uit</string>
     <string name="card_title_lines_num">Aantal rijen</string>
     <string name="card_title_auto_scroll">Auto-scroll titel</string>
+    <string name="send_to">Delen</string>
 </resources>
