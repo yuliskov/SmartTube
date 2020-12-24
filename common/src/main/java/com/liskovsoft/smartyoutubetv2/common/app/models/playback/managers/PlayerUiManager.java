@@ -264,6 +264,12 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         settingsPresenter.showDialog();
     }
 
+    @Override
+    public void onPipClicked() {
+        getController().setPlaybackMode(PlaybackEngineController.PLAYBACK_MODE_PIP);
+        getController().exit();
+    }
+
     private void intSpeedItems(List<OptionItem> items, float[] speedValues) {
         for (float speed : speedValues) {
             items.add(UiOptionItem.from(

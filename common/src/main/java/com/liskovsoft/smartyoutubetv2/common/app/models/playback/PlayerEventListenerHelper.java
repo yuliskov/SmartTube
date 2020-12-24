@@ -214,4 +214,9 @@ public abstract class PlayerEventListenerHelper implements PlayerHandlerEventLis
     public void onVideoZoomClicked() {
         // NOP
     }
+
+    @Override
+    public void onPipClicked() {
+        // NOP
+    }
 }

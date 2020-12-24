@@ -29,5 +29,6 @@ public interface PlayerUiEventListener {
     void onVideoSpeedClicked();
     void onSearchClicked();
     void onVideoZoomClicked();
+    void onPipClicked();
     void onControlsShown(boolean shown);
 }

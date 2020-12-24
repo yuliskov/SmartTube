@@ -306,5 +306,10 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         process(PlayerUiEventListener::onVideoZoomClicked);
     }
 
+    @Override
+    public void onPipClicked() {
+        process(PlayerUiEventListener::onPipClicked);
+    }
+
     // End UI events
 }

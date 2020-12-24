@@ -479,6 +479,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         }
 
         @Override
+        public void onPip() {
+            mEventListener.onPipClicked();
+        }
+
+        @Override
         public void onTopEdgeFocused() {
             showControls(false);
         }

@@ -7,15 +7,15 @@ import androidx.leanback.widget.Action;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /**
- * An action for displaying a channel icon.
+ * An action for displaying a PIP icon.
  */
-public class ChannelAction extends Action {
-    public ChannelAction(Context context) {
-        super(R.id.action_channel);
-        Drawable uncoloredDrawable = ContextCompat.getDrawable(context, R.drawable.action_channel);
+public class PipAction extends Action {
+    public PipAction(Context context) {
+        super(R.id.action_pip);
+        Drawable uncoloredDrawable = ContextCompat.getDrawable(context, R.drawable.action_pip);
 
         setIcon(uncoloredDrawable);
         setLabel1(context.getString(
-                R.string.action_channel));
+                R.string.action_pip));
     }
 }
