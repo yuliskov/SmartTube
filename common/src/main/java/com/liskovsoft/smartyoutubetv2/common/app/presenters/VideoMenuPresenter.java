@@ -30,10 +30,13 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     private Disposable mAddAction;
     private Disposable mSignCheckAction;
     private Disposable mNotInterestedAction;
+    private Disposable mSubscribeAction;
     private Video mVideo;
     private boolean mIsNotInterestedButtonEnabled;
     private boolean mIsOpenChannelButtonEnabled;
     private boolean mIsOpenChannelUploadsButtonEnabled;
+    private boolean mIsSubscribeButtonEnabled;
+    private boolean mIsShareButtonEnabled;
 
     private VideoMenuPresenter(Context context) {
         super(context);
@@ -48,22 +51,25 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     public void showShortMenu(Video video) {
-        showMenu(video, false, false, false);
+        showMenuInt(video);
     }
 
     public void showMenu(Video video) {
-        showMenu(video, true, true, true);
+        mIsOpenChannelButtonEnabled = true;
+        mIsOpenChannelUploadsButtonEnabled = true;
+        mIsNotInterestedButtonEnabled = true;
+        mIsShareButtonEnabled = true;
+        mIsSubscribeButtonEnabled = true;
+
+        showMenuInt(video);
     }
 
-    private void showMenu(Video video, boolean isOpenChannelButtonEnabled, boolean isOpenChannelUploadsButtonEnabled, boolean isNotInterestedButtonEnabled) {
+    private void showMenuInt(Video video) {
         if (video == null || !video.isVideo()) {
             return;
         }
 
         mVideo = video;
-        mIsOpenChannelButtonEnabled = isOpenChannelButtonEnabled;
-        mIsOpenChannelUploadsButtonEnabled = isOpenChannelUploadsButtonEnabled;
-        mIsNotInterestedButtonEnabled = isNotInterestedButtonEnabled;
 
         authCheck(this::obtainPlaylistsAndShow,
                   () -> MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only));;
@@ -82,10 +88,11 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         appendAddToPlaylist(videoPlaylistInfos);
         appendOpenChannelButton();
         //appendOpenChannelUploadsButton();
+        appendSubscribeButton();
         appendNotInterestedButton();
         appendShareButton();
 
-        mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction, mAddAction, mSignCheckAction, mNotInterestedAction));
+        mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction, mAddAction, mSignCheckAction, mNotInterestedAction, mSubscribeAction));
     }
 
     private void appendAddToPlaylist(List<VideoPlaylistInfo> videoPlaylistInfos) {
@@ -136,7 +143,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     private void appendShareButton() {
-        if (mVideo == null || mVideo.videoId == null) {
+        if (!mIsShareButtonEnabled || mVideo == null || mVideo.videoId == null) {
             return;
         }
 
@@ -144,6 +151,17 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
                 UiOptionItem.from(getContext().getString(R.string.send_to), optionItem -> {
                     Utils.displayShareVideoDialog(getContext(), mVideo.videoId);
                 }));
+    }
+
+    private void appendSubscribeButton() {
+        if (!mIsSubscribeButtonEnabled || mVideo == null || mVideo.channelId == null) {
+            return;
+        }
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(
+                        mVideo.subscribed ? R.string.unsubscribe_from_channel : R.string.subscribe_to_channel),
+                        optionItem -> subscribe(mVideo.channelId, mVideo.subscribed)));
     }
 
     private void addToPlaylist(String playlistId, boolean checked) {
@@ -176,5 +194,15 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
                         }
                 );
 
+    }
+
+    private void subscribe(String channelId, boolean subscribed) {
+        Observable<Void> observable = subscribed ? mItemManager.unsubscribeObserve(channelId) : mItemManager.subscribeObserve(channelId);
+
+        mSubscribeAction = observable
+                .subscribeOn(Schedulers.newThread())
+                .subscribe();
+
+        MessageHelpers.showMessage(getContext(), subscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel);
     }
 }

@@ -31,6 +31,7 @@ public final class Video implements Parcelable {
     public boolean hasNewContent;
     public boolean isLive;
     public boolean isUpcoming;
+    public boolean subscribed;
 
     public Video() {
         

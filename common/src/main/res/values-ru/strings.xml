@@ -149,4 +149,5 @@
     <string name="card_title_lines_num">Количество строк в карточках</string>
     <string name="card_title_auto_scroll">Прокручивать обрезанный заголовок</string>
     <string name="send_to">Отправить в</string>
+    <string name="subscribe_to_channel">Подписаться на канал</string>
 </resources>
