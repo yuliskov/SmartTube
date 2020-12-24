@@ -42,8 +42,14 @@ public class Utils {
 
     @TargetApi(17)
     public static void displayShareVideoDialog(Context context, String videoId) {
-        Uri videoUrl = convertToFullUrl(videoId);
+        Uri videoUrl = convertToFullVideoUrl(videoId);
         showMultiChooser(context, videoUrl);
+    }
+
+    @TargetApi(17)
+    public static void displayShareChannelDialog(Context context, String channelId) {
+        Uri channelUrl = convertToFullChannelUrl(channelId);
+        showMultiChooser(context, channelUrl);
     }
 
     @TargetApi(17)
@@ -59,8 +65,13 @@ public class Utils {
         context.startActivity(chooserIntent);
     }
 
-    private static Uri convertToFullUrl(String videoId) {
+    private static Uri convertToFullVideoUrl(String videoId) {
         String url = String.format("https://www.youtube.com/watch?v=%s", videoId);
+        return Uri.parse(url);
+    }
+
+    private static Uri convertToFullChannelUrl(String channelId) {
+        String url = String.format("https://www.youtube.com/channel/%s", channelId);
         return Uri.parse(url);
     }
 }

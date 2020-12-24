@@ -151,4 +151,5 @@
     <string name="card_title_auto_scroll">Auto-scroll cropped title</string>
     <string name="send_to">Send to…</string>
     <string name="subscribe_to_channel">Subscribe to channel</string>
+    <string name="wait_data_loading">Please wait while data is loading…</string>
 </resources>

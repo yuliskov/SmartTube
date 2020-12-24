@@ -4,16 +4,15 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.SignInManager;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
-import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.utils.ServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
@@ -29,6 +28,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     private final MediaItemManager mItemManager;
     private final SignInManager mAuthManager;
     private final AppSettingsPresenter mSettingsPresenter;
+    private final ServiceManager mServiceManager;
     private Disposable mPlaylistAction;
     private Disposable mAddAction;
     private Disposable mSignCheckAction;
@@ -41,12 +41,14 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     private boolean mIsOpenChannelUploadsButtonEnabled;
     private boolean mIsSubscribeButtonEnabled;
     private boolean mIsShareButtonEnabled;
+    private boolean mIsAddToPlaylistButtonEnabled;
 
     private VideoMenuPresenter(Context context) {
         super(context);
         MediaService service = YouTubeMediaService.instance();
         mItemManager = service.getMediaItemManager();
         mAuthManager = service.getSignInManager();
+        mServiceManager = ServiceManager.instance();
         mSettingsPresenter = AppSettingsPresenter.instance(context);
     }
 
@@ -55,21 +57,32 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     public void showShortMenu(Video video) {
+        mIsAddToPlaylistButtonEnabled = true;
+
         showMenuInt(video);
     }
 
-    public void showMenu(Video video) {
+    public void showVideoMenu(Video video) {
+        mIsAddToPlaylistButtonEnabled = true;
         mIsOpenChannelButtonEnabled = true;
         mIsOpenChannelUploadsButtonEnabled = true;
+        mIsSubscribeButtonEnabled = true;
         mIsNotInterestedButtonEnabled = true;
         mIsShareButtonEnabled = true;
+
+        showMenuInt(video);
+    }
+
+    public void showChannelMenu(Video video) {
         mIsSubscribeButtonEnabled = true;
+        mIsShareButtonEnabled = true;
+        mIsOpenChannelButtonEnabled = true;
 
         showMenuInt(video);
     }
 
     private void showMenuInt(Video video) {
-        if (video == null || !video.isVideo()) {
+        if (video == null) {
             return;
         }
 
@@ -100,6 +113,10 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     private void appendAddToPlaylist(List<VideoPlaylistInfo> videoPlaylistInfos) {
+        if (!mIsAddToPlaylistButtonEnabled) {
+            return;
+        }
+
         List<OptionItem> options = new ArrayList<>();
 
         for (VideoPlaylistInfo playlistInfo : videoPlaylistInfos) {
@@ -113,7 +130,11 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     private void appendOpenChannelButton() {
-        if (!mIsOpenChannelButtonEnabled || mVideo == null || mVideo.channelId == null) {
+        if (!mIsOpenChannelButtonEnabled || mVideo == null) {
+            return;
+        }
+
+        if (mVideo.videoId == null && mVideo.channelId == null) {
             return;
         }
 
@@ -147,13 +168,21 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     private void appendShareButton() {
-        if (!mIsShareButtonEnabled || mVideo == null || mVideo.videoId == null) {
+        if (!mIsShareButtonEnabled || mVideo == null) {
+            return;
+        }
+
+        if (mVideo.videoId == null && mVideo.channelId == null) {
             return;
         }
 
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.send_to), optionItem -> {
-                    Utils.displayShareVideoDialog(getContext(), mVideo.videoId);
+                    if (mVideo.videoId != null) {
+                        Utils.displayShareVideoDialog(getContext(), mVideo.videoId);
+                    } else if (mVideo.channelId != null) {
+                        Utils.displayShareChannelDialog(getContext(), mVideo.channelId);
+                    }
                 }));
     }
 
@@ -208,7 +237,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         if (mVideo.channelId != null) {
             subscribeInt();
         } else {
-            loadMetadata(mVideo, metadata -> {
+            mServiceManager.loadMetadata(mVideo, metadata -> {
                  mVideo.channelId = metadata.getChannelId();
                  subscribeInt();
             });
@@ -227,33 +256,5 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mSubscribeAction = observable
                 .subscribeOn(Schedulers.newThread())
                 .subscribe();
-    }
-
-    private void loadMetadata(Video video, OnMetadata onMetadata) {
-        if (video == null) {
-            return;
-        }
-
-        RxUtils.disposeActions(mMetadataAction);
-
-        Observable<MediaItemMetadata> observable;
-
-        if (video.mediaItem != null) {
-            // Use additional data like playlist id
-            observable = mItemManager.getMetadataObserve(video.mediaItem);
-        } else {
-            // Simply load
-            observable = mItemManager.getMetadataObserve(video.videoId);
-        }
-
-        mMetadataAction = observable
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(onMetadata::onMetadata,
-                        error -> Log.e(TAG, "loadMetadata error: " + error));
-    }
-
-    private interface OnMetadata {
-        void onMetadata(MediaItemMetadata metadata);
     }
 }

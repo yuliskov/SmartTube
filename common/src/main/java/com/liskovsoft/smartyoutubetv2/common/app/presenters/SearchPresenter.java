@@ -94,7 +94,11 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
             return;
         }
 
-        VideoMenuPresenter.instance(getContext()).showMenu(item);
+        if (item.isVideo()) {
+            VideoMenuPresenter.instance(getContext()).showVideoMenu(item);
+        } else if (item.isChannel()) {
+            VideoMenuPresenter.instance(getContext()).showChannelMenu(item);
+        }
     }
 
     public void onSearch(String searchText) {

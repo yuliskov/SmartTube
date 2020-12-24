@@ -5,13 +5,16 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.utils.ServiceManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -26,6 +29,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private static ChannelPresenter sInstance;
     private final MediaService mMediaService;
     private final PlaybackPresenter mPlaybackPresenter;
+    private final ServiceManager mServiceManager;
     private String mChannelId;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
@@ -34,6 +38,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         super(context);
         mMediaService = YouTubeMediaService.instance();
         mPlaybackPresenter = PlaybackPresenter.instance(context);
+        mServiceManager = ServiceManager.instance();
     }
 
     public static ChannelPresenter instance(Context context) {
@@ -65,7 +70,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
     @Override
     public void onVideoItemLongClicked(Video item) {
-        VideoMenuPresenter.instance(getContext()).showMenu(item);
+        VideoMenuPresenter.instance(getContext()).showVideoMenu(item);
     }
 
     @Override
@@ -86,12 +91,15 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
     public void openChannel(Video item) {
         if (item != null) {
-            if (item.channelId != null) {
+            if (item.isChannel()) {
                 openChannel(item.channelId);
-            } else {
+            } else if (item.isChannelUploads()) {
                 // Maybe this is subscribed items view
                 ChannelUploadsPresenter.instance(getContext())
                         .obtainVideoGroup(item, group -> openChannel(group.getChannelId()));
+            } else if (item.isVideo()) {
+                MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
+                mServiceManager.loadMetadata(item, metadata -> openChannel(metadata.getChannelId()));
             }
         }
     }

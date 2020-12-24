@@ -150,4 +150,5 @@
     <string name="card_title_auto_scroll">Прокручувати обрізаний заголовок</string>
     <string name="send_to">Надіслати у…</string>
     <string name="subscribe_to_channel">Підписатися на канал</string>
+    <string name="wait_data_loading">Зачекайте поки дані завантажуються…</string>
 </resources>
