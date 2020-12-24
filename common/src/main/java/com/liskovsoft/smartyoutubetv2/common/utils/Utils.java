@@ -41,7 +41,7 @@ public class Utils {
     }
 
     @TargetApi(17)
-    public void displayShareVideoDialog(Context context, String videoId) {
+    public static void displayShareVideoDialog(Context context, String videoId) {
         Uri videoUrl = convertToFullUrl(videoId);
         showMultiChooser(context, videoUrl);
     }

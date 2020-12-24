@@ -14,12 +14,14 @@
 
     <!-- NOTE: use older api -->
     <uses-sdk tools:overrideLibrary="
+        androidx.leanback.preference,
         androidx.recommendation,
         org.xwalk.core,
         com.algolia.instantsearch.voice,
         androidx.leanback, androidx.tvprovider,
         com.github.rubensousa.previewseekbar,
         com.github.rubensousa.previewseekbar.exoplayer,
+        com.google.android.exoplayer2.ext.leanback,
         com.google.android.exoplayer2.ext.vp9,
         com.google.android.exoplayer2.testutil,
         com.google.android.exoplayer2.ext.okhttp,

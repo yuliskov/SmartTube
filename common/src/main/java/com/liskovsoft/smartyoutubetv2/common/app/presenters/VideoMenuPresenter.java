@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -82,6 +83,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         appendOpenChannelButton();
         //appendOpenChannelUploadsButton();
         appendNotInterestedButton();
+        appendShareButton();
 
         mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction, mAddAction, mSignCheckAction, mNotInterestedAction));
     }
@@ -130,6 +132,17 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
                             .subscribe((var) -> {}, (err) -> {}, () -> {
                                 MessageHelpers.showMessage(getContext(), R.string.you_wont_see_this_video);
                             });
+                }));
+    }
+
+    private void appendShareButton() {
+        if (mVideo == null || mVideo.videoId == null) {
+            return;
+        }
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.send_to), optionItem -> {
+                    Utils.displayShareVideoDialog(getContext(), mVideo.videoId);
                 }));
     }
 
