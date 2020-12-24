@@ -1,5 +1,11 @@
 package com.liskovsoft.smartyoutubetv2.common.utils;
 
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import com.liskovsoft.smartyoutubetv2.common.R;
+
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,5 +38,29 @@ public class Utils {
                 return super.add(t);
             }
         };
+    }
+
+    @TargetApi(17)
+    public void displayShareVideoDialog(Context context, String videoId) {
+        Uri videoUrl = convertToFullUrl(videoId);
+        showMultiChooser(context, videoUrl);
+    }
+
+    @TargetApi(17)
+    private static void showMultiChooser(Context context, Uri url) {
+        Intent primaryIntent = new Intent(Intent.ACTION_VIEW);
+        Intent secondaryIntent = new Intent(Intent.ACTION_SEND);
+        primaryIntent.setData(url);
+        secondaryIntent.putExtra(Intent.EXTRA_TEXT, url.toString());
+        secondaryIntent.setType("text/plain");
+        Intent chooserIntent = Intent.createChooser(primaryIntent, context.getResources().getText(R.string.send_to));
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] { secondaryIntent });
+        chooserIntent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        context.startActivity(chooserIntent);
+    }
+
+    private static Uri convertToFullUrl(String videoId) {
+        String url = String.format("https://www.youtube.com/watch?v=%s", videoId);
+        return Uri.parse(url);
     }
 }

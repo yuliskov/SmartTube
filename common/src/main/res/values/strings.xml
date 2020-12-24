@@ -149,4 +149,5 @@
     <string name="unsubscribe_from_channel">Unsubscribe from channel</string>
     <string name="card_title_lines_num">Card title lines num</string>
     <string name="card_title_auto_scroll">Auto-scroll cropped title</string>
+    <string name="send_to">Send to</string>
 </resources>
