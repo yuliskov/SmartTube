@@ -148,6 +148,6 @@
     <string name="unsubscribe_from_channel">Відписатися від каналу</string>
     <string name="card_title_lines_num">Кількість рядків у картках</string>
     <string name="card_title_auto_scroll">Прокручувати обрізаний заголовок</string>
-    <string name="send_to">Надіслати у</string>
+    <string name="send_to">Надіслати у…</string>
     <string name="subscribe_to_channel">Підписатися на канал</string>
 </resources>
