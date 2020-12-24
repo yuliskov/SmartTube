@@ -4,8 +4,10 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.SignInManager;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VideoMenuPresenter extends BasePresenter<Void> {
+    private static final String TAG = VideoMenuPresenter.class.getSimpleName();
     private final MediaItemManager mItemManager;
     private final SignInManager mAuthManager;
     private final AppSettingsPresenter mSettingsPresenter;
@@ -31,6 +34,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     private Disposable mSignCheckAction;
     private Disposable mNotInterestedAction;
     private Disposable mSubscribeAction;
+    private Disposable mMetadataAction;
     private Video mVideo;
     private boolean mIsNotInterestedButtonEnabled;
     private boolean mIsOpenChannelButtonEnabled;
@@ -154,14 +158,14 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     private void appendSubscribeButton() {
-        if (!mIsSubscribeButtonEnabled || mVideo == null || mVideo.channelId == null) {
+        if (!mIsSubscribeButtonEnabled || mVideo == null) {
             return;
         }
 
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(
                         mVideo.subscribed ? R.string.unsubscribe_from_channel : R.string.subscribe_to_channel),
-                        optionItem -> subscribe(mVideo.channelId, mVideo.subscribed)));
+                        optionItem -> subscribe()));
     }
 
     private void addToPlaylist(String playlistId, boolean checked) {
@@ -196,13 +200,60 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
     }
 
-    private void subscribe(String channelId, boolean subscribed) {
-        Observable<Void> observable = subscribed ? mItemManager.unsubscribeObserve(channelId) : mItemManager.subscribeObserve(channelId);
+    private void subscribe() {
+        if (mVideo == null) {
+            return;
+        }
+
+        if (mVideo.channelId != null) {
+            subscribeInt();
+        } else {
+            loadMetadata(mVideo, metadata -> {
+                 mVideo.channelId = metadata.getChannelId();
+                 subscribeInt();
+            });
+        }
+        
+        MessageHelpers.showMessage(getContext(), mVideo.subscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel);
+    }
+
+    private void subscribeInt() {
+        if (mVideo == null) {
+            return;
+        }
+
+        Observable<Void> observable = mVideo.subscribed ? mItemManager.unsubscribeObserve(mVideo.channelId) : mItemManager.subscribeObserve(mVideo.channelId);
 
         mSubscribeAction = observable
                 .subscribeOn(Schedulers.newThread())
                 .subscribe();
+    }
 
-        MessageHelpers.showMessage(getContext(), subscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel);
+    private void loadMetadata(Video video, OnMetadata onMetadata) {
+        if (video == null) {
+            return;
+        }
+
+        RxUtils.disposeActions(mMetadataAction);
+
+        Observable<MediaItemMetadata> observable;
+
+        if (video.mediaItem != null) {
+            // Use additional data like playlist id
+            observable = mItemManager.getMetadataObserve(video.mediaItem);
+        } else {
+            // Simply load
+            observable = mItemManager.getMetadataObserve(video.videoId);
+        }
+
+        mMetadataAction = observable
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(onMetadata::onMetadata,
+                        error -> Log.e(TAG, "loadMetadata error: " + error));
+    }
+
+    private interface OnMetadata {
+        void onMetadata(MediaItemMetadata metadata);
     }
 }
