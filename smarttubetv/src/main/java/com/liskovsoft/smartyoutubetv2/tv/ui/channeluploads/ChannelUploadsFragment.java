@@ -72,6 +72,6 @@ public class ChannelUploadsFragment extends VideoGridFragment implements Channel
             return;
         }
 
-        browseGrid.setPadding(browseGrid.getPaddingLeft(), browseGrid.getPaddingTop() / 5, browseGrid.getPaddingRight(), browseGrid.getPaddingBottom());
+        browseGrid.setPadding(browseGrid.getPaddingLeft(), browseGrid.getPaddingTop() / 3, browseGrid.getPaddingRight(), browseGrid.getPaddingBottom());
     }
 }
