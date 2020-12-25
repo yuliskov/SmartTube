@@ -152,4 +152,6 @@
     <string name="share_link">Delen</string>
     <string name="subscribe_to_channel">Abonnement aan</string>
     <string name="wait_data_loading">Even wachten terwijl gegevens laden</string>
+    <string name="auto_frame_rate_pause">Auto frame rate pauzeren</string>
+    <string name="auto_frame_rate_applying">Auto frame rate toepassen %sx%s@%s</string>
 </resources>
