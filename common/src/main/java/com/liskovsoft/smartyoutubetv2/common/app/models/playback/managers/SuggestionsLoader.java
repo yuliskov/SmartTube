@@ -116,10 +116,10 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
             return;
         }
 
-        //if (getController().getVideo().isPlaylistItem() && !getController().isSuggestionsEmpty()) {
-        //    Log.d(TAG, "Don't reload suggestions when watching playlist items.");
-        //    return;
-        //}
+        if (getController().getVideo().isPlaylistItem() && !getController().isSuggestionsEmpty()) {
+            Log.d(TAG, "Skip reloading suggestions when watching playlist.");
+            return;
+        }
 
         if (getController().isSuggestionsShown()) {
             Log.d(TAG, "Suggestions is opened. Seems that user want to stay here.");

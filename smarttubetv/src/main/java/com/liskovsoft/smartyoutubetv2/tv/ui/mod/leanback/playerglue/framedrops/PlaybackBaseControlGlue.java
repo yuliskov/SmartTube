@@ -442,6 +442,10 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
     }
 
     public void setControlsVisibility(boolean show) {
+        if (show) {
+            syncControlsStateIfNeeded();
+        }
+
         mIsControlsVisible = show;
     }
 
