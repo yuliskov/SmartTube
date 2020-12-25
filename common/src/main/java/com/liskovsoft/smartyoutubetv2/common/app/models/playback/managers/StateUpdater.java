@@ -34,6 +34,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private AppPrefs mPrefs;
     private Disposable mHistoryAction;
     private PlayerData mPlayerData;
+    private boolean mIsPlayBlocked;
 
     @Override
     public void onInitDone() {
@@ -273,7 +274,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
             }
         }
 
-        getController().setPlay(mIsPlaying);
+        if (!mIsPlayBlocked) {
+            getController().setPlay(mIsPlaying);
+        }
     }
 
     private void restoreSpeed(Video item) {
@@ -300,6 +303,10 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     public FormatItem getVideoFormat() {
         return mVideoFormat;
+    }
+
+    public void blockPlay(boolean block) {
+        mIsPlayBlocked = block;
     }
 
     private void updateHistory() {

@@ -25,15 +25,22 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     private static final int AUTO_FRAME_RATE_ID = 21;
     private static final int AUTO_FRAME_RATE_DELAY_ID = 22;
     private final HqDialogManager mUiManager;
+    private StateUpdater mStateUpdater;
     private final AutoFrameRateHelper mAutoFrameRateHelper;
     private final ModeSyncManager mModeSyncManager;
     private final Runnable mApplyAfr = this::applyAfr;
     private final Handler mHandler;
     private PlayerData mPlayerData;
-    private final Runnable mPlaybackResumeHandler = () -> getController().setPlay(true);
+    private final Runnable mPlaybackResumeHandler = () -> {
+        if (mStateUpdater != null) {
+            mStateUpdater.blockPlay(false);
+        }
+        getController().setPlay(true);
+    };
 
-    public AutoFrameRateManager(HqDialogManager uiManager) {
+    public AutoFrameRateManager(HqDialogManager uiManager, StateUpdater stateUpdater) {
         mUiManager = uiManager;
+        mStateUpdater = stateUpdater;
         mAutoFrameRateHelper = new AutoFrameRateHelper();
         mModeSyncManager = ModeSyncManager.instance();
         mModeSyncManager.setAfrHelper(mAutoFrameRateHelper);
@@ -107,8 +114,10 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
 
     private void pausePlayback() {
         mHandler.removeCallbacks(mPlaybackResumeHandler);
+        mStateUpdater.blockPlay(false);
 
         if (mPlayerData.getAfrPauseSec() > 0) {
+            mStateUpdater.blockPlay(true);
             getController().setPlay(false);
             mHandler.postDelayed(mPlaybackResumeHandler, mPlayerData.getAfrPauseSec() * 1_000);
         }
