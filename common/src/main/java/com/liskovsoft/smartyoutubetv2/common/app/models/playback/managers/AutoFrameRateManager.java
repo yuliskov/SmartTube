@@ -181,7 +181,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         List<OptionItem> options = new ArrayList<>();
 
         for (int pauseSec : new int[] {0, 1, 2, 3, 4, 5, 6, 7}) {
-            options.add(UiOptionItem.from(String.valueOf(pauseSec),
+            options.add(UiOptionItem.from(String.format("%s sec", pauseSec),
                     optionItem -> playerData.setAfrPauseSec(pauseSec),
                     pauseSec == playerData.getAfrPauseSec()));
         }
