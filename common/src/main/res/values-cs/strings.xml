@@ -127,7 +127,7 @@
     <string name="player_show_remaining_time">Ukaž zbývající čas</string>
     <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Otevřít videa kanálu</string>
-     <string name="app_exit_shortcut">Ukončit aplikaci</string>
+    <string name="app_exit_shortcut">Ukončit aplikaci</string>
     <string name="app_exit_none">Neukončovat</string>
     <string name="app_double_back_exit">2x tlačítko Zpět</string>
     <string name="app_single_back_exit">1x tlačítko Zpět</string>
@@ -149,4 +149,6 @@
     <string name="send_to">Odeslat…</string>
     <string name="subscribe_to_channel">Přihlásit se k odběru kanálu</string>
     <string name="wait_data_loading">Prosím počkejte, než se načtou data…</string>
+    <string name="auto_frame_rate_pause">Pozastavení automatické snímkové frekvence</string>
+    <string name="auto_frame_rate_applying">Aplikování automatické snímkové frekvence %sx%s@%s</string>
 </resources>
