@@ -144,4 +144,9 @@
     <string name="player_seek_preview_single">Jeden snímek</string>
     <string name="player_seek_preview_carousel">Několik snímků</string>
     <string name="unsubscribe_from_channel">Odhlásit z odběru kanálu</string>
+    <string name="card_title_lines_num">Počet řádků v názvu videa</string>
+    <string name="card_title_auto_scroll">Auto-posouvání uříznutého názvu videa</string>
+    <string name="send_to">Odeslat…</string>
+    <string name="subscribe_to_channel">Přihlásit se k odběru kanálu</string>
+    <string name="wait_data_loading">Prosím počkejte, než se načtou data…</string>
 </resources>
