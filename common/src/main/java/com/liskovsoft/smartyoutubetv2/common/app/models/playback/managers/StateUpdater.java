@@ -31,7 +31,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
     // Don't store state inside Video object.
     // As one video might correspond to multiple Video objects.
     private final Map<String, State> mStates = Utils.createLRUMap(MAX_PERSISTENT_STATE_SIZE);
-    private float mLastSpeed = -1;
     private AppPrefs mPrefs;
     private Disposable mHistoryAction;
     private PlayerData mPlayerData;
@@ -183,19 +182,15 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
             persistState();
         }
-
-        mLastSpeed = getController().getSpeed();
     }
 
     private void restoreState() {
         restoreClipData();
-        restoreParams();
     }
 
     private void persistState() {
         updateHistory();
         persistVideoState();
-        persistParams();
     }
 
     private void persistVideoState() {
@@ -233,18 +228,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
                     mStates.put(state.videoId, state);
                 }
             }
-        }
-    }
-
-    private void persistParams() {
-        mPrefs.setStateUpdaterParams(String.format("%s", mLastSpeed));
-    }
-
-    private void restoreParams() {
-        String params = mPrefs.getStateUpdaterParams();
-
-        if (params != null) {
-            mLastSpeed = Helpers.parseFloat(params);
         }
     }
 
@@ -297,11 +280,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         boolean isLive = getController().getLengthMs() - getController().getPositionMs() < 30_000;
 
         if (!isLive) {
-            if (mLastSpeed != -1) {
-                getController().setSpeed(mLastSpeed);
-            } else {
-                getController().setSpeed(1.0f); // speed may be changed before, so do reset to default
-            }
+            getController().setSpeed(mPlayerData.getSpeed());
         } else {
             getController().setSpeed(1.0f); // speed may be changed before, so do reset to default
         }

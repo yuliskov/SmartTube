@@ -42,6 +42,7 @@ public class PlayerData {
     private int mSubtitleStyleIndex;
     private int mVideoZoomMode;
     private int mSeekPreviewMode;
+    private float mSpeed;
 
     public PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -200,10 +201,20 @@ public class PlayerData {
 
     public void setVideoZoomMode(int mode) {
         mVideoZoomMode = mode;
+        persistData();
     }
 
     public int getVideoZoomMode() {
         return mVideoZoomMode;
+    }
+
+    public void setSpeed(float speed) {
+        mSpeed = speed;
+        persistData();
+    }
+
+    public float getSpeed() {
+        return mSpeed;
     }
 
     private void initSubtitleStyles() {
@@ -233,6 +244,7 @@ public class PlayerData {
         mVideoBufferType = Helpers.parseInt(split, 12, PlaybackEngineController.BUFFER_LOW);
         mSubtitleStyleIndex = Helpers.parseInt(split, 13, 1);
         mVideoZoomMode = Helpers.parseInt(split, 14, PlaybackEngineController.ZOOM_MODE_DEFAULT);
+        mSpeed = Helpers.parseFloat(split, 15, 1.0f);
     }
 
     private void persistData() {
@@ -240,6 +252,6 @@ public class PlayerData {
                 mIsShowFullDateEnabled, mSeekPreviewMode, mIsPauseOnSeekEnabled,
                 mIsClockEnabled, mIsRemainingTimeEnabled, mPlaybackMode, Helpers.toString(mAfrData),
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
-                mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode));
+                mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed));
     }
 }

@@ -275,7 +275,10 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         for (float speed : speedValues) {
             items.add(UiOptionItem.from(
                     String.valueOf(speed),
-                    optionItem -> getController().setSpeed(speed),
+                    optionItem -> {
+                        mPlayerData.setSpeed(speed);
+                        getController().setSpeed(speed);
+                    },
                     getController().getSpeed() == speed));
         }
     }
