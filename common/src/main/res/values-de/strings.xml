@@ -127,7 +127,7 @@
     <string name="player_show_clock">Uhr anzeigen</string>
     <string name="player_show_remaining_time">Verbleibende Zeit anzeigen</string>
     <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
-    <string name="open_channel_uploads">Kanalvideos öffnen</string>
+    <string name="open_channel_uploads">Kanal-Videos öffnen</string>
     <string name="app_exit_shortcut">App beenden</string>
     <string name="app_exit_none">Nicht beenden</string>
     <string name="app_double_back_exit">2x Zurück-Taste</string>
@@ -144,4 +144,9 @@
     <string name="player_seek_preview_none">Keine Vorschau</string>
     <string name="player_seek_preview_single">Einzelbild</string>
     <string name="player_seek_preview_carousel">Mehrere Bilder</string>
+    <string name="player_seek_preview_carousel_slow">Mehrere Bilder (langsam)</string>
+    <string name="player_seek_preview_carousel_fast">Mehrere Bilder (schnell)</string>
+    <string name="unsubscribe_from_channel">Kanal-Abo beenden</string>
+    <string name="card_title_lines_num">Zeilenanzahl in Titeln</string>
+    <string name="card_title_auto_scroll">Auto-Scrollen in Titeln</string>
 </resources>
