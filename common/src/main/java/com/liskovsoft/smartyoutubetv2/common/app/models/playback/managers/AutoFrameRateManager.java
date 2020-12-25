@@ -1,7 +1,9 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
+import android.os.Handler;
+import android.os.Looper;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -21,53 +23,21 @@ import java.util.List;
 public class AutoFrameRateManager extends PlayerEventListenerHelper {
     private static final String TAG = AutoFrameRateManager.class.getSimpleName();
     private static final int AUTO_FRAME_RATE_ID = 21;
+    private static final int AUTO_FRAME_RATE_DELAY_ID = 22;
     private final HqDialogManager mUiManager;
-    //private FormatItem mSelectedVideoTrack;
     private final AutoFrameRateHelper mAutoFrameRateHelper;
     private final ModeSyncManager mModeSyncManager;
     private final Runnable mApplyAfr = this::applyAfr;
+    private final Handler mHandler;
     private PlayerData mPlayerData;
-
-    public static class AfrData {
-        public boolean afrEnabled;
-        public boolean afrFpsCorrectionEnabled;
-        public boolean afrResSwitchEnabled;
-
-        public AfrData() {
-        }
-
-        public AfrData(boolean afrEnabled, boolean afrFpsCorrectionEnabled, boolean afrResSwitchEnabled) {
-            this.afrEnabled = afrEnabled;
-            this.afrFpsCorrectionEnabled = afrFpsCorrectionEnabled;
-            this.afrResSwitchEnabled = afrResSwitchEnabled;
-        }
-
-        @NonNull
-        public String toString() {
-            return String.format("%s,%s,%s", afrEnabled, afrFpsCorrectionEnabled, afrResSwitchEnabled);
-        }
-
-        public static AfrData from(String data) {
-            if (data == null) {
-                return new AfrData();
-            }
-
-            String[] split = data.split(",");
-
-            if (split.length < 3) {
-                return new AfrData();
-            }
-
-            return new AfrData(
-                    Boolean.parseBoolean(split[0]), Boolean.parseBoolean(split[1]), Boolean.parseBoolean(split[2]));
-        }
-    }
+    private final Runnable mPlaybackResumeHandler = () -> getController().setPlay(true);
 
     public AutoFrameRateManager(HqDialogManager uiManager) {
         mUiManager = uiManager;
         mAutoFrameRateHelper = new AutoFrameRateHelper();
         mModeSyncManager = ModeSyncManager.instance();
         mModeSyncManager.setAfrHelper(mAutoFrameRateHelper);
+        mHandler = new Handler(Looper.getMainLooper());
     }
 
     @Override
@@ -78,9 +48,8 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
 
     @Override
     public void onViewResumed() {
-        AfrData afrData = mPlayerData.getAfrData();
-        mAutoFrameRateHelper.setFpsCorrectionEnabled(afrData.afrFpsCorrectionEnabled);
-        mAutoFrameRateHelper.setResolutionSwitchEnabled(afrData.afrResSwitchEnabled, false);
+        mAutoFrameRateHelper.setFpsCorrectionEnabled(mPlayerData.isAfrFpsCorrectionEnabled());
+        mAutoFrameRateHelper.setResolutionSwitchEnabled(mPlayerData.isAfrResSwitchEnabled(), false);
 
         addUiOptions();
     }
@@ -91,28 +60,21 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     }
 
     private void onFpsCorrectionClick() {
-        mAutoFrameRateHelper.setFpsCorrectionEnabled(mPlayerData.getAfrData().afrFpsCorrectionEnabled);
+        mAutoFrameRateHelper.setFpsCorrectionEnabled(mPlayerData.isAfrFpsCorrectionEnabled());
     }
 
     private void onResolutionSwitchClick() {
-        AfrData afrData = mPlayerData.getAfrData();
-
-        boolean force = afrData.afrEnabled;
-        mAutoFrameRateHelper.setResolutionSwitchEnabled(afrData.afrResSwitchEnabled, force);
+        mAutoFrameRateHelper.setResolutionSwitchEnabled(mPlayerData.isAfrResSwitchEnabled(), mPlayerData.isAfrEnabled());
     }
 
     private void applyAfrWrapper() {
-        AfrData afrData = mPlayerData.getAfrData();
-
-        if (afrData.afrEnabled) {
+        if (mPlayerData.isAfrEnabled()) {
             AppSettingsPresenter.instance(getActivity()).showDialogMessage("Applying AFR...", this::applyAfr, 1_000);
         }
     }
 
     private void applyAfr() {
-        AfrData afrData = mPlayerData.getAfrData();
-
-        if (afrData.afrEnabled) {
+        if (mPlayerData.isAfrEnabled()) {
             applyAfr(getController().getVideoFormat(), false);
         } else {
             restoreAfr();
@@ -131,21 +93,42 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
             String msg = String.format("Applying afr... fps: %s, resolution: %sx%s, activity: %s",
                     track.getFrameRate(), track.getWidth(), track.getHeight(), getActivity().getClass().getSimpleName());
             Log.d(TAG, msg);
-            mAutoFrameRateHelper.apply(getActivity(), track, force);
+
+            boolean result = mAutoFrameRateHelper.apply(getActivity(), track, force);
             //mModeSyncManager.save(track);
+
+            if (result) { // beginning mode change...
+                MessageHelpers.showLongMessage(getActivity(),
+                        getActivity().getString(R.string.auto_frame_rate_applying, track.getWidth(), track.getHeight(), track.getFrameRate()));
+                pausePlayback();
+            }
+        }
+    }
+
+    private void pausePlayback() {
+        mHandler.removeCallbacks(mPlaybackResumeHandler);
+
+        if (mPlayerData.getAfrPauseSec() > 0) {
+            getController().setPlay(false);
+            mHandler.postDelayed(mPlaybackResumeHandler, mPlayerData.getAfrPauseSec() * 1_000);
         }
     }
 
     private void addUiOptions() {
         if (mAutoFrameRateHelper.isSupported()) {
-            OptionCategory category = createAutoFrameRateCategory(
+            OptionCategory afrCategory = createAutoFrameRateCategory(
                     getActivity(), PlayerData.instance(getActivity()),
                     () -> {}, this::onResolutionSwitchClick, this::onFpsCorrectionClick);
 
-            mUiManager.addCheckedCategory(category);
+            OptionCategory afrDelayCategory = createAutoFrameRatePauseCategory(
+                    getActivity(), PlayerData.instance(getActivity()));
+
+            mUiManager.addCategory(afrCategory);
+            mUiManager.addCategory(afrDelayCategory);
             mUiManager.addOnDialogHide(mApplyAfr);
         } else {
             mUiManager.removeCategory(AUTO_FRAME_RATE_ID);
+            mUiManager.removeCategory(AUTO_FRAME_RATE_DELAY_ID);
             mUiManager.removeOnDialogHide(mApplyAfr);
         }
     }
@@ -154,28 +137,24 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         return createAutoFrameRateCategory(context, playerData, () -> {}, () -> {}, () -> {});
     }
 
-    public static OptionCategory createAutoFrameRateCategory(Context context, PlayerData playerData, Runnable onAfrCallback, Runnable onResolutionCallback, Runnable onFpsCorrectionCallback) {
+    private static OptionCategory createAutoFrameRateCategory(Context context, PlayerData playerData, Runnable onAfrCallback, Runnable onResolutionCallback, Runnable onFpsCorrectionCallback) {
         String title = context.getString(R.string.auto_frame_rate);
         String fpsCorrection = context.getString(R.string.frame_rate_correction, "30->29.97, 60->59.94");
         String resolutionSwitch = context.getString(R.string.resolution_switch);
         List<OptionItem> options = new ArrayList<>();
-        AfrData afrData = playerData.getAfrData();
 
         OptionItem afrEnableOption = UiOptionItem.from(title, optionItem -> {
-            afrData.afrEnabled = optionItem.isSelected();
-            playerData.setAfrData(afrData);
+            playerData.setAfrEnabled(optionItem.isSelected());
             onAfrCallback.run();
-        }, afrData.afrEnabled);
+        }, playerData.isAfrEnabled());
         OptionItem afrResSwitchOption = UiOptionItem.from(resolutionSwitch, optionItem -> {
-            afrData.afrResSwitchEnabled = optionItem.isSelected();
-            playerData.setAfrData(afrData);
+            playerData.setAfrResSwitchEnabled(optionItem.isSelected());
             onResolutionCallback.run();
-        }, afrData.afrResSwitchEnabled);
+        }, playerData.isAfrResSwitchEnabled());
         OptionItem afrFpsCorrectionOption = UiOptionItem.from(fpsCorrection, optionItem -> {
-            afrData.afrFpsCorrectionEnabled = optionItem.isSelected();
-            playerData.setAfrData(afrData);
+            playerData.setAfrFpsCorrectionEnabled(optionItem.isSelected());
             onFpsCorrectionCallback.run();
-        }, afrData.afrFpsCorrectionEnabled);
+        }, playerData.isAfrFpsCorrectionEnabled());
 
         afrResSwitchOption.setRequire(afrEnableOption);
         afrFpsCorrectionOption.setRequire(afrEnableOption);
@@ -184,6 +163,20 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         options.add(afrResSwitchOption);
         options.add(afrFpsCorrectionOption);
 
-        return OptionCategory.from(AUTO_FRAME_RATE_ID, title, options);
+        return OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_CHECKED, title, options);
+    }
+
+    public static OptionCategory createAutoFrameRatePauseCategory(Context context, PlayerData playerData) {
+        String title = context.getString(R.string.auto_frame_rate_pause);
+
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int pauseSec : new int[] {0, 1, 2, 3, 4, 5, 6, 7}) {
+            options.add(UiOptionItem.from(String.valueOf(pauseSec),
+                    optionItem -> playerData.setAfrPauseSec(pauseSec),
+                    pauseSec == playerData.getAfrPauseSec()));
+        }
+
+        return OptionCategory.from(AUTO_FRAME_RATE_DELAY_ID, OptionCategory.TYPE_RADIO, title, options);
     }
 }

@@ -340,7 +340,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         
         String subtitleStyleTitle = context.getString(R.string.subtitle_style);
 
-        return OptionCategory.from(SUBTITLE_STYLES_ID, subtitleStyleTitle, fromSubtitleStyles(context, playerData, subtitleStyles, onSelectSubtitleStyle));
+        return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO, subtitleStyleTitle, fromSubtitleStyles(context, playerData, subtitleStyles, onSelectSubtitleStyle));
     }
 
     private static List<OptionItem> fromSubtitleStyles(Context context, PlayerData playerData, List<SubtitleStyle> subtitleStyles, OnSelectSubtitleStyle onSelectSubtitleStyle) {
@@ -382,6 +382,6 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
         String videoZoomTitle = context.getString(R.string.video_zoom);
 
-        return OptionCategory.from(SUBTITLE_STYLES_ID, videoZoomTitle, options);
+        return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO, videoZoomTitle, options);
     }
 }

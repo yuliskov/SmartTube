@@ -6,7 +6,6 @@ import com.google.android.exoplayer2.text.CaptionStyleCompat;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager.AfrData;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
@@ -33,7 +32,6 @@ public class PlayerData {
     private boolean mIsClockEnabled;
     private boolean mIsRemainingTimeEnabled;
     private int mPlaybackMode;
-    private AfrData mAfrData;
     private FormatItem mVideoFormat;
     private FormatItem mAudioFormat;
     private FormatItem mSubtitleFormat;
@@ -43,6 +41,10 @@ public class PlayerData {
     private int mVideoZoomMode;
     private int mSeekPreviewMode;
     private float mSpeed;
+    private boolean mIsAfrEnabled;
+    private boolean mIsAfrFpsCorrectionEnabled;
+    private boolean mIsAfrResSwitchEnabled;
+    private int mAfrPauseSec;
 
     public PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -130,12 +132,39 @@ public class PlayerData {
         return mPlaybackMode;
     }
 
-    public AfrData getAfrData() {
-        return mAfrData;
+    public boolean isAfrEnabled() {
+        return mIsAfrEnabled;
     }
 
-    public void setAfrData(AfrData afrData) {
-        mAfrData = afrData;
+    public void setAfrEnabled(boolean enabled) {
+        mIsAfrEnabled = enabled;
+        persistData();
+    }
+
+    public boolean isAfrFpsCorrectionEnabled() {
+        return mIsAfrFpsCorrectionEnabled;
+    }
+
+    public void setAfrFpsCorrectionEnabled(boolean enabled) {
+        mIsAfrFpsCorrectionEnabled = enabled;
+        persistData();
+    }
+
+    public boolean isAfrResSwitchEnabled() {
+        return mIsAfrResSwitchEnabled;
+    }
+
+    public void setAfrResSwitchEnabled(boolean enabled) {
+        mIsAfrResSwitchEnabled = enabled;
+        persistData();
+    }
+
+    public int getAfrPauseSec() {
+        return mAfrPauseSec;
+    }
+
+    public void setAfrPauseSec(int pauseSec) {
+        mAfrPauseSec = pauseSec;
         persistData();
     }
 
@@ -237,7 +266,6 @@ public class PlayerData {
         mIsClockEnabled = Helpers.parseBoolean(split, 5, true);
         mIsRemainingTimeEnabled = Helpers.parseBoolean(split, 6, true);
         mPlaybackMode = Helpers.parseInt(split, 7, PlaybackEngineController.PLAYBACK_MODE_DEFAULT);
-        mAfrData = AfrData.from(Helpers.parseStr(split, 8));
         mVideoFormat = ExoFormatItem.from(Helpers.parseStr(split, 9));
         mAudioFormat = ExoFormatItem.from(Helpers.parseStr(split, 10));
         mSubtitleFormat = ExoFormatItem.from(Helpers.parseStr(split, 11));
@@ -245,13 +273,18 @@ public class PlayerData {
         mSubtitleStyleIndex = Helpers.parseInt(split, 13, 1);
         mVideoZoomMode = Helpers.parseInt(split, 14, PlaybackEngineController.ZOOM_MODE_DEFAULT);
         mSpeed = Helpers.parseFloat(split, 15, 1.0f);
+        mIsAfrEnabled = Helpers.parseBoolean(split, 16, false);
+        mIsAfrFpsCorrectionEnabled = Helpers.parseBoolean(split, 17, false);
+        mIsAfrResSwitchEnabled = Helpers.parseBoolean(split, 18, false);
+        mAfrPauseSec = Helpers.parseInt(split, 19, 3);
     }
 
     private void persistData() {
         mPrefs.setPlayerData(Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec,
                 mIsShowFullDateEnabled, mSeekPreviewMode, mIsPauseOnSeekEnabled,
-                mIsClockEnabled, mIsRemainingTimeEnabled, mPlaybackMode, Helpers.toString(mAfrData),
+                mIsClockEnabled, mIsRemainingTimeEnabled, mPlaybackMode, null, // afrData was there
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
-                mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed));
+                mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
+                mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec));
     }
 }

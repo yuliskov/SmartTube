@@ -33,9 +33,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     private static final int VIDEO_PRESETS_ID = 136;
     private AppSettingsPresenter mSettingsPresenter;
     // NOTE: using map, because same item could be changed time to time
-    private final Map<Integer, OptionCategory> mCheckedCategories = new LinkedHashMap<>();
-    private final Map<Integer, OptionCategory> mRadioCategories = new LinkedHashMap<>();
-    private final Map<Integer, OptionCategory> mSingleOptions = new LinkedHashMap<>();
+    private final Map<Integer, OptionCategory> mCategories = new LinkedHashMap<>();
     private final Set<Runnable> mHideListeners = new HashSet<>();
     private final StateUpdater mStateUpdater;
     private PlayerData mPlayerData;
@@ -65,7 +63,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         addPresetsCategory();
         addBackgroundPlaybackCategory();
 
-        internalStuff();
+        appendOptions();
 
         mSettingsPresenter.showDialog(getActivity().getString(R.string.playback_settings), this::onDialogHide);
     }
@@ -77,12 +75,14 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         List<FormatItem> audioFormats = getController().getAudioFormats();
         String audioFormatsTitle = getActivity().getString(R.string.title_audio_formats);
 
-        addRadioCategory(OptionCategory.from(
+        addCategory(OptionCategory.from(
                 VIDEO_FORMATS_ID,
+                OptionCategory.TYPE_RADIO,
                 videoFormatsTitle,
                 UiOptionItem.from(videoFormats, this::selectFormatOption)));
-        addRadioCategory(OptionCategory.from(
+        addCategory(OptionCategory.from(
                 AUDIO_FORMATS_ID,
+                OptionCategory.TYPE_RADIO,
                 audioFormatsTitle,
                 UiOptionItem.from(audioFormats, this::selectFormatOption)));
     }
@@ -95,15 +95,9 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     }
 
     private void addVideoBufferCategory() {
-        addRadioCategory(createVideoBufferCategory(getActivity(), mPlayerData, type -> {
+        addCategory(createVideoBufferCategory(getActivity(), mPlayerData, type -> {
             getController().setBufferType(type);
         }));
-    }
-
-    private void internalStuff() {
-        appendRadioOptions();
-        appendCheckedOptions();
-        appendSingleOptions();
     }
 
     private void onDialogHide() {
@@ -124,27 +118,19 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         OptionCategory category =
                 createBackgroundPlaybackCategory(getActivity(), mPlayerData, this::updateBackgroundPlayback);
 
-        addRadioCategory(category);
+        addCategory(category);
     }
 
     private void addPresetsCategory() {
-        addRadioCategory(createVideoPresetsCategory(getActivity(), mPlayerData, format -> getController().selectFormat(format)));
-    }
-
-    public void addSingleOption(OptionCategory category) {
-        mSingleOptions.put(category.id, category);
-    }
-
-    public void addCheckedCategory(OptionCategory category) {
-        mCheckedCategories.put(category.id, category);
+        addCategory(createVideoPresetsCategory(getActivity(), mPlayerData, format -> getController().selectFormat(format)));
     }
 
     public void removeCategory(int id) {
-        mCheckedCategories.remove(id);
+        mCategories.remove(id);
     }
 
-    public void addRadioCategory(OptionCategory category) {
-        mRadioCategories.put(category.id, category);
+    public void addCategory(OptionCategory category) {
+        mCategories.put(category.id, category);
     }
 
     public void addOnDialogHide(Runnable listener) {
@@ -155,21 +141,19 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         mHideListeners.remove(listener);
     }
 
-    private void appendSingleOptions() {
-        for (OptionCategory category : mSingleOptions.values()) {
-            mSettingsPresenter.appendSingleSwitch(category.option);
-        }
-    }
-
-    private void appendCheckedOptions() {
-        for (OptionCategory category : mCheckedCategories.values()) {
-            mSettingsPresenter.appendCheckedCategory(category.title, category.options);
-        }
-    }
-
-    private void appendRadioOptions() {
-        for (OptionCategory category : mRadioCategories.values()) {
-            mSettingsPresenter.appendRadioCategory(category.title, category.options);
+    private void appendOptions() {
+        for (OptionCategory category : mCategories.values()) {
+            switch (category.type) {
+                case OptionCategory.TYPE_RADIO:
+                    mSettingsPresenter.appendRadioCategory(category.title, category.options);
+                    break;
+                case OptionCategory.TYPE_CHECKED:
+                    mSettingsPresenter.appendCheckedCategory(category.title, category.options);
+                    break;
+                case OptionCategory.TYPE_SINGLE:
+                    mSettingsPresenter.appendSingleSwitch(category.option);
+                    break;
+            }
         }
     }
 
@@ -204,7 +188,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
                     onSetCallback.run();
                 }, playerData.getPlaybackMode() == PlaybackEngineController.PLAYBACK_MODE_BACKGROUND_PLAY));
 
-        return OptionCategory.from(BACKGROUND_PLAYBACK_ID, categoryTitle, options);
+        return OptionCategory.from(BACKGROUND_PLAYBACK_ID, OptionCategory.TYPE_RADIO, categoryTitle, options);
     }
 
     public static OptionCategory createVideoPresetsCategory(Context context, PlayerData playerData) {
@@ -243,6 +227,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
         return OptionCategory.from(
                 VIDEO_PRESETS_ID,
+                OptionCategory.TYPE_RADIO,
                 context.getString(R.string.title_video_presets),
                 fromPresets(presets, playerData, onFormatSelected));
     }
@@ -272,7 +257,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_low, PlaybackEngineController.BUFFER_LOW, onBufferSelected));
         optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_med, PlaybackEngineController.BUFFER_MED, onBufferSelected));
         optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_high, PlaybackEngineController.BUFFER_HIGH, onBufferSelected));
-        return OptionCategory.from(VIDEO_BUFFER_ID, videoBufferTitle, optionItems);
+        return OptionCategory.from(VIDEO_BUFFER_ID, OptionCategory.TYPE_RADIO, videoBufferTitle, optionItems);
     }
 
     private static OptionItem createVideoBufferOption(Context context, PlayerData playerData, int titleResId, int type, OnBufferSelected onBufferSelected) {
