@@ -91,15 +91,15 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
     public void openChannel(Video item) {
         if (item != null) {
-            if (item.isChannel()) {
+            if (item.channelId != null) {
                 openChannel(item.channelId);
+            } else if (item.videoId != null) {
+                MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
+                mServiceManager.loadMetadata(item, metadata -> openChannel(metadata.getChannelId()));
             } else if (item.isChannelUploads()) {
                 // Maybe this is subscribed items view
                 ChannelUploadsPresenter.instance(getContext())
                         .obtainVideoGroup(item, group -> openChannel(group.getChannelId()));
-            } else if (item.isVideo()) {
-                MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
-                mServiceManager.loadMetadata(item, metadata -> openChannel(metadata.getChannelId()));
             }
         }
     }

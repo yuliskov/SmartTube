@@ -16,6 +16,7 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.VerticalGridPresenter;
+import androidx.leanback.widget.VerticalGridView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /**
@@ -60,6 +61,13 @@ public class GridFragment extends Fragment implements BrowseSupportFragment.Main
      */
     public VerticalGridPresenter getGridPresenter() {
         return mGridPresenter;
+    }
+
+    /**
+     * Returns R.id.browse_grid
+     */
+    public VerticalGridView getBrowseGrid() {
+        return mGridViewHolder.getGridView();
     }
 
     /**
