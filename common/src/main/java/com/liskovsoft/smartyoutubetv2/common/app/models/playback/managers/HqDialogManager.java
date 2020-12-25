@@ -34,6 +34,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     private AppSettingsPresenter mSettingsPresenter;
     // NOTE: using map, because same item could be changed time to time
     private final Map<Integer, OptionCategory> mCategories = new LinkedHashMap<>();
+    private final Map<Integer, OptionCategory> mCategoriesInt = new LinkedHashMap<>();
     private final Set<Runnable> mHideListeners = new HashSet<>();
     private final StateUpdater mStateUpdater;
     private PlayerData mPlayerData;
@@ -63,7 +64,8 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         addPresetsCategory();
         addBackgroundPlaybackCategory();
 
-        appendOptions();
+        appendOptions(mCategoriesInt);
+        appendOptions(mCategories);
 
         mSettingsPresenter.showDialog(getActivity().getString(R.string.playback_settings), this::onDialogHide);
     }
@@ -75,12 +77,12 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         List<FormatItem> audioFormats = getController().getAudioFormats();
         String audioFormatsTitle = getActivity().getString(R.string.title_audio_formats);
 
-        addCategory(OptionCategory.from(
+        addCategoryInt(OptionCategory.from(
                 VIDEO_FORMATS_ID,
                 OptionCategory.TYPE_RADIO,
                 videoFormatsTitle,
                 UiOptionItem.from(videoFormats, this::selectFormatOption)));
-        addCategory(OptionCategory.from(
+        addCategoryInt(OptionCategory.from(
                 AUDIO_FORMATS_ID,
                 OptionCategory.TYPE_RADIO,
                 audioFormatsTitle,
@@ -95,7 +97,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     }
 
     private void addVideoBufferCategory() {
-        addCategory(createVideoBufferCategory(getActivity(), mPlayerData, type -> {
+        addCategoryInt(createVideoBufferCategory(getActivity(), mPlayerData, type -> {
             getController().setBufferType(type);
         }));
     }
@@ -118,11 +120,19 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         OptionCategory category =
                 createBackgroundPlaybackCategory(getActivity(), mPlayerData, this::updateBackgroundPlayback);
 
-        addCategory(category);
+        addCategoryInt(category);
     }
 
     private void addPresetsCategory() {
-        addCategory(createVideoPresetsCategory(getActivity(), mPlayerData, format -> getController().selectFormat(format)));
+        addCategoryInt(createVideoPresetsCategory(getActivity(), mPlayerData, format -> getController().selectFormat(format)));
+    }
+
+    private void removeCategoryInt(int id) {
+        mCategoriesInt.remove(id);
+    }
+
+    private void addCategoryInt(OptionCategory category) {
+        mCategoriesInt.put(category.id, category);
     }
 
     public void removeCategory(int id) {
@@ -141,8 +151,8 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         mHideListeners.remove(listener);
     }
 
-    private void appendOptions() {
-        for (OptionCategory category : mCategories.values()) {
+    private void appendOptions(Map<Integer, OptionCategory> categories) {
+        for (OptionCategory category : categories.values()) {
             switch (category.type) {
                 case OptionCategory.TYPE_RADIO:
                     mSettingsPresenter.appendRadioCategory(category.title, category.options);
