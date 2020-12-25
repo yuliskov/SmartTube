@@ -177,7 +177,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         }
 
         mSettingsPresenter.appendSingleButton(
-                UiOptionItem.from(getContext().getString(R.string.send_to), optionItem -> {
+                UiOptionItem.from(getContext().getString(R.string.share_link), optionItem -> {
                     if (mVideo.videoId != null) {
                         Utils.displayShareVideoDialog(getContext(), mVideo.videoId);
                     } else if (mVideo.channelId != null) {

@@ -181,11 +181,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     public void onDispatchKeyEvent(KeyEvent event) {
         // Fix seeking with remote when ui not visible yet
-        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            if (mPlayerGlue != null) {
-                mPlayerGlue.syncControlsStateIfNeeded();
-            }
-        }
+        //if (event.getAction() == KeyEvent.ACTION_DOWN) {
+        //    if (mPlayerGlue != null) {
+        //        mPlayerGlue.syncControlsStateIfNeeded();
+        //    }
+        //}
     }
 
     public void onDispatchTouchEvent(MotionEvent event) {

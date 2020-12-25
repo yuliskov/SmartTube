@@ -59,7 +59,7 @@ public class Utils {
         primaryIntent.setData(url);
         secondaryIntent.putExtra(Intent.EXTRA_TEXT, url.toString());
         secondaryIntent.setType("text/plain");
-        Intent chooserIntent = Intent.createChooser(primaryIntent, context.getResources().getText(R.string.send_to));
+        Intent chooserIntent = Intent.createChooser(primaryIntent, context.getResources().getText(R.string.share_link));
         chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] { secondaryIntent });
         chooserIntent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
         context.startActivity(chooserIntent);
