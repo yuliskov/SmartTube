@@ -77,27 +77,27 @@ public class AutoFrameRateHelper {
         mFrameRateMapping.put(60f, 59.94f);
     }
 
-    public boolean apply(Activity activity, FormatItem format, boolean force) {
+    public void apply(Activity activity, FormatItem format, boolean force) {
         setActivity(activity);
 
         if (activity == null) {
             Log.e(TAG, "Activity in null. exiting...");
-            return false;
+            return;
         }
 
         if (!isSupported()) {
             Log.e(TAG, "Autoframerate not supported. Exiting...");
-            return false;
+            return;
         }
 
         if (format == null) {
             Log.e(TAG, "Can't apply mode change: format is null");
-            return false;
+            return;
         }
 
         if (System.currentTimeMillis() - mPrevCall < THROTTLE_INTERVAL_MS) {
             Log.e(TAG, "Throttling afr calls...");
-            return false;
+            return;
         } else {
             mPrevCall = System.currentTimeMillis();
         }
@@ -109,25 +109,25 @@ public class AutoFrameRateHelper {
 
         Log.d(TAG, String.format("Applying mode change... Video fps: %s, width: %s, height: %s", frameRate, width, format.getHeight()));
 
-        return syncMode(activity, width, frameRate, force);
+        syncMode(activity, width, frameRate, force);
     }
 
     //private void syncMode(int width, float frameRate) {
     //    syncMode(width, frameRate, false);
     //}
 
-    private boolean syncMode(Activity activity, int width, float frameRate, boolean force) {
+    private void syncMode(Activity activity, int width, float frameRate, boolean force) {
         if (activity == null) {
             Log.e(TAG, "Activity in null. exiting...");
-            return false;
+            return;
         }
 
         if (!isSupported()) {
             Log.e(TAG, "Autoframerate not supported. Exiting...");
-            return false;
+            return;
         }
 
-        return mSyncHelper.syncDisplayMode(activity.getWindow(), width, frameRate, force);
+        mSyncHelper.syncDisplayMode(activity.getWindow(), width, frameRate, force);
     }
 
     public void restoreOriginalState(Activity activity) {

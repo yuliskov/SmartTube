@@ -15,12 +15,14 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.AutoFrameRateHelper;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolder.Mode;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncHelper.AutoFrameRateListener;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AutoFrameRateManager extends PlayerEventListenerHelper {
+public class AutoFrameRateManager extends PlayerEventListenerHelper implements AutoFrameRateListener {
     private static final String TAG = AutoFrameRateManager.class.getSimpleName();
     private static final int AUTO_FRAME_RATE_ID = 21;
     private static final int AUTO_FRAME_RATE_DELAY_ID = 22;
@@ -42,6 +44,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
         mUiManager = uiManager;
         mStateUpdater = stateUpdater;
         mAutoFrameRateHelper = new AutoFrameRateHelper();
+        mAutoFrameRateHelper.setListener(this);
         mModeSyncManager = ModeSyncManager.instance();
         mModeSyncManager.setAfrHelper(mAutoFrameRateHelper);
         mHandler = new Handler(Looper.getMainLooper());
@@ -64,6 +67,13 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
     @Override
     public void onVideoLoaded(Video item) {
         applyAfr();
+    }
+
+    @Override
+    public void onModeStart(Mode newMode) {
+        MessageHelpers.showLongMessage(getActivity(),
+                getActivity().getString(R.string.auto_frame_rate_applying, newMode.getPhysicalWidth(), newMode.getPhysicalHeight(), newMode.getRefreshRate()));
+        pausePlayback();
     }
 
     private void onFpsCorrectionClick() {
@@ -101,14 +111,8 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper {
                     track.getFrameRate(), track.getWidth(), track.getHeight(), getActivity().getClass().getSimpleName());
             Log.d(TAG, msg);
 
-            boolean result = mAutoFrameRateHelper.apply(getActivity(), track, force);
+            mAutoFrameRateHelper.apply(getActivity(), track, force);
             //mModeSyncManager.save(track);
-
-            if (result) { // beginning mode change...
-                MessageHelpers.showLongMessage(getActivity(),
-                        getActivity().getString(R.string.auto_frame_rate_applying, track.getWidth(), track.getHeight(), track.getFrameRate()));
-                pausePlayback();
-            }
         }
     }
 
