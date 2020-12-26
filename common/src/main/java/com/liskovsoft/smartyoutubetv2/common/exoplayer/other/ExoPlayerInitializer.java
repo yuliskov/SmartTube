@@ -15,7 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.V2.CustomOverridesR
 
 public class ExoPlayerInitializer {
     private final int mDeviceRam;
-    private int mBufferType = PlayerController.BUFFER_MED;
+    private int mBufferType = PlayerController.BUFFER_LOW;
     private float mAudioDelay;
 
     public ExoPlayerInitializer(Context activity) {
