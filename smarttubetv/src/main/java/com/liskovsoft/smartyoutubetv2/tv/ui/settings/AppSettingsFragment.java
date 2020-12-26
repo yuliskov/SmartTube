@@ -110,6 +110,11 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
 
     @Override
     public boolean onPreferenceDisplayDialog(@NonNull PreferenceFragment caller, Preference pref) {
+        // Fix IllegalStateException: Activity has been destroyed
+        if (isDetached()) {
+            return false;
+        }
+
         if (pref instanceof StringListPreference) {
             StringListPreference listPreference = (StringListPreference) pref;
             LeanbackPreferenceDialogFragment f = StringListPreferenceDialogFragment.newInstanceStringList(listPreference.getKey());

@@ -100,6 +100,10 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     private void prepareAndShowDialog(List<VideoPlaylistInfo> videoPlaylistInfos) {
+        if (getContext() == null) {
+            return;
+        }
+
         mSettingsPresenter.clear();
 
         appendAddToPlaylist(videoPlaylistInfos);
