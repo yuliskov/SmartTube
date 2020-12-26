@@ -23,7 +23,7 @@
     <string name="audio_max_quality">Auto (max kwaliteit)</string>
     <string name="subtitles_disabled">Geen ondertitels</string>
     <string name="auto_frame_rate">Auto frame rate</string>
-    <string name="frame_rate_correction">Fix fps:\n%s</string>
+    <string name="frame_rate_correction">Fix fps: %s</string>
     <string name="category_background_playback">Afspelen op achtergrond</string>
     <string name="not_implemented">Niet geïmplementeerd</string>
     <string name="option_background_playback_off">Uit</string>
@@ -75,7 +75,7 @@
     <string name="player_only_ui">Player weergeven</string>
     <string name="player_ui_and_pause">Player weergeven en pauzeren</string>
     <string name="player_only_pause">Pauzeren</string>
-    <string name="check_for_updates">App bijwerken</string>
+    <string name="check_for_updates">App updaten</string>
     <string name="update_not_found">Je gebruikt reeds de nieuwste versie</string>
     <string name="update_in_progess">Even geduld…</string>
     <string name="player_ui_hide_behavior">Player verbergen</string>
@@ -90,9 +90,9 @@
     <string name="color_scheme_red_grey">Rood-grijs</string>
     <string name="color_scheme_red">Rood</string>
     <string name="color_scheme_dark_grey">Donker</string>
-    <string name="disable_update_check">Automatisch bijwerken uitschakelen</string>
+    <string name="disable_update_check">Automatisch updaten uitschakelen</string>
     <string name="show_again">Altijd weergeven</string>
-    <string name="check_updates_auto">App automatisch bijwerken</string>
+    <string name="check_updates_auto">App automatisch updaten</string>
     <string name="select_account_on_boot">Account selecteren bij opstarten</string>
     <string name="player_other">Diverse</string>
     <string name="player_full_date">Publicatiedatum weergeven</string>
@@ -152,6 +152,7 @@
     <string name="share_link">Delen</string>
     <string name="subscribe_to_channel">Abonnement aan</string>
     <string name="wait_data_loading">Even wachten terwijl gegevens laden</string>
-    <string name="auto_frame_rate_pause">Auto frame rate pauzeren</string>
+    <string name="auto_frame_rate_pause">Auto frame rate (pauze)</string>
     <string name="auto_frame_rate_applying">Auto frame rate toepassen %sx%s@%s</string>
+    <string name="audio_delay">Audio delay</string>
 </resources>
