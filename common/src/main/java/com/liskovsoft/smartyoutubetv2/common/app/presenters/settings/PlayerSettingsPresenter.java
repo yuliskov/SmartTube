@@ -37,7 +37,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
         appendVideoBufferCategory(settingsPresenter);
         appendVideoPresetsCategory(settingsPresenter);
-        appendAudioDelayCategory(settingsPresenter);
+        appendAudioShiftCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
         appendAutoFrameRateCategory(settingsPresenter);
         appendAutoFrameRatePauseCategory(settingsPresenter);
@@ -122,8 +122,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
-    private void appendAudioDelayCategory(AppSettingsPresenter settingsPresenter) {
-        OptionCategory category = HqDialogManager.createAudioDelayCategory(getContext(), mPlayerData);
+    private void appendAudioShiftCategory(AppSettingsPresenter settingsPresenter) {
+        OptionCategory category = HqDialogManager.createAudioShiftCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 

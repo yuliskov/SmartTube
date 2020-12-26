@@ -101,7 +101,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     }
 
     private void addAudioDelayCategory() {
-        addCategoryInt(createAudioDelayCategory(getActivity(), mPlayerData,
+        addCategoryInt(createAudioShiftCategory(getActivity(), mPlayerData,
                 () -> getController().restartEngine()));
     }
 
@@ -284,12 +284,12 @@ public class HqDialogManager extends PlayerEventListenerHelper {
                 playerData.getVideoBufferType() == type);
     }
 
-    public static OptionCategory createAudioDelayCategory(Context context, PlayerData playerData) {
-        return createAudioDelayCategory(context, playerData, () -> {});
+    public static OptionCategory createAudioShiftCategory(Context context, PlayerData playerData) {
+        return createAudioShiftCategory(context, playerData, () -> {});
     }
 
-    private static OptionCategory createAudioDelayCategory(Context context, PlayerData playerData, Runnable onSetCallback) {
-        String title = context.getString(R.string.audio_delay);
+    private static OptionCategory createAudioShiftCategory(Context context, PlayerData playerData, Runnable onSetCallback) {
+        String title = context.getString(R.string.audio_shift);
 
         List<OptionItem> options = new ArrayList<>();
 
