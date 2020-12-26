@@ -53,6 +53,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     @Override
     public void onViewResumed() {
         getController().setBufferType(mPlayerData.getVideoBufferType());
+        getController().setAudioDelay(mPlayerData.getAudioDelay());
         updateBackgroundPlayback();
     }
 
