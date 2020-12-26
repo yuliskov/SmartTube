@@ -71,8 +71,14 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
     @Override
     public void onModeStart(Mode newMode) {
-        MessageHelpers.showLongMessage(getActivity(),
-                getActivity().getString(R.string.auto_frame_rate_applying, newMode.getPhysicalWidth(), newMode.getPhysicalHeight(), newMode.getRefreshRate()));
+        // Ugoos already displays this message on each mode switch
+        String message = getActivity().getString(
+                R.string.auto_frame_rate_applying,
+                newMode.getPhysicalWidth(),
+                newMode.getPhysicalHeight(),
+                newMode.getRefreshRate());
+        Log.d(TAG, message);
+        //MessageHelpers.showLongMessage(getActivity(), message);
         pausePlayback();
     }
 

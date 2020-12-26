@@ -667,11 +667,6 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
-    public int getBufferType() {
-        return mPlayerInitializer.getBufferType();
-    }
-
-    @Override
     public void setAudioDelay(float delaySec) {
         if (!Helpers.floatEquals(mPlayerInitializer.getAudioDelay(), delaySec)) {
             mPlayerInitializer.setAudioDelay(delaySec);

@@ -43,10 +43,9 @@ public interface PlaybackEngineController {
     void setSpeed(float speed);
     float getSpeed();
     void setBufferType(int bufferType);
-    int getBufferType();
+    void setAudioDelay(float delaySec);
     void setVideoZoomMode(int mode);
     int getVideoZoomMode();
-    void setAudioDelay(float delaySec);
     interface OnBufferSelected {
         void onBufferSelected(int type);
     }
