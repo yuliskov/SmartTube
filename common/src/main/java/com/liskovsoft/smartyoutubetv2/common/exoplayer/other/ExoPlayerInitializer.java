@@ -36,7 +36,7 @@ public class ExoPlayerInitializer {
         //trackSelector.setParameters(trackSelector.buildUponParameters().setTunnelingAudioSessionId(C.generateAudioSessionIdV21(activity)));
 
         if (renderersFactory instanceof CustomOverridesRenderersFactory) {
-            ((CustomOverridesRenderersFactory) renderersFactory).setAudioDelayMs((int) mPlayerData.getAudioDelay() * 1_000);
+            ((CustomOverridesRenderersFactory) renderersFactory).setAudioDelayMs(mPlayerData.getAudioDelayMs());
         }
 
         SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(activity, renderersFactory, trackSelector, loadControl);

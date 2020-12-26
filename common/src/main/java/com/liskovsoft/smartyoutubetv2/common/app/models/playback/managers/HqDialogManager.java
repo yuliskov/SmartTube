@@ -293,13 +293,13 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
         List<OptionItem> options = new ArrayList<>();
 
-        for (float delaySec : new float[] {-3, -2.5f, -2, -1.5f, -1, -0.5f, 0, 0.5f, 1, 1.5f, 2, 2.5f, 3}) {
-            options.add(UiOptionItem.from(String.format("%s sec", Helpers.toString(delaySec)),
+        for (int delayMs : Helpers.range(-2_000, 2_000, 250)) {
+            options.add(UiOptionItem.from(String.format("%s sec", Helpers.toString(delayMs / 1_000f)),
                     optionItem -> {
-                        playerData.setAudioDelay(delaySec);
+                        playerData.setAudioDelayMs(delayMs);
                         onSetCallback.run();
                     },
-                    Helpers.floatEquals(delaySec, playerData.getAudioDelay())));
+                    delayMs == playerData.getAudioDelayMs()));
         }
 
         return OptionCategory.from(AUDIO_DELAY_ID, OptionCategory.TYPE_RADIO, title, options);

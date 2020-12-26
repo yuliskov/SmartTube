@@ -45,7 +45,7 @@ public class PlayerData {
     private boolean mIsAfrFpsCorrectionEnabled;
     private boolean mIsAfrResSwitchEnabled;
     private int mAfrPauseSec;
-    private float mAudioDelay;
+    private int mAudioDelayMs;
 
     public PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -247,12 +247,12 @@ public class PlayerData {
         return mSpeed;
     }
 
-    public float getAudioDelay() {
-        return mAudioDelay;
+    public int getAudioDelayMs() {
+        return mAudioDelayMs;
     }
 
-    public void setAudioDelay(float delaySec) {
-        mAudioDelay = delaySec;
+    public void setAudioDelayMs(int delayMs) {
+        mAudioDelayMs = delayMs;
         persistData();
     }
 
@@ -287,7 +287,7 @@ public class PlayerData {
         mIsAfrFpsCorrectionEnabled = Helpers.parseBoolean(split, 17, false);
         mIsAfrResSwitchEnabled = Helpers.parseBoolean(split, 18, false);
         mAfrPauseSec = Helpers.parseInt(split, 19, 3);
-        mAudioDelay = Helpers.parseFloat(split, 20, 0);
+        mAudioDelayMs = Helpers.parseInt(split, 20, 0);
     }
 
     private void persistData() {
@@ -296,7 +296,6 @@ public class PlayerData {
                 mIsClockEnabled, mIsRemainingTimeEnabled, mPlaybackMode, null, // afrData was there
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
-                mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec,
-                mAudioDelay));
+                mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs));
     }
 }
