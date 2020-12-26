@@ -153,6 +153,8 @@ public class PlaybackActivity extends LeanbackActivity {
         enterPIPMode();
 
         super.finish();
+
+        mPlaybackFragment.onFinish();
     }
 
     public boolean isInPIPMode() {

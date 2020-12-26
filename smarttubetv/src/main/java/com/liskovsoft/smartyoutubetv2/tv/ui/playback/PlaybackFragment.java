@@ -39,11 +39,11 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerController;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.V2.CustomOverridesRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.DebugInfoManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ExoPlayerInitializer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.V2.CustomOverridesRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
@@ -180,16 +180,18 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     public void onDispatchKeyEvent(KeyEvent event) {
-        // Fix seeking with remote when ui not visible yet
-        //if (event.getAction() == KeyEvent.ACTION_DOWN) {
-        //    if (mPlayerGlue != null) {
-        //        mPlayerGlue.syncControlsStateIfNeeded();
-        //    }
-        //}
+        // NOP
     }
 
     public void onDispatchTouchEvent(MotionEvent event) {
         // NOP
+    }
+
+    public void onFinish() {
+        // Fix background play when playing trailers from NUM
+        if (Util.SDK_INT > 23 && getPlaybackMode() == PlaybackEngineController.PLAYBACK_MODE_DEFAULT) {
+            releasePlayer();
+        }
     }
 
     public void skipToNext() {
