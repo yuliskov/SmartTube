@@ -659,22 +659,6 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
-    public void setBufferType(int bufferType) {
-        if (mPlayerInitializer.getBufferType() != bufferType) {
-            mPlayerInitializer.setBufferType(bufferType);
-            restartEngine();
-        }
-    }
-
-    @Override
-    public void setAudioDelay(float delaySec) {
-        if (!Helpers.floatEquals(mPlayerInitializer.getAudioDelay(), delaySec)) {
-            mPlayerInitializer.setAudioDelay(delaySec);
-            restartEngine();
-        }
-    }
-
-    @Override
     public void setVideoZoomMode(int mode) {
         setResizeMode(mode);
     }

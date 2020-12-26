@@ -52,8 +52,6 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
     @Override
     public void onViewResumed() {
-        getController().setBufferType(mPlayerData.getVideoBufferType());
-        getController().setAudioDelay(mPlayerData.getAudioDelay());
         updateBackgroundPlayback();
     }
 
@@ -101,12 +99,12 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
     private void addVideoBufferCategory() {
         addCategoryInt(createVideoBufferCategory(getActivity(), mPlayerData,
-                type -> getController().setBufferType(type)));
+                type -> getController().restartEngine()));
     }
 
     private void addAudioDelayCategory() {
         addCategoryInt(createAudioDelayCategory(getActivity(), mPlayerData,
-                () -> getController().setAudioDelay(mPlayerData.getAudioDelay())));
+                () -> getController().restartEngine()));
     }
 
     private void onDialogHide() {
