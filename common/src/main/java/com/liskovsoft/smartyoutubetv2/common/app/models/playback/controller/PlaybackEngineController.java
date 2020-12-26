@@ -44,10 +44,4 @@ public interface PlaybackEngineController {
     float getSpeed();
     void setVideoZoomMode(int mode);
     int getVideoZoomMode();
-    interface OnBufferSelected {
-        void onBufferSelected(int type);
-    }
-    interface OnSelectZoomMode {
-        void onSelectZoomMode(int mode);
-    }
 }

@@ -20,23 +20,22 @@ public interface FormatItem {
     int getHeight();
     boolean isSelected();
     int getType();
-    class Preset {
-        public final String name;
-        public final FormatItem format;
 
-        public Preset(String presetName, String presetSpec) {
-            this.name = presetName;
-            // "2560,1440,30,vp9"
-            this.format = ExoFormatItem.fromVideoPreset(presetSpec);
-        }
-    }
-    interface OnFormatSelected {
-        void onFormatSelected(FormatItem format);
-    }
     static FormatItem checkFormat(FormatItem format, int type) {
         return format != null && format.getType() == type ? format : null;
     }
     static @NonNull FormatItem fromLanguage(String langCode) {
         return ExoFormatItem.fromSubtitleData(langCode);
+    }
+
+    class VideoPreset {
+        public final String name;
+        public final FormatItem format;
+
+        public VideoPreset(String presetName, String presetSpec) {
+            this.name = presetName;
+            // "2560,1440,30,vp9"
+            this.format = ExoFormatItem.fromVideoPreset(presetSpec);
+        }
     }
 }

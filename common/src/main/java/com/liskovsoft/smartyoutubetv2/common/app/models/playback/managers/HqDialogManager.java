@@ -6,15 +6,13 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController.OnBufferSelected;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.OnFormatSelected;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.Preset;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.VideoPreset;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.ArrayList;
@@ -99,7 +97,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
     private void addVideoBufferCategory() {
         addCategoryInt(createVideoBufferCategory(getActivity(), mPlayerData,
-                type -> getController().restartEngine()));
+                () -> getController().restartEngine()));
     }
 
     private void addAudioDelayCategory() {
@@ -129,7 +127,8 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     }
 
     private void addPresetsCategory() {
-        addCategoryInt(createVideoPresetsCategory(getActivity(), mPlayerData, format -> getController().setFormat(format)));
+        addCategoryInt(createVideoPresetsCategory(
+                getActivity(), mPlayerData, () -> getController().setFormat(mPlayerData.getFormat(FormatItem.TYPE_VIDEO))));
     }
 
     private void removeCategoryInt(int id) {
@@ -207,37 +206,37 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     }
 
     public static OptionCategory createVideoPresetsCategory(Context context, PlayerData playerData) {
-        return createVideoPresetsCategory(context, playerData, format -> {});
+        return createVideoPresetsCategory(context, playerData, () -> {});
     }
 
-    private static OptionCategory createVideoPresetsCategory(Context context, PlayerData playerData, OnFormatSelected onFormatSelected) {
-        Preset[] presets = {
-                new Preset("SD     30fps    avc", "640,360,30,avc"),
-                new Preset("SD     30fps    vp9", "640,360,30,vp9"),
-                new Preset("SD     60fps    avc", "640,360,60,avc"),
-                new Preset("SD     60fps    vp9", "640,360,60,vp9"),
-                new Preset("HD     30fps    avc", "1280,720,30,avc"),
-                new Preset("HD     30fps    vp9", "1280,720,30,vp9"),
-                new Preset("HD     60fps    avc", "1280,720,60,avc"),
-                new Preset("HD     60fps    vp9", "1280,720,60,vp9"),
-                new Preset("FHD    30fps    avc", "1920,1080,30,avc"),
-                new Preset("FHD    30fps    vp9", "1920,1080,30,vp9"),
-                new Preset("FHD    30fps    vp9+hdr", "1920,1080,30,vp9.2"),
-                new Preset("FHD    60fps    avc", "1920,1080,60,avc"),
-                new Preset("FHD    60fps    vp9", "1920,1080,60,vp9"),
-                new Preset("FHD    60fps    vp9+hdr", "1920,1080,60,vp9.2"),
-                new Preset("2K     30fps    vp9", "2560,1440,30,vp9"),
-                new Preset("2K     30fps    vp9+hdr", "2560,1440,30,vp9.2"),
-                new Preset("2K     60fps    vp9", "2560,1440,60,vp9"),
-                new Preset("2K     60fps    vp9+hdr", "2560,1440,60,vp9.2"),
-                new Preset("4K     30fps    vp9", "3840,2160,30,vp9"),
-                new Preset("4K     30fps    vp9+hdr", "3840,2160,30,vp9.2"),
-                new Preset("4K     60fps    vp9", "3840,2160,60,vp9"),
-                new Preset("4K     60fps    vp9+hdr", "3840,2160,60,vp9.2"),
-                new Preset("8K     30fps    vp9", "7680,4320,30,vp9"),
-                new Preset("8K     30fps    vp9+hdr", "7680,4320,30,vp9.2"),
-                new Preset("8K     60fps    vp9", "7680,4320,60,vp9"),
-                new Preset("8K     60fps    vp9+hdr", "7680,4320,60,vp9.2")
+    private static OptionCategory createVideoPresetsCategory(Context context, PlayerData playerData, Runnable onFormatSelected) {
+        VideoPreset[] presets = {
+                new VideoPreset("SD     30fps    avc", "640,360,30,avc"),
+                new VideoPreset("SD     30fps    vp9", "640,360,30,vp9"),
+                new VideoPreset("SD     60fps    avc", "640,360,60,avc"),
+                new VideoPreset("SD     60fps    vp9", "640,360,60,vp9"),
+                new VideoPreset("HD     30fps    avc", "1280,720,30,avc"),
+                new VideoPreset("HD     30fps    vp9", "1280,720,30,vp9"),
+                new VideoPreset("HD     60fps    avc", "1280,720,60,avc"),
+                new VideoPreset("HD     60fps    vp9", "1280,720,60,vp9"),
+                new VideoPreset("FHD    30fps    avc", "1920,1080,30,avc"),
+                new VideoPreset("FHD    30fps    vp9", "1920,1080,30,vp9"),
+                new VideoPreset("FHD    30fps    vp9+hdr", "1920,1080,30,vp9.2"),
+                new VideoPreset("FHD    60fps    avc", "1920,1080,60,avc"),
+                new VideoPreset("FHD    60fps    vp9", "1920,1080,60,vp9"),
+                new VideoPreset("FHD    60fps    vp9+hdr", "1920,1080,60,vp9.2"),
+                new VideoPreset("2K     30fps    vp9", "2560,1440,30,vp9"),
+                new VideoPreset("2K     30fps    vp9+hdr", "2560,1440,30,vp9.2"),
+                new VideoPreset("2K     60fps    vp9", "2560,1440,60,vp9"),
+                new VideoPreset("2K     60fps    vp9+hdr", "2560,1440,60,vp9.2"),
+                new VideoPreset("4K     30fps    vp9", "3840,2160,30,vp9"),
+                new VideoPreset("4K     30fps    vp9+hdr", "3840,2160,30,vp9.2"),
+                new VideoPreset("4K     60fps    vp9", "3840,2160,60,vp9"),
+                new VideoPreset("4K     60fps    vp9+hdr", "3840,2160,60,vp9.2"),
+                new VideoPreset("8K     30fps    vp9", "7680,4320,30,vp9"),
+                new VideoPreset("8K     30fps    vp9+hdr", "7680,4320,30,vp9.2"),
+                new VideoPreset("8K     60fps    vp9", "7680,4320,60,vp9"),
+                new VideoPreset("8K     60fps    vp9+hdr", "7680,4320,60,vp9.2")
         };
 
         return OptionCategory.from(
@@ -247,14 +246,14 @@ public class HqDialogManager extends PlayerEventListenerHelper {
                 fromPresets(presets, playerData, onFormatSelected));
     }
 
-    private static List<OptionItem> fromPresets(Preset[] presets, PlayerData playerData, OnFormatSelected onFormatSelected) {
+    private static List<OptionItem> fromPresets(VideoPreset[] presets, PlayerData playerData, Runnable onFormatSelected) {
         List<OptionItem> result = new ArrayList<>();
 
-        for (Preset preset : presets) {
+        for (VideoPreset preset : presets) {
             result.add(0, UiOptionItem.from(preset.name,
                     option -> {
                         playerData.setFormat(preset.format);
-                        onFormatSelected.onFormatSelected(preset.format);
+                        onFormatSelected.run();
                     },
                     preset.format.equals(playerData.getFormat(FormatItem.TYPE_VIDEO))));
         }
@@ -263,10 +262,10 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     }
 
     public static OptionCategory createVideoBufferCategory(Context context, PlayerData playerData) {
-        return createVideoBufferCategory(context, playerData, type -> {});
+        return createVideoBufferCategory(context, playerData, () -> {});
     }
 
-    private static OptionCategory createVideoBufferCategory(Context context, PlayerData playerData, OnBufferSelected onBufferSelected) {
+    private static OptionCategory createVideoBufferCategory(Context context, PlayerData playerData, Runnable onBufferSelected) {
         String videoBufferTitle = context.getString(R.string.video_buffer);
         List<OptionItem> optionItems = new ArrayList<>();
         optionItems.add(createVideoBufferOption(context, playerData, R.string.video_buffer_size_low, PlaybackEngineController.BUFFER_LOW, onBufferSelected));
@@ -275,12 +274,12 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         return OptionCategory.from(VIDEO_BUFFER_ID, OptionCategory.TYPE_RADIO, videoBufferTitle, optionItems);
     }
 
-    private static OptionItem createVideoBufferOption(Context context, PlayerData playerData, int titleResId, int type, OnBufferSelected onBufferSelected) {
+    private static OptionItem createVideoBufferOption(Context context, PlayerData playerData, int titleResId, int type, Runnable onBufferSelected) {
         return UiOptionItem.from(
                 context.getString(titleResId),
                 optionItem -> {
                     playerData.setVideoBufferType(type);
-                    onBufferSelected.onBufferSelected(type);
+                    onBufferSelected.run();
                 },
                 playerData.getVideoBufferType() == type);
     }

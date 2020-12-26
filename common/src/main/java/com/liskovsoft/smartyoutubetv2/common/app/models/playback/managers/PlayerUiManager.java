@@ -14,7 +14,6 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController.OnSelectZoomMode;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -256,7 +255,8 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onVideoZoomClicked() {
-        OptionCategory videoZoomCategory = createVideoZoomCategory(getActivity(), mPlayerData, mode -> getController().setVideoZoomMode(mode));
+        OptionCategory videoZoomCategory = createVideoZoomCategory(
+                getActivity(), mPlayerData, () -> getController().setVideoZoomMode(mPlayerData.getVideoZoomMode()));
 
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getActivity());
         settingsPresenter.clear();
@@ -360,10 +360,10 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     }
 
     public static OptionCategory createVideoZoomCategory(Context context, PlayerData playerData) {
-        return createVideoZoomCategory(context, playerData, mode -> {});
+        return createVideoZoomCategory(context, playerData, () -> {});
     }
 
-    private static OptionCategory createVideoZoomCategory(Context context, PlayerData playerData, OnSelectZoomMode onSelectZoomMode) {
+    private static OptionCategory createVideoZoomCategory(Context context, PlayerData playerData, Runnable onSelectZoomMode) {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
@@ -375,7 +375,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
             options.add(UiOptionItem.from(context.getString(pair[0]),
                     optionItem -> {
                         playerData.setVideoZoomMode(pair[1]);
-                        onSelectZoomMode.onSelectZoomMode(pair[1]);
+                        onSelectZoomMode.run();
                     },
                     playerData.getVideoZoomMode() == pair[1]));
         }
