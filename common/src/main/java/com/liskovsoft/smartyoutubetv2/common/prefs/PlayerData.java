@@ -45,6 +45,7 @@ public class PlayerData {
     private boolean mIsAfrFpsCorrectionEnabled;
     private boolean mIsAfrResSwitchEnabled;
     private int mAfrPauseSec;
+    private float mAudioDelay;
 
     public PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -246,6 +247,15 @@ public class PlayerData {
         return mSpeed;
     }
 
+    public float getAudioDelay() {
+        return mAudioDelay;
+    }
+
+    public void setAudioDelay(float delaySec) {
+        mAudioDelay = delaySec;
+        persistData();
+    }
+
     private void initSubtitleStyles() {
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_default, R.color.light_grey, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_semi_transparent_bg, R.color.light_grey, R.color.semi_grey, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
@@ -277,6 +287,7 @@ public class PlayerData {
         mIsAfrFpsCorrectionEnabled = Helpers.parseBoolean(split, 17, false);
         mIsAfrResSwitchEnabled = Helpers.parseBoolean(split, 18, false);
         mAfrPauseSec = Helpers.parseInt(split, 19, 3);
+        mAudioDelay = Helpers.parseFloat(split, 20, 0);
     }
 
     private void persistData() {
@@ -285,6 +296,7 @@ public class PlayerData {
                 mIsClockEnabled, mIsRemainingTimeEnabled, mPlaybackMode, null, // afrData was there
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
-                mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec));
+                mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec,
+                mAudioDelay));
     }
 }

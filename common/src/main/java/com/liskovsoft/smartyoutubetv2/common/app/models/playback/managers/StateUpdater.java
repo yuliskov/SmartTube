@@ -234,21 +234,21 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     private void restoreVideoFormat() {
         if (getController().isInPIPMode()) {
-            getController().selectFormat(FormatItem.VIDEO_SD_AVC_30);
+            getController().setFormat(FormatItem.VIDEO_SD_AVC_30);
         } else if (mVideoFormat != null) {
-            getController().selectFormat(mVideoFormat);
+            getController().setFormat(mVideoFormat);
         }
     }
 
     private void restoreAudioFormat() {
         if (mAudioFormat != null) {
-            getController().selectFormat(mAudioFormat);
+            getController().setFormat(mAudioFormat);
         }
     }
 
     private void restoreSubtitleFormat() {
         if (mSubtitleFormat != null) {
-            getController().selectFormat(mSubtitleFormat);
+            getController().setFormat(mSubtitleFormat);
         }
     }
 

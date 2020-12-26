@@ -31,6 +31,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     private static final int VIDEO_BUFFER_ID = 134;
     private static final int BACKGROUND_PLAYBACK_ID = 135;
     private static final int VIDEO_PRESETS_ID = 136;
+    private static final int AUDIO_DELAY_ID = 137;
     private AppSettingsPresenter mSettingsPresenter;
     // NOTE: using map, because same item could be changed time to time
     private final Map<Integer, OptionCategory> mCategories = new LinkedHashMap<>();
@@ -62,6 +63,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         addQualityCategories();
         addVideoBufferCategory();
         addPresetsCategory();
+        addAudioDelayCategory();
         addBackgroundPlaybackCategory();
 
         appendOptions(mCategoriesInt);
@@ -90,16 +92,20 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     }
 
     private void selectFormatOption(OptionItem option) {
-        getController().selectFormat(UiOptionItem.toFormat(option));
+        getController().setFormat(UiOptionItem.toFormat(option));
         if (getController().hasNoMedia()) {
             getController().reloadPlayback();
         }
     }
 
     private void addVideoBufferCategory() {
-        addCategoryInt(createVideoBufferCategory(getActivity(), mPlayerData, type -> {
-            getController().setBufferType(type);
-        }));
+        addCategoryInt(createVideoBufferCategory(getActivity(), mPlayerData,
+                type -> getController().setBufferType(type)));
+    }
+
+    private void addAudioDelayCategory() {
+        addCategoryInt(createAudioDelayCategory(getActivity(), mPlayerData,
+                () -> getController().setAudioDelay(mPlayerData.getAudioDelay())));
     }
 
     private void onDialogHide() {
@@ -124,7 +130,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     }
 
     private void addPresetsCategory() {
-        addCategoryInt(createVideoPresetsCategory(getActivity(), mPlayerData, format -> getController().selectFormat(format)));
+        addCategoryInt(createVideoPresetsCategory(getActivity(), mPlayerData, format -> getController().setFormat(format)));
     }
 
     private void removeCategoryInt(int id) {
@@ -278,5 +284,26 @@ public class HqDialogManager extends PlayerEventListenerHelper {
                     onBufferSelected.onBufferSelected(type);
                 },
                 playerData.getVideoBufferType() == type);
+    }
+
+    public static OptionCategory createAudioDelayCategory(Context context, PlayerData playerData) {
+        return createAudioDelayCategory(context, playerData, () -> {});
+    }
+
+    private static OptionCategory createAudioDelayCategory(Context context, PlayerData playerData, Runnable onSetCallback) {
+        String title = context.getString(R.string.audio_delay);
+
+        List<OptionItem> options = new ArrayList<>();
+
+        for (float delaySec : new float[] {-3, -2, -1, 0, 1, 2, 3}) {
+            options.add(UiOptionItem.from(String.format("%s sec", delaySec),
+                    optionItem -> {
+                        playerData.setAudioDelay(delaySec);
+                        onSetCallback.run();
+                    },
+                    Helpers.floatEquals(delaySec, playerData.getAudioDelay())));
+        }
+
+        return OptionCategory.from(AUDIO_DELAY_ID, OptionCategory.TYPE_RADIO, title, options);
     }
 }

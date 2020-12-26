@@ -31,7 +31,7 @@ public interface PlaybackEngineController {
     List<FormatItem> getVideoFormats();
     List<FormatItem> getAudioFormats();
     List<FormatItem> getSubtitleFormats();
-    void selectFormat(FormatItem option);
+    void setFormat(FormatItem option);
     FormatItem getVideoFormat();
     boolean isEngineInitialized();
     void restartEngine();
@@ -46,6 +46,7 @@ public interface PlaybackEngineController {
     int getBufferType();
     void setVideoZoomMode(int mode);
     int getVideoZoomMode();
+    void setAudioDelay(float delaySec);
     interface OnBufferSelected {
         void onBufferSelected(int type);
     }

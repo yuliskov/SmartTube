@@ -153,4 +153,5 @@
     <string name="wait_data_loading">Подождите пока загружаются данные…</string>
     <string name="auto_frame_rate_pause">Автофреймрейт (пауза)</string>
     <string name="auto_frame_rate_applying">Применяется автофреймрейт %sx%s@%s</string>
+    <string name="audio_delay">Задержка аудио</string>
 </resources>

@@ -30,6 +30,7 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
             "UGOOS (UGOOS)",
             "55UC30G (ctl_iptv_mrvl)" // Kivi 55uc30g
     };
+    private int mAudioDelayMs;
 
     public CustomOverridesRenderersFactory(FragmentActivity activity) {
         super(activity);
@@ -66,6 +67,10 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
                 eventListener,
                 out);
 
+        if (mAudioDelayMs == 0) {
+            return;
+        }
+
         Renderer originMediaCodecAudioRenderer = null;
         int index = 0;
 
@@ -80,16 +85,18 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
         if (originMediaCodecAudioRenderer != null) {
             // replace origin with custom
             out.remove(originMediaCodecAudioRenderer);
-            out.add(index,
+            AudioDelayMediaCodecAudioRenderer audioDelayRenderer =
                     new AudioDelayMediaCodecAudioRenderer(
-                            context,
-                            mediaCodecSelector,
-                            drmSessionManager,
-                            playClearSamplesWithoutKeys,
-                            enableDecoderFallback,
-                            eventHandler,
-                            eventListener,
-                            new DefaultAudioSink(AudioCapabilities.getCapabilities(context), audioProcessors)));
+                        context,
+                        mediaCodecSelector,
+                        drmSessionManager,
+                        playClearSamplesWithoutKeys,
+                        enableDecoderFallback,
+                        eventHandler,
+                        eventListener,
+                        new DefaultAudioSink(AudioCapabilities.getCapabilities(context), audioProcessors));
+            audioDelayRenderer.setAudioDelayMs(mAudioDelayMs);
+            out.add(index, audioDelayRenderer);
         }
     }
 
@@ -146,5 +153,9 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
                             eventListener,
                             MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY));
         }
+    }
+
+    public void setAudioDelayMs(int delayMs) {
+        mAudioDelayMs = delayMs;
     }
 }

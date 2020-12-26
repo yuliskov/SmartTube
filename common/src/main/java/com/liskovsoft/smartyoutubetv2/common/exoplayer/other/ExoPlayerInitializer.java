@@ -11,10 +11,12 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerController;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.V2.CustomOverridesRenderersFactory;
 
 public class ExoPlayerInitializer {
     private final int mDeviceRam;
     private int mBufferType = PlayerController.BUFFER_MED;
+    private float mAudioDelay;
 
     public ExoPlayerInitializer(Context activity) {
         int deviceRam = Helpers.getDeviceRam(activity);
@@ -30,6 +32,10 @@ public class ExoPlayerInitializer {
 
         // HDR fix?
         //trackSelector.setParameters(trackSelector.buildUponParameters().setTunnelingAudioSessionId(C.generateAudioSessionIdV21(activity)));
+
+        if (renderersFactory instanceof CustomOverridesRenderersFactory) {
+            ((CustomOverridesRenderersFactory) renderersFactory).setAudioDelayMs((int) mAudioDelay * 1_000);
+        }
 
         SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(activity, renderersFactory, trackSelector, loadControl);
         enableAudioFocus(player);
@@ -84,5 +90,13 @@ public class ExoPlayerInitializer {
 
     public int getBufferType() {
         return mBufferType;
+    }
+
+    public void setAudioDelay(float delaySec) {
+        mAudioDelay = delaySec;
+    }
+
+    public float getAudioDelay() {
+        return mAudioDelay;
     }
 }

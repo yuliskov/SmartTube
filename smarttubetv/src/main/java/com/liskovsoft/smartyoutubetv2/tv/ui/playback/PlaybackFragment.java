@@ -294,6 +294,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mPlayerGlue.setSeekEnabled(true);
         mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end
         StoryboardSeekDataProvider.setSeekProvider(mPlayerGlue);
+        hideControlsOverlay(mIsAnimationEnabled); // fix player ui not synced correctly
 
         mExoPlayerController.setPlayer(mPlayer);
         mExoPlayerController.setTrackSelector(trackSelector);
@@ -604,7 +605,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
-    public void selectFormat(FormatItem option) {
+    public void setFormat(FormatItem option) {
         // Android 4.4 fix for format selection dialog (player destroyed when dialog is focused)
         mExoPlayerController.selectFormat(option);
     }
@@ -668,6 +669,14 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     @Override
     public int getBufferType() {
         return mPlayerInitializer.getBufferType();
+    }
+
+    @Override
+    public void setAudioDelay(float delaySec) {
+        if (!Helpers.floatEquals(mPlayerInitializer.getAudioDelay(), delaySec)) {
+            mPlayerInitializer.setAudioDelay(delaySec);
+            restartEngine();
+        }
     }
 
     @Override
