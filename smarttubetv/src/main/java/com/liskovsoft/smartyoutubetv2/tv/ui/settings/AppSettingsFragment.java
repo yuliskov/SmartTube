@@ -58,6 +58,10 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
             return;
         }
 
+        // Fix mSettingsPresenter in null after init stage.
+        // Seems concurrency between dialogs.
+        mSettingsPresenter.setView(this);
+
         mPreferenceFragment = buildPreferenceFragment();
         startPreferenceFragment(mPreferenceFragment);
 
