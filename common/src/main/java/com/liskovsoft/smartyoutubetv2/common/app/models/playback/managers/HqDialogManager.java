@@ -294,7 +294,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
         List<OptionItem> options = new ArrayList<>();
 
-        for (float delaySec : new float[] {-3, -2, -1, 0, 1, 2, 3}) {
+        for (float delaySec : new float[] {-3, -2.5f, -2, -1.5f, -1, -0.5f, 0, 0.5f, 1, 1.5f, 2, 2.5f, 3}) {
             options.add(UiOptionItem.from(String.format("%s sec", delaySec),
                     optionItem -> {
                         playerData.setAudioDelay(delaySec);
