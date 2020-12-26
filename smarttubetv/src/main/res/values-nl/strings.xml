@@ -5,7 +5,7 @@
     <string name="signin_view_action_text">Klaar</string>
     <string name="action_subscribe_off">Abonnement uit</string>
     <string name="action_subscribe_on">Abonnement aan</string>
-    <string name="action_channel">Kanaal openen</string>
+    <string name="action_channel">Kanaal</string>
     <string name="action_playlist_add">Toevoegen aan playlist</string>
     <string name="action_video_stats">Video Stats</string>
     <string name="require_checked">Vereist \"%s\"</string>
