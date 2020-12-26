@@ -152,4 +152,7 @@
     <string name="share_link">Link teilen</string>
     <string name="subscribe_to_channel">Kanal abonnieren</string>
     <string name="wait_data_loading">Bitte warten, während die Daten geladen werden…</string>
+    <string name="auto_frame_rate_pause">Pause für automatische Bildrate</string>
+    <string name="auto_frame_rate_applying">Automatische Bildrate wird angewendet %sx%s@%s</string>
+    <string name="audio_delay">Audio-Verzögerung</string>
 </resources>
