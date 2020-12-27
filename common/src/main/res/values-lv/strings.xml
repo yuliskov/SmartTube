@@ -63,7 +63,7 @@
     <string name="action_search">Sākt meklēt</string>
     <string name="settings_main_ui">Lietotāja interfeiss</string>
     <string name="dialog_main_ui">Lietotāja interfeiss</string>
-    <string name="animated_previews">Animēti priekšskatījumi</string>
+    <string name="card_animated_previews">Animēti priekšskatījumi</string>
     <string name="web_site">Web lapa</string>
     <string name="donation">Ziedošana (Donation)</string>
     <string name="dialog_about">Par</string>
@@ -103,7 +103,7 @@
     <string name="instant_voice_search">Tūlītēja meklēšana ar balsi</string>
     <string name="option_background_playback_behind">Atskaņošana fonā</string>
     <string name="next_video_info_is_not_loaded_yet">Nākamais video nav vēl ielādējies</string>
-    <string name="multiline_titles">Daudzrindu nosaukumi</string>
+    <string name="card_multiline_title">Daudzrindu nosaukumi</string>
     <string name="cards_style">Karšu stils</string>
     <string name="repeat_mode_all">Atskaņot visus video pēc kārtas</string>
     <string name="repeat_mode_one">Atkārtot pašreizējo videoklipu</string>

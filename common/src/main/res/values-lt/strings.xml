@@ -63,7 +63,7 @@
     <string name="action_search">Pradėti paiešką</string>
     <string name="settings_main_ui">Vartotojo sąsaja</string>
     <string name="dialog_main_ui">Vartotojo sąsaja</string>
-    <string name="animated_previews">Animuotos peržiūros</string>
+    <string name="card_animated_previews">Animuotos peržiūros</string>
     <string name="web_site">Svetainė</string>
     <string name="donation">Aukojimas</string>
     <string name="dialog_about">Apie</string>
@@ -103,7 +103,7 @@
     <string name="instant_voice_search">Momentinė paieška balsu</string>
     <string name="option_background_playback_behind">Žaisti už</string>
     <string name="next_video_info_is_not_loaded_yet">Kita vaizdo įrašo informacija dar neįkelta</string>
-    <string name="multiline_titles">Kelių eilių pavadinimai</string>
+    <string name="card_multiline_title">Kelių eilių pavadinimai</string>
     <string name="cards_style">Kortelių stilius</string>
     <string name="repeat_mode_all">Leiskite visus vaizdo įrašus po vieną</string>
     <string name="repeat_mode_one">Pakartoti dabartinį vaizdo įrašą</string>

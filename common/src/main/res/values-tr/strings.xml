@@ -64,7 +64,7 @@
     <string name="action_search">Aramaya Başla</string>
     <string name="settings_main_ui">Ayarlar Menüsü Arayüzü</string>
     <string name="dialog_main_ui">Kullanıcı Arayüzü</string>
-    <string name="animated_previews">Animasyonlu Önizleme</string>
+    <string name="card_animated_previews">Animasyonlu Önizleme</string>
     <string name="web_site">Web Sitesi</string>
     <string name="donation">Bağış</string>
     <string name="dialog_about">Hakkında</string>

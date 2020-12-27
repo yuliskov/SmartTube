@@ -63,7 +63,7 @@
     <string name="action_search">Spustit hledání</string>
     <string name="settings_main_ui">Uživatelské rozhraní</string>
     <string name="dialog_main_ui">Uživatelské rozhraní</string>
-    <string name="animated_previews">Animované náhledy</string>
+    <string name="card_animated_previews">Animované náhledy</string>
     <string name="web_site">Webová stránka</string>
     <string name="donation">Darování</string>
     <string name="dialog_about">Informace</string>
@@ -103,7 +103,7 @@
     <string name="instant_voice_search">Okamžité hlasové vyhledávání</string>
     <string name="option_background_playback_behind">Přehraj poté</string>
     <string name="next_video_info_is_not_loaded_yet">Informace o dalším videu ještě nejsou načteny</string>
-    <string name="multiline_titles">Víceřádkové názvy</string>
+    <string name="card_multiline_title">Víceřádkové názvy</string>
     <string name="cards_style">Styl karet</string>
     <string name="repeat_mode_all">Přehrát vše po jednom</string>
     <string name="repeat_mode_one">Opakovat aktuální video</string>
@@ -145,7 +145,7 @@
     <string name="player_seek_preview_carousel">Několik snímků</string>
     <string name="unsubscribe_from_channel">Odhlásit z odběru kanálu</string>
     <string name="card_title_lines_num">Počet řádků v názvu videa</string>
-    <string name="card_title_auto_scroll">Auto-posouvání uříznutého názvu videa</string>
+    <string name="card_auto_scrolled_title">Auto-posouvání uříznutého názvu videa</string>
     <string name="send_to">Odeslat…</string>
     <string name="subscribe_to_channel">Přihlásit se k odběru kanálu</string>
     <string name="wait_data_loading">Prosím počkejte, než se načtou data…</string>

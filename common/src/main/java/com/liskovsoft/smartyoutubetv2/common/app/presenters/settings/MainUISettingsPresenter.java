@@ -56,14 +56,18 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
     private void appendCardsStyle(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        OptionItem animatedPreviewsOption = UiOptionItem.from(getContext().getString(R.string.animated_previews),
+        OptionItem animatedPreviewsOption = UiOptionItem.from(getContext().getString(R.string.card_animated_previews),
                 option -> mMainUIData.enableCardAnimatedPreviews(option.isSelected()), mMainUIData.isCardAnimatedPreviewsEnabled());
 
-        OptionItem dontCutTextOnCards = UiOptionItem.from(getContext().getString(R.string.multiline_titles),
+        OptionItem multilineTitle = UiOptionItem.from(getContext().getString(R.string.card_multiline_title),
                 option -> mMainUIData.enableCardMultilineTitle(option.isSelected()), mMainUIData.isCardMultilineTitleEnabled());
 
+        OptionItem autoScrolledTitle = UiOptionItem.from(getContext().getString(R.string.card_auto_scrolled_title),
+                option -> mMainUIData.enableCardTextAutoScroll(option.isSelected()), mMainUIData.isCardTextAutoScrollEnabled());
+
         options.add(animatedPreviewsOption);
-        options.add(dontCutTextOnCards);
+        options.add(multilineTitle);
+        options.add(autoScrolledTitle);
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.cards_style), options);
     }

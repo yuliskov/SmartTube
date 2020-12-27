@@ -65,7 +65,7 @@
     <string name="action_search">Սկսեք որոնումը</string>
     <string name="settings_main_ui">Օգտագործողի ինտերֆեյս</string>
     <string name="dialog_main_ui">Օգտագործողի ինտերֆեյս</string>
-    <string name="animated_previews">Անիմացիոն նախադիտումներ</string>
+    <string name="card_animated_previews">Անիմացիոն նախադիտումներ</string>
     <string name="web_site">Վեբ կայք</string>
     <string name="donation">Նվիրատվություն</string>
     <string name="dialog_about">Մասին</string>
@@ -105,7 +105,7 @@
     <string name="instant_voice_search">Ակնթարթային ձայնային որոնում</string>
     <string name="option_background_playback_behind">Խաղացեք ետեւում</string>
     <string name="next_video_info_is_not_loaded_yet">Տեսանյութի հաջորդ տեղեկությունները դեռ չեն բեռնված</string>
-    <string name="multiline_titles">Բազմաշերտ վերնագրեր</string>
+    <string name="card_multiline_title">Բազմաշերտ վերնագրեր</string>
     <string name="cards_style">Քարտերի ոճը</string>
     <string name="repeat_mode_all">Նվագեք բոլոր տեսանյութերը մեկ առ մեկ</string>
     <string name="repeat_mode_one">Կրկնել ընթացիկ տեսանյութը</string>

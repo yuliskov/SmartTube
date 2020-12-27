@@ -64,7 +64,7 @@
     <string name="action_search">Start search</string>
     <string name="settings_main_ui">User interface</string>
     <string name="dialog_main_ui">User interface</string>
-    <string name="animated_previews">Animated previews</string>
+    <string name="card_animated_previews">Animated previews</string>
     <string name="web_site">Web site</string>
     <string name="donation">Donation</string>
     <string name="dialog_about">About</string>
@@ -104,7 +104,7 @@
     <string name="instant_voice_search">Instant voice search</string>
     <string name="option_background_playback_behind">Play behind</string>
     <string name="next_video_info_is_not_loaded_yet">Next video info is not loaded yet</string>
-    <string name="multiline_titles">Multiline titles</string>
+    <string name="card_multiline_title">Multiline titles</string>
     <string name="cards_style">Cards style</string>
     <string name="repeat_mode_all">Play all videos one by one</string>
     <string name="repeat_mode_one">Repeat current video</string>
@@ -148,7 +148,7 @@
     <string name="player_seek_preview_carousel_fast">Carousel (fast)</string>
     <string name="unsubscribe_from_channel">Unsubscribe from channel</string>
     <string name="card_title_lines_num">Card title lines num</string>
-    <string name="card_title_auto_scroll">Auto-scroll cropped title</string>
+    <string name="card_auto_scrolled_title">Auto-scroll cropped title</string>
     <string name="share_link">Share link</string>
     <string name="subscribe_to_channel">Subscribe to channel</string>
     <string name="wait_data_loading">Please wait while data is loading…</string>

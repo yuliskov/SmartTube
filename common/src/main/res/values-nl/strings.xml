@@ -64,7 +64,7 @@
     <string name="action_search">Zoeken</string>
     <string name="settings_main_ui">Display</string>
     <string name="dialog_main_ui">Display</string>
-    <string name="animated_previews">Geanimeerde previews</string>
+    <string name="card_animated_previews">Geanimeerde previews</string>
     <string name="web_site">Website</string>
     <string name="donation">Steun dit project</string>
     <string name="dialog_about">Informatie</string>
@@ -104,7 +104,7 @@
     <string name="instant_voice_search">Instant voice search</string>
     <string name="option_background_playback_behind">Afspelen op achtergrond</string>
     <string name="next_video_info_is_not_loaded_yet">Volgende video nog niet geladen</string>
-    <string name="multiline_titles">Titel op rijen</string>
+    <string name="card_multiline_title">Titel op rijen</string>
     <string name="cards_style">Video\'s lay-out</string>
     <string name="repeat_mode_all">Alles afspelen</string>
     <string name="repeat_mode_one">Deze video herhalen</string>
@@ -148,7 +148,7 @@
     <string name="player_seek_preview_carousel_fast">Multi-frame (snel)</string>
     <string name="unsubscribe_from_channel">Abonnement uit</string>
     <string name="card_title_lines_num">Aantal rijen</string>
-    <string name="card_title_auto_scroll">Auto-scroll titel</string>
+    <string name="card_auto_scrolled_title">Auto-scroll titel</string>
     <string name="share_link">Delen</string>
     <string name="subscribe_to_channel">Abonnement aan</string>
     <string name="wait_data_loading">Even wachten terwijl gegevens laden</string>

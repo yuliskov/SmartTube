@@ -64,7 +64,7 @@
   <string name="action_search">開始搜尋</string>
   <string name="settings_main_ui">使用者介面</string>
   <string name="dialog_main_ui">使用者介面</string>
-  <string name="animated_previews">動畫預覽</string>
+  <string name="card_animated_previews">動畫預覽</string>
   <string name="web_site">網站</string>
   <string name="donation">捐贈</string>
   <string name="dialog_about">關於</string>
@@ -104,7 +104,7 @@
   <string name="instant_voice_search">即時語音搜索</string>
   <string name="option_background_playback_behind">稍後觀看</string>
   <string name="next_video_info_is_not_loaded_yet">下一部影片訊息尚未載入</string>
-  <string name="multiline_titles">複數行標題</string>
+  <string name="card_multiline_title">複數行標題</string>
   <string name="cards_style">卡片樣式</string>
   <string name="repeat_mode_all">播放所有影片</string>
   <string name="repeat_mode_one">重複播放</string>

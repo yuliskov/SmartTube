@@ -65,7 +65,7 @@
     <string name="action_search">तलाश शुरू करो</string>
     <string name="settings_main_ui">प्रयोक्ता इंटरफ़ेस</string>
     <string name="dialog_main_ui">प्रयोक्ता इंटरफ़ेस</string>
-    <string name="animated_previews">एनिमेटेड पूर्वावलोकन</string>
+    <string name="card_animated_previews">एनिमेटेड पूर्वावलोकन</string>
     <string name="web_site">वेबसाइट</string>
     <string name="donation">दान</string>
     <string name="dialog_about">के बारे में</string>
@@ -105,7 +105,7 @@
     <string name="instant_voice_search">तुरंत आवाज खोज</string>
     <string name="option_background_playback_behind">पीछे खेलते हैं</string>
     <string name="next_video_info_is_not_loaded_yet">अगला वीडियो जानकारी अभी तक लोड नहीं किया गया है</string>
-    <string name="multiline_titles">बहु उपाधि</string>
+    <string name="card_multiline_title">बहु उपाधि</string>
     <string name="cards_style">कार्ड शैली</string>
     <string name="repeat_mode_all">एक-एक कर सभी वीडियो चलाएं</string>
     <string name="repeat_mode_one">वर्तमान वीडियो को दोहराएं</string>

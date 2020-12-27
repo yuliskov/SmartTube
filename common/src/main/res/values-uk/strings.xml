@@ -64,7 +64,7 @@
     <string name="action_search">Почати пошук</string>
     <string name="settings_main_ui">Інтерфейс</string>
     <string name="dialog_main_ui">Інтерфейс додатку</string>
-    <string name="animated_previews">Анімовані превью</string>
+    <string name="card_animated_previews">Анімовані превью</string>
     <string name="web_site">Вебсайт</string>
     <string name="donation">Підтримати проект</string>
     <string name="dialog_about">Про додаток</string>
@@ -104,7 +104,7 @@
     <string name="instant_voice_search">Відразу запускати голосовий пошук</string>
     <string name="option_background_playback_behind">Грати позаду</string>
     <string name="next_video_info_is_not_loaded_yet">Інформація про наступне відео ще не завантажена</string>
-    <string name="multiline_titles">Декілька рядків у заголовках</string>
+    <string name="card_multiline_title">Декілька рядків у заголовках</string>
     <string name="cards_style">Стиль карток</string>
     <string name="repeat_mode_all">Грати усі відео один за одним</string>
     <string name="repeat_mode_one">Повторювати поточне відео</string>
@@ -147,7 +147,7 @@
     <string name="player_seek_preview_carousel_fast">Карусель (швидко)</string>
     <string name="unsubscribe_from_channel">Відписатися від каналу</string>
     <string name="card_title_lines_num">Кількість рядків у картках</string>
-    <string name="card_title_auto_scroll">Прокручувати обрізаний заголовок</string>
+    <string name="card_auto_scrolled_title">Прокручувати обрізаний заголовок</string>
     <string name="share_link">Поділитися посиланням</string>
     <string name="subscribe_to_channel">Підписатися на канал</string>
     <string name="wait_data_loading">Зачекайте поки дані завантажуються…</string>

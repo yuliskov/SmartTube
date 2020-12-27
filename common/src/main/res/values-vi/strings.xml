@@ -64,7 +64,7 @@
     <string name="action_search">Bắt đầu tìm kiếm</string>
     <string name="settings_main_ui">Giao diện người dùng</string>
     <string name="dialog_main_ui">Giao diện người dùng</string>
-    <string name="animated_previews">Xem trước ảnh động</string>
+    <string name="card_animated_previews">Xem trước ảnh động</string>
     <string name="web_site">Trang web</string>
     <string name="donation">Ủng hộ</string>
     <string name="dialog_about">Giới thiệu</string>

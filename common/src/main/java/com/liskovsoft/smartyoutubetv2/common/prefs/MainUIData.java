@@ -26,9 +26,10 @@ public class MainUIData {
     private static MainUIData sInstance;
     private final Context mContext;
     private final AppPrefs mPrefs;
-    private boolean mIsAnimatedPreviewsEnabled;
+    private boolean mIsCardAnimatedPreviewsEnabled;
+    private boolean mIsCardMultilineTitleEnabled;
+    private boolean mIsCardTextAutoScrollEnabled;
     private boolean mIsSettingsCategoryEnabled;
-    private boolean mIsMultilineTitlesEnabled;
     private int mCardTitleLinesNum;
     private int mBootCategoryId;
     private final Map<Integer, Integer> mLeftPanelCategories = new LinkedHashMap<>();
@@ -58,21 +59,30 @@ public class MainUIData {
     }
 
     public void enableCardAnimatedPreviews(boolean enable) {
-        mIsAnimatedPreviewsEnabled = enable;
+        mIsCardAnimatedPreviewsEnabled = enable;
         persistState();
     }
 
     public boolean isCardAnimatedPreviewsEnabled() {
-        return mIsAnimatedPreviewsEnabled;
+        return mIsCardAnimatedPreviewsEnabled;
     }
 
     public void enableCardMultilineTitle(boolean enable) {
-        mIsMultilineTitlesEnabled = enable;
+        mIsCardMultilineTitleEnabled = enable;
         persistState();
     }
 
     public boolean isCardMultilineTitleEnabled() {
-        return mIsMultilineTitlesEnabled;
+        return mIsCardMultilineTitleEnabled;
+    }
+
+    public void enableCardTextAutoScroll(boolean enable) {
+        mIsCardTextAutoScrollEnabled = enable;
+        persistState();
+    }
+
+    public boolean isCardTextAutoScrollEnabled() {
+        return mIsCardTextAutoScrollEnabled;
     }
 
     public void setCartTitleLinesNum(int lines) {
@@ -228,10 +238,9 @@ public class MainUIData {
 
     private void persistState() {
         String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
-        mPrefs.setMainUIData(Helpers.mergeObject(
-                mIsAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale,
-                mColorSchemeIndex, mIsMultilineTitlesEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting,
-                mPlaylistsStyle, mAppExitShortcut, mCardTitleLinesNum));
+        mPrefs.setMainUIData(Helpers.mergeObject(mIsCardAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale,
+                mColorSchemeIndex, mIsCardMultilineTitleEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting,
+                mPlaylistsStyle, mAppExitShortcut, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled));
     }
 
     private void restoreState() {
@@ -239,18 +248,19 @@ public class MainUIData {
 
         String[] split = Helpers.splitObject(data);
 
-        mIsAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0, true);
+        mIsCardAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0, true);
         String selectedCategories = Helpers.parseStr(split, 1);
         mBootCategoryId = Helpers.parseInt(split, 2, MediaGroup.TYPE_HOME);
         mVideoGridScale = Helpers.parseFloat(split, 3, 1.0f);
         mUIScale = Helpers.parseFloat(split, 4, 1.0f);
         mColorSchemeIndex = Helpers.parseInt(split, 5, 0);
-        mIsMultilineTitlesEnabled = Helpers.parseBoolean(split, 6, false);
+        mIsCardMultilineTitleEnabled = Helpers.parseBoolean(split, 6, false);
         mIsSettingsCategoryEnabled = Helpers.parseBoolean(split, 7, true);
         mChannelCategorySorting = Helpers.parseInt(split, 8, CHANNEL_SORTING_UPDATE);
         mPlaylistsStyle = Helpers.parseInt(split, 9, PLAYLISTS_STYLE_GRID);
         mAppExitShortcut = Helpers.parseInt(split, 10, EXIT_DOUBLE_BACK);
         mCardTitleLinesNum = Helpers.parseInt(split, 11, 1);
+        mIsCardTextAutoScrollEnabled = Helpers.parseBoolean(split, 12, true);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArray(selectedCategories);

@@ -8,13 +8,13 @@ import android.util.AttributeSet;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import androidx.leanback.widget.ImageCardView;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class ComplexImageCardView extends ImageCardView {
     private ComplexImageView mComplexImageView;
     private Handler mHandler;
-    private Runnable mEnableMarquee;
-    private boolean mIsCardTitleAutoScrollEnabled = true;
+    private boolean mIsCardTextAutoScrollEnabled;
 
     public ComplexImageCardView(Context context) {
         super(context);
@@ -53,13 +53,15 @@ public class ComplexImageCardView extends ImageCardView {
         }
 
         if (enable) {
-            mEnableMarquee = () -> enableMarquee(view);
+            Runnable enableMarquee = () -> enableMarquee(view);
 
-            mHandler.postDelayed(mEnableMarquee, 1_000);
+            mHandler.postDelayed(enableMarquee, 1_000);
+
+            view.setTag(enableMarquee);
         } else {
-            if (mEnableMarquee != null) {
-                mHandler.removeCallbacks(mEnableMarquee);
-                mEnableMarquee = null;
+            if (view.getTag() instanceof Runnable) {
+                mHandler.removeCallbacks((Runnable) view.getTag());
+                view.setTag(null);
             }
 
             disableMarquee(view);
@@ -73,6 +75,7 @@ public class ComplexImageCardView extends ImageCardView {
 
         for (TextView textView : textViews) {
             textView.setEllipsize(TruncateAt.END);
+            textView.setHorizontallyScrolling(false);
         }
     }
 
@@ -110,10 +113,11 @@ public class ComplexImageCardView extends ImageCardView {
     public void setSelected(boolean selected) {
         super.setSelected(selected);
 
-        if (mIsCardTitleAutoScrollEnabled) {
+        if (mIsCardTextAutoScrollEnabled) {
             enableTitleAnimation(selected);
+            enableContentAnimation(selected);
         }
-        enableContentAnimation(selected);
+
         enableVideoPreview(selected);
     }
 
@@ -132,14 +136,16 @@ public class ComplexImageCardView extends ImageCardView {
     public void setTitleLinesNum(int lines) {
         TextView titleView = findViewById(R.id.title_text);
 
-        if (titleView == null || lines < 1) {
+        if (titleView == null || lines <= 0) {
             return;
         }
 
-        mIsCardTitleAutoScrollEnabled = lines == 1;
-
         titleView.setMaxLines(lines);
         titleView.setLines(lines);
+    }
+
+    public void setTextAutoScroll(boolean enabled) {
+        mIsCardTextAutoScrollEnabled = enabled;
     }
 
     /**
