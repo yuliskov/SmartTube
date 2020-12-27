@@ -65,6 +65,10 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             return;
         }
 
+        if (mTrackSelector == null) {
+            return;
+        }
+
         initTrackGroups(rendererIndex, mTrackSelector.getCurrentMappedTrackInfo(), mTrackSelector.getParameters());
         initMediaTracks(rendererIndex);
     }

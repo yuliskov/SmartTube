@@ -36,7 +36,7 @@ public class RadioListPreferenceDialogFragment extends LeanbackListPreferenceDia
             }
             final CharSequence entry = mEntryValues[index];
             final ListPreference preference = (ListPreference) getPreference();
-            if (index >= 0) {
+            if (index >= 0 && preference != null) {
                 String value = mEntryValues[index].toString();
                 if (preference.callChangeListener(value)) {
                     preference.setValue(value);

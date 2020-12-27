@@ -129,6 +129,10 @@ public class StoryboardManager {
             return;
         }
 
+        if (index == mSeekPositions.length) {
+            return;
+        }
+
         loadPreview(mSeekPositions[index], callback);
     }
 
