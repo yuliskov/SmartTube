@@ -152,6 +152,7 @@
                   android:noHistory="true"
                   android:launchMode="singleInstance"
                   android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+                  android:screenOrientation="landscape"
                   android:theme="@style/App.Theme.Leanback.Preferences"/>
 
         <meta-data android:name="android.app.default_searchable"

@@ -14,7 +14,7 @@ public class AppSettingsActivity extends MotherActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setupActivity();
+        //setupActivity();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_app_settings);
         mFragment = (AppSettingsFragment) getFragmentManager().findFragmentById(R.id.app_settings_fragment);
