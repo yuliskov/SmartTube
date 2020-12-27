@@ -129,9 +129,9 @@
     <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Ouvrir les vidéos de la chaîne</string>
     <string name="app_exit_shortcut">Sortir de l’application</string>
-    <string name="app_exit_none">Ne pas sortir</string>
-    <string name="app_double_back_exit">2 fois sur retour</string>
-    <string name="app_single_back_exit">1 fois sur retour</string>
+    <string name="app_exit_none">Ne pas sortir de l'application</string>
+    <string name="app_double_back_exit">2 fois sur retour pour sortir</string>
+    <string name="app_single_back_exit">1 fois sur retour pour sortir</string>
     <string name="action_video_zoom">Zoom vidéo</string>
     <string name="video_zoom">Zoom vidéo</string>
     <string name="video_zoom_default">Par défaut</string>
@@ -141,4 +141,18 @@
     <string name="video_zoom_stretch">Étirer</string>
     <string name="color_scheme_teal">Sarcelle</string>
     <string name="color_scheme_teal_oled">Sarcelle (OLED)</string>
+    <string name="player_seek_preview_none">Désactivé</string>
+    <string name="player_seek_preview_single">Simple image</string>
+    <string name="player_seek_preview_carousel">Carousel</string>
+    <string name="player_seek_preview_carousel_slow">Carousel (lent)</string>
+    <string name="player_seek_preview_carousel_fast">Carousel (rapide)</string>
+    <string name="unsubscribe_from_channel">Se désabonner de la chaîne</string>
+    <string name="card_title_lines_num">Nombre de lignes du titre des tuiles</string>
+    <string name="card_auto_scrolled_title">Titre recadré avec défilement automatique</string>
+    <string name="share_link">Lien de partage</string>
+    <string name="subscribe_to_channel">S'abonner à la chaîne</string>
+    <string name="wait_data_loading">Veuillez patienter pendant le chargement des données…</string>
+    <string name="auto_frame_rate_pause">Pause automatique de la fréquence d'images</string>
+    <string name="auto_frame_rate_applying">Application de la fréquence d'images automatique %sx%s@%s</string>
+    <string name="audio_shift">Décalage audio</string>
 </resources>
