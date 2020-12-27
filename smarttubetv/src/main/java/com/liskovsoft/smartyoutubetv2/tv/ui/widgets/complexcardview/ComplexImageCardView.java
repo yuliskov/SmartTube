@@ -8,8 +8,8 @@ import android.util.AttributeSet;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import androidx.leanback.widget.ImageCardView;
-import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 public class ComplexImageCardView extends ImageCardView {
     private ComplexImageView mComplexImageView;
@@ -85,9 +85,11 @@ public class ComplexImageCardView extends ImageCardView {
         }
 
         for (TextView textView : textViews) {
-            textView.setEllipsize(TruncateAt.MARQUEE);
-            textView.setMarqueeRepeatLimit(-1);
-            textView.setHorizontallyScrolling(true);
+            if (ViewUtil.isEllipsized(textView)) {
+                textView.setEllipsize(TruncateAt.MARQUEE);
+                textView.setMarqueeRepeatLimit(-1);
+                textView.setHorizontallyScrolling(true);
+            }
         }
     }
 
