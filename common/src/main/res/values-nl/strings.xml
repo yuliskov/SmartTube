@@ -148,7 +148,7 @@
     <string name="player_seek_preview_carousel_fast">Multi-frame (snel)</string>
     <string name="unsubscribe_from_channel">Abonnement uit</string>
     <string name="card_title_lines_num">Aantal rijen</string>
-    <string name="card_auto_scrolled_title">Auto scroll titel</string>
+    <string name="card_auto_scrolled_title">Titel scrollen</string>
     <string name="share_link">Delen</string>
     <string name="subscribe_to_channel">Abonnement aan</string>
     <string name="wait_data_loading">Even wachten terwijl gegevens laden</string>
