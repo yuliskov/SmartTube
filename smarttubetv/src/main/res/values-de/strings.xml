@@ -5,7 +5,7 @@
     <string name="signin_view_action_text">Erledigt</string>
     <string name="require_checked">Benötigt \"%s\"</string>
     <string name="msg_press_again_to_exit">Zum Beenden erneut drücken</string>
-    <string name="player_remaining_time">Verbleibend: %s</string>
+    <string name="player_remaining_time">Ende: %s</string>
     <string name="badge_new_content">NEU</string>
     <string name="badge_live">LIVE</string>
 </resources>
