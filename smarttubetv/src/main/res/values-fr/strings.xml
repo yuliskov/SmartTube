@@ -131,4 +131,5 @@
     <string name="player_remaining_time">Fini dans: %s</string>
     <string name="badge_new_content">NOUVEAU CONTENU</string>
     <string name="badge_live">EN DIRECT</string>
+    <string name="action_pip">Démarrer PIP</string>
 </resources>
