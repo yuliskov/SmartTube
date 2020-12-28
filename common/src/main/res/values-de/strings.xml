@@ -22,8 +22,8 @@
     <string name="video_max_quality">Auto (maximale Qualität)</string>
     <string name="audio_max_quality">Auto (maximale Qualität)</string>
     <string name="subtitles_disabled">Untertitel deaktiviert</string>
-    <string name="auto_frame_rate">Automatische Bildrate (FPS)</string>
-    <string name="frame_rate_correction">Bildrate (FPS) korrigieren:\n%s</string>
+    <string name="auto_frame_rate">Automatische Bildrate</string>
+    <string name="frame_rate_correction">Bildrate korrigieren:\n%s</string>
     <string name="category_background_playback">Hintergrund-Wiedergabe</string>
     <string name="not_implemented">Nicht implementiert</string>
     <string name="option_background_playback_off">Deaktiviert</string>
