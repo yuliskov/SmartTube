@@ -129,7 +129,7 @@
     <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Ouvrir les vidéos de la chaîne</string>
     <string name="app_exit_shortcut">Sortir de l’application</string>
-    <string name="app_exit_none">Ne pas sortir de l'application</string>
+    <string name="app_exit_none">Ne pas sortir de l\'application</string>
     <string name="app_double_back_exit">2 fois sur retour pour sortir</string>
     <string name="app_single_back_exit">1 fois sur retour pour sortir</string>
     <string name="action_video_zoom">Zoom vidéo</string>
