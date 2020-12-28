@@ -150,9 +150,9 @@
     <string name="card_title_lines_num">Nombre de lignes du titre des tuiles</string>
     <string name="card_auto_scrolled_title">Titre recadré avec défilement automatique</string>
     <string name="share_link">Lien de partage</string>
-    <string name="subscribe_to_channel">S'abonner à la chaîne</string>
+    <string name="subscribe_to_channel">S\'abonner à la chaîne</string>
     <string name="wait_data_loading">Veuillez patienter pendant le chargement des données…</string>
-    <string name="auto_frame_rate_pause">Pause automatique de la fréquence d'images</string>
-    <string name="auto_frame_rate_applying">Application de la fréquence d'images automatique %sx%s@%s</string>
+    <string name="auto_frame_rate_pause">Pause automatique de la fréquence d\'images</string>
+    <string name="auto_frame_rate_applying">Application de la fréquence d\'images automatique %sx%s@%s</string>
     <string name="audio_shift">Décalage audio</string>
 </resources>
