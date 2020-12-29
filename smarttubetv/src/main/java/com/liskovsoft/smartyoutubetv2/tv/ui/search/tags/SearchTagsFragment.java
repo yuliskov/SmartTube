@@ -47,7 +47,9 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
 
     @Override
     public void updateSearch(VideoGroup group) {
+        freeze(true);
         mItemResultsAdapter.append(group);
+        freeze(false);
     }
 
     @Override

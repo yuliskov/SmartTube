@@ -20,6 +20,7 @@ import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
+import androidx.leanback.widget.RowPresenter.ViewHolder;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
@@ -72,6 +73,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private SimpleExoPlayer mPlayer;
     private PlaybackPresenter mPlaybackPresenter;
     private ArrayObjectAdapter mRowsAdapter;
+    private ListRowPresenter mRowPresenter;
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
     private PlayerEventListener mEventListener;
     private PlayerController mExoPlayerController;
@@ -317,14 +319,13 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         mDebugInfoManager = new DebugInfoManager(mPlayer, R.id.debug_view_group, getActivity());
 
-        mRowsAdapter = initializeSuggestedVideosRow();
-        setAdapter(mRowsAdapter);
+        initializeSuggestedVideosRow();
 
         mRowsSupportFragment = (RowsSupportFragment) getChildFragmentManager().findFragmentById(
                 R.id.playback_controls_dock);
     }
 
-    private ArrayObjectAdapter initializeSuggestedVideosRow() {
+    private void initializeSuggestedVideosRow() {
         /*
          * To add a new row to the mPlayerAdapter and not lose the controls row that is provided by the
          * glue, we need to compose a new row with the controls row and our related videos row.
@@ -335,29 +336,29 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
         presenterSelector.addClassPresenter(
                 mPlayerGlue.getControlsRow().getClass(), mPlayerGlue.getPlaybackRowPresenter());
-        presenterSelector.addClassPresenter(ListRow.class, new ListRowPresenter() {
+        mRowPresenter = new ListRowPresenter() {
             @Override
             protected void onBindRowViewHolder(RowPresenter.ViewHolder holder, Object item) {
                 super.onBindRowViewHolder(holder, item);
 
                 // Set position of item inside first row (playlist items)
-                if (getVideo() != null && getVideo().playlistIndex > 0 &&
-                    mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView().getSelectedPosition() == 0) {
-                    ViewHolder vh = (ListRowPresenter.ViewHolder) holder;
+                if (getVideo() != null && getVideo().playlistIndex > 0 && mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView().getSelectedPosition() == 0) {
+                    ViewHolder vh = (ViewHolder) holder;
                     vh.getGridView().setSelectedPosition(getVideo().playlistIndex);
                 }
             }
-        });
+        };
+        presenterSelector.addClassPresenter(ListRow.class, mRowPresenter);
 
-        ArrayObjectAdapter rowsAdapter = new ArrayObjectAdapter(presenterSelector);
+        mRowsAdapter = new ArrayObjectAdapter(presenterSelector);
 
         // player controls row
-        rowsAdapter.add(mPlayerGlue.getControlsRow());
+        mRowsAdapter.add(mPlayerGlue.getControlsRow());
 
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
 
-        return rowsAdapter;
+        setAdapter(mRowsAdapter);
     }
 
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
@@ -828,7 +829,24 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             ListRow row = new ListRow(rowHeader, mediaGroupAdapter);
             mRowsAdapter.add(row);
         } else {
+            freeze(true);
+
             existingAdapter.append(group); // continue row
+
+            freeze(false);
+        }
+    }
+
+    /**
+     * Disable scrolling on partially updated rows. This prevent controls from misbehaving.
+     */
+    private void freeze(boolean freeze) {
+        // Disable scrolling on partially updated rows. This prevent controls from misbehaving.
+        if (mRowPresenter != null && mRowsSupportFragment != null) {
+            ViewHolder vh = mRowsSupportFragment.getRowViewHolder(mRowsSupportFragment.getSelectedPosition());
+            if (vh != null) {
+                mRowPresenter.freeze(vh, freeze);
+            }
         }
     }
 

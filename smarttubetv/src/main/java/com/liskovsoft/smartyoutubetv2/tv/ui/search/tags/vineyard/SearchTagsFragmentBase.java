@@ -11,10 +11,12 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.leanback.app.RowsSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.ObjectAdapter;
+import androidx.leanback.widget.RowPresenter.ViewHolder;
 import androidx.leanback.widget.SpeechRecognitionCallback;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.SearchTagsProvider;
@@ -33,7 +35,8 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     private TagAdapter mSearchTagsAdapter;
     private ObjectAdapter mItemResultsAdapter;
     private ArrayObjectAdapter mResultsAdapter;
-    
+    private ListRowPresenter mResultsPresenter;
+
     private boolean mIsStopping;
     private SearchTagsProvider mSearchTagsProvider;
     private ProgressBarManager mProgressBarManager;
@@ -43,7 +46,8 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         super.onCreate(savedInstanceState);
 
         mProgressBarManager = new ProgressBarManager();
-        mResultsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
+        mResultsPresenter = new ListRowPresenter();
+        mResultsAdapter = new ArrayObjectAdapter(mResultsPresenter);
         mSearchTagsAdapter = new TagAdapter(getActivity(), "");
         mHandler = new Handler();
         setSearchResultProvider(this);
@@ -165,5 +169,19 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     private void performSearch(PaginationAdapter adapter) {
         String query = adapter.getAdapterOptions().get(PaginationAdapter.KEY_TAG);
         mSearchTagsProvider.search(query, adapter::addAllItems);
+    }
+
+    /**
+     * Disable scrolling on partially updated rows. This prevent controls from misbehaving.
+     */
+    protected void freeze(boolean freeze) {
+        // Disable scrolling on partially updated rows. This prevent controls from misbehaving.
+        RowsSupportFragment rowsSupportFragment = getRowsSupportFragment();
+        if (mResultsPresenter != null && rowsSupportFragment != null) {
+            ViewHolder vh = rowsSupportFragment.getRowViewHolder(rowsSupportFragment.getSelectedPosition());
+            if (vh != null) {
+                mResultsPresenter.freeze(vh, freeze);
+            }
+        }
     }
 }

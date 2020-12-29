@@ -168,7 +168,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     private void freeze(boolean freeze) {
         // Disable scrolling on partially updated rows. This prevent controls from misbehaving.
         if (mRowPresenter != null) {
-            ViewHolder vh = getRowViewHolder(getPosition());
+            ViewHolder vh = getRowViewHolder(getSelectedPosition());
             if (vh != null) {
                 mRowPresenter.freeze(vh, freeze);
             }
