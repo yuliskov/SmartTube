@@ -423,7 +423,6 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                     }
                 }
             });
-            updateDateLabel();
             mProgressBar = (SeekBar) rootView.findViewById(R.id.playback_progress);
             mProgressBar.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -869,12 +868,12 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
     public int getSecondaryProgressColor() {
         return mSecondaryProgressColor;
     }
-
+    
     @Override
     public void onReappear(RowPresenter.ViewHolder rowViewHolder) {
         ViewHolder vh = (ViewHolder) rowViewHolder;
         if (vh.view.hasFocus()) {
-            vh.updateDateLabel();
+            // player controls hidden
             vh.enableCompactMode(false);
             vh.mProgressBar.requestFocus();
         }
