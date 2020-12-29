@@ -20,6 +20,8 @@ import java.util.List;
 public class DisplaySyncHelper implements UhdHelperListener {
     private static final String TAG = DisplaySyncHelper.class.getSimpleName();
     private static final int STATE_ORIGINAL = 1;
+    private static final int HD = 1200;
+    private static final int FHD = 1900;
     protected Context mContext;
     private boolean mDisplaySyncInProgress = false;
     private UhdHelper mUhdHelper;
@@ -296,7 +298,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
             List<Mode> resultModes = new ArrayList<>();
 
             if (mIsResolutionSwitchEnabled) {
-                resultModes = filterModesByWidth(modes, Math.max(videoWidth, 1200));
+                resultModes = filterModesByWidth(modes, Math.max(videoWidth, FHD));
             }
 
             //int minHeight = -1;
