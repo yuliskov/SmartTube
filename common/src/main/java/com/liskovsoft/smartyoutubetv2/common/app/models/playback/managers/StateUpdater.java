@@ -42,6 +42,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         mPlayerData = PlayerData.instance(getActivity());
 
         restoreState();
+        resetSpeedIfNeeded();
     }
 
     /**
@@ -53,6 +54,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         //mLastSpeed = -1; // Save global speed on per-view basis
 
         resetStateIfNeeded(item); // reset position of music videos
+        resetSpeedIfNeeded();
 
         mIsPlaying = true; // video just added
 
@@ -171,8 +173,10 @@ public class StateUpdater extends PlayerEventListenerHelper {
         if (state != null && state.lengthMs < MUSIC_VIDEO_LENGTH_MS) {
             mStates.remove(item.videoId);
         }
+    }
 
-        if (!mPlayerData.isRememberSpeedEnabled()) {
+    private void resetSpeedIfNeeded() {
+        if (mPlayerData != null && !mPlayerData.isRememberSpeedEnabled()) {
             mPlayerData.setSpeed(1.0f);
         }
     }
