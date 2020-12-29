@@ -128,7 +128,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             ListRow row = new ListRow(rowHeader, mediaGroupAdapter);
             mRowsAdapter.add(row);
         } else {
-            Log.d(TAG, "Continue row %s", group.getTitle());
+            Log.d(TAG, "Continue row %s %s", group.getTitle(), System.currentTimeMillis());
             existingAdapter.append(group); // continue row
         }
         
