@@ -50,9 +50,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
      * or video is opened from the intent
      */
     @Override
-    public void openVideo(Video item) {
-        //mLastSpeed = -1; // Save global speed on per-view basis
-
+    public void openVideoOutside(Video item) {
         resetStateIfNeeded(item); // reset position of music videos
         resetSpeedIfNeeded();
 
@@ -84,6 +82,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         saveState();
 
         clearStateOfNextVideo();
+        resetSpeedIfNeeded();
 
         return false;
     }
@@ -92,6 +91,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     public void onSuggestionItemClicked(Video item) {
         saveState();
         mIsPlaying = true; // autoplay video from suggestions
+        resetSpeedIfNeeded();
     }
 
     @Override

@@ -43,7 +43,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void openVideo(Video item) {
+    public void openVideoOutside(Video item) {
         mPlaylist.add(item);
 
         if (getController() != null && getController().isEngineInitialized()) { // player is initialized
