@@ -105,12 +105,12 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
     }
 
     @Override
-    public int getItemIndex() {
+    public int getPosition() {
         return getSelectedPosition();
     }
 
     @Override
-    public void setItemIndex(int index) {
+    public void setPosition(int index) {
         if (index < 0) {
             return;
         }
@@ -137,7 +137,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
         
         mGridAdapter.append(group);
 
-        setItemIndex(mSelectedItemIndex);
+        setPosition(mSelectedItemIndex);
     }
 
     @Override
