@@ -223,6 +223,10 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void restartEngine() {
+        if (isDetached()) {
+            return;
+        }
+
         if (mPlayer != null) {
             mEventListener.onEngineReleased();
         }

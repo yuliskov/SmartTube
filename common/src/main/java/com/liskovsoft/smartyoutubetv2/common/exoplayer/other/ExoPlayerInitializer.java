@@ -29,17 +29,17 @@ public class ExoPlayerInitializer {
         mDeviceRam = deviceRam < 0 ? 196000000 : deviceRam;
     }
 
-    public SimpleExoPlayer createPlayer(Context activity, DefaultRenderersFactory renderersFactory, DefaultTrackSelector trackSelector) {
+    public SimpleExoPlayer createPlayer(Context context, DefaultRenderersFactory renderersFactory, DefaultTrackSelector trackSelector) {
         DefaultLoadControl loadControl = createLoadControl();
 
         // HDR fix?
-        //trackSelector.setParameters(trackSelector.buildUponParameters().setTunnelingAudioSessionId(C.generateAudioSessionIdV21(activity)));
+        //trackSelector.setParameters(trackSelector.buildUponParameters().setTunnelingAudioSessionId(C.generateAudioSessionIdV21(context)));
 
         if (renderersFactory instanceof CustomOverridesRenderersFactory) {
             ((CustomOverridesRenderersFactory) renderersFactory).setAudioDelayMs(mPlayerData.getAudioDelayMs());
         }
 
-        SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(activity, renderersFactory, trackSelector, loadControl);
+        SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(context, renderersFactory, trackSelector, loadControl);
         enableAudioFocus(player);
 
         return player;
