@@ -14,6 +14,7 @@ import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
+import androidx.leanback.widget.RowPresenter.ViewHolder;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -34,6 +35,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     private static final boolean USE_FOCUS_DIMMER = false;
     private UriBackgroundManager mBackgroundManager;
     private ArrayObjectAdapter mRowsAdapter;
+    private ListRowPresenter mRowPresenter;
     private Map<Integer, VideoGroupObjectAdapter> mVideoGroupAdapters;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private VideoGroupPresenter mMainPresenter;
@@ -68,7 +70,8 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         }
 
         if (mRowsAdapter == null) {
-            mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter(ZOOM_FACTOR, USE_FOCUS_DIMMER));
+            mRowPresenter = new ListRowPresenter(ZOOM_FACTOR, USE_FOCUS_DIMMER);
+            mRowsAdapter = new ArrayObjectAdapter(mRowPresenter);
             setAdapter(mRowsAdapter);
         }
     }
@@ -129,7 +132,12 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             mRowsAdapter.add(row);
         } else {
             Log.d(TAG, "Continue row %s %s", group.getTitle(), System.currentTimeMillis());
+
+            freeze(true);
+
             existingAdapter.append(group); // continue row
+
+            freeze(false);
         }
         
         setPosition(mSelectedRowIndex);
@@ -151,6 +159,19 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             mSelectedRowIndex = -1;
         } else {
             mSelectedRowIndex = index;
+        }
+    }
+
+    /**
+     * Disable scrolling on partially updated rows. This prevent controls from misbehaving.
+     */
+    private void freeze(boolean freeze) {
+        // Disable scrolling on partially updated rows. This prevent controls from misbehaving.
+        if (mRowPresenter != null) {
+            ViewHolder vh = getRowViewHolder(getPosition());
+            if (vh != null) {
+                mRowPresenter.freeze(vh, freeze);
+            }
         }
     }
 
