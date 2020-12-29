@@ -195,6 +195,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerData.enableRemainingTime(option.isSelected()),
                 mPlayerData.isRemainingTimeEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_remember_speed),
+                option -> mPlayerData.enableRememberSpeed(option.isSelected()),
+                mPlayerData.isRememberSpeedEnabled()));
+
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 }

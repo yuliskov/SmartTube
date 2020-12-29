@@ -52,7 +52,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     public void openVideo(Video item) {
         //mLastSpeed = -1; // Save global speed on per-view basis
 
-        ensureVideoSize(item); // reset position of music videos
+        resetStateIfNeeded(item); // reset position of music videos
 
         mIsPlaying = true; // video just added
 
@@ -163,13 +163,17 @@ public class StateUpdater extends PlayerEventListenerHelper {
             mStates.remove(getController().getVideo().nextMediaItem.getVideoId());
         }
     }
-
-    private void ensureVideoSize(Video item) {
+    
+    private void resetStateIfNeeded(Video item) {
         State state = mStates.get(item.videoId);
 
-        // Trying to start music video from beginning
+        // Reset position of music videos
         if (state != null && state.lengthMs < MUSIC_VIDEO_LENGTH_MS) {
             mStates.remove(item.videoId);
+        }
+
+        if (!mPlayerData.isRememberSpeedEnabled()) {
+            mPlayerData.setSpeed(1.0f);
         }
     }
 
@@ -282,10 +286,10 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private void restoreSpeed(Video item) {
         boolean isLive = getController().getLengthMs() - getController().getPositionMs() < 30_000;
 
-        if (!isLive) {
-            getController().setSpeed(mPlayerData.getSpeed());
+        if (isLive) {
+            getController().setSpeed(1.0f);
         } else {
-            getController().setSpeed(1.0f); // speed may be changed before, so do reset to default
+            getController().setSpeed(mPlayerData.getSpeed());
         }
     }
 

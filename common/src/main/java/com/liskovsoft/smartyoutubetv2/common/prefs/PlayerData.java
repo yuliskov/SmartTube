@@ -46,6 +46,7 @@ public class PlayerData {
     private boolean mIsAfrResSwitchEnabled;
     private int mAfrPauseSec;
     private int mAudioDelayMs;
+    private boolean mIsRememberSpeedEnabled;
 
     public PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -126,6 +127,15 @@ public class PlayerData {
 
     public void setPlaybackMode(int type) {
         mPlaybackMode = type;
+        persistData();
+    }
+
+    public boolean isRememberSpeedEnabled() {
+        return mIsRememberSpeedEnabled;
+    }
+
+    public void enableRememberSpeed(boolean enable) {
+        mIsRememberSpeedEnabled = enable;
         persistData();
     }
 
@@ -288,6 +298,7 @@ public class PlayerData {
         mIsAfrResSwitchEnabled = Helpers.parseBoolean(split, 18, false);
         mAfrPauseSec = Helpers.parseInt(split, 19, 3);
         mAudioDelayMs = Helpers.parseInt(split, 20, 0);
+        mIsRememberSpeedEnabled = Helpers.parseBoolean(split, 21, true);
     }
 
     private void persistData() {
@@ -296,6 +307,6 @@ public class PlayerData {
                 mIsClockEnabled, mIsRemainingTimeEnabled, mPlaybackMode, null, // afrData was there
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
-                mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs));
+                mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs, mIsRememberSpeedEnabled));
     }
 }

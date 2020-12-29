@@ -155,4 +155,5 @@
     <string name="auto_frame_rate_pause">Auto frame rate pause</string>
     <string name="auto_frame_rate_applying">Applying auto frame rate %sx%s@%s</string>
     <string name="audio_shift">Audio shift</string>
+    <string name="player_remember_speed">Remember speed</string>
 </resources>

@@ -154,4 +154,5 @@
     <string name="auto_frame_rate_pause">Автофреймрейт (пауза)</string>
     <string name="auto_frame_rate_applying">Застосовується автофреймрейт %sx%s@%s</string>
     <string name="audio_shift">Зміщення аудіо</string>
+    <string name="player_remember_speed">Запам\'ятовувати швидкість</string>
 </resources>
