@@ -146,7 +146,7 @@
     <string name="player_seek_preview_carousel">Carousel</string>
     <string name="player_seek_preview_carousel_slow">Carousel (lent)</string>
     <string name="player_seek_preview_carousel_fast">Carousel (rapide)</string>
-    <string name="unsubscribe_from_channel">Vous n'êtes plus abonné à la chaîne</string>
+    <string name="unsubscribe_from_channel">Vous n\'êtes plus abonné à la chaîne</string>
     <string name="card_title_lines_num">Nombre de lignes du titre des tuiles</string>
     <string name="card_auto_scrolled_title">Titre recadré avec défilement automatique</string>
     <string name="share_link">Lien de partage</string>
