@@ -46,6 +46,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.Contr
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.OnControlSelectedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue.QualityInfoListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.seekpreview.ThumbsBar;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue.TickleListener;
 
 import java.util.Arrays;
 
@@ -115,6 +116,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
         // MOD: update quality info
         final QualityInfoListener mQualityListener = this::setQualityInfo;
+        final TickleListener mTickleListener = this::updateDateLabel;
         TopEdgeFocusListener mTopEdgeFocusListener = null;
 
         final PlaybackControlsRow.OnPlaybackProgressCallback mListener =

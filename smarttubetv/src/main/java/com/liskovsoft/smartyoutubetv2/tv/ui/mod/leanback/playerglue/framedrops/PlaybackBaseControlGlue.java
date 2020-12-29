@@ -449,6 +449,10 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
         mIsControlsVisible = show;
     }
 
+    public boolean isControlsVisible() {
+        return mIsControlsVisible;
+    }
+
     @CallSuper
     protected void onUpdateProgress() {
         if (mIsControlsVisible) {

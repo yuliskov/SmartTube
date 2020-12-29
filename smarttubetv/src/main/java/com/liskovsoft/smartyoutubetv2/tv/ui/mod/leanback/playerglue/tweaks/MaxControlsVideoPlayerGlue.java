@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import androidx.leanback.media.PlayerAdapter;
 import androidx.leanback.widget.AbstractDetailsDescriptionPresenter;
 import androidx.leanback.widget.PlaybackRowPresenter;
@@ -12,6 +14,10 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.framedrops.P
 
 public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
         extends PlaybackTransportControlGlue<T> implements TopEdgeFocusListener {
+    private final Handler mHandler;
+    private TickleListener mTickleListener;
+    private final Runnable mTickleHandler = this::onTickle;
+
     /**
      * Constructor for the glue.
      *
@@ -20,6 +26,8 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
      */
     public MaxControlsVideoPlayerGlue(Context context, T impl) {
         super(context, impl);
+
+        mHandler = new Handler(Looper.getMainLooper());
     }
 
     @Override
@@ -60,6 +68,7 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
                 ViewHolder viewHolder = (ViewHolder) vh;
 
                 addQualityInfoListener(viewHolder.mQualityListener);
+                mTickleListener = viewHolder.mTickleListener;
                 viewHolder.mTopEdgeFocusListener = MaxControlsVideoPlayerGlue.this;
             }
             @Override
@@ -76,7 +85,30 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
         void onQualityInfoChanged(String content);
     }
 
+    public interface TickleListener {
+        void onTickle();
+    }
+
     protected abstract void addQualityInfoListener(QualityInfoListener listener);
 
     public abstract void onTopEdgeFocused();
+
+    @Override
+    public void setControlsVisibility(boolean show) {
+        super.setControlsVisibility(show);
+
+        onTickle();
+    }
+
+    private void onTickle() {
+        if (isControlsVisible()) {
+            if (mTickleListener != null) {
+                mTickleListener.onTickle();
+            }
+
+            mHandler.postDelayed(mTickleHandler, 10_000);
+        } else {
+            mHandler.removeCallbacks(mTickleHandler);
+        }
+    }
 }
