@@ -10,11 +10,11 @@
     <string name="header_playlists">Wiedergabelisten</string>
     <string name="header_settings">Einstellungen</string>
     <string name="header_channels">Kanäle</string>
-    <string name="subscriptions_signin_title">Sieh dir die neuesten Videos deiner Lieblingskanäle an</string>
-    <string name="subscriptions_signin_subtitle">Anmelden, um Abos aufzurufen</string>
+    <string name="subscriptions_signin_title">Abos anzeigen</string>
+    <string name="subscriptions_signin_subtitle">Melden Sie sich an, um Ihre Abos anzuzeigen</string>
     <string name="subscriptions_signin_button_text">ANMELDEN</string>
-    <string name="library_signin_to_show_more">Sieh dir Videos an, die dir gefallen, gespeichert oder abonniert wurden</string>
-    <string name="library_signin_subtitle">Melde dich an, um deine Mediathek zu sehen</string>
+    <string name="library_signin_to_show_more">Melden Sie sich an, um diese Inhalte anzuzeigen</string>
+    <string name="library_signin_subtitle">Melden Sie sich an, um Ihre Wiedergabelisten anzuzeigen</string>
     <string name="action_signin">ANMELDEN</string>
     <string name="title_video_formats">Videoformate</string>
     <string name="title_audio_formats">Audioformate</string>
@@ -155,4 +155,5 @@
     <string name="auto_frame_rate_pause">Pause für automatische Bildrate</string>
     <string name="auto_frame_rate_applying">Automatische Bildrate wird angewendet %sx%s@%s</string>
     <string name="audio_shift">Audio-Verzögerung</string>
+    <string name="player_remember_speed">Video-Geschwindigkeit speichern</string>
 </resources>
