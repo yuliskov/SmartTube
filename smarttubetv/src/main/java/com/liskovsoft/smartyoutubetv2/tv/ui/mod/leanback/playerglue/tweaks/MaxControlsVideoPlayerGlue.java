@@ -8,15 +8,18 @@ import androidx.leanback.widget.AbstractDetailsDescriptionPresenter;
 import androidx.leanback.widget.PlaybackRowPresenter;
 import androidx.leanback.widget.RowPresenter;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.PlaybackTransportRowPresenter.TopEdgeFocusListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.framedrops.PlaybackBaseControlGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.framedrops.PlaybackTransportControlGlue;
 
 public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
-        extends PlaybackTransportControlGlue<T> implements TopEdgeFocusListener {
+        extends PlaybackTransportControlGlue<T> implements TopEdgeFocusListener, PlayerView {
     private final Handler mHandler;
+    private QualityInfoListener mQualityInfoListener;
     private TickleListener mTickleListener;
-    private final Runnable mTickleHandler = this::onTickle;
+    private final Runnable mTickleHandler = this::updateTickle;
+    private String mQualityInfo;
 
     /**
      * Constructor for the glue.
@@ -66,10 +69,11 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
                 vh.setOnKeyListener(MaxControlsVideoPlayerGlue.this);
 
                 ViewHolder viewHolder = (ViewHolder) vh;
-
-                addQualityInfoListener(viewHolder.mQualityListener);
+                
+                mQualityInfoListener = viewHolder.mQualityInfoListener;
                 mTickleListener = viewHolder.mTickleListener;
                 viewHolder.mTopEdgeFocusListener = MaxControlsVideoPlayerGlue.this;
+                updateQualityInfo();
             }
             @Override
             protected void onUnbindRowViewHolder(RowPresenter.ViewHolder vh) {
@@ -81,26 +85,23 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
         return rowPresenter;
     }
 
-    public interface QualityInfoListener {
-        void onQualityInfoChanged(String content);
-    }
-
-    public interface TickleListener {
-        void onTickle();
-    }
-
-    protected abstract void addQualityInfoListener(QualityInfoListener listener);
-
-    public abstract void onTopEdgeFocused();
-
     @Override
     public void setControlsVisibility(boolean show) {
         super.setControlsVisibility(show);
 
-        onTickle();
+        updateTickle();
     }
 
-    private void onTickle() {
+    @Override
+    public void setQualityInfo(String info) {
+        mQualityInfo = info;
+
+        if (mQualityInfoListener != null) {
+            mQualityInfoListener.onQualityInfoChanged(info);
+        }
+    }
+
+    private void updateTickle() {
         if (isControlsVisible()) {
             if (mTickleListener != null) {
                 mTickleListener.onTickle();
@@ -111,4 +112,20 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
             mHandler.removeCallbacks(mTickleHandler);
         }
     }
+
+    private void updateQualityInfo() {
+        if (mQualityInfoListener != null) {
+            mQualityInfoListener.onQualityInfoChanged(mQualityInfo);
+        }
+    }
+
+    public interface QualityInfoListener {
+        void onQualityInfoChanged(String content);
+    }
+
+    public interface TickleListener {
+        void onTickle();
+    }
+
+    public abstract void onTopEdgeFocused();
 }

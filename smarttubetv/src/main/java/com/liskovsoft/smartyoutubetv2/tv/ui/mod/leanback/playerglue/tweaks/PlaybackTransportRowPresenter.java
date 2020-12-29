@@ -115,7 +115,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         final PlayerData mPlayerData;
 
         // MOD: update quality info
-        final QualityInfoListener mQualityListener = this::setQualityInfo;
+        final QualityInfoListener mQualityInfoListener = this::setQualityInfo;
         final TickleListener mTickleListener = this::updateDateLabel;
         TopEdgeFocusListener mTopEdgeFocusListener = null;
 
