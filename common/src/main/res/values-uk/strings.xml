@@ -155,4 +155,6 @@
     <string name="auto_frame_rate_applying">Застосовується автофреймрейт %sx%s@%s</string>
     <string name="audio_shift">Зміщення аудіо</string>
     <string name="player_remember_speed">Запам\'ятовувати швидкість</string>
+    <string name="mark_channel_as_watched">Позначити як переглянуте</string>
+    <string name="channel_marked_as_watched">Канал позначен як переглянутий</string>
 </resources>

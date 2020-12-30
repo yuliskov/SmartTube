@@ -9,6 +9,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.utils.ServiceManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -16,6 +17,7 @@ import io.reactivex.schedulers.Schedulers;
 public class ChannelUploadsMenuPresenter extends BasePresenter<Void> {
     private final MediaItemManager mItemManager;
     private final AppSettingsPresenter mSettingsPresenter;
+    private final ServiceManager mServiceManager;
     private Disposable mUnsubscribeAction;
     private Video mVideo;
 
@@ -24,6 +26,7 @@ public class ChannelUploadsMenuPresenter extends BasePresenter<Void> {
         MediaService service = YouTubeMediaService.instance();
         mItemManager = service.getMediaItemManager();
         mSettingsPresenter = AppSettingsPresenter.instance(context);
+        mServiceManager = ServiceManager.instance();
     }
 
     public static ChannelUploadsMenuPresenter instance(Context context) {
@@ -45,6 +48,7 @@ public class ChannelUploadsMenuPresenter extends BasePresenter<Void> {
         
         appendOpenChannelUploadsButton();
         appendUnsubscribeButton();
+        appendMarkAsWatched();
 
         mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mUnsubscribeAction));
     }
@@ -68,6 +72,18 @@ public class ChannelUploadsMenuPresenter extends BasePresenter<Void> {
                     // Maybe this is subscribed items view
                     ChannelUploadsPresenter.instance(getContext())
                             .obtainVideoGroup(mVideo, group -> unsubscribe(group.getChannelId()));
+                }));
+    }
+
+    private void appendMarkAsWatched() {
+        if (mVideo == null || !mVideo.hasNewContent) {
+            return;
+        }
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.mark_channel_as_watched), optionItem -> {
+                    mServiceManager.loadChannelUploads(mVideo, (group) -> {});
+                    MessageHelpers.showMessage(getContext(), R.string.channel_marked_as_watched);
                 }));
     }
 
