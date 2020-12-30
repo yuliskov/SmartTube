@@ -151,5 +151,6 @@
     <string name="wait_data_loading">Prosím počkejte, než se načtou data…</string>
     <string name="auto_frame_rate_pause">Pozastavení automatické snímkové frekvence</string>
     <string name="auto_frame_rate_applying">Aplikování automatické snímkové frekvence %sx%s@%s</string>
-    <string name="audio_shift">Zpoždění audia</string>
+    <string name="audio_shift">Posunutí zvuku</string>
+    <string name="player_remember_speed">Pamatovat rychlost videa</string>
 </resources>
