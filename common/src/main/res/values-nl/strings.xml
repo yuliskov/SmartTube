@@ -156,4 +156,6 @@
     <string name="auto_frame_rate_applying">Auto frame rate toepassen %sx%s@%s</string>
     <string name="audio_shift">Audio sync</string>
     <string name="player_remember_speed">Video snelheid bewaren</string>
+    <string name="mark_channel_as_watched">Markeren als bekeken</string>
+    <string name="channel_marked_as_watched">Kanaal gemarkeerd als bekeken</string>
 </resources>
