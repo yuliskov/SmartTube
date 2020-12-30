@@ -96,20 +96,20 @@ To build, install and run a debug version, run this from the root of the project
 git clone https://github.com/yuliskov/SmartTubeNext.git
 cd SmartTubeNext
 git submodule update --init
-./gradlew buildStorigDebug
+gradlew buildStorigDebug
 ```
 
 # Unit Tests
 
 To run the unit tests for the application:
 
-```./gradlew testDebugUnitTest```
+```gradlew testDebugUnitTest```
 
 # User Interface Tests
 
 To run the user interface tests for the application:
 
-```./gradlew connectedDebugAndroidTest```
+```gradlew connectedDebugAndroidTest```
 
 # Donation
 
