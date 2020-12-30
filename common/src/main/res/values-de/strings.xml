@@ -156,4 +156,6 @@
     <string name="auto_frame_rate_applying">Automatische Bildrate wird angewendet %sx%s@%s</string>
     <string name="audio_shift">Audio-Verschiebung</string>
     <string name="player_remember_speed">Video-Geschwindigkeit merken</string>
+    <string name="mark_channel_as_watched">Als gesehen markieren</string>
+    <string name="channel_marked_as_watched">Kanal wurde als gesehen markiert</string>
 </resources>
