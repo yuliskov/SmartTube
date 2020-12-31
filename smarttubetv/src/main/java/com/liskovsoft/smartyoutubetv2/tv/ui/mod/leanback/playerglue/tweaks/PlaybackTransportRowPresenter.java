@@ -695,6 +695,9 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                 if (mPlayerData.isRemainingTimeEnabled()) {
                     long endingTimeMs = mTotalTimeInMs - currentTimeMs;
 
+                    // Apply speed correction
+                    endingTimeMs = (long) (endingTimeMs / mPlayerData.getSpeed());
+
                     if (endingTimeMs >= 0) {
                         formatTime(endingTimeMs, mTempBuilder);
                         mEndingTime.setText(String.format(mEndingTimeFormat, mTempBuilder.toString()));
