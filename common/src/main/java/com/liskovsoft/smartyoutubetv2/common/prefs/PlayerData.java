@@ -296,7 +296,7 @@ public class PlayerData {
         mIsAfrEnabled = Helpers.parseBoolean(split, 16, false);
         mIsAfrFpsCorrectionEnabled = Helpers.parseBoolean(split, 17, false);
         mIsAfrResSwitchEnabled = Helpers.parseBoolean(split, 18, false);
-        mAfrPauseSec = Helpers.parseInt(split, 19, 3);
+        mAfrPauseSec = Helpers.parseInt(split, 19, 0);
         mAudioDelayMs = Helpers.parseInt(split, 20, 0);
         mIsRememberSpeedEnabled = Helpers.parseBoolean(split, 21, true);
     }

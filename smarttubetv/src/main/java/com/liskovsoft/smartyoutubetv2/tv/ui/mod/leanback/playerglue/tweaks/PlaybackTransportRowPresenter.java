@@ -682,7 +682,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             if (!mInSeek) {
                 int progressRatio = 0;
                 if (mTotalTimeInMs > 0) {
-                    // Use ratio to represent current progres
+                    // Use ratio to represent current progress
                     double ratio = (double) mCurrentTimeInMs / mTotalTimeInMs;     // Range: [0, 1]
                     progressRatio = (int) (ratio * Integer.MAX_VALUE);  // Could safely cast to int
                 }
