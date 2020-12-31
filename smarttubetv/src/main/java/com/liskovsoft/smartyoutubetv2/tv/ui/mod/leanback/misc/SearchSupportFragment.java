@@ -757,6 +757,12 @@ public class SearchSupportFragment extends Fragment {
         }
     }
 
+    protected void selectAllText() {
+        if (mSearchTextEditor != null) {
+            mSearchTextEditor.selectAll();
+        }
+    }
+
     private void onSetSearchResultProvider() {
         mHandler.removeCallbacks(mSetSearchResultProvider);
         mHandler.post(mSetSearchResultProvider);

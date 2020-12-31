@@ -74,6 +74,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         if (searchText != null) {
             setSearchQuery(searchText, true);
         } else {
+            selectAllText();
             loadSearchTags("");
 
             if (enableRecognition) {
