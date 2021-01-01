@@ -1,6 +1,11 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.settings.dialogs;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import androidx.annotation.Nullable;
+import androidx.leanback.widget.VerticalGridView;
 import androidx.preference.ListPreference;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
@@ -23,6 +28,41 @@ public class RadioListPreferenceDialogFragment extends LeanbackListPreferenceDia
         return fragment;
     }
 
+    /**
+     * MOD: Set focus on selected radio item
+     */
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+
+        if (view != null) {
+            VerticalGridView verticalGridView = view.findViewById(android.R.id.list);
+            if (verticalGridView != null) {
+                verticalGridView.scrollToPosition(findSelectedPosition());
+            }
+        }
+
+        return view;
+    }
+
+    private int findSelectedPosition() {
+        if (mEntryValues == null) {
+            return 0;
+        }
+
+        for (int i = 0; i < mEntryValues.length; i++) {
+            if (mEntryValues[i].equals(mInitialSelection)) {
+                return i;
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * MOD: Don't exit from dialog after selection has been set
+     */
     public class AdapterRadio extends AdapterSingle {
         public AdapterRadio(CharSequence[] entries, CharSequence[] entryValues, CharSequence selectedValue) {
             super(entries, entryValues, selectedValue);
