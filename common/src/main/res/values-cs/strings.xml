@@ -153,4 +153,6 @@
     <string name="auto_frame_rate_applying">Aplikování automatické snímkové frekvence %sx%s@%s</string>
     <string name="audio_shift">Posunutí zvuku</string>
     <string name="player_remember_speed">Pamatovat rychlost videa</string>
+    <string name="mark_channel_as_watched">Označit jako zhlédnuté</string>
+    <string name="channel_marked_as_watched">Kanál byl označen jako zhlédnutý</string>
 </resources>
