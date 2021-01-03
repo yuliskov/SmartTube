@@ -5,6 +5,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUti
 
 public class VideoTrack extends MediaTrack {
     private static final int SIZE_EQUITY_THRESHOLD_PX = 80;
+    private static final int SIZE_EQUITY_THRESHOLD_PERCENT = 15;
     private static final int COMPARE_TYPE_IN_BOUNDS = 0;
     private static final int COMPARE_TYPE_IN_BOUNDS_PROFILE = 1;
     private static final int COMPARE_TYPE_NORMAL = 2;
@@ -18,7 +19,9 @@ public class VideoTrack extends MediaTrack {
             return false;
         }
 
-        return Math.abs(size1 - size2) < SIZE_EQUITY_THRESHOLD_PX;
+        int threshold = size1 / 100 * SIZE_EQUITY_THRESHOLD_PERCENT;
+
+        return Math.abs(size1 - size2) < threshold;
     }
 
     private static boolean sizeLessOrEquals(int size1, int size2) {
