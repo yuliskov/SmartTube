@@ -42,12 +42,13 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     public void onViewInitialized() {
         applyRunOnceTasks();
 
+        showAccountSelection();
+
         applyNewIntent(getView().getNewIntent());
     }
 
     private void applyRunOnceTasks() {
         if (!mRunOnce) {
-            showAccountSelection();
             updateChannels();
             getBackupDataOnce();
             mRunOnce = true;
