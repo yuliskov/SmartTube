@@ -35,6 +35,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private Disposable mHistoryAction;
     private PlayerData mPlayerData;
     private boolean mIsPlayBlocked;
+    private Video mLastVideo;
+    private boolean mIsVideoChanged;
 
     @Override
     public void onInitDone() {
@@ -42,7 +44,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
         mPlayerData = PlayerData.instance(getActivity());
 
         restoreState();
-        resetSpeedIfNeeded();
     }
 
     /**
@@ -51,8 +52,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
      */
     @Override
     public void openVideoOutside(Video item) {
+        mLastVideo = null;
+
         resetStateIfNeeded(item); // reset position of music videos
-        resetSpeedIfNeeded();
 
         mIsPlaying = true; // video just added
 
@@ -82,7 +84,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
         saveState();
 
         clearStateOfNextVideo();
-        resetSpeedIfNeeded();
 
         return false;
     }
@@ -91,7 +92,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
     public void onSuggestionItemClicked(Video item) {
         saveState();
         mIsPlaying = true; // autoplay video from suggestions
-        resetSpeedIfNeeded();
     }
 
     @Override
@@ -111,6 +111,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onVideoLoaded(Video item) {
+        mIsVideoChanged = mLastVideo != item;
+        mLastVideo = item;
+
         // In this state video length is not undefined.
         restorePosition(item);
         restoreSpeed(item);
@@ -172,12 +175,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
         // Reset position of music videos
         if (state != null && state.lengthMs < MUSIC_VIDEO_LENGTH_MS) {
             mStates.remove(item.videoId);
-        }
-    }
-
-    private void resetSpeedIfNeeded() {
-        if (mPlayerData != null && !mPlayerData.isRememberSpeedEnabled()) {
-            mPlayerData.setSpeed(1.0f);
         }
     }
 
@@ -290,7 +287,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private void restoreSpeed(Video item) {
         boolean isLive = getController().getLengthMs() - getController().getPositionMs() < 30_000;
 
-        if (isLive) {
+        boolean isResetSpeedEnabled = !mPlayerData.isRememberSpeedEnabled() && mIsVideoChanged;
+
+        if (isLive || isResetSpeedEnabled) {
             getController().setSpeed(1.0f);
         } else {
             getController().setSpeed(mPlayerData.getSpeed());
