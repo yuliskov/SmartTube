@@ -16,18 +16,17 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.fragments.GridFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class VideoGridFragment extends GridFragment implements VideoCategoryFragment {
+public class VideoGridFragment extends AutoSizeGridFragment implements VideoCategoryFragment {
     private static final String TAG = VideoGridFragment.class.getSimpleName();
-    private static final int COLUMNS_NUM = 4;
     private static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
     private static final boolean USE_FOCUS_DIMMER = false;
     private static final int CHECK_SCROLL_ITEMS_NUM = 15;
@@ -38,7 +37,6 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
     private boolean mInvalidate;
     private int mSelectedItemIndex = -1;
     private float mVideoGridScale;
-    private float mUIScale;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,7 +45,6 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
         mMainPresenter = getMainPresenter();
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
         mVideoGridScale = MainUIData.instance(getActivity()).getVideoGridScale();
-        mUIScale = MainUIData.instance(getActivity()).getUIScale();
 
         setupAdapter();
         setupEventListeners();
@@ -77,31 +74,13 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
 
     private void setupAdapter() {
         VerticalGridPresenter presenter = new VerticalGridPresenter(ZOOM_FACTOR, USE_FOCUS_DIMMER);
-        presenter.setNumberOfColumns(getNumColumns());
+        presenter.setNumberOfColumns(getColumnsNum(R.dimen.card_width, mVideoGridScale));
         setGridPresenter(presenter);
 
         if (mGridAdapter == null) {
             mGridAdapter = new VideoGroupObjectAdapter();
             setAdapter(mGridAdapter);
         }
-    }
-
-    private int getNumColumns() {
-        int result = COLUMNS_NUM;
-
-        if (mVideoGridScale > 1.3f) {
-            result--;
-        }
-
-        if (mUIScale < 1.0f) {
-            result += (int) Math.ceil((1.0f - mUIScale) / 0.15f);
-
-            if (mVideoGridScale > 1.3f) {
-                result--;
-            }
-        }
-
-        return result;
     }
 
     @Override
