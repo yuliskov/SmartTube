@@ -285,14 +285,20 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void restoreSpeed(Video item) {
+        resetSpeedIfNeeded();
+
         boolean isLive = getController().getLengthMs() - getController().getPositionMs() < 30_000;
 
-        boolean isResetSpeedEnabled = !mPlayerData.isRememberSpeedEnabled() && mIsVideoChanged;
-
-        if (isLive || isResetSpeedEnabled) {
+        if (isLive) {
             getController().setSpeed(1.0f);
         } else {
             getController().setSpeed(mPlayerData.getSpeed());
+        }
+    }
+
+    private void resetSpeedIfNeeded() {
+        if (mIsVideoChanged && !mPlayerData.isRememberSpeedEnabled()) {
+            mPlayerData.setSpeed(1.0f);
         }
     }
 

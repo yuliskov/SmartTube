@@ -249,6 +249,10 @@ public class PlayerData {
     }
 
     public void setSpeed(float speed) {
+        if (mSpeed == speed) {
+            return;
+        }
+
         mSpeed = speed;
         persistData();
     }
