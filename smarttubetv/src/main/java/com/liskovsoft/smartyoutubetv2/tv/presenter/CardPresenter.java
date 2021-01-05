@@ -22,13 +22,14 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.LongClickPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview.ComplexImageCardView;
 
 /*
  * A CardPresenter is used to generate Views and bind Objects to them on demand.
  * It contains an Image CardView
  */
-public class CardPresenter extends Presenter {
+public class CardPresenter extends LongClickPresenter {
     private static final String TAG = CardPresenter.class.getSimpleName();
     private int mDefaultBackgroundColor = -1;
     private int mDefaultTextColor = -1;
@@ -98,6 +99,8 @@ public class CardPresenter extends Presenter {
 
     @Override
     public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object item) {
+        super.onBindViewHolder(viewHolder, item);
+
         Video video = (Video) item;
 
         ComplexImageCardView cardView = (ComplexImageCardView) viewHolder.view;
@@ -136,6 +139,8 @@ public class CardPresenter extends Presenter {
 
     @Override
     public void onUnbindViewHolder(Presenter.ViewHolder viewHolder) {
+        super.onUnbindViewHolder(viewHolder);
+
         ComplexImageCardView cardView = (ComplexImageCardView) viewHolder.view;
 
         // Remove references to images so that the garbage collector can free up memory.

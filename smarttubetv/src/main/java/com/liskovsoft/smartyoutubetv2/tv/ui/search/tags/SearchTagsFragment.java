@@ -3,14 +3,15 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.search.tags;
 import android.os.Bundle;
 import android.text.TextUtils;
 import androidx.annotation.Nullable;
-import com.liskovsoft.sharedutils.mylogger.Log;
+import androidx.leanback.widget.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.MediaServiceSearchTagProvider;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
-import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewLongClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.vineyard.SearchTagsFragmentBase;
 
 public class SearchTagsFragment extends SearchTagsFragmentBase {
@@ -19,6 +20,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     private VideoGroupObjectAdapter mItemResultsAdapter;
     private String mSearchQuery;
     private String mNewQuery;
+    private CardPresenter mCardPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,10 +28,16 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
 
         mSearchPresenter = SearchPresenter.instance(getContext());
         mSearchPresenter.setView(this);
-        mItemResultsAdapter = new VideoGroupObjectAdapter();
+        mCardPresenter = new CardPresenter();
+        mItemResultsAdapter = new VideoGroupObjectAdapter(mCardPresenter);
 
+        setupEventListeners();
         setItemResultsAdapter(mItemResultsAdapter);
         setSearchTagsProvider(new MediaServiceSearchTagProvider());
+    }
+
+    private void setupEventListeners() {
+        mCardPresenter.setOnItemViewLongClickedListener(new ItemViewLongClickedListener());
     }
 
     @Override
@@ -138,19 +146,21 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         return isVoice;
     }
 
+    private final class ItemViewLongClickedListener implements OnItemViewLongClickedListener {
+        @Override
+        public void onItemLongClicked(Presenter.ViewHolder itemViewHolder, Object item) {
+            if (item instanceof Video) {
+                mSearchPresenter.onVideoItemLongClicked((Video) item);
+            } else if (item instanceof Tag) {
+                startSearch(((Tag) item).tag, false);
+            }
+        }
+    }
+
     @Override
     protected void onItemViewClicked(Object item) {
         if (item instanceof Video) {
-            if (getActivity() instanceof LeanbackActivity) {
-                boolean longClick = ((LeanbackActivity) getActivity()).isLongClick();
-                Log.d(TAG, "Is long click: " + longClick);
-
-                if (longClick) {
-                    mSearchPresenter.onVideoItemLongClicked((Video) item);
-                } else {
-                    mSearchPresenter.onVideoItemClicked((Video) item);
-                }
-            }
+            mSearchPresenter.onVideoItemClicked((Video) item);
         } else if (item instanceof Tag) {
             startSearch(((Tag) item).tag, false);
         }

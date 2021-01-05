@@ -13,14 +13,12 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.DoubleBackManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.LongClickManager;
 
 /**
  * This parent class contains common methods that run in every activity such as search.
  */
 public abstract class LeanbackActivity extends MotherActivity {
     private static final String TAG = LeanbackActivity.class.getSimpleName();
-    private LongClickManager mLongClickManager;
     private UriBackgroundManager mBackgroundManager;
     private ViewManager mViewManager;
     private ModeSyncManager mModeSyncManager;
@@ -31,7 +29,6 @@ public abstract class LeanbackActivity extends MotherActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mLongClickManager = new LongClickManager();
         mBackgroundManager = new UriBackgroundManager(this);
         mViewManager = ViewManager.instance(this);
         mModeSyncManager = ModeSyncManager.instance();
@@ -50,17 +47,11 @@ public abstract class LeanbackActivity extends MotherActivity {
     public boolean dispatchKeyEvent(KeyEvent event) {
         Log.d(TAG, event);
 
-        mLongClickManager.dispatchKeyEvent(event);
-
         if (mDoubleBackManager.checkDoubleBack(event)) {
             properlyFinishTheApp();
         }
 
         return super.dispatchKeyEvent(event);
-    }
-
-    public boolean isLongClick() {
-        return mLongClickManager.isLongClick();
     }
 
     public UriBackgroundManager getBackgroundManager() {

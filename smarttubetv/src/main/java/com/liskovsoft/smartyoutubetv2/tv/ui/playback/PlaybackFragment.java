@@ -48,6 +48,8 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.V2.CustomOverridesR
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewLongClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
@@ -72,6 +74,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private VideoPlayerGlue mPlayerGlue;
     private SimpleExoPlayer mPlayer;
     private PlaybackPresenter mPlaybackPresenter;
+    private CardPresenter mCardPresenter;
     private ArrayObjectAdapter mRowsAdapter;
     private ListRowPresenter mRowPresenter;
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
@@ -97,6 +100,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         mPlaybackPresenter = PlaybackPresenter.instance(getContext());
         mPlaybackPresenter.setView(this);
+        mCardPresenter = new CardPresenter();
     }
 
     @Override
@@ -355,10 +359,27 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         // player controls row
         mRowsAdapter.add(mPlayerGlue.getControlsRow());
 
-        setOnItemViewClickedListener(new ItemViewClickedListener());
-        setOnItemViewSelectedListener(new ItemViewSelectedListener());
+        setupEventListeners();
 
         setAdapter(mRowsAdapter);
+    }
+
+    private void setupEventListeners() {
+        setOnItemViewClickedListener(new ItemViewClickedListener());
+        setOnItemViewSelectedListener(new ItemViewSelectedListener());
+        mCardPresenter.setOnItemViewLongClickedListener(new ItemViewLongClickedListener());
+    }
+
+    private final class ItemViewLongClickedListener implements OnItemViewLongClickedListener {
+        @Override
+        public void onItemLongClicked(
+                Presenter.ViewHolder itemViewHolder,
+                Object item) {
+
+            if (item instanceof Video) {
+                mEventListener.onSuggestionItemLongClicked((Video) item);
+            }
+        }
     }
 
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
@@ -370,14 +391,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
                 Row row) {
 
             if (item instanceof Video) {
-                boolean longClick = getLeanbackActivity().isLongClick();
-                Log.d(TAG, "Is long click: " + longClick);
-
-                if (longClick) {
-                    mEventListener.onSuggestionItemLongClicked((Video) item);
-                } else {
-                    mEventListener.onSuggestionItemClicked((Video) item);
-                }
+                mEventListener.onSuggestionItemClicked((Video) item);
             }
         }
     }
@@ -822,7 +836,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(mediaGroupId);
 
         if (existingAdapter == null) {
-            VideoGroupObjectAdapter mediaGroupAdapter = new VideoGroupObjectAdapter(group);
+            VideoGroupObjectAdapter mediaGroupAdapter = new VideoGroupObjectAdapter(group, mCardPresenter);
 
             mMediaGroupAdapters.put(mediaGroupId, mediaGroupAdapter);
 

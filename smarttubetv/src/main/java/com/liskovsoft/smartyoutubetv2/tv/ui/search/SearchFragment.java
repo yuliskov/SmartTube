@@ -32,6 +32,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewLongClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
@@ -51,6 +53,7 @@ public class SearchFragment extends SearchSupportFragment
     private UriBackgroundManager mBackgroundManager;
     private VideoGroupObjectAdapter mAdapter;
     private ProgressBarManager mProgressBarManager;
+    private CardPresenter mCardPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,7 @@ public class SearchFragment extends SearchSupportFragment
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
         mSearchPresenter = SearchPresenter.instance(getContext());
         mSearchPresenter.setView(this);
+        mCardPresenter = new CardPresenter();
 
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         mProgressBarManager = new ProgressBarManager();
@@ -113,6 +117,7 @@ public class SearchFragment extends SearchSupportFragment
     private void setupEventListeners() {
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
+        mCardPresenter.setOnItemViewLongClickedListener(new ItemViewLongClickedListener());
     }
 
     @Override
@@ -196,11 +201,23 @@ public class SearchFragment extends SearchSupportFragment
 
         if (mRowsAdapter.size() == 0) {
             HeaderItem header = new HeaderItem(getString(titleRes, mQuery));
-            mAdapter = new VideoGroupObjectAdapter(group);
+            mAdapter = new VideoGroupObjectAdapter(group, mCardPresenter);
             ListRow row = new ListRow(header, mAdapter);
             mRowsAdapter.add(row);
         } else {
             mAdapter.append(group);
+        }
+    }
+
+    private final class ItemViewLongClickedListener implements OnItemViewLongClickedListener {
+        @Override
+        public void onItemLongClicked(Presenter.ViewHolder itemViewHolder, Object item) {
+
+            if (item instanceof Video) {
+                mSearchPresenter.onVideoItemLongClicked((Video) item);
+            } else {
+                Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -210,16 +227,7 @@ public class SearchFragment extends SearchSupportFragment
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
 
             if (item instanceof Video) {
-                if (getActivity() instanceof LeanbackActivity) {
-                    boolean longClick = ((LeanbackActivity) getActivity()).isLongClick();
-                    Log.d(TAG, "Is long click: " + longClick);
-
-                    if (longClick) {
-                        mSearchPresenter.onVideoItemLongClicked((Video) item);
-                    } else {
-                        mSearchPresenter.onVideoItemClicked((Video) item);
-                    }
-                }
+                mSearchPresenter.onVideoItemClicked((Video) item);
             } else {
                 Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
             }

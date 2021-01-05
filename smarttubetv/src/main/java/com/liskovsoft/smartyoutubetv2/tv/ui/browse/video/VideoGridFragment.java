@@ -10,7 +10,6 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.VerticalGridPresenter;
-import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
@@ -18,6 +17,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGrou
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewLongClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
@@ -34,6 +35,7 @@ public class VideoGridFragment extends AutoSizeGridFragment implements VideoCate
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private UriBackgroundManager mBackgroundManager;
     private VideoGroupPresenter mMainPresenter;
+    private CardPresenter mCardPresenter;
     private boolean mInvalidate;
     private int mSelectedItemIndex = -1;
     private float mVideoGridScale;
@@ -43,6 +45,7 @@ public class VideoGridFragment extends AutoSizeGridFragment implements VideoCate
         super.onCreate(savedInstanceState);
 
         mMainPresenter = getMainPresenter();
+        mCardPresenter = new CardPresenter();
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
         mVideoGridScale = MainUIData.instance(getActivity()).getVideoGridScale();
 
@@ -62,6 +65,7 @@ public class VideoGridFragment extends AutoSizeGridFragment implements VideoCate
     private void setupEventListeners() {
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
+        mCardPresenter.setOnItemViewLongClickedListener(new ItemViewLongClickedListener());
     }
 
     private void applyPendingUpdates() {
@@ -78,7 +82,7 @@ public class VideoGridFragment extends AutoSizeGridFragment implements VideoCate
         setGridPresenter(presenter);
 
         if (mGridAdapter == null) {
-            mGridAdapter = new VideoGroupObjectAdapter();
+            mGridAdapter = new VideoGroupObjectAdapter(mCardPresenter);
             setAdapter(mGridAdapter);
         }
     }
@@ -140,22 +144,24 @@ public class VideoGridFragment extends AutoSizeGridFragment implements VideoCate
         return mGridAdapter.size() == 0;
     }
 
+    private final class ItemViewLongClickedListener implements OnItemViewLongClickedListener {
+        @Override
+        public void onItemLongClicked(Presenter.ViewHolder itemViewHolder, Object item) {
+            if (item instanceof Video) {
+                mMainPresenter.onVideoItemLongClicked((Video) item);
+            } else {
+                Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
 
             if (item instanceof Video) {
-                if (getActivity() instanceof LeanbackActivity) {
-                    boolean longClick = ((LeanbackActivity) getActivity()).isLongClick();
-                    Log.d(TAG, "Is long click: " + longClick);
-
-                    if (longClick) {
-                        mMainPresenter.onVideoItemLongClicked((Video) item);
-                    } else {
-                        mMainPresenter.onVideoItemClicked((Video) item);
-                    }
-                }
+                mMainPresenter.onVideoItemClicked((Video) item);
             } else {
                 Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
             }

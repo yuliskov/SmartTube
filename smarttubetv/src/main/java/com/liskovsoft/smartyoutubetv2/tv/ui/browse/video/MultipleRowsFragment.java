@@ -20,6 +20,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewLongClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
@@ -39,6 +41,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     private Map<Integer, VideoGroupObjectAdapter> mVideoGroupAdapters;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private VideoGroupPresenter mMainPresenter;
+    private CardPresenter mCardPresenter;
     private boolean mInvalidate;
     private int mSelectedRowIndex = -1;
 
@@ -47,6 +50,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         super.onCreate(savedInstanceState);
         
         mMainPresenter = getMainPresenter();
+        mCardPresenter = new CardPresenter();
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
 
         setupAdapter();
@@ -79,6 +83,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     private void setupEventListeners() {
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
+        mCardPresenter.setOnItemViewLongClickedListener(new ItemViewLongClickedListener());
     }
 
     @Override
@@ -124,7 +129,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         VideoGroupObjectAdapter existingAdapter = mVideoGroupAdapters.get(mediaGroupId);
 
         if (existingAdapter == null) {
-            VideoGroupObjectAdapter mediaGroupAdapter = new VideoGroupObjectAdapter(group);
+            VideoGroupObjectAdapter mediaGroupAdapter = new VideoGroupObjectAdapter(group, mCardPresenter);
 
             mVideoGroupAdapters.put(mediaGroupId, mediaGroupAdapter);
 
@@ -175,22 +180,25 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         }
     }
 
+    private final class ItemViewLongClickedListener implements OnItemViewLongClickedListener {
+        @Override
+        public void onItemLongClicked(Presenter.ViewHolder itemViewHolder, Object item) {
+
+            if (item instanceof Video) {
+                mMainPresenter.onVideoItemLongClicked((Video) item);
+            } else {
+                Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     private final class ItemViewClickedListener implements OnItemViewClickedListener {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
 
             if (item instanceof Video) {
-                if (getActivity() instanceof LeanbackActivity) {
-                    boolean longClick = ((LeanbackActivity) getActivity()).isLongClick();
-                    Log.d(TAG, "Is long click: " + longClick);
-
-                    if (longClick) {
-                        mMainPresenter.onVideoItemLongClicked((Video) item);
-                    } else {
-                        mMainPresenter.onVideoItemClicked((Video) item);
-                    }
-                }
+                mMainPresenter.onVideoItemClicked((Video) item);
             } else {
                 Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
             }
