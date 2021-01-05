@@ -1,23 +1,25 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.settings;
+package com.liskovsoft.smartyoutubetv2.tv.ui.dialogs;
 
 import android.content.pm.ActivityInfo;
 import android.os.Build.VERSION;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 
-public class AppSettingsActivity extends MotherActivity {
-    private static final String TAG = AppSettingsActivity.class.getSimpleName();
-    private AppSettingsFragment mFragment;
+public class AppDialogActivity extends MotherActivity {
+    private static final String TAG = AppDialogActivity.class.getSimpleName();
+    private AppDialogFragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //setupActivity();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_app_settings);
-        mFragment = (AppSettingsFragment) getFragmentManager().findFragmentById(R.id.app_settings_fragment);
+        mFragment = (AppDialogFragment) getFragmentManager().findFragmentById(R.id.app_settings_fragment);
     }
 
     @Override
@@ -36,6 +38,15 @@ public class AppSettingsActivity extends MotherActivity {
         if (VERSION.SDK_INT != 26) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (KeyHelpers.isMenuKey(keyCode)) { // toggle dialog with menu key
+            finish();
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

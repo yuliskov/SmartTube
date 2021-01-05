@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.settings.dialogs;
+package com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

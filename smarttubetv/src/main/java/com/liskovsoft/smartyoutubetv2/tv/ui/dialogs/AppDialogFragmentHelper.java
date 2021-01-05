@@ -1,24 +1,22 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.settings;
+package com.liskovsoft.smartyoutubetv2.tv.ui.dialogs;
 
 import android.content.Context;
 import androidx.preference.DialogPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.MultiSelectListPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceScreen;
 import androidx.preference.SwitchPreference;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter.SettingsCategory;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.ui.settings.AppSettingsFragment.AppPreferenceFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.settings.dialogs.StringListPreference;
+import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreference;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class AppSettingsFragmentHelper {
+public class AppDialogFragmentHelper {
     private final Context mStyledContext;
 
     public static class ListPreferenceData {
@@ -35,7 +33,7 @@ public class AppSettingsFragmentHelper {
         }
     }
 
-    public AppSettingsFragmentHelper(Context styledContext) {
+    public AppDialogFragmentHelper(Context styledContext) {
         mStyledContext = styledContext;
     }
 

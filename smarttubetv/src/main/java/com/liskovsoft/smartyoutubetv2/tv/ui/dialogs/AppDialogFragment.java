@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.settings;
+package com.liskovsoft.smartyoutubetv2.tv.ui.dialogs;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -17,15 +17,15 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter.SettingsCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppSettingsView;
-import com.liskovsoft.smartyoutubetv2.tv.ui.settings.dialogs.RadioListPreferenceDialogFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.settings.dialogs.StringListPreference;
-import com.liskovsoft.smartyoutubetv2.tv.ui.settings.dialogs.StringListPreferenceDialogFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.RadioListPreferenceDialogFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreference;
+import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreferenceDialogFragment;
 
 import java.util.List;
 
-public class AppSettingsFragment extends LeanbackSettingsFragment
+public class AppDialogFragment extends LeanbackSettingsFragment
         implements DialogPreference.TargetFragment, AppSettingsView {
-    private static final String TAG = AppSettingsFragment.class.getSimpleName();
+    private static final String TAG = AppDialogFragment.class.getSimpleName();
     private AppPreferenceFragment mPreferenceFragment;
     private AppSettingsPresenter mSettingsPresenter;
     private boolean mIsStateSaved;
@@ -149,14 +149,14 @@ public class AppSettingsFragment extends LeanbackSettingsFragment
         private static final String TAG = AppPreferenceFragment.class.getSimpleName();
         private List<SettingsCategory> mCategories;
         private Context mExtractedContext;
-        private AppSettingsFragmentHelper mManager;
+        private AppDialogFragmentHelper mManager;
         private String mTitle;
 
         @Override
         public void onCreatePreferences(Bundle bundle, String s) {
             // Note, place in field with different name to avoid field overlapping
             mExtractedContext = (Context) Helpers.getField(this, "mStyledContext");
-            mManager = new AppSettingsFragmentHelper(mExtractedContext);
+            mManager = new AppDialogFragmentHelper(mExtractedContext);
 
             initPrefs();
 

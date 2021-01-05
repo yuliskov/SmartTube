@@ -37,8 +37,6 @@ public abstract class LongClickPresenter extends Presenter {
                         if (event.getAction() == KeyEvent.ACTION_DOWN) {
                             mMenuPressListener.onItemViewClicked(viewHolder, item);
                         }
-
-                        return true; // disable menu key processing inside player ui
                     }
                 }
 
