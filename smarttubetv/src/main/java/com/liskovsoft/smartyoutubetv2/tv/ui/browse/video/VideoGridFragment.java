@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.leanback.widget.FocusHighlight;
-import androidx.leanback.widget.OnItemViewClickedListener;
 import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
@@ -18,7 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewLongClickedListener;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
@@ -65,7 +64,8 @@ public class VideoGridFragment extends AutoSizeGridFragment implements VideoCate
     private void setupEventListeners() {
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
-        mCardPresenter.setOnItemViewLongClickedListener(new ItemViewLongClickedListener());
+        mCardPresenter.setOnLongClickedListener(new ItemViewLongClickedListener());
+        mCardPresenter.setOnMenuPressedListener(new ItemViewLongClickedListener());
     }
 
     private void applyPendingUpdates() {
@@ -144,9 +144,9 @@ public class VideoGridFragment extends AutoSizeGridFragment implements VideoCate
         return mGridAdapter.size() == 0;
     }
 
-    private final class ItemViewLongClickedListener implements OnItemViewLongClickedListener {
+    private final class ItemViewLongClickedListener implements OnItemViewClickedListener {
         @Override
-        public void onItemLongClicked(Presenter.ViewHolder itemViewHolder, Object item) {
+        public void onItemViewClicked(Presenter.ViewHolder itemViewHolder, Object item) {
             if (item instanceof Video) {
                 mMainPresenter.onVideoItemLongClicked((Video) item);
             } else {
@@ -155,7 +155,7 @@ public class VideoGridFragment extends AutoSizeGridFragment implements VideoCate
         }
     }
 
-    private final class ItemViewClickedListener implements OnItemViewClickedListener {
+    private final class ItemViewClickedListener implements androidx.leanback.widget.OnItemViewClickedListener {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {

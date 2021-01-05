@@ -5,38 +5,56 @@ import androidx.leanback.widget.Presenter;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 
 public abstract class LongClickPresenter extends Presenter {
-    private OnItemViewLongClickedListener mListener;
+    private OnItemViewClickedListener mLongClickListener;
+    private OnItemViewClickedListener mMenuPressListener;
 
-    public void setOnItemViewLongClickedListener(OnItemViewLongClickedListener listener) {
-        mListener = listener;
+    public void setOnLongClickedListener(OnItemViewClickedListener listener) {
+        mLongClickListener = listener;
+    }
+
+    public void setOnMenuPressedListener(OnItemViewClickedListener listener) {
+        mMenuPressListener = listener;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {
-        if (mListener != null) {
+        if (mLongClickListener != null) {
             viewHolder.view.setOnLongClickListener(v -> {
-                if (mListener != null) {
-                    mListener.onItemLongClicked(viewHolder, item);
-                }
-                return true; // don't provoke single click event
-            });
+                if (mLongClickListener != null) {
+                    mLongClickListener.onItemViewClicked(viewHolder, item);
 
-            //viewHolder.view.setOnKeyListener((v, keyCode, event) -> {
-            //    if (event.getAction() == KeyEvent.ACTION_DOWN && KeyHelpers.isMenuKey(keyCode)) {
-            //        if (mListener != null) {
-            //            mListener.onItemLongClicked(viewHolder, item);
-            //        }
-            //    }
-            //    return false; // enable navigation events
-            //});
+                    return true; // don't provoke single click event
+                }
+
+                return false; // work as usual
+            });
+        }
+
+        if (mMenuPressListener != null) {
+            viewHolder.view.setOnKeyListener((v, keyCode, event) -> {
+                if (mMenuPressListener != null) {
+                    if (KeyHelpers.isMenuKey(keyCode)) {
+                        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                            mMenuPressListener.onItemViewClicked(viewHolder, item);
+                        }
+
+                        return true; // disable menu key processing inside player ui
+                    }
+                }
+
+                return false; // enable navigation events
+            });
         }
     }
 
     @Override
     public void onUnbindViewHolder(ViewHolder viewHolder) {
-        if (mListener != null) {
+        if (mLongClickListener != null) {
             viewHolder.view.setOnLongClickListener(null);
-            //viewHolder.view.setOnKeyListener(null);
+        }
+
+        if (mMenuPressListener != null) {
+            viewHolder.view.setOnKeyListener(null);
         }
     }
 }

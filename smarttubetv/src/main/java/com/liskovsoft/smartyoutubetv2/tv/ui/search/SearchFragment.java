@@ -19,7 +19,6 @@ import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.ObjectAdapter;
-import androidx.leanback.widget.OnItemViewClickedListener;
 import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
@@ -33,7 +32,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewLongClickedListener;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
@@ -117,7 +116,8 @@ public class SearchFragment extends SearchSupportFragment
     private void setupEventListeners() {
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
-        mCardPresenter.setOnItemViewLongClickedListener(new ItemViewLongClickedListener());
+        mCardPresenter.setOnLongClickedListener(new ItemViewLongClickedListener());
+        mCardPresenter.setOnMenuPressedListener(new ItemViewLongClickedListener());
     }
 
     @Override
@@ -209,9 +209,9 @@ public class SearchFragment extends SearchSupportFragment
         }
     }
 
-    private final class ItemViewLongClickedListener implements OnItemViewLongClickedListener {
+    private final class ItemViewLongClickedListener implements OnItemViewClickedListener {
         @Override
-        public void onItemLongClicked(Presenter.ViewHolder itemViewHolder, Object item) {
+        public void onItemViewClicked(Presenter.ViewHolder itemViewHolder, Object item) {
 
             if (item instanceof Video) {
                 mSearchPresenter.onVideoItemLongClicked((Video) item);
@@ -221,7 +221,7 @@ public class SearchFragment extends SearchSupportFragment
         }
     }
 
-    private final class ItemViewClickedListener implements OnItemViewClickedListener {
+    private final class ItemViewClickedListener implements androidx.leanback.widget.OnItemViewClickedListener {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
