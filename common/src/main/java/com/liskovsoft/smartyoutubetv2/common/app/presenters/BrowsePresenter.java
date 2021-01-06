@@ -387,9 +387,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        continueMediaGroup -> getView().updateCategory(VideoGroup.from(continueMediaGroup, group.getCategory()))
-                        , error -> Log.e(TAG, "continueGroup error: " + error)
-                        , () -> getView().showProgressBar(false));
+                        continueMediaGroup -> getView().updateCategory(VideoGroup.from(continueMediaGroup, group.getCategory())),
+                        error -> {
+                            Log.e(TAG, "continueGroup error: " + error);
+                            getView().showProgressBar(false);
+                        },
+                        () -> getView().showProgressBar(false));
     }
 
     private void authCheck(boolean check, Runnable callback) {
@@ -413,7 +416,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                                     getView().showError(new SignInError(getContext()));
                                 }
                             }
-                        }
+                        },
+                        error -> Log.e(TAG, "authCheck error: " + error)
                 );
                 
     }
@@ -432,13 +436,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                             if (!mediaGroups.isEmpty()) {
                                 getView().showProgressBar(false);
                             }
-                        }
-                        , error -> Log.e(TAG, "updateRowsHeader error: " + error)
-                        , () -> {
-                            if (getView().isProgressBarShowing()) {
-                                getView().showProgressBar(false);
-                                getView().showError(new CategoryEmptyError(getContext()));
-                            }
+                        },
+                        error -> {
+                            Log.e(TAG, "updateRowsHeader error: " + error);
+                            getView().showProgressBar(false);
+                            getView().showError(new CategoryEmptyError(getContext()));
                         });
     }
 
@@ -456,13 +458,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                             if (mediaGroup.getMediaItems() != null) {
                                 getView().showProgressBar(false);
                             }
-                        }
-                        , error -> Log.e(TAG, "updateGridHeader error: " + error)
-                        , () -> {
-                            if (getView().isProgressBarShowing()) {
-                                getView().showProgressBar(false);
-                                getView().showError(new CategoryEmptyError(getContext()));
-                            }
+                        },
+                        error -> {
+                            Log.e(TAG, "updateGridHeader error: " + error);
+                            getView().showProgressBar(false);
+                            getView().showError(new CategoryEmptyError(getContext()));
                         });
     }
 

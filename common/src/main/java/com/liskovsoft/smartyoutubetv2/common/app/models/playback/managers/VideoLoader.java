@@ -199,7 +199,10 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::processFormatInfo,
-                           error -> Log.e(TAG, "loadFormatInfo error: " + error));
+                           error -> {
+                               Log.e(TAG, "loadFormatInfo error: " + error);
+                               scheduleReloadVideoTimer(1_000);
+                           });
     }
 
     //private void processFormatInfo(MediaItemFormatInfo formatInfo) {
@@ -249,14 +252,16 @@ public class VideoLoader extends PlayerEventListenerHelper {
             getController().openUrlList(formatInfo.createUrlList());
         } else {
             Log.d(TAG, "Empty format info received. Seems future translation. No video data to pass to the player.");
-            scheduleReloadVideoTimer();
+            scheduleReloadVideoTimer(30 * 1_000);
         }
     }
 
-    private void scheduleReloadVideoTimer() {
-        Log.d(TAG, "Starting check for the future stream...");
-        getController().showControls(true);
-        mHandler.postDelayed(mReloadVideoHandler, 30 * 1_000);
+    private void scheduleReloadVideoTimer(int reloadIntervalMs) {
+        if (getController().isEngineInitialized()) {
+            Log.d(TAG, "Starting check for the future stream...");
+            getController().showControls(true);
+            mHandler.postDelayed(mReloadVideoHandler, reloadIntervalMs);
+        }
     }
 
     private boolean isWithinTimeWindow() {
