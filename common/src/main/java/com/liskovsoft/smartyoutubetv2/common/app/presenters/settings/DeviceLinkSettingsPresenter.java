@@ -21,23 +21,23 @@ import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LinkedDevicesSettingsPresenter extends BasePresenter<Void> {
+public class DeviceLinkSettingsPresenter extends BasePresenter<Void> {
     @SuppressLint("StaticFieldLeak")
-    private static LinkedDevicesSettingsPresenter sInstance;
+    private static DeviceLinkSettingsPresenter sInstance;
     private final SignInManager mSignInManager;
     private Disposable mDevicesAction;
     private final List<Account> mPendingRemove = new ArrayList<>();
     private Account mSelectedAccount = null;
 
-    public LinkedDevicesSettingsPresenter(Context context) {
+    public DeviceLinkSettingsPresenter(Context context) {
         super(context);
         MediaService service = YouTubeMediaService.instance();
         mSignInManager = service.getSignInManager();
     }
 
-    public static LinkedDevicesSettingsPresenter instance(Context context) {
+    public static DeviceLinkSettingsPresenter instance(Context context) {
         if (sInstance == null) {
-            sInstance = new LinkedDevicesSettingsPresenter(context);
+            sInstance = new DeviceLinkSettingsPresenter(context);
         }
 
         sInstance.setContext(context);

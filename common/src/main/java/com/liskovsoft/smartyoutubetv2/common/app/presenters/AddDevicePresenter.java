@@ -6,7 +6,6 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AddDeviceView;
-import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -19,15 +18,11 @@ public class AddDevicePresenter extends BasePresenter<AddDeviceView> {
     @SuppressLint("StaticFieldLeak")
     private static AddDevicePresenter sInstance;
     private final MediaService mMediaService;
-    private final BrowsePresenter mBrowsePresenter;
-    private final SplashPresenter mSplashPresenter;
-    private Disposable mSignInAction;
+    private Disposable mDeviceCodeAction;
 
     private AddDevicePresenter(Context context) {
         super(context);
         mMediaService = YouTubeMediaService.instance();
-        mBrowsePresenter = BrowsePresenter.instance(context);
-        mSplashPresenter = SplashPresenter.instance(context);
     }
 
     public static AddDevicePresenter instance(Context context) {
@@ -41,7 +36,7 @@ public class AddDevicePresenter extends BasePresenter<AddDeviceView> {
     }
 
     public void unhold() {
-        RxUtils.disposeActions(mSignInAction);
+        RxUtils.disposeActions(mDeviceCodeAction);
         sInstance = null;
     }
 
@@ -52,33 +47,25 @@ public class AddDevicePresenter extends BasePresenter<AddDeviceView> {
 
     @Override
     public void onViewInitialized() {
-        RxUtils.disposeActions(mSignInAction);
-        updateUserCode();
+        RxUtils.disposeActions(mDeviceCodeAction);
+        updateDeviceCode();
     }
 
     public void onActionClicked() {
         getView().close();
     }
 
-    private void updateUserCode() {
-        mSignInAction = mMediaService.getSignInManager().signInObserve()
+    private void updateDeviceCode() {
+        mDeviceCodeAction = mMediaService.getDeviceLinkManager().getDeviceCodeObserve()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        userCode -> getView().showCode(userCode),
-                        error -> Log.e(TAG, error),
-                        () -> {
-                            // Success
-                            mBrowsePresenter.refresh();
-                            if (getView() != null) {
-                                getView().close();
-                            }
-                            mSplashPresenter.updateChannels();
-                        });
+                        deviceCode -> getView().showCode(deviceCode),
+                        error -> Log.e(TAG, error));
     }
 
     public void start() {
-        RxUtils.disposeActions(mSignInAction);
+        RxUtils.disposeActions(mDeviceCodeAction);
         ViewManager.instance(getContext()).startView(AddDeviceView.class);
     }
 }
