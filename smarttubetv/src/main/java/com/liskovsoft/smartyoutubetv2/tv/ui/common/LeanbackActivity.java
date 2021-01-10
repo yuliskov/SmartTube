@@ -110,6 +110,7 @@ public abstract class LeanbackActivity extends MotherActivity {
     }
 
     private void properlyFinishTheApp() {
+        Log.d(TAG, "Finishing the app...");
         SplashPresenter.instance(this).unhold();
         mViewManager.clearCaches();
         destroyActivity();

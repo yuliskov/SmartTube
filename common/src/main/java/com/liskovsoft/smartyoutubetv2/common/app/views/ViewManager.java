@@ -76,6 +76,7 @@ public class ViewManager {
         mMoveViewsToBack = false; // Essential part or new view will be pause immediately
 
         if (!forceStart && doThrottle()) {
+            Log.d(TAG, "Too many events. Skipping startView...");
             return;
         }
 
@@ -89,9 +90,10 @@ public class ViewManager {
     }
 
     public boolean startParentView(Activity activity) {
-        if (doThrottle()) {
-            return true;
-        }
+        //if (doThrottle()) {
+        //    Log.d(TAG, "Too many events. Skipping startParentView...");
+        //    return true;
+        //}
 
         if (activity.getIntent() != null) {
             removeTopActivity();
@@ -133,9 +135,10 @@ public class ViewManager {
         mMoveViewsToBack = false;
         mIsSinglePlayerMode = false;
 
-        if (doThrottle()) {
-            return;
-        }
+        //if (doThrottle()) {
+        //    Log.d(TAG, "Too many events. Skipping startDefaultView...");
+        //    return;
+        //}
 
         Class<?> lastActivity;
 

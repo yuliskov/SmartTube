@@ -144,6 +144,8 @@ public class PlaybackActivity extends LeanbackActivity {
 
     @Override
     public void finish() {
+        Log.d(TAG, "Finishing activity...");
+
         // NOTE: When exiting PIP mode onPause is called immediately after onResume
 
         // Also, avoid enter pip on stop!
