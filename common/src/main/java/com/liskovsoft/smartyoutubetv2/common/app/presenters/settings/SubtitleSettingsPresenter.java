@@ -19,33 +19,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-public class PlayerSettingsPresenter extends BasePresenter<Void> {
+public class SubtitleSettingsPresenter extends BasePresenter<Void> {
     private final PlayerData mPlayerData;
 
-    public PlayerSettingsPresenter(Context context) {
+    public SubtitleSettingsPresenter(Context context) {
         super(context);
         mPlayerData = PlayerData.instance(context);
     }
 
-    public static PlayerSettingsPresenter instance(Context context) {
-        return new PlayerSettingsPresenter(context);
+    public static SubtitleSettingsPresenter instance(Context context) {
+        return new SubtitleSettingsPresenter(context);
     }
 
     public void show() {
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
         settingsPresenter.clear();
 
-        appendVideoBufferCategory(settingsPresenter);
-        appendVideoPresetsCategory(settingsPresenter);
-        appendAudioShiftCategory(settingsPresenter);
-        appendBackgroundPlaybackCategory(settingsPresenter);
-        appendAutoFrameRateCategory(settingsPresenter);
-        appendAutoFrameRatePauseCategory(settingsPresenter);
-        appendVideoZoomCategory(settingsPresenter);
-        appendOKButtonCategory(settingsPresenter);
-        appendUIAutoHideCategory(settingsPresenter);
-        appendSeekingPreviewCategory(settingsPresenter);
-        appendMiscCategory(settingsPresenter);
+        appendSubtitleLanguageCategory(settingsPresenter);
+        appendSubtitleStyleCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_player_ui));
     }
