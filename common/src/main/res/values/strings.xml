@@ -158,4 +158,7 @@
     <string name="player_remember_speed">Remember speed</string>
     <string name="mark_channel_as_watched">Mark as watched</string>
     <string name="channel_marked_as_watched">Channel has been marked as watched</string>
+    <string name="dialog_add_device">Add device</string>
+    <string name="dialog_remove_device">Remove device</string>
+    <string name="device_link_enabled">Link enabled</string>
 </resources>
