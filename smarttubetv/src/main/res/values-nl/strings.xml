@@ -14,7 +14,7 @@
     <string name="badge_new_content">NIEUW</string>
     <string name="badge_live">LIVE</string>
     <string name="action_pip">Beeld-in-beeld</string>
-    <string name="add_device_view_description">Om dit apparaat te koppelen deze code invoeren op de YouTube app op je smartphone/tablet onder Instellingen-Op TV bekijken</string>
+    <string name="add_device_view_description">Dit apparaat koppelen met deze code in de YouTube app op je smartphone/tablet onder Instellingen-Op TV bekijken</string>
     <!-- Vineyard -->
     <string name="title_oops">Oeps</string>
     <string name="title_no_videos">Geen video\'s</string>
