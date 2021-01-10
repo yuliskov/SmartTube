@@ -5,6 +5,7 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.AddDeviceView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
@@ -13,7 +14,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class AddDevicePresenter extends BasePresenter<SignInView> {
+public class AddDevicePresenter extends BasePresenter<AddDeviceView> {
     private static final String TAG = AddDevicePresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static AddDevicePresenter sInstance;
@@ -78,6 +79,6 @@ public class AddDevicePresenter extends BasePresenter<SignInView> {
 
     public void start() {
         RxUtils.disposeActions(mSignInAction);
-        ViewManager.instance(getContext()).startView(SignInView.class);
+        ViewManager.instance(getContext()).startView(AddDeviceView.class);
     }
 }
