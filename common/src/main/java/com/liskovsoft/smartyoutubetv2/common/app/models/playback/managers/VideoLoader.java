@@ -235,9 +235,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
         if (formatInfo.isUnplayable()) {
             getController().showError(formatInfo.getPlayabilityStatus());
-        }
-
-        if (formatInfo.containsHlsUrl()) {
+        } else if (formatInfo.containsHlsUrl()) {
             Log.d(TAG, "Found live video (current and past) in hls format. Loading...");
             getController().openHlsUrl(formatInfo.getHlsManifestUrl());
         } else if (formatInfo.containsDashInfo()) {
@@ -251,7 +249,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
             Log.d(TAG, "Found url list video. This is always LQ. Loading...");
             getController().openUrlList(formatInfo.createUrlList());
         } else {
-            Log.d(TAG, "Empty format info received. Seems future translation. No video data to pass to the player.");
+            Log.d(TAG, "Empty format info received. Seems future live translation. No video data to pass to the player.");
             scheduleReloadVideoTimer(30 * 1_000);
         }
     }
