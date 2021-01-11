@@ -11,7 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AddDevicePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.DeviceLinkData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -103,8 +103,8 @@ public class DeviceLinkSettingsPresenter extends BasePresenter<Void> {
 
     private void appendDeviceLinkEnableSwitch(AppSettingsPresenter settingsPresenter) {
         settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.device_link_enabled), optionItem -> {
-            AccountsData.instance(getContext()).selectAccountOnBoot(optionItem.isSelected());
-        }, AccountsData.instance(getContext()).isSelectAccountOnBootEnabled()));
+            DeviceLinkData.instance(getContext()).enableDeviceLink(optionItem.isSelected());
+        }, DeviceLinkData.instance(getContext()).isDeviceLinkEnabled()));
     }
 
     private String formatAccount(Account account) {
