@@ -156,4 +156,9 @@
 	<string name="auto_frame_rate_applying">應用自動幀率 %sx%s@%s</string>
 	<string name="audio_shift">音訊轉換</string>
 	<string name="player_remember_speed">記住速度</string>
+	<string name="mark_channel_as_watched">標記為已觀看</string>
+	<string name="channel_marked_as_watched">頻道標記為已觀看</string>
+	<string name="dialog_add_device">新增裝置</string>
+	<string name="dialog_remove_device">移除裝置</string>
+	<string name="device_link_enabled">連結已啟用</string>
 </resources>
