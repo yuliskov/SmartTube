@@ -1,10 +1,12 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.CommandManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.Command;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.DeviceLinkData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -18,15 +20,20 @@ public class DeviceCommandManager extends PlayerEventListenerHelper {
     private final DeviceLinkData mDeviceLinkData;
     private Disposable mCommandAction;
 
-    public DeviceCommandManager() {
+    public DeviceCommandManager(Context context) {
         MediaService mediaService = YouTubeMediaService.instance();
         mCommandManager = mediaService.getCommandManager();
-        mDeviceLinkData = DeviceLinkData.instance(null);
+        mDeviceLinkData = DeviceLinkData.instance(context);
         tryListening();
     }
 
     @Override
     public void onInitDone() {
+        tryListening();
+    }
+
+    @Override
+    public void onViewResumed() {
         tryListening();
     }
 
@@ -48,7 +55,9 @@ public class DeviceCommandManager extends PlayerEventListenerHelper {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::processCommand,
-                        error -> Log.e(TAG, "startListening error: " + error)
+                        error -> {
+                            Log.e(TAG, "startListening error: " + error);
+                        }
                 );
     }
 
@@ -57,6 +66,10 @@ public class DeviceCommandManager extends PlayerEventListenerHelper {
     }
 
     private void processCommand(Command command) {
-
+        switch (command.getType()) {
+            case Command.TYPE_OPEN:
+                PlaybackPresenter.instance(getActivity()).openVideo(command.getVideoId());
+                break;
+        }
     }
 }

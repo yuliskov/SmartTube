@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import androidx.fragment.app.Fragment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -37,8 +38,8 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     private WeakReference<PlaybackController> mController = new WeakReference<>(null);
     private WeakReference<Activity> mActivity = new WeakReference<>(null);
 
-    public MainPlayerEventBridge() {
-        DeviceCommandManager commandManager = new DeviceCommandManager();
+    public MainPlayerEventBridge(Context context) {
+        DeviceCommandManager commandManager = new DeviceCommandManager(context);
         PlayerUiManager uiManager = new PlayerUiManager();
         VideoLoader videoLoader = new VideoLoader();
         StateUpdater stateUpdater = new StateUpdater();
@@ -56,9 +57,9 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         mEventListeners.add(videoLoader);
     }
 
-    public static MainPlayerEventBridge instance() {
+    public static MainPlayerEventBridge instance(Context context) {
         if (sInstance == null) {
-            sInstance = new MainPlayerEventBridge();
+            sInstance = new MainPlayerEventBridge(context);
         }
 
         return sInstance;

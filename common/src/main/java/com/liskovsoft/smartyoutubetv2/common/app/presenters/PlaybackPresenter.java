@@ -18,7 +18,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     private PlaybackPresenter(Context context) {
         super(context);
         mViewManager = ViewManager.instance(context);
-        mMainPlayerEventBridge = MainPlayerEventBridge.instance();
+        mMainPlayerEventBridge = MainPlayerEventBridge.instance(context);
     }
 
     public static PlaybackPresenter instance(Context context) {
@@ -41,7 +41,9 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
      * Opens video item from browser, search or channel views
      */
     public void openVideo(String videoId) {
-        openVideo(Video.from(videoId));
+        if (videoId != null) {
+            openVideo(Video.from(videoId));
+        }
     }
 
     /**
