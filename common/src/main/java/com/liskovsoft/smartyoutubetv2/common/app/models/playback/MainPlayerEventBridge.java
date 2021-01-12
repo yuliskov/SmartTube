@@ -8,6 +8,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerHandlerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.DeviceCommandManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HqDialogManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.StateUpdater;
@@ -37,6 +38,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     private WeakReference<Activity> mActivity = new WeakReference<>(null);
 
     public MainPlayerEventBridge() {
+        DeviceCommandManager commandManager = new DeviceCommandManager();
         PlayerUiManager uiManager = new PlayerUiManager();
         VideoLoader videoLoader = new VideoLoader();
         StateUpdater stateUpdater = new StateUpdater();
@@ -45,6 +47,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         suggestionsLoader.addMetadataListener(uiManager);
 
         // NOTE: position matters!!!
+        mEventListeners.add(commandManager);
         mEventListeners.add(new AutoFrameRateManager(hqDialogManager, stateUpdater));
         mEventListeners.add(uiManager);
         mEventListeners.add(hqDialogManager);
