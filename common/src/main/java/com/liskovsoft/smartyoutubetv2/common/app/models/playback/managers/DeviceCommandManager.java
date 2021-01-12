@@ -2,18 +2,31 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import com.liskovsoft.mediaserviceinterfaces.CommandManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.data.Command;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.prefs.DeviceLinkData;
+import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class DeviceCommandManager extends PlayerEventListenerHelper {
-    private final CommandManager mDeviceCommandManager;
+    private static final String TAG = DeviceCommandManager.class.getSimpleName();
+    private final CommandManager mCommandManager;
     private final DeviceLinkData mDeviceLinkData;
+    private Disposable mCommandAction;
 
     public DeviceCommandManager() {
         MediaService mediaService = YouTubeMediaService.instance();
-        mDeviceCommandManager = mediaService.getCommandManager();
+        mCommandManager = mediaService.getCommandManager();
         mDeviceLinkData = DeviceLinkData.instance(null);
+        tryListening();
+    }
+
+    @Override
+    public void onInitDone() {
         tryListening();
     }
 
@@ -26,10 +39,24 @@ public class DeviceCommandManager extends PlayerEventListenerHelper {
     }
 
     private void startListening() {
+        if (mCommandAction != null && !mCommandAction.isDisposed()) {
+            return;
+        }
 
+        mCommandAction = mCommandManager.getDeviceCommandObserve()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        this::processCommand,
+                        error -> Log.e(TAG, "startListening error: " + error)
+                );
     }
 
     private void stopListening() {
+        RxUtils.disposeActions(mCommandAction);
+    }
+
+    private void processCommand(Command command) {
 
     }
 }

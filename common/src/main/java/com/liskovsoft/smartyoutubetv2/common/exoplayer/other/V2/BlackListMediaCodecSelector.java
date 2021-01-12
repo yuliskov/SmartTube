@@ -9,12 +9,15 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Usage {@link CustomOverridesRenderersFactory#setMediaCodecSelector}
+ */
 public class BlackListMediaCodecSelector implements MediaCodecSelector {
     private static final String TAG = BlackListMediaCodecSelector.class.getSimpleName();
 
     // list of strings used in blacklisting codecs
     //final static String[] BLACKLISTEDCODECS = {"OMX.google.h264.decoder", "OMX.Nvidia.vp9.decoder", "OMX.google.vp9.decoder", "OMX.MTK.VIDEO.DECODER.VP9", "OMX.amlogic.vp9.decoder"};
-    final static String[] BLACKLISTEDCODECS = {"OMX.google.h264.decoder", "OMX.Nvidia.vp9.decoder", "OMX.google.vp9.decoder", "OMX.MTK.VIDEO.DECODER.VP9"};
+    final static String[] BLACKLISTEDCODECS = {"google"}; // SW codec
 
     // Ver. 2.9.6
     //@Override
