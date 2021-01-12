@@ -56,10 +56,6 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     }
 
     private void focusView() {
-        //if (getView() != null && (getView().getController().isInPIPMode() || getView().getController().isEngineBlocked())) {
-        //    return;
-        //}
-
         mViewManager.startView(PlaybackView.class);
     }
 
