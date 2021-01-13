@@ -10,6 +10,7 @@ public class DeviceLinkData {
     private final Context mContext;
     private final AppPrefs mAppPrefs;
     private boolean mIsDeviceLinkEnabled;
+    private Runnable mOnChange;
 
     public DeviceLinkData(Context context) {
         mContext = context;
@@ -34,8 +35,16 @@ public class DeviceLinkData {
         return mIsDeviceLinkEnabled;
     }
 
+    public void onChange(Runnable callback) {
+        mOnChange = callback;
+    }
+
     private void persistState() {
         mAppPrefs.setDeviceLinkData(Helpers.mergeObject(mIsDeviceLinkEnabled));
+
+        if (mOnChange != null) {
+            mOnChange.run();
+        }
     }
 
     private void restoreState() {

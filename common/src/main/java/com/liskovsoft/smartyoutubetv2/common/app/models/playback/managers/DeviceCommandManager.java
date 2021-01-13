@@ -6,6 +6,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.Command;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.DeviceLinkData;
@@ -20,11 +21,13 @@ public class DeviceCommandManager extends PlayerEventListenerHelper {
     private final CommandManager mCommandManager;
     private final DeviceLinkData mDeviceLinkData;
     private Disposable mCommandAction;
+    private Disposable mPostAction;
 
     public DeviceCommandManager(Context context) {
         MediaService mediaService = YouTubeMediaService.instance();
         mCommandManager = mediaService.getCommandManager();
         mDeviceLinkData = DeviceLinkData.instance(context);
+        mDeviceLinkData.onChange(this::tryListening);
         tryListening();
     }
 
@@ -36,6 +39,18 @@ public class DeviceCommandManager extends PlayerEventListenerHelper {
     @Override
     public void onViewResumed() {
         tryListening();
+    }
+
+    @Override
+    public void onVideoLoaded(Video item) {
+        //postPlaying(item);
+    }
+
+    private void postPlaying(Video item) {
+        mPostAction = mCommandManager.postPlayingObserve(item.videoId, getController().getPositionMs(), getController().getLengthMs())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
     }
 
     private void tryListening() {
@@ -65,7 +80,7 @@ public class DeviceCommandManager extends PlayerEventListenerHelper {
     }
 
     private void stopListening() {
-        RxUtils.disposeActions(mCommandAction);
+        RxUtils.disposeActions(mCommandAction, mPostAction);
     }
 
     private void processCommand(Command command) {
