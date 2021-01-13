@@ -4,6 +4,7 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.CommandManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.Command;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
@@ -56,7 +57,9 @@ public class DeviceCommandManager extends PlayerEventListenerHelper {
                 .subscribe(
                         this::processCommand,
                         error -> {
-                            Log.e(TAG, "startListening error: " + error);
+                            String msg = "startListening error: " + error;
+                            Log.e(TAG, msg);
+                            MessageHelpers.showMessage(getActivity(), msg);
                         }
                 );
     }
