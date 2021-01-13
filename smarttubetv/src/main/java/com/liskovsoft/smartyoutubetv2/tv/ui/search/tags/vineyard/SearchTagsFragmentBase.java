@@ -20,11 +20,15 @@ import androidx.leanback.widget.RowPresenter.ViewHolder;
 import androidx.leanback.widget.SpeechRecognitionCallback;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.SearchTagsProvider;
+import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.PaginationAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.TagAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SearchSupportFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         implements SearchSupportFragment.SearchResultProvider, SearchView {
@@ -168,7 +172,24 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
 
     private void performSearch(PaginationAdapter adapter) {
         String query = adapter.getAdapterOptions().get(PaginationAdapter.KEY_TAG);
-        mSearchTagsProvider.search(query, adapter::addAllItems);
+        mSearchTagsProvider.search(query, results -> {
+            adapter.addAllItems(results);
+            displayCompletions(toCompletions(results));
+        });
+    }
+
+    private List<String> toCompletions(List<Tag> results) {
+        List<String> result = null;
+
+        if (results != null) {
+            result = new ArrayList<>();
+
+            for (Tag tag : results) {
+                result.add(tag.tag);
+            }
+        }
+
+        return result;
     }
 
     /**
