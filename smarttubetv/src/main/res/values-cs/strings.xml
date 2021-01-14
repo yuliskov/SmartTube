@@ -22,4 +22,6 @@
     <string name="player_remaining_time">Zbývá: %s</string>
     <string name="badge_new_content">NOVÝ OBSAH</string>
     <string name="badge_live">ŽIVĚ</string>
+    <string name="action_pip">Spusit PIP (obraz v obraze)</string>
+    <string name="add_device_view_description">Pro propojení zařízení zadejte tento kód do aplikace YouTube v telefonu/tabletu v sekci: Nastavení-->Sledovat v TV</string>
 </resources>
