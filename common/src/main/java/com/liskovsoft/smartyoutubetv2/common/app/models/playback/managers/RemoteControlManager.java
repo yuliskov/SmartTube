@@ -44,6 +44,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     @Override
     public void onVideoLoaded(Video item) {
         postPlaying(item);
+        postUpdate();
     }
 
     private void postPlaying(Video item) {
@@ -52,6 +53,17 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         }
 
         mPostAction = mRemoteManager.postPlayingObserve(item.videoId, getController().getPositionMs(), getController().getLengthMs())
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe();
+    }
+
+    private void postUpdate() {
+        if (!mDeviceLinkData.isDeviceLinkEnabled()) {
+            return;
+        }
+
+        mPostAction = mRemoteManager.postUpdatePositionObserve(getController().getPositionMs(), getController().getLengthMs())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();

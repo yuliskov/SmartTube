@@ -111,7 +111,9 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 break;
             case PlaybackUiController.REPEAT_NONE:
                 // close player
-                getController().exit();
+                if (!getController().isSuggestionsShown()) {
+                    getController().exit();
+                }
                 break;
             case PlaybackUiController.REPEAT_PAUSE:
                 // pause player
