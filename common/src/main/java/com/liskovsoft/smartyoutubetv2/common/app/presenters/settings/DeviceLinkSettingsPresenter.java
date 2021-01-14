@@ -63,8 +63,8 @@ public class DeviceLinkSettingsPresenter extends BasePresenter<Void> {
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
         settingsPresenter.clear();
 
-        appendDeviceLinkEnableSwitch(settingsPresenter);
-        appendRemoveDeviceSection(accounts, settingsPresenter);
+        appendLinkEnableSwitch(settingsPresenter);
+        //appendRemoveDeviceSection(accounts, settingsPresenter);
         appendAddDeviceButton(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_linked_devices), () -> {
@@ -101,7 +101,7 @@ public class DeviceLinkSettingsPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.dialog_add_device), option -> AddDevicePresenter.instance(getContext()).start()));
     }
 
-    private void appendDeviceLinkEnableSwitch(AppSettingsPresenter settingsPresenter) {
+    private void appendLinkEnableSwitch(AppSettingsPresenter settingsPresenter) {
         settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.device_link_enabled), optionItem -> {
             DeviceLinkData.instance(getContext()).enableDeviceLink(optionItem.isSelected());
         }, DeviceLinkData.instance(getContext()).isDeviceLinkEnabled()));

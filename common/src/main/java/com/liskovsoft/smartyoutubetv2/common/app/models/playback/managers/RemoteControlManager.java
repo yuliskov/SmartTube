@@ -1,7 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.CommandManager;
+import com.liskovsoft.mediaserviceinterfaces.RemoteManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.Command;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -16,16 +16,16 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class DeviceCommandManager extends PlayerEventListenerHelper {
-    private static final String TAG = DeviceCommandManager.class.getSimpleName();
-    private final CommandManager mCommandManager;
+public class RemoteControlManager extends PlayerEventListenerHelper {
+    private static final String TAG = RemoteControlManager.class.getSimpleName();
+    private final RemoteManager mRemoteManager;
     private final DeviceLinkData mDeviceLinkData;
     private Disposable mCommandAction;
     private Disposable mPostAction;
 
-    public DeviceCommandManager(Context context) {
+    public RemoteControlManager(Context context) {
         MediaService mediaService = YouTubeMediaService.instance();
-        mCommandManager = mediaService.getCommandManager();
+        mRemoteManager = mediaService.getRemoteManager();
         mDeviceLinkData = DeviceLinkData.instance(context);
         mDeviceLinkData.onChange(this::tryListening);
         tryListening();
@@ -43,11 +43,15 @@ public class DeviceCommandManager extends PlayerEventListenerHelper {
 
     @Override
     public void onVideoLoaded(Video item) {
-        //postPlaying(item);
+        postPlaying(item);
     }
 
     private void postPlaying(Video item) {
-        mPostAction = mCommandManager.postPlayingObserve(item.videoId, getController().getPositionMs(), getController().getLengthMs())
+        if (!mDeviceLinkData.isDeviceLinkEnabled()) {
+            return;
+        }
+
+        mPostAction = mRemoteManager.postPlayingObserve(item.videoId, getController().getPositionMs(), getController().getLengthMs())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe();
@@ -66,7 +70,7 @@ public class DeviceCommandManager extends PlayerEventListenerHelper {
             return;
         }
 
-        mCommandAction = mCommandManager.getDeviceCommandObserve()
+        mCommandAction = mRemoteManager.getCommandObserve()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
