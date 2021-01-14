@@ -16,6 +16,7 @@ import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.PageRow;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.PresenterSelector;
+import androidx.leanback.widget.TitleHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Category;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
@@ -331,6 +332,18 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         }
 
         mIsFragmentCreated = false;
+
+        fixInvisibleSearchOrb();
+    }
+
+    /**
+     * Fix suddenly invisible search orb bug<br/>
+     * More info: {@link TitleHelper}
+     */
+    private void fixInvisibleSearchOrb() {
+        if (isShowingTitle() && getTitleView() != null && getTitleView().getVisibility() != View.VISIBLE) {
+            getTitleView().setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
