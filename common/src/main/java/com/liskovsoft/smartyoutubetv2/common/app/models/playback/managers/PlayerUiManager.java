@@ -26,6 +26,7 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.OnSelectSubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
@@ -291,7 +292,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     public void enableUiAutoHideTimeout() {
         Log.d(TAG, "Starting auto hide ui timer...");
         if (mEngineReady && mPlayerData.getUIHideTimoutSec() > 0) {
-            mHandler.postDelayed(mUiAutoHideHandler, mPlayerData.getUIHideTimoutSec() * 1_000);
+            mHandler.postDelayed(mUiAutoHideHandler, mPlayerData.getUIHideTimoutSec() * 1_000L);
         }
     }
 
@@ -322,9 +323,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
         Observable<Void> observable = callable.call(video.mediaItem);
 
-        observable
-                .subscribeOn(Schedulers.newThread())
-                .subscribe();
+        RxUtils.subscribe(observable);
     }
 
     private interface MediaItemObservable {
