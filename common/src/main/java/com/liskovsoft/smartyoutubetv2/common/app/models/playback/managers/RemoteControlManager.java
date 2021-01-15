@@ -21,7 +21,8 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     private final RemoteManager mRemoteManager;
     private final DeviceLinkData mDeviceLinkData;
     private Disposable mCommandAction;
-    private Disposable mPostAction;
+    private Disposable mPostPlayAction;
+    private Disposable mPostStateAction;
 
     public RemoteControlManager(Context context) {
         MediaService mediaService = YouTubeMediaService.instance();
@@ -43,16 +44,30 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
 
     @Override
     public void onVideoLoaded(Video item) {
-        postPlaying(item);
+        postStartPlaying(item);
     }
 
-    private void postPlaying(Video item) {
+    private void postStartPlaying(Video item) {
         if (!mDeviceLinkData.isDeviceLinkEnabled()) {
             return;
         }
 
-        mPostAction = RxUtils.subscribe(
-                mRemoteManager.postPlayingObserve(item.videoId, getController().getPositionMs(), getController().getLengthMs())
+        mPostPlayAction = RxUtils.subscribe(
+                mRemoteManager.postStartPlayingObserve(item.videoId, getController().getPositionMs(), getController().getLengthMs())
+        );
+    }
+
+    private void postSeek(long positionMs) {
+        postState(positionMs, getController().getLengthMs(), getController().isPlaying());
+    }
+
+    private void postPlay(boolean isPlay) {
+        postState(getController().getPositionMs(), getController().getLengthMs(), isPlay);
+    }
+
+    private void postState(long positionMs, long durationMs, boolean isPlaying) {
+        mPostStateAction = RxUtils.subscribe(
+                mRemoteManager.postStateChangeObserve(positionMs, durationMs, isPlaying)
         );
     }
 
@@ -83,13 +98,25 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     }
 
     private void stopListening() {
-        RxUtils.disposeActions(mCommandAction, mPostAction);
+        RxUtils.disposeActions(mCommandAction, mPostPlayAction, mPostStateAction);
     }
 
     private void processCommand(Command command) {
         switch (command.getType()) {
-            case Command.TYPE_OPEN:
+            case Command.TYPE_OPEN_VIDEO:
                 PlaybackPresenter.instance(getActivity()).openVideo(command.getVideoId());
+                break;
+            case Command.TYPE_SEEK:
+                getController().setPositionMs(command.getCurrentTimeMs());
+                postSeek(command.getCurrentTimeMs());
+                break;
+            case Command.TYPE_PLAY:
+                getController().setPlay(true);
+                postPlay(true);
+                break;
+            case Command.TYPE_PAUSE:
+                getController().setPlay(false);
+                postPlay(false);
                 break;
         }
     }
