@@ -48,13 +48,13 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         suggestionsLoader.addMetadataListener(uiManager);
 
         // NOTE: position matters!!!
-        mEventListeners.add(commandManager);
         mEventListeners.add(new AutoFrameRateManager(hqDialogManager, stateUpdater));
         mEventListeners.add(uiManager);
         mEventListeners.add(hqDialogManager);
         mEventListeners.add(stateUpdater);
         mEventListeners.add(suggestionsLoader);
         mEventListeners.add(videoLoader);
+        mEventListeners.add(commandManager);
     }
 
     public static MainPlayerEventBridge instance(Context context) {

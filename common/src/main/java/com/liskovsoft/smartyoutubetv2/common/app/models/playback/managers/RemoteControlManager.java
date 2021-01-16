@@ -47,6 +47,16 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         postStartPlaying(item);
     }
 
+    @Override
+    public void onPlay() {
+        postPlay(true);
+    }
+
+    @Override
+    public void onPause() {
+        postPlay(false);
+    }
+
     private void postStartPlaying(Video item) {
         if (!mDeviceLinkData.isDeviceLinkEnabled()) {
             return;
@@ -57,18 +67,22 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         );
     }
 
-    private void postSeek(long positionMs) {
-        postState(positionMs, getController().getLengthMs(), getController().isPlaying());
+    private void postState(long positionMs, long durationMs, boolean isPlaying) {
+        if (!mDeviceLinkData.isDeviceLinkEnabled()) {
+            return;
+        }
+
+        mPostStateAction = RxUtils.subscribe(
+                mRemoteManager.postStateChangeObserve(positionMs, durationMs, isPlaying)
+        );
     }
 
     private void postPlay(boolean isPlay) {
         postState(getController().getPositionMs(), getController().getLengthMs(), isPlay);
     }
 
-    private void postState(long positionMs, long durationMs, boolean isPlaying) {
-        mPostStateAction = RxUtils.subscribe(
-                mRemoteManager.postStateChangeObserve(positionMs, durationMs, isPlaying)
-        );
+    private void postSeek(long positionMs) {
+        postState(positionMs, getController().getLengthMs(), getController().isPlaying());
     }
 
     private void tryListening() {
@@ -117,6 +131,11 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
             case Command.TYPE_PAUSE:
                 getController().setPlay(false);
                 postPlay(false);
+                break;
+            case Command.TYPE_GET_STATE:
+                if (getController() != null) {
+                    postStartPlaying(getController().getVideo());
+                }
                 break;
         }
     }
