@@ -12,7 +12,7 @@ public class DeviceLinkData {
     private boolean mIsDeviceLinkEnabled;
     private Runnable mOnChange;
 
-    public DeviceLinkData(Context context) {
+    private DeviceLinkData(Context context) {
         mContext = context;
         mAppPrefs = AppPrefs.instance(mContext);
         restoreState();
@@ -50,7 +50,7 @@ public class DeviceLinkData {
     private void restoreState() {
         String data = mAppPrefs.getDeviceLinkData();
 
-        String[] split = Helpers.splitObject(data);
+        String[] split = Helpers.splitObjectLegacy(data);
 
         mIsDeviceLinkEnabled = Helpers.parseBoolean(split, 0, true);
     }

@@ -48,7 +48,7 @@ public class PlayerData {
     private int mAudioDelayMs;
     private boolean mIsRememberSpeedEnabled;
 
-    public PlayerData(Context context) {
+    private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
         initSubtitleStyles();
         restoreData();
@@ -280,7 +280,7 @@ public class PlayerData {
     private void restoreData() {
         String data = mPrefs.getPlayerData();
 
-        String[] split = Helpers.splitObject(data);
+        String[] split = Helpers.splitObjectLegacy(data);
 
         mOKButtonBehavior = Helpers.parseInt(split, 0, ONLY_UI);
         mUIHideTimeoutSec = Helpers.parseInt(split, 1, 3);

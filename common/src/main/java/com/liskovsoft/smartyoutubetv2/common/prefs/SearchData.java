@@ -11,7 +11,7 @@ public class SearchData {
     private final AppPrefs mAppPrefs;
     private boolean mIsInstantVoiceSearchEnabled;
 
-    public SearchData(Context context) {
+    private SearchData(Context context) {
         mContext = context;
         mAppPrefs = AppPrefs.instance(mContext);
         restoreState();
@@ -41,7 +41,7 @@ public class SearchData {
     private void restoreState() {
         String data = mAppPrefs.getSearchData();
 
-        String[] split = Helpers.splitObject(data);
+        String[] split = Helpers.splitObjectLegacy(data);
 
         mIsInstantVoiceSearchEnabled = Helpers.parseBoolean(split, 0, false);
     }

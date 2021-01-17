@@ -42,7 +42,7 @@ public class MainUIData {
     private int mPlaylistsStyle;
     private int mAppExitShortcut;
 
-    public MainUIData(Context context) {
+    private MainUIData(Context context) {
         mContext = context;
         mPrefs = AppPrefs.instance(context);
         initLeftPanelCategories();
@@ -246,7 +246,7 @@ public class MainUIData {
     private void restoreState() {
         String data = mPrefs.getMainUIData();
 
-        String[] split = Helpers.splitObject(data);
+        String[] split = Helpers.splitObjectLegacy(data);
 
         mIsCardAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0, true);
         String selectedCategories = Helpers.parseStr(split, 1);
@@ -263,7 +263,7 @@ public class MainUIData {
         mIsCardTextAutoScrollEnabled = Helpers.parseBoolean(split, 12, true);
 
         if (selectedCategories != null) {
-            String[] selectedCategoriesArr = Helpers.splitArray(selectedCategories);
+            String[] selectedCategoriesArr = Helpers.splitArrayLegacy(selectedCategories);
 
             for (String categoryId : selectedCategoriesArr) {
                 mEnabledLeftPanelCategories.add(Helpers.parseInt(categoryId));

@@ -11,7 +11,7 @@ public class AccountsData {
     private final AppPrefs mAppPrefs;
     private boolean mIsSelectAccountOnBootEnabled;
 
-    public AccountsData(Context context) {
+    private AccountsData(Context context) {
         mContext = context;
         mAppPrefs = AppPrefs.instance(mContext);
         restoreState();
@@ -41,7 +41,7 @@ public class AccountsData {
     private void restoreState() {
         String data = mAppPrefs.getAccountsData();
 
-        String[] split = Helpers.splitObject(data);
+        String[] split = Helpers.splitObjectLegacy(data);
 
         mIsSelectAccountOnBootEnabled = Helpers.parseBoolean(split, 0, true);
     }
