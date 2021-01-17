@@ -121,16 +121,22 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 PlaybackPresenter.instance(getActivity()).openVideo(command.getVideoId());
                 break;
             case Command.TYPE_SEEK:
-                getController().setPositionMs(command.getCurrentTimeMs());
-                postSeek(command.getCurrentTimeMs());
+                if (getController() != null) {
+                    getController().setPositionMs(command.getCurrentTimeMs());
+                    postSeek(command.getCurrentTimeMs());
+                }
                 break;
             case Command.TYPE_PLAY:
-                getController().setPlay(true);
-                postPlay(true);
+                if (getController() != null) {
+                    getController().setPlay(true);
+                    postPlay(true);
+                }
                 break;
             case Command.TYPE_PAUSE:
-                getController().setPlay(false);
-                postPlay(false);
+                if (getController() != null) {
+                    getController().setPlay(false);
+                    postPlay(false);
+                }
                 break;
             case Command.TYPE_GET_STATE:
                 if (getController() != null) {
