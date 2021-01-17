@@ -52,6 +52,9 @@
         tools:replace="android:theme,android:allowBackup"
         tools:ignore="GoogleAppIndexingWarning,LockedOrientationActivity,UnusedAttribute">
 
+        <!-- NOTE: Screen Mirror (e.g. DIAL) for Amazon TV -->
+        <meta-data android:name="whisperplay" android:resource="@xml/whisperplay"/>
+
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity"
             android:launchMode="singleInstance"
