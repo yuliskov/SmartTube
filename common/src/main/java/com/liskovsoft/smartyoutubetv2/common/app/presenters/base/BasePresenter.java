@@ -7,7 +7,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter
 import java.lang.ref.WeakReference;
 
 public abstract class BasePresenter<T> implements Presenter<T> {
-    private WeakReference<T> mView = new WeakReference<T>(null);
+    private WeakReference<T> mView = new WeakReference<>(null);
     private WeakReference<Context> mContext = new WeakReference<>(null);
 
     public BasePresenter(Context context) {
@@ -16,7 +16,9 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void setView(T view) {
-        mView = new WeakReference<T>(view);
+        if (view != null) {
+            mView = new WeakReference<>(view);
+        }
     }
 
     @Override
@@ -26,7 +28,9 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void setContext(Context context) {
-        mContext = new WeakReference<>(context);
+        if (context != null) {
+            mContext = new WeakReference<>(context);
+        }
     }
 
     @Override
