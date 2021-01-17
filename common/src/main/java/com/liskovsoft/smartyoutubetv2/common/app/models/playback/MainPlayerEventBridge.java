@@ -39,6 +39,10 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     private WeakReference<Activity> mActivity = new WeakReference<>(null);
 
     public MainPlayerEventBridge(Context context) {
+        if (context instanceof Activity) {
+            mActivity = new WeakReference<>((Activity) context);
+        }
+
         RemoteControlManager commandManager = new RemoteControlManager(context);
         PlayerUiManager uiManager = new PlayerUiManager();
         VideoLoader videoLoader = new VideoLoader();

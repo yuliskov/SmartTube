@@ -161,4 +161,6 @@
     <string name="dialog_add_device">Add device</string>
     <string name="dialog_remove_device">Remove device</string>
     <string name="device_link_enabled">Link enabled</string>
+    <string name="device_connected">Device \"%s\" connected</string>
+    <string name="device_disconnected">Device \"%s\" disconnected</string>
 </resources>

@@ -6,6 +6,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.Command;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
@@ -141,6 +142,16 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
             case Command.TYPE_GET_STATE:
                 if (getController() != null) {
                     postStartPlaying(getController().getVideo());
+                }
+                break;
+            case Command.TYPE_CONNECTED:
+                if (getActivity() != null) {
+                    MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_connected, command.getDeviceName()));
+                }
+                break;
+            case Command.TYPE_DISCONNECTED:
+                if (getActivity() != null) {
+                    MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_disconnected, command.getDeviceName()));
                 }
                 break;
         }
