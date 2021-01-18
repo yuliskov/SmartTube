@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.base;
 
+import android.app.Activity;
 import android.content.Context;
 import androidx.fragment.app.Fragment;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
@@ -28,9 +29,18 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void setContext(Context context) {
-        if (context != null) {
+        if (checkContext(context)) {
             mContext = new WeakReference<>(context);
         }
+    }
+
+    private boolean checkContext(Context context) {
+        if (context == null) {
+            return false;
+        }
+
+        // Localization fix: prefer Activity context
+        return getContext() == null || context instanceof Activity;
     }
 
     @Override

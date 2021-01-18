@@ -1,2 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.liskovsoft.smartyoutubetv2.common"/>
+          package="com.liskovsoft.smartyoutubetv2.common">
+    <application>
+        <receiver
+            android:name="com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.SCREEN_ON" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <!-- Called one time after app is installed -->
+                <action android:name="android.media.tv.action.INITIALIZE_PROGRAMS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>
