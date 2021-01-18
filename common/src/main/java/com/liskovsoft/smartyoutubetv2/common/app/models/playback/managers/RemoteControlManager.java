@@ -1,8 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.RemoteManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.RemoteManager;
 import com.liskovsoft.mediaserviceinterfaces.data.Command;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -10,8 +10,11 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.DeviceLinkData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -58,6 +61,11 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         postPlay(false);
     }
 
+    @Override
+    public void onEngineReleased() {
+        postPlay(false);
+    }
+
     private void postStartPlaying(Video item) {
         if (!mDeviceLinkData.isDeviceLinkEnabled()) {
             return;
@@ -76,6 +84,12 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         mPostStateAction = RxUtils.subscribe(
                 mRemoteManager.postStateChangeObserve(positionMs, durationMs, isPlaying)
         );
+    }
+
+    private void moveAppToForeground() {
+        if (!Utils.isAppInForeground()) {
+            ViewManager.instance(getActivity()).startView(SplashView.class);
+        }
     }
 
     private void postPlay(boolean isPlay) {
@@ -123,18 +137,21 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 break;
             case Command.TYPE_SEEK:
                 if (getController() != null) {
+                    moveAppToForeground();
                     getController().setPositionMs(command.getCurrentTimeMs());
                     postSeek(command.getCurrentTimeMs());
                 }
                 break;
             case Command.TYPE_PLAY:
                 if (getController() != null) {
+                    moveAppToForeground();
                     getController().setPlay(true);
                     postPlay(true);
                 }
                 break;
             case Command.TYPE_PAUSE:
                 if (getController() != null) {
+                    moveAppToForeground();
                     getController().setPlay(false);
                     postPlay(false);
                 }
@@ -146,6 +163,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 break;
             case Command.TYPE_CONNECTED:
                 if (getActivity() != null) {
+                    moveAppToForeground();
                     MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_connected, command.getDeviceName()));
                 }
                 break;

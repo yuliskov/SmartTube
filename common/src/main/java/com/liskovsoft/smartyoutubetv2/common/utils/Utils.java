@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.utils;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -73,5 +75,12 @@ public class Utils {
     private static Uri convertToFullChannelUrl(String channelId) {
         String url = String.format("https://www.youtube.com/channel/%s", channelId);
         return Uri.parse(url);
+    }
+
+    public static boolean isAppInForeground() {
+        ActivityManager.RunningAppProcessInfo appProcessInfo = new ActivityManager.RunningAppProcessInfo();
+        ActivityManager.getMyMemoryState(appProcessInfo);
+        return (appProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND ||
+                appProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE);
     }
 }
