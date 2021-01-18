@@ -119,7 +119,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     private void processCommand(Command command) {
         switch (command.getType()) {
             case Command.TYPE_OPEN_VIDEO:
-                PlaybackPresenter.instance(getActivity()).openVideo(command.getVideoId());
+                PlaybackPresenter.instance(getActivity()).openVideo(Video.from(command.getVideoId(), command.getPlaylistId(), command.getPlaylistIndex()));
                 break;
             case Command.TYPE_SEEK:
                 if (getController() != null) {

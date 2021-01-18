@@ -19,12 +19,13 @@ public final class Video implements Parcelable {
     public String channelId;
     public String videoId;
     public String videoUrl;
+    public String playlistId;
+    public int playlistIndex;
     public String bgImageUrl;
     public String cardImageUrl;
     public String studio;
     public String badge;
     public String previewUrl;
-    public int playlistIndex;
     public int percentWatched = -1;
     public MediaItem mediaItem;
     public MediaItem nextMediaItem;
@@ -87,6 +88,7 @@ public final class Video implements Parcelable {
         video.badge = item.getBadgeText();
         video.hasNewContent = item.hasNewContent();
         video.previewUrl = item.getVideoPreviewUrl();
+        video.playlistId = item.getPlaylistId();
         video.playlistIndex = item.getPlaylistIndex();
         video.isLive = item.isLive();
         video.isUpcoming = item.isUpcoming();
@@ -96,8 +98,14 @@ public final class Video implements Parcelable {
     }
 
     public static Video from(String videoId) {
+        return from(videoId, null, -1);
+    }
+
+    public static Video from(String videoId, String playlistId, int playlistIndex) {
         Video video = new Video();
         video.videoId = videoId;
+        video.playlistId = playlistId;
+        video.playlistIndex = playlistIndex;
 
         return video;
     }

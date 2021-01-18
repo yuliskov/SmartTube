@@ -94,7 +94,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
             observable = mediaItemManager.getMetadataObserve(video.mediaItem);
         } else {
             // Video might be loaded from channels
-            observable = mediaItemManager.getMetadataObserve(video.videoId);
+            observable = mediaItemManager.getMetadataObserve(video.videoId, video.playlistId, video.playlistIndex);
         }
 
         mMetadataAction = observable
