@@ -8,6 +8,8 @@
             <intent-filter>
                 <action android:name="android.intent.action.SCREEN_ON" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <!-- Fix: Permission Denial: not allowed to send broadcast android.intent.action.BOOT_COMPLETED -->
+                <action android:name="android.intent.action.ACTION_BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
     </application>
