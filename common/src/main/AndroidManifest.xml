@@ -8,9 +8,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.SCREEN_ON" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <!-- Called one time after app is installed -->
-                <action android:name="android.media.tv.action.INITIALIZE_PROGRAMS" />
-                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
     </application>
