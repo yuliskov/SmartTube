@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import android.content.Context;
+import androidx.annotation.Nullable;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.RemoteManager;
 import com.liskovsoft.mediaserviceinterfaces.data.Command;
@@ -66,13 +67,27 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         postPlay(false);
     }
 
-    private void postStartPlaying(Video item) {
+    private void postStartPlaying(@Nullable Video item) {
+        String videoId = null;
+        long positionMs = -1;
+        long lengthMs = -1;
+
+        if (item != null && getController() != null) {
+            videoId = item.videoId;
+            positionMs = getController().getPositionMs();
+            lengthMs = getController().getLengthMs();
+        }
+
+        postStartPlaying(videoId, positionMs, lengthMs);
+    }
+
+    private void postStartPlaying(String videoId, long positionMs, long durationMs) {
         if (!mDeviceLinkData.isDeviceLinkEnabled()) {
             return;
         }
 
         mPostPlayAction = RxUtils.subscribe(
-                mRemoteManager.postStartPlayingObserve(item.videoId, getController().getPositionMs(), getController().getLengthMs())
+                mRemoteManager.postStartPlayingObserve(videoId, positionMs, durationMs)
         );
     }
 
@@ -98,6 +113,10 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
 
     private void postSeek(long positionMs) {
         postState(positionMs, getController().getLengthMs(), getController().isPlaying());
+    }
+
+    private void postIdle() {
+        postState(-1, -1, false);
     }
 
     private void tryListening() {
@@ -159,6 +178,8 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
             case Command.TYPE_GET_STATE:
                 if (getController() != null) {
                     postStartPlaying(getController().getVideo());
+                } else {
+                    postStartPlaying(null);
                 }
                 break;
             case Command.TYPE_CONNECTED:
