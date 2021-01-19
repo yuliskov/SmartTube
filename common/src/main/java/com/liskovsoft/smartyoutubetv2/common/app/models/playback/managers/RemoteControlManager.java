@@ -64,7 +64,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
 
     @Override
     public void onEngineReleased() {
-        postPlay(false);
+        postStartPlaying(null);
     }
 
     private void postStartPlaying(@Nullable Video item) {
