@@ -158,7 +158,7 @@
     <string name="player_remember_speed">Video-Geschwindigkeit merken</string>
     <string name="mark_channel_as_watched">Als gesehen markieren</string>
     <string name="channel_marked_as_watched">Kanal wurde als gesehen markiert</string>
-    <string name="dialog_add_device">Gerät verbinden</string>
+    <string name="dialog_add_device">Gerät hinzufügen</string>
     <string name="dialog_remove_device">Gerät entfernen</string>
     <string name="device_link_enabled">Geräte-Verbindung</string>
     <string name="device_connected">Gerät \"%s\" wurde verbunden</string>
