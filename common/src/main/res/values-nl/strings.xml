@@ -49,7 +49,7 @@
     <string name="settings_other">Andere</string>
     <string name="settings_player">Video Player</string>
     <string name="settings_language">Taal</string>
-    <string name="settings_linked_devices">Gekoppelde apparaten</string>
+    <string name="settings_linked_devices">Cast Apparaten</string>
     <string name="settings_about">Informatie</string>
     <string name="dialog_account_list">Account selecteren</string>
     <string name="dialog_account_none">Geen</string>
@@ -160,7 +160,7 @@
     <string name="channel_marked_as_watched">Kanaal gemarkeerd als bekeken</string>
     <string name="dialog_add_device">Apparaat koppelen</string>
     <string name="dialog_remove_device">Apparaat ontkoppelen</string>
-    <string name="device_link_enabled">Koppeling OK</string>
+    <string name="device_link_enabled">Melding weergeven</string>
     <string name="device_connected">Apparaat \"%s\" gekoppeld</string>
     <string name="device_disconnected">Apparaat \"%s\" ontkoppeld</string>
 </resources>
