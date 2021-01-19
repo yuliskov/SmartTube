@@ -22,8 +22,9 @@ Current release features:
 __Useful links__:
 
 - __[Latest release](https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.apk)__
-- __[Ask a question](https://t.me/SmartTubeNext_en)__
+- __[News](https://t.me/SmartTubeNextNewsEN)__
 - __[FAQ](https://t.me/STNFAQENG)__
+- __[Ask a question](https://t.me/SmartTubeNext_en)__
 
 # Screens
 
