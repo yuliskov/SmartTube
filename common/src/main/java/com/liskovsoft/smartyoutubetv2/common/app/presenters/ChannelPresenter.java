@@ -172,9 +172,10 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(continueMediaGroup -> {
-                            getView().update(VideoGroup.from(continueMediaGroup));
-                        }, error -> Log.e(TAG, "continueGroup error: " + error),
-                        () -> getView().showProgressBar(false));
+                .subscribe(
+                        continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),
+                        error -> Log.e(TAG, "continueGroup error: " + error),
+                        () -> getView().showProgressBar(false)
+                );
     }
 }

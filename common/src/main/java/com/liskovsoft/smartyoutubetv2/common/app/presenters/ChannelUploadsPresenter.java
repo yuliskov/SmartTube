@@ -135,10 +135,11 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         mScrollAction = mGroupManager.continueGroupObserve(mediaGroup)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(continueMediaGroup -> {
-                            getView().update(VideoGroup.from(continueMediaGroup));
-                        }, error -> Log.e(TAG, "continueGroup error: " + error),
-                        () -> getView().showProgressBar(false));
+                .subscribe(
+                        continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),
+                        error -> Log.e(TAG, "continueGroup error: " + error),
+                        () -> getView().showProgressBar(false)
+                );
     }
 
     private void updateVideoGrid(Observable<MediaGroup> group) {
@@ -157,11 +158,10 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
                             if (mediaGroup.getMediaItems() != null) {
                                 getView().showProgressBar(false);
                             }
-                        }
-                        , error -> Log.e(TAG, "updateGridHeader error: " + error)
-                        , () -> {
-                            getView().showProgressBar(false);
-                        });
+                        },
+                        error -> Log.e(TAG, "updateGridHeader error: " + error),
+                        () -> getView().showProgressBar(false)
+                );
     }
 
     private void updateVideoGrid(MediaItem mediaItem, VideoGroupCallback callback) {
@@ -172,7 +172,10 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         mUpdateAction = group
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(callback::onGroup, error -> Log.e(TAG, "updateVideoGrid error: " + error));
+                .subscribe(
+                        callback::onGroup,
+                        error -> Log.e(TAG, "updateVideoGrid error: " + error)
+                );
     }
 
     public interface VideoGroupCallback {

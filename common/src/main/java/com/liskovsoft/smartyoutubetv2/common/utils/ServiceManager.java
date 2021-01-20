@@ -76,8 +76,10 @@ public class ServiceManager {
         mUploadsAction = observable
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(onMediaGroup::onMediaGroup,
-                        error -> Log.e(TAG, "loadChannelUploads error: " + error));
+                .subscribe(
+                        onMediaGroup::onMediaGroup,
+                        error -> Log.e(TAG, "loadChannelUploads error: " + error)
+                );
     }
 
     public interface OnMediaGroup {

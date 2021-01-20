@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.search;
 
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -10,6 +11,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class MediaServiceSearchTagProvider implements SearchTagsProvider {
+    private static final String TAG = MediaServiceSearchTagProvider.class.getSimpleName();
     private final MediaGroupManager mGroupManager;
     private Disposable mTagsAction;
 
@@ -25,8 +27,9 @@ public class MediaServiceSearchTagProvider implements SearchTagsProvider {
         mTagsAction = mGroupManager.getSearchTagsObserve(query)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(tags -> {
-                    callback.onResults(Tag.from(tags));
-                });
+                .subscribe(
+                        tags -> callback.onResults(Tag.from(tags)),
+                        error -> Log.e(TAG, "Result is empty. Just ignore it. %s", error.getMessage())
+                );
     }
 }
