@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.sharedutils.prefs.SharedPreferencesBase;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 
 public class AppPrefs extends SharedPreferencesBase {
     private static final String TAG = AppPrefs.class.getSimpleName();
@@ -13,12 +11,10 @@ public class AppPrefs extends SharedPreferencesBase {
     private static AppPrefs sInstance;
     private static final String COMPLETED_ONBOARDING = "completed_onboarding";
     private static final String BACKUP_DATA = "backup_data";
-    private static final String VIDEO_LOADER_DATA = "video_loader_data";
     private static final String STATE_UPDATER_DATA = "state_updater_data";
     private static final String PREFERRED_LANGUAGE_DATA = "preferred_language_data";
     private static final String VIEW_MANAGER_DATA = "view_manager_data";
     private static final String MAIN_UI_DATA = "main_ui_data";
-    private static final String UI_STYLE_DATA = "ui_style_data";
     private static final String VIDEO_PLAYER_DATA = "video_player_data";
     private static final String ACCOUNTS_DATA = "accounts_data";
     private static final String DEVICE_LINK_DATA = "device_link_data";
@@ -70,19 +66,11 @@ public class AppPrefs extends SharedPreferencesBase {
         return getString(BACKUP_DATA, null);
     }
 
-    public int getVideoLoaderData(int defaultVal) {
-        return getInt(VIDEO_LOADER_DATA, defaultVal);
-    }
-
-    public void setVideoLoaderData(int data) {
-        putInt(VIDEO_LOADER_DATA, data);
-    }
-
-    public String getStateUpdaterItemsData() {
+    public String getStateUpdaterData() {
         return getString(STATE_UPDATER_DATA, null);
     }
 
-    public void setStateUpdaterClipData(String data) {
+    public void setStateUpdaterData(String data) {
         putString(STATE_UPDATER_DATA, data);
     }
 
@@ -108,14 +96,6 @@ public class AppPrefs extends SharedPreferencesBase {
 
     public void setMainUIData(String data) {
         putString(MAIN_UI_DATA, data);
-    }
-
-    public String getUIStyleData() {
-        return getString(UI_STYLE_DATA, null);
-    }
-
-    public void setUIStyleData(String data) {
-        putString(UI_STYLE_DATA, data);
     }
 
     public String getPlayerData() {

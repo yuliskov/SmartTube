@@ -14,7 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUiController;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
-import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -28,9 +28,9 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private Video mLastVideo;
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
-    private int mRepeatMode = PlaybackUiController.REPEAT_ALL;
     private final Runnable mReloadVideoHandler = () -> loadVideo(mLastVideo);
     private long mPrevErrorTimeMs;
+    private PlayerData mPlayerData;
 
     public VideoLoader() {
         mPlaylist = Playlist.instance();
@@ -39,7 +39,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onInitDone() {
-        mRepeatMode = AppPrefs.instance(getActivity()).getVideoLoaderData(PlaybackUiController.REPEAT_ALL);
+        mPlayerData = PlayerData.instance(getActivity());
     }
 
     @Override
@@ -58,7 +58,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     @Override
     public void onEngineInitialized() {
         loadVideo(mLastVideo);
-        getController().setRepeatButtonState(mRepeatMode);
+        getController().setRepeatButtonState(mPlayerData.getRepeatMode());
     }
 
     @Override
@@ -99,7 +99,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onPlayEnd() {
-        switch (mRepeatMode) {
+        switch (mPlayerData.getRepeatMode()) {
             case PlaybackUiController.REPEAT_ALL:
                 onNextClicked();
                 if (!getController().isInPIPMode()) {
@@ -121,7 +121,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 break;
         }
 
-        Log.e(TAG, "Undetected repeat mode " + mRepeatMode);
+        Log.e(TAG, "Undetected repeat mode " + mPlayerData.getRepeatMode());
     }
 
     @Override
@@ -138,8 +138,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onRepeatModeClicked(int modeIndex) {
-        mRepeatMode = modeIndex;
-        AppPrefs.instance(getActivity()).setVideoLoaderData(mRepeatMode);
+        mPlayerData.setRepeatMode(modeIndex);
         showBriefInfo(modeIndex);
     }
 

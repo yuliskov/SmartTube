@@ -6,6 +6,7 @@ import com.google.android.exoplayer2.text.CaptionStyleCompat;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUiController;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
@@ -47,6 +48,7 @@ public class PlayerData {
     private int mAfrPauseSec;
     private int mAudioDelayMs;
     private boolean mIsRememberSpeedEnabled;
+    private int mRepeatMode;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -130,6 +132,19 @@ public class PlayerData {
         persistData();
     }
 
+    public int getPlaybackMode() {
+        return mPlaybackMode;
+    }
+
+    public void setRepeatMode(int type) {
+        mRepeatMode = type;
+        persistData();
+    }
+
+    public int getRepeatMode() {
+        return mRepeatMode;
+    }
+
     public boolean isRememberSpeedEnabled() {
         return mIsRememberSpeedEnabled;
     }
@@ -137,10 +152,6 @@ public class PlayerData {
     public void enableRememberSpeed(boolean enable) {
         mIsRememberSpeedEnabled = enable;
         persistData();
-    }
-
-    public int getPlaybackMode() {
-        return mPlaybackMode;
     }
 
     public boolean isAfrEnabled() {
@@ -303,6 +314,7 @@ public class PlayerData {
         mAfrPauseSec = Helpers.parseInt(split, 19, 0);
         mAudioDelayMs = Helpers.parseInt(split, 20, 0);
         mIsRememberSpeedEnabled = Helpers.parseBoolean(split, 21, true);
+        mRepeatMode = Helpers.parseInt(split, 22, PlaybackUiController.REPEAT_ALL);
     }
 
     private void persistData() {
@@ -311,6 +323,7 @@ public class PlayerData {
                 mIsClockEnabled, mIsRemainingTimeEnabled, mPlaybackMode, null, // afrData was there
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
-                mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs, mIsRememberSpeedEnabled));
+                mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs, mIsRememberSpeedEnabled,
+                mRepeatMode));
     }
 }

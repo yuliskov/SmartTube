@@ -10,10 +10,12 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUiController;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.DeviceLinkData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -60,6 +62,18 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     @Override
     public void onPause() {
         postPlay(false);
+    }
+
+    @Override
+    public void onPlayEnd() {
+        switch (PlayerData.instance(getActivity()).getRepeatMode()) {
+            case PlaybackUiController.REPEAT_PAUSE:
+                postPlay(false);
+                break;
+            case PlaybackUiController.REPEAT_ONE:
+                postStartPlaying(getController().getVideo());
+                break;
+        }
     }
 
     @Override

@@ -218,11 +218,11 @@ public class StateUpdater extends PlayerEventListenerHelper {
             sb.append(state);
         }
 
-        mPrefs.setStateUpdaterClipData(sb.toString());
+        mPrefs.setStateUpdaterData(sb.toString());
     }
 
     private void restoreClipData() {
-        String data = mPrefs.getStateUpdaterItemsData();
+        String data = mPrefs.getStateUpdaterData();
 
         if (data != null) {
             String[] split = data.split("\\|");
