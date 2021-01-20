@@ -27,12 +27,14 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     private static final String TAG = RemoteControlManager.class.getSimpleName();
     private final RemoteManager mRemoteManager;
     private final DeviceLinkData mDeviceLinkData;
+    private final SuggestionsLoader mSuggestionsLoader;
     private Disposable mCommandAction;
     private Disposable mPostPlayAction;
     private Disposable mPostStateAction;
 
-    public RemoteControlManager(Context context) {
+    public RemoteControlManager(Context context, SuggestionsLoader suggestionsLoader) {
         MediaService mediaService = YouTubeMediaService.instance();
+        mSuggestionsLoader = suggestionsLoader;
         mRemoteManager = mediaService.getRemoteManager();
         mDeviceLinkData = DeviceLinkData.instance(context);
         mDeviceLinkData.onChange(this::tryListening);
@@ -167,6 +169,14 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         switch (command.getType()) {
             case Command.TYPE_OPEN_VIDEO:
                 PlaybackPresenter.instance(getActivity()).openVideo(Video.from(command.getVideoId(), command.getPlaylistId(), command.getPlaylistIndex()));
+                break;
+            case Command.TYPE_UPDATE_PLAYLIST:
+                if (getController() != null) {
+                    Video video = getController().getVideo();
+                    video.playlistId = command.getPlaylistId();
+                    video.mediaItem = null; // video comes from another source
+                    mSuggestionsLoader.loadSuggestions(video);
+                }
                 break;
             case Command.TYPE_SEEK:
                 if (getController() != null) {

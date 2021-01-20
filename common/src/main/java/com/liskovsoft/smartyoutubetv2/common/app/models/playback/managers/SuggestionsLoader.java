@@ -77,7 +77,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
         getController().setVideo(video);
     }
 
-    private void loadSuggestions(Video video) {
+    public void loadSuggestions(Video video) {
         if (video == null) {
             Log.e(TAG, "loadSuggestions: video is null");
             return;

@@ -43,11 +43,11 @@ public class MainPlayerEventBridge implements PlayerEventListener {
             mActivity = new WeakReference<>((Activity) context);
         }
 
-        RemoteControlManager commandManager = new RemoteControlManager(context);
         PlayerUiManager uiManager = new PlayerUiManager();
         VideoLoader videoLoader = new VideoLoader();
         StateUpdater stateUpdater = new StateUpdater();
         SuggestionsLoader suggestionsLoader = new SuggestionsLoader();
+        RemoteControlManager commandManager = new RemoteControlManager(context, suggestionsLoader);
         HqDialogManager hqDialogManager = new HqDialogManager(stateUpdater);
         suggestionsLoader.addMetadataListener(uiManager);
 
