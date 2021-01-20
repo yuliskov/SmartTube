@@ -49,7 +49,7 @@
     <string name="settings_other">Sonstige</string>
     <string name="settings_player">Video-Player</string>
     <string name="settings_language">Sprache</string>
-    <string name="settings_linked_devices">Verknüpfte Geräte</string>
+    <string name="settings_linked_devices">Verbundene Geräte</string>
     <string name="settings_about">Über</string>
     <string name="dialog_account_list">Konto auswählen</string>
     <string name="dialog_account_none">Kein Konto</string>
@@ -160,5 +160,7 @@
     <string name="channel_marked_as_watched">Kanal wurde als gesehen markiert</string>
     <string name="dialog_add_device">Gerät hinzufügen</string>
     <string name="dialog_remove_device">Gerät entfernen</string>
-    <string name="device_link_enabled">Gerät verknüpft</string>
+    <string name="device_link_enabled">Geräte-Verbindung</string>
+    <string name="device_connected">Gerät \"%s\" wurde verbunden</string>
+    <string name="device_disconnected">Gerät \"%s\" wurde getrennt</string>
 </resources>
