@@ -71,8 +71,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
                         , error -> Log.e(TAG, "continueGroup error: " + error));
     }
 
-    private void syncCurrentVideo(MediaItemMetadata mediaItemMetadata) {
-        Video video = getController().getVideo();
+    private void syncCurrentVideo(MediaItemMetadata mediaItemMetadata, Video video) {
         video.sync(mediaItemMetadata, PlayerData.instance(getActivity()).isShowFullDateEnabled());
         getController().setVideo(video);
     }
@@ -90,7 +89,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
         Observable<MediaItemMetadata> observable;
 
-        if (video.mediaItem != null) {
+        if (video.mediaItem != null && !video.isRemote) {
             observable = mediaItemManager.getMetadataObserve(video.mediaItem);
         } else {
             // Video might be loaded from channels
@@ -100,30 +99,32 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
         mMetadataAction = observable
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::loadSuggestions,
+                .subscribe(metadata -> updateSuggestions(metadata, video),
                            error -> Log.e(TAG, "loadSuggestions error: " + error));
     }
 
-    private void loadSuggestions(MediaItemMetadata mediaItemMetadata) {
-        syncCurrentVideo(mediaItemMetadata);
+    private void updateSuggestions(MediaItemMetadata mediaItemMetadata, Video video) {
+        syncCurrentVideo(mediaItemMetadata, video);
 
         callListener(mediaItemMetadata);
 
         List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
 
         if (suggestions == null) {
-            Log.e(TAG, "loadSuggestions: Can't obtain suggestions for video: " + getController().getVideo().title);
+            Log.e(TAG, "loadSuggestions: Can't obtain suggestions for video: " + video.title);
             return;
         }
 
-        if (getController().getVideo().isPlaylistItem() && !getController().isSuggestionsEmpty()) {
-            Log.d(TAG, "Skip reloading suggestions when watching playlist.");
-            return;
-        }
+        if (!video.isRemote) {
+            if (video.isPlaylistItem() && !getController().isSuggestionsEmpty()) {
+                Log.d(TAG, "Skip reloading suggestions when watching playlist.");
+                return;
+            }
 
-        if (getController().isSuggestionsShown()) {
-            Log.d(TAG, "Suggestions is opened. Seems that user want to stay here.");
-            return;
+            if (getController().isSuggestionsShown()) {
+                Log.d(TAG, "Suggestions is opened. Seems that user want to stay here.");
+                return;
+            }
         }
 
         getController().clearSuggestions(); // clear previous videos
