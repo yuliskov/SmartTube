@@ -159,6 +159,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onVideoLoaded(Video item) {
         mIsMetadataLoaded = false; // metadata isn't loaded yet at this point
+        resetButtonStates();
 
         // Next lines on engine initialized stage cause other listeners to disappear.
         getController().showDebugView(mDebugViewEnabled);
@@ -167,6 +168,12 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         if (mPlayerData.getSeekPreviewMode() != PlayerData.SEEK_PREVIEW_NONE) {
             getController().loadStoryboard();
         }
+    }
+
+    private void resetButtonStates() {
+        getController().setLikeButtonState(false);
+        getController().setDislikeButtonState(false);
+        getController().setSubscribeButtonState(false);
     }
 
     @Override
@@ -190,8 +197,22 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         VideoMenuPresenter.instance(getActivity()).showVideoMenu(item);
     }
 
+    private void showBriefInfo(boolean subscribed) {
+        if (subscribed) {
+            MessageHelpers.showMessage(getActivity(), R.string.subscribed_to_channel);
+        } else {
+            MessageHelpers.showMessage(getActivity(), R.string.unsubscribed_from_channel);
+        }
+    }
+
     @Override
     public void onSubscribeClicked(boolean subscribed) {
+        if (!mIsMetadataLoaded) {
+            MessageHelpers.showLongMessage(getActivity(), R.string.wait_data_loading);
+            getController().setSubscribeButtonState(!subscribed);
+            return;
+        }
+
         if (subscribed) {
             callMediaItemObservable(mMediaItemManager::subscribeObserve);
         } else {
@@ -199,14 +220,6 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         }
 
         showBriefInfo(subscribed);
-    }
-
-    private void showBriefInfo(boolean subscribed) {
-        if (subscribed) {
-            MessageHelpers.showMessage(getActivity(), R.string.subscribed_to_channel);
-        } else {
-            MessageHelpers.showMessage(getActivity(), R.string.unsubscribed_from_channel);
-        }
     }
 
     @Override
