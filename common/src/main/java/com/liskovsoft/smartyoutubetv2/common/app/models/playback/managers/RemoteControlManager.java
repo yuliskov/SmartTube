@@ -37,7 +37,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         mSuggestionsLoader = suggestionsLoader;
         mRemoteManager = mediaService.getRemoteManager();
         mDeviceLinkData = DeviceLinkData.instance(context);
-        mDeviceLinkData.onChange(this::tryListening);
+        mDeviceLinkData.setOnChange(this::tryListening);
         tryListening();
     }
 

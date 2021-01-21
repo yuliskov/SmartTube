@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class MainUIData {
+public class MainUIData extends DataChangeBase {
     public static final int CHANNEL_SORTING_UPDATE = 0;
     public static final int CHANNEL_SORTING_AZ = 1;
     public static final int CHANNEL_SORTING_LAST_VIEWED = 2;
@@ -236,11 +236,13 @@ public class MainUIData {
                 mContext));
     }
 
-    private void persistState() {
+    protected void persistState() {
         String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
         mPrefs.setMainUIData(Helpers.mergeObject(mIsCardAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale,
                 mColorSchemeIndex, mIsCardMultilineTitleEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting,
                 mPlaylistsStyle, mAppExitShortcut, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled));
+
+        super.persistState();
     }
 
     private void restoreState() {

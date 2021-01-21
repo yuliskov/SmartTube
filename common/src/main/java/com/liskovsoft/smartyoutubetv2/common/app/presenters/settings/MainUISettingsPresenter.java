@@ -87,7 +87,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
     private void appendVideoGridScale(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        for (float scale : new float[] {1.0f, 1.35f}) {
+        for (float scale : new float[] {0.5f, 0.75f, 1.0f, 1.35f, 1.5f}) {
             options.add(UiOptionItem.from(String.format("%sx", scale),
                     optionItem -> mMainUIData.setVideoGridScale(scale),
                     Helpers.floatEquals(scale, mMainUIData.getVideoGridScale())));

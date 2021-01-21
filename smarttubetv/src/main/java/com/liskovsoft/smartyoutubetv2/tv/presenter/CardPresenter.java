@@ -72,6 +72,7 @@ public class CardPresenter extends LongClickPresenter {
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
         updateCardBackgroundColor(cardView, false);
+        updateDimensions();
         return new ViewHolder(cardView);
     }
 
@@ -146,6 +147,10 @@ public class CardPresenter extends LongClickPresenter {
         // Remove references to images so that the garbage collector can free up memory.
         cardView.setBadgeImage(null);
         cardView.setMainImage(null);
+    }
+
+    private void updateDimensions() {
+
     }
 
     private final RequestListener<Drawable> mErrorListener = new RequestListener<Drawable>() {

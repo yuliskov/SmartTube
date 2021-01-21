@@ -4,13 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
-public class DeviceLinkData {
+public class DeviceLinkData extends DataChangeBase {
     @SuppressLint("StaticFieldLeak")
     private static DeviceLinkData sInstance;
     private final Context mContext;
     private final AppPrefs mAppPrefs;
     private boolean mIsDeviceLinkEnabled;
-    private Runnable mOnChange;
 
     private DeviceLinkData(Context context) {
         mContext = context;
@@ -35,16 +34,10 @@ public class DeviceLinkData {
         return mIsDeviceLinkEnabled;
     }
 
-    public void onChange(Runnable callback) {
-        mOnChange = callback;
-    }
-
-    private void persistState() {
+    protected void persistState() {
         mAppPrefs.setDeviceLinkData(Helpers.mergeObject(mIsDeviceLinkEnabled));
 
-        if (mOnChange != null) {
-            mOnChange.run();
-        }
+        super.persistState();
     }
 
     private void restoreState() {
