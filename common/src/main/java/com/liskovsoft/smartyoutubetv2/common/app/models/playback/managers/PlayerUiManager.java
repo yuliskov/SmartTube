@@ -29,7 +29,6 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +42,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     private boolean mEngineReady;
     private boolean mDebugViewEnabled;
     private PlayerData mPlayerData;
+    private boolean mIsMetadataLoaded;
     private final Runnable mSuggestionsResetHandler = () -> getController().resetSuggestedPosition();
     private final Runnable mUiAutoHideHandler = () -> {
         if (getController().isPlaying()) {
@@ -135,12 +135,6 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
                         option -> getController().setFormat(UiOptionItem.toFormat(option)),
                         getActivity().getString(R.string.subtitles_disabled)));
 
-        //OptionCategory category = createSubtitleStylesCategory(
-        //        getActivity(), mPlayerData,
-        //        style -> getController().setSubtitleStyle(style));
-        //
-        //settingsPresenter.appendRadioCategory(category.title, category.options);
-
         settingsPresenter.showDialog(subtitlesCategoryTitle);
     }
 
@@ -164,6 +158,8 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onVideoLoaded(Video item) {
+        mIsMetadataLoaded = false; // metadata isn't loaded yet at this point
+
         // Next lines on engine initialized stage cause other listeners to disappear.
         getController().showDebugView(mDebugViewEnabled);
         getController().setDebugButtonState(mDebugViewEnabled);
@@ -181,13 +177,9 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         disposeTimeouts();
     }
 
-    //@Override
-    //public void onRepeatModeClicked(int modeIndex) {
-    //    //getController().setRepeatMode(modeIndex);
-    //}
-
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
+        mIsMetadataLoaded = true;
         getController().setLikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_LIKE);
         getController().setDislikeButtonState(metadata.getLikeStatus() == MediaItemMetadata.LIKE_STATUS_DISLIKE);
         getController().setSubscribeButtonState(metadata.isSubscribed());
@@ -219,6 +211,12 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onThumbsDownClicked(boolean thumbsDown) {
+        if (!mIsMetadataLoaded) {
+            MessageHelpers.showLongMessage(getActivity(), R.string.wait_data_loading);
+            getController().setDislikeButtonState(!thumbsDown);
+            return;
+        }
+
         if (thumbsDown) {
             callMediaItemObservable(mMediaItemManager::setDislikeObserve);
         } else {
@@ -228,6 +226,12 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onThumbsUpClicked(boolean thumbsUp) {
+        if (!mIsMetadataLoaded) {
+            MessageHelpers.showLongMessage(getActivity(), R.string.wait_data_loading);
+            getController().setLikeButtonState(!thumbsUp);
+            return;
+        }
+
         if (thumbsUp) {
             callMediaItemObservable(mMediaItemManager::setLikeObserve);
         } else {
