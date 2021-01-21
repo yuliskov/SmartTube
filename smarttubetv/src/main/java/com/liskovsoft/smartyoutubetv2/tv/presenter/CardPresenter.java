@@ -61,11 +61,7 @@ public class CardPresenter extends LongClickPresenter {
         mIsCardTextAutoScrollEnabled = mainUIData.isCardTextAutoScrollEnabled();
         mVideoGridScale = mainUIData.getVideoGridScale();
 
-        Resources res = parent.getResources();
-        // Set card size from dimension resources.
-        mWidth = res.getDimensionPixelSize(R.dimen.card_width);
-        mHeight = res.getDimensionPixelSize(R.dimen.card_height);
-        updateDimensions();
+        updateDimensions(parent.getResources());
 
         ComplexImageCardView cardView = new ComplexImageCardView(parent.getContext()) {
             @Override
@@ -146,7 +142,11 @@ public class CardPresenter extends LongClickPresenter {
         cardView.setMainImage(null);
     }
 
-    private void updateDimensions() {
+    private void updateDimensions(Resources res) {
+        // Set card size from dimension resources.
+        mWidth = res.getDimensionPixelSize(R.dimen.card_width);
+        mHeight = res.getDimensionPixelSize(R.dimen.card_height);
+
         if (mVideoGridScale > 1.0f) {
             mWidth *= mVideoGridScale;
             mHeight *= mVideoGridScale;
