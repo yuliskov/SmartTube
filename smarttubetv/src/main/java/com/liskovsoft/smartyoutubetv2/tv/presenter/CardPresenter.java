@@ -36,10 +36,12 @@ public class CardPresenter extends LongClickPresenter {
     private int mSelectedBackgroundColor = -1;
     private int mSelectedTextColor = -1;
     private Drawable mDefaultCardImage;
-    private float mVideoGridScale;
     private boolean mIsAnimatedPreviewsEnabled;
     private boolean mIsCardMultilineTitleEnabled;
     private boolean mIsCardTextAutoScrollEnabled;
+    private float mVideoGridScale;
+    private int mWidth;
+    private int mHeight;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
@@ -55,9 +57,15 @@ public class CardPresenter extends LongClickPresenter {
 
         MainUIData mainUIData = MainUIData.instance(parent.getContext());
         mIsAnimatedPreviewsEnabled = mainUIData.isCardAnimatedPreviewsEnabled();
-        mVideoGridScale = mainUIData.getVideoGridScale();
         mIsCardMultilineTitleEnabled = mainUIData.isCardMultilineTitleEnabled();
         mIsCardTextAutoScrollEnabled = mainUIData.isCardTextAutoScrollEnabled();
+        mVideoGridScale = mainUIData.getVideoGridScale();
+
+        Resources res = parent.getResources();
+        // Set card size from dimension resources.
+        mWidth = res.getDimensionPixelSize(R.dimen.card_width);
+        mHeight = res.getDimensionPixelSize(R.dimen.card_height);
+        updateDimensions();
 
         ComplexImageCardView cardView = new ComplexImageCardView(parent.getContext()) {
             @Override
@@ -72,7 +80,6 @@ public class CardPresenter extends LongClickPresenter {
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
         updateCardBackgroundColor(cardView, false);
-        updateDimensions();
         return new ViewHolder(cardView);
     }
 
@@ -106,7 +113,6 @@ public class CardPresenter extends LongClickPresenter {
 
         ComplexImageCardView cardView = (ComplexImageCardView) viewHolder.view;
         Context context = cardView.getContext();
-        Resources res = cardView.getResources();
 
         cardView.setTitleText(video.title);
         cardView.setContentText(video.description);
@@ -120,16 +126,7 @@ public class CardPresenter extends LongClickPresenter {
             cardView.setPreviewUrl(video.previewUrl);
         }
 
-        // Set card size from dimension resources.
-        int width = res.getDimensionPixelSize(R.dimen.card_width);
-        int height = res.getDimensionPixelSize(R.dimen.card_height);
-
-        if (mVideoGridScale > 1.0f) {
-            width *= mVideoGridScale;
-            height *= mVideoGridScale;
-        }
-
-        cardView.setMainImageDimensions(width, height);
+        cardView.setMainImageDimensions(mWidth, mHeight);
 
         Glide.with(context)
                 .load(video.cardImageUrl)
@@ -150,7 +147,10 @@ public class CardPresenter extends LongClickPresenter {
     }
 
     private void updateDimensions() {
-
+        if (mVideoGridScale > 1.0f) {
+            mWidth *= mVideoGridScale;
+            mHeight *= mVideoGridScale;
+        }
     }
 
     private final RequestListener<Drawable> mErrorListener = new RequestListener<Drawable>() {
