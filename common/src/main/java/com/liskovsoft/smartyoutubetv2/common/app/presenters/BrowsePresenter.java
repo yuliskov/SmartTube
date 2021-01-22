@@ -466,10 +466,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                                 getView().showProgressBar(false);
                             }
 
-                            // Most tiny ui has 8 cards in a row
-                            if (mMainUIData.getUIScale() < 0.8f) {
-                                continueGroup(videoGroup);
-                            }
+                            loadNextPortionIfNeeded(videoGroup);
                         },
                         error -> {
                             Log.e(TAG, "updateGridHeader error: " + error);
@@ -489,10 +486,16 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
             getView().updateCategory(videoGroup);
 
-            // Most tiny ui has 8 cards in a row
-            if (mMainUIData.getUIScale() < 0.8f && videoGroup.getVideos().size() < 8) {
-                continueGroup(videoGroup);
-            }
+            loadNextPortionIfNeeded(videoGroup);
+        }
+    }
+
+    /**
+     * Most tiny ui has 8 cards in a row or 24 in grid.
+     */
+    private void loadNextPortionIfNeeded(VideoGroup videoGroup) {
+        if (mMainUIData.getUIScale() < 0.8f || mMainUIData.getVideoGridScale() < 0.8f) {
+            continueGroup(videoGroup);
         }
     }
 }
