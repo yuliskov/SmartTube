@@ -41,7 +41,6 @@ public class CardPresenter extends LongClickPresenter {
     private boolean mIsAnimatedPreviewsEnabled;
     private boolean mIsCardMultilineTitleEnabled;
     private boolean mIsCardTextAutoScrollEnabled;
-    private float mVideoGridScale;
     private int mWidth;
     private int mHeight;
 
@@ -61,9 +60,8 @@ public class CardPresenter extends LongClickPresenter {
         mIsAnimatedPreviewsEnabled = mainUIData.isCardAnimatedPreviewsEnabled();
         mIsCardMultilineTitleEnabled = mainUIData.isCardMultilineTitleEnabled();
         mIsCardTextAutoScrollEnabled = mainUIData.isCardTextAutoScrollEnabled();
-        mVideoGridScale = mainUIData.getVideoGridScale();
 
-        updateDimensions(parent.getResources());
+        updateDimensions(parent.getContext());
 
         ComplexImageCardView cardView = new ComplexImageCardView(parent.getContext()) {
             @Override
@@ -144,18 +142,11 @@ public class CardPresenter extends LongClickPresenter {
         cardView.setMainImage(null);
     }
 
-    private void updateDimensions(Resources res) {
-        // Set card size from dimension resources.
-        //mWidth = res.getDimensionPixelSize(R.dimen.card_width);
-        //mHeight = res.getDimensionPixelSize(R.dimen.card_height);
-        //
-        //if (mVideoGridScale > 1.0f) {
-        //    mWidth *= mVideoGridScale;
-        //    mHeight *= mVideoGridScale;
-        //}
-
+    private void updateDimensions(Context context) {
         Pair<Integer, Integer> dimens =
-                AutoSizeGridFragment.getCardDimensionPx(res, R.dimen.card_width, R.dimen.card_height, mVideoGridScale);
+                AutoSizeGridFragment.getCardDimensionPx(
+                        context, R.dimen.card_width, R.dimen.card_height, MainUIData.instance(context).getVideoGridScale()
+                );
 
         mWidth = dimens.first;
         mHeight = dimens.second;

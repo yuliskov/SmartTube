@@ -458,11 +458,17 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mediaGroup -> {
-                            getView().updateCategory(VideoGroup.from(mediaGroup, category));
+                            VideoGroup videoGroup = VideoGroup.from(mediaGroup, category);
+                            getView().updateCategory(videoGroup);
 
                             // Hide loading as long as first group received
                             if (mediaGroup.getMediaItems() != null) {
                                 getView().showProgressBar(false);
+                            }
+
+                            // Most tiny ui has 8 cards in a row
+                            if (mMainUIData.getUIScale() < 0.8f) {
+                                continueGroup(videoGroup);
                             }
                         },
                         error -> {
@@ -479,13 +485,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 continue;
             }
 
-            VideoGroup group = VideoGroup.from(mediaGroup, category);
+            VideoGroup videoGroup = VideoGroup.from(mediaGroup, category);
 
-            getView().updateCategory(group);
+            getView().updateCategory(videoGroup);
 
             // Most tiny ui has 8 cards in a row
-            if (mMainUIData.getUIScale() < 0.8f && group.getVideos().size() < 8) {
-                continueGroup(group);
+            if (mMainUIData.getUIScale() < 0.8f && videoGroup.getVideos().size() < 8) {
+                continueGroup(videoGroup);
             }
         }
     }
