@@ -28,6 +28,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.MainUISetti
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.PlayerSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SearchSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SubtitleSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.UIScaleSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -149,6 +150,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 getContext().getString(R.string.settings_language), () -> LanguageSettingsPresenter.instance(getContext()).show(), R.drawable.settings_language));
         settingItems.add(new SettingsItem(
                 getContext().getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(getContext()).show(), R.drawable.settings_main_ui));
+        settingItems.add(new SettingsItem(
+                getContext().getString(R.string.settings_ui_scale), () -> UIScaleSettingsPresenter.instance(getContext()).show(), R.drawable.settings_ui_scale));
         settingItems.add(new SettingsItem(
                 getContext().getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(getContext()).show(), R.drawable.settings_player));
         settingItems.add(new SettingsItem(
