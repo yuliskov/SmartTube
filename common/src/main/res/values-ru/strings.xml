@@ -163,4 +163,5 @@
     <string name="device_connected">Устройство \"%s\" подключено</string>
     <string name="device_disconnected">Устройство \"%s\" отключено</string>
     <string name="settings_ui_scale">Масштаб интерфейса</string>
+    <string name="msg_restart_app">Пожалуйста, перезапустите приложение, чтобы изменения вступили в силу</string>
 </resources>

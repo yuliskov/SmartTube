@@ -48,7 +48,7 @@ public abstract class LeanbackActivity extends MotherActivity {
         Log.d(TAG, event);
 
         if (mDoubleBackManager.checkDoubleBack(event)) {
-            properlyFinishTheApp();
+            mViewManager.properlyFinishTheApp();
         }
 
         return super.dispatchKeyEvent(event);
@@ -103,16 +103,9 @@ public abstract class LeanbackActivity extends MotherActivity {
                     mDoubleBackManager.enableDoubleBackExit();
                     break;
                 case MainUIData.EXIT_SINGLE_BACK:
-                    properlyFinishTheApp();
+                    mViewManager.properlyFinishTheApp();
                     break;
             }
         }
-    }
-
-    private void properlyFinishTheApp() {
-        Log.d(TAG, "Finishing the app...");
-        SplashPresenter.instance(this).unhold();
-        mViewManager.clearCaches();
-        destroyActivity();
     }
 }

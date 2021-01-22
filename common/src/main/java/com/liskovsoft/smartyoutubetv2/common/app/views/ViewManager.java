@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -308,6 +309,23 @@ public class ViewManager {
         Intent intent = new Intent(context, myClass);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
+        Runtime.getRuntime().exit(0);
+    }
+
+    public void properlyFinishTheApp() {
+        Log.d(TAG, "Finishing the app...");
+        mMoveViewsToBack = true;
+        persistState();
+        finishTheApp();
+    }
+
+    private void finishTheApp() {
+        SplashPresenter.instance(mContext).unhold();
+        clearCaches();
+        destroyApp();
+    }
+
+    public static void destroyApp() {
         Runtime.getRuntime().exit(0);
     }
 }

@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -36,7 +37,8 @@ public class UIScaleSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.showDialog(getContext().getString(R.string.settings_ui_scale), () -> {
             if (mRestartApp) {
                 mRestartApp = false;
-                ViewManager.instance(getContext()).restartApp();
+                MessageHelpers.showLongMessage(getContext(), R.string.msg_restart_app);
+                //ViewManager.instance(getContext()).restartApp();
             }
         });
     }
