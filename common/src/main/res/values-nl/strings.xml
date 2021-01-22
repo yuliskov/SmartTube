@@ -74,7 +74,7 @@
     <string name="player_ok_button_behavior">OK toets</string>
     <string name="player_only_ui">Player weergeven</string>
     <string name="player_ui_and_pause">Player weergeven en pauzeren</string>
-    <string name="player_only_pause">Pauzeren</string>
+    <string name="player_only_pause">Player pauzeren</string>
     <string name="check_for_updates">Controleren op update</string>
     <string name="update_not_found">Je gebruikt reeds de nieuwste versie</string>
     <string name="update_in_progess">Even geduld…</string>
