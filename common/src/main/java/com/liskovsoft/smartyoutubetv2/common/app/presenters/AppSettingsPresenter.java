@@ -143,6 +143,12 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
         ViewManager.instance(getContext()).startView(AppSettingsView.class, true);
     }
 
+    public void closeDialog() {
+        if (getView() != null) {
+            getView().finish();
+        }
+    }
+
     public void appendRadioCategory(String categoryTitle, List<OptionItem> items) {
         mCategories.add(SettingsCategory.radioList(categoryTitle, items));
     }

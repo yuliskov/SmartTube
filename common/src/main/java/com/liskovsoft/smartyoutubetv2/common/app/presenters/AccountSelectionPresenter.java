@@ -80,7 +80,10 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
 
         for (Account account : accounts) {
             optionItems.add(UiOptionItem.from(
-                    formatAccount(account), option -> selectAccount(account), account.isSelected()
+                    formatAccount(account), option -> {
+                        selectAccount(account);
+                        settingsPresenter.closeDialog();
+                    }, account.isSelected()
             ));
         }
 
