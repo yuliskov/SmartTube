@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.MainPlayerEventBridge;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
@@ -17,6 +18,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
 
     private PlaybackPresenter(Context context) {
         super(context);
+        GlobalPreferences.instance(context); // init MediaService context
         mViewManager = ViewManager.instance(context);
         mMainPlayerEventBridge = MainPlayerEventBridge.instance(context);
     }

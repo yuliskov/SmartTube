@@ -13,7 +13,6 @@ public class RemoteControlReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "Initializing remote control listener...");
-        GlobalPreferences.instance(context); // init MediaService context
         PlaybackPresenter.instance(context); // init RemoteControlListener
     }
 }
