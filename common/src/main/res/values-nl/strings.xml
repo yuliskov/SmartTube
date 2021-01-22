@@ -164,4 +164,5 @@
     <string name="device_connected">Apparaat \"%s\" gekoppeld</string>
     <string name="device_disconnected">Apparaat \"%s\" ontkoppeld</string>
     <string name="settings_ui_scale">Formaat</string>
+    <string name="msg_restart_app">App opnieuw starten om deze instellingen toe te passen</string>
 </resources>
