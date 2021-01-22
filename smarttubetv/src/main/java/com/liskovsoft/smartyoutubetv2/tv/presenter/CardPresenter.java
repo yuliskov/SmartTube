@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
@@ -23,6 +24,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.LongClickPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.AutoSizeGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview.ComplexImageCardView;
 
 /*
@@ -144,13 +146,19 @@ public class CardPresenter extends LongClickPresenter {
 
     private void updateDimensions(Resources res) {
         // Set card size from dimension resources.
-        mWidth = res.getDimensionPixelSize(R.dimen.card_width);
-        mHeight = res.getDimensionPixelSize(R.dimen.card_height);
+        //mWidth = res.getDimensionPixelSize(R.dimen.card_width);
+        //mHeight = res.getDimensionPixelSize(R.dimen.card_height);
+        //
+        //if (mVideoGridScale > 1.0f) {
+        //    mWidth *= mVideoGridScale;
+        //    mHeight *= mVideoGridScale;
+        //}
 
-        if (mVideoGridScale > 1.0f) {
-            mWidth *= mVideoGridScale;
-            mHeight *= mVideoGridScale;
-        }
+        Pair<Integer, Integer> dimens =
+                AutoSizeGridFragment.getCardDimensionPx(res, R.dimen.card_width, R.dimen.card_height, mVideoGridScale);
+
+        mWidth = dimens.first;
+        mHeight = dimens.second;
     }
 
     private final RequestListener<Drawable> mErrorListener = new RequestListener<Drawable>() {

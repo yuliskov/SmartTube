@@ -30,8 +30,23 @@ public class AutoSizeGridFragment extends GridFragment {
     }
 
     public static Pair<Integer, Integer> getCardDimensionPx(Resources res, int cardWidthResId, int cardHeightResId, float cardScale) {
-        
+        DisplayMetrics displayMetrics = res.getDisplayMetrics();
+        int displayWidthPx = (int) (displayMetrics.widthPixels * displayMetrics.density);
+        int cardWidthDp = (int) (res.getDimension(cardWidthResId) * cardScale);
+        int cardHeightDp = (int) (res.getDimension(cardHeightResId) * cardScale);
+        int cardSpacingDp = (int) res.getDimension(R.dimen.grid_item_horizontal_spacing);
+        int cardWidthPx = Utils.convertDpToPixel(res, cardWidthDp);
+        int cardHeightPx = Utils.convertDpToPixel(res, cardHeightDp);
+        int cardSpacingPx = Utils.convertDpToPixel(res, cardSpacingDp);
 
-        return null;
+        // Get into consideration space from grid sides
+        float colsNum = (displayWidthPx - cardSpacingPx * 4f) / (cardWidthPx + cardSpacingPx);
+        int realColsNum = (int) colsNum;
+        float colsReminder = colsNum - realColsNum;
+
+        int width = cardWidthPx + (int) (cardWidthPx * colsReminder);
+        int height = cardHeightPx + (int) (cardHeightPx * colsReminder);
+
+        return new Pair<>(width, height);
     }
 }
