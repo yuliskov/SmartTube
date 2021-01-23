@@ -159,14 +159,6 @@ public class PlaybackActivity extends LeanbackActivity {
         mPlaybackFragment.onFinish();
     }
 
-    public boolean isInPIPMode() {
-        if (Build.VERSION.SDK_INT < 24) {
-            return false;
-        }
-
-        return isInPictureInPictureMode();
-    }
-
     @SuppressWarnings("deprecation")
     private void enterBackgroundPlayMode() {
         if (Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 26) {

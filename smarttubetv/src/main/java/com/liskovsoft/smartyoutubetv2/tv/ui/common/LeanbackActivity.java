@@ -1,13 +1,12 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.common;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
-import android.view.GestureDetector;
 import android.view.KeyEvent;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
@@ -23,7 +22,6 @@ public abstract class LeanbackActivity extends MotherActivity {
     private ViewManager mViewManager;
     private ModeSyncManager mModeSyncManager;
     private DoubleBackManager mDoubleBackManager;
-    private GestureDetector mGestureDetector;
     private MainUIData mMainUiData;
 
     @Override
@@ -41,7 +39,7 @@ public abstract class LeanbackActivity extends MotherActivity {
         SearchPresenter.instance(this).startSearch(null);
         return true;
     }
-    
+
     @SuppressLint("RestrictedApi")
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
@@ -106,6 +104,18 @@ public abstract class LeanbackActivity extends MotherActivity {
                     mViewManager.properlyFinishTheApp();
                     break;
             }
+        } else {
+            if (!isInPIPMode()) {
+                super.finish();
+            }
         }
+    }
+
+    public boolean isInPIPMode() {
+        if (Build.VERSION.SDK_INT < 24) {
+            return false;
+        }
+
+        return isInPictureInPictureMode();
     }
 }
