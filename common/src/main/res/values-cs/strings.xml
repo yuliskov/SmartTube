@@ -161,4 +161,5 @@
     <string name="device_connected">Zařízení \"%s\" bylo připojeno</string>
     <string name="device_disconnected">Zařízení \"%s\" bylo odpojeno</string>
     <string name="settings_ui_scale">Velikost rozhraní</string>
+    <string name="msg_restart_app">Pro aplikování nastavení prosím restartujte aplikaci</string>
 </resources>
