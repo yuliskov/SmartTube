@@ -164,4 +164,5 @@
     <string name="device_disconnected">Пристрій \"%s\" відключений</string>
     <string name="settings_ui_scale">Масштаб інтерфейсу</string>
     <string name="msg_restart_app">Будь ласка, перезапустіть додаток, щоб зміни набули чинності</string>
+    <string name="settings_block">Блокування контенту</string>
 </resources>

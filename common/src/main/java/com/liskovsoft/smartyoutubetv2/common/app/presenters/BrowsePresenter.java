@@ -22,6 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.CategoryP
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AboutPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.BlockSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.LanguageSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.DeviceLinkSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.MainUISettingsPresenter;
@@ -158,6 +159,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 getContext().getString(R.string.subtitle_category_title), () -> SubtitleSettingsPresenter.instance(getContext()).show(), R.drawable.settings_subtitles));
         settingItems.add(new SettingsItem(
                 getContext().getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(getContext()).show(), R.drawable.settings_search));
+        settingItems.add(new SettingsItem(
+                getContext().getString(R.string.settings_block), () -> BlockSettingsPresenter.instance(getContext()).show(), R.drawable.settings_block));
         settingItems.add(new SettingsItem(
                 getContext().getString(R.string.settings_about), () -> AboutPresenter.instance(getContext()).show(), R.drawable.settings_about));
 
