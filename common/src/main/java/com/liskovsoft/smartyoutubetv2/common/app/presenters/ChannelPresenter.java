@@ -144,9 +144,10 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         mUpdateAction = channelObserve
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::updateRowsHeader
-                        , error -> Log.e(TAG, "updateRows error: " + error)
-                        , () -> getView().showProgressBar(false));
+                .subscribe(
+                        this::updateRowsHeader,
+                        error -> Log.e(TAG, "updateRows error: " + error)
+                 );
     }
 
     private void updateRowsHeader(List<MediaGroup> mediaGroups) {
@@ -158,6 +159,8 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
             getView().update(VideoGroup.from(mediaGroup));
         }
+
+        getView().showProgressBar(false);
     }
 
     private void continueGroup(VideoGroup group) {
@@ -174,7 +177,10 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),
-                        error -> Log.e(TAG, "continueGroup error: " + error),
+                        error -> {
+                            Log.e(TAG, "continueGroup error: " + error);
+                            getView().showProgressBar(false);
+                        },
                         () -> getView().showProgressBar(false)
                 );
     }
