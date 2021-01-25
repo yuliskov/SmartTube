@@ -34,10 +34,10 @@ public class ContentBlockManager extends PlayerEventListenerHelper {
 
     @Override
     public void onVideoLoaded(Video item) {
+        disposeActions();
+
         if (mPlayerData.isSponsorBlockEnabled()) {
             updateSponsorSegmentsAndWatch(item);
-        } else {
-            disposeActions();
         }
     }
 
