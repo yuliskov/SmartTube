@@ -166,4 +166,5 @@
     <string name="settings_ui_scale">Formaat</string>
     <string name="msg_restart_app">App opnieuw starten om deze instellingen toe te passen</string>
     <string name="settings_block">Inhoud Blokkeren</string>
+    <string name="msg_applying">%s aan</string>
 </resources>
