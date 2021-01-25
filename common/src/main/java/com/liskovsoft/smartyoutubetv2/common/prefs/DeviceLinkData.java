@@ -5,6 +5,7 @@ import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class DeviceLinkData extends DataChangeBase {
+    private static final String DEVICE_LINK_DATA = "device_link_data";
     @SuppressLint("StaticFieldLeak")
     private static DeviceLinkData sInstance;
     private final Context mContext;
@@ -34,17 +35,17 @@ public class DeviceLinkData extends DataChangeBase {
         return mIsDeviceLinkEnabled;
     }
 
-    protected void persistState() {
-        mAppPrefs.setDeviceLinkData(Helpers.mergeObject(mIsDeviceLinkEnabled));
-
-        super.persistState();
-    }
-
     private void restoreState() {
-        String data = mAppPrefs.getDeviceLinkData();
+        String data = mAppPrefs.getData(DEVICE_LINK_DATA);
 
         String[] split = Helpers.splitObjectLegacy(data);
 
         mIsDeviceLinkEnabled = Helpers.parseBoolean(split, 0, true);
+    }
+
+    protected void persistState() {
+        mAppPrefs.setData(DEVICE_LINK_DATA, Helpers.mergeObject(mIsDeviceLinkEnabled));
+
+        super.persistState();
     }
 }

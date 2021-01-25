@@ -8,7 +8,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 public class ContentBlockManager extends PlayerEventListenerHelper {
     private static final String TAG = ContentBlockManager.class.getSimpleName();
     private MediaItemManager mMediaItemManager;
-    private PlayerData mPlayerData;
+    private ContentBlockData mContentBlockData;
     private List<SponsorSegment> mSponsorSegments;
     private Disposable mProgressAction;
     private Disposable mSegmentsAction;
@@ -31,14 +31,14 @@ public class ContentBlockManager extends PlayerEventListenerHelper {
     public void onInitDone() {
         MediaService mediaService = YouTubeMediaService.instance();
         mMediaItemManager = mediaService.getMediaItemManager();
-        mPlayerData = PlayerData.instance(getActivity());
+        mContentBlockData = ContentBlockData.instance(getActivity());
     }
 
     @Override
     public void onVideoLoaded(Video item) {
         disposeActions();
 
-        if (mPlayerData.isSponsorBlockEnabled()) {
+        if (mContentBlockData.isSponsorBlockEnabled()) {
             updateSponsorSegmentsAndWatch(item);
         }
     }

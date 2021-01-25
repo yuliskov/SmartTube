@@ -14,11 +14,6 @@ public class AppPrefs extends SharedPreferencesBase {
     private static final String STATE_UPDATER_DATA = "state_updater_data";
     private static final String PREFERRED_LANGUAGE_DATA = "preferred_language_data";
     private static final String VIEW_MANAGER_DATA = "view_manager_data";
-    private static final String MAIN_UI_DATA = "main_ui_data";
-    private static final String VIDEO_PLAYER_DATA = "video_player_data";
-    private static final String ACCOUNTS_DATA = "accounts_data";
-    private static final String DEVICE_LINK_DATA = "device_link_data";
-    private static final String SEARCH_DATA = "search_data";
     private String mDefaultDisplayMode;
     private String mCurrentDisplayMode;
 
@@ -90,43 +85,11 @@ public class AppPrefs extends SharedPreferencesBase {
         return getString(VIEW_MANAGER_DATA, null);
     }
 
-    public String getMainUIData() {
-        return getString(MAIN_UI_DATA, null);
+    public void setData(String key, String data) {
+        putString(key, data);
     }
 
-    public void setMainUIData(String data) {
-        putString(MAIN_UI_DATA, data);
-    }
-
-    public String getPlayerData() {
-        return getString(VIDEO_PLAYER_DATA, null);
-    }
-
-    public void setPlayerData(String data) {
-        putString(VIDEO_PLAYER_DATA, data);
-    }
-
-    public void setAccountsData(String data) {
-        putString(ACCOUNTS_DATA, data);
-    }
-
-    public String getAccountsData() {
-        return getString(ACCOUNTS_DATA, null);
-    }
-
-    public void setDeviceLinkData(String data) {
-        putString(DEVICE_LINK_DATA, data);
-    }
-
-    public String getDeviceLinkData() {
-        return getString(DEVICE_LINK_DATA, null);
-    }
-
-    public void setSearchData(String data) {
-        putString(SEARCH_DATA, data);
-    }
-
-    public String getSearchData() {
-        return getString(SEARCH_DATA, null);
+    public String getData(String key) {
+        return getString(key, null);
     }
 }

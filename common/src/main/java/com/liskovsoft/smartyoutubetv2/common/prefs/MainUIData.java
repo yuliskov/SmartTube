@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class MainUIData {
+    private static final String MAIN_UI_DATA = "main_ui_data";
     public static final int CHANNEL_SORTING_UPDATE = 0;
     public static final int CHANNEL_SORTING_AZ = 1;
     public static final int CHANNEL_SORTING_LAST_VIEWED = 2;
@@ -236,15 +237,8 @@ public class MainUIData {
                 mContext));
     }
 
-    private void persistState() {
-        String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
-        mPrefs.setMainUIData(Helpers.mergeObject(mIsCardAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale,
-                mColorSchemeIndex, mIsCardMultilineTitleEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting,
-                mPlaylistsStyle, mAppExitShortcut, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled));
-    }
-
     private void restoreState() {
-        String data = mPrefs.getMainUIData();
+        String data = mPrefs.getData(MAIN_UI_DATA);
 
         String[] split = Helpers.splitObjectLegacy(data);
 
@@ -271,6 +265,13 @@ public class MainUIData {
         } else {
             mEnabledLeftPanelCategories.addAll(mLeftPanelCategories.values());
         }
+    }
+
+    private void persistState() {
+        String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
+        mPrefs.setData(MAIN_UI_DATA, Helpers.mergeObject(mIsCardAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale,
+                mColorSchemeIndex, mIsCardMultilineTitleEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting,
+                mPlaylistsStyle, mAppExitShortcut, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled));
     }
 
     public static class ColorScheme {

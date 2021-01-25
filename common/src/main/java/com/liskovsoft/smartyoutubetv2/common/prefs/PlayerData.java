@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerData {
+    private static final String VIDEO_PLAYER_DATA = "video_player_data";
     public static final int ONLY_UI = 0;
     public static final int UI_AND_PAUSE = 1;
     public static final int ONLY_PAUSE = 2;
@@ -49,7 +50,6 @@ public class PlayerData {
     private int mAudioDelayMs;
     private boolean mIsRememberSpeedEnabled;
     private int mRepeatMode;
-    private boolean mIsSponsorBlockEnabled;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -282,15 +282,6 @@ public class PlayerData {
         persistData();
     }
 
-    public boolean isSponsorBlockEnabled() {
-        return mIsSponsorBlockEnabled;
-    }
-
-    public void setSponsorBlockEnabled(boolean enabled) {
-        mIsSponsorBlockEnabled = enabled;
-        persistData();
-    }
-
     private void initSubtitleStyles() {
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_default, R.color.light_grey, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_semi_transparent_bg, R.color.light_grey, R.color.semi_grey, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
@@ -299,7 +290,7 @@ public class PlayerData {
     }
 
     private void restoreData() {
-        String data = mPrefs.getPlayerData();
+        String data = mPrefs.getData(VIDEO_PLAYER_DATA);
 
         String[] split = Helpers.splitObjectLegacy(data);
 
@@ -325,16 +316,15 @@ public class PlayerData {
         mAudioDelayMs = Helpers.parseInt(split, 20, 0);
         mIsRememberSpeedEnabled = Helpers.parseBoolean(split, 21, true);
         mRepeatMode = Helpers.parseInt(split, 22, PlaybackUiController.REPEAT_ALL);
-        mIsSponsorBlockEnabled = Helpers.parseBoolean(split, 23, false);
     }
 
     private void persistData() {
-        mPrefs.setPlayerData(Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec,
+        mPrefs.setData(VIDEO_PLAYER_DATA, Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec,
                 mIsShowFullDateEnabled, mSeekPreviewMode, mIsPauseOnSeekEnabled,
                 mIsClockEnabled, mIsRemainingTimeEnabled, mPlaybackMode, null, // afrData was there
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs, mIsRememberSpeedEnabled,
-                mRepeatMode, mIsSponsorBlockEnabled));
+                mRepeatMode));
     }
 }
