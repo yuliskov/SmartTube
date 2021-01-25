@@ -23,7 +23,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper {
     private PlayerData mPlayerData;
     private List<SponsorSegment> mSponsorSegments;
     private Disposable mProgressAction;
-    private String mVideoId;
+    private Disposable mSegmentsAction;
 
     @Override
     public void onInitDone() {
@@ -35,35 +35,33 @@ public class ContentBlockManager extends PlayerEventListenerHelper {
     @Override
     public void onVideoLoaded(Video item) {
         if (mPlayerData.isSponsorBlockEnabled()) {
-            updateSponsorSegments(item);
-
-            if (mSponsorSegments != null) {
-                startPlaybackWatcher();
-            } else {
-                stopPlaybackWatcher();
-            }
+            updateSponsorSegmentsAndWatch(item);
         } else {
-            stopPlaybackWatcher();
+            disposeActions();
         }
     }
 
-    private void updateSponsorSegments(Video item) {
+    private void updateSponsorSegmentsAndWatch(Video item) {
         if (item == null || item.videoId == null) {
             mSponsorSegments = null;
             return;
         }
 
-        if (item.videoId.equals(mVideoId)) {
-            return;
-        }
-
-        mSponsorSegments = mMediaItemManager.getSponsorSegments(item.videoId);
-        mVideoId = item.videoId;
+        mSegmentsAction = mMediaItemManager.getSponsorSegmentsObserve(item.videoId)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        segments -> {
+                            mSponsorSegments = segments;
+                            startPlaybackWatcher();
+                        },
+                        error -> Log.e(TAG, "updateSponsorSegments error: %s", error)
+                );
     }
 
     @Override
     public void onEngineReleased() {
-        stopPlaybackWatcher();
+        disposeActions();
     }
 
     private void startPlaybackWatcher() {
@@ -80,8 +78,8 @@ public class ContentBlockManager extends PlayerEventListenerHelper {
                 );
     }
 
-    private void stopPlaybackWatcher() {
-        RxUtils.disposeActions(mProgressAction);
+    private void disposeActions() {
+        RxUtils.disposeActions(mProgressAction, mSegmentsAction);
     }
 
     private void skipSegment(long positionMs) {
