@@ -166,5 +166,5 @@
     <string name="settings_ui_scale">Anzeigegröße</string>
     <string name="msg_restart_app">App neu starten, um diese Einstellungen zu übernehmen</string>
     <string name="settings_block">Inhalte blockieren</string>
-    <string name="msg_applying">Wird angewendet %s…</string>
+    <string name="msg_applying">%s aktiv</string>
 </resources>
