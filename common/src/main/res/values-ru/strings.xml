@@ -165,4 +165,5 @@
     <string name="settings_ui_scale">Масштаб интерфейса</string>
     <string name="msg_restart_app">Пожалуйста, перезапустите приложение, чтобы изменения вступили в силу</string>
     <string name="settings_block">Блокировка контента</string>
+    <string name="msg_applying">Применяется %s…</string>
 </resources>

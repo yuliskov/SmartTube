@@ -3,7 +3,9 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -83,12 +85,13 @@ public class ContentBlockManager extends PlayerEventListenerHelper {
     }
 
     private void skipSegment(long positionMs) {
-        if (mSponsorSegments == null || getController() == null) {
+        if (mSponsorSegments == null) {
             return;
         }
 
         for (SponsorSegment segment : mSponsorSegments) {
-            if (positionMs >= segment.getStartMs() && positionMs <= segment.getEndMs()) {
+            if (positionMs >= segment.getStartMs() && positionMs < segment.getEndMs()) {
+                MessageHelpers.showMessage(getActivity(), getActivity().getString(R.string.msg_applying, "SponsorBlock"));
                 getController().setPositionMs(segment.getEndMs());
                 break;
             }
