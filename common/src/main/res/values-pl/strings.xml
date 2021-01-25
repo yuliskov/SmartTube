@@ -113,7 +113,7 @@
     <string name="unsubscribed_from_channel">Odsubskrybowano kanał</string>
     <string name="subtitle_yellow">Zółty</string>
     <string name="subtitle_black_bg">Czarne tło</string>
-	<string name="player_seek_preview">Podgląd podczas przewijania</string>
+    <string name="player_seek_preview">Podgląd podczas przewijania</string>
     <string name="color_scheme_dark_grey_oled">Ciemno szary (OLED)</string>
     <string name="channel_category_sorting">Sortowanie sekcji kanałów</string>
     <string name="sorting_by_new_content">Nowe filmy</string>
