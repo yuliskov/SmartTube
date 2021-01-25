@@ -162,4 +162,6 @@
     <string name="device_disconnected">Zařízení \"%s\" bylo odpojeno</string>
     <string name="settings_ui_scale">Velikost rozhraní</string>
     <string name="msg_restart_app">Pro aplikování nastavení prosím restartujte aplikaci</string>
+    <string name="settings_block">Blokování sponzorů (SponsorBlock)</string>
+    <string name="msg_applying">Aplikuji %s…</string>
 </resources>
