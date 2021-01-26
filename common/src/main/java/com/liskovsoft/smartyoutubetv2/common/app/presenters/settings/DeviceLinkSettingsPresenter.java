@@ -60,7 +60,7 @@ public class DeviceLinkSettingsPresenter extends BasePresenter<Void> {
     private void appendRemoveAllDevicesButton(AppSettingsPresenter settingsPresenter) {
         OptionItem optionItem = UiOptionItem.from(
                 getContext().getString(R.string.dialog_remove_all_devices), option -> {
-                    RxUtils.execute(mRemoteManager.resetObserve());
+                    RxUtils.execute(mRemoteManager.resetDataObserve());
                     MessageHelpers.showMessage(getContext(), R.string.msg_done);
                 }
         );
