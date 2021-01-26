@@ -166,4 +166,5 @@
     <string name="msg_restart_app">Uruchom ponownie aplikację, aby zastosować te ustawienia</string>
     <string name="settings_block">Blokowanie treści</string>
     <string name="msg_applying">Pomijam fragment sponsorowany %s…</string>
+    <string name="msg_done">Gotowe</string>
 </resources>
