@@ -51,8 +51,8 @@ public class DeviceLinkSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.clear();
 
         appendLinkEnableSwitch(settingsPresenter);
-        appendRemoveAllDevicesButton(settingsPresenter);
         appendAddDeviceButton(settingsPresenter);
+        appendRemoveAllDevicesButton(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_linked_devices), this::unhold);
     }
