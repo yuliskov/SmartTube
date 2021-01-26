@@ -159,10 +159,13 @@
     <string name="mark_channel_as_watched">Als gesehen markieren</string>
     <string name="channel_marked_as_watched">Kanal wurde als gesehen markiert</string>
     <string name="dialog_add_device">Gerät hinzufügen</string>
-    <string name="dialog_remove_all_devices">Gerät entfernen</string>
+    <string name="dialog_remove_all_devices">Alle Geräte entfernen</string>
     <string name="device_link_enabled">Geräte-Verbindung</string>
     <string name="device_connected">Gerät \"%s\" wurde verbunden</string>
     <string name="device_disconnected">Gerät \"%s\" wurde getrennt</string>
     <string name="settings_ui_scale">Anzeigegröße</string>
     <string name="msg_restart_app">App neu starten, um diese Einstellungen zu übernehmen</string>
+    <string name="settings_block">Inhalte blockieren</string>
+    <string name="msg_applying">%s aktiv</string>
+    <string name="msg_done">Erledigt</string>
 </resources>
