@@ -3,36 +3,29 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.SignInManager;
-import com.liskovsoft.mediaserviceinterfaces.data.Account;
+import com.liskovsoft.mediaserviceinterfaces.RemoteManager;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AddDevicePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.DeviceLinkData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class DeviceLinkSettingsPresenter extends BasePresenter<Void> {
     @SuppressLint("StaticFieldLeak")
     private static DeviceLinkSettingsPresenter sInstance;
-    private final SignInManager mSignInManager;
-    private Disposable mDevicesAction;
-    private final List<Account> mPendingRemove = new ArrayList<>();
-    private Account mSelectedAccount = null;
+    private final DeviceLinkData mDeviceLinkData;
+    private final RemoteManager mRemoteManager;
 
     public DeviceLinkSettingsPresenter(Context context) {
         super(context);
-        MediaService service = YouTubeMediaService.instance();
-        mSignInManager = service.getSignInManager();
+        MediaService mediaService = YouTubeMediaService.instance();
+        mRemoteManager = mediaService.getRemoteManager();
+        mDeviceLinkData = DeviceLinkData.instance(context);
     }
 
     public static DeviceLinkSettingsPresenter instance(Context context) {
@@ -46,54 +39,33 @@ public class DeviceLinkSettingsPresenter extends BasePresenter<Void> {
     }
 
     public void unhold() {
-        RxUtils.disposeActions(mDevicesAction);
-        mPendingRemove.clear();
-        mSelectedAccount = null;
         sInstance = null;
     }
 
     public void show() {
-        mDevicesAction = mSignInManager.getAccountsObserve()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::createAndShowDialog);
+        createAndShowDialog();
     }
 
-    private void createAndShowDialog(List<Account> accounts) {
+    private void createAndShowDialog() {
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
         settingsPresenter.clear();
 
         appendLinkEnableSwitch(settingsPresenter);
-        //appendRemoveDeviceSection(accounts, settingsPresenter);
+        appendRemoveAllDevicesButton(settingsPresenter);
         appendAddDeviceButton(settingsPresenter);
 
-        settingsPresenter.showDialog(getContext().getString(R.string.settings_linked_devices), () -> {
-            //for (Account account : mPendingRemove) {
-            //    mSignInManager.removeAccount(account);
-            //}
-            //
-            //mSignInManager.selectAccount(mSelectedAccount);
-
-            unhold();
-        });
+        settingsPresenter.showDialog(getContext().getString(R.string.settings_linked_devices), this::unhold);
     }
 
-    private void appendRemoveDeviceSection(List<Account> accounts, AppSettingsPresenter settingsPresenter) {
-        List<OptionItem> optionItems = new ArrayList<>();
+    private void appendRemoveAllDevicesButton(AppSettingsPresenter settingsPresenter) {
+        OptionItem optionItem = UiOptionItem.from(
+                getContext().getString(R.string.dialog_remove_all_devices), option -> {
+                    RxUtils.execute(mRemoteManager.resetObserve());
+                    MessageHelpers.showMessage(getContext(), R.string.msg_done);
+                }
+        );
 
-        for (Account account : accounts) {
-            optionItems.add(UiOptionItem.from(
-                    formatAccount(account), option -> {
-                        if (option.isSelected()) {
-                            mPendingRemove.add(account);
-                        } else {
-                            mPendingRemove.remove(account);
-                        }
-                    }, false
-            ));
-        }
-
-        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.dialog_remove_device), optionItems);
+        settingsPresenter.appendSingleButton(optionItem);
     }
 
     private void appendAddDeviceButton(AppSettingsPresenter settingsPresenter) {
@@ -103,19 +75,7 @@ public class DeviceLinkSettingsPresenter extends BasePresenter<Void> {
 
     private void appendLinkEnableSwitch(AppSettingsPresenter settingsPresenter) {
         settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.device_link_enabled), optionItem -> {
-            DeviceLinkData.instance(getContext()).enableDeviceLink(optionItem.isSelected());
-        }, DeviceLinkData.instance(getContext()).isDeviceLinkEnabled()));
-    }
-
-    private String formatAccount(Account account) {
-        String format;
-
-        if (account.getEmail() != null) {
-            format = String.format("%s (%s)", account.getName(), account.getEmail());
-        } else {
-            format = account.getName();
-        }
-
-        return format;
+            mDeviceLinkData.enableDeviceLink(optionItem.isSelected());
+        }, mDeviceLinkData.isDeviceLinkEnabled()));
     }
 }

@@ -159,7 +159,7 @@
     <string name="mark_channel_as_watched">Đánh dấu là đã xem</string>
     <string name="channel_marked_as_watched">Kênh đã được đánh dấu là đã xem</string>
     <string name="dialog_add_device">Thêm thiết bị</string>
-    <string name="dialog_remove_device">Gỡ bỏ thiết bị</string>
+    <string name="dialog_remove_all_devices">Gỡ bỏ thiết bị</string>
     <string name="device_link_enabled">Đã bật liên kết</string>
     <string name="device_connected">Thiết bị \"%s\" đã được kết nối</string>
     <string name="device_disconnected">Thiết bị \"%s\" đã bị ngắt kết nối</string>

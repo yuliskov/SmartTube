@@ -17,7 +17,7 @@ public class RxUtils {
         }
     }
 
-    public static <T> Disposable subscribe(Observable<T> observable) {
+    public static <T> Disposable execute(Observable<T> observable) {
         return observable
                 .subscribeOn(Schedulers.newThread())
                 .subscribe();

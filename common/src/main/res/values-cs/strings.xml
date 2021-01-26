@@ -156,7 +156,7 @@
     <string name="mark_channel_as_watched">Označit jako zhlédnuté</string>
     <string name="channel_marked_as_watched">Kanál byl označen jako zhlédnutý</string>
     <string name="dialog_add_device">Přidat zařízení</string>
-    <string name="dialog_remove_device">Odebrat zařízení</string>
+    <string name="dialog_remove_all_devices">Odebrat zařízení</string>
     <string name="device_link_enabled">Spojení povoleno</string>
     <string name="device_connected">Zařízení \"%s\" bylo připojeno</string>
     <string name="device_disconnected">Zařízení \"%s\" bylo odpojeno</string>

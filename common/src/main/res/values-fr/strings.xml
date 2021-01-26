@@ -159,7 +159,7 @@
     <string name="mark_channel_as_watched">Marquer comme vue</string>
     <string name="channel_marked_as_watched">La chaîne a été marquée comme vue</string>
     <string name="dialog_add_device">Ajouter un appareil</string>
-    <string name="dialog_remove_device">Supprimer un appareil</string>
+    <string name="dialog_remove_all_devices">Supprimer un appareil</string>
     <string name="device_link_enabled">Lien activé</string>
     <string name="device_connected">L\'appareil \"%s\" a été connecté</string>
     <string name="device_disconnected">L\'appareil \"%s\" a été déconnecté</string>

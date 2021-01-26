@@ -159,7 +159,7 @@
     <string name="mark_channel_as_watched">Tandai sebagai telah diawasi</string>
     <string name="channel_marked_as_watched">Channel telah ditandai sebagai ditonton</string>
     <string name="dialog_add_device">Tambahkan perangkat</string>
-    <string name="dialog_remove_device">Hapus perangkat</string>
+    <string name="dialog_remove_all_devices">Hapus perangkat</string>
     <string name="device_link_enabled">Tautan diaktifkan</string>
     <string name="device_connected">Perangkat \"%s\" telah terhubung</string>
     <string name="device_disconnected">Perangkat \"%s\" telah diputuskan</string>

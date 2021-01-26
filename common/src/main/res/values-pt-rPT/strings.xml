@@ -159,7 +159,7 @@
     <string name="mark_channel_as_watched">Marcar como assistido</string>
     <string name="channel_marked_as_watched">O canal foi marcado como assistido</string>
     <string name="dialog_add_device">Adicionar dispositivo</string>
-    <string name="dialog_remove_device">Remover dispositivo</string>
+    <string name="dialog_remove_all_devices">Remover dispositivo</string>
     <string name="device_link_enabled">Link ativado</string>
     <string name="device_connected">Dispositivo \"%s\" conectado</string>
     <string name="device_disconnected">Dispositivo \"%s\" desconectado</string>

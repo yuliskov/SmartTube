@@ -158,7 +158,7 @@
     <string name="mark_channel_as_watched">Отметить как просмотренное</string>
     <string name="channel_marked_as_watched">Канал отмечен как просмотренный</string>
     <string name="dialog_add_device">Добавить устройство</string>
-    <string name="dialog_remove_device">Удалить устройство</string>
+    <string name="dialog_remove_all_devices">Удалить все устройства</string>
     <string name="device_link_enabled">Привязка активна</string>
     <string name="device_connected">Устройство \"%s\" подключено</string>
     <string name="device_disconnected">Устройство \"%s\" отключено</string>
@@ -166,4 +166,5 @@
     <string name="msg_restart_app">Пожалуйста, перезапустите приложение, чтобы изменения вступили в силу</string>
     <string name="settings_block">Блокировка контента</string>
     <string name="msg_applying">Применяется %s…</string>
+    <string name="msg_done">Готово</string>
 </resources>

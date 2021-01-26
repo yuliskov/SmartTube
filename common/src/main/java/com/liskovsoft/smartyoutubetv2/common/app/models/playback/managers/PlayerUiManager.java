@@ -340,7 +340,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
 
         Observable<Void> observable = callable.call(video.mediaItem);
 
-        RxUtils.subscribe(observable);
+        RxUtils.execute(observable);
     }
 
     private interface MediaItemObservable {

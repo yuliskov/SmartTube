@@ -158,7 +158,7 @@
     <string name="mark_channel_as_watched">Позначити як переглянуте</string>
     <string name="channel_marked_as_watched">Канал позначен як переглянутий</string>
     <string name="dialog_add_device">Додати пристрій</string>
-    <string name="dialog_remove_device">Видалити пристрій</string>
+    <string name="dialog_remove_all_devices">Видалити усі пристрої</string>
     <string name="device_link_enabled">Прив`язка активована</string>
     <string name="device_connected">Пристрій \"%s\" підключений</string>
     <string name="device_disconnected">Пристрій \"%s\" відключений</string>
@@ -166,4 +166,5 @@
     <string name="msg_restart_app">Будь ласка, перезапустіть додаток, щоб зміни набули чинності</string>
     <string name="settings_block">Блокування контенту</string>
     <string name="msg_applying">Застосовується %s…</string>
+    <string name="msg_done">Готово</string>
 </resources>

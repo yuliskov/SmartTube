@@ -102,7 +102,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
             return;
         }
 
-        mPostPlayAction = RxUtils.subscribe(
+        mPostPlayAction = RxUtils.execute(
                 mRemoteManager.postStartPlayingObserve(videoId, positionMs, durationMs)
         );
     }
@@ -112,7 +112,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
             return;
         }
 
-        mPostStateAction = RxUtils.subscribe(
+        mPostStateAction = RxUtils.execute(
                 mRemoteManager.postStateChangeObserve(positionMs, durationMs, isPlaying)
         );
     }
