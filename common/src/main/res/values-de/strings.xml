@@ -168,4 +168,6 @@
     <string name="settings_block">Inhalte blockieren</string>
     <string name="msg_applying">%s aktiv</string>
     <string name="msg_done">Fertig</string>
+    <string name="settings_general">Allgemein</string>
+    <string name="settings_video">Video</string>
 </resources>
