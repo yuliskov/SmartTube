@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -77,10 +80,30 @@ public class Utils {
         return Uri.parse(url);
     }
 
-    public static boolean isAppInForeground() {
+    private static boolean isAppInForeground() {
         ActivityManager.RunningAppProcessInfo appProcessInfo = new ActivityManager.RunningAppProcessInfo();
         ActivityManager.getMyMemoryState(appProcessInfo);
         return (appProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND ||
                 appProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE);
+    }
+
+    private static boolean isPlayerInForeground(Context context) {
+        if (context == null) {
+            return false;
+        }
+
+        return isAppInForeground() && ViewManager.instance(context).getTopView() == PlaybackView.class;
+    }
+
+    public static void moveAppToForeground(Context context) {
+        if (!Utils.isAppInForeground()) {
+            ViewManager.instance(context).startView(SplashView.class);
+        }
+    }
+
+    public static void movePlayerToForeground(Context context) {
+        if (!Utils.isPlayerInForeground(context)) {
+            ViewManager.instance(context).startView(PlaybackView.class);
+        }
     }
 }

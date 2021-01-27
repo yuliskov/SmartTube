@@ -328,4 +328,20 @@ public class ViewManager {
     public static void destroyApp() {
         Runtime.getRuntime().exit(0);
     }
+
+    public Class<?> getTopView() {
+        Class<?> topActivity = getTopActivity();
+
+        if (topActivity == null) {
+            return null;
+        }
+
+        for (Map.Entry<Class<?>, Class<? extends Activity>> entry: mViewMapping.entrySet()) {
+            if (entry.getValue() == topActivity) {
+                return entry.getKey();
+            }
+        }
+
+        return null;
+    }
 }
