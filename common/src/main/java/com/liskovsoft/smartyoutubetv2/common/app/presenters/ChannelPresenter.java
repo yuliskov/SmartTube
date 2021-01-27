@@ -95,11 +95,17 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                 openChannel(item.channelId);
             } else if (item.videoId != null) {
                 MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
-                mServiceManager.loadMetadata(item, metadata -> openChannel(metadata.getChannelId()));
+                mServiceManager.loadMetadata(item, metadata -> {
+                    openChannel(metadata.getChannelId());
+                    item.channelId = metadata.getChannelId();
+                });
             } else if (item.isChannelUploads()) {
                 // Maybe this is subscribed items view
                 ChannelUploadsPresenter.instance(getContext())
-                        .obtainVideoGroup(item, group -> openChannel(group.getChannelId()));
+                        .obtainVideoGroup(item, group -> {
+                            openChannel(group.getChannelId());
+                            item.channelId = group.getChannelId();
+                        });
             }
         }
     }
