@@ -55,7 +55,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
 
     @Override
     public void onVideoLoaded(Video item) {
-        postStartPlaying(item);
+        postStartPlaying(item, true);
         mVideo = item;
     }
 
@@ -76,7 +76,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 postPlay(false);
                 break;
             case PlaybackUiController.REPEAT_ONE:
-                postStartPlaying(getController().getVideo());
+                postStartPlaying(getController().getVideo(), true);
                 break;
         }
     }
@@ -88,7 +88,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         //postStartPlaying(null);
     }
 
-    private void postStartPlaying(@Nullable Video item) {
+    private void postStartPlaying(@Nullable Video item, boolean isPlaying) {
         String videoId = null;
         long positionMs = -1;
         long lengthMs = -1;
@@ -99,16 +99,16 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
             lengthMs = getController().getLengthMs();
         }
 
-        postStartPlaying(videoId, positionMs, lengthMs);
+        postStartPlaying(videoId, positionMs, lengthMs, isPlaying);
     }
 
-    private void postStartPlaying(String videoId, long positionMs, long durationMs) {
+    private void postStartPlaying(String videoId, long positionMs, long durationMs, boolean isPlaying) {
         if (!mDeviceLinkData.isDeviceLinkEnabled()) {
             return;
         }
 
         mPostPlayAction = RxUtils.execute(
-                mRemoteManager.postStartPlayingObserve(videoId, positionMs, durationMs)
+                mRemoteManager.postStartPlayingObserve(videoId, positionMs, durationMs, isPlaying)
         );
     }
 
@@ -122,8 +122,8 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         );
     }
 
-    private void postPlay(boolean isPlay) {
-        postState(getController().getPositionMs(), getController().getLengthMs(), isPlay);
+    private void postPlay(boolean isPlaying) {
+        postState(getController().getPositionMs(), getController().getLengthMs(), isPlaying);
     }
 
     private void postSeek(long positionMs) {
@@ -206,9 +206,9 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 break;
             case Command.TYPE_GET_STATE:
                 if (getController() != null) {
-                    postStartPlaying(getController().getVideo());
+                    postStartPlaying(getController().getVideo(), getController().isPlaying());
                 } else {
-                    postStartPlaying(null);
+                    postStartPlaying(null, false);
                 }
                 break;
             case Command.TYPE_CONNECTED:
