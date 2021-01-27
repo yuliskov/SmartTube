@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCatego
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.DataSourcePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.VideoPreset;
@@ -30,13 +31,13 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     private static final int BACKGROUND_PLAYBACK_ID = 135;
     private static final int VIDEO_PRESETS_ID = 136;
     private static final int AUDIO_DELAY_ID = 137;
-    private AppSettingsPresenter mSettingsPresenter;
     // NOTE: using map, because same item could be changed time to time
     private final Map<Integer, OptionCategory> mCategories = new LinkedHashMap<>();
     private final Map<Integer, OptionCategory> mCategoriesInt = new LinkedHashMap<>();
     private final Set<Runnable> mHideListeners = new HashSet<>();
     private final StateUpdater mStateUpdater;
     private PlayerData mPlayerData;
+    private AppSettingsPresenter mSettingsPresenter;;
 
     public HqDialogManager(StateUpdater stateUpdater) {
         mStateUpdater = stateUpdater;
@@ -210,40 +211,16 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     }
 
     private static OptionCategory createVideoPresetsCategory(Context context, PlayerData playerData, Runnable onFormatSelected) {
-        VideoPreset[] presets = {
-                new VideoPreset("SD     30fps    avc", "640,360,30,avc"),
-                new VideoPreset("SD     30fps    vp9", "640,360,30,vp9"),
-                new VideoPreset("SD     60fps    avc", "640,360,60,avc"),
-                new VideoPreset("SD     60fps    vp9", "640,360,60,vp9"),
-                new VideoPreset("HD     30fps    avc", "1280,720,30,avc"),
-                new VideoPreset("HD     30fps    vp9", "1280,720,30,vp9"),
-                new VideoPreset("HD     60fps    avc", "1280,720,60,avc"),
-                new VideoPreset("HD     60fps    vp9", "1280,720,60,vp9"),
-                new VideoPreset("FHD    30fps    avc", "1920,1080,30,avc"),
-                new VideoPreset("FHD    30fps    vp9", "1920,1080,30,vp9"),
-                new VideoPreset("FHD    30fps    vp9+hdr", "1920,1080,30,vp9.2"),
-                new VideoPreset("FHD    60fps    avc", "1920,1080,60,avc"),
-                new VideoPreset("FHD    60fps    vp9", "1920,1080,60,vp9"),
-                new VideoPreset("FHD    60fps    vp9+hdr", "1920,1080,60,vp9.2"),
-                new VideoPreset("2K     30fps    vp9", "2560,1440,30,vp9"),
-                new VideoPreset("2K     30fps    vp9+hdr", "2560,1440,30,vp9.2"),
-                new VideoPreset("2K     60fps    vp9", "2560,1440,60,vp9"),
-                new VideoPreset("2K     60fps    vp9+hdr", "2560,1440,60,vp9.2"),
-                new VideoPreset("4K     30fps    vp9", "3840,2160,30,vp9"),
-                new VideoPreset("4K     30fps    vp9+hdr", "3840,2160,30,vp9.2"),
-                new VideoPreset("4K     60fps    vp9", "3840,2160,60,vp9"),
-                new VideoPreset("4K     60fps    vp9+hdr", "3840,2160,60,vp9.2"),
-                new VideoPreset("8K     30fps    vp9", "7680,4320,30,vp9"),
-                new VideoPreset("8K     30fps    vp9+hdr", "7680,4320,30,vp9.2"),
-                new VideoPreset("8K     60fps    vp9", "7680,4320,60,vp9"),
-                new VideoPreset("8K     60fps    vp9+hdr", "7680,4320,60,vp9.2")
-        };
-
         return OptionCategory.from(
                 VIDEO_PRESETS_ID,
                 OptionCategory.TYPE_RADIO,
                 context.getString(R.string.title_video_presets),
-                fromPresets(presets, playerData, onFormatSelected));
+                fromPresets(
+                        DataSourcePresenter.instance(context).getVideoPresets(),
+                        playerData,
+                        onFormatSelected
+                )
+        );
     }
 
     private static List<OptionItem> fromPresets(VideoPreset[] presets, PlayerData playerData, Runnable onFormatSelected) {
