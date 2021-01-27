@@ -50,8 +50,8 @@ public class DataSourcePresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.settings_general), () -> GeneralSettingsPresenter.instance(getContext()).show(), R.drawable.settings_app));
         settingItems.add(new SettingsItem(
                 getContext().getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(getContext()).show(), R.drawable.settings_main_ui));
-        settingItems.add(new SettingsItem(
-                getContext().getString(R.string.settings_ui_scale), () -> UIScaleSettingsPresenter.instance(getContext()).show(), R.drawable.settings_ui_scale));
+        //settingItems.add(new SettingsItem(
+        //        getContext().getString(R.string.settings_ui_scale), () -> UIScaleSettingsPresenter.instance(getContext()).show(), R.drawable.settings_ui_scale));
         settingItems.add(new SettingsItem(
                 getContext().getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(getContext()).show(), R.drawable.settings_player));
         settingItems.add(new SettingsItem(

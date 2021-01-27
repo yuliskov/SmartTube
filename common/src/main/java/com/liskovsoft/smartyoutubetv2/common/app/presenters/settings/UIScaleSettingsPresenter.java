@@ -38,7 +38,6 @@ public class UIScaleSettingsPresenter extends BasePresenter<Void> {
             if (mRestartApp) {
                 mRestartApp = false;
                 MessageHelpers.showLongMessage(getContext(), R.string.msg_restart_app);
-                //ViewManager.instance(getContext()).restartApp();
             }
         });
     }
