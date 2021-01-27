@@ -167,4 +167,6 @@
     <string name="settings_block">Блокировка контента</string>
     <string name="msg_applying">Применяется %s…</string>
     <string name="msg_done">Готово</string>
+    <string name="settings_general">Общие</string>
+    <string name="settings_video">Видео</string>
 </resources>

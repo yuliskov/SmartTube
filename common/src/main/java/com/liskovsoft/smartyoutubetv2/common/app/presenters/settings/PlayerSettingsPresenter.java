@@ -32,7 +32,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
         appendVideoBufferCategory(settingsPresenter);
         appendVideoPresetsCategory(settingsPresenter);
-        appendVideoZoomCategory(settingsPresenter);
+        //appendVideoZoomCategory(settingsPresenter);
         appendAudioShiftCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
         appendOKButtonCategory(settingsPresenter);

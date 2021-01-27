@@ -168,4 +168,6 @@
     <string name="settings_block">Content blocking</string>
     <string name="msg_applying">Applying %s…</string>
     <string name="msg_done">Done</string>
+    <string name="settings_general">General</string>
+    <string name="settings_video">Video</string>
 </resources>
