@@ -18,18 +18,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.CategoryEmptyError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.DataSourcePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.CategoryPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AboutPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.BlockSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.LanguageSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.DeviceLinkSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.MainUISettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.PlayerSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SearchSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SubtitleSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.UIScaleSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -59,6 +50,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private final Map<Integer, Observable<MediaGroup>> mGridMapping;
     private final Map<Integer, Observable<List<MediaGroup>>> mRowMapping;
     private final Map<Integer, List<SettingsItem>> mTextGridMapping;
+    private final DataSourcePresenter mDataSourcePresenter;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
     private Disposable mSignCheckAction;
@@ -68,6 +60,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
     private BrowsePresenter(Context context) {
         super(context);
+        mDataSourcePresenter = DataSourcePresenter.instance(context);
         mPlaybackPresenter = PlaybackPresenter.instance(context);
         mMediaService = YouTubeMediaService.instance();
         mViewManager = ViewManager.instance(context);
@@ -141,30 +134,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void initSettingsSubCategories() {
-        List<SettingsItem> settingItems = new ArrayList<>();
-
-        settingItems.add(new SettingsItem(
-                getContext().getString(R.string.settings_accounts), () -> AccountSettingsPresenter.instance(getContext()).show(), R.drawable.settings_account));
-        settingItems.add(new SettingsItem(
-                getContext().getString(R.string.settings_linked_devices), () -> DeviceLinkSettingsPresenter.instance(getContext()).show(), R.drawable.settings_cast));
-        settingItems.add(new SettingsItem(
-                getContext().getString(R.string.settings_language), () -> LanguageSettingsPresenter.instance(getContext()).show(), R.drawable.settings_language));
-        settingItems.add(new SettingsItem(
-                getContext().getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(getContext()).show(), R.drawable.settings_main_ui));
-        settingItems.add(new SettingsItem(
-                getContext().getString(R.string.settings_ui_scale), () -> UIScaleSettingsPresenter.instance(getContext()).show(), R.drawable.settings_ui_scale));
-        settingItems.add(new SettingsItem(
-                getContext().getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(getContext()).show(), R.drawable.settings_player));
-        settingItems.add(new SettingsItem(
-                getContext().getString(R.string.subtitle_category_title), () -> SubtitleSettingsPresenter.instance(getContext()).show(), R.drawable.settings_subtitles));
-        settingItems.add(new SettingsItem(
-                getContext().getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(getContext()).show(), R.drawable.settings_search));
-        settingItems.add(new SettingsItem(
-                getContext().getString(R.string.settings_block), () -> BlockSettingsPresenter.instance(getContext()).show(), R.drawable.settings_block));
-        settingItems.add(new SettingsItem(
-                getContext().getString(R.string.settings_about), () -> AboutPresenter.instance(getContext()).show(), R.drawable.settings_about));
-
-        mTextGridMapping.put(MediaGroup.TYPE_SETTINGS, settingItems);
+        mTextGridMapping.put(MediaGroup.TYPE_SETTINGS, mDataSourcePresenter.getSettingItems());
     }
 
     public void updateCategories() {

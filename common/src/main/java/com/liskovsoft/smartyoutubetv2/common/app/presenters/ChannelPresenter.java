@@ -116,14 +116,15 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         }
 
         disposeActions();
-        ViewManager.instance(getContext()).startView(ChannelView.class);
+
+        mChannelId = channelId;
 
         if (getView() != null) {
             getView().clear();
-            updateRows(channelId);
-        } else {
-            mChannelId = channelId;
+            updateRows(mChannelId);
         }
+
+        ViewManager.instance(getContext()).startView(ChannelView.class);
     }
 
     private void disposeActions() {

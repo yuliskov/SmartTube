@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HqDialogManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
@@ -33,11 +32,9 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
         appendVideoBufferCategory(settingsPresenter);
         appendVideoPresetsCategory(settingsPresenter);
+        appendVideoZoomCategory(settingsPresenter);
         appendAudioShiftCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
-        appendAutoFrameRateCategory(settingsPresenter);
-        appendAutoFrameRatePauseCategory(settingsPresenter);
-        appendVideoZoomCategory(settingsPresenter);
         appendOKButtonCategory(settingsPresenter);
         appendUIAutoHideCategory(settingsPresenter);
         appendSeekingPreviewCategory(settingsPresenter);
@@ -98,16 +95,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
     private void appendBackgroundPlaybackCategory(AppSettingsPresenter settingsPresenter) {
         OptionCategory category = HqDialogManager.createBackgroundPlaybackCategory(getContext(), mPlayerData);
-        settingsPresenter.appendRadioCategory(category.title, category.options);
-    }
-
-    private void appendAutoFrameRateCategory(AppSettingsPresenter settingsPresenter) {
-        OptionCategory category = AutoFrameRateManager.createAutoFrameRateCategory(getContext(), mPlayerData);
-        settingsPresenter.appendCheckedCategory(category.title, category.options);
-    }
-
-    private void appendAutoFrameRatePauseCategory(AppSettingsPresenter settingsPresenter) {
-        OptionCategory category = AutoFrameRateManager.createAutoFrameRatePauseCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
