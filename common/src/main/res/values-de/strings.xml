@@ -172,12 +172,12 @@
     <string name="settings_video">Video</string>
     <string name="content_block_confirm_skip">Überspringen bestätigen</string>
     <string name="content_block_categories">Kategorien</string>
-    <string name="content_block_sponsor">Gesponserte Videosegmente</string>
-    <string name="content_block_intro">Unterbrechung/Intro-Animation</string>
-    <string name="content_block_outro">Abspann/Outro</string>
-    <string name="content_block_interaction">Interaktions-Erinnerungen (Abonnieren)</string>
+    <string name="content_block_sponsor">Sponsor</string>
+    <string name="content_block_intro">Intermission/Intro Animation</string>
+    <string name="content_block_outro">Endkarten/Credits</string>
+    <string name="content_block_interaction">Interaktionserinnerung (Abonnieren)</string>
     <string name="content_block_self_promo">Unbezahlt/Eigenwerbung</string>
-    <string name="content_block_music_off_topic">Musikvideo-Teile ohne Musik</string>
+    <string name="content_block_music_off_topic">Musik: Nicht-musikalischer Teil</string>
     <string name="confirm_segment_skip">Segment überspringen?</string>
     <string name="msg_skipping_segment">Segment überspringen…</string>
 </resources>
