@@ -165,4 +165,16 @@
     <string name="settings_block">Blokování obsahu</string>
     <string name="msg_applying">Aplikuji %s…</string>
     <string name="msg_done">Hotovo</string>
+    <string name="settings_general">Obecné</string>
+    <string name="settings_video">Video</string>
+    <string name="content_block_confirm_skip">Potvrzovat přeskočení</string>
+    <string name="content_block_categories">Kategorie</string>
+    <string name="content_block_sponsor">Sponzor</string>
+    <string name="content_block_intro">Přestávka/Úvodní animace</string>
+    <string name="content_block_outro">Koncové karty/Titulky</string>
+    <string name="content_block_interaction">Připomenutí interakce (odběr)</string>
+    <string name="content_block_self_promo">Neplacená/vlastní propagace</string>
+    <string name="content_block_music_off_topic">Hudba - nehudební sekce klipu</string>
+    <string name="confirm_segment_skip">Přeskočit segment?</string>
+    <string name="msg_skipping_segment">Přeskakuji segment…</string>
 </resources>
