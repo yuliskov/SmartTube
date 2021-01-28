@@ -165,6 +165,18 @@
     <string name="settings_ui_scale">Skalowanie interfejsu</string>
     <string name="msg_restart_app">Uruchom ponownie aplikację, aby zastosować te ustawienia</string>
     <string name="settings_block">Blokowanie treści</string>
-    <string name="msg_applying">Pomijam fragment sponsorowany %s…</string>
+    <string name="msg_applying">Pomijam %s…</string>
     <string name="msg_done">Gotowe</string>
+    <string name="settings_general">Ogólne</string>
+    <string name="settings_video">Wideo</string>
+    <string name="content_block_confirm_skip">Potwierdź pominięcie</string>
+    <string name="content_block_categories">Kategorie</string>
+    <string name="content_block_sponsor">Sponsor</string>
+    <string name="content_block_intro">Intro</string>
+    <string name="content_block_outro">Outro</string>
+    <string name="content_block_interaction">Wzmianka o subksrybowaniu</string>
+    <string name="content_block_self_promo">Auto promocja</string>
+    <string name="content_block_music_off_topic">Niemuzyczna część teledysku</string>
+    <string name="confirm_segment_skip">Pominąć fragment?</string>
+    <string name="msg_skipping_segment">Pomijam fragment…</string>
 </resources>
