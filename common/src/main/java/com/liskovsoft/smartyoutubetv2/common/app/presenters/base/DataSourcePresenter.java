@@ -60,7 +60,7 @@ public class DataSourcePresenter extends BasePresenter<Void> {
         settingItems.add(new SettingsItem(
                 getContext().getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(getContext()).show(), R.drawable.settings_search));
         settingItems.add(new SettingsItem(
-                ContentBlockSettingsPresenter.SPONSOR_BLOCK_TITLE, () -> ContentBlockSettingsPresenter.instance(getContext()).show(), R.drawable.settings_block));
+                ContentBlockSettingsPresenter.SPONSOR_BLOCK_NAME, () -> ContentBlockSettingsPresenter.instance(getContext()).show(), R.drawable.settings_block));
         settingItems.add(new SettingsItem(
                 getContext().getString(R.string.settings_about), () -> AboutPresenter.instance(getContext()).show(), R.drawable.settings_about));
 

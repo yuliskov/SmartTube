@@ -14,7 +14,9 @@ import java.util.List;
 import java.util.Set;
 
 public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
-    public static final String SPONSOR_BLOCK_TITLE = "SponsorBlock";
+    public static final String SPONSOR_BLOCK_NAME = "SponsorBlock";
+    public static final String SPONSOR_BLOCK_URL = "https://sponsor.ajay.app";
+    public static final String SPONSOR_BLOCK_TITLE = String.format("%s (%s)", SPONSOR_BLOCK_NAME, SPONSOR_BLOCK_URL);
     private final ContentBlockData mContentBlockData;
 
     public ContentBlockSettingsPresenter(Context context) {
@@ -34,7 +36,7 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         appendConfirmOnSkipSwitch(settingsPresenter);
         appendCategoriesSection(settingsPresenter);
 
-        settingsPresenter.showDialog(SPONSOR_BLOCK_TITLE);
+        settingsPresenter.showDialog(SPONSOR_BLOCK_NAME);
     }
 
     private void appendSponsorBlockSwitch(AppSettingsPresenter settingsPresenter) {
