@@ -1,3 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Vineyard -->
+    <string name="title_oops">Ups...</string>
+    <string name="title_no_videos">Brak filmów</string>
+    <string name="message_try_again">Spróbować jeszcze raz?</string>
+    <string name="message_check_again">Sprawdzić jeszcze raz?</string>
+    <string name="text_search_results">Wyniki wyszukiwania dla frazy %s</string>
+    <string name="text_post_results_title">Posty dla %s</string>
+    <string name="text_no_results">Brak wyników</string>
+    <string name="error_message_network_needed">Ups, musisz być połączony z siecią żeby to zrobić!</string>
+
+    <!--  NEW ITEMS  -->
+    <string name="signin_view_title">Ładuje kod użytkownika</string>
+    <string name="signin_view_description">Żeby się zalogować wpisz ten kod na stronie %s</string>
+    <string name="signin_view_action_text">Gotowe</string>
+    <string name="action_subscribe_off">Odsubskrybowano</string>
+    <string name="action_subscribe_on">Zasubskrybowano</string>
+    <string name="action_channel">Otwórz Kanał</string>
+    <string name="action_playlist_add">Dodaj do Playlisty</string>
+    <string name="action_video_stats">Statystyki Wideo</string>
+    <string name="require_checked">Wymaga \"%s\"</string>
+    <string name="msg_press_again_to_exit">Wciśnij ponownie, żeby wyjść</string>
     <string name="player_remaining_time">Pozostało: %s</string>
+    <string name="badge_new_content">Nowe</string>
+    <string name="badge_live">Na żywo</string>
+    <string name="action_pip">Włącz PIP</string>
+    <string name="add_device_view_description">Aby podłączyć urządzenie wpisz ten kod na swoim telefonie w aplikacji YouTube w sekcji Ustawienia/Watch on TV</string>
 </resources>
