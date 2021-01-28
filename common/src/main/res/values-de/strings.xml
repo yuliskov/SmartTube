@@ -170,7 +170,7 @@
     <string name="msg_done">Fertig</string>
     <string name="settings_general">Allgemein</string>
     <string name="settings_video">Video</string>
-    <string name="content_block_confirm_skip">Bestätigen zum Überspringen</string>
+    <string name="content_block_confirm_skip">Überspringen bestätigen</string>
     <string name="content_block_categories">Kategorien</string>
     <string name="content_block_sponsor">Gesponserte Videosegmente</string>
     <string name="content_block_intro">Unterbrechung/Intro-Animation</string>
