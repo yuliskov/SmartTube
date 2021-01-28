@@ -163,8 +163,8 @@
     <string name="device_link_enabled">Lien activé</string>
     <string name="device_connected">L\'appareil \"%s\" a été connecté</string>
     <string name="device_disconnected">L\'appareil \"%s\" a été déconnecté</string>
-    <string name="settings_ui_scale">Échelle de l'interface utilisateur</string>
-    <string name="msg_restart_app">Veuillez redémarrer l'application pour appliquer ces paramètres</string>
+    <string name="settings_ui_scale">Échelle de l\'interface utilisateur</string>
+    <string name="msg_restart_app">Veuillez redémarrer l\'application pour appliquer ces paramètres</string>
     <string name="settings_block">Blocage de contenu</string>
     <string name="msg_applying">Application %s…</string>
     <string name="msg_done">Terminé</string>
