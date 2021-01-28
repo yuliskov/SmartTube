@@ -153,7 +153,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::updateRowsHeader,
-                        error -> Log.e(TAG, "updateRows error: " + error)
+                        error -> Log.e(TAG, "updateRows error: %s", error.getMessage())
                  );
     }
 
@@ -185,7 +185,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                 .subscribe(
                         continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),
                         error -> {
-                            Log.e(TAG, "continueGroup error: " + error);
+                            Log.e(TAG, "continueGroup error: %s", error.getMessage());
                             getView().showProgressBar(false);
                         },
                         () -> getView().showProgressBar(false)

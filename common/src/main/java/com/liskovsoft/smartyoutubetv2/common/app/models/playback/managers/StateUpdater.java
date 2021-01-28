@@ -339,9 +339,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
             historyObservable = mediaItemManager.updateHistoryPositionObserve(item.videoId, positionSec);
         }
 
-        mHistoryAction = historyObservable
-                .subscribeOn(Schedulers.newThread())
-                .subscribe((Void v) -> {}, error -> Log.e(TAG, "History update error: " + error));
+        mHistoryAction = RxUtils.execute(historyObservable);
     }
 
     private void initFormats() {

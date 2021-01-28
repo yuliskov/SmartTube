@@ -56,8 +56,10 @@ public class ServiceManager {
         mMetadataAction = observable
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(onMetadata::onMetadata,
-                        error -> Log.e(TAG, "loadMetadata error: " + error));
+                .subscribe(
+                        onMetadata::onMetadata,
+                        error -> Log.e(TAG, "loadMetadata error: %s", error.getMessage())
+                );
     }
 
     public interface OnMetadata {
@@ -78,7 +80,7 @@ public class ServiceManager {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         onMediaGroup::onMediaGroup,
-                        error -> Log.e(TAG, "loadChannelUploads error: " + error)
+                        error -> Log.e(TAG, "loadChannelUploads error: %s", error.getMessage())
                 );
     }
 

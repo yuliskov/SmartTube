@@ -371,7 +371,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 .subscribe(
                         continueMediaGroup -> getView().updateCategory(VideoGroup.from(continueMediaGroup, group.getCategory())),
                         error -> {
-                            Log.e(TAG, "continueGroup error: " + error);
+                            Log.e(TAG, "continueGroup error: %s", error.getMessage());
                             getView().showProgressBar(false);
                         },
                         () -> getView().showProgressBar(false));
@@ -399,7 +399,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                                 }
                             }
                         },
-                        error -> Log.e(TAG, "authCheck error: " + error)
+                        error -> Log.e(TAG, "authCheck error: %s", error.getMessage())
                 );
                 
     }
@@ -420,7 +420,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                             }
                         },
                         error -> {
-                            Log.e(TAG, "updateRowsHeader error: " + error);
+                            Log.e(TAG, "updateRowsHeader error: %s", error.getMessage());
                             getView().showProgressBar(false);
                             getView().showError(new CategoryEmptyError(getContext()));
                         });
@@ -445,7 +445,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                             loadNextPortionIfNeeded(videoGroup);
                         },
                         error -> {
-                            Log.e(TAG, "updateGridHeader error: " + error);
+                            Log.e(TAG, "updateGridHeader error: %s", error.getMessage());
                             getView().showProgressBar(false);
                             getView().showError(new CategoryEmptyError(getContext()));
                         });

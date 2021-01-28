@@ -115,10 +115,11 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         mLoadAction = mediaGroupManager.getSearchObserve(searchText)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mediaGroup -> {
-                    getView().updateSearch(VideoGroup.from(mediaGroup));
-                }, error -> Log.e(TAG, "loadSearchData error: " + error),
-                   () -> getView().showProgressBar(false));
+                .subscribe(
+                        mediaGroup -> getView().updateSearch(VideoGroup.from(mediaGroup)),
+                        error -> Log.e(TAG, "loadSearchData error: %s", error.getMessage()),
+                        () -> getView().showProgressBar(false)
+                );
     }
     
     private void continueGroup(VideoGroup group) {
@@ -135,7 +136,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         continueMediaGroup -> getView().updateSearch(VideoGroup.from(continueMediaGroup)),
-                        error -> Log.e(TAG, "continueGroup error: " + error),
+                        error -> Log.e(TAG, "continueGroup error: %s", error.getMessage()),
                         () -> getView().showProgressBar(false)
                 );
     }

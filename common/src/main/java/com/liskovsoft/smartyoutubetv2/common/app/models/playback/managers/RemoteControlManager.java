@@ -153,7 +153,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 .subscribe(
                         this::processCommand,
                         error -> {
-                            String msg = "startListening error: " + error;
+                            String msg = "startListening error: " + error.getMessage();
                             Log.e(TAG, msg);
                             MessageHelpers.showMessage(getActivity(), msg);
                         }

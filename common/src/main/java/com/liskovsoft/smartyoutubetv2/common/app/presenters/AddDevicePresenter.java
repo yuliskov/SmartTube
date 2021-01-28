@@ -61,7 +61,8 @@ public class AddDevicePresenter extends BasePresenter<AddDeviceView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         deviceCode -> getView().showCode(deviceCode),
-                        error -> Log.e(TAG, error));
+                        error -> Log.e(TAG, "Get pairing code error: %s", error.getMessage())
+                );
     }
 
     public void start() {

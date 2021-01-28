@@ -202,7 +202,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::processFormatInfo,
                            error -> {
-                               Log.e(TAG, "loadFormatInfo error: " + error);
+                               Log.e(TAG, "loadFormatInfo error: %s", error.getMessage());
                                scheduleReloadVideoTimer(1_000);
                            });
     }
@@ -246,7 +246,10 @@ public class VideoLoader extends PlayerEventListenerHelper {
             mMpdStreamAction = formatInfo.createMpdStreamObservable()
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(getController()::openDash, error -> Log.e(TAG, "createMpdStream error: " + error));
+                    .subscribe(
+                            getController()::openDash,
+                            error -> Log.e(TAG, "createMpdStream error: %s", error.getMessage())
+                    );
         } else if (formatInfo.containsUrlListInfo()) {
             Log.d(TAG, "Found url list video. This is always LQ. Loading...");
             getController().openUrlList(formatInfo.createUrlList());

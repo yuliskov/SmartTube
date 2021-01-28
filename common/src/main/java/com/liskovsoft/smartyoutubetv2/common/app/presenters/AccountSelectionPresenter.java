@@ -5,6 +5,7 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.Account;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AccountSelectionPresenter extends BasePresenter<Void> {
+    private static final String TAG = AccountSelectionPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static AccountSelectionPresenter sInstance;
     private final SignInManager mSignInManager;
@@ -50,7 +52,10 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
         mAccountsAction = mSignInManager.getAccountsObserve()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::createAndShowDialog);
+                .subscribe(
+                        this::createAndShowDialog,
+                        error -> Log.e(TAG, "Get accounts error: %s", error.getMessage())
+                );
     }
 
     public void unhold() {

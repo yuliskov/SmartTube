@@ -88,9 +88,7 @@ public class ChannelUploadsMenuPresenter extends BasePresenter<Void> {
     }
 
     private void unsubscribe(String channelId) {
-        mUnsubscribeAction = mItemManager.unsubscribeObserve(channelId)
-                .subscribeOn(Schedulers.newThread())
-                .subscribe();
+        mUnsubscribeAction = RxUtils.execute(mItemManager.unsubscribeObserve(channelId));
 
         MessageHelpers.showMessage(getContext(), R.string.unsubscribed_from_channel);
     }

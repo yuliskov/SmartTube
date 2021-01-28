@@ -6,6 +6,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -96,7 +97,10 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mPlaylistAction = mItemManager.getVideoPlaylistsInfosObserve(mVideo.videoId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::prepareAndShowDialog);
+                .subscribe(
+                        this::prepareAndShowDialog,
+                        error -> Log.e(TAG, "Get playlists error: %s", error.getMessage())
+                );
     }
 
     private void prepareAndShowDialog(List<VideoPlaylistInfo> videoPlaylistInfos) {
@@ -165,9 +169,11 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
                     mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem)
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe((var) -> {}, (err) -> {}, () -> {
-                                MessageHelpers.showMessage(getContext(), R.string.you_wont_see_this_video);
-                            });
+                            .subscribe(
+                                    var -> {},
+                                    error -> Log.e(TAG, "Mark as 'not interested' error: %s", error.getMessage()),
+                                    () -> MessageHelpers.showMessage(getContext(), R.string.you_wont_see_this_video)
+                            );
                 }));
     }
 
@@ -211,10 +217,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             editObserve = mItemManager.removeFromPlaylistObserve(playlistId, mVideo.videoId);
         }
 
-        mAddAction = editObserve
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+        mAddAction = RxUtils.execute(editObserve);
     }
 
     private void authCheck(Runnable onSuccess, Runnable onError) {
@@ -228,7 +231,8 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
                             } else {
                                 onError.run();
                             }
-                        }
+                        },
+                        error -> Log.e(TAG, "Sign check error: %s", error.getMessage())
                 );
 
     }
@@ -255,10 +259,9 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        Observable<Void> observable = mVideo.subscribed ? mItemManager.unsubscribeObserve(mVideo.channelId) : mItemManager.subscribeObserve(mVideo.channelId);
+        Observable<Void> observable = mVideo.subscribed ?
+                mItemManager.unsubscribeObserve(mVideo.channelId) : mItemManager.subscribeObserve(mVideo.channelId);
 
-        mSubscribeAction = observable
-                .subscribeOn(Schedulers.newThread())
-                .subscribe();
+        mSubscribeAction = RxUtils.execute(observable);
     }
 }

@@ -61,7 +61,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper {
                             mSponsorSegments = segments;
                             startPlaybackWatcher();
                         },
-                        error -> Log.e(TAG, "updateSponsorSegments error: %s", error)
+                        error -> Log.e(TAG, "updateSponsorSegments error: %s", error.getMessage())
                 );
     }
 
@@ -80,7 +80,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::skipSegment,
-                        error -> Log.e(TAG, "startPlaybackWatcher error: %s", error)
+                        error -> Log.e(TAG, "startPlaybackWatcher error: %s", error.getMessage())
                 );
     }
 

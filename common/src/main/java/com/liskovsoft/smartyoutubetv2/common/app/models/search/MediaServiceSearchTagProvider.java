@@ -29,7 +29,7 @@ public class MediaServiceSearchTagProvider implements SearchTagsProvider {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         tags -> callback.onResults(Tag.from(tags)),
-                        error -> Log.e(TAG, "Result is empty. Just ignore it. %s", error.getMessage())
+                        error -> Log.e(TAG, "Result is empty. Just ignore it. Error msg: %s", error.getMessage())
                 );
     }
 }

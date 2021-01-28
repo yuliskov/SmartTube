@@ -67,8 +67,10 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        continueMediaGroup -> getController().updateSuggestions(VideoGroup.from(continueMediaGroup, group.getCategory()))
-                        , error -> Log.e(TAG, "continueGroup error: " + error));
+                        continueMediaGroup ->
+                                getController().updateSuggestions(VideoGroup.from(continueMediaGroup, group.getCategory())),
+                        error -> Log.e(TAG, "continueGroup error: %s", error.getMessage())
+                );
     }
 
     private void syncCurrentVideo(MediaItemMetadata mediaItemMetadata, Video video) {
@@ -99,8 +101,10 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
         mMetadataAction = observable
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(metadata -> updateSuggestions(metadata, video),
-                           error -> Log.e(TAG, "loadSuggestions error: " + error));
+                .subscribe(
+                        metadata -> updateSuggestions(metadata, video),
+                        error -> Log.e(TAG, "loadSuggestions error: %s", error.getMessage())
+                );
     }
 
     private void updateSuggestions(MediaItemMetadata mediaItemMetadata, Video video) {

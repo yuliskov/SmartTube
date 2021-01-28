@@ -77,10 +77,13 @@ public class StoryboardManager {
         mFormatAction = infoObserve
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(formatInfo -> {
-                    mStoryboard = formatInfo.createStoryboard();
-                    initSeekPositions();
-                });
+                .subscribe(
+                        formatInfo -> {
+                            mStoryboard = formatInfo.createStoryboard();
+                            initSeekPositions();
+                        },
+                        error -> Log.e(TAG, "Error obtaining format info: %s", error.getMessage())
+                );
     }
 
     private void initSeekPositions() {

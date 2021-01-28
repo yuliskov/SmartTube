@@ -137,7 +137,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),
-                        error -> Log.e(TAG, "continueGroup error: " + error),
+                        error -> Log.e(TAG, "continueGroup error: %s", error.getMessage()),
                         () -> getView().showProgressBar(false)
                 );
     }
@@ -159,7 +159,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
                                 getView().showProgressBar(false);
                             }
                         },
-                        error -> Log.e(TAG, "updateGridHeader error: " + error),
+                        error -> Log.e(TAG, "updateGridHeader error: %s", error.getMessage()),
                         () -> getView().showProgressBar(false)
                 );
     }
@@ -174,7 +174,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         callback::onGroup,
-                        error -> Log.e(TAG, "updateVideoGrid error: " + error)
+                        error -> Log.e(TAG, "updateVideoGrid error: %s", error.getMessage())
                 );
     }
 
