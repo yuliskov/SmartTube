@@ -174,7 +174,8 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         String query = adapter.getAdapterOptions().get(PaginationAdapter.KEY_TAG);
         mSearchTagsProvider.search(query, results -> {
             adapter.addAllItems(results);
-            displayCompletions(toCompletions(results));
+            // Same suggestions in the keyboard
+            //displayCompletions(toCompletions(results));
         });
     }
 
