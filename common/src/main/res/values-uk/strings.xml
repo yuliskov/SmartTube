@@ -179,4 +179,8 @@
     <string name="content_block_music_off_topic">Немузикальна секція кліпу</string>
     <string name="confirm_segment_skip">Пропустити сегмент?</string>
     <string name="msg_skipping_segment">Пропуск сегменту…</string>
+    <string name="content_block_notification_type">Тип повідомлень</string>
+    <string name="content_block_notify_none">Без повідомлень</string>
+    <string name="content_block_notify_toast">Спливаюче повідомлення</string>
+    <string name="content_block_notify_dialog">Діалог підтвердження</string>
 </resources>

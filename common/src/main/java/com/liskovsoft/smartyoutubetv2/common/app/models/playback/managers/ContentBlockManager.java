@@ -97,12 +97,19 @@ public class ContentBlockManager extends PlayerEventListenerHelper {
 
         for (SponsorSegment segment : mSponsorSegments) {
             if (positionMs >= segment.getStartMs() && positionMs < segment.getEndMs()) {
-                if (mContentBlockData.isConfirmOnSkipEnabled()) {
-                    confirmSkip(segment.getEndMs());
-                } else {
-                    MessageHelpers.showMessage(getActivity(), getActivity().getString(R.string.msg_skipping_segment));
-                    getController().setPositionMs(segment.getEndMs());
+                switch (mContentBlockData.getNotificationType()) {
+                    case ContentBlockData.NOTIFICATION_TYPE_NONE:
+                        getController().setPositionMs(segment.getEndMs());
+                        break;
+                    case ContentBlockData.NOTIFICATION_TYPE_TOAST:
+                        MessageHelpers.showMessage(getActivity(), getActivity().getString(R.string.msg_skipping_segment));
+                        getController().setPositionMs(segment.getEndMs());
+                        break;
+                    case ContentBlockData.NOTIFICATION_TYPE_DIALOG:
+                        confirmSkip(segment.getEndMs());
+                        break;
                 }
+
                 isSegmentFound = true;
                 break;
             }

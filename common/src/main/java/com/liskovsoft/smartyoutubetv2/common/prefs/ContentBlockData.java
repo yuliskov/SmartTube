@@ -9,14 +9,17 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ContentBlockData {
+    public static final int NOTIFICATION_TYPE_NONE = 0;
+    public static final int NOTIFICATION_TYPE_TOAST = 1;
+    public static final int NOTIFICATION_TYPE_DIALOG = 2;
     private static final String CONTENT_BLOCK_DATA = "content_block_data";
     @SuppressLint("StaticFieldLeak")
     private static ContentBlockData sInstance;
     private final Context mContext;
     private final AppPrefs mAppPrefs;
     private boolean mIsSponsorBlockEnabled;
-    private boolean mIsConfirmOnSkipEnabled;
     private final Set<String> mCategories = new HashSet<>();
+    private int mNotificationType;
 
     private ContentBlockData(Context context) {
         mContext = context;
@@ -41,15 +44,6 @@ public class ContentBlockData {
         persistData();
     }
 
-    public boolean isConfirmOnSkipEnabled() {
-        return mIsConfirmOnSkipEnabled;
-    }
-
-    public void setConfirmOnSkipEnabled(boolean enabled) {
-        mIsConfirmOnSkipEnabled = enabled;
-        persistData();
-    }
-
     public Set<String> getCategories() {
         return mCategories;
     }
@@ -64,13 +58,22 @@ public class ContentBlockData {
         persistData();
     }
 
+    public int getNotificationType() {
+        return mNotificationType;
+    }
+
+    public void setNotificationType(int type) {
+        mNotificationType = type;
+        persistData();
+    }
+
     private void restoreState() {
         String data = mAppPrefs.getData(CONTENT_BLOCK_DATA);
 
         String[] split = Helpers.splitObjectLegacy(data);
 
         mIsSponsorBlockEnabled = Helpers.parseBoolean(split, 0, false);
-        mIsConfirmOnSkipEnabled = Helpers.parseBoolean(split, 1, false);
+        mNotificationType = Helpers.parseInt(split, 1, NOTIFICATION_TYPE_TOAST);
         String categories = Helpers.parseStr(split, 2);
 
         if (categories != null) {
@@ -85,6 +88,6 @@ public class ContentBlockData {
     private void persistData() {
         String categories = Helpers.mergeArray(mCategories.toArray());
 
-        mAppPrefs.setData(CONTENT_BLOCK_DATA, Helpers.mergeObject(mIsSponsorBlockEnabled, mIsConfirmOnSkipEnabled, categories));
+        mAppPrefs.setData(CONTENT_BLOCK_DATA, Helpers.mergeObject(mIsSponsorBlockEnabled, mNotificationType, categories));
     }
 }

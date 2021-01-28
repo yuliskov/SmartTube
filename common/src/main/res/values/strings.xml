@@ -180,4 +180,8 @@
     <string name="content_block_music_off_topic">Non-music section of clip</string>
     <string name="confirm_segment_skip">Skip segment?</string>
     <string name="msg_skipping_segment">Skipping segment…</string>
+    <string name="content_block_notification_type">Notification type</string>
+    <string name="content_block_notify_none">Without notification</string>
+    <string name="content_block_notify_toast">Toast</string>
+    <string name="content_block_notify_dialog">Confirmation dialog</string>
 </resources>

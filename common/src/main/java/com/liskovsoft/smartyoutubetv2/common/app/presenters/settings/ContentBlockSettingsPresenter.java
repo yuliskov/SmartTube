@@ -33,7 +33,7 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.clear();
         
         appendSponsorBlockSwitch(settingsPresenter);
-        appendConfirmOnSkipSwitch(settingsPresenter);
+        appendNotificationTypeSection(settingsPresenter);
         appendCategoriesSection(settingsPresenter);
 
         settingsPresenter.showDialog(SPONSOR_BLOCK_NAME);
@@ -49,14 +49,22 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendSingleSwitch(sponsorBlockOption);
     }
 
-    private void appendConfirmOnSkipSwitch(AppSettingsPresenter settingsPresenter) {
-        OptionItem sponsorBlockOption = UiOptionItem.from(
-                getContext().getString(R.string.content_block_confirm_skip),
-                option -> mContentBlockData.setConfirmOnSkipEnabled(option.isSelected()),
-                mContentBlockData.isConfirmOnSkipEnabled()
-        );
+    private void appendNotificationTypeSection(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
 
-        settingsPresenter.appendSingleSwitch(sponsorBlockOption);
+        int notificationType = mContentBlockData.getNotificationType();
+
+        for (int[] pair : new int[][] {
+                {R.string.content_block_notify_none, ContentBlockData.NOTIFICATION_TYPE_NONE},
+                {R.string.content_block_notify_toast, ContentBlockData.NOTIFICATION_TYPE_TOAST},
+                {R.string.content_block_notify_dialog, ContentBlockData.NOTIFICATION_TYPE_DIALOG}
+        }) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]),
+                    optionItem -> mContentBlockData.setNotificationType(pair[1]),
+                    notificationType == pair[1]));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.content_block_notification_type), options);
     }
 
     private void appendCategoriesSection(AppSettingsPresenter settingsPresenter) {
