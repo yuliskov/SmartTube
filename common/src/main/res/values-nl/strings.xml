@@ -22,7 +22,7 @@
     <string name="video_max_quality">Auto (max kwaliteit)</string>
     <string name="audio_max_quality">Auto (max kwaliteit)</string>
     <string name="subtitles_disabled">Geen ondertitels</string>
-    <string name="auto_frame_rate">Auto frame rate</string>
+    <string name="auto_frame_rate">Auto Frame Rate</string>
     <string name="frame_rate_correction">Fix fps: %s</string>
     <string name="category_background_playback">Afspelen op achtergrond</string>
     <string name="not_implemented">Niet geïmplementeerd</string>
@@ -83,8 +83,8 @@
     <string name="side_panel_sections">Rubrieken</string>
     <string name="boot_to_section">Opstarten met rubriek</string>
     <string name="large_ui">Grote weergave</string>
-    <string name="video_grid_scale">Formaat video\'s</string>
-    <string name="scale_ui">Formaat display</string>
+    <string name="video_grid_scale">Video\'s formaat</string>
+    <string name="scale_ui">Display formaat</string>
     <string name="color_scheme">Display thema</string>
     <string name="color_scheme_default">Standaard</string>
     <string name="color_scheme_red_grey">Rood-grijs</string>
@@ -152,15 +152,15 @@
     <string name="share_link">Delen</string>
     <string name="subscribe_to_channel">Abonnement aan</string>
     <string name="wait_data_loading">Even wachten terwijl gegevens laden</string>
-    <string name="auto_frame_rate_pause">Auto frame rate (pauze)</string>
-    <string name="auto_frame_rate_applying">Auto frame rate toepassen %sx%s@%s</string>
+    <string name="auto_frame_rate_pause">Auto Frame Rate (pauze)</string>
+    <string name="auto_frame_rate_applying">Auto Frame Rate toepassen %sx%s@%s</string>
     <string name="audio_shift">Audio sync</string>
     <string name="player_remember_speed">Video snelheid bewaren</string>
     <string name="mark_channel_as_watched">Markeren als bekeken</string>
     <string name="channel_marked_as_watched">Kanaal gemarkeerd als bekeken</string>
     <string name="dialog_add_device">Apparaat toevoegen</string>
     <string name="dialog_remove_all_devices">Alle apparaten verwijderen</string>
-    <string name="device_link_enabled">Melding weergeven</string>
+    <string name="device_link_enabled">Meldingen weergeven</string>
     <string name="device_connected">Apparaat \"%s\" gekoppeld</string>
     <string name="device_disconnected">Apparaat \"%s\" ontkoppeld</string>
     <string name="settings_ui_scale">Formaat</string>
@@ -171,7 +171,7 @@
     <string name="settings_general">Algemeen</string>
     <string name="settings_video">Video</string>
     <string name="content_block_confirm_skip">Overslaan bevestigen</string>
-    <string name="content_block_categories">Segment types</string>
+    <string name="content_block_categories">Segmenten</string>
     <string name="content_block_sponsor">Sponsor/betaalde promotie</string>
     <string name="content_block_intro">Intro/onderbreking</string>
     <string name="content_block_outro">Eindschermen/credits</string>
@@ -180,4 +180,8 @@
     <string name="content_block_music_off_topic">Intro/outro muziekvideo\'s</string>
     <string name="confirm_segment_skip">Segment overslaan ?</string>
     <string name="msg_skipping_segment">Segment overslaan</string>
+    <string name="content_block_notification_type">Meldingen</string>
+    <string name="content_block_notify_none">Geen melding</string>
+    <string name="content_block_notify_toast">Pop-up</string>
+    <string name="content_block_notify_dialog">Bevestiging</string>
 </resources>
