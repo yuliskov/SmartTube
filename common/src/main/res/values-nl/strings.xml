@@ -170,4 +170,14 @@
     <string name="msg_done">Klaar</string>
     <string name="settings_general">Algemeen</string>
     <string name="settings_video">Video</string>
+    <string name="content_block_confirm_skip">Overslaan bevestigen</string>
+    <string name="content_block_categories">Types segmenten</string>
+    <string name="content_block_sponsor">Sponsor/betaalde promotie</string>
+    <string name="content_block_intro">Intro/onderbreking</string>
+    <string name="content_block_outro">Eindschermen/credits</string>
+    <string name="content_block_interaction">Interactie herinnering (abonneren)</string>
+    <string name="content_block_self_promo">Zelfpromotie/onbetaalde promotie</string>
+    <string name="content_block_music_off_topic">Intro/outro muziekvideo\'s</string>
+    <string name="confirm_segment_skip">Segment overslaan ?</string>
+    <string name="msg_skipping_segment">Segment overslaan</string>
 </resources>
