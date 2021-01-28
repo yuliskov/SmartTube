@@ -180,4 +180,8 @@
     <string name="content_block_music_off_topic">Intro/outro muziekvideo\'s</string>
     <string name="confirm_segment_skip">Segment overslaan ?</string>
     <string name="msg_skipping_segment">Segment overslaan</string>
+    <string name="content_block_notification_type">Melding type</string>
+    <string name="content_block_notify_none">Geen melding</string>
+    <string name="content_block_notify_toast">Pop-up</string>
+    <string name="content_block_notify_dialog">Bevestiging</string>
 </resources>
