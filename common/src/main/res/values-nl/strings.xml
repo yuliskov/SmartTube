@@ -175,7 +175,7 @@
     <string name="content_block_sponsor">Sponsor/betaalde promotie</string>
     <string name="content_block_intro">Intro/onderbreking</string>
     <string name="content_block_outro">Eindschermen/credits</string>
-    <string name="content_block_interaction">Interactie herinnering (abonneren)</string>
+    <string name="content_block_interaction">Interactie (abonneren/leuk/volgen)</string>
     <string name="content_block_self_promo">Zelfpromotie/onbetaalde promotie</string>
     <string name="content_block_music_off_topic">Intro/outro muziekvideo\'s</string>
     <string name="confirm_segment_skip">Segment overslaan ?</string>
