@@ -159,10 +159,25 @@
     <string name="mark_channel_as_watched">Als gesehen markieren</string>
     <string name="channel_marked_as_watched">Kanal wurde als gesehen markiert</string>
     <string name="dialog_add_device">Gerät hinzufügen</string>
-    <string name="dialog_remove_all_devices">Gerät entfernen</string>
-    <string name="device_link_enabled">Geräte-Verbindung</string>
+    <string name="dialog_remove_all_devices">Alle Geräte entfernen</string>
+    <string name="device_link_enabled">Verbindung aktiviert</string>
     <string name="device_connected">Gerät \"%s\" wurde verbunden</string>
     <string name="device_disconnected">Gerät \"%s\" wurde getrennt</string>
     <string name="settings_ui_scale">Anzeigegröße</string>
     <string name="msg_restart_app">App neu starten, um diese Einstellungen zu übernehmen</string>
+    <string name="settings_block">Inhalte blockieren</string>
+    <string name="msg_applying">%s aktiv</string>
+    <string name="msg_done">Fertig</string>
+    <string name="settings_general">Allgemein</string>
+    <string name="settings_video">Video</string>
+    <string name="content_block_confirm_skip">Überspringen bestätigen</string>
+    <string name="content_block_categories">Kategorien</string>
+    <string name="content_block_sponsor">Gesponserte Videosegmente</string>
+    <string name="content_block_intro">Unterbrechung/Intro-Animation</string>
+    <string name="content_block_outro">Abspann/Outro</string>
+    <string name="content_block_interaction">Interaktions-Erinnerungen (Abonnieren)</string>
+    <string name="content_block_self_promo">Unbezahlt/Eigenwerbung</string>
+    <string name="content_block_music_off_topic">Musikvideo-Teile ohne Musik</string>
+    <string name="confirm_segment_skip">Segment überspringen?</string>
+    <string name="msg_skipping_segment">Segment überspringen…</string>
 </resources>
