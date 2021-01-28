@@ -177,7 +177,7 @@
     <string name="content_block_outro">Endkarten/Credits</string>
     <string name="content_block_interaction">Interaktionserinnerung (Abonnieren)</string>
     <string name="content_block_self_promo">Unbezahlt/Eigenwerbung</string>
-    <string name="content_block_music_off_topic">Musik: Nicht-musikalischer Teil</string>
+    <string name="content_block_music_off_topic">Musikvideo: Intro/Outro</string>
     <string name="confirm_segment_skip">Segment überspringen?</string>
     <string name="msg_skipping_segment">Segment überspringen…</string>
 </resources>
