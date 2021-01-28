@@ -160,7 +160,7 @@
     <string name="channel_marked_as_watched">Kanaal gemarkeerd als bekeken</string>
     <string name="dialog_add_device">Apparaat toevoegen</string>
     <string name="dialog_remove_all_devices">Alle apparaten verwijderen</string>
-    <string name="device_link_enabled">Melding weergeven</string>
+    <string name="device_link_enabled">Meldingen weergeven</string>
     <string name="device_connected">Apparaat \"%s\" gekoppeld</string>
     <string name="device_disconnected">Apparaat \"%s\" ontkoppeld</string>
     <string name="settings_ui_scale">Formaat</string>
@@ -171,7 +171,7 @@
     <string name="settings_general">Algemeen</string>
     <string name="settings_video">Video</string>
     <string name="content_block_confirm_skip">Overslaan bevestigen</string>
-    <string name="content_block_categories">Segment types</string>
+    <string name="content_block_categories">Segmenten</string>
     <string name="content_block_sponsor">Sponsor/betaalde promotie</string>
     <string name="content_block_intro">Intro/onderbreking</string>
     <string name="content_block_outro">Eindschermen/credits</string>
@@ -180,7 +180,7 @@
     <string name="content_block_music_off_topic">Intro/outro muziekvideo\'s</string>
     <string name="confirm_segment_skip">Segment overslaan ?</string>
     <string name="msg_skipping_segment">Segment overslaan</string>
-    <string name="content_block_notification_type">Melding type</string>
+    <string name="content_block_notification_type">Meldingen</string>
     <string name="content_block_notify_none">Geen melding</string>
     <string name="content_block_notify_toast">Pop-up</string>
     <string name="content_block_notify_dialog">Bevestiging</string>
