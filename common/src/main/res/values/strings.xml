@@ -170,4 +170,14 @@
     <string name="msg_done">Done</string>
     <string name="settings_general">General</string>
     <string name="settings_video">Video</string>
+    <string name="content_block_confirm_skip">Confirm on skip</string>
+    <string name="content_block_categories">Categories</string>
+    <string name="content_block_sponsor">Sponsor</string>
+    <string name="content_block_intro">Intermission/intro animation</string>
+    <string name="content_block_outro">Endcards/credits</string>
+    <string name="content_block_interaction">Interaction reminder (subscribe)</string>
+    <string name="content_block_self_promo">Unpaid/self promotion</string>
+    <string name="content_block_music_off_topic">Non-music section of clip</string>
+    <string name="confirm_segment_skip">Skip segment?</string>
+    <string name="msg_skipping_segment">Skipping segment…</string>
 </resources>

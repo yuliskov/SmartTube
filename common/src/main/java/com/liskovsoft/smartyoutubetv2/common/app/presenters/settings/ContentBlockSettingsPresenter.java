@@ -1,0 +1,86 @@
+package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
+
+import android.content.Context;
+import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
+import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
+    public static final String SPONSOR_BLOCK_TITLE = "SponsorBlock";
+    private final ContentBlockData mContentBlockData;
+
+    public ContentBlockSettingsPresenter(Context context) {
+        super(context);
+        mContentBlockData = ContentBlockData.instance(context);
+    }
+
+    public static ContentBlockSettingsPresenter instance(Context context) {
+        return new ContentBlockSettingsPresenter(context);
+    }
+
+    public void show() {
+        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
+        settingsPresenter.clear();
+        
+        appendSponsorBlockSwitch(settingsPresenter);
+        appendConfirmOnSkipSwitch(settingsPresenter);
+        appendCategoriesSection(settingsPresenter);
+
+        settingsPresenter.showDialog(SPONSOR_BLOCK_TITLE);
+    }
+
+    private void appendSponsorBlockSwitch(AppSettingsPresenter settingsPresenter) {
+        OptionItem sponsorBlockOption = UiOptionItem.from(
+                SPONSOR_BLOCK_TITLE,
+                option -> mContentBlockData.setSponsorBlockEnabled(option.isSelected()),
+                mContentBlockData.isSponsorBlockEnabled()
+        );
+
+        settingsPresenter.appendSingleSwitch(sponsorBlockOption);
+    }
+
+    private void appendConfirmOnSkipSwitch(AppSettingsPresenter settingsPresenter) {
+        OptionItem sponsorBlockOption = UiOptionItem.from(
+                getContext().getString(R.string.content_block_confirm_skip),
+                option -> mContentBlockData.setConfirmOnSkipEnabled(option.isSelected()),
+                mContentBlockData.isConfirmOnSkipEnabled()
+        );
+
+        settingsPresenter.appendSingleSwitch(sponsorBlockOption);
+    }
+
+    private void appendCategoriesSection(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        Set<String> categories = mContentBlockData.getCategories();
+
+        for (String[] pair : new String[][] {
+                {getContext().getString(R.string.content_block_sponsor), SponsorSegment.CATEGORY_SPONSOR},
+                {getContext().getString(R.string.content_block_intro), SponsorSegment.CATEGORY_INTRO},
+                {getContext().getString(R.string.content_block_outro), SponsorSegment.CATEGORY_OUTRO},
+                {getContext().getString(R.string.content_block_interaction), SponsorSegment.CATEGORY_INTERACTION},
+                {getContext().getString(R.string.content_block_self_promo), SponsorSegment.CATEGORY_SELF_PROMO},
+                {getContext().getString(R.string.content_block_music_off_topic), SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC}
+        }) {
+            options.add(UiOptionItem.from(pair[0],
+                    optionItem -> {
+                        if (optionItem.isSelected()) {
+                            mContentBlockData.addCategory(pair[1]);
+                        } else {
+                            mContentBlockData.removeCategory(pair[1]);
+                        }
+                    },
+                    categories.contains(pair[1])));
+        }
+
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.content_block_categories), options);
+    }
+}

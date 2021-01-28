@@ -169,4 +169,14 @@
     <string name="msg_done">Готово</string>
     <string name="settings_general">Загальні</string>
     <string name="settings_video">Відео</string>
+    <string name="content_block_confirm_skip">Підтвердження при пропуску</string>
+    <string name="content_block_categories">Категорії</string>
+    <string name="content_block_sponsor">Спонсорський блок</string>
+    <string name="content_block_intro">Вступ</string>
+    <string name="content_block_outro">Кінцевий екран/титри</string>
+    <string name="content_block_interaction">Нагадування про підписку</string>
+    <string name="content_block_self_promo">Самореклама</string>
+    <string name="content_block_music_off_topic">Немузикальна секція кліпу</string>
+    <string name="confirm_segment_skip">Пропустити сегмент?</string>
+    <string name="msg_skipping_segment">Пропуск сегменту…</string>
 </resources>

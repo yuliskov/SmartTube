@@ -8,6 +8,9 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -26,6 +29,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper {
     private List<SponsorSegment> mSponsorSegments;
     private Disposable mProgressAction;
     private Disposable mSegmentsAction;
+    private boolean mIsSameSegment;
 
     @Override
     public void onInitDone() {
@@ -49,7 +53,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper {
             return;
         }
 
-        mSegmentsAction = mMediaItemManager.getSponsorSegmentsObserve(item.videoId)
+        mSegmentsAction = mMediaItemManager.getSponsorSegmentsObserve(item.videoId, mContentBlockData.getCategories())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -89,12 +93,42 @@ public class ContentBlockManager extends PlayerEventListenerHelper {
             return;
         }
 
+        boolean isSegmentFound = false;
+
         for (SponsorSegment segment : mSponsorSegments) {
             if (positionMs >= segment.getStartMs() && positionMs < segment.getEndMs()) {
-                MessageHelpers.showMessage(getActivity(), getActivity().getString(R.string.msg_applying, "SponsorBlock"));
-                getController().setPositionMs(segment.getEndMs());
+                if (mContentBlockData.isConfirmOnSkipEnabled()) {
+                    confirmSkip(segment.getEndMs());
+                } else {
+                    MessageHelpers.showMessage(getActivity(), getActivity().getString(R.string.msg_skipping_segment));
+                    getController().setPositionMs(segment.getEndMs());
+                }
+                isSegmentFound = true;
                 break;
             }
         }
+
+        mIsSameSegment = isSegmentFound;
+    }
+
+    private void confirmSkip(long skipPositionMs) {
+        if (mIsSameSegment) {
+            return;
+        }
+
+        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getActivity());
+        settingsPresenter.clear();
+
+        OptionItem sponsorBlockOption = UiOptionItem.from(
+                getActivity().getString(R.string.confirm_segment_skip),
+                option -> {
+                    settingsPresenter.closeDialog();
+                    getController().setPositionMs(skipPositionMs);
+                }
+        );
+
+        settingsPresenter.appendSingleButton(sponsorBlockOption);
+
+        settingsPresenter.showDialog(getActivity().getString(R.string.confirm_segment_skip));
     }
 }

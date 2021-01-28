@@ -6,7 +6,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AboutPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AutoFrameRateSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.BlockSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.ContentBlockSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.DeviceLinkSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.GeneralSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.LanguageSettingsPresenter;
@@ -14,7 +14,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.MainUISetti
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.PlayerSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SearchSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SubtitleSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.UIScaleSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.VideoPreset;
 
 import java.util.ArrayList;
@@ -61,7 +60,7 @@ public class DataSourcePresenter extends BasePresenter<Void> {
         settingItems.add(new SettingsItem(
                 getContext().getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(getContext()).show(), R.drawable.settings_search));
         settingItems.add(new SettingsItem(
-                getContext().getString(R.string.settings_block), () -> BlockSettingsPresenter.instance(getContext()).show(), R.drawable.settings_block));
+                ContentBlockSettingsPresenter.SPONSOR_BLOCK_TITLE, () -> ContentBlockSettingsPresenter.instance(getContext()).show(), R.drawable.settings_block));
         settingItems.add(new SettingsItem(
                 getContext().getString(R.string.settings_about), () -> AboutPresenter.instance(getContext()).show(), R.drawable.settings_about));
 
