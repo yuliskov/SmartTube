@@ -1,8 +1,9 @@
-package com.liskovsoft.smartyoutubetv2.common.app.presenters.base;
+package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AboutPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AutoFrameRateSettingsPresenter;
@@ -19,50 +20,48 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.VideoPrese
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataSourcePresenter extends BasePresenter<Void> {
-    private static DataSourcePresenter sInstance;
+public class AppDataSourceManager {
+    private static AppDataSourceManager sInstance;
 
-    public DataSourcePresenter(Context context) {
-        super(context);
+    private AppDataSourceManager() {
     }
 
-    public static DataSourcePresenter instance(Context context) {
+    public static AppDataSourceManager instance() {
         if (sInstance == null) {
-            sInstance = new DataSourcePresenter(context);
+            sInstance = new AppDataSourceManager();
         }
-
-        sInstance.setContext(context);
 
         return sInstance;
     }
 
-    public List<SettingsItem> getSettingItems() {
+    public List<SettingsItem> getSettingItems(BasePresenter<?> presenter) {
         List<SettingsItem> settingItems = new ArrayList<>();
+        Context context = presenter.getContext();
 
         settingItems.add(new SettingsItem(
-                getContext().getString(R.string.settings_accounts), () -> AccountSettingsPresenter.instance(getContext()).show(), R.drawable.settings_account));
+                context.getString(R.string.settings_accounts), () -> AccountSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_account));
         settingItems.add(new SettingsItem(
-                getContext().getString(R.string.settings_linked_devices), () -> DeviceLinkSettingsPresenter.instance(getContext()).show(), R.drawable.settings_cast));
+                context.getString(R.string.settings_linked_devices), () -> DeviceLinkSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_cast));
         settingItems.add(new SettingsItem(
-                getContext().getString(R.string.settings_language), () -> LanguageSettingsPresenter.instance(getContext()).show(), R.drawable.settings_language));
+                context.getString(R.string.settings_language), () -> LanguageSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_language));
         settingItems.add(new SettingsItem(
-                getContext().getString(R.string.settings_general), () -> GeneralSettingsPresenter.instance(getContext()).show(), R.drawable.settings_app));
+                context.getString(R.string.settings_general), () -> GeneralSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_app));
         settingItems.add(new SettingsItem(
-                getContext().getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(getContext()).show(), R.drawable.settings_main_ui));
+                context.getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_main_ui));
         //settingItems.add(new SettingsItem(
-        //        getContext().getString(R.string.settings_ui_scale), () -> UIScaleSettingsPresenter.instance(getContext()).show(), R.drawable.settings_ui_scale));
+        //        context.getString(R.string.settings_ui_scale), () -> UIScaleSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_ui_scale));
         settingItems.add(new SettingsItem(
-                getContext().getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(getContext()).show(), R.drawable.settings_player));
+                context.getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_player));
         settingItems.add(new SettingsItem(
-                getContext().getString(R.string.auto_frame_rate), () -> AutoFrameRateSettingsPresenter.instance(getContext()).show(), R.drawable.settings_afr));
+                context.getString(R.string.auto_frame_rate), () -> AutoFrameRateSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_afr));
         settingItems.add(new SettingsItem(
-                getContext().getString(R.string.subtitle_category_title), () -> SubtitleSettingsPresenter.instance(getContext()).show(), R.drawable.settings_subtitles));
+                context.getString(R.string.subtitle_category_title), () -> SubtitleSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_subtitles));
         settingItems.add(new SettingsItem(
-                getContext().getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(getContext()).show(), R.drawable.settings_search));
+                context.getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_search));
         settingItems.add(new SettingsItem(
-                ContentBlockSettingsPresenter.SPONSOR_BLOCK_NAME, () -> ContentBlockSettingsPresenter.instance(getContext()).show(), R.drawable.settings_block));
+                ContentBlockSettingsPresenter.SPONSOR_BLOCK_NAME, () -> ContentBlockSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_block));
         settingItems.add(new SettingsItem(
-                getContext().getString(R.string.settings_about), () -> AboutPresenter.instance(getContext()).show(), R.drawable.settings_about));
+                context.getString(R.string.settings_about), () -> AboutPresenter.instance(presenter.getContext()).show(), R.drawable.settings_about));
 
         return settingItems;
     }

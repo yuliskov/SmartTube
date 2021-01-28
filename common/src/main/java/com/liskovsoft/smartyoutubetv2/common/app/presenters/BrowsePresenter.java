@@ -18,7 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.CategoryEmptyError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.DataSourcePresenter;
+import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.CategoryPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
@@ -50,7 +50,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private final Map<Integer, Observable<MediaGroup>> mGridMapping;
     private final Map<Integer, Observable<List<MediaGroup>>> mRowMapping;
     private final Map<Integer, List<SettingsItem>> mTextGridMapping;
-    private final DataSourcePresenter mDataSourcePresenter;
+    private final AppDataSourceManager mDataSourcePresenter;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
     private Disposable mSignCheckAction;
@@ -60,7 +60,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
     private BrowsePresenter(Context context) {
         super(context);
-        mDataSourcePresenter = DataSourcePresenter.instance(context);
+        mDataSourcePresenter = AppDataSourceManager.instance();
         mPlaybackPresenter = PlaybackPresenter.instance(context);
         mMediaService = YouTubeMediaService.instance();
         mViewManager = ViewManager.instance(context);
@@ -134,7 +134,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void initSettingsSubCategories() {
-        mTextGridMapping.put(MediaGroup.TYPE_SETTINGS, mDataSourcePresenter.getSettingItems());
+        mTextGridMapping.put(MediaGroup.TYPE_SETTINGS, mDataSourcePresenter.getSettingItems(this));
     }
 
     public void updateCategories() {

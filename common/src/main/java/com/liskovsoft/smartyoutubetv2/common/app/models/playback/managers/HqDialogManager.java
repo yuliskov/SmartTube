@@ -10,7 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCatego
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.DataSourcePresenter;
+import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.VideoPreset;
@@ -216,7 +216,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
                 OptionCategory.TYPE_RADIO,
                 context.getString(R.string.title_video_presets),
                 fromPresets(
-                        DataSourcePresenter.instance(context).getVideoPresets(),
+                        AppDataSourceManager.instance().getVideoPresets(),
                         playerData,
                         onFormatSelected
                 )
