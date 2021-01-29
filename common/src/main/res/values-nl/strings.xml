@@ -23,7 +23,7 @@
     <string name="audio_max_quality">Auto (max kwaliteit)</string>
     <string name="subtitles_disabled">Geen ondertitels</string>
     <string name="auto_frame_rate">Auto Frame Rate</string>
-    <string name="frame_rate_correction">Fix fps: %s</string>
+    <string name="frame_rate_correction">Fps aanpassen %s</string>
     <string name="category_background_playback">Afspelen op achtergrond</string>
     <string name="not_implemented">Niet geïmplementeerd</string>
     <string name="option_background_playback_off">Uit</string>
@@ -101,7 +101,7 @@
     <string name="you_wont_see_this_video">Video verwijderd uit Aanbevolen</string>
     <string name="settings_search">Zoeken</string>
     <string name="dialog_search">Zoeken</string>
-    <string name="instant_voice_search">Instant voice search</string>
+    <string name="instant_voice_search">Spraakgestuurd zoeken</string>
     <string name="option_background_playback_behind">Afspelen op achtergrond</string>
     <string name="next_video_info_is_not_loaded_yet">Volgende video nog niet geladen</string>
     <string name="card_multiline_title">Titel op rijen</string>
@@ -159,7 +159,7 @@
     <string name="mark_channel_as_watched">Markeren als bekeken</string>
     <string name="channel_marked_as_watched">Kanaal gemarkeerd als bekeken</string>
     <string name="dialog_add_device">Apparaat toevoegen</string>
-    <string name="dialog_remove_all_devices">Alle apparaten verwijderen</string>
+    <string name="dialog_remove_all_devices">Apparaten verwijderen</string>
     <string name="device_link_enabled">Meldingen weergeven</string>
     <string name="device_connected">Apparaat \"%s\" gekoppeld</string>
     <string name="device_disconnected">Apparaat \"%s\" ontkoppeld</string>
@@ -182,6 +182,8 @@
     <string name="msg_skipping_segment">Segment overslaan</string>
     <string name="content_block_notification_type">Meldingen</string>
     <string name="content_block_notify_none">Geen melding</string>
-    <string name="content_block_notify_toast">Pop-up</string>
-    <string name="content_block_notify_dialog">Bevestiging</string>
+    <string name="content_block_notify_toast">Melding weergeven</string>
+    <string name="content_block_notify_dialog">Bevestiging vragen</string>
+    <string name="exit_from_channels">Afsluiten naar ATV launcher</string>
+    <string name="intent_force_close">Video van externe bron geforceerd afsluiten</string>
 </resources>
