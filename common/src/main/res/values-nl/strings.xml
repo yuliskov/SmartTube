@@ -159,7 +159,7 @@
     <string name="mark_channel_as_watched">Markeren als bekeken</string>
     <string name="channel_marked_as_watched">Kanaal gemarkeerd als bekeken</string>
     <string name="dialog_add_device">Apparaat toevoegen</string>
-    <string name="dialog_remove_all_devices">Alle apparaten verwijderen</string>
+    <string name="dialog_remove_all_devices">Apparaten verwijderen</string>
     <string name="device_link_enabled">Meldingen weergeven</string>
     <string name="device_connected">Apparaat \"%s\" gekoppeld</string>
     <string name="device_disconnected">Apparaat \"%s\" ontkoppeld</string>
@@ -182,6 +182,7 @@
     <string name="msg_skipping_segment">Segment overslaan</string>
     <string name="content_block_notification_type">Meldingen</string>
     <string name="content_block_notify_none">Geen melding</string>
-    <string name="content_block_notify_toast">Pop-up</string>
-    <string name="content_block_notify_dialog">Bevestiging</string>
+    <string name="content_block_notify_toast">Melding weergeven</string>
+    <string name="content_block_notify_dialog">Bevestiging vragen</string>
+    <string name="exit_from_channels">Afsluiten naar ATV launcher</string>
 </resources>
