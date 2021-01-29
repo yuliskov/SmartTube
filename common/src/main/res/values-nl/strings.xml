@@ -185,4 +185,5 @@
     <string name="content_block_notify_toast">Melding weergeven</string>
     <string name="content_block_notify_dialog">Bevestiging vragen</string>
     <string name="exit_from_channels">Afsluiten naar ATV launcher</string>
+    <string name="intent_force_close">Video van externe bron geforceerd afsluiten</string>
 </resources>
