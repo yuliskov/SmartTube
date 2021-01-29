@@ -184,5 +184,5 @@
     <string name="content_block_notify_none">Geen melding</string>
     <string name="content_block_notify_toast">Melding weergeven</string>
     <string name="content_block_notify_dialog">Bevestiging vragen</string>
-    <string name="exit_from_channels">Launcher ATV kanalen gebruiken</string>
+    <string name="exit_from_channels">ATV kanalen direct afsluiten</string>
 </resources>
