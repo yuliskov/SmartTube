@@ -183,6 +183,6 @@
     <string name="content_block_notify_none">Без уведомлений</string>
     <string name="content_block_notify_toast">Всплывающее сообщение</string>
     <string name="content_block_notify_dialog">Диалог подверждения</string>
-    <string name="exit_from_channels">Выходить сразу в лаунчер из каналов ATV</string>
+    <string name="return_to_launcher">Возвращаться в лаунчер из ATV каналов/поиска</string>
     <string name="intent_force_close">Принудительный выход, если видео открыто из внешнего источника</string>
 </resources>

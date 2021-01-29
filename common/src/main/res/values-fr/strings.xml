@@ -175,7 +175,7 @@
     <string name="content_block_sponsor">Sponsor</string>
     <string name="content_block_intro">Animation entracte/intro</string>
     <string name="content_block_outro">Suggestions/crédits</string>
-    <string name="content_block_interaction">Rappel d'interaction (s'abonner)</string>
+    <string name="content_block_interaction">Rappel d\'interaction (s\'abonner)</string>
     <string name="content_block_self_promo">Non rémunéré/auto-promotion</string>
     <string name="content_block_music_off_topic">Section non musicale du clip</string>
     <string name="confirm_segment_skip">Ignorer le segment?</string>
@@ -184,5 +184,5 @@
     <string name="content_block_notify_none">Sans notification</string>
     <string name="content_block_notify_toast">Toaster</string>
     <string name="content_block_notify_dialog">Dialogue de confirmation</string>
-    <string name="exit_from_channels">Sortir directement au lanceur des canaux ATV</string>
+    <string name="return_to_launcher">Sortir directement au lanceur des canaux ATV</string>
 </resources>

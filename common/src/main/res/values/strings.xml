@@ -184,6 +184,6 @@
     <string name="content_block_notify_none">Without notification</string>
     <string name="content_block_notify_toast">Toast</string>
     <string name="content_block_notify_dialog">Confirmation dialog</string>
-    <string name="exit_from_channels">Exit straight to launcher from ATV channels</string>
+    <string name="return_to_launcher">Return to the launcher from ATV channels/search</string>
     <string name="intent_force_close">Force exit if video has been opened from external source</string>
 </resources>

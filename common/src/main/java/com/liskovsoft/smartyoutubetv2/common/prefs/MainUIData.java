@@ -42,7 +42,7 @@ public class MainUIData {
     private int mChannelCategorySorting;
     private int mPlaylistsStyle;
     private int mAppExitShortcut;
-    private boolean mIsIntentForceCloseEnabled;
+    private boolean mIsReturnToLauncherEnabled;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -194,13 +194,13 @@ public class MainUIData {
         persistState();
     }
 
-    public void enableIntentForceClose(boolean enable) {
-        mIsIntentForceCloseEnabled = enable;
+    public void enableReturnToLauncher(boolean enable) {
+        mIsReturnToLauncherEnabled = enable;
         persistState();
     }
 
-    public boolean isIntentForceCloseEnabled() {
-        return mIsIntentForceCloseEnabled;
+    public boolean isReturnToLauncherEnabled() {
+        return mIsReturnToLauncherEnabled;
     }
 
     private void initLeftPanelCategories() {
@@ -265,7 +265,7 @@ public class MainUIData {
         mAppExitShortcut = Helpers.parseInt(split, 10, EXIT_DOUBLE_BACK);
         mCardTitleLinesNum = Helpers.parseInt(split, 11, 1);
         mIsCardTextAutoScrollEnabled = Helpers.parseBoolean(split, 12, true);
-        mIsIntentForceCloseEnabled = Helpers.parseBoolean(split, 13, true);
+        mIsReturnToLauncherEnabled = Helpers.parseBoolean(split, 13, true);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArrayLegacy(selectedCategories);
@@ -282,7 +282,7 @@ public class MainUIData {
         String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
         mPrefs.setData(MAIN_UI_DATA, Helpers.mergeObject(mIsCardAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale,
                 mColorSchemeIndex, mIsCardMultilineTitleEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting,
-                mPlaylistsStyle, mAppExitShortcut, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled, mIsIntentForceCloseEnabled));
+                mPlaylistsStyle, mAppExitShortcut, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled, mIsReturnToLauncherEnabled));
     }
 
     public static class ColorScheme {
