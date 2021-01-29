@@ -177,4 +177,9 @@
     <string name="content_block_music_off_topic">Hudba - nehudební sekce klipu</string>
     <string name="confirm_segment_skip">Přeskočit segment?</string>
     <string name="msg_skipping_segment">Přeskakuji segment…</string>
+    <string name="content_block_notification_type">Typ oznámení</string>
+    <string name="content_block_notify_none">Bez oznámení</string>
+    <string name="content_block_notify_toast">Toast dialog</string>
+    <string name="content_block_notify_dialog">Potvrzovací dialog</string>
+    <string name="exit_from_channels">Ukončit přímo do launcheru z ATV kanálů</string>
 </resources>
