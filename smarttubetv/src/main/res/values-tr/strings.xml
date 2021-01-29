@@ -13,7 +13,7 @@
     <string name="watch_trailer_1">Fragmanı izle</string>
     <string name="watch_trailer_2">ÜCRETSİZ</string>
     <string name="rent_1">Günlük kirala</string>
-    <string name="rent_2">$1.99'dan</string>
+    <string name="rent_2">$1.99\'dan</string>
     <string name="buy_1">Satın Al ve Sahip Ol</string>
     <string name="buy_2">$9.99</string>
     <string name="queue_name">Sırayı Oynat</string>
@@ -81,7 +81,7 @@
     <string name="header_icon">Üstbilgi simgesi</string>
 
     <string name="mobile_welcome_title">Leanback Örneğine Hoş Geldiniz</string>
-    <string name="mobile_welcome_description">Leanback Sample uygulamasına hoş geldiniz! Harika bir geriye yaslanma deneyimi için bunu bir Android TV'de açmayı deneyin.</string>
+    <string name="mobile_welcome_description">Leanback Sample uygulamasına hoş geldiniz! Harika bir geriye yaslanma deneyimi için bunu bir Android TV\'de açmayı deneyin.</string>
 
     <!-- Strings related to onboarding -->
     <string name="onboarding_title_welcome">Leanback Örneğine Hoş Geldiniz</string>
@@ -89,10 +89,10 @@
     <string name="onboarding_title_simple">Dahil etmesi basit</string>
     <string name="onboarding_title_project">Örnek Projeye göz atın</string>
 
-    <string name="onboarding_description_welcome">Bu, kullanıcı uygulamayı ilk açtığında çalışan Onboarding Fragment'tır.</string>
+    <string name="onboarding_description_welcome">Bu, kullanıcı uygulamayı ilk açtığında çalışan Onboarding Fragment\'tır.</string>
     <string name="onboarding_description_design">Leanback örneği, 3 metrelik bir kullanıcı arayüzü için tasarlanmış uygulamaların nasıl hızlı bir şekilde tasarlanacağını gösterir</string>
     <string name="onboarding_description_simple">Leanback kitaplığını gradle aracılığıyla kendi uygulamalarınıza dahil edebilirsiniz</string>
-    <string name="onboarding_description_project">Rehberlik mi arıyorsunuz? Bu örnek GitHub'da mevcuttur, böylece bunu nasıl oluşturduğumuzu görebilirsiniz.</string>
+    <string name="onboarding_description_project">Rehberlik mi arıyorsunuz? Bu örnek GitHub\'da mevcuttur, böylece bunu nasıl oluşturduğumuzu görebilirsiniz.</string>
     <string name="pref_title_settings">Uygulama Ayarları</string>
     <string name="pref_title_recommendations">Öneriler</string>
     <string name="pref_key_recommendations">pref_recommendations</string>
@@ -133,5 +133,5 @@
     <string name="badge_new_content">YENİ İÇERİK</string>
     <string name="badge_live">CANLI</string>
     <string name="action_pip">PIP Başlat</string>
-    <string name="add_device_view_description">Cihazı bağlamak için bu kodu telefonunuzun YouTube uygulamasında Ayarlar / TV'de İzle bölümüne girin</string>
+    <string name="add_device_view_description">Cihazı bağlamak için bu kodu telefonunuzun YouTube uygulamasında Ayarlar / TV\'de İzle bölümüne girin</string>
 </resources>
