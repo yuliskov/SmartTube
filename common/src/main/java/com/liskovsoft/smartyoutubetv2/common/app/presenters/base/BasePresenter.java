@@ -30,35 +30,32 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void setContext(Context context) {
-        if (checkContext(context)) {
-            mContext = new WeakReference<>(context);
-            // In case view was disposed like SplashView does
-            mApplicationContext = new WeakReference<>(context.getApplicationContext());
-        }
-    }
-
-    private boolean checkContext(Context context) {
         if (context == null) {
-            return false;
+            return;
         }
 
         // Localization fix: prefer Activity context
-        return getContext() == null || context instanceof Activity;
+        if (context instanceof Activity) {
+            mContext = new WeakReference<>(context);
+        }
+
+        // In case view was disposed like SplashView does
+        mApplicationContext = new WeakReference<>(context.getApplicationContext());
     }
 
     @Override
     public Context getContext() {
-        Context context = mContext.get();
+        Context context;
 
-        // View could also hold a context
-        if (context == null) {
-            T view = mView.get();
-            if (view instanceof Fragment) {
-                context = ((Fragment) view).getContext();
-            } else {
-                // In case view was disposed like SplashView does
-                context = mApplicationContext.get();
-            }
+        // First, try to get localized contexts (regular and View contexts)
+        // Fallback to non-localized ApplicationContext if others fail
+        if (mContext.get() != null) {
+            context = mContext.get();
+        } else if (mView.get() instanceof Fragment) {
+            context = ((Fragment) mView.get()).getContext();
+        } else {
+            // In case view was disposed like SplashView does
+            context = mApplicationContext.get();
         }
 
         return context;
