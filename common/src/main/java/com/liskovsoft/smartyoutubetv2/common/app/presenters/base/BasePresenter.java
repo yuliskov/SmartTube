@@ -10,6 +10,7 @@ import java.lang.ref.WeakReference;
 public abstract class BasePresenter<T> implements Presenter<T> {
     private WeakReference<T> mView = new WeakReference<>(null);
     private WeakReference<Context> mContext = new WeakReference<>(null);
+    private WeakReference<Context> mApplicationContext = new WeakReference<>(null);
 
     public BasePresenter(Context context) {
         setContext(context);
@@ -31,6 +32,8 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     public void setContext(Context context) {
         if (checkContext(context)) {
             mContext = new WeakReference<>(context);
+            // In case view was disposed like SplashView does
+            mApplicationContext = new WeakReference<>(context.getApplicationContext());
         }
     }
 
@@ -52,6 +55,9 @@ public abstract class BasePresenter<T> implements Presenter<T> {
             T view = mView.get();
             if (view instanceof Fragment) {
                 context = ((Fragment) view).getContext();
+            } else {
+                // In case view was disposed like SplashView does
+                context = mApplicationContext.get();
             }
         }
 
