@@ -182,6 +182,6 @@
     <string name="msg_skipping_segment">Segment overslaan</string>
     <string name="content_block_notification_type">Meldingen</string>
     <string name="content_block_notify_none">Geen melding</string>
-    <string name="content_block_notify_toast">Melding</string>
-    <string name="content_block_notify_dialog">Bevestiging</string>
+    <string name="content_block_notify_toast">Melding weergeven</string>
+    <string name="content_block_notify_dialog">Bevestiging vragen</string>
 </resources>
