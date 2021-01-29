@@ -101,7 +101,7 @@
     <string name="you_wont_see_this_video">Video verwijderd uit Aanbevolen</string>
     <string name="settings_search">Zoeken</string>
     <string name="dialog_search">Zoeken</string>
-    <string name="instant_voice_search">Instant voice search</string>
+    <string name="instant_voice_search">Spraakgestuurd zoeken</string>
     <string name="option_background_playback_behind">Afspelen op achtergrond</string>
     <string name="next_video_info_is_not_loaded_yet">Volgende video nog niet geladen</string>
     <string name="card_multiline_title">Titel op rijen</string>
