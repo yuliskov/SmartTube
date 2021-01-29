@@ -185,4 +185,5 @@
     <string name="content_block_notify_toast">Toast-Meldung</string>
     <string name="content_block_notify_dialog">Bestätigungs-Dialog</string>
     <string name="exit_from_channels">Verlasse ATV-Kanäle direkt zum Launcher</string>
+    <string name="intent_force_close">Beenden erzwingen, wenn das Video von einer externen Quelle geöffnet wurde</string>
 </resources>
