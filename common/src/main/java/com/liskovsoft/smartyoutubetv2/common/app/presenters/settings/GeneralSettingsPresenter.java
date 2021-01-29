@@ -35,6 +35,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendLeftPanelCategories(settingsPresenter);
         appendBootToCategory(settingsPresenter);
         appendAppExitCategory(settingsPresenter);
+        appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_general), () -> {
             if (mRestartApp) {
@@ -86,5 +87,15 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.app_exit_shortcut), options);
+    }
+
+    private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.exit_from_channels),
+                option -> mMainUIData.enableExitFromChannels(option.isSelected()),
+                mMainUIData.isExitFromChannelsEnabled()));
+
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 }

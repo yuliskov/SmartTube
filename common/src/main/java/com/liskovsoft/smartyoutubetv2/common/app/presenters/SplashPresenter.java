@@ -9,6 +9,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
 
 public class SplashPresenter extends BasePresenter<SplashView> {
@@ -105,7 +106,10 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             playbackPresenter.openVideo(videoId);
 
             ViewManager viewManager = ViewManager.instance(getContext());
-            viewManager.setSinglePlayerMode(true);
+
+            if (MainUIData.instance(getContext()).isExitFromChannelsEnabled()) {
+                viewManager.setSinglePlayerMode(true);
+            }
         } else {
             String searchText = IntentExtractor.extractSearchText(intent);
 

@@ -184,4 +184,5 @@
     <string name="content_block_notify_none">Without notification</string>
     <string name="content_block_notify_toast">Toast</string>
     <string name="content_block_notify_dialog">Confirmation dialog</string>
+    <string name="exit_from_channels">Exit straight to launcher from ATV channels</string>
 </resources>

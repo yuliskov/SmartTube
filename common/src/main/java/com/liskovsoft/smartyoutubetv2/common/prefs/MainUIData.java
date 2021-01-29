@@ -42,6 +42,7 @@ public class MainUIData {
     private int mChannelCategorySorting;
     private int mPlaylistsStyle;
     private int mAppExitShortcut;
+    private boolean mIsExitFromChannelsEnabled;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -193,6 +194,15 @@ public class MainUIData {
         persistState();
     }
 
+    public void enableExitFromChannels(boolean enable) {
+        mIsExitFromChannelsEnabled = enable;
+        persistState();
+    }
+
+    public boolean isExitFromChannelsEnabled() {
+        return mIsExitFromChannelsEnabled;
+    }
+
     private void initLeftPanelCategories() {
         mLeftPanelCategories.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mLeftPanelCategories.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
@@ -255,6 +265,7 @@ public class MainUIData {
         mAppExitShortcut = Helpers.parseInt(split, 10, EXIT_DOUBLE_BACK);
         mCardTitleLinesNum = Helpers.parseInt(split, 11, 1);
         mIsCardTextAutoScrollEnabled = Helpers.parseBoolean(split, 12, true);
+        mIsExitFromChannelsEnabled = Helpers.parseBoolean(split, 13, true);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArrayLegacy(selectedCategories);
@@ -271,7 +282,7 @@ public class MainUIData {
         String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
         mPrefs.setData(MAIN_UI_DATA, Helpers.mergeObject(mIsCardAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale,
                 mColorSchemeIndex, mIsCardMultilineTitleEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting,
-                mPlaylistsStyle, mAppExitShortcut, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled));
+                mPlaylistsStyle, mAppExitShortcut, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled, mIsExitFromChannelsEnabled));
     }
 
     public static class ColorScheme {
