@@ -14,9 +14,11 @@ import java.util.List;
 import java.util.Set;
 
 public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
-    public static final String SPONSOR_BLOCK_NAME = "SponsorBlock";
-    public static final String SPONSOR_BLOCK_URL = "https://sponsor.ajay.app";
-    public static final String SPONSOR_BLOCK_TITLE = String.format("%s (%s)", SPONSOR_BLOCK_NAME, SPONSOR_BLOCK_URL);
+    private static final String CONTENT_BLOCK_TITLE = String.format(
+            "%s (%s)",
+            ContentBlockData.SPONSOR_BLOCK_NAME,
+            ContentBlockData.SPONSOR_BLOCK_URL
+    );
     private final ContentBlockData mContentBlockData;
 
     public ContentBlockSettingsPresenter(Context context) {
@@ -36,12 +38,11 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         appendNotificationTypeSection(settingsPresenter);
         appendCategoriesSection(settingsPresenter);
 
-        settingsPresenter.showDialog(SPONSOR_BLOCK_NAME);
+        settingsPresenter.showDialog(ContentBlockData.SPONSOR_BLOCK_NAME);
     }
 
     private void appendSponsorBlockSwitch(AppSettingsPresenter settingsPresenter) {
-        OptionItem sponsorBlockOption = UiOptionItem.from(
-                SPONSOR_BLOCK_TITLE,
+        OptionItem sponsorBlockOption = UiOptionItem.from(CONTENT_BLOCK_TITLE,
                 option -> mContentBlockData.setSponsorBlockEnabled(option.isSelected()),
                 mContentBlockData.isSponsorBlockEnabled()
         );

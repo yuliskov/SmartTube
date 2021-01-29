@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.PlayerSetti
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SearchSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SubtitleSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.VideoPreset;
+import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +60,7 @@ public class AppDataSourceManager {
         settingItems.add(new SettingsItem(
                 context.getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_search));
         settingItems.add(new SettingsItem(
-                ContentBlockSettingsPresenter.SPONSOR_BLOCK_NAME, () -> ContentBlockSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_block));
+                ContentBlockData.SPONSOR_BLOCK_NAME, () -> ContentBlockSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_block));
         settingItems.add(new SettingsItem(
                 context.getString(R.string.settings_about), () -> AboutPresenter.instance(presenter.getContext()).show(), R.drawable.settings_about));
 

@@ -136,6 +136,6 @@ public class ContentBlockManager extends PlayerEventListenerHelper {
 
         settingsPresenter.appendSingleButton(sponsorBlockOption);
 
-        settingsPresenter.showDialog(getActivity().getString(R.string.confirm_segment_skip));
+        settingsPresenter.showDialog(ContentBlockData.SPONSOR_BLOCK_NAME);
     }
 }

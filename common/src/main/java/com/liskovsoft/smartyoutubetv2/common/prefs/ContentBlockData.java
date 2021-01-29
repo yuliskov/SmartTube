@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ContentBlockData {
+    public static final String SPONSOR_BLOCK_NAME = "SponsorBlock";
+    public static final String SPONSOR_BLOCK_URL = "https://sponsor.ajay.app";
     public static final int NOTIFICATION_TYPE_NONE = 0;
     public static final int NOTIFICATION_TYPE_TOAST = 1;
     public static final int NOTIFICATION_TYPE_DIALOG = 2;
