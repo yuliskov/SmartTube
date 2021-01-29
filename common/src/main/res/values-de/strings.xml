@@ -184,5 +184,5 @@
     <string name="content_block_notify_none">Ohne Benachrichtigung</string>
     <string name="content_block_notify_toast">Toast-Dialog</string>
     <string name="content_block_notify_dialog">Bestätigungs-Dialog</string>
-    <string name="exit_from_channels">ATV-Kanäle direkt verlassen</string>
+    <string name="exit_from_channels">Verlasse ATV-Kanäle direkt zum Launcher</string>
 </resources>
