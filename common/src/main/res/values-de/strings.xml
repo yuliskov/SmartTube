@@ -175,9 +175,15 @@
     <string name="content_block_sponsor">Gesponserte Videosegmente</string>
     <string name="content_block_intro">Unterbrechung/Intro-Animation</string>
     <string name="content_block_outro">Abspann/Outro</string>
-    <string name="content_block_interaction">Interaktions-Erinnerungen (Abonnieren)</string>
+    <string name="content_block_interaction">Interaktionserinnerung (Abo)</string>
     <string name="content_block_self_promo">Unbezahlt/Eigenwerbung</string>
-    <string name="content_block_music_off_topic">Musikvideo-Teile ohne Musik</string>
+    <string name="content_block_music_off_topic">Musik: Segmente ohne Musik</string>
     <string name="confirm_segment_skip">Segment überspringen?</string>
     <string name="msg_skipping_segment">Segment überspringen…</string>
+    <string name="content_block_notification_type">Benachrichtigungstyp</string>
+    <string name="content_block_notify_none">Ohne Benachrichtigung</string>
+    <string name="content_block_notify_toast">Toast-Meldung</string>
+    <string name="content_block_notify_dialog">Bestätigungs-Dialog</string>
+    <string name="exit_from_channels">Verlasse ATV-Kanäle direkt zum Launcher</string>
+    <string name="intent_force_close">Beenden erzwingen, wenn Video von externer Quelle geöffnet wurde</string>
 </resources>
