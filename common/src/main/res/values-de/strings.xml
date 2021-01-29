@@ -182,7 +182,7 @@
     <string name="msg_skipping_segment">Segment überspringen…</string>
     <string name="content_block_notification_type">Benachrichtigungstyp</string>
     <string name="content_block_notify_none">Ohne Benachrichtigung</string>
-    <string name="content_block_notify_toast">Toast-Dialog</string>
+    <string name="content_block_notify_toast">Toast-Meldung</string>
     <string name="content_block_notify_dialog">Bestätigungs-Dialog</string>
     <string name="exit_from_channels">Verlasse ATV-Kanäle direkt zum Launcher</string>
 </resources>
