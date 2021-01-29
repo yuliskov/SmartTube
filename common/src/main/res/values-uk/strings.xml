@@ -184,4 +184,5 @@
     <string name="content_block_notify_toast">Спливаюче повідомлення</string>
     <string name="content_block_notify_dialog">Діалог підтвердження</string>
     <string name="exit_from_channels">Виходити відразу у ланчер із каналів ATV</string>
+    <string name="intent_force_close">Примусовий вихід, якщо відео відкрито з зовнішнього джерела</string>
 </resources>

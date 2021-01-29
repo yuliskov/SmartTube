@@ -107,7 +107,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
             ViewManager viewManager = ViewManager.instance(getContext());
 
-            if (MainUIData.instance(getContext()).isExitFromChannelsEnabled()) {
+            if (MainUIData.instance(getContext()).isIntentForceCloseEnabled()) {
                 viewManager.setSinglePlayerMode(true);
             }
         } else {

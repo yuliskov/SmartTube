@@ -92,9 +92,9 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.exit_from_channels),
-                option -> mMainUIData.enableExitFromChannels(option.isSelected()),
-                mMainUIData.isExitFromChannelsEnabled()));
+        options.add(UiOptionItem.from(getContext().getString(R.string.intent_force_close),
+                option -> mMainUIData.enableIntentForceClose(option.isSelected()),
+                mMainUIData.isIntentForceCloseEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
