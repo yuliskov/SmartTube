@@ -184,6 +184,6 @@
     <string name="content_block_notify_none">Ohne Benachrichtigung</string>
     <string name="content_block_notify_toast">Toast-Meldung</string>
     <string name="content_block_notify_dialog">Bestätigungs-Dialog</string>
-    <string name="return_to_launcher">Verlasse ATV-Kanäle direkt zum Launcher</string>
+    <string name="return_to_launcher">Rückkehr zum Launcher aus ATV-Kanälen/Suche</string>
     <string name="intent_force_close">Beenden erzwingen, wenn Video von externer Quelle geöffnet wurde</string>
 </resources>
