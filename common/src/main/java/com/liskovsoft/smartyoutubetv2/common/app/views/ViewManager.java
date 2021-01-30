@@ -76,10 +76,10 @@ public class ViewManager {
     public void startView(Class<?> viewClass, boolean forceStart) {
         mMoveViewsToBack = false; // Essential part or new view will be pause immediately
 
-        if (!forceStart && doThrottle()) {
-            Log.d(TAG, "Too many events. Skipping startView...");
-            return;
-        }
+        //if (!forceStart && doThrottle()) {
+        //    Log.d(TAG, "Too many events. Skipping startView...");
+        //    return;
+        //}
 
         Class<?> activityClass = mViewMapping.get(viewClass);
 
@@ -91,11 +91,6 @@ public class ViewManager {
     }
 
     public boolean startParentView(Activity activity) {
-        //if (doThrottle()) {
-        //    Log.d(TAG, "Too many events. Skipping startParentView...");
-        //    return true;
-        //}
-
         if (activity.getIntent() != null) {
             removeTopActivity();
 
@@ -122,6 +117,8 @@ public class ViewManager {
                 Log.d(TAG, "Launching parent activity: " + parentActivity.getSimpleName());
                 Intent intent = new Intent(activity, parentActivity);
 
+                // Possible fix: java.lang.IllegalArgumentException
+                // View=android.widget.TextView not attached to window manager
                 if (!activity.isDestroyed()) {
                     activity.startActivity(intent);
                 }
@@ -137,11 +134,6 @@ public class ViewManager {
     public void startDefaultView() {
         mMoveViewsToBack = false;
         mIsSinglePlayerMode = false;
-
-        //if (doThrottle()) {
-        //    Log.d(TAG, "Too many events. Skipping startDefaultView...");
-        //    return;
-        //}
 
         Class<?> lastActivity;
 
@@ -234,6 +226,9 @@ public class ViewManager {
 
     private boolean checkMoveViewsToBack(Activity activity) {
         if (mMoveViewsToBack) {
+            // Possible fix: java.lang.NullPointerException Attempt to read from field
+            // 'com.android.server.am.TaskRecord com.android.server.am.ActivityRecord.task'
+            // on a null object reference
             if (!activity.isDestroyed()) {
                 activity.moveTaskToBack(true);
             }
