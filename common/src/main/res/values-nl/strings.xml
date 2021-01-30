@@ -184,6 +184,6 @@
     <string name="content_block_notify_none">Geen melding</string>
     <string name="content_block_notify_toast">Melding weergeven</string>
     <string name="content_block_notify_dialog">Bevestiging vragen</string>
-    <string name="return_to_launcher">Teruggaan naar ATV launcher/zoeken</string>
+    <string name="return_to_launcher">Terug naar ATV launcher/zoeken</string>
     <string name="intent_force_close">Video van externe bron geforceerd afsluiten</string>
 </resources>
