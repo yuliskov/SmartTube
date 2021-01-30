@@ -170,12 +170,12 @@
     <string name="msg_done">Terminé</string>
     <string name="settings_general">Général</string>
     <string name="settings_video">Vidéo</string>
-    <string name="content_block_confirm_skip">Confirmez ignorer</string>
+    <string name="content_block_confirm_skip">Confirmer sortie</string>
     <string name="content_block_categories">Catégories</string>
     <string name="content_block_sponsor">Sponsor</string>
     <string name="content_block_intro">Animation entracte/intro</string>
     <string name="content_block_outro">Suggestions/crédits</string>
-    <string name="content_block_interaction">Rappel d\'interaction (s\'abonner)</string>
+    <string name="content_block_interaction">Rappel (s\'abonner)</string>
     <string name="content_block_self_promo">Non rémunéré/auto-promotion</string>
     <string name="content_block_music_off_topic">Section non musicale du clip</string>
     <string name="confirm_segment_skip">Ignorer le segment?</string>
@@ -184,5 +184,6 @@
     <string name="content_block_notify_none">Sans notification</string>
     <string name="content_block_notify_toast">Toaster</string>
     <string name="content_block_notify_dialog">Dialogue de confirmation</string>
-    <string name="return_to_launcher">Sortir directement au lanceur des canaux ATV</string>
+    <string name="return_to_launcher">Revenir au lanceur à partir des chaînes ATV/rechercher</string>
+    <string name="intent_force_close">Forcer la sortie si la vidéo a été ouverte à partir d'une source externe</string>
 </resources>
