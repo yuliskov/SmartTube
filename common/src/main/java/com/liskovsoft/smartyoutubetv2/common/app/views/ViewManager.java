@@ -232,7 +232,9 @@ public class ViewManager {
 
     private boolean checkMoveViewsToBack(Activity activity) {
         if (mMoveViewsToBack) {
-            activity.moveTaskToBack(true);
+            if (activity != null && !activity.isDestroyed()) {
+                activity.moveTaskToBack(true);
+            }
             return true;
         }
 
