@@ -122,7 +122,9 @@ public class ViewManager {
                 Log.d(TAG, "Launching parent activity: " + parentActivity.getSimpleName());
                 Intent intent = new Intent(activity, parentActivity);
 
-                activity.startActivity(intent);
+                if (!activity.isDestroyed()) {
+                    activity.startActivity(intent);
+                }
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();
                 Log.e(TAG, "Parent activity not found.");
@@ -232,7 +234,7 @@ public class ViewManager {
 
     private boolean checkMoveViewsToBack(Activity activity) {
         if (mMoveViewsToBack) {
-            if (activity != null && !activity.isDestroyed()) {
+            if (!activity.isDestroyed()) {
                 activity.moveTaskToBack(true);
             }
             return true;
