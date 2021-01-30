@@ -70,8 +70,8 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
 
         appendSelectAccountOnBoot(settingsPresenter);
         appendSelectAccountSection(accounts, settingsPresenter);
-        appendRemoveAccountSection(accounts, settingsPresenter);
         appendAddAccountButton(settingsPresenter);
+        appendRemoveAccountSection(accounts, settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_accounts), () -> {
             for (Account account : mPendingRemove) {
