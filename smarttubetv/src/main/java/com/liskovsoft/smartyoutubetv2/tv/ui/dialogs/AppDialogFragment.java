@@ -111,7 +111,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     @Override
     public boolean onPreferenceDisplayDialog(@NonNull PreferenceFragment caller, Preference pref) {
         // Fix IllegalStateException: Activity has been destroyed
-        if (isDetached()) {
+        if (getActivity() == null || getActivity().isDestroyed()) {
             return false;
         }
 
