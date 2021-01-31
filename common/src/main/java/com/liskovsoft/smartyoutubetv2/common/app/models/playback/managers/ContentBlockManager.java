@@ -61,7 +61,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper {
                             mSponsorSegments = segments;
                             startPlaybackWatcher();
                         },
-                        error -> Log.e(TAG, "updateSponsorSegments error: %s", error.getMessage())
+                        error -> Log.d(TAG, "It's ok. Nothing to block in this video. Error msg: %s", error.getMessage())
                 );
     }
 
