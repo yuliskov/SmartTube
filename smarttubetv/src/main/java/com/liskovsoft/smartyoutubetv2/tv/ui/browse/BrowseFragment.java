@@ -25,6 +25,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.ErrorDialogFragment;
@@ -269,6 +270,10 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private void focusOnChildFragment() {
+        if (!Utils.checkActivity(getActivity())) {
+            return;
+        }
+
         if (mFocusOnChildFragment) {
             startHeadersTransition(false);
             mFocusOnChildFragment = false;

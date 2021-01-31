@@ -128,11 +128,7 @@ public class StoryboardManager {
     }
 
     public void getBitmap(int index, Callback callback) {
-        if (mStoryboard == null || mSeekPositions == null) {
-            return;
-        }
-
-        if (index == mSeekPositions.length) {
+        if (mStoryboard == null || mSeekPositions == null || index >= mSeekPositions.length) {
             return;
         }
 

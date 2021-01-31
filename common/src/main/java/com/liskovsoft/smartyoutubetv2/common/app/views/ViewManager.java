@@ -14,6 +14,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
 import java.util.HashMap;
@@ -119,7 +120,7 @@ public class ViewManager {
 
                 // Possible fix: java.lang.IllegalArgumentException
                 // View=android.widget.TextView not attached to window manager
-                if (!activity.isDestroyed()) {
+                if (Utils.checkActivity(activity)) {
                     activity.startActivity(intent);
                 }
             } catch (ActivityNotFoundException e) {
@@ -229,7 +230,7 @@ public class ViewManager {
             // Possible fix: java.lang.NullPointerException Attempt to read from field
             // 'com.android.server.am.TaskRecord com.android.server.am.ActivityRecord.task'
             // on a null object reference
-            if (!activity.isDestroyed()) {
+            if (Utils.checkActivity(activity)) {
                 activity.moveTaskToBack(true);
             }
             return true;

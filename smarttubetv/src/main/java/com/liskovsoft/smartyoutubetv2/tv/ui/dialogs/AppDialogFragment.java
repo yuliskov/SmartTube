@@ -17,6 +17,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter.SettingsCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppSettingsView;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.RadioListPreferenceDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreference;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreferenceDialogFragment;
@@ -93,12 +94,16 @@ public class AppDialogFragment extends LeanbackSettingsFragment
 
     @Override
     public void setTitle(String title) {
-        mPreferenceFragment.setTitle(title);
+        if (mPreferenceFragment != null) {
+            mPreferenceFragment.setTitle(title);
+        }
     }
 
     @Override
     public void addCategories(List<SettingsCategory> categories) {
-        mPreferenceFragment.addCategories(categories);
+        if (mPreferenceFragment != null) {
+            mPreferenceFragment.addCategories(categories);
+        }
     }
 
     @Override
@@ -185,6 +190,11 @@ public class AppDialogFragment extends LeanbackSettingsFragment
         }
         
         private void setSingleCategoryAsRoot(PreferenceScreen screen) {
+            // Possible fix: java.lang.IllegalStateException Activity has been destroyed
+            if (!Utils.checkActivity(getActivity())) {
+                return;
+            }
+
             // auto expand single list preference
             if (mCategories != null && mCategories.size() == 1 && screen.getPreferenceCount() > 0) {
                 Preference preference = screen.getPreference(0);

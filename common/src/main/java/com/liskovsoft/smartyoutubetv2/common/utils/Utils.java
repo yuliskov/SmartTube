@@ -106,4 +106,8 @@ public class Utils {
             ViewManager.instance(context).startView(PlaybackView.class);
         }
     }
+
+    public static boolean checkActivity(Activity activity) {
+        return activity != null && !activity.isDestroyed() && !activity.isFinishing();
+    }
 }
