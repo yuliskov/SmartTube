@@ -237,6 +237,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         if (mOnSourceChanged) {
             mOnSourceChanged = false;
             mEventListener.onVideoLoaded(mVideo);
+            mTrackSelectorManager.fixTracksSelection();
         }
     }
 

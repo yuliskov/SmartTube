@@ -270,17 +270,26 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     }
 
     private Pair<Definition, MediaTrack> createSelection(TrackGroupArray groups, MediaTrack selectedTrack) {
+        if (selectedTrack == null) {
+            Log.e(TAG, "Can't create selection. Selected track is null.");
+            return null;
+        }
+
+        if (mRenderers[selectedTrack.rendererIndex] == null) {
+            Log.e(TAG, "Can't create selection. Renderer isn't initialized.");
+            return null;
+        }
+
         Pair<Definition, MediaTrack> definitionPair = null;
 
-        if (selectedTrack != null) {
-            MediaTrack matchedTrack = findBestMatch(selectedTrack);
-            if (matchedTrack.groupIndex != -1) {
-                Definition definition = new Definition(groups.get(matchedTrack.groupIndex), matchedTrack.trackIndex);
-                definitionPair = new Pair<>(definition, selectedTrack);
-                setOverride(matchedTrack.rendererIndex, matchedTrack.groupIndex, matchedTrack.trackIndex);
-            } else {
-                Log.e(TAG, "Oops. Can't find match for track %s", selectedTrack);
-            }
+        MediaTrack matchedTrack = findBestMatch(selectedTrack);
+
+        if (matchedTrack.groupIndex != -1) {
+            Definition definition = new Definition(groups.get(matchedTrack.groupIndex), matchedTrack.trackIndex);
+            definitionPair = new Pair<>(definition, matchedTrack);
+            setOverride(matchedTrack.rendererIndex, matchedTrack.groupIndex, matchedTrack.trackIndex);
+        } else {
+            Log.e(TAG, "Can't create selection. No match for the track %s", selectedTrack);
         }
 
         return definitionPair;
@@ -371,14 +380,21 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         return renderer.selectedTrack;
     }
 
-    public boolean fixVideoTrackSelection() {
-        // track already properly selected
-        if (hasSelection(RENDERER_INDEX_VIDEO)) {
-            return false;
-        }
+    /**
+     *  Video/audio tracks should be selected at this point.<br/>
+     *  Reselect if not done yet.
+     */
+    public void fixTracksSelection() {
+        for (MediaTrack track : mSelectedTracks) {
+            if (track == null || track.rendererIndex == RENDERER_INDEX_SUBTITLE) {
+                continue;
+            }
 
-        selectTrack(mSelectedTracks[RENDERER_INDEX_VIDEO]);
-        return true;
+            if (!hasSelection(track.rendererIndex)) {
+                Log.e(TAG, "Oops. Track %s isn't selected before. Fixing...", track.rendererIndex);
+                selectTrack(track);
+            }
+        }
     }
 
     public void setTrackSelector(DefaultTrackSelector selector) {
@@ -472,10 +488,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     }
 
     private boolean hasSelection(int rendererIndex) {
-        if (mSelectedTracks[rendererIndex] == null) {
-            return true;
-        }
-
         return mRenderers[rendererIndex] != null && mRenderers[rendererIndex].selectedTrack != null;
     }
 
