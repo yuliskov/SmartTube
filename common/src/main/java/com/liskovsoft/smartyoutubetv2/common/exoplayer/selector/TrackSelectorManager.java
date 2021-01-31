@@ -66,6 +66,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         }
 
         if (mTrackSelector == null) {
+            Log.e(TAG, "Can't init renderer %s. TrackSelector is null!", rendererIndex);
             return;
         }
 
@@ -381,6 +382,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     }
 
     public void setTrackSelector(DefaultTrackSelector selector) {
+        Log.d(TAG, "Initializing TrackSelector...");
         mTrackSelector = selector;
 
         if (selector instanceof RestoreTrackSelector) {
@@ -390,6 +392,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
     public void release() {
         if (mTrackSelector != null) {
+            Log.d(TAG, "Destroying TrackSelector...");
             if (mTrackSelector instanceof RestoreTrackSelector) {
                 ((RestoreTrackSelector) mTrackSelector).setOnTrackSelectCallback(null);
             }
@@ -456,6 +459,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         if (mRenderers[rendererIndex] == null) {
             return;
         }
+
+        Log.d(TAG, "Setting override for renderer %s and group %s...", rendererIndex, groupIndex);
 
         if (groupIndex == -1) {
             mRenderers[rendererIndex].override = null; // auto option selected
