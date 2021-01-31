@@ -185,5 +185,5 @@
     <string name="content_block_notify_toast">Toaster</string>
     <string name="content_block_notify_dialog">Dialogue de confirmation</string>
     <string name="return_to_launcher">Revenir au lanceur à partir des chaînes ATV/rechercher</string>
-    <string name="intent_force_close">Forcer la sortie si la vidéo a été ouverte à partir d'une source externe</string>
+    <string name="intent_force_close">Forcer la sortie si la vidéo a été ouverte à partir d\'une source externe</string>
 </resources>
