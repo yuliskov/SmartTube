@@ -381,8 +381,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
             }
 
             String videoId = split[0];
-            long positionMs = Helpers.parseInt(split[1]);
-            long lengthMs = Helpers.parseInt(split[2]);
+            long positionMs = Helpers.parseLong(split[1]);
+            long lengthMs = Helpers.parseLong(split[2]);
             float speed = Helpers.parseFloat(split[3]);
 
             return new State(videoId, positionMs, lengthMs, speed);
