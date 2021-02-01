@@ -203,7 +203,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(
-                        mVideo.subscribed ? R.string.unsubscribe_from_channel : R.string.subscribe_to_channel),
+                        mVideo.isSubscribed ? R.string.unsubscribe_from_channel : R.string.subscribe_to_channel),
                         optionItem -> subscribe()));
     }
 
@@ -251,7 +251,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             });
         }
         
-        MessageHelpers.showMessage(getContext(), mVideo.subscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel);
+        MessageHelpers.showMessage(getContext(), mVideo.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel);
     }
 
     private void subscribeInt() {
@@ -259,7 +259,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        Observable<Void> observable = mVideo.subscribed ?
+        Observable<Void> observable = mVideo.isSubscribed ?
                 mItemManager.unsubscribeObserve(mVideo.channelId) : mItemManager.subscribeObserve(mVideo.channelId);
 
         mSubscribeAction = RxUtils.execute(observable);

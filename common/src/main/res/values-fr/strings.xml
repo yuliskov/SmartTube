@@ -178,8 +178,8 @@
     <string name="content_block_interaction">Rappel (s\'abonner)</string>
     <string name="content_block_self_promo">Non rémunéré/auto-promotion</string>
     <string name="content_block_music_off_topic">Section non musicale du clip</string>
-    <string name="confirm_segment_skip">Ignorer le segment?</string>
-    <string name="msg_skipping_segment">Sauter segment…</string>
+    <string name="confirm_segment_skip">Ignorer le segment \"%s\"?</string>
+    <string name="msg_skipping_segment">Sauter segment \"%s\"…</string>
     <string name="content_block_notification_type">Type de notification</string>
     <string name="content_block_notify_none">Sans notification</string>
     <string name="content_block_notify_toast">Toaster</string>

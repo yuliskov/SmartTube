@@ -178,8 +178,8 @@
     <string name="content_block_interaction">Interactie (abonneren/leuk/volgen)</string>
     <string name="content_block_self_promo">Zelfpromotie/onbetaalde promotie</string>
     <string name="content_block_music_off_topic">Intro/outro muziekvideo\'s</string>
-    <string name="confirm_segment_skip">Segment overslaan ?</string>
-    <string name="msg_skipping_segment">Segment overslaan</string>
+    <string name="confirm_segment_skip">Segment overslaan \"%s\"?</string>
+    <string name="msg_skipping_segment">Segment overslaan \"%s\"...</string>
     <string name="content_block_notification_type">Meldingen</string>
     <string name="content_block_notify_none">Geen melding</string>
     <string name="content_block_notify_toast">Melding weergeven</string>

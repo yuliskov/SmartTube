@@ -42,9 +42,18 @@ public class ContentBlockManager extends PlayerEventListenerHelper {
     public void onVideoLoaded(Video item) {
         disposeActions();
 
-        if (mContentBlockData.isSponsorBlockEnabled()) {
+        if (mContentBlockData.isSponsorBlockEnabled() && checkVideo(item)) {
             updateSponsorSegmentsAndWatch(item);
         }
+    }
+
+    @Override
+    public void onEngineReleased() {
+        disposeActions();
+    }
+
+    private boolean checkVideo(Video video) {
+        return video != null && !video.isLive && !video.isUpcoming;
     }
 
     private void updateSponsorSegmentsAndWatch(Video item) {
@@ -63,11 +72,6 @@ public class ContentBlockManager extends PlayerEventListenerHelper {
                         },
                         error -> Log.d(TAG, "It's ok. Nothing to block in this video. Error msg: %s", error.getMessage())
                 );
-    }
-
-    @Override
-    public void onEngineReleased() {
-        disposeActions();
     }
 
     private void startPlaybackWatcher() {
@@ -102,11 +106,11 @@ public class ContentBlockManager extends PlayerEventListenerHelper {
                         getController().setPositionMs(segment.getEndMs());
                         break;
                     case ContentBlockData.NOTIFICATION_TYPE_TOAST:
-                        MessageHelpers.showMessage(getActivity(), getActivity().getString(R.string.msg_skipping_segment));
+                        MessageHelpers.showMessage(getActivity(), getActivity().getString(R.string.msg_skipping_segment, segment.getCategory()));
                         getController().setPositionMs(segment.getEndMs());
                         break;
                     case ContentBlockData.NOTIFICATION_TYPE_DIALOG:
-                        confirmSkip(segment.getEndMs());
+                        confirmSkip(segment.getEndMs(), segment.getCategory());
                         break;
                 }
 
@@ -118,7 +122,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper {
         mIsSameSegment = isSegmentFound;
     }
 
-    private void confirmSkip(long skipPositionMs) {
+    private void confirmSkip(long skipPositionMs, String category) {
         if (mIsSameSegment) {
             return;
         }
@@ -127,7 +131,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper {
         settingsPresenter.clear();
 
         OptionItem sponsorBlockOption = UiOptionItem.from(
-                getActivity().getString(R.string.confirm_segment_skip),
+                getActivity().getString(R.string.confirm_segment_skip, category),
                 option -> {
                     settingsPresenter.closeDialog();
                     getController().setPositionMs(skipPositionMs);

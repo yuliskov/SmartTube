@@ -178,8 +178,8 @@
     <string name="content_block_interaction">Etkileşim hatırlatıcısı (abone olun)</string>
     <string name="content_block_self_promo">Tanıtımlar</string>
     <string name="content_block_music_off_topic">Müzik sesi kısık</string>
-    <string name="confirm_segment_skip">Parça atlansın mı?</string>
-    <string name="msg_skipping_segment">Parça atlanıyor…</string>
+    <string name="confirm_segment_skip">Parça atlansın mı \"%s\"?</string>
+    <string name="msg_skipping_segment">Parça atlanıyor \"%s\"…</string>
     <string name="content_block_notification_type">Bildirim türü</string>
     <string name="content_block_notify_none">Bildirim olmadan</string>
     <string name="content_block_notify_toast">Ekranda göster</string>

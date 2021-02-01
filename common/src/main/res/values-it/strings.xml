@@ -177,8 +177,8 @@
     <string name="content_block_interaction">Promemoria di interazione (iscriviti)</string>
     <string name="content_block_self_promo">Non pagato/auto promozione</string>
     <string name="content_block_music_off_topic">Sezione non musicale della clip</string>
-    <string name="confirm_segment_skip">salta questa parte?</string>
-    <string name="msg_skipping_segment">Salto…</string>
+    <string name="confirm_segment_skip">salta questa parte \"%s\"?</string>
+    <string name="msg_skipping_segment">Salto \"%s\"…</string>
     <string name="content_block_notification_type">Tipo di notifica</string>
     <string name="content_block_notify_none">Senza notifica</string>
     <string name="content_block_notify_toast">Toast</string>

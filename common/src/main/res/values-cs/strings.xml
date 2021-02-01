@@ -175,8 +175,8 @@
     <string name="content_block_interaction">Připomenutí interakce (odběr)</string>
     <string name="content_block_self_promo">Neplacená/vlastní propagace</string>
     <string name="content_block_music_off_topic">Hudba - nehudební sekce klipu</string>
-    <string name="confirm_segment_skip">Přeskočit segment?</string>
-    <string name="msg_skipping_segment">Přeskakuji segment…</string>
+    <string name="confirm_segment_skip">Přeskočit segment \"%s\"?</string>
+    <string name="msg_skipping_segment">Přeskakuji segment \"%s\"…</string>
     <string name="content_block_notification_type">Typ oznámení</string>
     <string name="content_block_notify_none">Bez oznámení</string>
     <string name="content_block_notify_toast">Toast dialog</string>

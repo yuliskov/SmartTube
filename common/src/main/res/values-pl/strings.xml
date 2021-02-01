@@ -177,6 +177,6 @@
     <string name="content_block_interaction">Wzmianka o subksrybowaniu</string>
     <string name="content_block_self_promo">Auto promocja</string>
     <string name="content_block_music_off_topic">Niemuzyczna część teledysku</string>
-    <string name="confirm_segment_skip">Pominąć fragment?</string>
-    <string name="msg_skipping_segment">Pomijam fragment…</string>
+    <string name="confirm_segment_skip">Pominąć fragment \"%s\"?</string>
+    <string name="msg_skipping_segment">Pomijam fragment \"%s\"…</string>
 </resources>
