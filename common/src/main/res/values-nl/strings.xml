@@ -12,10 +12,10 @@
     <string name="header_channels">Kanalen</string>
     <string name="subscriptions_signin_title">Bekijk je kanalen</string>
     <string name="subscriptions_signin_subtitle">Aanmelden om je abonnementen te bekijken</string>
-    <string name="subscriptions_signin_button_text">AANMELDEN</string>
+    <string name="subscriptions_signin_button_text">Aanmelden</string>
     <string name="library_signin_to_show_more">Bekijk je video\'s</string>
     <string name="library_signin_subtitle">Aanmelden om je bibliotheek te bekijken</string>
-    <string name="action_signin">AANMELDEN</string>
+    <string name="action_signin">Aanmelden</string>
     <string name="title_video_formats">Video kwaliteit</string>
     <string name="title_audio_formats">Audio kwaliteit</string>
     <string name="subtitle_category_title">Ondertitels</string>
@@ -52,7 +52,7 @@
     <string name="settings_linked_devices">Cast Apparaten</string>
     <string name="settings_about">Informatie</string>
     <string name="dialog_account_list">Account selecteren</string>
-    <string name="dialog_account_none">Geen</string>
+    <string name="dialog_account_none">Geen account</string>
     <string name="dialog_remove_account">Account verwijderen</string>
     <string name="dialog_add_account">Account toevoegen</string>
     <string name="default_lang">Standaard</string>
@@ -77,7 +77,7 @@
     <string name="player_only_pause">Player pauzeren</string>
     <string name="check_for_updates">Controleren op update</string>
     <string name="update_not_found">Je gebruikt reeds de nieuwste versie</string>
-    <string name="update_in_progess">Even geduld…</string>
+    <string name="update_in_progess">Even geduld</string>
     <string name="player_ui_hide_behavior">Player verbergen</string>
     <string name="player_ui_hide_never">Nooit</string>
     <string name="side_panel_sections">Rubrieken</string>
@@ -178,8 +178,8 @@
     <string name="content_block_interaction">Interactie (abonneren/leuk/volgen)</string>
     <string name="content_block_self_promo">Zelfpromotie/onbetaalde promotie</string>
     <string name="content_block_music_off_topic">Intro/outro muziekvideo\'s</string>
-    <string name="confirm_segment_skip">Segment overslaan \"%s\"?</string>
-    <string name="msg_skipping_segment">Segment overslaan \"%s\"...</string>
+    <string name="confirm_segment_skip">Segment \"%s\" overslaan ?</string>
+    <string name="msg_skipping_segment">Segment \"%s\" overslaan</string>
     <string name="content_block_notification_type">Meldingen</string>
     <string name="content_block_notify_none">Geen melding</string>
     <string name="content_block_notify_toast">Melding weergeven</string>
