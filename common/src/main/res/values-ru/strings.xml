@@ -186,4 +186,5 @@
     <string name="return_to_launcher">Возвращаться в лаунчер из ATV каналов/поиска</string>
     <string name="intent_force_close">Принудительный выход, если видео открыто из внешнего источника</string>
     <string name="btn_confirm">Подтвердить</string>
+    <string name="player_low_video_quality">Низкое качество видео</string>
 </resources>

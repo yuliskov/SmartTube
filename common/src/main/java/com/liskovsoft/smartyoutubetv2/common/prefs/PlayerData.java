@@ -49,6 +49,7 @@ public class PlayerData {
     private int mAfrPauseSec;
     private int mAudioDelayMs;
     private boolean mIsRememberSpeedEnabled;
+    private boolean mIsLowQualityEnabled;
     private int mRepeatMode;
 
     private PlayerData(Context context) {
@@ -152,6 +153,15 @@ public class PlayerData {
 
     public void enableRememberSpeed(boolean enable) {
         mIsRememberSpeedEnabled = enable;
+        persistData();
+    }
+
+    public boolean isLowQualityEnabled() {
+        return mIsLowQualityEnabled;
+    }
+
+    public void enableLowQuality(boolean enable) {
+        mIsLowQualityEnabled = enable;
         persistData();
     }
 
@@ -316,6 +326,7 @@ public class PlayerData {
         mAudioDelayMs = Helpers.parseInt(split, 20, 0);
         mIsRememberSpeedEnabled = Helpers.parseBoolean(split, 21, true);
         mRepeatMode = Helpers.parseInt(split, 22, PlaybackUiController.REPEAT_ALL);
+        mIsLowQualityEnabled = Helpers.parseBoolean(split, 23, false);
     }
 
     private void persistData() {
@@ -325,6 +336,6 @@ public class PlayerData {
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs, mIsRememberSpeedEnabled,
-                mRepeatMode));
+                mRepeatMode, mIsLowQualityEnabled));
     }
 }

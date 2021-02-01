@@ -240,7 +240,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         } else if (formatInfo.containsHlsUrl()) {
             Log.d(TAG, "Found live video (current and past) in hls format. Loading...");
             getController().openHlsUrl(formatInfo.getHlsManifestUrl());
-        } else if (formatInfo.containsDashVideoInfo()) {
+        } else if (formatInfo.containsDashVideoInfo() && !mPlayerData.isLowQualityEnabled()) {
             Log.d(TAG, "Found regular video in dash format. Loading...");
 
             mMpdStreamAction = formatInfo.createMpdStreamObservable()

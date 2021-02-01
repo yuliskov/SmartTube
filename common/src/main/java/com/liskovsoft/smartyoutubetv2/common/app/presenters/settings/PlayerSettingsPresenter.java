@@ -147,6 +147,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerData.enableRememberSpeed(option.isSelected()),
                 mPlayerData.isRememberSpeedEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_low_video_quality),
+                option -> mPlayerData.enableLowQuality(option.isSelected()),
+                mPlayerData.isLowQualityEnabled()));
+
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 }
