@@ -19,7 +19,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class ContentBlockManager extends PlayerEventListenerHelper {
@@ -30,12 +32,24 @@ public class ContentBlockManager extends PlayerEventListenerHelper {
     private Disposable mProgressAction;
     private Disposable mSegmentsAction;
     private boolean mIsSameSegment;
+    private Map<String, Integer> mLocalizedMapping;
 
     @Override
     public void onInitDone() {
         MediaService mediaService = YouTubeMediaService.instance();
         mMediaItemManager = mediaService.getMediaItemManager();
         mContentBlockData = ContentBlockData.instance(getActivity());
+        initLocalizedMapping();
+    }
+
+    private void initLocalizedMapping() {
+        mLocalizedMapping = new HashMap<>();
+        mLocalizedMapping.put(SponsorSegment.CATEGORY_SPONSOR, R.string.content_block_sponsor);
+        mLocalizedMapping.put(SponsorSegment.CATEGORY_INTRO, R.string.content_block_intro);
+        mLocalizedMapping.put(SponsorSegment.CATEGORY_OUTRO, R.string.content_block_outro);
+        mLocalizedMapping.put(SponsorSegment.CATEGORY_SELF_PROMO, R.string.content_block_self_promo);
+        mLocalizedMapping.put(SponsorSegment.CATEGORY_INTERACTION, R.string.content_block_interaction);
+        mLocalizedMapping.put(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC, R.string.content_block_music_off_topic);
     }
 
     @Override
@@ -101,16 +115,18 @@ public class ContentBlockManager extends PlayerEventListenerHelper {
 
         for (SponsorSegment segment : mSponsorSegments) {
             if (positionMs >= segment.getStartMs() && positionMs < segment.getEndMs()) {
+                Integer resId = mLocalizedMapping.get(segment.getCategory());
+                String localizedCategory = resId != null ? getActivity().getString(resId) : segment.getCategory();
                 switch (mContentBlockData.getNotificationType()) {
                     case ContentBlockData.NOTIFICATION_TYPE_NONE:
                         getController().setPositionMs(segment.getEndMs());
                         break;
                     case ContentBlockData.NOTIFICATION_TYPE_TOAST:
-                        MessageHelpers.showMessage(getActivity(), getActivity().getString(R.string.msg_skipping_segment, segment.getCategory()));
+                        MessageHelpers.showMessage(getActivity(), getActivity().getString(R.string.msg_skipping_segment, localizedCategory));
                         getController().setPositionMs(segment.getEndMs());
                         break;
                     case ContentBlockData.NOTIFICATION_TYPE_DIALOG:
-                        confirmSkip(segment.getEndMs(), segment.getCategory());
+                        confirmSkip(segment.getEndMs(), localizedCategory);
                         break;
                 }
 
