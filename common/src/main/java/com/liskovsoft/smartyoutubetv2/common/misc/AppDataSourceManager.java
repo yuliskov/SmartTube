@@ -8,7 +8,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AboutPresen
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AutoFrameRateSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.ContentBlockSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.DeviceLinkSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.RemoteControlSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.GeneralSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.LanguageSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.MainUISettingsPresenter;
@@ -42,7 +42,7 @@ public class AppDataSourceManager {
         settingItems.add(new SettingsItem(
                 context.getString(R.string.settings_accounts), () -> AccountSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_account));
         settingItems.add(new SettingsItem(
-                context.getString(R.string.settings_linked_devices), () -> DeviceLinkSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_cast));
+                context.getString(R.string.settings_linked_devices), () -> RemoteControlSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_cast));
         settingItems.add(new SettingsItem(
                 context.getString(R.string.settings_language), () -> LanguageSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_language));
         settingItems.add(new SettingsItem(

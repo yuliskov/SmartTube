@@ -4,23 +4,23 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
-public class DeviceLinkData extends DataChangeBase {
+public class RemoteControlData extends DataChangeBase {
     private static final String DEVICE_LINK_DATA = "device_link_data";
     @SuppressLint("StaticFieldLeak")
-    private static DeviceLinkData sInstance;
+    private static RemoteControlData sInstance;
     private final Context mContext;
     private final AppPrefs mAppPrefs;
     private boolean mIsDeviceLinkEnabled;
 
-    private DeviceLinkData(Context context) {
+    private RemoteControlData(Context context) {
         mContext = context;
         mAppPrefs = AppPrefs.instance(mContext);
         restoreState();
     }
 
-    public static DeviceLinkData instance(Context context) {
+    public static RemoteControlData instance(Context context) {
         if (sInstance == null) {
-            sInstance = new DeviceLinkData(context.getApplicationContext());
+            sInstance = new RemoteControlData(context.getApplicationContext());
         }
 
         return sInstance;

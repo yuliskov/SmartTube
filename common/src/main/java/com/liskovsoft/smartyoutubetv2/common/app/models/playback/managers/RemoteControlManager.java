@@ -12,10 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUiController;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
-import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.smartyoutubetv2.common.prefs.DeviceLinkData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -27,7 +24,7 @@ import io.reactivex.schedulers.Schedulers;
 public class RemoteControlManager extends PlayerEventListenerHelper {
     private static final String TAG = RemoteControlManager.class.getSimpleName();
     private final RemoteManager mRemoteManager;
-    private final DeviceLinkData mDeviceLinkData;
+    private final RemoteControlData mRemoteControlData;
     private final SuggestionsLoader mSuggestionsLoader;
     private Disposable mCommandAction;
     private Disposable mPostPlayAction;
@@ -38,8 +35,8 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         MediaService mediaService = YouTubeMediaService.instance();
         mSuggestionsLoader = suggestionsLoader;
         mRemoteManager = mediaService.getRemoteManager();
-        mDeviceLinkData = DeviceLinkData.instance(context);
-        mDeviceLinkData.setOnChange(this::tryListening);
+        mRemoteControlData = RemoteControlData.instance(context);
+        mRemoteControlData.setOnChange(this::tryListening);
         tryListening();
     }
 
@@ -103,7 +100,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     }
 
     private void postStartPlaying(String videoId, long positionMs, long durationMs, boolean isPlaying) {
-        if (!mDeviceLinkData.isDeviceLinkEnabled()) {
+        if (!mRemoteControlData.isDeviceLinkEnabled()) {
             return;
         }
 
@@ -113,7 +110,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     }
 
     private void postState(long positionMs, long durationMs, boolean isPlaying) {
-        if (!mDeviceLinkData.isDeviceLinkEnabled()) {
+        if (!mRemoteControlData.isDeviceLinkEnabled()) {
             return;
         }
 
@@ -135,7 +132,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     }
 
     private void tryListening() {
-        if (mDeviceLinkData.isDeviceLinkEnabled()) {
+        if (mRemoteControlData.isDeviceLinkEnabled()) {
             startListening();
         } else {
             stopListening();
