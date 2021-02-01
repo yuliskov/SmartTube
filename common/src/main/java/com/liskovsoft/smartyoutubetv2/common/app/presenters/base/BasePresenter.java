@@ -4,12 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import androidx.fragment.app.Fragment;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.lang.ref.WeakReference;
 
 public abstract class BasePresenter<T> implements Presenter<T> {
     private WeakReference<T> mView = new WeakReference<>(null);
-    private WeakReference<Context> mContext = new WeakReference<>(null);
+    private WeakReference<Activity> mActivity = new WeakReference<>(null);
     private WeakReference<Context> mApplicationContext = new WeakReference<>(null);
 
     public BasePresenter(Context context) {
@@ -36,7 +37,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
         // Localization fix: prefer Activity context
         if (context instanceof Activity) {
-            mContext = new WeakReference<>(context);
+            mActivity = new WeakReference<>((Activity) context);
         }
 
         // In case view was disposed like SplashView does
@@ -45,20 +46,18 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public Context getContext() {
-        Context context;
+        Activity activity = null;
 
         // First, try to get localized contexts (regular and View contexts)
-        // Fallback to non-localized ApplicationContext if others fail
-        if (mContext.get() != null) {
-            context = mContext.get();
+        if (mActivity.get() != null) {
+            activity = mActivity.get();
         } else if (mView.get() instanceof Fragment) {
-            context = ((Fragment) mView.get()).getContext();
-        } else {
-            // In case view was disposed like SplashView does
-            context = mApplicationContext.get();
+            activity = ((Fragment) mView.get()).getActivity();
         }
 
-        return context;
+        // In case view was disposed like SplashView does
+        // Fallback to non-localized ApplicationContext if others fail
+        return Utils.checkActivity(activity) ? activity : mApplicationContext.get();
     }
 
     @Override
