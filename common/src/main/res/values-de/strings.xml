@@ -178,12 +178,14 @@
     <string name="content_block_interaction">Interaktionserinnerung (Abo)</string>
     <string name="content_block_self_promo">Unbezahlt/Eigenwerbung</string>
     <string name="content_block_music_off_topic">Musik: Segmente ohne Musik</string>
-    <string name="confirm_segment_skip">Segment überspringen \"%s\"?</string>
-    <string name="msg_skipping_segment">Segment überspringen \"%s\"…</string>
+    <string name="confirm_segment_skip">Segment \"%s\" überspringen?</string>
+    <string name="msg_skipping_segment">Segment \"%s\" überspringen…</string>
     <string name="content_block_notification_type">Benachrichtigungstyp</string>
     <string name="content_block_notify_none">Ohne Benachrichtigung</string>
     <string name="content_block_notify_toast">Toast-Meldung</string>
     <string name="content_block_notify_dialog">Bestätigungs-Dialog</string>
     <string name="return_to_launcher">Rückkehr zum Launcher aus ATV-Kanälen/Suche</string>
     <string name="intent_force_close">Beenden erzwingen, wenn Video von externer Quelle geöffnet wurde</string>
+    <string name="btn_confirm">Bestätigen</string>
+    <string name="player_low_video_quality">Niedrige Videoqualität</string>
 </resources>
