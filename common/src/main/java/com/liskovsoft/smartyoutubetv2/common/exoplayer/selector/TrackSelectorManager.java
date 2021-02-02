@@ -61,7 +61,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
      *                      One of the {@link #RENDERER_INDEX_VIDEO}, {@link #RENDERER_INDEX_AUDIO}, {@link #RENDERER_INDEX_SUBTITLE}
      */
     private void initRenderer(int rendererIndex) {
-        if (mRenderers[rendererIndex] != null) {
+        if (mRenderers[rendererIndex] != null && mRenderers[rendererIndex].mediaTracks != null) {
             return;
         }
 
@@ -351,9 +351,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
         mSelectedTracks[rendererIndex] = track;
 
-        if (mRenderers[rendererIndex] == null) {
+        if (mRenderers[rendererIndex] == null || mRenderers[rendererIndex].mediaTracks == null) {
             Log.e(TAG, "Renderer isn't initialized. Waiting for later selection...");
-            //mPendingSelection = track;
             return;
         }
 
