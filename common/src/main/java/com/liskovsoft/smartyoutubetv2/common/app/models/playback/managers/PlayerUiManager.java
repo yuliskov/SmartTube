@@ -142,7 +142,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     public void onPlaylistAddClicked() {
         VideoMenuPresenter mp = VideoMenuPresenter.instance(getActivity());
 
-        mp.showShortMenu(getController().getVideo());
+        mp.showPlaylistMenu(getController().getVideo());
     }
 
     @Override

@@ -57,7 +57,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         return new VideoMenuPresenter(context);
     }
 
-    public void showShortMenu(Video video) {
+    public void showPlaylistMenu(Video video) {
         mIsAddToPlaylistButtonEnabled = true;
 
         showMenuInt(video);
@@ -86,6 +86,8 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         if (video == null) {
             return;
         }
+
+        RxUtils.disposeActions(mPlaylistAction, mSignCheckAction, mAddAction, mNotInterestedAction, mSubscribeAction);
 
         mVideo = video;
 
@@ -117,7 +119,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         appendNotInterestedButton();
         appendShareButton();
 
-        mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction, mAddAction, mSignCheckAction, mNotInterestedAction, mSubscribeAction));
+        mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction, mSignCheckAction));
     }
 
     private void appendAddToPlaylist(List<VideoPlaylistInfo> videoPlaylistInfos) {
@@ -130,7 +132,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         for (VideoPlaylistInfo playlistInfo : videoPlaylistInfos) {
             options.add(UiOptionItem.from(
                     playlistInfo.getTitle(),
-                    (item) -> this.addToPlaylist(playlistInfo.getPlaylistId(), item.isSelected()),
+                    (item) -> addToPlaylist(playlistInfo.getPlaylistId(), item.isSelected()),
                     playlistInfo.isSelected()));
         }
 
