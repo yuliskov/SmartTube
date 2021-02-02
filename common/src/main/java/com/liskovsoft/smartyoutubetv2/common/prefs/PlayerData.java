@@ -312,6 +312,7 @@ public class PlayerData {
         mIsClockEnabled = Helpers.parseBoolean(split, 5, true);
         mIsRemainingTimeEnabled = Helpers.parseBoolean(split, 6, true);
         mPlaybackMode = Helpers.parseInt(split, 7, PlaybackEngineController.PLAYBACK_MODE_DEFAULT);
+        // afrData was there
         mVideoFormat = ExoFormatItem.from(Helpers.parseStr(split, 9));
         mAudioFormat = ExoFormatItem.from(Helpers.parseStr(split, 10));
         mSubtitleFormat = ExoFormatItem.from(Helpers.parseStr(split, 11));
@@ -326,7 +327,8 @@ public class PlayerData {
         mAudioDelayMs = Helpers.parseInt(split, 20, 0);
         mIsRememberSpeedEnabled = Helpers.parseBoolean(split, 21, true);
         mRepeatMode = Helpers.parseInt(split, 22, PlaybackUiController.REPEAT_ALL);
-        mIsLowQualityEnabled = Helpers.parseBoolean(split, 23, false);
+        // didn't remember what was there
+        mIsLowQualityEnabled = Helpers.parseBoolean(split, 24, false);
     }
 
     private void persistData() {
@@ -336,6 +338,6 @@ public class PlayerData {
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs, mIsRememberSpeedEnabled,
-                mRepeatMode, mIsLowQualityEnabled));
+                mRepeatMode, null, mIsLowQualityEnabled)); // didn't remember what was there
     }
 }
