@@ -165,4 +165,27 @@
     <string name="device_disconnected">Perangkat \"%s\" telah diputuskan</string>
      <string name="settings_ui_scale">Skala UI</string>
     <string name="msg_restart_app">Silakan, mulai ulang aplikasi untuk menerapkan pengaturan ini</string>
+    <string name="settings_block">Pemblokiran konten</string>
+    <string name="msg_applying">Menerapkan %s…</string>
+    <string name="msg_done">Selesai</string>
+    <string name="settings_general">Umum</string>
+    <string name="settings_video">Video</string>
+    <string name="content_block_confirm_skip">Konfirmasi saat melewati</string>
+    <string name="content_block_categories">Kategori</string>
+    <string name="content_block_sponsor">Sponsor</string>
+    <string name="content_block_intro">Animasi jeda/pembuka</string>
+    <string name="content_block_outro">Kartu akhir/credits</string>
+    <string name="content_block_interaction">Pengingat interaksi (berlangganan)</string>
+    <string name="content_block_self_promo">Promosi tidak dibayar/diri sendiri</string>
+    <string name="content_block_music_off_topic">Bagian non-musik dari klip</string>
+    <string name="confirm_segment_skip">Lewati segmen \"%s\"?</string>
+    <string name="msg_skipping_segment">Melewati segmen \"%s\"…</string>
+    <string name="content_block_notification_type">Jenis pemberitahuan</string>
+    <string name="content_block_notify_none">Tanpa pemberitahuan</string>
+    <string name="content_block_notify_toast">Toast</string>
+    <string name="content_block_notify_dialog">Dialog konfirmasi</string>
+    <string name="return_to_launcher">Kembali ke Launcher dari saluran/pencarian ATV</string>
+    <string name="intent_force_close">Keluar paksa jika video telah dibuka dari sumber eksternal </string>
+    <string name="btn_confirm">Konfirmasi</string>
+    <string name="player_low_video_quality">Kualitas video rendah</string>
 </resources>
