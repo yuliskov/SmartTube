@@ -137,7 +137,10 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),
-                        error -> Log.e(TAG, "continueGroup error: %s", error.getMessage()),
+                        error -> {
+                            Log.e(TAG, "continueGroup error: %s", error.getMessage());
+                            getView().showProgressBar(false);
+                        },
                         () -> getView().showProgressBar(false)
                 );
     }

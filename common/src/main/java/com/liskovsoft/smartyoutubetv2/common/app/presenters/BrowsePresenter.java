@@ -374,7 +374,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
                             getView().showProgressBar(false);
                         },
-                        () -> getView().showProgressBar(false));
+                        () -> getView().showProgressBar(false)
+                );
     }
 
     private void authCheck(boolean check, Runnable callback) {
