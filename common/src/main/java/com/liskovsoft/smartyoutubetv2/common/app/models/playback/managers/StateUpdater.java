@@ -100,6 +100,11 @@ public class StateUpdater extends PlayerEventListenerHelper {
         restoreVideoFormat();
         restoreAudioFormat();
         restoreSubtitleFormat();
+
+        // Screen usually black when video stopped or paused.
+        if (!mIsPlaying) {
+            getController().showControls(true);
+        }
     }
 
     @Override
