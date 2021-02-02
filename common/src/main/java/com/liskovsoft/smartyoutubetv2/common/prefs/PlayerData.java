@@ -6,7 +6,6 @@ import com.google.android.exoplayer2.text.CaptionStyleCompat;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUiController;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
@@ -33,7 +32,7 @@ public class PlayerData {
     private boolean mIsPauseOnSeekEnabled;
     private boolean mIsClockEnabled;
     private boolean mIsRemainingTimeEnabled;
-    private int mPlaybackMode;
+    private int mBackgroundMode;
     private FormatItem mVideoFormat;
     private FormatItem mAudioFormat;
     private FormatItem mSubtitleFormat;
@@ -50,7 +49,7 @@ public class PlayerData {
     private int mAudioDelayMs;
     private boolean mIsRememberSpeedEnabled;
     private boolean mIsLowQualityEnabled;
-    private int mRepeatMode;
+    private int mPlaybackMode;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -129,6 +128,15 @@ public class PlayerData {
         return mIsPauseOnSeekEnabled;
     }
 
+    public void setBackgroundMode(int type) {
+        mBackgroundMode = type;
+        persistData();
+    }
+
+    public int getBackgroundMode() {
+        return mBackgroundMode;
+    }
+
     public void setPlaybackMode(int type) {
         mPlaybackMode = type;
         persistData();
@@ -136,15 +144,6 @@ public class PlayerData {
 
     public int getPlaybackMode() {
         return mPlaybackMode;
-    }
-
-    public void setRepeatMode(int type) {
-        mRepeatMode = type;
-        persistData();
-    }
-
-    public int getRepeatMode() {
-        return mRepeatMode;
     }
 
     public boolean isRememberSpeedEnabled() {
@@ -311,7 +310,7 @@ public class PlayerData {
         mIsPauseOnSeekEnabled = Helpers.parseBoolean(split, 4, false);
         mIsClockEnabled = Helpers.parseBoolean(split, 5, true);
         mIsRemainingTimeEnabled = Helpers.parseBoolean(split, 6, true);
-        mPlaybackMode = Helpers.parseInt(split, 7, PlaybackEngineController.PLAYBACK_MODE_DEFAULT);
+        mBackgroundMode = Helpers.parseInt(split, 7, PlaybackEngineController.BACKGROUND_MODE_DEFAULT);
         // afrData was there
         mVideoFormat = ExoFormatItem.from(Helpers.parseStr(split, 9));
         mAudioFormat = ExoFormatItem.from(Helpers.parseStr(split, 10));
@@ -326,7 +325,7 @@ public class PlayerData {
         mAfrPauseSec = Helpers.parseInt(split, 19, 0);
         mAudioDelayMs = Helpers.parseInt(split, 20, 0);
         mIsRememberSpeedEnabled = Helpers.parseBoolean(split, 21, true);
-        mRepeatMode = Helpers.parseInt(split, 22, PlaybackUiController.REPEAT_ALL);
+        mPlaybackMode = Helpers.parseInt(split, 22, PlaybackEngineController.PLAYBACK_MODE_REPEAT_ALL);
         // didn't remember what was there
         mIsLowQualityEnabled = Helpers.parseBoolean(split, 24, false);
     }
@@ -334,10 +333,9 @@ public class PlayerData {
     private void persistData() {
         mPrefs.setData(VIDEO_PLAYER_DATA, Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec,
                 mIsShowFullDateEnabled, mSeekPreviewMode, mIsPauseOnSeekEnabled,
-                mIsClockEnabled, mIsRemainingTimeEnabled, mPlaybackMode, null, // afrData was there
+                mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null, // afrData was there
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
-                mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs, mIsRememberSpeedEnabled,
-                mRepeatMode, null, mIsLowQualityEnabled)); // didn't remember what was there
+                mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs, mIsRememberSpeedEnabled, mPlaybackMode, null, mIsLowQualityEnabled)); // didn't remember what was there
     }
 }

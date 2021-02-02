@@ -92,7 +92,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
 
     @Override
     public void openVideo(Video item) {
-        process(listener -> listener.openVideoOutside(item));
+        process(listener -> listener.openVideo(item));
     }
 
     // Helpers

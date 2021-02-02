@@ -85,7 +85,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private UriBackgroundManager mBackgroundManager;
     private RowsSupportFragment mRowsSupportFragment;
     private final boolean mIsAnimationEnabled = true;
-    private int mPlaybackMode = PlaybackEngineController.PLAYBACK_MODE_DEFAULT;
+    private int mPlaybackMode = PlaybackEngineController.BACKGROUND_MODE_DEFAULT;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -197,7 +197,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     public void onFinish() {
         // Fix background play when playing trailers from NUM
         // On API > 23 onStop not immediately occurred after onPause
-        if (Util.SDK_INT > 23 && getPlaybackMode() == PlaybackEngineController.PLAYBACK_MODE_DEFAULT) {
+        if (Util.SDK_INT > 23 && getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_DEFAULT) {
             releasePlayer();
         }
     }
@@ -255,7 +255,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     private void releasePlayer() {
-        if (getPlaybackMode() == PlaybackEngineController.PLAYBACK_MODE_BACKGROUND_PLAY) {
+        if (getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND) {
             Log.d(TAG, "releasePlayer: Engine release is blocked. Exiting...");
             return;
         }
@@ -718,7 +718,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         // Fix situations when engine didn't properly destroyed.
         // E.g. after closing dialogs.
-        setPlaybackMode(PlaybackEngineController.PLAYBACK_MODE_DEFAULT);
+        setPlaybackMode(PlaybackEngineController.BACKGROUND_MODE_DEFAULT);
         releasePlayer();
 
         mPlaybackPresenter.onViewDestroyed();

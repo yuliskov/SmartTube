@@ -285,7 +285,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onPipClicked() {
         getController().showControls(false);
-        getController().setPlaybackMode(PlaybackEngineController.PLAYBACK_MODE_PIP);
+        getController().setPlaybackMode(PlaybackEngineController.BACKGROUND_MODE_PIP);
         getController().exit();
     }
 

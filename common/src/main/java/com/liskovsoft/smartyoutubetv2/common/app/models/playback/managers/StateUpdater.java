@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -16,7 +15,6 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.Map;
 
@@ -51,7 +49,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
      * or video is opened from the intent
      */
     @Override
-    public void openVideoOutside(Video item) {
+    public void openVideo(Video item) {
         mLastVideo = null;
 
         resetStateIfNeeded(item); // reset position of music videos
@@ -59,7 +57,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         mIsPlaying = true; // video just added
 
         // Ensure that we aren't running on presenter init stage
-        if (getController() != null && getController().getPlaybackMode() == PlaybackEngineController.PLAYBACK_MODE_BACKGROUND_PLAY) {
+        if (getController() != null && getController().getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND) {
             // In background mode some event not called.
             // So, for proper state persistence, we need to save state here.
             saveState();
@@ -150,6 +148,10 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onPlayEnd() {
+        if (mPlayerData.getPlaybackMode() == PlaybackEngineController.PLAYBACK_MODE_PAUSE) {
+            mIsPlaying = false;
+        }
+
         Video video = getController().getVideo();
 
         // In case we start to watch the video again

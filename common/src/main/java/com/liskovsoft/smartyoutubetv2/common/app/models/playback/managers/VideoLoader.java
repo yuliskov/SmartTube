@@ -12,7 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackUiController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
@@ -43,7 +43,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void openVideoOutside(Video item) {
+    public void openVideo(Video item) {
         mPlaylist.add(item);
 
         if (getController() != null && getController().isEngineInitialized()) { // player is initialized
@@ -58,7 +58,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     @Override
     public void onEngineInitialized() {
         loadVideo(mLastVideo);
-        getController().setRepeatButtonState(mPlayerData.getRepeatMode());
+        getController().setRepeatButtonState(mPlayerData.getPlaybackMode());
     }
 
     @Override
@@ -99,29 +99,29 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onPlayEnd() {
-        switch (mPlayerData.getRepeatMode()) {
-            case PlaybackUiController.REPEAT_ALL:
+        switch (mPlayerData.getPlaybackMode()) {
+            case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ALL:
                 onNextClicked();
                 if (!getController().isInPIPMode()) {
                     getController().showControls(true);
                 }
                 break;
-            case PlaybackUiController.REPEAT_ONE:
+            case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
                 loadVideo(mLastVideo);
                 break;
-            case PlaybackUiController.REPEAT_NONE:
+            case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
                 // close player
                 if (!getController().isSuggestionsShown()) {
                     getController().exit();
                 }
                 break;
-            case PlaybackUiController.REPEAT_PAUSE:
+            case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
                 // pause player
                 getController().showControls(true);
                 break;
         }
 
-        Log.e(TAG, "Undetected repeat mode " + mPlayerData.getRepeatMode());
+        Log.e(TAG, "Undetected repeat mode " + mPlayerData.getPlaybackMode());
     }
 
     @Override
@@ -138,22 +138,22 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onRepeatModeClicked(int modeIndex) {
-        mPlayerData.setRepeatMode(modeIndex);
+        mPlayerData.setPlaybackMode(modeIndex);
         showBriefInfo(modeIndex);
     }
 
     private void showBriefInfo(int modeIndex) {
         switch (modeIndex) {
-            case PlaybackUiController.REPEAT_ALL:
+            case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ALL:
                 MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_all);
                 break;
-            case PlaybackUiController.REPEAT_ONE:
+            case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
                 MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_one);
                 break;
-            case PlaybackUiController.REPEAT_PAUSE:
+            case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
                 MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_pause);
                 break;
-            case PlaybackUiController.REPEAT_NONE:
+            case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
                 MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_none);
                 break;
         }

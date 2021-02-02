@@ -132,7 +132,7 @@ public class PlaybackActivity extends LeanbackActivity {
     }
 
     private boolean wannaEnterToPIP() {
-        return mPlaybackFragment.getPlaybackMode() == PlaybackEngineController.PLAYBACK_MODE_PIP && !isInPictureInPictureMode();
+        return mPlaybackFragment.getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_PIP && !isInPictureInPictureMode();
     }
 
     //@Override
@@ -195,11 +195,11 @@ public class PlaybackActivity extends LeanbackActivity {
         // Check that user not open dialog instead of really leaving the activity
         if (!mPlaybackFragment.isControlsShown()) {
             switch (mPlaybackFragment.getPlaybackMode()) {
-                case PlaybackEngineController.PLAYBACK_MODE_PLAY_BEHIND:
+                case PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND:
                     enterBackgroundPlayMode();
                     ViewManager.instance(this).removeTop(this); // return to browser instead of player
                     break;
-                case PlaybackEngineController.PLAYBACK_MODE_PIP:
+                case PlaybackEngineController.BACKGROUND_MODE_PIP:
                     enterPIPMode();
                     ViewManager.instance(this).removeTop(this); // return to browser instead of player
                     break;

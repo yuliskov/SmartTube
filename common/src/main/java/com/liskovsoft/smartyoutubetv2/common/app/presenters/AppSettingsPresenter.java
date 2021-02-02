@@ -185,7 +185,7 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
             if (VERSION.SDK_INT < 25) {
                 if (block) {
                     mEnginePlaybackMode = mUiManager.getController().getPlaybackMode(); // save orig value for later restoration
-                    mUiManager.getController().setPlaybackMode(PlaybackEngineController.PLAYBACK_MODE_BACKGROUND_PLAY);
+                    mUiManager.getController().setPlaybackMode(PlaybackEngineController.BACKGROUND_MODE_SOUND);
                 } else {
                     mUiManager.getController().setPlaybackMode(mEnginePlaybackMode);
                 }

@@ -28,7 +28,7 @@ public abstract class PlayerEventListenerHelper implements PlayerHandlerEventLis
     }
 
     @Override
-    public void openVideoOutside(Video item) {
+    public void openVideo(Video item) {
         // NOP
     }
 
