@@ -45,7 +45,7 @@
     <string name="title_video_presets">Predefinições de Vídeo</string>
     <string name="settings_accounts">Contas</string>
     <string name="settings_left_panel">Editar Categorias</string>
-    <string name="settings_themes">Themes</string>
+    <string name="settings_themes">Temas</string>
     <string name="settings_other">Outros</string>
     <string name="settings_player">Configurações de Vídeo</string>
     <string name="settings_language">Idioma</string>
@@ -83,9 +83,9 @@
     <string name="side_panel_sections">Adicionar ou Excluir Seções</string>
     <string name="boot_to_section">Iniciar pela Seção</string>
     <string name="large_ui">Interface Completa</string>
-    <string name="video_grid_scale">Grade de Vídeos</string>
+    <string name="video_grid_scale">Escala da Grade de Vídeos</string>
     <string name="scale_ui">Escala da Interface</string>
-    <string name="color_scheme">Escala da Interface</string>
+    <string name="color_scheme">Temas</string>
     <string name="color_scheme_default">Padrão</string>
     <string name="color_scheme_red_grey">Cinza Avermelhado</string>
     <string name="color_scheme_red">Vermelho</string>
@@ -171,7 +171,7 @@
     <string name="settings_general">Configurações Gerais</string>
     <string name="settings_video">Configurações de Vídeo</string>
     <string name="content_block_confirm_skip">Pulou Propaganda</string>
-    <string name="content_block_categories">Categorias</string>
+    <string name="content_block_categories">Bloqueios por Categorias</string>
     <string name="content_block_sponsor">Sponsor</string>
     <string name="content_block_intro">Animação de Introdução/Intervalo</string>
     <string name="content_block_outro">Cartões Finais/Créditos</string>
