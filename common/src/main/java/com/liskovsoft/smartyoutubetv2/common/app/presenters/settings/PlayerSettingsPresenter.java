@@ -127,9 +127,9 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_full_date),
-                option -> mPlayerData.showFullDate(option.isSelected()),
-                mPlayerData.isShowFullDateEnabled()));
+        //options.add(UiOptionItem.from(getContext().getString(R.string.player_full_date),
+        //        option -> mPlayerData.showFullDate(option.isSelected()),
+        //        mPlayerData.isShowFullDateEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_pause_when_seek),
                 option -> mPlayerData.enablePauseOnSeek(option.isSelected()),
