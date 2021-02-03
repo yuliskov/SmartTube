@@ -107,7 +107,7 @@ public class ViewManager {
                 mMoveViewsToBack = true;
 
                 if (mIsSinglePlayerMode) {
-                    activity.moveTaskToBack(true);
+                    safeMoveTaskToBack(activity);
                     return true;
                 }
 
