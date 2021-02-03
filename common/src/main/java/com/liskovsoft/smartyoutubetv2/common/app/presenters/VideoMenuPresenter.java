@@ -43,6 +43,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     private boolean mIsSubscribeButtonEnabled;
     private boolean mIsShareButtonEnabled;
     private boolean mIsAddToPlaylistButtonEnabled;
+    private boolean mIsAccountSelectionEnabled;
 
     private VideoMenuPresenter(Context context) {
         super(context);
@@ -70,6 +71,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mIsSubscribeButtonEnabled = true;
         mIsNotInterestedButtonEnabled = true;
         mIsShareButtonEnabled = true;
+        mIsAccountSelectionEnabled = true;
 
         showMenuInt(video);
     }
@@ -78,6 +80,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mIsSubscribeButtonEnabled = true;
         mIsShareButtonEnabled = true;
         mIsOpenChannelButtonEnabled = true;
+        mIsAccountSelectionEnabled = true;
 
         showMenuInt(video);
     }
@@ -118,6 +121,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         appendSubscribeButton();
         appendNotInterestedButton();
         appendShareButton();
+        appendAccountSelectionButton();
 
         mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction, mSignCheckAction));
     }
@@ -195,6 +199,17 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
                     } else if (mVideo.channelId != null) {
                         Utils.displayShareChannelDialog(getContext(), mVideo.channelId);
                     }
+                }));
+    }
+
+    private void appendAccountSelectionButton() {
+        if (!mIsAccountSelectionEnabled) {
+            return;
+        }
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.dialog_account_list), optionItem -> {
+                    AccountSelectionPresenter.instance(getContext()).show(true);
                 }));
     }
 

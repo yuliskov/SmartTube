@@ -51,7 +51,7 @@
     <string name="settings_language">Мова</string>
     <string name="settings_linked_devices">Прив`язані пристрої</string>
     <string name="settings_about">Про додаток</string>
-    <string name="dialog_account_list">Вибрати обліковий запис</string>
+    <string name="dialog_account_list">Обрати обліковий запис</string>
     <string name="dialog_account_none">Не обрано</string>
     <string name="dialog_remove_account">Видалити обліковий запис</string>
     <string name="dialog_add_account">Додати обліковий запис</string>

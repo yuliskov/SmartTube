@@ -44,7 +44,11 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
     }
 
     public void show() {
-        if (!AccountsData.instance(getContext()).isSelectAccountOnBootEnabled()) {
+        show(false);
+    }
+
+    public void show(boolean force) {
+        if (!AccountsData.instance(getContext()).isSelectAccountOnBootEnabled() && !force) {
             // user don't want to see selection dialog
             return;
         }

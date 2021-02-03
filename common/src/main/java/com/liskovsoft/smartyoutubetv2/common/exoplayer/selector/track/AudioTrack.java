@@ -15,7 +15,7 @@ public class AudioTrack extends MediaTrack {
     @Override
     public int compare(MediaTrack track2) {
         if (track2 == null || track2.format == null) {
-            return -1;
+            return 1;
         }
 
         int result = -1;

@@ -156,6 +156,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
         private Context mExtractedContext;
         private AppDialogFragmentHelper mManager;
         private String mTitle;
+        private int mBackStackCount;
 
         @Override
         public void onCreatePreferences(Bundle bundle, String s) {
@@ -202,11 +203,27 @@ public class AppDialogFragment extends LeanbackSettingsFragment
                 if (preference instanceof DialogPreference) {
                     onDisplayPreferenceDialog(preference);
 
-                    getFragmentManager().addOnBackStackChangedListener(() -> {
-                        if (getFragmentManager() != null && getFragmentManager().getBackStackEntryCount() == 0) {
-                            getActivity().onBackPressed();
-                        }
-                    });
+                    if (getFragmentManager() != null) {
+                        mBackStackCount = 0;
+
+                        getFragmentManager().addOnBackStackChangedListener(() -> {
+                            if (getFragmentManager() != null) {
+                                int currentBackStackCount = getFragmentManager().getBackStackEntryCount();
+
+                                if (currentBackStackCount < mBackStackCount) {
+                                    if (currentBackStackCount == 0) {
+                                        // single dialog
+                                        getActivity().onBackPressed();
+                                    } else {
+                                        // multiple stacked dialogs
+                                        getFragmentManager().popBackStack();
+                                    }
+                                }
+
+                                mBackStackCount = currentBackStackCount;
+                            }
+                        });
+                    }
                 }
             }
         }
