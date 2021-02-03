@@ -69,7 +69,9 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     @Override
     public void onPlayEnd() {
         switch (PlayerData.instance(getActivity()).getPlaybackMode()) {
+            case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
             case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
+            case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ALL:
                 postPlay(false);
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
