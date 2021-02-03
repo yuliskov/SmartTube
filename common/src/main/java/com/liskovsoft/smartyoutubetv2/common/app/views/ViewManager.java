@@ -118,11 +118,7 @@ public class ViewManager {
                 Log.d(TAG, "Launching parent activity: " + parentActivity.getSimpleName());
                 Intent intent = new Intent(activity, parentActivity);
 
-                // Possible fix: java.lang.IllegalArgumentException
-                // View=android.widget.TextView not attached to window manager
-                if (Utils.checkActivity(activity)) {
-                    activity.startActivity(intent);
-                }
+                safeStartActivity(activity, intent);
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();
                 Log.e(TAG, "Parent activity not found.");
@@ -227,12 +223,8 @@ public class ViewManager {
 
     private boolean checkMoveViewsToBack(Activity activity) {
         if (mMoveViewsToBack) {
-            // Possible fix: java.lang.NullPointerException Attempt to read from field
-            // 'com.android.server.am.TaskRecord com.android.server.am.ActivityRecord.task'
-            // on a null object reference
-            if (Utils.checkActivity(activity)) {
-                activity.moveTaskToBack(true);
-            }
+            safeMoveTaskToBack(activity);
+
             return true;
         }
 
@@ -343,5 +335,30 @@ public class ViewManager {
         }
 
         return null;
+    }
+
+    /**
+     * Fix: java.lang.NullPointerException Attempt to read from field<br/>
+     * 'com.android.server.am.TaskRecord com.android.server.am.ActivityRecord.task'<br/>
+     * on a null object reference
+     */
+    private void safeMoveTaskToBack(Activity activity) {
+        try {
+            activity.moveTaskToBack(true);
+        } catch (NullPointerException e) {
+            Log.e(TAG, "Error when moving task to back: %s", e.getMessage());
+        }
+    }
+
+    /**
+     * Fix: java.lang.IllegalArgumentException<br/>
+     * View=android.widget.TextView not attached to window manager
+     */
+    private void safeStartActivity(Activity activity, Intent intent) {
+        try {
+            activity.startActivity(intent);
+        } catch (IllegalArgumentException e) {
+            Log.e(TAG, "Error when starting activity: %s", e.getMessage());
+        }
     }
 }

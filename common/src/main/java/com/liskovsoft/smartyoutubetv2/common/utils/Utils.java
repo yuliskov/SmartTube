@@ -108,6 +108,6 @@ public class Utils {
     }
 
     public static boolean checkActivity(Activity activity) {
-        return activity != null && !activity.isDestroyed() && !activity.isFinishing() && activity.getTaskId() > 0;
+        return activity != null && !activity.isDestroyed() && !activity.isFinishing();
     }
 }
