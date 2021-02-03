@@ -784,7 +784,9 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void setRepeatButtonState(int modeIndex) {
-        mPlayerGlue.setRepeatActionState(modeIndex);
+        if (mPlayerGlue != null) {
+            mPlayerGlue.setRepeatActionState(modeIndex);
+        }
     }
 
     @Override
