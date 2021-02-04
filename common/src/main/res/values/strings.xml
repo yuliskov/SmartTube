@@ -109,6 +109,7 @@
     <string name="repeat_mode_all">Play all videos one by one</string>
     <string name="repeat_mode_one">Repeat current video</string>
     <string name="repeat_mode_pause">Pause playback after each video</string>
+    <string name="repeat_mode_pause_alt">Pause playback after each non-playlist video</string>
     <string name="repeat_mode_none">Stop playback after one video</string>
     <string name="subscribed_to_channel">Subscribed to channel</string>
     <string name="unsubscribed_from_channel">Unsubscribed from channel</string>

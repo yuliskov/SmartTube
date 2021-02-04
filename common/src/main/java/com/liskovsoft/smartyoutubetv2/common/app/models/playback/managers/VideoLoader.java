@@ -157,7 +157,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_one);
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
-                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_pause);
+                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_pause_alt);
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
                 MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_none);

@@ -109,6 +109,7 @@
     <string name="repeat_mode_all">Играть видео друг за другом</string>
     <string name="repeat_mode_one">Повторять текущее видео</string>
     <string name="repeat_mode_pause">Ставить плеер на паузу после каждого видео</string>
+    <string name="repeat_mode_pause_alt">Ставить на паузу после видео не из плейлиста</string>
     <string name="repeat_mode_none">Завершать воспроизведение после одного видео</string>
     <string name="subscribed_to_channel">Подписка на канал оформлена</string>
     <string name="unsubscribed_from_channel">Подписка на канал отменена</string>
