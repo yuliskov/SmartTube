@@ -5,6 +5,7 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.Account;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -76,6 +77,10 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.showDialog(getContext().getString(R.string.settings_accounts), () -> {
             for (Account account : mPendingRemove) {
                 mSignInManager.removeAccount(account);
+            }
+
+            if (!mPendingRemove.isEmpty()) {
+                MessageHelpers.showMessage(getContext(), R.string.msg_done);
             }
 
             mSignInManager.selectAccount(mSelectedAccount);
