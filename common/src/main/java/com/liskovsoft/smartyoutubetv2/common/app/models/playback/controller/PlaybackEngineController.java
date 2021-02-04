@@ -9,7 +9,7 @@ import java.util.List;
 public interface PlaybackEngineController {
     int PLAYBACK_MODE_CLOSE = 0;
     int PLAYBACK_MODE_REPEAT_ONE = 1;
-    int PLAYBACK_MODE_REPEAT_ALL = 2;
+    int PLAYBACK_MODE_PLAY_ALL = 2;
     int PLAYBACK_MODE_PAUSE = 3;
     int BACKGROUND_MODE_DEFAULT = 0;
     int BACKGROUND_MODE_SOUND = 1;

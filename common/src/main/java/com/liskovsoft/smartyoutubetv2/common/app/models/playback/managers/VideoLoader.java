@@ -100,7 +100,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     @Override
     public void onPlayEnd() {
         switch (mPlayerData.getPlaybackMode()) {
-            case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ALL:
+            case PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL:
                 onNextClicked();
                 if (!getController().isInPIPMode()) {
                     getController().showControls(true);
@@ -116,8 +116,14 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 }
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
-                // pause player
-                getController().showControls(true);
+                // stop player (if not playing playlist)
+                if (getController().getVideo().playlistId != null) {
+                    onNextClicked();
+                }
+
+                if (!getController().isInPIPMode()) {
+                    getController().showControls(true);
+                }
                 break;
         }
 
@@ -144,7 +150,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     private void showBriefInfo(int modeIndex) {
         switch (modeIndex) {
-            case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ALL:
+            case PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL:
                 MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_all);
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
