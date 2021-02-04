@@ -108,8 +108,9 @@
     <string name="cards_style">Karten-Stil</string>
     <string name="repeat_mode_all">Alle Videos nacheinander abspielen</string>
     <string name="repeat_mode_one">Wiederhole dieses Video</string>
-    <string name="repeat_mode_pause">Pause nach diesem Video</string>
-    <string name="repeat_mode_none">Stoppen nach diesem Video</string>
+    <string name="repeat_mode_pause">Pause nach jedem Video</string>
+    <string name="repeat_mode_pause_alt">Pause nach jedem Video (außer Wiedergabelisten)</string>
+    <string name="repeat_mode_none">Stoppen nach jedem Video</string>
     <string name="subscribed_to_channel">Kanal abonniert</string>
     <string name="unsubscribed_from_channel">Kanal nicht mehr abonniert</string>
     <string name="subtitle_yellow">Gelb</string>
