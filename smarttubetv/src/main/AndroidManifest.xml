@@ -165,6 +165,8 @@
                   android:screenOrientation="landscape"
                   android:theme="@style/App.Theme.Leanback.Preferences"/>
 
+        <!--
+
         <meta-data android:name="android.app.default_searchable"
             android:value="com.liskovsoft.smartyoutubetv2.tv.ui.details.VideoDetailsActivity"/>
 
@@ -173,21 +175,21 @@
             android:launchMode="singleInstance"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Leanback.Details">
-
-            <!-- Receives the search request. -->
+            
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
-                <!-- No category needed, because the Intent will specify this class component -->
             </intent-filter>
 
-            <!-- Points to searchable meta data. -->
-            <!--<meta-data-->
-            <!--    android:name="android.app.searchable"-->
-            <!--    android:resource="@xml/searchable" />-->
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
+
+        -->
 
         <!-- Begin Old activities -->
 
+        <!--
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.old.ui.VerticalGridActivity"
             android:exported="true"
@@ -198,8 +200,10 @@
             android:name="com.liskovsoft.smartyoutubetv2.tv.old.ui.GuidedStepActivity"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Example.Leanback.GuidedStep" />
+        -->
 
         <!-- Provides search suggestions for keywords against video metadata. -->
+        <!--
         <provider
             android:name=".old.data.VideoProvider"
             android:authorities="${packageName}"
@@ -220,6 +224,7 @@
             android:name="com.liskovsoft.smartyoutubetv2.tv.old.ui.AuthenticationActivity"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.Example.Leanback.GuidedStep" />
+        -->
 
         <!-- End Old activities -->
     </application>
