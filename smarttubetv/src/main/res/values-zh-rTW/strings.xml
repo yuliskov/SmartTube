@@ -105,6 +105,16 @@
     <string name="playback_tag">PLAYBACK_TAG</string>
     <string name="no_title">沒有標題</string>
 
+    <!-- Vineyard -->
+    <string name="title_oops">糟糕</string>
+    <string name="title_no_videos">沒有影片</string>
+    <string name="message_try_again">再試一次？</string>
+    <string name="message_check_again">再次確認？</string>
+    <string name="text_search_results">%s 的搜尋結果</string>
+    <string name="text_post_results_title">%s 的文章</string>
+    <string name="text_no_results">沒有結果</string>
+    <string name="error_message_network_needed">糟糕, 您需要一個網路連線來實現這一點！</string>
+
     <!--  NEW ITEMS  -->
     <string name="signin_view_title">用戶代碼正在載入……</string>
     <string name="signin_view_description">要登入，請在頁面 %s 中輸入此代碼</string>
@@ -116,5 +126,9 @@
     <string name="action_video_stats">影片統計</string>
     <string name="require_checked">需要 \"%s\"</string>
     <string name="msg_press_again_to_exit">再按一次離開</string>
-    <string name="player_remaining_time">結束：%s</string>
+    <string name="player_remaining_time">剩餘：%s</string>
+    <string name="badge_new_content">新的內容</string>
+    <string name="badge_live">LIVE</string>
+    <string name="action_pip">開始子母畫面</string>
+    <string name="add_device_view_description">要連結該裝置，請在「設定」→「在電視上觀看」輸入此程式碼</string>
 </resources>
