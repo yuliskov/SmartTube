@@ -12,10 +12,10 @@
     <string name="header_channels">Kanalen</string>
     <string name="subscriptions_signin_title">Bekijk je kanalen</string>
     <string name="subscriptions_signin_subtitle">Aanmelden om je abonnementen te bekijken</string>
-    <string name="subscriptions_signin_button_text">Aanmelden</string>
+    <string name="subscriptions_signin_button_text">AANMELDEN</string>
     <string name="library_signin_to_show_more">Bekijk je video\'s</string>
     <string name="library_signin_subtitle">Aanmelden om je bibliotheek te bekijken</string>
-    <string name="action_signin">Aanmelden</string>
+    <string name="action_signin">AANMELDEN</string>
     <string name="title_video_formats">Video kwaliteit</string>
     <string name="title_audio_formats">Audio kwaliteit</string>
     <string name="subtitle_category_title">Ondertitels</string>
@@ -106,10 +106,11 @@
     <string name="next_video_info_is_not_loaded_yet">Volgende video nog niet geladen</string>
     <string name="card_multiline_title">Titel op rijen</string>
     <string name="cards_style">Video\'s lay-out</string>
-    <string name="repeat_mode_all">Alles afspelen</string>
+    <string name="repeat_mode_all">Alle video\'s afspelen</string>
     <string name="repeat_mode_one">Deze video herhalen</string>
-    <string name="repeat_mode_pause">Pauzeren na deze video</string>
-    <string name="repeat_mode_none">Stoppen na deze video</string>
+    <string name="repeat_mode_pause">Pauzeren na elke video</string>
+    <string name="repeat_mode_pause_alt">Pauzeren na elke video (behalve playlists)</string>
+    <string name="repeat_mode_none">Stoppen na elke video</string>
     <string name="subscribed_to_channel">Abonnement aan</string>
     <string name="unsubscribed_from_channel">Abonnement uit</string>
     <string name="subtitle_yellow">Geel</string>
