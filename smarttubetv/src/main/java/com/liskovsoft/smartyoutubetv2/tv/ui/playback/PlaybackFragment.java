@@ -218,7 +218,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mPlayerGlue.fastForward();
     }
 
-    private int getSuggestedRowIndex() {
+    private int getPlayerRowIndex() {
         int selectedPosition = 0;
 
         if (mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
@@ -226,6 +226,12 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         }
 
         return selectedPosition;
+    }
+
+    private void setPlayerRowIndex(int index) {
+        if (mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
+            mRowsSupportFragment.getVerticalGridView().setSelectedPosition(index);
+        }
     }
 
     @Override
@@ -739,7 +745,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public boolean isSuggestionsShown() {
-        return isControlsOverlayVisible() && getSuggestedRowIndex() != 0;
+        return isControlsOverlayVisible() && getPlayerRowIndex() != 0;
     }
 
     @Override
@@ -779,6 +785,15 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             showControlsOverlay(mIsAnimationEnabled);
         } else {
             hideControlsOverlay(mIsAnimationEnabled);
+        }
+    }
+
+    @Override
+    public void showSuggestions(boolean show) {
+        showControls(show);
+
+        if (show && !isSuggestionsShown() && !isSuggestionsEmpty()) {
+            setPlayerRowIndex(1);
         }
     }
 

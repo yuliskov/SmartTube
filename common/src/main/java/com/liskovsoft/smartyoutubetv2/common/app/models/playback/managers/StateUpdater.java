@@ -50,11 +50,11 @@ public class StateUpdater extends PlayerEventListenerHelper {
      */
     @Override
     public void openVideo(Video item) {
+        mIsPlaying = true; // video just added
+
         mLastVideo = null;
 
         resetStateIfNeeded(item); // reset position of music videos
-
-        mIsPlaying = true; // video just added
 
         // Ensure that we aren't running on presenter init stage
         if (getController() != null && getController().getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND) {
@@ -79,6 +79,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public boolean onNextClicked() {
+        mIsPlaying = true;
+
         saveState();
 
         clearStateOfNextVideo();
@@ -88,8 +90,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onSuggestionItemClicked(Video item) {
-        saveState();
         mIsPlaying = true; // autoplay video from suggestions
+
+        saveState();
     }
 
     @Override

@@ -119,10 +119,13 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 // stop player (if not playing playlist)
                 if (getController().getVideo().playlistId != null) {
                     onNextClicked();
-                }
-
-                if (!getController().isInPIPMode()) {
-                    getController().showControls(true);
+                    if (!getController().isInPIPMode()) {
+                        getController().showControls(true);
+                    }
+                } else {
+                    if (!getController().isInPIPMode()) {
+                        getController().showSuggestions(true);
+                    }
                 }
                 break;
         }
