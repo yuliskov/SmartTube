@@ -112,6 +112,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onEngineReleased() {
+        // Save previous state
+        mIsPlaying = getController().isPlaying();
+
         saveState();
     }
 
@@ -156,10 +159,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onPlayEnd() {
-        if (mPlayerData.getPlaybackMode() == PlaybackEngineController.PLAYBACK_MODE_PAUSE) {
-            mIsPlaying = false;
-        }
-
         Video video = getController().getVideo();
 
         // In case we start to watch the video again
