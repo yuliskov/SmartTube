@@ -57,7 +57,7 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        this::createAndShowDialog,
+                        accounts -> createAndShowDialog(accounts, force),
                         error -> Log.e(TAG, "Get accounts error: %s", error.getMessage())
                 );
     }
@@ -67,8 +67,8 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
         sInstance = null;
     }
 
-    private void createAndShowDialog(List<Account> accounts) {
-        if (accounts == null || accounts.size() <= 1) {
+    private void createAndShowDialog(List<Account> accounts, boolean force) {
+        if (accounts.size() <= 1 && !force) {
             return;
         }
 

@@ -187,18 +187,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
         }
     }
 
-    private void saveState() {
-        Video video = getController().getVideo();
-
-        if (video != null) {
-            if (getController().getLengthMs() - getController().getPositionMs() > 500) { // don't save position if track is ended
-                mStates.put(video.videoId, new State(video.videoId, getController().getPositionMs(), getController().getLengthMs(), getController().getSpeed()));
-            }
-
-            persistState();
-        }
-    }
-
     private void restoreState() {
         restoreClipData();
     }
@@ -266,6 +254,21 @@ public class StateUpdater extends PlayerEventListenerHelper {
         }
     }
 
+    private void saveState() {
+        Video video = getController().getVideo();
+
+        if (video != null) {
+            // Don't save position if track is ended.
+            // Skip if paused.
+            boolean isVideoEnded = Math.abs(getController().getLengthMs() - getController().getPositionMs()) < 1_000;
+            if (!isVideoEnded || !mIsPlaying) {
+                mStates.put(video.videoId, new State(video.videoId, getController().getPositionMs(), getController().getLengthMs(), getController().getSpeed()));
+            }
+
+            persistState();
+        }
+    }
+
     private void restorePosition(Video item) {
         State state = mStates.get(item.videoId);
 
@@ -283,7 +286,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
         if (state != null && !item.isLive) {
             boolean isVideoEnded = Math.abs(getController().getLengthMs() - state.positionMs) < 1_000;
-            if (!isVideoEnded) {
+            if (!isVideoEnded || !mIsPlaying) {
                 getController().setPositionMs(state.positionMs);
             }
         }
