@@ -55,7 +55,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     @Override
     public void onPreferenceStartInitialScreen() {
         // FIX: Can not perform this action after onSaveInstanceState
-        if (mIsStateSaved) {
+        if (mIsStateSaved || !Utils.checkActivity(getActivity())) {
             return;
         }
 
@@ -70,14 +70,12 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     }
 
     @Override
-    public boolean onPreferenceStartFragment(PreferenceFragment preferenceFragment,
-        Preference preference) {
+    public boolean onPreferenceStartFragment(PreferenceFragment preferenceFragment, Preference preference) {
         return false;
     }
 
     @Override
-    public boolean onPreferenceStartScreen(PreferenceFragment preferenceFragment,
-        PreferenceScreen preferenceScreen) {
+    public boolean onPreferenceStartScreen(PreferenceFragment preferenceFragment, PreferenceScreen preferenceScreen) {
         PreferenceFragment frag = buildPreferenceFragment();
         startPreferenceFragment(frag);
         return true;
@@ -116,7 +114,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     @Override
     public boolean onPreferenceDisplayDialog(@NonNull PreferenceFragment caller, Preference pref) {
         // Fix IllegalStateException: Activity has been destroyed
-        if (getActivity() == null || getActivity().isDestroyed()) {
+        if (!Utils.checkActivity(getActivity())) {
             return false;
         }
 
