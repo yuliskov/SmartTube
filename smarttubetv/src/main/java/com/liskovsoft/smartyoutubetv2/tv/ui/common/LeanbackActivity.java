@@ -61,8 +61,6 @@ public abstract class LeanbackActivity extends MotherActivity {
         super.onStart();
 
         mBackgroundManager.onStart();
-
-        Helpers.makeActivityFullscreen(this);
     }
 
     @Override

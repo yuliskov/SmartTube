@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.locale.LangHelper;
 import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -71,5 +72,12 @@ public class MotherActivity extends FragmentActivity {
         LangUpdater updater = new LangUpdater(newBase);
         String langCode = updater.getUpdatedLocale();
         super.attachBaseContext(LocaleContextWrapper.wrap(newBase, LangHelper.parseLangCode(langCode)));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Helpers.makeActivityFullscreen(this);
     }
 }
