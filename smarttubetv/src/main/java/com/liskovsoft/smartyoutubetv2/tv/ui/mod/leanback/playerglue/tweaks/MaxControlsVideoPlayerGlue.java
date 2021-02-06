@@ -103,14 +103,14 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
     }
 
     private void updateTickle() {
+        mHandler.removeCallbacks(mTickleHandler);
+
         if (isControlsVisible()) {
             if (mTickleListener != null) {
                 mTickleListener.onTickle();
             }
 
             mHandler.postDelayed(mTickleHandler, 10_000);
-        } else {
-            mHandler.removeCallbacks(mTickleHandler);
         }
     }
 
