@@ -74,6 +74,7 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
                 mTickleListener = viewHolder.mTickleListener;
                 viewHolder.mTopEdgeFocusListener = MaxControlsVideoPlayerGlue.this;
                 updateQualityInfo();
+                updateTickle();
             }
             @Override
             protected void onUnbindRowViewHolder(RowPresenter.ViewHolder vh) {
