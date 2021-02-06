@@ -55,6 +55,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     @Override
     public void onPreferenceStartInitialScreen() {
         // FIX: Can not perform this action after onSaveInstanceState
+        // Possible fix: Unable to add window -- token android.os.BinderProxy is not valid; is your activity running?
         if (mIsStateSaved || !Utils.checkActivity(getActivity())) {
             return;
         }
@@ -113,7 +114,8 @@ public class AppDialogFragment extends LeanbackSettingsFragment
 
     @Override
     public boolean onPreferenceDisplayDialog(@NonNull PreferenceFragment caller, Preference pref) {
-        // Fix IllegalStateException: Activity has been destroyed
+        // Fix: IllegalStateException: Activity has been destroyed
+        // Possible fix: Unable to add window -- token android.os.BinderProxy is not valid; is your activity running?
         if (!Utils.checkActivity(getActivity())) {
             return false;
         }

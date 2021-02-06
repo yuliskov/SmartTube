@@ -155,7 +155,8 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                             String msg = "startListening error: " + error.getMessage();
                             Log.e(TAG, msg);
                             MessageHelpers.showMessage(getActivity(), msg);
-                        }
+                        },
+                        () -> MessageHelpers.showMessage(getActivity(), R.string.remote_session_closed)
                 );
     }
 

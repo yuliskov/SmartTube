@@ -188,4 +188,5 @@
     <string name="intent_force_close">Примусовий вихід, якщо відео відкрито з зовнішнього джерела</string>
     <string name="btn_confirm">Підтвердити</string>
     <string name="player_low_video_quality">Погана якість зображення</string>
+    <string name="remote_session_closed">Віддалена сесія закрита</string>
 </resources>
