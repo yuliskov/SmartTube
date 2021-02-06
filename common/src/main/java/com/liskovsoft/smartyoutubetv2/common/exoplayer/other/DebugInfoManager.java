@@ -336,7 +336,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
 
         String defaultMode = AppPrefs.instance(mContext).getDefaultDisplayMode();
         defaultMode = defaultMode != null ? defaultMode : NOT_AVAILABLE;
-        String currentMode = AppPrefs.instance(mContext).getCurrentDisplayMode();
+        String currentMode = UhdHelper.formatMode(mUhdHelper.getCurrentMode());
         currentMode = currentMode != null ? currentMode : defaultMode;
         mDisplayInfo.add(new Pair<>("Display dpi", String.valueOf(Helpers.getDeviceDpi(mContext))));
         mDisplayInfo.add(new Pair<>("Display Resolution", currentMode));

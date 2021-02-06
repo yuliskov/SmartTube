@@ -15,7 +15,6 @@ public class AppPrefs extends SharedPreferencesBase {
     private static final String PREFERRED_LANGUAGE_DATA = "preferred_language_data";
     private static final String VIEW_MANAGER_DATA = "view_manager_data";
     private String mDefaultDisplayMode;
-    private String mCurrentDisplayMode;
 
     private AppPrefs(Context context) {
         super(context, R.xml.app_prefs);
@@ -43,14 +42,6 @@ public class AppPrefs extends SharedPreferencesBase {
 
     public String getDefaultDisplayMode() {
         return mDefaultDisplayMode;
-    }
-
-    public void setCurrentDisplayMode(String mode) {
-        mCurrentDisplayMode = mode;
-    }
-
-    public String getCurrentDisplayMode() {
-        return mCurrentDisplayMode;
     }
 
     public void setBackupData(String backupData) {

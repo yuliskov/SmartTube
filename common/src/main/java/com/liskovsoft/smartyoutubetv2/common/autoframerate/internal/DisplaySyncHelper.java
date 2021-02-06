@@ -260,8 +260,6 @@ public class DisplaySyncHelper implements UhdHelperListener {
             } else {
                 Log.i(TAG, "Mode changed successfully");
             }
-
-            AppPrefs.instance(mContext).setCurrentDisplayMode(UhdHelper.formatMode(currentMode));
         }
     }
 
