@@ -189,4 +189,5 @@
     <string name="intent_force_close">Video van externe bron geforceerd afsluiten</string>
     <string name="btn_confirm">Bevestigen</string>
     <string name="player_low_video_quality">Lage video kwaliteit</string>
+    <string name="remote_session_closed">Remote sessie beëindigd</string>
 </resources>
