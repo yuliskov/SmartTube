@@ -109,6 +109,7 @@
     <string name="repeat_mode_all">Lire toutes les vidéos une par une</string>
     <string name="repeat_mode_one">Répéter la vidéo en cours</string>
     <string name="repeat_mode_pause">Pause lecture après chaque vidéo</string>
+    <string name="repeat_mode_pause_alt">Interrompre la lecture après chaque vidéo non-playlisté</string>
     <string name="repeat_mode_none">Arrêtez la lecture après une vidéo</string>
     <string name="subscribed_to_channel">Abonné(e) à la chaîne</string>
     <string name="unsubscribed_from_channel">Désabonné de la chaîne</string>
@@ -186,4 +187,7 @@
     <string name="content_block_notify_dialog">Dialogue de confirmation</string>
     <string name="return_to_launcher">Revenir au lanceur à partir des chaînes ATV/rechercher</string>
     <string name="intent_force_close">Forcer la sortie si la vidéo a été ouverte à partir d\'une source externe</string>
+    <string name="btn_confirm">Confirmer</string>
+    <string name="player_low_video_quality">Faible qualité vidéo</string>
+    <string name="remote_session_closed">La session à distance a été fermée</string>
 </resources>
