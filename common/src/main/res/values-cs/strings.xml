@@ -185,4 +185,5 @@
     <string name="intent_force_close">Vynutit ukončení, pokud bylo video otevřeno z externího zdroje</string>
     <string name="btn_confirm">Potvrdit</string>
     <string name="player_low_video_quality">Nízká video kvalita</string>
+    <string name="remote_session_closed">Vzdálená relace byla uzavřena</string>
 </resources>
