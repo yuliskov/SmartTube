@@ -17,6 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolder.Mode;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncHelper.AutoFrameRateListener;
+import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.UhdHelper;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.ArrayList;
@@ -80,6 +81,14 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         Log.d(TAG, message);
         //MessageHelpers.showLongMessage(getActivity(), message);
         pausePlayback();
+    }
+
+    @Override
+    public void onModeError(Mode newMode) {
+        String msg = getActivity().getString(R.string.msg_mode_switch_error, UhdHelper.formatMode(newMode));
+        Log.e(TAG, msg);
+        MessageHelpers.showMessage(getActivity(), msg);
+        //applyAfr();
     }
 
     private void onFpsCorrectionClick() {

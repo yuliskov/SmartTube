@@ -189,4 +189,5 @@
     <string name="btn_confirm">Подтвердить</string>
     <string name="player_low_video_quality">Низкое качество видео</string>
     <string name="remote_session_closed">Удаленная сессия закрыта</string>
+    <string name="msg_mode_switch_error">Невозможно переключить дисплей в режим \"%s\"</string>
 </resources>

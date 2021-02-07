@@ -34,6 +34,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
 
     public interface AutoFrameRateListener {
         void onModeStart(Mode newMode);
+        void onModeError(Mode newMode);
     }
 
     public DisplaySyncHelper(Context context) {
@@ -257,6 +258,10 @@ public class DisplaySyncHelper implements UhdHelperListener {
 
                 // NOTE: changed
                 //CommonApplication.getPreferences().setCurrentDisplayMode(String.format("%s (%s)", UhdHelper.formatMode(currentMode), newMsg));
+
+                if (mListener != null) {
+                    mListener.onModeError(mNewMode);
+                }
             } else {
                 Log.i(TAG, "Mode changed successfully");
             }

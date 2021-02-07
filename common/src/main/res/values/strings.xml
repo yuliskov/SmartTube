@@ -190,4 +190,5 @@
     <string name="btn_confirm">Confirm</string>
     <string name="player_low_video_quality">Low video quality</string>
     <string name="remote_session_closed">Remote session has been closed</string>
+    <string name="msg_mode_switch_error">Can\'t switch display mode to \"%s\"</string>
 </resources>
