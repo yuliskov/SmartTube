@@ -205,13 +205,13 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     @Override
     public FormatItem getVideoFormat() {
         // Precise format (may not be loaded yet)
-        if (mPlayer instanceof SimpleExoPlayer) {
-            Format videoFormat = ((SimpleExoPlayer) mPlayer).getVideoFormat();
-
-            if (videoFormat != null) {
-                return ExoFormatItem.from(videoFormat);
-            }
-        }
+        //if (mPlayer instanceof SimpleExoPlayer) {
+        //    Format videoFormat = ((SimpleExoPlayer) mPlayer).getVideoFormat();
+        //
+        //    if (videoFormat != null) {
+        //        return ExoFormatItem.from(videoFormat);
+        //    }
+        //}
 
         return ExoFormatItem.from(mTrackSelectorManager.getVideoTrack());
     }

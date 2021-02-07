@@ -75,7 +75,8 @@ public class ExoFormatItem implements FormatItem {
 
         if (format != null) {
             formatItem.mTitle = TrackSelectorUtil.buildTrackNameShort(format);
-            formatItem.mFrameRate = format.frameRate;
+            // Workaround with LIVE streams. Where no fps info present.
+            formatItem.mFrameRate = format.frameRate == -1 ? 30 : format.frameRate;
             formatItem.mWidth = format.width;
             formatItem.mHeight = format.height;
             formatItem.mCodecs = format.codecs;
