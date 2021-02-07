@@ -69,7 +69,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
     @Override
     public void onEngineError(int type) {
         if (isWithinTimeWindow()) {
-            Log.e(TAG, "Player error occurred. Restarting engine once...");
+            Log.e(TAG, "Player error occurred. Restarting engine once…");
+            MessageHelpers.showMessage(getActivity(), R.string.msg_player_error);
             YouTubeMediaService.instance().invalidateCache(); // some data might be stalled
             getController().reloadPlayback(); // re-download video data
         } else {
