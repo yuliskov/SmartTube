@@ -26,7 +26,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     private final RemoteManager mRemoteManager;
     private final RemoteControlData mRemoteControlData;
     private final SuggestionsLoader mSuggestionsLoader;
-    private Disposable mCommandAction;
+    private Disposable mListeningAction;
     private Disposable mPostPlayAction;
     private Disposable mPostStateAction;
     private Video mVideo;
@@ -142,11 +142,11 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     }
 
     private void startListening() {
-        if (mCommandAction != null && !mCommandAction.isDisposed()) {
+        if (mListeningAction != null && !mListeningAction.isDisposed()) {
             return;
         }
 
-        mCommandAction = mRemoteManager.getCommandObserve()
+        mListeningAction = mRemoteManager.getCommandObserve()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -161,10 +161,12 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     }
 
     private void stopListening() {
-        RxUtils.disposeActions(mCommandAction, mPostPlayAction, mPostStateAction);
+        RxUtils.disposeActions(mListeningAction, mPostPlayAction, mPostStateAction);
     }
 
     private void processCommand(Command command) {
+        RxUtils.disposeActions(mPostPlayAction, mPostStateAction);
+
         switch (command.getType()) {
             case Command.TYPE_OPEN_VIDEO:
                 Video newVideo = Video.from(command.getVideoId(), command.getPlaylistId(), command.getPlaylistIndex());
