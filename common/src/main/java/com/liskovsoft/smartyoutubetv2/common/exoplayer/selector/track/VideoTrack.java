@@ -64,6 +64,10 @@ public class VideoTrack extends MediaTrack {
     }
 
     private int compare(MediaTrack track2, int type) {
+        if (format == null) {
+            return -1;
+        }
+
         if (track2 == null || track2.format == null) {
             return 1;
         }

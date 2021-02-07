@@ -425,7 +425,11 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         MediaTrack result = createAutoSelection(track.rendererIndex);
 
         if (track.format != null) { // not auto selection
+            MediaTrack prevResult;
+
             for (int groupIndex = 0; groupIndex < renderer.mediaTracks.length; groupIndex++) {
+                prevResult = result;
+
                 for (int trackIndex = 0; trackIndex < renderer.mediaTracks[groupIndex].length; trackIndex++) {
                     MediaTrack mediaTrack = renderer.mediaTracks[groupIndex][trackIndex];
 
@@ -440,8 +444,11 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                     }
                 }
 
-                if (result.format != null && MediaTrack.codecEquals(result.format.codecs, track.format.codecs)) {
-                    break;
+                if (prevResult.compare(result) == 0) {
+                    // Prefer the same codec if quality match
+                    if (prevResult.format != null && MediaTrack.codecEquals(prevResult.format.codecs, track.format.codecs)) {
+                        result = prevResult;
+                    }
                 }
             }
         }
