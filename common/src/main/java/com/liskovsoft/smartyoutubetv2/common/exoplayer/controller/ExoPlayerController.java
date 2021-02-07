@@ -245,10 +245,14 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     public void onPlayerError(ExoPlaybackException error) {
         Log.e(TAG, "onPlayerError: " + error);
 
-        // Unexpected error could occur when pausing activity that has non-default windowModeId
-        if (error.type != ExoPlaybackException.TYPE_UNEXPECTED) {
-            mEventListener.onEngineError(error.type);
+        if (error.type == ExoPlaybackException.TYPE_UNEXPECTED &&
+            error.getCause() instanceof IllegalArgumentException) {
+            // Maybe it's because of auto frame rate.
+            // Such error may occur when pausing activity.
+            return;
         }
+
+        mEventListener.onEngineError(error.type);
     }
 
     @Override
