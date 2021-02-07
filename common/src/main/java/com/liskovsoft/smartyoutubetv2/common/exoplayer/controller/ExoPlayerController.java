@@ -126,7 +126,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             return false;
         }
 
-        return mPlayer.isPlaying();
+        return mPlayer.getPlayWhenReady();
     }
 
     @Override
