@@ -257,8 +257,8 @@ public class MainUIData {
         mBootCategoryId = Helpers.parseInt(split, 2, MediaGroup.TYPE_HOME);
         mVideoGridScale = Helpers.parseFloat(split, 3, 1.0f);
         mUIScale = Helpers.parseFloat(split, 4, 1.0f);
-        mColorSchemeIndex = Helpers.parseInt(split, 5, 0);
-        mIsCardMultilineTitleEnabled = Helpers.parseBoolean(split, 6, false);
+        mColorSchemeIndex = Helpers.parseInt(split, 5, 1);
+        mIsCardMultilineTitleEnabled = Helpers.parseBoolean(split, 6, true);
         mIsSettingsCategoryEnabled = Helpers.parseBoolean(split, 7, true);
         mChannelCategorySorting = Helpers.parseInt(split, 8, CHANNEL_SORTING_UPDATE);
         mPlaylistsStyle = Helpers.parseInt(split, 9, PLAYLISTS_STYLE_GRID);
