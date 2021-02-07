@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import java.util.Arrays;
@@ -84,6 +85,18 @@ public class ContentBlockData {
             mCategories.clear();
 
             mCategories.addAll(Arrays.asList(categoriesArr));
+        } else {
+            mCategories.clear();
+
+            mCategories.addAll(Arrays.asList(
+                        SponsorSegment.CATEGORY_SPONSOR,
+                        SponsorSegment.CATEGORY_INTRO,
+                        SponsorSegment.CATEGORY_OUTRO,
+                        SponsorSegment.CATEGORY_INTERACTION,
+                        SponsorSegment.CATEGORY_SELF_PROMO,
+                        SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC
+                    )
+            );
         }
     }
 
