@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -50,7 +51,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
      */
     @Override
     public void openVideo(Video item) {
-        mIsPlaying = true; // video just added
+        setPlaying(true); // video just added
 
         mLastVideo = null;
 
@@ -79,7 +80,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public boolean onNextClicked() {
-        mIsPlaying = true;
+        setPlaying(true);
 
         saveState();
 
@@ -90,7 +91,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onSuggestionItemClicked(Video item) {
-        mIsPlaying = true; // autoplay video from suggestions
+        setPlaying(true); // autoplay video from suggestions
 
         saveState();
     }
@@ -105,7 +106,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         restoreSubtitleFormat();
 
         // Show user info instead of black screen.
-        if (!mIsPlaying) {
+        if (!getPlaying()) {
             getController().showControls(true);
         }
     }
@@ -113,7 +114,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     @Override
     public void onEngineReleased() {
         // Save previous state
-        mIsPlaying = getController().isPlaying();
+        setPlaying(getController().isPlaying());
 
         saveState();
     }
@@ -132,13 +133,13 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onPlay() {
-        mIsPlaying = true;
+        setPlaying(true);
         Helpers.disableScreensaver(getActivity());
     }
 
     @Override
     public void onPause() {
-        mIsPlaying = false;
+        setPlaying(false);
         Helpers.enableScreensaver(getActivity());
     }
 
@@ -261,7 +262,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
             // Don't save position if track is ended.
             // Skip if paused.
             boolean isVideoEnded = Math.abs(getController().getLengthMs() - getController().getPositionMs()) < 1_000;
-            if (!isVideoEnded || !mIsPlaying) {
+            if (!isVideoEnded || !getPlaying()) {
                 mStates.put(video.videoId, new State(video.videoId, getController().getPositionMs(), getController().getLengthMs(), getController().getSpeed()));
             }
 
@@ -286,13 +287,13 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
         if (state != null && !item.isLive) {
             boolean isVideoEnded = Math.abs(getController().getLengthMs() - state.positionMs) < 1_000;
-            if (!isVideoEnded || !mIsPlaying) {
+            if (!isVideoEnded || !getPlaying()) {
                 getController().setPositionMs(state.positionMs);
             }
         }
 
         if (!mIsPlayBlocked) {
-            getController().setPlay(mIsPlaying);
+            getController().setPlay(getPlaying());
         }
     }
 
@@ -332,6 +333,15 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     public void blockPlay(boolean block) {
         mIsPlayBlocked = block;
+    }
+
+    private void setPlaying(boolean isPlaying) {
+        Log.d(TAG, "setPlaying %s", isPlaying);
+        mIsPlaying = isPlaying;
+    }
+
+    private boolean getPlaying() {
+        return mIsPlaying;
     }
 
     private void updateHistory() {

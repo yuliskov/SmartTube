@@ -244,7 +244,11 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     @Override
     public void onPlayerError(ExoPlaybackException error) {
         Log.e(TAG, "onPlayerError: " + error);
-        mEventListener.onEngineError(error.type);
+
+        // Unexpected error could occur when pausing activity that has non-default windowModeId
+        if (error.type != ExoPlaybackException.TYPE_UNEXPECTED) {
+            mEventListener.onEngineError(error.type);
+        }
     }
 
     @Override
