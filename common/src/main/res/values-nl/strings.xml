@@ -190,4 +190,5 @@
     <string name="btn_confirm">Bevestigen</string>
     <string name="player_low_video_quality">Lage video kwaliteit</string>
     <string name="remote_session_closed">Remote sessie beëindigd</string>
+    <string name="msg_mode_switch_error">Fout bij aanpassen naar \"%s\"</string>
 </resources>
