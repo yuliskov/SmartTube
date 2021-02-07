@@ -14,6 +14,10 @@ public class SubtitleTrack extends MediaTrack {
 
     @Override
     public int compare(MediaTrack track2) {
+        if (format == null) {
+            return -1;
+        }
+
         if (track2.format == null) {
             return 1;
         }
