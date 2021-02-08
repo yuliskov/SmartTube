@@ -65,7 +65,8 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
-        // Live fix when opening video from phone. Full info isn't available yet.
+        // Disable sponsor for the live streams.
+        // Fix when using remote control.
         if (!mContentBlockData.isSponsorBlockEnabled() || !checkVideo(getController().getVideo())) {
             disposeActions();
         }
