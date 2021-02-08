@@ -65,7 +65,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
     @Override
     public void onMetadata(MediaItemMetadata metadata) {
-        // Remote control fix. Full video info is not available on 'video load' stage.
+        // Live fix when opening video from phone. Full info isn't available yet.
         if (!mContentBlockData.isSponsorBlockEnabled() || !checkVideo(getController().getVideo())) {
             disposeActions();
         }
