@@ -155,7 +155,7 @@ public class ViewManager {
         // Fix: Calling startActivity() from outside of an Activity  context requires the FLAG_ACTIVITY_NEW_TASK flag
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        mContext.startActivity(intent);
+        safeStartActivity(mContext, intent);
     }
 
     private boolean doThrottle() {
@@ -340,12 +340,15 @@ public class ViewManager {
     /**
      * Fix: java.lang.NullPointerException Attempt to read from field<br/>
      * 'com.android.server.am.TaskRecord com.android.server.am.ActivityRecord.task'<br/>
-     * on a null object reference
+     * on a null object reference<br/>
+     * <br/>
+     * Fix: java.lang.IllegalArgumentException<br/>
+     * View=android.widget.TextView not attached to window manager
      */
     private void safeMoveTaskToBack(Activity activity) {
         try {
             activity.moveTaskToBack(true);
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | IllegalArgumentException e) {
             Log.e(TAG, "Error when moving task to back: %s", e.getMessage());
         }
     }
@@ -354,9 +357,9 @@ public class ViewManager {
      * Fix: java.lang.IllegalArgumentException<br/>
      * View=android.widget.TextView not attached to window manager
      */
-    private void safeStartActivity(Activity activity, Intent intent) {
+    private void safeStartActivity(Context context, Intent intent) {
         try {
-            activity.startActivity(intent);
+            context.startActivity(intent);
         } catch (IllegalArgumentException e) {
             Log.e(TAG, "Error when starting activity: %s", e.getMessage());
         }
