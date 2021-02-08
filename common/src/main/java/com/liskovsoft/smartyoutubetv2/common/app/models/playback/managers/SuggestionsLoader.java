@@ -17,11 +17,13 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SuggestionsLoader extends PlayerEventListenerHelper {
     private static final String TAG = SuggestionsLoader.class.getSimpleName();
-    private final List<MetadataListener> mListeners = new ArrayList<>();
+    private final Set<MetadataListener> mListeners = new HashSet<>();
     private Disposable mMetadataAction;
     private Disposable mScrollAction;
 

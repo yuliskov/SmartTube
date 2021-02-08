@@ -25,6 +25,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private static final String TAG = VideoLoader.class.getSimpleName();
     private final Playlist mPlaylist;
     private final Handler mHandler;
+    private final SuggestionsLoader mSuggestionsLoader;
     private Video mLastVideo;
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
@@ -32,7 +33,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private long mPrevErrorTimeMs;
     private PlayerData mPlayerData;
 
-    public VideoLoader() {
+    public VideoLoader(SuggestionsLoader suggestionsLoader) {
+        mSuggestionsLoader = suggestionsLoader;
         mPlaylist = Playlist.instance();
         mHandler = new Handler(Looper.myLooper());
     }
@@ -265,6 +267,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         } else {
             Log.d(TAG, "Empty format info received. Seems future live translation. No video data to pass to the player.");
             scheduleReloadVideoTimer(30 * 1_000);
+            mSuggestionsLoader.loadSuggestions(mLastVideo);
         }
     }
 

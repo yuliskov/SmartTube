@@ -203,15 +203,17 @@ public final class Video implements Parcelable {
         return mediaItem != null && mediaItem.getType() == MediaItem.TYPE_PLAYLISTS_SECTION;
     }
 
-    public void sync(MediaItemMetadata metadata, boolean useAlt) {
+    public void sync(MediaItemMetadata metadata, boolean useAltDesc) {
         if (metadata == null) {
             return;
         }
 
         title = metadata.getTitle();
-        description = useAlt ? metadata.getDescriptionAlt() : metadata.getDescription();
+        description = useAltDesc ? metadata.getDescriptionAlt() : metadata.getDescription();
         channelId = metadata.getChannelId();
         nextMediaItem = metadata.getNextVideo();
+        isLive = metadata.isLive();
+        isSubscribed = metadata.isSubscribed();
     }
 
     // Builder for Video object.
