@@ -197,8 +197,13 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     public void onFinish() {
         // Fix background play when playing trailers from NUM
         // On API > 23 onStop not immediately occurred after onPause
-        if (Util.SDK_INT > 23 && getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_DEFAULT) {
-            releasePlayer();
+        if (getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_DEFAULT) {
+            if (Util.SDK_INT > 23) {
+                releasePlayer();
+            }
+
+            // Assuming that user wants to close the player
+            setVideo(null);
         }
     }
 
