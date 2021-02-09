@@ -119,6 +119,12 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 }
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
+                // stop player after each video
+                if (!getController().isInPIPMode()) {
+                    getController().showSuggestions(true);
+                }
+                break;
+            case PlaybackEngineController.PLAYBACK_MODE_LIST:
                 // stop player (if not playing playlist)
                 if (getController().getVideo().playlistId != null) {
                     onNextClicked();
@@ -163,6 +169,9 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_one);
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
+                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_pause);
+                break;
+            case PlaybackEngineController.PLAYBACK_MODE_LIST:
                 MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_pause_alt);
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_CLOSE:

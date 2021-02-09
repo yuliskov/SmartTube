@@ -11,6 +11,7 @@ public interface PlaybackEngineController {
     int PLAYBACK_MODE_REPEAT_ONE = 1;
     int PLAYBACK_MODE_PLAY_ALL = 2;
     int PLAYBACK_MODE_PAUSE = 3;
+    int PLAYBACK_MODE_LIST = 4;
     int BACKGROUND_MODE_DEFAULT = 0;
     int BACKGROUND_MODE_SOUND = 1;
     int BACKGROUND_MODE_PIP = 2;
