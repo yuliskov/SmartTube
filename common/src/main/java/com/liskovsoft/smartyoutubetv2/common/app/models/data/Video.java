@@ -209,11 +209,15 @@ public final class Video implements Parcelable {
         }
 
         title = metadata.getTitle();
-        description = useAltDesc ? metadata.getDescriptionAlt() : metadata.getDescription();
+        // Don't sync future translation because of not precise description
+        if (!metadata.isUpcoming()) {
+            description = useAltDesc ? metadata.getDescriptionAlt() : metadata.getDescription();
+        }
         channelId = metadata.getChannelId();
         nextMediaItem = metadata.getNextVideo();
         isLive = metadata.isLive();
         isSubscribed = metadata.isSubscribed();
+        isUpcoming = metadata.isUpcoming();
     }
 
     // Builder for Video object.
