@@ -155,15 +155,15 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     public void startSearch(String searchText) {
         mSearchText = searchText;
 
-        if (getView() == null) {
-            mViewManager.startView(SearchView.class);
-        } else {
-            mViewManager.startView(SearchView.class);
-            startSearchInt(searchText);
-        }
+        mViewManager.startView(SearchView.class);
+        startSearchInt(searchText);
     }
 
     private void startSearchInt(String searchText) {
+        if (getView() == null) {
+            return;
+        }
+
         if (mSearchData.isInstantVoiceSearchEnabled() && searchText == null) {
             getView().startVoiceRecognition();
         } else {
