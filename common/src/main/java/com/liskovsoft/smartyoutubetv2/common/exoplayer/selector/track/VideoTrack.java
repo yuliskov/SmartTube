@@ -108,7 +108,7 @@ public class VideoTrack extends MediaTrack {
 
         if (Helpers.equals(id1, id2)) {
             result = 0;
-        } if (sizeLessOrEquals(size2, size1)) {
+        } else if (sizeLessOrEquals(size2, size1)) {
             if (TrackSelectorUtil.isHdrCodec(codecs1) == TrackSelectorUtil.isHdrCodec(codecs2)) {
                 result = 1;
             } else if (TrackSelectorUtil.isHdrCodec(codecs1)) {
