@@ -4,7 +4,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 
 public class VideoTrack extends MediaTrack {
-    private static final int SIZE_EQUITY_THRESHOLD_PERCENT = 5;
+    private static final int SIZE_EQUITY_THRESHOLD_PERCENT = 5; // was 15 before
     private static final int COMPARE_TYPE_IN_BOUNDS = 0;
     private static final int COMPARE_TYPE_IN_BOUNDS_PROFILE = 1;
     private static final int COMPARE_TYPE_NORMAL = 2;
