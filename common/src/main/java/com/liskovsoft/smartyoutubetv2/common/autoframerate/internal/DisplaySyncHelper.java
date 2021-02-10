@@ -71,7 +71,10 @@ public class DisplaySyncHelper implements UhdHelperListener {
         return newModes;
     }
 
-    private ArrayList<Mode> filterModesByWidth(Mode[] allModes, int videoWidth) {
+    /**
+     * Filter all modes except one that match by width.
+     */
+    private ArrayList<Mode> filterModesByWidthOrigin(Mode[] allModes, int videoWidth) {
         ArrayList<Mode> newModes = new ArrayList<>();
 
         if (videoWidth == -1) {
@@ -81,6 +84,41 @@ public class DisplaySyncHelper implements UhdHelperListener {
         for (Mode mode : allModes) {
             int width = mode.getPhysicalWidth();
             if (width >= (videoWidth - 100) && width <= (videoWidth + 100)) {
+                newModes.add(mode);
+            }
+        }
+
+        if (newModes.isEmpty()) {
+            Log.i(TAG, "MODE CANDIDATES NOT FOUND!! Old modes: " + Arrays.asList(allModes));
+        } else {
+            Log.i(TAG, "FOUND MODE CANDIDATES! New modes: " + newModes);
+        }
+
+        return newModes;
+    }
+
+    /**
+     * Filter out modes that less then required width.<br/>
+     * Reverse order is important because of later mapping by fps in other method.
+     */
+    private ArrayList<Mode> filterModesByWidth(Mode[] allModes, int videoWidth) {
+        ArrayList<Mode> newModes = new ArrayList<>();
+
+        if (videoWidth == -1) {
+            return newModes;
+        }
+
+        // Reverse order. It's important because of later mapping by fps.
+        Arrays.sort(allModes, (mode1, mode2) -> {
+            int width1 = mode1.getPhysicalWidth();
+            int width2 = mode2.getPhysicalWidth();
+
+            return width2 - width1;
+        });
+
+        for (Mode mode : allModes) {
+            int width = mode.getPhysicalWidth();
+            if (width >= (videoWidth - 100)) {
                 newModes.add(mode);
             }
         }
@@ -301,7 +339,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
             List<Mode> resultModes = new ArrayList<>();
 
             if (mIsResolutionSwitchEnabled) {
-                resultModes = filterModesByWidth(modes, Math.max(videoWidth, FHD));
+                resultModes = filterModesByWidth(modes, Math.max(videoWidth, HD));
             }
 
             //int minHeight = -1;
