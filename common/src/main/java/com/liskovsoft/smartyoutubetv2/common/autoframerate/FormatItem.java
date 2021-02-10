@@ -20,6 +20,7 @@ public interface FormatItem {
     int getHeight();
     boolean isSelected();
     int getType();
+    boolean isPreset();
 
     static FormatItem checkFormat(FormatItem format, int type) {
         return format != null && format.getType() == type ? format : null;

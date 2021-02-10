@@ -192,4 +192,5 @@
     <string name="remote_session_closed">Remote session has been closed</string>
     <string name="msg_mode_switch_error">Can\'t switch display mode to \"%s\"</string>
     <string name="msg_player_error">Player error occurred. Restarting playback…</string>
+    <string name="preset_disabled">Without preset</string>
 </resources>

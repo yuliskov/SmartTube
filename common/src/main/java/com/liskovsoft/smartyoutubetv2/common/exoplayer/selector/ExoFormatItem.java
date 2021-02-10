@@ -348,4 +348,9 @@ public class ExoFormatItem implements FormatItem {
     public int getType() {
         return mType;
     }
+
+    @Override
+    public boolean isPreset() {
+        return mFormatId == null;
+    }
 }

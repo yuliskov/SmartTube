@@ -216,6 +216,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
                 OptionCategory.TYPE_RADIO,
                 context.getString(R.string.title_video_presets),
                 fromPresets(
+                        context,
                         AppDataSourceManager.instance().getVideoPresets(),
                         playerData,
                         onFormatSelected
@@ -223,8 +224,11 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         );
     }
 
-    private static List<OptionItem> fromPresets(VideoPreset[] presets, PlayerData playerData, Runnable onFormatSelected) {
+    private static List<OptionItem> fromPresets(Context context, VideoPreset[] presets, PlayerData playerData, Runnable onFormatSelected) {
         List<OptionItem> result = new ArrayList<>();
+
+        FormatItem selectedFormat = playerData.getFormat(FormatItem.TYPE_VIDEO);
+        boolean isPresetSelection = selectedFormat != null && selectedFormat.isPreset();
 
         for (VideoPreset preset : presets) {
             result.add(0, UiOptionItem.from(preset.name,
@@ -232,8 +236,16 @@ public class HqDialogManager extends PlayerEventListenerHelper {
                         playerData.setFormat(preset.format);
                         onFormatSelected.run();
                     },
-                    preset.format.equals(playerData.getFormat(FormatItem.TYPE_VIDEO))));
+                    isPresetSelection && preset.format.equals(selectedFormat)));
         }
+
+        result.add(0, UiOptionItem.from(
+                context.getString(R.string.preset_disabled),
+                optionItem -> {
+                    playerData.setFormat(null);
+                    onFormatSelected.run();
+                },
+                !isPresetSelection));
 
         return result;
     }

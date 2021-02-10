@@ -191,4 +191,5 @@
     <string name="remote_session_closed">Віддалена сесія закрита</string>
     <string name="msg_mode_switch_error">Неможливо перемкнути дисплей у режим \"%s\"</string>
     <string name="msg_player_error">У плеєрі виникла помилка. Перезапускаю відтворювання…</string>
+    <string name="preset_disabled">Без пресета</string>
 </resources>
