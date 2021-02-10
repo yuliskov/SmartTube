@@ -430,6 +430,12 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             for (int groupIndex = 0; groupIndex < renderer.mediaTracks.length; groupIndex++) {
                 prevResult = result;
 
+                // Very rare NPE fix
+                if (renderer.mediaTracks[groupIndex] == null) {
+                    Log.e(TAG, "Track selection error. Media track group %s is empty.", groupIndex);
+                    continue;
+                }
+
                 for (int trackIndex = 0; trackIndex < renderer.mediaTracks[groupIndex].length; trackIndex++) {
                     MediaTrack mediaTrack = renderer.mediaTracks[groupIndex][trackIndex];
 
