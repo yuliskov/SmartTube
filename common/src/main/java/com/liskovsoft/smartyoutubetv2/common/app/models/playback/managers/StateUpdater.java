@@ -160,14 +160,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onPlayEnd() {
-        Video video = getController().getVideo();
-
-        // In case we start to watch the video again
-        if (video != null) {
-            // Add null state to prevent restore position from history
-            mStates.put(video.videoId, new State(video.videoId, 0));
-            saveState();
-        }
+        saveState();
 
         // Take into account different playback states
         Helpers.enableScreensaver(getActivity());
@@ -264,6 +257,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
             boolean isVideoEnded = Math.abs(getController().getLengthMs() - getController().getPositionMs()) < 1_000;
             if (!isVideoEnded || !getPlaying()) {
                 mStates.put(video.videoId, new State(video.videoId, getController().getPositionMs(), getController().getLengthMs(), getController().getSpeed()));
+            } else {
+                // Add null state to prevent restore position from history
+                mStates.remove(video.videoId);
             }
 
             persistState();
