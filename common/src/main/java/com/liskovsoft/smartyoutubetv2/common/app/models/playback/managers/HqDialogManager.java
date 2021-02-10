@@ -240,7 +240,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         }
 
         result.add(0, UiOptionItem.from(
-                context.getString(R.string.preset_disabled),
+                context.getString(R.string.video_preset_disabled),
                 optionItem -> {
                     playerData.setFormat(null);
                     onFormatSelected.run();
