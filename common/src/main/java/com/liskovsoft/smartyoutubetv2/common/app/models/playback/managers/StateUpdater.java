@@ -361,9 +361,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void initFormats() {
-        mVideoFormat = Helpers.get(mPlayerData.getFormat(FormatItem.TYPE_VIDEO), FormatItem.VIDEO_HD_AVC_30);
-        mAudioFormat = Helpers.get(mPlayerData.getFormat(FormatItem.TYPE_AUDIO), FormatItem.AUDIO_HQ_MP4A);
-        mSubtitleFormat = Helpers.get(mPlayerData.getFormat(FormatItem.TYPE_SUBTITLE), null);
+        mVideoFormat = mPlayerData.getFormat(FormatItem.TYPE_VIDEO);
+        mAudioFormat = mPlayerData.getFormat(FormatItem.TYPE_AUDIO);
+        mSubtitleFormat = mPlayerData.getFormat(FormatItem.TYPE_SUBTITLE);
     }
 
     private static class State {

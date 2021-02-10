@@ -312,8 +312,8 @@ public class PlayerData {
         mIsRemainingTimeEnabled = Helpers.parseBoolean(split, 6, true);
         mBackgroundMode = Helpers.parseInt(split, 7, PlaybackEngineController.BACKGROUND_MODE_DEFAULT);
         // afrData was there
-        mVideoFormat = ExoFormatItem.from(Helpers.parseStr(split, 9));
-        mAudioFormat = ExoFormatItem.from(Helpers.parseStr(split, 10));
+        mVideoFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 9)), FormatItem.VIDEO_HD_AVC_30);
+        mAudioFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 10)), FormatItem.AUDIO_HQ_MP4A);
         mSubtitleFormat = ExoFormatItem.from(Helpers.parseStr(split, 11));
         mVideoBufferType = Helpers.parseInt(split, 12, PlaybackEngineController.BUFFER_LOW);
         mSubtitleStyleIndex = Helpers.parseInt(split, 13, 1);
