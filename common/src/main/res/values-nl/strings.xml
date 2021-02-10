@@ -192,4 +192,5 @@
     <string name="remote_session_closed">Remote sessie beëindigd</string>
     <string name="msg_mode_switch_error">Fout bij aanpassen naar \"%s\"</string>
     <string name="msg_player_error">Fout bij afspelen - opnieuw starten</string>
+    <string name="video_preset_disabled">Geen video preset</string>
 </resources>
