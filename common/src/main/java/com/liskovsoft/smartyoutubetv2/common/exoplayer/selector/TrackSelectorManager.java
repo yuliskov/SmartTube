@@ -439,6 +439,10 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 }
 
                 for (MediaTrack mediaTrack : trackGroup) {
+                    if (mediaTrack == null) {
+                        continue;
+                    }
+
                     int compare = track.inBounds(mediaTrack);
 
                     if (compare == 0) {
