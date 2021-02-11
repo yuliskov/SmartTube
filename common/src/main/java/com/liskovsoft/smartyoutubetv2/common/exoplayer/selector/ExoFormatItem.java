@@ -158,6 +158,11 @@ public class ExoFormatItem implements FormatItem {
     public static ExoFormatItem from(int type, int rendererIndex, String id, String codecs,
                                      int width, int height, float frameRate, String language, boolean isPreset) {
         MediaTrack mediaTrack = MediaTrack.forRendererIndex(rendererIndex);
+
+        if (mediaTrack == null) {
+            return null;
+        }
+
         mediaTrack.isPreset = isPreset;
 
         switch (type) {

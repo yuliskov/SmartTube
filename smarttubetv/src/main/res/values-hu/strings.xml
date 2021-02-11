@@ -1,4 +1,4 @@
-?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string translatable="false" name="app_name"><![CDATA[SmartTube Next]]></string>
     <string translatable="false" name="browse_title"><![CDATA[SmartTube Next]]></string>
@@ -18,7 +18,7 @@
     <string name="buy_2">akár\$9.99</string>
     <string name="queue_name">Várólista lejátszása</string>
 
-    <string name="search_results">Keresés eredménye \'%1$i\'</string>
+    <string name="search_results">Keresés eredménye \'%1$s\'</string>
     <string name="no_search_results">Nincs találat a következőre: \'%1$s\'</string>
     <string name="catalog_url">https://storage.googleapis.com/android-tv/android_tv_videos_new.json</string>
 
@@ -48,6 +48,7 @@
          Hablaty és sárkánya meghódítja az eget. Egyre magasabbra és messzebbre merészkednek, 
          és olyan tájakra jutnak, ahol nem járt még viking. Így fedezik fel a titkos jégbarlangot, 
          amelyben idomítatlan sárkányok tanyáznak..
+    </string>
     <string name="maleficent_title">Demóna</string>
     <string name="maleficent_description">Demóna megátkozza ellenfele újszülött kislányát, Csipkerózsikát.
          Miközben a lányka felcseperedik, Demóna rádöbben, hogy Csipkerózsika kezében
@@ -80,7 +81,7 @@
     <string name="mobile_welcome_description">Üdvözöljük a Leanback Sample alkalmazásban! Próbálja meg ezt megnyitni egy Android TV-n a nagyszerű élmény érdekében.</string>
 
     <!-- Strings related to onboarding -->
-    <string name="onboarding_title_welcome">Üdvözöljük a Leanback Sample-ban</</string>
+    <string name="onboarding_title_welcome">Üdvözöljük a Leanback Sample-ban</string>
     <string name="onboarding_title_design">Android TV -re tervezve</string>
     <string name="onboarding_title_simple">Egyszerű használat</string>
     <string name="onboarding_title_project">Nézd meg a  Sample Projectet</string>
@@ -96,7 +97,7 @@
     <string name="pref_title_screen_general">Általános beállítások</string>
     <string name="pref_key_screen_signin">Bejelentkezés</string>
     <string name="pref_title_screen_signin">Kérlek jelentkezz be</string>
-    <string name="pref_title_login_description">Írd be a felhasználónevedet és a jelszavadat./string>
+    <string name="pref_title_login_description">Írd be a felhasználónevedet és a jelszavadat.</string>
     <string name="pref_title_username">Felhasználónév</string>
     <string name="pref_title_password">Jelszó</string>
     <string name="pref_key_login">pref_login</string>
@@ -109,8 +110,8 @@
     <string name="title_no_videos">Nincsenek videók</string>
     <string name="message_try_again">Újrapróbálod?</string>
     <string name="message_check_again">Megnézed újra?</string>
-    <string name="text_search_results">Keresési találat %ok</string>
-    <string name="text_post_results_title">Bejegyzés %ek</string>
+    <string name="text_search_results">Keresési találat %s</string>
+    <string name="text_post_results_title">Bejegyzés %s</string>
     <string name="text_no_results">Nincs találat</string>
     <string name="error_message_network_needed">Hoppá, ehhez hálózati kapcsolatra van szüksége!</string>
 
@@ -123,9 +124,9 @@
     <string name="action_channel">Csatornák nyitása</string>
     <string name="action_playlist_add">Hozzáadás a lejátszási listához</string>
     <string name="action_video_stats">Video statisztika</string>
-    <string name="require_checked">Kell \"%enek\"</string>
+    <string name="require_checked">Kell \"%s\"</string>
     <string name="msg_press_again_to_exit">Nyomd újra a kilépéshez</string>
-    <string name="player_remaining_time">Hátralevő: %k</string>
+    <string name="player_remaining_time">Hátralevő: %s</string>
     <string name="badge_new_content">ÚJ TARTALOM</string>
     <string name="badge_live">ÉLŐ</string>
     <string name="action_pip">PIP INDÍTÁSA</string>
