@@ -193,4 +193,5 @@
     <string name="msg_mode_switch_error">Fout bij aanpassen naar \"%s\"</string>
     <string name="msg_player_error">Fout bij afspelen - opnieuw starten</string>
     <string name="video_preset_disabled">Geen video preset</string>
+    <string name="video_preset_enabled">Video kwaliteit van volgende video wordt ingesteld volgens je video preset</string>
 </resources>
