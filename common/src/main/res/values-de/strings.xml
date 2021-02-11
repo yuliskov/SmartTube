@@ -192,4 +192,6 @@
     <string name="remote_session_closed">Remote-Sitzung wurde beendet</string>
     <string name="msg_mode_switch_error">Anzeige kann nicht auf \"%s\" umgeschaltet werden</string>
     <string name="msg_player_error">Wiedergabefehler. Neu starten…</string>
+    <string name="video_preset_disabled">Ohne Video-Voreinstellung</string>
+    <string name="video_preset_enabled">Format des nächsten Videos wird gemäß der Video-Voreinstellung festgelegt</string>
 </resources>
