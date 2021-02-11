@@ -53,6 +53,10 @@ public class VideoTrack extends MediaTrack {
 
     @Override
     public int inBounds(MediaTrack track2) {
+        if (format == null) {
+            return -1;
+        }
+
         // Detect profile based on format id presence
         return format.id == null ? compare(track2, COMPARE_TYPE_IN_BOUNDS_PROFILE) : compare(track2, COMPARE_TYPE_IN_BOUNDS);
     }

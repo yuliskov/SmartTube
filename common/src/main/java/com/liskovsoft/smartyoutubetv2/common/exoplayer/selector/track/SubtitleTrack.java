@@ -18,7 +18,7 @@ public class SubtitleTrack extends MediaTrack {
             return -1;
         }
 
-        if (track2.format == null) {
+        if (track2 == null || track2.format == null) {
             return 1;
         }
 

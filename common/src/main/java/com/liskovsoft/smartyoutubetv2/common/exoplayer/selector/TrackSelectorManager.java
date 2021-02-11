@@ -431,14 +431,14 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 prevResult = result;
 
                 // Very rare NPE fix
-                if (renderer.mediaTracks[groupIndex] == null) {
+                MediaTrack[] trackGroup = renderer.mediaTracks[groupIndex];
+
+                if (trackGroup == null) {
                     Log.e(TAG, "Track selection error. Media track group %s is empty.", groupIndex);
                     continue;
                 }
 
-                for (int trackIndex = 0; trackIndex < renderer.mediaTracks[groupIndex].length; trackIndex++) {
-                    MediaTrack mediaTrack = renderer.mediaTracks[groupIndex][trackIndex];
-
+                for (MediaTrack mediaTrack : trackGroup) {
                     int compare = track.inBounds(mediaTrack);
 
                     if (compare == 0) {
