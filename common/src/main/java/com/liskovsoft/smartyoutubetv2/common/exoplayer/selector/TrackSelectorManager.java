@@ -199,8 +199,14 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         Renderer renderer = mRenderers[rendererIndex];
         renderer.selectedTrack = null;
         for (int groupIndex = 0; groupIndex < renderer.mediaTracks.length; groupIndex++) {
-            for (int trackIndex = 0; trackIndex < renderer.mediaTracks[groupIndex].length; trackIndex++) {
-                MediaTrack mediaTrack = renderer.mediaTracks[groupIndex][trackIndex];
+            MediaTrack[] trackGroup = renderer.mediaTracks[groupIndex];
+
+            if (trackGroup == null) {
+                continue;
+            }
+
+            for (int trackIndex = 0; trackIndex < trackGroup.length; trackIndex++) {
+                MediaTrack mediaTrack = trackGroup[trackIndex];
                 mediaTrack.isSelected = groupIndex == trackGroupIndex && Helpers.contains(trackIndexes, trackIndex);
 
                 if (mediaTrack.isSelected) {
