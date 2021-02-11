@@ -4,7 +4,6 @@ import android.os.Handler;
 import android.os.Looper;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -14,6 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -82,7 +82,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public boolean onPreviousClicked() {
-        loadVideo(mPlaylist.previous());
+        openVideoInt(mPlaylist.previous());
 
         return true;
     }
@@ -92,9 +92,9 @@ public class VideoLoader extends PlayerEventListenerHelper {
         Video next = mPlaylist.next();
 
         if (next == null) {
-            loadVideoFromMetadata(getController().getVideo());
+            openVideoFromNext(getController().getVideo());
         } else {
-            loadVideo(next);
+            openVideoInt(next);
         }
 
         return true;
@@ -145,8 +145,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     @Override
     public void onSuggestionItemClicked(Video item) {
         if (item.isVideo()) {
-            mPlaylist.add(item);
-            loadVideo(item);
+            openVideoInt(item);
         } else if (item.isChannel()) {
             ChannelPresenter.instance(getActivity()).openChannel(item);
         } else {
@@ -193,20 +192,14 @@ public class VideoLoader extends PlayerEventListenerHelper {
         }
     }
 
-    private void loadVideoFromNext(MediaItem nextVideo) {
-        Video item = Video.from(nextVideo);
-        mPlaylist.add(item);
-        loadVideo(item);
-    }
-
-    private void loadVideoFromMetadata(Video current) {
+    private void openVideoFromNext(Video current) {
         if (current == null) {
             return;
         }
 
         // Significantly improves next video loading time!
         if (current.nextMediaItem != null) {
-            loadVideoFromNext(current.nextMediaItem);
+            openVideoInt(Video.from(current.nextMediaItem));
         } else {
             MessageHelpers.showMessageThrottled(getActivity(), R.string.next_video_info_is_not_loaded_yet);
         }
@@ -295,5 +288,9 @@ public class VideoLoader extends PlayerEventListenerHelper {
         mPrevErrorTimeMs = currentTimeMillis;
 
         return withinTimeWindow;
+    }
+
+    private void openVideoInt(Video video) {
+        PlaybackPresenter.instance(getActivity()).openVideo(video);
     }
 }

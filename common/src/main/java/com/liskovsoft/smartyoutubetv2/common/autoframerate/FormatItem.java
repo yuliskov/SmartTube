@@ -4,7 +4,8 @@ import androidx.annotation.NonNull;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 
 public interface FormatItem {
-    FormatItem EMPTY_VIDEO = ExoFormatItem.fromVideoData(-1, -1, -1);
+    FormatItem VIDEO_AUTO = ExoFormatItem.fromVideoData(-1, -1, -1);
+    FormatItem SUBTITLE_AUTO = ExoFormatItem.fromSubtitleData(null);
     FormatItem VIDEO_FHD_AVC_30 = ExoFormatItem.fromVideoData(ExoFormatItem.RESOLUTION_FHD, ExoFormatItem.FORMAT_AVC, ExoFormatItem.FPS_30);
     FormatItem VIDEO_HD_AVC_30 = ExoFormatItem.fromVideoData(ExoFormatItem.RESOLUTION_HD, ExoFormatItem.FORMAT_AVC, ExoFormatItem.FPS_30);
     FormatItem VIDEO_SD_AVC_30 = ExoFormatItem.fromVideoData(ExoFormatItem.RESOLUTION_SD, ExoFormatItem.FORMAT_AVC, ExoFormatItem.FPS_30);

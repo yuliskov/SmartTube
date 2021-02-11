@@ -59,6 +59,7 @@ public class ExoFormatItem implements FormatItem {
         videoFormatItem.mType = track.rendererIndex;
         videoFormatItem.mIsSelected = track.isSelected;
         videoFormatItem.mTrack = track;
+        videoFormatItem.mIsPreset = track.isPreset;
 
         return videoFormatItem;
     }
@@ -115,6 +116,7 @@ public class ExoFormatItem implements FormatItem {
         float frameRate = -1;
         String language = "";
         String id = "";
+        boolean isPreset = false;
 
         if (mTrack != null && mTrack.format != null) {
             id = mTrack.format.id;
@@ -124,9 +126,10 @@ public class ExoFormatItem implements FormatItem {
             height = mTrack.format.height;
             frameRate = mTrack.format.frameRate;
             language = mTrack.format.language;
+            isPreset = mTrack.isPreset;
         }
 
-        return String.format("%s,%s,%s,%s,%s,%s,%s,%s", mType, rendererIndex, id, codecs, width, height, frameRate, language);
+        return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s", mType, rendererIndex, id, codecs, width, height, frameRate, language, isPreset);
     }
 
     @Override
@@ -152,8 +155,10 @@ public class ExoFormatItem implements FormatItem {
         return super.equals(obj);
     }
 
-    public static ExoFormatItem from(int type, int rendererIndex, String id, String codecs, int width, int height, float frameRate, String language) {
+    public static ExoFormatItem from(int type, int rendererIndex, String id, String codecs,
+                                     int width, int height, float frameRate, String language, boolean isPreset) {
         MediaTrack mediaTrack = MediaTrack.forRendererIndex(rendererIndex);
+        mediaTrack.isPreset = isPreset;
 
         switch (type) {
             case TYPE_VIDEO:
@@ -183,7 +188,7 @@ public class ExoFormatItem implements FormatItem {
 
         String[] split = spec.split(",");
 
-        if (split.length != 8) {
+        if (split.length != 9) {
             return null;
         }
 
@@ -195,8 +200,9 @@ public class ExoFormatItem implements FormatItem {
         int height = Helpers.parseInt(split[5]);
         float frameRate = Helpers.parseFloat(split[6]);
         String language = Helpers.parseStr(split[7]);
+        boolean isPreset = Helpers.parseBoolean(split[8]);
 
-        return from(type, rendererIndex, id, codecs, width, height, frameRate, language);
+        return from(type, rendererIndex, id, codecs, width, height, frameRate, language, isPreset);
     }
 
     /**
@@ -218,19 +224,7 @@ public class ExoFormatItem implements FormatItem {
         float frameRate = Helpers.parseFloat(split[2]);
         String codec = split[3];
 
-        ExoFormatItem formatItem = from(
-                TYPE_VIDEO,
-                TrackSelectorManager.RENDERER_INDEX_VIDEO,
-                null,
-                codec,
-                width,
-                height,
-                frameRate,
-                null);
-
-        formatItem.mIsPreset = true;
-
-        return formatItem;
+        return from(TYPE_VIDEO, TrackSelectorManager.RENDERER_INDEX_VIDEO, null, codec, width, height, frameRate,null,true);
     }
 
     public static FormatItem fromVideoData(int resolution, int format, int frameRate) {
@@ -239,8 +233,8 @@ public class ExoFormatItem implements FormatItem {
         formatItem.mTrack = mediaTrack;
         formatItem.mType = TYPE_VIDEO;
 
-        int width = -1;
-        int height = -1;
+        int width = Integer.MAX_VALUE;
+        int height = Integer.MAX_VALUE;
         String codec = null;
         int fps = 30;
 

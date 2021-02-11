@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 import android.content.Context;
 import android.os.Build;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -90,7 +91,14 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     }
 
     private void selectFormatOption(OptionItem option) {
-        getController().setFormat(UiOptionItem.toFormat(option));
+        FormatItem formatItem = UiOptionItem.toFormat(option);
+        getController().setFormat(formatItem);
+
+        if (mPlayerData.getFormat(formatItem.getType()).isPreset()) {
+            // Preset currently active. Show warning about format reset.
+            MessageHelpers.showMessage(getActivity(), R.string.video_preset_enabled);
+        }
+
         if (getController().hasNoMedia()) {
             getController().reloadPlayback();
         }
@@ -242,7 +250,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         result.add(0, UiOptionItem.from(
                 context.getString(R.string.video_preset_disabled),
                 optionItem -> {
-                    playerData.setFormat(FormatItem.EMPTY_VIDEO);
+                    playerData.setFormat(FormatItem.VIDEO_AUTO);
                     onFormatSelected.run();
                 },
                 !isPresetSelection));

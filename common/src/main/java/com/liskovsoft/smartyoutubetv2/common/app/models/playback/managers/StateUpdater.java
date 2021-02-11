@@ -54,14 +54,20 @@ public class StateUpdater extends PlayerEventListenerHelper {
         setPlaying(true); // video just added
 
         mLastVideo = null;
+        mTempVideoFormat = null;
 
         resetStateIfNeeded(item); // reset position of music videos
 
         // Ensure that we aren't running on presenter init stage
-        if (getController() != null && getController().getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND) {
-            // In background mode some event not called.
-            // So, for proper state persistence, we need to save state here.
-            saveState();
+        if (getController() != null) {
+            if (getController().getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND) {
+                // In background mode some event not called.
+                // So, for proper state persistence, we need to save state here.
+                saveState();
+            }
+
+            // Restore format according to profile on every new video
+            restoreVideoFormat();
         }
     }
 
@@ -148,7 +154,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
             if (track.getType() == FormatItem.TYPE_VIDEO) {
                 if (mPlayerData.getFormat(FormatItem.TYPE_VIDEO).isPreset()) {
                     mTempVideoFormat = track;
-                    MessageHelpers.showMessage(getActivity(), R.string.video_preset_enabled);
                 } else {
                     mTempVideoFormat = null;
                     mPlayerData.setFormat(track);

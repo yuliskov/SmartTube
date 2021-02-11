@@ -43,15 +43,21 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
      * Opens video item from browser, search or channel views
      */
     public void openVideo(String videoId) {
-        if (videoId != null) {
-            openVideo(Video.from(videoId));
+        if (videoId == null) {
+            return;
         }
+
+        openVideo(Video.from(videoId));
     }
 
     /**
      * Opens video item from browser, search or channel views
      */
     public void openVideo(Video item) {
+        if (item == null) {
+            return;
+        }
+
         mMainPlayerEventBridge.openVideo(item);
 
         focusView();
