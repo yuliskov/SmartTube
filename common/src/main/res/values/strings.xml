@@ -193,5 +193,5 @@
     <string name="msg_mode_switch_error">Can\'t switch display mode to \"%s\"</string>
     <string name="msg_player_error">Player error occurred. Restarting playback…</string>
     <string name="video_preset_disabled">Without preset</string>
-    <string name="video_preset_enabled">Next video format will be set according to preset</string>
+    <string name="video_preset_enabled">Format of the next video will be set according to preset</string>
 </resources>
