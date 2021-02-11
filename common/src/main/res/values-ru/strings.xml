@@ -192,4 +192,5 @@
     <string name="msg_mode_switch_error">Невозможно переключить дисплей в режим \"%s\"</string>
     <string name="msg_player_error">В плеере возникла ошибка. Перезапускаю воспроизведение…</string>
     <string name="video_preset_disabled">Без профиля</string>
+    <string name="video_preset_enabled">Формат следующего видео будет установлен в соответствии с профилем</string>
 </resources>

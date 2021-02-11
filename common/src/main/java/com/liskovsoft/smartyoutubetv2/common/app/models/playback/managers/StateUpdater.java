@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -24,9 +26,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
     private static final int MAX_PERSISTENT_STATE_SIZE = 30;
     private boolean mIsPlaying;
-    private FormatItem mVideoFormat;
-    private FormatItem mAudioFormat;
-    private FormatItem mSubtitleFormat;
+    private FormatItem mTempVideoFormat;
     // Don't store state inside Video object.
     // As one video might correspond to multiple Video objects.
     private final Map<String, State> mStates = Utils.createLRUMap(MAX_PERSISTENT_STATE_SIZE);
@@ -100,7 +100,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
     public void onEngineInitialized() {
         // Fragment might be destroyed by system at this point.
         // So, to be sure, repeat format selection.
-        initFormats();
         restoreVideoFormat();
         restoreAudioFormat();
         restoreSubtitleFormat();
@@ -145,16 +144,18 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onTrackSelected(FormatItem track) {
-        if (track.getType() == FormatItem.TYPE_VIDEO && !getController().isInPIPMode()) {
-            mVideoFormat = track;
-        } else if (track.getType() == FormatItem.TYPE_AUDIO) {
-            mAudioFormat = track;
-        } else if (track.getType() == FormatItem.TYPE_SUBTITLE) {
-            mSubtitleFormat = track;
-        }
-
         if (!getController().isInPIPMode()) {
-            mPlayerData.setFormat(track);
+            if (track.getType() == FormatItem.TYPE_VIDEO) {
+                if (mPlayerData.getFormat(FormatItem.TYPE_VIDEO).isPreset()) {
+                    mTempVideoFormat = track;
+                    MessageHelpers.showMessage(getActivity(), R.string.video_preset_enabled);
+                } else {
+                    mTempVideoFormat = null;
+                    mPlayerData.setFormat(track);
+                }
+            } else {
+                mPlayerData.setFormat(track);
+            }
         }
     }
 
@@ -231,21 +232,21 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private void restoreVideoFormat() {
         if (getController().isInPIPMode()) {
             getController().setFormat(FormatItem.VIDEO_SD_AVC_30);
-        } else if (mVideoFormat != null) {
-            getController().setFormat(mVideoFormat);
+        } else {
+            if (mTempVideoFormat != null) {
+                getController().setFormat(mTempVideoFormat);
+            } else {
+                getController().setFormat(mPlayerData.getFormat(FormatItem.TYPE_VIDEO));
+            }
         }
     }
 
     private void restoreAudioFormat() {
-        if (mAudioFormat != null) {
-            getController().setFormat(mAudioFormat);
-        }
+        getController().setFormat(mPlayerData.getFormat(FormatItem.TYPE_AUDIO));
     }
 
     private void restoreSubtitleFormat() {
-        if (mSubtitleFormat != null) {
-            getController().setFormat(mSubtitleFormat);
-        }
+        getController().setFormat(mPlayerData.getFormat(FormatItem.TYPE_SUBTITLE));
     }
 
     private void saveState() {
@@ -323,10 +324,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
         return newPositionMs;
     }
 
-    public FormatItem getVideoFormat() {
-        return mVideoFormat;
-    }
-
     public void blockPlay(boolean block) {
         mIsPlayBlocked = block;
     }
@@ -358,12 +355,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
         }
 
         mHistoryAction = RxUtils.execute(historyObservable);
-    }
-
-    private void initFormats() {
-        mVideoFormat = mPlayerData.getFormat(FormatItem.TYPE_VIDEO);
-        mAudioFormat = mPlayerData.getFormat(FormatItem.TYPE_AUDIO);
-        mSubtitleFormat = mPlayerData.getFormat(FormatItem.TYPE_SUBTITLE);
     }
 
     private static class State {

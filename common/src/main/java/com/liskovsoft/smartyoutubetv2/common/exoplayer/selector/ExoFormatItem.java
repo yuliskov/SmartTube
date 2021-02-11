@@ -33,6 +33,7 @@ public class ExoFormatItem implements FormatItem {
     private String mCodecs;
     private String mLanguage;
     private String mFormatId;
+    private boolean mIsPreset;
 
     public static List<FormatItem> from(Set<MediaTrack> mediaTracks) {
         if (mediaTracks == null) {
@@ -48,7 +49,7 @@ public class ExoFormatItem implements FormatItem {
         return formats;
     }
 
-    public static FormatItem from(MediaTrack track) {
+    public static ExoFormatItem from(MediaTrack track) {
         if (track == null) {
             return null;
         }
@@ -151,7 +152,7 @@ public class ExoFormatItem implements FormatItem {
         return super.equals(obj);
     }
 
-    public static FormatItem from(int type, int rendererIndex, String id, String codecs, int width, int height, float frameRate, String language) {
+    public static ExoFormatItem from(int type, int rendererIndex, String id, String codecs, int width, int height, float frameRate, String language) {
         MediaTrack mediaTrack = MediaTrack.forRendererIndex(rendererIndex);
 
         switch (type) {
@@ -175,7 +176,7 @@ public class ExoFormatItem implements FormatItem {
         return from(mediaTrack);
     }
 
-    public static FormatItem from(String spec) {
+    public static ExoFormatItem from(String spec) {
         if (spec == null) {
             return null;
         }
@@ -201,7 +202,7 @@ public class ExoFormatItem implements FormatItem {
     /**
      * "2560,1440,30,vp9"
      */
-    public static FormatItem fromVideoPreset(String spec) {
+    public static ExoFormatItem fromVideoPreset(String spec) {
         if (spec == null) {
             return null;
         }
@@ -217,7 +218,19 @@ public class ExoFormatItem implements FormatItem {
         float frameRate = Helpers.parseFloat(split[2]);
         String codec = split[3];
 
-        return from(TYPE_VIDEO, TrackSelectorManager.RENDERER_INDEX_VIDEO, null, codec, width, height, frameRate, null);
+        ExoFormatItem formatItem = from(
+                TYPE_VIDEO,
+                TrackSelectorManager.RENDERER_INDEX_VIDEO,
+                null,
+                codec,
+                width,
+                height,
+                frameRate,
+                null);
+
+        formatItem.mIsPreset = true;
+
+        return formatItem;
     }
 
     public static FormatItem fromVideoData(int resolution, int format, int frameRate) {
@@ -269,7 +282,7 @@ public class ExoFormatItem implements FormatItem {
         return formatItem;
     }
 
-    public static FormatItem fromAudioData(int format) {
+    public static ExoFormatItem fromAudioData(int format) {
         ExoFormatItem formatItem = new ExoFormatItem();
         MediaTrack mediaTrack = MediaTrack.forRendererIndex(TrackSelectorManager.RENDERER_INDEX_AUDIO);
         formatItem.mTrack = mediaTrack;
@@ -351,6 +364,6 @@ public class ExoFormatItem implements FormatItem {
 
     @Override
     public boolean isPreset() {
-        return mFormatId == null;
+        return mIsPreset;
     }
 }
