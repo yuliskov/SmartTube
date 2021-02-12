@@ -80,14 +80,14 @@ public class Utils {
         return Uri.parse(url);
     }
 
-    private static boolean isAppInForeground() {
+    public static boolean isAppInForeground() {
         ActivityManager.RunningAppProcessInfo appProcessInfo = new ActivityManager.RunningAppProcessInfo();
         ActivityManager.getMyMemoryState(appProcessInfo);
         return (appProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND ||
                 appProcessInfo.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE);
     }
 
-    private static boolean isPlayerInForeground(Context context) {
+    public static boolean isPlayerInForeground(Context context) {
         if (context == null) {
             return false;
         }
