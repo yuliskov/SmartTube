@@ -173,12 +173,12 @@
     <string name="settings_video">Video</string>
     <string name="content_block_confirm_skip">Überspringen bestätigen</string>
     <string name="content_block_categories">Kategorien</string>
-    <string name="content_block_sponsor">Gesponserte Videosegmente</string>
-    <string name="content_block_intro">Unterbrechung/Intro-Animation</string>
-    <string name="content_block_outro">Abspann/Outro</string>
+    <string name="content_block_sponsor">Sponsor/Bezahlte Werbung</string>
+    <string name="content_block_intro">Intro/Unterbrechung</string>
+    <string name="content_block_outro">Outro/Abspann</string>
     <string name="content_block_interaction">Interaktionserinnerung (Abo)</string>
-    <string name="content_block_self_promo">Unbezahlt/Eigenwerbung</string>
-    <string name="content_block_music_off_topic">Musik: Segmente ohne Musik</string>
+    <string name="content_block_self_promo">Eigenwerbung</string>
+    <string name="content_block_music_off_topic">Musikvideo: Intro/Outro</string>
     <string name="confirm_segment_skip">Segment \"%s\" überspringen?</string>
     <string name="msg_skipping_segment">Segment \"%s\" überspringen…</string>
     <string name="content_block_notification_type">Benachrichtigungstyp</string>
@@ -192,6 +192,6 @@
     <string name="remote_session_closed">Remote-Sitzung wurde beendet</string>
     <string name="msg_mode_switch_error">Anzeige kann nicht auf \"%s\" umgeschaltet werden</string>
     <string name="msg_player_error">Wiedergabefehler. Neu starten…</string>
-    <string name="video_preset_disabled">Ohne Video-Voreinstellung</string>
+    <string name="video_preset_disabled">Keine Voreinstellung</string>
     <string name="video_preset_enabled">Format des nächsten Videos wird gemäß der Video-Voreinstellung festgelegt</string>
 </resources>
