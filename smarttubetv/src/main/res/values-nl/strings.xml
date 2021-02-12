@@ -13,7 +13,7 @@
     <string name="player_remaining_time">%s</string>
     <string name="badge_new_content">NIEUW</string>
     <string name="badge_live">LIVE</string>
-    <string name="action_pip">Beeld-in-beeld</string>
+    <string name="action_pip">Scherm-in-scherm</string>
     <string name="add_device_view_description">Apparaat toevoegen in je YouTube app op je smartphone/tablet:\ndeze code invoeren onder Instellingen > Op TV bekijken > TV-code invoeren</string>
     <string name="playback_controls_repeat_pause">Pauze herhalen</string>
     <string name="playback_controls_repeat_list">Playlist herhalen</string>
