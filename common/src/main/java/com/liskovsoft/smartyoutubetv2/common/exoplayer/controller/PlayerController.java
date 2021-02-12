@@ -22,6 +22,7 @@ public interface PlayerController {
     void setPositionMs(long positionMs);
     long getLengthMs();
     void setPlay(boolean isPlaying);
+    boolean getPlay();
     boolean isPlaying();
     void release();
     void setPlayer(ExoPlayer player);

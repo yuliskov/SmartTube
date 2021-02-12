@@ -4,9 +4,7 @@ import androidx.annotation.NonNull;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -25,7 +23,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private static final String TAG = StateUpdater.class.getSimpleName();
     private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
     private static final int MAX_PERSISTENT_STATE_SIZE = 30;
-    private boolean mIsPlaying;
+    private boolean mIsPlayEnabled;
     private FormatItem mTempVideoFormat;
     // Don't store state inside Video object.
     // As one video might correspond to multiple Video objects.
@@ -51,7 +49,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
      */
     @Override
     public void openVideo(Video item) {
-        setPlaying(true); // video just added
+        setPlayEnabled(true); // video just added
 
         mLastVideo = null;
         mTempVideoFormat = null;
@@ -86,7 +84,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public boolean onNextClicked() {
-        setPlaying(true);
+        setPlayEnabled(true);
 
         saveState();
 
@@ -97,7 +95,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onSuggestionItemClicked(Video item) {
-        setPlaying(true); // autoplay video from suggestions
+        setPlayEnabled(true); // autoplay video from suggestions
 
         saveState();
     }
@@ -111,7 +109,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         restoreSubtitleFormat();
 
         // Show user info instead of black screen.
-        if (!getPlaying()) {
+        if (!getPlayEnabled()) {
             getController().showControls(true);
         }
     }
@@ -119,7 +117,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     @Override
     public void onEngineReleased() {
         // Save previous state
-        setPlaying(getController().isPlaying());
+        setPlayEnabled(getController().getPlay());
 
         saveState();
     }
@@ -138,13 +136,13 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onPlay() {
-        setPlaying(true);
+        setPlayEnabled(true);
         Helpers.disableScreensaver(getActivity());
     }
 
     @Override
     public void onPause() {
-        setPlaying(false);
+        setPlayEnabled(false);
         Helpers.enableScreensaver(getActivity());
     }
 
@@ -261,7 +259,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
             // Don't save position if track is ended.
             // Skip if paused.
             boolean isVideoEnded = Math.abs(getController().getLengthMs() - getController().getPositionMs()) < 1_000;
-            if (!isVideoEnded || !getPlaying()) {
+            if (!isVideoEnded || !getPlayEnabled()) {
                 mStates.put(video.videoId, new State(video.videoId, getController().getPositionMs(), getController().getLengthMs(), getController().getSpeed()));
             } else {
                 // Add null state to prevent restore position from history
@@ -289,13 +287,13 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
         if (state != null && !item.isLive) {
             boolean isVideoEnded = Math.abs(getController().getLengthMs() - state.positionMs) < 1_000;
-            if (!isVideoEnded || !getPlaying()) {
+            if (!isVideoEnded || !getPlayEnabled()) {
                 getController().setPositionMs(state.positionMs);
             }
         }
 
         if (!mIsPlayBlocked) {
-            getController().setPlay(getPlaying());
+            getController().setPlay(getPlayEnabled());
         }
     }
 
@@ -333,13 +331,13 @@ public class StateUpdater extends PlayerEventListenerHelper {
         mIsPlayBlocked = block;
     }
 
-    private void setPlaying(boolean isPlaying) {
-        Log.d(TAG, "setPlaying %s", isPlaying);
-        mIsPlaying = isPlaying;
+    private void setPlayEnabled(boolean isPlayEnabled) {
+        Log.d(TAG, "setPlayEnabled %s", isPlayEnabled);
+        mIsPlayEnabled = isPlayEnabled;
     }
 
-    private boolean getPlaying() {
-        return mIsPlaying;
+    private boolean getPlayEnabled() {
+        return mIsPlayEnabled;
     }
 
     private void updateHistory() {

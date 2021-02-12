@@ -32,6 +32,7 @@ public interface PlaybackEngineController {
     void setPositionMs(long positionMs);
     long getLengthMs();
     void setPlay(boolean play);
+    boolean getPlay();
     boolean isPlaying();
     List<FormatItem> getVideoFormats();
     List<FormatItem> getAudioFormats();

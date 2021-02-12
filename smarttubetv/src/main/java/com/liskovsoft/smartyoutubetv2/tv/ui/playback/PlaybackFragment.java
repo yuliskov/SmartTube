@@ -622,6 +622,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
+    public boolean getPlay() {
+        return mExoPlayerController.getPlay();
+    }
+
+    @Override
     public boolean isPlaying() {
         return mExoPlayerController.isPlaying();
     }

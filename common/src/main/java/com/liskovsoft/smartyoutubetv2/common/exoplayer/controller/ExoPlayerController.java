@@ -121,12 +121,21 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     @Override
-    public boolean isPlaying() {
+    public boolean getPlay() {
         if (mPlayer == null) {
             return false;
         }
 
         return mPlayer.getPlayWhenReady();
+    }
+
+    @Override
+    public boolean isPlaying() {
+        if (mPlayer == null) {
+            return false;
+        }
+
+        return mPlayer.isPlaying();
     }
 
     @Override

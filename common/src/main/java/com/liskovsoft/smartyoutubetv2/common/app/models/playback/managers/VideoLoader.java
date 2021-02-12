@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -70,14 +71,18 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onEngineError(int type) {
-        if (isWithinTimeWindow()) {
-            Log.e(TAG, "Player error occurred. Restarting engine once…");
-            MessageHelpers.showMessage(getActivity(), R.string.msg_player_error);
-            YouTubeMediaService.instance().invalidateCache(); // some data might be stalled
-            getController().reloadPlayback(); // re-download video data
+        Log.e(TAG, "Player error occurred: %s. Trying to fix…", type);
+
+        if (type == PlayerEventListener.ERROR_TYPE_SOURCE) {
+            // Some ciphered data might be stalled.
+            // Might happen when the app wasn't used quite a long time.
+            YouTubeMediaService.instance().invalidateCache();
+            loadVideo(mLastVideo);
         } else {
-            getController().showControls(true);
+            MessageHelpers.showMessage(getActivity(), R.string.msg_player_error);
         }
+
+        getController().showControls(true);
     }
 
     @Override

@@ -101,7 +101,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
                     // NOP
                     break;
                 case PlayerData.ONLY_PAUSE:
-                    getController().setPlay(!getController().isPlaying());
+                    getController().setPlay(!getController().getPlay());
                     return true; // don't show ui
             }
         } else if (KeyHelpers.isStopKey(keyCode)) {
