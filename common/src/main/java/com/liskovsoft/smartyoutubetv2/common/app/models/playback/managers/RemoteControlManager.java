@@ -230,6 +230,8 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     private void openNewVideo(Video newVideo) {
         if (Video.equals(mVideo, newVideo) && Utils.isPlayerInForeground(getActivity())) { // same video already playing
             mVideo.isRemote = true;
+            mVideo.playlistId = newVideo.playlistId;
+            mVideo.playlistIndex = newVideo.playlistIndex;
             postStartPlaying(mVideo, getController().isPlaying());
         } else if (newVideo != null) {
             newVideo.isRemote = true;
