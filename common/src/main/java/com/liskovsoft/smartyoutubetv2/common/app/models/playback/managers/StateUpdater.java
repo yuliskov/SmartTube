@@ -58,11 +58,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
         // Ensure that we aren't running on presenter init stage
         if (getController() != null) {
-            if (getController().getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND) {
-                // In background mode some event not called.
-                // So, for proper state persistence, we need to save state here.
-                saveState();
-            }
+            // In case video opened from phone and other stuff
+            saveState();
 
             // Restore format according to profile on every new video
             restoreVideoFormat();
