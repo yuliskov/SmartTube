@@ -254,6 +254,10 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     private void notifyOnVideoLoad() {
+        if (mVideo == null) {
+            return;
+        }
+
         if (mOnSourceChanged) {
             mOnSourceChanged = false;
             mEventListener.onVideoLoaded(mVideo);
