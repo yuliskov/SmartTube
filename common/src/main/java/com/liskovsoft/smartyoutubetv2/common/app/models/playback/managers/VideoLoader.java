@@ -74,7 +74,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
         Log.e(TAG, "Player error occurred: %s. Trying to fix…", type);
 
         if (type == PlayerEventListener.ERROR_TYPE_SOURCE ||
-            type == PlayerEventListener.ERROR_TYPE_RENDERER) {
+            type == PlayerEventListener.ERROR_TYPE_RENDERER ||
+            type == PlayerEventListener.ERROR_TYPE_REMOTE) {
             // Some ciphered data might be stalled.
             // Might happen when the app wasn't used quite a long time.
             YouTubeMediaService.instance().invalidateCache();
