@@ -27,7 +27,7 @@
     <string name="category_background_playback">Afspelen op achtergrond</string>
     <string name="not_implemented">Niet geïmplementeerd</string>
     <string name="option_background_playback_off">Uit</string>
-    <string name="option_background_playback_pip">Beeld-in-beeld</string>
+    <string name="option_background_playback_pip">Scherm-in-scherm</string>
     <string name="option_background_playback_only_audio">Enkel audio</string>
     <string name="playback_settings">HQ instellingen</string>
     <string name="video_speed">Video snelheid</string>
