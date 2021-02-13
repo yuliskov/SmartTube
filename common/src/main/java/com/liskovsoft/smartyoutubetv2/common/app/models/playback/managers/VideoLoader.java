@@ -33,6 +33,11 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private final Runnable mReloadVideoHandler = () -> loadVideo(mLastVideo);
     private long mPrevErrorTimeMs;
     private PlayerData mPlayerData;
+    private final Runnable mPendingNext = () -> {
+        if (getController() != null) {
+            openVideoFromNext(getController().getVideo(), false);
+        }
+    };
 
     public VideoLoader(SuggestionsLoader suggestionsLoader) {
         mSuggestionsLoader = suggestionsLoader;
@@ -99,7 +104,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         Video next = mPlaylist.next();
 
         if (next == null) {
-            openVideoFromNext(getController().getVideo());
+            openVideoFromNext(getController().getVideo(), true);
         } else {
             openVideoInt(next);
         }
@@ -152,13 +157,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onSuggestionItemClicked(Video item) {
-        if (item.isVideo()) {
-            openVideoInt(item);
-        } else if (item.isChannel()) {
-            ChannelPresenter.instance(getActivity()).openChannel(item);
-        } else {
-            Log.e(TAG, "Video item doesn't contain needed data!");
-        }
+        openVideoInt(item);
     }
 
     @Override
@@ -200,7 +199,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         }
     }
 
-    private void openVideoFromNext(Video current) {
+    private void openVideoFromNext(Video current, boolean showErrorMsg) {
         if (current == null) {
             return;
         }
@@ -209,7 +208,10 @@ public class VideoLoader extends PlayerEventListenerHelper {
         if (current.nextMediaItem != null) {
             openVideoInt(Video.from(current.nextMediaItem));
         } else {
-            MessageHelpers.showMessageThrottled(getActivity(), R.string.next_video_info_is_not_loaded_yet);
+            if (showErrorMsg) {
+                MessageHelpers.showMessageThrottled(getActivity(), R.string.next_video_info_is_not_loaded_yet);
+            }
+            startPendingNext();
         }
     }
 
@@ -298,7 +300,29 @@ public class VideoLoader extends PlayerEventListenerHelper {
         return withinTimeWindow;
     }
 
-    private void openVideoInt(Video video) {
-        PlaybackPresenter.instance(getActivity()).openVideo(video);
+    private void openVideoInt(Video item) {
+        stopPendingNext();
+
+        if (item == null) {
+            return;
+        }
+
+        if (item.isVideo()) {
+            getController().showControls(true);
+            PlaybackPresenter.instance(getActivity()).openVideo(item);
+        } else if (item.isChannel()) {
+            ChannelPresenter.instance(getActivity()).openChannel(item);
+        } else {
+            Log.e(TAG, "Video item doesn't contain needed data!");
+        }
+    }
+
+    private void stopPendingNext() {
+        mHandler.removeCallbacks(mPendingNext);
+    }
+
+    private void startPendingNext() {
+        mHandler.removeCallbacks(mPendingNext);
+        mHandler.postDelayed(mPendingNext, 1_000);
     }
 }
