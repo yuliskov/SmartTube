@@ -199,7 +199,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         }
     }
 
-    private void openVideoFromNext(Video current, boolean showErrorMsg) {
+    private void openVideoFromNext(Video current, boolean showLoadingMsg) {
         if (current == null) {
             return;
         }
@@ -208,8 +208,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
         if (current.nextMediaItem != null) {
             openVideoInt(Video.from(current.nextMediaItem));
         } else {
-            if (showErrorMsg) {
-                MessageHelpers.showMessageThrottled(getActivity(), R.string.next_video_info_is_not_loaded_yet);
+            if (showLoadingMsg) {
+                MessageHelpers.showMessageThrottled(getActivity(), R.string.wait_data_loading);
             }
             startPendingNext();
         }
