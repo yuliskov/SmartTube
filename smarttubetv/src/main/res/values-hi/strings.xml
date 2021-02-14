@@ -123,7 +123,7 @@
     <string name="action_channel">ओपन चैनल</string>
     <string name="action_playlist_add">प्लेलिस्ट में जोड़ें</string>
     <string name="action_video_stats">वीडियो आँकड़े</string>
-    <string name="require_checked">+ की जरूरत होती% 5C% 22 %s% 5C% 22</string>
+    <string name="require_checked">+ की जरूरत होती \"%s\"</string>
     <string name="msg_press_again_to_exit">बाहर निकलने के लिए फिर से दबाएँ</string>
     <string name="player_remaining_time">शेष: + %s</string>
     <string name="badge_new_content">नई सामग्री</string>

@@ -123,7 +123,7 @@
     <string name="action_channel">Բացել ալիքը</string>
     <string name="action_playlist_add">Ավելացնել երգացանկին</string>
     <string name="action_video_stats">Տեսանյութեր</string>
-    <string name="require_checked">Պահանջում է +% 5C% 22 %s% 5C% 22</string>
+    <string name="require_checked">Պահանջում է \"%s\"</string>
     <string name="msg_press_again_to_exit">Կրկին սեղմեք ՝ դուրս գալու համար</string>
     <string name="player_remaining_time">Մնացածը ՝ + %s</string>
     <string name="badge_new_content">ՆՈՐ ԲՈՎԱՆԴԱԿՈՒԹՅՈՒՆ</string>

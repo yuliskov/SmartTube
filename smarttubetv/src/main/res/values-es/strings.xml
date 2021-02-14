@@ -8,7 +8,7 @@
     <string name="action_channel">Canal abierto</string>
     <string name="action_playlist_add">Agregar a la lista de reproducción</string>
     <string name="action_video_stats">Video Stats</string>
-    <string name="require_checked">Requiere \" %s \"</string>
+    <string name="require_checked">Requiere \"%s\"</string>
     <string name="msg_press_again_to_exit">Presione nuevamente para salir</string>
     <string name="player_remaining_time">Finalizando: %s</string>
 </resources>

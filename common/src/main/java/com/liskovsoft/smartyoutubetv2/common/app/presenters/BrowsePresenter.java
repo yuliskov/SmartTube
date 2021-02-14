@@ -372,7 +372,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                         continueMediaGroup -> getView().updateCategory(VideoGroup.from(continueMediaGroup, group.getCategory())),
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
-                            getView().showProgressBar(false);
+                            if (getView() != null) {
+                                getView().showProgressBar(false);
+                            }
                         },
                         () -> getView().showProgressBar(false)
                 );

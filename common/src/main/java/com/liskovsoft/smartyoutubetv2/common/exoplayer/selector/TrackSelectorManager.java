@@ -207,6 +207,11 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
             for (int trackIndex = 0; trackIndex < trackGroup.length; trackIndex++) {
                 MediaTrack mediaTrack = trackGroup[trackIndex];
+
+                if (mediaTrack == null) {
+                    continue;
+                }
+
                 mediaTrack.isSelected = groupIndex == trackGroupIndex && Helpers.contains(trackIndexes, trackIndex);
 
                 if (mediaTrack.isSelected) {
