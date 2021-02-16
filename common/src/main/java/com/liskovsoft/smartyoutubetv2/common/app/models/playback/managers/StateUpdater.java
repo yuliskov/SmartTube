@@ -7,7 +7,6 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -32,8 +31,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private Disposable mHistoryAction;
     private PlayerData mPlayerData;
     private boolean mIsPlayBlocked;
-    private Video mLastVideo;
-    private boolean mIsVideoChanged;
 
     @Override
     public void onInitDone() {
@@ -50,15 +47,16 @@ public class StateUpdater extends PlayerEventListenerHelper {
     @Override
     public void openVideo(Video item) {
         setPlayEnabled(true); // video just added
-
-        mLastVideo = null;
+        
         mTempVideoFormat = null;
 
         resetStateIfNeeded(item); // reset position of music videos
+        resetSpeedIfNeeded();
 
         // Ensure that we aren't running on presenter init stage
         if (getController() != null) {
-            // In case video opened from phone and other stuff
+            // Save state of the previous video.
+            // In case video opened from phone and other stuff.
             saveState();
 
             // Restore format according to profile on every new video
@@ -121,9 +119,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onVideoLoaded(Video item) {
-        mIsVideoChanged = mLastVideo != item;
-        mLastVideo = item;
-
         // In this state video length is not undefined.
         restorePosition(item);
         restoreSpeed(item);
@@ -295,8 +290,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void restoreSpeed(Video item) {
-        resetSpeedIfNeeded();
-
         boolean isLive = getController().getLengthMs() - getController().getPositionMs() < 30_000;
 
         if (isLive) {
@@ -307,7 +300,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void resetSpeedIfNeeded() {
-        if (mIsVideoChanged && !mPlayerData.isRememberSpeedEnabled()) {
+        if (mPlayerData != null && !mPlayerData.isRememberSpeedEnabled()) {
             mPlayerData.setSpeed(1.0f);
         }
     }

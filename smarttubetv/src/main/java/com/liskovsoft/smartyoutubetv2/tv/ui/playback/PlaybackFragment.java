@@ -202,8 +202,10 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
                 releasePlayer();
             }
 
+            // Bug: history not updated on Android 6.0.1
+            // Remote control fix
             // Assuming that user wants to close the player
-            setVideo(null);
+            // setVideo(null);
         }
     }
 
