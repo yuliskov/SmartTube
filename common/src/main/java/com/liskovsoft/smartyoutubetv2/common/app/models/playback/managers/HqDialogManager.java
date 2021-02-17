@@ -240,22 +240,13 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
         for (VideoPreset preset : presets) {
             result.add(0, UiOptionItem.from(preset.name,
-                    option -> {
-                        if (playerData.isLowQualityEnabled()) {
-                            playerData.enableLowQuality(false);
-                        }
-                        playerData.setFormat(preset.format);
-                        onFormatSelected.run();
-                    },
+                    option -> setFormat(preset.format, playerData, onFormatSelected),
                     isPresetSelection && preset.format.equals(selectedFormat)));
         }
 
         result.add(0, UiOptionItem.from(
                 context.getString(R.string.video_preset_disabled),
-                optionItem -> {
-                    playerData.setFormat(FormatItem.VIDEO_AUTO);
-                    onFormatSelected.run();
-                },
+                optionItem -> setFormat(FormatItem.VIDEO_AUTO, playerData, onFormatSelected),
                 !isPresetSelection));
 
         return result;
@@ -263,6 +254,14 @@ public class HqDialogManager extends PlayerEventListenerHelper {
 
     public static OptionCategory createVideoBufferCategory(Context context, PlayerData playerData) {
         return createVideoBufferCategory(context, playerData, () -> {});
+    }
+
+    private static void setFormat(FormatItem formatItem, PlayerData playerData, Runnable onFormatSelected) {
+        if (playerData.isLowQualityEnabled()) {
+            playerData.enableLowQuality(false);
+        }
+        playerData.setFormat(formatItem);
+        onFormatSelected.run();
     }
 
     private static OptionCategory createVideoBufferCategory(Context context, PlayerData playerData, Runnable onBufferSelected) {
