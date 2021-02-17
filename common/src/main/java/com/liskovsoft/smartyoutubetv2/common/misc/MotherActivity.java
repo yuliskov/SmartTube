@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import androidx.annotation.Nullable;
@@ -15,25 +16,32 @@ public class MotherActivity extends FragmentActivity {
     private static final String TAG = MotherActivity.class.getSimpleName();
     private static final float DEFAULT_DENSITY = 2.0f; // xhdpi
     private static final float DEFAULT_WIDTH = 1920f; // xhdpi
+    private DisplayMetrics mCachedDisplayMetrics;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Log.d(TAG, "Starting %s...", this.getClass().getSimpleName());
-        
+
         forceDpi1();
         initTheme();
     }
 
     private void forceDpi1() {
-        float uiScale = MainUIData.instance(this).getUIScale();
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
-        displayMetrics.density = DEFAULT_DENSITY / widthRatio * uiScale;
-        displayMetrics.scaledDensity = DEFAULT_DENSITY / widthRatio * uiScale;
-        getResources().getDisplayMetrics().setTo(displayMetrics);
+        // Do caching to prevent sudden dpi change.
+        // Could happen when screen goes off or after PIP mode.
+        if (mCachedDisplayMetrics == null) {
+            float uiScale = MainUIData.instance(this).getUIScale();
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
+            displayMetrics.density = DEFAULT_DENSITY / widthRatio * uiScale;
+            displayMetrics.scaledDensity = DEFAULT_DENSITY / widthRatio * uiScale;
+            mCachedDisplayMetrics = displayMetrics;
+        }
+
+        getResources().getDisplayMetrics().setTo(mCachedDisplayMetrics);
     }
 
     private void forceDpi2() {
@@ -79,5 +87,14 @@ public class MotherActivity extends FragmentActivity {
         super.onResume();
 
         Helpers.makeActivityFullscreen(this);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Fix sudden dpi change.
+        // Could happen when screen goes off or after PIP mode.
+        forceDpi1();
     }
 }
