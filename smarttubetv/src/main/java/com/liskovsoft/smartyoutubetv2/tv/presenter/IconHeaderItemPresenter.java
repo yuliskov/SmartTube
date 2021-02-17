@@ -51,11 +51,15 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
         rootView.setFocusable(true);
 
         ImageView iconView = rootView.findViewById(R.id.header_icon);
-        Drawable icon = ContextCompat.getDrawable(rootView.getContext(), mResId > 0 ? mResId : R.drawable.header_default);
-        iconView.setImageDrawable(icon);
+        if (iconView != null) {
+            Drawable icon = ContextCompat.getDrawable(rootView.getContext(), mResId > 0 ? mResId : R.drawable.header_default);
+            iconView.setImageDrawable(icon);
+        }
 
         TextView label = rootView.findViewById(R.id.header_label);
-        label.setText(headerItem.getName());
+        if (label != null) {
+            label.setText(headerItem.getName());
+        }
     }
 
     @Override

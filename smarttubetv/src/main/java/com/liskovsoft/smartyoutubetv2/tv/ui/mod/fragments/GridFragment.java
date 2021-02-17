@@ -90,6 +90,9 @@ public class GridFragment extends Fragment implements BrowseSupportFragment.Main
                 @Override
                 public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
                                            RowPresenter.ViewHolder rowViewHolder, Row row) {
+                    if (mGridViewHolder == null) {
+                        return;
+                    }
                     int position = mGridViewHolder.getGridView().getSelectedPosition();
                     if (DEBUG) Log.v(TAG, "grid selected position " + position);
                     gridOnItemSelected(position);
