@@ -241,6 +241,9 @@ public class HqDialogManager extends PlayerEventListenerHelper {
         for (VideoPreset preset : presets) {
             result.add(0, UiOptionItem.from(preset.name,
                     option -> {
+                        if (playerData.isLowQualityEnabled()) {
+                            playerData.enableLowQuality(false);
+                        }
                         playerData.setFormat(preset.format);
                         onFormatSelected.run();
                     },
