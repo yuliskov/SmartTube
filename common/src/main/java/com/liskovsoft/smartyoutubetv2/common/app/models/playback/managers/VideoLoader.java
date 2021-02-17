@@ -82,7 +82,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         // Might happen when the app wasn't used quite a long time.
         MessageHelpers.showMessage(getActivity(), R.string.msg_player_error);
         YouTubeMediaService.instance().invalidateCache();
-        loadVideo(mLastVideo);
+        getController().reloadPlayback();
 
         //if (type == PlayerEventListener.ERROR_TYPE_SOURCE ||
         //    type == PlayerEventListener.ERROR_TYPE_RENDERER ||
