@@ -105,14 +105,9 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
     }
 
     private String formatAccount(Account account) {
-        String format;
-
         if (account.getEmail() != null) {
-            format = String.format("%s (%s)", account.getName(), account.getEmail());
-        } else {
-            format = account.getName();
+            return String.format("%s (%s)", account.getName(), account.getEmail());
         }
-
-        return format;
+        return account.getName();
     }
 }
