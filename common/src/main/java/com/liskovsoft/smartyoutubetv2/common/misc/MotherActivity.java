@@ -18,7 +18,8 @@ public class MotherActivity extends FragmentActivity {
     private static final String TAG = MotherActivity.class.getSimpleName();
     private static final float DEFAULT_DENSITY = 2.0f; // xhdpi
     private static final float DEFAULT_WIDTH = 1920f; // xhdpi
-    private DisplayMetrics mCachedDisplayMetrics;
+    private static DisplayMetrics sCachedDisplayMetrics;
+    private static Locale sCachedLocale;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,57 +27,8 @@ public class MotherActivity extends FragmentActivity {
 
         Log.d(TAG, "Starting %s...", this.getClass().getSimpleName());
 
-        forceDpi1();
+        initDpi();
         initTheme();
-    }
-
-    private void forceDpi1() {
-        // Do caching to prevent sudden dpi change.
-        // Could happen when screen goes off or after PIP mode.
-        if (mCachedDisplayMetrics == null) {
-            float uiScale = MainUIData.instance(this).getUIScale();
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
-            displayMetrics.density = DEFAULT_DENSITY / widthRatio * uiScale;
-            displayMetrics.scaledDensity = DEFAULT_DENSITY / widthRatio * uiScale;
-            mCachedDisplayMetrics = displayMetrics;
-        }
-
-        getResources().getDisplayMetrics().setTo(mCachedDisplayMetrics);
-    }
-
-    private void forceDpi2() {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        displayMetrics.density = 2.0f;
-        displayMetrics.densityDpi = 320;
-        displayMetrics.heightPixels = 1080;
-        displayMetrics.widthPixels = 1920;
-        displayMetrics.scaledDensity = 2.0f;
-        displayMetrics.xdpi = 30.48f;
-        displayMetrics.ydpi = 30.48f;
-        getResources().getDisplayMetrics().setTo(displayMetrics);
-    }
-
-    private void forceDpi3() {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        displayMetrics.densityDpi = DisplayMetrics.DENSITY_XHIGH;
-        getResources().getDisplayMetrics().setTo(displayMetrics);
-    }
-
-    protected void initTheme() {
-        int rootThemeResId = MainUIData.instance(this).getColorScheme().browseThemeResId;
-        if (rootThemeResId > 0) {
-            setTheme(rootThemeResId);
-        }
-    }
-
-    private static Locale getLocale(Context context) {
-        LangUpdater updater = new LangUpdater(context);
-        String langCode = updater.getUpdatedLocale();
-        return LangHelper.parseLangCode(langCode);
     }
 
     public void destroyActivity() {
@@ -101,10 +53,43 @@ public class MotherActivity extends FragmentActivity {
 
         // Fix sudden dpi change.
         // Could happen when screen goes off or after PIP mode.
-        forceDpi1();
+        initDpi();
 
         // Fix sudden language change.
         // Could happen when screen goes off or after PIP mode.
         LocaleContextWrapper.apply(this, getLocale(this));
+    }
+
+    protected void initTheme() {
+        int rootThemeResId = MainUIData.instance(this).getColorScheme().browseThemeResId;
+        if (rootThemeResId > 0) {
+            setTheme(rootThemeResId);
+        }
+    }
+
+    private void initDpi() {
+        // Do caching to prevent sudden dpi change.
+        // Could happen when screen goes off or after PIP mode.
+        if (sCachedDisplayMetrics == null) {
+            float uiScale = MainUIData.instance(this).getUIScale();
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
+            displayMetrics.density = DEFAULT_DENSITY / widthRatio * uiScale;
+            displayMetrics.scaledDensity = DEFAULT_DENSITY / widthRatio * uiScale;
+            sCachedDisplayMetrics = displayMetrics;
+        }
+
+        getResources().getDisplayMetrics().setTo(sCachedDisplayMetrics);
+    }
+
+    private static Locale getLocale(Context context) {
+        if (sCachedLocale == null) {
+            LangUpdater updater = new LangUpdater(context);
+            String langCode = updater.getUpdatedLocale();
+            sCachedLocale = LangHelper.parseLangCode(langCode);
+        }
+
+        return sCachedLocale;
     }
 }
