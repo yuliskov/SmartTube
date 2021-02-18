@@ -12,6 +12,8 @@ import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 
+import java.util.Locale;
+
 public class MotherActivity extends FragmentActivity {
     private static final String TAG = MotherActivity.class.getSimpleName();
     private static final float DEFAULT_DENSITY = 2.0f; // xhdpi
@@ -71,10 +73,10 @@ public class MotherActivity extends FragmentActivity {
         }
     }
 
-    private static Context applyLanguage(Context newBase) {
-        LangUpdater updater = new LangUpdater(newBase);
+    private static Locale getLocale(Context context) {
+        LangUpdater updater = new LangUpdater(context);
         String langCode = updater.getUpdatedLocale();
-        return LocaleContextWrapper.wrap(newBase, LangHelper.parseLangCode(langCode));
+        return LangHelper.parseLangCode(langCode);
     }
 
     public void destroyActivity() {
@@ -83,7 +85,7 @@ public class MotherActivity extends FragmentActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(applyLanguage(newBase));
+        super.attachBaseContext(LocaleContextWrapper.wrap(newBase, getLocale(newBase)));
     }
 
     @Override
@@ -100,5 +102,9 @@ public class MotherActivity extends FragmentActivity {
         // Fix sudden dpi change.
         // Could happen when screen goes off or after PIP mode.
         forceDpi1();
+
+        // Fix sudden language change.
+        // Could happen when screen goes off or after PIP mode.
+        LocaleContextWrapper.apply(this, getLocale(this));
     }
 }
