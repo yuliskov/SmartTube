@@ -71,15 +71,19 @@ public class MotherActivity extends FragmentActivity {
         }
     }
 
+    private static Context applyLanguage(Context newBase) {
+        LangUpdater updater = new LangUpdater(newBase);
+        String langCode = updater.getUpdatedLocale();
+        return LocaleContextWrapper.wrap(newBase, LangHelper.parseLangCode(langCode));
+    }
+
     public void destroyActivity() {
         super.finish();
     }
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        LangUpdater updater = new LangUpdater(newBase);
-        String langCode = updater.getUpdatedLocale();
-        super.attachBaseContext(LocaleContextWrapper.wrap(newBase, LangHelper.parseLangCode(langCode)));
+        super.attachBaseContext(applyLanguage(newBase));
     }
 
     @Override
