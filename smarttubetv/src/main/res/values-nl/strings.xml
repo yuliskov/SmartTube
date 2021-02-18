@@ -3,8 +3,8 @@
     <string name="signin_view_title">Gebruikerscode laden</string>
     <string name="signin_view_description">Aanmelden met deze code op webpagina %s</string>
     <string name="signin_view_action_text">Klaar</string>
-    <string name="action_subscribe_off">Abonnement uit</string>
-    <string name="action_subscribe_on">Abonnement aan</string>
+    <string name="action_subscribe_off">Abonnement afgemeld</string>
+    <string name="action_subscribe_on">Abonnement aangemeld</string>
     <string name="action_channel">Kanaal</string>
     <string name="action_playlist_add">Toevoegen aan playlist</string>
     <string name="action_video_stats">Video Stats</string>
