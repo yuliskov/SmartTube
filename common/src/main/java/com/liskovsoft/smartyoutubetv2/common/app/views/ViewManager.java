@@ -43,7 +43,7 @@ public class ViewManager {
         mActivityStack = new Stack<>();
         mPrefs = AppPrefs.instance(context);
 
-        restoreState();
+        //restoreState();
     }
 
     public static ViewManager instance(Context context) {
@@ -174,6 +174,11 @@ public class ViewManager {
 
         Class<?> activityClass = activity.getClass();
 
+        // Open from phone's history fix. Not parent? Make the root then.
+        if (mParentMapping.get(activityClass) == null) {
+            mActivityStack.clear();
+        }
+
         // reorder activity
         mActivityStack.remove(activityClass);
         mActivityStack.push(activityClass);
@@ -252,25 +257,25 @@ public class ViewManager {
 
         mMoveViewsToBack = false;
 
-        persistState();
+        //persistState();
 
         triggerRebirth3(mContext, mViewMapping.get(SplashView.class));
     }
 
-    private void persistState() {
-        mPrefs.setViewManagerData(String.format("%s,%s", mMoveViewsToBack, mIsSinglePlayerMode));
-    }
-
-    private void restoreState() {
-        String data = mPrefs.getViewManagerData();
-
-        if (data != null) {
-            String[] split = data.split(",");
-
-            mMoveViewsToBack = Helpers.parseBoolean(split, 0);
-            mIsSinglePlayerMode = Helpers.parseBoolean(split, 1);
-        }
-    }
+    //private void persistState() {
+    //    mPrefs.setViewManagerData(String.format("%s,%s", mMoveViewsToBack, mIsSinglePlayerMode));
+    //}
+    //
+    //private void restoreState() {
+    //    String data = mPrefs.getViewManagerData();
+    //
+    //    if (data != null) {
+    //        String[] split = data.split(",");
+    //
+    //        mMoveViewsToBack = Helpers.parseBoolean(split, 0);
+    //        mIsSinglePlayerMode = Helpers.parseBoolean(split, 1);
+    //    }
+    //}
 
     /**
      * More info: https://stackoverflow.com/questions/6609414/how-do-i-programmatically-restart-an-android-app
@@ -307,8 +312,16 @@ public class ViewManager {
     public void properlyFinishTheApp() {
         Log.d(TAG, "Finishing the app...");
         mMoveViewsToBack = true;
-        persistState();
+        //persistState();
+        //exitToHome();
         finishTheApp();
+    }
+
+    private void exitToHome() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        safeStartActivity(mContext, intent);
     }
 
     private void finishTheApp() {
