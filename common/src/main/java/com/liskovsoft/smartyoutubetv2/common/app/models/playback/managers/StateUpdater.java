@@ -252,6 +252,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
             } else {
                 // Add null state to prevent restore position from history
                 mStates.remove(video.videoId);
+                video.percentWatched = 0;
             }
 
             persistState();
