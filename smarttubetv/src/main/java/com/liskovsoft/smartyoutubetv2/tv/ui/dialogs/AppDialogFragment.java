@@ -213,7 +213,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
                                 if (currentBackStackCount < mBackStackCount) {
                                     if (currentBackStackCount == 0) {
                                         // single dialog
-                                        getActivity().onBackPressed();
+                                        getActivity().finish();
                                     } else {
                                         // multiple stacked dialogs
                                         getFragmentManager().popBackStack();
