@@ -12,7 +12,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -24,6 +23,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class VideoLoader extends PlayerEventListenerHelper {
     private static final String TAG = VideoLoader.class.getSimpleName();
+    private static final boolean ENABLE_4K_FIX = false;
     private final Playlist mPlaylist;
     private final Handler mHandler;
     private final SuggestionsLoader mSuggestionsLoader;
@@ -236,36 +236,12 @@ public class VideoLoader extends PlayerEventListenerHelper {
                            });
     }
 
-    //private void processFormatInfo(MediaItemFormatInfo formatInfo) {
-    //    if (formatInfo.isUnplayable()) {
-    //        getController().showError(formatInfo.getPlayabilityStatus());
-    //    }
-    //
-    //    if (formatInfo.containsDashUrl() && formatInfo.isLive() && formatInfo.isStreamSeekable()) {
-    //        Log.d(TAG, "Found live video in dash format. Loading...");
-    //        getController().openDashUrl(formatInfo.getDashManifestUrl());
-    //    } else if (formatInfo.containsHlsUrl()) {
-    //        Log.d(TAG, "Found live video in hls format. Loading...");
-    //        getController().openHlsUrl(formatInfo.getHlsManifestUrl());
-    //    } else if (formatInfo.containsDashInfo()) {
-    //        Log.d(TAG, "Found regular video in dash format. Loading...");
-    //
-    //        mMpdStreamAction = formatInfo.createMpdStreamObservable()
-    //                .subscribeOn(Schedulers.newThread())
-    //                .observeOn(AndroidSchedulers.mainThread())
-    //                .subscribe(getController()::openDash, error -> Log.e(TAG, "createMpdStream error: " + error));
-    //    } else if (formatInfo.containsUrlListInfo()) {
-    //        Log.d(TAG, "Found url list video. This is always LQ. Loading...");
-    //        getController().openUrlList(formatInfo.createUrlList());
-    //    } else {
-    //        Log.d(TAG, "Empty format info received. Seems future translation. No video data to pass to the player.");
-    //        scheduleReloadVideoTimer();
-    //    }
-    //}
-
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
         if (formatInfo.isUnplayable()) {
             getController().showError(formatInfo.getPlayabilityStatus());
+        } else if (ENABLE_4K_FIX && formatInfo.containsDashUrl() && formatInfo.isLive() && formatInfo.isStreamSeekable()) {
+            Log.d(TAG, "Found live video in dash format. Loading...");
+            getController().openDashUrl(formatInfo.getDashManifestUrl());
         } else if (formatInfo.containsHlsUrl()) {
             Log.d(TAG, "Found live video (current and past) in hls format. Loading...");
             getController().openHlsUrl(formatInfo.getHlsManifestUrl());

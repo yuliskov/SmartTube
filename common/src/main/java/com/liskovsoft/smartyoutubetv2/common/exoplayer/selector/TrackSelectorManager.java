@@ -7,10 +7,7 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector.Parameters;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector.SelectionOverride;
-import com.google.android.exoplayer2.trackselection.FixedTrackSelection;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector.MappedTrackInfo;
-import com.google.android.exoplayer2.trackselection.RandomTrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Definition;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -26,12 +23,12 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     public static final int RENDERER_INDEX_VIDEO = 0;
     public static final int RENDERER_INDEX_AUDIO = 1;
     public static final int RENDERER_INDEX_SUBTITLE = 2;
-    private static final TrackSelection.Factory FIXED_FACTORY = new FixedTrackSelection.Factory();
-    private static final TrackSelection.Factory RANDOM_FACTORY = new RandomTrackSelection.Factory();
+    //private static final TrackSelection.Factory FIXED_FACTORY = new FixedTrackSelection.Factory();
+    //private static final TrackSelection.Factory RANDOM_FACTORY = new RandomTrackSelection.Factory();
     private static final String TAG = TrackSelectorManager.class.getSimpleName();
 
     private DefaultTrackSelector mTrackSelector;
-    private TrackSelection.Factory mTrackSelectionFactory;
+    //private TrackSelection.Factory mTrackSelectionFactory;
 
     private final Renderer[] mRenderers = new Renderer[3];
     private final MediaTrack[] mSelectedTracks = new MediaTrack[3];
@@ -518,10 +515,10 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         return mRenderers[rendererIndex] != null && mRenderers[rendererIndex].selectedTrack != null;
     }
 
-    private void setOverride(int rendererIndex, int group, int[] tracks, boolean enableRandomAdaptation) {
-        TrackSelection.Factory factory = tracks.length == 1 ? FIXED_FACTORY : (enableRandomAdaptation ? RANDOM_FACTORY : mTrackSelectionFactory);
-        mRenderers[rendererIndex].override = new SelectionOverride(group, tracks);
-    }
+    //private void setOverride(int rendererIndex, int group, int[] tracks, boolean enableRandomAdaptation) {
+    //    TrackSelection.Factory factory = tracks.length == 1 ? FIXED_FACTORY : (enableRandomAdaptation ? RANDOM_FACTORY : mTrackSelectionFactory);
+    //    mRenderers[rendererIndex].override = new SelectionOverride(group, tracks);
+    //}
 
     // Track array manipulation.
     private static int[] getTracksAdding(SelectionOverride override, int addedTrack) {
