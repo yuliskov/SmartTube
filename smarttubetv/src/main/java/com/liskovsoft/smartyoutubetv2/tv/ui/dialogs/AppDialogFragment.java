@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.dialogs;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.leanback.preference.LeanbackPreferenceDialogFragment;
@@ -21,6 +23,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.RadioListPreferenceDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreference;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreferenceDialogFragment;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import java.util.List;
 
@@ -244,6 +247,22 @@ public class AppDialogFragment extends LeanbackSettingsFragment
 
         public void setTitle(String title) {
             mTitle = title;
+        }
+
+        @Override
+        public void setTitle(CharSequence title) {
+            super.setTitle(title);
+
+            makeTitleScrollable();
+        }
+
+        private void makeTitleScrollable() {
+            final View view = getView();
+            final TextView decorTitle = view == null
+                    ? null : (TextView) view.findViewById(androidx.leanback.preference.R.id.decor_title);
+            if (decorTitle != null) {
+                ViewUtil.enableMarquee(decorTitle);
+            }
         }
     }
 }

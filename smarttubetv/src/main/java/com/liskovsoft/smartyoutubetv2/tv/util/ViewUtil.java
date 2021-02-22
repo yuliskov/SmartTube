@@ -1,13 +1,14 @@
 package com.liskovsoft.smartyoutubetv2.tv.util;
 
 import android.text.Layout;
+import android.text.TextUtils.TruncateAt;
 import android.widget.TextView;
 
 public class ViewUtil {
     /**
      * Checks whether text is truncated (e.g. has ... at the end)
      */
-    public static boolean isEllipsized(TextView textView) {
+    public static boolean isTruncated(TextView textView) {
         Layout layout = textView.getLayout();
         if (layout != null) {
             int lines = layout.getLineCount();
@@ -17,8 +18,39 @@ public class ViewUtil {
                     return true;
                 }
             }
+        } else {
+            // App dialog title fix.
+            return true;
         }
 
         return false;
+    }
+
+    public static void disableMarquee(TextView... textViews) {
+        if (textViews == null || textViews.length == 0) {
+            return;
+        }
+
+        for (TextView textView : textViews) {
+            textView.setEllipsize(TruncateAt.END);
+            textView.setHorizontallyScrolling(false);
+        }
+    }
+
+    public static void enableMarquee(TextView... textViews) {
+        if (textViews == null || textViews.length == 0) {
+            return;
+        }
+
+        for (TextView textView : textViews) {
+            if (ViewUtil.isTruncated(textView)) { // multiline scroll fix
+                textView.setEllipsize(TruncateAt.MARQUEE);
+                textView.setMarqueeRepeatLimit(-1);
+                textView.setHorizontallyScrolling(true);
+
+                // App dialog title fix.
+                textView.setSelected(true);
+            }
+        }
     }
 }

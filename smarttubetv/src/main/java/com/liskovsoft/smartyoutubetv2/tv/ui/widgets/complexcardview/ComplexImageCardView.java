@@ -53,7 +53,7 @@ public class ComplexImageCardView extends ImageCardView {
         }
 
         if (enable) {
-            Runnable enableMarquee = () -> enableMarquee(view);
+            Runnable enableMarquee = () -> ViewUtil.enableMarquee(view);
 
             mHandler.postDelayed(enableMarquee, 1_000);
 
@@ -64,32 +64,7 @@ public class ComplexImageCardView extends ImageCardView {
                 view.setTag(null);
             }
 
-            disableMarquee(view);
-        }
-    }
-
-    private void disableMarquee(TextView... textViews) {
-        if (textViews == null || textViews.length == 0) {
-            return;
-        }
-
-        for (TextView textView : textViews) {
-            textView.setEllipsize(TruncateAt.END);
-            textView.setHorizontallyScrolling(false);
-        }
-    }
-
-    private void enableMarquee(TextView... textViews) {
-        if (textViews == null || textViews.length == 0) {
-            return;
-        }
-
-        for (TextView textView : textViews) {
-            if (ViewUtil.isEllipsized(textView)) {
-                textView.setEllipsize(TruncateAt.MARQUEE);
-                textView.setMarqueeRepeatLimit(-1);
-                textView.setHorizontallyScrolling(true);
-            }
+            ViewUtil.disableMarquee(view);
         }
     }
 
