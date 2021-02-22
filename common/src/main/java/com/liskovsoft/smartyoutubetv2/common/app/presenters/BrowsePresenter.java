@@ -449,8 +449,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                         },
                         error -> {
                             Log.e(TAG, "updateGridHeader error: %s", error.getMessage());
-                            getView().showProgressBar(false);
-                            getView().showError(new CategoryEmptyError(getContext()));
+                            if (getView() != null) {
+                                getView().showProgressBar(false);
+                                getView().showError(new CategoryEmptyError(getContext()));
+                            }
                         });
     }
 
