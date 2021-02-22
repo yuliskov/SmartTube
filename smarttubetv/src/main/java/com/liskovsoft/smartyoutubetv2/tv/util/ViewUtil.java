@@ -18,9 +18,6 @@ public class ViewUtil {
                     return true;
                 }
             }
-        } else {
-            // App dialog title fix.
-            return true;
         }
 
         return false;
@@ -37,6 +34,9 @@ public class ViewUtil {
         }
     }
 
+    /**
+     * <a href="https://stackoverflow.com/questions/3332924/textview-marquee-not-working">More info</a>
+     */
     public static void enableMarquee(TextView... textViews) {
         if (textViews == null || textViews.length == 0) {
             return;

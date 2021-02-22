@@ -248,21 +248,5 @@ public class AppDialogFragment extends LeanbackSettingsFragment
         public void setTitle(String title) {
             mTitle = title;
         }
-
-        @Override
-        public void setTitle(CharSequence title) {
-            super.setTitle(title);
-
-            //makeTitleScrollable();
-        }
-
-        private void makeTitleScrollable() {
-            final View view = getView();
-            final TextView decorTitle = view == null
-                    ? null : (TextView) view.findViewById(androidx.leanback.preference.R.id.decor_title);
-            if (decorTitle != null) {
-                ViewUtil.enableMarquee(decorTitle);
-            }
-        }
     }
 }
