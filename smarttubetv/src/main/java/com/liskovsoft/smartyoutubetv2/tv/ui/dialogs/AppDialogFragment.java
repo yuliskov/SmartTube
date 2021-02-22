@@ -253,7 +253,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
         public void setTitle(CharSequence title) {
             super.setTitle(title);
 
-            makeTitleScrollable();
+            //makeTitleScrollable();
         }
 
         private void makeTitleScrollable() {
