@@ -16,6 +16,7 @@
   -->
 
 <!-- MOD: make dialog title multiline -->
+<!-- MOD: only has effect on root dialog -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main_frame"
