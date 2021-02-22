@@ -2,47 +2,60 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
 import com.google.android.exoplayer2.Format;
 
-public class TrackInfoFormatter {
-    public static String formatQualityLabel(Format format, float speed) {
+public class TrackInfoFormatter2 {
+    private String mResolutionStr;
+    private String mFpsStr;
+    private String mCodecStr;
+    private String mHdrStr;
+    private String mSpeedStr;
+
+    public void setFormat(Format format) {
         if (format == null) {
-            return "none";
+            return;
         }
 
-        String separator = "/";
-
-        String resolution = extractResolutionLabel(format);
+        mResolutionStr = extractResolutionLabel(format);
 
         int fpsNum = extractFps(format);
-        String fps = fpsNum == 0 ? "" : String.valueOf(fpsNum);
+        mFpsStr = fpsNum == 0 ? "" : String.valueOf(fpsNum);
 
         String codec = TrackSelectorUtil.extractCodec(format);
+        mCodecStr = codec != null ? codec.toUpperCase() : "";
 
         boolean isHdr = TrackSelectorUtil.isHdrCodec(format.codecs);
-        String hdrStr = "";
+        mHdrStr = isHdr ? "HDR" : "";
+    }
 
-        String qualityString;
+    public void setSpeed(float speed) {
+        mSpeedStr = speed != 1.0f ? speed + "x" : "";
+    }
 
-        if (!fps.isEmpty()) {
-            fps = separator + fps;
+    public String getQualityLabel() {
+        return combine(mResolutionStr, mFpsStr, mCodecStr, mHdrStr, mSpeedStr);
+    }
+
+    private static String combine(String... items) {
+        String separator = "/";
+        StringBuilder result = new StringBuilder();
+
+        if (items != null && items.length != 0) {
+            int index = 0;
+
+            for (String item : items) {
+                if (item == null || item.isEmpty()) {
+                    continue;
+                }
+
+                if (index != 0) {
+                    result.append(separator);
+                }
+
+                result.append(item);
+                index++;
+            }
         }
 
-        if (!codec.isEmpty()) {
-            codec = separator + codec.toUpperCase();
-        }
-
-        if (isHdr) {
-            hdrStr = separator + "HDR";
-        }
-
-        String speedStr = "";
-
-        if (speed != 1.0f) {
-            speedStr = separator + speed + "x";
-        }
-
-        qualityString = String.format("%s%s%s%s%s", resolution, fps, codec, hdrStr, speedStr);
-
-        return qualityString;
+        return result.toString();
     }
 
     private static String extractResolutionLabel(Format format) {

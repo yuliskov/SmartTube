@@ -328,6 +328,10 @@ public class PlayerData {
         mPlaybackMode = Helpers.parseInt(split, 22, PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL);
         // didn't remember what was there
         mIsLowQualityEnabled = Helpers.parseBoolean(split, 24, false);
+
+        if (!mIsRememberSpeedEnabled) {
+            mSpeed = 1.0f;
+        }
     }
 
     private void persistData() {

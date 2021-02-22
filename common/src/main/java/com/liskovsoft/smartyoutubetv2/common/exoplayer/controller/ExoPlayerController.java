@@ -6,7 +6,6 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
@@ -20,7 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.Player
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackInfoFormatter;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackInfoFormatter2;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 
@@ -32,6 +31,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private final Context mContext;
     private final ExoMediaSourceFactory mMediaSourceFactory;
     private final TrackSelectorManager mTrackSelectorManager;
+    private final TrackInfoFormatter2 mTrackFormatter;
     private PlayerEventListener mEventListener;
     private Video mVideo;
     private boolean mOnSourceChanged;
@@ -42,6 +42,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         mContext = context;
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
         mTrackSelectorManager = new TrackSelectorManager();
+        mTrackFormatter = new TrackInfoFormatter2();
     }
 
     @Override
@@ -73,6 +74,8 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     private void openMediaSource(MediaSource mediaSource) {
+        setQualityInfo("");
+
         if (mPlayer == null) {
             return;
         }
@@ -247,15 +250,12 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
                 mEventListener.onTrackChanged(ExoFormatItem.from(format));
 
-                if (mPlayerView != null && ExoFormatItem.isVideo(format)) {
-                    mPlayerView.setQualityInfo(TrackInfoFormatter.formatQualityLabel(format));
+                if (ExoFormatItem.isVideo(format)) {
+                    mTrackFormatter.setFormat(format);
+                    setQualityInfo(mTrackFormatter.getQualityLabel());
                 }
             }
         }
-
-        //if (mTrackSelectorManager.fixVideoTrackSelection()) {
-        //    mEventListener.onTrackSelected(ExoFormatItem.from(mTrackSelectorManager.getVideoTrack()));
-        //}
     }
 
     private void notifyOnVideoLoad() {
@@ -307,6 +307,9 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     public void setSpeed(float speed) {
         if (mPlayer != null && speed > 0) {
             mPlayer.setPlaybackParameters(new PlaybackParameters(speed, 1.0f));
+
+            mTrackFormatter.setSpeed(speed);
+            setQualityInfo(mTrackFormatter.getQualityLabel());
         }
     }
 
@@ -316,6 +319,12 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             return mPlayer.getPlaybackParameters().speed;
         } else {
             return -1;
+        }
+    }
+
+    private void setQualityInfo(String qualityInfoStr) {
+        if (mPlayerView != null && qualityInfoStr != null) {
+            mPlayerView.setQualityInfo(qualityInfoStr);
         }
     }
 }
