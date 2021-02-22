@@ -234,14 +234,14 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             return;
         }
 
-        if (item.isVideo()) {
+        if (item.isChannelUploads()) {
+            ChannelUploadsMenuPresenter.instance(getContext()).showMenu(item);
+        } else if (item.isVideo()) {
             item.isSubscribed = mCurrentCategoryId == MediaGroup.TYPE_SUBSCRIPTIONS;
 
             VideoMenuPresenter.instance(getContext()).showVideoMenu(item);
         } else if (item.isChannel()) {
             VideoMenuPresenter.instance(getContext()).showChannelMenu(item);
-        } else if (item.isChannelUploads()) {
-            ChannelUploadsMenuPresenter.instance(getContext()).showMenu(item);
         }
 
         updateRefreshTime();
