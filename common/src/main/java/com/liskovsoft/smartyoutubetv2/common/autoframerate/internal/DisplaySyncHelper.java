@@ -275,33 +275,26 @@ public class DisplaySyncHelper implements UhdHelperListener {
     public void onModeChanged(Mode mode) {
         mDisplaySyncInProgress = false;
 
+        if (mNewMode == null) {
+            Log.d(TAG, "Ignore mode change. AFR isn't activated.");
+            return;
+        }
+
         Mode currentMode = getUhdHelper().getCurrentMode();
 
         if (mode == null && currentMode == null) {
-            String msg = "Mode change failure. Internal error occurred.";
-            Log.w(TAG, msg);
-
-            // NOTE: changed
-            //CommonApplication.getPreferences().setCurrentDisplayMode(msg);
+            Log.e(TAG, "Mode change failure. Internal error occurred.");
         } else {
-            int modeId = mNewMode != null ? mNewMode.getModeId() : -1;
-
-            if (currentMode.getModeId() != modeId) {
+            if (currentMode.getModeId() != mNewMode.getModeId()) {
                 // Once onDisplayChangedListener sends proper callback, the above if condition
                 // need to changed to mode.getModeId() != modeId
-                String msg = String.format("Mode change failure. Current mode id is %s. Expected mode id is %s", currentMode.getModeId(), modeId);
-                Log.w(TAG, msg);
-
-                String newMsg = String.format("Expected %s", UhdHelper.formatMode(mNewMode));
-
-                // NOTE: changed
-                //CommonApplication.getPreferences().setCurrentDisplayMode(String.format("%s (%s)", UhdHelper.formatMode(currentMode), newMsg));
+                Log.e(TAG, "Mode change failure. Current mode id is %s. Expected mode id is %s", currentMode.getModeId(), mNewMode.getModeId());
 
                 if (mListener != null) {
                     mListener.onModeError(mNewMode);
                 }
             } else {
-                Log.i(TAG, "Mode changed successfully");
+                Log.d(TAG, "Mode changed successfully");
             }
         }
     }
