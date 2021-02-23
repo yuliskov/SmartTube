@@ -297,7 +297,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
                     optionItem -> {
                         mPlayerData.setSpeed(speed);
                         getController().setSpeed(speed);
-                        settingsPresenter.closeDialog();
+                        //settingsPresenter.closeDialog();
                     },
                     getController().getSpeed() == speed));
         }

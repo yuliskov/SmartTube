@@ -128,7 +128,9 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 }
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
-                loadVideo(mLastVideo);
+                //loadVideo(mLastVideo);
+                getController().setPositionMs(0);
+                getController().setPlay(true);
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
                 // close player
