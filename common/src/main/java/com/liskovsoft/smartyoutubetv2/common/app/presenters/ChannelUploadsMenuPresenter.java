@@ -12,7 +12,6 @@ import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.utils.ServiceManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class ChannelUploadsMenuPresenter extends BasePresenter<Void> {
     private final MediaItemManager mItemManager;
@@ -45,8 +44,10 @@ public class ChannelUploadsMenuPresenter extends BasePresenter<Void> {
 
     private void prepareAndShowDialog() {
         mSettingsPresenter.clear();
-        
-        appendOpenChannelUploadsButton();
+
+        // Doesn't need this since this is the main action.
+        //appendOpenChannelUploadsButton();
+        appendOpenChannelButton();
         appendUnsubscribeButton();
         appendMarkAsWatched();
 
@@ -60,6 +61,19 @@ public class ChannelUploadsMenuPresenter extends BasePresenter<Void> {
 
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.open_channel_uploads), optionItem -> ChannelUploadsPresenter.instance(getContext()).openChannel(mVideo)));
+    }
+
+    private void appendOpenChannelButton() {
+        if (mVideo == null) {
+            return;
+        }
+
+        if (mVideo.videoId == null && mVideo.channelId == null) {
+            return;
+        }
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.open_channel), optionItem -> ChannelPresenter.instance(getContext()).openChannel(mVideo)));
     }
 
     private void appendUnsubscribeButton() {

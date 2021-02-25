@@ -215,14 +215,16 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             return;
         }
 
-        if (item.isVideo()) {
+        if (item.isChannelUploads()) {
+            // Doesn't work right now. Api doesn't contains channel id.
+            //ChannelPresenter.instance(getContext()).openChannel(item);
+            ChannelUploadsPresenter.instance(getContext()).openChannel(item);
+        } else if (item.isPlaylist()) {
+            ChannelUploadsPresenter.instance(getContext()).openChannel(item);
+        } else if (item.isVideo()) {
             mPlaybackPresenter.openVideo(item);
         } else if (item.isChannel()) {
             ChannelPresenter.instance(getContext()).openChannel(item);
-        } else if (item.isChannelUploads()) {
-            ChannelPresenter.instance(getContext()).openChannel(item);
-        } else if (item.isPlaylist()) {
-            ChannelUploadsPresenter.instance(getContext()).openChannel(item);
         }
 
         updateRefreshTime();
@@ -238,7 +240,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             ChannelUploadsMenuPresenter.instance(getContext()).showMenu(item);
         } else if (item.isVideo()) {
             item.isSubscribed = mCurrentCategoryId == MediaGroup.TYPE_SUBSCRIPTIONS;
-
             VideoMenuPresenter.instance(getContext()).showVideoMenu(item);
         } else if (item.isChannel()) {
             VideoMenuPresenter.instance(getContext()).showChannelMenu(item);
