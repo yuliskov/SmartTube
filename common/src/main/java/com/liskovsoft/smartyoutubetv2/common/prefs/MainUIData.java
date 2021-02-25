@@ -260,7 +260,7 @@ public class MainUIData {
         mColorSchemeIndex = Helpers.parseInt(split, 5, 1);
         mIsCardMultilineTitleEnabled = Helpers.parseBoolean(split, 6, true);
         mIsSettingsCategoryEnabled = Helpers.parseBoolean(split, 7, true);
-        mChannelCategorySorting = Helpers.parseInt(split, 8, CHANNEL_SORTING_UPDATE);
+        mChannelCategorySorting = Helpers.parseInt(split, 8, CHANNEL_SORTING_LAST_VIEWED);
         mPlaylistsStyle = Helpers.parseInt(split, 9, PLAYLISTS_STYLE_GRID);
         mAppExitShortcut = Helpers.parseInt(split, 10, EXIT_DOUBLE_BACK);
         mCardTitleLinesNum = Helpers.parseInt(split, 11, 1);
