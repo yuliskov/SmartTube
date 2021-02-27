@@ -89,6 +89,14 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         disposeActions();
     }
 
+    public static boolean canOpenChannel(Video item) {
+        if (item == null) {
+            return false;
+        }
+
+        return item.videoId != null || item.channelId != null || item.isChannelUploads();
+    }
+
     public void openChannel(Video item) {
         if (item != null) {
             if (item.channelId != null) {

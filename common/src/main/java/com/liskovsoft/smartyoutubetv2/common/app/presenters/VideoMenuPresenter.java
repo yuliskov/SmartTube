@@ -144,11 +144,11 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     private void appendOpenChannelButton() {
-        if (!mIsOpenChannelButtonEnabled || mVideo == null) {
+        if (!mIsOpenChannelButtonEnabled) {
             return;
         }
 
-        if (mVideo.videoId == null && mVideo.channelId == null) {
+        if (!ChannelPresenter.canOpenChannel(mVideo)) {
             return;
         }
 

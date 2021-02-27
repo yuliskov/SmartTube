@@ -64,11 +64,7 @@ public class ChannelUploadsMenuPresenter extends BasePresenter<Void> {
     }
 
     private void appendOpenChannelButton() {
-        if (mVideo == null) {
-            return;
-        }
-
-        if (mVideo.videoId == null && mVideo.channelId == null) {
+        if (!ChannelPresenter.canOpenChannel(mVideo)) {
             return;
         }
 
