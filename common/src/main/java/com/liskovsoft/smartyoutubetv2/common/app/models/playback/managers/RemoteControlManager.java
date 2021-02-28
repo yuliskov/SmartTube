@@ -216,12 +216,12 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
             case Command.TYPE_CONNECTED:
                 if (getActivity() != null) {
                     Utils.moveAppToForeground(getActivity());
-                    MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_connected, command.getDeviceName()));
+                    //MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_connected, command.getDeviceName()));
                 }
                 break;
             case Command.TYPE_DISCONNECTED:
                 if (getActivity() != null) {
-                    MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_disconnected, command.getDeviceName()));
+                    //MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_disconnected, command.getDeviceName()));
                 }
                 break;
         }
