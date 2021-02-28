@@ -75,4 +75,8 @@ public class IntentExtractor {
     private static boolean isValid(String videoId) {
         return videoId != null && videoId.length() == 11;
     }
+
+    public static boolean hasData(Intent intent) {
+        return intent != null && intent.getData() != null;
+    }
 }

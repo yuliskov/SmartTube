@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 
 public class RemoteControlReceiver extends BroadcastReceiver {
@@ -13,6 +12,11 @@ public class RemoteControlReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "Initializing remote control listener...");
+
+        // Fake service to prevent the app from destroying
+        Intent serviceIntent = new Intent(context, RemoteControlService.class);
+        context.startService(serviceIntent);
+
         PlaybackPresenter.instance(context); // init RemoteControlListener
     }
 }

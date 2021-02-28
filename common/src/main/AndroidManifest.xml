@@ -12,5 +12,6 @@
                 <action android:name="android.intent.action.ACTION_BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+        <service android:name="com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService" android:enabled="true"/>
     </application>
 </manifest>
