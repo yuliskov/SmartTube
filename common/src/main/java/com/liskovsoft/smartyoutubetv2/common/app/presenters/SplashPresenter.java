@@ -145,7 +145,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                         viewManager.startDefaultView();
 
                         // For debug purpose when using ATV bridge.
-                        if (IntentExtractor.hasData(intent)) {
+                        if (IntentExtractor.hasOtherData(intent)) {
                             MessageHelpers.showLongMessage(getContext(), String.format("Can't process intent: %s", Helpers.toString(intent)));
                         }
                     }
