@@ -67,6 +67,8 @@ dependencies {
 
     implementation 'com.github.bumptech.glide:glide:' + glideVersion
 
+    implementation 'androidx.work:work-runtime:' + workVersion
+
     storigImplementation project(path: ':leanbackassistant')
     storigImplementation project(path: ':appupdatechecker2')
     stbetaImplementation project(path: ':leanbackassistant')
