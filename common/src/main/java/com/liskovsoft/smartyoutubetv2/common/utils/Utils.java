@@ -3,9 +3,12 @@ package com.liskovsoft.smartyoutubetv2.common.utils;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
+import android.os.IBinder;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
@@ -122,7 +125,22 @@ public class Utils {
     public static void startRemoteControlService(Context context) {
         // Fake service to prevent the app from destroying
         Intent serviceIntent = new Intent(context, RemoteControlService.class);
-        context.startService(serviceIntent);
+
+        //context.startService(serviceIntent);
+
+        // https://medium.com/@debuggingisfun/android-auto-stop-background-service-336e8b3ff03c
+        // https://medium.com/@debuggingisfun/android-o-work-around-background-service-limitation-e697b2192bc3
+        context.getApplicationContext().bindService(serviceIntent, new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                 // NOP
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                 // NOP
+            }
+        }, Context.BIND_AUTO_CREATE);
     }
 
     public static void startRemoteControlWorkRequest(Context context) {

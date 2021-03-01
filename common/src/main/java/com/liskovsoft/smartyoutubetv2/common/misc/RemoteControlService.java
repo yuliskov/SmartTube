@@ -13,6 +13,8 @@ public class RemoteControlService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
+        Log.d(TAG, "onBind: %s", Helpers.toString(intent));
+
         return null;
     }
 
