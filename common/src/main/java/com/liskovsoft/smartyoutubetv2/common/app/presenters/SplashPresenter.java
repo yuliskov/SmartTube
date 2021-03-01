@@ -10,10 +10,10 @@ import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 public class SplashPresenter extends BasePresenter<SplashView> {
     private static final String CHANNELS_RECEIVER_CLASS_NAME = "com.liskovsoft.leanbackassistant.channels.RunOnInstallReceiver";
@@ -56,7 +56,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         if (!mRunOnce) {
             updateChannels();
             getBackupDataOnce();
-            runRemoteControlService();
+            runRemoteControlTasks();
             mRunOnce = true;
         }
     }
@@ -83,11 +83,11 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         return mBackupVideoId;
     }
 
-    private void runRemoteControlService() {
+    private void runRemoteControlTasks() {
         // Fake service to prevent the app from destroying
         if (getContext() != null) {
-            Intent serviceIntent = new Intent(getContext(), RemoteControlService.class);
-            getContext().startService(serviceIntent);
+            Utils.startRemoteControlService(getContext());
+            Utils.startRemoteControlWorkRequest(getContext());
         }
     }
 

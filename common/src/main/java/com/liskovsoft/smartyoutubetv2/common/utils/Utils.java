@@ -6,17 +6,25 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService;
+import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class Utils {
+    private static final String TASK_ID = RemoteControlWorker.class.getSimpleName();
+
     /**
      * Limit the maximum size of a Map by removing oldest entries when limit reached
      */
@@ -109,5 +117,26 @@ public class Utils {
 
     public static boolean checkActivity(Activity activity) {
         return activity != null && !activity.isDestroyed() && !activity.isFinishing();
+    }
+
+    public static void startRemoteControlService(Context context) {
+        // Fake service to prevent the app from destroying
+        Intent serviceIntent = new Intent(context, RemoteControlService.class);
+        context.startService(serviceIntent);
+    }
+
+    public static void startRemoteControlWorkRequest(Context context) {
+        PeriodicWorkRequest workRequest =
+                new PeriodicWorkRequest.Builder(
+                        RemoteControlWorker.class, 30, TimeUnit.MINUTES
+                ).build();
+
+        WorkManager
+                .getInstance(context)
+                .enqueueUniquePeriodicWork(
+                        TASK_ID,
+                        ExistingPeriodicWorkPolicy.KEEP,
+                        workRequest
+                );
     }
 }
