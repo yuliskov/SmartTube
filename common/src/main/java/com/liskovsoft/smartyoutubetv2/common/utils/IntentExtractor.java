@@ -80,9 +80,13 @@ public class IntentExtractor {
         return videoId != null && videoId.length() == 11;
     }
 
-    public static boolean hasOtherData(Intent intent) {
+    public static boolean hasData(Intent intent) {
+        return intent != null && intent.getData() != null;
+    }
+
+    public static boolean isChannelUrl(Intent intent) {
         return intent != null
-               && intent.getData() != null
-               && !Helpers.contains(new String[] {SUBSCRIPTIONS_URL, HISTORY_URL, RECOMMENDED_URL}, intent.getData().toString());
+                && intent.getData() != null
+                && Helpers.contains(new String[] {SUBSCRIPTIONS_URL, HISTORY_URL, RECOMMENDED_URL}, intent.getData().toString());
     }
 }
