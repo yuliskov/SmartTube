@@ -84,6 +84,9 @@ public class IntentExtractor {
         return intent != null && intent.getData() != null;
     }
 
+    /**
+     * ATV: Channel icon url
+     */
     public static boolean isChannelUrl(Intent intent) {
         return intent != null
                 && intent.getData() != null
