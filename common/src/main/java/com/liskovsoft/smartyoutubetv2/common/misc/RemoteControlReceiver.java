@@ -18,6 +18,7 @@ public class RemoteControlReceiver extends BroadcastReceiver {
 
         Utils.startRemoteControlWorkRequest(context);
 
+        // Couldn't success inside periodic work request
         PlaybackPresenter.instance(context); // init RemoteControlListener
     }
 }
