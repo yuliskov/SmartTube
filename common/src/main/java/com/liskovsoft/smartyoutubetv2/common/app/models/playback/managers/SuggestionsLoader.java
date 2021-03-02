@@ -117,7 +117,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
         }
 
         // Free a lot of memory
-        if (video.isRemote || (!video.isPlaylistItem() && !getController().isSuggestionsShown())) {
+        if (video.isRemote || !getController().isSuggestionsShown()) {
             getController().clearSuggestions();
         }
     }
