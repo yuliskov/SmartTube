@@ -14,6 +14,10 @@ public abstract class PlayerEventListenerHelper implements PlayerHandlerEventLis
         mEventBridge = eventBridge;
     }
 
+    public MainPlayerEventBridge getBridge() {
+        return mEventBridge;
+    }
+
     public PlaybackController getController() {
         return mEventBridge.getController();
     }

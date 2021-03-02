@@ -206,6 +206,24 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                     openNewVideo(mVideo);
                 }
                 break;
+            case Command.TYPE_NEXT:
+                if (getBridge() != null) {
+                    Utils.movePlayerToForeground(getActivity());
+                    getBridge().onNextClicked();
+                } else {
+                    openNewVideo(mVideo);
+                }
+                break;
+            case Command.TYPE_PREVIOUS:
+                if (getBridge() != null && getController() != null) {
+                    Utils.movePlayerToForeground(getActivity());
+                    // Switch immediately. Skip position reset logic.
+                    //getController().setPositionMs(0);
+                    getBridge().onPreviousClicked();
+                } else {
+                    openNewVideo(mVideo);
+                }
+                break;
             case Command.TYPE_GET_STATE:
                 if (getController() != null) {
                     postStartPlaying(getController().getVideo(), getController().isPlaying());
@@ -215,7 +233,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 break;
             case Command.TYPE_CONNECTED:
                 if (getActivity() != null) {
-                    Utils.moveAppToForeground(getActivity());
+                    //Utils.moveAppToForeground(getActivity());
                     //MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_connected, command.getDeviceName()));
                 }
                 break;
