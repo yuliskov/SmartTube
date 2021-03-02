@@ -106,6 +106,8 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
             return;
         }
 
+        RxUtils.disposeActions(mPostPlayAction, mPostStateAction);
+
         mPostPlayAction = RxUtils.execute(
                 mRemoteManager.postStartPlayingObserve(videoId, positionMs, durationMs, isPlaying)
         );
@@ -115,6 +117,8 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         if (!mRemoteControlData.isDeviceLinkEnabled()) {
             return;
         }
+
+        RxUtils.disposeActions(mPostPlayAction, mPostStateAction);
 
         mPostStateAction = RxUtils.execute(
                 mRemoteManager.postStateChangeObserve(positionMs, durationMs, isPlaying)
@@ -165,8 +169,6 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     }
 
     private void processCommand(Command command) {
-        RxUtils.disposeActions(mPostPlayAction, mPostStateAction);
-
         switch (command.getType()) {
             case Command.TYPE_OPEN_VIDEO:
                 Utils.movePlayerToForeground(getActivity());
