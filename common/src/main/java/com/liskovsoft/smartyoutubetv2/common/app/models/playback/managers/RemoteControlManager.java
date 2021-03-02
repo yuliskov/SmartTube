@@ -30,6 +30,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     private Disposable mPostPlayAction;
     private Disposable mPostStateAction;
     private Video mVideo;
+    private boolean mConnected;
 
     public RemoteControlManager(Context context, SuggestionsLoader suggestionsLoader) {
         MediaService mediaService = YouTubeMediaService.instance();
@@ -88,23 +89,27 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     }
 
     private void postStartPlaying(@Nullable Video item, boolean isPlaying) {
+        if (!mRemoteControlData.isDeviceLinkEnabled() || !mConnected) {
+            return;
+        }
+
         String videoId = null;
         long positionMs = -1;
-        long lengthMs = -1;
+        long durationMs = -1;
 
         if (item != null && getController() != null) {
             item.isRemote = true;
 
             videoId = item.videoId;
             positionMs = getController().getPositionMs();
-            lengthMs = getController().getLengthMs();
+            durationMs = getController().getLengthMs();
         }
 
-        postStartPlaying(videoId, positionMs, lengthMs, isPlaying);
+        postStartPlaying(videoId, positionMs, durationMs, isPlaying);
     }
 
     private void postStartPlaying(String videoId, long positionMs, long durationMs, boolean isPlaying) {
-        if (!mRemoteControlData.isDeviceLinkEnabled()) {
+        if (!mRemoteControlData.isDeviceLinkEnabled() || !mConnected) {
             return;
         }
 
@@ -116,7 +121,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     }
 
     private void postState(long positionMs, long durationMs, boolean isPlaying) {
-        if (!mRemoteControlData.isDeviceLinkEnabled()) {
+        if (!mRemoteControlData.isDeviceLinkEnabled() || !mConnected) {
             return;
         }
 
@@ -191,6 +196,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 break;
             case Command.TYPE_SEEK:
                 if (getController() != null) {
+                    getController().showControls(false);
                     Utils.movePlayerToForeground(getActivity());
                     getController().setPositionMs(command.getCurrentTimeMs());
                     postSeek(command.getCurrentTimeMs());
@@ -246,12 +252,14 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 break;
             case Command.TYPE_CONNECTED:
                 if (getActivity() != null) {
+                    mConnected = true;
                     //Utils.moveAppToForeground(getActivity());
                     //MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_connected, command.getDeviceName()));
                 }
                 break;
             case Command.TYPE_DISCONNECTED:
                 if (getActivity() != null) {
+                    mConnected = false;
                     //MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_disconnected, command.getDeviceName()));
                 }
                 break;
