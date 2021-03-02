@@ -7,6 +7,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
@@ -161,6 +162,16 @@ public class Utils {
                         ExistingPeriodicWorkPolicy.KEEP,
                         workRequest
                 );
+    }
+
+    public static void setGlobalVolume(Context context, int volume) {
+        if (context != null) {
+            AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            if (audioManager != null) {
+                int streamMaxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int) Math.ceil(streamMaxVolume / 100f * volume), 0);
+            }
+        }
     }
 
     /**
