@@ -100,6 +100,8 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
             observable = mediaItemManager.getMetadataObserve(video.videoId, video.playlistId, video.playlistIndex);
         }
 
+        clearSuggestionsIfNeeded(video);
+
         mMetadataAction = observable
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -107,6 +109,17 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
                         metadata -> updateSuggestions(metadata, video),
                         error -> Log.e(TAG, "loadSuggestions error: %s", error.getMessage())
                 );
+    }
+
+    private void clearSuggestionsIfNeeded(Video video) {
+        if (video == null || getController() == null) {
+            return;
+        }
+
+        // Free a lot of memory
+        if (video.isRemote || (!video.isPlaylistItem() && !getController().isSuggestionsShown())) {
+            getController().clearSuggestions();
+        }
     }
 
     private void updateSuggestions(MediaItemMetadata mediaItemMetadata, Video video) {
