@@ -53,7 +53,7 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
         settingsPresenter.clear();
 
-        appendLinkEnableSwitch(settingsPresenter);
+        //appendLinkEnableSwitch(settingsPresenter);
         appendAddDeviceButton(settingsPresenter);
         appendRemoveAllDevicesButton(settingsPresenter);
 
