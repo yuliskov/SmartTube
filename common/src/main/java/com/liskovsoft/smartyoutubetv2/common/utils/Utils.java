@@ -8,7 +8,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.IBinder;
+import android.view.Window;
+import android.view.WindowManager;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
@@ -113,6 +116,8 @@ public class Utils {
     }
 
     public static void movePlayerToForeground(Context context) {
+        turnScreenOn(context);
+
         if (!Utils.isPlayerInForeground(context)) {
             ViewManager.instance(context).startView(PlaybackView.class);
         }
@@ -156,5 +161,21 @@ public class Utils {
                         ExistingPeriodicWorkPolicy.KEEP,
                         workRequest
                 );
+    }
+
+    /**
+     * <a href="https://stackoverflow.com/questions/2891337/turning-on-screen-programmatically">More info</a>
+     */
+    @SuppressWarnings("deprecation")
+    private static void turnScreenOn(Context context) {
+        if (context instanceof Activity) {
+            Activity activity = (Activity) context;
+            if (Build.VERSION.SDK_INT >= 27) {
+                activity.setTurnScreenOn(true);
+            } else {
+                Window window = activity.getWindow();
+                window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+            }
+        }
     }
 }
