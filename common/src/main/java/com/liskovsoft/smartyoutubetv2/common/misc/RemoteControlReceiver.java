@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 public class RemoteControlReceiver extends BroadcastReceiver {
@@ -18,6 +17,6 @@ public class RemoteControlReceiver extends BroadcastReceiver {
 
         Utils.startRemoteControlWorkRequest(context);
 
-        PlaybackPresenter.instance(context); // init RemoteControlListener
+        //PlaybackPresenter.instance(context); // init RemoteControlListener
     }
 }
