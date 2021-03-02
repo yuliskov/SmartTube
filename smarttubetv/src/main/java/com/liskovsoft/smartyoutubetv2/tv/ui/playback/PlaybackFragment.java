@@ -794,10 +794,10 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     @Override
     public void showControls(boolean show) {
         if (show) {
-            showControlsOverlay(mIsAnimationEnabled);
             if (!isSuggestionsShown()) {
                 setPlayerRowIndex(0); // reset player focus to controls
             }
+            showControlsOverlay(mIsAnimationEnabled);
         } else {
             hideControlsOverlay(mIsAnimationEnabled);
         }
