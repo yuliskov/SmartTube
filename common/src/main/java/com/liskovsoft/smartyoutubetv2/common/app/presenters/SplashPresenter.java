@@ -86,7 +86,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private void runRemoteControlTasks() {
         // Fake service to prevent the app from destroying
         if (getContext() != null) {
-            Utils.startRemoteControlService(getContext());
+            //Utils.startRemoteControlService(getContext());
             Utils.startRemoteControlWorkRequest(getContext());
         }
     }
