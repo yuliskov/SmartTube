@@ -143,6 +143,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 if (!getController().isInPIPMode()) {
                     getController().showSuggestions(true);
                 }
+                getController().setPlay(false);
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_LIST:
                 // stop player (if not playing playlist)
@@ -156,6 +157,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
                     if (!getController().isInPIPMode()) {
                         getController().showSuggestions(true);
                     }
+                    getController().setPlay(false);
                 }
                 break;
         }
