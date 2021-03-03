@@ -149,6 +149,10 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
         }
     }
 
+    public boolean isDialogShown() {
+        return !mCategories.isEmpty();
+    }
+
     public void appendRadioCategory(String categoryTitle, List<OptionItem> items) {
         mCategories.add(SettingsCategory.radioList(categoryTitle, items));
     }
