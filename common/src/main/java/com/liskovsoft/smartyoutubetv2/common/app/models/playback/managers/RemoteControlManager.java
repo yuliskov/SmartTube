@@ -30,6 +30,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     private Disposable mPostPlayAction;
     private Disposable mPostStateAction;
     private Video mVideo;
+    private boolean mConnected;
 
     public RemoteControlManager(Context context, SuggestionsLoader suggestionsLoader) {
         MediaService mediaService = YouTubeMediaService.instance();
@@ -88,7 +89,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     }
 
     private void postStartPlaying(@Nullable Video item, boolean isPlaying) {
-        if (!mRemoteControlData.isDeviceLinkEnabled()) {
+        if (!mRemoteControlData.isDeviceLinkEnabled() || !mConnected) {
             return;
         }
 
@@ -97,7 +98,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         long durationMs = -1;
 
         if (item != null && getController() != null) {
-            item.isRemote = true;
+            item.isRemote = mConnected;
 
             videoId = item.videoId;
             positionMs = getController().getPositionMs();
@@ -108,7 +109,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     }
 
     private void postStartPlaying(String videoId, long positionMs, long durationMs, boolean isPlaying) {
-        if (!mRemoteControlData.isDeviceLinkEnabled()) {
+        if (!mRemoteControlData.isDeviceLinkEnabled() || !mConnected) {
             return;
         }
 
@@ -120,7 +121,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     }
 
     private void postState(long positionMs, long durationMs, boolean isPlaying) {
-        if (!mRemoteControlData.isDeviceLinkEnabled()) {
+        if (!mRemoteControlData.isDeviceLinkEnabled() || !mConnected) {
             return;
         }
 
@@ -175,6 +176,8 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     }
 
     private void processCommand(Command command) {
+        mConnected = command.getType() != Command.TYPE_DISCONNECTED && command.getType() != Command.TYPE_UNDEFINED;
+
         switch (command.getType()) {
             case Command.TYPE_OPEN_VIDEO:
                 if (getController() != null) {
