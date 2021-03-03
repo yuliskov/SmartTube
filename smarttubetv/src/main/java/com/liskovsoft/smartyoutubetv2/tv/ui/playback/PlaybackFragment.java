@@ -796,7 +796,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         if (show) {
             showControlsOverlay(mIsAnimationEnabled);
         } else {
-            setPlayerRowIndex(0); // reset player focus from suggestions to controls
+            // Hide Suggestions (if any) before the close
+            setPlayerRowIndex(0);
             hideControlsOverlay(mIsAnimationEnabled);
         }
     }
