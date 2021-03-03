@@ -176,7 +176,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     }
 
     private void processCommand(Command command) {
-        mConnected = command.getType() != Command.TYPE_DISCONNECTED && command.getType() != Command.TYPE_UNDEFINED;
+        mConnected = command.getType() != Command.TYPE_DISCONNECTED && command.getType() != Command.TYPE_IDLE;
 
         switch (command.getType()) {
             case Command.TYPE_OPEN_VIDEO:
