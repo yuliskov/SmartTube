@@ -40,7 +40,7 @@
     <string name="msg_category_is_empty">Ой! Здесь ничего нет.</string>
     <string name="dialog_add_to_playlist">Добавить в плейлист</string>
     <string name="msg_signed_users_only">Необходимо войти в вккаунт</string>
-    <string name="msg_cant_load_content">Невозможно загрузить содержимое</string>
+    <string name="msg_cant_load_content">Не получилось загрузить содержимое</string>
     <string name="title_video_presets">Профили видео</string>
     <string name="settings_accounts">Аккаунты</string>
     <string name="settings_left_panel">Настроить категории</string>
@@ -189,7 +189,7 @@
     <string name="btn_confirm">Подтвердить</string>
     <string name="player_low_video_quality">Низкое качество видео</string>
     <string name="remote_session_closed">Удаленная сессия закрыта</string>
-    <string name="msg_mode_switch_error">Невозможно переключить дисплей в режим \"%s\"</string>
+    <string name="msg_mode_switch_error">Не получилось переключить дисплей в режим \"%s\"</string>
     <string name="msg_player_error">В плеере возникла ошибка. Перезапускаю воспроизведение…</string>
     <string name="video_preset_disabled">Без профиля</string>
     <string name="video_preset_enabled">Формат следующего видео будет установлен в соответствии с профилем</string>
