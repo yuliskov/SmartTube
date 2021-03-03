@@ -5,6 +5,7 @@ import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.VideoTrack;
 
 import java.util.HashMap;
 
@@ -72,7 +73,8 @@ public class TrackSelectorUtil {
         // Try to amplify resolution of aspect ratios that differ from 16:9
         Integer height = mResolutionMap.get(format.width);
 
-        return height != null ? height + "p" : format.height + "p";
+        // Compare both heights to avoid non-standard video proportions
+        return height != null && VideoTrack.sizeEquals(height, format.height) ? height + "p" : format.height + "p";
     }
 
     private static String buildAudioPropertyString(Format format) {

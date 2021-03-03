@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
 import com.google.android.exoplayer2.Format;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.VideoTrack;
 
 public class TrackInfoFormatter2 {
     private String mResolutionStr;
@@ -62,7 +63,8 @@ public class TrackInfoFormatter2 {
         int width = format.width;
         int height = format.height;
 
-        return width > height ? getResolutionLabelByWidth(width) : getResolutionLabelByHeight(height);
+        // Compare sizes to avoid non-standard video proportions
+        return width > height && !VideoTrack.sizeEquals(width, height, 15) ? getResolutionLabelByWidth(width) : getResolutionLabelByHeight(height);
     }
 
     private static String getResolutionLabelByWidth(int width) {

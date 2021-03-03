@@ -13,12 +13,16 @@ public class VideoTrack extends MediaTrack {
         super(rendererIndex);
     }
 
-    private static boolean sizeEquals(int size1, int size2) {
+    public static boolean sizeEquals(int size1, int size2) {
+        return sizeEquals(size1, size2, SIZE_EQUITY_THRESHOLD_PERCENT);
+    }
+
+    public static boolean sizeEquals(int size1, int size2, int diffPercents) {
         if (size1 == -1 || size2 == -1) {
             return false;
         }
 
-        int threshold = size1 / 100 * SIZE_EQUITY_THRESHOLD_PERCENT;
+        int threshold = size1 / 100 * diffPercents;
 
         return Math.abs(size1 - size2) < threshold;
     }
