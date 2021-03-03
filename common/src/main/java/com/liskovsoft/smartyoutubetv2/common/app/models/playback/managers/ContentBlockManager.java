@@ -128,17 +128,15 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             if (positionMs >= segment.getStartMs() && positionMs < segment.getEndMs()) {
                 Integer resId = mLocalizedMapping.get(segment.getCategory());
                 String localizedCategory = resId != null ? getActivity().getString(resId) : segment.getCategory();
-                switch (mContentBlockData.getNotificationType()) {
-                    case ContentBlockData.NOTIFICATION_TYPE_NONE:
-                        getController().setPositionMs(segment.getEndMs());
-                        break;
-                    case ContentBlockData.NOTIFICATION_TYPE_TOAST:
-                        MessageHelpers.showMessage(getActivity(), getActivity().getString(R.string.msg_skipping_segment, localizedCategory));
-                        getController().setPositionMs(segment.getEndMs());
-                        break;
-                    case ContentBlockData.NOTIFICATION_TYPE_DIALOG:
-                        confirmSkip(segment.getEndMs(), localizedCategory);
-                        break;
+
+                int type = mContentBlockData.getNotificationType();
+
+                if (type == ContentBlockData.NOTIFICATION_TYPE_NONE || getController().isInPIPMode()) {
+                    getController().setPositionMs(segment.getEndMs());
+                } else if (type == ContentBlockData.NOTIFICATION_TYPE_TOAST) {
+                    messageSkip(segment.getEndMs(), localizedCategory);
+                } else if (type == ContentBlockData.NOTIFICATION_TYPE_DIALOG) {
+                    confirmSkip(segment.getEndMs(), localizedCategory);
                 }
 
                 isSegmentFound = true;
@@ -147,6 +145,11 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         }
 
         mIsSameSegment = isSegmentFound;
+    }
+
+    private void messageSkip(long skipPositionMs, String category) {
+        MessageHelpers.showMessage(getActivity(), getActivity().getString(R.string.msg_skipping_segment, category));
+        getController().setPositionMs(skipPositionMs);
     }
 
     private void confirmSkip(long skipPositionMs, String category) {
