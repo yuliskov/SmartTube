@@ -42,7 +42,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     public VideoLoader(SuggestionsLoader suggestionsLoader) {
         mSuggestionsLoader = suggestionsLoader;
         mPlaylist = Playlist.instance();
-        mHandler = new Handler(Looper.myLooper());
+        mHandler = new Handler(Looper.getMainLooper());
     }
 
     @Override
