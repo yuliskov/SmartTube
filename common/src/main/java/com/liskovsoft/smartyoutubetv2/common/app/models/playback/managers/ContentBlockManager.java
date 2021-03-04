@@ -169,6 +169,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         );
 
         settingsPresenter.appendSingleButton(sponsorBlockOption);
+        settingsPresenter.setTimout(20);
 
         settingsPresenter.showDialog(ContentBlockData.SPONSOR_BLOCK_NAME);
     }

@@ -19,10 +19,13 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     @SuppressLint("StaticFieldLeak")
     private static AppSettingsPresenter sInstance;
     private final List<SettingsCategory> mCategories;
+    private final Handler mHandler;
+    private final Runnable mCloseDialog = this::closeDialog;
     private String mTitle;
     private Runnable mOnClose;
     private PlayerUiManager mUiManager;
     private int mEnginePlaybackMode;
+    private int mTimeoutSec;
 
     public static class SettingsCategory {
         public static SettingsCategory radioList(String title, List<OptionItem> items) {
@@ -68,6 +71,7 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     public AppSettingsPresenter(Context context) {
         super(context);
         mCategories = new ArrayList<>();
+        mHandler = new Handler(Looper.getMainLooper());
     }
 
     public static AppSettingsPresenter instance(Context context) {
@@ -103,6 +107,7 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     }
 
     public void clear() {
+        mTimeoutSec = 0;
         mCategories.clear();
     }
 
@@ -141,6 +146,8 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
         }
 
         ViewManager.instance(getContext()).startView(AppSettingsView.class, true);
+
+        setupTimeout();
     }
 
     public void closeDialog() {
@@ -181,6 +188,18 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
                 getView().finish();
             }
         }, timeoutMs);
+    }
+
+    public void setTimout(int timeoutSec) {
+        mTimeoutSec = timeoutSec;
+    }
+
+    private void setupTimeout() {
+        mHandler.removeCallbacks(mCloseDialog);
+
+        if (mTimeoutSec > 0) {
+            mHandler.postDelayed(mCloseDialog, mTimeoutSec * 1_000L);
+        }
     }
 
     private void blockPlayerEngine(boolean block) {
