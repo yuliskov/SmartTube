@@ -89,7 +89,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     }
 
     private void postStartPlaying(@Nullable Video item, boolean isPlaying) {
-        if (!mRemoteControlData.isDeviceLinkEnabled() || !mConnected) {
+        if (!mRemoteControlData.isDeviceLinkEnabled()) {
             return;
         }
 
@@ -109,7 +109,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     }
 
     private void postStartPlaying(String videoId, long positionMs, long durationMs, boolean isPlaying) {
-        if (!mRemoteControlData.isDeviceLinkEnabled() || !mConnected) {
+        if (!mRemoteControlData.isDeviceLinkEnabled()) {
             return;
         }
 
@@ -121,7 +121,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     }
 
     private void postState(long positionMs, long durationMs, boolean isPlaying) {
-        if (!mRemoteControlData.isDeviceLinkEnabled() || !mConnected) {
+        if (!mRemoteControlData.isDeviceLinkEnabled()) {
             return;
         }
 
@@ -177,6 +177,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
 
     private void processCommand(Command command) {
         if (command.getType() != Command.TYPE_IDLE) {
+            // Seems that there is no robust way to detect a connection. Use carefully!
             mConnected = command.getType() != Command.TYPE_DISCONNECTED;
         }
 
@@ -212,8 +213,8 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 if (getController() != null) {
                     Utils.movePlayerToForeground(getActivity());
                     getController().setPlay(true);
-                    postStartPlaying(getController().getVideo(), true);
-                    //postPlay(true);
+                    //postStartPlaying(getController().getVideo(), true);
+                    postPlay(true);
                 } else {
                     openNewVideo(mVideo);
                 }
@@ -222,8 +223,8 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 if (getController() != null) {
                     Utils.movePlayerToForeground(getActivity());
                     getController().setPlay(false);
-                    postStartPlaying(getController().getVideo(), false);
-                    //postPlay(false);
+                    //postStartPlaying(getController().getVideo(), false);
+                    postPlay(false);
                 } else {
                     openNewVideo(mVideo);
                 }
