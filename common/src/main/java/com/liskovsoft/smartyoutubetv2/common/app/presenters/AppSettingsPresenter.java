@@ -108,6 +108,7 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
 
     public void clear() {
         mTimeoutMs = 0;
+        mHandler.removeCallbacks(mCloseDialog);
         mCategories.clear();
     }
 
