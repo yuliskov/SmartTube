@@ -53,7 +53,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
 
     @Override
     public void onVideoLoaded(Video item) {
-        postStartPlaying(item, true);
+        postStartPlaying(item, getController().getPlay());
         mVideo = item;
     }
 
@@ -212,7 +212,8 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 if (getController() != null) {
                     Utils.movePlayerToForeground(getActivity());
                     getController().setPlay(true);
-                    postPlay(true);
+                    postStartPlaying(getController().getVideo(), true);
+                    //postPlay(true);
                 } else {
                     openNewVideo(mVideo);
                 }
@@ -221,7 +222,8 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 if (getController() != null) {
                     Utils.movePlayerToForeground(getActivity());
                     getController().setPlay(false);
-                    postPlay(false);
+                    postStartPlaying(getController().getVideo(), false);
+                    //postPlay(false);
                 } else {
                     openNewVideo(mVideo);
                 }
