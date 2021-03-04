@@ -207,4 +207,11 @@ public class PlaybackActivity extends LeanbackActivity {
             }
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        ViewManager.instance(this).blockTop(isInPIPMode() ? this : null);
+    }
 }
