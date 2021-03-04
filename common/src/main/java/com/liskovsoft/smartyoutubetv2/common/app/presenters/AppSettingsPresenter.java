@@ -25,7 +25,7 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     private Runnable mOnClose;
     private PlayerUiManager mUiManager;
     private int mEnginePlaybackMode;
-    private int mTimeoutSec;
+    private long mTimeoutMs;
 
     public static class SettingsCategory {
         public static SettingsCategory radioList(String title, List<OptionItem> items) {
@@ -107,7 +107,7 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     }
 
     public void clear() {
-        mTimeoutSec = 0;
+        mTimeoutMs = 0;
         mCategories.clear();
     }
 
@@ -190,15 +190,15 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
         }, timeoutMs);
     }
 
-    public void setTimout(int timeoutSec) {
-        mTimeoutSec = timeoutSec;
+    public void setTimoutMs(long timeoutMs) {
+        mTimeoutMs = timeoutMs;
     }
 
     private void setupTimeout() {
         mHandler.removeCallbacks(mCloseDialog);
 
-        if (mTimeoutSec > 0) {
-            mHandler.postDelayed(mCloseDialog, mTimeoutSec * 1_000L);
+        if (mTimeoutMs > 0) {
+            mHandler.postDelayed(mCloseDialog, mTimeoutMs);
         }
     }
 
