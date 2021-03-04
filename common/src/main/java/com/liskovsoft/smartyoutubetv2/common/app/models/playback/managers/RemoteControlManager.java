@@ -178,7 +178,11 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     private void processCommand(Command command) {
         if (command.getType() != Command.TYPE_IDLE) {
             // Seems that there is no robust way to detect a connection. Use carefully!
+            // Add remote queue row to the suggestions.
             mConnected = command.getType() != Command.TYPE_DISCONNECTED;
+            if (getController() != null && getController().getVideo() != null) {
+                getController().getVideo().isRemote = mConnected;
+            }
         }
 
         switch (command.getType()) {
