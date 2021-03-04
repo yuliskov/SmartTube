@@ -41,6 +41,15 @@ public class MotherActivity extends FragmentActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        // Fix sudden dpi change.
+        // Could happen when screen goes off or after PIP mode.
+        initDpi();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
