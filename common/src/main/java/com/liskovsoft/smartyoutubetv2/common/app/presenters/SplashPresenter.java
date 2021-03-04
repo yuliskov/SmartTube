@@ -24,8 +24,11 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     private SplashPresenter(Context context) {
         super(context);
-        GlobalPreferences.instance(context); // auth token storage init
-        ViewManager.instance(context).clearCaches(); // remove downloaded apks, re-init service lang
+        // Auth token storage init
+        GlobalPreferences.instance(context);
+        // 1) Remove downloaded apks
+        // 2) Setup language
+        ViewManager.instance(context).clearCaches();
     }
 
     public static SplashPresenter instance(Context context) {
