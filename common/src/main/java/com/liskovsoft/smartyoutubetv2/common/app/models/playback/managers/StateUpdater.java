@@ -117,7 +117,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     @Override
     public void onEngineReleased() {
         // Save previous state
-        if (getController().getLengthMs() > 0) {
+        if (getController().getLengthMs() > 0) { // contains any media
             setPlayEnabled(getController().getPlay());
         }
 
