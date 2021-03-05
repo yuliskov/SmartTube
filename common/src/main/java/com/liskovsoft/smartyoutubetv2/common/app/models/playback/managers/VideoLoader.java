@@ -80,7 +80,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
         // Some ciphered data might be stalled.
         // Might happen when the app wasn't used quite a long time.
-        MessageHelpers.showMessage(getActivity(), R.string.msg_player_error);
+        MessageHelpers.showMessage(getActivity(), R.string.msg_player_error, type);
         YouTubeMediaService.instance().invalidateCache();
         getController().restartEngine(); // properly save position of the current track
 

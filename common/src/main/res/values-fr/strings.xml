@@ -191,7 +191,7 @@
     <string name="player_low_video_quality">Faible qualité vidéo</string>
     <string name="remote_session_closed">La session à distance a été fermée</string>
     <string name="msg_mode_switch_error">Impossible de basculer le mode d\'affichage sur \"%s\"</string>
-    <string name="msg_player_error">Une erreur de lecteur s\'est produite. Redémarrage de la lecture…</string>
+    <string name="msg_player_error">Une erreur de lecteur s\'est produite %s. Redémarrage de la lecture…</string>
     <string name="video_preset_disabled">Sans préréglage</string>
     <string name="video_preset_enabled">Le format de la vidéo suivante sera défini selon le préréglage</string>
 </resources>

@@ -187,7 +187,7 @@
     <string name="player_low_video_quality">Nízká video kvalita</string>
     <string name="remote_session_closed">Vzdálená relace byla uzavřena</string>
     <string name="msg_mode_switch_error">Nelze přepnout režim zobrazení na \"%s\"</string>
-    <string name="msg_player_error">Došlo k chybě přehrávače. Restartuji přehrávání…</string>
+    <string name="msg_player_error">Došlo k chybě přehrávače %s. Restartuji přehrávání…</string>
     <string name="video_preset_disabled">Bez video předvolby</string>
     <string name="video_preset_enabled">Formát dalšího videa bude nastaven podle video předvolby</string>
 </resources>

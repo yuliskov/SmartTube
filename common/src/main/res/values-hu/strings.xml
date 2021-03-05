@@ -191,5 +191,5 @@
     <string name="player_low_video_quality">Alacsony videó minőség</string>
     <string name="remote_session_closed">A távoli munkamenet lezárult</string>
     <string name="msg_mode_switch_error">Nem lehet átállítani a megjelenítési módot \"%s\"</string>
-    <string name="msg_player_error">Lejátszási hiba történt. A lejátszás újraindítása..</string>
+    <string name="msg_player_error">Lejátszási hiba történt %s. A lejátszás újraindítása..</string>
 </resources>

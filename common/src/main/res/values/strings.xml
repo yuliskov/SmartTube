@@ -191,7 +191,7 @@
     <string name="player_low_video_quality">Low video quality</string>
     <string name="remote_session_closed">Remote session has been closed</string>
     <string name="msg_mode_switch_error">Can\'t switch display mode to \"%s\"</string>
-    <string name="msg_player_error">Player error occurred. Restarting playback…</string>
+    <string name="msg_player_error">Player error occurred %s. Restarting playback…</string>
     <string name="video_preset_disabled">Without preset</string>
     <string name="video_preset_enabled">Format of the next video will be set according to preset</string>
 </resources>

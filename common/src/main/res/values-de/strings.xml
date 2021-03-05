@@ -191,7 +191,7 @@
     <string name="player_low_video_quality">Niedrige Videoqualität</string>
     <string name="remote_session_closed">Remote-Sitzung wurde beendet</string>
     <string name="msg_mode_switch_error">Anzeige kann nicht auf \"%s\" umgeschaltet werden</string>
-    <string name="msg_player_error">Wiedergabefehler. Neu starten…</string>
+    <string name="msg_player_error">Wiedergabefehler %s. Neu starten…</string>
     <string name="video_preset_disabled">Keine Voreinstellung</string>
     <string name="video_preset_enabled">Format des nächsten Videos wird gemäß der Video-Voreinstellung festgelegt</string>
 </resources>
