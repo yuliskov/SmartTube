@@ -123,9 +123,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         switch (mPlayerData.getPlaybackMode()) {
             case PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL:
                 onNextClicked();
-                if (!getController().isInPIPMode()) {
-                    getController().showControls(true);
-                }
+                getController().showControls(true);
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
                 //loadVideo(mLastVideo);
@@ -140,9 +138,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
                 // stop player after each video
-                if (!getController().isInPIPMode()) {
-                    getController().showSuggestions(true);
-                }
+                getController().showSuggestions(true);
                 getController().setPlay(false);
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_LIST:
@@ -150,13 +146,9 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 Video video = getController().getVideo();
                 if (video != null && video.playlistId != null) {
                     onNextClicked();
-                    if (!getController().isInPIPMode()) {
-                        getController().showControls(true);
-                    }
+                    getController().showControls(true);
                 } else {
-                    if (!getController().isInPIPMode()) {
-                        getController().showSuggestions(true);
-                    }
+                    getController().showSuggestions(true);
                     getController().setPlay(false);
                 }
                 break;

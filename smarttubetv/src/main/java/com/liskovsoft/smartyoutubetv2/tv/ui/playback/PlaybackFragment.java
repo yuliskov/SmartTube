@@ -793,6 +793,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void showControls(boolean show) {
+        if (isInPIPMode()) {
+            // UI couldn't be properly displayed in PIP mode
+            return;
+        }
+
         if (show) {
             showControlsOverlay(mIsAnimationEnabled);
         } else {
@@ -804,6 +809,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void showSuggestions(boolean show) {
+        if (isInPIPMode()) {
+            // UI couldn't be properly displayed in PIP mode
+            return;
+        }
+
         showControls(show);
 
         if (show && !isSuggestionsShown() && !isSuggestionsEmpty()) {
