@@ -271,7 +271,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
         // internal storage has priority over item data loaded from network
         if (state == null) {
-            boolean containsWebPosition = item.percentWatched > 0 && item.percentWatched < 98;
+            boolean containsWebPosition = item.percentWatched > 0 && item.percentWatched < 100;
             if (containsWebPosition) {
                 // Web state is buggy on short videos (e.g. video clips)
                 boolean isLongVideo = getController().getLengthMs() > MUSIC_VIDEO_LENGTH_MS;
@@ -282,7 +282,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
         }
 
         if (state != null && !item.isLive) {
-            boolean isVideoEnded = Math.abs(getController().getLengthMs() - state.positionMs) < 1_000;
+            long remainsMs = getController().getLengthMs() - state.positionMs;
+            boolean isVideoEnded = remainsMs < 1_000;
             if (!isVideoEnded || !getPlayEnabled()) {
                 getController().setPositionMs(state.positionMs);
             }
