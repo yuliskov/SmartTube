@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
@@ -32,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Utils {
     private static final String TASK_ID = RemoteControlWorker.class.getSimpleName();
+    private static final String TAG = Utils.class.getSimpleName();
 
     /**
      * Limit the maximum size of a Map by removing oldest entries when limit reached
@@ -192,6 +194,8 @@ public class Utils {
     }
 
     public static void initGlobalData(Context context) {
+        Log.d(TAG, "initGlobalData called...");
+
         // Auth token storage init
         GlobalPreferences.instance(context);
         // 1) Remove downloaded apks
