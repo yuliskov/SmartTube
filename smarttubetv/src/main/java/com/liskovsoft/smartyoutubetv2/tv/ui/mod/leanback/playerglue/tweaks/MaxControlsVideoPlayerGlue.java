@@ -3,6 +3,8 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import androidx.leanback.media.PlayerAdapter;
 import androidx.leanback.widget.AbstractDetailsDescriptionPresenter;
 import androidx.leanback.widget.PlaybackRowPresenter;
@@ -38,10 +40,10 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
         final AbstractDetailsDescriptionPresenter detailsPresenter =
                 new AbstractDetailsDescriptionPresenter() {
                     @Override
-                    protected void onBindDescription(ViewHolder
-                                                             viewHolder, Object obj) {
+                    protected void onBindDescription(ViewHolder viewHolder, Object obj) {
                         fixClippedTitle(viewHolder);
                         //fixOverlappedTitle(viewHolder);
+                        fixThumbOverlapping(viewHolder);
 
                         PlaybackBaseControlGlue<?> glue = (PlaybackBaseControlGlue<?>) obj;
                         viewHolder.getTitle().setText(glue.getTitle());
@@ -59,6 +61,14 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
                     private void fixClippedTitle(ViewHolder viewHolder) {
                         // Fix clipped title on videos with embedded icons
                         Helpers.setField(viewHolder, "mTitleMargin", 0);
+                    }
+
+                    private void fixThumbOverlapping(ViewHolder viewHolder) {
+                        LinearLayout.LayoutParams textParam = new LinearLayout.LayoutParams
+                                (LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f);
+
+                        viewHolder.getTitle().setLayoutParams(textParam);
+                        viewHolder.getSubtitle().setLayoutParams(textParam);
                     }
                 };
 
