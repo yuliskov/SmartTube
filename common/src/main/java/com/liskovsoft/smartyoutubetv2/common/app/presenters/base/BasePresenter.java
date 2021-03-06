@@ -3,9 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.base;
 import android.app.Activity;
 import android.content.Context;
 import androidx.fragment.app.Fragment;
-import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.lang.ref.WeakReference;
@@ -14,8 +12,8 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     private WeakReference<T> mView = new WeakReference<>(null);
     private WeakReference<Activity> mActivity = new WeakReference<>(null);
     private WeakReference<Context> mApplicationContext = new WeakReference<>(null);
-    private static boolean sGlobalDataInitialized;
-    private static boolean sGlobalDataInitializedTmp;
+    private static boolean sIsGlobalDataInitialized;
+    private static boolean sIsGlobalDataInitializedTmp;
 
     public BasePresenter(Context context) {
         setContext(context);
@@ -82,16 +80,16 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     }
 
     private void initGlobalData() {
-        if (sGlobalDataInitialized || getContext() == null) {
+        if (sIsGlobalDataInitialized || getContext() == null) {
             return;
         }
 
         boolean isActivity = getContext() instanceof Activity;
 
-        if (isActivity || !sGlobalDataInitializedTmp) {
+        if (isActivity || !sIsGlobalDataInitializedTmp) {
             Utils.initGlobalData(getContext());
-            sGlobalDataInitialized = isActivity;
-            sGlobalDataInitializedTmp = !isActivity;
+            sIsGlobalDataInitialized = isActivity;
+            sIsGlobalDataInitializedTmp = !isActivity;
         }
     }
 }
