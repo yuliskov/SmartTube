@@ -19,12 +19,6 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     private PlaybackPresenter(Context context) {
         super(context);
 
-        // Auth token storage init
-        GlobalPreferences.instance(context);
-        // 1) Remove downloaded apks
-        // 2) Setup language
-        ViewManager.instance(context).clearCaches();
-
         mViewManager = ViewManager.instance(context);
         mMainPlayerEventBridge = MainPlayerEventBridge.instance(context);
     }

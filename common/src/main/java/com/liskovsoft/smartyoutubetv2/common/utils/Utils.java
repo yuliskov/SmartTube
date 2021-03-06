@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
+import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
@@ -188,5 +189,13 @@ public class Utils {
                 window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
             }
         }
+    }
+
+    public static void initGlobalData(Context context) {
+        // Auth token storage init
+        GlobalPreferences.instance(context);
+        // 1) Remove downloaded apks
+        // 2) Setup language
+        ViewManager.instance(context).clearCaches();
     }
 }
