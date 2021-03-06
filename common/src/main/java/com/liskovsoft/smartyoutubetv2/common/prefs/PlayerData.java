@@ -50,6 +50,7 @@ public class PlayerData {
     private boolean mIsRememberSpeedEnabled;
     private boolean mIsLowQualityEnabled;
     private int mPlaybackMode;
+    private boolean mIsSleepTimerEnabled;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -106,6 +107,10 @@ public class PlayerData {
         persistData();
     }
 
+    public boolean isPauseOnSeekEnabled() {
+        return mIsPauseOnSeekEnabled;
+    }
+
     public boolean isClockEnabled() {
         return mIsClockEnabled;
     }
@@ -122,10 +127,6 @@ public class PlayerData {
     public void enableRemainingTime(boolean enable) {
         mIsRemainingTimeEnabled = enable;
         persistData();
-    }
-
-    public boolean isPauseOnSeekEnabled() {
-        return mIsPauseOnSeekEnabled;
     }
 
     public void setBackgroundMode(int type) {
@@ -291,6 +292,15 @@ public class PlayerData {
         persistData();
     }
 
+    public void enableSleepTimer(boolean enable) {
+        mIsSleepTimerEnabled = enable;
+        persistData();
+    }
+
+    public boolean isSleepTimerEnabled() {
+        return mIsSleepTimerEnabled;
+    }
+
     private void initSubtitleStyles() {
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_default, R.color.light_grey, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_semi_transparent_bg, R.color.light_grey, R.color.semi_grey, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
@@ -328,6 +338,7 @@ public class PlayerData {
         mPlaybackMode = Helpers.parseInt(split, 22, PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL);
         // didn't remember what was there
         mIsLowQualityEnabled = Helpers.parseBoolean(split, 24, false);
+        mIsSleepTimerEnabled = Helpers.parseBoolean(split, 25, false);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -340,6 +351,7 @@ public class PlayerData {
                 mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null, // afrData was there
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
-                mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs, mIsRememberSpeedEnabled, mPlaybackMode, null, mIsLowQualityEnabled)); // didn't remember what was there
+                mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs,
+                mIsRememberSpeedEnabled, mPlaybackMode, null, mIsLowQualityEnabled, mIsSleepTimerEnabled)); // didn't remember what was there
     }
 }

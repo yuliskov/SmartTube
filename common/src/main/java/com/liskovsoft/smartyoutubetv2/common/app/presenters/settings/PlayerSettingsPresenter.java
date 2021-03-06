@@ -135,6 +135,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerData.enablePauseOnSeek(option.isSelected()),
                 mPlayerData.isPauseOnSeekEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_sleep_timer),
+                option -> mPlayerData.enableSleepTimer(option.isSelected()),
+                mPlayerData.isSleepTimerEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_clock),
                 option -> mPlayerData.enableClock(option.isSelected()),
                 mPlayerData.isClockEnabled()));

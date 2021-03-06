@@ -194,4 +194,5 @@
     <string name="msg_player_error">Player error occurred %s. Restarting playback…</string>
     <string name="video_preset_disabled">Without preset</string>
     <string name="video_preset_enabled">Format of the next video will be set according to preset</string>
+    <string name="player_sleep_timer">Sleep timer</string>
 </resources>

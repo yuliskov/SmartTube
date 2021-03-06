@@ -193,4 +193,5 @@
     <string name="msg_player_error">У плеєрі виникла помилка %s. Перезапускаю відтворювання…</string>
     <string name="video_preset_disabled">Без пресета</string>
     <string name="video_preset_enabled">Формат слідуючого відео буде встановлений у відповідності до пресету</string>
+    <string name="player_sleep_timer">Таймер сну</string>
 </resources>

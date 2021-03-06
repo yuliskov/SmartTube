@@ -33,6 +33,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private final Runnable mReloadVideoHandler = () -> loadVideo(mLastVideo);
     private long mPrevErrorTimeMs;
     private PlayerData mPlayerData;
+    private long mSleepTimerStartMs;
     private final Runnable mPendingNext = () -> {
         if (getController() != null) {
             openVideoFromNext(getController().getVideo(), false);
@@ -67,6 +68,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     public void onEngineInitialized() {
         loadVideo(mLastVideo);
         getController().setRepeatButtonState(mPlayerData.getPlaybackMode());
+        mSleepTimerStartMs = System.currentTimeMillis();
     }
 
     @Override
@@ -120,7 +122,9 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onPlayEnd() {
-        switch (mPlayerData.getPlaybackMode()) {
+        int playbackMode = checkSleepTimer(mPlayerData.getPlaybackMode());
+
+        switch (playbackMode) {
             case PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL:
                 onNextClicked();
                 getController().showControls(true);
@@ -154,7 +158,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 break;
         }
 
-        Log.e(TAG, "Undetected repeat mode " + mPlayerData.getPlaybackMode());
+        Log.e(TAG, "Undetected repeat mode " + playbackMode);
     }
 
     @Override
@@ -166,6 +170,24 @@ public class VideoLoader extends PlayerEventListenerHelper {
     public void onRepeatModeClicked(int modeIndex) {
         mPlayerData.setPlaybackMode(modeIndex);
         showBriefInfo(modeIndex);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode) {
+        mSleepTimerStartMs = System.currentTimeMillis();
+
+        return false;
+    }
+
+    private int checkSleepTimer(int playbackMode) {
+        if (mPlayerData.isSleepTimerEnabled()) {
+            if (System.currentTimeMillis() - mSleepTimerStartMs > 60 * 60 * 1_000) {
+                MessageHelpers.showLongMessage(getActivity(), R.string.player_sleep_timer);
+                playbackMode = PlaybackEngineController.PLAYBACK_MODE_PAUSE;
+            }
+        }
+
+        return playbackMode;
     }
 
     private void showBriefInfo(int modeIndex) {

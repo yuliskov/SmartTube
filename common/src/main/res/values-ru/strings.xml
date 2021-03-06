@@ -193,4 +193,5 @@
     <string name="msg_player_error">В плеере возникла ошибка %s. Перезапускаю воспроизведение…</string>
     <string name="video_preset_disabled">Без профиля</string>
     <string name="video_preset_enabled">Формат следующего видео будет установлен в соответствии с профилем</string>
+    <string name="player_sleep_timer">Таймер сна</string>
 </resources>
