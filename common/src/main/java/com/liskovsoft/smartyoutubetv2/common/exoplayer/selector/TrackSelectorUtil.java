@@ -74,7 +74,7 @@ public class TrackSelectorUtil {
         Integer height = mResolutionMap.get(format.width);
 
         // Compare both heights to avoid non-standard video proportions
-        return height != null && VideoTrack.sizeEquals(height, format.height) ? height + "p" : format.height + "p";
+        return height != null && VideoTrack.sizeEquals(height, format.height, 15) ? height + "p" : format.height + "p";
     }
 
     private static String buildAudioPropertyString(Format format) {
