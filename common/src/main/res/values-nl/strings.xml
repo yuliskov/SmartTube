@@ -66,7 +66,7 @@
     <string name="dialog_main_ui">Display</string>
     <string name="card_animated_previews">Geanimeerde previews</string>
     <string name="web_site">Website</string>
-    <string name="donation">Steun dit project</string>
+    <string name="donation">App steunen</string>
     <string name="dialog_about">Informatie</string>
     <string name="dialog_player_ui">Video Player</string>
     <string name="player_show_ui_on_pause">Player weergeven met OK toets</string>
@@ -194,4 +194,5 @@
     <string name="msg_player_error">Fout bij afspelen %s - opnieuw starten</string>
     <string name="video_preset_disabled">Geen video preset</string>
     <string name="video_preset_enabled">Video kwaliteit van volgende video wordt ingesteld volgens je video preset</string>
+    <string name="player_sleep_timer">Sleep timer</string>
 </resources>
