@@ -31,8 +31,7 @@ public class AmlogicFix2MediaCodecVideoRenderer extends MediaCodecVideoRenderer 
 
         sVideoCodecName = codecInfo.name;
 
-        if (("OMX.amlogic.avc.decoder.awesome".equals(codecInfo.name) ||
-             "OMX.amlogic.vp9.decoder.awesome".equals(codecInfo.name))
+        if ("OMX.amlogic.avc.decoder.awesome".equals(codecInfo.name)
                 && Util.SDK_INT <= 25
                 && (maxValues.width < 1920 || maxValues.height < 1089)) {
             return new CodecMaxValues(
