@@ -221,7 +221,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
 
         mVideoInfo.add(new Pair<>("Video Resolution", videoRes));
         mVideoInfo.add(new Pair<>("Video/Audio Codecs", String.format(
-                "%s%s/%s%s",
+                "%s(%s)/%s(%s)",
                 getFormatMimeType(video),
                 getFormatId(video),
                 getFormatMimeType(audio),
@@ -401,9 +401,9 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private String getFormatId(Format video) {
         String id = video.id;
         if (Helpers.isNumeric(id)) {
-            return String.format("(%s)", id);
+            return id;
         }
-        return "";
+        return null;
     }
 
     private String getFormatMimeType(Format video) {
