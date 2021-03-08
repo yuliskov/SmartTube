@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.other.V2;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.other.V2.videorenderer;
 
 import android.content.Context;
 import android.media.MediaCodec;

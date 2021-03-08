@@ -17,6 +17,8 @@ import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
 import com.google.android.exoplayer2.video.MediaCodecVideoRenderer;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.V2.videorenderer.AmlogicFix2MediaCodecVideoRenderer;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.V2.videorenderer.FrameDropFixMediaCodecVideoRenderer;
 
 import java.util.ArrayList;
 
@@ -123,35 +125,49 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
                 allowedVideoJoiningTimeMs,
                 out);
 
-        if (!Helpers.contains(FRAME_DROP_FIX_LIST, Helpers.getDeviceName())) {
-            return;
+        Renderer videoRenderer = null;
+
+        if (Helpers.contains(FRAME_DROP_FIX_LIST, Helpers.getDeviceName())) {
+            videoRenderer = new FrameDropFixMediaCodecVideoRenderer(
+                    context,
+                    mediaCodecSelector,
+                    allowedVideoJoiningTimeMs,
+                    drmSessionManager,
+                    playClearSamplesWithoutKeys,
+                    enableDecoderFallback,
+                    eventHandler,
+                    eventListener,
+                    MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
+        } else {
+            videoRenderer = new AmlogicFix2MediaCodecVideoRenderer(
+                    context,
+                    mediaCodecSelector,
+                    allowedVideoJoiningTimeMs,
+                    drmSessionManager,
+                    playClearSamplesWithoutKeys,
+                    enableDecoderFallback,
+                    eventHandler,
+                    eventListener,
+                    MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
         }
 
-        Renderer originMediaCodecVideoRenderer = null;
-        int index = 0;
+        if (videoRenderer != null) {
+            Renderer originMediaCodecVideoRenderer = null;
+            int index = 0;
 
-        for (Renderer renderer : out) {
-            if (renderer instanceof MediaCodecVideoRenderer) {
-                originMediaCodecVideoRenderer = renderer;
-                break;
+            for (Renderer renderer : out) {
+                if (renderer instanceof MediaCodecVideoRenderer) {
+                    originMediaCodecVideoRenderer = renderer;
+                    break;
+                }
+                index++;
             }
-            index++;
-        }
 
-        if (originMediaCodecVideoRenderer != null) {
-            // replace origin with custom
-            out.remove(originMediaCodecVideoRenderer);
-            out.add(index,
-                    new FrameDropFixMediaCodecVideoRenderer(
-                            context,
-                            mediaCodecSelector,
-                            allowedVideoJoiningTimeMs,
-                            drmSessionManager,
-                            playClearSamplesWithoutKeys,
-                            enableDecoderFallback,
-                            eventHandler,
-                            eventListener,
-                            MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY));
+            if (originMediaCodecVideoRenderer != null) {
+                // replace origin with custom
+                out.remove(originMediaCodecVideoRenderer);
+                out.add(index, videoRenderer);
+            }
         }
     }
 
