@@ -16,6 +16,8 @@ import com.google.android.exoplayer2.video.VideoRendererEventListener;
  * <a href="https://github.com/google/ExoPlayer/issues/5003">More info</a>
  */
 public class AmlogicFix2MediaCodecVideoRenderer extends MediaCodecVideoRenderer {
+    public static String sVideoCodecName;
+
     public AmlogicFix2MediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
                                               @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, boolean enableDecoderFallback, @Nullable Handler eventHandler, @Nullable VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {
         super(context, mediaCodecSelector, allowedJoiningTimeMs, drmSessionManager, playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, maxDroppedFramesToNotify);
@@ -26,6 +28,9 @@ public class AmlogicFix2MediaCodecVideoRenderer extends MediaCodecVideoRenderer 
             MediaCodecInfo codecInfo, Format format, Format[] streamFormats) {
         CodecMaxValues maxValues =
                 super.getCodecMaxValues(codecInfo, format, streamFormats);
+
+        sVideoCodecName = codecInfo.name;
+
         if ("OMX.amlogic.avc.decoder.awesome".equals(codecInfo.name)
                 && Util.SDK_INT <= 25
                 && (maxValues.width < 1920 || maxValues.height < 1089)) {
@@ -34,6 +39,7 @@ public class AmlogicFix2MediaCodecVideoRenderer extends MediaCodecVideoRenderer 
                     Math.max(maxValues.height, 1089),
                     maxValues.inputSize);
         }
+
         return maxValues;
     }
 }

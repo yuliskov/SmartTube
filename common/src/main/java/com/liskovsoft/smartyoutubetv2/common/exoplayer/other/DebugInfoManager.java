@@ -28,6 +28,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolder.Mode;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.UhdHelper;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.V2.videorenderer.AmlogicFix2MediaCodecVideoRenderer;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 
 import java.util.ArrayList;
@@ -236,6 +237,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
                 DEFAULT : String.format(Locale.US, "%.02f", video.pixelWidthHeightRatio);
         mVideoInfo.add(new Pair<>("Aspect Ratio", par));
         mVideoInfo.add(new Pair<>("Hardware Accelerated", String.valueOf(isHardwareAccelerated(video))));
+        mVideoInfo.add(new Pair<>("Video Codec Name", AmlogicFix2MediaCodecVideoRenderer.sVideoCodecName));
     }
 
     /**
