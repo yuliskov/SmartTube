@@ -222,9 +222,9 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         mVideoInfo.add(new Pair<>("Video Resolution", videoRes));
         mVideoInfo.add(new Pair<>("Video/Audio Codecs", String.format(
                 "%s%s/%s%s",
-                video.sampleMimeType.replace("video/", ""),
+                video.sampleMimeType != null ? video.sampleMimeType.replace("video/", "") : null,
                 getFormatId(video),
-                audio.sampleMimeType.replace("audio/", ""),
+                audio.sampleMimeType != null ? audio.sampleMimeType.replace("audio/", "") : null,
                 getFormatId(audio)
         )));
         mVideoInfo.add(new Pair<>("Video/Audio Bitrate", String.format(
@@ -236,39 +236,25 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
                 video.pixelWidthHeightRatio == 1f ?
                 DEFAULT : String.format(Locale.US, "%.02f", video.pixelWidthHeightRatio);
         mVideoInfo.add(new Pair<>("Aspect Ratio", par));
-        mVideoInfo.add(new Pair<>("Hardware Accelerated", String.valueOf(isHardwareAccelerated(video))));
-        mVideoInfo.add(new Pair<>("Video Codec Name", AmlogicFix2MediaCodecVideoRenderer.sVideoCodecName));
+        String videoCodecName = getVideoCodecNameV2();
+        mVideoInfo.add(new Pair<>("Video Codec Name", videoCodecName));
+        mVideoInfo.add(new Pair<>("Hardware Accelerated", String.valueOf(isHardwareAccelerated(videoCodecName))));
     }
 
     /**
      * <a href="https://github.com/google/ExoPlayer/issues/4757">More info</a>
-     * @param format format
+     * @param videoCodecName name from CodecInfo
      * @return is accelerated
      */
-    private boolean isHardwareAccelerated(Format format) {
-        if (format == null) {
+    private boolean isHardwareAccelerated(String videoCodecName) {
+        if (videoCodecName == null) {
             return false;
         }
 
-        try {
-            // Ver 2.10.4
-            MediaCodecInfo info = MediaCodecUtil.getDecoderInfo(format.sampleMimeType, false, false);
-
-            // Ver 2.9.6
-            //MediaCodecInfo info = MediaCodecUtil.getDecoderInfo(format.sampleMimeType, false);
-
-            if (info == null) {
+        for (String name : new String[]{"omx.google.", "c2.android."}) {
+            if (videoCodecName.toLowerCase().startsWith(name)) {
                 return false;
             }
-
-            for (String name : new String[]{"omx.google.", "c2.android."}) {
-                if (info.name.toLowerCase().startsWith(name)) {
-                    return false;
-                }
-            }
-        } catch (DecoderQueryException e) {
-            e.printStackTrace();
-            return false;
         }
 
         return true;
@@ -426,5 +412,29 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
             result += "@" + ((int) video.frameRate);
         }
         return result;
+    }
+
+    private String getVideoCodecNameV1(Format format) {
+        if (format == null) {
+            return null;
+        }
+
+        MediaCodecInfo info = null;
+
+        try {
+            // Ver 2.10.4
+            info = MediaCodecUtil.getDecoderInfo(format.sampleMimeType, false, false);
+
+            // Ver 2.9.6
+            //info = MediaCodecUtil.getDecoderInfo(format.sampleMimeType, false);
+        } catch (DecoderQueryException e) {
+            e.printStackTrace();
+        }
+
+        return info != null ? info.name : null;
+    }
+
+    private String getVideoCodecNameV2() {
+        return AmlogicFix2MediaCodecVideoRenderer.sVideoCodecName;
     }
 }
