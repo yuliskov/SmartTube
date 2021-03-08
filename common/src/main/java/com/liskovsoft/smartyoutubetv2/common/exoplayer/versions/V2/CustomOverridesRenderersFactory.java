@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.other.V2;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.V2;
 
 import android.content.Context;
 import android.os.Handler;
@@ -17,8 +17,8 @@ import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
 import com.google.android.exoplayer2.video.MediaCodecVideoRenderer;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.V2.videorenderer.AmlogicFix2MediaCodecVideoRenderer;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.V2.videorenderer.FrameDropFixMediaCodecVideoRenderer;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.V2.videorenderer.AmlogicFix2MediaCodecVideoRenderer;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.V2.videorenderer.FrameDropFixMediaCodecVideoRenderer;
 
 import java.util.ArrayList;
 

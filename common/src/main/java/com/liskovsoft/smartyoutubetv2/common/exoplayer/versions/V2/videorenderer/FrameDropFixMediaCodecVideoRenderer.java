@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.other.V2.videorenderer;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.V2.videorenderer;
 
 import android.annotation.TargetApi;
 import android.content.Context;
