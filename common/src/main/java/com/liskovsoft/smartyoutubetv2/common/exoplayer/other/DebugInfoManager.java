@@ -222,9 +222,9 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         mVideoInfo.add(new Pair<>("Video Resolution", videoRes));
         mVideoInfo.add(new Pair<>("Video/Audio Codecs", String.format(
                 "%s%s/%s%s",
-                video.sampleMimeType != null ? video.sampleMimeType.replace("video/", "") : null,
+                getFormatMimeType(video),
                 getFormatId(video),
-                audio.sampleMimeType != null ? audio.sampleMimeType.replace("audio/", "") : null,
+                getFormatMimeType(audio),
                 getFormatId(audio)
         )));
         mVideoInfo.add(new Pair<>("Video/Audio Bitrate", String.format(
@@ -404,6 +404,14 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
             return String.format("(%s)", id);
         }
         return "";
+    }
+
+    private String getFormatMimeType(Format video) {
+        if (video == null || video.sampleMimeType == null) {
+            return null;
+        }
+
+        return video.sampleMimeType.replace("video/", "").replace("audio/", "");
     }
 
     private String getVideoResolution(Format video) {
