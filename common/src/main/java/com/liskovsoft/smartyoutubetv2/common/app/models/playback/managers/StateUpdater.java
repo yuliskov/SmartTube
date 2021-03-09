@@ -330,6 +330,10 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void updateHistory() {
+        if (getController().getVideo() == null) {
+            return;
+        }
+
         RxUtils.disposeActions(mHistoryAction);
 
         Video item = getController().getVideo();
