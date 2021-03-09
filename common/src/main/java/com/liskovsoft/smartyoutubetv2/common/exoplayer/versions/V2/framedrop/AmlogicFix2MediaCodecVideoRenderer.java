@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.V2.videorenderer;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.V2.framedrop;
 
 import android.content.Context;
 import android.os.Handler;

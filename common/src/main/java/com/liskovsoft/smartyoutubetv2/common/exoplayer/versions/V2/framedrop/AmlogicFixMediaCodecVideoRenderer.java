@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.V2.videorenderer;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.V2.framedrop;
 
 import android.content.Context;
 import android.media.MediaCodec;
@@ -19,22 +19,6 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 
 public class AmlogicFixMediaCodecVideoRenderer extends MediaCodecVideoRenderer {
     private static final String TAG = AmlogicFixMediaCodecVideoRenderer.class.getSimpleName();
-
-    public AmlogicFixMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector) {
-        super(context, mediaCodecSelector);
-    }
-
-    public AmlogicFixMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs) {
-        super(context, mediaCodecSelector, allowedJoiningTimeMs);
-    }
-
-    public AmlogicFixMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs, @Nullable Handler eventHandler, @Nullable VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {
-        super(context, mediaCodecSelector, allowedJoiningTimeMs, eventHandler, eventListener, maxDroppedFramesToNotify);
-    }
-
-    public AmlogicFixMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs, @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, @Nullable Handler eventHandler, @Nullable VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {
-        super(context, mediaCodecSelector, allowedJoiningTimeMs, drmSessionManager, playClearSamplesWithoutKeys, eventHandler, eventListener, maxDroppedFramesToNotify);
-    }
 
     public AmlogicFixMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
                                              @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, boolean enableDecoderFallback, @Nullable Handler eventHandler, @Nullable VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {

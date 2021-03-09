@@ -17,8 +17,9 @@ import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
 import com.google.android.exoplayer2.video.MediaCodecVideoRenderer;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.V2.videorenderer.AmlogicFix2MediaCodecVideoRenderer;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.V2.videorenderer.FrameDropFixMediaCodecVideoRenderer;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.V2.framedrop.AmlogicFix2MediaCodecVideoRenderer;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.V2.framedrop.CompoundFixMediaCodecVideoRenderer;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.V2.framedrop.FrameDropFixMediaCodecVideoRenderer;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.ArrayList;
@@ -135,7 +136,18 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
 
         Renderer videoRenderer = null;
 
-        if (Helpers.contains(FRAME_DROP_FIX_LIST, Helpers.getDeviceName())) {
+        if (mPlayerData.isFrameDropFixEnabled() && mPlayerData.isAmlogicFixEnabled()) {
+            videoRenderer = new CompoundFixMediaCodecVideoRenderer(
+                    context,
+                    mediaCodecSelector,
+                    allowedVideoJoiningTimeMs,
+                    drmSessionManager,
+                    playClearSamplesWithoutKeys,
+                    enableDecoderFallback,
+                    eventHandler,
+                    eventListener,
+                    MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
+        } else if (mPlayerData.isFrameDropFixEnabled()) {
             videoRenderer = new FrameDropFixMediaCodecVideoRenderer(
                     context,
                     mediaCodecSelector,

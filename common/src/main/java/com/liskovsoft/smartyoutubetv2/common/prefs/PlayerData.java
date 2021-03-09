@@ -52,6 +52,7 @@ public class PlayerData {
     private int mPlaybackMode;
     private boolean mIsSleepTimerEnabled;
     private boolean mIsAmlogicFixEnabled;
+    private boolean mIsFrameDropFixEnabled;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -311,6 +312,15 @@ public class PlayerData {
         return mIsAmlogicFixEnabled;
     }
 
+    public void enableFrameDropFix(boolean enable) {
+        mIsFrameDropFixEnabled = enable;
+        persistData();
+    }
+
+    public boolean isFrameDropFixEnabled() {
+        return mIsFrameDropFixEnabled;
+    }
+
     private void initSubtitleStyles() {
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_default, R.color.light_grey, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_semi_transparent_bg, R.color.light_grey, R.color.semi_grey, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
@@ -350,6 +360,7 @@ public class PlayerData {
         mIsLowQualityEnabled = Helpers.parseBoolean(split, 24, false);
         mIsSleepTimerEnabled = Helpers.parseBoolean(split, 25, false);
         mIsAmlogicFixEnabled = Helpers.parseBoolean(split, 26, false);
+        mIsFrameDropFixEnabled = Helpers.parseBoolean(split, 27, false);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -364,6 +375,6 @@ public class PlayerData {
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs,
                 mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
-                mIsLowQualityEnabled, mIsSleepTimerEnabled, mIsAmlogicFixEnabled));
+                mIsLowQualityEnabled, mIsSleepTimerEnabled, mIsAmlogicFixEnabled, mIsFrameDropFixEnabled));
     }
 }
