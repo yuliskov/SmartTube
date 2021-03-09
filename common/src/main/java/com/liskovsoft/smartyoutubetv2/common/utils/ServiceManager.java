@@ -4,6 +4,7 @@ import com.liskovsoft.appupdatechecker2.other.SettingsManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -19,13 +20,24 @@ public class ServiceManager {
     private static ServiceManager sInstance;
     private final MediaItemManager mItemManager;
     private final MediaGroupManager mGroupManager;
+    private final SignInManager mAuthManager;
     private Disposable mMetadataAction;
     private Disposable mUploadsAction;
+    private Disposable mSignCheckAction;
+
+    public interface OnMetadata {
+        void onMetadata(MediaItemMetadata metadata);
+    }
+
+    public interface OnMediaGroup {
+        void onMediaGroup(MediaGroup group);
+    }
 
     public ServiceManager() {
         MediaService service = YouTubeMediaService.instance();
         mItemManager = service.getMediaItemManager();
         mGroupManager = service.getMediaGroupManager();
+        mAuthManager = service.getSignInManager();
     }
 
     public static ServiceManager instance() {
@@ -62,10 +74,6 @@ public class ServiceManager {
                 );
     }
 
-    public interface OnMetadata {
-        void onMetadata(MediaItemMetadata metadata);
-    }
-
     public void loadChannelUploads(Video item, OnMediaGroup onMediaGroup) {
         if (item == null) {
             return;
@@ -84,7 +92,26 @@ public class ServiceManager {
                 );
     }
 
-    public interface OnMediaGroup {
-        void onMediaGroup(MediaGroup group);
+    public void authCheck(Runnable onSuccess, Runnable onError) {
+        if (onSuccess == null || onError == null) {
+            return;
+        }
+
+        RxUtils.disposeActions(mSignCheckAction);
+
+        mSignCheckAction = mAuthManager.isSignedObserve()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        isSigned -> {
+                            if (isSigned) {
+                                onSuccess.run();
+                            } else {
+                                onError.run();
+                            }
+                        },
+                        error -> Log.e(TAG, "Sign check error: %s", error.getMessage())
+                );
+
     }
 }
