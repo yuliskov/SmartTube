@@ -37,7 +37,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         mPrefs = AppPrefs.instance(getActivity());
         mPlayerData = PlayerData.instance(getActivity());
 
-        restoreState();
+        restoreClipData();
     }
 
     /**
@@ -131,6 +131,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
         restoreSpeed(item);
         // Player thinks that subs not enabled if I enable it too early (e.g. on source change event).
         restoreSubtitleFormat();
+
+        updateHistory();
     }
 
     @Override
@@ -182,15 +184,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
         if (state != null && state.lengthMs < MUSIC_VIDEO_LENGTH_MS) {
             mStates.remove(item.videoId);
         }
-    }
-
-    private void restoreState() {
-        restoreClipData();
-    }
-
-    private void persistState() {
-        updateHistory();
-        persistVideoState();
     }
 
     private void persistVideoState() {
@@ -262,7 +255,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
                 video.percentWatched = 0;
             }
 
-            persistState();
+            updateHistory();
+            persistVideoState();
         }
     }
 
