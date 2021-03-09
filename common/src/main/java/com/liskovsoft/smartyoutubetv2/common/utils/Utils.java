@@ -204,7 +204,7 @@ public class Utils {
         ViewManager.instance(context).clearCaches();
     }
 
-    public static String toQrCodeUrl(String data) {
+    public static String toQrCode(String data) {
         return String.format(QR_CODE_URL_TEMPLATE, data);
     }
 }

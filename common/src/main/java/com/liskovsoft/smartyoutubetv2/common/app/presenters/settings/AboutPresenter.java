@@ -20,6 +20,7 @@ public class AboutPresenter extends BasePresenter<Void> {
     private static final String DONATIONALERTS_URL = "https://www.donationalerts.com/r/firsthash";
     private static final String QIWI_URL = "https://qiwi.com/n/GUESS025";
     private static final String PRIVATBANK_URL = "https://privatbank.ua/ru/sendmoney?payment=9e46a6ef78";
+    private static final String BTC_HASH = "BTC: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx";
 
     public AboutPresenter(Context context) {
         super(context);
@@ -76,19 +77,19 @@ public class AboutPresenter extends BasePresenter<Void> {
 
         donateOptions.add(UiOptionItem.from(
                 "PrivatBank (UA)",
-                option -> Helpers.openLink(Utils.toQrCodeUrl(PRIVATBANK_URL), getContext())));
+                option -> Helpers.openLink(Utils.toQrCode(PRIVATBANK_URL), getContext())));
 
         donateOptions.add(UiOptionItem.from(
                 "QIWI (RU)",
-                option -> Helpers.openLink(Utils.toQrCodeUrl(QIWI_URL), getContext())));
+                option -> Helpers.openLink(Utils.toQrCode(QIWI_URL), getContext())));
 
         donateOptions.add(UiOptionItem.from(
                 "PayPal",
-                option -> Helpers.openLink(Utils.toQrCodeUrl(DONATIONALERTS_URL), getContext())));
+                option -> Helpers.openLink(Utils.toQrCode(DONATIONALERTS_URL), getContext())));
 
         donateOptions.add(UiOptionItem.from(
-                Utils.toQrCodeUrl("BTC: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx"),
-                null));
+                "BTC",
+                option -> Helpers.openLink(Utils.toQrCode(BTC_HASH), getContext())));
 
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.donation), donateOptions);
     }
