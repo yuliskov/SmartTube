@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppUpdatePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,18 +76,18 @@ public class AboutPresenter extends BasePresenter<Void> {
 
         donateOptions.add(UiOptionItem.from(
                 "PrivatBank (UA)",
-                option -> Helpers.openLink(PRIVATBANK_URL, getContext())));
+                option -> Helpers.openLink(Utils.toQrCodeUrl(PRIVATBANK_URL), getContext())));
 
         donateOptions.add(UiOptionItem.from(
                 "QIWI (RU)",
-                option -> Helpers.openLink(QIWI_URL, getContext())));
+                option -> Helpers.openLink(Utils.toQrCodeUrl(QIWI_URL), getContext())));
 
         donateOptions.add(UiOptionItem.from(
                 "PayPal",
-                option -> Helpers.openLink(DONATIONALERTS_URL, getContext())));
+                option -> Helpers.openLink(Utils.toQrCodeUrl(DONATIONALERTS_URL), getContext())));
 
         donateOptions.add(UiOptionItem.from(
-                "BTC: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx",
+                Utils.toQrCodeUrl("BTC: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx"),
                 null));
 
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.donation), donateOptions);

@@ -34,6 +34,7 @@ import java.util.concurrent.TimeUnit;
 public class Utils {
     private static final String TASK_ID = RemoteControlWorker.class.getSimpleName();
     private static final String TAG = Utils.class.getSimpleName();
+    private static final String QR_CODE_URL_TEMPLATE = "https://api.qrserver.com/v1/create-qr-code/?data=%s";
 
     /**
      * Limit the maximum size of a Map by removing oldest entries when limit reached
@@ -201,5 +202,9 @@ public class Utils {
         // 1) Remove downloaded apks
         // 2) Setup language
         ViewManager.instance(context).clearCaches();
+    }
+
+    public static String toQrCodeUrl(String data) {
+        return String.format(QR_CODE_URL_TEMPLATE, data);
     }
 }
