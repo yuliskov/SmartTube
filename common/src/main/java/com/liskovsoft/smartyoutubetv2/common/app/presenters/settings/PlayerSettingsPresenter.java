@@ -155,6 +155,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerData.enableLowQuality(option.isSelected()),
                 mPlayerData.isLowQualityEnabled()));
 
+        options.add(UiOptionItem.from("Amlogic fix",
+                option -> mPlayerData.enableAmlogicFix(option.isSelected()),
+                mPlayerData.isAmlogicFixEnabled()));
+
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 }

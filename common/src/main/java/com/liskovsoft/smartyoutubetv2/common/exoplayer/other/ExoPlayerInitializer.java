@@ -35,10 +35,6 @@ public class ExoPlayerInitializer {
         // HDR fix?
         //trackSelector.setParameters(trackSelector.buildUponParameters().setTunnelingAudioSessionId(C.generateAudioSessionIdV21(context)));
 
-        if (renderersFactory instanceof CustomOverridesRenderersFactory) {
-            ((CustomOverridesRenderersFactory) renderersFactory).setAudioDelayMs(mPlayerData.getAudioDelayMs());
-        }
-
         SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(context, renderersFactory, trackSelector, loadControl);
         enableAudioFocus(player);
 

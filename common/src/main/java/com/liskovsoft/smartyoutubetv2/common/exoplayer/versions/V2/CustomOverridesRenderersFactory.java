@@ -19,6 +19,7 @@ import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.V2.videorenderer.AmlogicFix2MediaCodecVideoRenderer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.V2.videorenderer.FrameDropFixMediaCodecVideoRenderer;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.ArrayList;
 
@@ -32,13 +33,15 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
             "UGOOS (UGOOS)",
             "55UC30G (ctl_iptv_mrvl)" // Kivi 55uc30g
     };
-    private int mAudioDelayMs;
+    private final PlayerData mPlayerData;
 
     public CustomOverridesRenderersFactory(FragmentActivity activity) {
         super(activity);
         setExtensionRendererMode(EXTENSION_RENDERER_MODE_ON);
         setEnableDecoderFallback(true);
         //setMediaCodecSelector(new BlackListMediaCodecSelector());
+
+        mPlayerData = PlayerData.instance(activity);
     }
 
     /**
@@ -69,36 +72,41 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
                 eventListener,
                 out);
 
-        if (mAudioDelayMs == 0) {
-            return;
-        }
+        Renderer audioRenderer = null;
 
-        Renderer originMediaCodecAudioRenderer = null;
-        int index = 0;
-
-        for (Renderer renderer : out) {
-            if (renderer instanceof MediaCodecAudioRenderer) {
-                originMediaCodecAudioRenderer = renderer;
-                break;
-            }
-            index++;
-        }
-
-        if (originMediaCodecAudioRenderer != null) {
-            // replace origin with custom
-            out.remove(originMediaCodecAudioRenderer);
+        if (mPlayerData.getAudioDelayMs() != 0) {
             AudioDelayMediaCodecAudioRenderer audioDelayRenderer =
                     new AudioDelayMediaCodecAudioRenderer(
-                        context,
-                        mediaCodecSelector,
-                        drmSessionManager,
-                        playClearSamplesWithoutKeys,
-                        enableDecoderFallback,
-                        eventHandler,
-                        eventListener,
-                        new DefaultAudioSink(AudioCapabilities.getCapabilities(context), audioProcessors));
-            audioDelayRenderer.setAudioDelayMs(mAudioDelayMs);
-            out.add(index, audioDelayRenderer);
+                            context,
+                            mediaCodecSelector,
+                            drmSessionManager,
+                            playClearSamplesWithoutKeys,
+                            enableDecoderFallback,
+                            eventHandler,
+                            eventListener,
+                            new DefaultAudioSink(AudioCapabilities.getCapabilities(context), audioProcessors));
+            audioDelayRenderer.setAudioDelayMs(mPlayerData.getAudioDelayMs());
+
+            audioRenderer = audioDelayRenderer;
+        }
+
+        if (audioRenderer != null) {
+            Renderer originMediaCodecAudioRenderer = null;
+            int index = 0;
+
+            for (Renderer renderer : out) {
+                if (renderer instanceof MediaCodecAudioRenderer) {
+                    originMediaCodecAudioRenderer = renderer;
+                    break;
+                }
+                index++;
+            }
+
+            if (originMediaCodecAudioRenderer != null) {
+                // replace origin with custom
+                out.remove(originMediaCodecAudioRenderer);
+                out.add(index, audioRenderer);
+            }
         }
     }
 
@@ -138,7 +146,7 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
                     eventHandler,
                     eventListener,
                     MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
-        } else {
+        } else if (mPlayerData.isAmlogicFixEnabled()) {
             videoRenderer = new AmlogicFix2MediaCodecVideoRenderer(
                     context,
                     mediaCodecSelector,
@@ -169,9 +177,5 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
                 out.add(index, videoRenderer);
             }
         }
-    }
-
-    public void setAudioDelayMs(int delayMs) {
-        mAudioDelayMs = delayMs;
     }
 }
