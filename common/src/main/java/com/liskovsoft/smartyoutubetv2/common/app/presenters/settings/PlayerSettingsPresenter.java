@@ -163,7 +163,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerData.enableAmlogicFix(option.isSelected()),
                 mPlayerData.isAmlogicFixEnabled()));
 
-        options.add(UiOptionItem.from("Experimental frame drops fix",
+        options.add(UiOptionItem.from("Frame drops fix (experimental)",
                 option -> mPlayerData.enableFrameDropFix(option.isSelected()),
                 mPlayerData.isFrameDropFixEnabled()));
 
