@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -83,7 +84,12 @@ public class VideoLoader extends PlayerEventListenerHelper {
         // Some ciphered data might be stalled.
         // Might happen when the app wasn't used quite a long time.
         MessageHelpers.showMessage(getActivity(), R.string.msg_player_error, type);
-        YouTubeMediaService.instance().invalidateCache();
+
+        if (type == PlayerEventListener.ERROR_TYPE_SOURCE) {
+            YouTubeMediaService.instance().enableAltDataSource(true);
+            YouTubeMediaService.instance().invalidateCache();
+        }
+
         getController().restartEngine(); // properly save position of the current track
 
         //if (type == PlayerEventListener.ERROR_TYPE_SOURCE ||
