@@ -195,4 +195,5 @@
     <string name="video_preset_disabled">Geen video preset</string>
     <string name="video_preset_enabled">Video kwaliteit van volgende video wordt ingesteld volgens je video preset</string>
     <string name="player_sleep_timer">Sleep timer</string>
+    <string name="player_show_quality_info">Info kwaliteit weergeven</string>
 </resources>
