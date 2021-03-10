@@ -690,6 +690,14 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             }
         }
 
+        void setBufferedPosition(long progressMs) {
+            mSecondaryProgressInMs = progressMs;
+            // Solve the progress bar by using ratio
+            double ratio = (double) progressMs / mTotalTimeInMs;           // Range: [0, 1]
+            double progressRatio = ratio * Integer.MAX_VALUE;   // Could safely cast to int
+            mProgressBar.setSecondaryProgress((int) progressRatio);
+        }
+
         void setEndingTime(long currentTimeMs) {
             if (mEndingTime != null) {
                 if (mPlayerData.isRemainingTimeEnabled()) {
@@ -699,8 +707,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                     endingTimeMs = (long) (endingTimeMs / mPlayerData.getSpeed());
 
                     formatTime(endingTimeMs >= 0 ? endingTimeMs : 0, mTempBuilder);
-                    mEndingTime.setText(String.format(mEndingTimeFormat, mTempBuilder.toString()));
 
+                    mEndingTime.setText(String.format(mEndingTimeFormat, mTempBuilder.toString()));
                     mEndingTime.setVisibility(View.VISIBLE);
                 } else {
                     mEndingTime.setVisibility(View.GONE);
@@ -708,17 +716,14 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             }
         }
 
-        void setBufferedPosition(long progressMs) {
-            mSecondaryProgressInMs = progressMs;
-            // Solve the progress bar by using ratio
-            double ratio = (double) progressMs / mTotalTimeInMs;           // Range: [0, 1]
-            double progressRatio = ratio * Integer.MAX_VALUE;   // Could safely cast to int
-            mProgressBar.setSecondaryProgress((int) progressRatio);
-        }
-
         void setQualityInfo(String content) {
             if (content != null) {
-                mQualityInfo.setText(content);
+                if (mPlayerData.isQualityInfoEnabled()) {
+                    mQualityInfo.setText(content);
+                    mQualityInfo.setVisibility(View.VISIBLE);
+                } else {
+                    mQualityInfo.setVisibility(View.GONE);
+                }
             }
         }
 

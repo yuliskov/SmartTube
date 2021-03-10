@@ -135,6 +135,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerData.enablePauseOnSeek(option.isSelected()),
                 mPlayerData.isPauseOnSeekEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_remember_speed),
+                option -> mPlayerData.enableRememberSpeed(option.isSelected()),
+                mPlayerData.isRememberSpeedEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_sleep_timer),
                 option -> mPlayerData.enableSleepTimer(option.isSelected()),
                 mPlayerData.isSleepTimerEnabled()));
@@ -147,9 +151,9 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerData.enableRemainingTime(option.isSelected()),
                 mPlayerData.isRemainingTimeEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_remember_speed),
-                option -> mPlayerData.enableRememberSpeed(option.isSelected()),
-                mPlayerData.isRememberSpeedEnabled()));
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_quality_info),
+                option -> mPlayerData.enableQualityInfo(option.isSelected()),
+                mPlayerData.isQualityInfoEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_low_video_quality),
                 option -> mPlayerData.enableLowQuality(option.isSelected()),

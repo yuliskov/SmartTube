@@ -53,6 +53,7 @@ public class PlayerData {
     private boolean mIsSleepTimerEnabled;
     private boolean mIsAmlogicFixEnabled;
     private boolean mIsFrameDropFixEnabled;
+    private boolean mIsQualityInfoEnabled;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -128,6 +129,15 @@ public class PlayerData {
 
     public void enableRemainingTime(boolean enable) {
         mIsRemainingTimeEnabled = enable;
+        persistData();
+    }
+
+    public boolean isQualityInfoEnabled() {
+        return mIsQualityInfoEnabled;
+    }
+
+    public void enableQualityInfo(boolean enable) {
+        mIsQualityInfoEnabled = enable;
         persistData();
     }
 
@@ -361,6 +371,7 @@ public class PlayerData {
         mIsSleepTimerEnabled = Helpers.parseBoolean(split, 25, false);
         mIsAmlogicFixEnabled = Helpers.parseBoolean(split, 26, false);
         mIsFrameDropFixEnabled = Helpers.parseBoolean(split, 27, false);
+        mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -375,6 +386,6 @@ public class PlayerData {
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs,
                 mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
-                mIsLowQualityEnabled, mIsSleepTimerEnabled, mIsAmlogicFixEnabled, mIsFrameDropFixEnabled));
+                mIsLowQualityEnabled, mIsSleepTimerEnabled, mIsAmlogicFixEnabled, mIsFrameDropFixEnabled, mIsQualityInfoEnabled));
     }
 }
