@@ -110,7 +110,7 @@
                     android:layout_alignParentEnd="true"
                     style="?attr/playbackControlsTimeStyle" />
                 <TextView
-                    android:id="@+id/current_date"
+                    android:id="@+id/date_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"

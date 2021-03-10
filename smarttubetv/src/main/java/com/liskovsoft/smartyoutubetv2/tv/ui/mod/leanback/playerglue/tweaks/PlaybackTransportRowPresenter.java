@@ -86,7 +86,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         final TextView mCurrentTime;
         final TextView mEndingTime;
         final TextView mQualityInfo;
-        final TextView mCurrentDate;
+        final TextView mDateTime;
         final ViewGroup mAdditionalInfo;
         final ViewGroup mTopEdge;
         final SeekBar mProgressBar;
@@ -116,7 +116,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
         // MOD: update quality info
         final QualityInfoListener mQualityInfoListener = this::setQualityInfo;
-        final TickleListener mTickleListener = this::updateDateLabel;
+        final TickleListener mTickleListener = this::updateDateTime;
         TopEdgeFocusListener mTopEdgeFocusListener = null;
 
         final PlaybackControlsRow.OnPlaybackProgressCallback mListener =
@@ -409,7 +409,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             mCurrentTime = (TextView) rootView.findViewById(R.id.current_time);
             mTotalTime = (TextView) rootView.findViewById(R.id.total_time);
             mQualityInfo = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.quality_info);
-            mCurrentDate = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.current_date);
+            mDateTime = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.date_time);
             mEndingTime = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.ending_time);
             mEndingTimeFormat = rootView.getContext().getString(com.liskovsoft.smartyoutubetv2.tv.R.string.player_remaining_time);
             mAdditionalInfo = (ViewGroup) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.additional_info);
@@ -727,12 +727,12 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             }
         }
 
-        void updateDateLabel() {
+        void updateDateTime() {
             if (mPlayerData.isClockEnabled()) {
-                mCurrentDate.setText(DateFormatter.getCurrentDateShort(mCurrentDate.getContext()));
-                mCurrentDate.setVisibility(View.VISIBLE);
+                mDateTime.setText(DateFormatter.getCurrentTimeShort(mDateTime.getContext()));
+                mDateTime.setVisibility(View.VISIBLE);
             } else {
-                mCurrentDate.setVisibility(View.GONE);
+                mDateTime.setVisibility(View.GONE);
             }
         }
     }
