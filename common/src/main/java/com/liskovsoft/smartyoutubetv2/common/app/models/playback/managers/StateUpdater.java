@@ -294,7 +294,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
         if (isLive) {
             getController().setSpeed(1.0f);
         } else {
-            getController().setSpeed(mPlayerData.getSpeed());
+            State state = mStates.get(item.videoId);
+            getController().setSpeed(state != null ? state.speed : mPlayerData.getSpeed());
         }
     }
 
