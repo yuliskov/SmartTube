@@ -194,5 +194,5 @@
     <string name="video_preset_disabled">Без пресета</string>
     <string name="video_preset_enabled">Формат слідуючого відео буде встановлений у відповідності до пресету</string>
     <string name="player_sleep_timer">Таймер сну</string>
-    <string name="player_show_quality_info">Відображати інформацію про якість</string>
+    <string name="player_show_quality_info">Відображати інформацію про якість відео</string>
 </resources>

@@ -194,5 +194,5 @@
     <string name="video_preset_disabled">Без профиля</string>
     <string name="video_preset_enabled">Формат следующего видео будет установлен в соответствии с профилем</string>
     <string name="player_sleep_timer">Таймер сна</string>
-    <string name="player_show_quality_info">Отображать информацию о качестве</string>
+    <string name="player_show_quality_info">Отображать информацию о качестве видео</string>
 </resources>
