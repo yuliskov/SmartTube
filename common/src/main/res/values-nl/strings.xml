@@ -156,7 +156,7 @@
     <string name="auto_frame_rate_pause">Auto Frame Rate (pauze)</string>
     <string name="auto_frame_rate_applying">Auto Frame Rate toepassen %sx%s@%s</string>
     <string name="audio_shift">Audio sync</string>
-    <string name="player_remember_speed">Video snelheid bewaren</string>
+    <string name="player_remember_speed">Video snelheid bewaren (algemeen)</string>
     <string name="mark_channel_as_watched">Markeren als bekeken</string>
     <string name="channel_marked_as_watched">Kanaal gemarkeerd als bekeken</string>
     <string name="dialog_add_device">Apparaat toevoegen</string>
@@ -196,4 +196,5 @@
     <string name="video_preset_enabled">Video kwaliteit van volgende video wordt ingesteld volgens je video preset</string>
     <string name="player_sleep_timer">Sleep timer</string>
     <string name="player_show_quality_info">Video kwaliteit weergeven</string>
+    <string name="player_remember_each_speed">Video snelheid bewaren (specifiek)</string>
 </resources>
