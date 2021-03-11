@@ -23,6 +23,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
     private static final int MAX_PERSISTENT_STATE_SIZE = 30;
     private boolean mIsPlayEnabled;
+    private Video mVideo;
     private FormatItem mTempVideoFormat;
     // Don't store state inside Video object.
     // As one video might correspond to multiple Video objects.
@@ -33,11 +34,12 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private boolean mIsPlayBlocked;
 
     @Override
-    public void onInitDone() {
+    public void onInitDone() { // called each time a video opened from the browser
         mPrefs = AppPrefs.instance(getActivity());
         mPlayerData = PlayerData.instance(getActivity());
 
         restoreClipData();
+        resetPositionIfNeeded(mVideo); // reset position of music videos
     }
 
     /**
@@ -47,10 +49,11 @@ public class StateUpdater extends PlayerEventListenerHelper {
     @Override
     public void openVideo(Video item) {
         setPlayEnabled(true); // video just added
-        
+
+        mVideo = item;
         mTempVideoFormat = null;
 
-        resetStateIfNeeded(item); // reset position of music videos
+        resetPositionIfNeeded(item); // reset position of music videos
         resetSpeedIfNeeded();
 
         // Ensure that we aren't running on presenter init stage
@@ -173,16 +176,32 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     private void clearStateOfNextVideo() {
         if (getController().getVideo() != null && getController().getVideo().nextMediaItem != null) {
-            mStates.remove(getController().getVideo().nextMediaItem.getVideoId());
+            resetPosition(getController().getVideo().nextMediaItem.getVideoId());
         }
     }
     
-    private void resetStateIfNeeded(Video item) {
+    private void resetPositionIfNeeded(Video item) {
+        if (item == null) {
+            return;
+        }
+
         State state = mStates.get(item.videoId);
 
         // Reset position of music videos
         if (state != null && state.lengthMs < MUSIC_VIDEO_LENGTH_MS) {
-            mStates.remove(item.videoId);
+            resetPosition(item.videoId);
+        }
+    }
+
+    private void resetPosition(String videoId) {
+        State state = mStates.get(videoId);
+
+        if (state != null) {
+            if (mPlayerData.isRememberSpeedEnabled()) {
+                mStates.put(videoId, new State(videoId, 0, state.lengthMs, state.speed));
+            } else {
+                mStates.remove(videoId);
+            }
         }
     }
 
@@ -256,7 +275,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
                 mStates.put(video.videoId, new State(video.videoId, getController().getPositionMs(), getController().getLengthMs(), getController().getSpeed()));
             } else {
                 // Add null state to prevent restore position from history
-                mStates.remove(video.videoId);
+                resetPosition(video.videoId);
                 video.percentWatched = 0;
             }
 
