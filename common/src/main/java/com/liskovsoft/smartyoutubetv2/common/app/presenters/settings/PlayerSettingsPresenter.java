@@ -139,6 +139,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerData.enableRememberSpeed(option.isSelected()),
                 mPlayerData.isRememberSpeedEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_remember_each_speed),
+                option -> mPlayerData.enableRememberEachSpeed(option.isSelected()),
+                mPlayerData.isRememberEachSpeedEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_sleep_timer),
                 option -> mPlayerData.enableSleepTimer(option.isSelected()),
                 mPlayerData.isSleepTimerEnabled()));

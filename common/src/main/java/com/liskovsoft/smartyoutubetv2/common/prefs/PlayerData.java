@@ -54,6 +54,7 @@ public class PlayerData {
     private boolean mIsAmlogicFixEnabled;
     private boolean mIsFrameDropFixEnabled;
     private boolean mIsQualityInfoEnabled;
+    private boolean mIsRememberEachSpeedEnabled;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -165,6 +166,17 @@ public class PlayerData {
 
     public void enableRememberSpeed(boolean enable) {
         mIsRememberSpeedEnabled = enable;
+        mIsRememberEachSpeedEnabled = false;
+        persistData();
+    }
+
+    public boolean isRememberEachSpeedEnabled() {
+        return mIsRememberEachSpeedEnabled;
+    }
+
+    public void enableRememberEachSpeed(boolean enable) {
+        mIsRememberEachSpeedEnabled = enable;
+        mIsRememberSpeedEnabled = false;
         persistData();
     }
 
@@ -372,6 +384,7 @@ public class PlayerData {
         mIsAmlogicFixEnabled = Helpers.parseBoolean(split, 26, false);
         mIsFrameDropFixEnabled = Helpers.parseBoolean(split, 27, false);
         mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
+        mIsRememberEachSpeedEnabled = Helpers.parseBoolean(split, 29, false);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -386,6 +399,6 @@ public class PlayerData {
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs,
                 mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
-                mIsLowQualityEnabled, mIsSleepTimerEnabled, mIsAmlogicFixEnabled, mIsFrameDropFixEnabled, mIsQualityInfoEnabled));
+                mIsLowQualityEnabled, mIsSleepTimerEnabled, mIsAmlogicFixEnabled, mIsFrameDropFixEnabled, mIsQualityInfoEnabled, mIsRememberEachSpeedEnabled));
     }
 }

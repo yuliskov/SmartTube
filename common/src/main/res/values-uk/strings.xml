@@ -155,7 +155,7 @@
     <string name="auto_frame_rate_pause">Автофреймрейт (пауза)</string>
     <string name="auto_frame_rate_applying">Застосовується автофреймрейт %sx%s@%s</string>
     <string name="audio_shift">Зміщення аудіо</string>
-    <string name="player_remember_speed">Запам\'ятовувати швидкість</string>
+    <string name="player_remember_speed">Запам\'ятовувати швидкість глобально</string>
     <string name="mark_channel_as_watched">Позначити як переглянуте</string>
     <string name="channel_marked_as_watched">Канал позначен як переглянутий</string>
     <string name="dialog_add_device">Додати пристрій</string>
@@ -195,4 +195,5 @@
     <string name="video_preset_enabled">Формат слідуючого відео буде встановлений у відповідності до пресету</string>
     <string name="player_sleep_timer">Таймер сну</string>
     <string name="player_show_quality_info">Відображати інформацію про якість відео</string>
+    <string name="player_remember_each_speed">Запам\'ятовувати швидкість кожного відео</string>
 </resources>

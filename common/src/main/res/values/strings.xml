@@ -156,7 +156,7 @@
     <string name="auto_frame_rate_pause">Auto frame rate pause</string>
     <string name="auto_frame_rate_applying">Applying auto frame rate %sx%s@%s</string>
     <string name="audio_shift">Audio shift</string>
-    <string name="player_remember_speed">Remember speed</string>
+    <string name="player_remember_speed">Remember speed globally</string>
     <string name="mark_channel_as_watched">Mark as watched</string>
     <string name="channel_marked_as_watched">Channel has been marked as watched</string>
     <string name="dialog_add_device">Add device</string>
@@ -196,4 +196,5 @@
     <string name="video_preset_enabled">Format of the next video will be set according to preset</string>
     <string name="player_sleep_timer">Sleep timer</string>
     <string name="player_show_quality_info">Show video quality info</string>
+    <string name="player_remember_each_speed">Remember each video speed</string>
 </resources>

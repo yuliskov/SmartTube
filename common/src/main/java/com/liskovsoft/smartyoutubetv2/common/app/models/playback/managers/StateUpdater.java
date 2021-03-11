@@ -197,7 +197,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         State state = mStates.get(videoId);
 
         if (state != null) {
-            if (mPlayerData.isRememberSpeedEnabled()) {
+            if (mPlayerData.isRememberEachSpeedEnabled()) {
                 mStates.put(videoId, new State(videoId, 0, state.lengthMs, state.speed));
             } else {
                 mStates.remove(videoId);
@@ -206,14 +206,14 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void persistVideoState() {
-        if (getController().getLengthMs() <= MUSIC_VIDEO_LENGTH_MS && !mPlayerData.isRememberSpeedEnabled()) {
+        if (getController().getLengthMs() <= MUSIC_VIDEO_LENGTH_MS && !mPlayerData.isRememberEachSpeedEnabled()) {
             return;
         }
 
         StringBuilder sb = new StringBuilder();
 
         for (State state : mStates.values()) {
-            if (state.lengthMs <= MUSIC_VIDEO_LENGTH_MS && !mPlayerData.isRememberSpeedEnabled()) {
+            if (state.lengthMs <= MUSIC_VIDEO_LENGTH_MS && !mPlayerData.isRememberEachSpeedEnabled()) {
                 continue;
             }
 
@@ -318,9 +318,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
         if (isLive) {
             getController().setSpeed(1.0f);
         } else {
-            //State state = mStates.get(item.videoId);
-            //getController().setSpeed(state != null && mPlayerData.isRememberSpeedEnabled() ? state.speed : mPlayerData.getSpeed());
-            getController().setSpeed(mPlayerData.getSpeed());
+            State state = mStates.get(item.videoId);
+            getController().setSpeed(state != null && mPlayerData.isRememberEachSpeedEnabled() ? state.speed : mPlayerData.getSpeed());
         }
     }
 
