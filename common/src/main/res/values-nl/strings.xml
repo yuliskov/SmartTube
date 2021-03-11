@@ -198,6 +198,6 @@
     <string name="player_show_quality_info">Video kwaliteit weergeven</string>
     <string name="player_remember_each_speed">Video snelheid bewaren (per video)</string>
     <string name="player_remember_speed_none">Niet bewaren</string>
-    <string name="player_remember_speed_all">Snelheid bewaren voor alle video\'s</string>
-    <string name="player_remember_speed_each">Snelheid bewaren per video</string>
+    <string name="player_remember_speed_all">Zelfde snelheid voor alle video\'s</string>
+    <string name="player_remember_speed_each">Specifieke snelheid per video</string>
 </resources>
