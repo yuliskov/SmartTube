@@ -40,6 +40,11 @@ public class VideoLoader extends PlayerEventListenerHelper {
             openVideoFromNext(getController().getVideo(), false);
         }
     };
+    private final Runnable mPendingRestartEngine = () -> {
+        if (getController() != null) {
+            getController().restartEngine(); // properly save position of the current track
+        }
+    };
 
     public VideoLoader(SuggestionsLoader suggestionsLoader) {
         mSuggestionsLoader = suggestionsLoader;
@@ -86,11 +91,11 @@ public class VideoLoader extends PlayerEventListenerHelper {
         MessageHelpers.showMessage(getActivity(), R.string.msg_player_error, type);
 
         if (type == PlayerEventListener.ERROR_TYPE_SOURCE) {
-            YouTubeMediaService.instance().enableAltDataSource(true);
+            //YouTubeMediaService.instance().enableAltDataSource(true);
             YouTubeMediaService.instance().invalidateCache();
         }
 
-        getController().restartEngine(); // properly save position of the current track
+        mHandler.postDelayed(mPendingRestartEngine, 3_000); // fix too frequent request
 
         //if (type == PlayerEventListener.ERROR_TYPE_SOURCE ||
         //    type == PlayerEventListener.ERROR_TYPE_RENDERER ||
