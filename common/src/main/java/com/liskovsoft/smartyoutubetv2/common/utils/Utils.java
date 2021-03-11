@@ -10,6 +10,7 @@ import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.view.Window;
 import android.view.WindowManager;
@@ -206,5 +207,20 @@ public class Utils {
 
     public static String toQrCode(String data) {
         return String.format(QR_CODE_URL_TEMPLATE, data);
+    }
+
+    public static void postDelayed(Handler handler, Runnable callback, int delayMs) {
+        handler.removeCallbacks(callback);
+        handler.postDelayed(callback, delayMs);
+    }
+
+    public static void removeCallbacks(Handler handler, Runnable... callbacks) {
+        if (callbacks == null) {
+            return;
+        }
+
+        for (Runnable callback : callbacks) {
+             handler.removeCallbacks(callback);
+        }
     }
 }

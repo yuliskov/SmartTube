@@ -12,11 +12,11 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -29,12 +29,12 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private final Handler mHandler;
     private final SuggestionsLoader mSuggestionsLoader;
     private Video mLastVideo;
-    private Disposable mFormatInfoAction;
-    private Disposable mMpdStreamAction;
-    private final Runnable mReloadVideoHandler = () -> loadVideo(mLastVideo);
     private long mPrevErrorTimeMs;
     private PlayerData mPlayerData;
     private long mSleepTimerStartMs;
+    private Disposable mFormatInfoAction;
+    private Disposable mMpdStreamAction;
+    private final Runnable mReloadVideoHandler = () -> loadVideo(mLastVideo);
     private final Runnable mPendingNext = () -> {
         if (getController() != null) {
             openVideoFromNext(getController().getVideo(), false);
@@ -90,11 +90,9 @@ public class VideoLoader extends PlayerEventListenerHelper {
         // Might happen when the app wasn't used quite a long time.
         MessageHelpers.showMessage(getActivity(), R.string.msg_player_error, type);
 
-        if (type == PlayerEventListener.ERROR_TYPE_SOURCE) {
-            YouTubeMediaService.instance().invalidateCache();
-        }
+        YouTubeMediaService.instance().invalidateCache();
 
-        mHandler.postDelayed(mPendingRestartEngine, 3_000); // fix too frequent request
+        Utils.postDelayed(mHandler, mPendingRestartEngine, 3_000); // fix too frequent request
 
         //if (type == PlayerEventListener.ERROR_TYPE_SOURCE ||
         //    type == PlayerEventListener.ERROR_TYPE_RENDERER ||
@@ -220,11 +218,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
         }
     }
 
-    private void disposeActions() {
-        RxUtils.disposeActions(mFormatInfoAction, mMpdStreamAction);
-        mHandler.removeCallbacks(mReloadVideoHandler);
-    }
-
     private void loadVideo(Video item) {
         if (item != null) {
             mLastVideo = item;
@@ -245,7 +238,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
             if (showLoadingMsg) {
                 MessageHelpers.showMessageThrottled(getActivity(), R.string.wait_data_loading);
             }
-            startPendingNext();
+            Utils.postDelayed(mHandler, mPendingNext, 1_000);
         }
     }
 
@@ -297,7 +290,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         if (getController().isEngineInitialized()) {
             Log.d(TAG, "Starting check for the future stream...");
             getController().showControls(true);
-            mHandler.postDelayed(mReloadVideoHandler, reloadIntervalMs);
+            Utils.postDelayed(mHandler, mReloadVideoHandler, reloadIntervalMs);
         }
     }
 
@@ -311,7 +304,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     private void openVideoInt(Video item) {
-        stopPendingNext();
+        disposeActions();
 
         if (item == null) {
             return;
@@ -327,12 +320,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
         }
     }
 
-    private void stopPendingNext() {
-        mHandler.removeCallbacks(mPendingNext);
-    }
-
-    private void startPendingNext() {
-        mHandler.removeCallbacks(mPendingNext);
-        mHandler.postDelayed(mPendingNext, 1_000);
+    private void disposeActions() {
+        RxUtils.disposeActions(mFormatInfoAction, mMpdStreamAction);
+        Utils.removeCallbacks(mHandler, mReloadVideoHandler, mPendingRestartEngine, mPendingNext);
     }
 }
