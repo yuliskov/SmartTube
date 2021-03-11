@@ -91,7 +91,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
         MessageHelpers.showMessage(getActivity(), R.string.msg_player_error, type);
 
         if (type == PlayerEventListener.ERROR_TYPE_SOURCE) {
-            //YouTubeMediaService.instance().enableAltDataSource(true);
             YouTubeMediaService.instance().invalidateCache();
         }
 
