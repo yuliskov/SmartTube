@@ -688,8 +688,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
-    public boolean hasNoMedia() {
-        return mExoPlayerController.hasNoMedia();
+    public boolean containsMedia() {
+        return mExoPlayerController.containsMedia();
     }
 
     @Override

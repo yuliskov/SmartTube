@@ -120,11 +120,10 @@ public class StateUpdater extends PlayerEventListenerHelper {
     @Override
     public void onEngineReleased() {
         // Save previous state
-        if (containsMedia()) {
+        if (getController().containsMedia()) {
             setPlayEnabled(getController().getPlay());
+            saveState();
         }
-
-        saveState();
     }
 
     @Override
@@ -260,7 +259,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void saveState() {
-        if (!containsMedia()) {
+        if (!getController().containsMedia()) {
             return;
         }
 
@@ -352,10 +351,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     private boolean getPlayEnabled() {
         return mIsPlayEnabled;
-    }
-
-    private boolean containsMedia() {
-        return getController() != null && getController().getLengthMs() > 0;
     }
 
     private void updateHistory() {

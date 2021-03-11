@@ -45,7 +45,7 @@ public interface PlaybackEngineController {
     void setPlaybackMode(int type);
     int getPlaybackMode();
     boolean isInPIPMode();
-    boolean hasNoMedia();
+    boolean containsMedia();
     void setSpeed(float speed);
     float getSpeed();
     void setVideoZoomMode(int mode);

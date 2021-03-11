@@ -142,12 +142,12 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     @Override
-    public boolean hasNoMedia() {
+    public boolean containsMedia() {
         if (mPlayer == null) {
-            return true;
+            return false;
         }
 
-        return mPlayer.getPlaybackState() == Player.STATE_IDLE;
+        return mPlayer.getPlaybackState() != Player.STATE_IDLE;
     }
 
     @Override

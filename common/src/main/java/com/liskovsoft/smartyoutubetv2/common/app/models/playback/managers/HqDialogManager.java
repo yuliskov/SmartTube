@@ -99,7 +99,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
             MessageHelpers.showMessage(getActivity(), R.string.video_preset_enabled);
         }
 
-        if (getController().hasNoMedia()) {
+        if (!getController().containsMedia()) {
             getController().reloadPlayback();
         }
     }
