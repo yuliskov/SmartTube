@@ -38,6 +38,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendOKButtonCategory(settingsPresenter);
         appendUIAutoHideCategory(settingsPresenter);
         appendSeekingPreviewCategory(settingsPresenter);
+        appendRememberSpeedCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_player_ui));
@@ -124,6 +125,27 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_seek_preview), options);
     }
 
+    private void appendRememberSpeedCategory(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_remember_speed_none),
+                optionItem -> {
+                    mPlayerData.enableRememberSpeed(false);
+                    mPlayerData.enableRememberSpeedEach(false);
+                },
+                !mPlayerData.isRememberSpeedEnabled() && !mPlayerData.isRememberSpeedEachEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_remember_speed_all),
+                optionItem -> mPlayerData.enableRememberSpeed(true),
+                mPlayerData.isRememberSpeedEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_remember_speed_each),
+                optionItem -> mPlayerData.enableRememberSpeedEach(true),
+                mPlayerData.isRememberSpeedEachEnabled()));
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_remember_speed), options);
+    }
+
     private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
@@ -134,14 +156,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.player_pause_when_seek),
                 option -> mPlayerData.enablePauseOnSeek(option.isSelected()),
                 mPlayerData.isPauseOnSeekEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_remember_speed),
-                option -> mPlayerData.enableRememberSpeed(option.isSelected()),
-                mPlayerData.isRememberSpeedEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_remember_each_speed),
-                option -> mPlayerData.enableRememberEachSpeed(option.isSelected()),
-                mPlayerData.isRememberEachSpeedEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_sleep_timer),
                 option -> mPlayerData.enableSleepTimer(option.isSelected()),

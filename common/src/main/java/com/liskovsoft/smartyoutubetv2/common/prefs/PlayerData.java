@@ -54,7 +54,7 @@ public class PlayerData {
     private boolean mIsAmlogicFixEnabled;
     private boolean mIsFrameDropFixEnabled;
     private boolean mIsQualityInfoEnabled;
-    private boolean mIsRememberEachSpeedEnabled;
+    private boolean mIsRememberSpeedEachEnabled;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -166,16 +166,16 @@ public class PlayerData {
 
     public void enableRememberSpeed(boolean enable) {
         mIsRememberSpeedEnabled = enable;
-        mIsRememberEachSpeedEnabled = false;
+        mIsRememberSpeedEachEnabled = false;
         persistData();
     }
 
-    public boolean isRememberEachSpeedEnabled() {
-        return mIsRememberEachSpeedEnabled;
+    public boolean isRememberSpeedEachEnabled() {
+        return mIsRememberSpeedEachEnabled;
     }
 
-    public void enableRememberEachSpeed(boolean enable) {
-        mIsRememberEachSpeedEnabled = enable;
+    public void enableRememberSpeedEach(boolean enable) {
+        mIsRememberSpeedEachEnabled = enable;
         mIsRememberSpeedEnabled = false;
         persistData();
     }
@@ -384,7 +384,7 @@ public class PlayerData {
         mIsAmlogicFixEnabled = Helpers.parseBoolean(split, 26, false);
         mIsFrameDropFixEnabled = Helpers.parseBoolean(split, 27, false);
         mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
-        mIsRememberEachSpeedEnabled = Helpers.parseBoolean(split, 29, false);
+        mIsRememberSpeedEachEnabled = Helpers.parseBoolean(split, 29, false);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -399,6 +399,6 @@ public class PlayerData {
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs,
                 mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
-                mIsLowQualityEnabled, mIsSleepTimerEnabled, mIsAmlogicFixEnabled, mIsFrameDropFixEnabled, mIsQualityInfoEnabled, mIsRememberEachSpeedEnabled));
+                mIsLowQualityEnabled, mIsSleepTimerEnabled, mIsAmlogicFixEnabled, mIsFrameDropFixEnabled, mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled));
     }
 }
