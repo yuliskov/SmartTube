@@ -117,7 +117,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     @Override
     public void onEngineReleased() {
         // Save previous state
-        if (getController().getLengthMs() > 0) { // contains any media
+        if (containsMedia()) {
             setPlayEnabled(getController().getPlay());
         }
 
@@ -187,14 +187,14 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void persistVideoState() {
-        if (getController().getLengthMs() <= MUSIC_VIDEO_LENGTH_MS) {
+        if (getController().getLengthMs() <= MUSIC_VIDEO_LENGTH_MS && !mPlayerData.isRememberSpeedEnabled()) {
             return;
         }
 
         StringBuilder sb = new StringBuilder();
 
         for (State state : mStates.values()) {
-            if (state.lengthMs <= MUSIC_VIDEO_LENGTH_MS) {
+            if (state.lengthMs <= MUSIC_VIDEO_LENGTH_MS && !mPlayerData.isRememberSpeedEnabled()) {
                 continue;
             }
 
@@ -241,12 +241,17 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void saveState() {
+        if (!containsMedia()) {
+            return;
+        }
+
         Video video = getController().getVideo();
 
         if (video != null) {
             // Don't save position if track is ended.
             // Skip if paused.
-            boolean isVideoEnded = Math.abs(getController().getLengthMs() - getController().getPositionMs()) < 1_000;
+            long remainsMs = getController().getLengthMs() - getController().getPositionMs();
+            boolean isVideoEnded = remainsMs < 1_000;
             if (!isVideoEnded || !getPlayEnabled()) {
                 mStates.put(video.videoId, new State(video.videoId, getController().getPositionMs(), getController().getLengthMs(), getController().getSpeed()));
             } else {
@@ -294,8 +299,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
         if (isLive) {
             getController().setSpeed(1.0f);
         } else {
-            State state = mStates.get(item.videoId);
-            getController().setSpeed(state != null ? state.speed : mPlayerData.getSpeed());
+            //State state = mStates.get(item.videoId);
+            //getController().setSpeed(state != null && mPlayerData.isRememberSpeedEnabled() ? state.speed : mPlayerData.getSpeed());
+            getController().setSpeed(mPlayerData.getSpeed());
         }
     }
 
@@ -328,6 +334,10 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     private boolean getPlayEnabled() {
         return mIsPlayEnabled;
+    }
+
+    private boolean containsMedia() {
+        return getController() != null && getController().getLengthMs() > 0;
     }
 
     private void updateHistory() {
