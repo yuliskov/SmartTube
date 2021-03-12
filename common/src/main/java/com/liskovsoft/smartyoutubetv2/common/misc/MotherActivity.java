@@ -68,7 +68,7 @@ public class MotherActivity extends FragmentActivity {
         }
     }
 
-    //private void initDpiOld() {
+    //private void initDpi() {
     //    // Do caching to prevent sudden dpi change.
     //    // Could happen when screen goes off or after PIP mode.
     //    if (sCachedDisplayMetrics == null) {
