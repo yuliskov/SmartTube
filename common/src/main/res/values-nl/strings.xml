@@ -125,7 +125,7 @@
     <string name="playlists_style">Playlists lay-out</string>
     <string name="playlists_style_grid">Raster</string>
     <string name="playlists_style_rows">Lijst</string>
-    <string name="player_show_clock">Klok weergeven</string>
+    <string name="player_show_clock">Datum/klok weergeven</string>
     <string name="player_show_remaining_time">Resterende tijd weergeven</string>
     <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Recente uploads</string>
@@ -195,4 +195,9 @@
     <string name="video_preset_disabled">Geen video preset</string>
     <string name="video_preset_enabled">Video kwaliteit van volgende video wordt ingesteld volgens je video preset</string>
     <string name="player_sleep_timer">Sleep timer</string>
+    <string name="player_show_quality_info">Video kwaliteit weergeven</string>
+    <string name="player_remember_each_speed">Video snelheid bewaren (per video)</string>
+    <string name="player_remember_speed_none">Niet bewaren</string>
+    <string name="player_remember_speed_all">Zelfde snelheid voor alle video\'s</string>
+    <string name="player_remember_speed_each">Specifieke snelheid per video</string>
 </resources>
