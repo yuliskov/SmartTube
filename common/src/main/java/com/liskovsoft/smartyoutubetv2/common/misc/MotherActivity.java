@@ -40,17 +40,19 @@ public class MotherActivity extends FragmentActivity {
         super.attachBaseContext(LocaleContextWrapper.wrap(newBase, getLocale(newBase)));
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        applyCustomConfig();
-    }
+    //@Override
+    //protected void onStart() {
+    //    super.onStart();
+    //
+    //    applyCustomConfig();
+    //}
 
     @Override
     protected void onResume() {
         super.onResume();
 
+        // 4K fix with AFR
+        applyCustomConfig();
         Helpers.makeActivityFullscreen(this);
     }
 
