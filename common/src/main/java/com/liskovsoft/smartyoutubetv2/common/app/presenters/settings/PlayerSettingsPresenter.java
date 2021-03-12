@@ -177,7 +177,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerData.enableLowQuality(option.isSelected()),
                 mPlayerData.isLowQualityEnabled()));
 
-        options.add(UiOptionItem.from("Amlogic fix",
+        options.add(UiOptionItem.from("Amlogic 1080/60 fix",
                 option -> mPlayerData.enableAmlogicFix(option.isSelected()),
                 mPlayerData.isAmlogicFixEnabled()));
 

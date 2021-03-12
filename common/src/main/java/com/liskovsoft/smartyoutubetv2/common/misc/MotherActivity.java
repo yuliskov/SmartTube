@@ -18,7 +18,7 @@ public class MotherActivity extends FragmentActivity {
     private static final String TAG = MotherActivity.class.getSimpleName();
     private static final float DEFAULT_DENSITY = 2.0f; // xhdpi
     private static final float DEFAULT_WIDTH = 1920f; // xhdpi
-    private static DisplayMetrics sCachedDisplayMetrics;
+    //private static DisplayMetrics sCachedDisplayMetrics;
     private static Locale sCachedLocale;
 
     @Override
@@ -68,20 +68,33 @@ public class MotherActivity extends FragmentActivity {
         }
     }
 
-    private void initDpi() {
-        // Do caching to prevent sudden dpi change.
-        // Could happen when screen goes off or after PIP mode.
-        if (sCachedDisplayMetrics == null) {
-            float uiScale = MainUIData.instance(this).getUIScale();
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
-            displayMetrics.density = DEFAULT_DENSITY / widthRatio * uiScale;
-            displayMetrics.scaledDensity = DEFAULT_DENSITY / widthRatio * uiScale;
-            sCachedDisplayMetrics = displayMetrics;
-        }
+    //private void initDpiOld() {
+    //    // Do caching to prevent sudden dpi change.
+    //    // Could happen when screen goes off or after PIP mode.
+    //    if (sCachedDisplayMetrics == null) {
+    //        float uiScale = MainUIData.instance(this).getUIScale();
+    //        DisplayMetrics displayMetrics = new DisplayMetrics();
+    //        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+    //        float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
+    //        displayMetrics.density = DEFAULT_DENSITY / widthRatio * uiScale;
+    //        displayMetrics.scaledDensity = DEFAULT_DENSITY / widthRatio * uiScale;
+    //        sCachedDisplayMetrics = displayMetrics;
+    //    }
+    //
+    //    getResources().getDisplayMetrics().setTo(sCachedDisplayMetrics);
+    //}
 
-        getResources().getDisplayMetrics().setTo(sCachedDisplayMetrics);
+    private void initDpi() {
+        // To adapt to resolution change (e.g. on AFR) we can't do caching.
+
+        float uiScale = MainUIData.instance(this).getUIScale();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
+        displayMetrics.density = DEFAULT_DENSITY / widthRatio * uiScale;
+        displayMetrics.scaledDensity = DEFAULT_DENSITY / widthRatio * uiScale;
+
+        getResources().getDisplayMetrics().setTo(displayMetrics);
     }
 
     private static Locale getLocale(Context context) {
