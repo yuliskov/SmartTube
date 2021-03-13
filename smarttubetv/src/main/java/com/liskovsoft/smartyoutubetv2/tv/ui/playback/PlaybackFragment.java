@@ -585,21 +585,29 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void openDash(InputStream dashManifest) {
+        cleanupPrevTrack();
+
         mExoPlayerController.openDash(dashManifest);
     }
 
     @Override
     public void openDashUrl(String dashManifestUrl) {
+        cleanupPrevTrack();
+
         mExoPlayerController.openDashUrl(dashManifestUrl);
     }
 
     @Override
     public void openHlsUrl(String hlsPlaylistUrl) {
+        cleanupPrevTrack();
+
         mExoPlayerController.openHlsUrl(hlsPlaylistUrl);
     }
 
     @Override
     public void openUrlList(List<String> urlList) {
+        cleanupPrevTrack();
+
         mExoPlayerController.openUrlList(urlList);
     }
 
@@ -913,5 +921,18 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     private LeanbackActivity getLeanbackActivity() {
         return (LeanbackActivity) getActivity();
+    }
+
+    /**
+     * Simply recreates exoplayer objects (silently) if prev track (current from this perspective) isn't empty<br/>
+     * Could help with memory leaks?
+     */
+    private void cleanupPrevTrack() {
+        if (containsMedia()) {
+            Video video = getVideo(); // backup video
+            destroyPlayerObjects(); // silent destroy
+            createPlayerObjects(); // silent create
+            setVideo(video); // restore
+        }
     }
 }
