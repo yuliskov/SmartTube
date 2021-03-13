@@ -936,10 +936,12 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
      * Could help with memory leaks?
      */
     private void cleanupPrevTrack() {
-        if (containsMedia()) {
+        // Ensure that user isn't browsing suggestions
+        if (containsMedia() && !isSuggestionsShown()) {
             // save state
             Video video = getVideo();
             int repeatButtonState = getRepeatButtonState();
+            boolean controlsShown = isControlsShown();
 
             // silently recreate player objects
             destroyPlayerObjects();
@@ -948,6 +950,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             // restore state
             setVideo(video);
             setRepeatButtonState(repeatButtonState);
+            showControls(controlsShown);
         }
     }
 }
