@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.view.Window;
 import android.view.WindowManager;
+import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
@@ -205,8 +206,17 @@ public class Utils {
         ViewManager.instance(context).clearCaches();
     }
 
-    public static String toQrCode(String data) {
+    public static String toQrCodeLink(String data) {
         return String.format(QR_CODE_URL_TEMPLATE, data);
+    }
+
+    /**
+     * <a href="https://developer.chrome.com/docs/android/custom-tabs/integration-guide/">Chrome custom tabs</a>
+     */
+    public static void openLink(Context context, String url) {
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(context, Uri.parse(url));
     }
 
     public static void postDelayed(Handler handler, Runnable callback, int delayMs) {

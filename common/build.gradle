@@ -69,6 +69,8 @@ dependencies {
 
     implementation 'androidx.work:work-runtime:' + workVersion
 
+    implementation 'androidx.browser:browser:' + browserXVersion
+
     storigImplementation project(path: ':leanbackassistant')
     storigImplementation project(path: ':appupdatechecker2')
     stbetaImplementation project(path: ':leanbackassistant')

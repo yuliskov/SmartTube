@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 import android.content.Context;
 import com.liskovsoft.appupdatechecker2.AppUpdateChecker;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -67,7 +66,7 @@ public class AboutPresenter extends BasePresenter<Void> {
 
     private void appendSiteLink(AppSettingsPresenter settingsPresenter) {
         OptionItem webSiteOption = UiOptionItem.from(String.format("%s (GitHub)", getContext().getString(R.string.web_site)),
-                option -> Helpers.openLink(WEB_SITE_URL, getContext()));
+                option -> Utils.openLink(getContext(), WEB_SITE_URL));
 
         settingsPresenter.appendSingleButton(webSiteOption);
     }
@@ -77,19 +76,19 @@ public class AboutPresenter extends BasePresenter<Void> {
 
         donateOptions.add(UiOptionItem.from(
                 "PrivatBank (UA)",
-                option -> Helpers.openLink(Utils.toQrCode(PRIVATBANK_URL), getContext())));
+                option -> Utils.openLink(getContext(), Utils.toQrCodeLink(PRIVATBANK_URL))));
 
         donateOptions.add(UiOptionItem.from(
                 "QIWI (RU)",
-                option -> Helpers.openLink(Utils.toQrCode(QIWI_URL), getContext())));
+                option -> Utils.openLink(getContext(), Utils.toQrCodeLink(QIWI_URL))));
 
         donateOptions.add(UiOptionItem.from(
                 "PayPal",
-                option -> Helpers.openLink(Utils.toQrCode(DONATIONALERTS_URL), getContext())));
+                option -> Utils.openLink(getContext(), Utils.toQrCodeLink(DONATIONALERTS_URL))));
 
         donateOptions.add(UiOptionItem.from(
                 "BTC",
-                option -> Helpers.openLink(Utils.toQrCode(BTC_HASH), getContext())));
+                option -> Utils.openLink(getContext(), Utils.toQrCodeLink(BTC_HASH))));
 
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.donation), donateOptions);
     }
