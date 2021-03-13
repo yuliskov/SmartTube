@@ -199,6 +199,10 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         invalidateUi(mRepeatAction);
     }
 
+    public int getRepeatActionState() {
+        return mRepeatAction.getIndex();
+    }
+
     public void setSubscribeActionState(boolean subscribed) {
         mSubscribeAction.setIndex(subscribed ? SubscribeAction.INDEX_ON : SubscribeAction.INDEX_OFF);
         invalidateUi(mSubscribeAction);

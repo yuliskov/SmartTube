@@ -836,6 +836,14 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         }
     }
 
+    private int getRepeatButtonState() {
+        if (mPlayerGlue != null) {
+            return mPlayerGlue.getRepeatActionState();
+        }
+
+        return 0;
+    }
+
     @Override
     public void setLikeButtonState(boolean like) {
         mPlayerGlue.setThumbsUpActionState(like);
@@ -929,10 +937,17 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
      */
     private void cleanupPrevTrack() {
         if (containsMedia()) {
-            Video video = getVideo(); // backup video
-            destroyPlayerObjects(); // silent destroy
-            createPlayerObjects(); // silent create
-            setVideo(video); // restore
+            // save state
+            Video video = getVideo();
+            int repeatButtonState = getRepeatButtonState();
+
+            // silently recreate player objects
+            destroyPlayerObjects();
+            createPlayerObjects();
+
+            // restore state
+            setVideo(video);
+            setRepeatButtonState(repeatButtonState);
         }
     }
 }
