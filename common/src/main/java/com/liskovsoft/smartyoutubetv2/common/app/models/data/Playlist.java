@@ -50,6 +50,7 @@ public class Playlist {
         }
 
         trimPlaylist();
+        stripPrevItem();
     }
 
     /**
@@ -106,5 +107,20 @@ public class Playlist {
         }
 
         return null;
+    }
+
+    /**
+     * Do some cleanup to prevent possible OOM exception
+     */
+    private void stripPrevItem() {
+        int prevPosition = mCurrentPosition - 1;
+
+        if (prevPosition < mPlaylist.size() && prevPosition >= 0) {
+            Video prevItem = mPlaylist.get(prevPosition);
+            if (prevItem != null) {
+                prevItem.mediaItem = null;
+                prevItem.nextMediaItem = null;
+            }
+        }
     }
 }
