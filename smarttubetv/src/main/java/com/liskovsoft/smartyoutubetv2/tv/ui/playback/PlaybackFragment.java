@@ -73,9 +73,9 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private VideoPlayerGlue mPlayerGlue;
     private SimpleExoPlayer mPlayer;
     private PlaybackPresenter mPlaybackPresenter;
-    private CardPresenter mCardPresenter;
     private ArrayObjectAdapter mRowsAdapter;
     private ListRowPresenter mRowPresenter;
+    private CardPresenter mCardPresenter;
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
     private PlayerEventListener mEventListener;
     private PlayerController mExoPlayerController;
@@ -99,7 +99,6 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         mPlaybackPresenter = PlaybackPresenter.instance(getContext());
         mPlaybackPresenter.setView(this);
-        mCardPresenter = new CardPresenter();
     }
 
     @Override
@@ -377,6 +376,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         // player controls row
         mRowsAdapter.add(mPlayerGlue.getControlsRow());
+
+        mCardPresenter = new CardPresenter();
 
         setupEventListeners();
 
