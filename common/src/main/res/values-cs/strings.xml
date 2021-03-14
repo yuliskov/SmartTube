@@ -191,4 +191,9 @@
     <string name="video_preset_disabled">Bez video předvolby</string>
     <string name="video_preset_enabled">Formát dalšího videa bude nastaven podle video předvolby</string>
     <string name="player_sleep_timer">Časovač vypnutí</string>
+    <string name="player_show_quality_info">Zobrazit info o kvalitě videa</string>
+    <string name="player_remember_each_speed">Pamatovat si rychlost každého videa</string>
+    <string name="player_remember_speed_none">Nepamatovat si žádné</string>
+    <string name="player_remember_speed_all">Stejná rychlost pro všechna videa</string>
+    <string name="player_remember_speed_each">Každé video má svou vlastní rychlost</string>
 </resources>
