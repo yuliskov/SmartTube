@@ -99,7 +99,9 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         mPlaybackPresenter = PlaybackPresenter.instance(getContext());
         mPlaybackPresenter.setView(this);
-        mCardPresenter = new CardPresenter();
+
+        initPresenters();
+        setupEventListeners();
     }
 
     @Override
@@ -302,12 +304,9 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mExoPlayerController.release();
         mPlayer = null;
         mPlayerGlue = null;
+        mRowsAdapter = null;
         mSubtitleManager = null;
         mDebugInfoManager = null;
-
-        if (mRowsAdapter != null) {
-            mRowsAdapter.clear();
-        }
     }
 
     private void createPlayerObjects() {
@@ -358,6 +357,17 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         ClassPresenterSelector presenterSelector = new ClassPresenterSelector();
         presenterSelector.addClassPresenter(
                 mPlayerGlue.getControlsRow().getClass(), mPlayerGlue.getPlaybackRowPresenter());
+        presenterSelector.addClassPresenter(ListRow.class, mRowPresenter);
+
+        mRowsAdapter = new ArrayObjectAdapter(presenterSelector);
+
+        // player controls row
+        mRowsAdapter.add(mPlayerGlue.getControlsRow());
+
+        setAdapter(mRowsAdapter);
+    }
+
+    private void initPresenters() {
         mRowPresenter = new ListRowPresenter() {
             @Override
             protected void onBindRowViewHolder(RowPresenter.ViewHolder holder, Object item) {
@@ -371,16 +381,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
                 }
             }
         };
-        presenterSelector.addClassPresenter(ListRow.class, mRowPresenter);
-
-        mRowsAdapter = new ArrayObjectAdapter(presenterSelector);
-
-        // player controls row
-        mRowsAdapter.add(mPlayerGlue.getControlsRow());
-
-        setupEventListeners();
-
-        setAdapter(mRowsAdapter);
+        mCardPresenter = new CardPresenter();
     }
 
     private void setupEventListeners() {
