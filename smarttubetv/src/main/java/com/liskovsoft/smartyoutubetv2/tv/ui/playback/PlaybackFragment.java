@@ -304,6 +304,10 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mPlayerGlue = null;
         mSubtitleManager = null;
         mDebugInfoManager = null;
+
+        if (mRowsAdapter != null) {
+            mRowsAdapter.clear();
+        }
     }
 
     private void createPlayerObjects() {
@@ -337,13 +341,13 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         mDebugInfoManager = new DebugInfoManager(mPlayer, R.id.debug_view_group, getActivity());
 
-        initializeSuggestedVideosRow();
+        initializePlayerRows();
 
         mRowsSupportFragment = (RowsSupportFragment) getChildFragmentManager().findFragmentById(
                 R.id.playback_controls_dock);
     }
 
-    private void initializeSuggestedVideosRow() {
+    private void initializePlayerRows() {
         /*
          * To add a new row to the mPlayerAdapter and not lose the controls row that is provided by the
          * glue, we need to compose a new row with the controls row and our related videos row.
@@ -360,7 +364,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
                 super.onBindRowViewHolder(holder, item);
 
                 // Set position of item inside first row (playlist items)
-                if (getVideo() != null && getVideo().playlistIndex > 0 && mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView().getSelectedPosition() == 0) {
+                if (getVideo() != null && getVideo().playlistIndex > 0 &&
+                        mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView().getSelectedPosition() == 0) {
                     ViewHolder vh = (ViewHolder) holder;
                     vh.getGridView().setSelectedPosition(getVideo().playlistIndex);
                 }
