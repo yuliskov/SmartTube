@@ -341,10 +341,10 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         mDebugInfoManager = new DebugInfoManager(mPlayer, R.id.debug_view_group, getActivity());
 
-        initializePlayerRows();
-
         mRowsSupportFragment = (RowsSupportFragment) getChildFragmentManager().findFragmentById(
                 R.id.playback_controls_dock);
+
+        initializePlayerRows();
     }
 
     private void initializePlayerRows() {
