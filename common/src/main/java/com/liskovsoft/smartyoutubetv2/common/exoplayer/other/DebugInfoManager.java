@@ -265,10 +265,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
             return;
 
         counters.ensureUpdated();
-        appendRow("Dropped/Rendered Frames",
-                counters.droppedBufferCount + counters.skippedOutputBufferCount
-                    + "/" +
-                    counters.renderedOutputBufferCount);
+        appendRow("Dropped/Rendered Frames", counters.droppedBufferCount + "/" + counters.renderedOutputBufferCount);
         appendRow("Buffer size (seconds)", (int)(mPlayer.getBufferedPosition() - mPlayer.getCurrentPosition()) / 1_000);
     }
 
