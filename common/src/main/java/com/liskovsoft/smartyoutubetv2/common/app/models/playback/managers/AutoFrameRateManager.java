@@ -62,7 +62,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         mAutoFrameRateHelper.setFpsCorrectionEnabled(mPlayerData.isAfrFpsCorrectionEnabled());
         mAutoFrameRateHelper.setResolutionSwitchEnabled(mPlayerData.isAfrResSwitchEnabled(), false);
 
-        addUiOptions();
+//        addUiOptions();
     }
 
     @Override

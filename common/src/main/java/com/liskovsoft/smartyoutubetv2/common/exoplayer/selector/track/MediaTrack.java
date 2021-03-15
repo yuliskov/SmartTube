@@ -14,6 +14,7 @@ public abstract class MediaTrack {
     public boolean isSelected;
     public boolean isPreset;
     public int rendererIndex;
+    public boolean isHidden;
 
     public MediaTrack(int rendererIndex) {
         this.rendererIndex = rendererIndex;

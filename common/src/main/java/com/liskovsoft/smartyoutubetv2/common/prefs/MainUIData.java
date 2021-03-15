@@ -255,9 +255,9 @@ public class MainUIData {
         mIsCardAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0, true);
         String selectedCategories = Helpers.parseStr(split, 1);
         mBootCategoryId = Helpers.parseInt(split, 2, MediaGroup.TYPE_HOME);
-        mVideoGridScale = Helpers.parseFloat(split, 3, 1.0f);
+        mVideoGridScale = Helpers.parseFloat(split, 3, 1.35f);
         mUIScale = Helpers.parseFloat(split, 4, 1.0f);
-        mColorSchemeIndex = Helpers.parseInt(split, 5, 1);
+        mColorSchemeIndex = Helpers.parseInt(split, 5, 2);
         mIsCardMultilineTitleEnabled = Helpers.parseBoolean(split, 6, true);
         mIsSettingsCategoryEnabled = Helpers.parseBoolean(split, 7, true);
         mChannelCategorySorting = Helpers.parseInt(split, 8, CHANNEL_SORTING_LAST_VIEWED);

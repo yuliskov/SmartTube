@@ -41,28 +41,28 @@ public class AppDataSourceManager {
 
         settingItems.add(new SettingsItem(
                 context.getString(R.string.settings_accounts), () -> AccountSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_account));
-        settingItems.add(new SettingsItem(
-                context.getString(R.string.settings_linked_devices), () -> RemoteControlSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_cast));
-        settingItems.add(new SettingsItem(
-                context.getString(R.string.settings_language), () -> LanguageSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_language));
-        settingItems.add(new SettingsItem(
-                context.getString(R.string.settings_general), () -> GeneralSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_app));
-        settingItems.add(new SettingsItem(
-                context.getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_main_ui));
+//        settingItems.add(new SettingsItem(
+//                context.getString(R.string.settings_linked_devices), () -> RemoteControlSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_cast));
+//        settingItems.add(new SettingsItem(
+//                context.getString(R.string.settings_language), () -> LanguageSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_language));
+//        settingItems.add(new SettingsItem(
+//                context.getString(R.string.settings_general), () -> GeneralSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_app));
+//        settingItems.add(new SettingsItem(
+//                context.getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_main_ui));
         //settingItems.add(new SettingsItem(
         //        context.getString(R.string.settings_ui_scale), () -> UIScaleSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_ui_scale));
-        settingItems.add(new SettingsItem(
-                context.getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_player));
-        settingItems.add(new SettingsItem(
-                context.getString(R.string.auto_frame_rate), () -> AutoFrameRateSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_afr));
-        settingItems.add(new SettingsItem(
-                context.getString(R.string.subtitle_category_title), () -> SubtitleSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_subtitles));
-        settingItems.add(new SettingsItem(
-                context.getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_search));
-        settingItems.add(new SettingsItem(
-                ContentBlockData.SPONSOR_BLOCK_NAME, () -> ContentBlockSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_block));
-        settingItems.add(new SettingsItem(
-                context.getString(R.string.settings_about), () -> AboutPresenter.instance(presenter.getContext()).show(), R.drawable.settings_about));
+//        settingItems.add(new SettingsItem(
+//                context.getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_player));
+//        settingItems.add(new SettingsItem(
+//                context.getString(R.string.auto_frame_rate), () -> AutoFrameRateSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_afr));
+//        settingItems.add(new SettingsItem(
+//                context.getString(R.string.subtitle_category_title), () -> SubtitleSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_subtitles));
+//        settingItems.add(new SettingsItem(
+//                context.getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_search));
+//        settingItems.add(new SettingsItem(
+//                ContentBlockData.SPONSOR_BLOCK_NAME, () -> ContentBlockSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_block));
+//        settingItems.add(new SettingsItem(
+//                context.getString(R.string.settings_about), () -> AboutPresenter.instance(presenter.getContext()).show(), R.drawable.settings_about));
 
         return settingItems;
     }

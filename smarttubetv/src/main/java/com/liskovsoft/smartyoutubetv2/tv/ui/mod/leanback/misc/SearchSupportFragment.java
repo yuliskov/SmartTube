@@ -320,10 +320,8 @@ public class SearchSupportFragment extends Fragment {
                 if (DEBUG) Log.v(TAG, String.format("onSearchQuerySubmit %s", query));
                 submitQuery(query);
                 mScrollToEndAfterTextChanged = true;
-                if (BuildConfig.FLAVOR.equals("stbolshoetv")) {
-                    InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputMethodManager.hideSoftInputFromWindow(mSearchBar.getWindowToken(), 0);
-                }
+                InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(mSearchBar.getWindowToken(), 0);
             }
 
             @Override
