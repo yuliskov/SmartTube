@@ -211,17 +211,21 @@ public class Utils {
         return String.format(QR_CODE_URL_TEMPLATE, data);
     }
 
-    /**
-     * <a href="https://developer.chrome.com/docs/android/custom-tabs/integration-guide/">Chrome custom tabs</a>
-     */
     public static void openLink(Context context, String url) {
-        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-        CustomTabsIntent customTabsIntent = builder.build();
         try {
-            customTabsIntent.launchUrl(context, Uri.parse(url));
+            openLinkInTabs(context, url);
         } catch (SecurityException e) { // Permission Denial on Android 9
             Helpers.openLink(context, url); // revert to simple in-browser page
         }
+    }
+
+    /**
+     * <a href="https://developer.chrome.com/docs/android/custom-tabs/integration-guide/">Chrome custom tabs</a>
+     */
+    private static void openLinkInTabs(Context context, String url) {
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(context, Uri.parse(url));
     }
 
     public static void postDelayed(Handler handler, Runnable callback, int delayMs) {
