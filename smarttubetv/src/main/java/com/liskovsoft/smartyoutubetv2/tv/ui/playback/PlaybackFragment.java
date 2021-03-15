@@ -543,9 +543,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void resetSuggestedPosition() {
-        if (mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
-            mRowsSupportFragment.getVerticalGridView().setSelectedPosition(0);
-        }
+        setPlayerRowIndex(0);
     }
 
     @Override
@@ -815,8 +813,6 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         if (show) {
             showControlsOverlay(mIsAnimationEnabled);
         } else {
-            // Hide Suggestions (if any) before the close
-            setPlayerRowIndex(0);
             hideControlsOverlay(mIsAnimationEnabled);
         }
     }
