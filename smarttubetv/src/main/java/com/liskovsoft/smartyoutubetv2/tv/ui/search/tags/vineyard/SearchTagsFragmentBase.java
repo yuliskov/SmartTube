@@ -52,7 +52,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         mProgressBarManager = new ProgressBarManager();
         mResultsPresenter = new ListRowPresenter();
         mResultsAdapter = new ArrayObjectAdapter(mResultsPresenter);
-        mSearchTagsAdapter = new TagAdapter(getActivity(), "");
+        mSearchTagsAdapter = new TagAdapter(getActivity(), "", getSearchTextEditorId());
         mHandler = new Handler();
         setSearchResultProvider(this);
         setupListeners();
@@ -132,22 +132,6 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     private void setupListeners() {
         setOnItemViewClickedListener((itemViewHolder, item, rowViewHolder, row) -> onItemViewClicked(item));
         setOnItemViewSelectedListener((itemViewHolder, item, rowViewHolder, row) -> onItemViewSelected(item));
-        if (!hasPermission(Manifest.permission.RECORD_AUDIO)) {
-            setSpeechRecognitionCallback(new SpeechRecognitionCallback() {
-                @Override
-                public void recognizeSpeech() {
-                    if (isAdded()) {
-                        try {
-                            startActivityForResult(getRecognizerIntent(), REQUEST_SPEECH);
-                        } catch (ActivityNotFoundException e) {
-                            Log.e(TAG, "Cannot find activity for speech recognizer", e);
-                        }
-                    } else {
-                        Log.e(TAG, "Can't perform search. Fragment is detached.");
-                    }
-                }
-            });
-        }
     }
 
     private boolean hasPermission(final String permission) {
