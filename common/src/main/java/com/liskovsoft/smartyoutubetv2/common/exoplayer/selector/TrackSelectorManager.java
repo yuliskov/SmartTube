@@ -464,6 +464,9 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                     if (mediaTrack == null) {
                         continue;
                     }
+                    if (mediaTrack.format.width > MAX_HEIGHT_VIDEO_RESOLUTION) {
+                        continue;
+                    }
 
                     int compare = track.inBounds(mediaTrack);
 
