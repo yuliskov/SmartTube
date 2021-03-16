@@ -88,11 +88,17 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         disableUiAutoHideTimeout();
         disableSuggestionsResetTimeout();
 
+        boolean controlsShown = getController().isControlsShown();
+
         if (KeyHelpers.isBackKey(keyCode)) {
             enableSuggestionsResetTimeout();
         } else if (KeyHelpers.isMenuKey(keyCode)) {
-            getController().showControls(!getController().isControlsShown());
-        } else if (KeyHelpers.isConfirmKey(keyCode) && !getController().isControlsShown()) {
+            getController().showControls(!controlsShown);
+
+            if (controlsShown) {
+                enableSuggestionsResetTimeout();
+            }
+        } else if (KeyHelpers.isConfirmKey(keyCode) && !controlsShown) {
             switch (mPlayerData.getOKButtonBehavior()) {
                 case PlayerData.ONLY_UI:
                     getController().showControls(true);

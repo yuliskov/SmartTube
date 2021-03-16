@@ -18,6 +18,7 @@ import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -210,10 +211,18 @@ public class Utils {
         return String.format(QR_CODE_URL_TEMPLATE, data);
     }
 
+    public static void openLink(Context context, String url) {
+        try {
+            openLinkInTabs(context, url);
+        } catch (SecurityException e) { // Permission Denial on Android 9
+            Helpers.openLink(context, url); // revert to simple in-browser page
+        }
+    }
+
     /**
      * <a href="https://developer.chrome.com/docs/android/custom-tabs/integration-guide/">Chrome custom tabs</a>
      */
-    public static void openLink(Context context, String url) {
+    private static void openLinkInTabs(Context context, String url) {
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         CustomTabsIntent customTabsIntent = builder.build();
         customTabsIntent.launchUrl(context, Uri.parse(url));

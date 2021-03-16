@@ -236,7 +236,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
                 DEFAULT : String.format(Locale.US, "%.02f", video.pixelWidthHeightRatio);
         mVideoInfo.add(new Pair<>("Aspect Ratio", par));
         String videoCodecName = getVideoCodecNameV1(video);
-        mVideoInfo.add(new Pair<>("Video Codec Name", videoCodecName));
+        mVideoInfo.add(new Pair<>("Video Decoder Name", videoCodecName));
         mVideoInfo.add(new Pair<>("Hardware Accelerated", String.valueOf(isHardwareAccelerated(videoCodecName))));
     }
 
@@ -265,10 +265,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
             return;
 
         counters.ensureUpdated();
-        appendRow("Dropped/Rendered Frames",
-                counters.droppedBufferCount + counters.skippedOutputBufferCount
-                    + "/" +
-                    counters.renderedOutputBufferCount);
+        appendRow("Dropped/Rendered Frames", counters.droppedBufferCount + "/" + counters.renderedOutputBufferCount);
         appendRow("Buffer size (seconds)", (int)(mPlayer.getBufferedPosition() - mPlayer.getCurrentPosition()) / 1_000);
     }
 
