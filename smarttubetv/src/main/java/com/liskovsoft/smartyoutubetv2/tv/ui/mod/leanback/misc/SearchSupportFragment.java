@@ -480,15 +480,20 @@ public class SearchSupportFragment extends Fragment {
             mSearchBar.startRecognition();
         } else {
             // Ensure search bar state consistency when using external recognizer
-            mSearchBar.stopRecognition();
+//            mSearchBar.stopRecognition();
         }
     }
 
     @Override
     public void onPause() {
-        releaseRecognizer();
         mIsPaused = true;
         super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        releaseRecognizer();
+        super.onStop();
     }
 
     @Override
