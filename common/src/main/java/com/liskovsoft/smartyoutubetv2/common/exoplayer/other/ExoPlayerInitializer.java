@@ -11,7 +11,6 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerController;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.V2.CustomOverridesRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 public class ExoPlayerInitializer {
