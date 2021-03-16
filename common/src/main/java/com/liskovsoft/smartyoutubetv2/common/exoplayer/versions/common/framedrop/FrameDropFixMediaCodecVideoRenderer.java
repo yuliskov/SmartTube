@@ -1,21 +1,31 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.V3.framedrop;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.common.framedrop;
 
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.media.MediaCodec;
 import android.os.Handler;
 import androidx.annotation.Nullable;
+import com.google.android.exoplayer2.drm.DrmSessionManager;
+import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
+import com.google.android.exoplayer2.video.MediaCodecVideoRenderer;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
 
-public class CompoundFixMediaCodecVideoRenderer extends AmlogicFix2MediaCodecVideoRenderer {
-    public CompoundFixMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
-                                               boolean enableDecoderFallback, @Nullable Handler eventHandler,
-                                               @Nullable VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {
+public class FrameDropFixMediaCodecVideoRenderer extends MediaCodecVideoRenderer {
+    // Exo 2.10, 2.11
+    //public FrameDropFixMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
+    //                                           @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, boolean enableDecoderFallback, @Nullable Handler eventHandler, @Nullable VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {
+    //    super(context, mediaCodecSelector, allowedJoiningTimeMs, drmSessionManager, playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, maxDroppedFramesToNotify);
+    //}
+
+    // Exo 2.12, 2.13
+    public FrameDropFixMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
+                                              boolean enableDecoderFallback, @Nullable Handler eventHandler,
+                                              @Nullable VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {
         super(context, mediaCodecSelector, allowedJoiningTimeMs, enableDecoderFallback, eventHandler, eventListener, maxDroppedFramesToNotify);
     }
 
-    // EXO: 2.12.1
+    // EXO: 2.10, 2.11, 2.12
     /**
      * Renders the output buffer with the specified index. This method is only called if the platform
      * API version of the device is 21 or later.
@@ -34,7 +44,7 @@ public class CompoundFixMediaCodecVideoRenderer extends AmlogicFix2MediaCodecVid
         super.renderOutputBufferV21(codec, index, presentationTimeUs, 0);
     }
 
-    // EXO: 2.13.1
+    // EXO: 2.13
     /**
      * Renders the output buffer with the specified index. This method is only called if the platform
      * API version of the device is 21 or later.
