@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -103,17 +102,7 @@ public abstract class LeanbackActivity extends MotherActivity {
                     break;
             }
         } else {
-            if (!isInPIPMode()) {
-                super.finish();
-            }
+            super.finish();
         }
-    }
-
-    public boolean isInPIPMode() {
-        if (Build.VERSION.SDK_INT < 24) {
-            return false;
-        }
-
-        return isInPictureInPictureMode();
     }
 }

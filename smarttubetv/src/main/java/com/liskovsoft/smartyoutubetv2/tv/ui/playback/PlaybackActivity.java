@@ -136,13 +136,6 @@ public class PlaybackActivity extends LeanbackActivity {
         return mPlaybackFragment != null && mPlaybackFragment.getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_PIP && !isInPictureInPictureMode();
     }
 
-    //@Override
-    //public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
-    //    super.onPictureInPictureModeChanged(isInPictureInPictureMode);
-    //
-    //    mPlaybackFragment.reloadPlayback();
-    //}
-
     @Override
     public void finish() {
         Log.d(TAG, "Finishing activity...");
@@ -155,9 +148,16 @@ public class PlaybackActivity extends LeanbackActivity {
         // User pressed back.
         enterPIPMode();
 
-        super.finish();
+        if (doNotDestroy()) {
+            ViewManager.instance(this).startParentView(this);
+        } else {
+            mPlaybackFragment.onFinish();
+            super.finish();
+        }
+    }
 
-        mPlaybackFragment.onFinish();
+    private boolean doNotDestroy() {
+        return isInPIPMode() || mPlaybackFragment.getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND;
     }
 
     @SuppressWarnings("deprecation")
@@ -212,6 +212,14 @@ public class PlaybackActivity extends LeanbackActivity {
     protected void onPause() {
         super.onPause();
 
-        ViewManager.instance(this).blockTop(isInPIPMode() ? this : null);
+        ViewManager.instance(this).blockTop(doNotDestroy() ? this : null);
+    }
+
+    public boolean isInPIPMode() {
+        if (Build.VERSION.SDK_INT < 24) {
+            return false;
+        }
+
+        return isInPictureInPictureMode();
     }
 }
