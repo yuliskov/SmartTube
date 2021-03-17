@@ -15,6 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.MainUISetti
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.PlayerSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SearchSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SubtitleSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.UIScaleSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.VideoPreset;
 import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
 
@@ -49,8 +50,8 @@ public class AppDataSourceManager {
 //                context.getString(R.string.settings_general), () -> GeneralSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_app));
 //        settingItems.add(new SettingsItem(
 //                context.getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_main_ui));
-        //settingItems.add(new SettingsItem(
-        //        context.getString(R.string.settings_ui_scale), () -> UIScaleSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_ui_scale));
+        settingItems.add(new SettingsItem(
+                context.getString(R.string.settings_ui_scale), () -> UIScaleSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_ui_scale));
 //        settingItems.add(new SettingsItem(
 //                context.getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_player));
 //        settingItems.add(new SettingsItem(

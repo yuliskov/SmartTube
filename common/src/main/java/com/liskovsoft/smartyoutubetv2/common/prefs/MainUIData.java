@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
 
 import java.util.ArrayList;
@@ -263,6 +264,7 @@ public class MainUIData {
         mChannelCategorySorting = Helpers.parseInt(split, 8, CHANNEL_SORTING_LAST_VIEWED);
         mPlaylistsStyle = Helpers.parseInt(split, 9, PLAYLISTS_STYLE_GRID);
         mAppExitShortcut = Helpers.parseInt(split, 10, EXIT_DOUBLE_BACK);
+        mAppExitShortcut = BuildConfig.DEBUG ? EXIT_SINGLE_BACK : EXIT_DOUBLE_BACK;
         mCardTitleLinesNum = Helpers.parseInt(split, 11, 1);
         mIsCardTextAutoScrollEnabled = Helpers.parseBoolean(split, 12, true);
         mIsReturnToLauncherEnabled = Helpers.parseBoolean(split, 13, true);

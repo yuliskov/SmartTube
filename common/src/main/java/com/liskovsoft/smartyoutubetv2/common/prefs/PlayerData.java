@@ -382,6 +382,7 @@ public class PlayerData {
         mIsLowQualityEnabled = Helpers.parseBoolean(split, 24, false);
         mIsSleepTimerEnabled = Helpers.parseBoolean(split, 25, false);
         mIsAmlogicFixEnabled = Helpers.parseBoolean(split, 26, false);
+        mIsAmlogicFixEnabled = true;
         mIsFrameDropFixEnabled = Helpers.parseBoolean(split, 27, false);
         mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
         mIsRememberSpeedEachEnabled = Helpers.parseBoolean(split, 29, false);
