@@ -115,6 +115,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
     private void disposeActions() {
         RxUtils.disposeActions(mProgressAction, mSegmentsAction);
+        mSponsorSegments = null;
     }
 
     private void skipSegment(long positionMs) {
