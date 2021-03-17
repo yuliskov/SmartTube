@@ -194,4 +194,10 @@
     <string name="msg_player_error">Une erreur de lecteur s\'est produite %s. Redémarrage de la lecture…</string>
     <string name="video_preset_disabled">Sans préréglage</string>
     <string name="video_preset_enabled">Le format de la vidéo suivante sera défini selon le préréglage</string>
+    <string name="player_sleep_timer">Minuterie de sommeil</string>
+    <string name="player_show_quality_info">Afficher les informations sur la qualité vidéo</string>
+    <string name="player_remember_each_speed">Se souvenir de la vitesse de chaque vidéo</string>
+    <string name="player_remember_speed_none">Aucun</string>
+    <string name="player_remember_speed_all">Idem sur toutes les vidéos</string>
+    <string name="player_remember_speed_each">Pour chaque vidéo</string>
 </resources>
