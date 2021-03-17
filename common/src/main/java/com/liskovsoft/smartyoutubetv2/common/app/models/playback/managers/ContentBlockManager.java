@@ -30,6 +30,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     private static final String TAG = ContentBlockManager.class.getSimpleName();
     private MediaItemManager mMediaItemManager;
     private ContentBlockData mContentBlockData;
+    private Video mVideo;
     private List<SponsorSegment> mSponsorSegments;
     private Disposable mProgressAction;
     private Disposable mSegmentsAction;
@@ -92,6 +93,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         segments -> {
+                            mVideo = item;
                             mSponsorSegments = segments;
                             startPlaybackWatcher();
                         },
@@ -116,10 +118,11 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     private void disposeActions() {
         RxUtils.disposeActions(mProgressAction, mSegmentsAction);
         mSponsorSegments = null;
+        mVideo = null;
     }
 
     private void skipSegment(long positionMs) {
-        if (mSponsorSegments == null) {
+        if (mSponsorSegments == null || !Video.equals(mVideo, getController().getVideo())) {
             return;
         }
 
