@@ -28,4 +28,8 @@ public class RxUtils {
                         error -> Log.e(TAG, "Execute error: %s", error.getMessage())
                 );
     }
+
+    public static boolean isActionRunning(Disposable action) {
+        return action != null && !action.isDisposed();
+    }
 }

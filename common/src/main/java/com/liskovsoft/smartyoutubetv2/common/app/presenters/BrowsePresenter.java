@@ -8,7 +8,6 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Category;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
@@ -52,7 +51,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private final Map<Integer, List<SettingsItem>> mTextGridMapping;
     private final AppDataSourceManager mDataSourcePresenter;
     private Disposable mUpdateAction;
-    private Disposable mScrollAction;
+    private Disposable mContinueAction;
     private Disposable mSignCheckAction;
     private int mCurrentCategoryId;
     private long mLastUpdateTimeMs;
@@ -205,7 +204,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
     @Override
     public void onViewDestroyed() {
-        RxUtils.disposeActions(mUpdateAction, mScrollAction, mSignCheckAction);
+        disposeActions();
     }
 
     @Override
@@ -251,9 +250,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     public void onScrollEnd(VideoGroup group) {
         Log.d(TAG, "onScrollEnd. Group title: " + group.getTitle());
 
-        boolean updateInProgress = mScrollAction != null && !mScrollAction.isDisposed();
-
-        if (updateInProgress) {
+        if (RxUtils.isActionRunning(mContinueAction)) {
             return;
         }
 
@@ -295,13 +292,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void updateCategory(int categoryId) {
+        disposeActions();
+
         mCurrentCategoryId = categoryId;
 
         if (getView() == null || categoryId < 0) {
             return;
         }
-
-        RxUtils.disposeActions(mUpdateAction, mScrollAction, mSignCheckAction);
 
         Category category = getCategory(categoryId);
 
@@ -365,7 +362,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
 
-        mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
+        mContinueAction = mediaGroupManager.continueGroupObserve(mediaGroup)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -478,5 +475,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         if (mMainUIData.getUIScale() < 0.8f || mMainUIData.getVideoGridScale() < 0.8f) {
             continueGroup(videoGroup);
         }
+    }
+
+    private void disposeActions() {
+        RxUtils.disposeActions(mUpdateAction, mContinueAction, mSignCheckAction);
     }
 }
