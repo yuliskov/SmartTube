@@ -398,6 +398,9 @@ public class SearchSupportFragment extends Fragment {
             }
         });
         mSpeechOrbView.setClickable(false);
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N_MR1) {
+            mSpeechOrbView.setVisibility(View.INVISIBLE);
+        }
         // End MOD
 
         readArguments(getArguments());
