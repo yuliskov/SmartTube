@@ -124,7 +124,7 @@
     <string name="player_pause_when_seek">Pauzeren tijdens snel zoeken</string>
     <string name="playlists_style">Playlists lay-out</string>
     <string name="playlists_style_grid">Raster</string>
-    <string name="playlists_style_rows">Lijst</string>
+    <string name="playlists_style_rows">Rijen</string>
     <string name="player_show_clock">Datum/klok weergeven</string>
     <string name="player_show_remaining_time">Resterende tijd weergeven</string>
     <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
