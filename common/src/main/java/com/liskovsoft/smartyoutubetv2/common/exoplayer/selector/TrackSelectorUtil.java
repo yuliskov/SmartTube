@@ -18,6 +18,7 @@ public class TrackSelectorUtil {
     private static final String SEPARATOR = ", ";
     private static final HashMap<Integer, Integer> mResolutionMap = new HashMap<>();
 
+    // Try to amplify resolution of aspect ratios that differ from 16:9
     static {
         mResolutionMap.put(256, 144);
         mResolutionMap.put(426, 240);
@@ -63,18 +64,26 @@ public class TrackSelectorUtil {
     }
 
     /**
-     * Build short resolution: e.g. 720p, 1080p etc
+     * Build short resolution: e.g. 720p, 1080p etc<br/>
+     * Try to amplify resolution of aspect ratios that differ from 16:9
      */
     private static String buildResolutionShortString(Format format) {
-        if (format.width == Format.NO_VALUE || format.height == Format.NO_VALUE) {
+        if (format == null) {
+            return "";
+        }
+
+        int height = format.height;
+        int width = format.width;
+
+        if (width == Format.NO_VALUE || height == Format.NO_VALUE) {
             return "";
         }
 
         // Try to amplify resolution of aspect ratios that differ from 16:9
-        Integer height = mResolutionMap.get(format.width);
+        Integer heightAmp = mResolutionMap.get(width);
 
-        // Compare both heights to avoid non-standard video proportions
-        return height != null && VideoTrack.sizeEquals(height, format.height, 15) ? height + "p" : format.height + "p";
+        // Try to avoid square video proportions
+        return heightAmp != null && width > height && !VideoTrack.sizeEquals(width, height, 15) ? heightAmp + "p" : height + "p";
     }
 
     private static String buildAudioPropertyString(Format format) {
