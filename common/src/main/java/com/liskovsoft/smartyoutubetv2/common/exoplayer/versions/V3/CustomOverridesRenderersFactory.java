@@ -39,7 +39,7 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
         setExtensionRendererMode(EXTENSION_RENDERER_MODE_ON);
         setEnableDecoderFallback(true);
 
-        mOperationMode = MediaCodecRenderer.OPERATION_MODE_ASYNCHRONOUS_DEDICATED_THREAD_ASYNCHRONOUS_QUEUEING;
+        //mOperationMode = MediaCodecRenderer.OPERATION_MODE_ASYNCHRONOUS_DEDICATED_THREAD_ASYNCHRONOUS_QUEUEING;
         experimentalSetMediaCodecOperationMode(mOperationMode);
     }
 
