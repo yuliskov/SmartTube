@@ -14,12 +14,11 @@ import com.google.android.exoplayer2.audio.MediaCodecAudioRenderer;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
+import com.google.android.exoplayer2.util.AmazonQuirks;
 import com.google.android.exoplayer2.video.MediaCodecVideoRenderer;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
-import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.V2.framedrop.AmlogicFix2MediaCodecVideoRenderer;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.V2.framedrop.CompoundFixMediaCodecVideoRenderer;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.V2.framedrop.FrameDropFixMediaCodecVideoRenderer;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.common.CustomMediaCodecAudioRenderer;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.common.CustomMediaCodecVideoRenderer;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.ArrayList;
@@ -47,7 +46,7 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
 
     /**
      * Delay audio<br/>
-     * All real delay happens in {@link AudioDelayMediaCodecAudioRenderer}
+     * All real delay happens in {@link CustomMediaCodecAudioRenderer}
      */
     @Override
     protected void buildAudioRenderers(
@@ -73,11 +72,11 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
                 eventListener,
                 out);
 
-        Renderer audioRenderer = null;
+        CustomMediaCodecAudioRenderer audioRenderer = null;
 
         if (mPlayerData.getAudioDelayMs() != 0) {
-            AudioDelayMediaCodecAudioRenderer audioDelayRenderer =
-                    new AudioDelayMediaCodecAudioRenderer(
+            audioRenderer =
+                    new CustomMediaCodecAudioRenderer(
                             context,
                             mediaCodecSelector,
                             drmSessionManager,
@@ -86,9 +85,8 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
                             eventHandler,
                             eventListener,
                             new DefaultAudioSink(AudioCapabilities.getCapabilities(context), audioProcessors));
-            audioDelayRenderer.setAudioDelayMs(mPlayerData.getAudioDelayMs());
 
-            audioRenderer = audioDelayRenderer;
+            audioRenderer.setAudioDelayMs(mPlayerData.getAudioDelayMs());
         }
 
         if (audioRenderer != null) {
@@ -134,10 +132,10 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
                 allowedVideoJoiningTimeMs,
                 out);
 
-        Renderer videoRenderer = null;
+        CustomMediaCodecVideoRenderer videoRenderer = null;
 
-        if (mPlayerData.isFrameDropFixEnabled() && mPlayerData.isAmlogicFixEnabled()) {
-            videoRenderer = new CompoundFixMediaCodecVideoRenderer(
+        if (mPlayerData.isFrameDropFixEnabled() || mPlayerData.isAmlogicFixEnabled()) {
+            videoRenderer = new CustomMediaCodecVideoRenderer(
                     context,
                     mediaCodecSelector,
                     allowedVideoJoiningTimeMs,
@@ -147,28 +145,9 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
                     eventHandler,
                     eventListener,
                     MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
-        } else if (mPlayerData.isFrameDropFixEnabled()) {
-            videoRenderer = new FrameDropFixMediaCodecVideoRenderer(
-                    context,
-                    mediaCodecSelector,
-                    allowedVideoJoiningTimeMs,
-                    drmSessionManager,
-                    playClearSamplesWithoutKeys,
-                    enableDecoderFallback,
-                    eventHandler,
-                    eventListener,
-                    MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
-        } else if (mPlayerData.isAmlogicFixEnabled()) {
-            videoRenderer = new AmlogicFix2MediaCodecVideoRenderer(
-                    context,
-                    mediaCodecSelector,
-                    allowedVideoJoiningTimeMs,
-                    drmSessionManager,
-                    playClearSamplesWithoutKeys,
-                    enableDecoderFallback,
-                    eventHandler,
-                    eventListener,
-                    MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
+
+            videoRenderer.enableFrameDropFix(mPlayerData.isFrameDropFixEnabled());
+            videoRenderer.enableAmlogicFix(mPlayerData.isAmlogicFixEnabled());
         }
 
         if (videoRenderer != null) {
