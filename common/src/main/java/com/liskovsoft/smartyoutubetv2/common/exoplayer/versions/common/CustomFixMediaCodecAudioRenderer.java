@@ -8,8 +8,8 @@ import com.google.android.exoplayer2.audio.AudioSink;
 import com.google.android.exoplayer2.audio.MediaCodecAudioRenderer;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
 
-public class AudioDelayMediaCodecAudioRenderer extends MediaCodecAudioRenderer {
-    private static final String TAG = AudioDelayMediaCodecAudioRenderer.class.getSimpleName();
+public class CustomFixMediaCodecAudioRenderer extends MediaCodecAudioRenderer {
+    private static final String TAG = CustomFixMediaCodecAudioRenderer.class.getSimpleName();
     private int mDelayUs;
 
     // Exo 2.10, 2.11
@@ -18,7 +18,7 @@ public class AudioDelayMediaCodecAudioRenderer extends MediaCodecAudioRenderer {
     //}
 
     // Exo 2.12, 2.13
-    public AudioDelayMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector, boolean enableDecoderFallback, @Nullable Handler eventHandler, @Nullable AudioRendererEventListener eventListener, AudioSink audioSink) {
+    public CustomFixMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector, boolean enableDecoderFallback, @Nullable Handler eventHandler, @Nullable AudioRendererEventListener eventListener, AudioSink audioSink) {
         super(context, mediaCodecSelector, enableDecoderFallback, eventHandler, eventListener, audioSink);
     }
 

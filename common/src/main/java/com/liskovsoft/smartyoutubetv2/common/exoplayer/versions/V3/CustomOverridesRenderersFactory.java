@@ -8,13 +8,12 @@ import com.google.android.exoplayer2.Renderer;
 import com.google.android.exoplayer2.audio.AudioRendererEventListener;
 import com.google.android.exoplayer2.audio.AudioSink;
 import com.google.android.exoplayer2.audio.MediaCodecAudioRenderer;
+import com.google.android.exoplayer2.mediacodec.MediaCodecRenderer;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
 import com.google.android.exoplayer2.video.MediaCodecVideoRenderer;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.common.AudioDelayMediaCodecAudioRenderer;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.common.framedrop.AmlogicFix2MediaCodecVideoRenderer;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.common.framedrop.CompoundFixMediaCodecVideoRenderer;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.common.framedrop.FrameDropFixMediaCodecVideoRenderer;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.common.CustomFixMediaCodecAudioRenderer;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.common.CustomFixMediaCodecVideoRenderer;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.ArrayList;
@@ -30,17 +29,18 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
             "55UC30G (ctl_iptv_mrvl)" // Kivi 55uc30g
     };
     private final PlayerData mPlayerData;
+    private int mOperationMode = MediaCodecRenderer.OPERATION_MODE_SYNCHRONOUS;
 
     public CustomOverridesRenderersFactory(FragmentActivity activity) {
         super(activity);
+
+        mPlayerData = PlayerData.instance(activity);
+
         setExtensionRendererMode(EXTENSION_RENDERER_MODE_ON);
         setEnableDecoderFallback(true);
 
-        //experimentalSetVideoMediaCodecOperationMode(MediaCodecRenderer.OPERATION_MODE_ASYNCHRONOUS_DEDICATED_THREAD_ASYNCHRONOUS_QUEUEING);
-        //experimentalSetAudioMediaCodecOperationMode(MediaCodecRenderer.OPERATION_MODE_ASYNCHRONOUS_DEDICATED_THREAD_ASYNCHRONOUS_QUEUEING);
-
-
-        mPlayerData = PlayerData.instance(activity);
+        mOperationMode = MediaCodecRenderer.OPERATION_MODE_ASYNCHRONOUS_DEDICATED_THREAD_ASYNCHRONOUS_QUEUEING;
+        experimentalSetMediaCodecOperationMode(mOperationMode);
     }
 
     @Override
@@ -49,23 +49,24 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
                                        AudioRendererEventListener eventListener, ArrayList<Renderer> out) {
         super.buildAudioRenderers(context, extensionRendererMode, mediaCodecSelector, enableDecoderFallback, audioSink, eventHandler, eventListener, out);
 
-        Renderer audioRenderer = null;
+        CustomFixMediaCodecAudioRenderer audioRenderer = null;
 
         if (mPlayerData.getAudioDelayMs() != 0) {
-            AudioDelayMediaCodecAudioRenderer audioDelayRenderer =
-                    new AudioDelayMediaCodecAudioRenderer(
+            audioRenderer = new CustomFixMediaCodecAudioRenderer(
                             context,
                             mediaCodecSelector,
                             enableDecoderFallback,
                             eventHandler,
                             eventListener,
                             audioSink);
-            audioDelayRenderer.setAudioDelayMs(mPlayerData.getAudioDelayMs());
 
-            audioRenderer = audioDelayRenderer;
+            audioRenderer.setAudioDelayMs(mPlayerData.getAudioDelayMs());
         }
 
         if (audioRenderer != null) {
+            // Restore global operation mode (needed for stability)
+            audioRenderer.experimentalSetMediaCodecOperationMode(mOperationMode);
+
             Renderer originMediaCodecAudioRenderer = null;
             int index = 0;
 
@@ -92,38 +93,26 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
         super.buildVideoRenderers(context, extensionRendererMode, mediaCodecSelector, enableDecoderFallback, eventHandler, eventListener,
                 allowedVideoJoiningTimeMs, out);
 
-        Renderer videoRenderer = null;
+        CustomFixMediaCodecVideoRenderer videoRenderer = null;
 
-        if (mPlayerData.isFrameDropFixEnabled() && mPlayerData.isAmlogicFixEnabled()) {
-            videoRenderer = new CompoundFixMediaCodecVideoRenderer(
-                            context,
-                            mediaCodecSelector,
-                            allowedVideoJoiningTimeMs,
-                            enableDecoderFallback,
-                            eventHandler,
-                            eventListener,
-                            MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
-        } else if (mPlayerData.isFrameDropFixEnabled()) {
-            videoRenderer = new FrameDropFixMediaCodecVideoRenderer(
-                            context,
-                            mediaCodecSelector,
-                            allowedVideoJoiningTimeMs,
-                            enableDecoderFallback,
-                            eventHandler,
-                            eventListener,
-                            MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
-        } else if (mPlayerData.isAmlogicFixEnabled()) {
-            videoRenderer = new AmlogicFix2MediaCodecVideoRenderer(
-                            context,
-                            mediaCodecSelector,
-                            allowedVideoJoiningTimeMs,
-                            enableDecoderFallback,
-                            eventHandler,
-                            eventListener,
-                            MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
+        if (mPlayerData.isFrameDropFixEnabled() || mPlayerData.isAmlogicFixEnabled()) {
+            videoRenderer = new CustomFixMediaCodecVideoRenderer(
+                    context,
+                    mediaCodecSelector,
+                    allowedVideoJoiningTimeMs,
+                    enableDecoderFallback,
+                    eventHandler,
+                    eventListener,
+                    MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
+
+            videoRenderer.enableFrameDropFix(mPlayerData.isFrameDropFixEnabled());
+            videoRenderer.enableAmlogicFix(mPlayerData.isAmlogicFixEnabled());
         }
 
         if (videoRenderer != null) {
+            // Restore global operation mode (needed for stability)
+            videoRenderer.experimentalSetMediaCodecOperationMode(mOperationMode);
+
             Renderer originMediaCodecVideoRenderer = null;
             int index = 0;
 

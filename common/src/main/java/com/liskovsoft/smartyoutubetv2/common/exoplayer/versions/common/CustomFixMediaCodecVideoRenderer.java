@@ -1,16 +1,22 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.common.framedrop;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.common;
 
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.media.MediaCodec;
 import android.os.Handler;
 import androidx.annotation.Nullable;
-import com.google.android.exoplayer2.drm.DrmSessionManager;
-import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
+import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.mediacodec.MediaCodecInfo;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
+import com.google.android.exoplayer2.video.MediaCodecVideoRenderer;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
+import com.liskovsoft.sharedutils.mylogger.Log;
 
-public class CompoundFixMediaCodecVideoRenderer extends AmlogicFix2MediaCodecVideoRenderer {
+public class CustomFixMediaCodecVideoRenderer extends MediaCodecVideoRenderer {
+    private static final String TAG = CustomFixMediaCodecVideoRenderer.class.getSimpleName();
+    private boolean mIsFrameDropFixEnabled;
+    private boolean mIsAmlogicFixEnabled;
+
     // Exo 2.10, 2.11
     //public CompoundFixMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
     //                                          @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, boolean enableDecoderFallback, @Nullable Handler eventHandler, @Nullable VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {
@@ -18,9 +24,9 @@ public class CompoundFixMediaCodecVideoRenderer extends AmlogicFix2MediaCodecVid
     //}
 
     // Exo 2.12, 2.13
-    public CompoundFixMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
-                                             boolean enableDecoderFallback, @Nullable Handler eventHandler,
-                                             @Nullable VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {
+    public CustomFixMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
+                                            boolean enableDecoderFallback, @Nullable Handler eventHandler,
+                                            @Nullable VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {
         super(context, mediaCodecSelector, allowedJoiningTimeMs, enableDecoderFallback, eventHandler, eventListener, maxDroppedFramesToNotify);
     }
 
@@ -40,7 +46,7 @@ public class CompoundFixMediaCodecVideoRenderer extends AmlogicFix2MediaCodecVid
         // Fix frame drops on SurfaceView
         // https://github.com/google/ExoPlayer/issues/6348
         // https://developer.android.com/reference/android/media/MediaCodec#releaseOutputBuffer(int,%20long)
-        super.renderOutputBufferV21(codec, index, presentationTimeUs, 0);
+        super.renderOutputBufferV21(codec, index, presentationTimeUs, mIsFrameDropFixEnabled ? 0 : releaseTimeNs);
     }
 
     // EXO: 2.13
@@ -61,4 +67,31 @@ public class CompoundFixMediaCodecVideoRenderer extends AmlogicFix2MediaCodecVid
     //    // https://developer.android.com/reference/android/media/MediaCodec#releaseOutputBuffer(int,%20long)
     //    super.renderOutputBufferV21(codec, index, presentationTimeUs, 0);
     //}
+
+    @Override
+    protected CodecMaxValues getCodecMaxValues(
+            MediaCodecInfo codecInfo, Format format, Format[] streamFormats) {
+        CodecMaxValues maxValues =
+                super.getCodecMaxValues(codecInfo, format, streamFormats);
+
+        if (mIsAmlogicFixEnabled) {
+            if (maxValues.width < 1920 || maxValues.height < 1089) {
+                Log.d(TAG, "Applying Amlogic fix...");
+                return new CodecMaxValues(
+                        Math.max(maxValues.width, 1920),
+                        Math.max(maxValues.height, 1089),
+                        maxValues.inputSize);
+            }
+        }
+
+        return maxValues;
+    }
+
+    public void enableFrameDropFix(boolean enabled) {
+        mIsFrameDropFixEnabled = enabled;
+    }
+
+    public void enableAmlogicFix(boolean enabled) {
+        mIsAmlogicFixEnabled = enabled;
+    }
 }
