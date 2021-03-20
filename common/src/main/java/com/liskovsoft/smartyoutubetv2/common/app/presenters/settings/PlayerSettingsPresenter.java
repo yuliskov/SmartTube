@@ -169,6 +169,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.skipProfileLevelCheck(option.isSelected()),
                 mPlayerTweaksData.isProfileLevelCheckSkipped()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_low_video_quality),
+                option -> mPlayerData.enableLowQuality(option.isSelected()),
+                mPlayerData.isLowQualityEnabled()));
+
         settingsPresenter.appendCheckedCategory("Tweaks", options);
     }
 
@@ -198,10 +202,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_quality_info),
                 option -> mPlayerData.enableQualityInfo(option.isSelected()),
                 mPlayerData.isQualityInfoEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_low_video_quality),
-                option -> mPlayerData.enableLowQuality(option.isSelected()),
-                mPlayerData.isLowQualityEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
