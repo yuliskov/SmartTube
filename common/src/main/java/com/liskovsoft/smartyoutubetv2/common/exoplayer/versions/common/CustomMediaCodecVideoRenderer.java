@@ -6,10 +6,13 @@ import android.media.MediaCodec;
 import android.os.Handler;
 import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.audio.AudioRendererEventListener;
+import com.google.android.exoplayer2.audio.AudioSink;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
 import com.google.android.exoplayer2.mediacodec.MediaCodecInfo;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
+import com.google.android.exoplayer2.mediacodec.MediaCodecUtil.DecoderQueryException;
 import com.google.android.exoplayer2.video.MediaCodecVideoRenderer;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -18,6 +21,15 @@ public class CustomMediaCodecVideoRenderer extends MediaCodecVideoRenderer {
     private static final String TAG = CustomMediaCodecVideoRenderer.class.getSimpleName();
     private boolean mIsFrameDropFixEnabled;
     private boolean mIsAmlogicFixEnabled;
+
+    // Exo 2.9
+    //public CustomMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
+    //                                     @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys,
+    //                                     @Nullable Handler eventHandler, @Nullable VideoRendererEventListener eventListener,
+    //                                     int maxDroppedFramesToNotify) {
+    //    super(context, mediaCodecSelector, allowedJoiningTimeMs, drmSessionManager, playClearSamplesWithoutKeys, eventHandler, eventListener,
+    //            maxDroppedFramesToNotify);
+    //}
 
     // Exo 2.10, 2.11
     public CustomMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
