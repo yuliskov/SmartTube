@@ -20,6 +20,7 @@ import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.common.CustomMediaCodecAudioRenderer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.common.CustomMediaCodecVideoRenderer;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 
 import java.util.ArrayList;
 
@@ -34,6 +35,7 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
             "55UC30G (ctl_iptv_mrvl)" // Kivi 55uc30g
     };
     private final PlayerData mPlayerData;
+    private final PlayerTweaksData mPlayerTweaksData;
 
     public CustomOverridesRenderersFactory(FragmentActivity activity) {
         super(activity);
@@ -42,6 +44,10 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
         //setMediaCodecSelector(new BlackListMediaCodecSelector());
 
         mPlayerData = PlayerData.instance(activity);
+        mPlayerTweaksData = PlayerTweaksData.instance(activity);
+
+        AmazonQuirks.disableSnappingToVsync(mPlayerTweaksData.isSnappingToVsyncDisabled());
+        AmazonQuirks.skipProfileLevelCheck(mPlayerTweaksData.isProfileLevelCheckSkipped());
     }
 
     /**
@@ -134,7 +140,7 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
 
         CustomMediaCodecVideoRenderer videoRenderer = null;
 
-        if (mPlayerData.isFrameDropFixEnabled() || mPlayerData.isAmlogicFixEnabled()) {
+        if (mPlayerTweaksData.isFrameDropFixEnabled() || mPlayerTweaksData.isAmlogicFixEnabled()) {
             videoRenderer = new CustomMediaCodecVideoRenderer(
                     context,
                     mediaCodecSelector,
@@ -146,8 +152,8 @@ public class CustomOverridesRenderersFactory extends DefaultRenderersFactory {
                     eventListener,
                     MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
 
-            videoRenderer.enableFrameDropFix(mPlayerData.isFrameDropFixEnabled());
-            videoRenderer.enableAmlogicFix(mPlayerData.isAmlogicFixEnabled());
+            videoRenderer.enableFrameDropFix(mPlayerTweaksData.isFrameDropFixEnabled());
+            videoRenderer.enableAmlogicFix(mPlayerTweaksData.isAmlogicFixEnabled());
         }
 
         if (videoRenderer != null) {

@@ -10,16 +10,19 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private final PlayerData mPlayerData;
+    private final PlayerTweaksData mPlayerTweaksData;
 
     public PlayerSettingsPresenter(Context context) {
         super(context);
         mPlayerData = PlayerData.instance(context);
+        mPlayerTweaksData = PlayerTweaksData.instance(context);
     }
 
     public static PlayerSettingsPresenter instance(Context context) {
@@ -39,6 +42,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendUIAutoHideCategory(settingsPresenter);
         appendSeekingPreviewCategory(settingsPresenter);
         appendRememberSpeedCategory(settingsPresenter);
+        appendTweaksCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_player_ui));
@@ -146,6 +150,28 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_remember_speed), options);
     }
 
+    private void appendTweaksCategory(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from("Amlogic 1080/60 fix",
+                option -> mPlayerTweaksData.enableAmlogicFix(option.isSelected()),
+                mPlayerTweaksData.isAmlogicFixEnabled()));
+
+        options.add(UiOptionItem.from("Frame drops fix (experimental)",
+                option -> mPlayerTweaksData.enableFrameDropFix(option.isSelected()),
+                mPlayerTweaksData.isFrameDropFixEnabled()));
+
+        options.add(UiOptionItem.from("Disable snap to vsync",
+                option -> mPlayerTweaksData.disableSnapToVsync(option.isSelected()),
+                mPlayerTweaksData.isSnappingToVsyncDisabled()));
+
+        options.add(UiOptionItem.from("Skip codec profile level check",
+                option -> mPlayerTweaksData.skipProfileLevelCheck(option.isSelected()),
+                mPlayerTweaksData.isProfileLevelCheckSkipped()));
+
+        settingsPresenter.appendCheckedCategory("Tweaks", options);
+    }
+
     private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
@@ -176,14 +202,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.player_low_video_quality),
                 option -> mPlayerData.enableLowQuality(option.isSelected()),
                 mPlayerData.isLowQualityEnabled()));
-
-        options.add(UiOptionItem.from("Amlogic 1080/60 fix",
-                option -> mPlayerData.enableAmlogicFix(option.isSelected()),
-                mPlayerData.isAmlogicFixEnabled()));
-
-        options.add(UiOptionItem.from("Frame drops fix (experimental)",
-                option -> mPlayerData.enableFrameDropFix(option.isSelected()),
-                mPlayerData.isFrameDropFixEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
