@@ -173,7 +173,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerData.enableLowQuality(option.isSelected()),
                 mPlayerData.isLowQualityEnabled()));
 
-        options.add(UiOptionItem.from("Force SW decoder",
+        options.add(UiOptionItem.from("Force SW video decoder",
                 option -> mPlayerTweaksData.forceSWDecoder(option.isSelected()),
                 mPlayerTweaksData.isSWDecoderForced()));
 
