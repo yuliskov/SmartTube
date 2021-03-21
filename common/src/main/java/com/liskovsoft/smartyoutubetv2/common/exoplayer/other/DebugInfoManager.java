@@ -19,8 +19,6 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.mediacodec.MediaCodecInfo;
-import com.google.android.exoplayer2.mediacodec.MediaCodecUtil;
-import com.google.android.exoplayer2.mediacodec.MediaCodecUtil.DecoderQueryException;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
@@ -28,7 +26,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolder.Mode;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.UhdHelper;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.common.ExoUtils;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 
 import java.util.ArrayList;

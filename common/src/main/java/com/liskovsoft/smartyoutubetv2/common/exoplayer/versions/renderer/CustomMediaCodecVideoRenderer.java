@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.common;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.renderer;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -6,8 +6,6 @@ import android.media.MediaCodec;
 import android.os.Handler;
 import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.Format;
-import com.google.android.exoplayer2.audio.AudioRendererEventListener;
-import com.google.android.exoplayer2.audio.AudioSink;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
 import com.google.android.exoplayer2.mediacodec.MediaCodecInfo;

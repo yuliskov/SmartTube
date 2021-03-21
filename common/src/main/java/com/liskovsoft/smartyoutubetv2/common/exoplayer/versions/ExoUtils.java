@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.common;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.versions;
 
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Player;

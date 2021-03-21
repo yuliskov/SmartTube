@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector;
 
 import android.util.Pair;
 import androidx.annotation.Nullable;
@@ -9,8 +9,8 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Factory;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.common.Definition;
 
 public class RestoreTrackSelector extends DefaultTrackSelector {
     private static final String TAG = RestoreTrackSelector.class.getSimpleName();
@@ -34,23 +34,6 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
     public void setOnTrackSelectCallback(TrackSelectorCallback callback) {
         mCallback = callback;
     }
-
-    // Exo 2.9
-    //@Nullable
-    //@Override
-    //protected TrackSelection selectVideoTrack(TrackGroupArray groups, int[][] formatSupports, int mixedMimeTypeAdaptationSupports,
-    //                                          Parameters params, @Nullable Factory adaptiveTrackSelectionFactory) throws ExoPlaybackException {
-    //
-    //    // Restore state before video starts playing
-    //    boolean isAuto = !params.hasSelectionOverride(ExoPlayerFragment.RENDERER_INDEX_VIDEO, groups);
-    //
-    //    if (isAuto && !mAlreadyRestored) {
-    //        mAlreadyRestored = true;
-    //        restoreVideoTrack(groups);
-    //    }
-    //
-    //    return super.selectVideoTrack(groups, formatSupports, mixedMimeTypeAdaptationSupports, params, adaptiveTrackSelectionFactory);
-    //}
 
     // Exo 2.9
     @Nullable
@@ -129,7 +112,7 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
         return selectionPair;
     }
 
-    // Exo 2.10, 2.11, 2.12, 2.13
+    // Exo 2.10 and up
     //@Nullable
     //@Override
     //protected Definition selectVideoTrack(TrackGroupArray groups, int[][] formatSupports, int mixedMimeTypeAdaptationSupports,
@@ -155,7 +138,7 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
     //    return definition;
     //}
 
-    // Exo 2.10, 2.11, 2.12, 2.13
+    // Exo 2.10 and up
     //@Nullable
     //@Override
     //protected Pair<Definition, AudioTrackScore> selectAudioTrack(TrackGroupArray groups, int[][] formatSupports,
@@ -181,7 +164,7 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
     //    return definitionPair;
     //}
 
-    // Exo 2.10, 2.11, 2.12, 2.13
+    // Exo 2.10 and up
     //@Nullable
     //@Override
     //protected Pair<Definition, TextTrackScore> selectTextTrack(TrackGroupArray groups, int[][] formatSupport, Parameters params,

@@ -22,7 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackInfoFormatter2;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.common.ExoUtils;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
 
 import java.io.InputStream;
 import java.util.List;
