@@ -169,9 +169,13 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.skipProfileLevelCheck(option.isSelected()),
                 mPlayerTweaksData.isProfileLevelCheckSkipped()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_low_video_quality),
+        options.add(UiOptionItem.from("Force legacy codecs",
                 option -> mPlayerData.enableLowQuality(option.isSelected()),
                 mPlayerData.isLowQualityEnabled()));
+
+        options.add(UiOptionItem.from("Force SW decoder",
+                option -> mPlayerTweaksData.forceSWDecoder(option.isSelected()),
+                mPlayerTweaksData.isSWDecoderForced()));
 
         settingsPresenter.appendCheckedCategory("Tweaks", options);
     }

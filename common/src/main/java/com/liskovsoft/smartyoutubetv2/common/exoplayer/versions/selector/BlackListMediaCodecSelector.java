@@ -13,44 +13,20 @@ import java.util.List;
 /**
  * Usage {@link CustomOverridesRenderersFactory#setMediaCodecSelector}
  */
-public class BlackListMediaCodecSelector implements MediaCodecSelector {
-    private static final String TAG = BlackListMediaCodecSelector.class.getSimpleName();
+public class BlacklistMediaCodecSelector implements MediaCodecSelector {
+    private static final String TAG = BlacklistMediaCodecSelector.class.getSimpleName();
 
     // list of strings used in blacklisting codecs
-    //final static String[] BLACKLISTEDCODECS = {"OMX.google.h264.decoder", "OMX.Nvidia.vp9.decoder", "OMX.google.vp9.decoder", "OMX.MTK.VIDEO.DECODER.VP9", "OMX.amlogic.vp9.decoder"};
-    final static String[] BLACKLISTEDCODECS = {"google"}; // SW codec
+    final static String[] ALL_DECODERS = {"OMX.google.h264.decoder", "OMX.Nvidia.vp9.decoder", "OMX.google.vp9.decoder", "OMX.MTK.VIDEO.DECODER.VP9", "OMX.amlogic.vp9.decoder"};
+    final static String[] SW_DECODERS = {"google"};
+    final static String[] HW_DECODERS = {"OMX.amlogic.vp9.decoder.awesome", "OMX.amlogic.avc.decoder.awesome"};
 
     // Ver. 2.9.6
-    @Override
-    public List<MediaCodecInfo> getDecoderInfos(String mimeType, boolean requiresSecureDecoder) throws MediaCodecUtil.DecoderQueryException {
-
-        List<MediaCodecInfo> codecInfos = MediaCodecUtil.getDecoderInfos(
-                mimeType, requiresSecureDecoder);
-        // filter codecs based on blacklist template
-        List<MediaCodecInfo> filteredCodecInfos = new ArrayList<>();
-        for (MediaCodecInfo codecInfo: codecInfos) {
-            Log.d(TAG, "Checking codec: " + codecInfo);
-            boolean blacklisted = false;
-            for (String blackListedCodec: BLACKLISTEDCODECS) {
-                if (codecInfo != null && codecInfo.name.toLowerCase().contains(blackListedCodec.toLowerCase())) {
-                    Log.d(TAG, "Blacklisting codec: " + blackListedCodec);
-                    blacklisted = true;
-                    break;
-                }
-            }
-            if (!blacklisted) {
-                filteredCodecInfos.add(codecInfo);
-            }
-        }
-        return filteredCodecInfos;
-    }
-
-    // Exo 2.10 and up
     //@Override
-    //public List<MediaCodecInfo> getDecoderInfos(String mimeType, boolean requiresSecureDecoder, boolean requiresTunnelingDecoder) throws MediaCodecUtil.DecoderQueryException {
+    //public List<MediaCodecInfo> getDecoderInfos(String mimeType, boolean requiresSecureDecoder) throws MediaCodecUtil.DecoderQueryException {
     //
     //    List<MediaCodecInfo> codecInfos = MediaCodecUtil.getDecoderInfos(
-    //            mimeType, requiresSecureDecoder, requiresTunnelingDecoder);
+    //            mimeType, requiresSecureDecoder);
     //    // filter codecs based on blacklist template
     //    List<MediaCodecInfo> filteredCodecInfos = new ArrayList<>();
     //    for (MediaCodecInfo codecInfo: codecInfos) {
@@ -69,6 +45,31 @@ public class BlackListMediaCodecSelector implements MediaCodecSelector {
     //    }
     //    return filteredCodecInfos;
     //}
+
+    // Exo 2.10 and up
+    @Override
+    public List<MediaCodecInfo> getDecoderInfos(String mimeType, boolean requiresSecureDecoder, boolean requiresTunnelingDecoder) throws MediaCodecUtil.DecoderQueryException {
+
+        List<MediaCodecInfo> codecInfos = MediaCodecUtil.getDecoderInfos(
+                mimeType, requiresSecureDecoder, requiresTunnelingDecoder);
+        // filter codecs based on blacklist template
+        List<MediaCodecInfo> filteredCodecInfos = new ArrayList<>();
+        for (MediaCodecInfo codecInfo: codecInfos) {
+            Log.d(TAG, "Checking codec: " + codecInfo);
+            boolean blacklisted = false;
+            for (String blacklistedDecoder: HW_DECODERS) {
+                if (codecInfo != null && codecInfo.name.toLowerCase().contains(blacklistedDecoder.toLowerCase())) {
+                    Log.d(TAG, "Blacklisting decoder: " + blacklistedDecoder);
+                    blacklisted = true;
+                    break;
+                }
+            }
+            if (!blacklisted) {
+                filteredCodecInfos.add(codecInfo);
+            }
+        }
+        return filteredCodecInfos;
+    }
 
     @Nullable
     @Override

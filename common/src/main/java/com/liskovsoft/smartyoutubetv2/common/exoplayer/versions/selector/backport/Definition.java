@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.backport;
 
 import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.C;

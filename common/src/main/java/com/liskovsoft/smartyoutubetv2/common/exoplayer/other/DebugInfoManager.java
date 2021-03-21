@@ -234,7 +234,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
                 video.pixelWidthHeightRatio == 1f ?
                 DEFAULT : String.format(Locale.US, "%.02f", video.pixelWidthHeightRatio);
         mVideoInfo.add(new Pair<>("Aspect Ratio", par));
-        String videoCodecName = getVideoCodecNameV1(video);
+        String videoCodecName = getVideoDecoderNameV2();
         mVideoInfo.add(new Pair<>("Video Decoder Name", videoCodecName));
         mVideoInfo.add(new Pair<>("Hardware Accelerated", String.valueOf(isHardwareAccelerated(videoCodecName))));
     }
@@ -417,13 +417,18 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         return result;
     }
 
-    private String getVideoCodecNameV1(Format format) {
+    // NOTE: Be aware. This info isn't real! It's like caps or something like that. To get real info use method below.
+    private String getVideoDecoderNameV1(Format format) {
         if (format == null) {
             return null;
         }
 
-        MediaCodecInfo info = ExoUtils.getDecoderInfo(format.sampleMimeType);
+        MediaCodecInfo info = ExoUtils.getCapsDecoderInfo(format.sampleMimeType);
 
         return info != null ? info.name : null;
+    }
+
+    private String getVideoDecoderNameV2() {
+        return ExoUtils.getVideoDecoderName();
     }
 }
