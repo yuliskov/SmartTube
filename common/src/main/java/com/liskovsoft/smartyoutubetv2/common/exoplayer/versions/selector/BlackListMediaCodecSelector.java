@@ -17,9 +17,10 @@ public class BlacklistMediaCodecSelector implements MediaCodecSelector {
     private static final String TAG = BlacklistMediaCodecSelector.class.getSimpleName();
 
     // list of strings used in blacklisting codecs
-    final static String[] ALL_DECODERS = {"OMX.google.h264.decoder", "OMX.Nvidia.vp9.decoder", "OMX.google.vp9.decoder", "OMX.MTK.VIDEO.DECODER.VP9", "OMX.amlogic.vp9.decoder"};
-    final static String[] SW_DECODERS = {"google"};
-    final static String[] HW_DECODERS = {"OMX.amlogic.vp9.decoder.awesome", "OMX.amlogic.avc.decoder.awesome"};
+    final static String[] ALL_DECODERS = {"OMX.google.h264.decoder", "OMX.google.vp9.decoder", "OMX.Nvidia.vp9.decoder",
+            "OMX.MTK.VIDEO.DECODER.VP9", "OMX.amlogic.vp9.decoder.awesome", "OMX.amlogic.avc.decoder.awesome"};
+    final static String[] SW_DECODERS = {"OMX.google"};
+    final static String[] HW_DECODERS = {"OMX.amlogic", "OMX.MTK", "OMX.Nvidia"};
 
     // Ver. 2.9.6
     //@Override
@@ -58,7 +59,7 @@ public class BlacklistMediaCodecSelector implements MediaCodecSelector {
             Log.d(TAG, "Checking codec: " + codecInfo);
             boolean blacklisted = false;
             for (String blacklistedDecoder: HW_DECODERS) {
-                if (codecInfo != null && codecInfo.name.toLowerCase().contains(blacklistedDecoder.toLowerCase())) {
+                if (codecInfo != null && codecInfo.name.toLowerCase().startsWith(blacklistedDecoder.toLowerCase())) {
                     Log.d(TAG, "Blacklisting decoder: " + blacklistedDecoder);
                     blacklisted = true;
                     break;
