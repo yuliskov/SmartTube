@@ -23,19 +23,19 @@ public class CustomMediaCodecVideoRenderer extends MediaCodecVideoRenderer {
     private boolean mIsAmlogicFixEnabled;
 
     // Exo 2.9
-    //public CustomMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
-    //                                     @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys,
-    //                                     @Nullable Handler eventHandler, @Nullable VideoRendererEventListener eventListener,
-    //                                     int maxDroppedFramesToNotify) {
-    //    super(context, mediaCodecSelector, allowedJoiningTimeMs, drmSessionManager, playClearSamplesWithoutKeys, eventHandler, eventListener,
-    //            maxDroppedFramesToNotify);
-    //}
+    public CustomMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
+                                         @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys,
+                                         @Nullable Handler eventHandler, @Nullable VideoRendererEventListener eventListener,
+                                         int maxDroppedFramesToNotify) {
+        super(context, mediaCodecSelector, allowedJoiningTimeMs, drmSessionManager, playClearSamplesWithoutKeys, eventHandler, eventListener,
+                maxDroppedFramesToNotify);
+    }
 
     // Exo 2.10, 2.11
-    public CustomMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
-                                         @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, boolean enableDecoderFallback, @Nullable Handler eventHandler, @Nullable VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {
-        super(context, mediaCodecSelector, allowedJoiningTimeMs, drmSessionManager, playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, maxDroppedFramesToNotify);
-    }
+    //public CustomMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
+    //                                     @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, boolean enableDecoderFallback, @Nullable Handler eventHandler, @Nullable VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {
+    //    super(context, mediaCodecSelector, allowedJoiningTimeMs, drmSessionManager, playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, maxDroppedFramesToNotify);
+    //}
 
     // Exo 2.12, 2.13
     //public CustomMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
@@ -84,7 +84,7 @@ public class CustomMediaCodecVideoRenderer extends MediaCodecVideoRenderer {
 
     @Override
     protected CodecMaxValues getCodecMaxValues(
-            MediaCodecInfo codecInfo, Format format, Format[] streamFormats) {
+            MediaCodecInfo codecInfo, Format format, Format[] streamFormats) throws DecoderQueryException {
         CodecMaxValues maxValues =
                 super.getCodecMaxValues(codecInfo, format, streamFormats);
 

@@ -51,64 +51,20 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
     }
 
     // Exo 2.9
-    //@Override
-    //protected void buildAudioRenderers(Context context, int extensionRendererMode, MediaCodecSelector mediaCodecSelector,
-    //                                   @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys,
-    //                                   AudioProcessor[] audioProcessors, Handler eventHandler, AudioRendererEventListener eventListener,
-    //                                   ArrayList<Renderer> out) {
-    //    super.buildAudioRenderers(context, extensionRendererMode, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys,
-    //            audioProcessors, eventHandler, eventListener, out);
-    //
-    //    CustomMediaCodecAudioRenderer audioRenderer = null;
-    //
-    //    if (mPlayerData.getAudioDelayMs() != 0) {
-    //        audioRenderer =
-    //                new CustomMediaCodecAudioRenderer(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, eventHandler,
-    //                        eventListener, new DefaultAudioSink(AudioCapabilities.getCapabilities(context), audioProcessors));
-    //
-    //        audioRenderer.setAudioDelayMs(mPlayerData.getAudioDelayMs());
-    //    }
-    //
-    //    replaceAudioRenderer(out, audioRenderer);
-    //}
-
-    // Exo 2.9
-    //@Override
-    //protected void buildVideoRenderers(Context context, int extensionRendererMode, MediaCodecSelector mediaCodecSelector,
-    //                                   @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys,
-    //                                   Handler eventHandler, VideoRendererEventListener eventListener, long allowedVideoJoiningTimeMs,
-    //                                   ArrayList<Renderer> out) {
-    //    super.buildVideoRenderers(context, extensionRendererMode, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, eventHandler,
-    //            eventListener, allowedVideoJoiningTimeMs, out);
-    //
-    //    CustomMediaCodecVideoRenderer videoRenderer = null;
-    //
-    //    if (mPlayerTweaksData.isFrameDropFixEnabled() || mPlayerTweaksData.isAmlogicFixEnabled()) {
-    //        videoRenderer = new CustomMediaCodecVideoRenderer(context, mediaCodecSelector, allowedVideoJoiningTimeMs, drmSessionManager,
-    //                playClearSamplesWithoutKeys, eventHandler, eventListener, MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
-    //
-    //        videoRenderer.enableFrameDropFix(mPlayerTweaksData.isFrameDropFixEnabled());
-    //        videoRenderer.enableAmlogicFix(mPlayerTweaksData.isAmlogicFixEnabled());
-    //    }
-    //
-    //    replaceVideoRenderer(out, videoRenderer);
-    //}
-
-    // 2.10, 2.11
     @Override
-    protected void buildAudioRenderers(Context context, @ExtensionRendererMode int extensionRendererMode, MediaCodecSelector mediaCodecSelector,
+    protected void buildAudioRenderers(Context context, int extensionRendererMode, MediaCodecSelector mediaCodecSelector,
                                        @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys,
-                                       boolean enableDecoderFallback, AudioProcessor[] audioProcessors, Handler eventHandler,
-                                       AudioRendererEventListener eventListener, ArrayList<Renderer> out) {
+                                       AudioProcessor[] audioProcessors, Handler eventHandler, AudioRendererEventListener eventListener,
+                                       ArrayList<Renderer> out) {
         super.buildAudioRenderers(context, extensionRendererMode, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys,
-                enableDecoderFallback, audioProcessors, eventHandler, eventListener, out);
+                audioProcessors, eventHandler, eventListener, out);
 
         CustomMediaCodecAudioRenderer audioRenderer = null;
 
         if (mPlayerData.getAudioDelayMs() != 0) {
             audioRenderer =
-                    new CustomMediaCodecAudioRenderer(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, enableDecoderFallback,
-                            eventHandler, eventListener, new DefaultAudioSink(AudioCapabilities.getCapabilities(context), audioProcessors));
+                    new CustomMediaCodecAudioRenderer(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, eventHandler,
+                            eventListener, new DefaultAudioSink(AudioCapabilities.getCapabilities(context), audioProcessors));
 
             audioRenderer.setAudioDelayMs(mPlayerData.getAudioDelayMs());
         }
@@ -116,20 +72,20 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
         replaceAudioRenderer(out, audioRenderer);
     }
 
-    // 2.10, 2.11
+    // Exo 2.9
     @Override
     protected void buildVideoRenderers(Context context, int extensionRendererMode, MediaCodecSelector mediaCodecSelector,
                                        @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys,
-                                       boolean enableDecoderFallback, Handler eventHandler, VideoRendererEventListener eventListener,
-                                       long allowedVideoJoiningTimeMs, ArrayList<Renderer> out) {
-        super.buildVideoRenderers(context, extensionRendererMode, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys,
-                enableDecoderFallback, eventHandler, eventListener, allowedVideoJoiningTimeMs, out);
+                                       Handler eventHandler, VideoRendererEventListener eventListener, long allowedVideoJoiningTimeMs,
+                                       ArrayList<Renderer> out) {
+        super.buildVideoRenderers(context, extensionRendererMode, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, eventHandler,
+                eventListener, allowedVideoJoiningTimeMs, out);
 
         CustomMediaCodecVideoRenderer videoRenderer = null;
 
         if (mPlayerTweaksData.isFrameDropFixEnabled() || mPlayerTweaksData.isAmlogicFixEnabled()) {
             videoRenderer = new CustomMediaCodecVideoRenderer(context, mediaCodecSelector, allowedVideoJoiningTimeMs, drmSessionManager,
-                    playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
+                    playClearSamplesWithoutKeys, eventHandler, eventListener, MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
 
             videoRenderer.enableFrameDropFix(mPlayerTweaksData.isFrameDropFixEnabled());
             videoRenderer.enableAmlogicFix(mPlayerTweaksData.isAmlogicFixEnabled());
@@ -137,6 +93,50 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
 
         replaceVideoRenderer(out, videoRenderer);
     }
+
+    // 2.10, 2.11
+    //@Override
+    //protected void buildAudioRenderers(Context context, @ExtensionRendererMode int extensionRendererMode, MediaCodecSelector mediaCodecSelector,
+    //                                   @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys,
+    //                                   boolean enableDecoderFallback, AudioProcessor[] audioProcessors, Handler eventHandler,
+    //                                   AudioRendererEventListener eventListener, ArrayList<Renderer> out) {
+    //    super.buildAudioRenderers(context, extensionRendererMode, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys,
+    //            enableDecoderFallback, audioProcessors, eventHandler, eventListener, out);
+    //
+    //    CustomMediaCodecAudioRenderer audioRenderer = null;
+    //
+    //    if (mPlayerData.getAudioDelayMs() != 0) {
+    //        audioRenderer =
+    //                new CustomMediaCodecAudioRenderer(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, enableDecoderFallback,
+    //                        eventHandler, eventListener, new DefaultAudioSink(AudioCapabilities.getCapabilities(context), audioProcessors));
+    //
+    //        audioRenderer.setAudioDelayMs(mPlayerData.getAudioDelayMs());
+    //    }
+    //
+    //    replaceAudioRenderer(out, audioRenderer);
+    //}
+
+    // 2.10, 2.11
+    //@Override
+    //protected void buildVideoRenderers(Context context, int extensionRendererMode, MediaCodecSelector mediaCodecSelector,
+    //                                   @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys,
+    //                                   boolean enableDecoderFallback, Handler eventHandler, VideoRendererEventListener eventListener,
+    //                                   long allowedVideoJoiningTimeMs, ArrayList<Renderer> out) {
+    //    super.buildVideoRenderers(context, extensionRendererMode, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys,
+    //            enableDecoderFallback, eventHandler, eventListener, allowedVideoJoiningTimeMs, out);
+    //
+    //    CustomMediaCodecVideoRenderer videoRenderer = null;
+    //
+    //    if (mPlayerTweaksData.isFrameDropFixEnabled() || mPlayerTweaksData.isAmlogicFixEnabled()) {
+    //        videoRenderer = new CustomMediaCodecVideoRenderer(context, mediaCodecSelector, allowedVideoJoiningTimeMs, drmSessionManager,
+    //                playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
+    //
+    //        videoRenderer.enableFrameDropFix(mPlayerTweaksData.isFrameDropFixEnabled());
+    //        videoRenderer.enableAmlogicFix(mPlayerTweaksData.isAmlogicFixEnabled());
+    //    }
+    //
+    //    replaceVideoRenderer(out, videoRenderer);
+    //}
 
     // Exo 2.12, 2.13
     //@Override

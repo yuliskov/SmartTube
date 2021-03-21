@@ -22,6 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackInfoFormatter2;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.common.ExoUtils;
 
 import java.io.InputStream;
 import java.util.List;
@@ -138,7 +139,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             return false;
         }
 
-        return mPlayer.isPlaying();
+        return ExoUtils.isPlaying(mPlayer);
     }
 
     @Override

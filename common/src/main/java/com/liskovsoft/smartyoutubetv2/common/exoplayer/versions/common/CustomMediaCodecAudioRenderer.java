@@ -15,20 +15,20 @@ public class CustomMediaCodecAudioRenderer extends MediaCodecAudioRenderer {
     private int mDelayUs;
 
     // Exo 2.9
-    //public CustomMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector,
-    //                                           @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager,
-    //                                           boolean playClearSamplesWithoutKeys, @Nullable Handler eventHandler,
-    //                                           @Nullable AudioRendererEventListener eventListener, AudioSink audioSink) {
-    //    super(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, eventHandler, eventListener, audioSink);
-    //}
+    public CustomMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector,
+                                               @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager,
+                                               boolean playClearSamplesWithoutKeys, @Nullable Handler eventHandler,
+                                               @Nullable AudioRendererEventListener eventListener, AudioSink audioSink) {
+        super(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, eventHandler, eventListener, audioSink);
+    }
 
     // Exo 2.10, 2.11
-    public CustomMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector,
-                                            @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager,
-                                            boolean playClearSamplesWithoutKeys, boolean enableDecoderFallback, @Nullable Handler eventHandler,
-                                            @Nullable AudioRendererEventListener eventListener, AudioSink audioSink) {
-        super(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, audioSink);
-    }
+    //public CustomMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector,
+    //                                        @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager,
+    //                                        boolean playClearSamplesWithoutKeys, boolean enableDecoderFallback, @Nullable Handler eventHandler,
+    //                                        @Nullable AudioRendererEventListener eventListener, AudioSink audioSink) {
+    //    super(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, audioSink);
+    //}
 
     // Exo 2.12, 2.13
     //public CustomMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector,

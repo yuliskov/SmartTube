@@ -28,6 +28,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolder.Mode;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.UhdHelper;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.common.ExoUtils;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 
 import java.util.ArrayList;
@@ -423,17 +424,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
             return null;
         }
 
-        MediaCodecInfo info = null;
-
-        try {
-            // Ver 2.10.4
-            info = MediaCodecUtil.getDecoderInfo(format.sampleMimeType, false, false);
-
-            // Ver 2.9.6
-            //info = MediaCodecUtil.getDecoderInfo(format.sampleMimeType, false);
-        } catch (DecoderQueryException e) {
-            e.printStackTrace();
-        }
+        MediaCodecInfo info = ExoUtils.getDecoderInfo(format.sampleMimeType);
 
         return info != null ? info.name : null;
     }
