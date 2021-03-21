@@ -177,7 +177,7 @@
     <string name="content_block_outro">Кінцевий екран/титри</string>
     <string name="content_block_interaction">Нагадування про підписку</string>
     <string name="content_block_self_promo">Самореклама</string>
-    <string name="content_block_music_off_topic">Немузикальна секція кліпу</string>
+    <string name="content_block_music_off_topic">Немузична секція кліпу</string>
     <string name="confirm_segment_skip">Пропустити сегмент \"%s\"?</string>
     <string name="msg_skipping_segment">Пропуск сегменту \"%s\"…</string>
     <string name="content_block_notification_type">Тип повідомлень</string>
