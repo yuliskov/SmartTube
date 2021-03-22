@@ -16,8 +16,8 @@
     <string name="library_signin_subtitle">Увійдіть, щоб переглянути бібліотеку</string>
     <string name="action_signin">УВІЙТИ</string>
     <string name="header_settings">Налаштування</string>
-    <string name="title_video_formats">Відео формати</string>
-    <string name="title_audio_formats">Аудіо формати</string>
+    <string name="title_video_formats">Відеоформат</string>
+    <string name="title_audio_formats">Аудіоформат</string>
     <string name="subtitle_category_title">Субтитри</string>
     <string name="video_max_quality">Авто (макс. якість)</string>
     <string name="audio_max_quality">Авто (макс. якість)</string>
@@ -199,4 +199,7 @@
     <string name="player_remember_speed_none">Не запам\'ятовувати</string>
     <string name="player_remember_speed_all">Однакова швидкість на усіх відео</string>
     <string name="player_remember_speed_each">На кожному відео своя швидкість</string>
+    <string name="msg_player_error_source">Не вдається завантажити відео</string>
+    <string name="msg_player_error_renderer">Обраний відеоформат не підтримуєтся</string>
+    <string name="msg_player_error_unexpected">Помилка у відеодекодері</string>
 </resources>

@@ -199,4 +199,7 @@
     <string name="player_remember_speed_none">Не запоминать</string>
     <string name="player_remember_speed_all">Одинаковая скорость на всех видео</string>
     <string name="player_remember_speed_each">На каждом видео своя скорость</string>
+    <string name="msg_player_error_source">Не получается загрузить видео</string>
+    <string name="msg_player_error_renderer">Выбранный видеоформат не поддерживается</string>
+    <string name="msg_player_error_unexpected">Ошибка в видеодекодере</string>
 </resources>

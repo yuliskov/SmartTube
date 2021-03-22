@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -21,6 +22,9 @@ import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class VideoLoader extends PlayerEventListenerHelper {
     private static final String TAG = VideoLoader.class.getSimpleName();
@@ -34,6 +38,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private long mSleepTimerStartMs;
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
+    private final Map<Integer, Integer> mErrorMap = new HashMap<>();
     private final Runnable mReloadVideoHandler = () -> loadVideo(mLastVideo);
     private final Runnable mPendingNext = () -> {
         if (getController() != null) {
@@ -55,6 +60,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     @Override
     public void onInitDone() {
         mPlayerData = PlayerData.instance(getActivity());
+        initErrorMap();
     }
 
     @Override
@@ -88,7 +94,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
         // Some ciphered data might be stalled.
         // Might happen when the app wasn't used quite a long time.
-        MessageHelpers.showMessage(getActivity(), R.string.msg_player_error, type);
+        MessageHelpers.showMessage(getActivity(), getErrorMessage(type));
 
         YouTubeMediaService.instance().invalidateCache();
 
@@ -324,5 +330,17 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private void disposeActions() {
         RxUtils.disposeActions(mFormatInfoAction, mMpdStreamAction);
         Utils.removeCallbacks(mHandler, mReloadVideoHandler, mPendingRestartEngine, mPendingNext);
+    }
+
+    private void initErrorMap() {
+        mErrorMap.put(PlayerEventListener.ERROR_TYPE_SOURCE, R.string.msg_player_error_source);
+        mErrorMap.put(PlayerEventListener.ERROR_TYPE_RENDERER, R.string.msg_player_error_renderer);
+        mErrorMap.put(PlayerEventListener.ERROR_TYPE_UNEXPECTED, R.string.msg_player_error_unexpected);
+    }
+
+    private String getErrorMessage(int type) {
+        Integer resId = mErrorMap.get(type);
+        
+        return resId != null ? getActivity().getString(resId) : getActivity().getString(R.string.msg_player_error, type);
     }
 }
