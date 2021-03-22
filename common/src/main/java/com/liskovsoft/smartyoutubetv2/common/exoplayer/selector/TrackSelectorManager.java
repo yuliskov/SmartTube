@@ -29,8 +29,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     //private static final TrackSelection.Factory FIXED_FACTORY = new FixedTrackSelection.Factory();
     //private static final TrackSelection.Factory RANDOM_FACTORY = new RandomTrackSelection.Factory();
     private static final String TAG = TrackSelectorManager.class.getSimpleName();
-    private final static int MAX_HEIGHT_VIDEO_RESOLUTION = (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ? 720 :
-            Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ? 1920 : 2160);
+    private final static int MAX_VIDEO_WIDTH = (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ? 1280 :
+            Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ? 1920 : 3840);
 
     private DefaultTrackSelector mTrackSelector;
     //private TrackSelection.Factory mTrackSelectionFactory;
@@ -455,7 +455,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                     if (mediaTrack == null) {
                         continue;
                     }
-                    if (mediaTrack.format.height > MAX_HEIGHT_VIDEO_RESOLUTION) {
+                    if (mediaTrack.format.width > MAX_VIDEO_WIDTH) {
                         continue;
                     }
 

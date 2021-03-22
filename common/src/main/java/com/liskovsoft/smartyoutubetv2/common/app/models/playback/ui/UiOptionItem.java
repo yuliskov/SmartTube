@@ -19,8 +19,8 @@ public class UiOptionItem implements OptionItem {
     private Object mData;
     private OptionItem[] mCheckedRules;
 
-    private final static int MAX_HEIGHT_VIDEO_RESOLUTION = (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ? 720 :
-            Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ? 1920 : 2160);
+    private final static int MAX_VIDEO_WIDTH = (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ? 1280 :
+            Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ? 1920 : 3840);
 
     public static List<OptionItem> from(List<FormatItem> formats, OptionCallback callback) {
         return from(formats, callback, null);
@@ -34,7 +34,7 @@ public class UiOptionItem implements OptionItem {
         List<OptionItem> options = new ArrayList<>();
 
         for (FormatItem format : formats) {
-            if (format.getHeight() > MAX_HEIGHT_VIDEO_RESOLUTION) {
+            if (format.getWidth() > MAX_VIDEO_WIDTH) {
                 continue;
             }
             if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT
