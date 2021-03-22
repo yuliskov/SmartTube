@@ -293,10 +293,9 @@ public class ViewManager {
         Runtime.getRuntime().exit(0);
     }
 
-    public void properlyFinishTheApp(Activity activity) {
+    public void properlyFinishTheApp() {
         Log.d(TAG, "Finishing the app...");
         mMoveViewsToBack = true;
-        activity.finish();
         finishTheApp();
     }
 
