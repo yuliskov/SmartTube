@@ -201,5 +201,5 @@
     <string name="player_remember_speed_each">На кожному відео своя швидкість</string>
     <string name="msg_player_error_source">Не вдається завантажити відео</string>
     <string name="msg_player_error_renderer">Обраний відеоформат не підтримуєтся</string>
-    <string name="msg_player_error_unexpected">Помилка у відеодекодері</string>
+    <string name="msg_player_error_unexpected">Невідома помилка у відеодекодері</string>
 </resources>

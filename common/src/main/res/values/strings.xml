@@ -202,5 +202,5 @@
     <string name="player_remember_speed_each">Per each video</string>
     <string name="msg_player_error_source">Can\'t download the video</string>
     <string name="msg_player_error_renderer">Selected video format isn\'t supported</string>
-    <string name="msg_player_error_unexpected">Video decoder error</string>
+    <string name="msg_player_error_unexpected">Unknown video decoder error</string>
 </resources>
