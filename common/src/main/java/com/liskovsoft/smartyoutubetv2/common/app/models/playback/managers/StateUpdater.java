@@ -288,7 +288,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
         // internal storage has priority over item data loaded from network
         if (state == null) {
-            boolean containsWebPosition = item.percentWatched > 0 && item.percentWatched < 100;
+            // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
+            boolean containsWebPosition = item.percentWatched > 10 && item.percentWatched < 100;
             if (containsWebPosition) {
                 // Web state is buggy on short videos (e.g. video clips)
                 boolean isLongVideo = getController().getLengthMs() > MUSIC_VIDEO_LENGTH_MS;
