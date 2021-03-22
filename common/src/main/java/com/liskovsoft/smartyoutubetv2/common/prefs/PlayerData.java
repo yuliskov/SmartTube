@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
+
 import com.google.android.exoplayer2.text.CaptionStyleCompat;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -364,7 +366,11 @@ public class PlayerData {
         mIsRemainingTimeEnabled = Helpers.parseBoolean(split, 6, true);
         mBackgroundMode = Helpers.parseInt(split, 7, PlaybackEngineController.BACKGROUND_MODE_DEFAULT);
         // afrData was there
-        mVideoFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 9)), FormatItem.VIDEO_HD_AVC_30);
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1) {
+            mVideoFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 9)), FormatItem.VIDEO_HD_VP9_30);
+        } else {
+            mVideoFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 9)), FormatItem.VIDEO_HD_AVC_30);
+        }
         mAudioFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 10)), FormatItem.AUDIO_HQ_MP4A);
         mSubtitleFormat = ExoFormatItem.from(Helpers.parseStr(split, 11));
         mVideoBufferType = Helpers.parseInt(split, 12, PlaybackEngineController.BUFFER_LOW);
