@@ -188,7 +188,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     private int checkSleepTimer(int playbackMode) {
-        if (mPlayerData.isSleepTimerEnabled()) {
+        if (mPlayerData.isSonyTimerFixEnabled()) {
             if (System.currentTimeMillis() - mSleepTimerStartMs > 60 * 60 * 1_000) {
                 MessageHelpers.showLongMessage(getActivity(), R.string.player_sleep_timer);
                 playbackMode = PlaybackEngineController.PLAYBACK_MODE_PAUSE;

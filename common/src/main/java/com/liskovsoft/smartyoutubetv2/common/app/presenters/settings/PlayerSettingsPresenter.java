@@ -177,6 +177,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.forceSWDecoder(option.isSelected()),
                 mPlayerTweaksData.isSWDecoderForced()));
 
+        options.add(UiOptionItem.from("Sony sleep timer fix",
+                option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
+                mPlayerData.isSonyTimerFixEnabled()));
+
         settingsPresenter.appendCheckedCategory("Tweaks", options);
     }
 
@@ -190,10 +194,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.player_pause_when_seek),
                 option -> mPlayerData.enablePauseOnSeek(option.isSelected()),
                 mPlayerData.isPauseOnSeekEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_sleep_timer),
-                option -> mPlayerData.enableSleepTimer(option.isSelected()),
-                mPlayerData.isSleepTimerEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_clock),
                 option -> mPlayerData.enableClock(option.isSelected()),

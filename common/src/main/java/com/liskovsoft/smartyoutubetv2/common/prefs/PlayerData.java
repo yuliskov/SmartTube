@@ -50,7 +50,7 @@ public class PlayerData {
     private boolean mIsRememberSpeedEnabled;
     private boolean mIsLowQualityEnabled;
     private int mPlaybackMode;
-    private boolean mIsSleepTimerEnabled;
+    private boolean mIsSonyTimerFixEnabled;
     private boolean mIsQualityInfoEnabled;
     private boolean mIsRememberSpeedEachEnabled;
 
@@ -314,13 +314,13 @@ public class PlayerData {
         persistData();
     }
 
-    public void enableSleepTimer(boolean enable) {
-        mIsSleepTimerEnabled = enable;
+    public void enableSonyTimerFix(boolean enable) {
+        mIsSonyTimerFixEnabled = enable;
         persistData();
     }
 
-    public boolean isSleepTimerEnabled() {
-        return mIsSleepTimerEnabled;
+    public boolean isSonyTimerFixEnabled() {
+        return mIsSonyTimerFixEnabled;
     }
 
     private void initSubtitleStyles() {
@@ -360,7 +360,7 @@ public class PlayerData {
         mPlaybackMode = Helpers.parseInt(split, 22, PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL);
         // didn't remember what was there
         mIsLowQualityEnabled = Helpers.parseBoolean(split, 24, false);
-        mIsSleepTimerEnabled = Helpers.parseBoolean(split, 25, false);
+        mIsSonyTimerFixEnabled = Helpers.parseBoolean(split, 25, false);
         // old player tweaks
         mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
         mIsRememberSpeedEachEnabled = Helpers.parseBoolean(split, 29, false);
@@ -378,7 +378,7 @@ public class PlayerData {
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs,
                 mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
-                mIsLowQualityEnabled, mIsSleepTimerEnabled, null, null, // old player tweaks
+                mIsLowQualityEnabled, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled));
     }
 }
