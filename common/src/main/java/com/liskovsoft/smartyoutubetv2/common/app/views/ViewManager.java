@@ -14,6 +14,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
@@ -327,10 +328,14 @@ public class ViewManager {
     private void finishTheApp() {
         SplashPresenter.instance(mContext).unhold();
         clearCaches();
-        destroyApp();
+
+        // We need to destroy the app only if settings are changed
+        if (MainUIData.instance(mContext).isSettingsCategoryEnabled()) {
+            destroyApp();
+        }
     }
 
-    public static void destroyApp() {
+    private static void destroyApp() {
         Runtime.getRuntime().exit(0);
     }
 
