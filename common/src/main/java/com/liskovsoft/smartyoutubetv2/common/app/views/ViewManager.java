@@ -247,35 +247,18 @@ public class ViewManager {
         FileHelpers.deleteCache(mContext);
     }
 
-    public void restartApp() {
-        //startView(SplashView.class);
-        //
-        //mMoveViewsToBack = true;
-        //
-        //persistState();
-        //
-        //System.exit(0);
-
-        mMoveViewsToBack = false;
-
-        //persistState();
-
-        triggerRebirth3(mContext, mViewMapping.get(SplashView.class));
-    }
-
-    //private void persistState() {
-    //    mPrefs.setViewManagerData(String.format("%s,%s", mMoveViewsToBack, mIsSinglePlayerMode));
-    //}
+    //public void restartApp() {
+    //    //startView(SplashView.class);
+    //    //
+    //    //mMoveViewsToBack = true;
+    //    //
+    //    //persistState();
+    //    //
+    //    //System.exit(0);
     //
-    //private void restoreState() {
-    //    String data = mPrefs.getViewManagerData();
+    //    mMoveViewsToBack = false;
     //
-    //    if (data != null) {
-    //        String[] split = data.split(",");
-    //
-    //        mMoveViewsToBack = Helpers.parseBoolean(split, 0);
-    //        mIsSinglePlayerMode = Helpers.parseBoolean(split, 1);
-    //    }
+    //    triggerRebirth3(mContext, mViewMapping.get(SplashView.class));
     //}
 
     /**
@@ -310,11 +293,10 @@ public class ViewManager {
         Runtime.getRuntime().exit(0);
     }
 
-    public void properlyFinishTheApp() {
+    public void properlyFinishTheApp(Activity activity) {
         Log.d(TAG, "Finishing the app...");
         mMoveViewsToBack = true;
-        //persistState();
-        //exitToHome();
+        activity.finish();
         finishTheApp();
     }
 
