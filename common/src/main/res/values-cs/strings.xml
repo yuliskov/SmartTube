@@ -196,4 +196,7 @@
     <string name="player_remember_speed_none">Nepamatovat si žádné</string>
     <string name="player_remember_speed_all">Stejná rychlost pro všechna videa</string>
     <string name="player_remember_speed_each">Každé video má svou vlastní rychlost</string>
+    <string name="msg_player_error_source">Nelze načíst video</string>
+    <string name="msg_player_error_renderer">Vybraný formát videa není podporován</string>
+    <string name="msg_player_error_unexpected">Neznámá chyba video dekodéru</string>
 </resources>
