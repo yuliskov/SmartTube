@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.browse.video;
 import android.os.Bundle;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
-import androidx.leanback.widget.FocusHighlight;
 import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
@@ -21,14 +20,13 @@ import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewClickedListene
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class VideoGridFragment extends AutoSizeGridFragment implements VideoCategoryFragment {
     private static final String TAG = VideoGridFragment.class.getSimpleName();
-    private static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
-    private static final boolean USE_ITEM_FOCUS_DIMMER = false;
     private static final int CHECK_SCROLL_ITEMS_NUM = 15;
     private VideoGroupObjectAdapter mGridAdapter;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
@@ -77,7 +75,7 @@ public class VideoGridFragment extends AutoSizeGridFragment implements VideoCate
     }
 
     private void setupAdapter() {
-        VerticalGridPresenter presenter = new VerticalGridPresenter(ZOOM_FACTOR, USE_ITEM_FOCUS_DIMMER);
+        VerticalGridPresenter presenter = new VerticalGridPresenter(ViewUtil.ZOOM_FACTOR, ViewUtil.USE_ITEM_FOCUS_DIMMER);
         presenter.setNumberOfColumns(getColumnsNum(R.dimen.card_width, mVideoGridScale));
         setGridPresenter(presenter);
 
