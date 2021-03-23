@@ -179,7 +179,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         int index = mItemResultsAdapter.indexOf(item);
 
         if (index > (size - 4)) {
-            mSearchPresenter.onScrollEnd(mItemResultsAdapter.getGroup());
+            mSearchPresenter.onScrollEnd(mItemResultsAdapter.getLastGroup());
         }
     }
 }

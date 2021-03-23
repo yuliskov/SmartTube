@@ -184,7 +184,7 @@ public class VideoGridFragment extends AutoSizeGridFragment implements VideoCate
             int index = mGridAdapter.indexOf(item);
 
             if (index > (size - CHECK_SCROLL_ITEMS_NUM)) {
-                mMainPresenter.onScrollEnd(mGridAdapter.getGroup());
+                mMainPresenter.onScrollEnd(mGridAdapter.getLastGroup());
             }
         }
     }
