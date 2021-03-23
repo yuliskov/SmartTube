@@ -200,7 +200,7 @@
     <string name="player_remember_speed_none">Niet bewaren</string>
     <string name="player_remember_speed_all">Zelfde snelheid voor alle video\'s</string>
     <string name="player_remember_speed_each">Specifieke snelheid per video</string>
-    <string name="msg_player_error_source">Kan video niet downloaden</string>
+    <string name="msg_player_error_source">Kan video niet laden</string>
     <string name="msg_player_error_renderer">Geselecteerde video kwaliteit niet ondersteund</string>
     <string name="msg_player_error_unexpected">Onbekende video decoder fout</string>
 </resources>
