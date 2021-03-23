@@ -166,7 +166,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         }
 
         if (mRowsAdapter != null && index < mRowsAdapter.size()) {
-            setSelectedPosition(index);
+            setSelectedPosition(index, false);
             mSelectedRowIndex = -1;
         } else {
             mSelectedRowIndex = index;
@@ -174,7 +174,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     }
 
     /**
-     * Disable scrolling on partially updated rows. This prevent controls from misbehaving.
+     * Disable scrolling on partially updated rows. This prevent cards from misbehaving.
      */
     private void freeze(boolean freeze) {
         // Disable scrolling on partially updated rows. This prevent controls from misbehaving.
