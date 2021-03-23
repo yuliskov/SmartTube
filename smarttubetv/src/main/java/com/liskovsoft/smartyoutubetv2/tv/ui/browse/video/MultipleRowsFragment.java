@@ -33,7 +33,8 @@ import java.util.Map;
 public abstract class MultipleRowsFragment extends RowsSupportFragment implements VideoCategoryFragment {
     private static final String TAG = MultipleRowsFragment.class.getSimpleName();
     private static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
-    private static final boolean USE_FOCUS_DIMMER = false;
+    private static final boolean USE_ITEM_FOCUS_DIMMER = false;
+    private static final boolean USE_ROW_FOCUS_DIMMER = false;
     private UriBackgroundManager mBackgroundManager;
     private ArrayObjectAdapter mRowsAdapter;
     private ListRowPresenter mRowPresenter;
@@ -73,7 +74,9 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         }
 
         if (mRowsAdapter == null) {
-            mRowPresenter = new ListRowPresenter(ZOOM_FACTOR, USE_FOCUS_DIMMER);
+            mRowPresenter = new ListRowPresenter(ZOOM_FACTOR, USE_ITEM_FOCUS_DIMMER);
+            mRowPresenter.setSelectEffectEnabled(USE_ROW_FOCUS_DIMMER);
+
             mRowsAdapter = new ArrayObjectAdapter(mRowPresenter);
             setAdapter(mRowsAdapter);
         }

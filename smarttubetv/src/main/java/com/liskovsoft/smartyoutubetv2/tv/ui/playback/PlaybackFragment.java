@@ -12,6 +12,7 @@ import androidx.leanback.app.RowsSupportFragment;
 import androidx.leanback.media.PlayerAdapter;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ClassPresenterSelector;
+import androidx.leanback.widget.FocusHighlight;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
@@ -70,6 +71,9 @@ import java.util.Map;
 public class PlaybackFragment extends VideoEventsOverrideFragment implements PlaybackView, PlaybackController {
     private static final String TAG = PlaybackFragment.class.getSimpleName();
     private static final int UPDATE_DELAY_MS = 16;
+    private static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
+    private static final boolean USE_ITEM_FOCUS_DIMMER = false;
+    private static final boolean USE_ROW_FOCUS_DIMMER = false;
     private VideoPlayerGlue mPlayerGlue;
     private SimpleExoPlayer mPlayer;
     private PlaybackPresenter mPlaybackPresenter;
@@ -368,7 +372,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     private void initPresenters() {
-        mRowPresenter = new ListRowPresenter() {
+        mRowPresenter = new ListRowPresenter(ZOOM_FACTOR, USE_ITEM_FOCUS_DIMMER) {
             @Override
             protected void onBindRowViewHolder(RowPresenter.ViewHolder holder, Object item) {
                 super.onBindRowViewHolder(holder, item);
@@ -381,6 +385,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
                 }
             }
         };
+        mRowPresenter.setSelectEffectEnabled(USE_ROW_FOCUS_DIMMER);
+
         mCardPresenter = new CardPresenter();
     }
 
