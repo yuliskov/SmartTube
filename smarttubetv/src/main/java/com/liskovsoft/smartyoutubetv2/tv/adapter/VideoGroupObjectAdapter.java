@@ -65,10 +65,10 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
 
     public void clear() {
         int itemCount = mVideoItems.size();
+        mVideoItems.clear();
+        mVideoGroups.clear();
         if (itemCount != 0) {
             notifyItemRangeRemoved(0, itemCount);
         }
-        mVideoItems.clear();
-        mVideoGroups.clear();
     }
 }
