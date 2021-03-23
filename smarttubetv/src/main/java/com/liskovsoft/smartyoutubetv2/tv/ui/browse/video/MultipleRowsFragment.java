@@ -151,7 +151,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     private void updatePosition() {
         setPosition(mSelectedRowIndex);
 
-        // No need to load next group since all rows already fetched.
+        // Maybe we don't need to load next group since all rows already fetched?
     }
 
     @Override
