@@ -126,7 +126,7 @@ public class VideoGridFragment extends AutoSizeGridFragment implements VideoCate
     private void updatePosition() {
         setPosition(mSelectedItemIndex);
 
-        // Item not found? Continue auto-scroll.
+        // Item not found? Load next group.
         if (mSelectedItemIndex != -1) {
             mMainPresenter.onScrollEnd(mGridAdapter.getLastGroup());
         }

@@ -49,7 +49,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private ProgressBarManager mProgressBarManager;
     private boolean mIsFragmentCreated;
     private int mRestoredHeaderIndex = -1;
-    private int mRestoredItemIndex = 20;
+    private int mRestoredItemIndex = -1;
     private boolean mFocusOnChildFragment;
     private GestureDetector mGestureDetector;
 
@@ -57,8 +57,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
 
-        //mRestoredHeaderIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_HEADER_INDEX, -1) : -1;
-        //mRestoredItemIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_ITEM_INDEX, -1) : -1;
+        mRestoredHeaderIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_HEADER_INDEX, -1) : -1;
+        mRestoredItemIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_ITEM_INDEX, -1) : -1;
         mIsFragmentCreated = true;
 
         mCategories = new LinkedHashMap<>();
