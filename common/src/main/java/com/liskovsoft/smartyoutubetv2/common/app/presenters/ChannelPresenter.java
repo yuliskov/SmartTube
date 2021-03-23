@@ -130,6 +130,8 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         if (getView() != null) {
             getView().clear();
             updateRows(mChannelId);
+            // Fix double results. Prevent from doing the same in onViewInitialized()
+            mChannelId = null;
         }
 
         ViewManager.instance(getContext()).startView(ChannelView.class);
