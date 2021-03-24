@@ -71,8 +71,8 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         }
 
         if (mRowsAdapter == null) {
-            mRowPresenter = new ListRowPresenter(ViewUtil.ZOOM_FACTOR, ViewUtil.USE_ITEM_FOCUS_DIMMER);
-            mRowPresenter.setSelectEffectEnabled(ViewUtil.USE_ROW_FOCUS_DIMMER);
+            mRowPresenter = new ListRowPresenter(ViewUtil.FOCUS_ZOOM_FACTOR, ViewUtil.USE_FOCUS_DIMMER);
+            mRowPresenter.setSelectEffectEnabled(ViewUtil.SELECT_EFFECT_ENABLED);
 
             mRowsAdapter = new ArrayObjectAdapter(mRowPresenter);
             setAdapter(mRowsAdapter);

@@ -26,7 +26,6 @@ import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection.Factory;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.util.Util;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -365,7 +364,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     private void initPresenters() {
-        mRowPresenter = new ListRowPresenter(ViewUtil.ZOOM_FACTOR, ViewUtil.USE_ITEM_FOCUS_DIMMER) {
+        mRowPresenter = new ListRowPresenter(ViewUtil.FOCUS_ZOOM_FACTOR, ViewUtil.USE_FOCUS_DIMMER) {
             @Override
             protected void onBindRowViewHolder(RowPresenter.ViewHolder holder, Object item) {
                 super.onBindRowViewHolder(holder, item);
@@ -385,7 +384,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
                 updatePlayerBackground();
             }
         };
-        mRowPresenter.setSelectEffectEnabled(ViewUtil.USE_ROW_FOCUS_DIMMER);
+        mRowPresenter.setSelectEffectEnabled(ViewUtil.SELECT_EFFECT_ENABLED);
 
         mCardPresenter = new CardPresenter();
     }

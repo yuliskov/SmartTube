@@ -26,6 +26,7 @@ import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.PaginationAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.TagAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SearchSupportFragment;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,8 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         super.onCreate(savedInstanceState);
 
         mProgressBarManager = new ProgressBarManager();
-        mResultsPresenter = new ListRowPresenter();
+        mResultsPresenter = new ListRowPresenter(ViewUtil.FOCUS_ZOOM_FACTOR, ViewUtil.USE_FOCUS_DIMMER);
+        mResultsPresenter.setSelectEffectEnabled(ViewUtil.SELECT_EFFECT_ENABLED);
         mResultsAdapter = new ArrayObjectAdapter(mResultsPresenter);
         mSearchTagsAdapter = new TagAdapter(getActivity(), "");
         mHandler = new Handler();
@@ -129,22 +131,20 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         return mResultsAdapter.size() > 0;
     }
 
+    @SuppressWarnings("deprecation")
     private void setupListeners() {
         setOnItemViewClickedListener((itemViewHolder, item, rowViewHolder, row) -> onItemViewClicked(item));
         setOnItemViewSelectedListener((itemViewHolder, item, rowViewHolder, row) -> onItemViewSelected(item));
         if (!hasPermission(Manifest.permission.RECORD_AUDIO)) {
-            setSpeechRecognitionCallback(new SpeechRecognitionCallback() {
-                @Override
-                public void recognizeSpeech() {
-                    if (isAdded()) {
-                        try {
-                            startActivityForResult(getRecognizerIntent(), REQUEST_SPEECH);
-                        } catch (ActivityNotFoundException e) {
-                            Log.e(TAG, "Cannot find activity for speech recognizer", e);
-                        }
-                    } else {
-                        Log.e(TAG, "Can't perform search. Fragment is detached.");
+            setSpeechRecognitionCallback(() -> {
+                if (isAdded()) {
+                    try {
+                        startActivityForResult(getRecognizerIntent(), REQUEST_SPEECH);
+                    } catch (ActivityNotFoundException e) {
+                        Log.e(TAG, "Cannot find activity for speech recognizer", e);
                     }
+                } else {
+                    Log.e(TAG, "Can't perform search. Fragment is detached.");
                 }
             });
         }

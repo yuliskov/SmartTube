@@ -4,11 +4,21 @@ import android.text.Layout;
 import android.text.TextUtils.TruncateAt;
 import android.widget.TextView;
 import androidx.leanback.widget.FocusHighlight;
+import androidx.leanback.widget.RowPresenter;
 
 public class ViewUtil {
-    public static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
-    public static final boolean USE_ITEM_FOCUS_DIMMER = false;
-    public static final boolean USE_ROW_FOCUS_DIMMER = false;
+    /**
+     * Focused card zoom factor
+     */
+    public static final int FOCUS_ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
+    /**
+     * Dim focused card?
+     */
+    public static final boolean USE_FOCUS_DIMMER = false;
+    /**
+     * Dim other rows in {@link RowPresenter}
+     */
+    public static final boolean SELECT_EFFECT_ENABLED = false;
 
     /**
      * Checks whether text is truncated (e.g. has ... at the end)

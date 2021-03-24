@@ -75,7 +75,7 @@ public class VideoGridFragment extends AutoSizeGridFragment implements VideoCate
     }
 
     private void setupAdapter() {
-        VerticalGridPresenter presenter = new VerticalGridPresenter(ViewUtil.ZOOM_FACTOR, ViewUtil.USE_ITEM_FOCUS_DIMMER);
+        VerticalGridPresenter presenter = new VerticalGridPresenter(ViewUtil.FOCUS_ZOOM_FACTOR, ViewUtil.USE_FOCUS_DIMMER);
         presenter.setNumberOfColumns(getColumnsNum(R.dimen.card_width, mVideoGridScale));
         setGridPresenter(presenter);
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/search_fragment"
-    android:name="com.liskovsoft.smartyoutubetv2.tv.ui.search.SearchFragment"
+    android:name="com.liskovsoft.smartyoutubetv2.tv.ui.search.regular.SearchFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent" />

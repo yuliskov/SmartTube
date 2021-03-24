@@ -1,8 +1,7 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.search;
+package com.liskovsoft.smartyoutubetv2.tv.ui.search.regular;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
-import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 

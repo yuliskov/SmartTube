@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.search;
+package com.liskovsoft.smartyoutubetv2.tv.ui.search.regular;
 
 import android.Manifest;
 import android.app.Activity;
