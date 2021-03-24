@@ -12,7 +12,6 @@ import androidx.leanback.app.RowsSupportFragment;
 import androidx.leanback.media.PlayerAdapter;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ClassPresenterSelector;
-import androidx.leanback.widget.FocusHighlight;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
@@ -110,7 +109,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        setupPlayerBackground();
+        updatePlayerBackground();
 
         mPlaybackPresenter.onViewInitialized();
     }
@@ -125,14 +124,14 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         return view;
     }
 
-    private void setupPlayerBackground() {
-        // Make player controls more distinguished on white background
-        //setBackgroundType(BG_NONE);
-
+    /**
+     * Update background depending what's shown: controls or suggestions
+     */
+    private void updatePlayerBackground() {
         View backgroundView = (View) Helpers.getField(this, "mBackgroundView");
 
         if (backgroundView != null) {
-            backgroundView.setBackgroundResource(R.drawable.player_background);
+            backgroundView.setBackgroundResource(isSuggestionsShown() ? R.drawable.player_background2 : R.drawable.player_background);
         }
     }
 
@@ -382,6 +381,13 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
                     vh.getGridView().setSelectedPosition(getVideo().playlistIndex);
                 }
             }
+
+            //@Override
+            //protected void onRowViewSelected(RowPresenter.ViewHolder holder, boolean selected) {
+            //    super.onRowViewSelected(holder, selected);
+            //
+            //    updatePlayerBackground();
+            //}
         };
         mRowPresenter.setSelectEffectEnabled(ViewUtil.USE_ROW_FOCUS_DIMMER);
 
