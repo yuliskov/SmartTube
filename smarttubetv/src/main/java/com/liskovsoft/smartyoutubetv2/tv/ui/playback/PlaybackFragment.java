@@ -109,8 +109,6 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        updatePlayerBackground();
-
         mPlaybackPresenter.onViewInitialized();
     }
 
@@ -130,7 +128,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private void updatePlayerBackground() {
         View backgroundView = (View) Helpers.getField(this, "mBackgroundView");
 
-        if (backgroundView != null) {
+        if (backgroundView != null && isControlsShown()) {
             backgroundView.setBackgroundResource(isSuggestionsShown() ? R.drawable.player_background2 : R.drawable.player_background);
         }
     }
@@ -382,12 +380,12 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
                 }
             }
 
-            //@Override
-            //protected void onRowViewSelected(RowPresenter.ViewHolder holder, boolean selected) {
-            //    super.onRowViewSelected(holder, selected);
-            //
-            //    updatePlayerBackground();
-            //}
+            @Override
+            protected void onRowViewSelected(RowPresenter.ViewHolder holder, boolean selected) {
+                super.onRowViewSelected(holder, selected);
+
+                updatePlayerBackground();
+            }
         };
         mRowPresenter.setSelectEffectEnabled(ViewUtil.USE_ROW_FOCUS_DIMMER);
 
@@ -790,6 +788,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     @Override
     public void showControlsOverlay(boolean runAnimation) {
         super.showControlsOverlay(runAnimation);
+
+        updatePlayerBackground();
 
         if (mPlayerGlue != null) {
             mPlayerGlue.setControlsVisibility(true);
