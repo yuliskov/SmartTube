@@ -126,10 +126,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
      * Update background depending what's shown: controls or suggestions
      */
     private void updatePlayerBackground() {
-        View backgroundView = (View) Helpers.getField(this, "mBackgroundView");
-
-        if (backgroundView != null && isControlsShown()) {
-            backgroundView.setBackgroundResource(isSuggestionsShown() ? R.drawable.player_background2 : R.drawable.player_background);
+        if (isControlsShown()) {
+            setBackgroundResource(isSuggestionsShown() ? R.drawable.player_background2 : R.drawable.player_background);
         }
     }
 

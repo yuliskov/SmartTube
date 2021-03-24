@@ -24,6 +24,7 @@ import androidx.leanback.app.PlaybackSupportFragment;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout.ResizeMode;
 import com.google.android.exoplayer2.util.Assertions;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 
 /**
  * Subclass of {@link PlaybackSupportFragment} that is responsible for providing a {@link SurfaceView}
@@ -32,12 +33,11 @@ import com.google.android.exoplayer2.util.Assertions;
 public class VideoSupportFragment extends PlaybackSupportFragment {
     static final int SURFACE_NOT_CREATED = 0;
     static final int SURFACE_CREATED = 1;
-
     SurfaceView mVideoSurface;
     AspectRatioFrameLayout mVideoSurfaceRoot;
     SurfaceHolder.Callback mMediaPlaybackCallback;
-
     int mState = SURFACE_NOT_CREATED;
+    private int mBackgroundResId;
 
     @Override
     public View onCreateView(
@@ -120,5 +120,22 @@ public class VideoSupportFragment extends PlaybackSupportFragment {
     /** Returns the {@link ResizeMode}. */
     public @ResizeMode int getResizeMode() {
         return mVideoSurfaceRoot.getResizeMode();
+    }
+
+    /**
+     * Setup player's background used when controls are showed.
+     * @param resId background
+     */
+    public void setBackgroundResource(int resId) {
+        if (resId <= 0 || mBackgroundResId == resId) {
+            return;
+        }
+
+        View backgroundView = (View) Helpers.getField(this, "mBackgroundView");
+
+        if (backgroundView != null) {
+            backgroundView.setBackgroundResource(resId);
+            mBackgroundResId = resId;
+        }
     }
 }
