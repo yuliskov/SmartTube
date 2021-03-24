@@ -201,6 +201,6 @@
     <string name="player_remember_speed_all">Idem sur toutes les vidéos</string>
     <string name="player_remember_speed_each">Pour chaque vidéo</string>
     <string name="msg_player_error_source">Impossible de télécharger la vidéo</string>
-    <string name="msg_player_error_renderer">Le format vidéo sélectionné n'est pas pris en charge</string>
+    <string name="msg_player_error_renderer">Le format vidéo sélectionné n\'est pas pris en charge</string>
     <string name="msg_player_error_unexpected">Erreur inconnue du décodeur vidéo</string>
 </resources>
