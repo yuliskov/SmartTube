@@ -61,6 +61,8 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
+        getController().showProgressBar(true);
+
         MediaGroup mediaGroup = group.getMediaGroup();
 
         MediaItemManager mediaItemManager = YouTubeMediaService.instance().getMediaItemManager();
@@ -69,9 +71,14 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        continueMediaGroup ->
-                                getController().updateSuggestions(VideoGroup.from(continueMediaGroup, group.getCategory())),
-                        error -> Log.e(TAG, "continueGroup error: %s", error.getMessage())
+                        continueMediaGroup -> {
+                            getController().showProgressBar(false);
+                            getController().updateSuggestions(VideoGroup.from(continueMediaGroup, group.getCategory()));
+                        },
+                        error -> {
+                            getController().showProgressBar(false);
+                            Log.e(TAG, "continueGroup error: %s", error.getMessage());
+                        }
                 );
     }
 

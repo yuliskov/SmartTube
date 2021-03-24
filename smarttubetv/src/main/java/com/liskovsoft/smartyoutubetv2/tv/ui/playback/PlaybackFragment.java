@@ -113,12 +113,13 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+        View root = super.onCreateView(inflater, container, savedInstanceState);
 
-        // ProgressBar.setRootView already called at this moment
-        ProgressBarManager.setup(getProgressBarManager(), (ViewGroup) view);
+        // We should use internal progress manager because it's used in many places like Exo engine etc.
+        // ProgressBar.setRootView already called at this moment.
+        ProgressBarManager.setup(getProgressBarManager(), (ViewGroup) root);
 
-        return view;
+        return root;
     }
 
     /**
@@ -586,6 +587,19 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     public void showError(String errorMessage) {
         mPlayerGlue.setTitle(errorMessage);
         showControls(true);
+    }
+
+    @Override
+    public void showProgressBar(boolean show) {
+        if (getProgressBarManager() == null) {
+            return;
+        }
+
+        if (show) {
+            getProgressBarManager().show();
+        } else {
+            getProgressBarManager().hide();
+        }
     }
 
     // End Ui events

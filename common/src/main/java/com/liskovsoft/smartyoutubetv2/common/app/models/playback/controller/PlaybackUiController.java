@@ -5,7 +5,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.Sub
 
 import java.util.List;
 
-public interface PlaybackUiController {
+public interface PlaybackUIController {
     void updateSuggestions(VideoGroup group);
     void resetSuggestedPosition();
     boolean isSuggestionsEmpty();
@@ -25,4 +25,5 @@ public interface PlaybackUiController {
     SubtitleStyle getSubtitleStyle();
     void loadStoryboard();
     void showError(String errorInfo);
+    void showProgressBar(boolean show);
 }
