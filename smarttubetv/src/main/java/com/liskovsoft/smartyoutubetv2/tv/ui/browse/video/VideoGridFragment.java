@@ -21,13 +21,13 @@ import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewClickedListene
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class VideoGridFragment extends AutoSizeGridFragment implements VideoCategoryFragment {
     private static final String TAG = VideoGridFragment.class.getSimpleName();
-    private static final int CHECK_SCROLL_ITEMS_NUM = 15;
     private VideoGroupObjectAdapter mGridAdapter;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private UriBackgroundManager mBackgroundManager;
@@ -190,7 +190,7 @@ public class VideoGridFragment extends AutoSizeGridFragment implements VideoCate
             int size = mGridAdapter.size();
             int index = mGridAdapter.indexOf(item);
 
-            if (index > (size - CHECK_SCROLL_ITEMS_NUM)) {
+            if (index > (size - ViewUtil.GRID_SCROLL_CONTINUE_NUM)) {
                 mMainPresenter.onScrollEnd(mGridAdapter.getLastGroup());
             }
         }

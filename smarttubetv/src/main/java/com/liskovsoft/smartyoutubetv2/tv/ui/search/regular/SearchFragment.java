@@ -37,6 +37,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SearchSupportFragment;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 public class SearchFragment extends SearchSupportFragment
         implements SearchSupportFragment.SearchResultProvider, SearchView {
@@ -249,7 +250,7 @@ public class SearchFragment extends SearchSupportFragment
             int size = mAdapter.size();
             int index = mAdapter.indexOf(item);
 
-            if (index > (size - 4)) {
+            if (index > (size - ViewUtil.ROW_SCROLL_CONTINUE_NUM)) {
                 mSearchPresenter.onScrollEnd(mAdapter.getLastGroup());
             }
         }

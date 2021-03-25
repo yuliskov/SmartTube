@@ -19,6 +19,11 @@ public class ViewUtil {
      * Dim other rows in {@link RowPresenter}
      */
     public static final boolean SELECT_EFFECT_ENABLED = false;
+    /**
+     * Scroll continue threshold
+     */
+    public static final int GRID_SCROLL_CONTINUE_NUM = 10;
+    public static final int ROW_SCROLL_CONTINUE_NUM = 4;
 
     /**
      * Checks whether text is truncated (e.g. has ... at the end)

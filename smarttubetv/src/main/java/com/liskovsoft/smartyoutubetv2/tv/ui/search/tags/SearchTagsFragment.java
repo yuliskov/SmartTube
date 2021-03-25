@@ -13,6 +13,7 @@ import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.vineyard.SearchTagsFragmentBase;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 public class SearchTagsFragment extends SearchTagsFragmentBase {
     private static final String TAG = SearchTagsFragment.class.getSimpleName();
@@ -178,7 +179,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         int size = mItemResultsAdapter.size();
         int index = mItemResultsAdapter.indexOf(item);
 
-        if (index > (size - 4)) {
+        if (index > (size - ViewUtil.ROW_SCROLL_CONTINUE_NUM)) {
             mSearchPresenter.onScrollEnd(mItemResultsAdapter.getLastGroup());
         }
     }

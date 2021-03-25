@@ -228,7 +228,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
 
                 if (index != -1) {
                     int size = adapter.size();
-                    if (index > (size - 4)) {
+                    if (index > (size - ViewUtil.ROW_SCROLL_CONTINUE_NUM)) {
                         mMainPresenter.onScrollEnd(adapter.getLastGroup());
                     }
                     break;
