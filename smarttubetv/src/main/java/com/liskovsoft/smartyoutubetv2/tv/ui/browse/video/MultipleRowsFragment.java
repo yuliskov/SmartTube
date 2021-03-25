@@ -19,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
@@ -71,8 +72,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         }
 
         if (mRowsAdapter == null) {
-            mRowPresenter = new ListRowPresenter(ViewUtil.FOCUS_ZOOM_FACTOR, ViewUtil.USE_FOCUS_DIMMER);
-            mRowPresenter.setSelectEffectEnabled(ViewUtil.SELECT_EFFECT_ENABLED);
+            mRowPresenter = new CustomListRowPresenter();
 
             mRowsAdapter = new ArrayObjectAdapter(mRowPresenter);
             setAdapter(mRowsAdapter);

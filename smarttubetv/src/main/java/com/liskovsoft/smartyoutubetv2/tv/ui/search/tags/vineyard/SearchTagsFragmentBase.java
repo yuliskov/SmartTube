@@ -17,16 +17,15 @@ import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.RowPresenter.ViewHolder;
-import androidx.leanback.widget.SpeechRecognitionCallback;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.SearchTagsProvider;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.PaginationAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.TagAdapter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SearchSupportFragment;
-import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +50,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         super.onCreate(savedInstanceState);
 
         mProgressBarManager = new ProgressBarManager();
-        mResultsPresenter = new ListRowPresenter(ViewUtil.FOCUS_ZOOM_FACTOR, ViewUtil.USE_FOCUS_DIMMER);
-        mResultsPresenter.setSelectEffectEnabled(ViewUtil.SELECT_EFFECT_ENABLED);
+        mResultsPresenter = new CustomListRowPresenter();
         mResultsAdapter = new ArrayObjectAdapter(mResultsPresenter);
         mSearchTagsAdapter = new TagAdapter(getActivity(), "");
         mHandler = new Handler();

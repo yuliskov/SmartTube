@@ -112,8 +112,8 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
             return;
         }
 
-        CustomMediaCodecAudioRenderer audioRenderer =
-                new CustomMediaCodecAudioRenderer(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, enableDecoderFallback,
+        DelayMediaCodecAudioRenderer audioRenderer =
+                new DelayMediaCodecAudioRenderer(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, enableDecoderFallback,
                         eventHandler, eventListener, new DefaultAudioSink(AudioCapabilities.getCapabilities(context), audioProcessors));
 
         audioRenderer.setAudioDelayMs(mPlayerData.getAudioDelayMs());
@@ -130,10 +130,20 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
         super.buildVideoRenderers(context, extensionRendererMode, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys,
                 enableDecoderFallback, eventHandler, eventListener, allowedVideoJoiningTimeMs, out);
 
-        // Can't use condition here because we need proper decoder name.
+        if (!mPlayerTweaksData.isFrameDropFixEnabled() && !mPlayerTweaksData.isAmlogicFixEnabled()) {
+            // We need to obtain codec real name somehow. So use interceptor below.
 
-        CustomMediaCodecVideoRenderer videoRenderer =
-                new CustomMediaCodecVideoRenderer(context, mediaCodecSelector, allowedVideoJoiningTimeMs, drmSessionManager,
+            DebugInfoMediaCodecVideoRenderer videoRenderer =
+                    new DebugInfoMediaCodecVideoRenderer(context, mediaCodecSelector, allowedVideoJoiningTimeMs, drmSessionManager,
+                        playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
+
+            replaceVideoRenderer(out, videoRenderer);
+
+            return;
+        }
+
+        TweaksMediaCodecVideoRenderer videoRenderer =
+                new TweaksMediaCodecVideoRenderer(context, mediaCodecSelector, allowedVideoJoiningTimeMs, drmSessionManager,
                         playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
 
         videoRenderer.enableFrameDropFix(mPlayerTweaksData.isFrameDropFixEnabled());

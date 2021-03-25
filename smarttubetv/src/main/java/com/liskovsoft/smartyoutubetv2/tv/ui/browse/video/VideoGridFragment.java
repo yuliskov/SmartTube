@@ -16,11 +16,11 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomVerticalGridPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
-import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +75,7 @@ public class VideoGridFragment extends AutoSizeGridFragment implements VideoCate
     }
 
     private void setupAdapter() {
-        VerticalGridPresenter presenter = new VerticalGridPresenter(ViewUtil.FOCUS_ZOOM_FACTOR, ViewUtil.USE_FOCUS_DIMMER);
+        VerticalGridPresenter presenter = new CustomVerticalGridPresenter();
         presenter.setNumberOfColumns(getColumnsNum(R.dimen.card_width, mVideoGridScale));
         setGridPresenter(presenter);
 

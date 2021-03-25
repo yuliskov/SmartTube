@@ -47,6 +47,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.Restore
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
@@ -56,7 +57,6 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.StoryboardSeekDataPro
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoEventsOverrideFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue.OnActionClickedListener;
-import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -365,7 +365,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     private void initPresenters() {
-        mRowPresenter = new ListRowPresenter(ViewUtil.FOCUS_ZOOM_FACTOR, ViewUtil.USE_FOCUS_DIMMER) {
+        mRowPresenter = new CustomListRowPresenter() {
             @Override
             protected void onBindRowViewHolder(RowPresenter.ViewHolder holder, Object item) {
                 super.onBindRowViewHolder(holder, item);
@@ -385,7 +385,6 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
                 updatePlayerBackground();
             }
         };
-        mRowPresenter.setSelectEffectEnabled(ViewUtil.SELECT_EFFECT_ENABLED);
 
         mCardPresenter = new CardPresenter();
     }

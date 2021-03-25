@@ -10,13 +10,11 @@ import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
 import com.google.android.exoplayer2.mediacodec.MediaCodecInfo;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
-import com.google.android.exoplayer2.video.MediaCodecVideoRenderer;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
 
-public class CustomMediaCodecVideoRenderer extends MediaCodecVideoRenderer {
-    private static final String TAG = CustomMediaCodecVideoRenderer.class.getSimpleName();
+public class TweaksMediaCodecVideoRenderer extends DebugInfoMediaCodecVideoRenderer {
+    private static final String TAG = TweaksMediaCodecVideoRenderer.class.getSimpleName();
     private boolean mIsFrameDropFixEnabled;
     private boolean mIsAmlogicFixEnabled;
 
@@ -30,7 +28,7 @@ public class CustomMediaCodecVideoRenderer extends MediaCodecVideoRenderer {
     //}
 
     // Exo 2.10, 2.11
-    public CustomMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
+    public TweaksMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
                                          @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, boolean enableDecoderFallback, @Nullable Handler eventHandler, @Nullable VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {
         super(context, mediaCodecSelector, allowedJoiningTimeMs, drmSessionManager, playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, maxDroppedFramesToNotify);
     }
@@ -85,8 +83,6 @@ public class CustomMediaCodecVideoRenderer extends MediaCodecVideoRenderer {
             MediaCodecInfo codecInfo, Format format, Format[] streamFormats) {
         CodecMaxValues maxValues =
                 super.getCodecMaxValues(codecInfo, format, streamFormats);
-
-        ExoUtils.updateVideoDecoderInfo(codecInfo);
 
         if (mIsAmlogicFixEnabled) {
             if (maxValues.width < 1920 || maxValues.height < 1089) {

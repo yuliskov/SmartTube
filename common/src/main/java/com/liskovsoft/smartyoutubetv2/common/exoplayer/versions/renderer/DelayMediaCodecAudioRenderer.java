@@ -10,8 +10,8 @@ import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
 
-public class CustomMediaCodecAudioRenderer extends MediaCodecAudioRenderer {
-    private static final String TAG = CustomMediaCodecAudioRenderer.class.getSimpleName();
+public class DelayMediaCodecAudioRenderer extends MediaCodecAudioRenderer {
+    private static final String TAG = DelayMediaCodecAudioRenderer.class.getSimpleName();
     private int mDelayUs;
 
     // Exo 2.9
@@ -23,10 +23,10 @@ public class CustomMediaCodecAudioRenderer extends MediaCodecAudioRenderer {
     //}
 
     // Exo 2.10, 2.11
-    public CustomMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector,
-                                            @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager,
-                                            boolean playClearSamplesWithoutKeys, boolean enableDecoderFallback, @Nullable Handler eventHandler,
-                                            @Nullable AudioRendererEventListener eventListener, AudioSink audioSink) {
+    public DelayMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector,
+                                        @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager,
+                                        boolean playClearSamplesWithoutKeys, boolean enableDecoderFallback, @Nullable Handler eventHandler,
+                                        @Nullable AudioRendererEventListener eventListener, AudioSink audioSink) {
         super(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, audioSink);
     }
 
