@@ -92,4 +92,8 @@ public class IntentExtractor {
                 && intent.getData() != null
                 && Helpers.contains(new String[] {SUBSCRIPTIONS_URL, HISTORY_URL, RECOMMENDED_URL}, intent.getData().toString());
     }
+
+    public static boolean isVoiceCommand(Intent intent) {
+        return intent != null && intent.getData() != null && intent.getData().toString().contains("launch=voice");
+    }
 }
