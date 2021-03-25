@@ -109,6 +109,8 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
                 enableDecoderFallback, audioProcessors, eventHandler, eventListener, out);
 
         if (mPlayerData.getAudioDelayMs() == 0) {
+            // Improve performance a bit by eliminating calculations presented in custom renderer.
+
             return;
         }
 
@@ -131,7 +133,8 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
                 enableDecoderFallback, eventHandler, eventListener, allowedVideoJoiningTimeMs, out);
 
         if (!mPlayerTweaksData.isFrameDropFixEnabled() && !mPlayerTweaksData.isAmlogicFixEnabled()) {
-            // We need to obtain codec real name somehow. So use interceptor below.
+            // Improve performance a bit by eliminating some if conditions presented in tweaks.
+            // But we need to obtain codec real name somehow. So use interceptor below.
 
             DebugInfoMediaCodecVideoRenderer videoRenderer =
                     new DebugInfoMediaCodecVideoRenderer(context, mediaCodecSelector, allowedVideoJoiningTimeMs, drmSessionManager,
