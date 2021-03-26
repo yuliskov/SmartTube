@@ -740,9 +740,10 @@ public class SearchSupportFragment extends Fragment {
         if (mResultAdapter != null && mResultAdapter.size() > 0
                 && mRowsSupportFragment != null && mRowsSupportFragment.getAdapter() == mResultAdapter) {
             focusOnResults();
+        } else {
+            // Fixed moving focus to voice button
+            //mSearchBar.requestFocus();
         }
-
-        // Fixed moving focus to voice button
     }
 
     protected void focusOnResults() {
