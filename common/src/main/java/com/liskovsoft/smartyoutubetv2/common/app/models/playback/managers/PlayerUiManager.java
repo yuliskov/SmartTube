@@ -76,6 +76,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onViewResumed() {
         getController().setVideoZoomMode(mPlayerData.getVideoZoomMode());
+        getController().setVideoAspectRatio(mPlayerData.getVideoAspectRatio());
     }
 
     @Override
