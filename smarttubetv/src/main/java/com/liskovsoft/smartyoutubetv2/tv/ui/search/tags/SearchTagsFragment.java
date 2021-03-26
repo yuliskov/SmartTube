@@ -60,6 +60,8 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         freeze(true);
         mItemResultsAdapter.append(group);
         freeze(false);
+
+        attachAdapter(1, mItemResultsAdapter);
     }
 
     @Override
@@ -104,6 +106,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     public boolean onQueryTextChange(String newQuery) {
         loadSearchTags(newQuery);
 
+        // Don't auto commit to prevent focus loss.
         if (isVoiceQuery(newQuery)) {
             loadSearchResult(newQuery);
         }

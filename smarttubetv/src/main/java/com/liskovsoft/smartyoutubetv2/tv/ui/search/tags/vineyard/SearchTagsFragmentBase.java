@@ -163,8 +163,8 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         mResultsAdapter.clear();
         mSearchTagsAdapter.clear();
         //mResultsHeader = new HeaderItem(0, getString(R.string.text_search_results, query));
-        mResultsAdapter.add(new ListRow(mSearchTagsAdapter));
-        mResultsAdapter.add(new ListRow(mItemResultsAdapter));
+        //mResultsAdapter.add(new ListRow(mSearchTagsAdapter));
+        //mResultsAdapter.add(new ListRow(mItemResultsAdapter));
         performTagSearch(mSearchTagsAdapter);
     }
 
@@ -172,6 +172,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         String query = adapter.getAdapterOptions().get(PaginationAdapter.KEY_TAG);
         mSearchTagsProvider.search(query, results -> {
             adapter.addAllItems(results);
+            attachAdapter(0, adapter);
             // Same suggestions in the keyboard
             //displayCompletions(toCompletions(results));
         });
@@ -203,5 +204,27 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
                 mResultsPresenter.freeze(vh, freeze);
             }
         }
+    }
+
+    protected void attachAdapter(int index, ObjectAdapter adapter) {
+        if (mResultsAdapter != null) {
+            if (!containsAdapter(adapter)) {
+                index = Math.min(index, mResultsAdapter.size());
+                mResultsAdapter.add(index, new ListRow(adapter));
+            }
+        }
+    }
+
+    private boolean containsAdapter(ObjectAdapter adapter) {
+        if (mResultsAdapter != null) {
+            for (int i = 0; i < mResultsAdapter.size(); i++) {
+                ListRow row = (ListRow) mResultsAdapter.get(i);
+                if (row.getAdapter() == adapter) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
