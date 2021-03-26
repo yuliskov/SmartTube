@@ -421,10 +421,16 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
         Map<String, Float> pairs = new LinkedHashMap<>();
         pairs.put(context.getString(R.string.video_zoom_default), PlaybackEngineController.ASPECT_RATIO_DEFAULT);
-        pairs.put("2.21:1", PlaybackEngineController.ASPECT_RATIO_221_1);
-        pairs.put("2.39:1", PlaybackEngineController.ASPECT_RATIO_239_1);
+        pairs.put("1:1", PlaybackEngineController.ASPECT_RATIO_1_1);
         pairs.put("4:3", PlaybackEngineController.ASPECT_RATIO_4_3);
+        pairs.put("5:4", PlaybackEngineController.ASPECT_RATIO_5_4);
         pairs.put("16:9", PlaybackEngineController.ASPECT_RATIO_16_9);
+        pairs.put("16:10", PlaybackEngineController.ASPECT_RATIO_16_10);
+        pairs.put("21:9 (2.33:1)", PlaybackEngineController.ASPECT_RATIO_21_9);
+        pairs.put("64:27 (2.37:1)", PlaybackEngineController.ASPECT_RATIO_64_27);
+        pairs.put("2.21:1", PlaybackEngineController.ASPECT_RATIO_221_1);
+        pairs.put("2.35:1", PlaybackEngineController.ASPECT_RATIO_235_1);
+        pairs.put("2.39:1", PlaybackEngineController.ASPECT_RATIO_239_1);
 
         for (Entry<String, Float> entry: pairs.entrySet()) {
             options.add(UiOptionItem.from(entry.getKey(),
