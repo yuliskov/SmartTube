@@ -71,10 +71,8 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     public void onInitDone() {
         AppSettingsPresenter.instance(getActivity()).setPlayerUiManager(this);
         mPlayerData = PlayerData.instance(getActivity());
-    }
 
-    @Override
-    public void onViewResumed() {
+        // Could be set once per activity creation (view layout stuff)
         getController().setVideoZoomMode(mPlayerData.getVideoZoomMode());
         getController().setVideoAspectRatio(mPlayerData.getVideoAspectRatio());
     }

@@ -23,7 +23,6 @@ import androidx.leanback.R;
 import androidx.leanback.app.PlaybackSupportFragment;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout.ResizeMode;
-import com.google.android.exoplayer2.util.Assertions;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 /**
@@ -38,6 +37,8 @@ public class VideoSupportFragment extends PlaybackSupportFragment {
     SurfaceHolder.Callback mMediaPlaybackCallback;
     int mState = SURFACE_NOT_CREATED;
     private int mBackgroundResId;
+    private float mAspectRatio;
+    private float mVideoAspectRatio;
 
     @Override
     public View onCreateView(
@@ -91,7 +92,8 @@ public class VideoSupportFragment extends PlaybackSupportFragment {
 
     @Override
     protected void onVideoSizeChanged(int width, int height) {
-        mVideoSurfaceRoot.setAspectRatio(((float) width) / height);
+        mVideoAspectRatio = ((float) width) / height;
+        mVideoSurfaceRoot.setAspectRatio(mAspectRatio == 0 ? mVideoAspectRatio : mAspectRatio);
     }
 
     /**
@@ -123,7 +125,8 @@ public class VideoSupportFragment extends PlaybackSupportFragment {
     }
 
     public void setAspectRatio(float aspectRatio) {
-        mVideoSurfaceRoot.setAspectRatio(aspectRatio);
+        mAspectRatio = aspectRatio;
+        mVideoSurfaceRoot.setAspectRatio(mAspectRatio == 0 ? mVideoAspectRatio : mAspectRatio);
     }
 
     /**
