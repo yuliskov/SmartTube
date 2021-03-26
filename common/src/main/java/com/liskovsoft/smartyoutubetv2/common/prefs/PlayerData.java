@@ -40,6 +40,7 @@ public class PlayerData {
     private final List<SubtitleStyle> mSubtitleStyles = new ArrayList<>();
     private int mSubtitleStyleIndex;
     private int mVideoZoomMode;
+    private float mVideoAspectRatio;
     private int mSeekPreviewMode;
     private float mSpeed;
     private boolean mIsAfrEnabled;
@@ -292,6 +293,15 @@ public class PlayerData {
         return mVideoZoomMode;
     }
 
+    public void setVideoAspectRatio(float ratio) {
+        mVideoAspectRatio = ratio;
+        persistData();
+    }
+
+    public float getVideoAspectRatio() {
+        return mVideoAspectRatio;
+    }
+
     public void setSpeed(float speed) {
         if (mSpeed == speed) {
             return;
@@ -364,6 +374,7 @@ public class PlayerData {
         // old player tweaks
         mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
         mIsRememberSpeedEachEnabled = Helpers.parseBoolean(split, 29, false);
+        mVideoAspectRatio = Helpers.parseFloat(split, 30, PlaybackEngineController.ASPECT_RATIO_DEFAULT);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -379,6 +390,6 @@ public class PlayerData {
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs,
                 mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
                 mIsLowQualityEnabled, mIsSonyTimerFixEnabled, null, null, // old player tweaks
-                mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled));
+                mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio));
     }
 }

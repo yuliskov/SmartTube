@@ -27,7 +27,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     private static final String TAG = AutoFrameRateManager.class.getSimpleName();
     private static final int AUTO_FRAME_RATE_ID = 21;
     private static final int AUTO_FRAME_RATE_DELAY_ID = 22;
-    private final HqDialogManager mUiManager;
+    private final HQDialogManager mUiManager;
     private StateUpdater mStateUpdater;
     private final AutoFrameRateHelper mAutoFrameRateHelper;
     private final ModeSyncManager mModeSyncManager;
@@ -41,7 +41,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         getController().setPlay(true);
     };
 
-    public AutoFrameRateManager(HqDialogManager uiManager, StateUpdater stateUpdater) {
+    public AutoFrameRateManager(HQDialogManager uiManager, StateUpdater stateUpdater) {
         mUiManager = uiManager;
         mStateUpdater = stateUpdater;
         mAutoFrameRateHelper = new AutoFrameRateHelper();

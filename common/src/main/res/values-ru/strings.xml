@@ -202,4 +202,5 @@
     <string name="msg_player_error_source">Не получается загрузить видео</string>
     <string name="msg_player_error_renderer">Выбранный видеоформат не поддерживается</string>
     <string name="msg_player_error_unexpected">Неизвестная ошибка в видеодекодере</string>
+    <string name="video_aspect">Соотношение сторон</string>
 </resources>

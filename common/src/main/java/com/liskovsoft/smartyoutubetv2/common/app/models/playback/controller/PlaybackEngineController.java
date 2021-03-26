@@ -24,6 +24,11 @@ public interface PlaybackEngineController {
     int ZOOM_MODE_FIT_HEIGHT = AspectRatioFrameLayout.RESIZE_MODE_FIXED_HEIGHT;
     int ZOOM_MODE_FIT_BOTH = AspectRatioFrameLayout.RESIZE_MODE_ZOOM;
     int ZOOM_MODE_STRETCH = AspectRatioFrameLayout.RESIZE_MODE_FILL;
+    float ASPECT_RATIO_DEFAULT = 1.77f; // 16/9
+    float ASPECT_RATIO_221_1 = 2.21f; // 2.21:1
+    float ASPECT_RATIO_239_1 = 2.39f; // 2.39:1
+    float ASPECT_RATIO_4_3 = 1.33f; // 4:3
+    float ASPECT_RATIO_16_9 = 1.77f; // 16:9
     void openDash(InputStream dashManifest);
     void openDashUrl(String dashManifestUrl);
     void openHlsUrl(String hlsPlaylistUrl);
@@ -50,4 +55,5 @@ public interface PlaybackEngineController {
     float getSpeed();
     void setVideoZoomMode(int mode);
     int getVideoZoomMode();
+    void setVideoAspectRatio(float mode);
 }

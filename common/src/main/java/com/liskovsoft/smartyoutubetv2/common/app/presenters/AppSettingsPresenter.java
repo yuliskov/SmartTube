@@ -6,7 +6,7 @@ import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.Looper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUIManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppSettingsView;
@@ -23,7 +23,7 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     private final Runnable mCloseDialog = this::closeDialog;
     private String mTitle;
     private Runnable mOnClose;
-    private PlayerUiManager mUiManager;
+    private PlayerUIManager mUiManager;
     private int mEnginePlaybackMode;
     private long mTimeoutMs;
 
@@ -118,7 +118,7 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
         getView().addCategories(mCategories);
     }
 
-    public void setPlayerUiManager(PlayerUiManager uiManager) {
+    public void setPlayerUiManager(PlayerUIManager uiManager) {
         mUiManager = uiManager;
     }
 

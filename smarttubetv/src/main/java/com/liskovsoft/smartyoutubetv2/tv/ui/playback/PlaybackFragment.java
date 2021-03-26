@@ -742,6 +742,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         return getResizeMode();
     }
 
+    @Override
+    public void setVideoAspectRatio(float ratio) {
+        setAspectRatio(ratio);
+    }
+
     // End Engine Events
 
     @Override

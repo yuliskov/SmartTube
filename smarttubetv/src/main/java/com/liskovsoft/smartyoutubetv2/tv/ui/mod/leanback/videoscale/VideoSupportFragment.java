@@ -122,6 +122,10 @@ public class VideoSupportFragment extends PlaybackSupportFragment {
         return mVideoSurfaceRoot.getResizeMode();
     }
 
+    public void setAspectRatio(float aspectRatio) {
+        mVideoSurfaceRoot.setAspectRatio(aspectRatio);
+    }
+
     /**
      * Setup player's background used when controls are showed.
      * @param resId background

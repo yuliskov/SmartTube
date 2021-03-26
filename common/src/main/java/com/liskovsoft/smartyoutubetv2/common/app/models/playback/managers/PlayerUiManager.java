@@ -7,6 +7,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -31,10 +32,13 @@ import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
-public class PlayerUiManager extends PlayerEventListenerHelper implements MetadataListener {
-    private static final String TAG = PlayerUiManager.class.getSimpleName();
+public class PlayerUIManager extends PlayerEventListenerHelper implements MetadataListener {
+    private static final String TAG = PlayerUIManager.class.getSimpleName();
     private static final long SUGGESTIONS_RESET_TIMEOUT_MS = 500;
     private static final int SUBTITLE_STYLES_ID = 45;
     private final Handler mHandler;
@@ -56,7 +60,7 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         }
     };
 
-    public PlayerUiManager() {
+    public PlayerUIManager() {
         mHandler = new Handler(Looper.getMainLooper());
 
         MediaService service = YouTubeMediaService.instance();
@@ -283,10 +287,14 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         OptionCategory videoZoomCategory = createVideoZoomCategory(
                 getActivity(), mPlayerData, () -> getController().setVideoZoomMode(mPlayerData.getVideoZoomMode()));
 
+        OptionCategory videoAspectCategory = createVideoAspectCategory(
+                getActivity(), mPlayerData, () -> getController().setVideoAspectRatio(mPlayerData.getVideoAspectRatio()));
+
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getActivity());
         settingsPresenter.clear();
+        settingsPresenter.appendRadioCategory(videoAspectCategory.title, videoAspectCategory.options);
         settingsPresenter.appendRadioCategory(videoZoomCategory.title, videoZoomCategory.options);
-        settingsPresenter.showDialog();
+        settingsPresenter.showDialog(getActivity().getString(R.string.video_aspect));
     }
 
     @Override
@@ -405,6 +413,29 @@ public class PlayerUiManager extends PlayerEventListenerHelper implements Metada
         }
 
         String videoZoomTitle = context.getString(R.string.video_zoom);
+
+        return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO, videoZoomTitle, options);
+    }
+
+    private static OptionCategory createVideoAspectCategory(Context context, PlayerData playerData, Runnable onSelectAspectMode) {
+        List<OptionItem> options = new ArrayList<>();
+
+        Map<String, Float> pairs = new LinkedHashMap<>();
+        pairs.put(context.getString(R.string.video_zoom_default), PlaybackEngineController.ASPECT_RATIO_DEFAULT);
+        pairs.put("2.21:1", PlaybackEngineController.ASPECT_RATIO_221_1);
+        pairs.put("2.39:1", PlaybackEngineController.ASPECT_RATIO_239_1);
+        pairs.put("4:3", PlaybackEngineController.ASPECT_RATIO_4_3);
+        pairs.put("16:9", PlaybackEngineController.ASPECT_RATIO_16_9);
+
+        for (Entry<String, Float> entry: pairs.entrySet()) {
+            options.add(UiOptionItem.from(entry.getKey(),
+                    optionItem -> {
+                        playerData.setVideoAspectRatio(entry.getValue());
+                        onSelectAspectMode.run();
+                    }, Helpers.floatEquals(playerData.getVideoAspectRatio(), entry.getValue())));
+        }
+
+        String videoZoomTitle = context.getString(R.string.video_aspect);
 
         return OptionCategory.from(SUBTITLE_STYLES_ID, OptionCategory.TYPE_RADIO, videoZoomTitle, options);
     }

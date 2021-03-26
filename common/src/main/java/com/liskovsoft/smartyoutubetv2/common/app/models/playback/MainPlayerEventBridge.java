@@ -11,8 +11,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.Player
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.ContentBlockManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.RemoteControlManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HqDialogManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HQDialogManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUIManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.StateUpdater;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.VideoLoader;
@@ -44,14 +44,14 @@ public class MainPlayerEventBridge implements PlayerEventListener {
             mActivity = new WeakReference<>((Activity) context);
         }
 
-        PlayerUiManager uiManager = new PlayerUiManager();
+        PlayerUIManager uiManager = new PlayerUIManager();
         SuggestionsLoader suggestionsLoader = new SuggestionsLoader();
         StateUpdater stateUpdater = new StateUpdater();
         ContentBlockManager contentBlockManager = new ContentBlockManager();
 
         VideoLoader videoLoader = new VideoLoader(suggestionsLoader);
         RemoteControlManager commandManager = new RemoteControlManager(context, suggestionsLoader);
-        HqDialogManager hqDialogManager = new HqDialogManager(stateUpdater);
+        HQDialogManager hqDialogManager = new HQDialogManager(stateUpdater);
 
         suggestionsLoader.addMetadataListener(uiManager);
         suggestionsLoader.addMetadataListener(contentBlockManager);

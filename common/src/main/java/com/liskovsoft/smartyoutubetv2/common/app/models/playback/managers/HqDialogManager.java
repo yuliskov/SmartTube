@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class HqDialogManager extends PlayerEventListenerHelper {
-    private static final String TAG = HqDialogManager.class.getSimpleName();
+public class HQDialogManager extends PlayerEventListenerHelper {
+    private static final String TAG = HQDialogManager.class.getSimpleName();
     private static final int VIDEO_FORMATS_ID = 132;
     private static final int AUDIO_FORMATS_ID = 133;
     private static final int VIDEO_BUFFER_ID = 134;
@@ -40,7 +40,7 @@ public class HqDialogManager extends PlayerEventListenerHelper {
     private PlayerData mPlayerData;
     private AppSettingsPresenter mSettingsPresenter;;
 
-    public HqDialogManager(StateUpdater stateUpdater) {
+    public HQDialogManager(StateUpdater stateUpdater) {
         mStateUpdater = stateUpdater;
     }
 

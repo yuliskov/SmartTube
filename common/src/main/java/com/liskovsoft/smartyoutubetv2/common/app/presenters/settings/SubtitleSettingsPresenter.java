@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUIManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -68,7 +68,7 @@ public class SubtitleSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendSubtitleStyleCategory(AppSettingsPresenter settingsPresenter) {
-        OptionCategory category = PlayerUiManager.createSubtitleStylesCategory(getContext(), mPlayerData);
+        OptionCategory category = PlayerUIManager.createSubtitleStylesCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 }

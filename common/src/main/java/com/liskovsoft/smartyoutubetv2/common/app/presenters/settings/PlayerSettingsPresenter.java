@@ -2,8 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HqDialogManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HQDialogManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUIManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -89,27 +89,27 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendVideoBufferCategory(AppSettingsPresenter settingsPresenter) {
-        OptionCategory category = HqDialogManager.createVideoBufferCategory(getContext(), mPlayerData);
+        OptionCategory category = HQDialogManager.createVideoBufferCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
     private void appendVideoPresetsCategory(AppSettingsPresenter settingsPresenter) {
-        OptionCategory category = HqDialogManager.createVideoPresetsCategory(getContext(), mPlayerData);
+        OptionCategory category = HQDialogManager.createVideoPresetsCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
     private void appendBackgroundPlaybackCategory(AppSettingsPresenter settingsPresenter) {
-        OptionCategory category = HqDialogManager.createBackgroundPlaybackCategory(getContext(), mPlayerData);
+        OptionCategory category = HQDialogManager.createBackgroundPlaybackCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
     private void appendVideoZoomCategory(AppSettingsPresenter settingsPresenter) {
-        OptionCategory category = PlayerUiManager.createVideoZoomCategory(getContext(), mPlayerData);
+        OptionCategory category = PlayerUIManager.createVideoZoomCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
     private void appendAudioShiftCategory(AppSettingsPresenter settingsPresenter) {
-        OptionCategory category = HqDialogManager.createAudioShiftCategory(getContext(), mPlayerData);
+        OptionCategory category = HQDialogManager.createAudioShiftCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 

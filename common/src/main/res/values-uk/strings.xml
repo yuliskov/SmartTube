@@ -202,4 +202,5 @@
     <string name="msg_player_error_source">Не вдається завантажити відео</string>
     <string name="msg_player_error_renderer">Обраний відеоформат не підтримуєтся</string>
     <string name="msg_player_error_unexpected">Невідома помилка у відеодекодері</string>
+    <string name="video_aspect">Співвідношення сторін</string>
 </resources>
