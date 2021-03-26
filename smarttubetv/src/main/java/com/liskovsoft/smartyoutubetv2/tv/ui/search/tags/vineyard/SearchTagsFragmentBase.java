@@ -158,17 +158,17 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         searchTaggedPosts(searchQuery);
     }
 
-    private void searchTaggedPosts(String tag) {
-        mSearchTagsAdapter.setTag(tag);
+    private void searchTaggedPosts(String query) {
+        mSearchTagsAdapter.setTag(query);
         mResultsAdapter.clear();
         mSearchTagsAdapter.clear();
-        //mResultsHeader = new HeaderItem(0, getString(R.string.text_search_results, tag));
+        //mResultsHeader = new HeaderItem(0, getString(R.string.text_search_results, query));
         mResultsAdapter.add(new ListRow(mSearchTagsAdapter));
         mResultsAdapter.add(new ListRow(mItemResultsAdapter));
-        performSearch(mSearchTagsAdapter);
+        performTagSearch(mSearchTagsAdapter);
     }
 
-    private void performSearch(PaginationAdapter adapter) {
+    private void performTagSearch(PaginationAdapter adapter) {
         String query = adapter.getAdapterOptions().get(PaginationAdapter.KEY_TAG);
         mSearchTagsProvider.search(query, results -> {
             adapter.addAllItems(results);
