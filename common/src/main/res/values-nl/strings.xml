@@ -203,4 +203,5 @@
     <string name="msg_player_error_source">Kan video niet laden</string>
     <string name="msg_player_error_renderer">Geselecteerde video kwaliteit niet ondersteund</string>
     <string name="msg_player_error_unexpected">Onbekende video decoder fout</string>
+    <string name="video_aspect">Beeldverhouding</string>
 </resources>
