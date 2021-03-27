@@ -27,9 +27,9 @@ public abstract class LeanbackActivity extends MotherActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Fix situations when the app is killed but the activity is restored by the system
         if (savedInstanceState != null && savedInstanceState.getBoolean(IS_APP_FINISHING, false)) {
-            // Activity (probably) restored after app is killed.
-            finishReally();
+            finishTheApp();
         }
         mBackgroundManager = new UriBackgroundManager(this);
         mViewManager = ViewManager.instance(this);
