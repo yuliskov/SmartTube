@@ -27,7 +27,7 @@ public abstract class LeanbackActivity extends MotherActivity {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
             // Activity (probably) restored after app is killed.
-            finishTheApp();
+            destroyActivity();
         }
         mBackgroundManager = new UriBackgroundManager(this);
         mViewManager = ViewManager.instance(this);
@@ -76,7 +76,7 @@ public abstract class LeanbackActivity extends MotherActivity {
         // We can't do it in the ViewManager because activity may be started from outside
         if (!mViewManager.addTop(this)) {
             // not added, probably move task to back is active
-            finishActivity();
+            destroyActivity();
         }
     }
 
@@ -105,12 +105,12 @@ public abstract class LeanbackActivity extends MotherActivity {
                     break;
             }
         } else {
-            finishActivity();
+            destroyActivity();
         }
     }
 
     private void finishTheApp() {
-        finishActivity();
+        destroyActivity();
         mViewManager.properlyFinishTheApp();
     }
 }
