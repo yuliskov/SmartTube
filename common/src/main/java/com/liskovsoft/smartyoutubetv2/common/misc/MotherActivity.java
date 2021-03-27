@@ -10,6 +10,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.locale.LangHelper;
 import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 
 import java.util.Locale;
@@ -20,6 +21,7 @@ public class MotherActivity extends FragmentActivity {
     private static final float DEFAULT_WIDTH = 1920f; // xhdpi
     private static DisplayMetrics sCachedDisplayMetrics;
     private static Locale sCachedLocale;
+    private static int sNumActivities;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,6 +31,8 @@ public class MotherActivity extends FragmentActivity {
 
         initDpi();
         initTheme();
+
+        sNumActivities++;
     }
 
     public void finishReally() {
@@ -36,16 +40,19 @@ public class MotherActivity extends FragmentActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        sNumActivities--;
+
+        if (sNumActivities == 0) {
+            ViewManager.instance(this).finishTheApp();
+        }
+    }
+
+    @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(LocaleContextWrapper.wrap(newBase, getLocale(newBase)));
     }
-
-    //@Override
-    //protected void onStart() {
-    //    super.onStart();
-    //
-    //    applyCustomConfig();
-    //}
 
     @Override
     protected void onResume() {

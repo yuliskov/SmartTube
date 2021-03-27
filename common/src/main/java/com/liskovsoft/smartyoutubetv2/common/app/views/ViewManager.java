@@ -32,7 +32,7 @@ public class ViewManager {
     private Class<?> mRootActivity;
     private Class<?> mDefaultTop;
     private long mPrevThrottleTimeMS;
-    private boolean mMoveViewsToBack;
+    private boolean mIsMoveViewsToBackEnabled;
     private boolean mIsSinglePlayerMode;
 
     private ViewManager(Context context) {
@@ -41,8 +41,6 @@ public class ViewManager {
         mParentMapping = new HashMap<>();
         mActivityStack = new Stack<>();
         mPrefs = AppPrefs.instance(context);
-
-        //restoreState();
     }
 
     public static ViewManager instance(Context context) {
@@ -74,7 +72,7 @@ public class ViewManager {
     }
 
     public void startView(Class<?> viewClass, boolean forceStart) {
-        mMoveViewsToBack = false; // Essential part or new view will be pause immediately
+        mIsMoveViewsToBackEnabled = false; // Essential part or new view will be pause immediately
 
         //if (!forceStart && doThrottle()) {
         //    Log.d(TAG, "Too many events. Skipping startView...");
@@ -103,7 +101,7 @@ public class ViewManager {
             if (parentActivity == null) {
                 Log.d(TAG, "Parent activity name doesn't stored in registry. Exiting to Home...");
 
-                mMoveViewsToBack = true;
+                mIsMoveViewsToBackEnabled = true;
 
                 if (mIsSinglePlayerMode) {
                     safeMoveTaskToBack(activity);
@@ -128,7 +126,7 @@ public class ViewManager {
     }
 
     public void startDefaultView() {
-        mMoveViewsToBack = false;
+        mIsMoveViewsToBackEnabled = false;
         mIsSinglePlayerMode = false;
 
         Class<?> lastActivity;
@@ -166,9 +164,13 @@ public class ViewManager {
         return skipEvent;
     }
 
-    public boolean addTop(Activity activity) {
+    public void addTop(Activity activity) {
         if (checkMoveViewsToBack(activity)) {
-            return false;
+            // Maybe finish whole app?
+            // Move task to back is active.
+            // So finishing the activity only.
+            ((MotherActivity) activity).finishReally();
+            return;
         }
 
         Class<?> activityClass = activity.getClass();
@@ -181,8 +183,6 @@ public class ViewManager {
         // reorder activity
         mActivityStack.remove(activityClass);
         mActivityStack.push(activityClass);
-
-        return true;
     }
 
     private void removeTopActivity() {
@@ -226,7 +226,7 @@ public class ViewManager {
     }
 
     private boolean checkMoveViewsToBack(Activity activity) {
-        if (mMoveViewsToBack) {
+        if (mIsMoveViewsToBackEnabled) {
             safeMoveTaskToBack(activity);
 
             return true;
@@ -291,12 +291,6 @@ public class ViewManager {
         Runtime.getRuntime().exit(0);
     }
 
-    public void properlyFinishTheApp() {
-        Log.d(TAG, "Finishing the app...");
-        mMoveViewsToBack = true;
-        finishTheApp();
-    }
-
     private void exitToHome() {
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
@@ -304,7 +298,19 @@ public class ViewManager {
         safeStartActivity(mContext, intent);
     }
 
-    private void finishTheApp() {
+    /**
+     * Only moves tasks to back.<br/>
+     * Main magic happened in {@link MotherActivity}
+     * @param activity this activity
+     */
+    public void properlyFinishTheApp(Activity activity) {
+        Log.d(TAG, "Trying finish the app...");
+        mIsMoveViewsToBackEnabled = true;
+
+        ((MotherActivity) activity).finishReally();
+    }
+
+    public void finishTheApp() {
         SplashPresenter.instance(mContext).unhold();
         clearCaches();
 

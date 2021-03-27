@@ -16,21 +16,19 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.DoubleBackManager;
  */
 public abstract class LeanbackActivity extends MotherActivity {
     private static final String TAG = LeanbackActivity.class.getSimpleName();
-    private static final String IS_APP_FINISHING = "isAppFinishing";
     private UriBackgroundManager mBackgroundManager;
     private ViewManager mViewManager;
     private ModeSyncManager mModeSyncManager;
     private DoubleBackManager mDoubleBackManager;
     private MainUIData mMainUiData;
-    private static boolean sIsAppFinishing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Fix situations when the app is killed but the activity is restored by the system
-        if (savedInstanceState != null && savedInstanceState.getBoolean(IS_APP_FINISHING, false)) {
-            finishTheApp();
-        }
+        //if (savedInstanceState != null) {
+        //    finishTheApp();
+        //}
         mBackgroundManager = new UriBackgroundManager(this);
         mViewManager = ViewManager.instance(this);
         mModeSyncManager = ModeSyncManager.instance();
@@ -75,11 +73,7 @@ public abstract class LeanbackActivity extends MotherActivity {
 
         mModeSyncManager.restore(this);
 
-        // We can't do it in the ViewManager because activity may be started from outside
-        if (!mViewManager.addTop(this)) {
-            // not added, probably move task to back is active
-            finishReally();
-        }
+        mViewManager.addTop(this);
     }
 
     @Override
@@ -111,15 +105,7 @@ public abstract class LeanbackActivity extends MotherActivity {
         }
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(IS_APP_FINISHING, sIsAppFinishing);
-    }
-
     private void finishTheApp() {
-        sIsAppFinishing = true;
-        finishReally();
-        mViewManager.properlyFinishTheApp();
+        mViewManager.properlyFinishTheApp(this);
     }
 }
