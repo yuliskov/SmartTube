@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.common;
 
 import android.annotation.SuppressLint;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -26,6 +25,10 @@ public abstract class LeanbackActivity extends MotherActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            // Activity (probably) restored after app is killed.
+            finishTheApp();
+        }
         mBackgroundManager = new UriBackgroundManager(this);
         mViewManager = ViewManager.instance(this);
         mModeSyncManager = ModeSyncManager.instance();
@@ -73,7 +76,7 @@ public abstract class LeanbackActivity extends MotherActivity {
         // We can't do it in the ViewManager because activity may be started from outside
         if (!mViewManager.addTop(this)) {
             // not added, probably move task to back is active
-            destroyActivity();
+            finishActivity();
         }
     }
 
@@ -102,12 +105,12 @@ public abstract class LeanbackActivity extends MotherActivity {
                     break;
             }
         } else {
-            super.finish();
+            finishActivity();
         }
     }
 
     private void finishTheApp() {
-        super.finish();
+        finishActivity();
         mViewManager.properlyFinishTheApp();
     }
 }

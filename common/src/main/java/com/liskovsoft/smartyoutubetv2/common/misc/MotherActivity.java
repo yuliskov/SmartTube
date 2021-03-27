@@ -31,7 +31,7 @@ public class MotherActivity extends FragmentActivity {
         initTheme();
     }
 
-    public void destroyActivity() {
+    public void finishActivity() {
         super.finish();
     }
 
