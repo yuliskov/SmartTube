@@ -267,7 +267,7 @@ public class ViewManager {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
         if (context instanceof MotherActivity) {
-            ((MotherActivity) context).destroyActivity();
+            ((MotherActivity) context).finishReally();
         }
         Runtime.getRuntime().exit(0);
     }

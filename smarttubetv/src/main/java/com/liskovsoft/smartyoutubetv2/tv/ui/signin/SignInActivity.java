@@ -18,6 +18,6 @@ public class SignInActivity extends LeanbackActivity {
     public void finish() {
         super.finish();
 
-        destroyActivity();
+        finishReally();
     }
 }

@@ -16,18 +16,20 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.DoubleBackManager;
  */
 public abstract class LeanbackActivity extends MotherActivity {
     private static final String TAG = LeanbackActivity.class.getSimpleName();
+    private static final String IS_APP_FINISHING = "isAppFinishing";
     private UriBackgroundManager mBackgroundManager;
     private ViewManager mViewManager;
     private ModeSyncManager mModeSyncManager;
     private DoubleBackManager mDoubleBackManager;
     private MainUIData mMainUiData;
+    private static boolean sIsAppFinishing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null) {
+        if (savedInstanceState != null && savedInstanceState.getBoolean(IS_APP_FINISHING, false)) {
             // Activity (probably) restored after app is killed.
-            destroyActivity();
+            finishReally();
         }
         mBackgroundManager = new UriBackgroundManager(this);
         mViewManager = ViewManager.instance(this);
@@ -76,7 +78,7 @@ public abstract class LeanbackActivity extends MotherActivity {
         // We can't do it in the ViewManager because activity may be started from outside
         if (!mViewManager.addTop(this)) {
             // not added, probably move task to back is active
-            destroyActivity();
+            finishReally();
         }
     }
 
@@ -105,12 +107,19 @@ public abstract class LeanbackActivity extends MotherActivity {
                     break;
             }
         } else {
-            destroyActivity();
+            finishReally();
         }
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(IS_APP_FINISHING, sIsAppFinishing);
+    }
+
     private void finishTheApp() {
-        destroyActivity();
+        sIsAppFinishing = true;
+        finishReally();
         mViewManager.properlyFinishTheApp();
     }
 }
