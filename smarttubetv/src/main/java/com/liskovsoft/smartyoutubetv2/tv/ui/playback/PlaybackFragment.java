@@ -714,7 +714,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         }
 
         // Old api fix
-        return playbackActivity.isInPIPMode();
+        return playbackActivity.isInPipMode();
     }
 
     @Override

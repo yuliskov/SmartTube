@@ -22,6 +22,7 @@ public class MotherActivity extends FragmentActivity {
     private static DisplayMetrics sCachedDisplayMetrics;
     private static Locale sCachedLocale;
     private static int sNumActivities;
+    protected static boolean sIsInPipMode;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,7 +45,8 @@ public class MotherActivity extends FragmentActivity {
         super.onDestroy();
         sNumActivities--;
 
-        if (sNumActivities == 0) {
+        // No activities or only pip activity remains
+        if (sNumActivities == 0 || (sNumActivities == 1 && sIsInPipMode)) {
             ViewManager.instance(this).finishTheApp();
         }
     }

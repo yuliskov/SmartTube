@@ -157,7 +157,8 @@ public class PlaybackActivity extends LeanbackActivity {
     }
 
     private boolean doNotDestroy() {
-        return isInPIPMode() || mPlaybackFragment.getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND;
+        sIsInPipMode = isInPipMode();
+        return sIsInPipMode || mPlaybackFragment.getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND;
     }
 
     @SuppressWarnings("deprecation")
@@ -215,7 +216,7 @@ public class PlaybackActivity extends LeanbackActivity {
         ViewManager.instance(this).blockTop(doNotDestroy() ? this : null);
     }
 
-    public boolean isInPIPMode() {
+    public boolean isInPipMode() {
         if (Build.VERSION.SDK_INT < 24) {
             return false;
         }
