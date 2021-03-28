@@ -32,7 +32,8 @@ public class ViewManager {
     private Class<?> mRootActivity;
     private Class<?> mDefaultTop;
     private long mPrevThrottleTimeMS;
-    private boolean mIsMoveViewsToBackEnabled;
+    private boolean mIsMoveViewsToBack;
+    private boolean mIsFinishing;
     private boolean mIsSinglePlayerMode;
 
     private ViewManager(Context context) {
@@ -72,7 +73,7 @@ public class ViewManager {
     }
 
     public void startView(Class<?> viewClass, boolean forceStart) {
-        mIsMoveViewsToBackEnabled = false; // Essential part or new view will be pause immediately
+        mIsMoveViewsToBack = false; // Essential part or new view will be pause immediately
 
         //if (!forceStart && doThrottle()) {
         //    Log.d(TAG, "Too many events. Skipping startView...");
@@ -101,7 +102,7 @@ public class ViewManager {
             if (parentActivity == null) {
                 Log.d(TAG, "Parent activity name doesn't stored in registry. Exiting to Home...");
 
-                mIsMoveViewsToBackEnabled = true;
+                mIsMoveViewsToBack = true;
 
                 if (mIsSinglePlayerMode) {
                     safeMoveTaskToBack(activity);
@@ -126,7 +127,7 @@ public class ViewManager {
     }
 
     public void startDefaultView() {
-        mIsMoveViewsToBackEnabled = false;
+        mIsMoveViewsToBack = false;
         mIsSinglePlayerMode = false;
 
         Class<?> lastActivity;
@@ -226,7 +227,7 @@ public class ViewManager {
     }
 
     private boolean checkMoveViewsToBack(Activity activity) {
-        if (mIsMoveViewsToBackEnabled) {
+        if (mIsMoveViewsToBack) {
             safeMoveTaskToBack(activity);
 
             return true;
@@ -305,12 +306,13 @@ public class ViewManager {
      */
     public void properlyFinishTheApp(Activity activity) {
         Log.d(TAG, "Trying finish the app...");
-        mIsMoveViewsToBackEnabled = true;
+        mIsMoveViewsToBack = true;
+        mIsFinishing = true;
 
         ((MotherActivity) activity).finishReally();
     }
 
-    public void finishTheApp() {
+    public void forceFinishTheApp() {
         SplashPresenter.instance(mContext).unhold();
         clearCaches();
 
@@ -366,5 +368,9 @@ public class ViewManager {
         } catch (IllegalArgumentException e) {
             Log.e(TAG, "Error when starting activity: %s", e.getMessage());
         }
+    }
+
+    public boolean isFinishing() {
+        return mIsFinishing;
     }
 }

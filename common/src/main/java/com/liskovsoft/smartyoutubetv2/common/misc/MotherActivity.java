@@ -45,9 +45,12 @@ public class MotherActivity extends FragmentActivity {
         super.onDestroy();
         sNumActivities--;
 
-        // No activities or only pip activity remains
-        if (sNumActivities == 0 || (sNumActivities == 1 && sIsInPipMode)) {
-            ViewManager.instance(this).finishTheApp();
+        if (ViewManager.instance(this).isFinishing()) {
+            boolean noActivities = sNumActivities == 0;
+            boolean singlePipActivity = sNumActivities == 1 && sIsInPipMode;
+            if (noActivities || singlePipActivity) {
+                ViewManager.instance(this).forceFinishTheApp();
+            }
         }
     }
 
