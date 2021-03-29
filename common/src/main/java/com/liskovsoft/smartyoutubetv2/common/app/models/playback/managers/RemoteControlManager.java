@@ -90,6 +90,12 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         //postStartPlaying(null);
     }
 
+    @Override
+    public void onNewSession() {
+        // User action detected. Pretend that there is no remote session.
+        mConnected = false;
+    }
+
     private void postStartPlaying(@Nullable Video item, boolean isPlaying) {
         if (!mRemoteControlData.isDeviceLinkEnabled()) {
             return;
@@ -178,13 +184,27 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     }
 
     private void processCommand(Command command) {
-        if (command.getType() != Command.TYPE_IDLE) {
-            // Seems that there is no robust way to detect a connection. Use carefully!
-            // Add remote queue row to the suggestions.
-            mConnected = command.getType() != Command.TYPE_DISCONNECTED;
-            if (getController() != null && getController().getVideo() != null) {
-                getController().getVideo().isRemote = mConnected;
-            }
+        //if (command.getType() != Command.TYPE_IDLE &&
+        //    command.getType() != Command.TYPE_UNDEFINED) {
+        //    // Seems that there is no robust way to detect a connection. Use carefully!
+        //    // Add remote queue row to the suggestions.
+        //    mConnected = command.getType() != Command.TYPE_DISCONNECTED;
+        //    if (getController() != null && getController().getVideo() != null) {
+        //        getController().getVideo().isRemote = mConnected;
+        //    }
+        //}
+
+        switch (command.getType()) {
+            case Command.TYPE_CONNECTED:
+            case Command.TYPE_OPEN_VIDEO:
+                mConnected = true;
+                break;
+            case Command.TYPE_DISCONNECTED:
+                mConnected = false;
+        }
+
+        if (getController() != null && getController().getVideo() != null) {
+            getController().getVideo().isRemote = mConnected;
         }
 
         switch (command.getType()) {

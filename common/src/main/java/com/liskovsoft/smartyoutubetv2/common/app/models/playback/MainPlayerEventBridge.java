@@ -7,18 +7,17 @@ import androidx.fragment.app.Fragment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerHandlerEventListener;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.ContentBlockManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.RemoteControlManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HQDialogManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUIManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.StateUpdater;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.VideoLoader;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerUiEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.ViewEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.ContentBlockManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HQDialogManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUIManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.RemoteControlManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.StateUpdater;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.VideoLoader;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
 import java.lang.ref.WeakReference;
@@ -26,9 +25,9 @@ import java.util.ArrayList;
 
 public class MainPlayerEventBridge implements PlayerEventListener {
     private static final String TAG = MainPlayerEventBridge.class.getSimpleName();
-    private final ArrayList<PlayerHandlerEventListener> mEventListeners = new ArrayList<PlayerHandlerEventListener>() {
+    private final ArrayList<PlayerEventListener> mEventListeners = new ArrayList<PlayerEventListener>() {
         @Override
-        public boolean add(PlayerHandlerEventListener listener) {
+        public boolean add(PlayerEventListener listener) {
             ((PlayerEventListenerHelper) listener).setBridge(MainPlayerEventBridge.this);
 
             return super.add(listener);
@@ -81,7 +80,7 @@ public class MainPlayerEventBridge implements PlayerEventListener {
             if (mController.get() != controller) { // Be ready to re-init after app exit
                 mController = new WeakReference<>(controller);
                 mActivity = new WeakReference<>(((Fragment) controller).getActivity());
-                process(PlayerHandlerEventListener::onInitDone);
+                process(PlayerEventListener::onInitDone);
             }
         }
     }
@@ -94,17 +93,31 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         return mActivity.get();
     }
 
+    // Core events
+
     @Override
     public void openVideo(Video item) {
         process(listener -> listener.openVideo(item));
     }
+
+    @Override
+    public void onNewSession() {
+        process(PlayerEventListener::onNewSession);
+    }
+
+    @Override
+    public void onInitDone() {
+        // NOP. Internal event.
+    }
+
+    // End core events
 
     // Helpers
 
     private boolean chainProcess(ChainProcessor processor) {
         boolean result = false;
 
-        for (PlayerHandlerEventListener listener : mEventListeners) {
+        for (PlayerEventListener listener : mEventListeners) {
             result = processor.process(listener);
 
             if (result) {
@@ -116,17 +129,17 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     private interface ChainProcessor {
-        boolean process(PlayerHandlerEventListener listener);
+        boolean process(PlayerEventListener listener);
     }
 
     private void process(Processor processor) {
-        for (PlayerHandlerEventListener listener : mEventListeners) {
+        for (PlayerEventListener listener : mEventListeners) {
             processor.process(listener);
         }
     }
 
     private interface Processor {
-        void process(PlayerHandlerEventListener listener);
+        void process(PlayerEventListener listener);
     }
 
     // End Helpers
@@ -164,12 +177,12 @@ public class MainPlayerEventBridge implements PlayerEventListener {
 
     @Override
     public void onEngineInitialized() {
-        process(PlayerHandlerEventListener::onEngineInitialized);
+        process(PlayerEventListener::onEngineInitialized);
     }
 
     @Override
     public void onEngineReleased() {
-        process(PlayerHandlerEventListener::onEngineReleased);
+        process(PlayerEventListener::onEngineReleased);
     }
 
     @Override
@@ -179,32 +192,32 @@ public class MainPlayerEventBridge implements PlayerEventListener {
 
     @Override
     public void onPlay() {
-        process(PlayerHandlerEventListener::onPlay);
+        process(PlayerEventListener::onPlay);
     }
 
     @Override
     public void onPause() {
-        process(PlayerHandlerEventListener::onPause);
+        process(PlayerEventListener::onPause);
     }
 
     @Override
     public void onPlayClicked() {
-        process(PlayerHandlerEventListener::onPlayClicked);
+        process(PlayerEventListener::onPlayClicked);
     }
 
     @Override
     public void onPauseClicked() {
-        process(PlayerHandlerEventListener::onPauseClicked);
+        process(PlayerEventListener::onPauseClicked);
     }
     
     @Override
     public void onSeek() {
-        process(PlayerHandlerEventListener::onSeek);
+        process(PlayerEventListener::onSeek);
     }
 
     @Override
     public void onPlayEnd() {
-        process(PlayerHandlerEventListener::onPlayEnd);
+        process(PlayerEventListener::onPlayEnd);
     }
 
     @Override
@@ -243,12 +256,12 @@ public class MainPlayerEventBridge implements PlayerEventListener {
 
     @Override
     public boolean onPreviousClicked() {
-        return chainProcess(PlayerHandlerEventListener::onPreviousClicked);
+        return chainProcess(PlayerEventListener::onPreviousClicked);
     }
 
     @Override
     public boolean onNextClicked() {
-        return chainProcess(PlayerHandlerEventListener::onNextClicked);
+        return chainProcess(PlayerEventListener::onNextClicked);
     }
 
     @Override

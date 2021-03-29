@@ -40,12 +40,14 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     }
 
     /**
-     * Opens video item from browser, search or channel views
+     * Opens video item from splash view
      */
     public void openVideo(String videoId) {
         if (videoId == null) {
             return;
         }
+
+        mMainPlayerEventBridge.onNewSession();
 
         openVideo(Video.from(videoId), true);
     }
@@ -54,6 +56,12 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
      * Opens video item from browser, search or channel views
      */
     public void openVideo(Video item) {
+        if (item == null) {
+            return;
+        }
+
+        mMainPlayerEventBridge.onNewSession();
+
         openVideo(item, true);
     }
 
