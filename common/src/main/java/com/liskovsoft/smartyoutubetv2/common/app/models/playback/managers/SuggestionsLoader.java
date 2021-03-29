@@ -16,7 +16,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -83,7 +82,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
     }
 
     private void syncCurrentVideo(MediaItemMetadata mediaItemMetadata, Video video) {
-        video.sync(mediaItemMetadata, PlayerData.instance(getActivity()).isShowFullDateEnabled());
+        video.sync(mediaItemMetadata, PlayerData.instance(getActivity()).isAbsoluteDateEnabled());
         getController().setVideo(video);
     }
 

@@ -36,14 +36,14 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendVideoBufferCategory(settingsPresenter);
         appendVideoPresetsCategory(settingsPresenter);
         //appendVideoZoomCategory(settingsPresenter);
-        //appendAudioShiftCategory(settingsPresenter);
+        appendAudioShiftCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
         appendOKButtonCategory(settingsPresenter);
         appendUIAutoHideCategory(settingsPresenter);
         appendSeekingPreviewCategory(settingsPresenter);
         appendRememberSpeedCategory(settingsPresenter);
-        appendTweaksCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
+        appendTweaksCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_player_ui));
     }
@@ -188,8 +188,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         //options.add(UiOptionItem.from(getContext().getString(R.string.player_full_date),
-        //        option -> mPlayerData.showFullDate(option.isSelected()),
-        //        mPlayerData.isShowFullDateEnabled()));
+        //        option -> mPlayerData.enableAbsoluteDate(option.isSelected()),
+        //        mPlayerData.isAbsoluteDateEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_pause_when_seek),
                 option -> mPlayerData.enablePauseOnSeek(option.isSelected()),

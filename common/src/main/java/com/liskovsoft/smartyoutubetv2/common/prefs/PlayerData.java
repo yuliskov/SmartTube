@@ -28,7 +28,7 @@ public class PlayerData {
     private final AppPrefs mPrefs;
     private int mOKButtonBehavior;
     private int mUIHideTimeoutSec;
-    private boolean mIsShowFullDateEnabled;
+    private boolean mIsAbsoluteDateEnabled;
     private boolean mIsPauseOnSeekEnabled;
     private boolean mIsClockEnabled;
     private boolean mIsRemainingTimeEnabled;
@@ -87,13 +87,13 @@ public class PlayerData {
         return mUIHideTimeoutSec;
     }
 
-    public void showFullDate(boolean show) {
-        mIsShowFullDateEnabled = show;
+    public void enableAbsoluteDate(boolean show) {
+        mIsAbsoluteDateEnabled = show;
         persistData();
     }
 
-    public boolean isShowFullDateEnabled() {
-        return mIsShowFullDateEnabled;
+    public boolean isAbsoluteDateEnabled() {
+        return mIsAbsoluteDateEnabled;
     }
 
     public void setSeekPreviewMode(int mode) {
@@ -347,7 +347,7 @@ public class PlayerData {
 
         mOKButtonBehavior = Helpers.parseInt(split, 0, ONLY_UI);
         mUIHideTimeoutSec = Helpers.parseInt(split, 1, 3);
-        mIsShowFullDateEnabled = Helpers.parseBoolean(split, 2, false);
+        mIsAbsoluteDateEnabled = Helpers.parseBoolean(split, 2, false);
         mSeekPreviewMode = Helpers.parseInt(split, 3, SEEK_PREVIEW_SINGLE);
         mIsPauseOnSeekEnabled = Helpers.parseBoolean(split, 4, false);
         mIsClockEnabled = Helpers.parseBoolean(split, 5, true);
@@ -382,8 +382,7 @@ public class PlayerData {
     }
 
     private void persistData() {
-        mPrefs.setData(VIDEO_PLAYER_DATA, Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec,
-                mIsShowFullDateEnabled, mSeekPreviewMode, mIsPauseOnSeekEnabled,
+        mPrefs.setData(VIDEO_PLAYER_DATA, Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec, mIsAbsoluteDateEnabled, mSeekPreviewMode, mIsPauseOnSeekEnabled,
                 mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null, // afrData was there
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
