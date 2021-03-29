@@ -26,15 +26,17 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     private final RemoteManager mRemoteManager;
     private final RemoteControlData mRemoteControlData;
     private final SuggestionsLoader mSuggestionsLoader;
+    private final VideoLoader mVideoLoader;
     private Disposable mListeningAction;
     private Disposable mPostPlayAction;
     private Disposable mPostStateAction;
     private Video mVideo;
     private boolean mConnected;
 
-    public RemoteControlManager(Context context, SuggestionsLoader suggestionsLoader) {
+    public RemoteControlManager(Context context, SuggestionsLoader suggestionsLoader, VideoLoader videoLoader) {
         MediaService mediaService = YouTubeMediaService.instance();
         mSuggestionsLoader = suggestionsLoader;
+        mVideoLoader = videoLoader;
         mRemoteManager = mediaService.getRemoteManager();
         mRemoteControlData = RemoteControlData.instance(context);
         mRemoteControlData.setOnChange(this::tryListening);
@@ -236,7 +238,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
             case Command.TYPE_NEXT:
                 if (getBridge() != null) {
                     Utils.movePlayerToForeground(getActivity());
-                    getBridge().onNextClicked();
+                    mVideoLoader.loadNext();
                 } else {
                     openNewVideo(mVideo);
                 }
@@ -245,8 +247,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 if (getBridge() != null && getController() != null) {
                     Utils.movePlayerToForeground(getActivity());
                     // Switch immediately. Skip position reset logic.
-                    //getController().setPositionMs(0);
-                    getBridge().onPreviousClicked();
+                    mVideoLoader.loadPrevious();
                 } else {
                     openNewVideo(mVideo);
                 }

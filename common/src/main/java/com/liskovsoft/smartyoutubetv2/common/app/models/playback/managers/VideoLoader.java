@@ -99,30 +99,27 @@ public class VideoLoader extends PlayerEventListenerHelper {
         YouTubeMediaService.instance().invalidateCache();
 
         Utils.postDelayed(mHandler, mPendingRestartEngine, 3_000); // fix too frequent request
-
-        //if (type == PlayerEventListener.ERROR_TYPE_SOURCE ||
-        //    type == PlayerEventListener.ERROR_TYPE_RENDERER ||
-        //    type == PlayerEventListener.ERROR_TYPE_REMOTE) {
-        //    // Some ciphered data might be stalled.
-        //    // Might happen when the app wasn't used quite a long time.
-        //    YouTubeMediaService.instance().invalidateCache();
-        //    loadVideo(mLastVideo);
-        //} else {
-        //    MessageHelpers.showMessage(getActivity(), R.string.msg_player_error);
-        //}
-
-        //getController().showControls(true);
     }
 
     @Override
     public boolean onPreviousClicked() {
-        openVideoInt(mPlaylist.previous());
+        loadPrevious();
 
         return true;
     }
 
     @Override
     public boolean onNextClicked() {
+        loadNext();
+
+        return true;
+    }
+
+    public void loadPrevious() {
+        openVideoInt(mPlaylist.previous());
+    }
+
+    public void loadNext() {
         Video next = mPlaylist.next();
 
         if (next == null) {
@@ -130,8 +127,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
         } else {
             openVideoInt(next);
         }
-
-        return true;
     }
 
     @Override

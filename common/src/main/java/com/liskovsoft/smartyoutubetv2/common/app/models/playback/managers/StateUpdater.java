@@ -69,11 +69,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public boolean onPreviousClicked() {
-        // Skip auto seek logic when running remote session
-        if (getController().getVideo() != null && getController().getVideo().isRemote) {
-            return false;
-        }
-
         boolean isFarFromStart = getController().getPositionMs() > 10_000;
 
         if (isFarFromStart) {
