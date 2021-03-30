@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.MediaCodec;
 import android.os.Handler;
 import androidx.annotation.Nullable;
+import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
@@ -16,7 +17,9 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
 
 public class DebugInfoMediaCodecVideoRenderer extends MediaCodecVideoRenderer {
     private static final String TAG = DebugInfoMediaCodecVideoRenderer.class.getSimpleName();
-    //private long mPrevPresentationTimeUs;
+    //private int mFrameIndex;
+    //private long mDurationUs;
+    //private long mPrevDurationUs;
 
     // Exo 2.9
     //public DebugInfoMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
@@ -60,8 +63,18 @@ public class DebugInfoMediaCodecVideoRenderer extends MediaCodecVideoRenderer {
     //protected void renderOutputBufferV21(MediaCodec codec, int index, long presentationTimeUs, long releaseTimeNs) {
     //    super.renderOutputBufferV21(codec, index, presentationTimeUs, releaseTimeNs);
     //
-    //    Log.d(TAG, "Real fps: %s", 1_000_000f / (presentationTimeUs - mPrevPresentationTimeUs));
+    //    mFrameIndex++;
+    //    //mDurationUs += presentationTimeUs - mPrevDurationUs;
+    //    //mPrevDurationUs = presentationTimeUs;
     //
-    //    mPrevPresentationTimeUs = presentationTimeUs;
+    //    Log.d(TAG, "Real fps: %s", 1_000_000f / (presentationTimeUs / mFrameIndex));
+    //}
+    //
+    //@Override
+    //protected void onInputFormatChanged(Format newFormat) throws ExoPlaybackException {
+    //    super.onInputFormatChanged(newFormat);
+    //
+    //    mFrameIndex = 0;
+    //    mDurationUs = 0;
     //}
 }
