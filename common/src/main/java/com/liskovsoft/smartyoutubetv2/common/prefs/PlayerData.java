@@ -362,7 +362,7 @@ public class PlayerData {
         mVideoZoomMode = Helpers.parseInt(split, 14, PlaybackEngineController.ZOOM_MODE_DEFAULT);
         mSpeed = Helpers.parseFloat(split, 15, 1.0f);
         mIsAfrEnabled = Helpers.parseBoolean(split, 16, false);
-        mIsAfrFpsCorrectionEnabled = Helpers.parseBoolean(split, 17, false);
+        mIsAfrFpsCorrectionEnabled = Helpers.parseBoolean(split, 17, true);
         mIsAfrResSwitchEnabled = Helpers.parseBoolean(split, 18, false);
         mAfrPauseSec = Helpers.parseInt(split, 19, 0);
         mAudioDelayMs = Helpers.parseInt(split, 20, 0);
