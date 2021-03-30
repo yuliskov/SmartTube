@@ -203,4 +203,5 @@
     <string name="msg_player_error_source">Impossible de charger la vidéo</string>
     <string name="msg_player_error_renderer">Le format vidéo sélectionné n\'est pas pris en charge</string>
     <string name="msg_player_error_unexpected">Erreur inconnue du décodeur vidéo</string>
+    <string name="video_aspect">Ratio d'aspect</string>
 </resources>
