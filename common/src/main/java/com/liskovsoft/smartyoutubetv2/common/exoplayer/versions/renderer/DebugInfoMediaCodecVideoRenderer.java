@@ -4,7 +4,6 @@ import android.content.Context;
 import android.media.MediaCodec;
 import android.os.Handler;
 import androidx.annotation.Nullable;
-import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
@@ -17,9 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
 
 public class DebugInfoMediaCodecVideoRenderer extends MediaCodecVideoRenderer {
     private static final String TAG = DebugInfoMediaCodecVideoRenderer.class.getSimpleName();
-    //private int mFrameIndex;
-    //private long mDurationUs;
-    //private long mPrevDurationUs;
+    private int mFrameIndex;
 
     // Exo 2.9
     //public DebugInfoMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
@@ -52,6 +49,7 @@ public class DebugInfoMediaCodecVideoRenderer extends MediaCodecVideoRenderer {
     }
 
     // Measure real fps.
+    // Note, that you can't accurate measure frame rate because actual frame rate is the average frame rate for the whole video track!
     // 29.97fps test: https://www.youtube.com/watch?v=LXb3EKWsInQ (Costa Rica)
     // More info: https://github.com/google/ExoPlayer/issues/4088
     //@Override
@@ -64,17 +62,7 @@ public class DebugInfoMediaCodecVideoRenderer extends MediaCodecVideoRenderer {
     //    super.renderOutputBufferV21(codec, index, presentationTimeUs, releaseTimeNs);
     //
     //    mFrameIndex++;
-    //    //mDurationUs += presentationTimeUs - mPrevDurationUs;
-    //    //mPrevDurationUs = presentationTimeUs;
     //
     //    Log.d(TAG, "Real fps: %s", 1_000_000f / (presentationTimeUs / mFrameIndex));
-    //}
-    //
-    //@Override
-    //protected void onInputFormatChanged(Format newFormat) throws ExoPlaybackException {
-    //    super.onInputFormatChanged(newFormat);
-    //
-    //    mFrameIndex = 0;
-    //    mDurationUs = 0;
     //}
 }
