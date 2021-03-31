@@ -199,4 +199,5 @@
     <string name="msg_player_error_source">Nelze načíst video</string>
     <string name="msg_player_error_renderer">Vybraný formát videa není podporován</string>
     <string name="msg_player_error_unexpected">Neznámá chyba video dekodéru</string>
+    <string name="video_aspect">Poměr stran</string>
 </resources>
