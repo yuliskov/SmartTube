@@ -382,6 +382,19 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mMediaSession.setActive(true);
         mMediaSessionConnector = new MediaSessionConnector(mMediaSession);
         mMediaSessionConnector.setPlayer(mPlayer);
+
+        mMediaSessionConnector.setMediaMetadataProvider(player -> {
+            if (getVideo() == null) {
+                return null;
+            }
+
+            MediaMetadataCompat.Builder metadataBuilder = new MediaMetadataCompat.Builder();
+
+            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, getVideo().title);
+            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, getVideo().description);
+
+            return metadataBuilder.build();
+        });
     }
 
     private void initializePlayerRows() {
