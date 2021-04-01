@@ -42,6 +42,7 @@ import java.util.List;
 public class ExoMediaSourceFactory {
     private static final String TAG = ExoMediaSourceFactory.class.getSimpleName();
     private static ExoMediaSourceFactory sInstance;
+    @SuppressWarnings("deprecation")
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private final Factory mMediaDataSourceFactory;
     private final Context mContext;
@@ -125,6 +126,7 @@ public class ExoMediaSourceFactory {
         return buildHttpDataSourceFactory(mContext, useBandwidthMeter ? BANDWIDTH_METER : null);
     }
 
+    @SuppressWarnings("deprecation")
     private MediaSource buildMediaSource(Uri uri, String overrideExtension) {
         int type = TextUtils.isEmpty(overrideExtension) ? Util.inferContentType(uri) : Util.inferContentType("." + overrideExtension);
         switch (type) {
@@ -231,7 +233,7 @@ public class ExoMediaSourceFactory {
     //public static HttpDataSource.Factory buildHttpDataSourceFactory(Context context, DefaultBandwidthMeter bandwidthMeter) {
     //    // OkHttpHelpers.getOkHttpClient()
     //    // RetrofitHelper.createOkHttpClient()
-    //    OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(OkHttpHelpers.getOkHttpClient(), AppConstants.APP_USER_AGENT,
+    //    OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(RetrofitHelper.createOkHttpClient(), AppConstants.APP_USER_AGENT,
     //            bandwidthMeter);
     //    //addCommonHeaders(context, dataSourceFactory);
     //    return dataSourceFactory;
