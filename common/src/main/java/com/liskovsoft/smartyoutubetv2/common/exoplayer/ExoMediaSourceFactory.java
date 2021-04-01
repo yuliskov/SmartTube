@@ -50,12 +50,13 @@ public class ExoMediaSourceFactory {
     private static final Uri DASH_MANIFEST_URI = Uri.parse("https://example.com/test.mpd");
     private static final String DASH_MANIFEST_EXTENSION = "mpd";
     private static final String HLS_PLAYLIST_EXTENSION = "m3u8";
+    private static final boolean USE_BANDWIDTH_METER = false;
     private Handler mMainHandler;
     private MediaSourceEventListener mEventLogger;
 
     private ExoMediaSourceFactory(Context context) {
         mContext = context;
-        mMediaDataSourceFactory = buildDataSourceFactory(false);
+        mMediaDataSourceFactory = buildDataSourceFactory(USE_BANDWIDTH_METER);
     }
 
     public static ExoMediaSourceFactory instance(Context context) {
@@ -130,7 +131,7 @@ public class ExoMediaSourceFactory {
                 SsMediaSource ssSource =
                         new SsMediaSource.Factory(
                                 new DefaultSsChunkSource.Factory(mMediaDataSourceFactory),
-                                buildDataSourceFactory(false)
+                                buildDataSourceFactory(USE_BANDWIDTH_METER)
                         )
                                 .createMediaSource(uri);
                 if (mEventLogger != null) {
@@ -141,7 +142,7 @@ public class ExoMediaSourceFactory {
                 DashMediaSource dashSource =
                         new DashMediaSource.Factory(
                                 new DefaultDashChunkSource.Factory(mMediaDataSourceFactory),
-                                buildDataSourceFactory(false)
+                                buildDataSourceFactory(USE_BANDWIDTH_METER)
                         )
                                 .createMediaSource(uri);
                 if (mEventLogger != null) {
