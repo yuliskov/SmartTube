@@ -179,6 +179,16 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         }
     }
 
+    @Override
+    public void onViewPaused() {
+        if (getController().isInPIPMode()) {
+            // UI couldn't be properly displayed in PIP mode
+            getController().showControls(false);
+            getController().showDebugView(false);
+            getController().setDebugButtonState(false);
+        }
+    }
+
     private void resetButtonStates() {
         getController().setLikeButtonState(false);
         getController().setDislikeButtonState(false);

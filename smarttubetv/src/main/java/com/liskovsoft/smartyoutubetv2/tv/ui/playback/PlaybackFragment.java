@@ -185,12 +185,6 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     public void onPause() {
         super.onPause();
 
-        if (isInPIPMode()) {
-            // UI couldn't be properly displayed in PIP mode
-            showControls(false);
-            showDebugView(false);
-        }
-
         if (Util.SDK_INT <= 23) {
             releasePlayer();
         }
