@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="header_home">Home</string>
     <string name="title_search">Cerca</string>
@@ -5,14 +6,14 @@
     <string name="header_history">Cronologia</string>
     <string name="header_music">Musica</string>
     <string name="header_news">Notizie</string>
-    <string name="header_gaming">Giochi</string>
+    <string name="header_gaming">Videogiochi</string>
     <string name="header_playlists">Playlist</string>
     <string name="header_settings">Opzioni</string>
     <string name="header_channels">Canali</string>
     <string name="subscriptions_signin_title">Novità dai canali che segui</string>
     <string name="subscriptions_signin_subtitle">Accedi per vedere i canali che segui</string>
     <string name="subscriptions_signin_button_text">ACCEDI</string>
-    <string name="library_signin_to_show_more">Guarda i video piaciuti, salvati o dei canali a cui sei iscritto</string>
+    <string name="library_signin_to_show_more">Guarda i video che ti piacciono o dei canali a cui sei iscritto</string>
     <string name="library_signin_subtitle">Accedi per visualizzare la tua libreria</string>
     <string name="action_signin">ACCEDI</string>
     <string name="title_video_formats">Formati video</string>
@@ -21,8 +22,8 @@
     <string name="video_max_quality">Auto (qualità massima)</string>
     <string name="audio_max_quality">Auto (qualità massima)</string>
     <string name="subtitles_disabled">Sottotitoli disattivati</string>
-    <string name="auto_frame_rate">Auto frame rate</string>
-    <string name="frame_rate_correction">Fix fps:\n%s</string>
+    <string name="auto_frame_rate">Attiva</string>
+    <string name="frame_rate_correction">Correggi fps:\n%s</string>
     <string name="category_background_playback">Riproduzione in background</string>
     <string name="not_implemented">Non implementato</string>
     <string name="option_background_playback_off">Disattivato</string>
@@ -30,7 +31,7 @@
     <string name="option_background_playback_only_audio">Solo audio</string>
     <string name="playback_settings">Opzioni riproduzione</string>
     <string name="video_speed">Velocità video</string>
-    <string name="resolution_switch">Cambia risoluzione</string>
+    <string name="resolution_switch">Cambia risoluzione TV</string>
     <string name="video_buffer">Video buffer</string>
     <string name="video_buffer_size_low">Basso</string>
     <string name="video_buffer_size_med">Medio</string>
@@ -54,7 +55,7 @@
     <string name="dialog_account_none">Nessuno</string>
     <string name="dialog_remove_account">Rimuovi profilo</string>
     <string name="dialog_add_account">Aggiungi profilo</string>
-    <string name="default_lang">Predefinito</string>
+    <string name="default_lang">Sistema</string>
     <string name="dialog_select_language">Lingua</string>
     <string name="subtitle_default">Predefinito</string>
     <string name="subtitle_semi_transparent_bg">Sfondo semitrasparente</string>
@@ -84,7 +85,7 @@
     <string name="large_ui">IU grande</string>
     <string name="video_grid_scale">Scala griglia video</string>
     <string name="scale_ui">Scala IU</string>
-    <string name="color_scheme">Temi</string>
+    <string name="color_scheme">Tema</string>
     <string name="color_scheme_default">Predefinito</string>
     <string name="color_scheme_red_grey">Rosso-Grigio</string>
     <string name="color_scheme_red">Rosso</string>
@@ -108,6 +109,7 @@
     <string name="repeat_mode_all">Riproduci tutti i video uno per uno</string>
     <string name="repeat_mode_one">Ripeti video corrente</string>
     <string name="repeat_mode_pause">Pausa dopo ogni video</string>
+    <string name="repeat_mode_pause_alt">Pausa dopo ogni video non in playlist</string>
     <string name="repeat_mode_none">Ferma dopo un video</string>
     <string name="subscribed_to_channel">Iscritto al canale</string>
     <string name="unsubscribed_from_channel">Disiscritto dal canale</string>
@@ -158,7 +160,7 @@
     <string name="mark_channel_as_watched">Segna come visto</string>
     <string name="channel_marked_as_watched">Il canale è stato segnato come visto</string>
     <string name="dialog_add_device">Aggiungi dispositivo</string>
-    <string name="dialog_remove_device">Rimuovi dispositivo</string>
+    <string name="dialog_remove_all_devices">Rimuovi tutti i dispositivi</string>
     <string name="device_link_enabled">Collegamento abilitato</string>
     <string name="device_connected">Il dispositivo \"%s\" è connesso</string>
     <string name="device_disconnected">Il dispositivo \"%s\" è stato disconnesso</string>
@@ -185,4 +187,21 @@
     <string name="content_block_notify_dialog">Notifica di conferma</string>
     <string name="return_to_launcher">Ritorna al launcher dai canali/cerca di ATV</string>
     <string name="intent_force_close">Forza l\'uscita se il video è stato aperto da una fonte esterna</string>
+    <string name="btn_confirm">Conferma</string>
+    <string name="player_low_video_quality">Video in bassa qualità</string>
+    <string name="remote_session_closed">La sessione remota è stata chiusa</string>
+    <string name="msg_mode_switch_error">Non posso cambiare modalità \"%s\"</string>
+    <string name="msg_player_error">Errore riproduttore video %s. Riavvio riproduzione…</string>
+    <string name="video_preset_disabled">Senza preset</string>
+    <string name="video_preset_enabled">Il formato del prossimo video sarà impostato in base al preset</string>
+    <string name="player_sleep_timer">Timer Spegnimento</string>
+    <string name="player_show_quality_info">Visualizza info qualità video</string>
+    <string name="player_remember_each_speed">Ricorda la velocità di ogni video</string>
+    <string name="player_remember_speed_none">No</string>
+    <string name="player_remember_speed_all">Stessa in tutti i video</string>
+    <string name="player_remember_speed_each">Per ogni video</string>
+    <string name="msg_player_error_source">Non posso scaricare il video</string>
+    <string name="msg_player_error_renderer">Formato video non supportato</string>
+    <string name="msg_player_error_unexpected">Errore di decodifica sconosciuto</string>
+    <string name="video_aspect">Proporzioni</string>
 </resources>
