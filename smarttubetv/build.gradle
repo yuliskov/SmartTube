@@ -127,6 +127,7 @@ dependencies {
 
     implementation 'com.amazon.android:exoplayer:' + amazonExoplayerVersion
     implementation 'com.amazon.android:extension-leanback:' + amazonExoplayerVersion
+    implementation 'com.amazon.android:extension-mediasession:' + amazonExoplayerVersion
 
     // implementation 'com.google.android.exoplayer:exoplayer:' + exoplayerVersion
     // implementation 'com.google.android.exoplayer:extension-leanback:' + exoplayerVersion

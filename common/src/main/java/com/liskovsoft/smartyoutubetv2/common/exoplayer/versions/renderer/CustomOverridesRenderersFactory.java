@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.renderer;
 import android.content.Context;
 import android.os.Handler;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
 import com.google.android.exoplayer2.Renderer;
 import com.google.android.exoplayer2.audio.AudioCapabilities;
 import com.google.android.exoplayer2.audio.AudioProcessor;
@@ -34,7 +33,7 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
     private final PlayerTweaksData mPlayerTweaksData;
     //private int mOperationMode = MediaCodecRenderer.OPERATION_MODE_SYNCHRONOUS;
 
-    public CustomOverridesRenderersFactory(FragmentActivity activity) {
+    public CustomOverridesRenderersFactory(Context activity) {
         super(activity);
 
         mPlayerData = PlayerData.instance(activity);

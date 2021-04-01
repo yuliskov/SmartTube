@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
 import android.os.Bundle;
+import android.support.v4.media.MediaMetadataCompat;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -21,8 +23,12 @@ import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.RowPresenter.ViewHolder;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
+import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
+import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector.DefaultMediaMetadataProvider;
+import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector.MediaMetadataProvider;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection.Factory;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.util.Util;
@@ -86,6 +92,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private RowsSupportFragment mRowsSupportFragment;
     private final boolean mIsAnimationEnabled = true;
     private int mPlaybackMode = PlaybackEngineController.BACKGROUND_MODE_DEFAULT;
+    private MediaSessionCompat mMediaSession;
+    private MediaSessionConnector mMediaSessionConnector;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,7 +101,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         mMediaGroupAdapters = new HashMap<>();
         mBackgroundManager = getLeanbackActivity().getBackgroundManager();
-        mBackgroundManager.setBackgroundColor(ContextCompat.getColor(getLeanbackActivity(), R.color.player_background));
+        mBackgroundManager.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.player_background));
         mPlayerInitializer = new ExoPlayerInitializer(getContext());
         mExoPlayerController = new ExoPlayerController(getContext());
 
@@ -299,51 +307,87 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private void destroyPlayerObjects() {
         // Fix access calls when player isn't initialized
         mExoPlayerController.release();
+        if (mMediaSessionConnector != null) {
+            mMediaSessionConnector.setPlayer(null);
+        }
+        if (mMediaSession != null) {
+            mMediaSession.release();
+        }
         mPlayer = null;
         mPlayerGlue = null;
         mRowsAdapter = null;
         mSubtitleManager = null;
         mDebugInfoManager = null;
+        mMediaSessionConnector = null;
+        mMediaSession = null;
     }
 
     private void createPlayerObjects() {
-        DefaultRenderersFactory renderersFactory = new CustomOverridesRenderersFactory(getActivity());
+        // NOTE: position matters!
+
+        createPlayer();
+
+        createPlayerGlue();
+
+        createSubtitleManager();
+
+        createDebugManager();
+
+        createMediaSession();
+
+        initializePlayerRows();
+    }
+
+    private void createPlayer() {
+        DefaultRenderersFactory renderersFactory = new CustomOverridesRenderersFactory(getContext());
 
         // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
         DefaultTrackSelector trackSelector = new RestoreTrackSelector(new Factory());
-        mPlayer = mPlayerInitializer.createPlayer(getActivity(), renderersFactory, trackSelector);
+        mPlayer = mPlayerInitializer.createPlayer(getContext(), renderersFactory, trackSelector);
 
-        PlayerAdapter playerAdapter = new LeanbackPlayerAdapter(getActivity(), mPlayer, UPDATE_DELAY_MS);
+        mExoPlayerController.setPlayer(mPlayer);
+        mExoPlayerController.setTrackSelector(trackSelector);
+        mExoPlayerController.setEventListener(mEventListener);
+    }
+
+    private void createPlayerGlue() {
+        PlayerAdapter playerAdapter = new LeanbackPlayerAdapter(getContext(), mPlayer, UPDATE_DELAY_MS);
 
         OnActionClickedListener playerActionListener = new PlayerActionListener();
-        mPlayerGlue = new VideoPlayerGlue(getActivity(), playerAdapter, playerActionListener);
+        mPlayerGlue = new VideoPlayerGlue(getContext(), playerAdapter, playerActionListener);
         mPlayerGlue.setHost(new VideoSupportFragmentGlueHost(this));
         mPlayerGlue.setSeekEnabled(true);
         mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end
         StoryboardSeekDataProvider.setSeekProvider(mPlayerGlue);
         hideControlsOverlay(mIsAnimationEnabled); // fix player ui not synced correctly
 
-        mExoPlayerController.setPlayer(mPlayer);
-        mExoPlayerController.setTrackSelector(trackSelector);
-        mExoPlayerController.setEventListener(mEventListener);
         mExoPlayerController.setPlayerView(mPlayerGlue);
+    }
 
+    private void createSubtitleManager() {
         mSubtitleManager = new SubtitleManager(getActivity(), R.id.leanback_subtitles);
 
         // subs renderer
         if (mPlayer.getTextComponent() != null) {
             mPlayer.getTextComponent().addTextOutput(mSubtitleManager);
         }
+    }
 
-        mDebugInfoManager = new DebugInfoManager(mPlayer, R.id.debug_view_group, getActivity());
+    private void createDebugManager() {
+        mDebugInfoManager = new DebugInfoManager(getActivity(), mPlayer, R.id.debug_view_group);
+    }
 
-        mRowsSupportFragment = (RowsSupportFragment) getChildFragmentManager().findFragmentById(
-                R.id.playback_controls_dock);
-
-        initializePlayerRows();
+    private void createMediaSession() {
+        mMediaSession = new MediaSessionCompat(getContext(), getContext().getPackageName());
+        mMediaSession.setActive(true);
+        mMediaSessionConnector = new MediaSessionConnector(mMediaSession);
+        mMediaSessionConnector.setPlayer(mPlayer);
     }
 
     private void initializePlayerRows() {
+        mRowsSupportFragment = (RowsSupportFragment) getChildFragmentManager().findFragmentById(
+                R.id.playback_controls_dock);
+
         /*
          * To add a new row to the mPlayerAdapter and not lose the controls row that is provided by the
          * glue, we need to compose a new row with the controls row and our related videos row.
