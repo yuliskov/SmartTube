@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 import android.os.Bundle;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -22,13 +23,12 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.RowPresenter.ViewHolder;
+import com.google.android.exoplayer2.ControlDispatcher;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
-import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector.DefaultMediaMetadataProvider;
-import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector.MediaMetadataProvider;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection.Factory;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.util.Util;
@@ -59,6 +59,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.videoscale.VideoSupportFragmentGlueHost;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.BackboneQueueNavigator;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.StoryboardSeekDataProvider;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoEventsOverrideFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue;
@@ -394,6 +395,23 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, getVideo().description);
 
             return metadataBuilder.build();
+        });
+
+        mMediaSessionConnector.setQueueNavigator(new BackboneQueueNavigator() {
+            @Override
+            public long getSupportedQueueNavigatorActions(Player player) {
+                return PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS | PlaybackStateCompat.ACTION_SKIP_TO_NEXT;
+            }
+
+            @Override
+            public void onSkipToPrevious(Player player, ControlDispatcher controlDispatcher) {
+                mEventListener.onPreviousClicked();
+            }
+
+            @Override
+            public void onSkipToNext(Player player, ControlDispatcher controlDispatcher) {
+                mEventListener.onNextClicked();
+            }
         });
     }
 
