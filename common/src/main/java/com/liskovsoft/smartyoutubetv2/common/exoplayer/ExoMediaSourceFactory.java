@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
 import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -29,6 +30,7 @@ import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.okhttp.OkHttpHelpers;
 import com.liskovsoft.youtubeapi.app.AppConstants;
 
 import java.io.IOException;
@@ -223,18 +225,20 @@ public class ExoMediaSourceFactory {
         return new DefaultDataSourceFactory(context, bandwidthMeter, buildHttpDataSourceFactory(context, bandwidthMeter));
     }
 
-    //public static HttpDataSource.Factory buildHttpDataSourceFactory(Context context, DefaultBandwidthMeter bandwidthMeter) {
-    //    OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(OkHttpHelpers.getOkHttpClient(), AppConstants.APP_USER_AGENT,
-    //            bandwidthMeter);
-    //    //addCommonHeaders(context, dataSourceFactory);
-    //    return dataSourceFactory;
-    //}
-
-    private static HttpDataSource.Factory buildHttpDataSourceFactory(Context context, DefaultBandwidthMeter bandwidthMeter) {
-        DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(AppConstants.APP_USER_AGENT, bandwidthMeter);
-        //addCommonHeaders(context, dataSourceFactory); // cause troubles for some users
+    // Use OkHttp for networking
+    public static HttpDataSource.Factory buildHttpDataSourceFactory(Context context, DefaultBandwidthMeter bandwidthMeter) {
+        OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(OkHttpHelpers.getOkHttpClient(), AppConstants.APP_USER_AGENT,
+                bandwidthMeter);
+        //addCommonHeaders(context, dataSourceFactory);
         return dataSourceFactory;
     }
+
+    // Use internal component for networking
+    //private static HttpDataSource.Factory buildHttpDataSourceFactory(Context context, DefaultBandwidthMeter bandwidthMeter) {
+    //    DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(AppConstants.APP_USER_AGENT, bandwidthMeter);
+    //    //addCommonHeaders(context, dataSourceFactory); // cause troubles for some users
+    //    return dataSourceFactory;
+    //}
 
     //private static void addCommonHeaders(Context context, BaseFactory dataSourceFactory) {
     //    HeaderManager headerManager = new HeaderManager(context);
