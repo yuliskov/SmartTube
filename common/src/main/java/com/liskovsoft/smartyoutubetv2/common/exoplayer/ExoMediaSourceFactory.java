@@ -228,20 +228,21 @@ public class ExoMediaSourceFactory {
     }
 
     // Use OkHttp for networking
-    public static HttpDataSource.Factory buildHttpDataSourceFactory(Context context, DefaultBandwidthMeter bandwidthMeter) {
-        // OkHttpHelpers.getOkHttpClient()
-        OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(RetrofitHelper.createOkHttpClient(), AppConstants.APP_USER_AGENT,
-                bandwidthMeter);
-        //addCommonHeaders(context, dataSourceFactory);
-        return dataSourceFactory;
-    }
-
-    // Use internal component for networking
-    //private static HttpDataSource.Factory buildHttpDataSourceFactory(Context context, DefaultBandwidthMeter bandwidthMeter) {
-    //    DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(AppConstants.APP_USER_AGENT, bandwidthMeter);
-    //    //addCommonHeaders(context, dataSourceFactory); // cause troubles for some users
+    //public static HttpDataSource.Factory buildHttpDataSourceFactory(Context context, DefaultBandwidthMeter bandwidthMeter) {
+    //    // OkHttpHelpers.getOkHttpClient()
+    //    // RetrofitHelper.createOkHttpClient()
+    //    OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(OkHttpHelpers.getOkHttpClient(), AppConstants.APP_USER_AGENT,
+    //            bandwidthMeter);
+    //    //addCommonHeaders(context, dataSourceFactory);
     //    return dataSourceFactory;
     //}
+
+    // Use internal component for networking
+    private static HttpDataSource.Factory buildHttpDataSourceFactory(Context context, DefaultBandwidthMeter bandwidthMeter) {
+        DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(AppConstants.APP_USER_AGENT, bandwidthMeter);
+        //addCommonHeaders(context, dataSourceFactory); // cause troubles for some users
+        return dataSourceFactory;
+    }
 
     //private static void addCommonHeaders(Context context, BaseFactory dataSourceFactory) {
     //    HeaderManager headerManager = new HeaderManager(context);
