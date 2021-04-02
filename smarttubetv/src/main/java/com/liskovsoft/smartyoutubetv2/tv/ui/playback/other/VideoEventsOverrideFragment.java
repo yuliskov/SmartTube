@@ -7,7 +7,7 @@ import android.view.View;
 import androidx.leanback.app.PlaybackSupportFragment;
 import androidx.leanback.widget.VerticalGridView;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.videofragment.SurfaceSupportFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.surfacefragment.SurfaceSupportFragment;
 
 /**
  *  Every successfully handled event invokes {@link PlaybackSupportFragment#tickle} that makes ui to appear.

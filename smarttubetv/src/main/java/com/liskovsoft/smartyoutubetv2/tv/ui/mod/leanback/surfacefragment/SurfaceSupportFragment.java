@@ -1,17 +1,4 @@
-/*
- * Copyright (C) 2016 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing permissions and limitations under
- * the License.
- */
-package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.videoscale;
+package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.surfacefragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,23 +6,19 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.leanback.R;
 import androidx.leanback.app.PlaybackSupportFragment;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout.ResizeMode;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 
 /**
  * Subclass of {@link PlaybackSupportFragment} that is responsible for providing a {@link SurfaceView}
  * and rendering video.
  */
-public class VideoSupportFragment extends PlaybackSupportFragment {
-    static final int SURFACE_NOT_CREATED = 0;
-    static final int SURFACE_CREATED = 1;
-    SurfaceView mVideoSurface;
+public class SurfaceSupportFragment extends PlaybackSupportFragment {
+    SurfaceWrapper mVideoSurfaceWrapper;
     AspectRatioFrameLayout mVideoSurfaceRoot;
-    SurfaceHolder.Callback mMediaPlaybackCallback;
-    int mState = SURFACE_NOT_CREATED;
     private int mBackgroundResId;
     private float mAspectRatio;
     private float mVideoAspectRatio;
@@ -44,35 +27,10 @@ public class VideoSupportFragment extends PlaybackSupportFragment {
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) super.onCreateView(inflater, container, savedInstanceState);
-        mVideoSurface = (SurfaceView) LayoutInflater.from(getContext()).inflate(
-                R.layout.lb_video_surface, root, false);
+        mVideoSurfaceWrapper = PlayerTweaksData.instance(getContext()).isTextureViewEnabled() ?
+                new TextureViewWrapper(getContext(), root) : new SurfaceViewWrapper(getContext(), root);
         mVideoSurfaceRoot = root.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.surface_root);
-        mVideoSurfaceRoot.addView(mVideoSurface, 0);
-        mVideoSurface.getHolder().addCallback(new SurfaceHolder.Callback() {
-
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                if (mMediaPlaybackCallback != null) {
-                    mMediaPlaybackCallback.surfaceCreated(holder);
-                }
-                mState = SURFACE_CREATED;
-            }
-
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-                if (mMediaPlaybackCallback != null) {
-                    mMediaPlaybackCallback.surfaceChanged(holder, format, width, height);
-                }
-            }
-
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-                if (mMediaPlaybackCallback != null) {
-                    mMediaPlaybackCallback.surfaceDestroyed(holder);
-                }
-                mState = SURFACE_NOT_CREATED;
-            }
-        });
+        mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
         setBackgroundType(PlaybackSupportFragment.BG_LIGHT);
         return root;
     }
@@ -81,12 +39,8 @@ public class VideoSupportFragment extends PlaybackSupportFragment {
      * Adds {@link SurfaceHolder.Callback} to {@link SurfaceView}.
      */
     public void setSurfaceHolderCallback(SurfaceHolder.Callback callback) {
-        mMediaPlaybackCallback = callback;
-
-        if (callback != null) {
-            if (mState == SURFACE_CREATED) {
-                mMediaPlaybackCallback.surfaceCreated(mVideoSurface.getHolder());
-            }
+        if (mVideoSurfaceWrapper != null) {
+            mVideoSurfaceWrapper.setSurfaceHolderCallback(callback);
         }
     }
 
@@ -99,14 +53,13 @@ public class VideoSupportFragment extends PlaybackSupportFragment {
     /**
      * Returns the surface view.
      */
-    public SurfaceView getSurfaceView() {
-        return mVideoSurface;
+    public View getSurfaceView() {
+        return mVideoSurfaceWrapper.getSurfaceView();
     }
 
     @Override
     public void onDestroyView() {
-        mVideoSurface = null;
-        mState = SURFACE_NOT_CREATED;
+        mVideoSurfaceWrapper = null;
         super.onDestroyView();
     }
 

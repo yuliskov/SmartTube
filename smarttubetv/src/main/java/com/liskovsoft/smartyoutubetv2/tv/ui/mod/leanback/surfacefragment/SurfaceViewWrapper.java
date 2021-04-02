@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.videofragment;
+package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.surfacefragment;
 
 import android.content.Context;
 import android.view.LayoutInflater;
