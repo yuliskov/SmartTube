@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
-import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.v4.media.MediaMetadataCompat;
