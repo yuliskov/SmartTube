@@ -14,8 +14,6 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.surface.textureview.TextureViewSurfaceHolder;
 
 public class TextureViewWrapper implements SurfaceWrapper {
-    private static final int SURFACE_NOT_CREATED = 0;
-    private static final int SURFACE_CREATED = 1;
     private int mState = SURFACE_NOT_CREATED;
     private final TextureView mVideoSurface;
     private SurfaceHolder.Callback mMediaPlaybackCallback;

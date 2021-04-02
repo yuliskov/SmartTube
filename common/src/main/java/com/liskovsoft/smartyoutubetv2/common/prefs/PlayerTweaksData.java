@@ -14,6 +14,7 @@ public class PlayerTweaksData {
     private boolean mIsSnapToVsyncDisabled;
     private boolean mIsProfileLevelCheckSkipped;
     private boolean mIsSWDecoderForced;
+    private boolean mIsTextureViewEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -73,6 +74,15 @@ public class PlayerTweaksData {
         return mIsSWDecoderForced;
     }
 
+    public boolean isTextureViewEnabled() {
+        return mIsTextureViewEnabled;
+    }
+
+    public void enableTextureView(boolean enable) {
+        mIsTextureViewEnabled = enable;
+        persistData();
+    }
+
     private void restoreData() {
         String data = mPrefs.getData(VIDEO_PLAYER_TWEAKS_DATA);
 
@@ -83,12 +93,13 @@ public class PlayerTweaksData {
         mIsSnapToVsyncDisabled = Helpers.parseBoolean(split, 2, false);
         mIsProfileLevelCheckSkipped = Helpers.parseBoolean(split, 3, false);
         mIsSWDecoderForced = Helpers.parseBoolean(split, 4, false);
+        mIsTextureViewEnabled = Helpers.parseBoolean(split, 5, false);
     }
 
     private void persistData() {
         mPrefs.setData(VIDEO_PLAYER_TWEAKS_DATA, Helpers.mergeObject(
                 mIsAmlogicFixEnabled, mIsFrameDropFixEnabled, mIsSnapToVsyncDisabled,
-                mIsProfileLevelCheckSkipped, mIsSWDecoderForced
+                mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled
         ));
     }
 }

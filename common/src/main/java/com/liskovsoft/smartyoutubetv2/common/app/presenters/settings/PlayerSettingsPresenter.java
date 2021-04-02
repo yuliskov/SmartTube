@@ -177,6 +177,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.forceSWDecoder(option.isSelected()),
                 mPlayerTweaksData.isSWDecoderForced()));
 
+        options.add(UiOptionItem.from("Enable TextureView",
+                option -> mPlayerTweaksData.enableTextureView(option.isSelected()),
+                mPlayerTweaksData.isTextureViewEnabled()));
+
         options.add(UiOptionItem.from("Sleep timer fix",
                 option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
                 mPlayerData.isSonyTimerFixEnabled()));

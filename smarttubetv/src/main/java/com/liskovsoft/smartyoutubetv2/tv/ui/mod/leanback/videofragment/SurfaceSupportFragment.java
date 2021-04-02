@@ -10,6 +10,7 @@ import androidx.leanback.app.PlaybackSupportFragment;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout.ResizeMode;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 
 /**
  * Subclass of {@link PlaybackSupportFragment} that is responsible for providing a {@link SurfaceView}
@@ -26,7 +27,8 @@ public class SurfaceSupportFragment extends PlaybackSupportFragment {
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup root = (ViewGroup) super.onCreateView(inflater, container, savedInstanceState);
-        mVideoSurfaceWrapper = new SurfaceViewWrapper(getContext(), root);
+        mVideoSurfaceWrapper = PlayerTweaksData.instance(getContext()).isTextureViewEnabled() ?
+                new TextureViewWrapper(getContext(), root) : new SurfaceViewWrapper(getContext(), root);
         mVideoSurfaceRoot = root.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.surface_root);
         mVideoSurfaceRoot.addView(mVideoSurfaceWrapper.getSurfaceView(), 0);
         setBackgroundType(PlaybackSupportFragment.BG_LIGHT);

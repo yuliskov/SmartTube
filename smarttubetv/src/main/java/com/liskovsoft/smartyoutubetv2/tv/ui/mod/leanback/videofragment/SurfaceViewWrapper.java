@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class SurfaceViewWrapper implements SurfaceWrapper {
-    private static final int SURFACE_NOT_CREATED = 0;
-    private static final int SURFACE_CREATED = 1;
     private int mState = SURFACE_NOT_CREATED;
     private final SurfaceView mVideoSurface;
     private SurfaceHolder.Callback mMediaPlaybackCallback;
