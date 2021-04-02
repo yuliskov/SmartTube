@@ -170,13 +170,18 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         mIsMetadataLoaded = false; // metadata isn't loaded yet at this point
         resetButtonStates();
 
-        // Next lines on engine initialized stage cause other listeners to disappear.
-        getController().showDebugView(mDebugViewEnabled);
-        getController().setDebugButtonState(mDebugViewEnabled);
-
         if (mPlayerData.getSeekPreviewMode() != PlayerData.SEEK_PREVIEW_NONE) {
             getController().loadStoryboard();
         }
+    }
+
+    @Override
+    public void onViewResumed() {
+        // Activate debug infos.
+        // Also at this stage we could properly restore after PIP.
+        // Next lines on engine initialized stage cause other listeners to disappear.
+        getController().showDebugView(mDebugViewEnabled);
+        getController().setDebugButtonState(mDebugViewEnabled);
     }
 
     @Override
