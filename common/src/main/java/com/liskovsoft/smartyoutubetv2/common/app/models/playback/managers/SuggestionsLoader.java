@@ -31,13 +31,20 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
     }
 
     @Override
+    public void openVideo(Video item) {
+        // Remote control fix. Slow network fix. Suggestions may still be loading.
+        // This could lead to changing current video info (title, id etc) to wrong one.
+        disposeActions();
+    }
+
+    @Override
     public void onSourceChanged(Video item) {
         loadSuggestions(item);
     }
 
     @Override
     public void onEngineReleased() {
-        RxUtils.disposeActions(mMetadataAction, mScrollAction);
+        disposeActions();
     }
 
     @Override
@@ -47,7 +54,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onSuggestionItemClicked(Video item) {
-        // Visual response to user clicks
+        // Update UI to response to user clicks
         getController().resetSuggestedPosition();
     }
 
@@ -92,7 +99,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
             return;
         }
 
-        RxUtils.disposeActions(mMetadataAction, mScrollAction);
+        disposeActions();
 
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
@@ -169,5 +176,9 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
                 listener.onMetadata(mediaItemMetadata);
             }
         }
+    }
+
+    private void disposeActions() {
+        RxUtils.disposeActions(mMetadataAction, mScrollAction);
     }
 }
