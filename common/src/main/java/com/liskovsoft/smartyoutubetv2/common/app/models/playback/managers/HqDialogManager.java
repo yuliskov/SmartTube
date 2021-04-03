@@ -60,7 +60,7 @@ public class HQDialogManager extends PlayerEventListenerHelper {
         mSettingsPresenter.clear();
 
         addQualityCategories();
-        //addVideoBufferCategory();
+        addVideoBufferCategory();
         //addPresetsCategory();
         addAudioDelayCategory();
         //addBackgroundPlaybackCategory();
