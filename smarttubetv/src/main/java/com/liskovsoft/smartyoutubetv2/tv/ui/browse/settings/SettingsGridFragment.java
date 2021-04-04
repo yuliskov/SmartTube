@@ -16,14 +16,15 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.SettingsItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.SettingsCategoryFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.AutoSizeGridFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.fragments.GridFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingsGridFragment extends AutoSizeGridFragment implements SettingsCategoryFragment {
+public class SettingsGridFragment extends GridFragment implements SettingsCategoryFragment {
     private static final String TAG = SettingsGridFragment.class.getSimpleName();
     private static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
     private ArrayObjectAdapter mSettingsAdapter;
@@ -62,7 +63,7 @@ public class SettingsGridFragment extends AutoSizeGridFragment implements Settin
 
     private void setupAdapter() {
         VerticalGridPresenter presenter = new VerticalGridPresenter(ZOOM_FACTOR, false);
-        presenter.setNumberOfColumns(getColumnsNum(R.dimen.grid_item_width));
+        presenter.setNumberOfColumns(GridFragmentHelper.getColumnsNum(getContext(), R.dimen.grid_item_width));
         setGridPresenter(presenter);
 
         if (mSettingsAdapter == null) {

@@ -6,18 +6,17 @@ import android.util.DisplayMetrics;
 import android.util.Pair;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.fragments.GridFragment;
 
-public class AutoSizeGridFragment extends GridFragment {
-    protected int getColumnsNum(int cardWidthResId) {
-        return getColumnsNum(cardWidthResId, 1.0f);
+public class GridFragmentHelper {
+    public static int getColumnsNum(Context context, int cardWidthResId) {
+        return getColumnsNum(context, cardWidthResId, 1.0f);
     }
 
-    protected int getColumnsNum(int cardWidthResId, float cardScale) {
-        return (int) getColumnsNum(getContext(), cardWidthResId, cardScale);
+    public static int getColumnsNum(Context context, int cardWidthResId, float cardScale) {
+        return (int) getColumnsNumInt(context, cardWidthResId, cardScale);
     }
 
-    private static float getColumnsNum(Context context, int cardWidthResId, float cardScale) {
+    private static float getColumnsNumInt(Context context, int cardWidthResId, float cardScale) {
         float uiScale = MainUIData.instance(context).getUIScale();
 
         Resources res = context.getResources();
@@ -38,7 +37,7 @@ public class AutoSizeGridFragment extends GridFragment {
         float cardHeightPx = res.getDimensionPixelSize(cardHeightResId) * cardScale;
 
         // Get into consideration space from grid sides
-        float colsNum = getColumnsNum(context, cardWidthResId, cardScale);
+        float colsNum = getColumnsNumInt(context, cardWidthResId, cardScale);
         int colsNumRounded = (int) colsNum;
         float colsReminder = (colsNum - colsNumRounded) / colsNumRounded;
 

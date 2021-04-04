@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.content.Context;
 import android.text.TextUtils.TruncateAt;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import androidx.leanback.widget.Presenter;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.AutoSizeGridFragment;
 
 public class SettingsItemPresenter extends Presenter {
     private final Fragment mainFragment;

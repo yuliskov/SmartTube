@@ -21,15 +21,16 @@ import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewClickedListene
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.fragments.GridFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.fragments.MultiGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class VideoGridFragment extends GridFragment implements VideoCategoryFragment {
-    private static final String TAG = VideoGridFragment.class.getSimpleName();
-    private VideoGroupObjectAdapter mGridAdapter;
+public class MultiVideoGridFragment extends MultiGridFragment implements VideoCategoryFragment {
+    private static final String TAG = MultiVideoGridFragment.class.getSimpleName();
+    private VideoGroupObjectAdapter mGridAdapter1;
+    private VideoGroupObjectAdapter mGridAdapter2;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private UriBackgroundManager mBackgroundManager;
     private VideoGroupPresenter mMainPresenter;
@@ -61,8 +62,10 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
     }
 
     private void setupEventListeners() {
-        setOnItemViewClickedListener(new ItemViewClickedListener());
-        setOnItemViewSelectedListener(new ItemViewSelectedListener());
+        setOnItemViewClickedListener1(new ItemViewClickedListener1());
+        setOnItemViewSelectedListener1(new ItemViewSelectedListener1());
+        setOnItemViewClickedListener2(new ItemViewClickedListener2());
+        setOnItemViewSelectedListener2(new ItemViewSelectedListener2());
         mCardPresenter.setOnLongClickedListener(new ItemViewLongClickedListener());
         mCardPresenter.setOnMenuPressedListener(new ItemViewLongClickedListener());
     }
@@ -78,17 +81,25 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
     private void setupAdapter() {
         VerticalGridPresenter presenter = new CustomVerticalGridPresenter();
         presenter.setNumberOfColumns(GridFragmentHelper.getColumnsNum(getContext(), R.dimen.card_width, mVideoGridScale));
-        setGridPresenter(presenter);
+        // TODO: may need to use different presenters
+        setGridPresenter1(presenter);
+        setGridPresenter2(presenter);
 
-        if (mGridAdapter == null) {
-            mGridAdapter = new VideoGroupObjectAdapter(mCardPresenter);
-            setAdapter(mGridAdapter);
+        if (mGridAdapter1 == null) {
+            mGridAdapter1 = new VideoGroupObjectAdapter(mCardPresenter);
+            setAdapter1(mGridAdapter1);
+        }
+
+        if (mGridAdapter2 == null) {
+            mGridAdapter2 = new VideoGroupObjectAdapter(mCardPresenter);
+            setAdapter1(mGridAdapter2);
         }
     }
 
     @Override
     public int getPosition() {
-        return getSelectedPosition();
+        // TODO: getPosition1 not used
+        return getSelectedPosition2();
     }
 
     @Override
@@ -97,8 +108,9 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
             return;
         }
 
-        if (mGridAdapter != null && index < mGridAdapter.size()) {
-            setSelectedPosition(index);
+        if (mGridAdapter1 != null && index < mGridAdapter1.size()) {
+            // TODO: setPosition1 not used
+            setSelectedPosition2(index);
             mSelectedItemIndex = -1;
         } else {
             mSelectedItemIndex = index;
@@ -107,7 +119,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
 
     @Override
     public void update(VideoGroup group) {
-        if (mGridAdapter == null) {
+        if (mGridAdapter1 == null) {
             mPendingUpdates.add(group);
             return;
         }
@@ -117,7 +129,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
             mInvalidate = false;
         }
         
-        mGridAdapter.append(group);
+        mGridAdapter1.append(group);
 
         updatePosition();
     }
@@ -127,7 +139,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
 
         // Item not found? Load next group.
         if (mSelectedItemIndex != -1) {
-            mMainPresenter.onScrollEnd(mGridAdapter.getLastGroup());
+            mMainPresenter.onScrollEnd(mGridAdapter1.getLastGroup());
         }
     }
 
@@ -138,18 +150,18 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
 
     @Override
     public void clear() {
-        if (mGridAdapter != null) {
-            mGridAdapter.clear();
+        if (mGridAdapter1 != null) {
+            mGridAdapter1.clear();
         }
     }
 
     @Override
     public boolean isEmpty() {
-        if (mGridAdapter == null) {
+        if (mGridAdapter1 == null) {
             return false;
         }
 
-        return mGridAdapter.size() == 0;
+        return mGridAdapter1.size() == 0;
     }
 
     private final class ItemViewLongClickedListener implements OnItemViewClickedListener {
@@ -163,7 +175,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
         }
     }
 
-    private final class ItemViewClickedListener implements androidx.leanback.widget.OnItemViewClickedListener {
+    private final class ItemViewClickedListener1 implements androidx.leanback.widget.OnItemViewClickedListener {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
@@ -176,7 +188,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
         }
     }
 
-    private final class ItemViewSelectedListener implements OnItemViewSelectedListener {
+    private final class ItemViewSelectedListener1 implements OnItemViewSelectedListener {
         @Override
         public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
                                    RowPresenter.ViewHolder rowViewHolder, Row row) {
@@ -188,11 +200,45 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
         }
 
         private void checkScrollEnd(Video item) {
-            int size = mGridAdapter.size();
-            int index = mGridAdapter.indexOf(item);
+            int size = mGridAdapter1.size();
+            int index = mGridAdapter1.indexOf(item);
 
             if (index > (size - ViewUtil.GRID_SCROLL_CONTINUE_NUM)) {
-                mMainPresenter.onScrollEnd(mGridAdapter.getLastGroup());
+                mMainPresenter.onScrollEnd(mGridAdapter1.getLastGroup());
+            }
+        }
+    }
+
+    private final class ItemViewClickedListener2 implements androidx.leanback.widget.OnItemViewClickedListener {
+        @Override
+        public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
+                                  RowPresenter.ViewHolder rowViewHolder, Row row) {
+
+            if (item instanceof Video) {
+                mMainPresenter.onVideoItemClicked((Video) item);
+            } else {
+                Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private final class ItemViewSelectedListener2 implements OnItemViewSelectedListener {
+        @Override
+        public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
+                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
+            if (item instanceof Video) {
+                mBackgroundManager.setBackgroundFrom((Video) item);
+
+                checkScrollEnd((Video) item);
+            }
+        }
+
+        private void checkScrollEnd(Video item) {
+            int size = mGridAdapter1.size();
+            int index = mGridAdapter1.indexOf(item);
+
+            if (index > (size - ViewUtil.GRID_SCROLL_CONTINUE_NUM)) {
+                mMainPresenter.onScrollEnd(mGridAdapter1.getLastGroup());
             }
         }
     }

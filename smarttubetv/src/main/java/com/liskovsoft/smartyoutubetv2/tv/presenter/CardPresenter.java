@@ -1,17 +1,15 @@
 package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Pair;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
-import androidx.leanback.widget.Presenter;
 import androidx.core.content.ContextCompat;
-import android.view.ViewGroup;
-
+import androidx.leanback.widget.Presenter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -20,11 +18,11 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.LongClickPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.AutoSizeGridFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview.ComplexImageCardView;
 
 /*
@@ -144,7 +142,7 @@ public class CardPresenter extends LongClickPresenter {
 
     private void updateDimensions(Context context) {
         Pair<Integer, Integer> dimens =
-                AutoSizeGridFragment.getCardDimensionPx(
+                GridFragmentHelper.getCardDimensionPx(
                         context, R.dimen.card_width, R.dimen.card_height, MainUIData.instance(context).getVideoGridScale()
                 );
 
