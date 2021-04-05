@@ -323,7 +323,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         currentMode = currentMode != null ? currentMode : defaultMode;
         mDisplayInfo.add(new Pair<>("Display dpi", String.valueOf(Helpers.getDeviceDpi(mContext))));
         mDisplayInfo.add(new Pair<>("Display Resolution", currentMode));
-        mDisplayInfo.add(new Pair<>("Default Resolution", defaultMode));
+        mDisplayInfo.add(new Pair<>("Launcher Resolution", defaultMode));
     }
 
     private void appendPlayerWindowIndex() {

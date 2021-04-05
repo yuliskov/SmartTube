@@ -185,7 +185,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
                 mPlayerData.isSonyTimerFixEnabled()));
 
-        settingsPresenter.appendCheckedCategory("Tweaks", options);
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_tweaks), options);
     }
 
     private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {
