@@ -14,6 +14,7 @@ public class VideoGroup {
     private List<Video> mVideos;
     private MediaGroup mMediaGroup;
     private Category mCategory;
+    private int mPosition;
 
     public static VideoGroup from(Category category) {
         return from(null, category);
@@ -24,8 +25,13 @@ public class VideoGroup {
     }
 
     public static VideoGroup from(MediaGroup mediaGroup, Category category) {
+        return from(mediaGroup, category, -1);
+    }
+
+    public static VideoGroup from(MediaGroup mediaGroup, Category category, int groupPosition) {
         VideoGroup videoGroup = new VideoGroup();
         videoGroup.mCategory = category;
+        videoGroup.mPosition = groupPosition;
 
         if (mediaGroup == null) {
             return videoGroup;
@@ -43,7 +49,10 @@ public class VideoGroup {
         }
 
         for (MediaItem item : mediaGroup.getMediaItems()) {
-            videoGroup.mVideos.add(Video.from(item));
+            Video video = Video.from(item);
+            // Group position in multi-grid fragments
+            video.groupPosition = videoGroup.mPosition;
+            videoGroup.mVideos.add(video);
         }
 
         return videoGroup;
@@ -71,5 +80,13 @@ public class VideoGroup {
 
     public boolean isEmpty() {
         return mVideos == null;
+    }
+
+    /**
+     * Group position in multi-grid fragments<br/>
+     * It isn't used on other types of fragments.
+     */
+    public int getPosition() {
+        return mPosition;
     }
 }

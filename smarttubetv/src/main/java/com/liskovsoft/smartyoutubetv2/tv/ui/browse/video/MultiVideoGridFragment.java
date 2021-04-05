@@ -31,12 +31,14 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
     private static final String TAG = MultiVideoGridFragment.class.getSimpleName();
     private VideoGroupObjectAdapter mGridAdapter1;
     private VideoGroupObjectAdapter mGridAdapter2;
-    private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
+    private final List<VideoGroup> mPendingUpdates1 = new ArrayList<>();
+    private final List<VideoGroup> mPendingUpdates2 = new ArrayList<>();
     private UriBackgroundManager mBackgroundManager;
     private VideoGroupPresenter mMainPresenter;
     private CardPresenter mCardPresenter;
     private boolean mInvalidate;
-    private int mSelectedItemIndex = -1;
+    private int mSelectedItemIndex1 = -1;
+    private int mSelectedItemIndex2 = -1;
     private float mVideoGridScale;
 
     @Override
@@ -62,20 +64,34 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
     }
 
     private void setupEventListeners() {
-        setOnItemViewClickedListener1(new ItemViewClickedListener1());
-        setOnItemViewSelectedListener1(new ItemViewSelectedListener1());
-        setOnItemViewClickedListener2(new ItemViewClickedListener2());
-        setOnItemViewSelectedListener2(new ItemViewSelectedListener2());
+        // We'll use attribute on Video item to differentiate between grids
+        setOnItemViewClickedListener1(new ItemViewClickedListener());
+        setOnItemViewSelectedListener1(new ItemViewSelectedListener());
+        setOnItemViewClickedListener2(new ItemViewClickedListener());
+        setOnItemViewSelectedListener2(new ItemViewSelectedListener());
         mCardPresenter.setOnLongClickedListener(new ItemViewLongClickedListener());
         mCardPresenter.setOnMenuPressedListener(new ItemViewLongClickedListener());
     }
 
     private void applyPendingUpdates() {
-        for (VideoGroup group : mPendingUpdates) {
+        applyPendingUpdates1();
+        applyPendingUpdates2();
+    }
+
+    private void applyPendingUpdates1() {
+        for (VideoGroup group : mPendingUpdates1) {
             update(group);
         }
 
-        mPendingUpdates.clear();
+        mPendingUpdates1.clear();
+    }
+
+    private void applyPendingUpdates2() {
+        for (VideoGroup group : mPendingUpdates2) {
+            update(group);
+        }
+
+        mPendingUpdates2.clear();
     }
 
     private void setupAdapter() {
@@ -98,8 +114,8 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
 
     @Override
     public int getPosition() {
-        // TODO: getPosition1 not used
-        return getSelectedPosition2();
+        // TODO: getPosition2 not used
+        return getSelectedPosition1();
     }
 
     @Override
@@ -109,18 +125,26 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         }
 
         if (mGridAdapter1 != null && index < mGridAdapter1.size()) {
-            // TODO: setPosition1 not used
-            setSelectedPosition2(index);
-            mSelectedItemIndex = -1;
+            // TODO: setPosition2 not used
+            setSelectedPosition1(index);
+            mSelectedItemIndex1 = -1;
         } else {
-            mSelectedItemIndex = index;
+            mSelectedItemIndex1 = index;
         }
     }
 
     @Override
     public void update(VideoGroup group) {
+        if (group.getPosition() == 0) {
+            updateGroup1(group);
+        } else if (group.getPosition() == 1) {
+            updateGroup2(group);
+        }
+    }
+
+    private void updateGroup1(VideoGroup group) {
         if (mGridAdapter1 == null) {
-            mPendingUpdates.add(group);
+            mPendingUpdates1.add(group);
             return;
         }
 
@@ -128,17 +152,34 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
             clear();
             mInvalidate = false;
         }
-        
+
         mGridAdapter1.append(group);
 
-        updatePosition();
+        updatePosition1();
     }
 
-    private void updatePosition() {
-        setPosition(mSelectedItemIndex);
+    private void updateGroup2(VideoGroup group) {
+        if (mGridAdapter2 == null) {
+            mPendingUpdates2.add(group);
+            return;
+        }
+
+        if (mInvalidate) {
+            clear();
+            mInvalidate = false;
+        }
+
+        mGridAdapter2.append(group);
+
+        // TODO: Do we need to update position on second group?
+        //updatePosition2();
+    }
+
+    private void updatePosition1() {
+        setPosition(mSelectedItemIndex1);
 
         // Item not found? Load next group.
-        if (mSelectedItemIndex != -1) {
+        if (mSelectedItemIndex1 != -1) {
             mMainPresenter.onScrollEnd(mGridAdapter1.getLastGroup());
         }
     }
@@ -175,7 +216,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         }
     }
 
-    private final class ItemViewClickedListener1 implements androidx.leanback.widget.OnItemViewClickedListener {
+    private final class ItemViewClickedListener implements androidx.leanback.widget.OnItemViewClickedListener {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
@@ -188,41 +229,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         }
     }
 
-    private final class ItemViewSelectedListener1 implements OnItemViewSelectedListener {
-        @Override
-        public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
-                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
-            if (item instanceof Video) {
-                mBackgroundManager.setBackgroundFrom((Video) item);
-
-                checkScrollEnd((Video) item);
-            }
-        }
-
-        private void checkScrollEnd(Video item) {
-            int size = mGridAdapter1.size();
-            int index = mGridAdapter1.indexOf(item);
-
-            if (index > (size - ViewUtil.GRID_SCROLL_CONTINUE_NUM)) {
-                mMainPresenter.onScrollEnd(mGridAdapter1.getLastGroup());
-            }
-        }
-    }
-
-    private final class ItemViewClickedListener2 implements androidx.leanback.widget.OnItemViewClickedListener {
-        @Override
-        public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
-                                  RowPresenter.ViewHolder rowViewHolder, Row row) {
-
-            if (item instanceof Video) {
-                mMainPresenter.onVideoItemClicked((Video) item);
-            } else {
-                Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private final class ItemViewSelectedListener2 implements OnItemViewSelectedListener {
+    private final class ItemViewSelectedListener implements OnItemViewSelectedListener {
         @Override
         public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
                                    RowPresenter.ViewHolder rowViewHolder, Row row) {
