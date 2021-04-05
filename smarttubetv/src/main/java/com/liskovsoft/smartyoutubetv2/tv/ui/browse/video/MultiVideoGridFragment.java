@@ -79,16 +79,24 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
     }
 
     private void applyPendingUpdates1() {
+        if (mGridAdapter1 == null) {
+            return;
+        }
+
         for (VideoGroup group : mPendingUpdates1) {
-            update(group);
+            updateGroup1Int(group);
         }
 
         mPendingUpdates1.clear();
     }
 
     private void applyPendingUpdates2() {
+        if (mGridAdapter2 == null) {
+            return;
+        }
+
         for (VideoGroup group : mPendingUpdates2) {
-            update(group);
+            updateGroup2Int(group);
         }
 
         mPendingUpdates2.clear();
@@ -148,6 +156,19 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
             return;
         }
 
+        updateGroup1Int(group);
+    }
+
+    private void updateGroup2(VideoGroup group) {
+        if (mGridAdapter2 == null) {
+            mPendingUpdates2.add(group);
+            return;
+        }
+
+        updateGroup2Int(group);
+    }
+
+    private void updateGroup1Int(VideoGroup group) {
         if (mInvalidate) {
             clear();
             mInvalidate = false;
@@ -158,12 +179,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         updatePosition1();
     }
 
-    private void updateGroup2(VideoGroup group) {
-        if (mGridAdapter2 == null) {
-            mPendingUpdates2.add(group);
-            return;
-        }
-
+    private void updateGroup2Int(VideoGroup group) {
         if (mInvalidate) {
             clear();
             mInvalidate = false;

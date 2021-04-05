@@ -59,8 +59,12 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     protected abstract VideoGroupPresenter getMainPresenter();
 
     private void applyPendingUpdates() {
+        if (mVideoGroupAdapters == null) {
+            return;
+        }
+
         for (VideoGroup group : mPendingUpdates) {
-            update(group);
+            updateInt(group);
         }
 
         mPendingUpdates.clear();
@@ -118,6 +122,10 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             return;
         }
 
+        updateInt(group);
+    }
+
+    private void updateInt(VideoGroup group) {
         if (mInvalidate) {
             clear();
             mInvalidate = false;
