@@ -204,4 +204,5 @@
     <string name="msg_player_error_renderer">Das ausgewählte Videoformat wird nicht unterstützt</string>
     <string name="msg_player_error_unexpected">Unbekannter Video-Decoder-Fehler</string>
     <string name="video_aspect">Seitenverhältnis</string>
+    <string name="player_tweaks">Entwickleroptionen</string>
 </resources>
