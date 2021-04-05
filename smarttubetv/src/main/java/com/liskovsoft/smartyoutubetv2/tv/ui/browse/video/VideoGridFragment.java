@@ -68,15 +68,15 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
     }
 
     private void applyPendingUpdates() {
-        if (mGridAdapter == null) {
-            return;
-        }
-
-        for (VideoGroup group : mPendingUpdates) {
-            updateInt(group);
-        }
+        // prevent modification within update method
+        List<VideoGroup> copyArray = new ArrayList<>(mPendingUpdates);
 
         mPendingUpdates.clear();
+
+        for (VideoGroup group : copyArray) {
+            update(group);
+        }
+
     }
 
     private void setupAdapter() {
@@ -116,10 +116,6 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
             return;
         }
 
-        updateInt(group);
-    }
-
-    private void updateInt(VideoGroup group) {
         if (mInvalidate) {
             clear();
             mInvalidate = false;

@@ -59,15 +59,14 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     protected abstract VideoGroupPresenter getMainPresenter();
 
     private void applyPendingUpdates() {
-        if (mVideoGroupAdapters == null) {
-            return;
-        }
-
-        for (VideoGroup group : mPendingUpdates) {
-            updateInt(group);
-        }
+        // prevent modification within update method
+        List<VideoGroup> copyArray = new ArrayList<>(mPendingUpdates);
 
         mPendingUpdates.clear();
+
+        for (VideoGroup group : copyArray) {
+            update(group);
+        }
     }
 
     private void setupAdapter() {
@@ -122,10 +121,6 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             return;
         }
 
-        updateInt(group);
-    }
-
-    private void updateInt(VideoGroup group) {
         if (mInvalidate) {
             clear();
             mInvalidate = false;

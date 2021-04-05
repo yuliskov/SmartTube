@@ -79,27 +79,26 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
     }
 
     private void applyPendingUpdates1() {
-        if (mGridAdapter1 == null) {
-            return;
-        }
-
-        for (VideoGroup group : mPendingUpdates1) {
-            updateGroup1Int(group);
-        }
+        // prevent modification within update method
+        List<VideoGroup> copyArray = new ArrayList<>(mPendingUpdates1);
 
         mPendingUpdates1.clear();
+
+        for (VideoGroup group : copyArray) {
+            update(group);
+        }
+
     }
 
     private void applyPendingUpdates2() {
-        if (mGridAdapter2 == null) {
-            return;
-        }
-
-        for (VideoGroup group : mPendingUpdates2) {
-            updateGroup2Int(group);
-        }
+        // prevent modification within update method
+        List<VideoGroup> copyArray = new ArrayList<>(mPendingUpdates2);
 
         mPendingUpdates2.clear();
+
+        for (VideoGroup group : copyArray) {
+            update(group);
+        }
     }
 
     private void setupAdapter() {
@@ -156,19 +155,6 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
             return;
         }
 
-        updateGroup1Int(group);
-    }
-
-    private void updateGroup2(VideoGroup group) {
-        if (mGridAdapter2 == null) {
-            mPendingUpdates2.add(group);
-            return;
-        }
-
-        updateGroup2Int(group);
-    }
-
-    private void updateGroup1Int(VideoGroup group) {
         if (mInvalidate) {
             clear();
             mInvalidate = false;
@@ -179,7 +165,12 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         updatePosition1();
     }
 
-    private void updateGroup2Int(VideoGroup group) {
+    private void updateGroup2(VideoGroup group) {
+        if (mGridAdapter2 == null) {
+            mPendingUpdates2.add(group);
+            return;
+        }
+
         if (mInvalidate) {
             clear();
             mInvalidate = false;
