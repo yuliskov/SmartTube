@@ -96,7 +96,7 @@
     <string name="select_account_on_boot">Sélectionnez au démarrage</string>
     <string name="player_other">Divers</string>
     <string name="player_full_date">Date précise dans la description</string>
-    <string name="open_channel">Ouvrir chaine</string>
+    <string name="open_channel">Ouvrir la chaine</string>
     <string name="not_interested">Pas intéressé</string>
     <string name="you_wont_see_this_video">La vidéo a été supprimée de la recommandation</string>
     <string name="settings_search">Recherche</string>
@@ -150,7 +150,7 @@
     <string name="unsubscribe_from_channel">Se désabonner de la chaîne</string>
     <string name="card_title_lines_num">Nombre de lignes du titre des tuiles</string>
     <string name="card_auto_scrolled_title">Titre recadré avec défilement automatique</string>
-    <string name="share_link">Lien de partage</string>
+    <string name="share_link">Partager lien</string>
     <string name="subscribe_to_channel">S\'abonner à la chaîne</string>
     <string name="wait_data_loading">Veuillez patienter pendant le chargement des données…</string>
     <string name="auto_frame_rate_pause">Pause automatique de la fréquence d\'images</string>
@@ -204,4 +204,5 @@
     <string name="msg_player_error_renderer">Le format vidéo sélectionné n\'est pas pris en charge</string>
     <string name="msg_player_error_unexpected">Erreur inconnue du décodeur vidéo</string>
     <string name="video_aspect">Ratio d\'aspect</string>
+    <string name="player_tweaks">Options de développeur</string>
 </resources>
