@@ -87,7 +87,6 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         for (VideoGroup group : copyArray) {
             update(group);
         }
-
     }
 
     private void applyPendingUpdates2() {

@@ -76,7 +76,6 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
         for (VideoGroup group : copyArray) {
             update(group);
         }
-
     }
 
     private void setupAdapter() {
