@@ -63,7 +63,7 @@ public class SettingsGridFragment extends GridFragment implements SettingsCatego
 
     private void setupAdapter() {
         VerticalGridPresenter presenter = new VerticalGridPresenter(ZOOM_FACTOR, false);
-        presenter.setNumberOfColumns(GridFragmentHelper.getColumnsNum(getContext(), R.dimen.grid_item_width));
+        presenter.setNumberOfColumns(GridFragmentHelper.getMaxColsNum(getContext(), R.dimen.grid_item_width));
         setGridPresenter(presenter);
 
         if (mSettingsAdapter == null) {

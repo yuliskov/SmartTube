@@ -80,7 +80,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
 
     private void setupAdapter() {
         VerticalGridPresenter presenter = new CustomVerticalGridPresenter();
-        presenter.setNumberOfColumns(GridFragmentHelper.getColumnsNum(getContext(), R.dimen.card_width, mVideoGridScale));
+        presenter.setNumberOfColumns(GridFragmentHelper.getMaxColsNum(getContext(), R.dimen.card_width, mVideoGridScale));
         setGridPresenter(presenter);
 
         if (mGridAdapter == null) {

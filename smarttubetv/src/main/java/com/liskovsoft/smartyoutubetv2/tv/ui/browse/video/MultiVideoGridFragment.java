@@ -101,11 +101,16 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
     }
 
     private void setupAdapter() {
-        VerticalGridPresenter presenter = new CustomVerticalGridPresenter();
-        presenter.setNumberOfColumns(GridFragmentHelper.getColumnsNum(getContext(), R.dimen.card_width, mVideoGridScale));
-        // TODO: may need to use different presenters
-        setGridPresenter1(presenter);
-        setGridPresenter2(presenter);
+        // Left vertical list of channels
+        VerticalGridPresenter presenter1 = new CustomVerticalGridPresenter();
+        presenter1.setNumberOfColumns(1);
+
+        // Right grid of channel's content
+        VerticalGridPresenter presenter2 = new CustomVerticalGridPresenter();
+        presenter2.setNumberOfColumns(GridFragmentHelper.getMaxColsNum(getContext(), R.dimen.card_width, mVideoGridScale) - 1);
+
+        setGridPresenter1(presenter1);
+        setGridPresenter2(presenter2);
 
         if (mGridAdapter1 == null) {
             mGridAdapter1 = new VideoGroupObjectAdapter(mCardPresenter);

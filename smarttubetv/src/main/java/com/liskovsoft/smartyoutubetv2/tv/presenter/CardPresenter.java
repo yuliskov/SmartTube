@@ -142,7 +142,7 @@ public class CardPresenter extends LongClickPresenter {
 
     private void updateDimensions(Context context) {
         Pair<Integer, Integer> dimens =
-                GridFragmentHelper.getCardDimensionPx(
+                GridFragmentHelper.getCardDimensPx(
                         context, R.dimen.card_width, R.dimen.card_height, MainUIData.instance(context).getVideoGridScale()
                 );
 

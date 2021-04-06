@@ -8,15 +8,21 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class GridFragmentHelper {
-    public static int getColumnsNum(Context context, int cardWidthResId) {
-        return getColumnsNum(context, cardWidthResId, 1.0f);
+    /**
+     * Max number of cards that could fit horizontally
+     */
+    public static int getMaxColsNum(Context context, int cardWidthResId) {
+        return getMaxColsNum(context, cardWidthResId, 1.0f);
     }
 
-    public static int getColumnsNum(Context context, int cardWidthResId, float cardScale) {
-        return (int) getColumnsNumInt(context, cardWidthResId, cardScale);
+    /**
+     * Max number of cards that could fit horizontally
+     */
+    public static int getMaxColsNum(Context context, int cardWidthResId, float cardScale) {
+        return (int) getColumnsNum(context, cardWidthResId, cardScale);
     }
 
-    private static float getColumnsNumInt(Context context, int cardWidthResId, float cardScale) {
+    private static float getColumnsNum(Context context, int cardWidthResId, float cardScale) {
         float uiScale = MainUIData.instance(context).getUIScale();
 
         Resources res = context.getResources();
@@ -30,14 +36,18 @@ public class GridFragmentHelper {
         return (displayWidthPx - displayWidthPx * 0.1f * uiScale) / (cardWidthPx + cardSpacingPx);
     }
 
-    public static Pair<Integer, Integer> getCardDimensionPx(Context context, int cardWidthResId, int cardHeightResId, float cardScale) {
+    /**
+     * Calculate card dimension depending on supplied params<br/>
+     * Trying to not leave empty space (useful in grids).
+     */
+    public static Pair<Integer, Integer> getCardDimensPx(Context context, int cardWidthResId, int cardHeightResId, float cardScale) {
         Resources res = context.getResources();
 
         float cardWidthPx = res.getDimensionPixelSize(cardWidthResId) * cardScale;
         float cardHeightPx = res.getDimensionPixelSize(cardHeightResId) * cardScale;
 
         // Get into consideration space from grid sides
-        float colsNum = getColumnsNumInt(context, cardWidthResId, cardScale);
+        float colsNum = getColumnsNum(context, cardWidthResId, cardScale);
         int colsNumRounded = (int) colsNum;
         float colsReminder = (colsNum - colsNumRounded) / colsNumRounded;
 
