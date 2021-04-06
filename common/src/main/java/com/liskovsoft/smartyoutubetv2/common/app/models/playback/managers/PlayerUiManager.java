@@ -163,6 +163,10 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onEngineInitialized() {
         mEngineReady = true;
+
+        // Activate debug infos after engine restarting.
+        getController().showDebugView(mDebugViewEnabled);
+        getController().setDebugButtonState(mDebugViewEnabled);
     }
 
     @Override
@@ -177,9 +181,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onViewResumed() {
-        // Activate debug infos.
-        // Also at this stage we could properly restore after PIP.
-        // Next lines on engine initialized stage cause other listeners to disappear.
+        // Activate debug infos when restoring after PIP.
         getController().showDebugView(mDebugViewEnabled);
         getController().setDebugButtonState(mDebugViewEnabled);
     }

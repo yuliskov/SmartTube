@@ -230,10 +230,11 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
                 toHumanReadable(video.bitrate),
                 toHumanReadable(audio.bitrate)
         )));
-        String par = video.pixelWidthHeightRatio == Format.NO_VALUE ||
-                video.pixelWidthHeightRatio == 1f ?
-                DEFAULT : String.format(Locale.US, "%.02f", video.pixelWidthHeightRatio);
-        mVideoInfo.add(new Pair<>("Aspect Ratio", par));
+        // Aspect info is not valid since we're using custom views
+        //String par = video.pixelWidthHeightRatio == Format.NO_VALUE ||
+        //        video.pixelWidthHeightRatio == 1f ?
+        //        DEFAULT : String.format(Locale.US, "%.02f", video.pixelWidthHeightRatio);
+        //mVideoInfo.add(new Pair<>("Aspect Ratio", par));
         String videoCodecName = getVideoDecoderNameV2();
         mVideoInfo.add(new Pair<>("Video Decoder Name", videoCodecName));
         mVideoInfo.add(new Pair<>("Hardware Accelerated", String.valueOf(isHardwareAccelerated(videoCodecName))));
