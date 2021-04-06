@@ -165,8 +165,8 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         mEngineReady = true;
 
         // Activate debug infos after engine restarting.
-        getController().showDebugView(mDebugViewEnabled);
-        getController().setDebugButtonState(mDebugViewEnabled);
+        //getController().showDebugView(mDebugViewEnabled);
+        //getController().setDebugButtonState(mDebugViewEnabled);
     }
 
     @Override
