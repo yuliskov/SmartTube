@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.other;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.os.Build.VERSION;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -187,7 +188,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         appendDisplayInfo();
         //appendPlayerWindowIndex();
         appendVersion();
-        appendDeviceName();
+        appendDeviceNameAndSDK();
 
         // Schedule next update
         mDebugViewGroup.removeCallbacks(this);
@@ -336,8 +337,9 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         appendRow(mAppVersion, AppInfoHelpers.getAppVersionName(mContext));
     }
 
-    private void appendDeviceName() {
+    private void appendDeviceNameAndSDK() {
         appendRow("Device Name", Helpers.getDeviceName());
+        appendRow("Android SDK", VERSION.SDK_INT);
     }
 
     private void appendRow(String name, boolean val) {
