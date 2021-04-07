@@ -97,9 +97,8 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
      */
     public void onClose() {
         clear();
-
-        enablePlayerUiAutoHide(true);
-        blockPlayerEngine(false);
+        
+        //blockPlayerEngine(false);
 
         if (mOnClose != null) {
             mOnClose.run();
@@ -137,9 +136,8 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     public void showDialog(String dialogTitle, Runnable onClose) {
         mTitle = dialogTitle;
         mOnClose = onClose;
-
-        enablePlayerUiAutoHide(false);
-        blockPlayerEngine(true);
+        
+        //blockPlayerEngine(true);
 
         if (getView() != null) {
             getView().clear();
@@ -203,27 +201,17 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
         }
     }
 
-    private void blockPlayerEngine(boolean block) {
-        if (mUiManager != null && mUiManager.getController() != null) {
-            // Old Android fix: don't destroy player while dialog is open
-            if (VERSION.SDK_INT < 25) {
-                if (block) {
-                    mEnginePlaybackMode = mUiManager.getController().getPlaybackMode(); // save orig value for later restoration
-                    mUiManager.getController().setPlaybackMode(PlaybackEngineController.BACKGROUND_MODE_SOUND);
-                } else {
-                    mUiManager.getController().setPlaybackMode(mEnginePlaybackMode);
-                }
-            }
-        }
-    }
-
-    private void enablePlayerUiAutoHide(boolean enable) {
-        if (mUiManager != null) {
-            if (enable) {
-                mUiManager.enableUiAutoHideTimeout();
-            } else {
-                mUiManager.disableUiAutoHideTimeout();
-            }
-        }
-    }
+    //private void blockPlayerEngine(boolean block) {
+    //    if (mUiManager != null && mUiManager.getController() != null) {
+    //        // Old Android fix: don't destroy player while dialog is open
+    //        if (VERSION.SDK_INT < 25) {
+    //            if (block) {
+    //                mEnginePlaybackMode = mUiManager.getController().getPlaybackMode(); // save orig value for later restoration
+    //                mUiManager.getController().setPlaybackMode(PlaybackEngineController.BACKGROUND_MODE_SOUND);
+    //            } else {
+    //                mUiManager.getController().setPlaybackMode(mEnginePlaybackMode);
+    //            }
+    //        }
+    //    }
+    //}
 }

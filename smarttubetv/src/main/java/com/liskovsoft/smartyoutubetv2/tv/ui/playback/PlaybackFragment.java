@@ -40,6 +40,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
@@ -277,7 +278,9 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     private void releasePlayer() {
-        if (getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND) {
+        // Inside dialogs we could change engine settings on fly
+        if (getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND ||
+            AppSettingsPresenter.instance(getContext()).isDialogShown()) {
             Log.d(TAG, "releasePlayer: Engine release is blocked. Exiting...");
             return;
         }

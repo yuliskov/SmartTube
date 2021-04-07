@@ -49,7 +49,8 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     private boolean mIsMetadataLoaded;
     private final Runnable mSuggestionsResetHandler = () -> getController().resetSuggestedPosition();
     private final Runnable mUiAutoHideHandler = () -> {
-        if (getController().isPlaying()) {
+        // Playing the video and dialog overlay isn't shown
+        if (getController().isPlaying() && !AppSettingsPresenter.instance(getActivity()).isDialogShown()) {
             if (!getController().isSuggestionsShown()) { // don't hide when suggestions is shown
                 getController().showControls(false);
             }
@@ -164,9 +165,12 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     public void onEngineInitialized() {
         mEngineReady = true;
 
-        // Activate debug infos after engine restarting.
-        getController().showDebugView(mDebugViewEnabled);
-        getController().setDebugButtonState(mDebugViewEnabled);
+        if (AppSettingsPresenter.instance(getActivity()).isDialogShown()) {
+            // Activate debug infos/show ui after engine restarting (buffering, sound shift, error?).
+            getController().showControls(true);
+            getController().showDebugView(mDebugViewEnabled);
+            getController().setDebugButtonState(mDebugViewEnabled);
+        }
     }
 
     @Override
@@ -333,12 +337,12 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         }
     }
 
-    public void disableUiAutoHideTimeout() {
+    private void disableUiAutoHideTimeout() {
         Log.d(TAG, "Stopping auto hide ui timer...");
         mHandler.removeCallbacks(mUiAutoHideHandler);
     }
 
-    public void enableUiAutoHideTimeout() {
+    private void enableUiAutoHideTimeout() {
         Log.d(TAG, "Starting auto hide ui timer...");
         if (mEngineReady && mPlayerData.getUIHideTimoutSec() > 0) {
             mHandler.postDelayed(mUiAutoHideHandler, mPlayerData.getUIHideTimoutSec() * 1_000L);
