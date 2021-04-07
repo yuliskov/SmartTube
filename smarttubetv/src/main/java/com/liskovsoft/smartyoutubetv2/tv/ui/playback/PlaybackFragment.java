@@ -303,12 +303,6 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mEventListener.onEngineInitialized();
     }
 
-    private void testHardwareAcceleration() {
-        if (getSurfaceView() != null && !getSurfaceView().isHardwareAccelerated()) {
-            MessageHelpers.showMessage(getContext(), "Oops. Seems that video hardware acceleration is disabled!");
-        }
-    }
-
     private void destroyPlayerObjects() {
         // Fix access calls when player isn't initialized
         mExoPlayerController.release();
