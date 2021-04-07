@@ -2,11 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.Looper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUIManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppSettingsView;
@@ -23,8 +20,6 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     private final Runnable mCloseDialog = this::closeDialog;
     private String mTitle;
     private Runnable mOnClose;
-    private PlayerUIManager mUiManager;
-    private int mEnginePlaybackMode;
     private long mTimeoutMs;
 
     public static class SettingsCategory {
@@ -97,8 +92,6 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
      */
     public void onClose() {
         clear();
-        
-        //blockPlayerEngine(false);
 
         if (mOnClose != null) {
             mOnClose.run();
@@ -117,10 +110,6 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
         getView().addCategories(mCategories);
     }
 
-    public void setPlayerUiManager(PlayerUIManager uiManager) {
-        mUiManager = uiManager;
-    }
-
     public void showDialog() {
         showDialog(null, null);
     }
@@ -136,8 +125,6 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     public void showDialog(String dialogTitle, Runnable onClose) {
         mTitle = dialogTitle;
         mOnClose = onClose;
-        
-        //blockPlayerEngine(true);
 
         if (getView() != null) {
             getView().clear();
@@ -200,18 +187,4 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
             mHandler.postDelayed(mCloseDialog, mTimeoutMs);
         }
     }
-
-    //private void blockPlayerEngine(boolean block) {
-    //    if (mUiManager != null && mUiManager.getController() != null) {
-    //        // Old Android fix: don't destroy player while dialog is open
-    //        if (VERSION.SDK_INT < 25) {
-    //            if (block) {
-    //                mEnginePlaybackMode = mUiManager.getController().getPlaybackMode(); // save orig value for later restoration
-    //                mUiManager.getController().setPlaybackMode(PlaybackEngineController.BACKGROUND_MODE_SOUND);
-    //            } else {
-    //                mUiManager.getController().setPlaybackMode(mEnginePlaybackMode);
-    //            }
-    //        }
-    //    }
-    //}
 }

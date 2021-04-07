@@ -70,7 +70,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onInitDone() {
-        AppSettingsPresenter.instance(getActivity()).setPlayerUiManager(this);
         mPlayerData = PlayerData.instance(getActivity());
 
         // Could be set once per activity creation (view layout stuff)
