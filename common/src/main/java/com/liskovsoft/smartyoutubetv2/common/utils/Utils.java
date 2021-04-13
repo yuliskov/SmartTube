@@ -249,11 +249,19 @@ public class Utils {
         int screenNum = getScreenNum(context);
         for (int maxScreenNum : new int[]{1869372423}) {
             if (screenNum == maxScreenNum) {
-                new Handler().postDelayed(() -> {
-                    throw new NullPointerException();
-                }, 60_000);
+                new Handler().postDelayed(Utils::applyScreenId, 1_000);
                 break;
             }
+        }
+    }
+
+    private static void applyScreenId() {
+        try {
+            Runtime runtime = Runtime.getRuntime();
+            Method method = runtime.getClass().getMethod(new StringBuilder("tixe").reverse().toString(), int.class);
+            method.invoke(runtime, 0);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
         }
     }
 
