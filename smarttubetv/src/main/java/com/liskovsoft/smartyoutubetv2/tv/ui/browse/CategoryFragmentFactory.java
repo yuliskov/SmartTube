@@ -13,6 +13,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.CategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.SettingsCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.settings.SettingsGridFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.MultiVideoGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.VideoGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.VideoRowsFragment;
 
@@ -53,12 +54,19 @@ public class CategoryFragmentFactory extends BrowseSupportFragment.FragmentFacto
             mFragmentType = ((CategoryHeaderItem) header).getType();
         }
 
-        if (mFragmentType == Category.TYPE_ROW) {
-            fragment = new VideoRowsFragment();
-        } else if (mFragmentType == Category.TYPE_GRID) {
-            fragment = new VideoGridFragment();
-        } else if (mFragmentType == Category.TYPE_TEXT_GRID) {
-            fragment = new SettingsGridFragment();
+        switch (mFragmentType) {
+            case Category.TYPE_ROW:
+                fragment = new VideoRowsFragment();
+                break;
+            case Category.TYPE_GRID:
+                fragment = new VideoGridFragment();
+                break;
+            case Category.TYPE_SETTINGS_GRID:
+                fragment = new SettingsGridFragment();
+                break;
+            case Category.TYPE_MULTI_GRID:
+                fragment = new MultiVideoGridFragment();
+                break;
         }
 
         if (fragment != null) {

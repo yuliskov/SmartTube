@@ -49,7 +49,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private final List<Category> mCategories;
     private final Map<Integer, Observable<MediaGroup>> mGridMapping;
     private final Map<Integer, Observable<List<MediaGroup>>> mRowMapping;
-    private final Map<Integer, List<SettingsItem>> mTextGridMapping;
+    private final Map<Integer, List<SettingsItem>> mSettingsGridMapping;
     private final AppDataSourceManager mDataSourcePresenter;
     private Disposable mUpdateAction;
     private Disposable mContinueAction;
@@ -67,7 +67,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         mCategories = new ArrayList<>();
         mGridMapping = new HashMap<>();
         mRowMapping = new HashMap<>();
-        mTextGridMapping = new HashMap<>();
+        mSettingsGridMapping = new HashMap<>();
         mMainUIData = MainUIData.instance(context);
         Utils.initPipMode(context);
         initCategories();
@@ -109,13 +109,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         mCategories.add(new Category(MediaGroup.TYPE_GAMING, getContext().getString(R.string.header_gaming), Category.TYPE_ROW, R.drawable.icon_gaming));
         mCategories.add(new Category(MediaGroup.TYPE_NEWS, getContext().getString(R.string.header_news), Category.TYPE_ROW, R.drawable.icon_news));
         mCategories.add(new Category(MediaGroup.TYPE_MUSIC, getContext().getString(R.string.header_music), Category.TYPE_ROW, R.drawable.icon_music));
-        mCategories.add(new Category(MediaGroup.TYPE_CHANNELS_SECTION, getContext().getString(R.string.header_channels), Category.TYPE_GRID, R.drawable.icon_channels, true));
+        mCategories.add(new Category(MediaGroup.TYPE_CHANNELS_SECTION, getContext().getString(R.string.header_channels), Category.TYPE_MULTI_GRID, R.drawable.icon_channels, true));
         mCategories.add(new Category(MediaGroup.TYPE_SUBSCRIPTIONS, getContext().getString(R.string.header_subscriptions), Category.TYPE_GRID, R.drawable.icon_subscriptions, true));
         mCategories.add(new Category(MediaGroup.TYPE_HISTORY, getContext().getString(R.string.header_history), Category.TYPE_GRID, R.drawable.icon_history, true));
         mCategories.add(new Category(MediaGroup.TYPE_PLAYLISTS_SECTION, getContext().getString(R.string.header_playlists), Category.TYPE_ROW, R.drawable.icon_playlist, true));
 
         if (mMainUIData.isSettingsCategoryEnabled()) {
-            mCategories.add(new Category(MediaGroup.TYPE_SETTINGS, getContext().getString(R.string.header_settings), Category.TYPE_TEXT_GRID, R.drawable.icon_settings));
+            mCategories.add(new Category(MediaGroup.TYPE_SETTINGS, getContext().getString(R.string.header_settings), Category.TYPE_SETTINGS_GRID, R.drawable.icon_settings));
         }
     }
 
@@ -134,7 +134,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void initSettingsSubCategories() {
-        mTextGridMapping.put(MediaGroup.TYPE_SETTINGS, mDataSourcePresenter.getSettingItems(this));
+        mSettingsGridMapping.put(MediaGroup.TYPE_SETTINGS, mDataSourcePresenter.getSettingItems(this));
     }
 
     public void updateCategories() {
@@ -331,16 +331,20 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 Observable<List<MediaGroup>> groups = mRowMapping.get(category.getId());
                 updateVideoRows(category, groups, category.isAuthOnly());
                 break;
-            case Category.TYPE_TEXT_GRID:
-                List<SettingsItem> items = mTextGridMapping.get(category.getId());
-                updateTextGrid(category, items);
+            case Category.TYPE_SETTINGS_GRID:
+                List<SettingsItem> items = mSettingsGridMapping.get(category.getId());
+                updateSettingsGrid(category, items);
+                break;
+            case Category.TYPE_MULTI_GRID:
+                Observable<MediaGroup> group2 = mGridMapping.get(category.getId());
+                updateVideoGrid(category, group2, category.isAuthOnly());
                 break;
         }
 
         updateRefreshTime();
     }
 
-    private void updateTextGrid(Category category, List<SettingsItem> items) {
+    private void updateSettingsGrid(Category category, List<SettingsItem> items) {
         getView().updateCategory(SettingsGroup.from(items, category));
         getView().showProgressBar(false);
     }

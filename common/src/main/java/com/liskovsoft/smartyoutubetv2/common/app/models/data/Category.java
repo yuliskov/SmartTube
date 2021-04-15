@@ -3,7 +3,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 public class Category {
     public static final int TYPE_GRID = 0;
     public static final int TYPE_ROW = 1;
-    public static final int TYPE_TEXT_GRID = 2;
+    public static final int TYPE_SETTINGS_GRID = 2;
+    public static final int TYPE_MULTI_GRID = 3;
     private final int mId;
     private final String mTitle;
     private final int mResId;
