@@ -337,7 +337,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 break;
             case Category.TYPE_MULTI_GRID:
                 Observable<MediaGroup> group2 = mGridMapping.get(category.getId());
-                updateVideoGrid(category, group2, category.isAuthOnly());
+                updateVideoGrid(category, group2, 0, category.isAuthOnly());
                 break;
         }
 
@@ -356,9 +356,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void updateVideoGrid(Category category, Observable<MediaGroup> group, boolean authCheck) {
-        Log.d(TAG, "loadGridHeader: Start loading category: " + category.getTitle());
+        updateVideoGrid(category, group, -1, authCheck);
+    }
 
-        authCheck(authCheck, () -> updateVideoGrid(category, group));
+    private void updateVideoGrid(Category category, Observable<MediaGroup> group, int position, boolean authCheck) {
+        Log.d(TAG, "loadMultiGridHeader: Start loading category: " + category.getTitle());
+
+        authCheck(authCheck, () -> updateVideoGrid(category, group, position));
     }
 
     private void continueGroup(VideoGroup group) {
@@ -434,7 +438,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                         });
     }
 
-    private void updateVideoGrid(Category category, Observable<MediaGroup> group) {
+    private void updateVideoGrid(Category category, Observable<MediaGroup> group, int position) {
         Log.d(TAG, "updateGridHeader: Start loading category: " + category.getTitle());
 
         mUpdateAction = group
@@ -442,7 +446,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mediaGroup -> {
-                            VideoGroup videoGroup = VideoGroup.from(mediaGroup, category);
+                            VideoGroup videoGroup = VideoGroup.from(mediaGroup, category, position);
                             getView().updateCategory(videoGroup);
 
                             // Hide loading as long as first group received

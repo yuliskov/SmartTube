@@ -25,7 +25,7 @@ public class VideoGroup {
     }
 
     public static VideoGroup from(MediaGroup mediaGroup, Category category) {
-        return from(mediaGroup, category, 0);
+        return from(mediaGroup, category, -1);
     }
 
     public static VideoGroup from(MediaGroup mediaGroup, Category category, int groupPosition) {
