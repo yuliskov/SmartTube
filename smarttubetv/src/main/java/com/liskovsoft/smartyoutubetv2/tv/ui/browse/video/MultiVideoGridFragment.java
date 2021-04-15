@@ -119,7 +119,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
 
         if (mGridAdapter2 == null) {
             mGridAdapter2 = new VideoGroupObjectAdapter(mCardPresenter);
-            setAdapter1(mGridAdapter2);
+            setAdapter2(mGridAdapter2);
         }
     }
 
