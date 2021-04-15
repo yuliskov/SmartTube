@@ -216,9 +216,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         }
 
         if (item.isChannelUploads()) {
-            // Doesn't work right now. Api doesn't contains channel id.
+            // Below doesn't work right now. Api doesn't contains channel id.
             //ChannelPresenter.instance(getContext()).openChannel(item);
-            ChannelUploadsPresenter.instance(getContext()).openChannel(item);
+
+            //ChannelUploadsPresenter.instance(getContext()).openChannel(item);
+
+            updateVideoGrid(getCategory(mCurrentCategoryId), ChannelUploadsPresenter.instance(getContext()).obtainVideoGroupObservable(item), 1, true);
         } else if (item.isPlaylist()) {
             ChannelUploadsPresenter.instance(getContext()).openChannel(item);
         } else if (item.isVideo()) {

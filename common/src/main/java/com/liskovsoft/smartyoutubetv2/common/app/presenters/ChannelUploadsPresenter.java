@@ -111,8 +111,12 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         }
     }
 
+    public Observable<MediaGroup> obtainVideoGroupObservable(Video item) {
+        return mGroupManager.getGroupObserve(item.mediaItem);
+    }
+
     private void updateGrid(Video item) {
-        updateVideoGrid(mGroupManager.getGroupObserve(item.mediaItem));
+        updateVideoGrid(obtainVideoGroupObservable(item));
     }
 
     private void disposeActions() {
