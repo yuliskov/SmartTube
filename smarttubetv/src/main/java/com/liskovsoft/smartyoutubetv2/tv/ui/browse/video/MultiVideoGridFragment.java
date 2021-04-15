@@ -102,7 +102,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
 
     private void setupAdapter() {
         // Left vertical list of channels
-        VerticalGridPresenter presenter1 = new CustomVerticalGridPresenter();
+        VerticalGridPresenter presenter1 = new CustomVerticalGridPresenter(R.layout.lb_vertical_grid1, R.id.browse_grid1);
         presenter1.setNumberOfColumns(1);
 
         // Right grid of channel's content
