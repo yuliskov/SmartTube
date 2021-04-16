@@ -221,7 +221,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
             //ChannelUploadsPresenter.instance(getContext()).openChannel(item);
 
-            updateVideoGrid(getCategory(mCurrentCategoryId), ChannelUploadsPresenter.instance(getContext()).obtainVideoGroupObservable(item), 1, true);
+            updateVideoGrid(
+                    getCategory(mCurrentCategoryId),
+                    ChannelUploadsPresenter.instance(getContext()).obtainVideoGroupObservable(item),
+                    1,
+                    true
+            );
         } else if (item.isPlaylist()) {
             ChannelUploadsPresenter.instance(getContext()).openChannel(item);
         } else if (item.isVideo()) {
@@ -253,6 +258,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
     @Override
     public void onScrollEnd(VideoGroup group) {
+        if (group == null) {
+            Log.e(TAG, "onScrollEnd. Can't continue. Empty group.");
+            return;
+        }
+
         Log.d(TAG, "onScrollEnd. Group title: " + group.getTitle());
 
         if (RxUtils.isActionRunning(mContinueAction)) {
@@ -308,7 +318,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         Category category = getCategory(categoryId);
 
         if (category != null) {
-            getView().showProgressBar(true);
             getView().clearCategory(category);
             updateCategory(category);
         }
@@ -368,59 +377,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         authCheck(authCheck, () -> updateVideoGrid(category, group, position));
     }
 
-    private void continueGroup(VideoGroup group) {
-        Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
-
-        getView().showProgressBar(true);
-
-        MediaGroup mediaGroup = group.getMediaGroup();
-
-        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
-
-        mContinueAction = mediaGroupManager.continueGroupObserve(mediaGroup)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        continueMediaGroup -> getView().updateCategory(VideoGroup.from(continueMediaGroup, group.getCategory())),
-                        error -> {
-                            Log.e(TAG, "continueGroup error: %s", error.getMessage());
-                            if (getView() != null) {
-                                getView().showProgressBar(false);
-                            }
-                        },
-                        () -> getView().showProgressBar(false)
-                );
-    }
-
-    private void authCheck(boolean check, Runnable callback) {
-        if (!check) {
-            callback.run();
-            return;
-        }
-
-        SignInManager signInManager = mMediaService.getSignInManager();
-
-        mSignCheckAction = signInManager.isSignedObserve()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        isSigned -> {
-                            if (isSigned) {
-                                callback.run();
-                            } else {
-                                if (getView().isProgressBarShowing()) {
-                                    getView().showProgressBar(false);
-                                    getView().showError(new SignInError(getContext()));
-                                }
-                            }
-                        },
-                        error -> Log.e(TAG, "authCheck error: %s", error.getMessage())
-                );
-                
-    }
-
     private void updateVideoRows(Category category, Observable<List<MediaGroup>> groups) {
         Log.d(TAG, "updateRowsHeader: Start loading category: " + category.getTitle());
+
+        getView().showProgressBar(true);
 
         mUpdateAction = groups
                 .subscribeOn(Schedulers.newThread())
@@ -443,6 +403,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
     private void updateVideoGrid(Category category, Observable<MediaGroup> group, int position) {
         Log.d(TAG, "updateGridHeader: Start loading category: " + category.getTitle());
+
+        getView().showProgressBar(true);
 
         mUpdateAction = group
                 .subscribeOn(Schedulers.newThread())
@@ -481,6 +443,59 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
             loadNextPortionIfNeeded(videoGroup);
         }
+    }
+
+    private void continueGroup(VideoGroup group) {
+        Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
+
+        getView().showProgressBar(true);
+
+        MediaGroup mediaGroup = group.getMediaGroup();
+
+        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
+
+        mContinueAction = mediaGroupManager.continueGroupObserve(mediaGroup)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        continueGroup -> getView().updateCategory(VideoGroup.from(continueGroup, group.getCategory(), true)),
+                        error -> {
+                            Log.e(TAG, "continueGroup error: %s", error.getMessage());
+                            if (getView() != null) {
+                                getView().showProgressBar(false);
+                            }
+                        },
+                        () -> getView().showProgressBar(false)
+                );
+    }
+
+    private void authCheck(boolean check, Runnable callback) {
+        if (!check) {
+            callback.run();
+            return;
+        }
+
+        getView().showProgressBar(true);
+
+        SignInManager signInManager = mMediaService.getSignInManager();
+
+        mSignCheckAction = signInManager.isSignedObserve()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        isSigned -> {
+                            if (isSigned) {
+                                callback.run();
+                            } else {
+                                if (getView().isProgressBarShowing()) {
+                                    getView().showProgressBar(false);
+                                    getView().showError(new SignInError(getContext()));
+                                }
+                            }
+                        },
+                        error -> Log.e(TAG, "authCheck error: %s", error.getMessage())
+                );
+
     }
 
     /**

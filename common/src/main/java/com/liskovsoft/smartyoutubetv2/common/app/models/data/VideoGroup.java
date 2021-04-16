@@ -15,6 +15,7 @@ public class VideoGroup {
     private MediaGroup mMediaGroup;
     private Category mCategory;
     private int mPosition;
+    private boolean mIsContinue;
 
     public static VideoGroup from(Category category) {
         return from(null, category);
@@ -28,10 +29,19 @@ public class VideoGroup {
         return from(mediaGroup, category, -1);
     }
 
+    public static VideoGroup from(MediaGroup mediaGroup, Category category, boolean isContinue) {
+        return from(mediaGroup, category, -1, isContinue);
+    }
+
     public static VideoGroup from(MediaGroup mediaGroup, Category category, int groupPosition) {
+        return from(mediaGroup, category, groupPosition, false);
+    }
+
+    public static VideoGroup from(MediaGroup mediaGroup, Category category, int groupPosition, boolean isContinue) {
         VideoGroup videoGroup = new VideoGroup();
         videoGroup.mCategory = category;
         videoGroup.mPosition = groupPosition;
+        videoGroup.mIsContinue = isContinue;
 
         if (mediaGroup == null) {
             return videoGroup;
@@ -88,5 +98,9 @@ public class VideoGroup {
      */
     public int getPosition() {
         return mPosition;
+    }
+
+    public boolean isContinue() {
+        return mIsContinue;
     }
 }

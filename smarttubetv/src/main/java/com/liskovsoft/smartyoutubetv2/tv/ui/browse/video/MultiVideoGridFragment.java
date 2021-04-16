@@ -147,8 +147,16 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
     @Override
     public void update(VideoGroup group) {
         if (group.getPosition() == 0) {
+            if (!group.isContinue()) {
+                clearAdapter1();
+            }
+
             updateGroup1(group);
         } else if (group.getPosition() == 1) {
+            if (!group.isContinue()) {
+                clearAdapter2();
+            }
+
             updateGroup2(group);
         }
     }
@@ -202,6 +210,17 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
 
     @Override
     public void clear() {
+        clearAdapter1();
+        clearAdapter2();
+    }
+
+    private void clearAdapter2() {
+        if (mGridAdapter2 != null) {
+            mGridAdapter2.clear();
+        }
+    }
+
+    private void clearAdapter1() {
         if (mGridAdapter1 != null) {
             mGridAdapter1.clear();
         }
