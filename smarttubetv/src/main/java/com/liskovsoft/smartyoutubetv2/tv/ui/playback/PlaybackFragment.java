@@ -648,9 +648,9 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mExoPlayerController.setVideo(video);
 
         if (mPlayerGlue != null && video != null) {
-            mPlayerGlue.setTitle(video.title);
-            // Preserve player formatting when no description
-            mPlayerGlue.setSubtitle(video.description != null ? video.description : "");
+            // Preserve player formatting
+            mPlayerGlue.setTitle(video.title != null ? video.title : "...");
+            mPlayerGlue.setSubtitle(video.description != null ? video.description : "...");
         }
     }
 
