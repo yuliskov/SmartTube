@@ -348,8 +348,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     /**
-     * Fix suddenly invisible search orb bug<br/>
-     * Could happen when search orb is hidden (e.g. page is scrolled)<br/>
+     * Fix suddenly invisible search orb<br/>
+     * Could happen on topmost category when the page partially scrolled<br/>
      * More info: {@link TitleHelper}
      */
     private void fixInvisibleSearchOrb() {
