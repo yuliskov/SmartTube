@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.tv.util;
 
 import android.text.Layout;
 import android.text.TextUtils.TruncateAt;
+import android.view.View;
 import android.widget.TextView;
 import androidx.leanback.widget.FocusHighlight;
 import androidx.leanback.widget.RowPresenter;
@@ -71,6 +72,12 @@ public class ViewUtil {
                 // App dialog title fix.
                 textView.setSelected(true);
             }
+        }
+    }
+
+    public static void enableView(View view, boolean enabled) {
+        if (view != null) {
+            view.setVisibility(enabled ? View.VISIBLE : View.GONE);
         }
     }
 }

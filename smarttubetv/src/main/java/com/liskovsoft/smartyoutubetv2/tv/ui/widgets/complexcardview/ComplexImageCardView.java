@@ -5,10 +5,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils.TruncateAt;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import androidx.leanback.widget.ImageCardView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.ui.common.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 public class ComplexImageCardView extends ImageCardView {
@@ -121,8 +123,16 @@ public class ComplexImageCardView extends ImageCardView {
         titleView.setLines(lines);
     }
 
-    public void setTextAutoScroll(boolean enabled) {
+    public void enableTextAutoScroll(boolean enabled) {
         mIsCardTextAutoScrollEnabled = enabled;
+    }
+
+    public void enableTitle(boolean enabled) {
+        ViewUtil.enableView(findViewById(R.id.title_text), enabled);
+    }
+
+    public void enableContent(boolean enabled) {
+        ViewUtil.enableView(findViewById(R.id.content_text), enabled);
     }
 
     /**

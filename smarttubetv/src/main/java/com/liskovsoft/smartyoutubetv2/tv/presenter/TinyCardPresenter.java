@@ -18,7 +18,7 @@ public class TinyCardPresenter extends CardPresenter {
     }
 
     @Override
-    protected boolean isCardTextAutoScrollEnabled(Context context) {
-        return true;
+    protected boolean isContentEnabled() {
+        return false;
     }
 }

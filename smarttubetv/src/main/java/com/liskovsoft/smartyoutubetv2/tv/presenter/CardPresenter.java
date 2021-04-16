@@ -71,9 +71,11 @@ public class CardPresenter extends LongClickPresenter {
         };
 
         cardView.setTitleLinesNum(mIsCardMultilineTitleEnabled ? 2 : 1);
-        cardView.setTextAutoScroll(mIsCardTextAutoScrollEnabled);
+        cardView.enableTextAutoScroll(mIsCardTextAutoScrollEnabled);
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
+        cardView.enableTitle(isTitleEnabled());
+        cardView.enableContent(isContentEnabled());
         updateCardBackgroundColor(cardView, false);
         return new ViewHolder(cardView);
     }
@@ -162,6 +164,14 @@ public class CardPresenter extends LongClickPresenter {
 
     protected boolean isCardMultilineTitleEnabled(Context context) {
         return MainUIData.instance(context).isCardMultilineTitleEnabled();
+    }
+
+    protected boolean isContentEnabled() {
+        return true;
+    }
+
+    protected boolean isTitleEnabled() {
+        return true;
     }
 
     private final RequestListener<Drawable> mErrorListener = new RequestListener<Drawable>() {
