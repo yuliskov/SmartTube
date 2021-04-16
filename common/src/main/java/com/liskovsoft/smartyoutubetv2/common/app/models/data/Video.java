@@ -15,7 +15,8 @@ public final class Video implements Parcelable {
     public long id;
     public String title;
     public String category;
-    public String description;
+    // Preserve formatting when no description
+    public String description = "";
     public String channelId;
     public String videoId;
     public String videoUrl;
