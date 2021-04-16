@@ -36,7 +36,6 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
     private UriBackgroundManager mBackgroundManager;
     private VideoGroupPresenter mMainPresenter;
     private CardPresenter mCardPresenter;
-    private boolean mInvalidate;
     private int mSelectedItemIndex1 = -1;
     private int mSelectedItemIndex2 = -1;
     private float mVideoGridScale;
@@ -147,16 +146,8 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
     @Override
     public void update(VideoGroup group) {
         if (group.getPosition() == 0) {
-            if (!group.isContinue()) {
-                clearAdapter1();
-            }
-
             updateGroup1(group);
         } else if (group.getPosition() == 1) {
-            if (!group.isContinue()) {
-                clearAdapter2();
-            }
-
             updateGroup2(group);
         }
     }
@@ -167,9 +158,12 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
             return;
         }
 
-        if (mInvalidate) {
-            clear();
-            mInvalidate = false;
+        if (group.isBegin()) {
+            clear1();
+        }
+
+        if (group.isEmpty()) {
+            return;
         }
 
         mGridAdapter1.append(group);
@@ -183,9 +177,12 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
             return;
         }
 
-        if (mInvalidate) {
-            clear();
-            mInvalidate = false;
+        if (group.isBegin()) {
+            clear2();
+        }
+
+        if (group.isEmpty()) {
+            return;
         }
 
         mGridAdapter2.append(group);
@@ -203,26 +200,21 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         }
     }
 
-    @Override
-    public void invalidate() {
-        mInvalidate = true;
+    private void clear1() {
+        if (mGridAdapter1 != null) {
+            mGridAdapter1.clear();
+        }
     }
 
     @Override
     public void clear() {
-        clearAdapter1();
-        clearAdapter2();
+        clear1();
+        clear2();
     }
 
-    private void clearAdapter2() {
+    private void clear2() {
         if (mGridAdapter2 != null) {
             mGridAdapter2.clear();
-        }
-    }
-
-    private void clearAdapter1() {
-        if (mGridAdapter1 != null) {
-            mGridAdapter1.clear();
         }
     }
 

@@ -41,7 +41,7 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
     }
 
     public void append(VideoGroup group) {
-        if (group != null) {
+        if (group != null && group.getVideos() != null) {
             int begin = mVideoItems.size();
 
             mVideoItems.addAll(group.getVideos());

@@ -34,7 +34,6 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
     private UriBackgroundManager mBackgroundManager;
     private VideoGroupPresenter mMainPresenter;
     private CardPresenter mCardPresenter;
-    private boolean mInvalidate;
     private int mSelectedItemIndex = -1;
     private float mVideoGridScale;
 
@@ -115,9 +114,12 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
             return;
         }
 
-        if (mInvalidate) {
+        if (group.isBegin()) {
             clear();
-            mInvalidate = false;
+        }
+
+        if (group.isEmpty()) {
+            return;
         }
 
         mGridAdapter.append(group);
@@ -132,11 +134,6 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
         if (mSelectedItemIndex != -1) {
             mMainPresenter.onScrollEnd(mGridAdapter.getLastGroup());
         }
-    }
-
-    @Override
-    public void invalidate() {
-        mInvalidate = true;
     }
 
     @Override

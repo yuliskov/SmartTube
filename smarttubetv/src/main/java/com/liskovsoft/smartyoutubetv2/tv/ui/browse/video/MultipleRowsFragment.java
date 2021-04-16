@@ -40,7 +40,6 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private VideoGroupPresenter mMainPresenter;
     private CardPresenter mCardPresenter;
-    private boolean mInvalidate;
     private int mSelectedRowIndex = -1;
 
     @Override
@@ -90,11 +89,6 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     }
 
     @Override
-    public void invalidate() {
-        mInvalidate = true;
-    }
-
-    @Override
     public void clear() {
         if (mRowsAdapter != null) {
             mRowsAdapter.clear();
@@ -121,9 +115,12 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             return;
         }
 
-        if (mInvalidate) {
+        if (group.isBegin()) {
             clear();
-            mInvalidate = false;
+        }
+
+        if (group.isEmpty()) {
+            return;
         }
 
         HeaderItem rowHeader = new HeaderItem(group.getTitle());

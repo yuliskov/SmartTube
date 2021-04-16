@@ -318,7 +318,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         Category category = getCategory(categoryId);
 
         if (category != null) {
-            getView().clearCategory(category);
             updateCategory(category);
         }
     }
@@ -382,6 +381,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
         getView().showProgressBar(true);
 
+        getView().updateCategory(VideoGroup.from(category, true));
+
         mUpdateAction = groups
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -405,6 +406,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         Log.d(TAG, "updateGridHeader: Start loading category: " + category.getTitle());
 
         getView().showProgressBar(true);
+
+        getView().updateCategory(VideoGroup.from(category, position, true));
 
         mUpdateAction = group
                 .subscribeOn(Schedulers.newThread())
@@ -458,7 +461,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        continueGroup -> getView().updateCategory(VideoGroup.from(continueGroup, group.getCategory(), true)),
+                        continueGroup -> getView().updateCategory(VideoGroup.from(continueGroup, group.getCategory())),
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
                             if (getView() != null) {

@@ -31,7 +31,6 @@ public class SettingsGridFragment extends GridFragment implements SettingsCatego
     private BrowsePresenter mMainPresenter;
     private UriBackgroundManager mBackgroundManager;
     private final List<SettingsGroup> mPendingUpdates = new ArrayList<>();
-    private boolean mInvalidate;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,11 +73,6 @@ public class SettingsGridFragment extends GridFragment implements SettingsCatego
     }
 
     @Override
-    public void invalidate() {
-        mInvalidate = true;
-    }
-
-    @Override
     public void clear() {
         if (mSettingsAdapter != null) {
             mSettingsAdapter.clear();
@@ -101,10 +95,8 @@ public class SettingsGridFragment extends GridFragment implements SettingsCatego
             return;
         }
 
-        if (mInvalidate) {
-            clear();
-            mInvalidate = false;
-        }
+        // Always clear (continuation not supported)
+        clear();
 
         if (group != null) {
             for (SettingsItem item : group.getItems()) {

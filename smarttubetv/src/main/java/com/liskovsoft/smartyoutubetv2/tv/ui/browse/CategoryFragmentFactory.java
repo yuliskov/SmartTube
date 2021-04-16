@@ -81,7 +81,7 @@ public class CategoryFragmentFactory extends BrowseSupportFragment.FragmentFacto
     }
 
     public void updateCurrentFragment(SettingsGroup group) {
-        if (group == null || group.isEmpty()) {
+        if (group == null) {
             return;
         }
 
@@ -98,7 +98,7 @@ public class CategoryFragmentFactory extends BrowseSupportFragment.FragmentFacto
     }
 
     public void updateCurrentFragment(VideoGroup group) {
-        if (group == null || group.isEmpty()) {
+        if (group == null) {
             return;
         }
 
@@ -155,7 +155,7 @@ public class CategoryFragmentFactory extends BrowseSupportFragment.FragmentFacto
 
     private void clearFragment(Fragment fragment) {
         if (fragment instanceof CategoryFragment) {
-            ((CategoryFragment) fragment).invalidate();
+            ((CategoryFragment) fragment).clear();
         } else {
             Log.e(TAG, "clearFragment: Page group fragment has incompatible type: " + fragment.getClass().getSimpleName());
         }
