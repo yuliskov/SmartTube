@@ -463,7 +463,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        continueGroup -> getView().updateCategory(VideoGroup.from(continueGroup, group.getCategory())),
+                        continueGroup -> getView().updateCategory(VideoGroup.from(continueGroup, group.getCategory(), group.getPosition())),
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
                             if (getView() != null) {
