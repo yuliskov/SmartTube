@@ -176,6 +176,7 @@ public class MultiGridFragment extends Fragment implements BrowseSupportFragment
                 @Override
                 public void onChildLaidOut(ViewGroup parent, View view, int position, long id) {
                     if (position == 0) {
+                        // Don't control title visibility on first column?
                         showOrHideTitle1();
                     }
                 }

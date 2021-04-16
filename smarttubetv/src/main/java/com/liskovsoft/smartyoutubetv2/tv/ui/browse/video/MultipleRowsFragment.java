@@ -115,7 +115,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             return;
         }
 
-        if (group.isBegin()) {
+        if (group.isNew()) {
             clear();
         }
 

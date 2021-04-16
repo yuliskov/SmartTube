@@ -15,18 +15,18 @@ public class VideoGroup {
     private MediaGroup mMediaGroup;
     private Category mCategory;
     private int mPosition;
-    private boolean mIsBegin;
+    private boolean mIsNew;
 
     public static VideoGroup from(Category category) {
         return from(null, category);
     }
 
-    public static VideoGroup from(Category category, boolean isBegin) {
-        return from(null, category, -1, isBegin);
+    public static VideoGroup from(Category category, boolean isNew) {
+        return from(null, category, -1, isNew);
     }
 
-    public static VideoGroup from(Category category, int groupPosition, boolean isBegin) {
-        return from(null, category, groupPosition, isBegin);
+    public static VideoGroup from(Category category, int groupPosition, boolean isNew) {
+        return from(null, category, groupPosition, isNew);
     }
 
     public static VideoGroup from(MediaGroup mediaGroup) {
@@ -37,19 +37,19 @@ public class VideoGroup {
         return from(mediaGroup, category, -1);
     }
 
-    public static VideoGroup from(MediaGroup mediaGroup, Category category, boolean isBegin) {
-        return from(mediaGroup, category, -1, isBegin);
+    public static VideoGroup from(MediaGroup mediaGroup, Category category, boolean isNew) {
+        return from(mediaGroup, category, -1, isNew);
     }
 
     public static VideoGroup from(MediaGroup mediaGroup, Category category, int groupPosition) {
         return from(mediaGroup, category, groupPosition, false);
     }
 
-    public static VideoGroup from(MediaGroup mediaGroup, Category category, int groupPosition, boolean isBegin) {
+    public static VideoGroup from(MediaGroup mediaGroup, Category category, int groupPosition, boolean isNew) {
         VideoGroup videoGroup = new VideoGroup();
         videoGroup.mCategory = category;
         videoGroup.mPosition = groupPosition;
-        videoGroup.mIsBegin = isBegin;
+        videoGroup.mIsNew = isNew;
 
         if (mediaGroup == null) {
             return videoGroup;
@@ -108,7 +108,7 @@ public class VideoGroup {
         return mPosition;
     }
 
-    public boolean isBegin() {
-        return mIsBegin;
+    public boolean isNew() {
+        return mIsNew;
     }
 }

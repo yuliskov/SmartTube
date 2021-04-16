@@ -44,24 +44,25 @@ public class CardPresenter extends LongClickPresenter {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
+        Context context = parent.getContext();
+
         mDefaultBackgroundColor =
-            ContextCompat.getColor(parent.getContext(), Helpers.getThemeAttr(parent.getContext(), R.attr.cardDefaultBackground));
+            ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardDefaultBackground));
         mDefaultTextColor =
-                ContextCompat.getColor(parent.getContext(), R.color.card_default_text);
+                ContextCompat.getColor(context, R.color.card_default_text);
         mSelectedBackgroundColor =
-                ContextCompat.getColor(parent.getContext(), Helpers.getThemeAttr(parent.getContext(), R.attr.cardSelectedBackground));
+                ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardSelectedBackground));
         mSelectedTextColor =
-                ContextCompat.getColor(parent.getContext(), R.color.card_selected_text_grey);
-        mDefaultCardImage = new ColorDrawable(ContextCompat.getColor(parent.getContext(), R.color.lb_grey));
+                ContextCompat.getColor(context, R.color.card_selected_text_grey);
+        mDefaultCardImage = new ColorDrawable(ContextCompat.getColor(context, R.color.lb_grey));
 
-        MainUIData mainUIData = MainUIData.instance(parent.getContext());
-        mIsAnimatedPreviewsEnabled = mainUIData.isCardAnimatedPreviewsEnabled();
-        mIsCardMultilineTitleEnabled = mainUIData.isCardMultilineTitleEnabled();
-        mIsCardTextAutoScrollEnabled = mainUIData.isCardTextAutoScrollEnabled();
+        mIsAnimatedPreviewsEnabled = isCardAnimatedPreviewsEnabled(context);
+        mIsCardMultilineTitleEnabled = isCardMultilineTitleEnabled(context);
+        mIsCardTextAutoScrollEnabled = isCardTextAutoScrollEnabled(context);
 
-        updateDimensions(parent.getContext());
+        updateDimensions(context);
 
-        ComplexImageCardView cardView = new ComplexImageCardView(parent.getContext()) {
+        ComplexImageCardView cardView = new ComplexImageCardView(context) {
             @Override
             public void setSelected(boolean selected) {
                 updateCardBackgroundColor(this, selected);
@@ -141,13 +142,26 @@ public class CardPresenter extends LongClickPresenter {
     }
 
     private void updateDimensions(Context context) {
-        Pair<Integer, Integer> dimens =
-                GridFragmentHelper.getCardDimensPx(
-                        context, R.dimen.card_width, R.dimen.card_height, MainUIData.instance(context).getVideoGridScale()
-                );
+        Pair<Integer, Integer> dimens = getCardDimensPx(context);
 
         mWidth = dimens.first;
         mHeight = dimens.second;
+    }
+    
+    protected Pair<Integer, Integer> getCardDimensPx(Context context) {
+        return GridFragmentHelper.getCardDimensPx(context, R.dimen.card_width, R.dimen.card_height, MainUIData.instance(context).getVideoGridScale());
+    }
+
+    protected boolean isCardTextAutoScrollEnabled(Context context) {
+        return MainUIData.instance(context).isCardTextAutoScrollEnabled();
+    }
+
+    protected boolean isCardAnimatedPreviewsEnabled(Context context) {
+        return MainUIData.instance(context).isCardAnimatedPreviewsEnabled();
+    }
+
+    protected boolean isCardMultilineTitleEnabled(Context context) {
+        return MainUIData.instance(context).isCardMultilineTitleEnabled();
     }
 
     private final RequestListener<Drawable> mErrorListener = new RequestListener<Drawable>() {

@@ -114,7 +114,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
             return;
         }
 
-        if (group.isBegin()) {
+        if (group.isNew()) {
             clear();
         }
 

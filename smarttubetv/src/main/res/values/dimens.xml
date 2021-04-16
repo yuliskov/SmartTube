@@ -6,6 +6,9 @@
     <dimen name="card_width">200dp</dimen>
     <dimen name="card_height">110dp</dimen>
 
+    <dimen name="tiny_card_width">100dp</dimen>
+    <dimen name="tiny_card_height">55dp</dimen>
+
     <!-- Card view default size -->
     <!--
     <dimen name="lb_basic_card_title_text_size">14sp</dimen>

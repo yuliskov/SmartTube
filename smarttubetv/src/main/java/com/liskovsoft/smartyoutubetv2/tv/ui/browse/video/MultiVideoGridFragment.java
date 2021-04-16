@@ -17,6 +17,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomVerticalGridPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.TinyCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
@@ -35,7 +36,8 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
     private final List<VideoGroup> mPendingUpdates2 = new ArrayList<>();
     private UriBackgroundManager mBackgroundManager;
     private VideoGroupPresenter mMainPresenter;
-    private CardPresenter mCardPresenter;
+    private CardPresenter mCardPresenter1;
+    private CardPresenter mCardPresenter2;
     private int mSelectedItemIndex1 = -1;
     private int mSelectedItemIndex2 = -1;
     private float mVideoGridScale;
@@ -45,7 +47,8 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         super.onCreate(savedInstanceState);
 
         mMainPresenter = getMainPresenter();
-        mCardPresenter = new CardPresenter();
+        mCardPresenter1 = new TinyCardPresenter();
+        mCardPresenter2 = new CardPresenter();
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
         mVideoGridScale = MainUIData.instance(getActivity()).getVideoGridScale();
 
@@ -68,8 +71,8 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         setOnItemViewSelectedListener1(new ItemViewSelectedListener());
         setOnItemViewClickedListener2(new ItemViewClickedListener());
         setOnItemViewSelectedListener2(new ItemViewSelectedListener());
-        mCardPresenter.setOnLongClickedListener(new ItemViewLongClickedListener());
-        mCardPresenter.setOnMenuPressedListener(new ItemViewLongClickedListener());
+        mCardPresenter1.setOnLongClickedListener(new ItemViewLongClickedListener());
+        mCardPresenter2.setOnMenuPressedListener(new ItemViewLongClickedListener());
     }
 
     private void applyPendingUpdates() {
@@ -112,12 +115,12 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         setGridPresenter2(presenter2);
 
         if (mGridAdapter1 == null) {
-            mGridAdapter1 = new VideoGroupObjectAdapter(mCardPresenter);
+            mGridAdapter1 = new VideoGroupObjectAdapter(mCardPresenter1);
             setAdapter1(mGridAdapter1);
         }
 
         if (mGridAdapter2 == null) {
-            mGridAdapter2 = new VideoGroupObjectAdapter(mCardPresenter);
+            mGridAdapter2 = new VideoGroupObjectAdapter(mCardPresenter2);
             setAdapter2(mGridAdapter2);
         }
     }
@@ -158,7 +161,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
             return;
         }
 
-        if (group.isBegin()) {
+        if (group.isNew()) {
             clear1();
         }
 
@@ -177,7 +180,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
             return;
         }
 
-        if (group.isBegin()) {
+        if (group.isNew()) {
             clear2();
         }
 
