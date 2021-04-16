@@ -379,6 +379,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private void updateVideoRows(Category category, Observable<List<MediaGroup>> groups) {
         Log.d(TAG, "updateRowsHeader: Start loading category: " + category.getTitle());
 
+        disposeActions();
         getView().showProgressBar(true);
 
         getView().updateCategory(VideoGroup.from(category, true));
@@ -405,6 +406,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private void updateVideoGrid(Category category, Observable<MediaGroup> group, int position) {
         Log.d(TAG, "updateGridHeader: Start loading category: " + category.getTitle());
 
+        disposeActions();
         getView().showProgressBar(true);
 
         getView().updateCategory(VideoGroup.from(category, position, true));
@@ -478,6 +480,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             return;
         }
 
+        disposeActions();
         getView().showProgressBar(true);
 
         SignInManager signInManager = mMediaService.getSignInManager();

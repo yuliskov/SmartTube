@@ -210,7 +210,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     @Override
     public void showError(ErrorFragmentData data) {
-        replaceMainFragment(new ErrorDialogFragment(data));
+        //replaceMainFragment(new ErrorDialogFragment(data));
+        showErrorIfEmpty(data);
     }
 
     private void showErrorIfEmpty(ErrorFragmentData data) {

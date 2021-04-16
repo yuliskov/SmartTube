@@ -67,10 +67,10 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
 
     private void setupEventListeners() {
         // We'll use attribute on Video item to differentiate between grids
-        setOnItemViewClickedListener1(new ItemViewClickedListener());
-        setOnItemViewSelectedListener1(new ItemViewSelectedListener());
-        setOnItemViewClickedListener2(new ItemViewClickedListener());
-        setOnItemViewSelectedListener2(new ItemViewSelectedListener());
+        //setOnItemViewClickedListener1(new ItemViewClickedListener2());
+        setOnItemViewSelectedListener1(new ItemViewSelectedListener1());
+        setOnItemViewClickedListener2(new ItemViewClickedListener2());
+        setOnItemViewSelectedListener2(new ItemViewSelectedListener2());
         mCardPresenter1.setOnLongClickedListener(new ItemViewLongClickedListener());
         mCardPresenter2.setOnMenuPressedListener(new ItemViewLongClickedListener());
     }
@@ -161,8 +161,10 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
             return;
         }
 
+        // Clear both because second grid is dependable on first one
         if (group.isNew()) {
             clear1();
+            clear2();
         }
 
         if (group.isEmpty()) {
@@ -223,11 +225,11 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
 
     @Override
     public boolean isEmpty() {
-        if (mGridAdapter1 == null) {
+        if (mGridAdapter1 == null || mGridAdapter2 == null) {
             return false;
         }
 
-        return mGridAdapter1.size() == 0;
+        return mGridAdapter1.size() == 0 && mGridAdapter2.size() == 0;
     }
 
     private final class ItemViewLongClickedListener implements OnItemViewClickedListener {
@@ -241,7 +243,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         }
     }
 
-    private final class ItemViewClickedListener implements androidx.leanback.widget.OnItemViewClickedListener {
+    private final class ItemViewClickedListener2 implements androidx.leanback.widget.OnItemViewClickedListener {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
@@ -254,7 +256,17 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         }
     }
 
-    private final class ItemViewSelectedListener implements OnItemViewSelectedListener {
+    private final class ItemViewSelectedListener1 implements OnItemViewSelectedListener {
+        @Override
+        public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
+                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
+            if (item instanceof Video) {
+                mMainPresenter.onVideoItemClicked((Video) item);
+            }
+        }
+    }
+
+    private final class ItemViewSelectedListener2 implements OnItemViewSelectedListener {
         @Override
         public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
                                    RowPresenter.ViewHolder rowViewHolder, Row row) {
