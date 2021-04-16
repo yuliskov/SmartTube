@@ -258,6 +258,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         restoreMainFragment();
 
         mCategoryFragmentFactory.updateCurrentFragment(group);
+
+        fixInvisibleSearchOrb();
     }
 
     @Override
@@ -343,12 +345,11 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         }
 
         mIsFragmentCreated = false;
-
-        fixInvisibleSearchOrb();
     }
 
     /**
      * Fix suddenly invisible search orb bug<br/>
+     * Could happen when search orb is hidden (e.g. page is scrolled)<br/>
      * More info: {@link TitleHelper}
      */
     private void fixInvisibleSearchOrb() {
