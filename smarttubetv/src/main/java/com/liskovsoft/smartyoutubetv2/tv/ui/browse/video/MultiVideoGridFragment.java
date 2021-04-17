@@ -120,11 +120,12 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
 
     private void setupEventListeners() {
         // We'll use attribute on Video item to differentiate between grids
-        //setOnItemViewClickedListener1(new ItemViewClickedListener2());
         setOnItemViewSelectedListener1(new ItemViewSelectedListener1());
         setOnItemViewClickedListener2(new ItemViewClickedListener2());
         setOnItemViewSelectedListener2(new ItemViewSelectedListener2());
         mCardPresenter1.setOnLongClickedListener(new ItemViewLongClickedListener());
+        mCardPresenter2.setOnLongClickedListener(new ItemViewLongClickedListener());
+        mCardPresenter1.setOnMenuPressedListener(new ItemViewLongClickedListener());
         mCardPresenter2.setOnMenuPressedListener(new ItemViewLongClickedListener());
     }
 
@@ -301,11 +302,13 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         }
 
         private void checkScrollEnd(Video item) {
-            int size = mGridAdapter1.size();
-            int index = mGridAdapter1.indexOf(item);
+            VideoGroupObjectAdapter adapter = mGridAdapter2;
+
+            int size = adapter.size();
+            int index = adapter.indexOf(item);
 
             if (index > (size - ViewUtil.GRID_SCROLL_CONTINUE_NUM)) {
-                mMainPresenter.onScrollEnd(mGridAdapter1.getLastGroup());
+                mMainPresenter.onScrollEnd(adapter.getLastGroup());
             }
         }
     }

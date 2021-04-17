@@ -5,9 +5,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.transition.TransitionHelper;
+import androidx.leanback.widget.HorizontalGridView;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.OnChildLaidOutListener;
 import androidx.leanback.widget.OnItemViewClickedListener;
@@ -17,6 +20,9 @@ import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.VerticalGridPresenter;
 import androidx.leanback.widget.VerticalGridView;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
+import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /**
@@ -246,8 +252,8 @@ public class MultiGridFragment extends Fragment implements BrowseSupportFragment
      */
     public void setOnItemViewClickedListener2(OnItemViewClickedListener listener) {
         mOnItemViewClickedListener2 = listener;
-        if (mGridPresenter1 != null) {
-            mGridPresenter1.setOnItemViewClickedListener(mOnItemViewClickedListener2);
+        if (mGridPresenter2 != null) {
+            mGridPresenter2.setOnItemViewClickedListener(mOnItemViewClickedListener2);
         }
     }
 
@@ -274,15 +280,16 @@ public class MultiGridFragment extends Fragment implements BrowseSupportFragment
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ViewGroup gridDock = (ViewGroup) view.findViewById(R.id.browse_grid_dock);
+        HorizontalGridView gridDock = (HorizontalGridView) view.findViewById(R.id.browse_grid_dock);
+        gridDock.setAdapter(new MultiGridAdapter());
 
         mGridViewHolder1 = mGridPresenter1.onCreateViewHolder(gridDock);
-        gridDock.addView(mGridViewHolder1.view);
         mGridViewHolder1.getGridView().setOnChildLaidOutListener(mChildLaidOutListener1);
+        //gridDock.addView(mGridViewHolder1.view);
 
         mGridViewHolder2 = mGridPresenter2.onCreateViewHolder(gridDock);
-        gridDock.addView(mGridViewHolder2.view);
         mGridViewHolder2.getGridView().setOnChildLaidOutListener(mChildLaidOutListener2);
+        //gridDock.addView(mGridViewHolder2.view);
 
         mSceneAfterEntranceTransition = TransitionHelper.createScene(gridDock, new Runnable() {
             @Override
@@ -360,5 +367,33 @@ public class MultiGridFragment extends Fragment implements BrowseSupportFragment
     void setEntranceTransitionState(boolean afterTransition) {
         mGridPresenter1.setEntranceTransitionState(mGridViewHolder1, afterTransition);
         mGridPresenter1.setEntranceTransitionState(mGridViewHolder2, afterTransition);
+    }
+
+    class MultiGridAdapter extends Adapter<ViewHolder> {
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new ViewHolder(new FrameLayout(parent.getContext()));
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            if (position == 0) {
+                ((FrameLayout) holder.itemView).addView(mGridViewHolder1.view);
+            } else if (position == 1) {
+                ((FrameLayout) holder.itemView).addView(mGridViewHolder2.view);
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return 2;
+        }
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        public ViewHolder(View v) {
+            super(v);
+        }
     }
 }
