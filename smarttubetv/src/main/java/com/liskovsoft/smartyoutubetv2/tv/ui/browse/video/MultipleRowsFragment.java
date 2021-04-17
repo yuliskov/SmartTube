@@ -41,6 +41,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     private VideoGroupPresenter mMainPresenter;
     private CardPresenter mCardPresenter;
     private int mSelectedRowIndex = -1;
+    private boolean mDoClear;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -115,12 +116,14 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             return;
         }
 
-        if (group.isNew()) {
-            clear();
-        }
+        mDoClear = group.isNew();
 
         if (group.isEmpty()) {
             return;
+        }
+
+        if (mDoClear) {
+            clear();
         }
 
         HeaderItem rowHeader = new HeaderItem(group.getTitle());
