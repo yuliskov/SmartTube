@@ -22,8 +22,11 @@
                 android:layout_height="match_parent" />
         -->
 
+        <!-- Allow focus out from left/right sides -->
         <androidx.leanback.widget.HorizontalGridView
             android:id="@+id/browse_grid_dock"
+            lb:focusOutFront="true"
+            lb:focusOutEnd="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
