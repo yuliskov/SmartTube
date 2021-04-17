@@ -4,24 +4,24 @@ import android.view.KeyEvent;
 import androidx.leanback.widget.Presenter;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 
-public abstract class LongClickPresenter extends Presenter {
-    private OnItemViewClickedListener mLongClickListener;
-    private OnItemViewClickedListener mMenuPressListener;
+public abstract class CustomEventsPresenter extends Presenter {
+    private OnItemViewPressedListener mLongPressedListener;
+    private OnItemViewPressedListener mMenuPressedListener;
 
-    public void setOnLongClickedListener(OnItemViewClickedListener listener) {
-        mLongClickListener = listener;
+    public void setOnItemViewLongPressedListener(OnItemViewPressedListener listener) {
+        mLongPressedListener = listener;
     }
 
-    public void setOnMenuPressedListener(OnItemViewClickedListener listener) {
-        mMenuPressListener = listener;
+    public void setOnItemViewMenuPressedListener(OnItemViewPressedListener listener) {
+        mMenuPressedListener = listener;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {
-        if (mLongClickListener != null) {
+        if (mLongPressedListener != null) {
             viewHolder.view.setOnLongClickListener(v -> {
-                if (mLongClickListener != null) {
-                    mLongClickListener.onItemViewClicked(viewHolder, item);
+                if (mLongPressedListener != null) {
+                    mLongPressedListener.onItemPressed(viewHolder, item);
 
                     return true; // don't provoke single click event
                 }
@@ -30,12 +30,12 @@ public abstract class LongClickPresenter extends Presenter {
             });
         }
 
-        if (mMenuPressListener != null) {
+        if (mMenuPressedListener != null) {
             viewHolder.view.setOnKeyListener((v, keyCode, event) -> {
-                if (mMenuPressListener != null) {
+                if (mMenuPressedListener != null) {
                     if (KeyHelpers.isMenuKey(keyCode)) {
                         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                            mMenuPressListener.onItemViewClicked(viewHolder, item);
+                            mMenuPressedListener.onItemPressed(viewHolder, item);
                         }
                     }
                 }
@@ -47,11 +47,11 @@ public abstract class LongClickPresenter extends Presenter {
 
     @Override
     public void onUnbindViewHolder(ViewHolder viewHolder) {
-        if (mLongClickListener != null) {
+        if (mLongPressedListener != null) {
             viewHolder.view.setOnLongClickListener(null);
         }
 
-        if (mMenuPressListener != null) {
+        if (mMenuPressedListener != null) {
             viewHolder.view.setOnKeyListener(null);
         }
     }

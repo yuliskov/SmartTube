@@ -20,7 +20,7 @@ import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomVerticalGridPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.TinyCardPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewClickedListener;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
@@ -123,10 +123,10 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         setOnItemViewSelectedListener1(new ItemViewSelectedListener1());
         setOnItemViewClickedListener2(new ItemViewClickedListener2());
         setOnItemViewSelectedListener2(new ItemViewSelectedListener2());
-        mCardPresenter1.setOnLongClickedListener(new ItemViewLongClickedListener());
-        mCardPresenter2.setOnLongClickedListener(new ItemViewLongClickedListener());
-        mCardPresenter1.setOnMenuPressedListener(new ItemViewLongClickedListener());
-        mCardPresenter2.setOnMenuPressedListener(new ItemViewLongClickedListener());
+        mCardPresenter1.setOnItemViewLongPressedListener(new ItemViewLongClickedListener());
+        mCardPresenter2.setOnItemViewLongPressedListener(new ItemViewLongClickedListener());
+        mCardPresenter1.setOnItemViewMenuPressedListener(new ItemViewLongClickedListener());
+        mCardPresenter2.setOnItemViewMenuPressedListener(new ItemViewLongClickedListener());
     }
 
     private void applyPendingUpdates() {
@@ -256,9 +256,9 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         return mGridAdapter1.size() == 0 && mGridAdapter2.size() == 0;
     }
 
-    private final class ItemViewLongClickedListener implements OnItemViewClickedListener {
+    private final class ItemViewLongClickedListener implements OnItemViewPressedListener {
         @Override
-        public void onItemViewClicked(Presenter.ViewHolder itemViewHolder, Object item) {
+        public void onItemPressed(Presenter.ViewHolder itemViewHolder, Object item) {
             if (item instanceof Video) {
                 mMainPresenter.onVideoItemLongClicked((Video) item);
             } else {
