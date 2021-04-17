@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.browse.video;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.leanback.widget.OnItemViewSelectedListener;
@@ -8,6 +9,7 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.VerticalGridPresenter;
+import androidx.leanback.widget.VerticalGridView;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
@@ -60,6 +62,56 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         if (getMainFragmentAdapter().getFragmentHost() != null) {
             getMainFragmentAdapter().getFragmentHost().notifyDataReady(getMainFragmentAdapter());
         }
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        removeRightPadding();
+    }
+
+    @Override
+    public int getPosition() {
+        // TODO: getPosition2 not used
+        return getSelectedPosition1();
+    }
+
+    @Override
+    public void setPosition(int index) {
+        if (index < 0) {
+            return;
+        }
+
+        if (mGridAdapter1 != null && index < mGridAdapter1.size()) {
+            // TODO: setPosition2 not used
+            setSelectedPosition1(index);
+            mSelectedItemIndex1 = -1;
+        } else {
+            mSelectedItemIndex1 = index;
+        }
+    }
+
+    @Override
+    public void update(VideoGroup group) {
+        if (group.getPosition() == 0) {
+            updateGroup1(group);
+        } else if (group.getPosition() == 1) {
+            updateGroup2(group);
+        }
+    }
+
+    /**
+     * https://stackoverflow.com/questions/9685658/add-padding-on-view-programmatically
+     */
+    private void removeRightPadding() {
+        VerticalGridView browseGrid = getBrowseGrid1();
+
+        if (browseGrid == null) {
+            return;
+        }
+
+        browseGrid.setPadding(browseGrid.getPaddingLeft(), browseGrid.getPaddingTop(), 0, browseGrid.getPaddingBottom());
     }
 
     protected VideoGroupPresenter getMainPresenter() {
@@ -123,36 +175,6 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         if (mGridAdapter2 == null) {
             mGridAdapter2 = new VideoGroupObjectAdapter(mCardPresenter2);
             setAdapter2(mGridAdapter2);
-        }
-    }
-
-    @Override
-    public int getPosition() {
-        // TODO: getPosition2 not used
-        return getSelectedPosition1();
-    }
-
-    @Override
-    public void setPosition(int index) {
-        if (index < 0) {
-            return;
-        }
-
-        if (mGridAdapter1 != null && index < mGridAdapter1.size()) {
-            // TODO: setPosition2 not used
-            setSelectedPosition1(index);
-            mSelectedItemIndex1 = -1;
-        } else {
-            mSelectedItemIndex1 = index;
-        }
-    }
-
-    @Override
-    public void update(VideoGroup group) {
-        if (group.getPosition() == 0) {
-            updateGroup1(group);
-        } else if (group.getPosition() == 1) {
-            updateGroup2(group);
         }
     }
 
