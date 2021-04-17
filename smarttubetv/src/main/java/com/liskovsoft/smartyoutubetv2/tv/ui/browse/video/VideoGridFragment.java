@@ -36,7 +36,6 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
     private CardPresenter mCardPresenter;
     private int mSelectedItemIndex = -1;
     private float mVideoGridScale;
-    private boolean mDoClear;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -115,14 +114,12 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
             return;
         }
 
-        mDoClear = group.isNew();
+        if (group.isNew()) {
+            clear();
+        }
 
         if (group.isEmpty()) {
             return;
-        }
-
-        if (mDoClear) {
-            clear();
         }
 
         mGridAdapter.append(group);

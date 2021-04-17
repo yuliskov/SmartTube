@@ -43,7 +43,6 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
     private int mSelectedItemIndex1 = -1;
     private int mSelectedItemIndex2 = -1;
     private float mVideoGridScale;
-    private boolean mDoClear;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -184,16 +183,14 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
             return;
         }
 
-        mDoClear = group.isNew();
+        // Clear both because second grid is dependable on first one
+        if (group.isNew()) {
+            clear1();
+            clear2();
+        }
 
         if (group.isEmpty()) {
             return;
-        }
-
-        // Clear both because second grid is dependable on first one
-        if (mDoClear) {
-            clear1();
-            clear2();
         }
 
         mGridAdapter1.append(group);
