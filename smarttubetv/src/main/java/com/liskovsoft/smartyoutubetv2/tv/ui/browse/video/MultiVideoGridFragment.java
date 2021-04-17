@@ -111,7 +111,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         }
 
         // Don't remove padding at all. This could cause weird card zooming.
-        browseGrid.setPadding(browseGrid.getPaddingLeft() / 10, browseGrid.getPaddingTop(), browseGrid.getPaddingRight(), browseGrid.getPaddingBottom());
+        browseGrid.setPadding(browseGrid.getPaddingLeft() / 6, browseGrid.getPaddingTop(), browseGrid.getPaddingRight(), browseGrid.getPaddingBottom());
     }
 
     protected VideoGroupPresenter getMainPresenter() {

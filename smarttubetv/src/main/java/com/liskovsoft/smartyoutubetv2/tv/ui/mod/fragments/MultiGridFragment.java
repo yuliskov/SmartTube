@@ -13,6 +13,8 @@ import androidx.leanback.transition.TransitionHelper;
 import androidx.leanback.widget.HorizontalGridView;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.OnChildLaidOutListener;
+import androidx.leanback.widget.OnChildSelectedListener;
+import androidx.leanback.widget.OnChildViewHolderSelectedListener;
 import androidx.leanback.widget.OnItemViewClickedListener;
 import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.Presenter;
@@ -22,7 +24,6 @@ import androidx.leanback.widget.VerticalGridPresenter;
 import androidx.leanback.widget.VerticalGridView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
-import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /**
@@ -140,12 +141,12 @@ public class MultiGridFragment extends Fragment implements BrowseSupportFragment
                 @Override
                 public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
                                            RowPresenter.ViewHolder rowViewHolder, Row row) {
-                    if (mGridViewHolder1 == null) {
+                    if (mGridViewHolder1 == null || itemViewHolder == null) {
                         return;
                     }
                     int position = mGridViewHolder1.getGridView().getSelectedPosition();
                     if (DEBUG) Log.v(TAG, "grid selected position " + position);
-                    gridOnItemSelected(position);
+                    grid1OnItemSelected(position, itemViewHolder.view.isFocused());
                     if (mOnItemViewSelectedListener1 != null) {
                         mOnItemViewSelectedListener1.onItemSelected(itemViewHolder, item,
                                 rowViewHolder, row);
@@ -158,12 +159,12 @@ public class MultiGridFragment extends Fragment implements BrowseSupportFragment
                 @Override
                 public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
                                            RowPresenter.ViewHolder rowViewHolder, Row row) {
-                    if (mGridViewHolder2 == null) {
+                    if (mGridViewHolder2 == null || itemViewHolder == null) {
                         return;
                     }
                     int position = mGridViewHolder2.getGridView().getSelectedPosition();
                     if (DEBUG) Log.v(TAG, "grid selected position " + position);
-                    gridOnItemSelected(position);
+                    grid2OnItemSelected(position, itemViewHolder.view.isFocused());
                     if (mOnItemViewSelectedListener2 != null) {
                         mOnItemViewSelectedListener2.onItemSelected(itemViewHolder, item,
                                 rowViewHolder, row);
@@ -176,7 +177,8 @@ public class MultiGridFragment extends Fragment implements BrowseSupportFragment
                 @Override
                 public void onChildLaidOut(ViewGroup parent, View view, int position, long id) {
                     if (position == 0) {
-                        // Don't control title visibility on first column?
+                        // First child has been added.
+                        // Check title on first grid only!
                         showOrHideTitle1();
                     }
                 }
@@ -187,7 +189,9 @@ public class MultiGridFragment extends Fragment implements BrowseSupportFragment
                 @Override
                 public void onChildLaidOut(ViewGroup parent, View view, int position, long id) {
                     if (position == 0) {
-                        showOrHideTitle2();
+                        // First child has been added.
+                        // Don't check title on second grid.
+                        // showOrHideTitle2();
                     }
                 }
             };
@@ -206,10 +210,23 @@ public class MultiGridFragment extends Fragment implements BrowseSupportFragment
         mOnItemViewSelectedListener2 = listener;
     }
 
-    private void gridOnItemSelected(int position) {
+    private void grid1OnItemSelected(int position, boolean isFocused) {
         if (position != mSelectedPosition1) {
             mSelectedPosition1 = position;
-            showOrHideTitle1();
+
+            if (isFocused) { // second grid might not have focus
+                showOrHideTitle1();
+            }
+        }
+    }
+
+    private void grid2OnItemSelected(int position, boolean isFocused) {
+        if (position != mSelectedPosition2) {
+            mSelectedPosition2 = position;
+
+            if (isFocused) { // second grid might not have focus
+                showOrHideTitle2();
+            }
         }
     }
 
@@ -282,6 +299,19 @@ public class MultiGridFragment extends Fragment implements BrowseSupportFragment
         super.onViewCreated(view, savedInstanceState);
         HorizontalGridView gridDock = (HorizontalGridView) view.findViewById(R.id.browse_grid_dock);
         gridDock.setAdapter(new MultiGridAdapter());
+        gridDock.setOnChildSelectedListener(new OnChildSelectedListener() {
+            @Override
+            public void onChildSelected(ViewGroup parent, View view, int position, long id) {
+                Log.d(TAG, "onChildSelected");
+                // Handle focus when switching between grids
+                // (OnItemSelectedListener doesn't help in this case)
+                if (position == 0) {
+                    showOrHideTitle1();
+                } else if (position == 1) {
+                    showOrHideTitle2();
+                }
+            }
+        });
 
         mGridViewHolder1 = mGridPresenter1.onCreateViewHolder(gridDock);
         mGridViewHolder1.getGridView().setOnChildLaidOutListener(mChildLaidOutListener1);
