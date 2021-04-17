@@ -7,7 +7,7 @@
     <dimen name="card_height">110dp</dimen>
 
     <dimen name="tiny_card_width">100dp</dimen>
-    <dimen name="tiny_card_height">55dp</dimen>
+    <dimen name="tiny_card_height">35dp</dimen>
 
     <!-- Card view default size -->
     <!--
