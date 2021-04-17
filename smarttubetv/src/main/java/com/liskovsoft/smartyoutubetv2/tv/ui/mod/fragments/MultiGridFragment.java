@@ -91,16 +91,10 @@ public class MultiGridFragment extends Fragment implements BrowseSupportFragment
         return mGridPresenter2;
     }
 
-    /**
-     * TODO: Returns R.id.browse_grid
-     */
     public VerticalGridView getBrowseGrid1() {
         return mGridViewHolder1.getGridView();
     }
 
-    /**
-     * TODO: Returns R.id.browse_grid
-     */
     public VerticalGridView getBrowseGrid2() {
         return mGridViewHolder2.getGridView();
     }
