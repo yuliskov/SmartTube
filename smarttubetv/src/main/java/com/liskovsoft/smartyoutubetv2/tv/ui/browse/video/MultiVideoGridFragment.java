@@ -104,14 +104,19 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
      * https://stackoverflow.com/questions/9685658/add-padding-on-view-programmatically
      */
     private void removePadding() {
-        VerticalGridView browseGrid = getBrowseGrid2();
+        VerticalGridView browseGrid = getBrowseGrid1();
 
-        if (browseGrid == null) {
-            return;
+        if (browseGrid != null) {
+            // Don't remove padding at all. This could cause weird card zooming.
+            browseGrid.setPadding(browseGrid.getPaddingLeft(), browseGrid.getPaddingTop(), browseGrid.getPaddingRight() / 3, browseGrid.getPaddingBottom());
         }
 
-        // Don't remove padding at all. This could cause weird card zooming.
-        browseGrid.setPadding(browseGrid.getPaddingLeft() / 6, browseGrid.getPaddingTop(), browseGrid.getPaddingRight(), browseGrid.getPaddingBottom());
+        browseGrid = getBrowseGrid2();
+
+        if (browseGrid != null) {
+            // Don't remove padding at all. This could cause weird card zooming.
+            browseGrid.setPadding(browseGrid.getPaddingLeft() / 3, browseGrid.getPaddingTop(), browseGrid.getPaddingRight(), browseGrid.getPaddingBottom());
+        }
     }
 
     protected VideoGroupPresenter getMainPresenter() {
