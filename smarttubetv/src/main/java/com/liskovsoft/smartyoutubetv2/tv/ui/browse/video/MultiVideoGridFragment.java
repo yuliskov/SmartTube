@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
+import androidx.leanback.widget.OnItemViewClickedListener;
 import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
@@ -125,12 +126,13 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
 
     private void setupEventListeners() {
         // We'll use attribute on Video item to differentiate between grids
+        setOnItemViewClickedListener1(new ItemViewClickedListener1());
         setOnItemViewSelectedListener1(new ItemViewSelectedListener1());
         setOnItemViewClickedListener2(new ItemViewClickedListener2());
         setOnItemViewSelectedListener2(new ItemViewSelectedListener2());
         mCardPresenter1.setOnItemViewLongPressedListener(new ItemViewLongClickedListener());
-        mCardPresenter2.setOnItemViewLongPressedListener(new ItemViewLongClickedListener());
         mCardPresenter1.setOnItemViewMenuPressedListener(new ItemViewLongClickedListener());
+        mCardPresenter2.setOnItemViewLongPressedListener(new ItemViewLongClickedListener());
         mCardPresenter2.setOnItemViewMenuPressedListener(new ItemViewLongClickedListener());
     }
 
@@ -281,6 +283,16 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
                 mMainPresenter.onVideoItemClicked((Video) item);
             } else {
                 Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private final class ItemViewClickedListener1 implements OnItemViewClickedListener {
+        @Override
+        public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
+                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
+            if (item instanceof Video) {
+                mMainPresenter.onVideoItemClicked((Video) item);
             }
         }
     }
