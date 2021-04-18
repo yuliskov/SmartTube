@@ -205,4 +205,5 @@
     <string name="msg_player_error_unexpected">Onbekende video decoder fout</string>
     <string name="video_aspect">Beeldverhouding</string>
     <string name="player_tweaks">Ontwikkelaarsopties</string>
+    <string name="header_uploads">Kanalen/Uploads</string>
 </resources>
