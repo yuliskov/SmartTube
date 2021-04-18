@@ -204,4 +204,5 @@
     <string name="msg_player_error_unexpected">Неизвестная ошибка в видеодекодере</string>
     <string name="video_aspect">Соотношение сторон</string>
     <string name="player_tweaks">Для разработчиков</string>
+    <string name="header_uploads">Загрузки</string>
 </resources>

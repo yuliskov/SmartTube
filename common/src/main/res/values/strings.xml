@@ -205,4 +205,5 @@
     <string name="msg_player_error_unexpected">Unknown video decoder error</string>
     <string name="video_aspect">Aspect ratio</string>
     <string name="player_tweaks">Developer options</string>
+    <string name="header_uploads">Uploads</string>
 </resources>
