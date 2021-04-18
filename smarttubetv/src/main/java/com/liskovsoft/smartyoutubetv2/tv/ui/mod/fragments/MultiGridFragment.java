@@ -214,7 +214,7 @@ public class MultiGridFragment extends Fragment implements BrowseSupportFragment
         if (position != mSelectedPosition1) {
             mSelectedPosition1 = position;
 
-            // Second grid might not have been focused
+            // Grid might not have been focused (e.g. just created)
             if (isFocused) {
                 showOrHideTitle1();
             }
@@ -225,21 +225,23 @@ public class MultiGridFragment extends Fragment implements BrowseSupportFragment
         if (position != mSelectedPosition2) {
             mSelectedPosition2 = position;
 
-            // Second grid might not have been focused
-            showOrHideTitle2();
+            // Grid might not have been focused (e.g. just created)
+            if (isFocused) {
+                showOrHideTitle2();
+            }
         }
     }
 
     private void showOrHideTitle1() {
-        //if (mGridViewHolder1.getGridView().findViewHolderForAdapterPosition(mSelectedPosition1)
-        //        == null || mMainFragmentAdapter.getFragmentHost() == null) {
-        //    return;
-        //}
-        //if (!mGridViewHolder1.getGridView().hasPreviousViewInSameRow(mSelectedPosition1)) {
-        //    mMainFragmentAdapter.getFragmentHost().showTitleView(true);
-        //} else {
-        //    mMainFragmentAdapter.getFragmentHost().showTitleView(false);
-        //}
+        if (mGridViewHolder1.getGridView().findViewHolderForAdapterPosition(mSelectedPosition1)
+                == null || mMainFragmentAdapter.getFragmentHost() == null) {
+            return;
+        }
+        if (!mGridViewHolder1.getGridView().hasPreviousViewInSameRow(mSelectedPosition1)) {
+            mMainFragmentAdapter.getFragmentHost().showTitleView(true);
+        } else {
+            mMainFragmentAdapter.getFragmentHost().showTitleView(false);
+        }
     }
 
     private void showOrHideTitle2() {
