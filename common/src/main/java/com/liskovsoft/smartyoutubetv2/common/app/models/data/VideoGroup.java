@@ -70,6 +70,7 @@ public class VideoGroup {
             Video video = Video.from(item);
             // Group position in multi-grid fragments
             video.groupPosition = videoGroup.mPosition;
+            video.group = videoGroup;
             videoGroup.mVideos.add(video);
         }
 

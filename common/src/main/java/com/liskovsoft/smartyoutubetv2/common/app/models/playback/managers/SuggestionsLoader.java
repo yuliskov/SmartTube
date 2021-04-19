@@ -48,8 +48,13 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onScrollEnd(VideoGroup group) {
-        continueGroup(group);
+    public void onScrollEnd(Video item) {
+        if (item == null) {
+            Log.e(TAG, "Can't scroll. Video is null.");
+            return;
+        }
+
+        continueGroup(item.group);
     }
 
     @Override

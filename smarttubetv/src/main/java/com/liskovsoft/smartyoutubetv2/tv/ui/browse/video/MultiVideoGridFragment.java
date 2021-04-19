@@ -204,7 +204,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
 
         mGridAdapter1.append(group);
 
-        updatePosition1();
+        restorePosition1();
     }
 
     private void updateGroup2(VideoGroup group) {
@@ -223,16 +223,16 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
 
         mGridAdapter2.append(group);
 
-        // TODO: Do we need to update position on second group?
-        //updatePosition2();
+        // TODO: Do we need to restore position on second group?
+        //restorePosition2();
     }
 
-    private void updatePosition1() {
+    private void restorePosition1() {
         setPosition(mSelectedItemIndex1);
 
-        // Item not found? Load next group.
+        // Item not found? Lookup in next group.
         if (mSelectedItemIndex1 != -1) {
-            mMainPresenter.onScrollEnd(mGridAdapter1.getLastGroup());
+            mMainPresenter.onScrollEnd((Video) mGridAdapter1.get(mGridAdapter1.size() - 1));
         }
     }
 
@@ -325,7 +325,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
             int index = adapter.indexOf(item);
 
             if (index > (size - ViewUtil.GRID_SCROLL_CONTINUE_NUM)) {
-                mMainPresenter.onScrollEnd(adapter.getLastGroup());
+                mMainPresenter.onScrollEnd(item);
             }
         }
     }

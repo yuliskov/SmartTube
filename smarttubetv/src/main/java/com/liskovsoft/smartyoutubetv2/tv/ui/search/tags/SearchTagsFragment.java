@@ -183,7 +183,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         int index = mItemResultsAdapter.indexOf(item);
 
         if (index > (size - ViewUtil.ROW_SCROLL_CONTINUE_NUM)) {
-            mSearchPresenter.onScrollEnd(mItemResultsAdapter.getLastGroup());
+            mSearchPresenter.onScrollEnd(item);
         }
     }
 }

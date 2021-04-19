@@ -11,7 +11,6 @@ import java.util.List;
 public class VideoGroupObjectAdapter extends ObjectAdapter {
     private static final String TAG = VideoGroupObjectAdapter.class.getSimpleName();
     private final List<Video> mVideoItems;
-    private final List<VideoGroup> mVideoGroups;
 
     // TODO: Select presenter based on the video item type. Such channel, playlist, or simple video
     // https://github.com/googlearchive/leanback-showcase/blob/master/app/src/main/java/android/support/v17/leanback/supportleanbackshowcase/app/page/PageAndListRowFragment.java
@@ -19,7 +18,6 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
     public VideoGroupObjectAdapter(VideoGroup videoGroup, CardPresenter presenter) {
         super(presenter);
         mVideoItems = new ArrayList<>();
-        mVideoGroups = new ArrayList<>();
 
         if (videoGroup != null) {
             append(videoGroup);
@@ -36,8 +34,12 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
     }
 
     @Override
-    public Object get(int position) {
-        return mVideoItems.get(position);
+    public Object get(int index) {
+        if (index < 0 || index >= size()) {
+            return null;
+        }
+
+        return mVideoItems.get(index);
     }
 
     public void append(VideoGroup group) {
@@ -45,18 +47,10 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
             int begin = mVideoItems.size();
 
             mVideoItems.addAll(group.getVideos());
-            mVideoGroups.add(group);
 
             // Fix double item blinking by specifying exact range
             notifyItemRangeInserted(begin, mVideoItems.size() - begin);
         }
-    }
-
-    /**
-     * Used as scrolling events params
-     */
-    public VideoGroup getLastGroup() {
-        return mVideoGroups.size() != 0 ? mVideoGroups.get(mVideoGroups.size() - 1) : null;
     }
 
     public int indexOf(Video item) {
@@ -66,7 +60,6 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
     public void clear() {
         int itemCount = mVideoItems.size();
         mVideoItems.clear();
-        mVideoGroups.clear();
         if (itemCount != 0) {
             notifyItemRangeRemoved(0, itemCount);
         }

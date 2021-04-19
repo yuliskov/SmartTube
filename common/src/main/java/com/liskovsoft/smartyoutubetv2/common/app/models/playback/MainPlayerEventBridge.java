@@ -250,8 +250,8 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
-    public void onScrollEnd(VideoGroup group) {
-        process(listener -> listener.onScrollEnd(group));
+    public void onScrollEnd(Video item) {
+        process(listener -> listener.onScrollEnd(item));
     }
 
     @Override

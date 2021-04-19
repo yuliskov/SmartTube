@@ -73,7 +73,14 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     @Override
-    public void onScrollEnd(VideoGroup group) {
+    public void onScrollEnd(Video item) {
+        if (item == null) {
+            Log.e(TAG, "Can't scroll. Video is null.");
+            return;
+        }
+
+        VideoGroup group = item.group;
+
         Log.d(TAG, "onScrollEnd: Group title: " + group.getTitle());
 
         boolean scrollInProgress = mScrollAction != null && !mScrollAction.isDisposed();

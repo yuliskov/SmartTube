@@ -47,7 +47,7 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
-    public void onScrollEnd(VideoGroup group) {
+    public void onScrollEnd(Video item) {
         // NOP
     }
 

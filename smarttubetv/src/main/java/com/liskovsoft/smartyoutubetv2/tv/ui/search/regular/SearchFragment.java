@@ -251,7 +251,7 @@ public class SearchFragment extends SearchSupportFragment
             int index = mAdapter.indexOf(item);
 
             if (index > (size - ViewUtil.ROW_SCROLL_CONTINUE_NUM)) {
-                mSearchPresenter.onScrollEnd(mAdapter.getLastGroup());
+                mSearchPresenter.onScrollEnd(item);
             }
         }
     }

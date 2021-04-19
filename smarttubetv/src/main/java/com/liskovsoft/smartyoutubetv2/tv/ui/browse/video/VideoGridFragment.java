@@ -124,15 +124,15 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
 
         mGridAdapter.append(group);
 
-        updatePosition();
+        restorePosition();
     }
 
-    private void updatePosition() {
+    private void restorePosition() {
         setPosition(mSelectedItemIndex);
 
-        // Item not found? Load next group.
+        // Item not found? Lookup item in next group.
         if (mSelectedItemIndex != -1) {
-            mMainPresenter.onScrollEnd(mGridAdapter.getLastGroup());
+            mMainPresenter.onScrollEnd((Video) mGridAdapter.get(mGridAdapter.size() - 1));
         }
     }
 
@@ -192,7 +192,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
             int index = mGridAdapter.indexOf(item);
 
             if (index > (size - ViewUtil.GRID_SCROLL_CONTINUE_NUM)) {
-                mMainPresenter.onScrollEnd(mGridAdapter.getLastGroup());
+                mMainPresenter.onScrollEnd(item);
             }
         }
     }

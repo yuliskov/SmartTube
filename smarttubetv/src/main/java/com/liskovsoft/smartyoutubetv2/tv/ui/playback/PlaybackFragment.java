@@ -516,7 +516,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
                 if (index != -1) {
                     int size = adapter.size();
                     if (index > (size - 4)) {
-                        mEventListener.onScrollEnd(adapter.getLastGroup());
+                        mEventListener.onScrollEnd(item);
                     }
                     break;
                 }

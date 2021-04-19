@@ -257,11 +257,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     @Override
-    public void onScrollEnd(VideoGroup group) {
-        if (group == null) {
-            Log.e(TAG, "onScrollEnd. Can't continue. Empty group.");
+    public void onScrollEnd(Video item) {
+        if (item == null) {
+            Log.e(TAG, "Can't scroll. Video is null.");
             return;
         }
+
+        VideoGroup group = item.group;
 
         Log.d(TAG, "onScrollEnd. Group title: " + group.getTitle());
 
