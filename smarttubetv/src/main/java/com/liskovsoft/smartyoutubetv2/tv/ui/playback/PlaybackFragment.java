@@ -966,7 +966,9 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void showDebugView(boolean show) {
-        mDebugInfoManager.show(show);
+        if (mDebugInfoManager != null) {
+            mDebugInfoManager.show(show);
+        }
     }
 
     @Override
