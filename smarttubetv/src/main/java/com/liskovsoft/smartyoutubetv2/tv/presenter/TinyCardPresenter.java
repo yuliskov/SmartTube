@@ -21,9 +21,4 @@ public class TinyCardPresenter extends CardPresenter {
     protected boolean isContentEnabled() {
         return false;
     }
-
-    @Override
-    protected boolean isBadgeEnabled() {
-        return false;
-    }
 }
