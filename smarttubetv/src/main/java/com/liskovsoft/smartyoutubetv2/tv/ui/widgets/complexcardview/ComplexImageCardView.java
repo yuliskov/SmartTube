@@ -3,20 +3,18 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.TextUtils.TruncateAt;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import androidx.leanback.widget.ImageCardView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.ui.common.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 public class ComplexImageCardView extends ImageCardView {
     private ComplexImageView mComplexImageView;
     private Handler mHandler;
     private boolean mIsCardTextAutoScrollEnabled;
+    private boolean mIsBadgeEnabled;
 
     public ComplexImageCardView(Context context) {
         super(context);
@@ -74,7 +72,9 @@ public class ComplexImageCardView extends ImageCardView {
      * Sets the badge text.
      */
     public void setBadgeText(String text) {
-        mComplexImageView.setBadgeText(text);
+        if (mIsBadgeEnabled) {
+            mComplexImageView.setBadgeText(text);
+        }
     }
 
     public void setBadgeColor(int color) {
@@ -121,6 +121,10 @@ public class ComplexImageCardView extends ImageCardView {
 
         titleView.setMaxLines(lines);
         titleView.setLines(lines);
+    }
+
+    public void enableBadge(boolean enabled) {
+        mIsBadgeEnabled = enabled;
     }
 
     public void enableTextAutoScroll(boolean enabled) {

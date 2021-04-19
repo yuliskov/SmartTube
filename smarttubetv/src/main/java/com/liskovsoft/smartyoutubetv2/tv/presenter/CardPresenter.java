@@ -74,6 +74,7 @@ public class CardPresenter extends CustomEventsPresenter {
         cardView.enableTextAutoScroll(mIsCardTextAutoScrollEnabled);
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
+        cardView.enableBadge(isBadgeEnabled());
         cardView.enableTitle(isTitleEnabled());
         cardView.enableContent(isContentEnabled());
         updateCardBackgroundColor(cardView, false);
@@ -171,6 +172,10 @@ public class CardPresenter extends CustomEventsPresenter {
     }
 
     protected boolean isTitleEnabled() {
+        return true;
+    }
+
+    protected boolean isBadgeEnabled() {
         return true;
     }
 
