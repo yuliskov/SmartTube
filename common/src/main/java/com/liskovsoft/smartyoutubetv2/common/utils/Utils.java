@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.utils;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -217,7 +216,9 @@ public class Utils {
     public static void openLink(Context context, String url) {
         try {
             openLinkInTabs(context, url);
-        } catch (SecurityException | ActivityNotFoundException e) { // Permission Denial on Android 9/Chrome Tabs not found
+        } catch (Exception e) {
+            // Permission Denial on Android 9 (SecurityException)
+            // Chrome Tabs not found (ActivityNotFoundException)
             Helpers.openLink(context, url); // revert to simple in-browser page
         }
     }

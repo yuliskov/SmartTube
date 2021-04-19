@@ -105,7 +105,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                 try {
                     getContext().sendBroadcast(intent);
                 } catch (Exception e) {
-                    // Fix NPE on MX9Pro (rk3328  7.1.2)
+                    // NullPointerException on MX9Pro (rk3328  7.1.2)
                 }
             }
         } else {
