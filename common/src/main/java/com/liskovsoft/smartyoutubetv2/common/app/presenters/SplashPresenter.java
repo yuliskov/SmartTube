@@ -102,7 +102,11 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             if (getContext() != null) {
                 Log.d(TAG, "Starting channels receiver...");
                 Intent intent = new Intent(getContext(), clazz);
-                getContext().sendBroadcast(intent);
+                try {
+                    getContext().sendBroadcast(intent);
+                } catch (Exception e) {
+                    // Fix NPE on MX9Pro (rk3328  7.1.2)
+                }
             }
         } else {
             Log.e(TAG, "Channels receiver class not found: " + CHANNELS_RECEIVER_CLASS_NAME);
