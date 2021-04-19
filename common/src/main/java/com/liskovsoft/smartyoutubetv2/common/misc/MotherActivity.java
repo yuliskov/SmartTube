@@ -37,7 +37,11 @@ public class MotherActivity extends FragmentActivity {
     }
 
     public void finishReally() {
-        super.finish();
+        try {
+            super.finish();
+        } catch (Exception e) {
+            // TextView not attached to window manager (IllegalArgumentException)
+        }
     }
 
     @Override
