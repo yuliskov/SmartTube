@@ -39,7 +39,7 @@ public class ChannelCardPresenter extends Presenter {
         View container = LayoutInflater.from(parent.getContext()).inflate(R.layout.channel_card, null);
         container.setBackgroundColor(mDefaultBackgroundColor);
 
-        TextView textView = container.findViewById(R.id.settings_title);
+        TextView textView = container.findViewById(R.id.channel_title);
         textView.setBackgroundColor(mDefaultBackgroundColor);
         textView.setTextColor(mDefaultTextColor);
 
@@ -64,13 +64,13 @@ public class ChannelCardPresenter extends Presenter {
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {
         SettingsItem settingsItem = (SettingsItem) item;
 
-        TextView textView = viewHolder.view.findViewById(R.id.settings_title);
+        TextView textView = viewHolder.view.findViewById(R.id.channel_title);
 
         textView.setText(settingsItem.title);
 
         if (settingsItem.imageResId > 0) {
             Context context = viewHolder.view.getContext();
-            ImageView imageView = viewHolder.view.findViewById(R.id.settings_image);
+            ImageView imageView = viewHolder.view.findViewById(R.id.channel_image);
             imageView.setImageDrawable(ContextCompat.getDrawable(context, settingsItem.imageResId));
             imageView.setVisibility(View.VISIBLE);
         }
