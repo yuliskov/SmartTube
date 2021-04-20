@@ -5,7 +5,7 @@
     <string name="header_subscriptions">Inscrições</string>
     <string name="header_history">Histórico</string>
     <string name="header_music">Música</string>
-    <string name="header_news">Nóticias</string>
+    <string name="header_news">Notícias</string>
     <string name="header_gaming">Jogos</string>
     <string name="header_playlists">Biblioteca</string>
     <string name="header_settings">Configurações</string>
@@ -17,7 +17,7 @@
     <string name="library_signin_subtitle">Faça login para ver sua biblioteca</string>
     <string name="action_signin">FAZER LOGIN</string>
     <string name="title_video_formats">Formatos de Vídeo</string>
-    <string name="title_audio_formats">Formatos de Audio</string>
+    <string name="title_audio_formats">Formatos de Áudio</string>
     <string name="subtitle_category_title">Legendas</string>
     <string name="video_max_quality">Automático (Qualidade Máxima)</string>
     <string name="audio_max_quality">Automático (Qualidade Máxima)</string>
@@ -28,7 +28,7 @@
     <string name="not_implemented">Não Implementado</string>
     <string name="option_background_playback_off">Desativado</string>
     <string name="option_background_playback_pip">Picture in Picture (PIP)</string>
-    <string name="option_background_playback_only_audio">Somente Audio</string>
+    <string name="option_background_playback_only_audio">Somente Áudio</string>
     <string name="playback_settings">Configurações de Reprodução</string>
     <string name="video_speed">Velocidade do Vídeo</string>
     <string name="resolution_switch">Mudar Resolução</string>
@@ -40,7 +40,7 @@
     <string name="install_update">Instalar Atualização</string>
     <string name="msg_category_is_empty">Ops! Não há Nada aqui.</string>
     <string name="dialog_add_to_playlist">Adicionar à Playlist</string>
-    <string name="msg_signed_users_only">Apenas Usuários Logado</string>
+    <string name="msg_signed_users_only">Apenas Usuários Logados</string>
     <string name="msg_cant_load_content">Ops. O Conteúdo não pode ser Carregado.</string>
     <string name="title_video_presets">Predefinições de Vídeo</string>
     <string name="settings_accounts">Contas</string>
@@ -103,7 +103,7 @@
     <string name="dialog_search">Pesquisa</string>
     <string name="instant_voice_search">Pesquisa por Voz</string>
     <string name="option_background_playback_behind">Reproduzir em Segundo Plano</string>
-    <string name="next_video_info_is_not_loaded_yet">s Informações do Próximo Vídeo ainda não foram Carregadas</string>
+    <string name="next_video_info_is_not_loaded_yet">As Informações do Próximo Vídeo ainda não foram Carregadas</string>
     <string name="card_multiline_title">Títulos Multilinhas</string>
     <string name="cards_style">Estilo dos Cartões</string>
     <string name="repeat_mode_all">Reproduzir Todos os Vídeos um por um</string>
