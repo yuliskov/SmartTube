@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.util;
 import android.text.Layout;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.leanback.widget.FocusHighlight;
 import androidx.leanback.widget.RowPresenter;
@@ -79,5 +80,12 @@ public class ViewUtil {
         if (view != null) {
             view.setVisibility(enabled ? View.VISIBLE : View.GONE);
         }
+    }
+
+    public static void setDimensions(View view, int width, int height) {
+        ViewGroup.LayoutParams lp = view.getLayoutParams();
+        lp.width = width;
+        lp.height = height;
+        view.setLayoutParams(lp);
     }
 }

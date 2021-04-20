@@ -1,25 +1,43 @@
 package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils.TruncateAt;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.leanback.widget.Presenter;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
+import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 public class ChannelCardPresenter extends Presenter {
+    private static final String TAG = CardPresenter.class.getSimpleName();
     private final Fragment mainFragment;
     private int mDefaultBackgroundColor;
     private int mDefaultTextColor;
     private int mSelectedBackgroundColor;
     private int mSelectedTextColor;
+    private Drawable mDefaultCardImage;
+    private int mWidth;
+    private int mHeight;
 
     public ChannelCardPresenter(Fragment mainFragment) {
         this.mainFragment = mainFragment;
@@ -27,16 +45,22 @@ public class ChannelCardPresenter extends Presenter {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
-        mDefaultBackgroundColor =
-                ContextCompat.getColor(parent.getContext(), Helpers.getThemeAttr(parent.getContext(), R.attr.cardDefaultBackground));
-        mDefaultTextColor =
-                ContextCompat.getColor(parent.getContext(), R.color.card_default_text);
-        mSelectedBackgroundColor =
-                ContextCompat.getColor(parent.getContext(), R.color.card_selected_background_white);
-        mSelectedTextColor =
-                ContextCompat.getColor(parent.getContext(), R.color.card_selected_text_grey);
+        Context context = parent.getContext();
 
-        View container = LayoutInflater.from(parent.getContext()).inflate(R.layout.channel_card, null);
+        mDefaultBackgroundColor =
+                ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardDefaultBackground));
+        mDefaultTextColor =
+                ContextCompat.getColor(context, R.color.card_default_text);
+        mSelectedBackgroundColor =
+                ContextCompat.getColor(context, R.color.card_selected_background_white);
+        mSelectedTextColor =
+                ContextCompat.getColor(context, R.color.card_selected_text_grey);
+        mDefaultCardImage = new ColorDrawable(ContextCompat.getColor(context, R.color.lb_grey));
+
+        updateDimensions(context);
+
+        View container = LayoutInflater.from(context).inflate(R.layout.channel_card, null);
+        ViewUtil.setDimensions(container, mWidth, mHeight);
         container.setBackgroundColor(mDefaultBackgroundColor);
 
         TextView textView = container.findViewById(R.id.channel_title);
@@ -62,22 +86,27 @@ public class ChannelCardPresenter extends Presenter {
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {
-        SettingsItem settingsItem = (SettingsItem) item;
+        Context context = viewHolder.view.getContext();
+        Video video = (Video) item;
 
         TextView textView = viewHolder.view.findViewById(R.id.channel_title);
+        textView.setText(video.title);
 
-        textView.setText(settingsItem.title);
+        ImageView imageView = viewHolder.view.findViewById(R.id.channel_image);
+        imageView.setVisibility(View.VISIBLE);
 
-        if (settingsItem.imageResId > 0) {
-            Context context = viewHolder.view.getContext();
-            ImageView imageView = viewHolder.view.findViewById(R.id.channel_image);
-            imageView.setImageDrawable(ContextCompat.getDrawable(context, settingsItem.imageResId));
-            imageView.setVisibility(View.VISIBLE);
-        }
+        Glide.with(context)
+                .load(video.cardImageUrl)
+                .apply(RequestOptions.errorOf(mDefaultCardImage))
+                .listener(mErrorListener)
+                .into(imageView);
     }
 
     @Override
     public void onUnbindViewHolder(ViewHolder viewHolder) {
+        // Remove references to images so that the garbage collector can free up memory.
+        ImageView imageView = viewHolder.view.findViewById(R.id.channel_image);
+        imageView.setImageDrawable(null);
     }
 
     private void disableMarquee(TextView... textViews) {
@@ -101,4 +130,28 @@ public class ChannelCardPresenter extends Presenter {
             textView.setHorizontallyScrolling(true);
         }
     }
+
+    private void updateDimensions(Context context) {
+        Pair<Integer, Integer> dimens = getCardDimensPx(context);
+
+        mWidth = dimens.first;
+        mHeight = dimens.second;
+    }
+
+    protected Pair<Integer, Integer> getCardDimensPx(Context context) {
+        return GridFragmentHelper.getCardDimensPx(context, R.dimen.channel_card_width, R.dimen.channel_card_height, MainUIData.instance(context).getVideoGridScale());
+    }
+
+    private final RequestListener<Drawable> mErrorListener = new RequestListener<Drawable>() {
+        @Override
+        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+            Log.e(TAG, "Glide load failed: " + e);
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+            return false;
+        }
+    };
 }
