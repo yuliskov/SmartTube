@@ -16,6 +16,9 @@ public abstract class CardEventsPresenter extends Presenter {
         mMenuPressedListener = listener;
     }
 
+    /**
+     * Don't forget to call this method in descendants!
+     */
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {
         if (mLongPressedListener != null) {

@@ -11,6 +11,7 @@
 
     <dimen name="channel_card_width">150dp</dimen>
     <dimen name="channel_card_height">10dp</dimen>
+    <dimen name="channel_card_text_width">140dp</dimen>
 
     <dimen name="settings_image_size">70dp</dimen>
     <!-- Old value: 15dp -->

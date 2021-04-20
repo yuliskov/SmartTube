@@ -54,7 +54,6 @@ public class ChannelCardPresenter extends CardEventsPresenter {
         updateDimensions(context);
 
         View container = LayoutInflater.from(context).inflate(R.layout.channel_card, null);
-        ViewUtil.setDimensions(container, mWidth, mHeight);
         container.setBackgroundColor(mDefaultBackgroundColor);
 
         TextView textView = container.findViewById(R.id.channel_title);
@@ -80,8 +79,12 @@ public class ChannelCardPresenter extends CardEventsPresenter {
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {
+        super.onBindViewHolder(viewHolder, item);
+
         Context context = viewHolder.view.getContext();
         Video video = (Video) item;
+
+        //ViewUtil.setDimensions(viewHolder.view, mWidth, mHeight);
 
         TextView textView = viewHolder.view.findViewById(R.id.channel_title);
         textView.setText(video.title);
@@ -133,7 +136,7 @@ public class ChannelCardPresenter extends CardEventsPresenter {
     }
 
     protected Pair<Integer, Integer> getCardDimensPx(Context context) {
-        return GridFragmentHelper.getCardDimensPx(context, R.dimen.channel_card_width, R.dimen.channel_card_height, MainUIData.instance(context).getVideoGridScale());
+        return GridFragmentHelper.getCardDimensPx(context, R.dimen.channel_card_text_width, R.dimen.channel_card_height, 1);
     }
 
     private final RequestListener<Drawable> mErrorListener = new RequestListener<Drawable>() {
