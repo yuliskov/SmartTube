@@ -91,10 +91,10 @@ public class ChannelCardPresenter extends CardEventsPresenter {
         TextView textView = viewHolder.view.findViewById(R.id.channel_title);
         textView.setText(video.title);
 
-        if (video.hasNewContent) {
-            textView.setBackgroundColor(mNewContentBackgroundColor);
-            textView.setTag(R.id.channel_new_content, true);
-        }
+        // We should setup props each time because object may be reused by the underlying RecyclerView
+        textView.setBackgroundColor(video.hasNewContent ? mNewContentBackgroundColor : mDefaultBackgroundColor);
+        textView.setTag(R.id.channel_new_content, video.hasNewContent ? true : null);
+
 
         ImageView imageView = viewHolder.view.findViewById(R.id.channel_image);
         imageView.setVisibility(View.VISIBLE);
