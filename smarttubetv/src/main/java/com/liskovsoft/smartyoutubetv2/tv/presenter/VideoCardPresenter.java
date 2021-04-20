@@ -29,8 +29,8 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview.ComplexImage
  * A CardPresenter is used to generate Views and bind Objects to them on demand.
  * It contains an Image CardView
  */
-public class CardPresenter extends CardEventsPresenter {
-    private static final String TAG = CardPresenter.class.getSimpleName();
+public class VideoCardPresenter extends CardEventsPresenter {
+    private static final String TAG = VideoCardPresenter.class.getSimpleName();
     private int mDefaultBackgroundColor = -1;
     private int mDefaultTextColor = -1;
     private int mSelectedBackgroundColor = -1;

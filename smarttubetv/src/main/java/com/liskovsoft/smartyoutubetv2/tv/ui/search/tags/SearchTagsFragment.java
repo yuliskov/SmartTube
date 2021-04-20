@@ -10,7 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.search.MediaServiceSearc
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.vineyard.SearchTagsFragmentBase;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
@@ -21,7 +21,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     private VideoGroupObjectAdapter mItemResultsAdapter;
     private String mSearchQuery;
     private String mNewQuery;
-    private CardPresenter mCardPresenter;
+    private VideoCardPresenter mCardPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
 
         mSearchPresenter = SearchPresenter.instance(getContext());
         mSearchPresenter.setView(this);
-        mCardPresenter = new CardPresenter();
+        mCardPresenter = new VideoCardPresenter();
         mItemResultsAdapter = new VideoGroupObjectAdapter(mCardPresenter);
 
         setupEventListeners();

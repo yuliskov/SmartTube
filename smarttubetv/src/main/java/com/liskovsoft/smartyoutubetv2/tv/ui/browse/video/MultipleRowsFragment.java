@@ -18,7 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
@@ -39,7 +39,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     private Map<Integer, VideoGroupObjectAdapter> mVideoGroupAdapters;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private VideoGroupPresenter mMainPresenter;
-    private CardPresenter mCardPresenter;
+    private VideoCardPresenter mCardPresenter;
     private int mSelectedRowIndex = -1;
 
     @Override
@@ -47,7 +47,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         super.onCreate(savedInstanceState);
         
         mMainPresenter = getMainPresenter();
-        mCardPresenter = new CardPresenter();
+        mCardPresenter = new VideoCardPresenter();
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
 
         setupAdapter();

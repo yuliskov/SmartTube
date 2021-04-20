@@ -53,7 +53,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.renderer.CustomO
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
@@ -83,7 +83,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private PlaybackPresenter mPlaybackPresenter;
     private ArrayObjectAdapter mRowsAdapter;
     private ListRowPresenter mRowPresenter;
-    private CardPresenter mCardPresenter;
+    private VideoCardPresenter mCardPresenter;
     private Map<Integer, VideoGroupObjectAdapter> mMediaGroupAdapters;
     private PlayerEventListener mEventListener;
     private PlayerController mExoPlayerController;
@@ -463,7 +463,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             }
         };
 
-        mCardPresenter = new CardPresenter();
+        mCardPresenter = new VideoCardPresenter();
     }
 
     private void setupEventListeners() {

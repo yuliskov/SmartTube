@@ -12,8 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.leanback.widget.Presenter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
@@ -25,12 +23,12 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.CardEventsPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
-public class ChannelCardPresenter extends Presenter {
-    private static final String TAG = CardPresenter.class.getSimpleName();
-    private final Fragment mainFragment;
+public class ChannelCardPresenter extends CardEventsPresenter {
+    private static final String TAG = VideoCardPresenter.class.getSimpleName();
     private int mDefaultBackgroundColor;
     private int mDefaultTextColor;
     private int mSelectedBackgroundColor;
@@ -38,10 +36,6 @@ public class ChannelCardPresenter extends Presenter {
     private Drawable mDefaultCardImage;
     private int mWidth;
     private int mHeight;
-
-    public ChannelCardPresenter(Fragment mainFragment) {
-        this.mainFragment = mainFragment;
-    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {

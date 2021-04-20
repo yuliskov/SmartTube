@@ -18,9 +18,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGrou
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomVerticalGridPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.TinyCardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.CardEventsPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
@@ -39,8 +40,8 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
     private final List<VideoGroup> mPendingUpdates2 = new ArrayList<>();
     private UriBackgroundManager mBackgroundManager;
     private VideoGroupPresenter mMainPresenter;
-    private CardPresenter mCardPresenter1;
-    private CardPresenter mCardPresenter2;
+    private CardEventsPresenter mCardPresenter1;
+    private CardEventsPresenter mCardPresenter2;
     private int mSelectedItemIndex1 = -1;
     private int mSelectedItemIndex2 = -1;
     private float mVideoGridScale;
@@ -50,8 +51,8 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         super.onCreate(savedInstanceState);
 
         mMainPresenter = getMainPresenter();
-        mCardPresenter1 = new TinyCardPresenter();
-        mCardPresenter2 = new CardPresenter();
+        mCardPresenter1 = new ChannelCardPresenter();
+        mCardPresenter2 = new VideoCardPresenter();
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
         mVideoGridScale = MainUIData.instance(getActivity()).getVideoGridScale();
 

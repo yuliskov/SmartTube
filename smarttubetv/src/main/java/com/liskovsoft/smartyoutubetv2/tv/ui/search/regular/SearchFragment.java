@@ -31,7 +31,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
@@ -53,7 +53,7 @@ public class SearchFragment extends SearchSupportFragment
     private UriBackgroundManager mBackgroundManager;
     private VideoGroupObjectAdapter mAdapter;
     private ProgressBarManager mProgressBarManager;
-    private CardPresenter mCardPresenter;
+    private VideoCardPresenter mCardPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,7 +62,7 @@ public class SearchFragment extends SearchSupportFragment
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
         mSearchPresenter = SearchPresenter.instance(getContext());
         mSearchPresenter.setView(this);
-        mCardPresenter = new CardPresenter();
+        mCardPresenter = new VideoCardPresenter();
 
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         mProgressBarManager = new ProgressBarManager();

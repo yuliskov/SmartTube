@@ -66,7 +66,7 @@ public class SettingsGridFragment extends GridFragment implements SettingsCatego
         setGridPresenter(presenter);
 
         if (mSettingsAdapter == null) {
-            SettingsCardPresenter gridPresenter = new SettingsCardPresenter(this);
+            SettingsCardPresenter gridPresenter = new SettingsCardPresenter();
             mSettingsAdapter = new ArrayObjectAdapter(gridPresenter);
             setAdapter(mSettingsAdapter);
         }

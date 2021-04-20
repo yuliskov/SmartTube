@@ -15,7 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGrou
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomVerticalGridPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
@@ -33,7 +33,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private UriBackgroundManager mBackgroundManager;
     private VideoGroupPresenter mMainPresenter;
-    private CardPresenter mCardPresenter;
+    private VideoCardPresenter mCardPresenter;
     private int mSelectedItemIndex = -1;
     private float mVideoGridScale;
 
@@ -42,7 +42,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
         super.onCreate(savedInstanceState);
 
         mMainPresenter = getMainPresenter();
-        mCardPresenter = new CardPresenter();
+        mCardPresenter = new VideoCardPresenter();
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
         mVideoGridScale = MainUIData.instance(getActivity()).getVideoGridScale();
 
