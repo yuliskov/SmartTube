@@ -21,17 +21,16 @@ import com.bumptech.glide.request.target.Target;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.CardEventsPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
-import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 public class ChannelCardPresenter extends CardEventsPresenter {
     private static final String TAG = VideoCardPresenter.class.getSimpleName();
     private int mDefaultBackgroundColor;
     private int mDefaultTextColor;
     private int mSelectedBackgroundColor;
+    private int mNewContentBackgroundColor;
     private int mSelectedTextColor;
     private Drawable mDefaultCardImage;
     private int mWidth;
@@ -45,6 +44,8 @@ public class ChannelCardPresenter extends CardEventsPresenter {
                 ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardDefaultBackground));
         mDefaultTextColor =
                 ContextCompat.getColor(context, R.color.card_default_text);
+        mNewContentBackgroundColor =
+                ContextCompat.getColor(context, R.color.dark_red);
         mSelectedBackgroundColor =
                 ContextCompat.getColor(context, R.color.card_selected_background_white);
         mSelectedTextColor =
@@ -61,7 +62,8 @@ public class ChannelCardPresenter extends CardEventsPresenter {
         textView.setTextColor(mDefaultTextColor);
 
         container.setOnFocusChangeListener((v, hasFocus) -> {
-            int backgroundColor = hasFocus ? mSelectedBackgroundColor : mDefaultBackgroundColor;
+            int backgroundColor = hasFocus ? mSelectedBackgroundColor :
+                    textView.getTag(R.id.channel_new_content) != null ? mNewContentBackgroundColor : mDefaultBackgroundColor;
             int textColor = hasFocus ? mSelectedTextColor : mDefaultTextColor;
             
             textView.setBackgroundColor(backgroundColor);
@@ -88,6 +90,11 @@ public class ChannelCardPresenter extends CardEventsPresenter {
 
         TextView textView = viewHolder.view.findViewById(R.id.channel_title);
         textView.setText(video.title);
+
+        if (video.hasNewContent) {
+            textView.setBackgroundColor(mNewContentBackgroundColor);
+            textView.setTag(R.id.channel_new_content, true);
+        }
 
         ImageView imageView = viewHolder.view.findViewById(R.id.channel_image);
         imageView.setVisibility(View.VISIBLE);
