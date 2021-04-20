@@ -37,7 +37,7 @@ public class GridFragmentHelper {
     }
 
     /**
-     * Calculate card dimension depending on supplied params<br/>
+     * Calculate card dimension depending on card scale param<br/>
      * Trying to not leave empty space (useful in grids).
      */
     public static Pair<Integer, Integer> getCardDimensPx(Context context, int cardWidthResId, int cardHeightResId, float cardScale) {
