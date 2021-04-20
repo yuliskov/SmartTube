@@ -14,7 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.SettingsItemPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.SettingsCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.SettingsCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
@@ -62,11 +62,11 @@ public class SettingsGridFragment extends GridFragment implements SettingsCatego
 
     private void setupAdapter() {
         VerticalGridPresenter presenter = new VerticalGridPresenter(ZOOM_FACTOR, false);
-        presenter.setNumberOfColumns(GridFragmentHelper.getMaxColsNum(getContext(), R.dimen.grid_item_width));
+        presenter.setNumberOfColumns(GridFragmentHelper.getMaxColsNum(getContext(), R.dimen.settings_card_width));
         setGridPresenter(presenter);
 
         if (mSettingsAdapter == null) {
-            SettingsItemPresenter gridPresenter = new SettingsItemPresenter(this);
+            SettingsCardPresenter gridPresenter = new SettingsCardPresenter(this);
             mSettingsAdapter = new ArrayObjectAdapter(gridPresenter);
             setAdapter(mSettingsAdapter);
         }

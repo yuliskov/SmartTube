@@ -14,14 +14,14 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
-public class SettingsItemPresenter extends Presenter {
+public class ChannelCardPresenter extends Presenter {
     private final Fragment mainFragment;
     private int mDefaultBackgroundColor;
     private int mDefaultTextColor;
     private int mSelectedBackgroundColor;
     private int mSelectedTextColor;
 
-    public SettingsItemPresenter(Fragment mainFragment) {
+    public ChannelCardPresenter(Fragment mainFragment) {
         this.mainFragment = mainFragment;
     }
 
@@ -36,7 +36,7 @@ public class SettingsItemPresenter extends Presenter {
         mSelectedTextColor =
                 ContextCompat.getColor(parent.getContext(), R.color.card_selected_text_grey);
 
-        View container = LayoutInflater.from(parent.getContext()).inflate(R.layout.settings_item, null);
+        View container = LayoutInflater.from(parent.getContext()).inflate(R.layout.channel_card, null);
         container.setBackgroundColor(mDefaultBackgroundColor);
 
         TextView textView = container.findViewById(R.id.settings_title);

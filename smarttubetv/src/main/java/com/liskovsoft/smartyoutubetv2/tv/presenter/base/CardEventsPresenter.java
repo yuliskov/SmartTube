@@ -4,7 +4,7 @@ import android.view.KeyEvent;
 import androidx.leanback.widget.Presenter;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 
-public abstract class CustomEventsPresenter extends Presenter {
+public abstract class CardEventsPresenter extends Presenter {
     private OnItemViewPressedListener mLongPressedListener;
     private OnItemViewPressedListener mMenuPressedListener;
 

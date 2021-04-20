@@ -9,6 +9,16 @@
     <dimen name="tiny_card_width">150dp</dimen>
     <dimen name="tiny_card_height">25dp</dimen>
 
+    <dimen name="channel_card_width">150dp</dimen>
+    <dimen name="channel_card_height">10dp</dimen>
+
+    <dimen name="settings_image_size">70dp</dimen>
+    <!-- Old value: 15dp -->
+    <dimen name="settings_image_padding">25dp</dimen>
+    <!-- Old value: 100dp -->
+    <dimen name="settings_card_width">120dp</dimen>
+    <dimen name="settings_card_height">100dp</dimen>
+
     <!-- Card view default size -->
     <!--
     <dimen name="lb_basic_card_title_text_size">14sp</dimen>
@@ -50,13 +60,6 @@
     <dimen name="lb_basic_card_title_text_size">16sp</dimen>
     <dimen name="lb_basic_card_content_text_size">12sp</dimen>
     <dimen name="lb_basic_card_info_badge_size">16dp</dimen>
-    
-    <dimen name="grid_image_size">70dp</dimen>
-    <!--<dimen name="grid_image_padding">15dp</dimen>-->
-    <!--<dimen name="grid_item_width">100dp</dimen>-->
-    <dimen name="grid_image_padding">25dp</dimen>
-    <dimen name="grid_item_width">120dp</dimen>
-    <dimen name="grid_item_height">100dp</dimen>
 
     <!-- Elements below aren't used in the app -->
     <dimen name="spinner_width">50dp</dimen>
