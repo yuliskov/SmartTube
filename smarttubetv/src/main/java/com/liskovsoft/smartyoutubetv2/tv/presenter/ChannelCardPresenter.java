@@ -140,7 +140,7 @@ public class ChannelCardPresenter extends CardEventsPresenter {
     private void updateDimensions(Context context) {
         Pair<Integer, Integer> dimens = getCardDimensPx(context);
 
-        int horizontalGridSpacePx = 45;
+        int horizontalGridSpacePx = 45; // padding + margin for grid column
 
         mWidth = dimens.first - horizontalGridSpacePx;
         mHeight = dimens.second;
