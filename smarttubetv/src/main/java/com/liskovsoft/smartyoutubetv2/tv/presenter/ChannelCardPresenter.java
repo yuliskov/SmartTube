@@ -21,9 +21,11 @@ import com.bumptech.glide.request.target.Target;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.CardEventsPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 public class ChannelCardPresenter extends CardEventsPresenter {
     private static final String TAG = VideoCardPresenter.class.getSimpleName();
@@ -86,7 +88,7 @@ public class ChannelCardPresenter extends CardEventsPresenter {
         Context context = viewHolder.view.getContext();
         Video video = (Video) item;
 
-        //ViewUtil.setDimensions(viewHolder.view, mWidth, mHeight);
+        ViewUtil.setDimensions(viewHolder.view.findViewById(R.id.channel_card_wrapper), mWidth, -1); // don't do auto height
 
         TextView textView = viewHolder.view.findViewById(R.id.channel_title);
         textView.setText(video.title);
@@ -138,12 +140,14 @@ public class ChannelCardPresenter extends CardEventsPresenter {
     private void updateDimensions(Context context) {
         Pair<Integer, Integer> dimens = getCardDimensPx(context);
 
-        mWidth = dimens.first;
+        int horizontalGridSpacePx = 45;
+
+        mWidth = dimens.first - horizontalGridSpacePx;
         mHeight = dimens.second;
     }
 
     protected Pair<Integer, Integer> getCardDimensPx(Context context) {
-        return GridFragmentHelper.getCardDimensPx(context, R.dimen.channel_card_text_width, R.dimen.channel_card_height, 1);
+        return GridFragmentHelper.getCardDimensPx(context, R.dimen.channel_card_width, R.dimen.channel_card_height, MainUIData.instance(context).getVideoGridScale());
     }
 
     private final RequestListener<Drawable> mErrorListener = new RequestListener<Drawable>() {

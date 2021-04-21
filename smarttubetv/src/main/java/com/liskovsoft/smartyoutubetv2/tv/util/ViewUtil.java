@@ -87,8 +87,12 @@ public class ViewUtil {
             ViewGroup.LayoutParams lp = view.getLayoutParams();
 
             if (lp != null) {
-                lp.width = width;
-                lp.height = height;
+                if (width > 0) {
+                    lp.width = width;
+                }
+                if (height > 0) {
+                    lp.height = height;
+                }
                 view.setLayoutParams(lp);
             }
         }
