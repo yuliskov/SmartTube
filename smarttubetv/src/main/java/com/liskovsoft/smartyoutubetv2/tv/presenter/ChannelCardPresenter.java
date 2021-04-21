@@ -140,14 +140,16 @@ public class ChannelCardPresenter extends CardEventsPresenter {
     private void updateDimensions(Context context) {
         Pair<Integer, Integer> dimens = getCardDimensPx(context);
 
-        int horizontalGridSpacePx = 45; // padding + margin for grid column
-
-        mWidth = dimens.first - horizontalGridSpacePx;
+        mWidth = dimens.first;
         mHeight = dimens.second;
     }
 
     protected Pair<Integer, Integer> getCardDimensPx(Context context) {
-        return GridFragmentHelper.getCardDimensPx(context, R.dimen.channel_card_width, R.dimen.channel_card_height, MainUIData.instance(context).getVideoGridScale());
+        return GridFragmentHelper.getCardDimensPx(
+                context, R.dimen.channel_card_width,
+                R.dimen.channel_card_height,
+                MainUIData.instance(context).getVideoGridScale(),
+                true);
     }
 
     private final RequestListener<Drawable> mErrorListener = new RequestListener<Drawable>() {

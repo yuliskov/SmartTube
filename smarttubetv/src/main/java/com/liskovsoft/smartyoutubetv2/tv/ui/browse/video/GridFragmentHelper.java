@@ -36,11 +36,15 @@ public class GridFragmentHelper {
         return (displayWidthPx - displayWidthPx * 0.1f * uiScale) / (cardWidthPx + cardSpacingPx);
     }
 
+    public static Pair<Integer, Integer> getCardDimensPx(Context context, int cardWidthResId, int cardHeightResId, float cardScale) {
+        return getCardDimensPx(context, cardWidthResId, cardHeightResId, cardScale, false);
+    }
+
     /**
      * Calculate card dimension depending on card scale param<br/>
      * Trying to not leave empty space (useful in grids).
      */
-    public static Pair<Integer, Integer> getCardDimensPx(Context context, int cardWidthResId, int cardHeightResId, float cardScale) {
+    public static Pair<Integer, Integer> getCardDimensPx(Context context, int cardWidthResId, int cardHeightResId, float cardScale, boolean isSingleColumn) {
         Resources res = context.getResources();
 
         float cardWidthPx = res.getDimensionPixelSize(cardWidthResId) * cardScale;
@@ -53,6 +57,10 @@ public class GridFragmentHelper {
 
         float width = cardWidthPx + cardWidthPx * colsReminder;
         float height = cardHeightPx + cardHeightPx * colsReminder;
+
+        if (isSingleColumn) { // single column grids have huge margin
+            width -= res.getDimensionPixelSize(R.dimen.grid_horizontal_margin);
+        }
 
         return new Pair<>((int) width, (int) height);
     }
