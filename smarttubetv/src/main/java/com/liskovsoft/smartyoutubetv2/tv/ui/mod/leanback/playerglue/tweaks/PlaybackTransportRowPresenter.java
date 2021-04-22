@@ -41,12 +41,11 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.SeekBar;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
-import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.OnControlClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.OnControlSelectedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue.QualityInfoListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.seekpreview.ThumbsBar;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue.TickleListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue.ControlsVisibilityListener;
 
 import java.util.Arrays;
 
@@ -116,7 +115,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
         // MOD: update quality info
         final QualityInfoListener mQualityInfoListener = this::setQualityInfo;
-        final TickleListener mTickleListener = this::updateDateTime;
+        final ControlsVisibilityListener mVisibilityListener = this::updateVisibility;
         TopEdgeFocusListener mTopEdgeFocusListener = null;
 
         final PlaybackControlsRow.OnPlaybackProgressCallback mListener =
@@ -727,9 +726,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             }
         }
 
-        void updateDateTime() {
+        void updateVisibility(boolean isVisible) {
             if (mPlayerData.isClockEnabled()) {
-                mDateTime.setText(DateFormatter.getCurrentTimeShort(mDateTime.getContext()));
                 mDateTime.setVisibility(View.VISIBLE);
             } else {
                 mDateTime.setVisibility(View.GONE);
