@@ -203,6 +203,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerData.enableClock(option.isSelected()),
                 mPlayerData.isClockEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_global_clock),
+                option -> mPlayerData.enableGlobalClock(option.isSelected()),
+                mPlayerData.isGlobalClockEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_remaining_time),
                 option -> mPlayerData.enableRemainingTime(option.isSelected()),
                 mPlayerData.isRemainingTimeEnabled()));

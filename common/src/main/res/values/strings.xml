@@ -39,7 +39,7 @@
     <string name="update_changelog">Changelog</string>
     <string name="install_update">Install update</string>
     <string name="msg_category_is_empty">Oops! There is nothing in here.</string>
-    <string name="dialog_add_to_playlist">Add to playlist</string>
+    <string name="dialog_add_to_playlist">Add/Remove from playlist</string>
     <string name="msg_signed_users_only">Signed users only</string>
     <string name="msg_cant_load_content">Oops. Can\'t load content.</string>
     <string name="title_video_presets">Video presets</string>
@@ -206,4 +206,5 @@
     <string name="video_aspect">Aspect ratio</string>
     <string name="player_tweaks">Developer options</string>
     <string name="header_uploads">Uploads</string>
+    <string name="player_show_global_clock">Show always on screen clock</string>
 </resources>

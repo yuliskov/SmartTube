@@ -31,6 +31,7 @@ public class PlayerData {
     private boolean mIsAbsoluteDateEnabled;
     private boolean mIsPauseOnSeekEnabled;
     private boolean mIsClockEnabled;
+    private boolean mIsGlobalClockEnabled;
     private boolean mIsRemainingTimeEnabled;
     private int mBackgroundMode;
     private FormatItem mVideoFormat;
@@ -120,6 +121,15 @@ public class PlayerData {
 
     public void enableClock(boolean enable) {
         mIsClockEnabled = enable;
+        persistData();
+    }
+
+    public boolean isGlobalClockEnabled() {
+        return mIsGlobalClockEnabled;
+    }
+
+    public void enableGlobalClock(boolean enable) {
+        mIsGlobalClockEnabled = enable;
         persistData();
     }
 
@@ -375,6 +385,7 @@ public class PlayerData {
         mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
         mIsRememberSpeedEachEnabled = Helpers.parseBoolean(split, 29, false);
         mVideoAspectRatio = Helpers.parseFloat(split, 30, PlaybackEngineController.ASPECT_RATIO_DEFAULT);
+        mIsGlobalClockEnabled = Helpers.parseBoolean(split, 31, false);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -389,6 +400,6 @@ public class PlayerData {
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs,
                 mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
                 mIsLowQualityEnabled, mIsSonyTimerFixEnabled, null, null, // old player tweaks
-                mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio));
+                mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled));
     }
 }

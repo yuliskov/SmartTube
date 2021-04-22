@@ -39,7 +39,7 @@
     <string name="update_changelog">Зміни</string>
     <string name="install_update">Встановити оновлення</string>
     <string name="msg_category_is_empty">Халепа! Тут нічого нема.</string>
-    <string name="dialog_add_to_playlist">Додати у плейлист</string>
+    <string name="dialog_add_to_playlist">Додати/Видалити із плейлиста</string>
     <string name="msg_signed_users_only">Необхідно увійти в обліковий запис</string>
     <string name="msg_cant_load_content">Неможливо завантажити вміст</string>
     <string name="title_video_presets">Відео пресети</string>
@@ -205,4 +205,5 @@
     <string name="video_aspect">Співвідношення сторін</string>
     <string name="player_tweaks">Для розробників</string>
     <string name="header_uploads">Завантаження</string>
+    <string name="player_show_global_clock">Відображати годинник завжди на екрані</string>
 </resources>

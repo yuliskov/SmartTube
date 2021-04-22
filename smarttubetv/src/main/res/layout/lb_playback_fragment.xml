@@ -39,16 +39,12 @@
         android:id="@+id/global_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="4sp"
-        android:paddingLeft="10sp"
-        android:paddingRight="10sp"
-        android:visibility="visible"
+        android:padding="10sp"
+        android:visibility="gone"
         android:layout_gravity="top|right"
         android:shadowColor="@color/black"
-        android:shadowDx="1.5"
-        android:shadowDy="1.3"
         android:shadowRadius="1.6"
-        android:textColor="@color/white"
+        android:textStyle="bold"
         style="?attr/playbackControlsTimeStyle"/>
 
     <androidx.leanback.widget.NonOverlappingFrameLayout

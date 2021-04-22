@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time;
+package com.liskovsoft.smartyoutubetv2.common.utils;
 
 import android.os.Handler;
 import android.os.Looper;
