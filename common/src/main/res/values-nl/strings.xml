@@ -206,4 +206,5 @@
     <string name="video_aspect">Beeldverhouding</string>
     <string name="player_tweaks">Ontwikkelaarsopties</string>
     <string name="header_uploads">Kanalen/Uploads</string>
+    <string name="player_show_global_clock">Klok altijd op scherm weergeven</string>
 </resources>
