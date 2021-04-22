@@ -146,7 +146,7 @@ public class PlaybackActivity extends LeanbackActivity {
         // More info: https://developer.android.com/guide/topics/ui/picture-in-picture#continuing_playback
 
         // User pressed back.
-        enterPIPMode();
+        //enterPIPMode();
 
         if (doNotDestroy()) {
             ViewManager.instance(this).startParentView(this);
@@ -193,7 +193,7 @@ public class PlaybackActivity extends LeanbackActivity {
     }
 
     @Override
-    public void onUserLeaveHint () {
+    public void onUserLeaveHint() {
         // Check that user not open dialog instead of really leaving the activity
         if (!AppSettingsPresenter.instance(this).isDialogShown()) {
             switch (mPlaybackFragment.getPlaybackMode()) {
