@@ -213,6 +213,7 @@ public class PlaybackActivity extends LeanbackActivity {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode);
 
         if (!isInPictureInPictureMode) {
+            // Disable collapse app to Home launcher
             ViewManager.instance(this).enableMoveToBack(false);
         }
     }
@@ -230,8 +231,9 @@ public class PlaybackActivity extends LeanbackActivity {
                     enterPipMode();
                     // Ensure to opening this activity when the user is returning to the app
                     ViewManager.instance(this).blockTop(doNotDestroy() ? this : null);
-                    // Return to previous activity (you need it in order the pip to work)
+                    // Return to previous activity (create point from that app could be launched)
                     ViewManager.instance(this).startParentView(this);
+                    // Enable collapse app to Home launcher
                     ViewManager.instance(this).enableMoveToBack(true);
                     break;
             }
