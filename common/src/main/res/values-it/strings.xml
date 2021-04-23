@@ -117,7 +117,7 @@
     <string name="subtitle_black_bg">Sfondo nero</string>
     <string name="player_seek_preview">Anteprima durante avanzamento</string>
     <string name="color_scheme_dark_grey_oled">Grigio scuro (OLED)</string>
-    <string name="uploads_category_sorting">Ordinamento canali</string>
+    <string name="channels_category_sorting">Ordinamento canali</string>
     <string name="sorting_by_new_content">Nuovo contenuto</string>
     <string name="sorting_alphabetically">Alfabetico</string>
     <string name="sorting_last_viewed">Ultimo visto</string>

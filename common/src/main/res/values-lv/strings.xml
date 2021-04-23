@@ -115,7 +115,7 @@
     <string name="subtitle_black_bg">Melns fons</string>
     <string name="player_seek_preview">Priekšskatīt, kamēr meklējat</string>
     <string name="color_scheme_dark_grey_oled">Tumšs (OLED)</string>
-    <string name="uploads_category_sorting">Kanālu sadaļu šķirošana</string>
+    <string name="channels_category_sorting">Kanālu sadaļu šķirošana</string>
     <string name="sorting_by_new_content">Jauns saturs</string>
     <string name="sorting_alphabetically">Alfabētiski</string>
     <string name="sorting_last_viewed">Pēdējais skatītais</string>

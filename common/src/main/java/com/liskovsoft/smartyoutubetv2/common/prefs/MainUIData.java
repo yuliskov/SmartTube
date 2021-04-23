@@ -218,7 +218,7 @@ public class MainUIData {
         mLeftPanelCategories.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
         mLeftPanelCategories.put(R.string.header_news, MediaGroup.TYPE_NEWS);
         mLeftPanelCategories.put(R.string.header_music, MediaGroup.TYPE_MUSIC);
-        mLeftPanelCategories.put(R.string.header_uploads, MediaGroup.TYPE_CHANNEL_UPLOADS);
+        mLeftPanelCategories.put(R.string.header_channels, MediaGroup.TYPE_CHANNEL_UPLOADS);
         mLeftPanelCategories.put(R.string.header_subscriptions, MediaGroup.TYPE_SUBSCRIPTIONS);
         mLeftPanelCategories.put(R.string.header_history, MediaGroup.TYPE_HISTORY);
         mLeftPanelCategories.put(R.string.header_playlists, MediaGroup.TYPE_USER_PLAYLISTS);

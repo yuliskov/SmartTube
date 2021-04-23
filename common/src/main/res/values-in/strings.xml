@@ -116,7 +116,7 @@
     <string name="subtitle_black_bg">Latar belakang hitam</string>
     <string name="player_seek_preview">Pratinjau sambil mencari</string>
     <string name="color_scheme_dark_grey_oled">Abu-abu Tua (OLED)</string>
-    <string name="uploads_category_sorting">Penyortiran bagian saluran</string>
+    <string name="channels_category_sorting">Penyortiran bagian saluran</string>
     <string name="sorting_by_new_content">Konten baru</string>
     <string name="sorting_alphabetically">Menurut abjad</string>
     <string name="sorting_last_viewed">Terakhir dilihat</string>

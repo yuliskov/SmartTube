@@ -115,7 +115,7 @@
     <string name="subtitle_black_bg">Czarne tło</string>
     <string name="player_seek_preview">Podgląd podczas przewijania</string>
     <string name="color_scheme_dark_grey_oled">Ciemno szary (OLED)</string>
-    <string name="uploads_category_sorting">Sortowanie sekcji kanałów</string>
+    <string name="channels_category_sorting">Sortowanie sekcji kanałów</string>
     <string name="sorting_by_new_content">Nowe filmy</string>
     <string name="sorting_alphabetically">Alfabetycznie</string>
     <string name="sorting_last_viewed">Ostatnio oglądane</string>

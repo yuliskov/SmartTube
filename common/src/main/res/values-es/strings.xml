@@ -115,7 +115,7 @@
     <string name="subtitle_black_bg">Fondo negro</string>
     <string name="player_seek_preview">Previsualizar mientras busca</string>
     <string name="color_scheme_dark_grey_oled">Oscuro (OLED)</string>
-    <string name="uploads_category_sorting">Orden sección canales</string>
+    <string name="channels_category_sorting">Orden sección canales</string>
     <string name="sorting_by_new_content">Nuevo contenido</string>
     <string name="sorting_alphabetically">Alfabéticamente</string>
     <string name="sorting_by_popularity">Populares primero</string>

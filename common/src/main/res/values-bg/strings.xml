@@ -117,7 +117,7 @@
     <string name="subtitle_black_bg">Черен фон</string>
     <string name="player_seek_preview">Визуализиране при търсене</string>
     <string name="color_scheme_dark_grey_oled">Тъмно сиво (OLED)</string>
-    <string name="uploads_category_sorting">Сортиране на видеоклиповете</string>
+    <string name="channels_category_sorting">Сортиране на видеоклиповете</string>
     <string name="sorting_by_new_content">Ново съдържание</string>
     <string name="sorting_alphabetically">Азбучен ред</string>
     <string name="sorting_last_viewed">Последно гледани</string>

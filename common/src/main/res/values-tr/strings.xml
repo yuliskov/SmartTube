@@ -116,7 +116,7 @@
     <string name="subtitle_black_bg">Siyah arka plan</string>
     <string name="player_seek_preview">Ararken önizleme</string>
     <string name="color_scheme_dark_grey_oled">Koyu Gri (OLED)</string>
-    <string name="uploads_category_sorting">Kanal bölümü sıralama</string>
+    <string name="channels_category_sorting">Kanal bölümü sıralama</string>
     <string name="sorting_by_new_content">Yeni içerik</string>
     <string name="sorting_alphabetically">Alfabetik</string>
     <string name="sorting_last_viewed">Son görüntülenen</string>

@@ -116,7 +116,7 @@
     <string name="subtitle_black_bg">Črno ozadje</string>
     <string name="player_seek_preview">Predogled med previjanjem</string>
     <string name="color_scheme_dark_grey_oled">Temnosiva (OLED)</string>
-    <string name="uploads_category_sorting">Sortiranje v kategoriji kanalov</string>
+    <string name="channels_category_sorting">Sortiranje v kategoriji kanalov</string>
     <string name="sorting_by_new_content">Nova vsebina</string>
     <string name="sorting_alphabetically">Po abecedi</string>
     <string name="sorting_last_viewed">Nazadnje gledano</string>

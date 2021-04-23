@@ -116,7 +116,7 @@
     <string name="subtitle_black_bg">Nền đen</string>
     <string name="player_seek_preview">Xem trước trong khi tua</string>
     <string name="color_scheme_dark_grey_oled">Màu xám đen (OLED)</string>
-    <string name="uploads_category_sorting">Phân loại thành phần kênh</string>
+    <string name="channels_category_sorting">Phân loại thành phần kênh</string>
     <string name="sorting_by_new_content">Nội dung mới</string>
     <string name="sorting_alphabetically">Theo bảng chữ cái</string>
     <string name="sorting_last_viewed">Xem lần cuối</string>

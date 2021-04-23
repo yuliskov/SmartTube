@@ -115,7 +115,7 @@
     <string name="subtitle_black_bg">Černé pozadí</string>
     <string name="player_seek_preview">Náhledy při přeskakování</string>
     <string name="color_scheme_dark_grey_oled">Tmavé (OLED)</string>
-    <string name="uploads_category_sorting">Řazení sekce kanálu</string>
+    <string name="channels_category_sorting">Řazení sekce kanálu</string>
     <string name="sorting_by_new_content">Nový obsah</string>
     <string name="sorting_alphabetically">Abecedně</string>
     <string name="sorting_last_viewed">Poslední zhlédnuté</string>
