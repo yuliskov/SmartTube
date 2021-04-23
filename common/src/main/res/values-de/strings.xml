@@ -206,5 +206,5 @@
     <string name="video_aspect">Seitenverhältnis</string>
     <string name="player_tweaks">Entwickleroptionen</string>
     <string name="header_uploads">Uploads</string>
-    <string name="player_show_global_clock">Uhr auf dem Bildschirm anzeigen</string>
+    <string name="player_show_global_clock">Uhr immer anzeigen</string>
 </resources>
