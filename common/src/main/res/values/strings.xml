@@ -208,4 +208,5 @@
     <string name="header_uploads">Uploads</string>
     <string name="player_show_global_clock">Show always on screen clock</string>
     <string name="uploads_old_look">Revert old look of uploads section</string>
+    <string name="background_playback_activation">Background playback (activation)</string>
 </resources>

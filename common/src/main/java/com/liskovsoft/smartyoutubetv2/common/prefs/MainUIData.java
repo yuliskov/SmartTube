@@ -23,6 +23,8 @@ public class MainUIData {
     public static final int EXIT_NONE = 0;
     public static final int EXIT_DOUBLE_BACK = 1;
     public static final int EXIT_SINGLE_BACK = 2;
+    public static final int BACKGROUND_SHORTCUT_HOME = 0;
+    public static final int BACKGROUND_SHORTCUT_HOME_N_BACK = 1;
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
     private final Context mContext;
@@ -44,6 +46,7 @@ public class MainUIData {
     private int mAppExitShortcut;
     private boolean mIsReturnToLauncherEnabled;
     private boolean mIsUploadsOldLookEnabled;
+    private int mBackgroundShortcut;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -213,6 +216,15 @@ public class MainUIData {
         return mIsUploadsOldLookEnabled;
     }
 
+    public int getBackgroundShortcut() {
+        return mBackgroundShortcut;
+    }
+
+    public void setBackgroundShortcut(int type) {
+        mBackgroundShortcut = type;
+        persistState();
+    }
+
     private void initLeftPanelCategories() {
         mLeftPanelCategories.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mLeftPanelCategories.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
@@ -277,6 +289,7 @@ public class MainUIData {
         mIsCardTextAutoScrollEnabled = Helpers.parseBoolean(split, 12, true);
         mIsReturnToLauncherEnabled = Helpers.parseBoolean(split, 13, true);
         mIsUploadsOldLookEnabled = Helpers.parseBoolean(split, 14, false);
+        mBackgroundShortcut = Helpers.parseInt(split, 15, BACKGROUND_SHORTCUT_HOME);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArrayLegacy(selectedCategories);
@@ -293,7 +306,8 @@ public class MainUIData {
         String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
         mPrefs.setData(MAIN_UI_DATA, Helpers.mergeObject(mIsCardAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale,
                 mColorSchemeIndex, mIsCardMultilineTitleEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting,
-                mPlaylistsStyle, mAppExitShortcut, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled, mIsReturnToLauncherEnabled, mIsUploadsOldLookEnabled));
+                mPlaylistsStyle, mAppExitShortcut, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
+                mIsReturnToLauncherEnabled, mIsUploadsOldLookEnabled, mBackgroundShortcut));
     }
 
     public static class ColorScheme {

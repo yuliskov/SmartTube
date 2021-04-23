@@ -32,6 +32,7 @@ public class PlaybackActivity extends LeanbackActivity {
     private long mBackPressedMs;
     private long mFinishCalledMs;
     private ViewManager mViewManager;
+    private MainUIData mMainUIData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class PlaybackActivity extends LeanbackActivity {
             mPlaybackFragment = (PlaybackFragment) fragment;
         }
         mViewManager = ViewManager.instance(this);
+        mMainUIData = MainUIData.instance(this);
     }
 
     @Override
@@ -153,18 +155,24 @@ public class PlaybackActivity extends LeanbackActivity {
 
         // NOTE: block back button for PIP.
         // User pressed PIP button in the player.
-        if (!isBackPressed()) {
+        if (!isBackPressed() || mMainUIData.getBackgroundShortcut() == MainUIData.BACKGROUND_SHORTCUT_HOME_N_BACK) {
             enterPipMode();
         }
 
-        if (isInPipMode()) {
+        if (doNotFinish()) {
             // Ensure to opening this activity when the user is returning to the app
-            mViewManager.blockTop(doNotDestroy() ? this : null);
+            mViewManager.blockTop(this);
             mViewManager.startParentView(this);
         } else {
             mPlaybackFragment.onFinish();
             super.finish();
         }
+    }
+
+    private boolean doNotFinish() {
+        sIsInPipMode = isInPipMode();
+        return sIsInPipMode || (mPlaybackFragment.getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND
+        && mMainUIData.getBackgroundShortcut() == MainUIData.BACKGROUND_SHORTCUT_HOME_N_BACK);
     }
 
     private boolean doNotDestroy() {
@@ -230,12 +238,14 @@ public class PlaybackActivity extends LeanbackActivity {
                     break;
                 case PlaybackEngineController.BACKGROUND_MODE_PIP:
                     enterPipMode();
-                    // Ensure to opening this activity when the user is returning to the app
-                    mViewManager.blockTop(doNotDestroy() ? this : null);
-                    // Return to previous activity (create point from that app could be launched)
-                    mViewManager.startParentView(this);
-                    // Enable collapse app to Home launcher
-                    mViewManager.enableMoveToBack(true);
+                    if (doNotDestroy()) {
+                        // Ensure to opening this activity when the user is returning to the app
+                        mViewManager.blockTop(this);
+                        // Return to previous activity (create point from that app could be launched)
+                        mViewManager.startParentView(this);
+                        // Enable collapse app to Home launcher
+                        mViewManager.enableMoveToBack(true);
+                    }
                     break;
             }
         }

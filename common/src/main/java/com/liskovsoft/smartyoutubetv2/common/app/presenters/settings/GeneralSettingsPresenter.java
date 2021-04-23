@@ -41,6 +41,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendBootToCategory(settingsPresenter);
         appendAppExitCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
+        appendBackgroundPlaybackActivationCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_general), () -> {
@@ -95,6 +96,25 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.app_exit_shortcut), options);
     }
 
+    private void appendBackgroundPlaybackCategory(AppSettingsPresenter settingsPresenter) {
+        OptionCategory category = HQDialogManager.createBackgroundPlaybackCategory(getContext(), mPlayerData);
+        settingsPresenter.appendRadioCategory(category.title, category.options);
+    }
+
+    private void appendBackgroundPlaybackActivationCategory(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from("HOME",
+                option -> mMainUIData.setBackgroundShortcut(MainUIData.BACKGROUND_SHORTCUT_HOME),
+                mMainUIData.getBackgroundShortcut() == MainUIData.BACKGROUND_SHORTCUT_HOME));
+
+        options.add(UiOptionItem.from("HOME/BACK",
+                option -> mMainUIData.setBackgroundShortcut(MainUIData.BACKGROUND_SHORTCUT_HOME_N_BACK),
+                mMainUIData.getBackgroundShortcut() == MainUIData.BACKGROUND_SHORTCUT_HOME_N_BACK));
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.background_playback_activation), options);
+    }
+
     private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
@@ -103,10 +123,5 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 mMainUIData.isReturnToLauncherEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
-    }
-
-    private void appendBackgroundPlaybackCategory(AppSettingsPresenter settingsPresenter) {
-        OptionCategory category = HQDialogManager.createBackgroundPlaybackCategory(getContext(), mPlayerData);
-        settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 }

@@ -207,4 +207,5 @@
     <string name="header_uploads">Завантаження</string>
     <string name="player_show_global_clock">Відображати годинник завжди на екрані</string>
     <string name="uploads_old_look">Повернути старий вигляд розділу Завантаження</string>
+    <string name="background_playback_activation">Фонове відтворення (активація)</string>
 </resources>
