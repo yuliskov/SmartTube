@@ -8,11 +8,26 @@ import java.util.Date;
 import java.util.Locale;
 
 public class DateFormatter {
-    public static String getCurrentTimeShort(Context context) {
-        // details: https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
-        String pattern = is24HourLocale(context) ? "EEE d MMM H:mm" : "EEE d MMM h:mm a";
+    public static String getCurrentDateTimeShort(Context context) {
+        return getCurrentTimeShort(context, true, true);
+    }
 
-        SimpleDateFormat serverFormat = new SimpleDateFormat(pattern, Locale.getDefault());
+    public static String getCurrentTimeShort(Context context) {
+        return getCurrentTimeShort(context, false, true);
+    }
+
+    private static String getCurrentTimeShort(Context context, boolean showDate, boolean showTime) {
+        String datePattern = "EEE d MMM";
+
+        // details: https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
+        String timePattern = is24HourLocale(context) ? "H:mm" : "h:mm a";
+
+        SimpleDateFormat serverFormat = new SimpleDateFormat(
+                String.format("%s%s",
+                        showDate ? datePattern + " " : "",
+                        showTime ? timePattern : ""),
+                Locale.getDefault()
+        );
         String currentTime = serverFormat.format(new Date());
 
         return String.format("%1$s", currentTime);

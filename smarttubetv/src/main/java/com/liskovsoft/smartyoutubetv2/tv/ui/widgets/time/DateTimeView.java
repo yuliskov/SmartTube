@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.TickleManager.TickleListener;
 
 public class DateTimeView extends AppCompatTextView implements TickleListener {
     private TickleManager mTickleManager;
+    private boolean mIsDateEnabled = true;
 
     public DateTimeView(Context context) {
         super(context);
@@ -49,7 +50,11 @@ public class DateTimeView extends AppCompatTextView implements TickleListener {
     @Override
     public void onTickle() {
         if (getVisibility() == View.VISIBLE) {
-            setText(DateFormatter.getCurrentTimeShort(getContext()));
+            if (mIsDateEnabled) {
+                setText(DateFormatter.getCurrentDateTimeShort(getContext()));
+            } else {
+                setText(DateFormatter.getCurrentTimeShort(getContext()));
+            }
         }
     }
 
@@ -59,5 +64,9 @@ public class DateTimeView extends AppCompatTextView implements TickleListener {
 
         // Player has been closed
         mTickleManager.removeListener(this);
+    }
+
+    public void showDate(boolean show) {
+        mIsDateEnabled = show;
     }
 }

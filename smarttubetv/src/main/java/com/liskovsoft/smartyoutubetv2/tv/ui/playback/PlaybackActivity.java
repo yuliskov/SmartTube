@@ -30,6 +30,7 @@ public class PlaybackActivity extends LeanbackActivity {
     private boolean gamepadTriggerPressed = false;
     private PlaybackFragment mPlaybackFragment;
     private long mBackPressedMs;
+    private long mFinishCalledMs;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -141,12 +142,14 @@ public class PlaybackActivity extends LeanbackActivity {
     public void finish() {
         Log.d(TAG, "Finishing activity...");
 
+        mFinishCalledMs = System.currentTimeMillis();
+
         // NOTE: When exiting PIP mode onPause is called immediately after onResume
 
         // Also, avoid enter pip on stop!
         // More info: https://developer.android.com/guide/topics/ui/picture-in-picture#continuing_playback
 
-        // User pressed back.
+        // User pressed back or PIP player button.
         enterPIPMode();
 
         if (doNotDestroy()) {
@@ -201,19 +204,22 @@ public class PlaybackActivity extends LeanbackActivity {
 
     @Override
     public void onUserLeaveHint() {
-        // Assume Home if no back event happens
-        boolean isHomePressed = System.currentTimeMillis() - mBackPressedMs > 1_000;
+        // Assume Home if no back and finish event happens
+        long currentTimeMs = System.currentTimeMillis();
+        boolean isBackPressed = currentTimeMs - mBackPressedMs < 1_000;
+        boolean isPIPPressed = currentTimeMs - mFinishCalledMs < 1_000;
+        boolean isHomePressed = !isBackPressed && !isPIPPressed;
 
         // Check that user not open dialog instead of really leaving the activity
         if (!AppSettingsPresenter.instance(this).isDialogShown()) {
             switch (mPlaybackFragment.getPlaybackMode()) {
                 case PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND:
                     enterBackgroundPlayMode();
-                    ViewManager.instance(this).removeTop(this); // return to browser instead of player
+                    ViewManager.instance(this).removeTop(this); // return to previous activity after bg mode started
                     break;
                 case PlaybackEngineController.BACKGROUND_MODE_PIP:
                     enterPIPMode();
-                    ViewManager.instance(this).removeTop(this); // return to browser instead of player
+                    ViewManager.instance(this).removeTop(this); // return to previous activity after pip is started
                     break;
             }
         }

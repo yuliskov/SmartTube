@@ -66,6 +66,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.StoryboardSeekDataPro
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoEventsOverrideFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue.OnActionClickedListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -379,8 +380,9 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     private void initializeGlobalClock() {
-        getActivity().findViewById(R.id.global_time)
-                .setVisibility(PlayerData.instance(getContext()).isGlobalClockEnabled() ? View.VISIBLE : View.GONE);
+        DateTimeView clock = getActivity().findViewById(R.id.global_time);
+        clock.showDate(false);
+        clock.setVisibility(PlayerData.instance(getContext()).isGlobalClockEnabled() ? View.VISIBLE : View.GONE);
     }
 
     private void createMediaSession() {
