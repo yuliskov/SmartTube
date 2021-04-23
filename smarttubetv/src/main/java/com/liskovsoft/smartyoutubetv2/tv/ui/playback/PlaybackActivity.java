@@ -156,7 +156,7 @@ public class PlaybackActivity extends LeanbackActivity {
             enterPipMode();
         }
 
-        if (doNotDestroy()) {
+        if (isInPipMode()) {
             // Ensure to opening this activity when the user is returning to the app
             ViewManager.instance(this).blockTop(doNotDestroy() ? this : null);
             ViewManager.instance(this).startParentView(this);

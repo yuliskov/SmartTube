@@ -37,7 +37,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendVideoPresetsCategory(settingsPresenter);
         //appendVideoZoomCategory(settingsPresenter);
         appendAudioShiftCategory(settingsPresenter);
-        appendBackgroundPlaybackCategory(settingsPresenter);
+        //appendBackgroundPlaybackCategory(settingsPresenter);
         appendOKButtonCategory(settingsPresenter);
         appendUIAutoHideCategory(settingsPresenter);
         appendSeekingPreviewCategory(settingsPresenter);
@@ -95,11 +95,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
     private void appendVideoPresetsCategory(AppSettingsPresenter settingsPresenter) {
         OptionCategory category = HQDialogManager.createVideoPresetsCategory(getContext(), mPlayerData);
-        settingsPresenter.appendRadioCategory(category.title, category.options);
-    }
-
-    private void appendBackgroundPlaybackCategory(AppSettingsPresenter settingsPresenter) {
-        OptionCategory category = HQDialogManager.createBackgroundPlaybackCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
