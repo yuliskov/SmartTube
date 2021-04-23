@@ -39,7 +39,7 @@
     <string name="update_changelog">Changelog</string>
     <string name="install_update">Update installieren</string>
     <string name="msg_category_is_empty">Hier ist nichts drin</string>
-    <string name="dialog_add_to_playlist">Zur Wiedergabeliste hinzufügen</string>
+    <string name="dialog_add_to_playlist">Hinzufügen/Entfernen aus Wiedergabeliste</string>
     <string name="msg_signed_users_only">Nur angemeldete Nutzer</string>
     <string name="msg_cant_load_content">Inhalt kann nicht geladen werden</string>
     <string name="title_video_presets">Video-Voreinstellungen</string>
@@ -125,7 +125,7 @@
     <string name="playlists_style">Wiedergabelisten-Stil</string>
     <string name="playlists_style_grid">Raster</string>
     <string name="playlists_style_rows">Reihe</string>
-    <string name="player_show_clock">Uhr anzeigen</string>
+    <string name="player_show_clock">Uhr im Player anzeigen</string>
     <string name="player_show_remaining_time">Verbleibende Zeit anzeigen</string>
     <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Kanal-Videos öffnen</string>
@@ -205,4 +205,6 @@
     <string name="msg_player_error_unexpected">Unbekannter Video-Decoder-Fehler</string>
     <string name="video_aspect">Seitenverhältnis</string>
     <string name="player_tweaks">Entwickleroptionen</string>
+    <string name="header_uploads">Uploads</string>
+    <string name="player_show_global_clock">Uhr immer anzeigen</string>
 </resources>
