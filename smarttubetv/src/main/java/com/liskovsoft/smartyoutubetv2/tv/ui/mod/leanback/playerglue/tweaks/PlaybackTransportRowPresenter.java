@@ -93,6 +93,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         final String mEndingTimeFormat;
         long mTotalTimeInMs = Long.MIN_VALUE;
         long mCurrentTimeInMs = Long.MIN_VALUE;
+        long mEndingTimeInMs = Long.MIN_VALUE;
         long mSecondaryProgressInMs;
         final StringBuilder mTempBuilder = new StringBuilder();
         ControlBarPresenter.ViewHolder mControlsVh;
@@ -124,6 +125,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             public void onCurrentPositionChanged(PlaybackControlsRow row, long ms) {
                 setCurrentPosition(ms);
                 setEndingTime(ms);
+                updateTotalTime();
             }
 
             @Override
@@ -648,7 +650,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         void setTotalTime(long totalTimeMs) {
             if (mTotalTimeInMs != totalTimeMs) {
                 mTotalTimeInMs = totalTimeMs;
-                onSetDurationLabel(totalTimeMs);
+                onSetDurationLabel(applySpeedCorrection(totalTimeMs));
             }
         }
 
@@ -676,7 +678,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         void setCurrentPosition(long currentTimeMs) {
             if (currentTimeMs != mCurrentTimeInMs) {
                 mCurrentTimeInMs = currentTimeMs;
-                onSetCurrentPositionLabel(currentTimeMs);
+                onSetCurrentPositionLabel(applySpeedCorrection(currentTimeMs));
             }
             if (!mInSeek) {
                 int progressRatio = 0;
@@ -698,15 +700,18 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         }
 
         void setEndingTime(long currentTimeMs) {
+            long endingTimeMs = mTotalTimeInMs - currentTimeMs;
+
+            if (mEndingTimeInMs != endingTimeMs) {
+                mEndingTimeInMs = endingTimeMs;
+                onSetEndingTimeLabel(applySpeedCorrection(endingTimeMs));
+            }
+        }
+
+        protected void onSetEndingTimeLabel(long endingTimeMs) {
             if (mEndingTime != null) {
                 if (mPlayerData.isRemainingTimeEnabled()) {
-                    long endingTimeMs = mTotalTimeInMs - currentTimeMs;
-
-                    // Apply speed correction
-                    endingTimeMs = (long) (endingTimeMs / mPlayerData.getSpeed());
-
-                    formatTime(endingTimeMs >= 0 ? endingTimeMs : 0, mTempBuilder);
-
+                    formatTime(endingTimeMs, mTempBuilder);
                     mEndingTime.setText(String.format(mEndingTimeFormat, mTempBuilder.toString()));
                     mEndingTime.setVisibility(View.VISIBLE);
                 } else {
@@ -732,6 +737,21 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             } else {
                 mDateTime.setVisibility(View.GONE);
             }
+        }
+
+        void updateTotalTime() {
+            // Update total time with respect of speed
+            long newTotalTimeMs = applySpeedCorrection(mTotalTimeInMs);
+
+            if (newTotalTimeMs != mTotalTimeInMs) {
+                onSetDurationLabel(newTotalTimeMs);
+            }
+        }
+
+        long applySpeedCorrection(long timeMs) {
+            timeMs = (long) (timeMs / mPlayerData.getSpeed());
+
+            return timeMs >= 0 ? timeMs : 0;
         }
     }
 
