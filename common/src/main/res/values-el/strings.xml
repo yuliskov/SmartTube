@@ -116,7 +116,7 @@
     <string name="subtitle_black_bg">Μαύρο Φόντο</string>
     <string name="player_seek_preview">Προεπισκόπηση κατά την αναζήτηση</string>
     <string name="color_scheme_dark_grey_oled">Μαύρο Γκρι (OLED)</string>
-    <string name="channel_category_sorting">Ταξινόμηση ενότητας καναλιού</string>
+    <string name="uploads_category_sorting">Ταξινόμηση ενότητας καναλιού</string>
     <string name="sorting_by_new_content">Νέο Περιεχόμενο</string>
     <string name="sorting_alphabetically">Αλφαβητικά</string>
     <string name="sorting_last_viewed">Τελευταίες Προβολές</string>

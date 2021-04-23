@@ -93,7 +93,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
             }, mMainUIData.getChannelCategorySorting() == pair[1]));
         }
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.channel_category_sorting), options);
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.uploads_category_sorting), options);
     }
 
     private void appendPlaylistsStyle(AppSettingsPresenter settingsPresenter) {

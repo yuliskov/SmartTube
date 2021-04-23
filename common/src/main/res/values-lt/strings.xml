@@ -115,7 +115,7 @@
     <string name="subtitle_black_bg">Juodas fonas</string>
     <string name="player_seek_preview">Peržiūra ieškant</string>
     <string name="color_scheme_dark_grey_oled">Tamsus (OLED)</string>
-    <string name="channel_category_sorting">Kanalų sekcijų rūšiavimas</string>
+    <string name="uploads_category_sorting">Kanalų sekcijų rūšiavimas</string>
     <string name="sorting_by_new_content">Naujas turinys</string>
     <string name="sorting_alphabetically">Abėcėlės tvarka</string>
     <string name="sorting_last_viewed">Paskutinį kartą peržiūrėta</string>

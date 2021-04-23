@@ -117,7 +117,7 @@
     <string name="subtitle_black_bg">Fundo Preto</string>
     <string name="player_seek_preview">Visualizar Durante a Busca</string>
     <string name="color_scheme_dark_grey_oled">Cinza Escuro (OLED)</string>
-    <string name="channel_category_sorting">Classifição das Seções</string>
+    <string name="uploads_category_sorting">Classifição das Seções</string>
     <string name="sorting_by_new_content">Novos Conteúdos</string>
     <string name="sorting_alphabetically">Ordem Alfabética</string>
     <string name="sorting_last_viewed">Ultimos Vistos</string>

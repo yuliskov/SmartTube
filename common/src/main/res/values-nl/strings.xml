@@ -117,7 +117,7 @@
     <string name="subtitle_black_bg">Zwarte achtergrond</string>
     <string name="player_seek_preview">Preview tijdens snel zoeken</string>
     <string name="color_scheme_dark_grey_oled">Donker (OLED)</string>
-    <string name="channel_category_sorting">Kanalen sorteren</string>
+    <string name="uploads_category_sorting">Kanalen sorteren</string>
     <string name="sorting_by_new_content">Nieuwe video\'s</string>
     <string name="sorting_alphabetically">Alfabetisch</string>
     <string name="sorting_last_viewed">Laatst bekeken</string>
