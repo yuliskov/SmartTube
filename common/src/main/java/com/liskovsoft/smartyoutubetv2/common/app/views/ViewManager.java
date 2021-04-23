@@ -35,6 +35,7 @@ public class ViewManager {
     private boolean mIsMoveToBackEnabled;
     private boolean mIsFinishing;
     private boolean mIsSinglePlayerMode;
+    private long mStartActivityMs;
 
     private ViewManager(Context context) {
         mContext = context;
@@ -147,6 +148,8 @@ public class ViewManager {
 
     private void startActivity(Class<?> activityClass) {
         Log.d(TAG, "Launching activity: " + activityClass.getSimpleName());
+
+        mStartActivityMs = System.currentTimeMillis();
 
         Intent intent = new Intent(mContext, activityClass);
 
@@ -378,5 +381,9 @@ public class ViewManager {
 
     public void enableMoveToBack(boolean enable) {
         mIsMoveToBackEnabled = enable;
+    }
+
+    public boolean isStartViewPending() {
+        return System.currentTimeMillis() - mStartActivityMs < 1_000;
     }
 }

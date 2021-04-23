@@ -39,6 +39,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         appendPlaylistsStyle(settingsPresenter);
         appendScaleUI(settingsPresenter);
         appendVideoGridScale(settingsPresenter);
+        appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_main_ui), () -> {
             if (mRestartApp) {
@@ -157,5 +158,18 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.video_grid_scale), options);
+    }
+
+    private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.uploads_old_look),
+                optionItem -> {
+                    mMainUIData.enableUploadsOldLook(optionItem.isSelected());
+                    mRestartApp = true;
+                },
+                mMainUIData.isUploadsOldLookEnabled()));
+
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 }

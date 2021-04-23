@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
 import android.app.PictureInPictureParams;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -32,6 +31,7 @@ public class PlaybackActivity extends LeanbackActivity {
     private PlaybackFragment mPlaybackFragment;
     private long mBackPressedMs;
     private long mFinishCalledMs;
+    private ViewManager mViewManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +42,7 @@ public class PlaybackActivity extends LeanbackActivity {
         if (fragment instanceof PlaybackFragment) {
             mPlaybackFragment = (PlaybackFragment) fragment;
         }
+        mViewManager = ViewManager.instance(this);
     }
 
     @Override
@@ -158,8 +159,8 @@ public class PlaybackActivity extends LeanbackActivity {
 
         if (isInPipMode()) {
             // Ensure to opening this activity when the user is returning to the app
-            ViewManager.instance(this).blockTop(doNotDestroy() ? this : null);
-            ViewManager.instance(this).startParentView(this);
+            mViewManager.blockTop(doNotDestroy() ? this : null);
+            mViewManager.startParentView(this);
         } else {
             mPlaybackFragment.onFinish();
             super.finish();
@@ -214,7 +215,7 @@ public class PlaybackActivity extends LeanbackActivity {
 
         if (!isInPictureInPictureMode) {
             // Disable collapse app to Home launcher
-            ViewManager.instance(this).enableMoveToBack(false);
+            mViewManager.enableMoveToBack(false);
         }
     }
 
@@ -230,11 +231,11 @@ public class PlaybackActivity extends LeanbackActivity {
                 case PlaybackEngineController.BACKGROUND_MODE_PIP:
                     enterPipMode();
                     // Ensure to opening this activity when the user is returning to the app
-                    ViewManager.instance(this).blockTop(doNotDestroy() ? this : null);
+                    mViewManager.blockTop(doNotDestroy() ? this : null);
                     // Return to previous activity (create point from that app could be launched)
-                    ViewManager.instance(this).startParentView(this);
+                    mViewManager.startParentView(this);
                     // Enable collapse app to Home launcher
-                    ViewManager.instance(this).enableMoveToBack(true);
+                    mViewManager.enableMoveToBack(true);
                     break;
             }
         }
@@ -250,7 +251,7 @@ public class PlaybackActivity extends LeanbackActivity {
 
     private boolean isHomePressed() {
         // Assume Home if no back and finish event happens
-        return !isBackPressed() && !isPipPressed();
+        return !isBackPressed() && !isPipPressed() && !mViewManager.isStartViewPending();
     }
 
     private boolean isPipPressed() {

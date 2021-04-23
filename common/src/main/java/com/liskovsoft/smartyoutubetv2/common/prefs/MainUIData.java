@@ -43,6 +43,7 @@ public class MainUIData {
     private int mPlaylistsStyle;
     private int mAppExitShortcut;
     private boolean mIsReturnToLauncherEnabled;
+    private boolean mIsUploadsOldLookEnabled;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -203,6 +204,15 @@ public class MainUIData {
         return mIsReturnToLauncherEnabled;
     }
 
+    public void enableUploadsOldLook(boolean enable) {
+        mIsUploadsOldLookEnabled = enable;
+        persistState();
+    }
+
+    public boolean isUploadsOldLookEnabled() {
+        return mIsUploadsOldLookEnabled;
+    }
+
     private void initLeftPanelCategories() {
         mLeftPanelCategories.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mLeftPanelCategories.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
@@ -266,6 +276,7 @@ public class MainUIData {
         mCardTitleLinesNum = Helpers.parseInt(split, 11, 1);
         mIsCardTextAutoScrollEnabled = Helpers.parseBoolean(split, 12, true);
         mIsReturnToLauncherEnabled = Helpers.parseBoolean(split, 13, true);
+        mIsUploadsOldLookEnabled = Helpers.parseBoolean(split, 14, false);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArrayLegacy(selectedCategories);
@@ -282,7 +293,7 @@ public class MainUIData {
         String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
         mPrefs.setData(MAIN_UI_DATA, Helpers.mergeObject(mIsCardAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale,
                 mColorSchemeIndex, mIsCardMultilineTitleEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting,
-                mPlaylistsStyle, mAppExitShortcut, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled, mIsReturnToLauncherEnabled));
+                mPlaylistsStyle, mAppExitShortcut, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled, mIsReturnToLauncherEnabled, mIsUploadsOldLookEnabled));
     }
 
     public static class ColorScheme {

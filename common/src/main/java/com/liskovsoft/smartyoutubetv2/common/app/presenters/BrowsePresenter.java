@@ -57,6 +57,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private int mCurrentCategoryId;
     private long mLastUpdateTimeMs;
     private int mStartCategoryIndex;
+    private int mUploadsType;
 
     private BrowsePresenter(Context context) {
         super(context);
@@ -105,11 +106,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void initCategoryHeaders() {
+        mUploadsType = mMainUIData.isUploadsOldLookEnabled() ? Category.TYPE_GRID : Category.TYPE_MULTI_GRID;
+
         mCategories.add(new Category(MediaGroup.TYPE_HOME, getContext().getString(R.string.header_home), Category.TYPE_ROW, R.drawable.icon_home));
         mCategories.add(new Category(MediaGroup.TYPE_GAMING, getContext().getString(R.string.header_gaming), Category.TYPE_ROW, R.drawable.icon_gaming));
         mCategories.add(new Category(MediaGroup.TYPE_NEWS, getContext().getString(R.string.header_news), Category.TYPE_ROW, R.drawable.icon_news));
         mCategories.add(new Category(MediaGroup.TYPE_MUSIC, getContext().getString(R.string.header_music), Category.TYPE_ROW, R.drawable.icon_music));
-        mCategories.add(new Category(MediaGroup.TYPE_CHANNEL_UPLOADS, getContext().getString(R.string.header_uploads), Category.TYPE_MULTI_GRID, R.drawable.icon_channels, true));
+        mCategories.add(new Category(MediaGroup.TYPE_CHANNEL_UPLOADS, getContext().getString(R.string.header_uploads), mUploadsType, R.drawable.icon_channels, true));
         mCategories.add(new Category(MediaGroup.TYPE_SUBSCRIPTIONS, getContext().getString(R.string.header_subscriptions), Category.TYPE_GRID, R.drawable.icon_subscriptions, true));
         mCategories.add(new Category(MediaGroup.TYPE_HISTORY, getContext().getString(R.string.header_history), Category.TYPE_GRID, R.drawable.icon_history, true));
         mCategories.add(new Category(MediaGroup.TYPE_USER_PLAYLISTS, getContext().getString(R.string.header_playlists), Category.TYPE_ROW, R.drawable.icon_playlist, true));
@@ -219,14 +222,16 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             // Below doesn't work right now. Api doesn't contains channel id.
             //ChannelPresenter.instance(getContext()).openChannel(item);
 
-            //ChannelUploadsPresenter.instance(getContext()).openChannel(item);
-
-            updateVideoGrid(
-                    getCategory(mCurrentCategoryId),
-                    ChannelUploadsPresenter.instance(getContext()).obtainVideoGroupObservable(item),
-                    1,
-                    true
-            );
+            if (mUploadsType == Category.TYPE_MULTI_GRID) {
+                updateVideoGrid(
+                        getCategory(mCurrentCategoryId),
+                        ChannelUploadsPresenter.instance(getContext()).obtainVideoGroupObservable(item),
+                        1,
+                        true
+                );
+            } else {
+                ChannelUploadsPresenter.instance(getContext()).openChannel(item);
+            }
         } else if (item.isPlaylist()) {
             ChannelUploadsPresenter.instance(getContext()).openChannel(item);
         } else if (item.isVideo()) {
