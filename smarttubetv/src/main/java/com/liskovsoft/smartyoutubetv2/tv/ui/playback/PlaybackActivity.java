@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
 import android.app.PictureInPictureParams;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
@@ -109,14 +110,14 @@ public class PlaybackActivity extends LeanbackActivity {
     // For N devices that support it, not "officially"
     // More: https://medium.com/s23nyc-tech/drop-in-android-video-exoplayer2-with-picture-in-picture-e2d4f8c1eb30
     @SuppressWarnings("deprecation")
-    private void enterPIPMode() {
+    private void enterPipMode() {
         // NOTE: When exiting PIP mode onPause is called immediately after onResume
 
         // Also, avoid enter pip on stop!
         // More info: https://developer.android.com/guide/topics/ui/picture-in-picture#continuing_playback
 
         if (Helpers.isPictureInPictureSupported(this)) {
-            if (wannaEnterToPIP()) {
+            if (wannaEnterToPip()) {
                 Log.d(TAG, "Entering PIP mode...");
 
                 try {
@@ -134,7 +135,7 @@ public class PlaybackActivity extends LeanbackActivity {
         }
     }
 
-    private boolean wannaEnterToPIP() {
+    private boolean wannaEnterToPip() {
         return mPlaybackFragment != null && mPlaybackFragment.getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_PIP && !isInPictureInPictureMode();
     }
 
@@ -149,10 +150,13 @@ public class PlaybackActivity extends LeanbackActivity {
         // Also, avoid enter pip on stop!
         // More info: https://developer.android.com/guide/topics/ui/picture-in-picture#continuing_playback
 
-        // User pressed back or PIP player button.
-        enterPIPMode();
+        // NOTE: block back button for PIP.
+        // User pressed PIP button in the player.
+        if (!isBackPressed()) {
+            enterPipMode();
+        }
 
-        if (doNotDestroy()) {
+        if (isInPipMode()) {
             ViewManager.instance(this).startParentView(this);
         } else {
             mPlaybackFragment.onFinish();
@@ -198,27 +202,21 @@ public class PlaybackActivity extends LeanbackActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         mBackPressedMs = System.currentTimeMillis();
+        super.onBackPressed();
     }
 
     @Override
     public void onUserLeaveHint() {
-        // Assume Home if no back and finish event happens
-        long currentTimeMs = System.currentTimeMillis();
-        boolean isBackPressed = currentTimeMs - mBackPressedMs < 1_000;
-        boolean isPIPPressed = currentTimeMs - mFinishCalledMs < 1_000;
-        boolean isHomePressed = !isBackPressed && !isPIPPressed;
-
         // Check that user not open dialog instead of really leaving the activity
-        if (!AppSettingsPresenter.instance(this).isDialogShown()) {
+        if (!AppSettingsPresenter.instance(this).isDialogShown() && isHomePressed()) {
             switch (mPlaybackFragment.getPlaybackMode()) {
                 case PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND:
                     enterBackgroundPlayMode();
                     ViewManager.instance(this).removeTop(this); // return to previous activity after bg mode started
                     break;
                 case PlaybackEngineController.BACKGROUND_MODE_PIP:
-                    enterPIPMode();
+                    enterPipMode();
                     ViewManager.instance(this).removeTop(this); // return to previous activity after pip is started
                     break;
             }
@@ -229,6 +227,7 @@ public class PlaybackActivity extends LeanbackActivity {
     protected void onPause() {
         super.onPause();
 
+        // Ensure to opening this activity when the user is returning to the app
         ViewManager.instance(this).blockTop(doNotDestroy() ? this : null);
     }
 
@@ -238,5 +237,24 @@ public class PlaybackActivity extends LeanbackActivity {
         }
 
         return isInPictureInPictureMode();
+    }
+
+    private boolean isHomePressed() {
+        // Assume Home if no back and finish event happens
+        return !isBackPressed() && !isPipPressed();
+    }
+
+    private boolean isPipPressed() {
+        return isFinishCalled() && !isBackPressed();
+    }
+
+    private boolean isFinishCalled() {
+        return System.currentTimeMillis() - mFinishCalledMs < 1_000;
+    }
+
+    private boolean isBackPressed() {
+        long backPressedAgoMs = System.currentTimeMillis() - mBackPressedMs;
+        Log.d(TAG, "Back pressed ms ago: " + backPressedAgoMs);
+        return backPressedAgoMs < 1_000;
     }
 }
