@@ -29,6 +29,7 @@ public class PlaybackActivity extends LeanbackActivity {
     private static final float GAMEPAD_TRIGGER_INTENSITY_OFF = 0.45f;
     private boolean gamepadTriggerPressed = false;
     private PlaybackFragment mPlaybackFragment;
+    private long mBackPressedMs;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -146,7 +147,7 @@ public class PlaybackActivity extends LeanbackActivity {
         // More info: https://developer.android.com/guide/topics/ui/picture-in-picture#continuing_playback
 
         // User pressed back.
-        //enterPIPMode();
+        enterPIPMode();
 
         if (doNotDestroy()) {
             ViewManager.instance(this).startParentView(this);
@@ -193,7 +194,16 @@ public class PlaybackActivity extends LeanbackActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mBackPressedMs = System.currentTimeMillis();
+    }
+
+    @Override
     public void onUserLeaveHint() {
+        // Assume Home if no back event happens
+        boolean isHomePressed = System.currentTimeMillis() - mBackPressedMs > 1_000;
+
         // Check that user not open dialog instead of really leaving the activity
         if (!AppSettingsPresenter.instance(this).isDialogShown()) {
             switch (mPlaybackFragment.getPlaybackMode()) {
