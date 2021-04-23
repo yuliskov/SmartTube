@@ -39,7 +39,7 @@
     <string name="update_changelog">Wat is er nieuw ?</string>
     <string name="install_update">Update installeren</string>
     <string name="msg_category_is_empty">Niets gevonden</string>
-    <string name="dialog_add_to_playlist">Toevoegen aan playlist</string>
+    <string name="dialog_add_to_playlist">Toevoegen/Verwijderen in playlist</string>
     <string name="msg_signed_users_only">Enkel voor aangemelde gebruikers</string>
     <string name="msg_cant_load_content">Kan inhoud niet laden</string>
     <string name="title_video_presets">Video preset</string>
@@ -125,7 +125,7 @@
     <string name="playlists_style">Playlists lay-out</string>
     <string name="playlists_style_grid">Raster</string>
     <string name="playlists_style_rows">Rijen</string>
-    <string name="player_show_clock">Datum/klok weergeven</string>
+    <string name="player_show_clock">Klok in player weergeven</string>
     <string name="player_show_remaining_time">Resterende tijd weergeven</string>
     <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Recente uploads</string>
@@ -206,5 +206,5 @@
     <string name="video_aspect">Beeldverhouding</string>
     <string name="player_tweaks">Ontwikkelaarsopties</string>
     <string name="header_uploads">Kanalen/Uploads</string>
-    <string name="player_show_global_clock">Klok altijd op scherm weergeven</string>
+    <string name="player_show_global_clock">Klok op scherm weergeven</string>
 </resources>
