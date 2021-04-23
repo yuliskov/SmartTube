@@ -743,9 +743,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             // Update total time with respect of speed
             long newTotalTimeMs = applySpeedCorrection(mTotalTimeInMs);
 
-            if (newTotalTimeMs != mTotalTimeInMs) {
-                onSetDurationLabel(newTotalTimeMs);
-            }
+            onSetDurationLabel(newTotalTimeMs);
         }
 
         long applySpeedCorrection(long timeMs) {
