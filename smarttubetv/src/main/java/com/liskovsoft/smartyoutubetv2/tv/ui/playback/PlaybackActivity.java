@@ -156,7 +156,9 @@ public class PlaybackActivity extends LeanbackActivity {
             enterPipMode();
         }
 
-        if (isInPipMode()) {
+        if (doNotDestroy()) {
+            // Ensure to opening this activity when the user is returning to the app
+            ViewManager.instance(this).blockTop(doNotDestroy() ? this : null);
             ViewManager.instance(this).startParentView(this);
         } else {
             mPlaybackFragment.onFinish();
@@ -207,28 +209,33 @@ public class PlaybackActivity extends LeanbackActivity {
     }
 
     @Override
+    public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode);
+
+        if (!isInPictureInPictureMode) {
+            ViewManager.instance(this).enableMoveToBack(false);
+        }
+    }
+
+    @Override
     public void onUserLeaveHint() {
         // Check that user not open dialog instead of really leaving the activity
         if (!AppSettingsPresenter.instance(this).isDialogShown() && isHomePressed()) {
             switch (mPlaybackFragment.getPlaybackMode()) {
                 case PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND:
                     enterBackgroundPlayMode();
-                    ViewManager.instance(this).removeTop(this); // return to previous activity after bg mode started
+                    // Do we need to do something additional when running Play Behind?
                     break;
                 case PlaybackEngineController.BACKGROUND_MODE_PIP:
                     enterPipMode();
-                    ViewManager.instance(this).removeTop(this); // return to previous activity after pip is started
+                    // Ensure to opening this activity when the user is returning to the app
+                    ViewManager.instance(this).blockTop(doNotDestroy() ? this : null);
+                    // Return to previous activity (you need it in order the pip to work)
+                    ViewManager.instance(this).startParentView(this);
+                    ViewManager.instance(this).enableMoveToBack(true);
                     break;
             }
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        // Ensure to opening this activity when the user is returning to the app
-        ViewManager.instance(this).blockTop(doNotDestroy() ? this : null);
     }
 
     public boolean isInPipMode() {

@@ -32,7 +32,7 @@ public class ViewManager {
     private Class<?> mRootActivity;
     private Class<?> mDefaultTop;
     private long mPrevThrottleTimeMS;
-    private boolean mIsMoveViewsToBack;
+    private boolean mIsMoveToBackEnabled;
     private boolean mIsFinishing;
     private boolean mIsSinglePlayerMode;
 
@@ -73,7 +73,7 @@ public class ViewManager {
     }
 
     public void startView(Class<?> viewClass, boolean forceStart) {
-        mIsMoveViewsToBack = false; // Essential part or new view will be pause immediately
+        mIsMoveToBackEnabled = false; // Essential part or new view will be pause immediately
 
         //if (!forceStart && doThrottle()) {
         //    Log.d(TAG, "Too many events. Skipping startView...");
@@ -102,7 +102,7 @@ public class ViewManager {
             if (parentActivity == null) {
                 Log.d(TAG, "Parent activity name doesn't stored in registry. Exiting to Home...");
 
-                mIsMoveViewsToBack = true;
+                mIsMoveToBackEnabled = true;
 
                 if (mIsSinglePlayerMode) {
                     safeMoveTaskToBack(activity);
@@ -127,7 +127,7 @@ public class ViewManager {
     }
 
     public void startDefaultView() {
-        mIsMoveViewsToBack = false;
+        mIsMoveToBackEnabled = false;
         mIsSinglePlayerMode = false;
 
         Class<?> lastActivity;
@@ -167,10 +167,12 @@ public class ViewManager {
 
     public void addTop(Activity activity) {
         if (checkMoveViewsToBack(activity)) {
+            // NOTE: Unknown purpose of commented code!
+
             // Maybe finish whole app?
             // Move task to back is active.
             // So finishing the activity only.
-            ((MotherActivity) activity).finishReally();
+            //((MotherActivity) activity).finishReally();
             return;
         }
 
@@ -227,7 +229,7 @@ public class ViewManager {
     }
 
     private boolean checkMoveViewsToBack(Activity activity) {
-        if (mIsMoveViewsToBack) {
+        if (mIsMoveToBackEnabled) {
             safeMoveTaskToBack(activity);
 
             return true;
@@ -306,7 +308,7 @@ public class ViewManager {
      */
     public void properlyFinishTheApp(Activity activity) {
         Log.d(TAG, "Trying finish the app...");
-        mIsMoveViewsToBack = true;
+        mIsMoveToBackEnabled = true;
         mIsFinishing = true;
 
         ((MotherActivity) activity).finishReally();
@@ -372,5 +374,9 @@ public class ViewManager {
 
     public boolean isFinishing() {
         return mIsFinishing;
+    }
+
+    public void enableMoveToBack(boolean enable) {
+        mIsMoveToBackEnabled = enable;
     }
 }
