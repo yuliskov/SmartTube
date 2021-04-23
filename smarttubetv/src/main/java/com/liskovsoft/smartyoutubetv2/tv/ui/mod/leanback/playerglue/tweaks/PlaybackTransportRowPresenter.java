@@ -92,6 +92,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         final ThumbsBar mThumbsBar;
         final String mEndingTimeFormat;
         long mTotalTimeInMs = Long.MIN_VALUE;
+        long mNewTotalTimeInMs = Long.MIN_VALUE;
         long mCurrentTimeInMs = Long.MIN_VALUE;
         long mEndingTimeInMs = Long.MIN_VALUE;
         long mSecondaryProgressInMs;
@@ -743,7 +744,10 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             // Update total time with respect of speed
             long newTotalTimeMs = applySpeedCorrection(mTotalTimeInMs);
 
-            onSetDurationLabel(newTotalTimeMs);
+            if (mNewTotalTimeInMs != newTotalTimeMs) {
+                mNewTotalTimeInMs = newTotalTimeMs;
+                onSetDurationLabel(newTotalTimeMs);
+            }
         }
 
         long applySpeedCorrection(long timeMs) {
