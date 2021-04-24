@@ -210,4 +210,5 @@
     <string name="uploads_old_look">Altes Aussehen der Uploads-Kategorie</string>
     <string name="background_playback_activation">Hintergrund-Wiedergabe (Taste)</string>
     <string name="channels_old_look">Altes Aussehen der Kanäle-Kategorie</string>
+    <string name="channels_auto_load">Inhalt der Kanäle-Kategorie automatisch laden</string>
 </resources>
