@@ -971,7 +971,9 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void setDebugButtonState(boolean show) {
-        mPlayerGlue.setVideoStatsActionState(show);
+        if (mPlayerGlue != null) {
+            mPlayerGlue.setVideoStatsActionState(show);
+        }
     }
 
     @Override
