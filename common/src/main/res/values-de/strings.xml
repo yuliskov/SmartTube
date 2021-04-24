@@ -36,7 +36,7 @@
     <string name="video_buffer_size_low">Niedrig</string>
     <string name="video_buffer_size_med">Mittel</string>
     <string name="video_buffer_size_high">Hoch</string>
-    <string name="update_changelog">Changelog</string>
+    <string name="update_changelog">Änderungen</string>
     <string name="install_update">Update installieren</string>
     <string name="msg_category_is_empty">Hier ist nichts drin</string>
     <string name="dialog_add_to_playlist">Hinzufügen/Entfernen aus Wiedergabeliste</string>
@@ -185,8 +185,8 @@
     <string name="content_block_notify_none">Ohne Benachrichtigung</string>
     <string name="content_block_notify_toast">Toast-Meldung</string>
     <string name="content_block_notify_dialog">Bestätigungs-Dialog</string>
-    <string name="return_to_launcher">Rückkehr zum Launcher aus ATV-Kanälen/Suche</string>
-    <string name="intent_force_close">Beenden erzwingen, wenn Video von externer Quelle geöffnet wurde</string>
+    <string name="return_to_launcher">Rückkehr zum ATV-Launcher/Suche</string>
+    <string name="intent_force_close">Beenden erzwingen, wenn Video aus externer Quelle geöffnet wurde</string>
     <string name="btn_confirm">Bestätigen</string>
     <string name="player_low_video_quality">Niedrige Videoqualität</string>
     <string name="remote_session_closed">Remote-Sitzung wurde beendet</string>
@@ -204,7 +204,10 @@
     <string name="msg_player_error_renderer">Das ausgewählte Videoformat wird nicht unterstützt</string>
     <string name="msg_player_error_unexpected">Unbekannter Video-Decoder-Fehler</string>
     <string name="video_aspect">Seitenverhältnis</string>
-    <string name="player_tweaks">Entwickleroptionen</string>
+    <string name="player_tweaks">Entwickler-Optionen</string>
     <string name="header_uploads">Uploads</string>
-    <string name="player_show_global_clock">Uhr immer anzeigen</string>
+    <string name="player_show_global_clock">Uhr oben auf dem Video anzeigen</string>
+    <string name="uploads_old_look">Altes Aussehen der Uploads-Kategorie</string>
+    <string name="background_playback_activation">Hintergrund-Wiedergabe (Taste)</string>
+    <string name="channels_old_look">Altes Aussehen der Kanäle-Kategorie</string>
 </resources>
