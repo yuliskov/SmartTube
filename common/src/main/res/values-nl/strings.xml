@@ -206,7 +206,7 @@
     <string name="video_aspect">Beeldverhouding</string>
     <string name="player_tweaks">Ontwikkelaarsopties</string>
     <string name="header_uploads">Kanalen/Uploads</string>
-    <string name="player_show_global_clock">Klok op scherm weergeven</string>
+    <string name="player_show_global_clock">Klok in video weergeven</string>
     <string name="uploads_old_look">Kanalen/Uploads (oude lay-out)</string>
     <string name="background_playback_activation">Afspelen op achtergrond (toets)</string>
     <string name="channels_old_look">Kanalen (oude lay-out)</string>
