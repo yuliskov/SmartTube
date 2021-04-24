@@ -204,7 +204,7 @@
     <string name="msg_player_error_renderer">Das ausgewählte Videoformat wird nicht unterstützt</string>
     <string name="msg_player_error_unexpected">Unbekannter Video-Decoder-Fehler</string>
     <string name="video_aspect">Seitenverhältnis</string>
-    <string name="player_tweaks">Entwickler-Optionen</string>
+    <string name="player_tweaks">Entwickleroptionen</string>
     <string name="header_uploads">Uploads</string>
     <string name="player_show_global_clock">Uhr oben auf dem Video anzeigen</string>
     <string name="uploads_old_look">Altes Aussehen der Uploads-Kategorie</string>
