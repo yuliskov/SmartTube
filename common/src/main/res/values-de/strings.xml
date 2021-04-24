@@ -186,7 +186,7 @@
     <string name="content_block_notify_toast">Toast-Meldung</string>
     <string name="content_block_notify_dialog">Bestätigungs-Dialog</string>
     <string name="return_to_launcher">Rückkehr zum ATV-Launcher/Suche</string>
-    <string name="intent_force_close">Beenden erzwingen, wenn Video aus externer Quelle geöffnet wurde</string>
+    <string name="intent_force_close">Beenden erzwingen, wenn Video von externer Quelle geöffnet wurde</string>
     <string name="btn_confirm">Bestätigen</string>
     <string name="player_low_video_quality">Niedrige Videoqualität</string>
     <string name="remote_session_closed">Remote-Sitzung wurde beendet</string>
