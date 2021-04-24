@@ -129,7 +129,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         boolean isSegmentFound = false;
 
         for (SponsorSegment segment : mSponsorSegments) {
-            if (positionMs >= segment.getStartMs() && positionMs < segment.getEndMs()) {
+            if (isPositionAtSegmentStart(positionMs, segment)) {
                 Integer resId = mLocalizedMapping.get(segment.getCategory());
                 String localizedCategory = resId != null ? getActivity().getString(resId) : segment.getCategory();
 
@@ -149,6 +149,14 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         }
 
         mIsSameSegment = isSegmentFound;
+    }
+
+    private boolean isPositionAtSegmentStart(long positionMs, SponsorSegment segment) {
+        return positionMs >= segment.getStartMs() && positionMs <= (segment.getStartMs() + 1_000);
+    }
+
+    private boolean isPositionInsideSegment(long positionMs, SponsorSegment segment) {
+        return positionMs >= segment.getStartMs() && positionMs < segment.getEndMs();
     }
 
     private void messageSkip(long skipPositionMs, String category) {
