@@ -17,13 +17,14 @@
 
 <!-- Library: androidx:leanback:leanback-preference:1.0.0 -->
 <!-- MOD: make dialog title multiline -->
-<!-- MOD: only has effect on root dialog -->
+<!-- MOD: only has effect on nested dialogs -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lb_preference_decor_list_background"
+    android:elevation="@dimen/lb_preference_decor_elevation"
     android:orientation="vertical"
     android:transitionGroup="false"
     >
@@ -54,5 +55,22 @@
             android:ellipsize="end"
             />
     </FrameLayout>
+
+    <TextView
+        android:id="@android:id/message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="56dp"
+        android:visibility="gone" />
+
+    <androidx.leanback.widget.VerticalGridView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:transitionGroup="true"/>
 
 </LinearLayout>
