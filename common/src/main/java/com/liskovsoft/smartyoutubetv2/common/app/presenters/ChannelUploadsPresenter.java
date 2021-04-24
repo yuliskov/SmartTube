@@ -55,6 +55,11 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     @Override
+    public void onVideoItemSelected(Video item) {
+        // NOP
+    }
+
+    @Override
     public void onVideoItemClicked(Video item) {
         if (item.isVideo()) {
             mPlaybackPresenter.openVideo(item);

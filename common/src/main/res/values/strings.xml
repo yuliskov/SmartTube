@@ -210,4 +210,5 @@
     <string name="uploads_old_look">Revert old look of Uploads section</string>
     <string name="background_playback_activation">Background playback (activation)</string>
     <string name="channels_old_look">Revert old look of Channels section</string>
+    <string name="channels_auto_load">Auto load Channels section content</string>
 </resources>

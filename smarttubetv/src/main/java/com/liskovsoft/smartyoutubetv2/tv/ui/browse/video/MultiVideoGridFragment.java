@@ -303,7 +303,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
                                    RowPresenter.ViewHolder rowViewHolder, Row row) {
             if (item instanceof Video) {
-                mMainPresenter.onVideoItemClicked((Video) item);
+                mMainPresenter.onVideoItemSelected((Video) item);
             }
         }
     }

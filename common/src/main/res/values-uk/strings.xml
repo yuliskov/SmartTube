@@ -209,4 +209,5 @@
     <string name="uploads_old_look">Повернути старий вигляд розділу Завантаження</string>
     <string name="background_playback_activation">Фонове відтворення (активація)</string>
     <string name="channels_old_look">Повернути старий вигляд розділу Канали</string>
+    <string name="channels_auto_load">Автоматично завантажувати вміст розділу Канали</string>
 </resources>

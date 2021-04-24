@@ -170,6 +170,10 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
                 },
                 mMainUIData.isUploadsOldLookEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.channels_auto_load),
+                optionItem -> mMainUIData.enableUploadsAutoLoad(optionItem.isSelected()),
+                mMainUIData.isUploadsAutoLoadEnabled()));
+
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 }

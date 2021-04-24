@@ -47,6 +47,7 @@ public class MainUIData {
     private boolean mIsReturnToLauncherEnabled;
     private boolean mIsUploadsOldLookEnabled;
     private int mBackgroundShortcut;
+    private boolean mIsUploadsAutoLoadEnabled;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -216,6 +217,15 @@ public class MainUIData {
         return mIsUploadsOldLookEnabled;
     }
 
+    public void enableUploadsAutoLoad(boolean enable) {
+        mIsUploadsAutoLoadEnabled = enable;
+        persistState();
+    }
+
+    public boolean isUploadsAutoLoadEnabled() {
+        return mIsUploadsAutoLoadEnabled;
+    }
+
     public int getBackgroundShortcut() {
         return mBackgroundShortcut;
     }
@@ -290,6 +300,7 @@ public class MainUIData {
         mIsReturnToLauncherEnabled = Helpers.parseBoolean(split, 13, true);
         mIsUploadsOldLookEnabled = Helpers.parseBoolean(split, 14, false);
         mBackgroundShortcut = Helpers.parseInt(split, 15, BACKGROUND_SHORTCUT_HOME);
+        mIsUploadsAutoLoadEnabled = Helpers.parseBoolean(split, 16, true);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArrayLegacy(selectedCategories);
@@ -307,7 +318,7 @@ public class MainUIData {
         mPrefs.setData(MAIN_UI_DATA, Helpers.mergeObject(mIsCardAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale,
                 mColorSchemeIndex, mIsCardMultilineTitleEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting,
                 mPlaylistsStyle, mAppExitShortcut, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
-                mIsReturnToLauncherEnabled, mIsUploadsOldLookEnabled, mBackgroundShortcut));
+                mIsReturnToLauncherEnabled, mIsUploadsOldLookEnabled, mBackgroundShortcut, mIsUploadsAutoLoadEnabled));
     }
 
     public static class ColorScheme {

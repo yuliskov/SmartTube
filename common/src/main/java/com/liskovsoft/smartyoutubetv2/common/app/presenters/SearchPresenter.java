@@ -65,14 +65,13 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
     @Override
     public void onViewInitialized() {
-        loadSuggestedKeywords();
-
         startSearchInt(mSearchText);
         mSearchText = null;
     }
 
-    private void loadSuggestedKeywords() {
-        // TODO: not implemented
+    @Override
+    public void onVideoItemSelected(Video item) {
+        // NOP
     }
 
     @Override

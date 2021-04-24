@@ -213,6 +213,19 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     @Override
+    public void onVideoItemSelected(Video item) {
+        if (getView() == null) {
+            return;
+        }
+
+        if (item.isChannelUploads() && mMainUIData.isUploadsAutoLoadEnabled()) {
+            if (mUploadsType == Category.TYPE_MULTI_GRID) {
+                updateMultiGrid(item);
+            }
+        }
+    }
+
+    @Override
     public void onVideoItemClicked(Video item) {
         if (getView() == null) {
             return;
@@ -223,12 +236,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             //ChannelPresenter.instance(getContext()).openChannel(item);
 
             if (mUploadsType == Category.TYPE_MULTI_GRID) {
-                updateVideoGrid(
-                        getCategory(mCurrentCategoryId),
-                        ChannelUploadsPresenter.instance(getContext()).obtainVideoGroupObservable(item),
-                        1,
-                        true
-                );
+                updateMultiGrid(item);
             } else {
                 ChannelUploadsPresenter.instance(getContext()).openChannel(item);
             }
@@ -522,5 +530,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
     private void disposeActions() {
         RxUtils.disposeActions(mUpdateAction, mContinueAction, mSignCheckAction);
+    }
+
+    private void updateMultiGrid(Video item) {
+        updateVideoGrid(getCategory(mCurrentCategoryId), ChannelUploadsPresenter.instance(getContext()).obtainVideoGroupObservable(item), 1, true);
     }
 }
