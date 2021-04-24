@@ -163,7 +163,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.uploads_old_look),
+        options.add(UiOptionItem.from(getContext().getString(R.string.channels_old_look),
                 optionItem -> {
                     mMainUIData.enableUploadsOldLook(optionItem.isSelected());
                     mRestartApp = true;

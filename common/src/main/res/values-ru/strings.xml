@@ -208,4 +208,5 @@
     <string name="player_show_global_clock">Отображать часы всегда на экране</string>
     <string name="uploads_old_look">Вернуть старый вид раздела Загрузки</string>
     <string name="background_playback_activation">Фоновое воспроизведение (активация)</string>
+    <string name="channels_old_look">Вернуть старый вид раздела Каналы</string>
 </resources>
