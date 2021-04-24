@@ -125,7 +125,7 @@
     <string name="playlists_style">Стиль плейлистов</string>
     <string name="playlists_style_grid">Сетка</string>
     <string name="playlists_style_rows">Строки</string>
-    <string name="player_show_clock">Отображать часы</string>
+    <string name="player_show_clock">Отображать часы во всплывающем меню</string>
     <string name="player_show_remaining_time">Отображать оставшееся время</string>
     <string name="open_channel_uploads">Открыть загрузки</string>
     <string name="app_exit_shortcut">Выход из приложения</string>
@@ -205,7 +205,7 @@
     <string name="video_aspect">Соотношение сторон</string>
     <string name="player_tweaks">Для разработчиков</string>
     <string name="header_uploads">Загрузки</string>
-    <string name="player_show_global_clock">Отображать часы всегда на экране</string>
+    <string name="player_show_global_clock">Отображать часы поверх видео</string>
     <string name="uploads_old_look">Вернуть старый вид раздела Загрузки</string>
     <string name="background_playback_activation">Фоновое воспроизведение (активация)</string>
     <string name="channels_old_look">Вернуть старый вид раздела Каналы</string>

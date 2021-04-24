@@ -125,7 +125,7 @@
     <string name="playlists_style">Playlists style</string>
     <string name="playlists_style_grid">Grid</string>
     <string name="playlists_style_rows">Rows</string>
-    <string name="player_show_clock">Show clock</string>
+    <string name="player_show_clock">Show clock in pop-up menu</string>
     <string name="player_show_remaining_time">Show remaining time</string>
     <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Open channel uploads</string>
@@ -206,7 +206,7 @@
     <string name="video_aspect">Aspect ratio</string>
     <string name="player_tweaks">Developer options</string>
     <string name="header_uploads">Uploads</string>
-    <string name="player_show_global_clock">Show always on screen clock</string>
+    <string name="player_show_global_clock">Show clock on top of the video</string>
     <string name="uploads_old_look">Revert old look of Uploads section</string>
     <string name="background_playback_activation">Background playback (activation)</string>
     <string name="channels_old_look">Revert old look of Channels section</string>

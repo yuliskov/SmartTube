@@ -125,7 +125,7 @@
     <string name="playlists_style">Стиль плейлистів</string>
     <string name="playlists_style_grid">Сітка</string>
     <string name="playlists_style_rows">Рядки</string>
-    <string name="player_show_clock">Відображати годинник</string>
+    <string name="player_show_clock">Відображати годинник у спливаючому меню</string>
     <string name="player_show_remaining_time">Відображати час, що залишився</string>
     <string name="open_channel_uploads">Відкрити завантаження</string>
     <string name="app_exit_shortcut">Вихід з додатку</string>
@@ -205,7 +205,7 @@
     <string name="video_aspect">Співвідношення сторін</string>
     <string name="player_tweaks">Для розробників</string>
     <string name="header_uploads">Завантаження</string>
-    <string name="player_show_global_clock">Відображати годинник завжди на екрані</string>
+    <string name="player_show_global_clock">Відображати годинник поверх відео</string>
     <string name="uploads_old_look">Повернути старий вигляд розділу Завантаження</string>
     <string name="background_playback_activation">Фонове відтворення (активація)</string>
     <string name="channels_old_look">Повернути старий вигляд розділу Канали</string>
