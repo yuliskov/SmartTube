@@ -218,9 +218,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             return;
         }
 
-        if (item.isChannelUploads() && mMainUIData.isUploadsAutoLoadEnabled()) {
-            if (mUploadsType == Category.TYPE_MULTI_GRID) {
+        if (item.isChannelUploads() && mUploadsType == Category.TYPE_MULTI_GRID) {
+            if (mMainUIData.isUploadsAutoLoadEnabled()) {
                 updateMultiGrid(item);
+            } else {
+                updateMultiGrid(null); // clear
             }
         }
     }
@@ -425,6 +427,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         getView().showProgressBar(true);
 
         getView().updateCategory(VideoGroup.from(category, position, true));
+
+        if (group == null) {
+            // No group. Maybe just clear.
+            getView().showProgressBar(false);
+            return;
+        }
 
         mUpdateAction = group
                 .subscribeOn(Schedulers.newThread())
