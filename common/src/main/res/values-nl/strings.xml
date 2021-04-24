@@ -210,4 +210,5 @@
     <string name="uploads_old_look">Kanalen/Uploads (vorige lay-out)</string>
     <string name="background_playback_activation">Afspelen op achtergrond (toets)</string>
     <string name="channels_old_look">Kanalen (vorige lay-out)</string>
+    <string name="channels_auto_load">Kanalen automatisch laden</string>
 </resources>
