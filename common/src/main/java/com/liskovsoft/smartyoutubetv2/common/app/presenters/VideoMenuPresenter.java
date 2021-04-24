@@ -247,7 +247,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.return_to_background_video),
-                        // Start the app as usual. Playback view already blocked and remembered.
+                        // Assume that the Playback view already blocked and remembered.
                         optionItem -> ViewManager.instance(getContext()).startView(SplashView.class)
                 )
         );
