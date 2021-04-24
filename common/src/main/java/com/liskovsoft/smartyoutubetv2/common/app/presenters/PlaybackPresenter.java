@@ -92,4 +92,8 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
 
         return getView().getController().getVideo();
     }
+
+    public boolean isVideoInBackground() {
+        return getView() != null && getView().getController().isInPIPMode();
+    }
 }

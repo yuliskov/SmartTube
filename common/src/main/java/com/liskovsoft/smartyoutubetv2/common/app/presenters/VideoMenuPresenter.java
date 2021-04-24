@@ -11,6 +11,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.utils.ServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -40,6 +42,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     private boolean mIsShareButtonEnabled;
     private boolean mIsAddToPlaylistButtonEnabled;
     private boolean mIsAccountSelectionEnabled;
+    private boolean mIsReturnToBackgroundVideoEnabled;
 
     private VideoMenuPresenter(Context context) {
         super(context);
@@ -67,6 +70,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mIsNotInterestedButtonEnabled = true;
         mIsShareButtonEnabled = true;
         mIsAccountSelectionEnabled = true;
+        mIsReturnToBackgroundVideoEnabled = true;
 
         showMenuInt(video);
     }
@@ -76,6 +80,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mIsShareButtonEnabled = true;
         mIsOpenChannelButtonEnabled = true;
         mIsAccountSelectionEnabled = true;
+        mIsReturnToBackgroundVideoEnabled = true;
 
         showMenuInt(video);
     }
@@ -109,6 +114,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         mSettingsPresenter.clear();
 
+        appendReturnToBackgroundVideoButton();
         appendAddToPlaylist(videoPlaylistInfos);
         appendOpenChannelButton();
         //appendOpenChannelUploadsButton();
@@ -127,6 +133,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         mSettingsPresenter.clear();
 
+        appendReturnToBackgroundVideoButton();
         appendOpenChannelButton();
         appendShareButton();
         appendAccountSelectionButton();
@@ -231,6 +238,19 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
                 UiOptionItem.from(getContext().getString(
                         mVideo.isSubscribed ? R.string.unsubscribe_from_channel : R.string.subscribe_to_channel),
                         optionItem -> subscribe()));
+    }
+
+    private void appendReturnToBackgroundVideoButton() {
+        if (!mIsReturnToBackgroundVideoEnabled || !PlaybackPresenter.instance(getContext()).isVideoInBackground()) {
+            return;
+        }
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.return_to_background_video),
+                        // Start the app as usual. Playback view already blocked and remembered.
+                        optionItem -> ViewManager.instance(getContext()).startView(SplashView.class)
+                )
+        );
     }
 
     private void addToPlaylist(String playlistId, boolean checked) {

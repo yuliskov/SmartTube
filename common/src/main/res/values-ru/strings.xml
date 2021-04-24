@@ -210,4 +210,5 @@
     <string name="background_playback_activation">Фоновое воспроизведение (активация)</string>
     <string name="channels_old_look">Вернуть старый вид раздела Каналы</string>
     <string name="channels_auto_load">Автоматически загружать содержимое раздела Каналы</string>
+    <string name="return_to_background_video">Вернуться к фоновому видео</string>
 </resources>
