@@ -211,4 +211,5 @@
     <string name="background_playback_activation">Afspelen op achtergrond (toets)</string>
     <string name="channels_old_look">Kanalen (vorige lay-out)</string>
     <string name="channels_auto_load">Kanalen automatisch laden</string>
+    <string name="return_to_background_video">Terug naar video op achtergrond</string>
 </resources>
