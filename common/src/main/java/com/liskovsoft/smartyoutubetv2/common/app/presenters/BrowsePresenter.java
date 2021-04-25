@@ -473,11 +473,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private void continueGroup(VideoGroup group) {
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
-        if (hasPendingActions()) {
+        if (RxUtils.isAnyActionRunning(mContinueAction)) {
             return;
         }
-
-        disposeActions();
+        
         getView().showProgressBar(true);
 
         MediaGroup mediaGroup = group.getMediaGroup();
