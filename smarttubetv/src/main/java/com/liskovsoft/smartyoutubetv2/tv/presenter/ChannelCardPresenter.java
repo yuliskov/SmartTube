@@ -49,7 +49,7 @@ public class ChannelCardPresenter extends CardEventsPresenter {
         mNewContentBackgroundColor =
                 ContextCompat.getColor(context, R.color.dark_red);
         mSelectedBackgroundColor =
-                ContextCompat.getColor(context, R.color.card_selected_background_white);
+                ContextCompat.getColor(context, Helpers.getThemeAttr(context, R.attr.cardSelectedBackground));
         mSelectedTextColor =
                 ContextCompat.getColor(context, R.color.card_selected_text_grey);
         mDefaultCardImage = new ColorDrawable(ContextCompat.getColor(context, R.color.lb_grey));
