@@ -205,5 +205,7 @@
     <string name="player_show_global_clock">Zobrazit hodiny v horní části videa</string>
     <string name="uploads_old_look">Vrátit zpět starý vzhled sekce Nahraná videa</string>
     <string name="background_playback_activation">Přehrávání na pozadí (aktivace)</string>
-    <string name="channels_old_look">Vrátit zpět starý vzhled sekce Kanály</string>    
+    <string name="channels_old_look">Vrátit zpět starý vzhled sekce Kanály</string>
+    <string name="channels_auto_load">Automaticky načíst obsah sekce Kanály</string>
+    <string name="return_to_background_video">Zpět na video běžící na pozadí</string>
 </resources>
