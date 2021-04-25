@@ -13,6 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -98,6 +99,11 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     @Override
     public void onViewDestroyed() {
         disposeActions();
+    }
+
+    @Override
+    public boolean hasPendingActions() {
+        return RxUtils.isAnyActionRunning(mScrollAction, mUpdateAction);
     }
 
     public void openChannel(Video item) {

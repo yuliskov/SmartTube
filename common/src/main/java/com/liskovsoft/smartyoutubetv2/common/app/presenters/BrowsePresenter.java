@@ -298,6 +298,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         updateCategory(categoryId);
     }
 
+    @Override
+    public boolean hasPendingActions() {
+        return RxUtils.isAnyActionRunning(mUpdateAction, mContinueAction, mSignCheckAction);
+    }
+
     private void maybeRefreshHeader() {
         long timeAfterPauseMs = System.currentTimeMillis() - mLastUpdateTimeMs;
         if (timeAfterPauseMs > HEADER_REFRESH_PERIOD_MS) { // update header every n minutes
@@ -402,7 +407,18 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mediaGroups -> {
-                            updateRowView(category, mediaGroups);
+                            for (MediaGroup mediaGroup : mediaGroups) {
+                                if (mediaGroup.getMediaItems() == null) {
+                                    Log.e(TAG, "loadRowsHeader: MediaGroup is empty. Group Name: " + mediaGroup.getTitle());
+                                    continue;
+                                }
+
+                                VideoGroup videoGroup = VideoGroup.from(mediaGroup, category);
+
+                                getView().updateCategory(videoGroup);
+
+                                loadNextPortionIfNeeded(videoGroup);
+                            }
 
                             // Hide loading as long as first group received
                             if (!mediaGroups.isEmpty()) {
@@ -454,25 +470,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                         });
     }
 
-    private void updateRowView(Category category, List<MediaGroup> mediaGroups) {
-        for (MediaGroup mediaGroup : mediaGroups) {
-            if (mediaGroup.getMediaItems() == null) {
-                Log.e(TAG, "loadRowsHeader: MediaGroup is empty. Group Name: " + mediaGroup.getTitle());
-                continue;
-            }
-
-            VideoGroup videoGroup = VideoGroup.from(mediaGroup, category);
-
-            getView().updateCategory(videoGroup);
-
-            loadNextPortionIfNeeded(videoGroup);
-        }
-    }
-
     private void continueGroup(VideoGroup group) {
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
-        if (isActionsRunning()) { // one action at a time allowed
+        if (hasPendingActions()) {
             return;
         }
 
@@ -539,10 +540,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
     private void disposeActions() {
         RxUtils.disposeActions(mUpdateAction, mContinueAction, mSignCheckAction);
-    }
-
-    private boolean isActionsRunning() {
-        return RxUtils.isAnyActionRunning(mUpdateAction, mContinueAction, mSignCheckAction);
     }
 
     private void updateMultiGrid(Video item) {

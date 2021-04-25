@@ -61,6 +61,11 @@ public class TickleManager {
         updateTickle();
     }
 
+    public void runTask(Runnable task, long delayMs) {
+        mHandler.removeCallbacks(task);
+        mHandler.postDelayed(task, delayMs);
+    }
+
     private void updateTickle() {
         mHandler.removeCallbacks(mUpdateHandler);
 

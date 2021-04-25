@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.utils.TickleManager;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
@@ -45,6 +46,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
     private int mSelectedItemIndex1 = -1;
     private int mSelectedItemIndex2 = -1;
     private float mVideoGridScale;
+    private final Runnable mRestore1Task = this::restorePosition1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -233,7 +235,11 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
 
         // Item not found? Lookup in next group.
         if (mSelectedItemIndex1 != -1) {
-            mMainPresenter.onScrollEnd((Video) mGridAdapter1.get(mGridAdapter1.size() - 1));
+            if (mMainPresenter.hasPendingActions()) {
+                TickleManager.instance().runTask(mRestore1Task, 500);
+            } else {
+                mMainPresenter.onScrollEnd((Video) mGridAdapter1.get(mGridAdapter1.size() - 1));
+            }
         }
     }
 

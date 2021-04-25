@@ -145,10 +145,10 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             freeze(false);
         }
 
-        updatePosition();
+        restorePosition();
     }
 
-    private void updatePosition() {
+    private void restorePosition() {
         setPosition(mSelectedRowIndex);
 
         // Maybe we don't need to load next group since all rows already fetched?

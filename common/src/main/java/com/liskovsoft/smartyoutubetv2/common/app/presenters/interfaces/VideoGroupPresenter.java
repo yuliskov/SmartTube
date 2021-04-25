@@ -7,4 +7,5 @@ public interface VideoGroupPresenter {
     void onVideoItemClicked(Video item);
     void onVideoItemLongClicked(Video item);
     void onScrollEnd(Video item);
+    boolean hasPendingActions();
 }
