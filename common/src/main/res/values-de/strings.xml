@@ -185,7 +185,7 @@
     <string name="content_block_notify_none">Ohne Benachrichtigung</string>
     <string name="content_block_notify_toast">Toast-Meldung</string>
     <string name="content_block_notify_dialog">Bestätigungs-Dialog</string>
-    <string name="return_to_launcher">Rückkehr zum Launcher aus ATV-Kanälen/Suche</string>
+    <string name="return_to_launcher">Rückkehr zum ATV-Launcher/Suche</string>
     <string name="intent_force_close">Beenden erzwingen, wenn Video von externer Quelle geöffnet wurde</string>
     <string name="btn_confirm">Bestätigen</string>
     <string name="player_low_video_quality">Niedrige Videoqualität</string>
@@ -206,5 +206,10 @@
     <string name="video_aspect">Seitenverhältnis</string>
     <string name="player_tweaks">Entwickleroptionen</string>
     <string name="header_uploads">Uploads</string>
-    <string name="player_show_global_clock">Uhr immer anzeigen</string>
+    <string name="player_show_global_clock">Uhr auf dem Video anzeigen</string>
+    <string name="uploads_old_look">Altes Aussehen der Uploads-Kategorie</string>
+    <string name="background_playback_activation">Hintergrund-Wiedergabe (Taste)</string>
+    <string name="channels_old_look">Altes Aussehen der Kanäle-Kategorie</string>
+    <string name="channels_auto_load">Inhalt der Kanäle-Kategorie automatisch laden</string>
+    <string name="return_to_background_video">Zurück zum Video im Hintergrund</string>
 </resources>
