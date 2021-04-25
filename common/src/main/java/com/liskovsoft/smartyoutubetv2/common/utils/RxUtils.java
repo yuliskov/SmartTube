@@ -29,7 +29,10 @@ public class RxUtils {
                 );
     }
 
-    public static boolean isActionRunning(Disposable action) {
+    /**
+     * NOTE: Don't use it to check that action in completed inside other action (scrollEnd bug).
+     */
+    private static boolean isActionRunning(Disposable action) {
         return action != null && !action.isDisposed();
     }
 }
