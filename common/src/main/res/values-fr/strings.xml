@@ -205,4 +205,9 @@
     <string name="msg_player_error_unexpected">Erreur inconnue du décodeur vidéo</string>
     <string name="video_aspect">Ratio d\'aspect</string>
     <string name="player_tweaks">Options de développeur</string>
+    <string name="header_uploads">Uploads</string>
+    <string name="player_show_global_clock">Afficher l’horloge en haut de la vidéo</string>
+    <string name="uploads_old_look">Restaurer l'ancienne apparence dans la section Uploads</string>
+    <string name="background_playback_activation">Activation de la lecture en arrière-plan</string>
+    <string name="channels_old_look">Restaurer l'ancienne apparence dans la section des chaînes</string>
 </resources>
