@@ -472,6 +472,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private void continueGroup(VideoGroup group) {
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
+        if (isActionsRunning()) { // one action at a time allowed
+            return;
+        }
+
         disposeActions();
         getView().showProgressBar(true);
 
@@ -535,6 +539,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
     private void disposeActions() {
         RxUtils.disposeActions(mUpdateAction, mContinueAction, mSignCheckAction);
+    }
+
+    private boolean isActionsRunning() {
+        return RxUtils.isAnyActionRunning(mUpdateAction, mContinueAction, mSignCheckAction);
     }
 
     private void updateMultiGrid(Video item) {
