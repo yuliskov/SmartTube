@@ -39,7 +39,7 @@
     <string name="update_changelog">Wat is er nieuw ?</string>
     <string name="install_update">Update installeren</string>
     <string name="msg_category_is_empty">Niets gevonden</string>
-    <string name="dialog_add_to_playlist">Toevoegen/verwijderen in playlist</string>
+    <string name="dialog_add_to_playlist">In of uit playlist(s)</string>
     <string name="msg_signed_users_only">Enkel voor aangemelde gebruikers</string>
     <string name="msg_cant_load_content">Kan inhoud niet laden</string>
     <string name="title_video_presets">Video preset</string>
@@ -206,6 +206,10 @@
     <string name="video_aspect">Beeldverhouding</string>
     <string name="player_tweaks">Ontwikkelaarsopties</string>
     <string name="header_uploads">Kanalen/Uploads</string>
-    <string name="player_show_global_clock">Klok op scherm weergeven</string>
+    <string name="player_show_global_clock">Klok in video weergeven</string>
     <string name="uploads_old_look">Vorige lay-out kanalen/uploads</string>
+    <string name="background_playback_activation">Afspelen op achtergrond (toets)</string>
+    <string name="channels_old_look">Vorige lay-out kanalen</string>
+    <string name="channels_auto_load">Inhoud kanalen automatisch laden</string>
+    <string name="return_to_background_video">Terug naar video op achtergrond</string>
 </resources>
