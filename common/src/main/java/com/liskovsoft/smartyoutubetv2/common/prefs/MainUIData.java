@@ -5,6 +5,7 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -231,6 +232,12 @@ public class MainUIData {
     }
 
     public void setBackgroundShortcut(int type) {
+        PlayerData playerData = PlayerData.instance(mContext);
+
+        if (playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_DEFAULT) {
+            playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_PIP);
+        }
+
         mBackgroundShortcut = type;
         persistState();
     }
