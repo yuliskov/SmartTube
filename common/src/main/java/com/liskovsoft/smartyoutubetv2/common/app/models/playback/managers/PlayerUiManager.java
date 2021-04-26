@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.KeyEvent;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
@@ -86,36 +87,53 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         }
     }
 
+    //@Override
+    //public boolean onKeyDown(int keyCode) {
+    //    disableUiAutoHideTimeout();
+    //    disableSuggestionsResetTimeout();
+    //
+    //    boolean controlsShown = getController().isControlsShown();
+    //
+    //    if (KeyHelpers.isBackKey(keyCode)) {
+    //        enableSuggestionsResetTimeout();
+    //    } else if (KeyHelpers.isMenuKey(keyCode)) {
+    //        getController().showControls(!controlsShown);
+    //
+    //        if (controlsShown) {
+    //            enableSuggestionsResetTimeout();
+    //        }
+    //    } else if (KeyHelpers.isConfirmKey(keyCode) && !controlsShown) {
+    //        switch (mPlayerData.getOKButtonBehavior()) {
+    //            case PlayerData.ONLY_UI:
+    //                getController().showControls(true);
+    //                return true; // don't show ui
+    //            case PlayerData.UI_AND_PAUSE:
+    //                // NOP
+    //                break;
+    //            case PlayerData.ONLY_PAUSE:
+    //                getController().setPlay(!getController().getPlay());
+    //                return true; // don't show ui
+    //        }
+    //    } else if (KeyHelpers.isStopKey(keyCode)) {
+    //        getController().exit();
+    //        return true;
+    //    }
+    //
+    //    enableUiAutoHideTimeout();
+    //
+    //    return false;
+    //}
+
     @Override
     public boolean onKeyDown(int keyCode) {
         disableUiAutoHideTimeout();
         disableSuggestionsResetTimeout();
 
-        boolean controlsShown = getController().isControlsShown();
+        boolean isHandled = handleBackKey(keyCode) || handleMenuKey(keyCode) ||
+                handleConfirmKey(keyCode) || handleStopKey(keyCode) || handleNumKeys(keyCode);
 
-        if (KeyHelpers.isBackKey(keyCode)) {
-            enableSuggestionsResetTimeout();
-        } else if (KeyHelpers.isMenuKey(keyCode)) {
-            getController().showControls(!controlsShown);
-
-            if (controlsShown) {
-                enableSuggestionsResetTimeout();
-            }
-        } else if (KeyHelpers.isConfirmKey(keyCode) && !controlsShown) {
-            switch (mPlayerData.getOKButtonBehavior()) {
-                case PlayerData.ONLY_UI:
-                    getController().showControls(true);
-                    return true; // don't show ui
-                case PlayerData.UI_AND_PAUSE:
-                    // NOP
-                    break;
-                case PlayerData.ONLY_PAUSE:
-                    getController().setPlay(!getController().getPlay());
-                    return true; // don't show ui
-            }
-        } else if (KeyHelpers.isStopKey(keyCode)) {
-            getController().exit();
-            return true;
+        if (isHandled) {
+            return true; // don't show UI
         }
 
         enableUiAutoHideTimeout();
@@ -343,6 +361,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     private void enableUiAutoHideTimeout() {
         Log.d(TAG, "Starting auto hide ui timer...");
+        disableUiAutoHideTimeout();
         if (mEngineReady && mPlayerData.getUIHideTimoutSec() > 0) {
             mHandler.postDelayed(mUiAutoHideHandler, mPlayerData.getUIHideTimoutSec() * 1_000L);
         }
@@ -355,6 +374,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     private void enableSuggestionsResetTimeout() {
         Log.d(TAG, "Starting reset position timer...");
+        disableSuggestionsResetTimeout();
         if (mEngineReady) {
             mHandler.postDelayed(mSuggestionsResetHandler, SUGGESTIONS_RESET_TIMEOUT_MS);
         }
@@ -376,6 +396,68 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         Observable<Void> observable = callable.call(video.mediaItem);
 
         RxUtils.execute(observable);
+    }
+
+    private boolean handleBackKey(int keyCode) {
+        if (KeyHelpers.isBackKey(keyCode)) {
+            enableSuggestionsResetTimeout();
+        }
+
+        return false;
+    }
+
+    private boolean handleMenuKey(int keyCode) {
+        boolean controlsShown = getController().isControlsShown();
+
+        if (KeyHelpers.isMenuKey(keyCode)) {
+            getController().showControls(!controlsShown);
+
+            if (controlsShown) {
+                enableSuggestionsResetTimeout();
+            }
+        }
+
+        return false;
+    }
+
+    private boolean handleConfirmKey(int keyCode) {
+        boolean controlsShown = getController().isControlsShown();
+
+        if (KeyHelpers.isConfirmKey(keyCode) && !controlsShown) {
+            switch (mPlayerData.getOKButtonBehavior()) {
+                case PlayerData.ONLY_UI:
+                    getController().showControls(true);
+                    return true; // don't show ui
+                case PlayerData.UI_AND_PAUSE:
+                    // NOP
+                    break;
+                case PlayerData.ONLY_PAUSE:
+                    getController().setPlay(!getController().getPlay());
+                    return true; // don't show ui
+            }
+        }
+
+        return false;
+    }
+
+    private boolean handleStopKey(int keyCode) {
+        if (KeyHelpers.isStopKey(keyCode)) {
+            getController().exit();
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean handleNumKeys(int keyCode) {
+        if (keyCode >= KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9) {
+            if (getController() != null && getController().getLengthMs() > 0) {
+                float seekPercent = (keyCode - KeyEvent.KEYCODE_0) / 10f;
+                getController().setPositionMs((long)(getController().getLengthMs() * seekPercent));
+            }
+        }
+
+        return false;
     }
 
     private interface MediaItemObservable {
