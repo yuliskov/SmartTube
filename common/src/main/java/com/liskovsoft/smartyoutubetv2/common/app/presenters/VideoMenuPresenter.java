@@ -136,9 +136,12 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         appendReturnToBackgroundVideoButton();
         appendOpenChannelButton();
         appendShareButton();
-        appendAccountSelectionButton();
 
-        mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction));
+        if (mSettingsPresenter.isEmpty()) {
+            MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
+        } else {
+            mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction));
+        }
     }
 
     private void appendAddToPlaylist(List<VideoPlaylistInfo> videoPlaylistInfos) {

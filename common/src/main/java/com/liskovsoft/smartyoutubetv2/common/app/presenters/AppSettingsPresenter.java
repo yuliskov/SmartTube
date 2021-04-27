@@ -180,6 +180,10 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
         mTimeoutMs = timeoutMs;
     }
 
+    public boolean isEmpty() {
+        return mCategories == null || mCategories.isEmpty();
+    }
+
     private void setupTimeout() {
         mHandler.removeCallbacks(mCloseDialog);
 
