@@ -6,7 +6,6 @@ import android.content.Intent;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -128,7 +127,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         } else {
             String searchText = IntentExtractor.extractSearchText(intent);
 
-            if (searchText != null || IntentExtractor.isVoiceCommand(intent)) {
+            if (searchText != null || IntentExtractor.isStartVoiceCommand(intent)) {
                 SearchPresenter searchPresenter = SearchPresenter.instance(getContext());
                 searchPresenter.startSearch(searchText);
             } else {
