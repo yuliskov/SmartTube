@@ -82,7 +82,7 @@ public class SettingsGridFragment extends GridFragment implements SettingsCatego
     @Override
     public boolean isEmpty() {
         if (mSettingsAdapter == null) {
-            return false;
+            return mPendingUpdates.isEmpty();
         }
 
         return mSettingsAdapter.size() == 0;

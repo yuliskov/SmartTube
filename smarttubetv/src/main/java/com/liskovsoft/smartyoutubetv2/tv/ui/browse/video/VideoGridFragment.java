@@ -152,7 +152,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
     @Override
     public boolean isEmpty() {
         if (mGridAdapter == null) {
-            return false;
+            return mPendingUpdates.isEmpty();
         }
 
         return mGridAdapter.size() == 0;

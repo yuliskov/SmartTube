@@ -263,11 +263,23 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
 
     @Override
     public boolean isEmpty() {
-        if (mGridAdapter1 == null || mGridAdapter2 == null) {
-            return false;
+        return isEmpty1() && isEmpty2();
+    }
+
+    private boolean isEmpty1() {
+        if (mGridAdapter1 == null) {
+            return mPendingUpdates1.isEmpty();
         }
 
-        return mGridAdapter1.size() == 0 && mGridAdapter2.size() == 0;
+        return mGridAdapter1.size() == 0;
+    }
+
+    private boolean isEmpty2() {
+        if (mGridAdapter2 == null) {
+            return mPendingUpdates2.isEmpty();
+        }
+
+        return mGridAdapter2.size() == 0;
     }
 
     private final class ItemViewLongClickedListener implements OnItemViewPressedListener {

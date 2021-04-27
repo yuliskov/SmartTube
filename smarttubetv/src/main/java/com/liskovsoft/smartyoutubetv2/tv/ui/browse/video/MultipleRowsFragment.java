@@ -102,7 +102,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     @Override
     public boolean isEmpty() {
         if (mRowsAdapter == null) {
-            return false;
+            return mPendingUpdates.isEmpty();
         }
 
         return mRowsAdapter.size() == 0;
