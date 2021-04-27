@@ -76,6 +76,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         private static final long SPEED_INCREASE_PERIOD_MS = 1000;
         private static final double SPEED_INCREASE_FACTOR = 1.5;
         private static final long START_SEEK_INCREMENT_MS = 10_000;
+        private static final int CONTROLS_MODE_FULL = 0;
+        private static final int CONTROLS_MODE_COMPACT = 1;
         final Presenter.ViewHolder mDescriptionViewHolder;
         final ImageView mImageView;
         final ViewGroup mDescriptionDock;
@@ -441,7 +443,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                         case KeyEvent.KEYCODE_DPAD_UP:
                         case KeyEvent.KEYCODE_DPAD_DOWN:
                             if (!mInSeek) {
-                                enableCompactMode(false);
+                                setControlsMode(CONTROLS_MODE_FULL);
                             }
 
                             // eat DPAD UP/DOWN in seek mode
@@ -450,7 +452,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                         case KeyEvent.KEYCODE_MINUS:
                         case KeyEvent.KEYCODE_MEDIA_REWIND:
                             if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                                enableCompactMode(true);
+                                setControlsMode(CONTROLS_MODE_COMPACT);
                                 onBackward();
                             } else {
                                 // MOD: resume immediately after seeking
@@ -463,7 +465,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                         case KeyEvent.KEYCODE_PLUS:
                         case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
                             if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                                enableCompactMode(true);
+                                setControlsMode(CONTROLS_MODE_COMPACT);
                                 onForward();
                             } else {
                                 // MOD: resume immediately after seeking
@@ -578,20 +580,23 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         }
 
         // MOD: seek ui tweaks
-        void enableCompactMode(boolean enable) {
-            if (enable) {
-                mControlsVh.view.setVisibility(View.GONE);
-                // MOD: use GONE to move previews closer to seek bar
-                mSecondaryControlsVh.view.setVisibility(View.GONE);
-                mDescriptionViewHolder.view.setVisibility(View.GONE);
-                mAdditionalInfo.setVisibility(View.GONE);
-                mThumbsBar.setVisibility(View.VISIBLE);
-            } else {
-                mControlsVh.view.setVisibility(View.VISIBLE);
-                mSecondaryControlsVh.view.setVisibility(View.VISIBLE);
-                mDescriptionViewHolder.view.setVisibility(View.VISIBLE);
-                mAdditionalInfo.setVisibility(View.VISIBLE);
-                mThumbsBar.setVisibility(View.INVISIBLE);
+        void setControlsMode(int mode) {
+            switch (mode) {
+                case CONTROLS_MODE_FULL:
+                    mControlsVh.view.setVisibility(View.VISIBLE);
+                    mSecondaryControlsVh.view.setVisibility(View.VISIBLE);
+                    mDescriptionViewHolder.view.setVisibility(View.VISIBLE);
+                    mAdditionalInfo.setVisibility(View.VISIBLE);
+                    mThumbsBar.setVisibility(View.INVISIBLE);
+                    break;
+                case CONTROLS_MODE_COMPACT:
+                    mControlsVh.view.setVisibility(View.GONE);
+                    // MOD: use GONE to move previews closer to seek bar
+                    mSecondaryControlsVh.view.setVisibility(View.GONE);
+                    mDescriptionViewHolder.view.setVisibility(View.GONE);
+                    mAdditionalInfo.setVisibility(View.GONE);
+                    mThumbsBar.setVisibility(View.VISIBLE);
+                    break;
             }
         }
 
@@ -900,7 +905,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         ViewHolder vh = (ViewHolder) rowViewHolder;
         if (vh.view.hasFocus()) {
             // player controls hidden
-            vh.enableCompactMode(false);
+            vh.setControlsMode(ViewHolder.CONTROLS_MODE_FULL);
             vh.mProgressBar.requestFocus();
         }
     }
