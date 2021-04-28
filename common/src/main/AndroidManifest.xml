@@ -19,5 +19,6 @@
             </intent-filter>
         </receiver>
         <service android:name="com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService" android:enabled="true"/>
+        <service android:name="com.liskovsoft.smartyoutubetv2.common.misc.BackgroundPlaybackService" android:enabled="true"/>
     </application>
 </manifest>

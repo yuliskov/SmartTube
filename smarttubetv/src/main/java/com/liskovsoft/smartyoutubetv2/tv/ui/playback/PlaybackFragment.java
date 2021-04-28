@@ -54,8 +54,8 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.Restore
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
@@ -280,8 +280,13 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     private void releasePlayer() {
         // Inside dialogs we could change engine settings on fly
-        if (getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND ||
-            AppSettingsPresenter.instance(getContext()).isDialogShown()) {
+        if (AppSettingsPresenter.instance(getContext()).isDialogShown()) {
+            Log.d(TAG, "releasePlayer: Engine release is blocked. Exiting...");
+            return;
+        }
+
+        // Background audio mode is complicated (surface destroyed error) on Android 9 and above. So avoid it.
+        if (getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND && VERSION.SDK_INT < 28) {
             Log.d(TAG, "releasePlayer: Engine release is blocked. Exiting...");
             return;
         }
