@@ -383,7 +383,7 @@ public class ViewManager {
         mIsMoveToBackEnabled = enable;
     }
 
-    public boolean isStartViewPending() {
+    public boolean isNewViewPending() {
         return System.currentTimeMillis() - mStartActivityMs < 1_000;
     }
 }

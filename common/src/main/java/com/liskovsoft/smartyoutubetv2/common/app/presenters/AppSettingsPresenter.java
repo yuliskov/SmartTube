@@ -143,7 +143,8 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     }
 
     public boolean isDialogShown() {
-        return !mCategories.isEmpty();
+        // Also check that current dialog almost closed (new view start is pending from a menu item)
+        return !mCategories.isEmpty() && !ViewManager.instance(getContext()).isNewViewPending();
     }
 
     public void appendRadioCategory(String categoryTitle, List<OptionItem> items) {

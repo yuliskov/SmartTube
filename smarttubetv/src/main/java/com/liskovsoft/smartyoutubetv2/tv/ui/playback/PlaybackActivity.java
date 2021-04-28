@@ -261,7 +261,7 @@ public class PlaybackActivity extends LeanbackActivity {
 
     private boolean isHomePressed() {
         // Assume Home if no back and finish event happens
-        return !isBackPressed() && !isPipPressed() && !mViewManager.isStartViewPending();
+        return !isBackPressed() && !isPipPressed() && !mViewManager.isNewViewPending();
     }
 
     private boolean isPipPressed() {
