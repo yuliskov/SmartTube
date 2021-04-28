@@ -69,7 +69,8 @@ public class MotherActivity extends FragmentActivity {
 
         // 4K fix with AFR
         applyCustomConfig();
-        Helpers.makeActivityFullscreen(this);
+        // Fullscreen moved to styles so it could be applied as early as possible.
+        //Helpers.makeActivityFullscreen(this);
     }
 
     @Override
