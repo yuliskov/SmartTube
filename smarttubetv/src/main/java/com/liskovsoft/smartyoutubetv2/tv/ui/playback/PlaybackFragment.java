@@ -42,6 +42,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.Player
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.ExoPlayerController;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerController;
@@ -286,7 +287,9 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         }
 
         // Background audio mode is complicated (surface destroyed error) on Android 9 and above. So avoid it.
-        if (getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND && VERSION.SDK_INT < 28) {
+        if (getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND &&
+            !ViewManager.instance(getContext()).isNewViewPending() &&
+            VERSION.SDK_INT < 28) {
             Log.d(TAG, "releasePlayer: Engine release is blocked. Exiting...");
             return;
         }
