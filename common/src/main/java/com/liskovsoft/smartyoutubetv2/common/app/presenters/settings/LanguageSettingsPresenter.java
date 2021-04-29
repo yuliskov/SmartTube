@@ -7,12 +7,11 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.LangUpdater;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public class LanguageSettingsPresenter extends BasePresenter<Void> {
@@ -28,7 +27,7 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
     }
 
     public void show() {
-        HashMap<String, String> locales = mLangUpdater.getSupportedLocales();
+        Map<String, String> locales = mLangUpdater.getSupportedLocales();
         String language = mLangUpdater.getPreferredLocale();
 
         List<OptionItem> options = new ArrayList<>();
