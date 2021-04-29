@@ -282,7 +282,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private void releasePlayer() {
         // Inside dialogs we could change engine settings on fly
         if (AppSettingsPresenter.instance(getContext()).isDialogShown()) {
-            Log.d(TAG, "releasePlayer: Engine release is blocked. Exiting...");
+            Log.d(TAG, "releasePlayer: Engine release is blocked by dialog. Exiting...");
             return;
         }
 
@@ -290,7 +290,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         if (getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND &&
             !ViewManager.instance(getContext()).isNewViewPending() &&
             VERSION.SDK_INT < 28) {
-            Log.d(TAG, "releasePlayer: Engine release is blocked. Exiting...");
+            Log.d(TAG, "releasePlayer: Engine release is blocked by background playback. Exiting...");
             return;
         }
 
