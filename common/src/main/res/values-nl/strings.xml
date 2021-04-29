@@ -127,7 +127,6 @@
     <string name="playlists_style_rows">Rijen</string>
     <string name="player_show_clock">Klok in player weergeven</string>
     <string name="player_show_remaining_time">Resterende tijd weergeven</string>
-    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Recente uploads</string>
     <string name="action_video_zoom">Video zoom</string>
     <string name="video_zoom">Video zoom</string>

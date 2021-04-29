@@ -127,7 +127,6 @@
     <string name="playlists_style_rows">Rows</string>
     <string name="player_show_clock">Show clock in pop-up menu</string>
     <string name="player_show_remaining_time">Show remaining time</string>
-    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Open channel uploads</string>
     <string name="app_exit_shortcut">Exit from the app</string>
     <string name="app_exit_none">Don\'t exit</string>

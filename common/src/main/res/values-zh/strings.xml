@@ -127,8 +127,7 @@
 	<string name="playlists_style_rows">行</string>
 	<string name="player_show_clock">显示时间</string>
 	<string name="player_show_remaining_time">显示剩余时间</string>
-	<string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
-	<string name="open_channel_uploads">打开频道上传</string>
+    <string name="open_channel_uploads">打开频道上传</string>
 	<string name="app_exit_shortcut">关闭应用程序</string>
 	<string name="app_exit_none">不要关闭</string>
 	<string name="app_double_back_exit">两下退后键</string>

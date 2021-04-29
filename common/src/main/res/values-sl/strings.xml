@@ -126,7 +126,6 @@
     <string name="playlists_style_rows">Vrstice</string>
     <string name="player_show_clock">Prikaži uro</string>
     <string name="player_show_remaining_time">Prikaže preostali čas</string>
-    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Odpri nalaganje kanala</string>
     <string name="app_exit_shortcut">Izhod iz aplikacije</string>
     <string name="app_exit_none">Brez izhoda</string>

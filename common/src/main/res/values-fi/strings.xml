@@ -127,7 +127,6 @@
     <string name="playlists_style_rows">Rivi</string>
     <string name="player_show_clock">Näytä kello pop-up ikkunassa</string>
     <string name="player_show_remaining_time">Näytä jäljellä oleva aika</string>
-    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Avaa kanavan lataukset</string>
     <string name="app_exit_shortcut">Poistu sovelluksesta</string>
     <string name="app_exit_none">Älä poistu</string>

@@ -127,7 +127,6 @@
     <string name="playlists_style_rows">पंक्तियों</string>
     <string name="player_show_clock">घड़ी दिखाओ</string>
     <string name="player_show_remaining_time">शेष समय दिखाएँ</string>
-    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">ओपन चैनल अपलोड</string>
     <string name="app_exit_shortcut">ऐप से बाहर निकलें</string>
     <string name="app_exit_none">डॉन \'टी बाहर निकलें</string>

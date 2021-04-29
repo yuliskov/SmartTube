@@ -125,7 +125,6 @@
     <string name="playlists_style_rows">Řady</string>
     <string name="player_show_clock">Zobraz hodiny</string>
     <string name="player_show_remaining_time">Ukaž zbývající čas</string>
-    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Otevřít videa kanálu</string>
     <string name="app_exit_shortcut">Ukončit aplikaci</string>
     <string name="app_exit_none">Neukončovat</string>

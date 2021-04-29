@@ -126,7 +126,6 @@
     <string name="playlists_style_rows">Σειρές</string>
     <string name="player_show_clock">Εμφάνιση Ρολογιού</string>
     <string name="player_show_remaining_time">Επφάνιση Υπολοιπόμενου Χρόνου</string>
-    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Άνοιγμα Μεταφορτώσεων Καναλιού</string>
     <string name="app_exit_shortcut">Έξοδος απο την Εφαρμογή</string>
     <string name="app_exit_none">Μήν Βγείτε</string>

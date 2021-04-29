@@ -126,7 +126,6 @@
     <string name="playlists_style_rows">Hàng</string>
     <string name="player_show_clock">Hiển thị đồng hồ</string>
     <string name="player_show_remaining_time">Hiển thị thời gian còn lại</string>
-    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Mở video tải lên</string>
     <string name="app_exit_shortcut">Thoát khỏi ứng dụng</string>
     <string name="app_exit_none">Không thoát</string>

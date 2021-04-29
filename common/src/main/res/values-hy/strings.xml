@@ -125,7 +125,6 @@
     <string name="playlists_style_rows">Շարքեր</string>
     <string name="player_show_clock">Ցուցադրել ժամը</string>
     <string name="player_show_remaining_time">Ցույց տալ մնացած ժամանակը</string>
-    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Բացել ալիքի վերբեռնումները</string>
     <string name="app_exit_shortcut">Ելք հավելվածից</string>
     <string name="app_exit_none">Դուրս չգա՛լ</string>

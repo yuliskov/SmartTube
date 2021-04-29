@@ -127,7 +127,6 @@
     <string name="playlists_style_rows">Righe</string>
     <string name="player_show_clock">Mostra orologio</string>
     <string name="player_show_remaining_time">Mostra tempo rimanente</string>
-    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Apri video caricati</string>
     <string name="app_exit_shortcut">Esci dall\'app</string>
     <string name="app_exit_none">Non uscire</string>
