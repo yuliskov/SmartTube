@@ -167,7 +167,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
     private static OptionCategory createAutoFrameRateCategory(Context context, PlayerData playerData, Runnable onAfrCallback, Runnable onResolutionCallback, Runnable onFpsCorrectionCallback) {
         String title = context.getString(R.string.auto_frame_rate);
-        String fpsCorrection = context.getString(R.string.frame_rate_correction, "30->29.97, 60->59.94");
+        String fpsCorrection = context.getString(R.string.frame_rate_correction, "24->23.97, 30->29.97, 60->59.94");
         String resolutionSwitch = context.getString(R.string.resolution_switch);
         List<OptionItem> options = new ArrayList<>();
 
