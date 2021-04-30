@@ -98,7 +98,7 @@ public class VideoGroup {
     }
 
     public boolean isEmpty() {
-        return mVideos == null;
+        return mVideos == null || mVideos.isEmpty();
     }
 
     /**

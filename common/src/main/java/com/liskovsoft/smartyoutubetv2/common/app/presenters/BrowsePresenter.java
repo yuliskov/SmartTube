@@ -408,7 +408,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 .subscribe(
                         mediaGroups -> {
                             for (MediaGroup mediaGroup : mediaGroups) {
-                                if (mediaGroup.getMediaItems() == null) {
+                                if (mediaGroup.isEmpty()) {
                                     Log.e(TAG, "loadRowsHeader: MediaGroup is empty. Group Name: " + mediaGroup.getTitle());
                                     continue;
                                 }
