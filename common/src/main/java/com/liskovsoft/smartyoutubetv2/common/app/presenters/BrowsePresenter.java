@@ -100,8 +100,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
     private void initCategories() {
         initCategoryHeaders();
+        initPinnedHeaders();
 
         initCategoryCallbacks();
+        initPinnedCallbacks();
 
         initSettingsSubCategories();
     }
@@ -135,6 +137,27 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mediaGroupManager.getSubscriptionsObserve());
         mGridMapping.put(MediaGroup.TYPE_HISTORY, mediaGroupManager.getHistoryObserve());
         mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mediaGroupManager.getSubscribedChannelsUpdateObserve());
+    }
+
+    private void initPinnedHeaders() {
+        Set<Video> pinnedItems = mMainUIData.getPinnedItems();
+
+        for (Video item : pinnedItems) {
+            if (item != null) {
+                Category category = new Category(item.hashCode(), item.title, Category.TYPE_GRID, R.drawable.icon_playlist);
+                mCategories.add(category);
+            }
+        }
+    }
+
+    private void initPinnedCallbacks() {
+        Set<Video> pinnedItems = mMainUIData.getPinnedItems();
+
+        for (Video item : pinnedItems) {
+            if (item != null) {
+                mGridMapping.put(item.hashCode(), ChannelUploadsPresenter.instance(getContext()).obtainVideoGroupObservable(item));
+            }
+        }
     }
 
     private void initSettingsSubCategories() {
@@ -317,9 +340,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         items.add(item);
         mMainUIData.setPinnedItems(items);
 
-        Category category = new Category(item.playlistId.hashCode(), item.title, Category.TYPE_GRID, R.drawable.icon_playlist);
+        Category category = new Category(item.hashCode(), item.title, Category.TYPE_GRID, R.drawable.icon_playlist);
         mCategories.add(category);
-        mGridMapping.put(item.playlistId.hashCode(), ChannelUploadsPresenter.instance(getContext()).obtainVideoGroupObservable(item));
+        mGridMapping.put(item.hashCode(), ChannelUploadsPresenter.instance(getContext()).obtainVideoGroupObservable(item));
 
         getView().addCategory(-1, category); // add last
     }
@@ -332,13 +355,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         Category category = null;
 
         for (Category cat : mCategories) {
-            if (cat.getId() == item.playlistId.hashCode()) {
+            if (cat.getId() == item.hashCode()) {
                 category = cat;
                 break;
             }
         }
 
-        mGridMapping.remove(item.playlistId.hashCode());
+        mGridMapping.remove(item.hashCode());
 
         getView().removeCategory(category);
     }

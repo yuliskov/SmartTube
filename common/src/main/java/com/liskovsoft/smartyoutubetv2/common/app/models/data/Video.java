@@ -126,13 +126,28 @@ public final class Video implements Parcelable {
         }
     };
 
+    ///**
+    // * Don't change the logic from equality by reference!<br/>
+    // * Or adapters won't work properly (same video may appear twice).
+    // */
+    //@Override
+    //public boolean equals(@Nullable Object obj) {
+    //    return super.equals(obj);
+    //}
+
     /**
-     * Don't change the logic from equality by reference!<br/>
-     * Or adapters won't work properly.
+     * Use with caution.<br/>
+     * Old logic is equality by reference!<br/>
+     * Adapters may work properly (same video may appear twice)?
      */
     @Override
     public boolean equals(@Nullable Object obj) {
-        return super.equals(obj);
+        return obj instanceof Video && hashCode() == obj.hashCode();
+    }
+
+    @Override
+    public int hashCode() {
+        return Helpers.hashCode(title, description, videoId, playlistId, cardImageUrl, bgImageUrl);
     }
 
     /**

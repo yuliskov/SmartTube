@@ -120,7 +120,8 @@ public class MainUIData {
     }
 
     public boolean isCategoryEnabled(int categoryId) {
-        return mEnabledLeftPanelCategories.contains(categoryId);
+        // Enable by default pinned sidebar items
+        return mEnabledLeftPanelCategories.contains(categoryId) || !mLeftPanelCategories.containsValue(categoryId);
     }
 
     public void setBootCategoryId(int categoryId) {

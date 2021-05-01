@@ -270,6 +270,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
                             } else {
                                 presenter.pinItem(mVideo);
                             }
+                            mSettingsPresenter.closeDialog();
                         }));
     }
 
