@@ -43,6 +43,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     private boolean mIsAddToPlaylistButtonEnabled;
     private boolean mIsAccountSelectionEnabled;
     private boolean mIsReturnToBackgroundVideoEnabled;
+    private boolean mIsPinToSidebarEnabled;
 
     private VideoMenuPresenter(Context context) {
         super(context);
@@ -56,7 +57,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         return new VideoMenuPresenter(context);
     }
 
-    public void showPlaylistMenu(Video video) {
+    public void showAddToPlaylistMenu(Video video) {
         mIsAddToPlaylistButtonEnabled = true;
 
         showMenuInt(video);
@@ -83,6 +84,12 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mIsReturnToBackgroundVideoEnabled = true;
 
         showMenuInt(video);
+    }
+
+    public void showPlaylistMenu(Video item) {
+        mIsPinToSidebarEnabled = true;
+
+        showMenuInt(item);
     }
 
     private void showMenuInt(Video video) {
@@ -122,8 +129,11 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         appendNotInterestedButton();
         appendShareButton();
         appendAccountSelectionButton();
+        appendPinToSidebarButton();
 
-        mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction));
+        if (!mSettingsPresenter.isEmpty()) {
+            mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction));
+        }
     }
 
     private void prepareAndShowDialogUnsigned() {
@@ -240,6 +250,16 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(
                         mVideo.isSubscribed ? R.string.unsubscribe_from_channel : R.string.subscribe_to_channel),
+                        optionItem -> subscribe()));
+    }
+
+    private void appendPinToSidebarButton() {
+        if (!mIsPinToSidebarEnabled || mVideo == null) {
+            return;
+        }
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.pin_to_sidebar),
                         optionItem -> subscribe()));
     }
 

@@ -211,4 +211,6 @@
     <string name="channels_old_look">Revert old look of Channels section</string>
     <string name="channels_auto_load">Auto load Channels section content</string>
     <string name="return_to_background_video">Return to video running in background</string>
+    <string name="pin_to_sidebar">Pin to sidebar</string>
+    <string name="unpin_from_sidebar">Unpin from sidebar</string>
 </resources>
