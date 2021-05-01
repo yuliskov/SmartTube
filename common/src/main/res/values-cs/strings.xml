@@ -207,4 +207,6 @@
     <string name="channels_old_look">Vrátit zpět starý vzhled sekce Kanály</string>
     <string name="channels_auto_load">Automaticky načíst obsah sekce Kanály</string>
     <string name="return_to_background_video">Zpět na video běžící na pozadí</string>
+    <string name="pin_to_sidebar">Připnout na postranní panel</string>
+    <string name="unpin_from_sidebar">Odepnout z postranního panelu</string>
 </resources>
