@@ -5,11 +5,13 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -49,6 +51,7 @@ public class MainUIData {
     private boolean mIsUploadsOldLookEnabled;
     private int mBackgroundShortcut;
     private boolean mIsUploadsAutoLoadEnabled;
+    private Set<Video> mPinnedItems = new LinkedHashSet<>();
 
     private MainUIData(Context context) {
         mContext = context;
@@ -242,6 +245,15 @@ public class MainUIData {
         persistState();
     }
 
+    public Set<Video> getPinnedItems() {
+        return mPinnedItems;
+    }
+
+    public void setPinnedItems(Set<Video> items) {
+        mPinnedItems = items;
+        persistState();
+    }
+
     private void initLeftPanelCategories() {
         mLeftPanelCategories.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mLeftPanelCategories.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
@@ -308,6 +320,7 @@ public class MainUIData {
         mIsUploadsOldLookEnabled = Helpers.parseBoolean(split, 14, false);
         mBackgroundShortcut = Helpers.parseInt(split, 15, BACKGROUND_SHORTCUT_HOME);
         mIsUploadsAutoLoadEnabled = Helpers.parseBoolean(split, 16, true);
+        String pinnedItems = Helpers.parseStr(split, 17);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArrayLegacy(selectedCategories);
@@ -318,14 +331,23 @@ public class MainUIData {
         } else {
             mEnabledLeftPanelCategories.addAll(mLeftPanelCategories.values());
         }
+
+        if (pinnedItems != null) {
+            String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
+
+            for (String pinnedItem : pinnedItemsArr) {
+                mPinnedItems.add(Video.fromString(pinnedItem));
+            }
+        }
     }
 
     private void persistState() {
         String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
+        String pinnedItems = Helpers.mergeArray(mPinnedItems.toArray());
         mPrefs.setData(MAIN_UI_DATA, Helpers.mergeObject(mIsCardAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale,
                 mColorSchemeIndex, mIsCardMultilineTitleEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting,
                 mPlaylistsStyle, mAppExitShortcut, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
-                mIsReturnToLauncherEnabled, mIsUploadsOldLookEnabled, mBackgroundShortcut, mIsUploadsAutoLoadEnabled));
+                mIsReturnToLauncherEnabled, mIsUploadsOldLookEnabled, mBackgroundShortcut, mIsUploadsAutoLoadEnabled, pinnedItems));
     }
 
     public static class ColorScheme {

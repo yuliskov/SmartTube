@@ -258,9 +258,19 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
+        BrowsePresenter presenter = BrowsePresenter.instance(getContext());
+        boolean isItemPinned = presenter.isItemPinned(mVideo);
+
         mSettingsPresenter.appendSingleButton(
-                UiOptionItem.from(getContext().getString(R.string.pin_to_sidebar),
-                        optionItem -> subscribe()));
+                UiOptionItem.from(getContext().getString(
+                        isItemPinned ? R.string.unpin_from_sidebar : R.string.pin_to_sidebar),
+                        optionItem -> {
+                            if (isItemPinned) {
+                                presenter.unpinItem(mVideo);
+                            } else {
+                                presenter.pinItem(mVideo);
+                            }
+                        }));
     }
 
     private void appendReturnToBackgroundVideoButton() {

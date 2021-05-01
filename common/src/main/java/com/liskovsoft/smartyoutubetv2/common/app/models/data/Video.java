@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 
 /**
  * Video is an object that holds the various metadata associated with a single video.
@@ -170,20 +171,50 @@ public final class Video implements Parcelable {
         dest.writeString(studio);
     }
 
+    public static Video fromString(String spec) {
+        if (spec == null) {
+            return null;
+        }
+
+        String[] split = spec.split(",");
+
+        if (split.length != 8) {
+            return null;
+        }
+
+        Video result = new Video();
+
+        result.id = Helpers.parseLong(split[0]);
+        result.category = Helpers.parseStr(split[1]);
+        result.title = Helpers.parseStr(split[2]);
+        result.videoId = Helpers.parseStr(split[3]);
+        result.videoUrl = Helpers.parseStr(split[4]);
+        result.playlistId = Helpers.parseStr(split[5]);
+        result.bgImageUrl = Helpers.parseStr(split[6]);
+        result.cardImageUrl = Helpers.parseStr(split[7]);
+
+        return result;
+    }
+
     @Override
     public String toString() {
-        String s = "Video{";
-        s += "id=" + id;
-        s += ", category='" + category + "'";
-        s += ", title='" + title + "'";
-        s += ", videoId='" + videoId + "'";
-        s += ", videoUrl='" + videoUrl + "'";
-        s += ", bgImageUrl='" + bgImageUrl + "'";
-        s += ", cardImageUrl='" + cardImageUrl + "'";
-        s += ", studio='" + cardImageUrl + "'";
-        s += "}";
-        return s;
+        return String.format("%s,%s,%s,%s,%s,%s,%s,%s", id, category, title, videoId, videoUrl, playlistId, bgImageUrl, cardImageUrl);
     }
+
+    //@Override
+    //public String toString() {
+    //    String s = "Video{";
+    //    s += "id=" + id;
+    //    s += ", category='" + category + "'";
+    //    s += ", title='" + title + "'";
+    //    s += ", videoId='" + videoId + "'";
+    //    s += ", videoUrl='" + videoUrl + "'";
+    //    s += ", bgImageUrl='" + bgImageUrl + "'";
+    //    s += ", cardImageUrl='" + cardImageUrl + "'";
+    //    s += ", studio='" + cardImageUrl + "'";
+    //    s += "}";
+    //    return s;
+    //}
 
     public boolean isVideo() {
         return videoId != null;

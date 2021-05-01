@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class BrowsePresenter extends BasePresenter<BrowseView> implements CategoryPresenter, VideoGroupPresenter {
     private static final String TAG = BrowsePresenter.class.getSimpleName();
@@ -303,6 +304,43 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     @Override
     public boolean hasPendingActions() {
         return RxUtils.isAnyActionRunning(mUpdateAction, mContinueAction, mSignCheckAction);
+    }
+
+    public boolean isItemPinned(Video item) {
+        Set<Video> items = mMainUIData.getPinnedItems();
+
+        return items.contains(item);
+    }
+
+    public void pinItem(Video item) {
+        Set<Video> items = mMainUIData.getPinnedItems();
+        items.add(item);
+        mMainUIData.setPinnedItems(items);
+
+        Category category = new Category(item.playlistId.hashCode(), item.title, Category.TYPE_GRID, R.drawable.icon_playlist);
+        mCategories.add(category);
+        mGridMapping.put(item.playlistId.hashCode(), ChannelUploadsPresenter.instance(getContext()).obtainVideoGroupObservable(item));
+
+        getView().addCategory(-1, category); // add last
+    }
+
+    public void unpinItem(Video item) {
+        Set<Video> items = mMainUIData.getPinnedItems();
+        items.remove(item);
+        mMainUIData.setPinnedItems(items);
+
+        Category category = null;
+
+        for (Category cat : mCategories) {
+            if (cat.getId() == item.playlistId.hashCode()) {
+                category = cat;
+                break;
+            }
+        }
+
+        mGridMapping.remove(item.playlistId.hashCode());
+
+        getView().removeCategory(category);
     }
 
     private void maybeRefreshHeader() {

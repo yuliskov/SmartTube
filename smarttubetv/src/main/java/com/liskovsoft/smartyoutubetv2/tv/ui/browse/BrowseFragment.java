@@ -308,7 +308,11 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         HeaderItem headerItem = new CategoryHeaderItem(header);
 
         PageRow pageRow = new PageRow(headerItem);
-        mCategoryRowAdapter.add(index, pageRow);
+        if (index == -1) {
+            mCategoryRowAdapter.add(pageRow); // add to the end
+        } else {
+            mCategoryRowAdapter.add(index, pageRow);
+        }
     }
 
     private void removeHeader(Category header) {
