@@ -8,6 +8,7 @@ import androidx.annotation.RequiresApi;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
 /**
  * Video is an object that holds the various metadata associated with a single video.
@@ -191,9 +192,9 @@ public final class Video implements Parcelable {
             return null;
         }
 
-        String[] split = spec.split(",");
+        String[] split = spec.split("&vi;");
 
-        if (split.length != 8) {
+        if (split.length != 9) {
             return null;
         }
 
@@ -207,13 +208,15 @@ public final class Video implements Parcelable {
         result.playlistId = Helpers.parseStr(split[5]);
         result.bgImageUrl = Helpers.parseStr(split[6]);
         result.cardImageUrl = Helpers.parseStr(split[7]);
+        result.mediaItem = YouTubeMediaService.deserializeMediaItem(Helpers.parseStr(split[8]));
 
         return result;
     }
 
     @Override
     public String toString() {
-        return String.format("%s,%s,%s,%s,%s,%s,%s,%s", id, category, title, videoId, videoUrl, playlistId, bgImageUrl, cardImageUrl);
+        return String.format("%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s",
+                id, category, title, videoId, videoUrl, playlistId, bgImageUrl, cardImageUrl, YouTubeMediaService.serialize(mediaItem));
     }
 
     //@Override
