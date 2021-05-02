@@ -54,7 +54,17 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
     }
 
     public int indexOf(Video item) {
-        return mVideoItems.indexOf(item);
+        // Compare by reference. Because there may be multiple same videos.
+        int index = -1;
+
+        for (Video video : mVideoItems) {
+            index++;
+            if (video == item) {
+                return index;
+            }
+        }
+
+        return -1;
     }
 
     public void clear() {

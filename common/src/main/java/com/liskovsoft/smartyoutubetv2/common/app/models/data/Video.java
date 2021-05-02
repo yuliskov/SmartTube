@@ -139,7 +139,7 @@ public final class Video implements Parcelable {
     /**
      * Use with caution.<br/>
      * Old logic is equality by reference!<br/>
-     * Adapters may work properly (same video may appear twice)?
+     * Adapters may not work properly when detecting scroll position (same video may appear twice).
      */
     @Override
     public boolean equals(@Nullable Object obj) {
@@ -150,20 +150,13 @@ public final class Video implements Parcelable {
     public int hashCode() {
         return Helpers.hashCode(title, description, videoId, playlistId, cardImageUrl, bgImageUrl);
     }
-
-    /**
-     * Equality that intended for playlists or other not strong cases.
-     */
+    
     public static boolean equals(Video video1, Video video2) {
-        if (video1 == null || video2 == null) {
+        if (video1 == null) {
             return false;
         }
 
-        if (video1.videoId == null) {
-            return false;
-        }
-
-        return video1.videoId.equals(video2.videoId);
+        return video1.equals(video2);
     }
 
     public static boolean isEmpty(Video video) {
