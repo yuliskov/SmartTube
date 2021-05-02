@@ -211,4 +211,6 @@
     <string name="channels_old_look">Altes Aussehen der Kanäle-Kategorie</string>
     <string name="channels_auto_load">Inhalt der Kanäle-Kategorie automatisch laden</string>
     <string name="return_to_background_video">Zurück zum Video im Hintergrund</string>
+    <string name="pin_to_sidebar">Anheften an Seitenleiste</string>
+    <string name="unpin_from_sidebar">Lösen von Seitenleiste</string>
 </resources>
