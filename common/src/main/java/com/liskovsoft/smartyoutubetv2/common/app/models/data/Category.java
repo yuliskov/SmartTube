@@ -8,6 +8,7 @@ public class Category {
     private final int mId;
     private final String mTitle;
     private final int mResId;
+    private final String mIconUrl;
     private final boolean mIsAuthOnly;
     private boolean mEnabled;
     private int mType;
@@ -16,11 +17,24 @@ public class Category {
         this(id, title, type, resId, false);
     }
 
+    public Category(int id, String title, int type, String iconUrl) {
+        this(id, title, type, iconUrl, false);
+    }
+
+    public Category(int id, String title, int type, String iconUrl, boolean isAuthOnly) {
+        this(id, title, type, -1, iconUrl, isAuthOnly);
+    }
+
     public Category(int id, String title, int type, int resId, boolean isAuthOnly) {
+        this(id, title, type, resId, null, isAuthOnly);
+    }
+
+    public Category(int id, String title, int type, int resId, String iconUrl, boolean isAuthOnly) {
         mId = id;
         mTitle = title;
         mType = type;
         mResId = resId;
+        mIconUrl = iconUrl;
         mIsAuthOnly = isAuthOnly;
     }
 
@@ -42,6 +56,10 @@ public class Category {
 
     public int getResId() {
         return mResId;
+    }
+
+    public String getIconUrl() {
+        return mIconUrl;
     }
 
     public boolean isAuthOnly() {

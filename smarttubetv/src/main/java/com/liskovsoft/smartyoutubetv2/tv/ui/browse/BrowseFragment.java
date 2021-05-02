@@ -183,7 +183,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         setHeaderPresenterSelector(new PresenterSelector() {
             @Override
             public Presenter getPresenter(Object o) {
-                return new IconHeaderItemPresenter(getHeaderResId(o));
+                return new IconHeaderItemPresenter(getHeaderResId(o), getIconUrl(o));
             }
         });
     }
@@ -194,6 +194,14 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         }
 
         return -1;
+    }
+
+    private String getIconUrl(Object o) {
+        if (o instanceof PageRow) {
+            return ((CategoryHeaderItem) ((PageRow) o).getHeaderItem()).getIconUrl();
+        }
+
+        return null;
     }
 
     private int getSelectedHeaderId() {

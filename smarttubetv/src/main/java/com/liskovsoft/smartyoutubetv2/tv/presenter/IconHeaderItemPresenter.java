@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRow;
@@ -14,14 +15,24 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class IconHeaderItemPresenter extends RowHeaderPresenter {
-    private final int mResId;
+    private static final String TAG = IconHeaderItemPresenter.class.getSimpleName();
     private float mUnselectedAlpha;
+    private final int mResId;
+    private final String mIconUrl;
 
-    public IconHeaderItemPresenter(int resId) {
+    public IconHeaderItemPresenter(int resId, String iconUrl) {
         mResId = resId;
+        mIconUrl = iconUrl;
     }
 
     @Override
@@ -52,8 +63,17 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
 
         ImageView iconView = rootView.findViewById(R.id.header_icon);
         if (iconView != null) {
-            Drawable icon = ContextCompat.getDrawable(rootView.getContext(), mResId > 0 ? mResId : R.drawable.header_default);
-            iconView.setImageDrawable(icon);
+            if (mIconUrl != null) {
+                Drawable icon = ContextCompat.getDrawable(rootView.getContext(), R.drawable.header_default);
+                Glide.with(rootView.getContext())
+                        .load(mIconUrl)
+                        .apply(RequestOptions.errorOf(icon))
+                        .listener(mErrorListener)
+                        .into(iconView);
+            } else {
+                Drawable icon = ContextCompat.getDrawable(rootView.getContext(), mResId > 0 ? mResId : R.drawable.header_default);
+                iconView.setImageDrawable(icon);
+            }
         }
 
         TextView label = rootView.findViewById(R.id.header_label);
@@ -74,4 +94,17 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
         holder.view.setAlpha(mUnselectedAlpha + holder.getSelectLevel() *
                 (1.0f - mUnselectedAlpha));
     }
+
+    private final RequestListener<Drawable> mErrorListener = new RequestListener<Drawable>() {
+        @Override
+        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+            Log.e(TAG, "Glide load failed: " + e);
+            return false;
+        }
+
+        @Override
+        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+            return false;
+        }
+    };
 }

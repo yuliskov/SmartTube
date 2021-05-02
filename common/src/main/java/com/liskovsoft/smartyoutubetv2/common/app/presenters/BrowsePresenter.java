@@ -144,7 +144,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
         for (Video item : pinnedItems) {
             if (item != null) {
-                Category category = new Category(item.hashCode(), item.title, Category.TYPE_GRID, R.drawable.icon_playlist);
+                Category category = new Category(item.hashCode(), item.title, Category.TYPE_GRID, item.cardImageUrl, true);
                 mCategories.add(category);
             }
         }
@@ -340,7 +340,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         items.add(item);
         mMainUIData.setPinnedItems(items);
 
-        Category category = new Category(item.hashCode(), item.title, Category.TYPE_GRID, R.drawable.icon_playlist);
+        Category category = new Category(item.hashCode(), item.title, Category.TYPE_GRID, item.cardImageUrl, true);
         mCategories.add(category);
         mGridMapping.put(item.hashCode(), ChannelUploadsPresenter.instance(getContext()).obtainVideoGroupObservable(item));
 
