@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -29,6 +30,7 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
     private float mUnselectedAlpha;
     private final int mResId;
     private final String mIconUrl;
+    private Drawable mDefaultIcon;
 
     public IconHeaderItemPresenter(int resId, String iconUrl) {
         mResId = resId;
@@ -41,6 +43,7 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
                 .getFraction(R.fraction.lb_browse_header_unselect_alpha, 1, 1);
         LayoutInflater inflater = (LayoutInflater) viewGroup.getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mDefaultIcon = new ColorDrawable(ContextCompat.getColor(viewGroup.getContext(), R.color.lb_grey));
 
         View view = inflater.inflate(R.layout.icon_header_item, null);
         view.setAlpha(mUnselectedAlpha); // Initialize icons to be at half-opacity.
@@ -64,14 +67,13 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
         ImageView iconView = rootView.findViewById(R.id.header_icon);
         if (iconView != null) {
             if (mIconUrl != null) {
-                Drawable icon = ContextCompat.getDrawable(rootView.getContext(), R.drawable.header_default);
                 Glide.with(rootView.getContext())
                         .load(mIconUrl)
-                        .apply(RequestOptions.errorOf(icon))
+                        .apply(RequestOptions.errorOf(mDefaultIcon))
                         .listener(mErrorListener)
                         .into(iconView);
             } else {
-                Drawable icon = ContextCompat.getDrawable(rootView.getContext(), mResId > 0 ? mResId : R.drawable.header_default);
+                Drawable icon = mResId > 0 ? ContextCompat.getDrawable(rootView.getContext(), mResId) : mDefaultIcon;
                 iconView.setImageDrawable(icon);
             }
         }
