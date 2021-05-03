@@ -148,7 +148,7 @@ public final class Video implements Parcelable {
 
     @Override
     public int hashCode() {
-        return Helpers.hashCode(title, description, videoId, playlistId, cardImageUrl, bgImageUrl);
+        return Helpers.hashCode(title, description, videoId, playlistId, channelId);
     }
     
     public static boolean equals(Video video1, Video video2) {
@@ -187,7 +187,7 @@ public final class Video implements Parcelable {
 
         String[] split = spec.split("&vi;");
 
-        if (split.length != 9) {
+        if (split.length != 10) {
             return null;
         }
 
@@ -199,17 +199,18 @@ public final class Video implements Parcelable {
         result.videoId = Helpers.parseStr(split[3]);
         result.videoUrl = Helpers.parseStr(split[4]);
         result.playlistId = Helpers.parseStr(split[5]);
-        result.bgImageUrl = Helpers.parseStr(split[6]);
-        result.cardImageUrl = Helpers.parseStr(split[7]);
-        result.mediaItem = YouTubeMediaService.deserializeMediaItem(Helpers.parseStr(split[8]));
+        result.channelId = Helpers.parseStr(split[6]);
+        result.bgImageUrl = Helpers.parseStr(split[7]);
+        result.cardImageUrl = Helpers.parseStr(split[8]);
+        result.mediaItem = YouTubeMediaService.deserializeMediaItem(Helpers.parseStr(split[9]));
 
         return result;
     }
 
     @Override
     public String toString() {
-        return String.format("%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s",
-                id, category, title, videoId, videoUrl, playlistId, bgImageUrl, cardImageUrl, YouTubeMediaService.serialize(mediaItem));
+        return String.format("%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s",
+                id, category, title, videoId, videoUrl, playlistId, channelId, bgImageUrl, cardImageUrl, YouTubeMediaService.serialize(mediaItem));
     }
 
     //@Override
