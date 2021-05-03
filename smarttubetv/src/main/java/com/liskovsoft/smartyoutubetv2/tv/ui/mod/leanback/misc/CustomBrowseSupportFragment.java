@@ -1,29 +1,39 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc;
 
+import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnLayoutChangeListener;
+import android.view.ViewGroup;
+import androidx.leanback.app.BrowseSupportFragment;
 import androidx.leanback.app.HeadersSupportFragment;
+import androidx.leanback.app.HeadersSupportFragment.OnHeaderClickedListener;
 import androidx.leanback.widget.ItemBridgeAdapter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowHeaderPresenter;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.mylogger.Log;
 
-public class CustomHeadersSupportFragment extends HeadersSupportFragment {
-    private final OnHeaderClickedListener mCustomOnHeaderClickedListener;
-    private final ItemBridgeAdapter.Wrapper mCustomWrapper;
-    private final OnLayoutChangeListener sCustomLayoutChangeListener;
+public class CustomBrowseSupportFragment extends BrowseSupportFragment {
+    private static final String TAG = CustomBrowseSupportFragment.class.getSimpleName();
+    private OnHeaderClickedListener mCustomOnHeaderClickedListener;
+    private ItemBridgeAdapter.Wrapper mCustomWrapper;
+    private OnLayoutChangeListener sCustomLayoutChangeListener;
 
-    public CustomHeadersSupportFragment() {
-        mCustomOnHeaderClickedListener = (OnHeaderClickedListener) Helpers.getField(this, "mOnHeaderClickedListener");
-        mCustomWrapper = (ItemBridgeAdapter.Wrapper) Helpers.getField(this, "mWrapper");
-        sCustomLayoutChangeListener = (OnLayoutChangeListener) Helpers.getField(this, "sLayoutChangeListener");
-        Helpers.setField(this, "mAdapterListener", mCustomAdapterListener);
-    }
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
 
-    void updateAdapter() {
-        ItemBridgeAdapter adapter = getBridgeAdapter();
-        adapter.setAdapterListener(mCustomAdapterListener);
-        adapter.setWrapper(mCustomWrapper);
+        HeadersSupportFragment customHeadersSupportFragment = (HeadersSupportFragment) Helpers.getField(this, "mHeadersSupportFragment");
+
+        if (customHeadersSupportFragment != null) {
+            mCustomOnHeaderClickedListener = (OnHeaderClickedListener) Helpers.getField(customHeadersSupportFragment, "mOnHeaderClickedListener");
+            mCustomWrapper = (ItemBridgeAdapter.Wrapper) Helpers.getField(customHeadersSupportFragment, "mWrapper");
+            sCustomLayoutChangeListener = (OnLayoutChangeListener) Helpers.getField(customHeadersSupportFragment, "sLayoutChangeListener");
+            Helpers.setField(customHeadersSupportFragment, "mAdapterListener", mCustomAdapterListener);
+        }
+
+        return view;
     }
 
     private final ItemBridgeAdapter.AdapterListener mCustomAdapterListener =
@@ -39,6 +49,7 @@ public class CustomHeadersSupportFragment extends HeadersSupportFragment {
                                         (RowHeaderPresenter.ViewHolder) viewHolder.getViewHolder(),
                                         (Row) viewHolder.getItem());
                             }
+                            Log.d(TAG, "onClick");
                         }
                     });
                     if (mCustomWrapper != null) {
