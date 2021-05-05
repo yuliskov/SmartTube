@@ -35,6 +35,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     private Disposable mNotInterestedAction;
     private Disposable mSubscribeAction;
     private Video mVideo;
+    private Video mCategory;
     private boolean mIsNotInterestedButtonEnabled;
     private boolean mIsOpenChannelButtonEnabled;
     private boolean mIsOpenChannelUploadsButtonEnabled;
@@ -64,6 +65,10 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     public void showVideoMenu(Video video) {
+        showVideoMenu(video, null);
+    }
+
+    public void showVideoMenu(Video video, Video category) {
         mIsAddToPlaylistButtonEnabled = true;
         mIsOpenChannelButtonEnabled = true;
         mIsOpenChannelUploadsButtonEnabled = true;
@@ -72,8 +77,9 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mIsShareButtonEnabled = true;
         mIsAccountSelectionEnabled = true;
         mIsReturnToBackgroundVideoEnabled = true;
+        mIsPinToSidebarEnabled = true;
 
-        showMenuInt(video);
+        showMenuInt(video, category);
     }
 
     public void showChannelMenu(Video video) {
@@ -86,20 +92,25 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         showMenuInt(video);
     }
 
-    public void showPlaylistMenu(Video item) {
+    public void showPlaylistMenu(Video category) {
         mIsPinToSidebarEnabled = true;
 
-        showMenuInt(item);
+        showMenuInt(null, category);
     }
 
     private void showMenuInt(Video video) {
-        if (video == null) {
+        showMenuInt(video, null);
+    }
+
+    private void showMenuInt(Video video, Video category) {
+        if (video == null && category == null) {
             return;
         }
 
         RxUtils.disposeActions(mPlaylistAction, mAddAction, mNotInterestedAction, mSubscribeAction);
 
         mVideo = video;
+        mCategory = category;
 
         ServiceManager.instance().authCheck(this::obtainPlaylistsAndShowDialogSigned, this::prepareAndShowDialogUnsigned);
     }

@@ -4,6 +4,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -148,7 +149,9 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
         List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
 
         if (suggestions == null) {
-            Log.e(TAG, "loadSuggestions: Can't obtain suggestions for video: " + video.title);
+            String msg = "loadSuggestions: Can't obtain suggestions for video: " + video.title;
+            Log.e(TAG, msg);
+            MessageHelpers.showMessage(getActivity(), msg);
             return;
         }
 

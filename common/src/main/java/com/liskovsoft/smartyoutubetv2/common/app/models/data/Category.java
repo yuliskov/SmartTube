@@ -10,6 +10,7 @@ public class Category {
     private final int mResId;
     private final String mIconUrl;
     private final boolean mIsAuthOnly;
+    private final Video mData;
     private boolean mEnabled;
     private int mType;
 
@@ -22,20 +23,25 @@ public class Category {
     }
 
     public Category(int id, String title, int type, String iconUrl, boolean isAuthOnly) {
-        this(id, title, type, -1, iconUrl, isAuthOnly);
+        this(id, title, type, -1, iconUrl, isAuthOnly, null);
+    }
+
+    public Category(int id, String title, int type, String iconUrl, boolean isAuthOnly, Video data) {
+        this(id, title, type, -1, iconUrl, isAuthOnly, data);
     }
 
     public Category(int id, String title, int type, int resId, boolean isAuthOnly) {
-        this(id, title, type, resId, null, isAuthOnly);
+        this(id, title, type, resId, null, isAuthOnly, null);
     }
 
-    public Category(int id, String title, int type, int resId, String iconUrl, boolean isAuthOnly) {
+    public Category(int id, String title, int type, int resId, String iconUrl, boolean isAuthOnly, Video data) {
         mId = id;
         mTitle = title;
         mType = type;
         mResId = resId;
         mIconUrl = iconUrl;
         mIsAuthOnly = isAuthOnly;
+        mData = data;
     }
 
     public String getTitle() {
@@ -72,5 +78,9 @@ public class Category {
 
     public boolean isEnabled() {
         return mEnabled;
+    }
+
+    public Video getData() {
+        return mData;
     }
 }

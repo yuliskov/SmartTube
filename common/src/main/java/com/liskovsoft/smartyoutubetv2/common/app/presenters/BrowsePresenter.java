@@ -144,7 +144,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
         for (Video item : pinnedItems) {
             if (item != null) {
-                Category category = new Category(item.hashCode(), item.title, Category.TYPE_GRID, item.cardImageUrl, true);
+                Category category = new Category(item.hashCode(), item.title, Category.TYPE_GRID, item.cardImageUrl, true, item);
                 mCategories.add(category);
             }
         }
@@ -287,7 +287,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             ChannelUploadsMenuPresenter.instance(getContext()).showMenu(item);
         } else if (item.isVideo()) {
             item.isSubscribed = mCurrentCategoryId == MediaGroup.TYPE_SUBSCRIPTIONS;
-            VideoMenuPresenter.instance(getContext()).showVideoMenu(item);
+            Category category = getCategory(mCurrentCategoryId);
+            VideoMenuPresenter.instance(getContext()).showVideoMenu(item, category != null ? category.getData() : null);
         } else if (item.isChannel()) {
             VideoMenuPresenter.instance(getContext()).showChannelMenu(item);
         } else if (item.isPlaylist()) {
