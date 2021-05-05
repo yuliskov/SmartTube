@@ -341,7 +341,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         items.add(item);
         mMainUIData.setPinnedItems(items);
 
-        Category category = new Category(item.hashCode(), item.title, Category.TYPE_GRID, item.cardImageUrl, true);
+        Category category = new Category(item.hashCode(), item.title, Category.TYPE_GRID, item.cardImageUrl, true, item);
         mCategories.add(category);
         mGridMapping.put(item.hashCode(), ChannelUploadsPresenter.instance(getContext()).obtainVideoGroupObservable(item));
 
