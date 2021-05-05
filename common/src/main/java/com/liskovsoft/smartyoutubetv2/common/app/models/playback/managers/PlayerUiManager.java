@@ -130,7 +130,8 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         disableSuggestionsResetTimeout();
 
         boolean isHandled = handleBackKey(keyCode) || handleMenuKey(keyCode) ||
-                handleConfirmKey(keyCode) || handleStopKey(keyCode) || handleNumKeys(keyCode);
+                handleConfirmKey(keyCode) || handleStopKey(keyCode) || handleNumKeys(keyCode) ||
+                handlePlayPauseKey(keyCode);
 
         if (isHandled) {
             return true; // don't show UI
@@ -455,6 +456,15 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
                 float seekPercent = (keyCode - KeyEvent.KEYCODE_0) / 10f;
                 getController().setPositionMs((long)(getController().getLengthMs() * seekPercent));
             }
+        }
+
+        return false;
+    }
+
+    private boolean handlePlayPauseKey(int keyCode) {
+        if (keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) {
+            getController().setPlay(!getController().getPlay());
+            return true;
         }
 
         return false;

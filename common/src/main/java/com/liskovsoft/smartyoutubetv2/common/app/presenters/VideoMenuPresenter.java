@@ -116,6 +116,11 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     private void obtainPlaylistsAndShowDialogSigned() {
+        if (!mIsAddToPlaylistButtonEnabled || mVideo == null) {
+            prepareAndShowDialogSigned(null);
+            return;
+        }
+
         mPlaylistAction = mItemManager.getVideoPlaylistsInfosObserve(mVideo.videoId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -143,7 +148,8 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         appendPinToSidebarButton();
 
         if (!mSettingsPresenter.isEmpty()) {
-            mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction));
+            String title = mVideo != null ? mVideo.title : mCategory.title;
+            mSettingsPresenter.showDialog(title, () -> RxUtils.disposeActions(mPlaylistAction));
         }
     }
 
@@ -166,7 +172,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     private void appendAddToPlaylist(List<VideoPlaylistInfo> videoPlaylistInfos) {
-        if (!mIsAddToPlaylistButtonEnabled) {
+        if (!mIsAddToPlaylistButtonEnabled || videoPlaylistInfos == null) {
             return;
         }
 
@@ -265,21 +271,21 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     private void appendPinToSidebarButton() {
-        if (!mIsPinToSidebarEnabled || mVideo == null) {
+        if (!mIsPinToSidebarEnabled || mCategory == null) {
             return;
         }
 
         BrowsePresenter presenter = BrowsePresenter.instance(getContext());
-        boolean isItemPinned = presenter.isItemPinned(mVideo);
+        boolean isItemPinned = presenter.isItemPinned(mCategory);
 
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(
                         isItemPinned ? R.string.unpin_from_sidebar : R.string.pin_to_sidebar),
                         optionItem -> {
                             if (isItemPinned) {
-                                presenter.unpinItem(mVideo);
+                                presenter.unpinItem(mCategory);
                             } else {
-                                presenter.pinItem(mVideo);
+                                presenter.pinItem(mCategory);
                             }
                             mSettingsPresenter.closeDialog();
                         }));
