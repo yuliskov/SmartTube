@@ -464,6 +464,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     private boolean handlePlayPauseKey(int keyCode) {
         if (keyCode == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE) {
             getController().setPlay(!getController().getPlay());
+            enableUiAutoHideTimeout(); // TODO: move out somehow
             return true;
         }
 
