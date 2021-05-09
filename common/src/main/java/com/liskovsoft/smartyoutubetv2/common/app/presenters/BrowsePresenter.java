@@ -261,7 +261,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             // Below doesn't work right now. Api doesn't contains channel id.
             //ChannelPresenter.instance(getContext()).openChannel(item);
 
-            if (mUploadsType == Category.TYPE_MULTI_GRID) {
+            if (mUploadsType == Category.TYPE_MULTI_GRID) { // Is Channels new look enabled?
                 updateMultiGrid(item);
             } else {
                 ChannelUploadsPresenter.instance(getContext()).openChannel(item);

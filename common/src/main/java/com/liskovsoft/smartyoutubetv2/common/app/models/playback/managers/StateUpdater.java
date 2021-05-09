@@ -122,6 +122,12 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     @Override
+    public void onEngineError(int type) {
+        // Network connection lost while watching the video.
+        saveState();
+    }
+
+    @Override
     public void onVideoLoaded(Video item) {
         // In this state video length is not undefined.
         restorePosition(item);
@@ -264,8 +270,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
             // Don't save position if track is ended.
             // Skip if paused.
             long remainsMs = getController().getLengthMs() - getController().getPositionMs();
-            boolean isVideoEnded = remainsMs < 1_000;
-            if (!isVideoEnded || !getPlayEnabled()) {
+            boolean isPositionActual = remainsMs > 1_000 && getController().getPositionMs() > 3_000;
+            if (isPositionActual || !getPlayEnabled()) { // Is pause after each video enabled?
                 mStates.put(video.videoId, new State(video.videoId, getController().getPositionMs(), getController().getLengthMs(), getController().getSpeed()));
             } else {
                 // Add null state to prevent restore position from history
