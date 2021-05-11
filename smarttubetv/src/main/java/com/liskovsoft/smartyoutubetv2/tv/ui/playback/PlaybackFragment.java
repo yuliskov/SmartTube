@@ -255,7 +255,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void restartEngine() {
-        if (isDetached()) {
+        if (isDetached() || getContext() == null) {
+            Log.e(TAG, "Can't restart engine. Seems that player activity is being destroyed.");
             return;
         }
 
