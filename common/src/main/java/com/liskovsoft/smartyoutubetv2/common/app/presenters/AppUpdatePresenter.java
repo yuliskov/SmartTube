@@ -18,7 +18,7 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
     private static AppUpdatePresenter sInstance;
     private final AppUpdateChecker mUpdateChecker;
     private final AppSettingsPresenter mSettingsPresenter;
-    private final String mUpdateManifestUrl;
+    private final String[] mUpdateManifestUrls;
     private boolean mUpdateInstalled;
     private boolean mIsForceCheck;
 
@@ -26,7 +26,7 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
         super(context);
         mUpdateChecker = new AppUpdateChecker(context, this);
         mSettingsPresenter = AppSettingsPresenter.instance(context);
-        mUpdateManifestUrl = context.getString(R.string.update_manifest_url);
+        mUpdateManifestUrls = context.getResources().getStringArray(R.array.update_urls);
     }
 
     public static AppUpdatePresenter instance(Context context) {
@@ -48,9 +48,9 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
         mUpdateInstalled = false;
 
         if (forceCheck) {
-            mUpdateChecker.forceCheckForUpdates(mUpdateManifestUrl);
+            mUpdateChecker.forceCheckForUpdates(mUpdateManifestUrls);
         } else {
-            mUpdateChecker.checkForUpdates(mUpdateManifestUrl);
+            mUpdateChecker.checkForUpdates(mUpdateManifestUrls);
         }
     }
 
