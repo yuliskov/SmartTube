@@ -170,7 +170,9 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
         getController().clearSuggestions(); // clear previous videos
 
         for (MediaGroup group : suggestions) {
-            getController().updateSuggestions(VideoGroup.from(group));
+            if (group != null && !group.isEmpty()) {
+                getController().updateSuggestions(VideoGroup.from(group));
+            }
         }
     }
 
