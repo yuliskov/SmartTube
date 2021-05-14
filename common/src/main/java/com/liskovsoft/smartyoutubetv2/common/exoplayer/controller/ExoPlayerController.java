@@ -33,9 +33,9 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private final ExoMediaSourceFactory mMediaSourceFactory;
     private final TrackSelectorManager mTrackSelectorManager;
     private final TrackInfoFormatter2 mTrackFormatter;
-    private PlayerEventListener mEventListener;
-    private Video mVideo;
     private boolean mOnSourceChanged;
+    private Video mVideo;
+    private PlayerEventListener mEventListener;
     private ExoPlayer mPlayer;
     private PlayerView mPlayerView;
 
@@ -160,6 +160,9 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             mPlayer.release();
             mPlayer = null;
         }
+
+        mPlayerView = null;
+        mEventListener = null;
     }
 
     @Override
