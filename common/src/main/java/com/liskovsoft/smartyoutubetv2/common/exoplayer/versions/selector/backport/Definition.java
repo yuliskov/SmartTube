@@ -44,8 +44,9 @@ public final class Definition {
         return new Definition(selection.getTrackGroup(), selection.getSelectedIndex());
     }
 
-    @SuppressWarnings("deprecation")
-    public TrackSelection toSelection() {
-        return new FixedTrackSelection.Factory().createTrackSelection(group, null, tracks);
-    }
+    // Exo 2.10
+    //@SuppressWarnings("deprecation")
+    //public TrackSelection toSelection() {
+    //    return new FixedTrackSelection.Factory().createTrackSelection(group, null, tracks);
+    //}
 }
