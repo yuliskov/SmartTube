@@ -149,6 +149,11 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
+    public void onBuffering() {
+        // NOP
+    }
+
+    @Override
     public void onControlsShown(boolean shown) {
         // NOP
     }

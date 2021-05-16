@@ -221,6 +221,11 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
+    public void onBuffering() {
+        process(PlayerEventListener::onBuffering);
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode) {
         return chainProcess(listener -> listener.onKeyDown(keyCode));
     }

@@ -296,16 +296,19 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             Log.d(TAG, "onPlayerStateChanged: " + TrackSelectorUtil.stateToString(playbackState));
         }
 
-        boolean playPressed = Player.STATE_READY == playbackState && playWhenReady;
-        boolean pausePressed = Player.STATE_READY == playbackState && !playWhenReady;
-        boolean playbackEnded = Player.STATE_ENDED == playbackState && playWhenReady;
+        boolean isPlayPressed = Player.STATE_READY == playbackState && playWhenReady;
+        boolean isPausePressed = Player.STATE_READY == playbackState && !playWhenReady;
+        boolean isPlaybackEnded = Player.STATE_ENDED == playbackState && playWhenReady;
+        boolean isBuffering = Player.STATE_BUFFERING == playbackState && playWhenReady;
 
-        if (playPressed) {
+        if (isPlayPressed) {
             mEventListener.onPlay();
-        } else if (pausePressed) {
+        } else if (isPausePressed) {
             mEventListener.onPause();
-        } else if (playbackEnded) {
+        } else if (isPlaybackEnded) {
             mEventListener.onPlayEnd();
+        } else if (isBuffering) {
+            mEventListener.onBuffering();
         }
     }
 

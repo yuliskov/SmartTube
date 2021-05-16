@@ -46,6 +46,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
         }
     };
     private final Runnable mPendingRestartEngine = () -> {
+        YouTubeMediaService.instance().invalidateCache();
+
         if (getController() != null) {
             getController().restartEngine(); // properly save position of the current track
         }
@@ -96,9 +98,24 @@ public class VideoLoader extends PlayerEventListenerHelper {
         // Might happen when the app wasn't used quite a long time.
         MessageHelpers.showMessage(getActivity(), getErrorMessage(type));
 
-        YouTubeMediaService.instance().invalidateCache();
+        // Delay to fix frequent requests
+        Utils.postDelayed(mHandler, mPendingRestartEngine, 3_000);
+    }
 
-        Utils.postDelayed(mHandler, mPendingRestartEngine, 3_000); // fix too frequent request
+    @Override
+    public void onBuffering() {
+        //MessageHelpers.showMessage(getActivity(), "Buffering occurs!");
+
+        // Fix long buffering
+        Utils.postDelayed(mHandler, mPendingRestartEngine, 5_000);
+    }
+
+    @Override
+    public void onPlay() {
+        //MessageHelpers.showMessage(getActivity(), "Start playing!");
+
+        // Seems fine. Buffering is gone.
+        Utils.removeCallbacks(mHandler, mPendingRestartEngine);
     }
 
     @Override
