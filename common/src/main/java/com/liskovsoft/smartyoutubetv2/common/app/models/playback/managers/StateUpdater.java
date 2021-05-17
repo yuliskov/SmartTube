@@ -7,6 +7,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -124,7 +125,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
     @Override
     public void onEngineError(int type) {
         // Network connection lost while watching the video.
-        saveState();
+        if (type == PlayerEventListener.ERROR_TYPE_SOURCE) {
+            saveState();
+        }
     }
 
     @Override
@@ -267,14 +270,14 @@ public class StateUpdater extends PlayerEventListenerHelper {
         Video video = getController().getVideo();
 
         if (video != null) {
-            // Don't save position if track is ended.
+            // Reset position if track is ended.
             // Skip if paused.
             long remainsMs = getController().getLengthMs() - getController().getPositionMs();
-            boolean isPositionActual = remainsMs > 1_000 && getController().getPositionMs() > 3_000;
+            boolean isPositionActual = remainsMs > 1_000;
             if (isPositionActual || !getPlayEnabled()) { // Is pause after each video enabled?
                 mStates.put(video.videoId, new State(video.videoId, getController().getPositionMs(), getController().getLengthMs(), getController().getSpeed()));
             } else {
-                // Add null state to prevent restore position from history
+                // Reset position when video almost ended
                 resetPosition(video.videoId);
                 video.percentWatched = 0;
             }
