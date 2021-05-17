@@ -107,7 +107,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                         .map((val) -> getController().getPositionMs());
 
         mProgressAction = playbackProgressObservable
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(AndroidSchedulers.mainThread()) // We should access player's position on the main thread
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::skipSegment,
