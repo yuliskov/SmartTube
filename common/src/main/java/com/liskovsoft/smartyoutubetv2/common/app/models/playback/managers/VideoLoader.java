@@ -46,9 +46,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
         }
     };
     private final Runnable mPendingRestartEngine = () -> {
-        YouTubeMediaService.instance().invalidateCache();
-
         if (getController() != null) {
+            YouTubeMediaService.instance().invalidateCache();
             getController().restartEngine(); // properly save position of the current track
         }
     };
@@ -88,6 +87,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
     @Override
     public void onEngineReleased() {
         disposeActions();
+        // We don't all fixes anymore
+        Utils.removeCallbacks(mHandler, mPendingRestartEngine);
     }
 
     @Override
