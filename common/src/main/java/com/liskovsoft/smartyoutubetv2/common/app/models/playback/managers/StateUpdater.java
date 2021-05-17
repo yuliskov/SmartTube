@@ -151,6 +151,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     public void onPause() {
         setPlayEnabled(false);
         Helpers.enableScreensaver(getActivity());
+        saveState();
     }
 
     @Override
@@ -270,8 +271,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
         Video video = getController().getVideo();
 
         if (video != null) {
-            // Reset position if track is ended.
-            // Skip if paused.
+            // Exceptional cases:
+            // 1) Track is ended
+            // 2) Pause on end enabled
             long remainsMs = getController().getLengthMs() - getController().getPositionMs();
             boolean isPositionActual = remainsMs > 1_000;
             if (isPositionActual || !getPlayEnabled()) { // Is pause after each video enabled?
