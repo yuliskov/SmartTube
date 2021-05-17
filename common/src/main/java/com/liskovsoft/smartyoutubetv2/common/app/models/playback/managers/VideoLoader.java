@@ -87,8 +87,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
     @Override
     public void onEngineReleased() {
         disposeActions();
-        // We don't all fixes anymore
-        Utils.removeCallbacks(mHandler, mPendingRestartEngine);
     }
 
     @Override
