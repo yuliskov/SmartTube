@@ -6,10 +6,13 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +27,8 @@ public class MainUIData {
     public static final int EXIT_NONE = 0;
     public static final int EXIT_DOUBLE_BACK = 1;
     public static final int EXIT_SINGLE_BACK = 2;
+    public static final int BACKGROUND_SHORTCUT_HOME = 0;
+    public static final int BACKGROUND_SHORTCUT_HOME_N_BACK = 1;
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
     private final Context mContext;
@@ -44,6 +49,10 @@ public class MainUIData {
     private int mPlaylistsStyle;
     private int mAppExitShortcut;
     private boolean mIsReturnToLauncherEnabled;
+    private boolean mIsUploadsOldLookEnabled;
+    private int mBackgroundShortcut;
+    private boolean mIsUploadsAutoLoadEnabled;
+    private Set<Video> mPinnedItems = new LinkedHashSet<>();
 
     private MainUIData(Context context) {
         mContext = context;
@@ -112,7 +121,8 @@ public class MainUIData {
     }
 
     public boolean isCategoryEnabled(int categoryId) {
-        return mEnabledLeftPanelCategories.contains(categoryId);
+        // Enable by default pinned sidebar items
+        return mEnabledLeftPanelCategories.contains(categoryId) || !mLeftPanelCategories.containsValue(categoryId);
     }
 
     public void setBootCategoryId(int categoryId) {
@@ -204,15 +214,57 @@ public class MainUIData {
         return mIsReturnToLauncherEnabled;
     }
 
+    public void enableUploadsOldLook(boolean enable) {
+        mIsUploadsOldLookEnabled = enable;
+        persistState();
+    }
+
+    public boolean isUploadsOldLookEnabled() {
+        return mIsUploadsOldLookEnabled;
+    }
+
+    public void enableUploadsAutoLoad(boolean enable) {
+        mIsUploadsAutoLoadEnabled = enable;
+        persistState();
+    }
+
+    public boolean isUploadsAutoLoadEnabled() {
+        return mIsUploadsAutoLoadEnabled;
+    }
+
+    public int getBackgroundShortcut() {
+        return mBackgroundShortcut;
+    }
+
+    public void setBackgroundShortcut(int type) {
+        PlayerData playerData = PlayerData.instance(mContext);
+
+        if (playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_DEFAULT) {
+            playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_PIP);
+        }
+
+        mBackgroundShortcut = type;
+        persistState();
+    }
+
+    public Set<Video> getPinnedItems() {
+        return mPinnedItems;
+    }
+
+    public void setPinnedItems(Set<Video> items) {
+        mPinnedItems = items;
+        persistState();
+    }
+
     private void initLeftPanelCategories() {
         mLeftPanelCategories.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mLeftPanelCategories.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
         mLeftPanelCategories.put(R.string.header_news, MediaGroup.TYPE_NEWS);
         mLeftPanelCategories.put(R.string.header_music, MediaGroup.TYPE_MUSIC);
-        mLeftPanelCategories.put(R.string.header_channels, MediaGroup.TYPE_CHANNELS_SECTION);
+        mLeftPanelCategories.put(R.string.header_channels, MediaGroup.TYPE_CHANNEL_UPLOADS);
         mLeftPanelCategories.put(R.string.header_subscriptions, MediaGroup.TYPE_SUBSCRIPTIONS);
         mLeftPanelCategories.put(R.string.header_history, MediaGroup.TYPE_HISTORY);
-        mLeftPanelCategories.put(R.string.header_playlists, MediaGroup.TYPE_PLAYLISTS_SECTION);
+        mLeftPanelCategories.put(R.string.header_playlists, MediaGroup.TYPE_USER_PLAYLISTS);
     }
 
     private void initColorSchemes() {
@@ -268,6 +320,10 @@ public class MainUIData {
         mCardTitleLinesNum = Helpers.parseInt(split, 11, 1);
         mIsCardTextAutoScrollEnabled = Helpers.parseBoolean(split, 12, true);
         mIsReturnToLauncherEnabled = Helpers.parseBoolean(split, 13, true);
+        mIsUploadsOldLookEnabled = Helpers.parseBoolean(split, 14, false);
+        mBackgroundShortcut = Helpers.parseInt(split, 15, BACKGROUND_SHORTCUT_HOME);
+        mIsUploadsAutoLoadEnabled = Helpers.parseBoolean(split, 16, true);
+        String pinnedItems = Helpers.parseStr(split, 17);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArrayLegacy(selectedCategories);
@@ -278,13 +334,23 @@ public class MainUIData {
         } else {
             mEnabledLeftPanelCategories.addAll(mLeftPanelCategories.values());
         }
+
+        if (pinnedItems != null) {
+            String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
+
+            for (String pinnedItem : pinnedItemsArr) {
+                mPinnedItems.add(Video.fromString(pinnedItem));
+            }
+        }
     }
 
     private void persistState() {
         String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
+        String pinnedItems = Helpers.mergeArray(mPinnedItems.toArray());
         mPrefs.setData(MAIN_UI_DATA, Helpers.mergeObject(mIsCardAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale,
                 mColorSchemeIndex, mIsCardMultilineTitleEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting,
-                mPlaylistsStyle, mAppExitShortcut, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled, mIsReturnToLauncherEnabled));
+                mPlaylistsStyle, mAppExitShortcut, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
+                mIsReturnToLauncherEnabled, mIsUploadsOldLookEnabled, mBackgroundShortcut, mIsUploadsAutoLoadEnabled, pinnedItems));
     }
 
     public static class ColorScheme {

@@ -2,7 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUIManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -13,8 +13,8 @@ import com.liskovsoft.smartyoutubetv2.common.misc.LangUpdater;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public class SubtitleSettingsPresenter extends BasePresenter<Void> {
@@ -44,7 +44,7 @@ public class SubtitleSettingsPresenter extends BasePresenter<Void> {
         String subtitlesDisabled = getContext().getString(R.string.subtitles_disabled);
 
         LangUpdater langUpdater = new LangUpdater(getContext());
-        HashMap<String, String> locales = langUpdater.getSupportedLocales();
+        Map<String, String> locales = langUpdater.getSupportedLocales();
         FormatItem currentFormat = mPlayerData.getFormat(FormatItem.TYPE_SUBTITLE);
 
         List<OptionItem> options = new ArrayList<>();
@@ -68,7 +68,7 @@ public class SubtitleSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendSubtitleStyleCategory(AppSettingsPresenter settingsPresenter) {
-        OptionCategory category = PlayerUiManager.createSubtitleStylesCategory(getContext(), mPlayerData);
+        OptionCategory category = PlayerUIManager.createSubtitleStylesCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 }

@@ -119,7 +119,7 @@ So, make a copy of values-he and name it values-iw. Keep both in your structure.
     <string name="subtitle_black_bg">רקע שחור</string>
     <string name="player_seek_preview">תצוגה מקדימה בעת חיפוש</string>
     <string name="color_scheme_dark_grey_oled">כהה (OLED)</string>
-    <string name="channel_category_sorting">מיון מקטעי ערוץ</string>
+    <string name="channels_category_sorting">מיון מקטעי ערוץ</string>
     <string name="sorting_by_new_content">תוכן חדש</string>
     <string name="sorting_alphabetically">אלפאבתית</string>
     <string name="sorting_last_viewed">נראה לאחרונה</string>
@@ -129,5 +129,4 @@ So, make a copy of values-he and name it values-iw. Keep both in your structure.
     <string name="playlists_style_rows">שורות</string>
     <string name="player_show_clock">הצג שעון</string>
     <string name="player_show_remaining_time">הצג זמן שנותר</string>
-    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
 </resources>

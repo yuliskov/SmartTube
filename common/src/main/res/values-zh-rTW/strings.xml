@@ -117,7 +117,7 @@
     <string name="subtitle_black_bg">背景播放</string>
     <string name="player_seek_preview">搜尋時預覽</string>
     <string name="color_scheme_dark_grey_oled">深灰色（OLED）</string>
-    <string name="channel_category_sorting">頻道排序</string>
+    <string name="channels_category_sorting">頻道排序</string>
     <string name="sorting_by_new_content">新活動</string>
     <string name="sorting_alphabetically">A-Z</string>
     <string name="sorting_last_viewed">上次觀看</string>
@@ -127,7 +127,6 @@
     <string name="playlists_style_rows">行</string>
     <string name="player_show_clock">顯示時間</string>
     <string name="player_show_remaining_time">顯示剩餘時間</string>
-    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">開啟頻道上傳</string>
     <string name="app_exit_shortcut">關閉應用程式</string>
     <string name="app_exit_none">不要關閉</string>
@@ -189,4 +188,18 @@
     <string name="intent_force_close">如果影片已經從外部開啟，則強制退出</string>
     <string name="btn_confirm">確認</string>
     <string name="player_low_video_quality">較低的影片畫質</string>
+    <string name="remote_session_closed">遠端已經關閉</string>
+    <string name="msg_mode_switch_error">無法切換顯示模式到 \"%s\"</string>
+    <string name="msg_player_error">播放器錯誤發生 %s。重新啟動播放……</string>
+    <string name="video_preset_disabled">沒有預設</string>
+    <string name="video_preset_enabled">下一段影片的格式將根據預設進行設定</string>
+    <string name="player_sleep_timer">睡眠定時</string>
+    <string name="player_show_quality_info">顯示影片品質資訊</string>
+    <string name="player_remember_each_speed">記住每個影片速度</string>
+    <string name="player_remember_speed_none">無</string>
+    <string name="player_remember_speed_all">所有影片都相同</string>
+    <string name="player_remember_speed_each">前一個影片</string>
+    <string name="msg_player_error_source">不能下載這個影片</string>
+    <string name="msg_player_error_renderer">選擇的影片格式不支援</string>
+    <string name="msg_player_error_unexpected">未知影片解碼器錯誤</string>
 </resources>

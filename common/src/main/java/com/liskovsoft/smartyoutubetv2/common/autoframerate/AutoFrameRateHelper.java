@@ -73,6 +73,7 @@ public class AutoFrameRateHelper {
 
     private void initFrameRateMapping() {
         mFrameRateMapping = new HashMap<>();
+        mFrameRateMapping.put(24f, 23.97f);
         mFrameRateMapping.put(30f, 29.97f);
         mFrameRateMapping.put(60f, 59.94f);
     }

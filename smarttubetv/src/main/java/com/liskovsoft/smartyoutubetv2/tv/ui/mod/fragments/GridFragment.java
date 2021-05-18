@@ -201,7 +201,7 @@ public class GridFragment extends Fragment implements BrowseSupportFragment.Main
     public void setSelectedPosition(int position) {
         mSelectedPosition = position;
         if(mGridViewHolder != null && mGridViewHolder.getGridView().getAdapter() != null) {
-            mGridViewHolder.getGridView().setSelectedPositionSmooth(position);
+            mGridViewHolder.getGridView().setSelectedPosition(position);
         }
     }
 

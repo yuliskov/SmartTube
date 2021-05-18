@@ -26,15 +26,17 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     private final RemoteManager mRemoteManager;
     private final RemoteControlData mRemoteControlData;
     private final SuggestionsLoader mSuggestionsLoader;
+    private final VideoLoader mVideoLoader;
     private Disposable mListeningAction;
     private Disposable mPostPlayAction;
     private Disposable mPostStateAction;
     private Video mVideo;
     private boolean mConnected;
 
-    public RemoteControlManager(Context context, SuggestionsLoader suggestionsLoader) {
+    public RemoteControlManager(Context context, SuggestionsLoader suggestionsLoader, VideoLoader videoLoader) {
         MediaService mediaService = YouTubeMediaService.instance();
         mSuggestionsLoader = suggestionsLoader;
+        mVideoLoader = videoLoader;
         mRemoteManager = mediaService.getRemoteManager();
         mRemoteControlData = RemoteControlData.instance(context);
         mRemoteControlData.setOnChange(this::tryListening);
@@ -86,6 +88,12 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         postPlay(false);
         // Below doesn't work on Vanced
         //postStartPlaying(null);
+    }
+
+    @Override
+    public void onNewSession() {
+        // User action detected. Pretend that there is no remote session.
+        mConnected = false;
     }
 
     private void postStartPlaying(@Nullable Video item, boolean isPlaying) {
@@ -176,13 +184,27 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     }
 
     private void processCommand(Command command) {
-        if (command.getType() != Command.TYPE_IDLE) {
-            // Seems that there is no robust way to detect a connection. Use carefully!
-            // Add remote queue row to the suggestions.
-            mConnected = command.getType() != Command.TYPE_DISCONNECTED;
-            if (getController() != null && getController().getVideo() != null) {
-                getController().getVideo().isRemote = mConnected;
-            }
+        //if (command.getType() != Command.TYPE_IDLE &&
+        //    command.getType() != Command.TYPE_UNDEFINED) {
+        //    // Seems that there is no robust way to detect a connection. Use carefully!
+        //    // Add remote queue row to the suggestions.
+        //    mConnected = command.getType() != Command.TYPE_DISCONNECTED;
+        //    if (getController() != null && getController().getVideo() != null) {
+        //        getController().getVideo().isRemote = mConnected;
+        //    }
+        //}
+
+        switch (command.getType()) {
+            case Command.TYPE_CONNECTED:
+            case Command.TYPE_OPEN_VIDEO:
+                mConnected = true;
+                break;
+            case Command.TYPE_DISCONNECTED:
+                mConnected = false;
+        }
+
+        if (getController() != null && getController().getVideo() != null) {
+            getController().getVideo().isRemote = mConnected;
         }
 
         switch (command.getType()) {
@@ -236,7 +258,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
             case Command.TYPE_NEXT:
                 if (getBridge() != null) {
                     Utils.movePlayerToForeground(getActivity());
-                    getBridge().onNextClicked();
+                    mVideoLoader.loadNext();
                 } else {
                     openNewVideo(mVideo);
                 }
@@ -245,8 +267,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 if (getBridge() != null && getController() != null) {
                     Utils.movePlayerToForeground(getActivity());
                     // Switch immediately. Skip position reset logic.
-                    //getController().setPositionMs(0);
-                    getBridge().onPreviousClicked();
+                    mVideoLoader.loadPrevious();
                 } else {
                     openNewVideo(mVideo);
                 }

@@ -10,7 +10,7 @@ public interface PlayerUiEventListener {
     int REPEAT_ALL = 2;
     void onSuggestionItemClicked(Video item);
     void onSuggestionItemLongClicked(Video item);
-    void onScrollEnd(VideoGroup group);
+    void onScrollEnd(Video item);
     boolean onPreviousClicked();
     boolean onNextClicked();
     void onPlayClicked();

@@ -21,7 +21,6 @@ import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import androidx.annotation.RestrictTo;
@@ -59,11 +58,11 @@ public class ThumbsBar extends LinearLayout {
         // the width of non-hero thumb should be 80% of HeroThumb's Width, i.e. 0.8 * 192dp = 154dp
         mThumbWidthInPixel = context.getResources().getDimensionPixelSize(
                 R.dimen.lb_playback_transport_thumbs_width);
-        mThumbHeightInPixel = LayoutParams.WRAP_CONTENT;
+        mThumbHeightInPixel = (int) (mThumbWidthInPixel / 1.77); // limit height by 16:9 ratio (vertical videos fix)
         // According to the spec, the width of HeroThumb should be 192dp
         mHeroThumbWidthInPixel = context.getResources().getDimensionPixelSize(
                 R.dimen.lb_playback_transport_hero_thumbs_width);
-        mHeroThumbHeightInPixel = LayoutParams.WRAP_CONTENT;
+        mHeroThumbHeightInPixel = (int) (mHeroThumbWidthInPixel / 1.77); // limit height by 16:9 ratio (vertical videos fix)
         // According to the spec, the margin between thumbs to be 4dp
         mMeasuredMarginInPixel = context.getResources().getDimensionPixelSize(
                 R.dimen.lb_playback_transport_thumbs_margin);

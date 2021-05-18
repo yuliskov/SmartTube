@@ -39,7 +39,7 @@
     <string name="update_changelog">Changelog</string>
     <string name="install_update">Update installieren</string>
     <string name="msg_category_is_empty">Hier ist nichts drin</string>
-    <string name="dialog_add_to_playlist">Zur Wiedergabeliste hinzufügen</string>
+    <string name="dialog_add_to_playlist">Hinzufügen/Entfernen aus Wiedergabeliste</string>
     <string name="msg_signed_users_only">Nur angemeldete Nutzer</string>
     <string name="msg_cant_load_content">Inhalt kann nicht geladen werden</string>
     <string name="title_video_presets">Video-Voreinstellungen</string>
@@ -117,7 +117,7 @@
     <string name="subtitle_black_bg">Schwarzer Hintergrund</string>
     <string name="player_seek_preview">Vorschau beim Spulen anzeigen</string>
     <string name="color_scheme_dark_grey_oled">Dunkel (OLED)</string>
-    <string name="channel_category_sorting">Kanäle-Kategorie sortieren</string>
+    <string name="channels_category_sorting">Kanäle-Kategorie sortieren</string>
     <string name="sorting_by_new_content">Neue Videos</string>
     <string name="sorting_alphabetically">Alphabetisch</string>
     <string name="sorting_last_viewed">Zuletzt angesehen</string>
@@ -125,9 +125,8 @@
     <string name="playlists_style">Wiedergabelisten-Stil</string>
     <string name="playlists_style_grid">Raster</string>
     <string name="playlists_style_rows">Reihe</string>
-    <string name="player_show_clock">Uhr anzeigen</string>
+    <string name="player_show_clock">Uhr im Player anzeigen</string>
     <string name="player_show_remaining_time">Verbleibende Zeit anzeigen</string>
-    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Kanal-Videos öffnen</string>
     <string name="app_exit_shortcut">App beenden</string>
     <string name="app_exit_none">Nicht beenden</string>
@@ -185,7 +184,7 @@
     <string name="content_block_notify_none">Ohne Benachrichtigung</string>
     <string name="content_block_notify_toast">Toast-Meldung</string>
     <string name="content_block_notify_dialog">Bestätigungs-Dialog</string>
-    <string name="return_to_launcher">Rückkehr zum Launcher aus ATV-Kanälen/Suche</string>
+    <string name="return_to_launcher">Rückkehr zum ATV-Launcher/Suche</string>
     <string name="intent_force_close">Beenden erzwingen, wenn Video von externer Quelle geöffnet wurde</string>
     <string name="btn_confirm">Bestätigen</string>
     <string name="player_low_video_quality">Niedrige Videoqualität</string>
@@ -200,4 +199,18 @@
     <string name="player_remember_speed_none">Nicht merken</string>
     <string name="player_remember_speed_all">Gleiche Geschwindigkeit für alle Videos</string>
     <string name="player_remember_speed_each">Spezifische Geschwindigkeit pro Video</string>
+    <string name="msg_player_error_source">Video kann nicht geladen werden</string>
+    <string name="msg_player_error_renderer">Das ausgewählte Videoformat wird nicht unterstützt</string>
+    <string name="msg_player_error_unexpected">Unbekannter Video-Decoder-Fehler</string>
+    <string name="video_aspect">Seitenverhältnis</string>
+    <string name="player_tweaks">Entwickleroptionen</string>
+    <string name="header_uploads">Uploads</string>
+    <string name="player_show_global_clock">Uhr auf dem Video anzeigen</string>
+    <string name="uploads_old_look">Altes Aussehen der Uploads-Kategorie</string>
+    <string name="background_playback_activation">Hintergrund-Wiedergabe (Taste)</string>
+    <string name="channels_old_look">Altes Aussehen der Kanäle-Kategorie</string>
+    <string name="channels_auto_load">Inhalt der Kanäle-Kategorie automatisch laden</string>
+    <string name="return_to_background_video">Zurück zum Video im Hintergrund</string>
+    <string name="pin_to_sidebar">Anheften an Seitenleiste</string>
+    <string name="unpin_from_sidebar">Lösen von Seitenleiste</string>
 </resources>

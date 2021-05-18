@@ -76,15 +76,15 @@
     <string name="player_ui_and_pause">UI e pausa</string>
     <string name="player_only_pause">Somente pausa</string>
     <string name="check_for_updates">Verificar se há atualizações</string>
-    <string name="update_not_found">Está a usando a versão mais recente</string>
-    <string name="update_in_progess">Esperar…</string>
+    <string name="update_not_found">Está a usar a versão mais recente</string>
+    <string name="update_in_progess">Aguarde…</string>
     <string name="player_ui_hide_behavior">Ocultar automaticamente a UI</string>
     <string name="player_ui_hide_never">Nunca</string>
     <string name="side_panel_sections">Configuração de secções</string>
     <string name="boot_to_section">Iniciar pela secção</string>
-    <string name="large_ui">UI completa</string>
-    <string name="video_grid_scale">Vídeo estilo grade</string>
-    <string name="scale_ui">Tamanho do UI</string>
+    <string name="large_ui">Escala grande</string>
+    <string name="video_grid_scale">Escala da grelha</string>
+    <string name="scale_ui">Escala do UI</string>
     <string name="color_scheme">Esquema de cores</string>
     <string name="color_scheme_default">Padrão</string>
     <string name="color_scheme_red_grey">Cinza-Vermelho</string>
@@ -96,7 +96,7 @@
     <string name="select_account_on_boot">Selecionar no início</string>
     <string name="player_other">Diversos</string>
     <string name="player_full_date">Data precisa na descrição</string>
-    <string name="open_channel">Canal aberto</string>
+    <string name="open_channel">Abrir canal</string>
     <string name="not_interested">Não interessado</string>
     <string name="you_wont_see_this_video">O vídeo foi removido das recomendações</string>
     <string name="settings_search">Pesquisar</string>
@@ -116,7 +116,7 @@
     <string name="subtitle_black_bg">Fundo preto</string>
     <string name="player_seek_preview">Visualizar enquanto procura</string>
     <string name="color_scheme_dark_grey_oled">Cinza Escuro (OLED)</string>
-    <string name="channel_category_sorting">Classificação dos canais</string>
+    <string name="channels_category_sorting">Classificação dos canais</string>
     <string name="sorting_by_new_content">Novos conteúdos</string>
     <string name="sorting_alphabetically">Ordem alfabética</string>
     <string name="sorting_last_viewed">Ultimos vistos</string>
@@ -126,7 +126,6 @@
     <string name="playlists_style_rows">Linhas</string>
     <string name="player_show_clock">Mostrar relógio</string>
     <string name="player_show_remaining_time">Mostrar o tempo restante</string>
-    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Abrir uploads do canal</string>
     <string name="app_exit_shortcut">Sair da aplicação</string>
     <string name="app_exit_none">Não Sair</string>
@@ -188,4 +187,19 @@
     <string name="intent_force_close">Forçar saída se o vídeo tiver sido aberto de uma fonte externa</string>
     <string name="btn_confirm">Confirmar</string>
     <string name="player_low_video_quality">Vídeo de baixa qualidade</string>
+    <string name="remote_session_closed">Sessão remota encerrada</string>
+    <string name="msg_mode_switch_error">Não foi possível alterar para o modo \"%s\"</string>
+    <string name="msg_player_error">Erro %s. A reiniciar reprodução…</string>
+    <string name="video_preset_disabled">Sem predefinição</string>
+    <string name="video_preset_enabled">O formato do próximo vídeo estará de acordo com a predefinição</string>
+    <string name="player_sleep_timer">Temporizador</string>
+    <string name="player_show_quality_info">Mostrar a qualidade do vídeo</string>
+    <string name="player_remember_each_speed">Lembrar a velocidade de reprodução</string>
+    <string name="player_remember_speed_none">Nenhuma</string>
+    <string name="player_remember_speed_all">Igual para todos os vídeos</string>
+    <string name="player_remember_speed_each">Por vídeo</string>
+    <string name="msg_player_error_source"> Não foi possível descarregar o vídeo</string>
+    <string name="msg_player_error_renderer">Seleção de qualidade de vídeo não suportada</string>
+    <string name="msg_player_error_unexpected">Erro de vídeo</string>
+    <string name="video_aspect">Aspeto</string>
 </resources>

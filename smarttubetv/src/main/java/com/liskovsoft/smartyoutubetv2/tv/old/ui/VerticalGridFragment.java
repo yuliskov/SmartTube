@@ -39,7 +39,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.old.data.VideoContract;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.tv.old.model.VideoCursorMapper;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.details.VideoDetailsActivity;
 
 /*
@@ -50,7 +50,7 @@ public class VerticalGridFragment extends VerticalGridSupportFragment
 
     private static final int NUM_COLUMNS = 5;
     private final CursorObjectAdapter mVideoCursorAdapter =
-            new CursorObjectAdapter(new CardPresenter());
+            new CursorObjectAdapter(new VideoCardPresenter());
     private static final int ALL_VIDEOS_LOADER = 1;
 
     @Override

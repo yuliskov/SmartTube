@@ -26,12 +26,13 @@ public interface PlayerEngineEventListener {
     int ERROR_TYPE_OUT_OF_MEMORY = 4;
     void onPlay();
     void onPause();
+    void onPlayEnd();
+    void onBuffering();
     void onSeek();
     void onSourceChanged(Video item);
     void onVideoLoaded(Video item);
     void onEngineInitialized();
     void onEngineReleased();
     void onEngineError(int type);
-    void onPlayEnd();
     void onTrackChanged(FormatItem track);
 }

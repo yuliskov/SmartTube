@@ -30,6 +30,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     private static final String TAG = ContentBlockManager.class.getSimpleName();
     private MediaItemManager mMediaItemManager;
     private ContentBlockData mContentBlockData;
+    private Video mVideo;
     private List<SponsorSegment> mSponsorSegments;
     private Disposable mProgressAction;
     private Disposable mSegmentsAction;
@@ -92,6 +93,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         segments -> {
+                            mVideo = item;
                             mSponsorSegments = segments;
                             startPlaybackWatcher();
                         },
@@ -105,7 +107,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                         .map((val) -> getController().getPositionMs());
 
         mProgressAction = playbackProgressObservable
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(AndroidSchedulers.mainThread()) // We should access player's position on the main thread
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::skipSegment,
@@ -115,17 +117,19 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
     private void disposeActions() {
         RxUtils.disposeActions(mProgressAction, mSegmentsAction);
+        mSponsorSegments = null;
+        mVideo = null;
     }
 
     private void skipSegment(long positionMs) {
-        if (mSponsorSegments == null) {
+        if (mSponsorSegments == null || !Video.equals(mVideo, getController().getVideo())) {
             return;
         }
 
         boolean isSegmentFound = false;
 
         for (SponsorSegment segment : mSponsorSegments) {
-            if (positionMs >= segment.getStartMs() && positionMs < segment.getEndMs()) {
+            if (isPositionAtSegmentStart(positionMs, segment)) {
                 Integer resId = mLocalizedMapping.get(segment.getCategory());
                 String localizedCategory = resId != null ? getActivity().getString(resId) : segment.getCategory();
 
@@ -145,6 +149,14 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         }
 
         mIsSameSegment = isSegmentFound;
+    }
+
+    private boolean isPositionAtSegmentStart(long positionMs, SponsorSegment segment) {
+        return positionMs >= segment.getStartMs() && positionMs <= (segment.getStartMs() + 1_000);
+    }
+
+    private boolean isPositionInsideSegment(long positionMs, SponsorSegment segment) {
+        return positionMs >= segment.getStartMs() && positionMs < segment.getEndMs();
     }
 
     private void messageSkip(long skipPositionMs, String category) {

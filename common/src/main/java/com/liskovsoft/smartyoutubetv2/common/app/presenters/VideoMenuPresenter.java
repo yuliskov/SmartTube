@@ -11,6 +11,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.utils.ServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -33,6 +35,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     private Disposable mNotInterestedAction;
     private Disposable mSubscribeAction;
     private Video mVideo;
+    private Video mCategory;
     private boolean mIsNotInterestedButtonEnabled;
     private boolean mIsOpenChannelButtonEnabled;
     private boolean mIsOpenChannelUploadsButtonEnabled;
@@ -40,6 +43,8 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     private boolean mIsShareButtonEnabled;
     private boolean mIsAddToPlaylistButtonEnabled;
     private boolean mIsAccountSelectionEnabled;
+    private boolean mIsReturnToBackgroundVideoEnabled;
+    private boolean mIsPinToSidebarEnabled;
 
     private VideoMenuPresenter(Context context) {
         super(context);
@@ -53,13 +58,17 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         return new VideoMenuPresenter(context);
     }
 
-    public void showPlaylistMenu(Video video) {
+    public void showAddToPlaylistMenu(Video video) {
         mIsAddToPlaylistButtonEnabled = true;
 
         showMenuInt(video);
     }
 
     public void showVideoMenu(Video video) {
+        showVideoMenu(video, null);
+    }
+
+    public void showVideoMenu(Video video, Video category) {
         mIsAddToPlaylistButtonEnabled = true;
         mIsOpenChannelButtonEnabled = true;
         mIsOpenChannelUploadsButtonEnabled = true;
@@ -67,8 +76,10 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mIsNotInterestedButtonEnabled = true;
         mIsShareButtonEnabled = true;
         mIsAccountSelectionEnabled = true;
+        mIsReturnToBackgroundVideoEnabled = true;
+        mIsPinToSidebarEnabled = true;
 
-        showMenuInt(video);
+        showMenuInt(video, category);
     }
 
     public void showChannelMenu(Video video) {
@@ -76,23 +87,40 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mIsShareButtonEnabled = true;
         mIsOpenChannelButtonEnabled = true;
         mIsAccountSelectionEnabled = true;
+        mIsReturnToBackgroundVideoEnabled = true;
 
         showMenuInt(video);
     }
 
+    public void showPlaylistMenu(Video category) {
+        mIsPinToSidebarEnabled = true;
+
+        showMenuInt(null, category);
+    }
+
     private void showMenuInt(Video video) {
-        if (video == null) {
+        showMenuInt(video, null);
+    }
+
+    private void showMenuInt(Video video, Video category) {
+        if (video == null && category == null) {
             return;
         }
 
         RxUtils.disposeActions(mPlaylistAction, mAddAction, mNotInterestedAction, mSubscribeAction);
 
         mVideo = video;
+        mCategory = category;
 
         ServiceManager.instance().authCheck(this::obtainPlaylistsAndShowDialogSigned, this::prepareAndShowDialogUnsigned);
     }
 
     private void obtainPlaylistsAndShowDialogSigned() {
+        if (!mIsAddToPlaylistButtonEnabled || mVideo == null) {
+            prepareAndShowDialogSigned(null);
+            return;
+        }
+
         mPlaylistAction = mItemManager.getVideoPlaylistsInfosObserve(mVideo.videoId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -109,6 +137,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         mSettingsPresenter.clear();
 
+        appendReturnToBackgroundVideoButton();
         appendAddToPlaylist(videoPlaylistInfos);
         appendOpenChannelButton();
         //appendOpenChannelUploadsButton();
@@ -116,8 +145,12 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         appendNotInterestedButton();
         appendShareButton();
         appendAccountSelectionButton();
+        appendPinToSidebarButton();
 
-        mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction));
+        if (!mSettingsPresenter.isEmpty()) {
+            String title = mVideo != null ? mVideo.title : mCategory.title;
+            mSettingsPresenter.showDialog(title, () -> RxUtils.disposeActions(mPlaylistAction));
+        }
     }
 
     private void prepareAndShowDialogUnsigned() {
@@ -127,15 +160,19 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         mSettingsPresenter.clear();
 
+        appendReturnToBackgroundVideoButton();
         appendOpenChannelButton();
         appendShareButton();
-        appendAccountSelectionButton();
 
-        mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction));
+        if (mSettingsPresenter.isEmpty()) {
+            MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
+        } else {
+            mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction));
+        }
     }
 
     private void appendAddToPlaylist(List<VideoPlaylistInfo> videoPlaylistInfos) {
-        if (!mIsAddToPlaylistButtonEnabled) {
+        if (!mIsAddToPlaylistButtonEnabled || videoPlaylistInfos == null) {
             return;
         }
 
@@ -231,6 +268,40 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
                 UiOptionItem.from(getContext().getString(
                         mVideo.isSubscribed ? R.string.unsubscribe_from_channel : R.string.subscribe_to_channel),
                         optionItem -> subscribe()));
+    }
+
+    private void appendPinToSidebarButton() {
+        if (!mIsPinToSidebarEnabled || mCategory == null) {
+            return;
+        }
+
+        BrowsePresenter presenter = BrowsePresenter.instance(getContext());
+        boolean isItemPinned = presenter.isItemPinned(mCategory);
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(
+                        isItemPinned ? R.string.unpin_from_sidebar : R.string.pin_to_sidebar),
+                        optionItem -> {
+                            if (isItemPinned) {
+                                presenter.unpinItem(mCategory);
+                            } else {
+                                presenter.pinItem(mCategory);
+                            }
+                            mSettingsPresenter.closeDialog();
+                        }));
+    }
+
+    private void appendReturnToBackgroundVideoButton() {
+        if (!mIsReturnToBackgroundVideoEnabled || !PlaybackPresenter.instance(getContext()).isVideoInBackground()) {
+            return;
+        }
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.return_to_background_video),
+                        // Assume that the Playback view already blocked and remembered.
+                        optionItem -> ViewManager.instance(getContext()).startView(SplashView.class)
+                )
+        );
     }
 
     private void addToPlaylist(String playlistId, boolean checked) {

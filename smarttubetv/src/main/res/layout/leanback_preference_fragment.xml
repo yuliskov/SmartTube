@@ -15,6 +15,7 @@
   ~ limitations under the License
   -->
 
+<!-- Library: androidx:leanback:leanback-preference:1.0.0 -->
 <!-- MOD: make dialog title multiline -->
 <!-- MOD: only has effect on root dialog -->
 

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="update_urls">
+        <item>https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</item>
+        <item>https://getfile.dokpub.com/yandex/get/https://disk.yandex.com/d/tUDPwYGyVRoYLA</item>
+    </string-array>
+</resources>

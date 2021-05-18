@@ -14,23 +14,23 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.SettingsItemPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.SettingsCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.SettingsCategoryFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.AutoSizeGridFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.fragments.GridFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingsGridFragment extends AutoSizeGridFragment implements SettingsCategoryFragment {
+public class SettingsGridFragment extends GridFragment implements SettingsCategoryFragment {
     private static final String TAG = SettingsGridFragment.class.getSimpleName();
     private static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
     private ArrayObjectAdapter mSettingsAdapter;
     private BrowsePresenter mMainPresenter;
     private UriBackgroundManager mBackgroundManager;
     private final List<SettingsGroup> mPendingUpdates = new ArrayList<>();
-    private boolean mInvalidate;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,19 +62,14 @@ public class SettingsGridFragment extends AutoSizeGridFragment implements Settin
 
     private void setupAdapter() {
         VerticalGridPresenter presenter = new VerticalGridPresenter(ZOOM_FACTOR, false);
-        presenter.setNumberOfColumns(getColumnsNum(R.dimen.grid_item_width));
+        presenter.setNumberOfColumns(GridFragmentHelper.getMaxColsNum(getContext(), R.dimen.settings_card_width));
         setGridPresenter(presenter);
 
         if (mSettingsAdapter == null) {
-            SettingsItemPresenter gridPresenter = new SettingsItemPresenter(this);
+            SettingsCardPresenter gridPresenter = new SettingsCardPresenter();
             mSettingsAdapter = new ArrayObjectAdapter(gridPresenter);
             setAdapter(mSettingsAdapter);
         }
-    }
-
-    @Override
-    public void invalidate() {
-        mInvalidate = true;
     }
 
     @Override
@@ -87,7 +82,7 @@ public class SettingsGridFragment extends AutoSizeGridFragment implements Settin
     @Override
     public boolean isEmpty() {
         if (mSettingsAdapter == null) {
-            return false;
+            return mPendingUpdates.isEmpty();
         }
 
         return mSettingsAdapter.size() == 0;
@@ -100,10 +95,8 @@ public class SettingsGridFragment extends AutoSizeGridFragment implements Settin
             return;
         }
 
-        if (mInvalidate) {
-            clear();
-            mInvalidate = false;
-        }
+        // Always clear (continuation not supported)
+        clear();
 
         if (group != null) {
             for (SettingsItem item : group.getItems()) {

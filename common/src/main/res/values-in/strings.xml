@@ -116,7 +116,7 @@
     <string name="subtitle_black_bg">Latar belakang hitam</string>
     <string name="player_seek_preview">Pratinjau sambil mencari</string>
     <string name="color_scheme_dark_grey_oled">Abu-abu Tua (OLED)</string>
-    <string name="channel_category_sorting">Penyortiran bagian saluran</string>
+    <string name="channels_category_sorting">Penyortiran bagian saluran</string>
     <string name="sorting_by_new_content">Konten baru</string>
     <string name="sorting_alphabetically">Menurut abjad</string>
     <string name="sorting_last_viewed">Terakhir dilihat</string>
@@ -126,7 +126,6 @@
     <string name="playlists_style_rows">Baris</string>
     <string name="player_show_clock">Tunjukkan jam</string>
     <string name="player_show_remaining_time">Tunjukkan waktu yang tersisa</string>
-    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Buka upload saluran</string>
     <string name="app_exit_shortcut">Keluar dari aplikasi</string>
     <string name="app_exit_none">Jangan keluar</string>

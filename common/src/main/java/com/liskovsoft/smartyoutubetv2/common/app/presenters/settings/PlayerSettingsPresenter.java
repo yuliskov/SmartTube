@@ -2,24 +2,27 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HqDialogManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HQDialogManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUIManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private final PlayerData mPlayerData;
+    private final PlayerTweaksData mPlayerTweaksData;
 
     public PlayerSettingsPresenter(Context context) {
         super(context);
         mPlayerData = PlayerData.instance(context);
+        mPlayerTweaksData = PlayerTweaksData.instance(context);
     }
 
     public static PlayerSettingsPresenter instance(Context context) {
@@ -32,14 +35,15 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
         appendVideoBufferCategory(settingsPresenter);
         appendVideoPresetsCategory(settingsPresenter);
-        appendVideoZoomCategory(settingsPresenter);
+        //appendVideoZoomCategory(settingsPresenter);
         appendAudioShiftCategory(settingsPresenter);
-        appendBackgroundPlaybackCategory(settingsPresenter);
+        //appendBackgroundPlaybackCategory(settingsPresenter);
         appendOKButtonCategory(settingsPresenter);
         appendUIAutoHideCategory(settingsPresenter);
         appendSeekingPreviewCategory(settingsPresenter);
         appendRememberSpeedCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
+        appendTweaksCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_player_ui));
     }
@@ -85,27 +89,22 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendVideoBufferCategory(AppSettingsPresenter settingsPresenter) {
-        OptionCategory category = HqDialogManager.createVideoBufferCategory(getContext(), mPlayerData);
+        OptionCategory category = HQDialogManager.createVideoBufferCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
     private void appendVideoPresetsCategory(AppSettingsPresenter settingsPresenter) {
-        OptionCategory category = HqDialogManager.createVideoPresetsCategory(getContext(), mPlayerData);
-        settingsPresenter.appendRadioCategory(category.title, category.options);
-    }
-
-    private void appendBackgroundPlaybackCategory(AppSettingsPresenter settingsPresenter) {
-        OptionCategory category = HqDialogManager.createBackgroundPlaybackCategory(getContext(), mPlayerData);
+        OptionCategory category = HQDialogManager.createVideoPresetsCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
     private void appendVideoZoomCategory(AppSettingsPresenter settingsPresenter) {
-        OptionCategory category = PlayerUiManager.createVideoZoomCategory(getContext(), mPlayerData);
+        OptionCategory category = PlayerUIManager.createVideoZoomCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
     private void appendAudioShiftCategory(AppSettingsPresenter settingsPresenter) {
-        OptionCategory category = HqDialogManager.createAudioShiftCategory(getContext(), mPlayerData);
+        OptionCategory category = HQDialogManager.createAudioShiftCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
@@ -146,24 +145,62 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_remember_speed), options);
     }
 
+    private void appendTweaksCategory(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from("Amlogic 1080/60 fix",
+                option -> mPlayerTweaksData.enableAmlogicFix(option.isSelected()),
+                mPlayerTweaksData.isAmlogicFixEnabled()));
+
+        options.add(UiOptionItem.from("Frame drops fix (experimental)",
+                option -> mPlayerTweaksData.enableFrameDropFix(option.isSelected()),
+                mPlayerTweaksData.isFrameDropFixEnabled()));
+
+        options.add(UiOptionItem.from("Disable snap to vsync",
+                option -> mPlayerTweaksData.disableSnapToVsync(option.isSelected()),
+                mPlayerTweaksData.isSnappingToVsyncDisabled()));
+
+        options.add(UiOptionItem.from("Skip codec profile level check",
+                option -> mPlayerTweaksData.skipProfileLevelCheck(option.isSelected()),
+                mPlayerTweaksData.isProfileLevelCheckSkipped()));
+
+        options.add(UiOptionItem.from("Force legacy codecs",
+                option -> mPlayerData.enableLowQuality(option.isSelected()),
+                mPlayerData.isLowQualityEnabled()));
+
+        options.add(UiOptionItem.from("Force SW video decoder",
+                option -> mPlayerTweaksData.forceSWDecoder(option.isSelected()),
+                mPlayerTweaksData.isSWDecoderForced()));
+
+        options.add(UiOptionItem.from("Enable TextureView",
+                option -> mPlayerTweaksData.enableTextureView(option.isSelected()),
+                mPlayerTweaksData.isTextureViewEnabled()));
+
+        options.add(UiOptionItem.from("Sleep timer fix",
+                option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
+                mPlayerData.isSonyTimerFixEnabled()));
+
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_tweaks), options);
+    }
+
     private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         //options.add(UiOptionItem.from(getContext().getString(R.string.player_full_date),
-        //        option -> mPlayerData.showFullDate(option.isSelected()),
-        //        mPlayerData.isShowFullDateEnabled()));
+        //        option -> mPlayerData.enableAbsoluteDate(option.isSelected()),
+        //        mPlayerData.isAbsoluteDateEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_pause_when_seek),
                 option -> mPlayerData.enablePauseOnSeek(option.isSelected()),
                 mPlayerData.isPauseOnSeekEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_sleep_timer),
-                option -> mPlayerData.enableSleepTimer(option.isSelected()),
-                mPlayerData.isSleepTimerEnabled()));
-
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_clock),
                 option -> mPlayerData.enableClock(option.isSelected()),
                 mPlayerData.isClockEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_global_clock),
+                option -> mPlayerData.enableGlobalClock(option.isSelected()),
+                mPlayerData.isGlobalClockEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_remaining_time),
                 option -> mPlayerData.enableRemainingTime(option.isSelected()),
@@ -172,18 +209,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_quality_info),
                 option -> mPlayerData.enableQualityInfo(option.isSelected()),
                 mPlayerData.isQualityInfoEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_low_video_quality),
-                option -> mPlayerData.enableLowQuality(option.isSelected()),
-                mPlayerData.isLowQualityEnabled()));
-
-        options.add(UiOptionItem.from("Amlogic 1080/60 fix",
-                option -> mPlayerData.enableAmlogicFix(option.isSelected()),
-                mPlayerData.isAmlogicFixEnabled()));
-
-        options.add(UiOptionItem.from("Frame drops fix (experimental)",
-                option -> mPlayerData.enableFrameDropFix(option.isSelected()),
-                mPlayerData.isFrameDropFixEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }

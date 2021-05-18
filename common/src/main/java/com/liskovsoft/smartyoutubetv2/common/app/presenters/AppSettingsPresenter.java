@@ -2,11 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.Looper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppSettingsView;
@@ -23,8 +20,6 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     private final Runnable mCloseDialog = this::closeDialog;
     private String mTitle;
     private Runnable mOnClose;
-    private PlayerUiManager mUiManager;
-    private int mEnginePlaybackMode;
     private long mTimeoutMs;
 
     public static class SettingsCategory {
@@ -98,9 +93,6 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     public void onClose() {
         clear();
 
-        enablePlayerUiAutoHide(true);
-        blockPlayerEngine(false);
-
         if (mOnClose != null) {
             mOnClose.run();
         }
@@ -116,10 +108,6 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     public void onViewInitialized() {
         getView().setTitle(mTitle);
         getView().addCategories(mCategories);
-    }
-
-    public void setPlayerUiManager(PlayerUiManager uiManager) {
-        mUiManager = uiManager;
     }
 
     public void showDialog() {
@@ -138,9 +126,6 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
         mTitle = dialogTitle;
         mOnClose = onClose;
 
-        enablePlayerUiAutoHide(false);
-        blockPlayerEngine(true);
-
         if (getView() != null) {
             getView().clear();
             onViewInitialized();
@@ -158,7 +143,8 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     }
 
     public boolean isDialogShown() {
-        return !mCategories.isEmpty();
+        // Also check that current dialog almost closed (new view start is pending from a menu item)
+        return !mCategories.isEmpty() && !ViewManager.instance(getContext()).isNewViewPending();
     }
 
     public void appendRadioCategory(String categoryTitle, List<OptionItem> items) {
@@ -195,35 +181,15 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
         mTimeoutMs = timeoutMs;
     }
 
+    public boolean isEmpty() {
+        return mCategories == null || mCategories.isEmpty();
+    }
+
     private void setupTimeout() {
         mHandler.removeCallbacks(mCloseDialog);
 
         if (mTimeoutMs > 0) {
             mHandler.postDelayed(mCloseDialog, mTimeoutMs);
-        }
-    }
-
-    private void blockPlayerEngine(boolean block) {
-        if (mUiManager != null && mUiManager.getController() != null) {
-            // Old Android fix: don't destroy player while dialog is open
-            if (VERSION.SDK_INT < 25) {
-                if (block) {
-                    mEnginePlaybackMode = mUiManager.getController().getPlaybackMode(); // save orig value for later restoration
-                    mUiManager.getController().setPlaybackMode(PlaybackEngineController.BACKGROUND_MODE_SOUND);
-                } else {
-                    mUiManager.getController().setPlaybackMode(mEnginePlaybackMode);
-                }
-            }
-        }
-    }
-
-    private void enablePlayerUiAutoHide(boolean enable) {
-        if (mUiManager != null) {
-            if (enable) {
-                mUiManager.enableUiAutoHideTimeout();
-            } else {
-                mUiManager.disableUiAutoHideTimeout();
-            }
         }
     }
 }

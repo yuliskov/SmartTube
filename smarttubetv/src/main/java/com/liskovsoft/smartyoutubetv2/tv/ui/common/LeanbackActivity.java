@@ -1,10 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.common;
 
 import android.annotation.SuppressLint;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -27,6 +25,10 @@ public abstract class LeanbackActivity extends MotherActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Fix situations when the app is killed but the activity is restored by the system
+        //if (savedInstanceState != null) {
+        //    finishTheApp();
+        //}
         mBackgroundManager = new UriBackgroundManager(this);
         mViewManager = ViewManager.instance(this);
         mModeSyncManager = ModeSyncManager.instance();
@@ -46,7 +48,7 @@ public abstract class LeanbackActivity extends MotherActivity {
         Log.d(TAG, event);
 
         if (mDoubleBackManager.checkDoubleBack(event)) {
-            mViewManager.properlyFinishTheApp();
+            finishTheApp();
         }
 
         return super.dispatchKeyEvent(event);
@@ -71,11 +73,7 @@ public abstract class LeanbackActivity extends MotherActivity {
 
         mModeSyncManager.restore(this);
 
-        // We can't do it in the ViewManager because activity may be started from outside
-        if (!mViewManager.addTop(this)) {
-            // not added, probably move task to back is active
-            destroyActivity();
-        }
+        mViewManager.addTop(this);
     }
 
     @Override
@@ -99,21 +97,15 @@ public abstract class LeanbackActivity extends MotherActivity {
                     mDoubleBackManager.enableDoubleBackExit();
                     break;
                 case MainUIData.EXIT_SINGLE_BACK:
-                    mViewManager.properlyFinishTheApp();
+                    finishTheApp();
                     break;
             }
         } else {
-            if (!isInPIPMode()) {
-                super.finish();
-            }
+            finishReally();
         }
     }
 
-    public boolean isInPIPMode() {
-        if (Build.VERSION.SDK_INT < 24) {
-            return false;
-        }
-
-        return isInPictureInPictureMode();
+    private void finishTheApp() {
+        mViewManager.properlyFinishTheApp(this);
     }
 }

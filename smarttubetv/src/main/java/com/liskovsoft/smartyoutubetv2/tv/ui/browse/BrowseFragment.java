@@ -49,6 +49,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private ProgressBarManager mProgressBarManager;
     private boolean mIsFragmentCreated;
     private int mRestoredHeaderIndex = -1;
+    private int mRestoredItemIndex = -1;
     private boolean mFocusOnChildFragment;
     private GestureDetector mGestureDetector;
 
@@ -57,6 +58,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         super.onCreate(null);
 
         mRestoredHeaderIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_HEADER_INDEX, -1) : -1;
+        mRestoredItemIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_ITEM_INDEX, -1) : -1;
         mIsFragmentCreated = true;
 
         mCategories = new LinkedHashMap<>();
@@ -104,6 +106,10 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         // Restore state after crash
         selectCategory(mRestoredHeaderIndex);
         mRestoredHeaderIndex = -1;
+
+        // Restore state after crash
+        selectItem(mRestoredItemIndex);
+        mRestoredItemIndex = -1;
     }
 
     private void setupEventListeners() {
@@ -177,7 +183,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         setHeaderPresenterSelector(new PresenterSelector() {
             @Override
             public Presenter getPresenter(Object o) {
-                return new IconHeaderItemPresenter(getHeaderResId(o));
+                return new IconHeaderItemPresenter(getHeaderResId(o), getIconUrl(o));
             }
         });
     }
@@ -188,6 +194,14 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         }
 
         return -1;
+    }
+
+    private String getIconUrl(Object o) {
+        if (o instanceof PageRow) {
+            return ((CategoryHeaderItem) ((PageRow) o).getHeaderItem()).getIconUrl();
+        }
+
+        return null;
     }
 
     private int getSelectedHeaderId() {
@@ -204,7 +218,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     @Override
     public void showError(ErrorFragmentData data) {
-        replaceMainFragment(new ErrorDialogFragment(data));
+        //replaceMainFragment(new ErrorDialogFragment(data));
+        showErrorIfEmpty(data);
     }
 
     private void showErrorIfEmpty(ErrorFragmentData data) {
@@ -252,6 +267,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         restoreMainFragment();
 
         mCategoryFragmentFactory.updateCurrentFragment(group);
+
+        fixInvisibleSearchOrb();
     }
 
     @Override
@@ -299,7 +316,11 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         HeaderItem headerItem = new CategoryHeaderItem(header);
 
         PageRow pageRow = new PageRow(headerItem);
-        mCategoryRowAdapter.add(index, pageRow);
+        if (index == -1) {
+            mCategoryRowAdapter.add(pageRow); // add to the end
+        } else {
+            mCategoryRowAdapter.add(index, pageRow);
+        }
     }
 
     private void removeHeader(Category header) {
@@ -337,12 +358,11 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         }
 
         mIsFragmentCreated = false;
-
-        fixInvisibleSearchOrb();
     }
 
     /**
-     * Fix suddenly invisible search orb bug<br/>
+     * Fix suddenly invisible search orb<br/>
+     * Could happen on topmost category when the page partially scrolled<br/>
      * More info: {@link TitleHelper}
      */
     private void fixInvisibleSearchOrb() {

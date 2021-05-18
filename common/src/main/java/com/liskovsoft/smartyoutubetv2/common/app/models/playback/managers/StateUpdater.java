@@ -9,6 +9,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -71,11 +72,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public boolean onPreviousClicked() {
-        // Skip auto seek logic when running remote session
-        if (getController().getVideo() != null && getController().getVideo().isRemote) {
-            return false;
-        }
-
         boolean isFarFromStart = getController().getPositionMs() > 10_000;
 
         if (isFarFromStart) {
@@ -129,6 +125,14 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     @Override
+    public void onEngineError(int type) {
+        // Oops. Error happens while playing (network lost etc).
+        if (getController().getPositionMs() > 1_000) {
+            saveState();
+        }
+    }
+
+    @Override
     public void onVideoLoaded(Video item) {
         // In this state video length is not undefined.
         restorePosition(item);
@@ -149,6 +153,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     public void onPause() {
         setPlayEnabled(false);
         Helpers.enableScreensaver(getActivity());
+        saveState();
     }
 
     @Override
@@ -272,14 +277,15 @@ public class StateUpdater extends PlayerEventListenerHelper {
         Video video = getController().getVideo();
 
         if (video != null) {
-            // Don't save position if track is ended.
-            // Skip if paused.
+            // Exceptional cases:
+            // 1) Track is ended
+            // 2) Pause on end enabled
             long remainsMs = getController().getLengthMs() - getController().getPositionMs();
-            boolean isVideoEnded = remainsMs < 1_000;
-            if (!isVideoEnded || !getPlayEnabled()) {
+            boolean isPositionActual = remainsMs > 1_000;
+            if (isPositionActual || !getPlayEnabled()) { // Is pause after each video enabled?
                 mStates.put(video.videoId, new State(video.videoId, getController().getPositionMs(), getController().getLengthMs(), getController().getSpeed()));
             } else {
-                // Add null state to prevent restore position from history
+                // Reset position when video almost ended
                 resetPosition(video.videoId);
                 video.percentWatched = 0;
             }
@@ -294,7 +300,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
         // internal storage has priority over item data loaded from network
         if (state == null) {
-            boolean containsWebPosition = item.percentWatched > 0 && item.percentWatched < 100;
+            // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
+            boolean containsWebPosition = item.percentWatched > 10 && item.percentWatched < 100;
             if (containsWebPosition) {
                 // Web state is buggy on short videos (e.g. video clips)
                 boolean isLongVideo = getController().getLengthMs() > MUSIC_VIDEO_LENGTH_MS;

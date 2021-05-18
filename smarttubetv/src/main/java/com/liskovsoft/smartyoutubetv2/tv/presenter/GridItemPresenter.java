@@ -22,8 +22,8 @@ public class GridItemPresenter extends Presenter {
         TextView view = new TextView(parent.getContext());
 
         Resources res = parent.getResources();
-        int width = res.getDimensionPixelSize(R.dimen.grid_item_width);
-        int height = res.getDimensionPixelSize(R.dimen.grid_item_height);
+        int width = res.getDimensionPixelSize(R.dimen.settings_card_width);
+        int height = res.getDimensionPixelSize(R.dimen.settings_card_height);
 
         view.setLayoutParams(new ViewGroup.LayoutParams(width, height));
         view.setFocusable(true);

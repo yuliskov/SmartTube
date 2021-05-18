@@ -29,6 +29,10 @@ public class PlaybackActivity extends LeanbackActivity {
     private static final float GAMEPAD_TRIGGER_INTENSITY_OFF = 0.45f;
     private boolean gamepadTriggerPressed = false;
     private PlaybackFragment mPlaybackFragment;
+    private long mBackPressedMs;
+    private long mFinishCalledMs;
+    private ViewManager mViewManager;
+    private MainUIData mMainUIData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,8 @@ public class PlaybackActivity extends LeanbackActivity {
         if (fragment instanceof PlaybackFragment) {
             mPlaybackFragment = (PlaybackFragment) fragment;
         }
+        mViewManager = ViewManager.instance(this);
+        mMainUIData = MainUIData.instance(this);
     }
 
     @Override
@@ -107,14 +113,14 @@ public class PlaybackActivity extends LeanbackActivity {
     // For N devices that support it, not "officially"
     // More: https://medium.com/s23nyc-tech/drop-in-android-video-exoplayer2-with-picture-in-picture-e2d4f8c1eb30
     @SuppressWarnings("deprecation")
-    private void enterPIPMode() {
+    private void enterPipMode() {
         // NOTE: When exiting PIP mode onPause is called immediately after onResume
 
         // Also, avoid enter pip on stop!
         // More info: https://developer.android.com/guide/topics/ui/picture-in-picture#continuing_playback
 
         if (Helpers.isPictureInPictureSupported(this)) {
-            if (wannaEnterToPIP()) {
+            if (wannaEnterToPip()) {
                 Log.d(TAG, "Entering PIP mode...");
 
                 try {
@@ -132,32 +138,46 @@ public class PlaybackActivity extends LeanbackActivity {
         }
     }
 
-    private boolean wannaEnterToPIP() {
+    private boolean wannaEnterToPip() {
         return mPlaybackFragment != null && mPlaybackFragment.getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_PIP && !isInPictureInPictureMode();
     }
-
-    //@Override
-    //public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
-    //    super.onPictureInPictureModeChanged(isInPictureInPictureMode);
-    //
-    //    mPlaybackFragment.reloadPlayback();
-    //}
 
     @Override
     public void finish() {
         Log.d(TAG, "Finishing activity...");
+
+        mFinishCalledMs = System.currentTimeMillis();
 
         // NOTE: When exiting PIP mode onPause is called immediately after onResume
 
         // Also, avoid enter pip on stop!
         // More info: https://developer.android.com/guide/topics/ui/picture-in-picture#continuing_playback
 
-        // User pressed back.
-        enterPIPMode();
+        // NOTE: block back button for PIP.
+        // User pressed PIP button in the player.
+        if (!isBackPressed() || mMainUIData.getBackgroundShortcut() == MainUIData.BACKGROUND_SHORTCUT_HOME_N_BACK) {
+            enterPipMode();
+        }
 
-        super.finish();
+        if (doNotFinish()) {
+            // Ensure to opening this activity when the user is returning to the app
+            mViewManager.blockTop(this);
+            mViewManager.startParentView(this);
+        } else {
+            mPlaybackFragment.onFinish();
+            super.finish();
+        }
+    }
 
-        mPlaybackFragment.onFinish();
+    private boolean doNotFinish() {
+        sIsInPipMode = isInPipMode();
+        return sIsInPipMode || (mPlaybackFragment.getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND
+        && mMainUIData.getBackgroundShortcut() == MainUIData.BACKGROUND_SHORTCUT_HOME_N_BACK);
+    }
+
+    private boolean doNotDestroy() {
+        sIsInPipMode = isInPipMode();
+        return sIsInPipMode || mPlaybackFragment.getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND;
     }
 
     @SuppressWarnings("deprecation")
@@ -192,26 +212,69 @@ public class PlaybackActivity extends LeanbackActivity {
     }
 
     @Override
-    public void onUserLeaveHint () {
+    public void onBackPressed() {
+        mBackPressedMs = System.currentTimeMillis();
+        super.onBackPressed();
+    }
+
+    @Override
+    public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode);
+
+        if (!isInPictureInPictureMode) {
+            // Disable collapse app to Home launcher
+            mViewManager.enableMoveToBack(false);
+        }
+    }
+
+    @Override
+    public void onUserLeaveHint() {
         // Check that user not open dialog instead of really leaving the activity
-        if (!AppSettingsPresenter.instance(this).isDialogShown()) {
+        if (!AppSettingsPresenter.instance(this).isDialogShown() && isHomePressed()) {
             switch (mPlaybackFragment.getPlaybackMode()) {
                 case PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND:
                     enterBackgroundPlayMode();
-                    ViewManager.instance(this).removeTop(this); // return to browser instead of player
+                    // Do we need to do something additional when running Play Behind?
                     break;
                 case PlaybackEngineController.BACKGROUND_MODE_PIP:
-                    enterPIPMode();
-                    ViewManager.instance(this).removeTop(this); // return to browser instead of player
+                    enterPipMode();
+                    if (doNotDestroy()) {
+                        // Ensure to opening this activity when the user is returning to the app
+                        mViewManager.blockTop(this);
+                        // Return to previous activity (create point from that app could be launched)
+                        mViewManager.startParentView(this);
+                        // Enable collapse app to Home launcher
+                        mViewManager.enableMoveToBack(true);
+                    }
                     break;
             }
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
+    public boolean isInPipMode() {
+        if (Build.VERSION.SDK_INT < 24) {
+            return false;
+        }
 
-        ViewManager.instance(this).blockTop(isInPIPMode() ? this : null);
+        return isInPictureInPictureMode();
+    }
+
+    private boolean isHomePressed() {
+        // Assume Home if no back and finish event happens
+        return !isBackPressed() && !isPipPressed() && !mViewManager.isNewViewPending();
+    }
+
+    private boolean isPipPressed() {
+        return isFinishCalled() && !isBackPressed();
+    }
+
+    private boolean isFinishCalled() {
+        return System.currentTimeMillis() - mFinishCalledMs < 1_000;
+    }
+
+    private boolean isBackPressed() {
+        long backPressedAgoMs = System.currentTimeMillis() - mBackPressedMs;
+        Log.d(TAG, "Back pressed ms ago: " + backPressedAgoMs);
+        return backPressedAgoMs < 1_000;
     }
 }

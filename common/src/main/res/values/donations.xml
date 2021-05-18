@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="donations">
+        <item>PrivatBank (UA)|https://privatbank.ua/ru/sendmoney?payment=9e46a6ef78</item>
+        <item>QIWI (RU)|https://qiwi.com/n/GUESS025</item>
+        <item>PayPal|https://www.donationalerts.com/r/firsthash</item>
+        <item>BTC|BTC: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx</item>
+    </string-array>
+</resources>

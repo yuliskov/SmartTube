@@ -41,12 +41,11 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.SeekBar;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
-import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.OnControlClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.OnControlSelectedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue.QualityInfoListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.seekpreview.ThumbsBar;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue.TickleListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue.ControlsVisibilityListener;
 
 import java.util.Arrays;
 
@@ -77,6 +76,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         private static final long SPEED_INCREASE_PERIOD_MS = 1000;
         private static final double SPEED_INCREASE_FACTOR = 1.5;
         private static final long START_SEEK_INCREMENT_MS = 10_000;
+        private static final int CONTROLS_MODE_FULL = 0;
+        private static final int CONTROLS_MODE_COMPACT = 1;
         final Presenter.ViewHolder mDescriptionViewHolder;
         final ImageView mImageView;
         final ViewGroup mDescriptionDock;
@@ -93,7 +94,9 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         final ThumbsBar mThumbsBar;
         final String mEndingTimeFormat;
         long mTotalTimeInMs = Long.MIN_VALUE;
+        long mNewTotalTimeInMs = Long.MIN_VALUE;
         long mCurrentTimeInMs = Long.MIN_VALUE;
+        long mEndingTimeInMs = Long.MIN_VALUE;
         long mSecondaryProgressInMs;
         final StringBuilder mTempBuilder = new StringBuilder();
         ControlBarPresenter.ViewHolder mControlsVh;
@@ -116,7 +119,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
         // MOD: update quality info
         final QualityInfoListener mQualityInfoListener = this::setQualityInfo;
-        final TickleListener mTickleListener = this::updateDateTime;
+        final ControlsVisibilityListener mVisibilityListener = this::updateVisibility;
         TopEdgeFocusListener mTopEdgeFocusListener = null;
 
         final PlaybackControlsRow.OnPlaybackProgressCallback mListener =
@@ -125,6 +128,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             public void onCurrentPositionChanged(PlaybackControlsRow row, long ms) {
                 setCurrentPosition(ms);
                 setEndingTime(ms);
+                updateTotalTime();
             }
 
             @Override
@@ -439,7 +443,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                         case KeyEvent.KEYCODE_DPAD_UP:
                         case KeyEvent.KEYCODE_DPAD_DOWN:
                             if (!mInSeek) {
-                                enableCompactMode(false);
+                                setControlsMode(CONTROLS_MODE_FULL);
                             }
 
                             // eat DPAD UP/DOWN in seek mode
@@ -448,7 +452,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                         case KeyEvent.KEYCODE_MINUS:
                         case KeyEvent.KEYCODE_MEDIA_REWIND:
                             if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                                enableCompactMode(true);
+                                setControlsMode(CONTROLS_MODE_COMPACT);
                                 onBackward();
                             } else {
                                 // MOD: resume immediately after seeking
@@ -461,7 +465,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                         case KeyEvent.KEYCODE_PLUS:
                         case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
                             if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                                enableCompactMode(true);
+                                setControlsMode(CONTROLS_MODE_COMPACT);
                                 onForward();
                             } else {
                                 // MOD: resume immediately after seeking
@@ -576,20 +580,23 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         }
 
         // MOD: seek ui tweaks
-        void enableCompactMode(boolean enable) {
-            if (enable) {
-                mControlsVh.view.setVisibility(View.GONE);
-                // MOD: use GONE to move previews closer to seek bar
-                mSecondaryControlsVh.view.setVisibility(View.GONE);
-                mDescriptionViewHolder.view.setVisibility(View.GONE);
-                mAdditionalInfo.setVisibility(View.GONE);
-                mThumbsBar.setVisibility(View.VISIBLE);
-            } else {
-                mControlsVh.view.setVisibility(View.VISIBLE);
-                mSecondaryControlsVh.view.setVisibility(View.VISIBLE);
-                mDescriptionViewHolder.view.setVisibility(View.VISIBLE);
-                mAdditionalInfo.setVisibility(View.VISIBLE);
-                mThumbsBar.setVisibility(View.INVISIBLE);
+        void setControlsMode(int mode) {
+            switch (mode) {
+                case CONTROLS_MODE_FULL:
+                    mControlsVh.view.setVisibility(View.VISIBLE);
+                    mSecondaryControlsVh.view.setVisibility(View.VISIBLE);
+                    mDescriptionViewHolder.view.setVisibility(View.VISIBLE);
+                    mAdditionalInfo.setVisibility(View.VISIBLE);
+                    mThumbsBar.setVisibility(View.INVISIBLE);
+                    break;
+                case CONTROLS_MODE_COMPACT:
+                    mControlsVh.view.setVisibility(View.GONE);
+                    // MOD: use GONE to move previews closer to seek bar
+                    mSecondaryControlsVh.view.setVisibility(View.GONE);
+                    mDescriptionViewHolder.view.setVisibility(View.GONE);
+                    mAdditionalInfo.setVisibility(View.GONE);
+                    mThumbsBar.setVisibility(View.VISIBLE);
+                    break;
             }
         }
 
@@ -649,7 +656,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         void setTotalTime(long totalTimeMs) {
             if (mTotalTimeInMs != totalTimeMs) {
                 mTotalTimeInMs = totalTimeMs;
-                onSetDurationLabel(totalTimeMs);
+                onSetDurationLabel(applySpeedCorrection(totalTimeMs));
             }
         }
 
@@ -677,7 +684,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         void setCurrentPosition(long currentTimeMs) {
             if (currentTimeMs != mCurrentTimeInMs) {
                 mCurrentTimeInMs = currentTimeMs;
-                onSetCurrentPositionLabel(currentTimeMs);
+                onSetCurrentPositionLabel(applySpeedCorrection(currentTimeMs));
             }
             if (!mInSeek) {
                 int progressRatio = 0;
@@ -699,15 +706,18 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         }
 
         void setEndingTime(long currentTimeMs) {
+            long endingTimeMs = mTotalTimeInMs - currentTimeMs;
+
+            if (mEndingTimeInMs != endingTimeMs) {
+                mEndingTimeInMs = endingTimeMs;
+                onSetEndingTimeLabel(applySpeedCorrection(endingTimeMs));
+            }
+        }
+
+        protected void onSetEndingTimeLabel(long endingTimeMs) {
             if (mEndingTime != null) {
                 if (mPlayerData.isRemainingTimeEnabled()) {
-                    long endingTimeMs = mTotalTimeInMs - currentTimeMs;
-
-                    // Apply speed correction
-                    endingTimeMs = (long) (endingTimeMs / mPlayerData.getSpeed());
-
-                    formatTime(endingTimeMs >= 0 ? endingTimeMs : 0, mTempBuilder);
-
+                    formatTime(endingTimeMs, mTempBuilder);
                     mEndingTime.setText(String.format(mEndingTimeFormat, mTempBuilder.toString()));
                     mEndingTime.setVisibility(View.VISIBLE);
                 } else {
@@ -727,13 +737,28 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             }
         }
 
-        void updateDateTime() {
+        void updateVisibility(boolean isVisible) {
             if (mPlayerData.isClockEnabled()) {
-                mDateTime.setText(DateFormatter.getCurrentTimeShort(mDateTime.getContext()));
                 mDateTime.setVisibility(View.VISIBLE);
             } else {
                 mDateTime.setVisibility(View.GONE);
             }
+        }
+
+        void updateTotalTime() {
+            // Update total time with respect of speed
+            long newTotalTimeMs = applySpeedCorrection(mTotalTimeInMs);
+
+            if (mNewTotalTimeInMs != newTotalTimeMs) {
+                mNewTotalTimeInMs = newTotalTimeMs;
+                onSetDurationLabel(newTotalTimeMs);
+            }
+        }
+
+        long applySpeedCorrection(long timeMs) {
+            timeMs = (long) (timeMs / mPlayerData.getSpeed());
+
+            return timeMs >= 0 ? timeMs : 0;
         }
     }
 
@@ -880,7 +905,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         ViewHolder vh = (ViewHolder) rowViewHolder;
         if (vh.view.hasFocus()) {
             // player controls hidden
-            vh.enableCompactMode(false);
+            vh.setControlsMode(ViewHolder.CONTROLS_MODE_FULL);
             vh.mProgressBar.requestFocus();
         }
     }

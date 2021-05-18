@@ -8,7 +8,7 @@
         android:transitionGroup="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:ignore="UnusedAttribute">
+        tools:ignore="UnusedAttribute, RtlHardcoded">
 
     <!-- Original place for VideoSurfaceView -->
 
@@ -32,8 +32,21 @@
                  android:padding="4sp"
                  android:visibility="gone"
                  android:layout_gravity="top|right"
-                 android:background="#80000000"
-                 tools:ignore="RtlHardcoded"/>
+                 android:background="#80000000"/>
+
+    <!-- Global clock -->
+    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView
+        android:id="@+id/global_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10sp"
+        android:textSize="20sp"
+        android:visibility="gone"
+        android:layout_gravity="top|right"
+        android:shadowColor="@color/black"
+        android:shadowRadius="1.6"
+        android:textStyle="bold"
+        style="?attr/playbackControlsTimeStyle"/>
 
     <androidx.leanback.widget.NonOverlappingFrameLayout
         android:id="@+id/playback_fragment_background"

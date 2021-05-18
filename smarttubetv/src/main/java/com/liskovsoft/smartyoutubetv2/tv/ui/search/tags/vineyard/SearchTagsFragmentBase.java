@@ -17,13 +17,13 @@ import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.RowPresenter.ViewHolder;
-import androidx.leanback.widget.SpeechRecognitionCallback;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.SearchTagsProvider;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.PaginationAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.TagAdapter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SearchSupportFragment;
 
@@ -50,7 +50,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         super.onCreate(savedInstanceState);
 
         mProgressBarManager = new ProgressBarManager();
-        mResultsPresenter = new ListRowPresenter();
+        mResultsPresenter = new CustomListRowPresenter();
         mResultsAdapter = new ArrayObjectAdapter(mResultsPresenter);
         mSearchTagsAdapter = new TagAdapter(getActivity(), "", getSearchTextEditorId());
         mHandler = new Handler();
@@ -129,6 +129,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         return mResultsAdapter.size() > 0;
     }
 
+    @SuppressWarnings("deprecation")
     private void setupListeners() {
         setOnItemViewClickedListener((itemViewHolder, item, rowViewHolder, row) -> onItemViewClicked(item));
         setOnItemViewSelectedListener((itemViewHolder, item, rowViewHolder, row) -> onItemViewSelected(item));
@@ -144,20 +145,21 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         searchTaggedPosts(searchQuery);
     }
 
-    private void searchTaggedPosts(String tag) {
-        mSearchTagsAdapter.setTag(tag);
+    private void searchTaggedPosts(String query) {
+        mSearchTagsAdapter.setTag(query);
         mResultsAdapter.clear();
         mSearchTagsAdapter.clear();
-        //mResultsHeader = new HeaderItem(0, getString(R.string.text_search_results, tag));
-        mResultsAdapter.add(new ListRow(mSearchTagsAdapter));
-        mResultsAdapter.add(new ListRow(mItemResultsAdapter));
-        performSearch(mSearchTagsAdapter);
+        //mResultsHeader = new HeaderItem(0, getString(R.string.text_search_results, query));
+        //mResultsAdapter.add(new ListRow(mSearchTagsAdapter));
+        //mResultsAdapter.add(new ListRow(mItemResultsAdapter));
+        performTagSearch(mSearchTagsAdapter);
     }
 
-    private void performSearch(PaginationAdapter adapter) {
+    private void performTagSearch(PaginationAdapter adapter) {
         String query = adapter.getAdapterOptions().get(PaginationAdapter.KEY_TAG);
         mSearchTagsProvider.search(query, results -> {
             adapter.addAllItems(results);
+            attachAdapter(0, adapter);
             // Same suggestions in the keyboard
             //displayCompletions(toCompletions(results));
         });
@@ -189,5 +191,27 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
                 mResultsPresenter.freeze(vh, freeze);
             }
         }
+    }
+
+    protected void attachAdapter(int index, ObjectAdapter adapter) {
+        if (mResultsAdapter != null) {
+            if (!containsAdapter(adapter)) {
+                index = Math.min(index, mResultsAdapter.size());
+                mResultsAdapter.add(index, new ListRow(adapter));
+            }
+        }
+    }
+
+    private boolean containsAdapter(ObjectAdapter adapter) {
+        if (mResultsAdapter != null) {
+            for (int i = 0; i < mResultsAdapter.size(); i++) {
+                ListRow row = (ListRow) mResultsAdapter.get(i);
+                if (row.getAdapter() == adapter) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

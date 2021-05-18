@@ -6,7 +6,6 @@ import android.content.Intent;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -102,7 +101,11 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             if (getContext() != null) {
                 Log.d(TAG, "Starting channels receiver...");
                 Intent intent = new Intent(getContext(), clazz);
-                getContext().sendBroadcast(intent);
+                try {
+                    getContext().sendBroadcast(intent);
+                } catch (Exception e) {
+                    // NullPointerException on MX9Pro (rk3328  7.1.2)
+                }
             }
         } else {
             Log.e(TAG, "Channels receiver class not found: " + CHANNELS_RECEIVER_CLASS_NAME);
@@ -124,7 +127,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         } else {
             String searchText = IntentExtractor.extractSearchText(intent);
 
-            if (searchText != null) {
+            if (searchText != null || IntentExtractor.isStartVoiceCommand(intent)) {
                 SearchPresenter searchPresenter = SearchPresenter.instance(getContext());
                 searchPresenter.startSearch(searchText);
             } else {

@@ -1,71 +1,77 @@
 package com.liskovsoft.smartyoutubetv2.tv.adapter;
 
 import androidx.leanback.widget.ObjectAdapter;
+import androidx.leanback.widget.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.base.LongClickPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class VideoGroupObjectAdapter extends ObjectAdapter {
     private static final String TAG = VideoGroupObjectAdapter.class.getSimpleName();
-    private final List<Video> mMediaItems;
-    private VideoGroup mLastGroup;
+    private final List<Video> mVideoItems;
 
     // TODO: Select presenter based on the video item type. Such channel, playlist, or simple video
     // https://github.com/googlearchive/leanback-showcase/blob/master/app/src/main/java/android/support/v17/leanback/supportleanbackshowcase/app/page/PageAndListRowFragment.java
     // CardPresenterSelector cardPresenter = new CardPresenterSelector(getActivity());
-    public VideoGroupObjectAdapter(VideoGroup videoGroup, CardPresenter presenter) {
+    public VideoGroupObjectAdapter(VideoGroup videoGroup, Presenter presenter) {
         super(presenter);
-        mMediaItems = new ArrayList<>();
+        mVideoItems = new ArrayList<>();
 
         if (videoGroup != null) {
             append(videoGroup);
         }
     }
 
-    public VideoGroupObjectAdapter(CardPresenter presenter) {
+    public VideoGroupObjectAdapter(Presenter presenter) {
         this(null, presenter);
     }
 
     @Override
     public int size() {
-        return mMediaItems.size();
+        return mVideoItems.size();
     }
 
     @Override
-    public Object get(int position) {
-        return mMediaItems.get(position);
+    public Object get(int index) {
+        if (index < 0 || index >= size()) {
+            return null;
+        }
+
+        return mVideoItems.get(index);
     }
 
     public void append(VideoGroup group) {
-        if (group != null) {
-            int begin = mMediaItems.size();
+        if (group != null && group.getVideos() != null) {
+            int begin = mVideoItems.size();
 
-            mMediaItems.addAll(group.getVideos());
-            mLastGroup = group;
+            mVideoItems.addAll(group.getVideos());
 
             // Fix double item blinking by specifying exact range
-            notifyItemRangeInserted(begin, mMediaItems.size() - begin);
+            notifyItemRangeInserted(begin, mVideoItems.size() - begin);
         }
-    }
-
-    public VideoGroup getGroup() {
-        return mLastGroup;
     }
 
     public int indexOf(Video item) {
-        return mMediaItems.indexOf(item);
+        // Compare by reference. Because there may be multiple same videos.
+        int index = -1;
+
+        for (Video video : mVideoItems) {
+            index++;
+            if (video == item) {
+                return index;
+            }
+        }
+
+        return -1;
     }
 
     public void clear() {
-        int itemCount = mMediaItems.size();
-        if (itemCount == 0) {
-            return;
+        int itemCount = mVideoItems.size();
+        mVideoItems.clear();
+        if (itemCount != 0) {
+            notifyItemRangeRemoved(0, itemCount);
         }
-        mMediaItems.clear();
-        notifyItemRangeRemoved(0, itemCount);
     }
 }

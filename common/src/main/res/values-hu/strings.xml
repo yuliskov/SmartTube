@@ -117,7 +117,7 @@
     <string name="subtitle_black_bg">Fekete háttér</string>
     <string name="player_seek_preview">Előnézet gyorstekeréskor</string>
     <string name="color_scheme_dark_grey_oled">Sötétszürke (OLED)</string>
-    <string name="channel_category_sorting">Csatornaszekciók rendezése</string>
+    <string name="channels_category_sorting">Csatornaszekciók rendezése</string>
     <string name="sorting_by_new_content">Új tartalom</string>
     <string name="sorting_alphabetically">Abc szerint</string>
     <string name="sorting_last_viewed">Utoljára nézett</string>
@@ -127,7 +127,6 @@
     <string name="playlists_style_rows">Sorok</string>
     <string name="player_show_clock">Órát mutat</string>
     <string name="player_show_remaining_time">Hátralevő időt mutat</string>
-    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Nyissa meg a csatorna feltöltéseket</string>
     <string name="app_exit_shortcut">Kilépés az appból</string>
     <string name="app_exit_none">Ne lépjen ki</string>

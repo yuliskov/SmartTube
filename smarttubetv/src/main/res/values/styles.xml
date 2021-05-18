@@ -34,6 +34,12 @@
         <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
         <item name="itemsVerticalGridStyle">@style/GridViewStyle</item>
         <item name="rowHorizontalGridStyle">@style/RowViewStyle</item>
+        <!-- Disable activity transition animations -->
+        <item name="android:windowAnimationStyle">@null</item>
+        <!-- Make activity fullscreen -->
+        <item name="android:windowFullscreen">true</item>
+        <!-- Overlay bottom bar (can't hide it from styles) -->
+        <item tools:targetApi="19" name="android:windowTranslucentNavigation">true</item>
     </style>
     <style name="App.Theme.Leanback.Browse" parent="Theme.Leanback.Browse">
         <item name="android:windowBackground">@color/shelf_background_dark</item>
@@ -48,10 +54,22 @@
         <item name="itemsVerticalGridStyle">@style/GridViewStyle</item>
         <item name="rowHorizontalGridStyle">@style/RowViewStyle</item>
         <item name="headersVerticalGridStyle">@style/BrowseHeaderStyle</item>
+        <!-- Disable activity transition animations -->
+        <item name="android:windowAnimationStyle">@null</item>
+        <!-- Make activity fullscreen -->
+        <item name="android:windowFullscreen">true</item>
+        <!-- Overlay bottom bar (can't hide it from styles) -->
+        <item tools:targetApi="19" name="android:windowTranslucentNavigation">true</item>
     </style>
     <style name="App.Theme.Leanback.GuidedStep" parent="Theme.Leanback.GuidedStep">
         <item name="android:windowBackground">@color/shelf_background_dark</item>
         <item name="shelfBackground">@color/shelf_background_dark</item>
+        <!-- Disable activity transition animations -->
+        <item name="android:windowAnimationStyle">@null</item>
+        <!-- Make activity fullscreen -->
+        <item name="android:windowFullscreen">true</item>
+        <!-- Overlay bottom bar (can't hide it from styles) -->
+        <item tools:targetApi="19" name="android:windowTranslucentNavigation">true</item>
     </style>
     <style name="App.Theme.Leanback.Preferences.Base" parent="Theme.Leanback">
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Leanback</item>
@@ -60,6 +78,12 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
         <item name="android:colorPrimary" tools:targetApi="21">@color/fastlane_background_dark</item>
+        <!-- Disable activity transition animations -->
+        <item name="android:windowAnimationStyle">@null</item>
+        <!-- Make activity fullscreen -->
+        <item name="android:windowFullscreen">true</item>
+        <!-- Overlay bottom bar (can't hide it from styles) -->
+        <item tools:targetApi="19" name="android:windowTranslucentNavigation">true</item>
     </style>
     <!-- Give ability to override style for different api -->
     <style name="App.Theme.Leanback.Preferences" parent="App.Theme.Leanback.Preferences.Base" />

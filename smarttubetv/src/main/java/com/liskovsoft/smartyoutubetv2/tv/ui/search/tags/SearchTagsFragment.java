@@ -10,9 +10,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.search.MediaServiceSearc
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewClickedListener;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.vineyard.SearchTagsFragmentBase;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 public class SearchTagsFragment extends SearchTagsFragmentBase {
     private static final String TAG = SearchTagsFragment.class.getSimpleName();
@@ -20,7 +21,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     private VideoGroupObjectAdapter mItemResultsAdapter;
     private String mSearchQuery;
     private String mNewQuery;
-    private CardPresenter mCardPresenter;
+    private VideoCardPresenter mCardPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,7 +29,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
 
         mSearchPresenter = SearchPresenter.instance(getContext());
         mSearchPresenter.setView(this);
-        mCardPresenter = new CardPresenter();
+        mCardPresenter = new VideoCardPresenter();
         mItemResultsAdapter = new VideoGroupObjectAdapter(mCardPresenter);
 
         setupEventListeners();
@@ -37,8 +38,8 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     }
 
     private void setupEventListeners() {
-        mCardPresenter.setOnLongClickedListener(new ItemViewLongClickedListener());
-        mCardPresenter.setOnMenuPressedListener(new ItemViewLongClickedListener());
+        mCardPresenter.setOnItemViewLongPressedListener(new ItemViewLongClickedListener());
+        mCardPresenter.setOnItemViewMenuPressedListener(new ItemViewLongClickedListener());
     }
 
     @Override
@@ -59,6 +60,8 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         freeze(true);
         mItemResultsAdapter.append(group);
         freeze(false);
+
+        attachAdapter(1, mItemResultsAdapter);
     }
 
     @Override
@@ -103,6 +106,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     public boolean onQueryTextChange(String newQuery) {
         loadSearchTags(newQuery);
 
+        // Avoid auto commit to prevent search field focus loss.
         if (isVoiceQuery(newQuery)) {
             loadSearchResult(newQuery);
         }
@@ -147,9 +151,9 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         return isVoice;
     }
 
-    private final class ItemViewLongClickedListener implements OnItemViewClickedListener {
+    private final class ItemViewLongClickedListener implements OnItemViewPressedListener {
         @Override
-        public void onItemViewClicked(Presenter.ViewHolder itemViewHolder, Object item) {
+        public void onItemPressed(Presenter.ViewHolder itemViewHolder, Object item) {
             if (item instanceof Video) {
                 mSearchPresenter.onVideoItemLongClicked((Video) item);
             } else if (item instanceof Tag) {
@@ -178,8 +182,8 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         int size = mItemResultsAdapter.size();
         int index = mItemResultsAdapter.indexOf(item);
 
-        if (index > (size - 4)) {
-            mSearchPresenter.onScrollEnd(mItemResultsAdapter.getGroup());
+        if (index > (size - ViewUtil.ROW_SCROLL_CONTINUE_NUM)) {
+            mSearchPresenter.onScrollEnd(item);
         }
     }
 }
