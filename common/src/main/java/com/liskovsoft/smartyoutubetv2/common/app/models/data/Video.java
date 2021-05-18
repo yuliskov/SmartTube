@@ -19,18 +19,21 @@ public final class Video implements Parcelable {
     public String channelId;
     public String videoId;
     public String videoUrl;
+    public String playlistId;
+    public int playlistIndex;
     public String bgImageUrl;
     public String cardImageUrl;
     public String studio;
     public String badge;
     public String previewUrl;
-    public int playlistIndex;
     public int percentWatched = -1;
-    public MediaItem mediaItem;
-    public MediaItem nextMediaItem;
+    public MediaItem mediaItem; // memory leak
+    public MediaItem nextMediaItem; // memory leak
     public boolean hasNewContent;
     public boolean isLive;
     public boolean isUpcoming;
+    public boolean isSubscribed;
+    public boolean isRemote;
 
     public Video() {
         
@@ -86,6 +89,7 @@ public final class Video implements Parcelable {
         video.badge = item.getBadgeText();
         video.hasNewContent = item.hasNewContent();
         video.previewUrl = item.getVideoPreviewUrl();
+        video.playlistId = item.getPlaylistId();
         video.playlistIndex = item.getPlaylistIndex();
         video.isLive = item.isLive();
         video.isUpcoming = item.isUpcoming();
@@ -95,8 +99,14 @@ public final class Video implements Parcelable {
     }
 
     public static Video from(String videoId) {
+        return from(videoId, null, -1);
+    }
+
+    public static Video from(String videoId, String playlistId, int playlistIndex) {
         Video video = new Video();
         video.videoId = videoId;
+        video.playlistId = playlistId;
+        video.playlistIndex = playlistIndex;
 
         return video;
     }
@@ -181,7 +191,7 @@ public final class Video implements Parcelable {
         return videoId == null && channelId != null;
     }
 
-    public boolean isChannelSection() {
+    public boolean isChannelUploads() {
         return mediaItem != null && mediaItem.getType() == MediaItem.TYPE_CHANNELS_SECTION;
     }
 
@@ -193,15 +203,21 @@ public final class Video implements Parcelable {
         return mediaItem != null && mediaItem.getType() == MediaItem.TYPE_PLAYLISTS_SECTION;
     }
 
-    public void sync(MediaItemMetadata metadata, boolean useAlt) {
+    public void sync(MediaItemMetadata metadata, boolean useAltDesc) {
         if (metadata == null) {
             return;
         }
 
         title = metadata.getTitle();
-        description = useAlt ? metadata.getDescriptionAlt() : metadata.getDescription();
+        // Don't sync future translation because of not precise description
+        if (!metadata.isUpcoming()) {
+            description = useAltDesc ? metadata.getDescriptionAlt() : metadata.getDescription();
+        }
         channelId = metadata.getChannelId();
         nextMediaItem = metadata.getNextVideo();
+        isLive = metadata.isLive();
+        isSubscribed = metadata.isSubscribed();
+        isUpcoming = metadata.isUpcoming();
     }
 
     // Builder for Video object.

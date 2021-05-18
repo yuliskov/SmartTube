@@ -4,6 +4,7 @@ import androidx.leanback.widget.ObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.LongClickPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +17,8 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
     // TODO: Select presenter based on the video item type. Such channel, playlist, or simple video
     // https://github.com/googlearchive/leanback-showcase/blob/master/app/src/main/java/android/support/v17/leanback/supportleanbackshowcase/app/page/PageAndListRowFragment.java
     // CardPresenterSelector cardPresenter = new CardPresenterSelector(getActivity());
-    public VideoGroupObjectAdapter(VideoGroup videoGroup) {
-        super(new CardPresenter());
+    public VideoGroupObjectAdapter(VideoGroup videoGroup, CardPresenter presenter) {
+        super(presenter);
         mMediaItems = new ArrayList<>();
 
         if (videoGroup != null) {
@@ -25,8 +26,8 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         }
     }
 
-    public VideoGroupObjectAdapter() {
-        this(null);
+    public VideoGroupObjectAdapter(CardPresenter presenter) {
+        this(null, presenter);
     }
 
     @Override

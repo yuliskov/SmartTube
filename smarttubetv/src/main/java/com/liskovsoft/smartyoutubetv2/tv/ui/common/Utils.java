@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.common;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Point;
 import android.media.MediaMetadataRetriever;
 import android.os.Build;
@@ -44,7 +45,11 @@ public class Utils {
     }
 
     public static int convertDpToPixel(Context ctx, int dp) {
-        float density = ctx.getResources().getDisplayMetrics().density;
+        return convertDpToPixel(ctx.getResources(), dp);
+    }
+
+    public static int convertDpToPixel(Resources res, int dp) {
+        float density = res.getDisplayMetrics().density;
         return Math.round((float) dp * density);
     }
 

@@ -8,7 +8,7 @@
     <string name="action_channel">اتمنا من كل زوجه قناة فتح</string>
     <string name="action_playlist_add">أضف إلى قائمة التشغيل</string>
     <string name="action_video_stats">احصائيات الفيديو</string>
-    <string name="require_checked">يتطلب \"٪ s \"</string>
+    <string name="require_checked">يتطلب \"%s\"</string>
     <string name="msg_press_again_to_exit">اضغط مرة أخرى للخروج</string>
-    <string name="player_remaining_time">النهاية:٪ s</string>
+    <string name="player_remaining_time">النهاية: %s</string>
 </resources>

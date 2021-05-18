@@ -3,16 +3,17 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.utils.ServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -22,24 +23,29 @@ import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VideoMenuPresenter extends BasePresenter<SplashView> {
+public class VideoMenuPresenter extends BasePresenter<Void> {
+    private static final String TAG = VideoMenuPresenter.class.getSimpleName();
     private final MediaItemManager mItemManager;
-    private final SignInManager mAuthManager;
     private final AppSettingsPresenter mSettingsPresenter;
+    private final ServiceManager mServiceManager;
     private Disposable mPlaylistAction;
     private Disposable mAddAction;
-    private Disposable mSignCheckAction;
     private Disposable mNotInterestedAction;
+    private Disposable mSubscribeAction;
     private Video mVideo;
     private boolean mIsNotInterestedButtonEnabled;
     private boolean mIsOpenChannelButtonEnabled;
     private boolean mIsOpenChannelUploadsButtonEnabled;
+    private boolean mIsSubscribeButtonEnabled;
+    private boolean mIsShareButtonEnabled;
+    private boolean mIsAddToPlaylistButtonEnabled;
+    private boolean mIsAccountSelectionEnabled;
 
     private VideoMenuPresenter(Context context) {
         super(context);
         MediaService service = YouTubeMediaService.instance();
         mItemManager = service.getMediaItemManager();
-        mAuthManager = service.getSignInManager();
+        mServiceManager = ServiceManager.instance();
         mSettingsPresenter = AppSettingsPresenter.instance(context);
     }
 
@@ -47,53 +53,98 @@ public class VideoMenuPresenter extends BasePresenter<SplashView> {
         return new VideoMenuPresenter(context);
     }
 
-    public void showShortMenu(Video video) {
-        showMenu(video, false, false, false);
+    public void showPlaylistMenu(Video video) {
+        mIsAddToPlaylistButtonEnabled = true;
+
+        showMenuInt(video);
     }
 
-    public void showMenu(Video video) {
-        showMenu(video, true, true, true);
+    public void showVideoMenu(Video video) {
+        mIsAddToPlaylistButtonEnabled = true;
+        mIsOpenChannelButtonEnabled = true;
+        mIsOpenChannelUploadsButtonEnabled = true;
+        mIsSubscribeButtonEnabled = true;
+        mIsNotInterestedButtonEnabled = true;
+        mIsShareButtonEnabled = true;
+        mIsAccountSelectionEnabled = true;
+
+        showMenuInt(video);
     }
 
-    private void showMenu(Video video, boolean isOpenChannelButtonEnabled, boolean isOpenChannelUploadsButtonEnabled, boolean isNotInterestedButtonEnabled) {
-        if (video == null || !video.isVideo()) {
+    public void showChannelMenu(Video video) {
+        mIsSubscribeButtonEnabled = true;
+        mIsShareButtonEnabled = true;
+        mIsOpenChannelButtonEnabled = true;
+        mIsAccountSelectionEnabled = true;
+
+        showMenuInt(video);
+    }
+
+    private void showMenuInt(Video video) {
+        if (video == null) {
             return;
         }
 
-        mVideo = video;
-        mIsOpenChannelButtonEnabled = isOpenChannelButtonEnabled;
-        mIsOpenChannelUploadsButtonEnabled = isOpenChannelUploadsButtonEnabled;
-        mIsNotInterestedButtonEnabled = isNotInterestedButtonEnabled;
+        RxUtils.disposeActions(mPlaylistAction, mAddAction, mNotInterestedAction, mSubscribeAction);
 
-        authCheck(this::obtainPlaylistsAndShow,
-                  () -> MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only));;
+        mVideo = video;
+
+        ServiceManager.instance().authCheck(this::obtainPlaylistsAndShowDialogSigned, this::prepareAndShowDialogUnsigned);
     }
 
-    private void obtainPlaylistsAndShow() {
+    private void obtainPlaylistsAndShowDialogSigned() {
         mPlaylistAction = mItemManager.getVideoPlaylistsInfosObserve(mVideo.videoId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::prepareAndShowDialog);
+                .subscribe(
+                        this::prepareAndShowDialogSigned,
+                        error -> Log.e(TAG, "Get playlists error: %s", error.getMessage())
+                );
     }
 
-    private void prepareAndShowDialog(List<VideoPlaylistInfo> videoPlaylistInfos) {
+    private void prepareAndShowDialogSigned(List<VideoPlaylistInfo> videoPlaylistInfos) {
+        if (getContext() == null) {
+            return;
+        }
+
         mSettingsPresenter.clear();
 
         appendAddToPlaylist(videoPlaylistInfos);
         appendOpenChannelButton();
-        appendOpenChannelUploadsButton();
+        //appendOpenChannelUploadsButton();
+        appendSubscribeButton();
         appendNotInterestedButton();
+        appendShareButton();
+        appendAccountSelectionButton();
 
-        mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction, mAddAction, mSignCheckAction, mNotInterestedAction));
+        mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction));
+    }
+
+    private void prepareAndShowDialogUnsigned() {
+        if (getContext() == null) {
+            return;
+        }
+
+        mSettingsPresenter.clear();
+
+        appendOpenChannelButton();
+        appendShareButton();
+        appendAccountSelectionButton();
+
+        mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction));
     }
 
     private void appendAddToPlaylist(List<VideoPlaylistInfo> videoPlaylistInfos) {
+        if (!mIsAddToPlaylistButtonEnabled) {
+            return;
+        }
+
         List<OptionItem> options = new ArrayList<>();
 
         for (VideoPlaylistInfo playlistInfo : videoPlaylistInfos) {
             options.add(UiOptionItem.from(
                     playlistInfo.getTitle(),
-                    (item) -> this.addToPlaylist(playlistInfo.getPlaylistId(), item.isSelected()),
+                    (item) -> addToPlaylist(playlistInfo.getPlaylistId(), item.isSelected()),
                     playlistInfo.isSelected()));
         }
 
@@ -101,7 +152,11 @@ public class VideoMenuPresenter extends BasePresenter<SplashView> {
     }
 
     private void appendOpenChannelButton() {
-        if (!mIsOpenChannelButtonEnabled || mVideo == null || mVideo.channelId == null) {
+        if (!mIsOpenChannelButtonEnabled) {
+            return;
+        }
+
+        if (!ChannelPresenter.canOpenChannel(mVideo)) {
             return;
         }
 
@@ -128,14 +183,58 @@ public class VideoMenuPresenter extends BasePresenter<SplashView> {
                     mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem)
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe((var) -> {}, (err) -> {}, () -> {
-                                MessageHelpers.showMessage(getContext(), R.string.you_wont_see_this_video);
-                            });
+                            .subscribe(
+                                    var -> {},
+                                    error -> Log.e(TAG, "Mark as 'not interested' error: %s", error.getMessage()),
+                                    () -> MessageHelpers.showMessage(getContext(), R.string.you_wont_see_this_video)
+                            );
+                    mSettingsPresenter.closeDialog();
                 }));
     }
 
+    private void appendShareButton() {
+        if (!mIsShareButtonEnabled || mVideo == null) {
+            return;
+        }
+
+        if (mVideo.videoId == null && mVideo.channelId == null) {
+            return;
+        }
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.share_link), optionItem -> {
+                    if (mVideo.videoId != null) {
+                        Utils.displayShareVideoDialog(getContext(), mVideo.videoId);
+                    } else if (mVideo.channelId != null) {
+                        Utils.displayShareChannelDialog(getContext(), mVideo.channelId);
+                    }
+                }));
+    }
+
+    private void appendAccountSelectionButton() {
+        if (!mIsAccountSelectionEnabled) {
+            return;
+        }
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.dialog_account_list), optionItem -> {
+                    AccountSelectionPresenter.instance(getContext()).show(true);
+                }));
+    }
+
+    private void appendSubscribeButton() {
+        if (!mIsSubscribeButtonEnabled || mVideo == null) {
+            return;
+        }
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(
+                        mVideo.isSubscribed ? R.string.unsubscribe_from_channel : R.string.subscribe_to_channel),
+                        optionItem -> subscribe()));
+    }
+
     private void addToPlaylist(String playlistId, boolean checked) {
-        RxUtils.disposeActions(mPlaylistAction, mAddAction, mSignCheckAction);
+        RxUtils.disposeActions(mPlaylistAction, mAddAction);
         Observable<Void> editObserve;
 
         if (checked) {
@@ -144,25 +243,34 @@ public class VideoMenuPresenter extends BasePresenter<SplashView> {
             editObserve = mItemManager.removeFromPlaylistObserve(playlistId, mVideo.videoId);
         }
 
-        mAddAction = editObserve
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+        mAddAction = RxUtils.execute(editObserve);
     }
 
-    private void authCheck(Runnable onSuccess, Runnable onError) {
-        mSignCheckAction = mAuthManager.isSignedObserve()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        isSigned -> {
-                            if (isSigned) {
-                                onSuccess.run();
-                            } else {
-                                onError.run();
-                            }
-                        }
-                );
+    private void subscribe() {
+        if (mVideo == null) {
+            return;
+        }
 
+        if (mVideo.channelId != null) {
+            subscribeInt();
+        } else {
+            mServiceManager.loadMetadata(mVideo, metadata -> {
+                 mVideo.channelId = metadata.getChannelId();
+                 subscribeInt();
+            });
+        }
+        
+        MessageHelpers.showMessage(getContext(), mVideo.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel);
+    }
+
+    private void subscribeInt() {
+        if (mVideo == null) {
+            return;
+        }
+
+        Observable<Void> observable = mVideo.isSubscribed ?
+                mItemManager.unsubscribeObserve(mVideo.channelId) : mItemManager.subscribeObserve(mVideo.channelId);
+
+        mSubscribeAction = RxUtils.execute(observable);
     }
 }

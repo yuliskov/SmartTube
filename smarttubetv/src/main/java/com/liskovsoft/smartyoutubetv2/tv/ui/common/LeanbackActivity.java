@@ -1,44 +1,37 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.common;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
-import android.view.GestureDetector;
 import android.view.KeyEvent;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.sharedutils.locale.LangHelper;
-import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
-import com.liskovsoft.smartyoutubetv2.common.misc.LangUpdater;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.DoubleBackManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.LongClickManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.SearchTagsActivity;
 
 /**
  * This parent class contains common methods that run in every activity such as search.
  */
 public abstract class LeanbackActivity extends MotherActivity {
     private static final String TAG = LeanbackActivity.class.getSimpleName();
-    private LongClickManager mLongClickManager;
     private UriBackgroundManager mBackgroundManager;
     private ViewManager mViewManager;
     private ModeSyncManager mModeSyncManager;
     private DoubleBackManager mDoubleBackManager;
-    private GestureDetector mGestureDetector;
+    private MainUIData mMainUiData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mLongClickManager = new LongClickManager();
         mBackgroundManager = new UriBackgroundManager(this);
         mViewManager = ViewManager.instance(this);
         mModeSyncManager = ModeSyncManager.instance();
         mDoubleBackManager = new DoubleBackManager(this);
+        mMainUiData = MainUIData.instance(this);
     }
 
     @Override
@@ -49,23 +42,17 @@ public abstract class LeanbackActivity extends MotherActivity {
         }
         return true;
     }
-    
+
     @SuppressLint("RestrictedApi")
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         Log.d(TAG, event);
 
-        mLongClickManager.dispatchKeyEvent(event);
-
         if (mDoubleBackManager.checkDoubleBack(event)) {
-            properlyFinishTheApp();
+            mViewManager.properlyFinishTheApp();
         }
 
         return super.dispatchKeyEvent(event);
-    }
-
-    public boolean isLongClick() {
-        return mLongClickManager.isLongClick();
     }
 
     public UriBackgroundManager getBackgroundManager() {
@@ -77,8 +64,6 @@ public abstract class LeanbackActivity extends MotherActivity {
         super.onStart();
 
         mBackgroundManager.onStart();
-
-        Helpers.makeActivityFullscreen(this);
     }
 
     @Override
@@ -112,13 +97,26 @@ public abstract class LeanbackActivity extends MotherActivity {
     public void finish() {
         // user pressed back key
         if (!mViewManager.startParentView(this)) {
-            mDoubleBackManager.enableDoubleBackExit();
+            switch (mMainUiData.getAppExitShortcut()) {
+                case MainUIData.EXIT_DOUBLE_BACK:
+                    mDoubleBackManager.enableDoubleBackExit();
+                    break;
+                case MainUIData.EXIT_SINGLE_BACK:
+                    mViewManager.properlyFinishTheApp();
+                    break;
+            }
+        } else {
+            if (!isInPIPMode()) {
+                super.finish();
+            }
         }
     }
 
-    private void properlyFinishTheApp() {
-        SplashPresenter.instance(this).unhold();
-        mViewManager.clearCaches();
-        destroyActivity();
+    public boolean isInPIPMode() {
+        if (Build.VERSION.SDK_INT < 24) {
+            return false;
+        }
+
+        return isInPictureInPictureMode();
     }
 }

@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 import android.os.Bundle;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.Analytics;
-import com.liskovsoft.smartyoutubetv2.tv.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 
@@ -14,9 +13,7 @@ public class BrowseActivity extends LeanbackActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_main);
-        if ("stbolshoetv".equals(BuildConfig.FLAVOR)) {
-            Analytics.sendActivityStarted(getApplicationContext(), BrowseActivity.class.getSimpleName());
-        }
+        Analytics.sendActivityStarted(getApplicationContext(), BrowseActivity.class.getSimpleName());
     }
 
     @Override

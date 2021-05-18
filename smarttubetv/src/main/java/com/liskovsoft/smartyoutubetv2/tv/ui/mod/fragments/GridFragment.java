@@ -16,6 +16,7 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.VerticalGridPresenter;
+import androidx.leanback.widget.VerticalGridView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /**
@@ -63,6 +64,13 @@ public class GridFragment extends Fragment implements BrowseSupportFragment.Main
     }
 
     /**
+     * Returns R.id.browse_grid
+     */
+    public VerticalGridView getBrowseGrid() {
+        return mGridViewHolder.getGridView();
+    }
+
+    /**
      * Sets the object adapter for the fragment.
      */
     public void setAdapter(ObjectAdapter adapter) {
@@ -82,6 +90,9 @@ public class GridFragment extends Fragment implements BrowseSupportFragment.Main
                 @Override
                 public void onItemSelected(Presenter.ViewHolder itemViewHolder, Object item,
                                            RowPresenter.ViewHolder rowViewHolder, Row row) {
+                    if (mGridViewHolder == null) {
+                        return;
+                    }
                     int position = mGridViewHolder.getGridView().getSelectedPosition();
                     if (DEBUG) Log.v(TAG, "grid selected position " + position);
                     gridOnItemSelected(position);

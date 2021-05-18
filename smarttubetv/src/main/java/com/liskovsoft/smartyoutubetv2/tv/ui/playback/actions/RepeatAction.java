@@ -12,12 +12,10 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
  */
 public class RepeatAction extends MultiAction {
     public static final int INDEX_NONE = 0;
-    
     public static final int INDEX_ONE = 1;
-
     public static final int INDEX_ALL = 2;
-
     public static final int INDEX_PAUSE = 3;
+    public static final int INDEX_LIST = 4;
 
     /**
      * Constructor
@@ -34,24 +32,27 @@ public class RepeatAction extends MultiAction {
      */
     public RepeatAction(Context context, int selectionColor) {
         super(R.id.lb_control_repeat);
-        Drawable[] drawables = new Drawable[4];
+        Drawable[] drawables = new Drawable[5];
         BitmapDrawable repeatNoneDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_none);
-        BitmapDrawable repeatAllDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_all);
         BitmapDrawable repeatOneDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_one);
-        //BitmapDrawable repeatDrawable = (BitmapDrawable) ActionHelpers.getStyledDrawable(context,
-        //        R.styleable.lbPlaybackControlsActionIcons_repeat);
-        //BitmapDrawable repeatOneDrawable = (BitmapDrawable) ActionHelpers.getStyledDrawable(context,
-        //        R.styleable.lbPlaybackControlsActionIcons_repeat_one);
-        drawables[INDEX_NONE] = repeatNoneDrawable;
+        BitmapDrawable repeatAllDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_all);
+        BitmapDrawable repeatPauseDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_pause);
+        BitmapDrawable repeatListDrawable = (BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.action_repeat_list);
+        drawables[INDEX_NONE] = repeatNoneDrawable == null ? null
+                : new BitmapDrawable(context.getResources(),
+                ActionHelpers.createBitmap(repeatNoneDrawable.getBitmap(), selectionColor));
         drawables[INDEX_ONE] = repeatOneDrawable == null ? null
                 : new BitmapDrawable(context.getResources(),
                 ActionHelpers.createBitmap(repeatOneDrawable.getBitmap(), selectionColor));
         drawables[INDEX_ALL] = repeatAllDrawable == null ? null
                 : new BitmapDrawable(context.getResources(),
                 ActionHelpers.createBitmap(repeatAllDrawable.getBitmap(), selectionColor));
-        drawables[INDEX_PAUSE] = repeatNoneDrawable == null ? null
+        drawables[INDEX_PAUSE] = repeatPauseDrawable == null ? null
                 : new BitmapDrawable(context.getResources(),
-                ActionHelpers.createBitmap(repeatNoneDrawable.getBitmap(), selectionColor));
+                ActionHelpers.createBitmap(repeatPauseDrawable.getBitmap(), selectionColor));
+        drawables[INDEX_LIST] = repeatListDrawable == null ? null
+                : new BitmapDrawable(context.getResources(),
+                ActionHelpers.createBitmap(repeatListDrawable.getBitmap(), selectionColor));
         setDrawables(drawables);
 
         String[] labels = new String[drawables.length];
@@ -59,7 +60,8 @@ public class RepeatAction extends MultiAction {
         labels[INDEX_NONE] = context.getString(R.string.lb_playback_controls_repeat_none);
         labels[INDEX_ONE] = context.getString(R.string.lb_playback_controls_repeat_one);
         labels[INDEX_ALL] = context.getString(R.string.lb_playback_controls_repeat_all);
-        labels[INDEX_PAUSE] = context.getString(R.string.lb_playback_controls_repeat_none);
+        labels[INDEX_PAUSE] = context.getString(R.string.playback_controls_repeat_pause);
+        labels[INDEX_LIST] = context.getString(R.string.playback_controls_repeat_list);
         setLabels(labels);
     }
 }

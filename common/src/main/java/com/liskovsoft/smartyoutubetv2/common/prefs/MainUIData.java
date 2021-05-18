@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.FlavorConfig;
 
@@ -15,18 +16,24 @@ import java.util.Map;
 import java.util.Set;
 
 public class MainUIData {
+    private static final String MAIN_UI_DATA = "main_ui_data";
     public static final int CHANNEL_SORTING_UPDATE = 0;
     public static final int CHANNEL_SORTING_AZ = 1;
     public static final int CHANNEL_SORTING_LAST_VIEWED = 2;
     public static final int PLAYLISTS_STYLE_GRID = 0;
     public static final int PLAYLISTS_STYLE_ROWS = 1;
+    public static final int EXIT_NONE = 0;
+    public static final int EXIT_DOUBLE_BACK = 1;
+    public static final int EXIT_SINGLE_BACK = 2;
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
     private final Context mContext;
     private final AppPrefs mPrefs;
-    private boolean mIsAnimatedPreviewsEnabled;
-    private boolean mIsMultilineTitlesEnabled;
+    private boolean mIsCardAnimatedPreviewsEnabled;
+    private boolean mIsCardMultilineTitleEnabled;
+    private boolean mIsCardTextAutoScrollEnabled;
     private boolean mIsSettingsCategoryEnabled;
+    private int mCardTitleLinesNum;
     private int mBootCategoryId;
     private final Map<Integer, Integer> mLeftPanelCategories = new LinkedHashMap<>();
     private final Set<Integer> mEnabledLeftPanelCategories = new HashSet<>();
@@ -36,8 +43,10 @@ public class MainUIData {
     private int mColorSchemeIndex;
     private int mChannelCategorySorting;
     private int mPlaylistsStyle;
+    private int mAppExitShortcut;
+    private boolean mIsReturnToLauncherEnabled;
 
-    public MainUIData(Context context) {
+    private MainUIData(Context context) {
         mContext = context;
         mPrefs = AppPrefs.instance(context);
         initLeftPanelCategories();
@@ -53,22 +62,40 @@ public class MainUIData {
         return sInstance;
     }
 
-    public void enableAnimatedPreviews(boolean enable) {
-        mIsAnimatedPreviewsEnabled = enable;
+    public void enableCardAnimatedPreviews(boolean enable) {
+        mIsCardAnimatedPreviewsEnabled = enable;
         persistState();
     }
 
-    public boolean isAnimatedPreviewsEnabled() {
-        return mIsAnimatedPreviewsEnabled;
+    public boolean isCardAnimatedPreviewsEnabled() {
+        return mIsCardAnimatedPreviewsEnabled;
     }
 
-    public void enableMultilineTitles(boolean enable) {
-        mIsMultilineTitlesEnabled = enable;
+    public void enableCardMultilineTitle(boolean enable) {
+        mIsCardMultilineTitleEnabled = enable;
         persistState();
     }
 
-    public boolean isMultilineTitlesEnabled() {
-        return mIsMultilineTitlesEnabled;
+    public boolean isCardMultilineTitleEnabled() {
+        return mIsCardMultilineTitleEnabled;
+    }
+
+    public void enableCardTextAutoScroll(boolean enable) {
+        mIsCardTextAutoScrollEnabled = enable;
+        persistState();
+    }
+
+    public boolean isCardTextAutoScrollEnabled() {
+        return mIsCardTextAutoScrollEnabled;
+    }
+
+    public void setCartTitleLinesNum(int lines) {
+        mCardTitleLinesNum = lines;
+        persistState();
+    }
+
+    public int getCardTitleLinesNum() {
+        return mCardTitleLinesNum;
     }
 
     public Map<Integer, Integer> getCategories() {
@@ -160,6 +187,24 @@ public class MainUIData {
         persistState();
     }
 
+    public int getAppExitShortcut() {
+        return mAppExitShortcut;
+    }
+
+    public void setAppExitShortcut(int type) {
+        mAppExitShortcut = type;
+        persistState();
+    }
+
+    public void enableReturnToLauncher(boolean enable) {
+        mIsReturnToLauncherEnabled = enable;
+        persistState();
+    }
+
+    public boolean isReturnToLauncherEnabled() {
+        return mIsReturnToLauncherEnabled;
+    }
+
     private void initLeftPanelCategories() {
         mLeftPanelCategories.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mLeftPanelCategories.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
@@ -173,16 +218,16 @@ public class MainUIData {
 
     private void initColorSchemes() {
         mColorSchemes.add(new ColorScheme(
-                R.string.color_scheme_default,
+                R.string.color_scheme_teal,
                 null,
                 null,
                 null,
                 mContext));
         mColorSchemes.add(new ColorScheme(
-                R.string.color_scheme_dark,
-                "App.Theme.Dark.Player",
-                "App.Theme.Dark.Browse",
-                "App.Theme.Dark.Preferences",
+                R.string.color_scheme_dark_grey,
+                "App.Theme.DarkGrey.Player",
+                "App.Theme.DarkGrey.Browse",
+                "App.Theme.DarkGrey.Preferences",
                 mContext));
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_red,
@@ -191,38 +236,42 @@ public class MainUIData {
                 "App.Theme.Red.Preferences",
                 mContext));
         mColorSchemes.add(new ColorScheme(
-                R.string.color_scheme_dark_oled,
-                "App.Theme.Dark.OLED.Player",
-                "App.Theme.Dark.OLED.Browse",
-                "App.Theme.Dark.Preferences",
+                R.string.color_scheme_dark_grey_oled,
+                "App.Theme.DarkGrey.OLED.Player",
+                "App.Theme.DarkGrey.OLED.Browse",
+                "App.Theme.DarkGrey.Preferences",
+                mContext));
+        mColorSchemes.add(new ColorScheme(
+                R.string.color_scheme_teal_oled,
+                "App.Theme.Leanback.OLED.Player",
+                "App.Theme.Leanback.OLED.Browse",
+                null,
                 mContext));
     }
 
-    private void persistState() {
-        String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
-        mPrefs.setMainUIData(Helpers.mergeObject(
-                mIsAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale,
-                mColorSchemeIndex, mIsMultilineTitlesEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting, mPlaylistsStyle));
-    }
-
     private void restoreState() {
-        String data = mPrefs.getMainUIData();
+        String data = mPrefs.getData(MAIN_UI_DATA);
 
-        String[] split = Helpers.splitObject(data);
+        String[] split = Helpers.splitObjectLegacy(data);
 
-        mIsAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0, true);
+        mIsCardAnimatedPreviewsEnabled = Helpers.parseBoolean(split, 0, true);
         String selectedCategories = Helpers.parseStr(split, 1);
         mBootCategoryId = Helpers.parseInt(split, 2, MediaGroup.TYPE_HOME);
-        mVideoGridScale = Helpers.parseFloat(split, 3, FlavorConfig.AppPrefs.VIDEO_GRID_SCALE);
+        mVideoGridScale = Helpers.parseFloat(split, 3, 1.35f);
         mUIScale = Helpers.parseFloat(split, 4, 1.0f);
-        mColorSchemeIndex = Helpers.parseInt(split, 5, FlavorConfig.AppPrefs.COLOR_SCHEME_INDEX);
-        mIsMultilineTitlesEnabled = Helpers.parseBoolean(split, 6, false);
+        mColorSchemeIndex = Helpers.parseInt(split, 5, 2);
+        mIsCardMultilineTitleEnabled = Helpers.parseBoolean(split, 6, true);
         mIsSettingsCategoryEnabled = Helpers.parseBoolean(split, 7, true);
-        mChannelCategorySorting = Helpers.parseInt(split, 8, CHANNEL_SORTING_UPDATE);
+        mChannelCategorySorting = Helpers.parseInt(split, 8, CHANNEL_SORTING_LAST_VIEWED);
         mPlaylistsStyle = Helpers.parseInt(split, 9, PLAYLISTS_STYLE_GRID);
+        mAppExitShortcut = Helpers.parseInt(split, 10, EXIT_DOUBLE_BACK);
+        mAppExitShortcut = BuildConfig.DEBUG ? EXIT_SINGLE_BACK : EXIT_DOUBLE_BACK;
+        mCardTitleLinesNum = Helpers.parseInt(split, 11, 1);
+        mIsCardTextAutoScrollEnabled = Helpers.parseBoolean(split, 12, true);
+        mIsReturnToLauncherEnabled = Helpers.parseBoolean(split, 13, true);
 
         if (selectedCategories != null) {
-            String[] selectedCategoriesArr = Helpers.splitArray(selectedCategories);
+            String[] selectedCategoriesArr = Helpers.splitArrayLegacy(selectedCategories);
 
             for (String categoryId : selectedCategoriesArr) {
                 mEnabledLeftPanelCategories.add(Helpers.parseInt(categoryId));
@@ -230,6 +279,13 @@ public class MainUIData {
         } else {
             mEnabledLeftPanelCategories.addAll(mLeftPanelCategories.values());
         }
+    }
+
+    private void persistState() {
+        String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
+        mPrefs.setData(MAIN_UI_DATA, Helpers.mergeObject(mIsCardAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale,
+                mColorSchemeIndex, mIsCardMultilineTitleEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting,
+                mPlaylistsStyle, mAppExitShortcut, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled, mIsReturnToLauncherEnabled));
     }
 
     public static class ColorScheme {

@@ -132,7 +132,7 @@ public class CategoryFragmentFactory extends BrowseSupportFragment.FragmentFacto
 
     public int getCurrentFragmentItemIndex() {
         if (mCurrentFragment instanceof VideoCategoryFragment) {
-            return ((VideoCategoryFragment) mCurrentFragment).getItemIndex();
+            return ((VideoCategoryFragment) mCurrentFragment).getPosition();
         }
 
         return -1;
@@ -140,7 +140,7 @@ public class CategoryFragmentFactory extends BrowseSupportFragment.FragmentFacto
 
     public void setCurrentFragmentItemIndex(int index) {
         if (mCurrentFragment instanceof VideoCategoryFragment) {
-            ((VideoCategoryFragment) mCurrentFragment).setItemIndex(index);
+            ((VideoCategoryFragment) mCurrentFragment).setPosition(index);
             mSelectedItemIndex = -1;
         } else {
             mSelectedItemIndex = index;

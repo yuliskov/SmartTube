@@ -2,40 +2,65 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
+
+import com.google.android.exoplayer2.text.CaptionStyleCompat;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager.AfrData;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PlayerData {
+    private static final String VIDEO_PLAYER_DATA = "video_player_data";
     public static final int ONLY_UI = 0;
     public static final int UI_AND_PAUSE = 1;
     public static final int ONLY_PAUSE = 2;
     public static final int AUTO_HIDE_NEVER = 0;
-    public static final int BACKGROUND_PLAYBACK_NONE = 0;
-    public static final int BACKGROUND_PLAYBACK_AUDIO = 1;
-    public static final int BACKGROUND_PLAYBACK_PIP = 2;
-    public static final int BACKGROUND_PLAYBACK_BEHIND = 3;
+    public static final int SEEK_PREVIEW_NONE = 0;
+    public static final int SEEK_PREVIEW_SINGLE = 1;
+    public static final int SEEK_PREVIEW_CAROUSEL_SLOW = 2;
+    public static final int SEEK_PREVIEW_CAROUSEL_FAST = 3;
     @SuppressLint("StaticFieldLeak")
     private static PlayerData sInstance;
     private final AppPrefs mPrefs;
     private int mOKButtonBehavior;
     private int mUIHideTimeoutSec;
     private boolean mIsShowFullDateEnabled;
-    private boolean mIsSeekPreviewEnabled;
     private boolean mIsPauseOnSeekEnabled;
     private boolean mIsClockEnabled;
     private boolean mIsRemainingTimeEnabled;
-    private int mBackgroundPlaybackType;
-    private AfrData mAfrData;
+    private int mBackgroundMode;
     private FormatItem mVideoFormat;
     private FormatItem mAudioFormat;
     private FormatItem mSubtitleFormat;
     private int mVideoBufferType;
+    private final List<SubtitleStyle> mSubtitleStyles = new ArrayList<>();
+    private int mSubtitleStyleIndex;
+    private int mVideoZoomMode;
+    private int mSeekPreviewMode;
+    private float mSpeed;
+    private boolean mIsAfrEnabled;
+    private boolean mIsAfrFpsCorrectionEnabled;
+    private boolean mIsAfrResSwitchEnabled;
+    private int mAfrPauseSec;
+    private int mAudioDelayMs;
+    private boolean mIsRememberSpeedEnabled;
+    private boolean mIsLowQualityEnabled;
+    private int mPlaybackMode;
+    private boolean mIsSleepTimerEnabled;
+    private boolean mIsAmlogicFixEnabled;
+    private boolean mIsFrameDropFixEnabled;
+    private boolean mIsQualityInfoEnabled;
+    private boolean mIsRememberSpeedEachEnabled;
 
-    public PlayerData(Context context) {
+    private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
+        initSubtitleStyles();
         restoreData();
     }
 
@@ -74,18 +99,22 @@ public class PlayerData {
         return mIsShowFullDateEnabled;
     }
 
-    public void enableSeekPreview(boolean show) {
-        mIsSeekPreviewEnabled = show;
+    public void setSeekPreviewMode(int mode) {
+        mSeekPreviewMode = mode;
         persistData();
     }
 
-    public boolean isSeekPreviewEnabled() {
-        return mIsSeekPreviewEnabled;
+    public int getSeekPreviewMode() {
+        return mSeekPreviewMode;
     }
 
     public void enablePauseOnSeek(boolean enable) {
         mIsPauseOnSeekEnabled = enable;
         persistData();
+    }
+
+    public boolean isPauseOnSeekEnabled() {
+        return mIsPauseOnSeekEnabled;
     }
 
     public boolean isClockEnabled() {
@@ -106,52 +135,133 @@ public class PlayerData {
         persistData();
     }
 
-    public boolean isPauseOnSeekEnabled() {
-        return mIsPauseOnSeekEnabled;
+    public boolean isQualityInfoEnabled() {
+        return mIsQualityInfoEnabled;
     }
 
-    public void setBackgroundPlaybackType(int type) {
-        mBackgroundPlaybackType = type;
+    public void enableQualityInfo(boolean enable) {
+        mIsQualityInfoEnabled = enable;
         persistData();
     }
 
-    public int getBackgroundPlaybackType() {
-        return mBackgroundPlaybackType;
-    }
-
-    public AfrData getAfrData() {
-        return mAfrData;
-    }
-
-    public void setAfrData(AfrData afrData) {
-        mAfrData = afrData;
+    public void setBackgroundMode(int type) {
+        mBackgroundMode = type;
         persistData();
     }
 
-    public FormatItem getVideoFormat() {
-        return mVideoFormat;
+    public int getBackgroundMode() {
+        return mBackgroundMode;
     }
 
-    public void setVideoFormat(FormatItem format) {
-        mVideoFormat = format;
+    public void setPlaybackMode(int type) {
+        mPlaybackMode = type;
         persistData();
     }
 
-    public FormatItem getAudioFormat() {
-        return mAudioFormat;
+    public int getPlaybackMode() {
+        return mPlaybackMode;
     }
 
-    public void setAudioFormat(FormatItem format) {
-        mAudioFormat = format;
+    public boolean isRememberSpeedEnabled() {
+        return mIsRememberSpeedEnabled;
+    }
+
+    public void enableRememberSpeed(boolean enable) {
+        mIsRememberSpeedEnabled = enable;
+        mIsRememberSpeedEachEnabled = false;
         persistData();
     }
 
-    public FormatItem getSubtitleFormat() {
-        return mSubtitleFormat;
+    public boolean isRememberSpeedEachEnabled() {
+        return mIsRememberSpeedEachEnabled;
     }
 
-    public void setSubtitleFormat(FormatItem format) {
-        mSubtitleFormat = format;
+    public void enableRememberSpeedEach(boolean enable) {
+        mIsRememberSpeedEachEnabled = enable;
+        mIsRememberSpeedEnabled = false;
+        persistData();
+    }
+
+    public boolean isLowQualityEnabled() {
+        return mIsLowQualityEnabled;
+    }
+
+    public void enableLowQuality(boolean enable) {
+        mIsLowQualityEnabled = enable;
+        persistData();
+    }
+
+    public boolean isAfrEnabled() {
+        return mIsAfrEnabled;
+    }
+
+    public void setAfrEnabled(boolean enabled) {
+        mIsAfrEnabled = enabled;
+        persistData();
+    }
+
+    public boolean isAfrFpsCorrectionEnabled() {
+        return mIsAfrFpsCorrectionEnabled;
+    }
+
+    public void setAfrFpsCorrectionEnabled(boolean enabled) {
+        mIsAfrFpsCorrectionEnabled = enabled;
+        persistData();
+    }
+
+    public boolean isAfrResSwitchEnabled() {
+        return mIsAfrResSwitchEnabled;
+    }
+
+    public void setAfrResSwitchEnabled(boolean enabled) {
+        mIsAfrResSwitchEnabled = enabled;
+        persistData();
+    }
+
+    public int getAfrPauseSec() {
+        return mAfrPauseSec;
+    }
+
+    public void setAfrPauseSec(int pauseSec) {
+        mAfrPauseSec = pauseSec;
+        persistData();
+    }
+
+    public FormatItem getFormat(int type) {
+        FormatItem format = null;
+
+        switch (type) {
+            case FormatItem.TYPE_VIDEO:
+                format = mVideoFormat;
+                break;
+            case FormatItem.TYPE_AUDIO:
+                format = mAudioFormat;
+                break;
+            case FormatItem.TYPE_SUBTITLE:
+                format = mSubtitleFormat;
+                break;
+        }
+
+        return FormatItem.checkFormat(format, type);
+    }
+
+    public void setFormat(FormatItem format) {
+        if (format == null) {
+            return;
+        }
+
+        switch (format.getType()) {
+            case FormatItem.TYPE_VIDEO:
+                mVideoFormat = format;
+                break;
+            case FormatItem.TYPE_AUDIO:
+                mAudioFormat = format;
+                break;
+            case FormatItem.TYPE_SUBTITLE:
+                mSubtitleFormat = format;
+                break;
+        }
+        
         persistData();
     }
 
@@ -164,31 +274,138 @@ public class PlayerData {
         return mVideoBufferType;
     }
 
-    private void restoreData() {
-        String data = mPrefs.getPlayerData();
+    public List<SubtitleStyle> getSubtitleStyles() {
+        return mSubtitleStyles;
+    }
 
-        String[] split = Helpers.splitObject(data);
+    public SubtitleStyle getSubtitleStyle() {
+        return mSubtitleStyles.get(mSubtitleStyleIndex);
+    }
+
+    public void setSubtitleStyle(SubtitleStyle subtitleStyle) {
+        mSubtitleStyleIndex = mSubtitleStyles.indexOf(subtitleStyle);
+        persistData();
+    }
+
+    public void setVideoZoomMode(int mode) {
+        mVideoZoomMode = mode;
+        persistData();
+    }
+
+    public int getVideoZoomMode() {
+        return mVideoZoomMode;
+    }
+
+    public void setSpeed(float speed) {
+        if (mSpeed == speed) {
+            return;
+        }
+
+        mSpeed = speed;
+        persistData();
+    }
+
+    public float getSpeed() {
+        return mSpeed;
+    }
+
+    public int getAudioDelayMs() {
+        return mAudioDelayMs;
+    }
+
+    public void setAudioDelayMs(int delayMs) {
+        mAudioDelayMs = delayMs;
+        persistData();
+    }
+
+    public void enableSleepTimer(boolean enable) {
+        mIsSleepTimerEnabled = enable;
+        persistData();
+    }
+
+    public boolean isSleepTimerEnabled() {
+        return mIsSleepTimerEnabled;
+    }
+
+    public void enableAmlogicFix(boolean enable) {
+        mIsAmlogicFixEnabled = enable;
+        persistData();
+    }
+
+    public boolean isAmlogicFixEnabled() {
+        return mIsAmlogicFixEnabled;
+    }
+
+    public void enableFrameDropFix(boolean enable) {
+        mIsFrameDropFixEnabled = enable;
+        persistData();
+    }
+
+    public boolean isFrameDropFixEnabled() {
+        return mIsFrameDropFixEnabled;
+    }
+
+    private void initSubtitleStyles() {
+        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_default, R.color.light_grey, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
+        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_semi_transparent_bg, R.color.light_grey, R.color.semi_grey, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
+        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_black_bg, R.color.light_grey, R.color.black, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
+        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_yellow, R.color.yellow, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
+    }
+
+    private void restoreData() {
+        String data = mPrefs.getData(VIDEO_PLAYER_DATA);
+
+        String[] split = Helpers.splitObjectLegacy(data);
 
         mOKButtonBehavior = Helpers.parseInt(split, 0, ONLY_UI);
         mUIHideTimeoutSec = Helpers.parseInt(split, 1, 3);
         mIsShowFullDateEnabled = Helpers.parseBoolean(split, 2, false);
-        mIsSeekPreviewEnabled = Helpers.parseBoolean(split, 3, true);
+        mSeekPreviewMode = Helpers.parseInt(split, 3, SEEK_PREVIEW_SINGLE);
         mIsPauseOnSeekEnabled = Helpers.parseBoolean(split, 4, false);
         mIsClockEnabled = Helpers.parseBoolean(split, 5, true);
         mIsRemainingTimeEnabled = Helpers.parseBoolean(split, 6, true);
-        mBackgroundPlaybackType = Helpers.parseInt(split, 7, BACKGROUND_PLAYBACK_NONE);
-        mAfrData = AfrData.from(Helpers.parseStr(split, 8));
-        mVideoFormat = ExoFormatItem.from(Helpers.parseStr(split, 9));
-        mAudioFormat = ExoFormatItem.from(Helpers.parseStr(split, 10));
+        mBackgroundMode = Helpers.parseInt(split, 7, PlaybackEngineController.BACKGROUND_MODE_DEFAULT);
+        // afrData was there
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1) {
+            mVideoFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 9)), FormatItem.VIDEO_HD_VP9_30);
+        } else {
+            mVideoFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 9)), FormatItem.VIDEO_HD_AVC_30);
+        }
+        mAudioFormat = Helpers.firstNonNull(ExoFormatItem.from(Helpers.parseStr(split, 10)), FormatItem.AUDIO_HQ_MP4A);
         mSubtitleFormat = ExoFormatItem.from(Helpers.parseStr(split, 11));
         mVideoBufferType = Helpers.parseInt(split, 12, PlaybackEngineController.BUFFER_LOW);
+        mSubtitleStyleIndex = Helpers.parseInt(split, 13, 1);
+        mVideoZoomMode = Helpers.parseInt(split, 14, PlaybackEngineController.ZOOM_MODE_DEFAULT);
+        mSpeed = Helpers.parseFloat(split, 15, 1.0f);
+        mIsAfrEnabled = Helpers.parseBoolean(split, 16, false);
+        mIsAfrFpsCorrectionEnabled = Helpers.parseBoolean(split, 17, false);
+        mIsAfrResSwitchEnabled = Helpers.parseBoolean(split, 18, false);
+        mAfrPauseSec = Helpers.parseInt(split, 19, 0);
+        mAudioDelayMs = Helpers.parseInt(split, 20, 0);
+        mIsRememberSpeedEnabled = Helpers.parseBoolean(split, 21, false);
+        mPlaybackMode = Helpers.parseInt(split, 22, PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL);
+        // didn't remember what was there
+        mIsLowQualityEnabled = Helpers.parseBoolean(split, 24, false);
+        mIsSleepTimerEnabled = Helpers.parseBoolean(split, 25, false);
+        mIsAmlogicFixEnabled = Helpers.parseBoolean(split, 26, false);
+        mIsAmlogicFixEnabled = true;
+        mIsFrameDropFixEnabled = Helpers.parseBoolean(split, 27, false);
+        mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
+        mIsRememberSpeedEachEnabled = Helpers.parseBoolean(split, 29, false);
+
+        if (!mIsRememberSpeedEnabled) {
+            mSpeed = 1.0f;
+        }
     }
 
     private void persistData() {
-        mPrefs.setPlayerData(Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec,
-                mIsShowFullDateEnabled, mIsSeekPreviewEnabled, mIsPauseOnSeekEnabled,
-                mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundPlaybackType, Helpers.toString(mAfrData),
-                Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mVideoFormat),
-                mVideoBufferType));
+        mPrefs.setData(VIDEO_PLAYER_DATA, Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec,
+                mIsShowFullDateEnabled, mSeekPreviewMode, mIsPauseOnSeekEnabled,
+                mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null, // afrData was there
+                Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
+                mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
+                mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs,
+                mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
+                mIsLowQualityEnabled, mIsSleepTimerEnabled, mIsAmlogicFixEnabled, mIsFrameDropFixEnabled, mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled));
     }
 }

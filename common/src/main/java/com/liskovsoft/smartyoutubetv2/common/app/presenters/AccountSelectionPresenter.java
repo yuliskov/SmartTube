@@ -5,9 +5,11 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.Account;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -18,29 +20,35 @@ import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccountSelectionPresenter {
+public class AccountSelectionPresenter extends BasePresenter<Void> {
+    private static final String TAG = AccountSelectionPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static AccountSelectionPresenter sInstance;
-    private final Context mContext;
     private final SignInManager mSignInManager;
     private Disposable mAccountsAction;
 
     public AccountSelectionPresenter(Context context) {
-        mContext = context;
+        super(context);
         MediaService service = YouTubeMediaService.instance();
         mSignInManager = service.getSignInManager();
     }
 
     public static AccountSelectionPresenter instance(Context context) {
         if (sInstance == null) {
-            sInstance = new AccountSelectionPresenter(context.getApplicationContext());
+            sInstance = new AccountSelectionPresenter(context);
         }
+
+        sInstance.setContext(context);
 
         return sInstance;
     }
 
     public void show() {
-        if (!AccountsData.instance(mContext).isSelectAccountOnBootEnabled()) {
+        show(false);
+    }
+
+    public void show(boolean force) {
+        if (!AccountsData.instance(getContext()).isSelectAccountOnBootEnabled() && !force) {
             // user don't want to see selection dialog
             return;
         }
@@ -48,7 +56,10 @@ public class AccountSelectionPresenter {
         mAccountsAction = mSignInManager.getAccountsObserve()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::createAndShowDialog);
+                .subscribe(
+                        accounts -> createAndShowDialog(accounts, force),
+                        error -> Log.e(TAG, "Get accounts error: %s", error.getMessage())
+                );
     }
 
     public void unhold() {
@@ -56,38 +67,44 @@ public class AccountSelectionPresenter {
         sInstance = null;
     }
 
-    private void createAndShowDialog(List<Account> accounts) {
-        if (accounts == null || accounts.size() <= 1) {
+    private void createAndShowDialog(List<Account> accounts, boolean force) {
+        if (accounts.size() <= 1 && !force) {
             return;
         }
 
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(mContext);
+        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
         settingsPresenter.clear();
 
         appendAccountSelection(accounts, settingsPresenter);
 
-        settingsPresenter.showDialog(mContext.getString(R.string.settings_accounts), this::unhold);
+        settingsPresenter.showDialog(getContext().getString(R.string.settings_accounts), this::unhold);
     }
 
     private void appendAccountSelection(List<Account> accounts, AppSettingsPresenter settingsPresenter) {
         List<OptionItem> optionItems = new ArrayList<>();
 
         optionItems.add(UiOptionItem.from(
-                mContext.getString(R.string.dialog_account_none), optionItem -> selectAccount(null), true
+                getContext().getString(R.string.dialog_account_none), optionItem -> {
+                    selectAccount(null);
+                    settingsPresenter.closeDialog();
+                }, true
         ));
 
         for (Account account : accounts) {
             optionItems.add(UiOptionItem.from(
-                    formatAccount(account), option -> selectAccount(account), account.isSelected()
+                    formatAccount(account), option -> {
+                        selectAccount(account);
+                        settingsPresenter.closeDialog();
+                    }, account.isSelected()
             ));
         }
 
-        settingsPresenter.appendRadioCategory(mContext.getString(R.string.dialog_account_list), optionItems);
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.dialog_account_list), optionItems);
     }
 
     private void selectAccount(Account account) {
         mSignInManager.selectAccount(account);
-        BrowsePresenter.instance(mContext).refresh();
+        BrowsePresenter.instance(getContext()).refresh();
     }
 
     private String formatAccount(Account account) {

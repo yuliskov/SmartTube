@@ -14,6 +14,10 @@ public abstract class PlayerEventListenerHelper implements PlayerHandlerEventLis
         mEventBridge = eventBridge;
     }
 
+    public MainPlayerEventBridge getBridge() {
+        return mEventBridge;
+    }
+
     public PlaybackController getController() {
         return mEventBridge.getController();
     }
@@ -207,6 +211,16 @@ public abstract class PlayerEventListenerHelper implements PlayerHandlerEventLis
 
     @Override
     public void onSearchClicked() {
+        // NOP
+    }
+
+    @Override
+    public void onVideoZoomClicked() {
+        // NOP
+    }
+
+    @Override
+    public void onPipClicked() {
         // NOP
     }
 }

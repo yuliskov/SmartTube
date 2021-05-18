@@ -10,9 +10,9 @@ import com.google.android.exoplayer2.text.CaptionStyleCompat;
 import com.google.android.exoplayer2.text.Cue;
 import com.google.android.exoplayer2.text.TextOutput;
 import com.google.android.exoplayer2.ui.SubtitleView;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class SubtitleManager implements TextOutput {
     private final Context mContext;
     private final List<SubtitleStyle> mSubtitleStyles = new ArrayList<>();
     private final AppPrefs mPrefs;
-    private int mSubtitleStyleIndex;
+    private final PlayerData mPlayerData;
 
     public static class SubtitleStyle {
         public final int nameResId;
@@ -39,11 +39,16 @@ public class SubtitleManager implements TextOutput {
         }
     }
 
+    public interface OnSelectSubtitleStyle {
+        void onSelectSubtitleStyle(SubtitleStyle style);
+    }
+
     public SubtitleManager(Activity activity, int subViewId) {
         mContext = activity;
         mSubtitleView = activity.findViewById(subViewId);
         mPrefs = AppPrefs.instance(activity);
-        initDefaultStyles();
+        mPlayerData = PlayerData.instance(activity);
+        configureSubtitleView();
     }
 
     @Override
@@ -58,12 +63,11 @@ public class SubtitleManager implements TextOutput {
     }
 
     public SubtitleStyle getSubtitleStyle() {
-        return mSubtitleStyles.get(mSubtitleStyleIndex);
+        return mPlayerData.getSubtitleStyle();
     }
 
     public void setSubtitleStyle(SubtitleStyle subtitleStyle) {
-        mSubtitleStyleIndex = mSubtitleStyles.indexOf(subtitleStyle);
-        persistData();
+        mPlayerData.setSubtitleStyle(subtitleStyle);
         configureSubtitleView();
     }
 
@@ -104,31 +108,6 @@ public class SubtitleManager implements TextOutput {
 
             float textSize = mSubtitleView.getContext().getResources().getDimension(R.dimen.subtitle_text_size);
             mSubtitleView.setFixedTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
-        }
-    }
-
-    private void initDefaultStyles() {
-        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_default, R.color.light_grey, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
-        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_semi_transparent_bg, R.color.light_grey, R.color.semi_grey, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
-        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_black_bg, R.color.light_grey, R.color.black, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
-        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_yellow, R.color.yellow, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
-
-        restoreData();
-
-        configureSubtitleView();
-    }
-
-    private void persistData() {
-        mPrefs.setSubtitleManagerData(String.format("%s", mSubtitleStyleIndex));
-    }
-
-    private void restoreData() {
-        String data = mPrefs.getSubtitleManagerData();
-
-        if (data != null) {
-            String[] split = data.split(",");
-
-            mSubtitleStyleIndex = Helpers.parseInt(split, 0);
         }
     }
 }

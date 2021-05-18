@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class DateFormatter {
-    public static String getCurrentDateShort(Context context) {
+    public static String getCurrentTimeShort(Context context) {
         // details: https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
         String pattern = is24HourLocale(context) ? "EEE d MMM H:mm" : "EEE d MMM h:mm a";
 

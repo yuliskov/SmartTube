@@ -22,6 +22,8 @@ Current release features:
 __Useful links__:
 
 - __[Latest release](https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.apk)__
+- __[News](https://t.me/SmartTubeNextNewsEN)__
+- __[FAQ](https://t.me/STNFAQENG)__
 - __[Ask a question](https://t.me/SmartTubeNext_en)__
 
 # Screens
@@ -96,17 +98,25 @@ To build, install and run a debug version, run this from the root of the project
 git clone https://github.com/yuliskov/SmartTubeNext.git
 cd SmartTubeNext
 git submodule update --init
-./gradlew buildStbetaDebug
+gradlew buildStorigDebug
 ```
 
 # Unit Tests
 
 To run the unit tests for the application:
 
-```./gradlew testDebugUnitTest```
+```gradlew testDebugUnitTest```
 
 # User Interface Tests
 
 To run the user interface tests for the application:
 
-```./gradlew connectedDebugAndroidTest```
+```gradlew connectedDebugAndroidTest```
+
+# Donation
+
+If you want to support my developments you are welcome to buy me a cup of coffee :)
+ - __[Donation Alerts (PayPal)](https://www.donationalerts.ru/r/firsthash)__
+ - __[QIWI (RU)](https://qiwi.com/n/GUESS025)__
+ - __[PrivatBank (UA)](https://privatbank.ua/ru/sendmoney?payment=5fcdddf53e3d491d63fcb050e6e2e05f2f2678c2)__
+ - __BTC: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx__

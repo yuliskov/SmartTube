@@ -5,16 +5,17 @@ import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class SearchData {
+    private static final String SEARCH_DATA = "search_data";
     @SuppressLint("StaticFieldLeak")
     private static SearchData sInstance;
     private final Context mContext;
     private final AppPrefs mAppPrefs;
     private boolean mIsInstantVoiceSearchEnabled;
 
-    public SearchData(Context context) {
+    private SearchData(Context context) {
         mContext = context;
         mAppPrefs = AppPrefs.instance(mContext);
-        restoreState();
+        restoreData();
     }
 
     public static SearchData instance(Context context) {
@@ -27,22 +28,22 @@ public class SearchData {
 
     public void setInstantVoiceSearchEnabled(boolean enabled) {
         mIsInstantVoiceSearchEnabled = enabled;
-        persistState();
+        persistData();
     }
 
     public boolean isInstantVoiceSearchEnabled() {
         return mIsInstantVoiceSearchEnabled;
     }
 
-    private void persistState() {
-        mAppPrefs.setSearchData(Helpers.mergeObject(mIsInstantVoiceSearchEnabled));
-    }
+    private void restoreData() {
+        String data = mAppPrefs.getData(SEARCH_DATA);
 
-    private void restoreState() {
-        String data = mAppPrefs.getSearchData();
-
-        String[] split = Helpers.splitObject(data);
+        String[] split = Helpers.splitObjectLegacy(data);
 
         mIsInstantVoiceSearchEnabled = Helpers.parseBoolean(split, 0, false);
+    }
+
+    private void persistData() {
+        mAppPrefs.setData(SEARCH_DATA, Helpers.mergeObject(mIsInstantVoiceSearchEnabled));
     }
 }

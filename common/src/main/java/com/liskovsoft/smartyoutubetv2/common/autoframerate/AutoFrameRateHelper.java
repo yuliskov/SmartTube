@@ -108,6 +108,7 @@ public class AutoFrameRateHelper {
         Pair<Integer, Float> currentFormat = new Pair<>(width, frameRate);
 
         Log.d(TAG, String.format("Applying mode change... Video fps: %s, width: %s, height: %s", frameRate, width, format.getHeight()));
+
         syncMode(activity, width, frameRate, force);
     }
 

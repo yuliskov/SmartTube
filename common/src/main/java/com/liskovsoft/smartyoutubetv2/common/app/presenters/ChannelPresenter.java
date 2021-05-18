@@ -5,13 +5,16 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.utils.ServiceManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -26,6 +29,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private static ChannelPresenter sInstance;
     private final MediaService mMediaService;
     private final PlaybackPresenter mPlaybackPresenter;
+    private final ServiceManager mServiceManager;
     private String mChannelId;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
@@ -34,6 +38,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         super(context);
         mMediaService = YouTubeMediaService.instance();
         mPlaybackPresenter = PlaybackPresenter.instance(context);
+        mServiceManager = ServiceManager.instance();
     }
 
     public static ChannelPresenter instance(Context context) {
@@ -65,7 +70,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
     @Override
     public void onVideoItemLongClicked(Video item) {
-        VideoMenuPresenter.instance(getContext()).showMenu(item);
+        VideoMenuPresenter.instance(getContext()).showVideoMenu(item);
     }
 
     @Override
@@ -84,14 +89,31 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         disposeActions();
     }
 
+    public static boolean canOpenChannel(Video item) {
+        if (item == null) {
+            return false;
+        }
+
+        return item.videoId != null || item.channelId != null || item.isChannelUploads();
+    }
+
     public void openChannel(Video item) {
         if (item != null) {
             if (item.channelId != null) {
                 openChannel(item.channelId);
-            } else {
+            } else if (item.videoId != null) {
+                MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
+                mServiceManager.loadMetadata(item, metadata -> {
+                    openChannel(metadata.getChannelId());
+                    item.channelId = metadata.getChannelId();
+                });
+            } else if (item.isChannelUploads()) {
                 // Maybe this is subscribed items view
                 ChannelUploadsPresenter.instance(getContext())
-                        .obtainVideoGroup(item, group -> openChannel(group.getChannelId()));
+                        .obtainVideoGroup(item, group -> {
+                            openChannel(group.getChannelId());
+                            item.channelId = group.getChannelId();
+                        });
             }
         }
     }
@@ -102,14 +124,15 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         }
 
         disposeActions();
-        ViewManager.instance(getContext()).startView(ChannelView.class);
+
+        mChannelId = channelId;
 
         if (getView() != null) {
             getView().clear();
-            updateRows(channelId);
-        } else {
-            mChannelId = channelId;
+            updateRows(mChannelId);
         }
+
+        ViewManager.instance(getContext()).startView(ChannelView.class);
     }
 
     private void disposeActions() {
@@ -136,9 +159,10 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         mUpdateAction = channelObserve
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::updateRowsHeader
-                        , error -> Log.e(TAG, "updateRows error: " + error)
-                        , () -> getView().showProgressBar(false));
+                .subscribe(
+                        this::updateRowsHeader,
+                        error -> Log.e(TAG, "updateRows error: %s", error.getMessage())
+                 );
     }
 
     private void updateRowsHeader(List<MediaGroup> mediaGroups) {
@@ -150,6 +174,8 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
             getView().update(VideoGroup.from(mediaGroup));
         }
+
+        getView().showProgressBar(false);
     }
 
     private void continueGroup(VideoGroup group) {
@@ -164,9 +190,13 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(continueMediaGroup -> {
-                            getView().update(VideoGroup.from(continueMediaGroup));
-                        }, error -> Log.e(TAG, "continueGroup error: " + error),
-                        () -> getView().showProgressBar(false));
+                .subscribe(
+                        continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),
+                        error -> {
+                            Log.e(TAG, "continueGroup error: %s", error.getMessage());
+                            getView().showProgressBar(false);
+                        },
+                        () -> getView().showProgressBar(false)
+                );
     }
 }

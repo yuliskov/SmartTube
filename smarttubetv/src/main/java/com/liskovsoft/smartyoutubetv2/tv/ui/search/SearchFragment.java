@@ -19,7 +19,6 @@ import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.ObjectAdapter;
-import androidx.leanback.widget.OnItemViewClickedListener;
 import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
@@ -32,6 +31,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
@@ -51,6 +52,7 @@ public class SearchFragment extends SearchSupportFragment
     private UriBackgroundManager mBackgroundManager;
     private VideoGroupObjectAdapter mAdapter;
     private ProgressBarManager mProgressBarManager;
+    private CardPresenter mCardPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,7 @@ public class SearchFragment extends SearchSupportFragment
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
         mSearchPresenter = SearchPresenter.instance(getContext());
         mSearchPresenter.setView(this);
+        mCardPresenter = new CardPresenter();
 
         mRowsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
         mProgressBarManager = new ProgressBarManager();
@@ -113,6 +116,8 @@ public class SearchFragment extends SearchSupportFragment
     private void setupEventListeners() {
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
+        mCardPresenter.setOnLongClickedListener(new ItemViewLongClickedListener());
+        mCardPresenter.setOnMenuPressedListener(new ItemViewLongClickedListener());
     }
 
     @Override
@@ -196,7 +201,7 @@ public class SearchFragment extends SearchSupportFragment
 
         if (mRowsAdapter.size() == 0) {
             HeaderItem header = new HeaderItem(getString(titleRes, mQuery));
-            mAdapter = new VideoGroupObjectAdapter(group);
+            mAdapter = new VideoGroupObjectAdapter(group, mCardPresenter);
             ListRow row = new ListRow(header, mAdapter);
             mRowsAdapter.add(row);
         } else {
@@ -204,22 +209,25 @@ public class SearchFragment extends SearchSupportFragment
         }
     }
 
-    private final class ItemViewClickedListener implements OnItemViewClickedListener {
+    private final class ItemViewLongClickedListener implements OnItemViewClickedListener {
+        @Override
+        public void onItemViewClicked(Presenter.ViewHolder itemViewHolder, Object item) {
+
+            if (item instanceof Video) {
+                mSearchPresenter.onVideoItemLongClicked((Video) item);
+            } else {
+                Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private final class ItemViewClickedListener implements androidx.leanback.widget.OnItemViewClickedListener {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
 
             if (item instanceof Video) {
-                if (getActivity() instanceof LeanbackActivity) {
-                    boolean longClick = ((LeanbackActivity) getActivity()).isLongClick();
-                    Log.d(TAG, "Is long click: " + longClick);
-
-                    if (longClick) {
-                        mSearchPresenter.onVideoItemLongClicked((Video) item);
-                    } else {
-                        mSearchPresenter.onVideoItemClicked((Video) item);
-                    }
-                }
+                mSearchPresenter.onVideoItemClicked((Video) item);
             } else {
                 Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
             }

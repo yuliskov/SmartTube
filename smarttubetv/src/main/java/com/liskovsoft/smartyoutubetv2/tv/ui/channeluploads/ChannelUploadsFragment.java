@@ -1,8 +1,10 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.channeluploads;
 
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.Nullable;
+import androidx.leanback.widget.VerticalGridView;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
@@ -39,6 +41,13 @@ public class ChannelUploadsFragment extends VideoGridFragment implements Channel
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        removeTopPadding();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         mPresenter.onViewDestroyed();
@@ -51,5 +60,18 @@ public class ChannelUploadsFragment extends VideoGridFragment implements Channel
         } else {
             mProgressBarManager.hide();
         }
+    }
+
+    /**
+     * https://stackoverflow.com/questions/9685658/add-padding-on-view-programmatically
+     */
+    private void removeTopPadding() {
+        VerticalGridView browseGrid = getBrowseGrid();
+
+        if (browseGrid == null) {
+            return;
+        }
+
+        browseGrid.setPadding(browseGrid.getPaddingLeft(), browseGrid.getPaddingTop() / 3, browseGrid.getPaddingRight(), browseGrid.getPaddingBottom());
     }
 }

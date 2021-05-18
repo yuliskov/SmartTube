@@ -54,7 +54,7 @@
             android:layout_marginBottom="@dimen/lb_playback_transport_thumbs_bottom_margin" />
     </FrameLayout>
 
-    <com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.PlaybackTransportRowView
+    <com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.PlaybackTransportRowView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/transport_row"
@@ -110,7 +110,7 @@
                     android:layout_alignParentEnd="true"
                     style="?attr/playbackControlsTimeStyle" />
                 <TextView
-                    android:id="@+id/current_date"
+                    android:id="@+id/date_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -221,5 +221,5 @@
         </RelativeLayout>
 
 
-    </com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.PlaybackTransportRowView>
+    </com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.PlaybackTransportRowView>
 </LinearLayout>

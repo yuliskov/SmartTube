@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.Looper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
@@ -18,10 +19,13 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     @SuppressLint("StaticFieldLeak")
     private static AppSettingsPresenter sInstance;
     private final List<SettingsCategory> mCategories;
+    private final Handler mHandler;
+    private final Runnable mCloseDialog = this::closeDialog;
     private String mTitle;
     private Runnable mOnClose;
     private PlayerUiManager mUiManager;
-    private boolean mIsEngineBlocked;
+    private int mEnginePlaybackMode;
+    private long mTimeoutMs;
 
     public static class SettingsCategory {
         public static SettingsCategory radioList(String title, List<OptionItem> items) {
@@ -67,6 +71,7 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     public AppSettingsPresenter(Context context) {
         super(context);
         mCategories = new ArrayList<>();
+        mHandler = new Handler(Looper.getMainLooper());
     }
 
     public static AppSettingsPresenter instance(Context context) {
@@ -79,16 +84,22 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
         return sInstance;
     }
 
+    /**
+     * Called after {@link #onClose}
+     */
     @Override
     public void onViewDestroyed() {
         clear();
     }
 
+    /**
+     * Called when user pressed back button.
+     */
     public void onClose() {
         clear();
 
         enablePlayerUiAutoHide(true);
-        enableOldAndroidFix(false);
+        blockPlayerEngine(false);
 
         if (mOnClose != null) {
             mOnClose.run();
@@ -96,6 +107,8 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     }
 
     public void clear() {
+        mTimeoutMs = 0;
+        mHandler.removeCallbacks(mCloseDialog);
         mCategories.clear();
     }
 
@@ -126,7 +139,7 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
         mOnClose = onClose;
 
         enablePlayerUiAutoHide(false);
-        enableOldAndroidFix(true);
+        blockPlayerEngine(true);
 
         if (getView() != null) {
             getView().clear();
@@ -134,6 +147,18 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
         }
 
         ViewManager.instance(getContext()).startView(AppSettingsView.class, true);
+
+        setupTimeout();
+    }
+
+    public void closeDialog() {
+        if (getView() != null) {
+            getView().finish();
+        }
+    }
+
+    public boolean isDialogShown() {
+        return !mCategories.isEmpty();
     }
 
     public void appendRadioCategory(String categoryTitle, List<OptionItem> items) {
@@ -166,15 +191,27 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
         }, timeoutMs);
     }
 
-    private void enableOldAndroidFix(boolean enable) {
+    public void setTimoutMs(long timeoutMs) {
+        mTimeoutMs = timeoutMs;
+    }
+
+    private void setupTimeout() {
+        mHandler.removeCallbacks(mCloseDialog);
+
+        if (mTimeoutMs > 0) {
+            mHandler.postDelayed(mCloseDialog, mTimeoutMs);
+        }
+    }
+
+    private void blockPlayerEngine(boolean block) {
         if (mUiManager != null && mUiManager.getController() != null) {
             // Old Android fix: don't destroy player while dialog is open
             if (VERSION.SDK_INT < 25) {
-                if (enable) {
-                    mIsEngineBlocked = mUiManager.getController().isEngineBlocked();
-                    mUiManager.getController().blockEngine(true);
+                if (block) {
+                    mEnginePlaybackMode = mUiManager.getController().getPlaybackMode(); // save orig value for later restoration
+                    mUiManager.getController().setPlaybackMode(PlaybackEngineController.BACKGROUND_MODE_SOUND);
                 } else {
-                    mUiManager.getController().blockEngine(mIsEngineBlocked);
+                    mUiManager.getController().setPlaybackMode(mEnginePlaybackMode);
                 }
             }
         }

@@ -14,7 +14,11 @@ public class SubtitleTrack extends MediaTrack {
 
     @Override
     public int compare(MediaTrack track2) {
-        if (track2.format == null) {
+        if (format == null) {
+            return -1;
+        }
+
+        if (track2 == null || track2.format == null) {
             return 1;
         }
 
@@ -22,7 +26,7 @@ public class SubtitleTrack extends MediaTrack {
 
         if (Helpers.equals(format.id, track2.format.id)) {
             result = 0;
-        } else if (Helpers.equals(format.language, track2.format.language)) {
+        } else if (Helpers.contains(format.language, track2.format.language)) {
             return 0;
         }
 

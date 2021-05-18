@@ -1,6 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
-import android.content.Context;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
@@ -17,7 +17,6 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import java.util.Map;
 
@@ -25,31 +24,27 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private static final String TAG = StateUpdater.class.getSimpleName();
     private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
     private static final int MAX_PERSISTENT_STATE_SIZE = 30;
-    private boolean mIsPlaying;
-    private FormatItem mVideoFormat;
-    private FormatItem mAudioFormat;
-    private FormatItem mSubtitleFormat;
+    private boolean mIsPlayEnabled;
+    private Video mVideo;
+    private FormatItem mTempVideoFormat;
     // Don't store state inside Video object.
     // As one video might correspond to multiple Video objects.
     private final Map<String, State> mStates = Utils.createLRUMap(MAX_PERSISTENT_STATE_SIZE);
-    private float mLastSpeed = -1;
     private AppPrefs mPrefs;
     private Disposable mHistoryAction;
     private PlayerData mPlayerData;
+    private boolean mIsPlayBlocked;
 
     public StateUpdater() {
     }
 
     @Override
-    public void onInitDone() {
+    public void onInitDone() { // called each time a video opened from the browser
         mPrefs = AppPrefs.instance(getActivity());
         mPlayerData = PlayerData.instance(getActivity());
 
-        mVideoFormat = Helpers.get(mPlayerData.getVideoFormat(), FormatItem.VIDEO_HD_AVC_30);
-        mAudioFormat = Helpers.get(mPlayerData.getAudioFormat(), FormatItem.AUDIO_HQ_MP4A);
-        mSubtitleFormat = Helpers.get(mPlayerData.getSubtitleFormat(), null);
-
-        restoreState();
+        restoreClipData();
+        resetPositionIfNeeded(mVideo); // reset position of music videos
     }
 
     /**
@@ -58,22 +53,32 @@ public class StateUpdater extends PlayerEventListenerHelper {
      */
     @Override
     public void openVideo(Video item) {
-        //mLastSpeed = -1; // Save global speed on per-view basis
+        setPlayEnabled(true); // video just added
 
-        ensureVideoSize(item); // reset position of music videos
+        mVideo = item;
+        mTempVideoFormat = null;
 
-        mIsPlaying = true; // video just added
+        resetPositionIfNeeded(item); // reset position of music videos
+        resetSpeedIfNeeded();
 
         // Ensure that we aren't running on presenter init stage
-        if (getController() != null && getController().isEngineBlocked()) {
-            // In background mode some event not called.
-            // So, for proper state persistence, we need to save state here.
+        if (getController() != null) {
+            // Save state of the previous video.
+            // In case video opened from phone and other stuff.
             saveState();
+
+            // Restore format according to profile on every new video
+            restoreVideoFormat();
         }
     }
 
     @Override
     public boolean onPreviousClicked() {
+        // Skip auto seek logic when running remote session
+        if (getController().getVideo() != null && getController().getVideo().isRemote) {
+            return false;
+        }
+
         boolean isFarFromStart = getController().getPositionMs() > 10_000;
 
         if (isFarFromStart) {
@@ -87,6 +92,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public boolean onNextClicked() {
+        setPlayEnabled(true);
+
         saveState();
 
         clearStateOfNextVideo();
@@ -96,17 +103,10 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onSuggestionItemClicked(Video item) {
-        saveState();
-        mIsPlaying = true; // autoplay video from suggestions
-    }
+        setPlayEnabled(true); // autoplay video from suggestions
 
-    //@Override
-    //public void onEngineInitialized() {
-    //    // This is a backup place for format restoration.
-    //    // Usually you don't need to use it.
-    //    // There is rare bug when format didn't restore at all.
-    //    restoreVideoFormatSilent();
-    //}
+        saveState();
+    }
 
     @Override
     public void onEngineInitialized() {
@@ -114,65 +114,65 @@ public class StateUpdater extends PlayerEventListenerHelper {
         // So, to be sure, repeat format selection.
         restoreVideoFormat();
         restoreAudioFormat();
+        restoreSubtitleFormat();
+
+        // Show user info instead of black screen.
+        if (!getPlayEnabled()) {
+            getController().showControls(true);
+        }
     }
 
     @Override
     public void onEngineReleased() {
-        saveState();
+        // Save previous state
+        if (getController().containsMedia()) {
+            setPlayEnabled(getController().getPlay());
+            saveState();
+        }
     }
-
-    //@Override
-    //public void onSourceChanged(Video item) {
-    //    // called before engine attempt to auto select track by itself
-    //    restoreVideoFormat();
-    //    restoreAudioFormat();
-    //}
 
     @Override
     public void onVideoLoaded(Video item) {
         // In this state video length is not undefined.
         restorePosition(item);
         restoreSpeed(item);
-        // Player thinks that subs not enabled if did it too early (e.g. on source change event).
+        // Player thinks that subs not enabled if I enable it too early (e.g. on source change event).
         restoreSubtitleFormat();
+
+        updateHistory();
     }
 
     @Override
     public void onPlay() {
-        mIsPlaying = true;
+        setPlayEnabled(true);
         Helpers.disableScreensaver(getActivity());
     }
 
     @Override
     public void onPause() {
-        mIsPlaying = false;
+        setPlayEnabled(false);
         Helpers.enableScreensaver(getActivity());
     }
 
     @Override
     public void onTrackSelected(FormatItem track) {
-        if (track.getType() == FormatItem.TYPE_VIDEO && !getController().isInPIPMode()) {
-            mVideoFormat = track;
-            mPlayerData.setVideoFormat(track);
-        } else if (track.getType() == FormatItem.TYPE_AUDIO) {
-            mAudioFormat = track;
-            mPlayerData.setAudioFormat(track);
-        } else if (track.getType() == FormatItem.TYPE_SUBTITLE) {
-            mSubtitleFormat = track;
-            mPlayerData.setSubtitleFormat(track);
+        if (!getController().isInPIPMode()) {
+            if (track.getType() == FormatItem.TYPE_VIDEO) {
+                if (mPlayerData.getFormat(FormatItem.TYPE_VIDEO).isPreset()) {
+                    mTempVideoFormat = track;
+                } else {
+                    mTempVideoFormat = null;
+                    mPlayerData.setFormat(track);
+                }
+            } else {
+                mPlayerData.setFormat(track);
+            }
         }
     }
 
     @Override
     public void onPlayEnd() {
-        Video video = getController().getVideo();
-
-        // In case we start to watch the video again
-        if (video != null) {
-            // Add null state to prevent restore position from history
-            mStates.put(video.videoId, new State(video.videoId, 0));
-            saveState();
-        }
+        saveState();
 
         // Take into account different playback states
         Helpers.enableScreensaver(getActivity());
@@ -180,53 +180,44 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     private void clearStateOfNextVideo() {
         if (getController().getVideo() != null && getController().getVideo().nextMediaItem != null) {
-            mStates.remove(getController().getVideo().nextMediaItem.getVideoId());
+            resetPosition(getController().getVideo().nextMediaItem.getVideoId());
         }
     }
+    
+    private void resetPositionIfNeeded(Video item) {
+        if (item == null) {
+            return;
+        }
 
-    private void ensureVideoSize(Video item) {
         State state = mStates.get(item.videoId);
 
-        // Trying to start music video from beginning
+        // Reset position of music videos
         if (state != null && state.lengthMs < MUSIC_VIDEO_LENGTH_MS) {
-            mStates.remove(item.videoId);
+            resetPosition(item.videoId);
         }
     }
 
-    private void saveState() {
-        Video video = getController().getVideo();
+    private void resetPosition(String videoId) {
+        State state = mStates.get(videoId);
 
-        if (video != null) {
-            if (getController().getLengthMs() - getController().getPositionMs() > 500) { // don't save position if track is ended
-                mStates.put(video.videoId, new State(video.videoId, getController().getPositionMs(), getController().getLengthMs(), getController().getSpeed()));
+        if (state != null) {
+            if (mPlayerData.isRememberSpeedEachEnabled()) {
+                mStates.put(videoId, new State(videoId, 0, state.lengthMs, state.speed));
+            } else {
+                mStates.remove(videoId);
             }
-
-            persistState();
         }
-
-        mLastSpeed = getController().getSpeed();
-    }
-
-    private void restoreState() {
-        restoreClipData();
-        restoreParams();
-    }
-
-    private void persistState() {
-        updateHistory();
-        persistVideoState();
-        persistParams();
     }
 
     private void persistVideoState() {
-        if (getController().getLengthMs() <= MUSIC_VIDEO_LENGTH_MS) {
+        if (getController().getLengthMs() <= MUSIC_VIDEO_LENGTH_MS && !mPlayerData.isRememberSpeedEachEnabled()) {
             return;
         }
 
         StringBuilder sb = new StringBuilder();
 
         for (State state : mStates.values()) {
-            if (state.lengthMs <= MUSIC_VIDEO_LENGTH_MS) {
+            if (state.lengthMs <= MUSIC_VIDEO_LENGTH_MS && !mPlayerData.isRememberSpeedEachEnabled()) {
                 continue;
             }
 
@@ -237,11 +228,11 @@ public class StateUpdater extends PlayerEventListenerHelper {
             sb.append(state);
         }
 
-        mPrefs.setStateUpdaterClipData(sb.toString());
+        mPrefs.setStateUpdaterData(sb.toString());
     }
 
     private void restoreClipData() {
-        String data = mPrefs.getStateUpdaterItemsData();
+        String data = mPrefs.getStateUpdaterData();
 
         if (data != null) {
             String[] split = data.split("\\|");
@@ -256,46 +247,48 @@ public class StateUpdater extends PlayerEventListenerHelper {
         }
     }
 
-    private void persistParams() {
-        mPrefs.setStateUpdaterParams(String.format("%s", mLastSpeed));
-    }
-
-    private void restoreParams() {
-        String params = mPrefs.getStateUpdaterParams();
-
-        if (params != null) {
-            mLastSpeed = Helpers.parseFloat(params);
-        }
-    }
-
-    ///**
-    // * Mirrors {@link #restoreVideoFormat()} to be sure that selection perfroms in any case
-    // */
-    //private void restoreVideoFormatSilent() {
-    //    if (getController().isInPIPMode()) {
-    //        getController().selectFormatSilent(FormatItem.VIDEO_SD_AVC_30);
-    //    } else if (mVideoFormat != null) {
-    //        getController().selectFormatSilent(mVideoFormat);
-    //    }
-    //}
-
     private void restoreVideoFormat() {
-        if (getController().isInPIPMode()) {
-            getController().selectFormat(FormatItem.VIDEO_SD_AVC_30);
-        } else if (mVideoFormat != null) {
-            getController().selectFormat(mVideoFormat);
+        if (mTempVideoFormat != null) {
+            getController().setFormat(mTempVideoFormat);
+        } else {
+            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1) {
+                getController().setFormat(FormatItem.VIDEO_HD_VP9_30);
+            } else {
+                getController().setFormat(mPlayerData.getFormat(FormatItem.TYPE_VIDEO));
+            }
         }
     }
 
     private void restoreAudioFormat() {
-        if (mAudioFormat != null) {
-            getController().selectFormat(mAudioFormat);
-        }
+        getController().setFormat(mPlayerData.getFormat(FormatItem.TYPE_AUDIO));
     }
 
     private void restoreSubtitleFormat() {
-        if (mSubtitleFormat != null) {
-            getController().selectFormat(mSubtitleFormat);
+        getController().setFormat(mPlayerData.getFormat(FormatItem.TYPE_SUBTITLE));
+    }
+
+    private void saveState() {
+        if (!getController().containsMedia()) {
+            return;
+        }
+
+        Video video = getController().getVideo();
+
+        if (video != null) {
+            // Don't save position if track is ended.
+            // Skip if paused.
+            long remainsMs = getController().getLengthMs() - getController().getPositionMs();
+            boolean isVideoEnded = remainsMs < 1_000;
+            if (!isVideoEnded || !getPlayEnabled()) {
+                mStates.put(video.videoId, new State(video.videoId, getController().getPositionMs(), getController().getLengthMs(), getController().getSpeed()));
+            } else {
+                // Add null state to prevent restore position from history
+                resetPosition(video.videoId);
+                video.percentWatched = 0;
+            }
+
+            updateHistory();
+            persistVideoState();
         }
     }
 
@@ -315,26 +308,32 @@ public class StateUpdater extends PlayerEventListenerHelper {
         }
 
         if (state != null && !item.isLive) {
-            boolean isVideoEnded = Math.abs(getController().getLengthMs() - state.positionMs) < 1_000;
-            if (!isVideoEnded) {
+            long remainsMs = getController().getLengthMs() - state.positionMs;
+            boolean isVideoEnded = remainsMs < 1_000;
+            if (!isVideoEnded || !getPlayEnabled()) {
                 getController().setPositionMs(state.positionMs);
             }
         }
 
-        getController().setPlay(mIsPlaying);
+        if (!mIsPlayBlocked) {
+            getController().setPlay(getPlayEnabled());
+        }
     }
 
     private void restoreSpeed(Video item) {
         boolean isLive = getController().getLengthMs() - getController().getPositionMs() < 30_000;
 
-        if (!isLive) {
-            if (mLastSpeed != -1) {
-                getController().setSpeed(mLastSpeed);
-            } else {
-                getController().setSpeed(1.0f); // speed may be changed before, so do reset to default
-            }
+        if (isLive) {
+            getController().setSpeed(1.0f);
         } else {
-            getController().setSpeed(1.0f); // speed may be changed before, so do reset to default
+            State state = mStates.get(item.videoId);
+            getController().setSpeed(state != null && mPlayerData.isRememberSpeedEachEnabled() ? state.speed : mPlayerData.getSpeed());
+        }
+    }
+
+    private void resetSpeedIfNeeded() {
+        if (mPlayerData != null && !mPlayerData.isRememberSpeedEnabled()) {
+            mPlayerData.setSpeed(1.0f);
         }
     }
 
@@ -350,11 +349,24 @@ public class StateUpdater extends PlayerEventListenerHelper {
         return newPositionMs;
     }
 
-    public FormatItem getVideoFormat() {
-        return mVideoFormat;
+    public void blockPlay(boolean block) {
+        mIsPlayBlocked = block;
+    }
+
+    private void setPlayEnabled(boolean isPlayEnabled) {
+        Log.d(TAG, "setPlayEnabled %s", isPlayEnabled);
+        mIsPlayEnabled = isPlayEnabled;
+    }
+
+    private boolean getPlayEnabled() {
+        return mIsPlayEnabled;
     }
 
     private void updateHistory() {
+        if (getController().getVideo() == null) {
+            return;
+        }
+
         RxUtils.disposeActions(mHistoryAction);
 
         Video item = getController().getVideo();
@@ -371,9 +383,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
             historyObservable = mediaItemManager.updateHistoryPositionObserve(item.videoId, positionSec);
         }
 
-        mHistoryAction = historyObservable
-                .subscribeOn(Schedulers.newThread())
-                .subscribe((Void v) -> {}, error -> Log.e(TAG, "History update error: " + error));
+        mHistoryAction = RxUtils.execute(historyObservable);
     }
 
     private static class State {
@@ -409,8 +419,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
             }
 
             String videoId = split[0];
-            long positionMs = Helpers.parseInt(split[1]);
-            long lengthMs = Helpers.parseInt(split[2]);
+            long positionMs = Helpers.parseLong(split[1]);
+            long lengthMs = Helpers.parseLong(split[2]);
             float speed = Helpers.parseFloat(split[3]);
 
             return new State(videoId, positionMs, lengthMs, speed);

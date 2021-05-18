@@ -5,13 +5,14 @@ import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class AccountsData {
+    private static final String ACCOUNTS_DATA = "accounts_data";
     @SuppressLint("StaticFieldLeak")
     private static AccountsData sInstance;
     private final Context mContext;
     private final AppPrefs mAppPrefs;
     private boolean mIsSelectAccountOnBootEnabled;
 
-    public AccountsData(Context context) {
+    private AccountsData(Context context) {
         mContext = context;
         mAppPrefs = AppPrefs.instance(mContext);
         restoreState();
@@ -34,15 +35,15 @@ public class AccountsData {
         return mIsSelectAccountOnBootEnabled;
     }
 
-    private void persistState() {
-        mAppPrefs.setAccountsData(Helpers.mergeObject(mIsSelectAccountOnBootEnabled));
-    }
-
     private void restoreState() {
-        String data = mAppPrefs.getAccountsData();
+        String data = mAppPrefs.getData(ACCOUNTS_DATA);
 
-        String[] split = Helpers.splitObject(data);
+        String[] split = Helpers.splitObjectLegacy(data);
 
         mIsSelectAccountOnBootEnabled = Helpers.parseBoolean(split, 0, true);
+    }
+
+    private void persistState() {
+        mAppPrefs.setData(ACCOUNTS_DATA, Helpers.mergeObject(mIsSelectAccountOnBootEnabled));
     }
 }

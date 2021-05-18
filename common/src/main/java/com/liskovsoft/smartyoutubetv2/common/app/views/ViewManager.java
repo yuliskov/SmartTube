@@ -11,8 +11,10 @@ import androidx.annotation.NonNull;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
 import java.util.HashMap;
@@ -41,7 +43,7 @@ public class ViewManager {
         mActivityStack = new Stack<>();
         mPrefs = AppPrefs.instance(context);
 
-        restoreState();
+        //restoreState();
     }
 
     public static ViewManager instance(Context context) {
@@ -75,9 +77,10 @@ public class ViewManager {
     public void startView(Class<?> viewClass, boolean forceStart) {
         mMoveViewsToBack = false; // Essential part or new view will be pause immediately
 
-        if (!forceStart && doThrottle()) {
-            return;
-        }
+        //if (!forceStart && doThrottle()) {
+        //    Log.d(TAG, "Too many events. Skipping startView...");
+        //    return;
+        //}
 
         Class<?> activityClass = mViewMapping.get(viewClass);
 
@@ -89,10 +92,6 @@ public class ViewManager {
     }
 
     public boolean startParentView(Activity activity) {
-        if (doThrottle()) {
-            return true;
-        }
-
         if (activity.getIntent() != null) {
             removeTopActivity();
 
@@ -108,7 +107,7 @@ public class ViewManager {
                 mMoveViewsToBack = true;
 
                 if (mIsSinglePlayerMode) {
-                    activity.moveTaskToBack(true);
+                    safeMoveTaskToBack(activity);
                     return true;
                 }
 
@@ -119,7 +118,7 @@ public class ViewManager {
                 Log.d(TAG, "Launching parent activity: " + parentActivity.getSimpleName());
                 Intent intent = new Intent(activity, parentActivity);
 
-                activity.startActivity(intent);
+                safeStartActivity(activity, intent);
             } catch (ActivityNotFoundException e) {
                 e.printStackTrace();
                 Log.e(TAG, "Parent activity not found.");
@@ -132,10 +131,6 @@ public class ViewManager {
     public void startDefaultView() {
         mMoveViewsToBack = false;
         mIsSinglePlayerMode = false;
-
-        if (doThrottle()) {
-            return;
-        }
 
         Class<?> lastActivity;
 
@@ -160,7 +155,7 @@ public class ViewManager {
         // Fix: Calling startActivity() from outside of an Activity  context requires the FLAG_ACTIVITY_NEW_TASK flag
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        mContext.startActivity(intent);
+        safeStartActivity(mContext, intent);
     }
 
     private boolean doThrottle() {
@@ -178,6 +173,11 @@ public class ViewManager {
         }
 
         Class<?> activityClass = activity.getClass();
+
+        // Open from phone's history fix. Not parent? Make the root then.
+        if (mParentMapping.get(activityClass) == null) {
+            mActivityStack.clear();
+        }
 
         // reorder activity
         mActivityStack.remove(activityClass);
@@ -222,9 +222,14 @@ public class ViewManager {
         mDefaultTop = activity == null ? null : activity.getClass();
     }
 
+    public void removeTop(Activity activity) {
+        mActivityStack.remove(activity.getClass());
+    }
+
     private boolean checkMoveViewsToBack(Activity activity) {
         if (mMoveViewsToBack) {
-            activity.moveTaskToBack(true);
+            safeMoveTaskToBack(activity);
+
             return true;
         }
 
@@ -252,25 +257,25 @@ public class ViewManager {
 
         mMoveViewsToBack = false;
 
-        persistState();
+        //persistState();
 
         triggerRebirth3(mContext, mViewMapping.get(SplashView.class));
     }
 
-    private void persistState() {
-        mPrefs.setViewManagerData(String.format("%s,%s", mMoveViewsToBack, mIsSinglePlayerMode));
-    }
-
-    private void restoreState() {
-        String data = mPrefs.getViewManagerData();
-
-        if (data != null) {
-            String[] split = data.split(",");
-
-            mMoveViewsToBack = Helpers.parseBoolean(split, 0);
-            mIsSinglePlayerMode = Helpers.parseBoolean(split, 1);
-        }
-    }
+    //private void persistState() {
+    //    mPrefs.setViewManagerData(String.format("%s,%s", mMoveViewsToBack, mIsSinglePlayerMode));
+    //}
+    //
+    //private void restoreState() {
+    //    String data = mPrefs.getViewManagerData();
+    //
+    //    if (data != null) {
+    //        String[] split = data.split(",");
+    //
+    //        mMoveViewsToBack = Helpers.parseBoolean(split, 0);
+    //        mIsSinglePlayerMode = Helpers.parseBoolean(split, 1);
+    //    }
+    //}
 
     /**
      * More info: https://stackoverflow.com/questions/6609414/how-do-i-programmatically-restart-an-android-app
@@ -302,5 +307,74 @@ public class ViewManager {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(intent);
         Runtime.getRuntime().exit(0);
+    }
+
+    public void properlyFinishTheApp() {
+        Log.d(TAG, "Finishing the app...");
+        mMoveViewsToBack = true;
+        //persistState();
+        //exitToHome();
+        finishTheApp();
+    }
+
+    private void exitToHome() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        safeStartActivity(mContext, intent);
+    }
+
+    private void finishTheApp() {
+        SplashPresenter.instance(mContext).unhold();
+        clearCaches();
+        destroyApp();
+    }
+
+    public static void destroyApp() {
+        Runtime.getRuntime().exit(0);
+    }
+
+    public Class<?> getTopView() {
+        Class<?> topActivity = getTopActivity();
+
+        if (topActivity == null) {
+            return null;
+        }
+
+        for (Map.Entry<Class<?>, Class<? extends Activity>> entry: mViewMapping.entrySet()) {
+            if (entry.getValue() == topActivity) {
+                return entry.getKey();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Fix: java.lang.NullPointerException Attempt to read from field<br/>
+     * 'com.android.server.am.TaskRecord com.android.server.am.ActivityRecord.task'<br/>
+     * on a null object reference<br/>
+     * <br/>
+     * Fix: java.lang.IllegalArgumentException<br/>
+     * View=android.widget.TextView not attached to window manager
+     */
+    private void safeMoveTaskToBack(Activity activity) {
+        try {
+            activity.moveTaskToBack(true);
+        } catch (NullPointerException | IllegalArgumentException e) {
+            Log.e(TAG, "Error when moving task to back: %s", e.getMessage());
+        }
+    }
+
+    /**
+     * Fix: java.lang.IllegalArgumentException<br/>
+     * View=android.widget.TextView not attached to window manager
+     */
+    private void safeStartActivity(Context context, Intent intent) {
+        try {
+            context.startActivity(intent);
+        } catch (IllegalArgumentException e) {
+            Log.e(TAG, "Error when starting activity: %s", e.getMessage());
+        }
     }
 }

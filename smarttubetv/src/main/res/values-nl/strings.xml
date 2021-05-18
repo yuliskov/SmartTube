@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="signin_view_title">Gebruikerscode laden...</string>
-    <string name="signin_view_description">Aanmelden met deze code op pagina %s</string>
+    <string name="signin_view_title">Gebruikerscode laden</string>
+    <string name="signin_view_description">Aanmelden met deze code op webpagina %s</string>
     <string name="signin_view_action_text">Klaar</string>
-    <string name="action_subscribe_off">Abonnement uit</string>
-    <string name="action_subscribe_on">Abonnement aan</string>
-    <string name="action_channel">Kanaal openen</string>
+    <string name="action_subscribe_off">Abonnement afgemeld</string>
+    <string name="action_subscribe_on">Abonnement aangemeld</string>
+    <string name="action_channel">Kanaal</string>
     <string name="action_playlist_add">Toevoegen aan playlist</string>
     <string name="action_video_stats">Video Stats</string>
     <string name="require_checked">Vereist \"%s\"</string>
@@ -13,6 +13,10 @@
     <string name="player_remaining_time">%s</string>
     <string name="badge_new_content">NIEUW</string>
     <string name="badge_live">LIVE</string>
+    <string name="action_pip">Scherm-in-scherm</string>
+    <string name="add_device_view_description">Apparaat toevoegen in je YouTube app op je smartphone/tablet:\ndeze code invoeren onder Instellingen > Op TV bekijken > TV-code invoeren</string>
+    <string name="playback_controls_repeat_pause">Pauze herhalen</string>
+    <string name="playback_controls_repeat_list">Playlist herhalen</string>
     <!-- Vineyard -->
     <string name="title_oops">Oeps</string>
     <string name="title_no_videos">Geen video\'s</string>

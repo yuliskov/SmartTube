@@ -65,7 +65,7 @@ public class SignInPresenter extends BasePresenter<SignInView> {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         userCode -> getView().showCode(userCode),
-                        error -> Log.e(TAG, error),
+                        error -> Log.e(TAG, "Sign in error: %s", error.getMessage()),
                         () -> {
                             // Success
                             mBrowsePresenter.refresh();
@@ -73,7 +73,8 @@ public class SignInPresenter extends BasePresenter<SignInView> {
                                 getView().close();
                             }
                             mSplashPresenter.updateChannels();
-                        });
+                        }
+                 );
     }
 
     public void start() {

@@ -235,12 +235,12 @@ public class SearchSupportFragment extends Fragment {
     private boolean mPendingStartRecognitionWhenPaused;
     private SearchBar.SearchBarPermissionListener mPermissionListener =
             new SearchBar.SearchBarPermissionListener() {
-        @Override
-        public void requestAudioPermission() {
-            requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO},
-                    AUDIO_PERMISSION_REQUEST_CODE);
-        }
-    };
+                @Override
+                public void requestAudioPermission() {
+                    requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO},
+                            AUDIO_PERMISSION_REQUEST_CODE);
+                }
+            };
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -320,10 +320,8 @@ public class SearchSupportFragment extends Fragment {
                 if (DEBUG) Log.v(TAG, String.format("onSearchQuerySubmit %s", query));
                 submitQuery(query);
                 mScrollToEndAfterTextChanged = true;
-                if (BuildConfig.FLAVOR.equals("stbolshoetv")) {
-                    InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputMethodManager.hideSoftInputFromWindow(mSearchBar.getWindowToken(), 0);
-                }
+                InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(mSearchBar.getWindowToken(), 0);
             }
 
             @Override
@@ -340,6 +338,7 @@ public class SearchSupportFragment extends Fragment {
         // MOD: inner search bar views for improved focus handling
 
         mSearchTextEditor = mSearchBar.findViewById(R.id.lb_search_text_editor);
+        mSearchTextEditor.setSelectAllOnFocus(true); // easy clear previous search
         mSearchTextEditor.setOnFocusChangeListener((v, focused) -> {
             Log.d(TAG, "on search field focused");
             if (focused && mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
@@ -399,6 +398,9 @@ public class SearchSupportFragment extends Fragment {
             }
         });
         mSpeechOrbView.setClickable(false);
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N_MR1) {
+            mSpeechOrbView.setVisibility(View.INVISIBLE);
+        }
         // End MOD
 
         readArguments(getArguments());
@@ -481,15 +483,20 @@ public class SearchSupportFragment extends Fragment {
             mSearchBar.startRecognition();
         } else {
             // Ensure search bar state consistency when using external recognizer
-            mSearchBar.stopRecognition();
+//            mSearchBar.stopRecognition();
         }
     }
 
     @Override
     public void onPause() {
-        releaseRecognizer();
         mIsPaused = true;
         super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        releaseRecognizer();
+        super.onStop();
     }
 
     @Override
@@ -799,6 +806,12 @@ public class SearchSupportFragment extends Fragment {
         // MOD: hide kbd on back properly
         if (mRowsSupportFragment.getVerticalGridView().requestFocus()) {
             mStatus &= ~RESULTS_CHANGED;
+        }
+    }
+
+    protected void selectAllText() {
+        if (mSearchTextEditor != null) {
+            mSearchTextEditor.selectAll();
         }
     }
 

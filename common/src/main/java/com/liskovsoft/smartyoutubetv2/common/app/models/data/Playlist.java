@@ -47,9 +47,12 @@ public class Playlist {
             mPlaylist.set(mCurrentPosition, video);
         } else {
             mPlaylist.add(++mCurrentPosition, video);
-        }
 
-        trimPlaylist();
+            // Video opened from the browser or suggestions.
+            // In this case remove all next items.
+            trimPlaylist();
+            stripPrevItem();
+        }
     }
 
     /**
@@ -106,5 +109,20 @@ public class Playlist {
         }
 
         return null;
+    }
+
+    /**
+     * Do some cleanup to prevent possible OOM exception
+     */
+    private void stripPrevItem() {
+        int prevPosition = mCurrentPosition - 1;
+
+        if (prevPosition < mPlaylist.size() && prevPosition >= 0) {
+            Video prevItem = mPlaylist.get(prevPosition);
+            if (prevItem != null) {
+                prevItem.mediaItem = null;
+                prevItem.nextMediaItem = null;
+            }
+        }
     }
 }

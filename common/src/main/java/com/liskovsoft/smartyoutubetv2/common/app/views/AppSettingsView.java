@@ -5,8 +5,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter
 import java.util.List;
 
 public interface AppSettingsView {
-    void addCategories(List<SettingsCategory> categories);
     void setTitle(String title);
+    void addCategories(List<SettingsCategory> categories);
     void clear();
     void finish();
 }

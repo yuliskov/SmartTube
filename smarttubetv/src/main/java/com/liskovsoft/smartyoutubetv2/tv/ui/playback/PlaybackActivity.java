@@ -9,6 +9,9 @@ import android.view.MotionEvent;
 
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
@@ -53,6 +56,15 @@ public class PlaybackActivity extends LeanbackActivity {
         }
 
         return super.dispatchKeyEvent(event);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (mPlaybackFragment != null) {
+            mPlaybackFragment.onDispatchTouchEvent(event);
+        }
+
+        return super.dispatchTouchEvent(event);
     }
 
     @Override
@@ -121,18 +133,20 @@ public class PlaybackActivity extends LeanbackActivity {
     }
 
     private boolean wannaEnterToPIP() {
-        return mPlaybackFragment.isPIPEnabled() && !isInPictureInPictureMode() && !mPlaybackFragment.isPlayBehindEnabled();
+        return mPlaybackFragment != null && mPlaybackFragment.getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_PIP && !isInPictureInPictureMode();
     }
 
-    @Override
-    public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
-        super.onPictureInPictureModeChanged(isInPictureInPictureMode);
-
-        mPlaybackFragment.reloadPlayback();
-    }
+    //@Override
+    //public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode) {
+    //    super.onPictureInPictureModeChanged(isInPictureInPictureMode);
+    //
+    //    mPlaybackFragment.reloadPlayback();
+    //}
 
     @Override
     public void finish() {
+        Log.d(TAG, "Finishing activity...");
+
         // NOTE: When exiting PIP mode onPause is called immediately after onResume
 
         // Also, avoid enter pip on stop!
@@ -142,14 +156,8 @@ public class PlaybackActivity extends LeanbackActivity {
         enterPIPMode();
 
         super.finish();
-    }
 
-    public boolean isInPIPMode() {
-        if (Build.VERSION.SDK_INT < 24) {
-            return false;
-        }
-
-        return isInPictureInPictureMode();
+        mPlaybackFragment.onFinish();
     }
 
     @SuppressWarnings("deprecation")
@@ -185,10 +193,25 @@ public class PlaybackActivity extends LeanbackActivity {
 
     @Override
     public void onUserLeaveHint () {
-        if (mPlaybackFragment.isPlayBehindEnabled()) {
-            enterBackgroundPlayMode();
-        } else if (mPlaybackFragment.isPIPEnabled() && !mPlaybackFragment.isControlsShown()) {
-            enterPIPMode();
+        // Check that user not open dialog instead of really leaving the activity
+        if (!AppSettingsPresenter.instance(this).isDialogShown()) {
+            switch (mPlaybackFragment.getPlaybackMode()) {
+                case PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND:
+                    enterBackgroundPlayMode();
+                    ViewManager.instance(this).removeTop(this); // return to browser instead of player
+                    break;
+                case PlaybackEngineController.BACKGROUND_MODE_PIP:
+                    enterPIPMode();
+                    ViewManager.instance(this).removeTop(this); // return to browser instead of player
+                    break;
+            }
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        ViewManager.instance(this).blockTop(isInPIPMode() ? this : null);
     }
 }

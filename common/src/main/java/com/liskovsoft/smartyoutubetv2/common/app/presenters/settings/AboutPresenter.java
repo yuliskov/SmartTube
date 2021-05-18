@@ -1,16 +1,13 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
-import com.liskovsoft.appupdatechecker2.AppUpdateChecker;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
-import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppUpdatePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +17,7 @@ public class AboutPresenter extends BasePresenter<Void> {
     private static final String DONATIONALERTS_URL = "https://www.donationalerts.com/r/firsthash";
     private static final String QIWI_URL = "https://qiwi.com/n/GUESS025";
     private static final String PRIVATBANK_URL = "https://privatbank.ua/ru/sendmoney?payment=9e46a6ef78";
+    private static final String BTC_HASH = "BTC: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx";
 
     public AboutPresenter(Context context) {
         super(context);
@@ -49,24 +47,24 @@ public class AboutPresenter extends BasePresenter<Void> {
     }
 
     private void appendAutoUpdateSwitch(AppSettingsPresenter settingsPresenter) {
-        AppUpdateChecker mUpdateChecker = new AppUpdateChecker(getContext(), null);
-
-        settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.check_updates_auto), optionItem -> {
-            mUpdateChecker.enableUpdateCheck(optionItem.isSelected());
-        }, mUpdateChecker.isUpdateCheckEnabled()));
+//        AppUpdateChecker mUpdateChecker = new AppUpdateChecker(getContext(), null);
+//
+//        settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.check_updates_auto), optionItem -> {
+//            mUpdateChecker.enableUpdateCheck(optionItem.isSelected());
+//        }, mUpdateChecker.isUpdateCheckEnabled()));
     }
 
     private void appendUpdateCheckButton(AppSettingsPresenter settingsPresenter) {
-        OptionItem updateCheckOption = UiOptionItem.from(
-                getContext().getString(R.string.check_for_updates),
-                option -> AppUpdatePresenter.instance(getContext()).start(true));
-
-        settingsPresenter.appendSingleButton(updateCheckOption);
+//        OptionItem updateCheckOption = UiOptionItem.from(
+//                getContext().getString(R.string.check_for_updates),
+//                option -> AppUpdatePresenter.instance(getContext()).start(true));
+//
+//        settingsPresenter.appendSingleButton(updateCheckOption);
     }
 
     private void appendSiteLink(AppSettingsPresenter settingsPresenter) {
         OptionItem webSiteOption = UiOptionItem.from(String.format("%s (GitHub)", getContext().getString(R.string.web_site)),
-                option -> Helpers.openLink(WEB_SITE_URL, getContext()));
+                option -> Utils.openLink(getContext(), WEB_SITE_URL));
 
         settingsPresenter.appendSingleButton(webSiteOption);
     }
@@ -76,19 +74,19 @@ public class AboutPresenter extends BasePresenter<Void> {
 
         donateOptions.add(UiOptionItem.from(
                 "PrivatBank (UA)",
-                option -> Helpers.openLink(PRIVATBANK_URL, getContext())));
+                option -> Utils.openLink(getContext(), Utils.toQrCodeLink(PRIVATBANK_URL))));
 
         donateOptions.add(UiOptionItem.from(
                 "QIWI (RU)",
-                option -> Helpers.openLink(QIWI_URL, getContext())));
+                option -> Utils.openLink(getContext(), Utils.toQrCodeLink(QIWI_URL))));
 
         donateOptions.add(UiOptionItem.from(
                 "PayPal",
-                option -> Helpers.openLink(DONATIONALERTS_URL, getContext())));
+                option -> Utils.openLink(getContext(), Utils.toQrCodeLink(DONATIONALERTS_URL))));
 
         donateOptions.add(UiOptionItem.from(
-                "BTC: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx",
-                null));
+                "BTC",
+                option -> Utils.openLink(getContext(), Utils.toQrCodeLink(BTC_HASH))));
 
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.donation), donateOptions);
     }

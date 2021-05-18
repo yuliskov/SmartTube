@@ -9,19 +9,24 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import androidx.leanback.app.RowsSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.ObjectAdapter;
-
+import androidx.leanback.widget.RowPresenter.ViewHolder;
+import androidx.leanback.widget.SpeechRecognitionCallback;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.SearchTagsProvider;
+import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.PaginationAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.TagAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SearchSupportFragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         implements SearchSupportFragment.SearchResultProvider, SearchView {
@@ -32,7 +37,8 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     private TagAdapter mSearchTagsAdapter;
     private ObjectAdapter mItemResultsAdapter;
     private ArrayObjectAdapter mResultsAdapter;
-    
+    private ListRowPresenter mResultsPresenter;
+
     private boolean mIsStopping;
     private SearchTagsProvider mSearchTagsProvider;
     private ProgressBarManager mProgressBarManager;
@@ -42,7 +48,9 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         super.onCreate(savedInstanceState);
 
         mProgressBarManager = new ProgressBarManager();
-        mResultsAdapter = new ArrayObjectAdapter(new ListRowPresenter());
+        mResultsPresenter = new ListRowPresenter();
+        mResultsAdapter = new ArrayObjectAdapter(mResultsPresenter);
+        mSearchTagsAdapter = new TagAdapter(getActivity(), "", getSearchTextEditorId());
         mHandler = new Handler();
         setSearchResultProvider(this);
         setupListeners();
@@ -146,6 +154,38 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
 
     private void performSearch(PaginationAdapter adapter) {
         String query = adapter.getAdapterOptions().get(PaginationAdapter.KEY_TAG);
-        mSearchTagsProvider.search(query, adapter::addAllItems);
+        mSearchTagsProvider.search(query, results -> {
+            adapter.addAllItems(results);
+            // Same suggestions in the keyboard
+            //displayCompletions(toCompletions(results));
+        });
+    }
+
+    private List<String> toCompletions(List<Tag> results) {
+        List<String> result = null;
+
+        if (results != null) {
+            result = new ArrayList<>();
+
+            for (Tag tag : results) {
+                result.add(tag.tag);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Disable scrolling on partially updated rows. This prevent controls from misbehaving.
+     */
+    protected void freeze(boolean freeze) {
+        // Disable scrolling on partially updated rows. This prevent controls from misbehaving.
+        RowsSupportFragment rowsSupportFragment = getRowsSupportFragment();
+        if (mResultsPresenter != null && rowsSupportFragment != null) {
+            ViewHolder vh = rowsSupportFragment.getRowViewHolder(rowsSupportFragment.getSelectedPosition());
+            if (vh != null) {
+                mResultsPresenter.freeze(vh, freeze);
+            }
+        }
     }
 }

@@ -11,12 +11,15 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.upstream.DefaultAllocator;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerController;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 public class ExoPlayerInitializer {
     private final int mDeviceRam;
-    private int mBufferType = PlayerController.BUFFER_MED;
+    private final PlayerData mPlayerData;
 
     public ExoPlayerInitializer(Context activity) {
+        mPlayerData = PlayerData.instance(activity);
+
         int deviceRam = Helpers.getDeviceRam(activity);
 
         // If ram is too big, bigger then max int value DeviceRam will return a negative number...
@@ -25,13 +28,13 @@ public class ExoPlayerInitializer {
         mDeviceRam = deviceRam < 0 ? 196000000 : deviceRam;
     }
 
-    public SimpleExoPlayer createPlayer(Context activity, DefaultRenderersFactory renderersFactory, DefaultTrackSelector trackSelector) {
+    public SimpleExoPlayer createPlayer(Context context, DefaultRenderersFactory renderersFactory, DefaultTrackSelector trackSelector) {
         DefaultLoadControl loadControl = createLoadControl();
 
         // HDR fix?
-        //trackSelector.setParameters(trackSelector.buildUponParameters().setTunnelingAudioSessionId(C.generateAudioSessionIdV21(activity)));
+        //trackSelector.setParameters(trackSelector.buildUponParameters().setTunnelingAudioSessionId(C.generateAudioSessionIdV21(context)));
 
-        SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(activity, renderersFactory, trackSelector, loadControl);
+        SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(context, renderersFactory, trackSelector, loadControl);
         enableAudioFocus(player);
 
         return player;
@@ -55,7 +58,7 @@ public class ExoPlayerInitializer {
     private DefaultLoadControl createLoadControl() {
         DefaultLoadControl.Builder baseBuilder = new DefaultLoadControl.Builder();
 
-        if (PlayerController.BUFFER_HIGH == mBufferType) {
+        if (PlayerController.BUFFER_HIGH == mPlayerData.getVideoBufferType()) {
             int minBufferMs = 30000; // 30 seconds
             int maxBufferMs = 36000000; // technical infinity, recommended here a very high number, the max will be based on setTargetBufferBytes() value
             int bufferForPlaybackMs = 500; // half a seconds can be lower as lowe as 250
@@ -64,7 +67,7 @@ public class ExoPlayerInitializer {
                     .setAllocator(new DefaultAllocator(true, C.DEFAULT_BUFFER_SEGMENT_SIZE))
                     .setBufferDurationsMs(minBufferMs, maxBufferMs, bufferForPlaybackMs, bufferForPlaybackAfterRebufferMs)
                     .setTargetBufferBytes(mDeviceRam);
-        } else if (PlayerController.BUFFER_LOW == mBufferType) {
+        } else if (PlayerController.BUFFER_LOW == mPlayerData.getVideoBufferType()) {
             baseBuilder
                     .setBufferDurationsMs(
                             DefaultLoadControl.DEFAULT_MAX_BUFFER_MS / 3,
@@ -76,13 +79,5 @@ public class ExoPlayerInitializer {
         // Normal buffer is a default one
 
         return baseBuilder.createDefaultLoadControl();
-    }
-
-    public void setBufferType(int type) {
-        mBufferType = type;
-    }
-
-    public int getBufferType() {
-        return mBufferType;
     }
 }

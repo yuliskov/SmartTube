@@ -3,13 +3,14 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-
 import androidx.fragment.app.Fragment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerHandlerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.AutoFrameRateManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.ContentBlockManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.RemoteControlManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HqDialogManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUiManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.StateUpdater;
@@ -38,26 +39,37 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     private WeakReference<PlaybackController> mController = new WeakReference<>(null);
     private WeakReference<Activity> mActivity = new WeakReference<>(null);
 
-    public MainPlayerEventBridge() {
+    public MainPlayerEventBridge(Context context) {
+        if (context instanceof Activity) {
+            mActivity = new WeakReference<>((Activity) context);
+        }
+
         PlayerUiManager uiManager = new PlayerUiManager();
-        VideoLoader videoLoader = new VideoLoader();
-        StateUpdater stateUpdater = new StateUpdater();
         SuggestionsLoader suggestionsLoader = new SuggestionsLoader();
+        StateUpdater stateUpdater = new StateUpdater();
+        ContentBlockManager contentBlockManager = new ContentBlockManager();
+
+        VideoLoader videoLoader = new VideoLoader(suggestionsLoader);
+        RemoteControlManager commandManager = new RemoteControlManager(context, suggestionsLoader);
         HqDialogManager hqDialogManager = new HqDialogManager(stateUpdater);
+
         suggestionsLoader.addMetadataListener(uiManager);
+        suggestionsLoader.addMetadataListener(contentBlockManager);
 
         // NOTE: position matters!!!
-        mEventListeners.add(new AutoFrameRateManager(hqDialogManager));
+        mEventListeners.add(new AutoFrameRateManager(hqDialogManager, stateUpdater));
         mEventListeners.add(uiManager);
         mEventListeners.add(hqDialogManager);
         mEventListeners.add(stateUpdater);
         mEventListeners.add(suggestionsLoader);
         mEventListeners.add(videoLoader);
+        mEventListeners.add(commandManager);
+        mEventListeners.add(contentBlockManager);
     }
 
-    public static MainPlayerEventBridge instance() {
+    public static MainPlayerEventBridge instance(Context context) {
         if (sInstance == null) {
-            sInstance = new MainPlayerEventBridge();
+            sInstance = new MainPlayerEventBridge(context);
         }
 
         return sInstance;
@@ -301,6 +313,16 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     @Override
     public void onSearchClicked() {
         process(PlayerUiEventListener::onSearchClicked);
+    }
+
+    @Override
+    public void onVideoZoomClicked() {
+        process(PlayerUiEventListener::onVideoZoomClicked);
+    }
+
+    @Override
+    public void onPipClicked() {
+        process(PlayerUiEventListener::onPipClicked);
     }
 
     // End UI events

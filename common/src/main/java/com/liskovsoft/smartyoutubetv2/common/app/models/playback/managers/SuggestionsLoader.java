@@ -19,11 +19,13 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class SuggestionsLoader extends PlayerEventListenerHelper {
     private static final String TAG = SuggestionsLoader.class.getSimpleName();
-    private final List<MetadataListener> mListeners = new ArrayList<>();
+    private final Set<MetadataListener> mListeners = new HashSet<>();
     private Disposable mMetadataAction;
     private Disposable mScrollAction;
 
@@ -72,17 +74,18 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        continueMediaGroup -> getController().updateSuggestions(VideoGroup.from(continueMediaGroup, group.getCategory()))
-                        , error -> Log.e(TAG, "continueGroup error: " + error));
+                        continueMediaGroup ->
+                                getController().updateSuggestions(VideoGroup.from(continueMediaGroup, group.getCategory())),
+                        error -> Log.e(TAG, "continueGroup error: %s", error.getMessage())
+                );
     }
 
-    private void syncCurrentVideo(MediaItemMetadata mediaItemMetadata) {
-        Video video = getController().getVideo();
+    private void syncCurrentVideo(MediaItemMetadata mediaItemMetadata, Video video) {
         video.sync(mediaItemMetadata, PlayerData.instance(getActivity()).isShowFullDateEnabled());
         getController().setVideo(video);
     }
 
-    private void loadSuggestions(Video video) {
+    public void loadSuggestions(Video video) {
         if (video == null) {
             Log.e(TAG, "loadSuggestions: video is null");
             return;
@@ -95,40 +98,57 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
         Observable<MediaItemMetadata> observable;
 
-        if (video.mediaItem != null) {
+        if (video.mediaItem != null && !video.isRemote) {
             observable = mediaItemManager.getMetadataObserve(video.mediaItem);
         } else {
             // Video might be loaded from channels
-            observable = mediaItemManager.getMetadataObserve(video.videoId);
+            observable = mediaItemManager.getMetadataObserve(video.videoId, video.playlistId, video.playlistIndex);
         }
+
+        clearSuggestionsIfNeeded(video);
 
         mMetadataAction = observable
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::loadSuggestions,
-                           error -> Log.e(TAG, "loadSuggestions error: " + error));
+                .subscribe(
+                        metadata -> updateSuggestions(metadata, video),
+                        error -> Log.e(TAG, "loadSuggestions error: %s", error.getMessage())
+                );
     }
 
-    private void loadSuggestions(MediaItemMetadata mediaItemMetadata) {
-        syncCurrentVideo(mediaItemMetadata);
+    private void clearSuggestionsIfNeeded(Video video) {
+        if (video == null || getController() == null) {
+            return;
+        }
+
+        // Free a lot of memory
+        if (video.isRemote || !getController().isSuggestionsShown()) {
+            getController().clearSuggestions();
+        }
+    }
+
+    private void updateSuggestions(MediaItemMetadata mediaItemMetadata, Video video) {
+        syncCurrentVideo(mediaItemMetadata, video);
 
         callListener(mediaItemMetadata);
 
         List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
 
         if (suggestions == null) {
-            Log.e(TAG, "loadSuggestions: Can't obtain suggestions for video: " + getController().getVideo().title);
+            Log.e(TAG, "loadSuggestions: Can't obtain suggestions for video: " + video.title);
             return;
         }
 
-        //if (getController().getVideo().isPlaylistItem() && !getController().isSuggestionsEmpty()) {
-        //    Log.d(TAG, "Don't reload suggestions when watching playlist items.");
-        //    return;
-        //}
+        if (!video.isRemote) {
+            if (video.isPlaylistItem() && !getController().isSuggestionsEmpty()) {
+                Log.d(TAG, "Skip reloading suggestions when watching playlist.");
+                return;
+            }
 
-        if (getController().isSuggestionsShown()) {
-            Log.d(TAG, "Suggestions is opened. Seems that user want to stay here.");
-            return;
+            if (getController().isSuggestionsShown()) {
+                Log.d(TAG, "Suggestions is opened. Seems that user want to stay here.");
+                return;
+            }
         }
 
         getController().clearSuggestions(); // clear previous videos

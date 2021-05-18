@@ -3,13 +3,17 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 public class SplashPresenter extends BasePresenter<SplashView> {
     private static final String CHANNELS_RECEIVER_CLASS_NAME = "com.liskovsoft.leanbackassistant.channels.RunOnInstallReceiver";
@@ -20,7 +24,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     private SplashPresenter(Context context) {
         super(context);
-        GlobalPreferences.instance(context); // auth token storage init
     }
 
     public static SplashPresenter instance(Context context) {
@@ -42,14 +45,16 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     public void onViewInitialized() {
         applyRunOnceTasks();
 
+        showAccountSelection();
+
         applyNewIntent(getView().getNewIntent());
     }
 
     private void applyRunOnceTasks() {
         if (!mRunOnce) {
-            showAccountSelection();
             updateChannels();
             getBackupDataOnce();
+            runRemoteControlTasks();
             mRunOnce = true;
         }
     }
@@ -74,6 +79,14 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         String mBackupVideoId = prefs.getBackupData();
         prefs.setBackupData(null);
         return mBackupVideoId;
+    }
+
+    private void runRemoteControlTasks() {
+        // Fake service to prevent the app from destroying
+        if (getContext() != null) {
+            //Utils.startRemoteControlService(getContext());
+            Utils.startRemoteControlWorkRequest(getContext());
+        }
     }
 
     public void updateChannels() {
@@ -104,7 +117,10 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             playbackPresenter.openVideo(videoId);
 
             ViewManager viewManager = ViewManager.instance(getContext());
-            viewManager.setSinglePlayerMode(true);
+
+            if (MainUIData.instance(getContext()).isReturnToLauncherEnabled()) {
+                viewManager.setSinglePlayerMode(true);
+            }
         } else {
             String searchText = IntentExtractor.extractSearchText(intent);
 
@@ -125,6 +141,11 @@ public class SplashPresenter extends BasePresenter<SplashView> {
                     } else {
                         ViewManager viewManager = ViewManager.instance(getContext());
                         viewManager.startDefaultView();
+
+                        // For debug purpose when using ATV bridge.
+                        if (IntentExtractor.hasData(intent) && !IntentExtractor.isChannelUrl(intent)) {
+                            MessageHelpers.showLongMessage(getContext(), String.format("Can't process intent: %s", Helpers.toString(intent)));
+                        }
                     }
                 }
             }

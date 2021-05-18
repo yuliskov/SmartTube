@@ -1,5 +1,9 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui;
 
+import android.os.Build;
+import android.text.TextUtils;
+import android.util.Log;
+
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
 import java.util.ArrayList;
@@ -15,6 +19,9 @@ public class UiOptionItem implements OptionItem {
     private Object mData;
     private OptionItem[] mCheckedRules;
 
+    private final static int MAX_VIDEO_WIDTH = (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ? 1280 :
+            Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ? 1920 : 3840);
+
     public static List<OptionItem> from(List<FormatItem> formats, OptionCallback callback) {
         return from(formats, callback, null);
     }
@@ -27,6 +34,14 @@ public class UiOptionItem implements OptionItem {
         List<OptionItem> options = new ArrayList<>();
 
         for (FormatItem format : formats) {
+            if (format.getWidth() > MAX_VIDEO_WIDTH) {
+                continue;
+            }
+            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT
+                    && format.getTitle() != null
+                    && ((String) format.getTitle()).contains("vp9")) {
+                continue;
+            }
             options.add(from(format, callback, defaultTitle));
         }
 

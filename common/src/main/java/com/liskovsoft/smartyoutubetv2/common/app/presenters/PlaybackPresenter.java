@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.MainPlayerEventBridge;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
@@ -17,8 +18,9 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
 
     private PlaybackPresenter(Context context) {
         super(context);
+
         mViewManager = ViewManager.instance(context);
-        mMainPlayerEventBridge = MainPlayerEventBridge.instance();
+        mMainPlayerEventBridge = MainPlayerEventBridge.instance(context);
     }
 
     public static PlaybackPresenter instance(Context context) {
@@ -41,23 +43,37 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
      * Opens video item from browser, search or channel views
      */
     public void openVideo(String videoId) {
-        openVideo(Video.from(videoId));
+        if (videoId == null) {
+            return;
+        }
+
+        openVideo(Video.from(videoId), true);
     }
 
     /**
      * Opens video item from browser, search or channel views
      */
     public void openVideo(Video item) {
+        openVideo(item, true);
+    }
+
+    /**
+     * Opens video item from browser, search or channel views<br/>
+     * Focus player if needed. Useful when running player in PIP mode.
+     */
+    public void openVideo(Video item, boolean focusPlayer) {
+        if (item == null) {
+            return;
+        }
+
         mMainPlayerEventBridge.openVideo(item);
 
-        focusView();
+        if (focusPlayer) {
+            focusView();
+        }
     }
 
     private void focusView() {
-        //if (getView() != null && (getView().getController().isInPIPMode() || getView().getController().isEngineBlocked())) {
-        //    return;
-        //}
-
         mViewManager.startView(PlaybackView.class);
     }
 

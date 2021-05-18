@@ -32,8 +32,9 @@ public class VideoGroup {
         }
 
         videoGroup.mMediaGroup = mediaGroup;
-        videoGroup.mId = mediaGroup.hashCode(); // TODO: replace with real id
         videoGroup.mTitle = mediaGroup.getTitle();
+        // TODO: replace with real id
+        videoGroup.mId = mediaGroup.hashCode();
         videoGroup.mVideos = new ArrayList<>();
 
         if (mediaGroup.getMediaItems() == null) {
@@ -52,32 +53,16 @@ public class VideoGroup {
         return mVideos;
     }
 
-    public void setVideos(List<Video> videos) {
-        mVideos = videos;
-    }
-
     public String getTitle() {
         return mTitle;
-    }
-
-    public void setTitle(String title) {
-        mTitle = title;
     }
 
     public int getId() {
         return mId;
     }
 
-    public void setId(int id) {
-        mId = id;
-    }
-
     public MediaGroup getMediaGroup() {
         return mMediaGroup;
-    }
-
-    public void setMediaGroup(MediaGroup group) {
-        mMediaGroup = group;
     }
 
     public Category getCategory() {

@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
+import android.os.Build;
 import android.util.Pair;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.source.TrackGroup;
@@ -7,10 +8,7 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector.Parameters;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector.SelectionOverride;
-import com.google.android.exoplayer2.trackselection.FixedTrackSelection;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector.MappedTrackInfo;
-import com.google.android.exoplayer2.trackselection.RandomTrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Definition;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -23,16 +21,20 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil.extractCodec;
+
 public class TrackSelectorManager implements TrackSelectorCallback {
     public static final int RENDERER_INDEX_VIDEO = 0;
     public static final int RENDERER_INDEX_AUDIO = 1;
     public static final int RENDERER_INDEX_SUBTITLE = 2;
-    private static final TrackSelection.Factory FIXED_FACTORY = new FixedTrackSelection.Factory();
-    private static final TrackSelection.Factory RANDOM_FACTORY = new RandomTrackSelection.Factory();
+    //private static final TrackSelection.Factory FIXED_FACTORY = new FixedTrackSelection.Factory();
+    //private static final TrackSelection.Factory RANDOM_FACTORY = new RandomTrackSelection.Factory();
     private static final String TAG = TrackSelectorManager.class.getSimpleName();
+    private final static int MAX_VIDEO_WIDTH = (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ? 1280 :
+            Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ? 1920 : 3840);
 
     private DefaultTrackSelector mTrackSelector;
-    private TrackSelection.Factory mTrackSelectionFactory;
+    //private TrackSelection.Factory mTrackSelectionFactory;
 
     private final Renderer[] mRenderers = new Renderer[3];
     private final MediaTrack[] mSelectedTracks = new MediaTrack[3];
@@ -62,7 +64,12 @@ public class TrackSelectorManager implements TrackSelectorCallback {
      *                      One of the {@link #RENDERER_INDEX_VIDEO}, {@link #RENDERER_INDEX_AUDIO}, {@link #RENDERER_INDEX_SUBTITLE}
      */
     private void initRenderer(int rendererIndex) {
-        if (mRenderers[rendererIndex] != null) {
+        if (mRenderers[rendererIndex] != null && mRenderers[rendererIndex].mediaTracks != null) {
+            return;
+        }
+
+        if (mTrackSelector == null) {
+            Log.e(TAG, "Can't init renderer %s. TrackSelector is null!", rendererIndex);
             return;
         }
 
@@ -199,8 +206,19 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         Renderer renderer = mRenderers[rendererIndex];
         renderer.selectedTrack = null;
         for (int groupIndex = 0; groupIndex < renderer.mediaTracks.length; groupIndex++) {
-            for (int trackIndex = 0; trackIndex < renderer.mediaTracks[groupIndex].length; trackIndex++) {
-                MediaTrack mediaTrack = renderer.mediaTracks[groupIndex][trackIndex];
+            MediaTrack[] trackGroup = renderer.mediaTracks[groupIndex];
+
+            if (trackGroup == null) {
+                continue;
+            }
+
+            for (int trackIndex = 0; trackIndex < trackGroup.length; trackIndex++) {
+                MediaTrack mediaTrack = trackGroup[trackIndex];
+
+                if (mediaTrack == null) {
+                    continue;
+                }
+
                 mediaTrack.isSelected = groupIndex == trackGroupIndex && Helpers.contains(trackIndexes, trackIndex);
 
                 if (mediaTrack.isSelected) {
@@ -270,17 +288,26 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     }
 
     private Pair<Definition, MediaTrack> createSelection(TrackGroupArray groups, MediaTrack selectedTrack) {
+        if (selectedTrack == null) {
+            Log.e(TAG, "Can't create selection. Selected track is null.");
+            return null;
+        }
+
+        if (mRenderers[selectedTrack.rendererIndex] == null) {
+            Log.e(TAG, "Can't create selection. Renderer isn't initialized.");
+            return null;
+        }
+
         Pair<Definition, MediaTrack> definitionPair = null;
 
-        if (selectedTrack != null) {
-            MediaTrack matchedTrack = findBestMatch(selectedTrack);
-            if (matchedTrack.groupIndex != -1) {
-                Definition definition = new Definition(groups.get(matchedTrack.groupIndex), matchedTrack.trackIndex);
-                definitionPair = new Pair<>(definition, selectedTrack);
-                setOverride(matchedTrack.rendererIndex, matchedTrack.groupIndex, matchedTrack.trackIndex);
-            } else {
-                Log.e(TAG, "Oops. Can't find match for track %s", selectedTrack);
-            }
+        MediaTrack matchedTrack = findBestMatch(selectedTrack);
+
+        if (matchedTrack.groupIndex != -1) {
+            Definition definition = new Definition(groups.get(matchedTrack.groupIndex), matchedTrack.trackIndex);
+            definitionPair = new Pair<>(definition, matchedTrack);
+            setOverride(matchedTrack.rendererIndex, matchedTrack.groupIndex, matchedTrack.trackIndex);
+        } else {
+            Log.e(TAG, "Can't create selection. No match for the track %s", selectedTrack);
         }
 
         return definitionPair;
@@ -342,9 +369,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
         mSelectedTracks[rendererIndex] = track;
 
-        if (mRenderers[rendererIndex] == null) {
+        if (mRenderers[rendererIndex] == null || mRenderers[rendererIndex].mediaTracks == null) {
             Log.e(TAG, "Renderer isn't initialized. Waiting for later selection...");
-            //mPendingSelection = track;
             return;
         }
 
@@ -371,17 +397,25 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         return renderer.selectedTrack;
     }
 
-    public boolean fixVideoTrackSelection() {
-        // track already properly selected
-        if (hasSelection(RENDERER_INDEX_VIDEO)) {
-            return false;
-        }
+    /**
+     *  Video/audio tracks should be selected at this point.<br/>
+     *  Reselect if not done yet.
+     */
+    public void fixTracksSelection() {
+        for (MediaTrack track : mSelectedTracks) {
+            if (track == null || track.rendererIndex == RENDERER_INDEX_SUBTITLE) {
+                continue;
+            }
 
-        selectTrack(mSelectedTracks[RENDERER_INDEX_VIDEO]);
-        return true;
+            if (!hasSelection(track.rendererIndex)) {
+                Log.e(TAG, "Oops. Track %s isn't selected before. Fixing...", track.rendererIndex);
+                selectTrack(track);
+            }
+        }
     }
 
     public void setTrackSelector(DefaultTrackSelector selector) {
+        Log.d(TAG, "Initializing TrackSelector...");
         mTrackSelector = selector;
 
         if (selector instanceof RestoreTrackSelector) {
@@ -391,6 +425,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
     public void release() {
         if (mTrackSelector != null) {
+            Log.d(TAG, "Destroying TrackSelector...");
             if (mTrackSelector instanceof RestoreTrackSelector) {
                 ((RestoreTrackSelector) mTrackSelector).setOnTrackSelectCallback(null);
             }
@@ -408,9 +443,26 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         MediaTrack result = createAutoSelection(track.rendererIndex);
 
         if (track.format != null) { // not auto selection
+            MediaTrack prevResult;
+
             for (int groupIndex = 0; groupIndex < renderer.mediaTracks.length; groupIndex++) {
-                for (int trackIndex = 0; trackIndex < renderer.mediaTracks[groupIndex].length; trackIndex++) {
-                    MediaTrack mediaTrack = renderer.mediaTracks[groupIndex][trackIndex];
+                prevResult = result;
+
+                // Very rare NPE fix
+                MediaTrack[] trackGroup = renderer.mediaTracks[groupIndex];
+
+                if (trackGroup == null) {
+                    Log.e(TAG, "Track selection error. Media track group %s is empty.", groupIndex);
+                    continue;
+                }
+
+                for (MediaTrack mediaTrack : trackGroup) {
+                    if (mediaTrack == null) {
+                        continue;
+                    }
+                    if (mediaTrack.format.width > MAX_VIDEO_WIDTH) {
+                        continue;
+                    }
 
                     int compare = track.inBounds(mediaTrack);
 
@@ -423,8 +475,11 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                     }
                 }
 
-                if (result.format != null && MediaTrack.codecEquals(result.format.codecs, track.format.codecs)) {
-                    break;
+                if (prevResult.compare(result) == 0) {
+                    // Prefer the same codec if quality match
+                    if (prevResult.format != null && MediaTrack.codecEquals(prevResult.format.codecs, track.format.codecs)) {
+                        result = prevResult;
+                    }
                 }
             }
         }
@@ -458,6 +513,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             return;
         }
 
+        Log.d(TAG, "Setting override for renderer %s and group %s...", rendererIndex, groupIndex);
+
         if (groupIndex == -1) {
             mRenderers[rendererIndex].override = null; // auto option selected
         } else {
@@ -468,17 +525,13 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     }
 
     private boolean hasSelection(int rendererIndex) {
-        if (mSelectedTracks[rendererIndex] == null) {
-            return true;
-        }
-
         return mRenderers[rendererIndex] != null && mRenderers[rendererIndex].selectedTrack != null;
     }
 
-    private void setOverride(int rendererIndex, int group, int[] tracks, boolean enableRandomAdaptation) {
-        TrackSelection.Factory factory = tracks.length == 1 ? FIXED_FACTORY : (enableRandomAdaptation ? RANDOM_FACTORY : mTrackSelectionFactory);
-        mRenderers[rendererIndex].override = new SelectionOverride(group, tracks);
-    }
+    //private void setOverride(int rendererIndex, int group, int[] tracks, boolean enableRandomAdaptation) {
+    //    TrackSelection.Factory factory = tracks.length == 1 ? FIXED_FACTORY : (enableRandomAdaptation ? RANDOM_FACTORY : mTrackSelectionFactory);
+    //    mRenderers[rendererIndex].override = new SelectionOverride(group, tracks);
+    //}
 
     // Track array manipulation.
     private static int[] getTracksAdding(SelectionOverride override, int addedTrack) {

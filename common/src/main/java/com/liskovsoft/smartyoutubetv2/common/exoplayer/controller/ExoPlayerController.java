@@ -19,7 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.Player
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackInfoFormatter;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackInfoFormatter2;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 
@@ -31,6 +31,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private final Context mContext;
     private final ExoMediaSourceFactory mMediaSourceFactory;
     private final TrackSelectorManager mTrackSelectorManager;
+    private final TrackInfoFormatter2 mTrackFormatter;
     private PlayerEventListener mEventListener;
     private Video mVideo;
     private boolean mOnSourceChanged;
@@ -41,6 +42,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         mContext = context;
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
         mTrackSelectorManager = new TrackSelectorManager();
+        mTrackFormatter = new TrackInfoFormatter2();
     }
 
     @Override
@@ -72,6 +74,8 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     private void openMediaSource(MediaSource mediaSource) {
+        setQualityInfo("");
+
         if (mPlayer == null) {
             return;
         }
@@ -120,6 +124,15 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     @Override
+    public boolean getPlay() {
+        if (mPlayer == null) {
+            return false;
+        }
+
+        return mPlayer.getPlayWhenReady();
+    }
+
+    @Override
     public boolean isPlaying() {
         if (mPlayer == null) {
             return false;
@@ -129,12 +142,12 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     @Override
-    public boolean hasNoMedia() {
+    public boolean containsMedia() {
         if (mPlayer == null) {
-            return true;
+            return false;
         }
 
-        return mPlayer.getPlaybackState() == Player.STATE_IDLE;
+        return mPlayer.getPlaybackState() != Player.STATE_IDLE;
     }
 
     @Override
@@ -196,13 +209,24 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
     @Override
     public void selectFormat(FormatItem option) {
-        mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(option));
-        // TODO: move to the {@link #onTrackChanged()} somehow
-        mEventListener.onTrackSelected(option);
+        if (option != null) {
+            mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(option));
+            // TODO: move to the {@link #onTrackChanged()} somehow
+            mEventListener.onTrackSelected(option);
+        }
     }
 
     @Override
     public FormatItem getVideoFormat() {
+        // Precise format (may not be loaded yet)
+        //if (mPlayer instanceof SimpleExoPlayer) {
+        //    Format videoFormat = ((SimpleExoPlayer) mPlayer).getVideoFormat();
+        //
+        //    if (videoFormat != null) {
+        //        return ExoFormatItem.from(videoFormat);
+        //    }
+        //}
+
         return ExoFormatItem.from(mTrackSelectorManager.getVideoTrack());
     }
 
@@ -218,30 +242,45 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
         for (TrackSelection selection : trackSelections.getAll()) {
             if (selection != null) {
+                // EXO: 2.12.1
                 Format format = selection.getSelectedFormat();
+
+                // EXO: 2.13.1
+                // Format format = selection.getFormat(0);
+
                 mEventListener.onTrackChanged(ExoFormatItem.from(format));
 
-                if (mPlayerView != null && ExoFormatItem.isVideo(format)) {
-                    mPlayerView.setQualityInfo(TrackInfoFormatter.formatQualityLabel(format));
+                if (ExoFormatItem.isVideo(format)) {
+                    mTrackFormatter.setFormat(format);
+                    setQualityInfo(mTrackFormatter.getQualityLabel());
                 }
             }
         }
-
-        //if (mTrackSelectorManager.fixVideoTrackSelection()) {
-        //    mEventListener.onTrackSelected(ExoFormatItem.from(mTrackSelectorManager.getVideoTrack()));
-        //}
     }
 
     private void notifyOnVideoLoad() {
+        if (mVideo == null) {
+            return;
+        }
+
         if (mOnSourceChanged) {
             mOnSourceChanged = false;
             mEventListener.onVideoLoaded(mVideo);
+            mTrackSelectorManager.fixTracksSelection();
         }
     }
 
     @Override
     public void onPlayerError(ExoPlaybackException error) {
         Log.e(TAG, "onPlayerError: " + error);
+
+        if (error.type == ExoPlaybackException.TYPE_UNEXPECTED &&
+            error.getCause() instanceof IllegalArgumentException) {
+            // Maybe it's because of auto frame rate.
+            // Such error may occur when pausing activity.
+            return;
+        }
+
         mEventListener.onEngineError(error.type);
     }
 
@@ -268,6 +307,9 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     public void setSpeed(float speed) {
         if (mPlayer != null && speed > 0) {
             mPlayer.setPlaybackParameters(new PlaybackParameters(speed, 1.0f));
+
+            mTrackFormatter.setSpeed(speed);
+            setQualityInfo(mTrackFormatter.getQualityLabel());
         }
     }
 
@@ -277,6 +319,12 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             return mPlayer.getPlaybackParameters().speed;
         } else {
             return -1;
+        }
+    }
+
+    private void setQualityInfo(String qualityInfoStr) {
+        if (mPlayerView != null && qualityInfoStr != null) {
+            mPlayerView.setQualityInfo(qualityInfoStr);
         }
     }
 }

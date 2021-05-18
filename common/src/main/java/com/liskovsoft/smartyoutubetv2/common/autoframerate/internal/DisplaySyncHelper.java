@@ -20,6 +20,8 @@ import java.util.List;
 public class DisplaySyncHelper implements UhdHelperListener {
     private static final String TAG = DisplaySyncHelper.class.getSimpleName();
     private static final int STATE_ORIGINAL = 1;
+    private static final int HD = 1200;
+    private static final int FHD = 1900;
     protected Context mContext;
     private boolean mDisplaySyncInProgress = false;
     private UhdHelper mUhdHelper;
@@ -32,6 +34,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
 
     public interface AutoFrameRateListener {
         void onModeStart(Mode newMode);
+        void onModeError(Mode newMode);
     }
 
     public DisplaySyncHelper(Context context) {
@@ -68,7 +71,10 @@ public class DisplaySyncHelper implements UhdHelperListener {
         return newModes;
     }
 
-    private ArrayList<Mode> filterModesByWidth(Mode[] allModes, int videoWidth) {
+    /**
+     * Filter all modes except one that match by width.
+     */
+    private ArrayList<Mode> filterModesByWidthOrigin(Mode[] allModes, int videoWidth) {
         ArrayList<Mode> newModes = new ArrayList<>();
 
         if (videoWidth == -1) {
@@ -78,6 +84,41 @@ public class DisplaySyncHelper implements UhdHelperListener {
         for (Mode mode : allModes) {
             int width = mode.getPhysicalWidth();
             if (width >= (videoWidth - 100) && width <= (videoWidth + 100)) {
+                newModes.add(mode);
+            }
+        }
+
+        if (newModes.isEmpty()) {
+            Log.i(TAG, "MODE CANDIDATES NOT FOUND!! Old modes: " + Arrays.asList(allModes));
+        } else {
+            Log.i(TAG, "FOUND MODE CANDIDATES! New modes: " + newModes);
+        }
+
+        return newModes;
+    }
+
+    /**
+     * Filter out modes that less then required width.<br/>
+     * Reverse order is important because of later mapping by fps in other method.
+     */
+    private ArrayList<Mode> filterModesByWidth(Mode[] allModes, int videoWidth) {
+        ArrayList<Mode> newModes = new ArrayList<>();
+
+        if (videoWidth == -1) {
+            return newModes;
+        }
+
+        // Reverse order. It's important because of later mapping by fps.
+        Arrays.sort(allModes, (mode1, mode2) -> {
+            int width1 = mode1.getPhysicalWidth();
+            int width2 = mode2.getPhysicalWidth();
+
+            return width2 - width1;
+        });
+
+        for (Mode mode : allModes) {
+            int width = mode.getPhysicalWidth();
+            if (width >= (videoWidth - 100)) {
                 newModes.add(mode);
             }
         }
@@ -234,32 +275,27 @@ public class DisplaySyncHelper implements UhdHelperListener {
     public void onModeChanged(Mode mode) {
         mDisplaySyncInProgress = false;
 
+        if (mNewMode == null) {
+            Log.d(TAG, "Ignore mode change. AFR isn't activated.");
+            return;
+        }
+
         Mode currentMode = getUhdHelper().getCurrentMode();
 
         if (mode == null && currentMode == null) {
-            String msg = "Mode change failure. Internal error occurred.";
-            Log.w(TAG, msg);
-
-            // NOTE: changed
-            //CommonApplication.getPreferences().setCurrentDisplayMode(msg);
+            Log.e(TAG, "Mode change failure. Internal error occurred.");
         } else {
-            int modeId = mNewMode != null ? mNewMode.getModeId() : -1;
-
-            if (currentMode.getModeId() != modeId) {
+            if (currentMode.getModeId() != mNewMode.getModeId()) {
                 // Once onDisplayChangedListener sends proper callback, the above if condition
                 // need to changed to mode.getModeId() != modeId
-                String msg = String.format("Mode change failure. Current mode id is %s. Expected mode id is %s", currentMode.getModeId(), modeId);
-                Log.w(TAG, msg);
+                Log.e(TAG, "Mode change failure. Current mode id is %s. Expected mode id is %s", currentMode.getModeId(), mNewMode.getModeId());
 
-                String newMsg = String.format("Expected %s", UhdHelper.formatMode(mNewMode));
-
-                // NOTE: changed
-                //CommonApplication.getPreferences().setCurrentDisplayMode(String.format("%s (%s)", UhdHelper.formatMode(currentMode), newMsg));
+                if (mListener != null) {
+                    mListener.onModeError(mNewMode);
+                }
             } else {
-                Log.i(TAG, "Mode changed successfully");
+                Log.d(TAG, "Mode changed successfully");
             }
-
-            AppPrefs.instance(mContext).setCurrentDisplayMode(UhdHelper.formatMode(currentMode));
         }
     }
 
@@ -296,7 +332,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
             List<Mode> resultModes = new ArrayList<>();
 
             if (mIsResolutionSwitchEnabled) {
-                resultModes = filterModesByWidth(modes, Math.max(videoWidth, 1200));
+                resultModes = filterModesByWidth(modes, Math.max(videoWidth, HD));
             }
 
             //int minHeight = -1;

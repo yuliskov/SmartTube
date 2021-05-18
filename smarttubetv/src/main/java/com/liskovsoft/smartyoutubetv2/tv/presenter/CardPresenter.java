@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
@@ -22,13 +23,15 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.LongClickPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.AutoSizeGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview.ComplexImageCardView;
 
 /*
  * A CardPresenter is used to generate Views and bind Objects to them on demand.
  * It contains an Image CardView
  */
-public class CardPresenter extends Presenter {
+public class CardPresenter extends LongClickPresenter {
     private static final String TAG = CardPresenter.class.getSimpleName();
     private int mDefaultBackgroundColor = -1;
     private int mDefaultTextColor = -1;
@@ -36,8 +39,10 @@ public class CardPresenter extends Presenter {
     private int mSelectedTextColor = -1;
     private Drawable mDefaultCardImage;
     private boolean mIsAnimatedPreviewsEnabled;
-    private boolean mIsMultilineTitlesEnabled;
-    private float mVideoGridScale;
+    private boolean mIsCardMultilineTitleEnabled;
+    private boolean mIsCardTextAutoScrollEnabled;
+    private int mWidth;
+    private int mHeight;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
@@ -52,9 +57,11 @@ public class CardPresenter extends Presenter {
         mDefaultCardImage = new ColorDrawable(ContextCompat.getColor(parent.getContext(), R.color.lb_grey));
 
         MainUIData mainUIData = MainUIData.instance(parent.getContext());
-        mIsAnimatedPreviewsEnabled = mainUIData.isAnimatedPreviewsEnabled();
-        mVideoGridScale = mainUIData.getVideoGridScale();
-        mIsMultilineTitlesEnabled = mainUIData.isMultilineTitlesEnabled();
+        mIsAnimatedPreviewsEnabled = mainUIData.isCardAnimatedPreviewsEnabled();
+        mIsCardMultilineTitleEnabled = mainUIData.isCardMultilineTitleEnabled();
+        mIsCardTextAutoScrollEnabled = mainUIData.isCardTextAutoScrollEnabled();
+
+        updateDimensions(parent.getContext());
 
         ComplexImageCardView cardView = new ComplexImageCardView(parent.getContext()) {
             @Override
@@ -64,7 +71,8 @@ public class CardPresenter extends Presenter {
             }
         };
 
-        cardView.enableMultilineTitles(mIsMultilineTitlesEnabled);
+        cardView.setTitleLinesNum(mIsCardMultilineTitleEnabled ? 2 : 1);
+        cardView.setTextAutoScroll(mIsCardTextAutoScrollEnabled);
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
         updateCardBackgroundColor(cardView, false);
@@ -95,11 +103,12 @@ public class CardPresenter extends Presenter {
 
     @Override
     public void onBindViewHolder(Presenter.ViewHolder viewHolder, Object item) {
+        super.onBindViewHolder(viewHolder, item);
+
         Video video = (Video) item;
 
         ComplexImageCardView cardView = (ComplexImageCardView) viewHolder.view;
         Context context = cardView.getContext();
-        Resources res = cardView.getResources();
 
         cardView.setTitleText(video.title);
         cardView.setContentText(video.description);
@@ -113,16 +122,7 @@ public class CardPresenter extends Presenter {
             cardView.setPreviewUrl(video.previewUrl);
         }
 
-        // Set card size from dimension resources.
-        int width = res.getDimensionPixelSize(R.dimen.card_width);
-        int height = res.getDimensionPixelSize(R.dimen.card_height);
-
-        if (mVideoGridScale > 1.0f) {
-            width *= mVideoGridScale;
-            height *= mVideoGridScale;
-        }
-
-        cardView.setMainImageDimensions(width, height);
+        cardView.setMainImageDimensions(mWidth, mHeight);
 
         Glide.with(context)
                 .load(video.cardImageUrl)
@@ -133,11 +133,23 @@ public class CardPresenter extends Presenter {
 
     @Override
     public void onUnbindViewHolder(Presenter.ViewHolder viewHolder) {
+        super.onUnbindViewHolder(viewHolder);
+
         ComplexImageCardView cardView = (ComplexImageCardView) viewHolder.view;
 
         // Remove references to images so that the garbage collector can free up memory.
         cardView.setBadgeImage(null);
         cardView.setMainImage(null);
+    }
+
+    private void updateDimensions(Context context) {
+        Pair<Integer, Integer> dimens =
+                AutoSizeGridFragment.getCardDimensionPx(
+                        context, R.dimen.card_width, R.dimen.card_height, MainUIData.instance(context).getVideoGridScale()
+                );
+
+        mWidth = dimens.first;
+        mHeight = dimens.second;
     }
 
     private final RequestListener<Drawable> mErrorListener = new RequestListener<Drawable>() {

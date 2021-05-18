@@ -8,14 +8,13 @@ import android.util.AttributeSet;
 import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import androidx.leanback.widget.ImageCardView;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 public class ComplexImageCardView extends ImageCardView {
     private ComplexImageView mComplexImageView;
     private Handler mHandler;
-    private Runnable mEnableMarquee;
-    private boolean mIsMultilineTitlesEnabled;
+    private boolean mIsCardTextAutoScrollEnabled;
 
     public ComplexImageCardView(Context context) {
         super(context);
@@ -54,38 +53,18 @@ public class ComplexImageCardView extends ImageCardView {
         }
 
         if (enable) {
-            mEnableMarquee = () -> enableMarquee(view);
+            Runnable enableMarquee = () -> ViewUtil.enableMarquee(view);
 
-            mHandler.postDelayed(mEnableMarquee, 1_000);
+            mHandler.postDelayed(enableMarquee, 1_000);
+
+            view.setTag(enableMarquee);
         } else {
-            if (mEnableMarquee != null) {
-                mHandler.removeCallbacks(mEnableMarquee);
-                mEnableMarquee = null;
+            if (view.getTag() instanceof Runnable) {
+                mHandler.removeCallbacks((Runnable) view.getTag());
+                view.setTag(null);
             }
 
-            disableMarquee(view);
-        }
-    }
-
-    private void disableMarquee(TextView... textViews) {
-        if (textViews == null || textViews.length == 0) {
-            return;
-        }
-
-        for (TextView textView : textViews) {
-            textView.setEllipsize(TruncateAt.END);
-        }
-    }
-
-    private void enableMarquee(TextView... textViews) {
-        if (textViews == null || textViews.length == 0) {
-            return;
-        }
-
-        for (TextView textView : textViews) {
-            textView.setEllipsize(TruncateAt.MARQUEE);
-            textView.setMarqueeRepeatLimit(-1);
-            textView.setHorizontallyScrolling(true);
+            ViewUtil.disableMarquee(view);
         }
     }
 
@@ -111,10 +90,11 @@ public class ComplexImageCardView extends ImageCardView {
     public void setSelected(boolean selected) {
         super.setSelected(selected);
 
-        if (!mIsMultilineTitlesEnabled) {
+        if (mIsCardTextAutoScrollEnabled) {
             enableTitleAnimation(selected);
+            enableContentAnimation(selected);
         }
-        enableContentAnimation(selected);
+
         enableVideoPreview(selected);
     }
 
@@ -130,17 +110,19 @@ public class ComplexImageCardView extends ImageCardView {
         mComplexImageView.setPreviewUrl(previewUrl);
     }
 
-    public void enableMultilineTitles(boolean enable) {
+    public void setTitleLinesNum(int lines) {
         TextView titleView = findViewById(R.id.title_text);
 
-        if (titleView == null) {
+        if (titleView == null || lines <= 0) {
             return;
         }
 
-        mIsMultilineTitlesEnabled = enable;
+        titleView.setMaxLines(lines);
+        titleView.setLines(lines);
+    }
 
-        titleView.setMaxLines(enable ? 3 : 1);
-        titleView.setLines(enable ? 3 : 1);
+    public void setTextAutoScroll(boolean enabled) {
+        mIsCardTextAutoScrollEnabled = enabled;
     }
 
     /**

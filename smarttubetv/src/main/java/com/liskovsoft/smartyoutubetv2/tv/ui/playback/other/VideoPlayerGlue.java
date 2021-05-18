@@ -10,21 +10,23 @@ import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.PlaybackControlsRow;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerView;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.MaxControlsVideoPlayerGlue;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChannelAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.HighQualityAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PipAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PlaylistAddAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.RepeatAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SearchAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SubscribeAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsDownAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ThumbsUpAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoSpeedAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoStatsAction;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChannelAction;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAction;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.HighQualityAction;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PlaylistAddAction;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.RepeatAction;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SubscribeAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoZoomAction;
 
 import java.util.concurrent.TimeUnit;
 
@@ -45,8 +47,7 @@ import java.util.concurrent.TimeUnit;
  * Note that the superclass, {@link PlaybackTransportControlGlue}, manages the playback controls
  * row.
  */
-public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter>
-                             implements PlayerView {
+public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
     private static final long TEN_SECONDS = TimeUnit.SECONDS.toMillis(10);
     private static final String TAG = VideoPlayerGlue.class.getSimpleName();
     private final OnActionClickedListener mActionListener;
@@ -66,6 +67,8 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter>
     private final VideoStatsAction mVideoStatsAction;
     private final VideoSpeedAction mVideoSpeedAction;
     private final SearchAction mSearchAction;
+    private final VideoZoomAction mVideoZoomAction;
+    private final PipAction mPipAction;
     private String mQualityInfo;
     private QualityInfoListener mQualityInfoListener;
     private int mPreviousAction = KeyEvent.ACTION_UP;
@@ -97,6 +100,8 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter>
         mVideoStatsAction = new VideoStatsAction(context);
         mVideoSpeedAction = new VideoSpeedAction(context);
         mSearchAction = new SearchAction(context);
+        mVideoZoomAction = new VideoZoomAction(context);
+        mPipAction = new PipAction(context);
     }
 
     @Override
@@ -112,6 +117,10 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter>
         adapter.add(mSkipNextAction);
         adapter.add(mRepeatAction);
         adapter.add(mVideoSpeedAction);
+        adapter.add(mVideoZoomAction);
+        if (Helpers.isPictureInPictureSupported(getContext())) {
+            adapter.add(mPipAction);
+        }
         adapter.add(mSearchAction);
     }
 
@@ -190,6 +199,10 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter>
         invalidateUi(mRepeatAction);
     }
 
+    public int getRepeatActionState() {
+        return mRepeatAction.getIndex();
+    }
+
     public void setSubscribeActionState(boolean subscribed) {
         mSubscribeAction.setIndex(subscribed ? SubscribeAction.INDEX_ON : SubscribeAction.INDEX_OFF);
         invalidateUi(mSubscribeAction);
@@ -228,7 +241,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter>
         }
 
         // Ignore result to give a chance to handle this event in
-        // com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.PlaybackTransportRowPresenter.ViewHolder
+        // com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.maxcontrols.PlaybackTransportRowPresenter.ViewHolder
         return handled || super.onKey(v, keyCode, event);
     }
 
@@ -291,6 +304,12 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter>
             handled = true;
         } else if (action == mSearchAction) {
             mActionListener.onSearch();
+            handled = true;
+        } else if (action == mVideoZoomAction) {
+            mActionListener.onVideoZoom();
+            handled = true;
+        } else if (action == mPipAction) {
+            mActionListener.onPip();
             handled = true;
         }
 
@@ -366,28 +385,10 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter>
     }
 
     @Override
-    public void setQualityInfo(String info) {
-        mQualityInfo = info;
-
-        if (mQualityInfoListener != null) {
-            mQualityInfoListener.onQualityInfoChanged(info);
-        }
-    }
-
-    @Override
     protected void onAttachedToHost(PlaybackGlueHost host) {
         super.onAttachedToHost(host);
 
         Log.d(TAG, "On attached to host");
-    }
-
-    @Override
-    protected void addQualityInfoListener(QualityInfoListener listener) {
-        mQualityInfoListener = listener;
-
-        if (mQualityInfo != null) {
-            mQualityInfoListener.onQualityInfoChanged(mQualityInfo);
-        }
     }
 
     @Override
@@ -428,6 +429,10 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter>
         void onVideoSpeed();
 
         void onSearch();
+
+        void onVideoZoom();
+
+        void onPip();
 
         void onTopEdgeFocused();
 

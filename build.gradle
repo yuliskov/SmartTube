@@ -19,5 +19,12 @@ allprojects {
         mavenCentral()
         jcenter()
         maven { url 'https://jitpack.io' }
+        flatDir { dirs 'libs' } // include duktape-my to all subprojects
+    }
+    configurations.all {
+        // WorkManager conflict resolution
+        resolutionStrategy.force "androidx.lifecycle:lifecycle-livedata-core:" + liveDataVersion
+        resolutionStrategy.force "androidx.lifecycle:lifecycle-livedata:" + liveDataVersion
+        resolutionStrategy.force "androidx.lifecycle:lifecycle-runtime:" + liveDataVersion
     }
 }

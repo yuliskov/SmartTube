@@ -220,10 +220,10 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
 
         mVideoInfo.add(new Pair<>("Video Resolution", videoRes));
         mVideoInfo.add(new Pair<>("Video/Audio Codecs", String.format(
-                "%s%s/%s%s",
-                video.sampleMimeType.replace("video/", ""),
+                "%s(%s)/%s(%s)",
+                getFormatMimeType(video),
                 getFormatId(video),
-                audio.sampleMimeType.replace("audio/", ""),
+                getFormatMimeType(audio),
                 getFormatId(audio)
         )));
         mVideoInfo.add(new Pair<>("Video/Audio Bitrate", String.format(
@@ -235,38 +235,25 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
                 video.pixelWidthHeightRatio == 1f ?
                 DEFAULT : String.format(Locale.US, "%.02f", video.pixelWidthHeightRatio);
         mVideoInfo.add(new Pair<>("Aspect Ratio", par));
-        mVideoInfo.add(new Pair<>("Hardware Accelerated", String.valueOf(isHardwareAccelerated(video))));
+        String videoCodecName = getVideoCodecNameV1(video);
+        mVideoInfo.add(new Pair<>("Video Decoder Name", videoCodecName));
+        mVideoInfo.add(new Pair<>("Hardware Accelerated", String.valueOf(isHardwareAccelerated(videoCodecName))));
     }
 
     /**
      * <a href="https://github.com/google/ExoPlayer/issues/4757">More info</a>
-     * @param format format
+     * @param videoCodecName name from CodecInfo
      * @return is accelerated
      */
-    private boolean isHardwareAccelerated(Format format) {
-        if (format == null) {
+    private boolean isHardwareAccelerated(String videoCodecName) {
+        if (videoCodecName == null) {
             return false;
         }
 
-        try {
-            // Ver 2.10.4
-            MediaCodecInfo info = MediaCodecUtil.getDecoderInfo(format.sampleMimeType, false, false);
-
-            // Ver 2.9.6
-            //MediaCodecInfo info = MediaCodecUtil.getDecoderInfo(format.sampleMimeType, false);
-
-            if (info == null) {
+        for (String name : new String[]{"omx.google.", "c2.android."}) {
+            if (videoCodecName.toLowerCase().startsWith(name)) {
                 return false;
             }
-
-            for (String name : new String[]{"omx.google.", "c2.android."}) {
-                if (info.name.toLowerCase().startsWith(name)) {
-                    return false;
-                }
-            }
-        } catch (DecoderQueryException e) {
-            e.printStackTrace();
-            return false;
         }
 
         return true;
@@ -278,10 +265,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
             return;
 
         counters.ensureUpdated();
-        appendRow("Dropped/Rendered Frames",
-                counters.droppedBufferCount + counters.skippedOutputBufferCount
-                    + "/" +
-                    counters.renderedOutputBufferCount);
+        appendRow("Dropped/Rendered Frames", counters.droppedBufferCount + "/" + counters.renderedOutputBufferCount);
         appendRow("Buffer size (seconds)", (int)(mPlayer.getBufferedPosition() - mPlayer.getCurrentPosition()) / 1_000);
     }
 
@@ -336,7 +320,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
 
         String defaultMode = AppPrefs.instance(mContext).getDefaultDisplayMode();
         defaultMode = defaultMode != null ? defaultMode : NOT_AVAILABLE;
-        String currentMode = AppPrefs.instance(mContext).getCurrentDisplayMode();
+        String currentMode = UhdHelper.formatMode(mUhdHelper.getCurrentMode());
         currentMode = currentMode != null ? currentMode : defaultMode;
         mDisplayInfo.add(new Pair<>("Display dpi", String.valueOf(Helpers.getDeviceDpi(mContext))));
         mDisplayInfo.add(new Pair<>("Display Resolution", currentMode));
@@ -413,9 +397,17 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private String getFormatId(Format video) {
         String id = video.id;
         if (Helpers.isNumeric(id)) {
-            return String.format("(%s)", id);
+            return id;
         }
-        return "";
+        return null;
+    }
+
+    private String getFormatMimeType(Format video) {
+        if (video == null || video.sampleMimeType == null) {
+            return null;
+        }
+
+        return video.sampleMimeType.replace("video/", "").replace("audio/", "");
     }
 
     private String getVideoResolution(Format video) {
@@ -424,5 +416,25 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
             result += "@" + ((int) video.frameRate);
         }
         return result;
+    }
+
+    private String getVideoCodecNameV1(Format format) {
+        if (format == null) {
+            return null;
+        }
+
+        MediaCodecInfo info = null;
+
+        try {
+            // Ver 2.10.4
+            info = MediaCodecUtil.getDecoderInfo(format.sampleMimeType, false, false);
+
+            // Ver 2.9.6
+            //info = MediaCodecUtil.getDecoderInfo(format.sampleMimeType, false);
+        } catch (DecoderQueryException e) {
+            e.printStackTrace();
+        }
+
+        return info != null ? info.name : null;
     }
 }

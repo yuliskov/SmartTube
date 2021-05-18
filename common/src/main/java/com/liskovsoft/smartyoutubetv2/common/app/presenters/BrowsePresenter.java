@@ -19,14 +19,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.CategoryEmptyError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.CategoryPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AboutPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.LanguageSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.MainUISettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.PlayerSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SearchSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -56,6 +51,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private final Map<Integer, Observable<MediaGroup>> mGridMapping;
     private final Map<Integer, Observable<List<MediaGroup>>> mRowMapping;
     private final Map<Integer, List<SettingsItem>> mTextGridMapping;
+    private final AppDataSourceManager mDataSourcePresenter;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
     private Disposable mSignCheckAction;
@@ -65,6 +61,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
     private BrowsePresenter(Context context) {
         super(context);
+        mDataSourcePresenter = AppDataSourceManager.instance();
         mPlaybackPresenter = PlaybackPresenter.instance(context);
         mMediaService = YouTubeMediaService.instance();
         mViewManager = ViewManager.instance(context);
@@ -73,7 +70,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         mRowMapping = new HashMap<>();
         mTextGridMapping = new HashMap<>();
         mMainUIData = MainUIData.instance(context);
-        GlobalPreferences.instance(context); // auth token storage init (in case activity restored after crash)
         initCategories();
     }
 
@@ -138,23 +134,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void initSettingsSubCategories() {
-        List<SettingsItem> settingItems = new ArrayList<>();
-        
-        settingItems.add(new SettingsItem(
-                getContext().getString(R.string.settings_accounts), () -> AccountSettingsPresenter.instance(getContext()).show(), R.drawable.settings_account));
-        if (!BuildConfig.FLAVOR.equals("stbolshoetv")) {
-            settingItems.add(new SettingsItem(
-                    getContext().getString(R.string.settings_language), () -> LanguageSettingsPresenter.instance(getContext()).show(), R.drawable.settings_language));
-            settingItems.add(new SettingsItem(
-                    getContext().getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(getContext()).show(), R.drawable.settings_main_ui));
-            settingItems.add(new SettingsItem(
-                    getContext().getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(getContext()).show(), R.drawable.settings_player));
-            settingItems.add(new SettingsItem(
-                    getContext().getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(getContext()).show(), R.drawable.settings_search));
-            settingItems.add(new SettingsItem(
-                    getContext().getString(R.string.settings_about), () -> AboutPresenter.instance(getContext()).show(), R.drawable.settings_about));
-        }
-        mTextGridMapping.put(MediaGroup.TYPE_SETTINGS, settingItems);
+        mTextGridMapping.put(MediaGroup.TYPE_SETTINGS, mDataSourcePresenter.getSettingItems(this));
     }
 
     public void updateCategories() {
@@ -235,14 +215,16 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             return;
         }
 
-        if (item.isVideo()) {
+        if (item.isChannelUploads()) {
+            // Doesn't work right now. Api doesn't contains channel id.
+            //ChannelPresenter.instance(getContext()).openChannel(item);
+            ChannelUploadsPresenter.instance(getContext()).openChannel(item);
+        } else if (item.isPlaylist()) {
+            ChannelUploadsPresenter.instance(getContext()).openChannel(item);
+        } else if (item.isVideo()) {
             mPlaybackPresenter.openVideo(item);
         } else if (item.isChannel()) {
             ChannelPresenter.instance(getContext()).openChannel(item);
-        } else if (item.isChannelSection()) {
-            ChannelPresenter.instance(getContext()).openChannel(item);
-        } else if (item.isPlaylist()) {
-            ChannelUploadsPresenter.instance(getContext()).openChannel(item);
         }
 
         updateRefreshTime();
@@ -254,7 +236,14 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             return;
         }
 
-        VideoMenuPresenter.instance(getContext()).showMenu(item);
+        if (item.isChannelUploads()) {
+            ChannelUploadsMenuPresenter.instance(getContext()).showMenu(item);
+        } else if (item.isVideo()) {
+            item.isSubscribed = mCurrentCategoryId == MediaGroup.TYPE_SUBSCRIPTIONS;
+            VideoMenuPresenter.instance(getContext()).showVideoMenu(item);
+        } else if (item.isChannel()) {
+            VideoMenuPresenter.instance(getContext()).showChannelMenu(item);
+        }
 
         updateRefreshTime();
     }
@@ -272,13 +261,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         continueGroup(group);
     }
 
-    /**
-     * Called even when closing dialog window
-     */
-    @Override
-    public void onViewResumed() {
-        maybeRefreshHeader();
-    }
+    ///**
+    // * Called even when closing dialog window
+    // */
+    //@Override
+    //public void onViewResumed() {
+    //    maybeRefreshHeader();
+    //}
 
     @Override
     public void onCategoryFocused(int categoryId) {
@@ -293,9 +282,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void checkForUpdates() {
-        AppUpdatePresenter updatePresenter = AppUpdatePresenter.instance(getContext());
-        updatePresenter.start(false);
-        updatePresenter.unhold();
+//        AppUpdatePresenter updatePresenter = AppUpdatePresenter.instance(getContext());
+//        updatePresenter.start(false);
+//        updatePresenter.unhold();
     }
 
     public void refresh() {
@@ -381,9 +370,15 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        continueMediaGroup -> getView().updateCategory(VideoGroup.from(continueMediaGroup, group.getCategory()))
-                        , error -> Log.e(TAG, "continueGroup error: " + error)
-                        , () -> getView().showProgressBar(false));
+                        continueMediaGroup -> getView().updateCategory(VideoGroup.from(continueMediaGroup, group.getCategory())),
+                        error -> {
+                            Log.e(TAG, "continueGroup error: %s", error.getMessage());
+                            if (getView() != null) {
+                                getView().showProgressBar(false);
+                            }
+                        },
+                        () -> getView().showProgressBar(false)
+                );
     }
 
     private void authCheck(boolean check, Runnable callback) {
@@ -407,7 +402,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                                     getView().showError(new SignInError(getContext()));
                                 }
                             }
-                        }
+                        },
+                        error -> Log.e(TAG, "authCheck error: %s", error.getMessage())
                 );
                 
     }
@@ -426,13 +422,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                             if (!mediaGroups.isEmpty()) {
                                 getView().showProgressBar(false);
                             }
-                        }
-                        , error -> Log.e(TAG, "updateRowsHeader error: " + error)
-                        , () -> {
-                            if (getView().isProgressBarShowing()) {
-                                getView().showProgressBar(false);
-                                getView().showError(new CategoryEmptyError(getContext()));
-                            }
+                        },
+                        error -> {
+                            Log.e(TAG, "updateRowsHeader error: %s", error.getMessage());
+                            getView().showProgressBar(false);
+                            getView().showError(new CategoryEmptyError(getContext()));
                         });
     }
 
@@ -444,16 +438,19 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mediaGroup -> {
-                            getView().updateCategory(VideoGroup.from(mediaGroup, category));
+                            VideoGroup videoGroup = VideoGroup.from(mediaGroup, category);
+                            getView().updateCategory(videoGroup);
 
                             // Hide loading as long as first group received
                             if (mediaGroup.getMediaItems() != null) {
                                 getView().showProgressBar(false);
                             }
-                        }
-                        , error -> Log.e(TAG, "updateGridHeader error: " + error)
-                        , () -> {
-                            if (getView().isProgressBarShowing()) {
+
+                            loadNextPortionIfNeeded(videoGroup);
+                        },
+                        error -> {
+                            Log.e(TAG, "updateGridHeader error: %s", error.getMessage());
+                            if (getView() != null) {
                                 getView().showProgressBar(false);
                                 getView().showError(new CategoryEmptyError(getContext()));
                             }
@@ -467,14 +464,20 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 continue;
             }
 
-            VideoGroup group = VideoGroup.from(mediaGroup, category);
+            VideoGroup videoGroup = VideoGroup.from(mediaGroup, category);
 
-            getView().updateCategory(group);
+            getView().updateCategory(videoGroup);
 
-            // Most tiny ui has 8 cards in a row
-            if (mMainUIData.getUIScale() < 0.8f && group.getVideos().size() < 8) {
-                continueGroup(group);
-            }
+            loadNextPortionIfNeeded(videoGroup);
+        }
+    }
+
+    /**
+     * Most tiny ui has 8 cards in a row or 24 in grid.
+     */
+    private void loadNextPortionIfNeeded(VideoGroup videoGroup) {
+        if (mMainUIData.getUIScale() < 0.8f || mMainUIData.getVideoGridScale() < 0.8f) {
+            continueGroup(videoGroup);
         }
     }
 }

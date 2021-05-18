@@ -96,7 +96,11 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
             return;
         }
 
-        VideoMenuPresenter.instance(getContext()).showMenu(item);
+        if (item.isVideo()) {
+            VideoMenuPresenter.instance(getContext()).showVideoMenu(item);
+        } else if (item.isChannel()) {
+            VideoMenuPresenter.instance(getContext()).showChannelMenu(item);
+        }
     }
 
     public void onSearch(String searchText) {
@@ -113,10 +117,11 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         mLoadAction = mediaGroupManager.getSearchObserve(searchText)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mediaGroup -> {
-                    getView().updateSearch(VideoGroup.from(mediaGroup));
-                }, error -> Log.e(TAG, "loadSearchData error: " + error),
-                   () -> getView().showProgressBar(false));
+                .subscribe(
+                        mediaGroup -> getView().updateSearch(VideoGroup.from(mediaGroup)),
+                        error -> Log.e(TAG, "loadSearchData error: %s", error.getMessage()),
+                        () -> getView().showProgressBar(false)
+                );
     }
     
     private void continueGroup(VideoGroup group) {
@@ -131,10 +136,11 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         mScrollAction = mediaGroupManager.continueGroupObserve(mediaGroup)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(continueMediaGroup -> {
-                    getView().updateSearch(VideoGroup.from(continueMediaGroup));
-                }, error -> Log.e(TAG, "continueGroup error: " + error),
-                   () -> getView().showProgressBar(false));
+                .subscribe(
+                        continueMediaGroup -> getView().updateSearch(VideoGroup.from(continueMediaGroup)),
+                        error -> Log.e(TAG, "continueGroup error: %s", error.getMessage()),
+                        () -> getView().showProgressBar(false)
+                );
     }
 
     @Override
@@ -151,15 +157,15 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     public void startSearch(String searchText) {
         mSearchText = searchText;
 
-        if (getView() == null) {
-            mViewManager.startView(SearchView.class);
-        } else {
-            mViewManager.startView(SearchView.class);
-            startSearchInt(searchText);
-        }
+        mViewManager.startView(SearchView.class);
+        startSearchInt(searchText);
     }
 
     private void startSearchInt(String searchText) {
+        if (getView() == null) {
+            return;
+        }
+
         if (mSearchData.isInstantVoiceSearchEnabled() && searchText == null) {
             getView().startVoiceRecognition();
         } else {

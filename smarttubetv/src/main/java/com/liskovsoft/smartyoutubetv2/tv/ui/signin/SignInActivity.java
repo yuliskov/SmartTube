@@ -8,30 +8,26 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 
-public class SignInActivity extends LeanbackActivity implements SignInView {
-    private SignInPresenter mSignInPresenter;
-    private TextView mUserCode;
+public class SignInActivity extends LeanbackActivity {
+    private SignInView signInView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.acitivity_sign_in);
+        signInView = new SignInView() {
+            @Override
+            public void showCode(String userCode) {
+                ((TextView)findViewById(R.id.user_code)).setText(userCode);
+            }
 
-        mSignInPresenter = SignInPresenter.instance(this);
-        mSignInPresenter.setView(this);
-        mUserCode = findViewById(R.id.user_code);
-
-//
-//        Fragment fragment =
-//                getSupportFragmentManager().;
-//        if (fragment instanceof PlaybackFragment) {
-//            mPlaybackFragment = (PlaybackFragment) fragment;
-//        }
-//
-////        if (null == savedInstanceState) {
-////            GuidedStepSupportFragment.addAsRoot(this, new SignInFragment(), android.R.id.content);
-////        }
+            @Override
+            public void close() {
+                finish();
+            }
+        };
+        SignInPresenter.instance(this).setView(signInView);
     }
 
     @Override
@@ -44,24 +40,12 @@ public class SignInActivity extends LeanbackActivity implements SignInView {
     @Override
     protected void onStart() {
         super.onStart();
-        mSignInPresenter.onViewInitialized();
-    }
-
-    @Override
-    public void showCode(String userCode) {
-        if (mUserCode != null) {
-            mUserCode.setText(userCode);
-        }
-    }
-
-    @Override
-    public void close() {
-        finish();
+        SignInPresenter.instance(this).onViewInitialized();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mSignInPresenter.onViewDestroyed();
+        SignInPresenter.instance(this).onViewDestroyed();
     }
 }

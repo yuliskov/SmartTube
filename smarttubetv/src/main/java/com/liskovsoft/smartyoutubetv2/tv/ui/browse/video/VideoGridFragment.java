@@ -4,49 +4,49 @@ import android.os.Bundle;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.leanback.widget.FocusHighlight;
-import androidx.leanback.widget.OnItemViewClickedListener;
 import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.VerticalGridPresenter;
-import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.CardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.fragments.GridFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class VideoGridFragment extends GridFragment implements VideoCategoryFragment {
+public class VideoGridFragment extends AutoSizeGridFragment implements VideoCategoryFragment {
     private static final String TAG = VideoGridFragment.class.getSimpleName();
-    private static final int COLUMNS_NUM = 4;
     private static final int ZOOM_FACTOR = FocusHighlight.ZOOM_FACTOR_SMALL;
+    private static final boolean USE_FOCUS_DIMMER = false;
     private static final int CHECK_SCROLL_ITEMS_NUM = 15;
     private VideoGroupObjectAdapter mGridAdapter;
     private final List<VideoGroup> mPendingUpdates = new ArrayList<>();
     private UriBackgroundManager mBackgroundManager;
     private VideoGroupPresenter mMainPresenter;
+    private CardPresenter mCardPresenter;
     private boolean mInvalidate;
     private int mSelectedItemIndex = -1;
     private float mVideoGridScale;
-    private float mUIScale;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mMainPresenter = getMainPresenter();
+        mCardPresenter = new CardPresenter();
         mBackgroundManager = ((LeanbackActivity) getActivity()).getBackgroundManager();
         mVideoGridScale = MainUIData.instance(getActivity()).getVideoGridScale();
-        mUIScale = MainUIData.instance(getActivity()).getUIScale();
 
         setupAdapter();
         setupEventListeners();
@@ -64,6 +64,8 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
     private void setupEventListeners() {
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
+        mCardPresenter.setOnLongClickedListener(new ItemViewLongClickedListener());
+        mCardPresenter.setOnMenuPressedListener(new ItemViewLongClickedListener());
     }
 
     private void applyPendingUpdates() {
@@ -75,41 +77,23 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
     }
 
     private void setupAdapter() {
-        VerticalGridPresenter presenter = new VerticalGridPresenter(ZOOM_FACTOR, false);
-        presenter.setNumberOfColumns(getNumColumns());
+        VerticalGridPresenter presenter = new VerticalGridPresenter(ZOOM_FACTOR, USE_FOCUS_DIMMER);
+        presenter.setNumberOfColumns(getColumnsNum(R.dimen.card_width, mVideoGridScale));
         setGridPresenter(presenter);
 
         if (mGridAdapter == null) {
-            mGridAdapter = new VideoGroupObjectAdapter();
+            mGridAdapter = new VideoGroupObjectAdapter(mCardPresenter);
             setAdapter(mGridAdapter);
         }
     }
 
-    private int getNumColumns() {
-        int result = COLUMNS_NUM;
-
-        if (mVideoGridScale > 1.3f) {
-            result--;
-        }
-
-        if (mUIScale < 1.0f) {
-            result += (int) Math.ceil((1.0f - mUIScale) / 0.15f);
-
-            if (mVideoGridScale > 1.3f) {
-                result--;
-            }
-        }
-
-        return result;
-    }
-
     @Override
-    public int getItemIndex() {
+    public int getPosition() {
         return getSelectedPosition();
     }
 
     @Override
-    public void setItemIndex(int index) {
+    public void setPosition(int index) {
         if (index < 0) {
             return;
         }
@@ -136,7 +120,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
         
         mGridAdapter.append(group);
 
-        setItemIndex(mSelectedItemIndex);
+        setPosition(mSelectedItemIndex);
     }
 
     @Override
@@ -160,22 +144,24 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
         return mGridAdapter.size() == 0;
     }
 
-    private final class ItemViewClickedListener implements OnItemViewClickedListener {
+    private final class ItemViewLongClickedListener implements OnItemViewClickedListener {
+        @Override
+        public void onItemViewClicked(Presenter.ViewHolder itemViewHolder, Object item) {
+            if (item instanceof Video) {
+                mMainPresenter.onVideoItemLongClicked((Video) item);
+            } else {
+                Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private final class ItemViewClickedListener implements androidx.leanback.widget.OnItemViewClickedListener {
         @Override
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
 
             if (item instanceof Video) {
-                if (getActivity() instanceof LeanbackActivity) {
-                    boolean longClick = ((LeanbackActivity) getActivity()).isLongClick();
-                    Log.d(TAG, "Is long click: " + longClick);
-
-                    if (longClick) {
-                        mMainPresenter.onVideoItemLongClicked((Video) item);
-                    } else {
-                        mMainPresenter.onVideoItemClicked((Video) item);
-                    }
-                }
+                mMainPresenter.onVideoItemClicked((Video) item);
             } else {
                 Toast.makeText(getActivity(), item.toString(), Toast.LENGTH_SHORT).show();
             }

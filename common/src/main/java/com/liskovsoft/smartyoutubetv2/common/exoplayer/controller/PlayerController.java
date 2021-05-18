@@ -22,6 +22,7 @@ public interface PlayerController {
     void setPositionMs(long positionMs);
     long getLengthMs();
     void setPlay(boolean isPlaying);
+    boolean getPlay();
     boolean isPlaying();
     void release();
     void setPlayer(ExoPlayer player);
@@ -35,7 +36,7 @@ public interface PlayerController {
     List<FormatItem> getSubtitleFormats();
     void selectFormat(FormatItem option);
     FormatItem getVideoFormat();
-    boolean hasNoMedia();
+    boolean containsMedia();
     void setSpeed(float speed);
     float getSpeed();
 }

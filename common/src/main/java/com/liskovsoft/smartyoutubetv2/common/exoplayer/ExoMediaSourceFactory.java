@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
 import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -30,7 +29,6 @@ import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.okhttp.OkHttpHelpers;
 import com.liskovsoft.youtubeapi.app.AppConstants;
 
 import java.io.IOException;
@@ -251,6 +249,7 @@ public class ExoMediaSourceFactory {
     //    }
     //}
 
+    // EXO: 2.12.1
     private static class StaticDashManifestParser extends DashManifestParser {
         @Override
         protected DashManifest buildMediaPresentationDescription(
@@ -281,4 +280,38 @@ public class ExoMediaSourceFactory {
                     periods);
         }
     }
+
+    // EXO: 2.13.1
+    //private static class StaticDashManifestParser extends DashManifestParser {
+    //    @Override
+    //    protected DashManifest buildMediaPresentationDescription(
+    //            long availabilityStartTime,
+    //            long durationMs,
+    //            long minBufferTimeMs,
+    //            boolean dynamic,
+    //            long minUpdateTimeMs,
+    //            long timeShiftBufferDepthMs,
+    //            long suggestedPresentationDelayMs,
+    //            long publishTimeMs,
+    //            @Nullable ProgramInformation programInformation,
+    //            @Nullable UtcTimingElement utcTiming,
+    //            @Nullable ServiceDescriptionElement serviceDescription,
+    //            @Nullable Uri location,
+    //            List<Period> periods) {
+    //        return new DashManifest(
+    //                availabilityStartTime,
+    //                durationMs,
+    //                minBufferTimeMs,
+    //                false,
+    //                minUpdateTimeMs,
+    //                timeShiftBufferDepthMs,
+    //                suggestedPresentationDelayMs,
+    //                publishTimeMs,
+    //                programInformation,
+    //                utcTiming,
+    //                serviceDescription,
+    //                location,
+    //                periods);
+    //    }
+    //}
 }

@@ -47,7 +47,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:' + appCompatXLibraryVersion
     testImplementation 'junit:junit:' + junitVersion
     androidTestImplementation 'androidx.test.ext:junit:' + testXSupportLibraryVersion
-
+    
     implementation project(':sharedutils')
     implementation project(':mediaserviceinterfaces')
     implementation project(':youtubeapi')
@@ -67,6 +67,12 @@ dependencies {
 
     implementation 'com.github.bumptech.glide:glide:' + glideVersion
 
+    implementation 'androidx.work:work-runtime:' + workVersion
+
+    implementation 'androidx.browser:browser:' + browserXVersion
+
+    storigImplementation project(path: ':leanbackassistant')
+    storigImplementation project(path: ':appupdatechecker2')
     stbetaImplementation project(path: ':leanbackassistant')
     stbetaImplementation project(path: ':appupdatechecker2')
     strtarmeniaImplementation project(path: ':appupdatechecker2')
