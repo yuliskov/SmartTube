@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import android.os.Build;
+
 import androidx.annotation.NonNull;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
@@ -251,7 +253,11 @@ public class StateUpdater extends PlayerEventListenerHelper {
         if (mTempVideoFormat != null) {
             getController().setFormat(mTempVideoFormat);
         } else {
-            getController().setFormat(mPlayerData.getFormat(FormatItem.TYPE_VIDEO));
+            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1) {
+                getController().setFormat(FormatItem.VIDEO_HD_VP9_30);
+            } else {
+                getController().setFormat(mPlayerData.getFormat(FormatItem.TYPE_VIDEO));
+            }
         }
     }
 

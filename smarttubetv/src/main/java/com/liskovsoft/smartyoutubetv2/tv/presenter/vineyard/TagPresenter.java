@@ -15,6 +15,11 @@ public class TagPresenter extends Presenter {
     private static int sDefaultTextColor;
     private static int sSelectedBackgroundColor;
     private static int sSelectedTextColor;
+    private final int mNextFocusUpId;
+
+    public TagPresenter(int nextFocusUpId) {
+        mNextFocusUpId = nextFocusUpId;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent) {
@@ -38,6 +43,7 @@ public class TagPresenter extends Presenter {
 
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
+        cardView.setNextFocusUpId(mNextFocusUpId);
         updateCardBackgroundColor(cardView, false);
         updateCardTextColor(cardView, false);
         return new ViewHolder(cardView);

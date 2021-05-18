@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
+import android.os.Build;
 import android.util.Pair;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.source.TrackGroup;
@@ -20,6 +21,8 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil.extractCodec;
+
 public class TrackSelectorManager implements TrackSelectorCallback {
     public static final int RENDERER_INDEX_VIDEO = 0;
     public static final int RENDERER_INDEX_AUDIO = 1;
@@ -27,6 +30,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     //private static final TrackSelection.Factory FIXED_FACTORY = new FixedTrackSelection.Factory();
     //private static final TrackSelection.Factory RANDOM_FACTORY = new RandomTrackSelection.Factory();
     private static final String TAG = TrackSelectorManager.class.getSimpleName();
+    private final static int MAX_VIDEO_WIDTH = (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ? 1280 :
+            Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ? 1920 : 3840);
 
     private DefaultTrackSelector mTrackSelector;
     //private TrackSelection.Factory mTrackSelectionFactory;
@@ -449,6 +454,9 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
                 for (MediaTrack mediaTrack : trackGroup) {
                     if (mediaTrack == null) {
+                        continue;
+                    }
+                    if (mediaTrack.format.width > MAX_VIDEO_WIDTH) {
                         continue;
                     }
 
