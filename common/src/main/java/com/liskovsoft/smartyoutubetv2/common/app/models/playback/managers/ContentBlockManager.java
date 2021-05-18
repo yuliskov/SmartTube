@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ContentBlockManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = ContentBlockManager.class.getSimpleName();
+    private static final long SEGMENT_CHECK_DURATION_MS = 1_000;
     private MediaItemManager mMediaItemManager;
     private ContentBlockData mContentBlockData;
     private Video mVideo;
@@ -152,7 +153,8 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     }
 
     private boolean isPositionAtSegmentStart(long positionMs, SponsorSegment segment) {
-        return positionMs >= segment.getStartMs() && positionMs <= (segment.getStartMs() + 1_000);
+        // Note. Getting into account playback speed.
+        return positionMs >= segment.getStartMs() && positionMs <= (segment.getStartMs() + SEGMENT_CHECK_DURATION_MS * getController().getSpeed());
     }
 
     private boolean isPositionInsideSegment(long positionMs, SponsorSegment segment) {
