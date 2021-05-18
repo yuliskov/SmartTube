@@ -39,6 +39,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         appendPlaylistsStyle(settingsPresenter);
         appendScaleUI(settingsPresenter);
         appendVideoGridScale(settingsPresenter);
+        appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_main_ui), () -> {
             if (mRestartApp) {
@@ -88,11 +89,11 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
                 {R.string.sorting_last_viewed, MainUIData.CHANNEL_SORTING_LAST_VIEWED}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
                 mMainUIData.setChannelCategorySorting(pair[1]);
-                BrowsePresenter.instance(getContext()).updateChannelCategorySorting();
+                BrowsePresenter.instance(getContext()).updateChannelSorting();
             }, mMainUIData.getChannelCategorySorting() == pair[1]));
         }
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.channel_category_sorting), options);
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.channels_category_sorting), options);
     }
 
     private void appendPlaylistsStyle(AppSettingsPresenter settingsPresenter) {
@@ -135,7 +136,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
     private void appendScaleUI(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        for (float scale : new float[] {0.6f, 0.65f, 0.7f, 0.75f, 0.8f, 0.85f, 0.9f, 0.95f, 1.0f, 1.05f, 1.1f, 1.15f, 1.2f}) {
+        for (float scale : new float[] {0.6f, 0.65f, 0.7f, 0.75f, 0.8f, 0.85f, 0.9f, 0.95f, 1.0f, 1.05f, 1.1f, 1.15f, 1.2f, 1.25f, 1.3f, 1.35f, 1.4f}) {
             options.add(UiOptionItem.from(String.format("%sx", scale),
                     optionItem -> {
                         mMainUIData.setUIScale(scale);
@@ -157,5 +158,22 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.video_grid_scale), options);
+    }
+
+    private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.channels_old_look),
+                optionItem -> {
+                    mMainUIData.enableUploadsOldLook(optionItem.isSelected());
+                    mRestartApp = true;
+                },
+                mMainUIData.isUploadsOldLookEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.channels_auto_load),
+                optionItem -> mMainUIData.enableUploadsAutoLoad(optionItem.isSelected()),
+                mMainUIData.isUploadsAutoLoadEnabled()));
+
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 }

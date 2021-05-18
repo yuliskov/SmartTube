@@ -10,6 +10,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.locale.LangHelper;
 import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 
 import java.util.Locale;
@@ -18,8 +19,10 @@ public class MotherActivity extends FragmentActivity {
     private static final String TAG = MotherActivity.class.getSimpleName();
     private static final float DEFAULT_DENSITY = 2.0f; // xhdpi
     private static final float DEFAULT_WIDTH = 1920f; // xhdpi
-    //private static DisplayMetrics sCachedDisplayMetrics;
+    private static DisplayMetrics sCachedDisplayMetrics;
     private static Locale sCachedLocale;
+    private static int sNumActivities;
+    protected static boolean sIsInPipMode;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -29,10 +32,30 @@ public class MotherActivity extends FragmentActivity {
 
         initDpi();
         initTheme();
+
+        sNumActivities++;
     }
 
-    public void destroyActivity() {
-        super.finish();
+    public void finishReally() {
+        try {
+            super.finish();
+        } catch (Exception e) {
+            // TextView not attached to window manager (IllegalArgumentException)
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        sNumActivities--;
+
+        if (ViewManager.instance(this).isFinishing()) {
+            boolean noActivities = sNumActivities == 0;
+            boolean singlePipActivity = sNumActivities == 1 && sIsInPipMode;
+            if (noActivities || singlePipActivity) {
+                ViewManager.instance(this).forceFinishTheApp();
+            }
+        }
     }
 
     @Override
@@ -40,19 +63,14 @@ public class MotherActivity extends FragmentActivity {
         super.attachBaseContext(LocaleContextWrapper.wrap(newBase, getLocale(newBase)));
     }
 
-    //@Override
-    //protected void onStart() {
-    //    super.onStart();
-    //
-    //    applyCustomConfig();
-    //}
-
     @Override
     protected void onResume() {
         super.onResume();
 
         // 4K fix with AFR
         applyCustomConfig();
+        // Most of the fullscreen tweaks could be performed in styles but not all.
+        // E.g. Hide bottom navigation bar (couldn't be done in styles).
         Helpers.makeActivityFullscreen(this);
     }
 
@@ -89,15 +107,18 @@ public class MotherActivity extends FragmentActivity {
     private void initDpi() {
         // To adapt to resolution change (e.g. on AFR) we can't do caching.
 
-        float uiScale = MainUIData.instance(this).getUIScale();
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
-        float density = DEFAULT_DENSITY / widthRatio * uiScale;
-        displayMetrics.density = density;
-        displayMetrics.scaledDensity = density;
+        if (sCachedDisplayMetrics == null) {
+            float uiScale = MainUIData.instance(this).getUIScale();
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
+            float density = DEFAULT_DENSITY / widthRatio * uiScale;
+            displayMetrics.density = density;
+            displayMetrics.scaledDensity = density;
+            sCachedDisplayMetrics = displayMetrics;
+        }
 
-        getResources().getDisplayMetrics().setTo(displayMetrics);
+        getResources().getDisplayMetrics().setTo(sCachedDisplayMetrics);
     }
 
     private static Locale getLocale(Context context) {

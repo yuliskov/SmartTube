@@ -116,7 +116,7 @@
     <string name="subtitle_black_bg">Black background</string>
     <string name="player_seek_preview">Preview while seeking</string>
     <string name="color_scheme_dark_grey_oled">Dark (OLED)</string>
-    <string name="channel_category_sorting">Channel section sorting</string>
+    <string name="channels_category_sorting">Channel section sorting</string>
     <string name="sorting_by_new_content">New content</string>
     <string name="sorting_alphabetically">Alphabetically</string>
     <string name="sorting_last_viewed">Last viewed</string>
@@ -126,6 +126,5 @@
     <string name="playlists_style_rows">Rows</string>
     <string name="player_show_clock">Show clock</string>
     <string name="player_show_remaining_time">Show remaining time</string>
-    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Open channel videos</string>
 </resources>

@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
@@ -14,8 +13,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGrou
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
+import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -67,14 +66,13 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
     @Override
     public void onViewInitialized() {
-        loadSuggestedKeywords();
-
         startSearchInt(mSearchText);
         mSearchText = null;
     }
 
-    private void loadSuggestedKeywords() {
-        // TODO: not implemented
+    @Override
+    public void onVideoItemSelected(Video item) {
+        // NOP
     }
 
     @Override
@@ -101,6 +99,11 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         } else if (item.isChannel()) {
             VideoMenuPresenter.instance(getContext()).showChannelMenu(item);
         }
+    }
+
+    @Override
+    public boolean hasPendingActions() {
+        return RxUtils.isAnyActionRunning(mLoadAction, mScrollAction);
     }
 
     public void onSearch(String searchText) {
@@ -144,7 +147,14 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     }
 
     @Override
-    public void onScrollEnd(VideoGroup group) {
+    public void onScrollEnd(Video item) {
+        if (item == null) {
+            Log.e(TAG, "Can't scroll. Video is null.");
+            return;
+        }
+
+        VideoGroup group = item.group;
+
         Log.d(TAG, "onScrollEnd: Group title: " + group.getTitle());
 
         boolean updateInProgress = mScrollAction != null && !mScrollAction.isDisposed();

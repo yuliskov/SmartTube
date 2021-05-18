@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
-import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
@@ -13,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -22,6 +22,9 @@ import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class VideoLoader extends PlayerEventListenerHelper {
     private static final String TAG = VideoLoader.class.getSimpleName();
@@ -35,6 +38,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private long mSleepTimerStartMs;
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
+    private final Map<Integer, Integer> mErrorMap = new HashMap<>();
     private final Runnable mReloadVideoHandler = () -> loadVideo(mLastVideo);
     private final Runnable mPendingNext = () -> {
         if (getController() != null) {
@@ -43,6 +47,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     };
     private final Runnable mPendingRestartEngine = () -> {
         if (getController() != null) {
+            YouTubeMediaService.instance().invalidateCache();
             getController().restartEngine(); // properly save position of the current track
         }
     };
@@ -56,6 +61,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     @Override
     public void onInitDone() {
         mPlayerData = PlayerData.instance(getActivity());
+        initErrorMap();
     }
 
     @Override
@@ -89,35 +95,47 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
         // Some ciphered data might be stalled.
         // Might happen when the app wasn't used quite a long time.
-        MessageHelpers.showMessage(getActivity(), R.string.msg_player_error, type);
+        MessageHelpers.showMessage(getActivity(), getErrorMessage(type));
 
-        YouTubeMediaService.instance().invalidateCache();
+        // Delay to fix frequent requests
+        Utils.postDelayed(mHandler, mPendingRestartEngine, 3_000);
+    }
 
-        Utils.postDelayed(mHandler, mPendingRestartEngine, 3_000); // fix too frequent request
+    @Override
+    public void onBuffering() {
+        //MessageHelpers.showMessage(getActivity(), "Buffering occurs!");
 
-        //if (type == PlayerEventListener.ERROR_TYPE_SOURCE ||
-        //    type == PlayerEventListener.ERROR_TYPE_RENDERER ||
-        //    type == PlayerEventListener.ERROR_TYPE_REMOTE) {
-        //    // Some ciphered data might be stalled.
-        //    // Might happen when the app wasn't used quite a long time.
-        //    YouTubeMediaService.instance().invalidateCache();
-        //    loadVideo(mLastVideo);
-        //} else {
-        //    MessageHelpers.showMessage(getActivity(), R.string.msg_player_error);
-        //}
+        // Fix long buffering
+        Utils.postDelayed(mHandler, mPendingRestartEngine, 5_000);
+    }
 
-        //getController().showControls(true);
+    @Override
+    public void onPlay() {
+        //MessageHelpers.showMessage(getActivity(), "Start playing!");
+
+        // Seems fine. Buffering is gone.
+        Utils.removeCallbacks(mHandler, mPendingRestartEngine);
     }
 
     @Override
     public boolean onPreviousClicked() {
-        openVideoInt(mPlaylist.previous());
+        loadPrevious();
 
         return true;
     }
 
     @Override
     public boolean onNextClicked() {
+        loadNext();
+
+        return true;
+    }
+
+    public void loadPrevious() {
+        openVideoInt(mPlaylist.previous());
+    }
+
+    public void loadNext() {
         Video next = mPlaylist.next();
 
         if (next == null) {
@@ -125,8 +143,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
         } else {
             openVideoInt(next);
         }
-
-        return true;
     }
 
     @Override
@@ -189,7 +205,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     private int checkSleepTimer(int playbackMode) {
-        if (mPlayerData.isSleepTimerEnabled()) {
+        if (mPlayerData.isSonyTimerFixEnabled()) {
             if (System.currentTimeMillis() - mSleepTimerStartMs > 60 * 60 * 1_000) {
                 MessageHelpers.showLongMessage(getActivity(), R.string.player_sleep_timer);
                 playbackMode = PlaybackEngineController.PLAYBACK_MODE_PAUSE;
@@ -325,5 +341,17 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private void disposeActions() {
         RxUtils.disposeActions(mFormatInfoAction, mMpdStreamAction);
         Utils.removeCallbacks(mHandler, mReloadVideoHandler, mPendingRestartEngine, mPendingNext);
+    }
+
+    private void initErrorMap() {
+        mErrorMap.put(PlayerEventListener.ERROR_TYPE_SOURCE, R.string.msg_player_error_source);
+        mErrorMap.put(PlayerEventListener.ERROR_TYPE_RENDERER, R.string.msg_player_error_renderer);
+        mErrorMap.put(PlayerEventListener.ERROR_TYPE_UNEXPECTED, R.string.msg_player_error_unexpected);
+    }
+
+    private String getErrorMessage(int type) {
+        Integer resId = mErrorMap.get(type);
+        
+        return resId != null ? getActivity().getString(resId) : getActivity().getString(R.string.msg_player_error, type);
     }
 }

@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
 import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -29,7 +30,9 @@ import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.okhttp.OkHttpHelpers;
 import com.liskovsoft.youtubeapi.app.AppConstants;
+import com.liskovsoft.youtubeapi.common.helpers.RetrofitHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,6 +42,7 @@ import java.util.List;
 public class ExoMediaSourceFactory {
     private static final String TAG = ExoMediaSourceFactory.class.getSimpleName();
     private static ExoMediaSourceFactory sInstance;
+    @SuppressWarnings("deprecation")
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private final Factory mMediaDataSourceFactory;
     private final Context mContext;
@@ -48,12 +52,13 @@ public class ExoMediaSourceFactory {
     private static final Uri DASH_MANIFEST_URI = Uri.parse("https://example.com/test.mpd");
     private static final String DASH_MANIFEST_EXTENSION = "mpd";
     private static final String HLS_PLAYLIST_EXTENSION = "m3u8";
+    private static final boolean USE_BANDWIDTH_METER = false;
     private Handler mMainHandler;
     private MediaSourceEventListener mEventLogger;
 
     private ExoMediaSourceFactory(Context context) {
         mContext = context;
-        mMediaDataSourceFactory = buildDataSourceFactory(false);
+        mMediaDataSourceFactory = buildDataSourceFactory(USE_BANDWIDTH_METER);
     }
 
     public static ExoMediaSourceFactory instance(Context context) {
@@ -121,6 +126,7 @@ public class ExoMediaSourceFactory {
         return buildHttpDataSourceFactory(mContext, useBandwidthMeter ? BANDWIDTH_METER : null);
     }
 
+    @SuppressWarnings("deprecation")
     private MediaSource buildMediaSource(Uri uri, String overrideExtension) {
         int type = TextUtils.isEmpty(overrideExtension) ? Util.inferContentType(uri) : Util.inferContentType("." + overrideExtension);
         switch (type) {
@@ -128,7 +134,7 @@ public class ExoMediaSourceFactory {
                 SsMediaSource ssSource =
                         new SsMediaSource.Factory(
                                 new DefaultSsChunkSource.Factory(mMediaDataSourceFactory),
-                                buildDataSourceFactory(false)
+                                buildDataSourceFactory(USE_BANDWIDTH_METER)
                         )
                                 .createMediaSource(uri);
                 if (mEventLogger != null) {
@@ -139,7 +145,7 @@ public class ExoMediaSourceFactory {
                 DashMediaSource dashSource =
                         new DashMediaSource.Factory(
                                 new DefaultDashChunkSource.Factory(mMediaDataSourceFactory),
-                                buildDataSourceFactory(false)
+                                buildDataSourceFactory(USE_BANDWIDTH_METER)
                         )
                                 .createMediaSource(uri);
                 if (mEventLogger != null) {
@@ -223,13 +229,17 @@ public class ExoMediaSourceFactory {
         return new DefaultDataSourceFactory(context, bandwidthMeter, buildHttpDataSourceFactory(context, bandwidthMeter));
     }
 
+    // Use OkHttp for networking
     //public static HttpDataSource.Factory buildHttpDataSourceFactory(Context context, DefaultBandwidthMeter bandwidthMeter) {
-    //    OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(OkHttpHelpers.getOkHttpClient(), AppConstants.APP_USER_AGENT,
+    //    // OkHttpHelpers.getOkHttpClient()
+    //    // RetrofitHelper.createOkHttpClient()
+    //    OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(RetrofitHelper.createOkHttpClient(), AppConstants.APP_USER_AGENT,
     //            bandwidthMeter);
     //    //addCommonHeaders(context, dataSourceFactory);
     //    return dataSourceFactory;
     //}
 
+    // Use internal component for networking
     private static HttpDataSource.Factory buildHttpDataSourceFactory(Context context, DefaultBandwidthMeter bandwidthMeter) {
         DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(AppConstants.APP_USER_AGENT, bandwidthMeter);
         //addCommonHeaders(context, dataSourceFactory); // cause troubles for some users

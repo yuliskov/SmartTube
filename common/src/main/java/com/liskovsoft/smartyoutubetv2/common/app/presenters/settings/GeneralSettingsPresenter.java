@@ -3,12 +3,15 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HQDialogManager;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +20,13 @@ import java.util.Map.Entry;
 
 public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private final MainUIData mMainUIData;
+    private final PlayerData mPlayerData;
     private boolean mRestartApp;
 
     public GeneralSettingsPresenter(Context context) {
         super(context);
         mMainUIData = MainUIData.instance(context);
+        mPlayerData = PlayerData.instance(context);
     }
 
     public static GeneralSettingsPresenter instance(Context context) {
@@ -35,6 +40,8 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendLeftPanelCategories(settingsPresenter);
         appendBootToCategory(settingsPresenter);
         appendAppExitCategory(settingsPresenter);
+        appendBackgroundPlaybackCategory(settingsPresenter);
+        appendBackgroundPlaybackActivationCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_general), () -> {
@@ -87,6 +94,25 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.app_exit_shortcut), options);
+    }
+
+    private void appendBackgroundPlaybackCategory(AppSettingsPresenter settingsPresenter) {
+        OptionCategory category = HQDialogManager.createBackgroundPlaybackCategory(getContext(), mPlayerData);
+        settingsPresenter.appendRadioCategory(category.title, category.options);
+    }
+
+    private void appendBackgroundPlaybackActivationCategory(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from("HOME",
+                option -> mMainUIData.setBackgroundShortcut(MainUIData.BACKGROUND_SHORTCUT_HOME),
+                mMainUIData.getBackgroundShortcut() == MainUIData.BACKGROUND_SHORTCUT_HOME));
+
+        options.add(UiOptionItem.from("HOME/BACK",
+                option -> mMainUIData.setBackgroundShortcut(MainUIData.BACKGROUND_SHORTCUT_HOME_N_BACK),
+                mMainUIData.getBackgroundShortcut() == MainUIData.BACKGROUND_SHORTCUT_HOME_N_BACK));
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.background_playback_activation), options);
     }
 
     private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {

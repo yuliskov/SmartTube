@@ -793,7 +793,8 @@ public class SearchSupportFragment extends Fragment {
                 && mRowsSupportFragment != null && mRowsSupportFragment.getAdapter() == mResultAdapter) {
             focusOnResults();
         } else {
-            mSearchBar.requestFocus();
+            // Fixed moving focus to voice button when activity stated
+            //mSearchBar.requestFocus();
         }
     }
 

@@ -22,6 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackInfoFormatter2;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
 
 import java.io.InputStream;
 import java.util.List;
@@ -32,9 +33,9 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private final ExoMediaSourceFactory mMediaSourceFactory;
     private final TrackSelectorManager mTrackSelectorManager;
     private final TrackInfoFormatter2 mTrackFormatter;
-    private PlayerEventListener mEventListener;
-    private Video mVideo;
     private boolean mOnSourceChanged;
+    private Video mVideo;
+    private PlayerEventListener mEventListener;
     private ExoPlayer mPlayer;
     private PlayerView mPlayerView;
 
@@ -138,7 +139,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             return false;
         }
 
-        return mPlayer.isPlaying();
+        return ExoUtils.isPlaying(mPlayer);
     }
 
     @Override
@@ -156,9 +157,14 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
         if (mPlayer != null) {
             mPlayer.removeListener(this);
+            mPlayer.stop();
             mPlayer.release();
             mPlayer = null;
         }
+
+        mPlayerView = null;
+        // Don't destroy it (needed inside bridge)!
+        //mEventListener = null;
     }
 
     @Override
@@ -290,16 +296,19 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             Log.d(TAG, "onPlayerStateChanged: " + TrackSelectorUtil.stateToString(playbackState));
         }
 
-        boolean playPressed = Player.STATE_READY == playbackState && playWhenReady;
-        boolean pausePressed = Player.STATE_READY == playbackState && !playWhenReady;
-        boolean playbackEnded = Player.STATE_ENDED == playbackState && playWhenReady;
+        boolean isPlayPressed = Player.STATE_READY == playbackState && playWhenReady;
+        boolean isPausePressed = Player.STATE_READY == playbackState && !playWhenReady;
+        boolean isPlaybackEnded = Player.STATE_ENDED == playbackState && playWhenReady;
+        boolean isBuffering = Player.STATE_BUFFERING == playbackState && playWhenReady;
 
-        if (playPressed) {
+        if (isPlayPressed) {
             mEventListener.onPlay();
-        } else if (pausePressed) {
+        } else if (isPausePressed) {
             mEventListener.onPause();
-        } else if (playbackEnded) {
+        } else if (isPlaybackEnded) {
             mEventListener.onPlayEnd();
+        } else if (isBuffering) {
+            mEventListener.onBuffering();
         }
     }
 

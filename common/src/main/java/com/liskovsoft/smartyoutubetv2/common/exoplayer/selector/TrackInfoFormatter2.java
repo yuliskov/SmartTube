@@ -63,7 +63,7 @@ public class TrackInfoFormatter2 {
         int width = format.width;
         int height = format.height;
 
-        // Compare sizes to avoid non-standard video proportions
+        // Try to avoid square video proportions
         return width > height && !VideoTrack.sizeEquals(width, height, 15) ? getResolutionLabelByWidth(width) : getResolutionLabelByHeight(height);
     }
 

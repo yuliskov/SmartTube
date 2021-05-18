@@ -1,11 +1,10 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
-import android.content.Context;
-
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -18,7 +17,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,11 +27,15 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
     private Disposable mMetadataAction;
     private Disposable mScrollAction;
 
-    public SuggestionsLoader() {
-    }
-
     public interface MetadataListener {
         void onMetadata(MediaItemMetadata metadata);
+    }
+
+    @Override
+    public void openVideo(Video item) {
+        // Remote control fix. Slow network fix. Suggestions may still be loading.
+        // This could lead to changing current video info (title, id etc) to wrong one.
+        disposeActions();
     }
 
     @Override
@@ -43,17 +45,22 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onEngineReleased() {
-        RxUtils.disposeActions(mMetadataAction, mScrollAction);
+        disposeActions();
     }
 
     @Override
-    public void onScrollEnd(VideoGroup group) {
-        continueGroup(group);
+    public void onScrollEnd(Video item) {
+        if (item == null) {
+            Log.e(TAG, "Can't scroll. Video is null.");
+            return;
+        }
+
+        continueGroup(item.group);
     }
 
     @Override
     public void onSuggestionItemClicked(Video item) {
-        // Visual response to user clicks
+        // Update UI to response to user clicks
         getController().resetSuggestedPosition();
     }
 
@@ -66,6 +73,8 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
+        getController().showProgressBar(true);
+
         MediaGroup mediaGroup = group.getMediaGroup();
 
         MediaItemManager mediaItemManager = YouTubeMediaService.instance().getMediaItemManager();
@@ -74,14 +83,19 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        continueMediaGroup ->
-                                getController().updateSuggestions(VideoGroup.from(continueMediaGroup, group.getCategory())),
-                        error -> Log.e(TAG, "continueGroup error: %s", error.getMessage())
+                        continueMediaGroup -> {
+                            getController().showProgressBar(false);
+                            getController().updateSuggestions(VideoGroup.from(continueMediaGroup, group.getCategory()));
+                        },
+                        error -> {
+                            getController().showProgressBar(false);
+                            Log.e(TAG, "continueGroup error: %s", error.getMessage());
+                        }
                 );
     }
 
     private void syncCurrentVideo(MediaItemMetadata mediaItemMetadata, Video video) {
-        video.sync(mediaItemMetadata, PlayerData.instance(getActivity()).isShowFullDateEnabled());
+        video.sync(mediaItemMetadata, PlayerData.instance(getActivity()).isAbsoluteDateEnabled());
         getController().setVideo(video);
     }
 
@@ -91,7 +105,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
             return;
         }
 
-        RxUtils.disposeActions(mMetadataAction, mScrollAction);
+        disposeActions();
 
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
@@ -135,7 +149,9 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
         List<MediaGroup> suggestions = mediaItemMetadata.getSuggestions();
 
         if (suggestions == null) {
-            Log.e(TAG, "loadSuggestions: Can't obtain suggestions for video: " + video.title);
+            String msg = "loadSuggestions: Can't obtain suggestions for video: " + video.title;
+            Log.e(TAG, msg);
+            MessageHelpers.showMessage(getActivity(), msg);
             return;
         }
 
@@ -154,7 +170,9 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
         getController().clearSuggestions(); // clear previous videos
 
         for (MediaGroup group : suggestions) {
-            getController().updateSuggestions(VideoGroup.from(group));
+            if (group != null && !group.isEmpty()) {
+                getController().updateSuggestions(VideoGroup.from(group));
+            }
         }
     }
 
@@ -168,5 +186,9 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
                 listener.onMetadata(mediaItemMetadata);
             }
         }
+    }
+
+    private void disposeActions() {
+        RxUtils.disposeActions(mMetadataAction, mScrollAction);
     }
 }

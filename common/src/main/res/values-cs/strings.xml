@@ -115,7 +115,7 @@
     <string name="subtitle_black_bg">Černé pozadí</string>
     <string name="player_seek_preview">Náhledy při přeskakování</string>
     <string name="color_scheme_dark_grey_oled">Tmavé (OLED)</string>
-    <string name="channel_category_sorting">Řazení sekce kanálu</string>
+    <string name="channels_category_sorting">Řazení sekce kanálu</string>
     <string name="sorting_by_new_content">Nový obsah</string>
     <string name="sorting_alphabetically">Abecedně</string>
     <string name="sorting_last_viewed">Poslední zhlédnuté</string>
@@ -125,7 +125,6 @@
     <string name="playlists_style_rows">Řady</string>
     <string name="player_show_clock">Zobraz hodiny</string>
     <string name="player_show_remaining_time">Ukaž zbývající čas</string>
-    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Otevřít videa kanálu</string>
     <string name="app_exit_shortcut">Ukončit aplikaci</string>
     <string name="app_exit_none">Neukončovat</string>
@@ -196,4 +195,18 @@
     <string name="player_remember_speed_none">Nepamatovat si žádné</string>
     <string name="player_remember_speed_all">Stejná rychlost pro všechna videa</string>
     <string name="player_remember_speed_each">Každé video má svou vlastní rychlost</string>
+    <string name="msg_player_error_source">Nelze načíst video</string>
+    <string name="msg_player_error_renderer">Vybraný formát videa není podporován</string>
+    <string name="msg_player_error_unexpected">Neznámá chyba video dekodéru</string>
+    <string name="video_aspect">Poměr stran</string>
+    <string name="player_tweaks">Vývojářské možnosti</string>
+    <string name="header_uploads">Nahraná videa</string>
+    <string name="player_show_global_clock">Zobrazit hodiny v horní části videa</string>
+    <string name="uploads_old_look">Vrátit zpět starý vzhled sekce Nahraná videa</string>
+    <string name="background_playback_activation">Přehrávání na pozadí (aktivace)</string>
+    <string name="channels_old_look">Vrátit zpět starý vzhled sekce Kanály</string>
+    <string name="channels_auto_load">Automaticky načíst obsah sekce Kanály</string>
+    <string name="return_to_background_video">Zpět na video běžící na pozadí</string>
+    <string name="pin_to_sidebar">Připnout na postranní panel</string>
+    <string name="unpin_from_sidebar">Odepnout z postranního panelu</string>
 </resources>

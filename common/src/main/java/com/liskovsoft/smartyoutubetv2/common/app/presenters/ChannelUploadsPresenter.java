@@ -13,6 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -55,6 +56,11 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     @Override
+    public void onVideoItemSelected(Video item) {
+        // NOP
+    }
+
+    @Override
     public void onVideoItemClicked(Video item) {
         if (item.isVideo()) {
             mPlaybackPresenter.openVideo(item);
@@ -73,7 +79,14 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     @Override
-    public void onScrollEnd(VideoGroup group) {
+    public void onScrollEnd(Video item) {
+        if (item == null) {
+            Log.e(TAG, "Can't scroll. Video is null.");
+            return;
+        }
+
+        VideoGroup group = item.group;
+
         Log.d(TAG, "onScrollEnd: Group title: " + group.getTitle());
 
         boolean scrollInProgress = mScrollAction != null && !mScrollAction.isDisposed();
@@ -86,6 +99,11 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     @Override
     public void onViewDestroyed() {
         disposeActions();
+    }
+
+    @Override
+    public boolean hasPendingActions() {
+        return RxUtils.isAnyActionRunning(mScrollAction, mUpdateAction);
     }
 
     public void openChannel(Video item) {
@@ -111,8 +129,16 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         }
     }
 
+    public Observable<MediaGroup> obtainVideoGroupObservable(Video item) {
+        if (item == null) {
+            return null;
+        }
+
+        return mGroupManager.getGroupObserve(item.mediaItem);
+    }
+
     private void updateGrid(Video item) {
-        updateVideoGrid(mGroupManager.getGroupObserve(item.mediaItem));
+        updateVideoGrid(obtainVideoGroupObservable(item));
     }
 
     private void disposeActions() {

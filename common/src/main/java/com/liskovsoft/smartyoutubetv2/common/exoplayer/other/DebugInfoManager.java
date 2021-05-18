@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.other;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.os.Build.VERSION;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,8 +20,6 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.mediacodec.MediaCodecInfo;
-import com.google.android.exoplayer2.mediacodec.MediaCodecUtil;
-import com.google.android.exoplayer2.mediacodec.MediaCodecUtil.DecoderQueryException;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
@@ -28,6 +27,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolder.Mode;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.UhdHelper;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 
 import java.util.ArrayList;
@@ -62,15 +62,15 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private final String mAppVersion;
 
     /**
+     * @param activity context
      * @param player   The {@link SimpleExoPlayer} from which debug information should be obtained.
      * @param resLayoutId The {@link TextView} that should be updated to display the information.
-     * @param ctx context
      */
-    public DebugInfoManager(SimpleExoPlayer player, int resLayoutId, Activity ctx) {
+    public DebugInfoManager(Activity activity, SimpleExoPlayer player, int resLayoutId) {
         mPlayer = player;
-        mDebugViewGroup = ctx.findViewById(resLayoutId);
-        mContext = ctx;
-        mTextSize = ctx.getResources().getDimension(R.dimen.debug_text_size);
+        mDebugViewGroup = activity.findViewById(resLayoutId);
+        mContext = activity;
+        mTextSize = activity.getResources().getDimension(R.dimen.debug_text_size);
         mAppVersion = String.format("%s Version", mContext.getString(R.string.app_name));
         inflate();
     }
@@ -188,7 +188,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         appendDisplayInfo();
         //appendPlayerWindowIndex();
         appendVersion();
-        appendDeviceName();
+        appendDeviceNameAndSDK();
 
         // Schedule next update
         mDebugViewGroup.removeCallbacks(this);
@@ -231,11 +231,12 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
                 toHumanReadable(video.bitrate),
                 toHumanReadable(audio.bitrate)
         )));
-        String par = video.pixelWidthHeightRatio == Format.NO_VALUE ||
-                video.pixelWidthHeightRatio == 1f ?
-                DEFAULT : String.format(Locale.US, "%.02f", video.pixelWidthHeightRatio);
-        mVideoInfo.add(new Pair<>("Aspect Ratio", par));
-        String videoCodecName = getVideoCodecNameV1(video);
+        // Aspect info is not valid since we're using custom views
+        //String par = video.pixelWidthHeightRatio == Format.NO_VALUE ||
+        //        video.pixelWidthHeightRatio == 1f ?
+        //        DEFAULT : String.format(Locale.US, "%.02f", video.pixelWidthHeightRatio);
+        //mVideoInfo.add(new Pair<>("Aspect Ratio", par));
+        String videoCodecName = getVideoDecoderNameV2();
         mVideoInfo.add(new Pair<>("Video Decoder Name", videoCodecName));
         mVideoInfo.add(new Pair<>("Hardware Accelerated", String.valueOf(isHardwareAccelerated(videoCodecName))));
     }
@@ -324,7 +325,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         currentMode = currentMode != null ? currentMode : defaultMode;
         mDisplayInfo.add(new Pair<>("Display dpi", String.valueOf(Helpers.getDeviceDpi(mContext))));
         mDisplayInfo.add(new Pair<>("Display Resolution", currentMode));
-        mDisplayInfo.add(new Pair<>("Default Resolution", defaultMode));
+        mDisplayInfo.add(new Pair<>("Boot Resolution", defaultMode));
     }
 
     private void appendPlayerWindowIndex() {
@@ -336,8 +337,9 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         appendRow(mAppVersion, AppInfoHelpers.getAppVersionName(mContext));
     }
 
-    private void appendDeviceName() {
+    private void appendDeviceNameAndSDK() {
         appendRow("Device Name", Helpers.getDeviceName());
+        appendRow("Android SDK", VERSION.SDK_INT);
     }
 
     private void appendRow(String name, boolean val) {
@@ -418,23 +420,18 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         return result;
     }
 
-    private String getVideoCodecNameV1(Format format) {
+    // NOTE: Be aware. This info isn't real! It's like caps or something like that. To get real info use method below.
+    private String getVideoDecoderNameV1(Format format) {
         if (format == null) {
             return null;
         }
 
-        MediaCodecInfo info = null;
-
-        try {
-            // Ver 2.10.4
-            info = MediaCodecUtil.getDecoderInfo(format.sampleMimeType, false, false);
-
-            // Ver 2.9.6
-            //info = MediaCodecUtil.getDecoderInfo(format.sampleMimeType, false);
-        } catch (DecoderQueryException e) {
-            e.printStackTrace();
-        }
+        MediaCodecInfo info = ExoUtils.getCapsDecoderInfo(format.sampleMimeType);
 
         return info != null ? info.name : null;
+    }
+
+    private String getVideoDecoderNameV2() {
+        return ExoUtils.getVideoDecoderName();
     }
 }

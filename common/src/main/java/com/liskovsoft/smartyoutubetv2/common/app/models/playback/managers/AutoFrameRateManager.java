@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.os.Looper;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
@@ -28,7 +27,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     private static final String TAG = AutoFrameRateManager.class.getSimpleName();
     private static final int AUTO_FRAME_RATE_ID = 21;
     private static final int AUTO_FRAME_RATE_DELAY_ID = 22;
-    private final HqDialogManager mUiManager;
+    private final HQDialogManager mUiManager;
     private StateUpdater mStateUpdater;
     private final AutoFrameRateHelper mAutoFrameRateHelper;
     private final ModeSyncManager mModeSyncManager;
@@ -42,7 +41,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         getController().setPlay(true);
     };
 
-    public AutoFrameRateManager(HqDialogManager uiManager, StateUpdater stateUpdater) {
+    public AutoFrameRateManager(HQDialogManager uiManager, StateUpdater stateUpdater) {
         mUiManager = uiManager;
         mStateUpdater = stateUpdater;
         mAutoFrameRateHelper = new AutoFrameRateHelper();
@@ -168,7 +167,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
     private static OptionCategory createAutoFrameRateCategory(Context context, PlayerData playerData, Runnable onAfrCallback, Runnable onResolutionCallback, Runnable onFpsCorrectionCallback) {
         String title = context.getString(R.string.auto_frame_rate);
-        String fpsCorrection = context.getString(R.string.frame_rate_correction, "30->29.97, 60->59.94");
+        String fpsCorrection = context.getString(R.string.frame_rate_correction, "24->23.97, 30->29.97, 60->59.94");
         String resolutionSwitch = context.getString(R.string.resolution_switch);
         List<OptionItem> options = new ArrayList<>();
 

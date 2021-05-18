@@ -1,12 +1,12 @@
 package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.content.Context;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.locale.LangHelper;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.StringTokenizer;
+import java.util.Map;
 
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
@@ -78,16 +78,9 @@ public class LangUpdater {
      * Gets map of Human readable locale names and their respective lang codes
      * @return locale name/code map
      */
-    public HashMap<String, String> getSupportedLocales() {
+    public Map<String, String> getSupportedLocales() {
         LinkedHashMap<String, String> map = new LinkedHashMap<>();
-        String[] langs = mContext.getResources().getStringArray(R.array.supported_languages);
         map.put(mContext.getResources().getString(R.string.default_lang), "");
-        for (String lang : langs) {
-            StringTokenizer tokenizer = new StringTokenizer(lang, "|");
-            String humanReadableName = tokenizer.nextToken();
-            String langCode = tokenizer.nextToken();
-            map.put(humanReadableName, langCode);
-        }
-        return map;
+        return Helpers.getMap(mContext.getResources().getStringArray(R.array.supported_languages), "|", map);
     }
 }

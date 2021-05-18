@@ -81,7 +81,7 @@
 	<string name="player_ui_hide_behavior">自动隐藏用户界面</string>
 	<string name="player_ui_hide_never">从不</string>
 	<string name="side_panel_sections">设置侧边菜单</string>
-	<string name="boot_to_section">預設打开页面</string>
+	<string name="boot_to_section">预设打开页面</string>
 	<string name="large_ui">大用户界面</string>
 	<string name="video_grid_scale">视频框架比例</string>
 	<string name="scale_ui">用户界面比例</string>
@@ -117,7 +117,7 @@
 	<string name="subtitle_black_bg">背景播放</string>
 	<string name="player_seek_preview">搜索时预览</string>
 	<string name="color_scheme_dark_grey_oled">深灰色（OLED）</string>
-	<string name="channel_category_sorting">频道排序</string>
+	<string name="channels_category_sorting">频道排序</string>
 	<string name="sorting_by_new_content">新活动</string>
 	<string name="sorting_alphabetically">A-Z</string>
 	<string name="sorting_last_viewed">上次观看</string>
@@ -127,8 +127,7 @@
 	<string name="playlists_style_rows">行</string>
 	<string name="player_show_clock">显示时间</string>
 	<string name="player_show_remaining_time">显示剩余时间</string>
-	<string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
-	<string name="open_channel_uploads">打开频道上传</string>
+    <string name="open_channel_uploads">打开频道上传</string>
 	<string name="app_exit_shortcut">关闭应用程序</string>
 	<string name="app_exit_none">不要关闭</string>
 	<string name="app_double_back_exit">两下退后键</string>
@@ -189,4 +188,18 @@
 	<string name="intent_force_close">如果视频已经从外部打开，则强制退出</string>
 	<string name="btn_confirm">确认</string>
 	<string name="player_low_video_quality">较低的视频画质</string>
+	<string name="remote_session_closed">远程已经关闭</string>
+	<string name="msg_mode_switch_error">无法切换显示模式到 \"%s\"</string>
+	<string name="msg_player_error">播放器错误发生 %s。重新启动播放……</string>
+	<string name="video_preset_disabled">没有预设</string>
+	<string name="video_preset_enabled">下一段视频的格式将根据预设进行设置</string>
+	<string name="player_sleep_timer">睡眠定时</string>
+	<string name="player_show_quality_info">显示视频品质信息</string>
+	<string name="player_remember_each_speed">记住每个视频速度</string>
+	<string name="player_remember_speed_none">无</string>
+	<string name="player_remember_speed_all">所有视频都相同</string>
+	<string name="player_remember_speed_each">前一个视频</string>
+	<string name="msg_player_error_source">不能下载这个视频</string>
+	<string name="msg_player_error_renderer">选择的视频格式不支持</string>
+	<string name="msg_player_error_unexpected">未知视频解码器错误</string>
 </resources>

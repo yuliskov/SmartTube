@@ -10,7 +10,7 @@
     <string name="header_playlists">Bibliothèque</string>
     <string name="header_settings">Paramètres</string>
     <string name="header_channels">Chaînes</string>
-    <string name="subscriptions_signin_title">Voir les derniéres chaines que vous aimez</string>
+    <string name="subscriptions_signin_title">Voir les derniéres chaînes que vous aimez</string>
     <string name="subscriptions_signin_subtitle">Connectez-vous pour voir vos Abonnements</string>
     <string name="subscriptions_signin_button_text">CONNEXION</string>
     <string name="library_signin_to_show_more">Regardez les vidéos que vous avez aimées, enregistrées ou souscrites</string>
@@ -96,7 +96,7 @@
     <string name="select_account_on_boot">Sélectionnez au démarrage</string>
     <string name="player_other">Divers</string>
     <string name="player_full_date">Date précise dans la description</string>
-    <string name="open_channel">Ouvrir chaine</string>
+    <string name="open_channel">Ouvrir la chaîne</string>
     <string name="not_interested">Pas intéressé</string>
     <string name="you_wont_see_this_video">La vidéo a été supprimée de la recommandation</string>
     <string name="settings_search">Recherche</string>
@@ -117,7 +117,7 @@
     <string name="subtitle_black_bg">Fond noir</string>
     <string name="player_seek_preview">Aperçu pendant la recherche</string>
     <string name="color_scheme_dark_grey_oled">Sombre (OLED)</string>
-    <string name="channel_category_sorting">Classement des sections de chaînes</string>
+    <string name="channels_category_sorting">Classement des sections de chaînes</string>
     <string name="sorting_by_new_content">Nouveau contenu</string>
     <string name="sorting_alphabetically">Alphabétiquement</string>
     <string name="sorting_last_viewed">Populaire en premier</string>
@@ -127,7 +127,6 @@
     <string name="playlists_style_rows">Lignes</string>
     <string name="player_show_clock">Afficher l’horloge</string>
     <string name="player_show_remaining_time">Afficher le temps restant</string>
-    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Ouvrir les vidéos de la chaîne</string>
     <string name="app_exit_shortcut">Sortir de l’application</string>
     <string name="app_exit_none">Ne pas sortir de l\'application</string>
@@ -150,7 +149,7 @@
     <string name="unsubscribe_from_channel">Se désabonner de la chaîne</string>
     <string name="card_title_lines_num">Nombre de lignes du titre des tuiles</string>
     <string name="card_auto_scrolled_title">Titre recadré avec défilement automatique</string>
-    <string name="share_link">Lien de partage</string>
+    <string name="share_link">Partager lien</string>
     <string name="subscribe_to_channel">S\'abonner à la chaîne</string>
     <string name="wait_data_loading">Veuillez patienter pendant le chargement des données…</string>
     <string name="auto_frame_rate_pause">Pause automatique de la fréquence d\'images</string>
@@ -194,4 +193,20 @@
     <string name="msg_player_error">Une erreur de lecteur s\'est produite %s. Redémarrage de la lecture…</string>
     <string name="video_preset_disabled">Sans préréglage</string>
     <string name="video_preset_enabled">Le format de la vidéo suivante sera défini selon le préréglage</string>
+    <string name="player_sleep_timer">Minuterie de sommeil</string>
+    <string name="player_show_quality_info">Afficher les informations sur la qualité vidéo</string>
+    <string name="player_remember_each_speed">Se souvenir de la vitesse de chaque vidéo</string>
+    <string name="player_remember_speed_none">Aucun</string>
+    <string name="player_remember_speed_all">Idem sur toutes les vidéos</string>
+    <string name="player_remember_speed_each">Pour chaque vidéo</string>
+    <string name="msg_player_error_source">Impossible de charger la vidéo</string>
+    <string name="msg_player_error_renderer">Le format vidéo sélectionné n\'est pas pris en charge</string>
+    <string name="msg_player_error_unexpected">Erreur inconnue du décodeur vidéo</string>
+    <string name="video_aspect">Ratio d\'aspect</string>
+    <string name="player_tweaks">Options de développeur</string>
+    <string name="header_uploads">Uploads</string>
+    <string name="player_show_global_clock">Afficher l’horloge en haut de la vidéo</string>
+    <string name="uploads_old_look">Restaurer l\'ancienne apparence dans la section Uploads</string>
+    <string name="background_playback_activation">Activation de la lecture en arrière-plan</string>
+    <string name="channels_old_look">Restaurer l\'ancienne apparence dans la section des chaînes</string>
 </resources>

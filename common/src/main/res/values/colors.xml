@@ -14,4 +14,5 @@
     <color name="light_grey">#E4E4E4</color>
     <color name="leanback">#0096a6</color>
     <color name="semi_grey">#64000000</color>
+    <color name="grey">#282828</color>
 </resources>

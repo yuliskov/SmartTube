@@ -55,11 +55,11 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:' + rxAndroidVersion
     implementation 'io.reactivex.rxjava2:rxjava:' + rxJavaVersion
 
-    // implementation 'com.amazon.android:exoplayer:' + amazonExoplayerVersion
-    // implementation 'com.amazon.android:extension-okhttp:' + amazonExoplayerVersion
+    implementation 'com.amazon.android:exoplayer:' + amazonExoplayerVersion
+    implementation 'com.amazon.android:extension-okhttp:' + amazonExoplayerVersion
 
-    implementation 'com.google.android.exoplayer:exoplayer:' + exoplayerVersion
-    implementation 'com.google.android.exoplayer:extension-okhttp:' + exoplayerVersion
+    // implementation 'com.google.android.exoplayer:exoplayer:' + exoplayerVersion
+    // implementation 'com.google.android.exoplayer:extension-okhttp:' + exoplayerVersion
 
     // implementation 'com.github.amzn:exoplayer-amazon-port:' + amazonExoplayerJitpackVersion
 
@@ -77,5 +77,4 @@ dependencies {
     stbetaImplementation project(path: ':appupdatechecker2')
     strtarmeniaImplementation project(path: ':appupdatechecker2')
     stredboxtvImplementation project(path: ':appupdatechecker2')
-    stbolshoetvImplementation project(path: ':appupdatechecker2')
 }

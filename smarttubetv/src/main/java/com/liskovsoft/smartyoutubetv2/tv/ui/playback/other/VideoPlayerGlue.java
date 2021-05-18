@@ -1,6 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback.other;
 
-import android.app.Activity;
+import android.content.Context;
 import android.view.KeyEvent;
 import android.view.View;
 import androidx.leanback.media.PlaybackGlueHost;
@@ -75,7 +75,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
     private boolean mIsSingleKeyDown;
 
     public VideoPlayerGlue(
-            Activity context,
+            Context context,
             PlayerAdapter playerAdapter,
             OnActionClickedListener actionListener) {
         super(context, playerAdapter);

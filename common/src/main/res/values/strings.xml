@@ -39,7 +39,7 @@
     <string name="update_changelog">Changelog</string>
     <string name="install_update">Install update</string>
     <string name="msg_category_is_empty">Oops! There is nothing in here.</string>
-    <string name="dialog_add_to_playlist">Add to playlist</string>
+    <string name="dialog_add_to_playlist">Add/Remove from playlist</string>
     <string name="msg_signed_users_only">Signed users only</string>
     <string name="msg_cant_load_content">Oops. Can\'t load content.</string>
     <string name="title_video_presets">Video presets</string>
@@ -117,7 +117,7 @@
     <string name="subtitle_black_bg">Black background</string>
     <string name="player_seek_preview">Preview while seeking</string>
     <string name="color_scheme_dark_grey_oled">Dark Grey (OLED)</string>
-    <string name="channel_category_sorting">Channel section sorting</string>
+    <string name="channels_category_sorting">Channels section sorting</string>
     <string name="sorting_by_new_content">New content</string>
     <string name="sorting_alphabetically">Alphabetically</string>
     <string name="sorting_last_viewed">Last viewed</string>
@@ -125,9 +125,8 @@
     <string name="playlists_style">Playlists style</string>
     <string name="playlists_style_grid">Grid</string>
     <string name="playlists_style_rows">Rows</string>
-    <string name="player_show_clock">Show clock</string>
+    <string name="player_show_clock">Show clock in pop-up menu</string>
     <string name="player_show_remaining_time">Show remaining time</string>
-    <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Open channel uploads</string>
     <string name="app_exit_shortcut">Exit from the app</string>
     <string name="app_exit_none">Don\'t exit</string>
@@ -200,4 +199,18 @@
     <string name="player_remember_speed_none">None</string>
     <string name="player_remember_speed_all">Same on all videos</string>
     <string name="player_remember_speed_each">Per each video</string>
+    <string name="msg_player_error_source">Can\'t download the video</string>
+    <string name="msg_player_error_renderer">Selected video format isn\'t supported</string>
+    <string name="msg_player_error_unexpected">Unknown video decoder error</string>
+    <string name="video_aspect">Aspect ratio</string>
+    <string name="player_tweaks">Developer options</string>
+    <string name="header_uploads">Uploads</string>
+    <string name="player_show_global_clock">Show clock on top of the video</string>
+    <string name="uploads_old_look">Revert old look of Uploads section</string>
+    <string name="background_playback_activation">Background playback (activation)</string>
+    <string name="channels_old_look">Revert old look of Channels section</string>
+    <string name="channels_auto_load">Auto load Channels section content</string>
+    <string name="return_to_background_video">Return to video running in background</string>
+    <string name="pin_to_sidebar">Pin to sidebar</string>
+    <string name="unpin_from_sidebar">Unpin from sidebar</string>
 </resources>

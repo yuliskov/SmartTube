@@ -7,6 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
 /**
  * Video is an object that holds the various metadata associated with a single video.
@@ -29,11 +31,13 @@ public final class Video implements Parcelable {
     public int percentWatched = -1;
     public MediaItem mediaItem; // memory leak
     public MediaItem nextMediaItem; // memory leak
+    public VideoGroup group; // used to get next page when scrolling
     public boolean hasNewContent;
     public boolean isLive;
     public boolean isUpcoming;
     public boolean isSubscribed;
     public boolean isRemote;
+    public int groupPosition = -1; // group position in multi-grid fragments
 
     public Video() {
         
@@ -123,28 +127,36 @@ public final class Video implements Parcelable {
         }
     };
 
+    ///**
+    // * Don't change the logic from equality by reference!<br/>
+    // * Or adapters won't work properly (same video may appear twice).
+    // */
+    //@Override
+    //public boolean equals(@Nullable Object obj) {
+    //    return super.equals(obj);
+    //}
+
     /**
-     * Don't change the logic from equality by reference!<br/>
-     * Or adapters won't work properly.
+     * Use with caution.<br/>
+     * Old logic is equality by reference!<br/>
+     * Adapters may not work properly when detecting scroll position (same video may appear twice).
      */
     @Override
     public boolean equals(@Nullable Object obj) {
-        return super.equals(obj);
+        return obj instanceof Video && hashCode() == obj.hashCode();
     }
 
-    /**
-     * Equality that intended for playlists or other not strong cases.
-     */
+    @Override
+    public int hashCode() {
+        return Helpers.hashCode(title, description, videoId, playlistId, channelId);
+    }
+    
     public static boolean equals(Video video1, Video video2) {
-        if (video1 == null || video2 == null) {
+        if (video1 == null) {
             return false;
         }
 
-        if (video1.videoId == null) {
-            return false;
-        }
-
-        return video1.videoId.equals(video2.videoId);
+        return video1.equals(video2);
     }
 
     public static boolean isEmpty(Video video) {
@@ -168,20 +180,53 @@ public final class Video implements Parcelable {
         dest.writeString(studio);
     }
 
+    public static Video fromString(String spec) {
+        if (spec == null) {
+            return null;
+        }
+
+        String[] split = spec.split("&vi;");
+
+        if (split.length != 10) {
+            return null;
+        }
+
+        Video result = new Video();
+
+        result.id = Helpers.parseLong(split[0]);
+        result.category = Helpers.parseStr(split[1]);
+        result.title = Helpers.parseStr(split[2]);
+        result.videoId = Helpers.parseStr(split[3]);
+        result.videoUrl = Helpers.parseStr(split[4]);
+        result.playlistId = Helpers.parseStr(split[5]);
+        result.channelId = Helpers.parseStr(split[6]);
+        result.bgImageUrl = Helpers.parseStr(split[7]);
+        result.cardImageUrl = Helpers.parseStr(split[8]);
+        result.mediaItem = YouTubeMediaService.deserializeMediaItem(Helpers.parseStr(split[9]));
+
+        return result;
+    }
+
     @Override
     public String toString() {
-        String s = "Video{";
-        s += "id=" + id;
-        s += ", category='" + category + "'";
-        s += ", title='" + title + "'";
-        s += ", videoId='" + videoId + "'";
-        s += ", videoUrl='" + videoUrl + "'";
-        s += ", bgImageUrl='" + bgImageUrl + "'";
-        s += ", cardImageUrl='" + cardImageUrl + "'";
-        s += ", studio='" + cardImageUrl + "'";
-        s += "}";
-        return s;
+        return String.format("%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s",
+                id, category, title, videoId, videoUrl, playlistId, channelId, bgImageUrl, cardImageUrl, YouTubeMediaService.serialize(mediaItem));
     }
+
+    //@Override
+    //public String toString() {
+    //    String s = "Video{";
+    //    s += "id=" + id;
+    //    s += ", category='" + category + "'";
+    //    s += ", title='" + title + "'";
+    //    s += ", videoId='" + videoId + "'";
+    //    s += ", videoUrl='" + videoUrl + "'";
+    //    s += ", bgImageUrl='" + bgImageUrl + "'";
+    //    s += ", cardImageUrl='" + cardImageUrl + "'";
+    //    s += ", studio='" + cardImageUrl + "'";
+    //    s += "}";
+    //    return s;
+    //}
 
     public boolean isVideo() {
         return videoId != null;

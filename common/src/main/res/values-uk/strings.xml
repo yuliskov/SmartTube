@@ -16,8 +16,8 @@
     <string name="library_signin_subtitle">Увійдіть, щоб переглянути бібліотеку</string>
     <string name="action_signin">УВІЙТИ</string>
     <string name="header_settings">Налаштування</string>
-    <string name="title_video_formats">Відео формати</string>
-    <string name="title_audio_formats">Аудіо формати</string>
+    <string name="title_video_formats">Відеоформат</string>
+    <string name="title_audio_formats">Аудіоформат</string>
     <string name="subtitle_category_title">Субтитри</string>
     <string name="video_max_quality">Авто (макс. якість)</string>
     <string name="audio_max_quality">Авто (макс. якість)</string>
@@ -39,7 +39,7 @@
     <string name="update_changelog">Зміни</string>
     <string name="install_update">Встановити оновлення</string>
     <string name="msg_category_is_empty">Халепа! Тут нічого нема.</string>
-    <string name="dialog_add_to_playlist">Додати у плейлист</string>
+    <string name="dialog_add_to_playlist">Додати/Видалити із плейлиста</string>
     <string name="msg_signed_users_only">Необхідно увійти в обліковий запис</string>
     <string name="msg_cant_load_content">Неможливо завантажити вміст</string>
     <string name="title_video_presets">Відео пресети</string>
@@ -117,7 +117,7 @@
     <string name="subtitle_black_bg">Чорний фон</string>
     <string name="player_seek_preview">Прев\'ю при перемотуванні</string>
     <string name="color_scheme_dark_grey_oled">Темно-сіра (OLED)</string>
-    <string name="channel_category_sorting">Сортування розділу Канали</string>
+    <string name="channels_category_sorting">Сортування розділу Канали</string>
     <string name="sorting_by_new_content">Новий контент</string>
     <string name="sorting_alphabetically">За абеткою</string>
     <string name="sorting_last_viewed">Останні переглянуті</string>
@@ -125,7 +125,7 @@
     <string name="playlists_style">Стиль плейлистів</string>
     <string name="playlists_style_grid">Сітка</string>
     <string name="playlists_style_rows">Рядки</string>
-    <string name="player_show_clock">Відображати годинник</string>
+    <string name="player_show_clock">Відображати годинник у спливаючому меню</string>
     <string name="player_show_remaining_time">Відображати час, що залишився</string>
     <string name="open_channel_uploads">Відкрити завантаження</string>
     <string name="app_exit_shortcut">Вихід з додатку</string>
@@ -177,7 +177,7 @@
     <string name="content_block_outro">Кінцевий екран/титри</string>
     <string name="content_block_interaction">Нагадування про підписку</string>
     <string name="content_block_self_promo">Самореклама</string>
-    <string name="content_block_music_off_topic">Немузикальна секція кліпу</string>
+    <string name="content_block_music_off_topic">Немузична секція кліпу</string>
     <string name="confirm_segment_skip">Пропустити сегмент \"%s\"?</string>
     <string name="msg_skipping_segment">Пропуск сегменту \"%s\"…</string>
     <string name="content_block_notification_type">Тип повідомлень</string>
@@ -199,4 +199,18 @@
     <string name="player_remember_speed_none">Не запам\'ятовувати</string>
     <string name="player_remember_speed_all">Однакова швидкість на усіх відео</string>
     <string name="player_remember_speed_each">На кожному відео своя швидкість</string>
+    <string name="msg_player_error_source">Не вдається завантажити відео</string>
+    <string name="msg_player_error_renderer">Обраний відеоформат не підтримуєтся</string>
+    <string name="msg_player_error_unexpected">Невідома помилка у відеодекодері</string>
+    <string name="video_aspect">Співвідношення сторін</string>
+    <string name="player_tweaks">Для розробників</string>
+    <string name="header_uploads">Завантаження</string>
+    <string name="player_show_global_clock">Відображати годинник поверх відео</string>
+    <string name="uploads_old_look">Повернути старий вигляд розділу Завантаження</string>
+    <string name="background_playback_activation">Фонове відтворення (активація)</string>
+    <string name="channels_old_look">Повернути старий вигляд розділу Канали</string>
+    <string name="channels_auto_load">Автоматично завантажувати вміст розділу Канали</string>
+    <string name="return_to_background_video">Повернутися до фонового відео</string>
+    <string name="pin_to_sidebar">Прикріпити до бічної панелі</string>
+    <string name="unpin_from_sidebar">Відкріпити від бічної панелі</string>
 </resources>

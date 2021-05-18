@@ -18,4 +18,8 @@ public class CategoryHeaderItem extends HeaderItem {
     public int getResId() {
         return mHeader.getResId();
     }
+
+    public String getIconUrl() {
+        return mHeader.getIconUrl();
+    }
 }

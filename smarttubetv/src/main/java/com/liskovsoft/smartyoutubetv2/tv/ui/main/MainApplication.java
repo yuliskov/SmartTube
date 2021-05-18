@@ -47,10 +47,5 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         viewManager.register(AddDeviceView.class, AddDeviceActivity.class, BrowseActivity.class);
         viewManager.register(ChannelView.class, ChannelActivity.class, BrowseActivity.class);
         viewManager.register(ChannelUploadsView.class, ChannelUploadsActivity.class, BrowseActivity.class);
-
-        if ("stbolshoetv".equals(BuildConfig.FLAVOR)) {
-            Thread.setDefaultUncaughtExceptionHandler(
-                    new UncaughtExceptionHandler(getApplicationContext(), true));
-        }
     }
 }

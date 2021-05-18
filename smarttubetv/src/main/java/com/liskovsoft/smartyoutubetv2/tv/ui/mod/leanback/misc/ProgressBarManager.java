@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc;
 
-import android.content.Context;
 import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
@@ -10,7 +9,6 @@ import android.widget.ProgressBar;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.app.BrowseFragment;
 import androidx.leanback.app.VerticalGridFragment;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 /**
@@ -21,7 +19,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
  */
 public final class ProgressBarManager {
     // Default delay for progress bar widget.
-    private static final long DEFAULT_PROGRESS_BAR_DELAY = 1000;
+    private static final long DEFAULT_PROGRESS_BAR_DELAY = 500;
 
     private long mInitialDelay = DEFAULT_PROGRESS_BAR_DELAY;
     ViewGroup rootView;

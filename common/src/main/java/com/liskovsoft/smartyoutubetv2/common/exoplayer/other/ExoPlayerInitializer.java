@@ -17,10 +17,10 @@ public class ExoPlayerInitializer {
     private final int mDeviceRam;
     private final PlayerData mPlayerData;
 
-    public ExoPlayerInitializer(Context activity) {
-        mPlayerData = PlayerData.instance(activity);
+    public ExoPlayerInitializer(Context context) {
+        mPlayerData = PlayerData.instance(context);
 
-        int deviceRam = Helpers.getDeviceRam(activity);
+        int deviceRam = Helpers.getDeviceRam(context);
 
         // If ram is too big, bigger then max int value DeviceRam will return a negative number...
         // use 196MB as that can only happens if device has more than 17GB of RAM, so 196 is enough and safe

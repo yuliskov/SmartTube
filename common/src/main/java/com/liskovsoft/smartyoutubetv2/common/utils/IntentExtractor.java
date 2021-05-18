@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.utils;
 
 import android.content.Intent;
+import android.net.Uri;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.querystringparser.UrlQueryString;
 import com.liskovsoft.sharedutils.querystringparser.UrlQueryStringFactory;
@@ -21,6 +22,10 @@ public class IntentExtractor {
 
     public static String extractVideoId(Intent intent) {
         if (intent == null || intent.getData() == null || !Intent.ACTION_VIEW.equals(intent.getAction())) {
+            return null;
+        }
+
+        if (extractVoiceQuery(intent.getData()) != null) {
             return null;
         }
 
@@ -47,6 +52,12 @@ public class IntentExtractor {
     public static String extractSearchText(Intent intent) {
         if (intent == null || intent.getData() == null || !Intent.ACTION_VIEW.equals(intent.getAction())) {
             return null;
+        }
+
+        String voiceQuery = extractVoiceQuery(intent.getData());
+
+        if (voiceQuery != null) {
+            return voiceQuery;
         }
 
         // Don't Uri directly or you might get UnsupportedOperationException on some urls.
@@ -91,5 +102,16 @@ public class IntentExtractor {
         return intent != null
                 && intent.getData() != null
                 && Helpers.contains(new String[] {SUBSCRIPTIONS_URL, HISTORY_URL, RECOMMENDED_URL}, intent.getData().toString());
+    }
+
+    public static boolean isStartVoiceCommand(Intent intent) {
+        return intent != null && intent.getData() != null && intent.getData().toString().contains("launch=voice");
+    }
+
+    /**
+     * Example: https://www.youtube.com/tv?voice={"youtubeAssistantRequest":{"query":"Russian YouTube","queryIntent":"CgxTZWFyY2hJbnRlbnQSFAoFcXVlcnkSCxoJCgdSdXNzaWFuEiYKCGRvY190eXBlEhoaGAoWWU9VVFVCRV9ET0NfVFlQRV9WSURFTw==","youtubeAssistantParams":{"personalDataParams":{"showPersonalData":false}},"enablePrefetchLogging":true},"updateYoutubeSettings":{"enableSafetyMode":false,"enablePersonalResults":false},"hasEntityBar":false}&command_id=CWGIYL6nN8Gi3AP_5Y6wAQ&launch=voice&vq=Russian%20YouTube
+     */
+    private static String extractVoiceQuery(Uri data) {
+        return Helpers.runMultiMatcher(data.toString(), ":\\{\"query\":\"([^\"]*)\"");
     }
 }

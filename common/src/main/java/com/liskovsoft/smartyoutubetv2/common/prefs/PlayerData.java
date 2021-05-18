@@ -30,9 +30,10 @@ public class PlayerData {
     private final AppPrefs mPrefs;
     private int mOKButtonBehavior;
     private int mUIHideTimeoutSec;
-    private boolean mIsShowFullDateEnabled;
+    private boolean mIsAbsoluteDateEnabled;
     private boolean mIsPauseOnSeekEnabled;
     private boolean mIsClockEnabled;
+    private boolean mIsGlobalClockEnabled;
     private boolean mIsRemainingTimeEnabled;
     private int mBackgroundMode;
     private FormatItem mVideoFormat;
@@ -42,6 +43,7 @@ public class PlayerData {
     private final List<SubtitleStyle> mSubtitleStyles = new ArrayList<>();
     private int mSubtitleStyleIndex;
     private int mVideoZoomMode;
+    private float mVideoAspectRatio;
     private int mSeekPreviewMode;
     private float mSpeed;
     private boolean mIsAfrEnabled;
@@ -52,9 +54,7 @@ public class PlayerData {
     private boolean mIsRememberSpeedEnabled;
     private boolean mIsLowQualityEnabled;
     private int mPlaybackMode;
-    private boolean mIsSleepTimerEnabled;
-    private boolean mIsAmlogicFixEnabled;
-    private boolean mIsFrameDropFixEnabled;
+    private boolean mIsSonyTimerFixEnabled;
     private boolean mIsQualityInfoEnabled;
     private boolean mIsRememberSpeedEachEnabled;
 
@@ -90,13 +90,13 @@ public class PlayerData {
         return mUIHideTimeoutSec;
     }
 
-    public void showFullDate(boolean show) {
-        mIsShowFullDateEnabled = show;
+    public void enableAbsoluteDate(boolean show) {
+        mIsAbsoluteDateEnabled = show;
         persistData();
     }
 
-    public boolean isShowFullDateEnabled() {
-        return mIsShowFullDateEnabled;
+    public boolean isAbsoluteDateEnabled() {
+        return mIsAbsoluteDateEnabled;
     }
 
     public void setSeekPreviewMode(int mode) {
@@ -123,6 +123,15 @@ public class PlayerData {
 
     public void enableClock(boolean enable) {
         mIsClockEnabled = enable;
+        persistData();
+    }
+
+    public boolean isGlobalClockEnabled() {
+        return mIsGlobalClockEnabled;
+    }
+
+    public void enableGlobalClock(boolean enable) {
+        mIsGlobalClockEnabled = enable;
         persistData();
     }
 
@@ -296,6 +305,15 @@ public class PlayerData {
         return mVideoZoomMode;
     }
 
+    public void setVideoAspectRatio(float ratio) {
+        mVideoAspectRatio = ratio;
+        persistData();
+    }
+
+    public float getVideoAspectRatio() {
+        return mVideoAspectRatio;
+    }
+
     public void setSpeed(float speed) {
         if (mSpeed == speed) {
             return;
@@ -318,31 +336,13 @@ public class PlayerData {
         persistData();
     }
 
-    public void enableSleepTimer(boolean enable) {
-        mIsSleepTimerEnabled = enable;
+    public void enableSonyTimerFix(boolean enable) {
+        mIsSonyTimerFixEnabled = enable;
         persistData();
     }
 
-    public boolean isSleepTimerEnabled() {
-        return mIsSleepTimerEnabled;
-    }
-
-    public void enableAmlogicFix(boolean enable) {
-        mIsAmlogicFixEnabled = enable;
-        persistData();
-    }
-
-    public boolean isAmlogicFixEnabled() {
-        return mIsAmlogicFixEnabled;
-    }
-
-    public void enableFrameDropFix(boolean enable) {
-        mIsFrameDropFixEnabled = enable;
-        persistData();
-    }
-
-    public boolean isFrameDropFixEnabled() {
-        return mIsFrameDropFixEnabled;
+    public boolean isSonyTimerFixEnabled() {
+        return mIsSonyTimerFixEnabled;
     }
 
     private void initSubtitleStyles() {
@@ -359,7 +359,7 @@ public class PlayerData {
 
         mOKButtonBehavior = Helpers.parseInt(split, 0, ONLY_UI);
         mUIHideTimeoutSec = Helpers.parseInt(split, 1, 3);
-        mIsShowFullDateEnabled = Helpers.parseBoolean(split, 2, false);
+        mIsAbsoluteDateEnabled = Helpers.parseBoolean(split, 2, false);
         mSeekPreviewMode = Helpers.parseInt(split, 3, SEEK_PREVIEW_SINGLE);
         mIsPauseOnSeekEnabled = Helpers.parseBoolean(split, 4, false);
         mIsClockEnabled = Helpers.parseBoolean(split, 5, true);
@@ -378,20 +378,20 @@ public class PlayerData {
         mVideoZoomMode = Helpers.parseInt(split, 14, PlaybackEngineController.ZOOM_MODE_DEFAULT);
         mSpeed = Helpers.parseFloat(split, 15, 1.0f);
         mIsAfrEnabled = Helpers.parseBoolean(split, 16, false);
-        mIsAfrFpsCorrectionEnabled = Helpers.parseBoolean(split, 17, false);
+        mIsAfrFpsCorrectionEnabled = Helpers.parseBoolean(split, 17, true);
         mIsAfrResSwitchEnabled = Helpers.parseBoolean(split, 18, false);
-        mAfrPauseSec = Helpers.parseInt(split, 19, 0);
+        mAfrPauseSec = Helpers.parseInt(split, 19, 3);
         mAudioDelayMs = Helpers.parseInt(split, 20, 0);
         mIsRememberSpeedEnabled = Helpers.parseBoolean(split, 21, false);
         mPlaybackMode = Helpers.parseInt(split, 22, PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL);
         // didn't remember what was there
         mIsLowQualityEnabled = Helpers.parseBoolean(split, 24, false);
-        mIsSleepTimerEnabled = Helpers.parseBoolean(split, 25, false);
-        mIsAmlogicFixEnabled = Helpers.parseBoolean(split, 26, false);
-        mIsAmlogicFixEnabled = true;
-        mIsFrameDropFixEnabled = Helpers.parseBoolean(split, 27, false);
+        mIsSonyTimerFixEnabled = Helpers.parseBoolean(split, 25, false);
+        // old player tweaks
         mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
         mIsRememberSpeedEachEnabled = Helpers.parseBoolean(split, 29, false);
+        mVideoAspectRatio = Helpers.parseFloat(split, 30, PlaybackEngineController.ASPECT_RATIO_DEFAULT);
+        mIsGlobalClockEnabled = Helpers.parseBoolean(split, 31, false);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -399,13 +399,13 @@ public class PlayerData {
     }
 
     private void persistData() {
-        mPrefs.setData(VIDEO_PLAYER_DATA, Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec,
-                mIsShowFullDateEnabled, mSeekPreviewMode, mIsPauseOnSeekEnabled,
+        mPrefs.setData(VIDEO_PLAYER_DATA, Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec, mIsAbsoluteDateEnabled, mSeekPreviewMode, mIsPauseOnSeekEnabled,
                 mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null, // afrData was there
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs,
                 mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
-                mIsLowQualityEnabled, mIsSleepTimerEnabled, mIsAmlogicFixEnabled, mIsFrameDropFixEnabled, mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled));
+                mIsLowQualityEnabled, mIsSonyTimerFixEnabled, null, null, // old player tweaks
+                mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled));
     }
 }
