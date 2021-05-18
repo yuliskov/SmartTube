@@ -124,8 +124,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onEngineError(int type) {
-        // Network connection lost while watching the video.
-        if (type == PlayerEventListener.ERROR_TYPE_SOURCE) {
+        // Oops. Error happens while playing (network lost etc).
+        if (getController().getPositionMs() > 1_000) {
             saveState();
         }
     }
