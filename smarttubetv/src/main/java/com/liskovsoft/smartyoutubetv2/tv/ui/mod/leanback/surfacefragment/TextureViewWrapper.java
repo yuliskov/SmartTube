@@ -11,7 +11,7 @@ import android.view.TextureView.SurfaceTextureListener;
 import android.view.View;
 import android.view.ViewGroup;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.tmp.surface.textureview.TextureViewSurfaceHolder;
+//import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.tmp.surface.textureview.TextureViewSurfaceHolder;
 
 public class TextureViewWrapper implements SurfaceWrapper {
     private int mState = SURFACE_NOT_CREATED;
@@ -25,7 +25,7 @@ public class TextureViewWrapper implements SurfaceWrapper {
             @Override
             public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
                 if (mMediaPlaybackCallback != null) {
-                    mMediaPlaybackCallback.surfaceCreated(new TextureViewSurfaceHolder(new Surface(surface)));
+//                    mMediaPlaybackCallback.surfaceCreated(new TextureViewSurfaceHolder(new Surface(surface)));
                 }
                 mState = SURFACE_CREATED;
             }
@@ -33,14 +33,14 @@ public class TextureViewWrapper implements SurfaceWrapper {
             @Override
             public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
                 if (mMediaPlaybackCallback != null) {
-                    mMediaPlaybackCallback.surfaceChanged(new TextureViewSurfaceHolder(new Surface(surface)), 4, width, height);
+//                    mMediaPlaybackCallback.surfaceChanged(new TextureViewSurfaceHolder(new Surface(surface)), 4, width, height);
                 }
             }
 
             @Override
             public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
                 if (mMediaPlaybackCallback != null) {
-                    mMediaPlaybackCallback.surfaceDestroyed(new TextureViewSurfaceHolder(new Surface(surface)));
+//                    mMediaPlaybackCallback.surfaceDestroyed(new TextureViewSurfaceHolder(new Surface(surface)));
                 }
                 mState = SURFACE_NOT_CREATED;
 
@@ -62,7 +62,7 @@ public class TextureViewWrapper implements SurfaceWrapper {
 
         if (callback != null) {
             if (mState == SURFACE_CREATED) {
-                mMediaPlaybackCallback.surfaceCreated(new TextureViewSurfaceHolder(new Surface(mVideoSurface.getSurfaceTexture())));
+//                mMediaPlaybackCallback.surfaceCreated(new TextureViewSurfaceHolder(new Surface(mVideoSurface.getSurfaceTexture())));
             }
         }
     }

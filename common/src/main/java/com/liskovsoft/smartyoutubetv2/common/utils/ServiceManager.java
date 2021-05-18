@@ -1,6 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.utils;
 
-import com.liskovsoft.appupdatechecker2.other.SettingsManager;
+//import com.liskovsoft.appupdatechecker2.other.SettingsManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
@@ -16,7 +16,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class ServiceManager {
-    private static final String TAG = SettingsManager.class.getSimpleName();
+    private static final String TAG = ServiceManager.class.getSimpleName();
     private static ServiceManager sInstance;
     private final MediaItemManager mItemManager;
     private final MediaGroupManager mGroupManager;
