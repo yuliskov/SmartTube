@@ -106,7 +106,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         //MessageHelpers.showMessage(getActivity(), "Buffering occurs!");
 
         // Fix long buffering
-        Utils.postDelayed(mHandler, mPendingRestartEngine, 5_000);
+        Utils.postDelayed(mHandler, mPendingRestartEngine, 10_000);
     }
 
     @Override
