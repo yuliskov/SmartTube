@@ -2,8 +2,12 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.renderer;
 
 import android.content.Context;
 import android.media.MediaCodec;
+import android.os.Build.VERSION;
 import android.os.Handler;
+import android.view.Surface;
 import androidx.annotation.Nullable;
+import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
@@ -65,4 +69,14 @@ public class DebugInfoMediaCodecVideoRenderer extends MediaCodecVideoRenderer {
     //
     //    Log.d(TAG, "Real fps: %s", 1_000_000f / (presentationTimeUs / mFrameIndex));
     //}
+
+    @Override
+    public void handleMessage(int messageType, @Nullable Object message) throws ExoPlaybackException {
+        // Null surface error on Android 9 and above
+        if (VERSION.SDK_INT >= 28 && messageType == C.MSG_SET_SURFACE && !(message instanceof Surface)) {
+            return;
+        }
+
+        super.handleMessage(messageType, message);
+    }
 }

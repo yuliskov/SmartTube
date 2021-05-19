@@ -178,7 +178,7 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
         }, timeoutMs);
     }
 
-    public void setTimoutMs(long timeoutMs) {
+    public void setCloseTimeoutMs(long timeoutMs) {
         mTimeoutMs = timeoutMs;
     }
 

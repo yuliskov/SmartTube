@@ -183,7 +183,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         );
 
         settingsPresenter.appendSingleButton(sponsorBlockOption);
-        settingsPresenter.setTimoutMs(skipPositionMs - getController().getPositionMs());
+        settingsPresenter.setCloseTimeoutMs(skipPositionMs - getController().getPositionMs());
 
         settingsPresenter.showDialog(ContentBlockData.SPONSOR_BLOCK_NAME);
     }
