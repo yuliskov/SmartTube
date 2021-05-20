@@ -15,6 +15,7 @@ public class PlayerTweaksData {
     private boolean mIsProfileLevelCheckSkipped;
     private boolean mIsSWDecoderForced;
     private boolean mIsTextureViewEnabled;
+    private boolean mIsSetOutputSurfaceWorkaroundEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -83,6 +84,15 @@ public class PlayerTweaksData {
         persistData();
     }
 
+    public boolean isSetOutputSurfaceWorkaroundEnabled() {
+        return mIsSetOutputSurfaceWorkaroundEnabled;
+    }
+
+    public void enableSetOutputSurfaceWorkaround(boolean enable) {
+        mIsSetOutputSurfaceWorkaroundEnabled = enable;
+        persistData();
+    }
+
     private void restoreData() {
         String data = mPrefs.getData(VIDEO_PLAYER_TWEAKS_DATA);
 
@@ -94,12 +104,14 @@ public class PlayerTweaksData {
         mIsProfileLevelCheckSkipped = Helpers.parseBoolean(split, 3, false);
         mIsSWDecoderForced = Helpers.parseBoolean(split, 4, false);
         mIsTextureViewEnabled = Helpers.parseBoolean(split, 5, false);
+        mIsSetOutputSurfaceWorkaroundEnabled = Helpers.parseBoolean(split, 6, true);
     }
 
     private void persistData() {
         mPrefs.setData(VIDEO_PLAYER_TWEAKS_DATA, Helpers.mergeObject(
                 mIsAmlogicFixEnabled, mIsFrameDropFixEnabled, mIsSnapToVsyncDisabled,
-                mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled
+                mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
+                mIsSetOutputSurfaceWorkaroundEnabled
         ));
     }
 }

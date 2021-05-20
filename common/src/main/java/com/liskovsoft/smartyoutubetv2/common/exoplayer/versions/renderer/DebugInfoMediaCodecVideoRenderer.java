@@ -21,6 +21,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
 public class DebugInfoMediaCodecVideoRenderer extends MediaCodecVideoRenderer {
     private static final String TAG = DebugInfoMediaCodecVideoRenderer.class.getSimpleName();
     private int mFrameIndex;
+    private boolean mIsSetOutputSurfaceWorkaroundEnabled;
 
     // Exo 2.9
     //public DebugInfoMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
@@ -71,12 +72,15 @@ public class DebugInfoMediaCodecVideoRenderer extends MediaCodecVideoRenderer {
     //}
 
     @Override
-    public void handleMessage(int messageType, @Nullable Object message) throws ExoPlaybackException {
-        // Null surface error on Android 9 and above
-        if (VERSION.SDK_INT >= 28 && messageType == C.MSG_SET_SURFACE && !(message instanceof Surface)) {
-            return;
-        }
+    protected boolean codecNeedsSetOutputSurfaceWorkaround(String name) {
+        // Null surface error on Android 9 (VERSION.SDK_INT >= 28) and above (appears on background audio playback)
+        return mIsSetOutputSurfaceWorkaroundEnabled || super.codecNeedsSetOutputSurfaceWorkaround(name);
+    }
 
-        super.handleMessage(messageType, message);
+    /**
+     * Null surface error on Android 9 (VERSION.SDK_INT >= 28) and above (appears on background audio playback)
+     */
+    public void enableSetOutputSurfaceWorkaround(boolean enable) {
+        mIsSetOutputSurfaceWorkaroundEnabled = enable;
     }
 }
