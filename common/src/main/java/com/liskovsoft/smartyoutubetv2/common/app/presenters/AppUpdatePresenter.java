@@ -9,6 +9,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,6 +71,10 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
                     mUpdateChecker.installUpdate();
                     SplashPresenter.instance(getContext()).saveBackupData();
                     mUpdateInstalled = true;
+
+                    // Close the app before install
+                    mSettingsPresenter.closeDialog();
+                    ViewManager.instance(getContext()).properlyFinishTheApp(getContext());
                 }, false));
         mSettingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.show_again), optionItem -> {
             mUpdateChecker.enableUpdateCheck(optionItem.isSelected());

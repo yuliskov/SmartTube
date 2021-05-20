@@ -309,12 +309,14 @@ public class ViewManager {
      * Main magic happened in {@link MotherActivity}
      * @param activity this activity
      */
-    public void properlyFinishTheApp(Activity activity) {
-        Log.d(TAG, "Trying finish the app...");
-        mIsMoveToBackEnabled = true;
-        mIsFinishing = true;
+    public void properlyFinishTheApp(Context activity) {
+        if (activity instanceof MotherActivity) {
+            Log.d(TAG, "Trying finish the app...");
+            mIsMoveToBackEnabled = true;
+            mIsFinishing = true;
 
-        ((MotherActivity) activity).finishReally();
+            ((MotherActivity) activity).finishReally();
+        }
     }
 
     public void forceFinishTheApp() {
