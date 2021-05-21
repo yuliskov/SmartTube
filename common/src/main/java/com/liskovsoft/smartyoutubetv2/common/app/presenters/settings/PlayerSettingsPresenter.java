@@ -176,6 +176,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableTextureView(option.isSelected()),
                 mPlayerTweaksData.isTextureViewEnabled()));
 
+        options.add(UiOptionItem.from("Enable set output surface workaround",
+                option -> mPlayerTweaksData.enableSetOutputSurfaceWorkaround(option.isSelected()),
+                mPlayerTweaksData.isSetOutputSurfaceWorkaroundEnabled()));
+
         options.add(UiOptionItem.from("Sleep timer fix",
                 option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
                 mPlayerData.isSonyTimerFixEnabled()));

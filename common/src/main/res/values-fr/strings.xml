@@ -209,4 +209,8 @@
     <string name="uploads_old_look">Restaurer l\'ancienne apparence dans la section Uploads</string>
     <string name="background_playback_activation">Activation de la lecture en arrière-plan</string>
     <string name="channels_old_look">Restaurer l\'ancienne apparence dans la section des chaînes</string>
+    <string name="channels_auto_load">Chargement automatique du contenu de la section Chaînes</string>
+    <string name="return_to_background_video">Retour à la vidéo en arrière-plan</string>
+    <string name="pin_to_sidebar">Épingler à la barre latérale</string>
+    <string name="unpin_from_sidebar">Déplacer de la barre latérale</string>
 </resources>

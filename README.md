@@ -26,6 +26,18 @@ __Useful links__:
 - __[FAQ](https://t.me/STNFAQENG)__
 - __[Ask a question](https://t.me/SmartTubeNext_en)__
 
+# Donation
+
+If you want to support my developments you are welcome to buy me a cup of coffee :)
+- __[Donation Alerts (PayPal)](https://www.donationalerts.ru/r/firsthash)__
+- __[QIWI (RU)](https://qiwi.com/n/GUESS025)__
+- __[PrivatBank (UA)](https://privatbank.ua/ru/sendmoney?payment=9e46a6ef78)__
+- __BTC: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx__
+- __LTC: ltc1qgc24eq9jl9cq78qnd5jpqhemkajg9vudwyd8pw__
+- __ETH: 0xe455E21a085ae195a097cd4F456051A9916A5064__
+- __ETC: 0x209eCd33Fa61fA92167595eB3Aea92EE1905c815__
+- __XMR: 48QsMjqfkeW54vkgKyRnjodtYxdmLk6HXfTWPSZoaFPEDpoHDwFUciGCe1QC9VAeGrgGw4PKNAksX9RW7myFqYJQDN5cHGT__
+
 # Screens
 
 ## [Browse Fragment](/smarttubetv/src/main/java/com/liskovsoft/smartyoutubetv2/tv/ui/browse/BrowseFragment.java)
@@ -112,11 +124,3 @@ To run the unit tests for the application:
 To run the user interface tests for the application:
 
 ```gradlew connectedDebugAndroidTest```
-
-# Donation
-
-If you want to support my developments you are welcome to buy me a cup of coffee :)
- - __[Donation Alerts (PayPal)](https://www.donationalerts.ru/r/firsthash)__
- - __[QIWI (RU)](https://qiwi.com/n/GUESS025)__
- - __[PrivatBank (UA)](https://privatbank.ua/ru/sendmoney?payment=5fcdddf53e3d491d63fcb050e6e2e05f2f2678c2)__
- - __BTC: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx__

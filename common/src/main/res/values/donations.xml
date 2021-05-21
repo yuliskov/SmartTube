@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="donations">
-        <item>PrivatBank (UA)|https://privatbank.ua/ru/sendmoney?payment=9e46a6ef78</item>
-        <item>QIWI (RU)|https://qiwi.com/n/GUESS025</item>
         <item>PayPal|https://www.donationalerts.com/r/firsthash</item>
-        <item>BTC|BTC: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx</item>
+        <item>QIWI (RU)|https://qiwi.com/n/GUESS025</item>
+        <item>PrivatBank (UA)|https://privatbank.ua/ru/sendmoney?payment=9e46a6ef78</item>
+        <item>BTC|1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx</item>
+        <item>LTC|ltc1qgc24eq9jl9cq78qnd5jpqhemkajg9vudwyd8pw</item>
+        <item>ETH|0xe455E21a085ae195a097cd4F456051A9916A5064</item>
+        <item>ETC|0x209eCd33Fa61fA92167595eB3Aea92EE1905c815</item>
+        <item>XMR|48QsMjqfkeW54vkgKyRnjodtYxdmLk6HXfTWPSZoaFPEDpoHDwFUciGCe1QC9VAeGrgGw4PKNAksX9RW7myFqYJQDN5cHGT</item>
     </string-array>
 </resources>
