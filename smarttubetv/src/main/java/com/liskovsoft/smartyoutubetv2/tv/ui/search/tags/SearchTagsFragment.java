@@ -122,13 +122,15 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
 
     @Override
     protected void focusOnResults() {
-        if (!TextUtils.isEmpty(mNewQuery)) {
-            super.focusOnResults();
-            if (getRowsSupportFragment() != null) {
-                // Move selection to the top
-                getRowsSupportFragment().setSelectedPosition(1);
-            }
-        }
+        // Disable annoying focus on video results when clicking on tags etc.
+
+        //if (!TextUtils.isEmpty(mNewQuery)) {
+        //    super.focusOnResults();
+        //    if (getRowsSupportFragment() != null) {
+        //        // Move selection to the videos (second row)
+        //        getRowsSupportFragment().setSelectedPosition(1);
+        //    }
+        //}
     }
 
     private void loadSearchResult(String searchQuery) {

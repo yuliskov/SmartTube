@@ -25,6 +25,7 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSource.Factory;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
@@ -229,7 +230,9 @@ public class ExoMediaSourceFactory {
         return new DefaultDataSourceFactory(context, bandwidthMeter, buildHttpDataSourceFactory(context, bandwidthMeter));
     }
 
-    // Use OkHttp for networking
+    /**
+     * Use OkHttp for networking
+     */
     //public static HttpDataSource.Factory buildHttpDataSourceFactory(Context context, DefaultBandwidthMeter bandwidthMeter) {
     //    // OkHttpHelpers.getOkHttpClient()
     //    // RetrofitHelper.createOkHttpClient()
@@ -239,9 +242,13 @@ public class ExoMediaSourceFactory {
     //    return dataSourceFactory;
     //}
 
-    // Use internal component for networking
+    /**
+     * Use internal component for networking
+     */
     private static HttpDataSource.Factory buildHttpDataSourceFactory(Context context, DefaultBandwidthMeter bandwidthMeter) {
-        DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(AppConstants.APP_USER_AGENT, bandwidthMeter);
+        DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(
+                AppConstants.APP_USER_AGENT, bandwidthMeter, DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS * 4,
+                DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS * 4, true);
         //addCommonHeaders(context, dataSourceFactory); // cause troubles for some users
         return dataSourceFactory;
     }

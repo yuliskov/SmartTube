@@ -39,7 +39,7 @@
     <string name="update_changelog">Wat is er nieuw ?</string>
     <string name="install_update">Update installeren</string>
     <string name="msg_category_is_empty">Niets gevonden</string>
-    <string name="dialog_add_to_playlist">In of uit playlist(s)</string>
+    <string name="dialog_add_to_playlist">In/uit playlist</string>
     <string name="msg_signed_users_only">Enkel voor aangemelde gebruikers</string>
     <string name="msg_cant_load_content">Kan inhoud niet laden</string>
     <string name="title_video_presets">Video preset</string>

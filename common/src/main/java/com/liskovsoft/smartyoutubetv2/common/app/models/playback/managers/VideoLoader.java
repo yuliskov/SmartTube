@@ -93,12 +93,14 @@ public class VideoLoader extends PlayerEventListenerHelper {
     public void onEngineError(int type) {
         Log.e(TAG, "Player error occurred: %s. Trying to fix…", type);
 
-        // Some ciphered data might be stalled.
-        // Might happen when the app wasn't used quite a long time.
-        MessageHelpers.showMessage(getActivity(), getErrorMessage(type));
+        if (mErrorMap.get(type) != null) {
+            // Some ciphered data might be stalled.
+            // Might happen when the app wasn't used quite a long time.
+            MessageHelpers.showMessage(getActivity(), getErrorMessage(type));
 
-        // Delay to fix frequent requests
-        Utils.postDelayed(mHandler, mPendingRestartEngine, 3_000);
+            // Delay to fix frequent requests
+            Utils.postDelayed(mHandler, mPendingRestartEngine, 3_000);
+        }
     }
 
     @Override
@@ -106,7 +108,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         //MessageHelpers.showMessage(getActivity(), "Buffering occurs!");
 
         // Fix long buffering
-        Utils.postDelayed(mHandler, mPendingRestartEngine, 5_000);
+        Utils.postDelayed(mHandler, mPendingRestartEngine, 10_000);
     }
 
     @Override

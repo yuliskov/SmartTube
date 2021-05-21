@@ -159,6 +159,7 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
                         playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
 
             replaceVideoRenderer(out, videoRenderer);
+            videoRenderer.enableSetOutputSurfaceWorkaround(mPlayerTweaksData.isSetOutputSurfaceWorkaroundEnabled());
 
             return;
         }
@@ -169,6 +170,7 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
 
         videoRenderer.enableFrameDropFix(mPlayerTweaksData.isFrameDropFixEnabled());
         videoRenderer.enableAmlogicFix(mPlayerTweaksData.isAmlogicFixEnabled());
+        videoRenderer.enableSetOutputSurfaceWorkaround(mPlayerTweaksData.isSetOutputSurfaceWorkaroundEnabled());
 
         replaceVideoRenderer(out, videoRenderer);
     }
@@ -251,6 +253,7 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
     //
     //        // Restore global operation mode (needed for stability)
     //        videoRenderer.experimentalSetMediaCodecOperationMode(mOperationMode);
+    //        videoRenderer.enableSetOutputSurfaceWorkaround(mPlayerTweaksData.isSetOutputSurfaceWorkaroundEnabled());
     //
     //        replaceVideoRenderer(out, videoRenderer);
     //
@@ -268,6 +271,7 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
     //
     //    videoRenderer.enableFrameDropFix(mPlayerTweaksData.isFrameDropFixEnabled());
     //    videoRenderer.enableAmlogicFix(mPlayerTweaksData.isAmlogicFixEnabled());
+    //    videoRenderer.enableSetOutputSurfaceWorkaround(mPlayerTweaksData.isSetOutputSurfaceWorkaroundEnabled());
     //
     //    // Restore global operation mode (needed for stability)
     //    videoRenderer.experimentalSetMediaCodecOperationMode(mOperationMode);

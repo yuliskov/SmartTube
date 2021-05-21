@@ -163,6 +163,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         appendReturnToBackgroundVideoButton();
         appendOpenChannelButton();
         appendShareButton();
+        appendAccountSelectionButton();
 
         if (mSettingsPresenter.isEmpty()) {
             MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);

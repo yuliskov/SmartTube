@@ -287,10 +287,10 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             return;
         }
 
-        // Background audio mode is complicated (surface destroyed error) on Android 9 and above. So avoid it.
+        // Background audio mode is complicated (null surface error) on Android 9 (api 28) and above. Try avoid it.
+        // More info: DebugInfoMediaCodecVideoRenderer#handleMessage
         if (getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND &&
-            !ViewManager.instance(getContext()).isNewViewPending() &&
-            VERSION.SDK_INT < 28) {
+            !ViewManager.instance(getContext()).isNewViewPending()) {
             Log.d(TAG, "releasePlayer: Engine release is blocked by background playback. Exiting...");
             return;
         }
