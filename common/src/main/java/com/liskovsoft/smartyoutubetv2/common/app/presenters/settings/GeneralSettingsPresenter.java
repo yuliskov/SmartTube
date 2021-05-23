@@ -3,6 +3,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Category;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HQDialogManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private final MainUIData mMainUIData;
@@ -73,9 +76,27 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         Map<Integer, Integer> leftPanelCategories = mMainUIData.getCategories();
 
         for (Entry<Integer, Integer> category : leftPanelCategories.entrySet()) {
-            options.add(UiOptionItem.from(getContext().getString(category.getKey()),
-            optionItem -> mMainUIData.setBootCategoryId(category.getValue()),
-            category.getValue().equals(mMainUIData.getBootCategoryId())));
+            options.add(
+                    UiOptionItem.from(
+                            getContext().getString(category.getKey()),
+                            optionItem -> mMainUIData.setBootCategoryId(category.getValue()),
+                            category.getValue().equals(mMainUIData.getBootCategoryId())
+                    )
+            );
+        }
+
+        Set<Video> pinnedItems = mMainUIData.getPinnedItems();
+
+        for (Video item : pinnedItems) {
+            if (item != null && item.title != null) {
+                options.add(
+                        UiOptionItem.from(
+                                item.title,
+                                optionItem -> mMainUIData.setBootCategoryId(item.hashCode()),
+                                item.hashCode() == mMainUIData.getBootCategoryId()
+                        )
+                );
+            }
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.boot_to_section), options);
