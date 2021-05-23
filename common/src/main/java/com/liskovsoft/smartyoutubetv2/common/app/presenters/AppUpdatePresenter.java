@@ -73,8 +73,9 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
                     mUpdateInstalled = true;
 
                     // Close the app before install
-                    mSettingsPresenter.closeDialog();
-                    ViewManager.instance(getContext()).properlyFinishTheApp(getContext());
+                    // Don't go well. Users think that app is crashing.
+                    //mSettingsPresenter.closeDialog();
+                    //ViewManager.instance(getContext()).properlyFinishTheApp(getContext());
                 }, false));
         mSettingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.show_again), optionItem -> {
             mUpdateChecker.enableUpdateCheck(optionItem.isSelected());
