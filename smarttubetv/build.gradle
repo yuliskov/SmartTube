@@ -125,15 +125,23 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:' + glideVersion
     implementation 'com.zlc.glide:webpdecoder:2.0.' + glideVersion
 
-    implementation 'com.amazon.android:exoplayer:' + amazonExoplayerVersion
-    implementation 'com.amazon.android:extension-leanback:' + amazonExoplayerVersion
-    implementation 'com.amazon.android:extension-mediasession:' + amazonExoplayerVersion
+    //////// BEGIN EXOPLAYER /////////
+
+    // implementation 'com.amazon.android:exoplayer:' + amazonExoplayerVersion
+    // implementation 'com.amazon.android:extension-leanback:' + amazonExoplayerVersion
+    // implementation 'com.amazon.android:extension-mediasession:' + amazonExoplayerVersion
 
     // implementation 'com.google.android.exoplayer:exoplayer:' + exoplayerVersion
     // implementation 'com.google.android.exoplayer:extension-leanback:' + exoplayerVersion
     // implementation 'com.google.android.exoplayer:extension-mediasession:' + exoplayerVersion
 
     // implementation 'com.github.amzn:exoplayer-amazon-port:' + amazonExoplayerJitpackVersion
+
+    implementation project(':exoplayer-library')
+    implementation project(':exoplayer-extension-leanback')
+    implementation project(':exoplayer-extension-mediasession')
+
+    //////// END EXOPLAYER //////////
 
     testImplementation 'junit:junit:' + junitVersion
     testImplementation 'org.robolectric:robolectric:' + robolectricVersion

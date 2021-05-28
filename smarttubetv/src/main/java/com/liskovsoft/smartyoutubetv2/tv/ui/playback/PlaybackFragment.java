@@ -99,6 +99,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private int mPlaybackMode = PlaybackEngineController.BACKGROUND_MODE_DEFAULT;
     private MediaSessionCompat mMediaSession;
     private MediaSessionConnector mMediaSessionConnector;
+    private long mLastEngineRestartMs;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -259,6 +260,15 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             Log.e(TAG, "Can't restart engine. Seems that player activity is being destroyed.");
             return;
         }
+
+        long currentTimeMillis = System.currentTimeMillis();
+
+        if (currentTimeMillis - mLastEngineRestartMs < 60_000) {
+            Log.d(TAG, "Trying not restart engine very often (once per minute)");
+            return;
+        }
+
+        mLastEngineRestartMs = currentTimeMillis;
 
         if (mPlayer != null) {
             mEventListener.onEngineReleased();

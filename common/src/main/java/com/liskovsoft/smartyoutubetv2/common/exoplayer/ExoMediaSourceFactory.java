@@ -1,11 +1,11 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
 import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -31,25 +31,23 @@ import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.sharedutils.okhttp.OkHttpHelpers;
 import com.liskovsoft.youtubeapi.app.AppConstants;
-import com.liskovsoft.youtubeapi.common.helpers.RetrofitHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.List;
 
 public class ExoMediaSourceFactory {
     private static final String TAG = ExoMediaSourceFactory.class.getSimpleName();
+    @SuppressLint("StaticFieldLeak")
     private static ExoMediaSourceFactory sInstance;
+    @SuppressLint("StaticFieldLeak")
     @SuppressWarnings("deprecation")
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
+    private static final DashManifestParser LIVE_MANIFEST_PARSER = new LiveManifestParser();
     private final Factory mMediaDataSourceFactory;
     private final Context mContext;
-    private static final List<String> EXO_HEADERS = Arrays.asList("Origin", "Referer", "User-Agent", "Accept-Language", "Accept", "X-Client-Data");
-    private static final String SAMSUNG_SMART_TV_UA =
-            "Mozilla/5.0 (Linux; Tizen 2.3; SmartHub; SMART-TV; SmartTV; U; Maple2012) AppleWebKit/538.1+ (KHTML, like Gecko) TV Safari/538.1+";
+    //private static final List<String> EXO_HEADERS = Arrays.asList("Origin", "Referer", "User-Agent", "Accept-Language", "Accept", "X-Client-Data");
     private static final Uri DASH_MANIFEST_URI = Uri.parse("https://example.com/test.mpd");
     private static final String DASH_MANIFEST_EXTENSION = "mpd";
     private static final String HLS_PLAYLIST_EXTENSION = "m3u8";
@@ -60,6 +58,12 @@ public class ExoMediaSourceFactory {
     private ExoMediaSourceFactory(Context context) {
         mContext = context;
         mMediaDataSourceFactory = buildDataSourceFactory(USE_BANDWIDTH_METER);
+
+        //if (BuildConfig.DEBUG) {
+        //    mMainHandler = new Handler(Looper.getMainLooper());
+        //    mEventLogger = new DefaultMediaSourceEventListener() {
+        //    };
+        //}
     }
 
     public static ExoMediaSourceFactory instance(Context context) {
@@ -148,6 +152,7 @@ public class ExoMediaSourceFactory {
                                 new DefaultDashChunkSource.Factory(mMediaDataSourceFactory),
                                 buildDataSourceFactory(USE_BANDWIDTH_METER)
                         )
+                                .setManifestParser(LIVE_MANIFEST_PARSER)
                                 .createMediaSource(uri);
                 if (mEventLogger != null) {
                     dashSource.addEventListener(mMainHandler, mEventLogger);
