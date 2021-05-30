@@ -44,7 +44,6 @@ public class ExoMediaSourceFactory {
     @SuppressLint("StaticFieldLeak")
     @SuppressWarnings("deprecation")
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
-    private static final DashManifestParser LIVE_MANIFEST_PARSER = new LiveManifestParser();
     private final Factory mMediaDataSourceFactory;
     private final Context mContext;
     //private static final List<String> EXO_HEADERS = Arrays.asList("Origin", "Referer", "User-Agent", "Accept-Language", "Accept", "X-Client-Data");
@@ -152,7 +151,7 @@ public class ExoMediaSourceFactory {
                                 new DefaultDashChunkSource.Factory(mMediaDataSourceFactory),
                                 buildDataSourceFactory(USE_BANDWIDTH_METER)
                         )
-                                .setManifestParser(LIVE_MANIFEST_PARSER)
+                                .setManifestParser(new LiveManifestParser()) // Don't make static! Need state reset for each live source.
                                 .createMediaSource(uri);
                 if (mEventLogger != null) {
                     dashSource.addEventListener(mMainHandler, mEventLogger);
