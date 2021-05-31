@@ -28,6 +28,10 @@
 
     <!-- Increase player time text size -->
     <dimen name="lb_playback_controls_time_text_size">16sp</dimen>
+
+    <!-- Multiline description in the player -->
+    <integer name="lb_details_description_subtitle_max_lines">2</integer>
+    <integer name="lb_details_description_title_max_lines">2</integer>
     
     <!--
     Making my card's corner rounded. More info:
