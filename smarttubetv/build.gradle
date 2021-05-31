@@ -127,9 +127,9 @@ dependencies {
 
     //////// BEGIN EXOPLAYER /////////
 
-    // implementation 'com.amazon.android:exoplayer:' + amazonExoplayerVersion
-    // implementation 'com.amazon.android:extension-leanback:' + amazonExoplayerVersion
-    // implementation 'com.amazon.android:extension-mediasession:' + amazonExoplayerVersion
+    implementation 'com.amazon.android:exoplayer:' + amazonExoplayerVersion
+    implementation 'com.amazon.android:extension-leanback:' + amazonExoplayerVersion
+    implementation 'com.amazon.android:extension-mediasession:' + amazonExoplayerVersion
 
     // implementation 'com.google.android.exoplayer:exoplayer:' + exoplayerVersion
     // implementation 'com.google.android.exoplayer:extension-leanback:' + exoplayerVersion
@@ -137,9 +137,9 @@ dependencies {
 
     // implementation 'com.github.amzn:exoplayer-amazon-port:' + amazonExoplayerJitpackVersion
 
-    implementation project(':exoplayer-library')
-    implementation project(':exoplayer-extension-leanback')
-    implementation project(':exoplayer-extension-mediasession')
+    // implementation project(':exoplayer-library')
+    // implementation project(':exoplayer-extension-leanback')
+    // implementation project(':exoplayer-extension-mediasession')
 
     //////// END EXOPLAYER //////////
 

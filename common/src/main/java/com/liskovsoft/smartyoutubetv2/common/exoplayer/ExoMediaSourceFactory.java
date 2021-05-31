@@ -151,7 +151,7 @@ public class ExoMediaSourceFactory {
                                 new DefaultDashChunkSource.Factory(mMediaDataSourceFactory),
                                 buildDataSourceFactory(USE_BANDWIDTH_METER)
                         )
-                                .setManifestParser(new LiveManifestParser()) // Don't make static! Need state reset for each live source.
+                                .setManifestParser(new LiveDashManifestParser()) // Don't make static! Need state reset for each live source.
                                 .createMediaSource(uri);
                 if (mEventLogger != null) {
                     dashSource.addEventListener(mMainHandler, mEventLogger);
