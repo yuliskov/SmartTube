@@ -7,7 +7,6 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -23,6 +22,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private static final String TAG = StateUpdater.class.getSimpleName();
     private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
     private static final int MAX_PERSISTENT_STATE_SIZE = 30;
+    private static final long LIVE_THRESHOLD_MS = 60_000;
     private boolean mIsPlayEnabled;
     private Video mVideo;
     private FormatItem mTempVideoFormat;
@@ -40,7 +40,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         mPlayerData = PlayerData.instance(getActivity());
 
         restoreClipData();
-        resetPositionIfNeeded(mVideo); // reset position of music videos
+        resetPositionIfNeeded(mVideo); // reset position of music/live videos
     }
 
     /**
@@ -192,7 +192,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         State state = mStates.get(item.videoId);
 
         // Reset position of music videos
-        if (state != null && state.lengthMs < MUSIC_VIDEO_LENGTH_MS) {
+        if (state != null && (state.lengthMs < MUSIC_VIDEO_LENGTH_MS || item.isLive)) {
             resetPosition(item.videoId);
         }
     }
@@ -305,7 +305,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
             }
         }
 
-        if (state != null && !item.isLive) {
+        // Do I need to check that item isn't live? (state != null && !item.isLive)
+        if (state != null) {
             long remainsMs = getController().getLengthMs() - state.positionMs;
             boolean isVideoEnded = remainsMs < 1_000;
             if (!isVideoEnded || !getPlayEnabled()) {
@@ -319,7 +320,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void restoreSpeed(Video item) {
-        boolean isLive = getController().getLengthMs() - getController().getPositionMs() < 30_000;
+        boolean isLive = getController().getLengthMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
 
         if (isLive) {
             getController().setSpeed(1.0f);

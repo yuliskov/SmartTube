@@ -15,6 +15,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+/**
+ * Supported ExoPlayer versions: 2.10.6
+ */
 public class LiveDashManifestParser extends DashManifestParser {
     private DashManifest mManifest;
     private long mOldSegmentNum;
