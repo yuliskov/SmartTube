@@ -34,7 +34,7 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
         appendLanguageCategory(settingsPresenter);
         appendCountryCategory(settingsPresenter);
 
-        settingsPresenter.showDialog(() -> {
+        settingsPresenter.showDialog(getContext().getString(R.string.settings_language_country), () -> {
             if (mRestartApp) {
                 mRestartApp = false;
                 MessageHelpers.showLongMessage(getContext(), R.string.msg_restart_app);
@@ -62,6 +62,21 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendCountryCategory(AppSettingsPresenter settingsPresenter) {
+        Map<String, String> countries = mLangUpdater.getSupportedCountries();
+        String country = mLangUpdater.getPreferredCountry();
 
+        List<OptionItem> options = new ArrayList<>();
+
+        for (Entry<String, String> entry : countries.entrySet()) {
+            options.add(UiOptionItem.from(
+                    entry.getKey(),
+                    option -> {
+                        mLangUpdater.setPreferredCountry(entry.getValue());
+                        mRestartApp = true;
+                    },
+                    entry.getValue().equals(country)));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.dialog_select_country), options);
     }
 }
