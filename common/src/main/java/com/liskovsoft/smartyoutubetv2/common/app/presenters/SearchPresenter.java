@@ -128,6 +128,10 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     }
     
     private void continueGroup(VideoGroup group) {
+        if (RxUtils.isAnyActionRunning(mScrollAction)) {
+            return;
+        }
+
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
         getView().showProgressBar(true);
@@ -157,11 +161,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
         Log.d(TAG, "onScrollEnd: Group title: " + group.getTitle());
 
-        boolean updateInProgress = mScrollAction != null && !mScrollAction.isDisposed();
-
-        if (!updateInProgress) {
-            continueGroup(group);
-        }
+        continueGroup(group);
     }
 
     public void startSearch(String searchText) {
