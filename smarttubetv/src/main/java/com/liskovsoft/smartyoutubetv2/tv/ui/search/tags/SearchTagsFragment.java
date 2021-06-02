@@ -107,9 +107,9 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         loadSearchTags(newQuery);
 
         // Avoid auto commit to prevent search field focus loss.
-        if (isVoiceQuery(newQuery)) {
-            loadSearchResult(newQuery);
-        }
+        //if (isVoiceQuery(newQuery)) {
+        //    loadSearchResult(newQuery);
+        //}
 
         return true;
     }
@@ -140,6 +140,9 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         }
     }
 
+    /**
+     * Check that previous query is null
+     */
     private boolean isVoiceQuery(String newQuery) {
         if (TextUtils.isEmpty(newQuery)) {
             mNewQuery = null;
@@ -185,7 +188,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         int index = mItemResultsAdapter.indexOf(item);
 
         if (index > (size - ViewUtil.ROW_SCROLL_CONTINUE_NUM)) {
-            mSearchPresenter.onScrollEnd(item);
+            mSearchPresenter.onScrollEnd((Video) mItemResultsAdapter.get(size - 1));
         }
     }
 }

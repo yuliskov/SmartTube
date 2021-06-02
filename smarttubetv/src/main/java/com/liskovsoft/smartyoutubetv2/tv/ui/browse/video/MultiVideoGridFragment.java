@@ -344,7 +344,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
             int index = adapter.indexOf(item);
 
             if (index > (size - ViewUtil.GRID_SCROLL_CONTINUE_NUM)) {
-                mMainPresenter.onScrollEnd(item);
+                mMainPresenter.onScrollEnd((Video) adapter.get(size - 1));
             }
         }
     }
