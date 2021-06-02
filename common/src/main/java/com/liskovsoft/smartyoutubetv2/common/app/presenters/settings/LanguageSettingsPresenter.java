@@ -16,6 +16,7 @@ import java.util.Map.Entry;
 
 public class LanguageSettingsPresenter extends BasePresenter<Void> {
     private final LangUpdater mLangUpdater;
+    private boolean mRestartApp;
 
     public LanguageSettingsPresenter(Context context) {
         super(context);
@@ -27,24 +28,40 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
     }
 
     public void show() {
+        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
+        settingsPresenter.clear();
+
+        appendLanguageCategory(settingsPresenter);
+        appendCountryCategory(settingsPresenter);
+
+        settingsPresenter.showDialog(() -> {
+            if (mRestartApp) {
+                mRestartApp = false;
+                MessageHelpers.showLongMessage(getContext(), R.string.msg_restart_app);
+            }
+        });
+    }
+
+    private void appendLanguageCategory(AppSettingsPresenter settingsPresenter) {
         Map<String, String> locales = mLangUpdater.getSupportedLocales();
         String language = mLangUpdater.getPreferredLocale();
 
         List<OptionItem> options = new ArrayList<>();
-        
+
         for (Entry<String, String> entry : locales.entrySet()) {
             options.add(UiOptionItem.from(
-                    entry.getKey(), option -> mLangUpdater.setPreferredLocale(entry.getValue()), entry.getValue().equals(language)));
+                    entry.getKey(),
+                    option -> {
+                        mLangUpdater.setPreferredLocale(entry.getValue());
+                        mRestartApp = true;
+                    },
+                    entry.getValue().equals(language)));
         }
 
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
-        settingsPresenter.clear();
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.dialog_select_language), options);
-        settingsPresenter.showDialog(() -> {
-            if (!language.equals(mLangUpdater.getPreferredLocale())) {
-                MessageHelpers.showLongMessage(getContext(), R.string.msg_restart_app);
-                //ViewManager.instance(getContext()).restartApp();
-            }
-        });
+    }
+
+    private void appendCountryCategory(AppSettingsPresenter settingsPresenter) {
+
     }
 }

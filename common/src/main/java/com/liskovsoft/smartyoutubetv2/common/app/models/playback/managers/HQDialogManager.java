@@ -200,11 +200,13 @@ public class HQDialogManager extends PlayerEventListenerHelper {
                         onSetCallback.run();
                     }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND));
         }
-        options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_pip),
-                optionItem -> {
-                    playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_PIP);
-                    onSetCallback.run();
-                }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PIP));
+        if (Helpers.isPictureInPictureSupported(context)) {
+            options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_pip),
+                    optionItem -> {
+                        playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_PIP);
+                        onSetCallback.run();
+                    }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PIP));
+        }
         options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_only_audio),
                 optionItem -> {
                     playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_SOUND);
