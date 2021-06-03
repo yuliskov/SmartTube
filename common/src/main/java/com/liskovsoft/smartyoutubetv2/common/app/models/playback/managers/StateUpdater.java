@@ -274,10 +274,14 @@ public class StateUpdater extends PlayerEventListenerHelper {
             // Exceptional cases:
             // 1) Track is ended
             // 2) Pause on end enabled
-            long remainsMs = getController().getLengthMs() - getController().getPositionMs();
+            long lengthMs = getController().getLengthMs();
+            long positionMs = getController().getPositionMs();
+            long remainsMs = lengthMs - positionMs;
             boolean isPositionActual = remainsMs > 1_000;
             if (isPositionActual || !getPlayEnabled()) { // Is pause after each video enabled?
-                mStates.put(video.videoId, new State(video.videoId, getController().getPositionMs(), getController().getLengthMs(), getController().getSpeed()));
+                mStates.put(video.videoId, new State(video.videoId, positionMs, lengthMs, getController().getSpeed()));
+                // Sync video. You could safely use it later to restore state.
+                video.percentWatched = (int) (positionMs / (lengthMs / 100));
             } else {
                 // Reset position when video almost ended
                 resetPosition(video.videoId);
@@ -289,19 +293,46 @@ public class StateUpdater extends PlayerEventListenerHelper {
         }
     }
 
+    //private void restorePosition(Video item) {
+    //    State state = mStates.get(item.videoId);
+    //
+    //    // internal storage has priority over item data loaded from network
+    //    if (state == null) {
+    //        // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
+    //        boolean containsWebPosition = item.percentWatched > 10 && item.percentWatched < 100;
+    //        if (containsWebPosition) {
+    //            // Web state is buggy on short videos (e.g. video clips)
+    //            boolean isLongVideo = getController().getLengthMs() > MUSIC_VIDEO_LENGTH_MS;
+    //            if (isLongVideo) {
+    //                state = new State(item.videoId, getNewPosition(item.percentWatched));
+    //            }
+    //        }
+    //    }
+    //
+    //    // Do I need to check that item isn't live? (state != null && !item.isLive)
+    //    if (state != null) {
+    //        long remainsMs = getController().getLengthMs() - state.positionMs;
+    //        boolean isVideoEnded = remainsMs < 1_000;
+    //        if (!isVideoEnded || !getPlayEnabled()) {
+    //            getController().setPositionMs(state.positionMs);
+    //        }
+    //    }
+    //
+    //    if (!mIsPlayBlocked) {
+    //        getController().setPlay(getPlayEnabled());
+    //    }
+    //}
+
     private void restorePosition(Video item) {
         State state = mStates.get(item.videoId);
 
-        // internal storage has priority over item data loaded from network
-        if (state == null) {
-            // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
-            boolean containsWebPosition = item.percentWatched > 10 && item.percentWatched < 100;
-            if (containsWebPosition) {
-                // Web state is buggy on short videos (e.g. video clips)
-                boolean isLongVideo = getController().getLengthMs() > MUSIC_VIDEO_LENGTH_MS;
-                if (isLongVideo) {
-                    state = new State(item.videoId, getNewPosition(item.percentWatched));
-                }
+        // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
+        boolean containsWebPosition = item.percentWatched > 10 && item.percentWatched < 90;
+        if (containsWebPosition) {
+            // Web state is buggy on short videos (e.g. video clips)
+            boolean isLongVideo = getController().getLengthMs() > MUSIC_VIDEO_LENGTH_MS;
+            if (isLongVideo) {
+                state = new State(item.videoId, getNewPosition(item.percentWatched));
             }
         }
 
