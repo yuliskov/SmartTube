@@ -35,6 +35,8 @@ public class LangUpdater {
 
         String langCode = getPreferredLocale();
 
+        langCode = appendCountry(langCode);
+
         // not set or default language selected
         if (langCode != null && !langCode.isEmpty()) {
             locale = langCode;
@@ -49,8 +51,6 @@ public class LangUpdater {
      */
     public String getPreferredLocale() {
         String language = mPrefs.getPreferredLanguage();
-
-        language = appendCountry(language);
 
         return language != null ? language : "";
     }
