@@ -214,5 +214,5 @@
     <string name="pin_to_sidebar">Anheften an Seitenleiste</string>
     <string name="unpin_from_sidebar">Lösen von Seitenleiste</string>
     <string name="dialog_select_country">Land</string>
-    <string name="settings_language_country">Sprache und Land</string>
+    <string name="settings_language_country">Sprache/Land</string>
 </resources>
