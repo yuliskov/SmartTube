@@ -263,8 +263,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         long currentTimeMillis = System.currentTimeMillis();
 
-        if (currentTimeMillis - mLastEngineRestartMs < 60_000) {
-            Log.d(TAG, "Trying not restart engine very often (once per minute)");
+        if (currentTimeMillis - mLastEngineRestartMs < 30_000) {
+            Log.d(TAG, "Trying to not restart engine very often");
             return;
         }
 
