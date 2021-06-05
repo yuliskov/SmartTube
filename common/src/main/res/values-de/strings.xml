@@ -56,7 +56,7 @@
     <string name="dialog_remove_account">Konto entfernen</string>
     <string name="dialog_add_account">Konto hinzufügen</string>
     <string name="default_lang">Standard</string>
-    <string name="dialog_select_language">App-Sprache</string>
+    <string name="dialog_select_language">Sprache</string>
     <string name="subtitle_default">Standard</string>
     <string name="subtitle_semi_transparent_bg">Halbtransparenter Hintergrund</string>
     <string name="subtitle_style">Untertitel-Stil</string>
@@ -213,4 +213,6 @@
     <string name="return_to_background_video">Zurück zum Video im Hintergrund</string>
     <string name="pin_to_sidebar">Anheften an Seitenleiste</string>
     <string name="unpin_from_sidebar">Lösen von Seitenleiste</string>
+    <string name="dialog_select_country">Land</string>
+    <string name="settings_language_country">Sprache/Land</string>
 </resources>
