@@ -400,6 +400,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         Category category = getCategory(categoryId);
 
         if (category != null) {
+            Log.d(TAG, "Update category %s", category.getTitle());
             updateCategory(category);
         }
     }
@@ -563,12 +564,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void authCheck(boolean check, Runnable callback) {
+        disposeActions();
+
         if (!check) {
             callback.run();
             return;
         }
 
-        disposeActions();
         getView().showProgressBar(true);
 
         SignInManager signInManager = mMediaService.getSignInManager();
