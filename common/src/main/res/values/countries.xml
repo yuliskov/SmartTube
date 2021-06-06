@@ -6,6 +6,11 @@
         <item>Россия|RU</item>
         <item>Україна|UA</item>
         <item>Беларусь|BY</item>
+        <item>Қазақстан|KZ</item>
+        <item>México|MX</item>
+        <item>India|IN</item>
+        <item>Kenya|KE</item>
+        <item>Israel|IL</item>
         <item>България|BG</item>
         <item>Deutschland|DE</item>
         <item>România|RO</item>
@@ -16,8 +21,9 @@
         <item>France|FR</item>
         <item>Hungary|HU</item>
         <item>Nederland|NL</item>
-        <item>Belgium (Nederland)|NL</item>
-        <item>Belgium (France)|FR</item>
+        <item>België|BE</item>
+        <item>België (Nederland)|NL</item>
+        <item>België (France)|FR</item>
         <item>Norsk|NB</item>
         <item>Czech|CS</item>
         <item>Italia|IT</item>
