@@ -281,7 +281,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
             if (isPositionActual || !getPlayEnabled()) { // Is pause after each video enabled?
                 mStates.put(video.videoId, new State(video.videoId, positionMs, lengthMs, getController().getSpeed()));
                 // Sync video. You could safely use it later to restore state.
-                video.percentWatched = (int) (positionMs / (lengthMs / 100));
+                video.percentWatched = positionMs / (lengthMs / 100f);
             } else {
                 // Reset position when video almost ended
                 resetPosition(video.videoId);
@@ -332,7 +332,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
             // Web state is buggy on short videos (e.g. video clips)
             boolean isLongVideo = getController().getLengthMs() > MUSIC_VIDEO_LENGTH_MS;
             if (isLongVideo) {
-                state = new State(item.videoId, getNewPosition(item.percentWatched));
+                state = new State(item.videoId, convertToMs(item.percentWatched));
             }
         }
 
@@ -367,8 +367,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
         }
     }
 
-    private long getNewPosition(int percentWatched) {
-        long newPositionMs = getController().getLengthMs() / 100 * percentWatched;
+    private long convertToMs(float percentWatched) {
+        long newPositionMs = (long) (getController().getLengthMs() / 100 * percentWatched);
 
         boolean samePositions = Math.abs(newPositionMs - getController().getPositionMs()) < 10_000;
 

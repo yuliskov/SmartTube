@@ -5,6 +5,7 @@
         <item>Great Britain|GB</item>
         <item>Россия|RU</item>
         <item>Україна|UA</item>
+        <item>Беларусь|BY</item>
         <item>България|BG</item>
         <item>Deutschland|DE</item>
         <item>România|RO</item>
@@ -15,8 +16,8 @@
         <item>France|FR</item>
         <item>Hungary|HU</item>
         <item>Nederland|NL</item>
-        <item>Belgium (NL)|NL</item>
-        <item>Belgium (FR)|FR</item>
+        <item>Belgium (Nederland)|NL</item>
+        <item>Belgium (France)|FR</item>
         <item>Norsk|NB</item>
         <item>Czech|CS</item>
         <item>Italia|IT</item>
@@ -28,6 +29,7 @@
         <item>Brasil|BR</item>
         <item>Portugalia|PT</item>
         <item>Türkiye|TR</item>
+        <item>Argentina|AR</item>
         <item>Việt Nam|VN</item>
         <item>China|CN</item>
         <item>Taiwan|TW</item>

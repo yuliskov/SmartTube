@@ -127,7 +127,7 @@ public class ExoMediaSourceFactory {
      * @return A new HttpDataSource factory.
      */
     private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
-        return buildHttpDataSourceFactory(mContext, useBandwidthMeter ? BANDWIDTH_METER : null);
+        return buildHttpDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
     }
 
     @SuppressWarnings("deprecation")
@@ -231,13 +231,13 @@ public class ExoMediaSourceFactory {
     }
 
     private static DataSource.Factory buildDataSourceFactory(Context context, DefaultBandwidthMeter bandwidthMeter) {
-        return new DefaultDataSourceFactory(context, bandwidthMeter, buildHttpDataSourceFactory(context, bandwidthMeter));
+        return new DefaultDataSourceFactory(context, bandwidthMeter, buildHttpDataSourceFactory(bandwidthMeter));
     }
 
     /**
      * Use OkHttp for networking
      */
-    //public static HttpDataSource.Factory buildHttpDataSourceFactory(Context context, DefaultBandwidthMeter bandwidthMeter) {
+    //public static HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
     //    // OkHttpHelpers.getOkHttpClient()
     //    // RetrofitHelper.createOkHttpClient()
     //    OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(RetrofitHelper.createOkHttpClient(), AppConstants.APP_USER_AGENT,
@@ -249,7 +249,7 @@ public class ExoMediaSourceFactory {
     /**
      * Use internal component for networking
      */
-    private static HttpDataSource.Factory buildHttpDataSourceFactory(Context context, DefaultBandwidthMeter bandwidthMeter) {
+    private static HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
         DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(
                 AppConstants.APP_USER_AGENT, bandwidthMeter, DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS * 4,
                 DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS * 4, true);
