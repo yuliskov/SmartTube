@@ -66,20 +66,20 @@ public class StoryboardManager {
             return;
         }
 
-        Observable<MediaItemFormatInfo> infoObserve;
+        Observable<MediaItemStoryboard> storyboardObserve;
 
         if (video.mediaItem != null) {
-            infoObserve = mMediaItemManager.getFormatInfoObserve(video.mediaItem);
+            storyboardObserve = mMediaItemManager.getStoryboardObserve(video.mediaItem);
         } else {
-            infoObserve = mMediaItemManager.getFormatInfoObserve(video.videoId);
+            storyboardObserve = mMediaItemManager.getStoryboardObserve(video.videoId);
         }
 
-        mFormatAction = infoObserve
+        mFormatAction = storyboardObserve
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        formatInfo -> {
-                            mStoryboard = formatInfo.createStoryboard();
+                        storyboard -> {
+                            mStoryboard = storyboard;
                             initSeekPositions();
                         },
                         error -> Log.e(TAG, "Error obtaining format info: %s", error.getMessage())
