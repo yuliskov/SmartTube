@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
 import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -32,6 +33,8 @@ import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.youtubeapi.app.AppConstants;
+import com.liskovsoft.youtubeapi.common.helpers.RetrofitHelper;
+import com.liskovsoft.youtubeapi.service.YouTubeSignInManager;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -247,13 +250,16 @@ public class ExoMediaSourceFactory {
     //}
 
     /**
-     * Use internal component for networking
+     * Use built-in component for networking
      */
     private static HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
         DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(
-                AppConstants.APP_USER_AGENT, bandwidthMeter, DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS * 4,
-                DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS * 4, true);
+                AppConstants.APP_USER_AGENT, bandwidthMeter, DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
+                DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS, true);
         //addCommonHeaders(context, dataSourceFactory); // cause troubles for some users
+        if (YouTubeSignInManager.mAuthorizationHeaderCached != null) {
+            dataSourceFactory.getDefaultRequestProperties().set("Authorization", YouTubeSignInManager.mAuthorizationHeaderCached);
+        }
         return dataSourceFactory;
     }
 
