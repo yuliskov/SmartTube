@@ -106,10 +106,11 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     public boolean onQueryTextChange(String newQuery) {
         loadSearchTags(newQuery);
 
-        // Avoid auto commit to prevent search field focus loss.
-        //if (isVoiceQuery(newQuery)) {
-        //    loadSearchResult(newQuery);
-        //}
+        // Commit on voice input.
+        // Note, that voice detection is far from ideal and may results duplicate search loading.
+        if (isVoiceQuery(newQuery)) {
+            loadSearchResult(newQuery);
+        }
 
         return true;
     }
