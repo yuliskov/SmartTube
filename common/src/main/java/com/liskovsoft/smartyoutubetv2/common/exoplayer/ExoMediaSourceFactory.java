@@ -29,6 +29,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
+import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -245,7 +246,7 @@ public class ExoMediaSourceFactory {
     //    // RetrofitHelper.createOkHttpClient()
     //    OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(RetrofitHelper.createOkHttpClient(), AppConstants.APP_USER_AGENT,
     //            bandwidthMeter);
-    //    //addCommonHeaders(context, dataSourceFactory);
+    //    //addCommonHeaders(dataSourceFactory);
     //    return dataSourceFactory;
     //}
 
@@ -256,25 +257,35 @@ public class ExoMediaSourceFactory {
         DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(
                 AppConstants.APP_USER_AGENT, bandwidthMeter, DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
                 DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS, true);
-        //addCommonHeaders(context, dataSourceFactory); // cause troubles for some users
-        if (YouTubeSignInManager.mAuthorizationHeaderCached != null) {
-            dataSourceFactory.getDefaultRequestProperties().set("Authorization", YouTubeSignInManager.mAuthorizationHeaderCached);
-        }
+        addCommonHeaders(dataSourceFactory); // cause troubles for some users
+        //if (YouTubeSignInManager.mAuthorizationHeaderCached != null) {
+        //    dataSourceFactory.getDefaultRequestProperties().set("Authorization", YouTubeSignInManager.mAuthorizationHeaderCached);
+        //}
         return dataSourceFactory;
     }
 
-    //private static void addCommonHeaders(Context context, BaseFactory dataSourceFactory) {
-    //    HeaderManager headerManager = new HeaderManager(context);
-    //    HashMap<String, String> headers = headerManager.getHeaders();
-    //
-    //    // NOTE: "Accept-Encoding" should set to "identity" or not present
-    //
-    //    for (String header : headers.keySet()) {
-    //        if (EXO_HEADERS.contains(header)) {
-    //            dataSourceFactory.getDefaultRequestProperties().set(header, headers.get(header));
-    //        }
-    //    }
-    //}
+    private static void addCommonHeaders(BaseFactory dataSourceFactory) {
+        //HeaderManager headerManager = new HeaderManager(context);
+        //HashMap<String, String> headers = headerManager.getHeaders();
+
+        // NOTE: "Accept-Encoding" should set to "identity" or not present
+
+        //for (String header : headers.keySet()) {
+        //    if (EXO_HEADERS.contains(header)) {
+        //        dataSourceFactory.getDefaultRequestProperties().set(header, headers.get(header));
+        //    }
+        //}
+
+        dataSourceFactory.getDefaultRequestProperties().set("accept", "*/*");
+        dataSourceFactory.getDefaultRequestProperties().set("accept-encoding", "identity"); // Next won't work: gzip, deflate, br
+        dataSourceFactory.getDefaultRequestProperties().set("accept-language", "en-US,en;q=0.9");
+        dataSourceFactory.getDefaultRequestProperties().set("dnt", "1");
+        dataSourceFactory.getDefaultRequestProperties().set("origin", "https://www.youtube.com");
+        dataSourceFactory.getDefaultRequestProperties().set("referer", "https://www.youtube.com/");
+        dataSourceFactory.getDefaultRequestProperties().set("sec-fetch-dest", "empty");
+        dataSourceFactory.getDefaultRequestProperties().set("sec-fetch-mode", "cors");
+        dataSourceFactory.getDefaultRequestProperties().set("sec-fetch-site", "cross-site");
+    }
 
     // EXO: 2.12.1
     private static class StaticDashManifestParser extends DashManifestParser {
