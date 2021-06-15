@@ -255,12 +255,17 @@ public class ExoMediaSourceFactory {
      */
     private static HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
         DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(
-                AppConstants.APP_USER_AGENT, bandwidthMeter, DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
-                DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS, true);
-        addCommonHeaders(dataSourceFactory); // cause troubles for some users
+                AppConstants.APP_USER_AGENT, bandwidthMeter);
+
+        //DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(
+        //        AppConstants.APP_USER_AGENT, bandwidthMeter, DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
+        //        DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS, true);
+
+        //addCommonHeaders(dataSourceFactory); // cause troubles for some users
         //if (YouTubeSignInManager.mAuthorizationHeaderCached != null) {
         //    dataSourceFactory.getDefaultRequestProperties().set("Authorization", YouTubeSignInManager.mAuthorizationHeaderCached);
         //}
+
         return dataSourceFactory;
     }
 
