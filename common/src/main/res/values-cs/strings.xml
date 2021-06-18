@@ -209,4 +209,6 @@
     <string name="return_to_background_video">Zpět na video běžící na pozadí</string>
     <string name="pin_to_sidebar">Připnout na postranní panel</string>
     <string name="unpin_from_sidebar">Odepnout z postranního panelu</string>
+    <string name="dialog_select_country">Země</string>
+    <string name="settings_language_country">Jazyk/Země</string>
 </resources>
