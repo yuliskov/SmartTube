@@ -106,7 +106,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     @Override
     public void onBuffering() {
         // Fix long buffering
-        //Utils.postDelayed(mHandler, mPendingRestartEngine, BUFFERING_CHECK_MS);
+        Utils.postDelayed(mHandler, mPendingRestartEngine, BUFFERING_CHECK_MS);
     }
 
     @Override
