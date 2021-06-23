@@ -56,7 +56,7 @@
     <string name="dialog_remove_account">Remove account</string>
     <string name="dialog_add_account">Add account</string>
     <string name="default_lang">Default</string>
-    <string name="dialog_select_language">App language</string>
+    <string name="dialog_select_language">Language</string>
     <string name="subtitle_default">Default</string>
     <string name="subtitle_semi_transparent_bg">Semitransparent background</string>
     <string name="subtitle_style">Subtitle style</string>
@@ -213,4 +213,6 @@
     <string name="return_to_background_video">Return to video running in background</string>
     <string name="pin_to_sidebar">Pin to sidebar</string>
     <string name="unpin_from_sidebar">Unpin from sidebar</string>
+    <string name="dialog_select_country">Country</string>
+    <string name="settings_language_country">Language/Country</string>
 </resources>

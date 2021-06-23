@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
-import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Pair;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.source.TrackGroup;
@@ -15,6 +16,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector.TrackSelectorCallback;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -24,6 +26,9 @@ import java.util.TreeSet;
 import static com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil.extractCodec;
 
 public class TrackSelectorManager implements TrackSelectorCallback {
+    private static final int DECODER_INIT_TIME_MS = 0; // Default - 1_000
+    private final Runnable mSelectTracks = this::fixTracksSelection;
+    private final Handler mHandler = new Handler(Looper.getMainLooper());
     public static final int RENDERER_INDEX_VIDEO = 0;
     public static final int RENDERER_INDEX_AUDIO = 1;
     public static final int RENDERER_INDEX_SUBTITLE = 2;
@@ -38,6 +43,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
     private final Renderer[] mRenderers = new Renderer[3];
     private final MediaTrack[] mSelectedTracks = new MediaTrack[3];
+    private long mTracksInitTimeMs;
 
     public void invalidate() {
         Arrays.fill(mRenderers, null);
@@ -187,6 +193,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             noSubsTrack.isSelected = true;
             renderer.selectedTrack = noSubsTrack;
         }
+
+        mTracksInitTimeMs = System.currentTimeMillis();
     }
 
     /**
@@ -367,6 +375,12 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
         if (mRenderers[rendererIndex] == null || mRenderers[rendererIndex].mediaTracks == null) {
             Log.e(TAG, "Renderer isn't initialized. Waiting for later selection...");
+            return;
+        }
+
+        if (DECODER_INIT_TIME_MS > 0 && System.currentTimeMillis() - mTracksInitTimeMs < DECODER_INIT_TIME_MS) {
+            Log.d(TAG, "Decoder probably isn't fully initialized. Deferring codec selection...");
+            Utils.postDelayed(mHandler, mSelectTracks, DECODER_INIT_TIME_MS);
             return;
         }
 

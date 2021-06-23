@@ -103,12 +103,13 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     }
 
     private void startPlaybackWatcher() {
+        // Warn. Try to not access player object here.
+        // Or you'll get "Player is accessed on the wrong thread" error.
         Observable<Long> playbackProgressObservable =
-                Observable.interval(1, TimeUnit.SECONDS)
-                        .map((val) -> getController().getPositionMs());
+                Observable.interval(1, TimeUnit.SECONDS);
 
         mProgressAction = playbackProgressObservable
-                .subscribeOn(AndroidSchedulers.mainThread()) // We should access player's position on the main thread
+                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::skipSegment,
@@ -122,7 +123,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         mVideo = null;
     }
 
-    private void skipSegment(long positionMs) {
+    private void skipSegment(long interval) {
         if (mSponsorSegments == null || !Video.equals(mVideo, getController().getVideo())) {
             return;
         }
@@ -130,7 +131,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         boolean isSegmentFound = false;
 
         for (SponsorSegment segment : mSponsorSegments) {
-            if (isPositionAtSegmentStart(positionMs, segment)) {
+            if (isPositionAtSegmentStart(getController().getPositionMs(), segment)) {
                 Integer resId = mLocalizedMapping.get(segment.getCategory());
                 String localizedCategory = resId != null ? getActivity().getString(resId) : segment.getCategory();
 
@@ -153,8 +154,9 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     }
 
     private boolean isPositionAtSegmentStart(long positionMs, SponsorSegment segment) {
-        // Note. Getting into account playback speed.
-        return positionMs >= segment.getStartMs() && positionMs <= (segment.getStartMs() + SEGMENT_CHECK_DURATION_MS * getController().getSpeed());
+        // Note. Getting into account playback speed. Also check that the zone is long enough.
+        float checkEndMs = segment.getStartMs() + SEGMENT_CHECK_DURATION_MS * getController().getSpeed();
+        return positionMs >= segment.getStartMs() && positionMs <= checkEndMs && checkEndMs <= segment.getEndMs();
     }
 
     private boolean isPositionInsideSegment(long positionMs, SponsorSegment segment) {

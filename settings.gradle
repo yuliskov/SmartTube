@@ -2,12 +2,17 @@ include ':smarttubetv', ':common'
 
 def rootDir = settingsDir
 
-// prepare to git submodule
+// git submodule
 gradle.ext.sharedModulesRoot = new File(rootDir, '../SharedModules').exists() ? new File(rootDir, '../SharedModules') : new File(rootDir, './SharedModules')
 apply from: new File(gradle.ext.sharedModulesRoot, 'core_settings.gradle')
 
 gradle.ext.sharedModulesConstants = new File(gradle.ext.sharedModulesRoot, 'constants.gradle')
 
-// prepare to git submodule
+// git submodule
 gradle.ext.mediaServiceCoreRoot = new File(rootDir, '../MediaServiceCore').exists() ? new File(rootDir, '../MediaServiceCore') : new File(rootDir, './MediaServiceCore')
 apply from: new File(gradle.ext.mediaServiceCoreRoot, 'core_settings.gradle')
+
+// git submodule
+// gradle.ext.exoplayerRoot = new File(rootDir, '../AmznExoPlayer2.10.6').exists() ? new File(rootDir, '../AmznExoPlayer2.10.6') : new File(rootDir, './AmznExoPlayer2.10.6')
+// gradle.ext.exoplayerModulePrefix = 'exoplayer-'
+// apply from: new File(gradle.ext.exoplayerRoot, 'core_settings.gradle')

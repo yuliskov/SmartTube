@@ -54,16 +54,6 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         disposeActions();
     }
 
-    private void disposeActions() {
-        if (mScrollAction != null && !mScrollAction.isDisposed()) {
-            mScrollAction.dispose();
-        }
-
-        if (mLoadAction != null && !mLoadAction.isDisposed()) {
-            mLoadAction.dispose();
-        }
-    }
-
     @Override
     public void onViewInitialized() {
         startSearchInt(mSearchText);
@@ -111,6 +101,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     }
     
     private void loadSearchResult(String searchText) {
+        disposeActions();
         getView().showProgressBar(true);
 
         MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
@@ -128,6 +119,10 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     }
     
     private void continueGroup(VideoGroup group) {
+        if (RxUtils.isAnyActionRunning(mScrollAction)) {
+            return;
+        }
+
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
         getView().showProgressBar(true);
@@ -157,11 +152,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
         Log.d(TAG, "onScrollEnd: Group title: " + group.getTitle());
 
-        boolean updateInProgress = mScrollAction != null && !mScrollAction.isDisposed();
-
-        if (!updateInProgress) {
-            continueGroup(group);
-        }
+        continueGroup(group);
     }
 
     public void startSearch(String searchText) {
@@ -181,5 +172,9 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         } else {
             getView().startSearch(searchText);
         }
+    }
+
+    private void disposeActions() {
+        RxUtils.disposeActions(mLoadAction, mScrollAction);
     }
 }

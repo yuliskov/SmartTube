@@ -28,7 +28,7 @@ public final class Video implements Parcelable {
     public String studio;
     public String badge;
     public String previewUrl;
-    public int percentWatched = -1;
+    public float percentWatched = -1;
     public MediaItem mediaItem; // memory leak
     public MediaItem nextMediaItem; // memory leak
     public VideoGroup group; // used to get next page when scrolling

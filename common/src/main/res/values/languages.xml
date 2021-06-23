@@ -5,9 +5,11 @@
         <item>Русский|ru_RU</item>
         <item>Українська|uk_UA</item>
         <item>Български|bg</item>
+        <item>Eesti keel|et_EE</item>
         <item>Deutsch|de_DE</item>
         <item>Romanian|ro</item>
-        <item>Spanish|es</item>
+        <item>Español|es</item>
+        <item>Español (Argentina)|es_AR</item>
         <item>Polski|pl</item>
         <item>Finnish|fi</item>
         <item>Latviešu|lv</item>
@@ -22,8 +24,8 @@
         <item>Slovenian|sl</item>
         <item>Ελληνικά|el_GR</item>
         <item>Armenian|hy</item>
-        <item>Português Brasileiro|pt_BR</item>
         <item>Português|pt_PT</item>
+        <item>Português (Brasileiro)|pt_BR</item>
         <item>Arabic|ar</item>
         <item>Turkish|tr</item>
         <item>Hindi|hi</item>

@@ -33,8 +33,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
         settingsPresenter.clear();
 
-        appendVideoBufferCategory(settingsPresenter);
         appendVideoPresetsCategory(settingsPresenter);
+        appendVideoBufferCategory(settingsPresenter);
         //appendVideoZoomCategory(settingsPresenter);
         appendAudioShiftCategory(settingsPresenter);
         //appendBackgroundPlaybackCategory(settingsPresenter);

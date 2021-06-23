@@ -55,7 +55,7 @@
     <string name="dialog_remove_account">Удалить аккаунт</string>
     <string name="dialog_add_account">Добавить аккаунт</string>
     <string name="default_lang">По умолчанию</string>
-    <string name="dialog_select_language">Язык приложения</string>
+    <string name="dialog_select_language">Язык</string>
     <string name="header_channels">Каналы</string>
     <string name="subtitle_default">Обычные</string>
     <string name="subtitle_semi_transparent_bg">Полупрозрачный фон</string>
@@ -213,4 +213,6 @@
     <string name="return_to_background_video">Вернуться к фоновому видео</string>
     <string name="pin_to_sidebar">Закрепить на боковой панели</string>
     <string name="unpin_from_sidebar">Открепить от боковой панели</string>
+    <string name="dialog_select_country">Страна</string>
+    <string name="settings_language_country">Язык/Страна</string>
 </resources>

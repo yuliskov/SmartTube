@@ -75,7 +75,7 @@ public class ContentBlockData {
 
         String[] split = Helpers.splitObjectLegacy(data);
 
-        mIsSponsorBlockEnabled = Helpers.parseBoolean(split, 0, false);
+        mIsSponsorBlockEnabled = Helpers.parseBoolean(split, 0, true);
         mNotificationType = Helpers.parseInt(split, 1, NOTIFICATION_TYPE_TOAST);
         String categories = Helpers.parseStr(split, 2);
 

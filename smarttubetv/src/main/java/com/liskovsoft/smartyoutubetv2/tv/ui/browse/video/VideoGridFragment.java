@@ -198,7 +198,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
             int index = mGridAdapter.indexOf(item);
 
             if (index > (size - ViewUtil.GRID_SCROLL_CONTINUE_NUM)) {
-                mMainPresenter.onScrollEnd(item);
+                mMainPresenter.onScrollEnd((Video) mGridAdapter.get(size - 1));
             }
         }
     }
