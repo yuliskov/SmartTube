@@ -58,6 +58,14 @@ public class ExoPlayerInitializer {
     private DefaultLoadControl createLoadControl() {
         DefaultLoadControl.Builder baseBuilder = new DefaultLoadControl.Builder();
 
+        //baseBuilder.setAllocator(new DefaultAllocator(true, C.DEFAULT_BUFFER_SEGMENT_SIZE))
+        //        .setBufferDurationsMs(2_500,
+        //                5_000,
+        //                1_000,
+        //                2_000)
+        //        .setTargetBufferBytes(C.LENGTH_UNSET)
+        //        .setPrioritizeTimeOverSizeThresholds(true);
+
         if (PlayerController.BUFFER_HIGH == mPlayerData.getVideoBufferType()) {
             int minBufferMs = 30000; // 30 seconds
             int maxBufferMs = 36000000; // technical infinity, recommended here a very high number, the max will be based on setTargetBufferBytes() value
@@ -70,7 +78,7 @@ public class ExoPlayerInitializer {
         } else if (PlayerController.BUFFER_LOW == mPlayerData.getVideoBufferType()) {
             baseBuilder
                     .setBufferDurationsMs(
-                            DefaultLoadControl.DEFAULT_MAX_BUFFER_MS / 3,
+                            DefaultLoadControl.DEFAULT_MIN_BUFFER_MS / 3,
                             DefaultLoadControl.DEFAULT_MAX_BUFFER_MS / 3,
                             DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS / 3,
                             DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS / 3);
