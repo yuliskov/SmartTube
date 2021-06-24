@@ -262,7 +262,7 @@ public class ExoMediaSourceFactory {
                 AppConstants.APP_USER_AGENT, bandwidthMeter, DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
                 DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS, true);
 
-        //addCommonHeaders(dataSourceFactory); // cause troubles for some users
+        addCommonHeaders(dataSourceFactory); // cause troubles for some users
         //if (YouTubeSignInManager.mAuthorizationHeaderCached != null) {
         //    dataSourceFactory.getDefaultRequestProperties().set("Authorization", YouTubeSignInManager.mAuthorizationHeaderCached);
         //}
@@ -282,15 +282,19 @@ public class ExoMediaSourceFactory {
         //    }
         //}
 
-        dataSourceFactory.getDefaultRequestProperties().set("accept", "*/*");
-        dataSourceFactory.getDefaultRequestProperties().set("accept-encoding", "identity"); // Next won't work: gzip, deflate, br
-        dataSourceFactory.getDefaultRequestProperties().set("accept-language", "en-US,en;q=0.9");
-        dataSourceFactory.getDefaultRequestProperties().set("dnt", "1");
-        dataSourceFactory.getDefaultRequestProperties().set("origin", "https://www.youtube.com");
-        dataSourceFactory.getDefaultRequestProperties().set("referer", "https://www.youtube.com/");
-        dataSourceFactory.getDefaultRequestProperties().set("sec-fetch-dest", "empty");
-        dataSourceFactory.getDefaultRequestProperties().set("sec-fetch-mode", "cors");
-        dataSourceFactory.getDefaultRequestProperties().set("sec-fetch-site", "cross-site");
+        // Emulate browser request
+        //dataSourceFactory.getDefaultRequestProperties().set("accept", "*/*");
+        //dataSourceFactory.getDefaultRequestProperties().set("accept-encoding", "identity"); // Next won't work: gzip, deflate, br
+        //dataSourceFactory.getDefaultRequestProperties().set("accept-language", "en-US,en;q=0.9");
+        //dataSourceFactory.getDefaultRequestProperties().set("dnt", "1");
+        //dataSourceFactory.getDefaultRequestProperties().set("origin", "https://www.youtube.com");
+        //dataSourceFactory.getDefaultRequestProperties().set("referer", "https://www.youtube.com/");
+        //dataSourceFactory.getDefaultRequestProperties().set("sec-fetch-dest", "empty");
+        //dataSourceFactory.getDefaultRequestProperties().set("sec-fetch-mode", "cors");
+        //dataSourceFactory.getDefaultRequestProperties().set("sec-fetch-site", "cross-site");
+
+        // Compress response
+        dataSourceFactory.getDefaultRequestProperties().set("Accept-Encoding", AppConstants.ACCEPT_ENCODING);
     }
 
     // EXO: 2.12.1
