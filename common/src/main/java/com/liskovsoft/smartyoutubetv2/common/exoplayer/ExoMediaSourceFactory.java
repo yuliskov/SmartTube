@@ -293,8 +293,8 @@ public class ExoMediaSourceFactory {
         //dataSourceFactory.getDefaultRequestProperties().set("sec-fetch-mode", "cors");
         //dataSourceFactory.getDefaultRequestProperties().set("sec-fetch-site", "cross-site");
 
-        // Compress response
-        dataSourceFactory.getDefaultRequestProperties().set("Accept-Encoding", AppConstants.ACCEPT_ENCODING);
+        // Compress response (WARN: gzip, deflate or br aren't supported in dash urls)
+        //dataSourceFactory.getDefaultRequestProperties().set("Accept-Encoding", AppConstants.ACCEPT_ENCODING);
     }
 
     // EXO: 2.12.1
