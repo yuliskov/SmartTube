@@ -249,10 +249,10 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         for (TrackSelection selection : trackSelections.getAll()) {
             if (selection != null) {
                 // EXO: 2.12.1
-                Format format = selection.getSelectedFormat();
+                //Format format = selection.getSelectedFormat();
 
                 // EXO: 2.13.1
-                // Format format = selection.getFormat(0);
+                Format format = selection.getFormat(0);
 
                 mEventListener.onTrackChanged(ExoFormatItem.from(format));
 

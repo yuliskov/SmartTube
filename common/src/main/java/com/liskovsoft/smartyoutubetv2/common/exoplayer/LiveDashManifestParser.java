@@ -18,6 +18,7 @@ import java.util.List;
 /**
  * Supported ExoPlayer versions: 2.10.6
  */
+@SuppressWarnings("unchecked")
 public class LiveDashManifestParser extends DashManifestParser {
     private DashManifest mManifest;
     private long mOldSegmentNum;

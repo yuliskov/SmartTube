@@ -38,6 +38,7 @@ public final class Video implements Parcelable {
     public boolean isSubscribed;
     public boolean isRemote;
     public int groupPosition = -1; // group position in multi-grid fragments
+    public String clickTrackingParams;
 
     public Video() {
         
@@ -97,6 +98,7 @@ public final class Video implements Parcelable {
         video.playlistIndex = item.getPlaylistIndex();
         video.isLive = item.isLive();
         video.isUpcoming = item.isUpcoming();
+        video.clickTrackingParams = item.getClickTrackingParams();
         video.mediaItem = item;
 
         return video;
