@@ -82,11 +82,11 @@ android {
             versionCode 11000 + defaultConfig.versionCode
             applicationId "com.google.android.youtube.tv"
         }
-        stbolshoetv {
-            // matchingFallbacks = ['lite']
-            versionCode 11000 + defaultConfig.versionCode
-            applicationIdSuffix ".bolshoetv"
-        }
+        // stbolshoetv {
+        //     // matchingFallbacks = ['lite']
+        //     versionCode 11000 + defaultConfig.versionCode
+        //     applicationIdSuffix ".bolshoetv"
+        // }
         stredboxtv {
             // matchingFallbacks = ['lite']
             versionCode 11000 + defaultConfig.versionCode
