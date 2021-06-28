@@ -37,11 +37,33 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
     //private int mOperationMode = MediaCodecRenderer.OPERATION_MODE_SYNCHRONOUS;
 
     // 2.9, 2.10, 2.11
+    //public CustomOverridesRenderersFactory(Context activity) {
+    //    super(activity);
+    //
+    //    mPlayerData = PlayerData.instance(activity);
+    //    mPlayerTweaksData = PlayerTweaksData.instance(activity);
+    //
+    //    setExtensionRendererMode(EXTENSION_RENDERER_MODE_ON);
+    //    // setEnableDecoderFallback(true); // Exo 2.10 and up
+    //
+    //    if (mPlayerTweaksData.isSWDecoderForced()) {
+    //        setMediaCodecSelector(new BlacklistMediaCodecSelector());
+    //    }
+    //
+    //    AmazonQuirks.disableSnappingToVsync(mPlayerTweaksData.isSnappingToVsyncDisabled());
+    //    AmazonQuirks.skipProfileLevelCheck(mPlayerTweaksData.isProfileLevelCheckSkipped());
+    //}
+
+    // 2.12, 2.13
     public CustomOverridesRenderersFactory(Context activity) {
         super(activity);
 
         mPlayerData = PlayerData.instance(activity);
         mPlayerTweaksData = PlayerTweaksData.instance(activity);
+
+        // Exo 2.12 (Exclusive experimental tweaks)
+        //mOperationMode = MediaCodecRenderer.OPERATION_MODE_ASYNCHRONOUS_DEDICATED_THREAD_ASYNCHRONOUS_QUEUEING;
+        //experimentalSetMediaCodecOperationMode(mOperationMode);
 
         setExtensionRendererMode(EXTENSION_RENDERER_MODE_ON);
         // setEnableDecoderFallback(true); // Exo 2.10 and up
@@ -50,28 +72,8 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
             setMediaCodecSelector(new BlacklistMediaCodecSelector());
         }
 
-        AmazonQuirks.disableSnappingToVsync(mPlayerTweaksData.isSnappingToVsyncDisabled());
         AmazonQuirks.skipProfileLevelCheck(mPlayerTweaksData.isProfileLevelCheckSkipped());
     }
-
-    // 2.12, 2.13
-    //public CustomOverridesRenderersFactory(Context activity) {
-    //    super(activity);
-    //
-    //    mPlayerData = PlayerData.instance(activity);
-    //    mPlayerTweaksData = PlayerTweaksData.instance(activity);
-    //
-    //    // Exo 2.12 (Exclusive experimental tweaks)
-    //    //mOperationMode = MediaCodecRenderer.OPERATION_MODE_ASYNCHRONOUS_DEDICATED_THREAD_ASYNCHRONOUS_QUEUEING;
-    //    //experimentalSetMediaCodecOperationMode(mOperationMode);
-    //
-    //    setExtensionRendererMode(EXTENSION_RENDERER_MODE_ON);
-    //    // setEnableDecoderFallback(true); // Exo 2.10 and up
-    //
-    //    if (mPlayerTweaksData.isSWDecoderForced()) {
-    //        setMediaCodecSelector(new BlacklistMediaCodecSelector());
-    //    }
-    //}
 
     // Exo 2.9
     //@Override
@@ -118,82 +120,13 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
     //}
 
     // 2.10, 2.11
-    @Override
-    protected void buildAudioRenderers(Context context, @ExtensionRendererMode int extensionRendererMode, MediaCodecSelector mediaCodecSelector,
-                                       @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys,
-                                       boolean enableDecoderFallback, AudioProcessor[] audioProcessors, Handler eventHandler,
-                                       AudioRendererEventListener eventListener, ArrayList<Renderer> out) {
-        super.buildAudioRenderers(context, extensionRendererMode, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys,
-                enableDecoderFallback, audioProcessors, eventHandler, eventListener, out);
-
-        if (mPlayerData.getAudioDelayMs() == 0) {
-            // Improve performance a bit by eliminating calculations presented in custom renderer.
-
-            return;
-        }
-
-        DelayMediaCodecAudioRenderer audioRenderer =
-                new DelayMediaCodecAudioRenderer(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, enableDecoderFallback,
-                        eventHandler, eventListener, new DefaultAudioSink(AudioCapabilities.getCapabilities(context), audioProcessors));
-
-        audioRenderer.setAudioDelayMs(mPlayerData.getAudioDelayMs());
-
-        replaceAudioRenderer(out, audioRenderer);
-    }
-
-    // 2.10, 2.11
-    @Override
-    protected void buildVideoRenderers(Context context, int extensionRendererMode, MediaCodecSelector mediaCodecSelector,
-                                       @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys,
-                                       boolean enableDecoderFallback, Handler eventHandler, VideoRendererEventListener eventListener,
-                                       long allowedVideoJoiningTimeMs, ArrayList<Renderer> out) {
-        super.buildVideoRenderers(context, extensionRendererMode, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys,
-                enableDecoderFallback, eventHandler, eventListener, allowedVideoJoiningTimeMs, out);
-
-        if (!mPlayerTweaksData.isFrameDropFixEnabled() && !mPlayerTweaksData.isAmlogicFixEnabled()) {
-            // Improve performance a bit by eliminating some if conditions presented in tweaks.
-            // But we need to obtain codec real name somehow. So use interceptor below.
-
-            DebugInfoMediaCodecVideoRenderer videoRenderer =
-                    new DebugInfoMediaCodecVideoRenderer(context, mediaCodecSelector, allowedVideoJoiningTimeMs, drmSessionManager,
-                        playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
-
-            replaceVideoRenderer(out, videoRenderer);
-            videoRenderer.enableSetOutputSurfaceWorkaround(mPlayerTweaksData.isSetOutputSurfaceWorkaroundEnabled());
-
-            return;
-        }
-
-        TweaksMediaCodecVideoRenderer videoRenderer =
-                new TweaksMediaCodecVideoRenderer(context, mediaCodecSelector, allowedVideoJoiningTimeMs, drmSessionManager,
-                        playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
-
-        videoRenderer.enableFrameDropFix(mPlayerTweaksData.isFrameDropFixEnabled());
-        videoRenderer.enableAmlogicFix(mPlayerTweaksData.isAmlogicFixEnabled());
-        videoRenderer.enableSetOutputSurfaceWorkaround(mPlayerTweaksData.isSetOutputSurfaceWorkaroundEnabled());
-
-        replaceVideoRenderer(out, videoRenderer);
-    }
-
-    // Exo 2.12, 2.13
     //@Override
-    //protected void buildAudioRenderers(Context context,
-    //                                   int extensionRendererMode,
-    //                                   MediaCodecSelector mediaCodecSelector,
-    //                                   boolean enableDecoderFallback,
-    //                                   AudioSink audioSink,
-    //                                   Handler eventHandler,
-    //                                   AudioRendererEventListener eventListener,
-    //                                   ArrayList<Renderer> out) {
-    //    super.buildAudioRenderers(
-    //            context,
-    //            extensionRendererMode,
-    //            mediaCodecSelector,
-    //            enableDecoderFallback,
-    //            audioSink,
-    //            eventHandler,
-    //            eventListener,
-    //            out);
+    //protected void buildAudioRenderers(Context context, @ExtensionRendererMode int extensionRendererMode, MediaCodecSelector mediaCodecSelector,
+    //                                   @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys,
+    //                                   boolean enableDecoderFallback, AudioProcessor[] audioProcessors, Handler eventHandler,
+    //                                   AudioRendererEventListener eventListener, ArrayList<Renderer> out) {
+    //    super.buildAudioRenderers(context, extensionRendererMode, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys,
+    //            enableDecoderFallback, audioProcessors, eventHandler, eventListener, out);
     //
     //    if (mPlayerData.getAudioDelayMs() == 0) {
     //        // Improve performance a bit by eliminating calculations presented in custom renderer.
@@ -202,80 +135,149 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
     //    }
     //
     //    DelayMediaCodecAudioRenderer audioRenderer =
-    //            new DelayMediaCodecAudioRenderer(context,
-    //                    mediaCodecSelector,
-    //                    enableDecoderFallback,
-    //                    eventHandler,
-    //                    eventListener,
-    //                    audioSink);
+    //            new DelayMediaCodecAudioRenderer(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, enableDecoderFallback,
+    //                    eventHandler, eventListener, new DefaultAudioSink(AudioCapabilities.getCapabilities(context), audioProcessors));
     //
     //    audioRenderer.setAudioDelayMs(mPlayerData.getAudioDelayMs());
-    //
-    //    // Restore global operation mode (needed for stability)
-    //    audioRenderer.experimentalSetMediaCodecOperationMode(mOperationMode);
     //
     //    replaceAudioRenderer(out, audioRenderer);
     //}
 
-    // Exo 2.12, 2.13
+    // 2.10, 2.11
     //@Override
-    //protected void buildVideoRenderers(Context context,
-    //                                   int extensionRendererMode,
-    //                                   MediaCodecSelector mediaCodecSelector,
-    //                                   boolean enableDecoderFallback,
-    //                                   Handler eventHandler,
-    //                                   VideoRendererEventListener eventListener,
-    //                                   long allowedVideoJoiningTimeMs,
-    //                                   ArrayList<Renderer> out) {
-    //    super.buildVideoRenderers(
-    //            context,
-    //            extensionRendererMode,
-    //            mediaCodecSelector,
-    //            enableDecoderFallback,
-    //            eventHandler,
-    //            eventListener,
-    //            allowedVideoJoiningTimeMs,
-    //            out);
-    //
+    //protected void buildVideoRenderers(Context context, int extensionRendererMode, MediaCodecSelector mediaCodecSelector,
+    //                                   @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys,
+    //                                   boolean enableDecoderFallback, Handler eventHandler, VideoRendererEventListener eventListener,
+    //                                   long allowedVideoJoiningTimeMs, ArrayList<Renderer> out) {
+    //    super.buildVideoRenderers(context, extensionRendererMode, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys,
+    //            enableDecoderFallback, eventHandler, eventListener, allowedVideoJoiningTimeMs, out);
     //
     //    if (!mPlayerTweaksData.isFrameDropFixEnabled() && !mPlayerTweaksData.isAmlogicFixEnabled()) {
     //        // Improve performance a bit by eliminating some if conditions presented in tweaks.
     //        // But we need to obtain codec real name somehow. So use interceptor below.
     //
     //        DebugInfoMediaCodecVideoRenderer videoRenderer =
-    //                new DebugInfoMediaCodecVideoRenderer(context,
-    //                        mediaCodecSelector,
-    //                        allowedVideoJoiningTimeMs,
-    //                        enableDecoderFallback,
-    //                        eventHandler,
-    //                        eventListener,
-    //                        MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
-    //
-    //        // Restore global operation mode (needed for stability)
-    //        videoRenderer.experimentalSetMediaCodecOperationMode(mOperationMode);
-    //        videoRenderer.enableSetOutputSurfaceWorkaround(mPlayerTweaksData.isSetOutputSurfaceWorkaroundEnabled());
+    //                new DebugInfoMediaCodecVideoRenderer(context, mediaCodecSelector, allowedVideoJoiningTimeMs, drmSessionManager,
+    //                    playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
     //
     //        replaceVideoRenderer(out, videoRenderer);
+    //        videoRenderer.enableSetOutputSurfaceWorkaround(mPlayerTweaksData.isSetOutputSurfaceWorkaroundEnabled());
     //
     //        return;
     //    }
     //
     //    TweaksMediaCodecVideoRenderer videoRenderer =
-    //            new TweaksMediaCodecVideoRenderer(context,
-    //                    mediaCodecSelector,
-    //                    allowedVideoJoiningTimeMs,
-    //                    enableDecoderFallback,
-    //                    eventHandler,
-    //                    eventListener,
-    //                    MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
+    //            new TweaksMediaCodecVideoRenderer(context, mediaCodecSelector, allowedVideoJoiningTimeMs, drmSessionManager,
+    //                    playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
     //
     //    videoRenderer.enableFrameDropFix(mPlayerTweaksData.isFrameDropFixEnabled());
     //    videoRenderer.enableAmlogicFix(mPlayerTweaksData.isAmlogicFixEnabled());
     //    videoRenderer.enableSetOutputSurfaceWorkaround(mPlayerTweaksData.isSetOutputSurfaceWorkaroundEnabled());
     //
-    //    // Restore global operation mode (needed for stability)
-    //    videoRenderer.experimentalSetMediaCodecOperationMode(mOperationMode);
-    //
     //    replaceVideoRenderer(out, videoRenderer);
     //}
+
+    // Exo 2.12, 2.13
+    @Override
+    protected void buildAudioRenderers(Context context,
+                                       int extensionRendererMode,
+                                       MediaCodecSelector mediaCodecSelector,
+                                       boolean enableDecoderFallback,
+                                       AudioSink audioSink,
+                                       Handler eventHandler,
+                                       AudioRendererEventListener eventListener,
+                                       ArrayList<Renderer> out) {
+        super.buildAudioRenderers(
+                context,
+                extensionRendererMode,
+                mediaCodecSelector,
+                enableDecoderFallback,
+                audioSink,
+                eventHandler,
+                eventListener,
+                out);
+
+        if (mPlayerData.getAudioDelayMs() == 0) {
+            // Improve performance a bit by eliminating calculations presented in custom renderer.
+
+            return;
+        }
+
+        DelayMediaCodecAudioRenderer audioRenderer =
+                new DelayMediaCodecAudioRenderer(context,
+                        mediaCodecSelector,
+                        enableDecoderFallback,
+                        eventHandler,
+                        eventListener,
+                        audioSink);
+
+        audioRenderer.setAudioDelayMs(mPlayerData.getAudioDelayMs());
+
+        // Restore global operation mode (needed for stability)
+        //audioRenderer.experimentalSetMediaCodecOperationMode(mOperationMode);
+
+        replaceAudioRenderer(out, audioRenderer);
+    }
+
+    // Exo 2.12, 2.13
+    @Override
+    protected void buildVideoRenderers(Context context,
+                                       int extensionRendererMode,
+                                       MediaCodecSelector mediaCodecSelector,
+                                       boolean enableDecoderFallback,
+                                       Handler eventHandler,
+                                       VideoRendererEventListener eventListener,
+                                       long allowedVideoJoiningTimeMs,
+                                       ArrayList<Renderer> out) {
+        super.buildVideoRenderers(
+                context,
+                extensionRendererMode,
+                mediaCodecSelector,
+                enableDecoderFallback,
+                eventHandler,
+                eventListener,
+                allowedVideoJoiningTimeMs,
+                out);
+
+
+        if (!mPlayerTweaksData.isFrameDropFixEnabled() && !mPlayerTweaksData.isAmlogicFixEnabled()) {
+            // Improve performance a bit by eliminating some if conditions presented in tweaks.
+            // But we need to obtain codec real name somehow. So use interceptor below.
+
+            DebugInfoMediaCodecVideoRenderer videoRenderer =
+                    new DebugInfoMediaCodecVideoRenderer(context,
+                            mediaCodecSelector,
+                            allowedVideoJoiningTimeMs,
+                            enableDecoderFallback,
+                            eventHandler,
+                            eventListener,
+                            MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
+
+            // Restore global operation mode (needed for stability)
+            //videoRenderer.experimentalSetMediaCodecOperationMode(mOperationMode);
+            videoRenderer.enableSetOutputSurfaceWorkaround(mPlayerTweaksData.isSetOutputSurfaceWorkaroundEnabled());
+
+            replaceVideoRenderer(out, videoRenderer);
+
+            return;
+        }
+
+        TweaksMediaCodecVideoRenderer videoRenderer =
+                new TweaksMediaCodecVideoRenderer(context,
+                        mediaCodecSelector,
+                        allowedVideoJoiningTimeMs,
+                        enableDecoderFallback,
+                        eventHandler,
+                        eventListener,
+                        MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
+
+        videoRenderer.enableFrameDropFix(mPlayerTweaksData.isFrameDropFixEnabled());
+        videoRenderer.enableAmlogicFix(mPlayerTweaksData.isAmlogicFixEnabled());
+        videoRenderer.enableSetOutputSurfaceWorkaround(mPlayerTweaksData.isSetOutputSurfaceWorkaroundEnabled());
+
+        // Restore global operation mode (needed for stability)
+        //videoRenderer.experimentalSetMediaCodecOperationMode(mOperationMode);
+
+        replaceVideoRenderer(out, videoRenderer);
+    }
 }
