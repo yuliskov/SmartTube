@@ -474,6 +474,9 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                     if (mediaTrack.format.width > MAX_VIDEO_WIDTH) {
                         continue;
                     }
+                    if (TrackSelectorUtil.isHdrCodec(mediaTrack.format.codecs)) {
+                        continue;
+                    }
 
                     int compare = track.inBounds(mediaTrack);
 

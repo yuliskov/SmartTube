@@ -42,6 +42,9 @@ public class UiOptionItem implements OptionItem {
                     && ((String) format.getTitle()).contains("vp9")) {
                 continue;
             }
+            if (format.getTitle() != null && ((String) format.getTitle()).contains("HDR")) {
+                continue;
+            }
             options.add(from(format, callback, defaultTitle));
         }
 
