@@ -1,13 +1,11 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
-import com.liskovsoft.appupdatechecker2.AppUpdateChecker;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppUpdatePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -46,19 +44,19 @@ public class AboutPresenter extends BasePresenter<Void> {
     }
 
     private void appendAutoUpdateSwitch(AppSettingsPresenter settingsPresenter) {
-        AppUpdateChecker mUpdateChecker = new AppUpdateChecker(getContext(), null);
-
-        settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.check_updates_auto), optionItem -> {
-            mUpdateChecker.enableUpdateCheck(optionItem.isSelected());
-        }, mUpdateChecker.isUpdateCheckEnabled()));
+//        AppUpdateChecker mUpdateChecker = new AppUpdateChecker(getContext(), null);
+//
+//        settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.check_updates_auto), optionItem -> {
+//            mUpdateChecker.enableUpdateCheck(optionItem.isSelected());
+//        }, mUpdateChecker.isUpdateCheckEnabled()));
     }
 
     private void appendUpdateCheckButton(AppSettingsPresenter settingsPresenter) {
-        OptionItem updateCheckOption = UiOptionItem.from(
-                getContext().getString(R.string.check_for_updates),
-                option -> AppUpdatePresenter.instance(getContext()).start(true));
-
-        settingsPresenter.appendSingleButton(updateCheckOption);
+//        OptionItem updateCheckOption = UiOptionItem.from(
+//                getContext().getString(R.string.check_for_updates),
+//                option -> AppUpdatePresenter.instance(getContext()).start(true));
+//
+//        settingsPresenter.appendSingleButton(updateCheckOption);
     }
 
     private void appendSiteLink(AppSettingsPresenter settingsPresenter) {

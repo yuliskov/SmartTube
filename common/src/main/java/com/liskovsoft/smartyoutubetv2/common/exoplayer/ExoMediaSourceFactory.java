@@ -5,6 +5,9 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
+
+import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
@@ -17,6 +20,7 @@ import com.google.android.exoplayer2.source.dash.manifest.DashManifest;
 import com.google.android.exoplayer2.source.dash.manifest.DashManifestParser;
 import com.google.android.exoplayer2.source.dash.manifest.Period;
 import com.google.android.exoplayer2.source.dash.manifest.ProgramInformation;
+import com.google.android.exoplayer2.source.dash.manifest.ServiceDescriptionElement;
 import com.google.android.exoplayer2.source.dash.manifest.UtcTimingElement;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
@@ -296,6 +300,38 @@ public class ExoMediaSourceFactory {
     }
 
     // EXO: 2.10 - 2.12
+//    private static class StaticDashManifestParser extends DashManifestParser {
+//        @Override
+//        protected DashManifest buildMediaPresentationDescription(
+//                long availabilityStartTime,
+//                long durationMs,
+//                long minBufferTimeMs,
+//                boolean dynamic,
+//                long minUpdateTimeMs,
+//                long timeShiftBufferDepthMs,
+//                long suggestedPresentationDelayMs,
+//                long publishTimeMs,
+//                ProgramInformation programInformation,
+//                UtcTimingElement utcTiming,
+//                Uri location,
+//                List<Period> periods) {
+//            return new DashManifest(
+//                    availabilityStartTime,
+//                    durationMs,
+//                    minBufferTimeMs,
+//                    false,
+//                    minUpdateTimeMs,
+//                    timeShiftBufferDepthMs,
+//                    suggestedPresentationDelayMs,
+//                    publishTimeMs,
+//                    programInformation,
+//                    utcTiming,
+//                    location,
+//                    periods);
+//        }
+//    }
+
+    // EXO: 2.13
     private static class StaticDashManifestParser extends DashManifestParser {
         @Override
         protected DashManifest buildMediaPresentationDescription(
@@ -307,9 +343,10 @@ public class ExoMediaSourceFactory {
                 long timeShiftBufferDepthMs,
                 long suggestedPresentationDelayMs,
                 long publishTimeMs,
-                ProgramInformation programInformation,
-                UtcTimingElement utcTiming,
-                Uri location,
+                @Nullable ProgramInformation programInformation,
+                @Nullable UtcTimingElement utcTiming,
+                @Nullable ServiceDescriptionElement serviceDescription,
+                @Nullable Uri location,
                 List<Period> periods) {
             return new DashManifest(
                     availabilityStartTime,
@@ -322,42 +359,9 @@ public class ExoMediaSourceFactory {
                     publishTimeMs,
                     programInformation,
                     utcTiming,
+                    serviceDescription,
                     location,
                     periods);
         }
     }
-
-    // EXO: 2.13
-    //private static class StaticDashManifestParser extends DashManifestParser {
-    //    @Override
-    //    protected DashManifest buildMediaPresentationDescription(
-    //            long availabilityStartTime,
-    //            long durationMs,
-    //            long minBufferTimeMs,
-    //            boolean dynamic,
-    //            long minUpdateTimeMs,
-    //            long timeShiftBufferDepthMs,
-    //            long suggestedPresentationDelayMs,
-    //            long publishTimeMs,
-    //            @Nullable ProgramInformation programInformation,
-    //            @Nullable UtcTimingElement utcTiming,
-    //            @Nullable ServiceDescriptionElement serviceDescription,
-    //            @Nullable Uri location,
-    //            List<Period> periods) {
-    //        return new DashManifest(
-    //                availabilityStartTime,
-    //                durationMs,
-    //                minBufferTimeMs,
-    //                false,
-    //                minUpdateTimeMs,
-    //                timeShiftBufferDepthMs,
-    //                suggestedPresentationDelayMs,
-    //                publishTimeMs,
-    //                programInformation,
-    //                utcTiming,
-    //                serviceDescription,
-    //                location,
-    //                periods);
-    //    }
-    //}
 }

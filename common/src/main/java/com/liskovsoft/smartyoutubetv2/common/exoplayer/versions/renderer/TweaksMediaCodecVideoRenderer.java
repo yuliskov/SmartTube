@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
+import com.google.android.exoplayer2.mediacodec.MediaCodecAdapter;
 import com.google.android.exoplayer2.mediacodec.MediaCodecInfo;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
 import com.google.android.exoplayer2.video.VideoRendererEventListener;
@@ -17,6 +18,14 @@ public class TweaksMediaCodecVideoRenderer extends DebugInfoMediaCodecVideoRende
     private static final String TAG = TweaksMediaCodecVideoRenderer.class.getSimpleName();
     private boolean mIsFrameDropFixEnabled;
     private boolean mIsAmlogicFixEnabled;
+
+    public TweaksMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs, boolean enableDecoderFallback, @Nullable Handler eventHandler, @Nullable VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {
+        super(context, mediaCodecSelector, allowedJoiningTimeMs, enableDecoderFallback, eventHandler, eventListener, maxDroppedFramesToNotify);
+    }
+
+//    public TweaksMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs, @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, boolean enableDecoderFallback, @Nullable @org.jetbrains.annotations.Nullable Handler eventHandler, @Nullable @org.jetbrains.annotations.Nullable VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {
+//        super(context, mediaCodecSelector, allowedJoiningTimeMs, drmSessionManager, playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, maxDroppedFramesToNotify);
+//    }
 
     // Exo 2.9
     //public CustomMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
@@ -28,10 +37,10 @@ public class TweaksMediaCodecVideoRenderer extends DebugInfoMediaCodecVideoRende
     //}
 
     // Exo 2.10, 2.11
-    public TweaksMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
-                                         @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, boolean enableDecoderFallback, @Nullable Handler eventHandler, @Nullable VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {
-        super(context, mediaCodecSelector, allowedJoiningTimeMs, drmSessionManager, playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, maxDroppedFramesToNotify);
-    }
+//    public TweaksMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
+//                                         @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, boolean enableDecoderFallback, @Nullable Handler eventHandler, @Nullable VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {
+//        super(context, mediaCodecSelector, allowedJoiningTimeMs, drmSessionManager, playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, maxDroppedFramesToNotify);
+//    }
 
     // Exo 2.12, 2.13
     //public TweaksMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
@@ -41,24 +50,31 @@ public class TweaksMediaCodecVideoRenderer extends DebugInfoMediaCodecVideoRende
     //}
 
     // EXO: 2.10, 2.11, 2.12
+//    @TargetApi(21)
+//    protected void renderOutputBufferV21(
+//            MediaCodecAdapter codec, int index, long presentationTimeUs, long releaseTimeNs) {
+//        // Fix frame drops on SurfaceView
+//        // https://github.com/google/ExoPlayer/issues/6348
+//        // https://developer.android.com/reference/android/media/MediaCodec#releaseOutputBuffer(int,%20long)
+//        super.renderOutputBufferV21(codec, index, presentationTimeUs, mIsFrameDropFixEnabled ? 0 : releaseTimeNs);
+//    }
+
+    // EXO: 2.13
     @TargetApi(21)
     protected void renderOutputBufferV21(
-            MediaCodec codec, int index, long presentationTimeUs, long releaseTimeNs) {
+            MediaCodecAdapter codec, int index, long presentationTimeUs, long releaseTimeNs) {
         // Fix frame drops on SurfaceView
         // https://github.com/google/ExoPlayer/issues/6348
         // https://developer.android.com/reference/android/media/MediaCodec#releaseOutputBuffer(int,%20long)
-        super.renderOutputBufferV21(codec, index, presentationTimeUs, mIsFrameDropFixEnabled ? 0 : releaseTimeNs);
+        super.renderOutputBufferV21(codec, index, presentationTimeUs, 0);
     }
 
-    // EXO: 2.13
-    //@TargetApi(21)
-    //protected void renderOutputBufferV21(
-    //        MediaCodecAdapter codec, int index, long presentationTimeUs, long releaseTimeNs) {
-    //    // Fix frame drops on SurfaceView
-    //    // https://github.com/google/ExoPlayer/issues/6348
-    //    // https://developer.android.com/reference/android/media/MediaCodec#releaseOutputBuffer(int,%20long)
-    //    super.renderOutputBufferV21(codec, index, presentationTimeUs, 0);
-    //}
+
+//    @TargetApi(21)
+//    @Override
+//    protected void renderOutputBufferV21(MediaCodecAdapter codec, int index, long presentationTimeUs, long releaseTimeNs) {
+//        super.renderOutputBufferV21(codec, index, presentationTimeUs, releaseTimeNs);
+//    }
 
     @Override
     protected CodecMaxValues getCodecMaxValues(
