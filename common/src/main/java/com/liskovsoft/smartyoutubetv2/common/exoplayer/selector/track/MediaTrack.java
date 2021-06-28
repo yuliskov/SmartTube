@@ -2,10 +2,10 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track;
 
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.trackselection.ExoTrackSelection.Definition;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.backport.Definition;
 
 public abstract class MediaTrack {
     public Format format;

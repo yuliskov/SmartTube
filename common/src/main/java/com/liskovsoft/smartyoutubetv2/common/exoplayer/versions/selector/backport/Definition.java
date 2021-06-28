@@ -40,9 +40,10 @@ public final class Definition {
         this.data = data;
     }
 
-    public static Definition from(TrackSelection selection) {
-        return new Definition(selection.getTrackGroup(), selection.getSelectedIndex());
-    }
+    // Exo 2.10
+    //public static Definition from(TrackSelection selection) {
+    //    return new Definition(selection.getTrackGroup(), selection.getSelectedIndex());
+    //}
 
     // Exo 2.10
     //@SuppressWarnings("deprecation")
