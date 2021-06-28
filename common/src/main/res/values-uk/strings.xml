@@ -56,7 +56,7 @@
     <string name="dialog_remove_account">Видалити обліковий запис</string>
     <string name="dialog_add_account">Додати обліковий запис</string>
     <string name="default_lang">За замовчуванням</string>
-    <string name="dialog_select_language">Мова додатку</string>
+    <string name="dialog_select_language">Мова</string>
     <string name="subtitle_default">Звичайні</string>
     <string name="subtitle_semi_transparent_bg">Напівпрозорий фон</string>
     <string name="subtitle_style">Стиль субтитрів</string>
@@ -213,4 +213,6 @@
     <string name="return_to_background_video">Повернутися до фонового відео</string>
     <string name="pin_to_sidebar">Прикріпити до бічної панелі</string>
     <string name="unpin_from_sidebar">Відкріпити від бічної панелі</string>
+    <string name="dialog_select_country">Країна</string>
+    <string name="settings_language_country">Мова/Країна</string>
 </resources>

@@ -3,10 +3,10 @@
     <string translatable="false" name="app_name"><![CDATA[SmartTube Next]]></string>
     <string translatable="false" name="browse_title"><![CDATA[SmartTube Next]]></string>
     <string name="related_movies">Related Videos</string>
-    <string name="vertical_grid_title"><![CDATA[Vertical Video Grid]]></string>
+    <string name="vertical_grid_title"><![CDATA[Lưới Video Dọc]]></string>
 
     <string name="popular_header">Video Phổ biến</string>
-    <string name="more_samples">More Samples</string>
+    <string name="more_samples">Thêm ví dụ</string>
     <string name="grid_view">Hiển thị lưới dọc</string>
     <string name="error_fragment">Phân đoạn lỗi</string>
     <string name="personal_settings">Thiết lập cá nhân</string>
@@ -131,4 +131,9 @@
     <string name="msg_press_again_to_exit">Nhấn 1 lần nữa để thoát</string>
     <string name="player_remaining_time">Còn lại: %s</string>
     <string name="badge_new_content">NỘI DUNG MỚI</string>
+    <string name="badge_live">TRỤC TIẾP</string>
+    <string name="action_pip">Bắt đầu PIP</string>
+    <string name="add_device_view_description">Để kết nối thiết bị hãy điền mã trên điện thoại với ứng dụng YouTube trong phần Cài đặt/Xem trên TV</string>
+    <string name="playback_controls_repeat_pause">Lặp lại việc tạm dừng</string>
+    <string name="playback_controls_repeat_list">Lặp lại danh sách</string>
 </resources>

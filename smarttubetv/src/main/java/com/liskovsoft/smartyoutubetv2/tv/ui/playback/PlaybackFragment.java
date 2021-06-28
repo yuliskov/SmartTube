@@ -965,17 +965,23 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void setLikeButtonState(boolean like) {
-        mPlayerGlue.setThumbsUpActionState(like);
+        if (mPlayerGlue != null) {
+            mPlayerGlue.setThumbsUpActionState(like);
+        }
     }
 
     @Override
     public void setDislikeButtonState(boolean dislike) {
-        mPlayerGlue.setThumbsDownActionState(dislike);
+        if (mPlayerGlue != null) {
+            mPlayerGlue.setThumbsDownActionState(dislike);
+        }
     }
 
     @Override
     public void setSubscribeButtonState(boolean subscribe) {
-        mPlayerGlue.setSubscribeActionState(subscribe);
+        if (mPlayerGlue != null) {
+            mPlayerGlue.setSubscribeActionState(subscribe);
+        }
     }
 
     @Override

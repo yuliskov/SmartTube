@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class VideoLoader extends PlayerEventListenerHelper {
     private static final String TAG = VideoLoader.class.getSimpleName();
-    private static final boolean ENABLE_4K_FIX = false;
+    private static final int BUFFERING_CHECK_MS = 10_000;
     private final Playlist mPlaylist;
     private final Handler mHandler;
     private final SuggestionsLoader mSuggestionsLoader;
@@ -105,10 +105,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onBuffering() {
-        //MessageHelpers.showMessage(getActivity(), "Buffering occurs!");
-
         // Fix long buffering
-        Utils.postDelayed(mHandler, mPendingRestartEngine, 10_000);
+        Utils.postDelayed(mHandler, mPendingRestartEngine, BUFFERING_CHECK_MS);
     }
 
     @Override
@@ -280,7 +278,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
         if (formatInfo.isUnplayable()) {
             getController().showError(formatInfo.getPlayabilityStatus());
-        } else if (ENABLE_4K_FIX && formatInfo.containsDashUrl() && formatInfo.isLive() && formatInfo.isStreamSeekable()) {
+        } else if (formatInfo.containsDashUrl()) {
             Log.d(TAG, "Found live video in dash format. Loading...");
             getController().openDashUrl(formatInfo.getDashManifestUrl());
         } else if (formatInfo.containsHlsUrl()) {

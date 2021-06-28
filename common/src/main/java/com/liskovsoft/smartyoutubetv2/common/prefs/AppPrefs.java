@@ -13,6 +13,7 @@ public class AppPrefs extends SharedPreferencesBase {
     private static final String BACKUP_DATA = "backup_data";
     private static final String STATE_UPDATER_DATA = "state_updater_data";
     private static final String PREFERRED_LANGUAGE_DATA = "preferred_language_data";
+    private static final String PREFERRED_COUNTRY_DATA = "preferred_country_data";
     private static final String VIEW_MANAGER_DATA = "view_manager_data";
     private String mDefaultDisplayMode;
 
@@ -66,6 +67,14 @@ public class AppPrefs extends SharedPreferencesBase {
 
     public String getPreferredLanguage() {
         return getString(PREFERRED_LANGUAGE_DATA, null);
+    }
+
+    public void setPreferredCountry(String countryData) {
+        putString(PREFERRED_COUNTRY_DATA, countryData);
+    }
+
+    public String getPreferredCountry() {
+        return getString(PREFERRED_COUNTRY_DATA, null);
     }
 
     public void setViewManagerData(String data) {

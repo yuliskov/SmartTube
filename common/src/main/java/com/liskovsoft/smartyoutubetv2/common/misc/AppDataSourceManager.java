@@ -50,8 +50,14 @@ public class AppDataSourceManager {
 //                context.getString(R.string.settings_general), () -> GeneralSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_app));
 //        settingItems.add(new SettingsItem(
 //                context.getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_main_ui));
+//        settingItems.add(new SettingsItem(
+//                context.getString(R.string.settings_language_country), () -> LanguageSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_language));
+//        settingItems.add(new SettingsItem(
+//                context.getString(R.string.settings_general), () -> GeneralSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_app));
         settingItems.add(new SettingsItem(
-                context.getString(R.string.settings_ui_scale), () -> UIScaleSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_ui_scale));
+                context.getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_main_ui));
+        //settingItems.add(new SettingsItem(
+        //        context.getString(R.string.settings_ui_scale), () -> UIScaleSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_ui_scale));
 //        settingItems.add(new SettingsItem(
 //                context.getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_player));
 //        settingItems.add(new SettingsItem(

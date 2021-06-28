@@ -48,8 +48,8 @@ android {
         applicationId "com.liskovsoft.smarttubetv"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 315
-        versionName "11.25"
+        versionCode 331
+        versionName "11.41"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
@@ -57,10 +57,23 @@ android {
         // Additionally, you should extend your application from MultiDexApplication
         multiDexEnabled = true
     }
+    signingConfigs {
+        release {
+            storeFile file(STORE_FILE)
+            storePassword STORE_PASSWORD
+            keyAlias KEY_ALIAS
+            keyPassword KEY_PASSWORD
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            applicationIdSuffix ".debug"
+            signingConfig signingConfigs.release
         }
     }
 
@@ -125,6 +138,8 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:' + glideVersion
     implementation 'com.zlc.glide:webpdecoder:2.0.' + glideVersion
 
+    //////// BEGIN EXOPLAYER /////////
+
     implementation 'com.amazon.android:exoplayer:' + amazonExoplayerVersion
     implementation 'com.amazon.android:extension-leanback:' + amazonExoplayerVersion
     implementation 'com.amazon.android:extension-mediasession:' + amazonExoplayerVersion
@@ -134,6 +149,12 @@ dependencies {
     // implementation 'com.google.android.exoplayer:extension-mediasession:' + exoplayerVersion
 
     // implementation 'com.github.amzn:exoplayer-amazon-port:' + amazonExoplayerJitpackVersion
+
+    // implementation project(':exoplayer-library')
+    // implementation project(':exoplayer-extension-leanback')
+    // implementation project(':exoplayer-extension-mediasession')
+
+    //////// END EXOPLAYER //////////
 
     testImplementation 'junit:junit:' + junitVersion
     testImplementation 'org.robolectric:robolectric:' + robolectricVersion

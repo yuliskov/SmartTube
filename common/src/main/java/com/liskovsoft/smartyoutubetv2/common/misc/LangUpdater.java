@@ -7,6 +7,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
@@ -34,6 +35,8 @@ public class LangUpdater {
 
         String langCode = getPreferredLocale();
 
+        langCode = appendCountry(langCode);
+
         // not set or default language selected
         if (langCode != null && !langCode.isEmpty()) {
             locale = langCode;
@@ -48,6 +51,7 @@ public class LangUpdater {
      */
     public String getPreferredLocale() {
         String language = mPrefs.getPreferredLanguage();
+
         return language != null ? language : "";
     }
 
@@ -74,6 +78,15 @@ public class LangUpdater {
         mPrefs.setPreferredLanguage(langCode);
     }
 
+    public String getPreferredCountry() {
+        String country = mPrefs.getPreferredCountry();
+        return country != null ? country : "";
+    }
+
+    public void setPreferredCountry(String countryCode) {
+        mPrefs.setPreferredCountry(countryCode);
+    }
+
     /**
      * Gets map of Human readable locale names and their respective lang codes
      * @return locale name/code map
@@ -82,5 +95,26 @@ public class LangUpdater {
         LinkedHashMap<String, String> map = new LinkedHashMap<>();
         map.put(mContext.getResources().getString(R.string.default_lang), "");
         return Helpers.getMap(mContext.getResources().getStringArray(R.array.supported_languages), "|", map);
+    }
+
+    public Map<String, String> getSupportedCountries() {
+        LinkedHashMap<String, String> map = new LinkedHashMap<>();
+        map.put(mContext.getResources().getString(R.string.default_lang), "");
+        return Helpers.getMap(mContext.getResources().getStringArray(R.array.supported_countries), "|", map);
+    }
+
+    private String appendCountry(String langCode) {
+        if (langCode != null && !langCode.isEmpty()) {
+            String preferredCountry = getPreferredCountry();
+
+            if (preferredCountry != null && !preferredCountry.isEmpty()) {
+                StringTokenizer tokenizer = new StringTokenizer(langCode, "_");
+                String lang = tokenizer.nextToken();
+
+                langCode = String.format("%s_%s", lang, preferredCountry);
+            }
+        }
+
+        return langCode;
     }
 }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="supported_countries">
+        <item>United States|US</item>
+        <item>Great Britain|GB</item>
+        <item>Россия|RU</item>
+        <item>Україна|UA</item>
+        <item>Беларусь|BY</item>
+        <item>Қазақстан|KZ</item>
+        <item>Argentina|AR</item>
+        <item>Australia|AU</item>
+        <item>México|MX</item>
+        <item>India|IN</item>
+        <item>Kenya|KE</item>
+        <item>Israel|IL</item>
+        <item>Eesti|EE</item>
+        <item>България|BG</item>
+        <item>Deutschland|DE</item>
+        <item>România|RO</item>
+        <item>España|ES</item>
+        <item>Polska|PL</item>
+        <item>Finland|FI</item>
+        <item>Latvija|LV</item>
+        <item>France|FR</item>
+        <item>Hungary|HU</item>
+        <item>Nederland|NL</item>
+        <item>België|BE</item>
+        <item>België (Nederland)|NL</item>
+        <item>België (France)|FR</item>
+        <item>Norsk|NB</item>
+        <item>Czech|CS</item>
+        <item>Italia|IT</item>
+        <item>Lietuva|LT</item>
+        <item>Moldova|MO</item>
+        <item>Slovenia|SL</item>
+        <item>Ελληνικά|GR</item>
+        <item>Armenia|HY</item>
+        <item>Brasil|BR</item>
+        <item>Portugalia|PT</item>
+        <item>Türkiye|TR</item>
+        <item>Việt Nam|VN</item>
+        <item>China|CN</item>
+        <item>Taiwan|TW</item>
+        <item>Indonesia|IN</item>
+    </string-array>
+</resources>

@@ -106,7 +106,8 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     public boolean onQueryTextChange(String newQuery) {
         loadSearchTags(newQuery);
 
-        // Avoid auto commit to prevent search field focus loss.
+        // Commit on voice input.
+        // Note, that voice detection is far from ideal and may results duplicate search loading.
         if (isVoiceQuery(newQuery)) {
             loadSearchResult(newQuery);
         }
@@ -140,6 +141,9 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         }
     }
 
+    /**
+     * Check that previous query is null
+     */
     private boolean isVoiceQuery(String newQuery) {
         if (TextUtils.isEmpty(newQuery)) {
             mNewQuery = null;
@@ -185,7 +189,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         int index = mItemResultsAdapter.indexOf(item);
 
         if (index > (size - ViewUtil.ROW_SCROLL_CONTINUE_NUM)) {
-            mSearchPresenter.onScrollEnd(item);
+            mSearchPresenter.onScrollEnd((Video) mItemResultsAdapter.get(size - 1));
         }
     }
 }

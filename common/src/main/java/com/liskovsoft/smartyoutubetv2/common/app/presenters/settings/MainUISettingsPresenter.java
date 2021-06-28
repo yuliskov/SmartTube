@@ -32,14 +32,14 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
         settingsPresenter.clear();
 
-        appendColorScheme(settingsPresenter);
-        appendCardsStyle(settingsPresenter);
+//        appendColorScheme(settingsPresenter);
+//        appendCardsStyle(settingsPresenter);
         //appendCardTitleLines(settingsPresenter);
-        appendChannelSortingCategory(settingsPresenter);
-        appendPlaylistsStyle(settingsPresenter);
+//        appendChannelSortingCategory(settingsPresenter);
+//        appendPlaylistsStyle(settingsPresenter);
         appendScaleUI(settingsPresenter);
-        appendVideoGridScale(settingsPresenter);
-        appendMiscCategory(settingsPresenter);
+//        appendVideoGridScale(settingsPresenter);
+//        appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_main_ui), () -> {
             if (mRestartApp) {
@@ -151,7 +151,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
     private void appendVideoGridScale(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        for (float scale : new float[] {0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f, 1.1f, 1.2f, 1.35f, 1.4f, 1.5f}) {
+        for (float scale : new float[] {0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f, 1.1f, 1.2f, 1.25f, 1.3f, 1.35f, 1.4f, 1.5f}) {
             options.add(UiOptionItem.from(String.format("%sx", scale),
                     optionItem -> mMainUIData.setVideoGridScale(scale),
                     Helpers.floatEquals(scale, mMainUIData.getVideoGridScale())));
