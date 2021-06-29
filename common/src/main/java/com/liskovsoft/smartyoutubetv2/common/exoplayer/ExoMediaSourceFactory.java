@@ -5,9 +5,10 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
+
 import androidx.annotation.Nullable;
+
 import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -36,8 +37,6 @@ import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.youtubeapi.app.AppConstants;
-import com.liskovsoft.youtubeapi.common.helpers.RetrofitHelper;
-import com.liskovsoft.youtubeapi.service.YouTubeSignInManager;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -295,41 +294,42 @@ public class ExoMediaSourceFactory {
         //dataSourceFactory.getDefaultRequestProperties().set("sec-fetch-mode", "cors");
         //dataSourceFactory.getDefaultRequestProperties().set("sec-fetch-site", "cross-site");
 
+        // WARN: Won't work on Exo 2.10!!!
         // Compress response (WARN: gzip, deflate or br aren't supported in dash urls)
-        dataSourceFactory.getDefaultRequestProperties().set("Accept-Encoding", AppConstants.ACCEPT_ENCODING);
+        // dataSourceFactory.getDefaultRequestProperties().set("Accept-Encoding", AppConstants.ACCEPT_ENCODING);
     }
 
-    // EXO: 2.12
-    //private static class StaticDashManifestParser extends DashManifestParser {
-    //    @Override
-    //    protected DashManifest buildMediaPresentationDescription(
-    //            long availabilityStartTime,
-    //            long durationMs,
-    //            long minBufferTimeMs,
-    //            boolean dynamic,
-    //            long minUpdateTimeMs,
-    //            long timeShiftBufferDepthMs,
-    //            long suggestedPresentationDelayMs,
-    //            long publishTimeMs,
-    //            ProgramInformation programInformation,
-    //            UtcTimingElement utcTiming,
-    //            Uri location,
-    //            List<Period> periods) {
-    //        return new DashManifest(
-    //                availabilityStartTime,
-    //                durationMs,
-    //                minBufferTimeMs,
-    //                false,
-    //                minUpdateTimeMs,
-    //                timeShiftBufferDepthMs,
-    //                suggestedPresentationDelayMs,
-    //                publishTimeMs,
-    //                programInformation,
-    //                utcTiming,
-    //                location,
-    //                periods);
-    //    }
-    //}
+    // EXO: 2.10 - 2.12
+//    private static class StaticDashManifestParser extends DashManifestParser {
+//        @Override
+//        protected DashManifest buildMediaPresentationDescription(
+//                long availabilityStartTime,
+//                long durationMs,
+//                long minBufferTimeMs,
+//                boolean dynamic,
+//                long minUpdateTimeMs,
+//                long timeShiftBufferDepthMs,
+//                long suggestedPresentationDelayMs,
+//                long publishTimeMs,
+//                ProgramInformation programInformation,
+//                UtcTimingElement utcTiming,
+//                Uri location,
+//                List<Period> periods) {
+//            return new DashManifest(
+//                    availabilityStartTime,
+//                    durationMs,
+//                    minBufferTimeMs,
+//                    false,
+//                    minUpdateTimeMs,
+//                    timeShiftBufferDepthMs,
+//                    suggestedPresentationDelayMs,
+//                    publishTimeMs,
+//                    programInformation,
+//                    utcTiming,
+//                    location,
+//                    periods);
+//        }
+//    }
 
     // EXO: 2.13
     private static class StaticDashManifestParser extends DashManifestParser {

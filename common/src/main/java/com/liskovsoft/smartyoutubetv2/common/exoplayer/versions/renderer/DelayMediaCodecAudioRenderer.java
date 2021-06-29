@@ -32,8 +32,8 @@ public class DelayMediaCodecAudioRenderer extends MediaCodecAudioRenderer {
 
     // Exo 2.12, 2.13
     public DelayMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector,
-                                            boolean enableDecoderFallback, @Nullable Handler eventHandler,
-                                            @Nullable AudioRendererEventListener eventListener, AudioSink audioSink) {
+                                        boolean enableDecoderFallback, @Nullable Handler eventHandler,
+                                        @Nullable AudioRendererEventListener eventListener, AudioSink audioSink) {
         super(context, mediaCodecSelector, enableDecoderFallback, eventHandler, eventListener, audioSink);
     }
 
