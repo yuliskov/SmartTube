@@ -38,7 +38,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
 //        appendChannelSortingCategory(settingsPresenter);
 //        appendPlaylistsStyle(settingsPresenter);
         appendScaleUI(settingsPresenter);
-//        appendVideoGridScale(settingsPresenter);
+        appendVideoGridScale(settingsPresenter);
 //        appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_main_ui), () -> {
