@@ -19,14 +19,6 @@ public class TweaksMediaCodecVideoRenderer extends DebugInfoMediaCodecVideoRende
     private boolean mIsFrameDropFixEnabled;
     private boolean mIsAmlogicFixEnabled;
 
-    public TweaksMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs, boolean enableDecoderFallback, @Nullable Handler eventHandler, @Nullable VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {
-        super(context, mediaCodecSelector, allowedJoiningTimeMs, enableDecoderFallback, eventHandler, eventListener, maxDroppedFramesToNotify);
-    }
-
-//    public TweaksMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs, @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys, boolean enableDecoderFallback, @Nullable @org.jetbrains.annotations.Nullable Handler eventHandler, @Nullable @org.jetbrains.annotations.Nullable VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {
-//        super(context, mediaCodecSelector, allowedJoiningTimeMs, drmSessionManager, playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, maxDroppedFramesToNotify);
-//    }
-
     // Exo 2.9
     //public CustomMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
     //                                     @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys,
@@ -43,11 +35,11 @@ public class TweaksMediaCodecVideoRenderer extends DebugInfoMediaCodecVideoRende
 //    }
 
     // Exo 2.12, 2.13
-    //public TweaksMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
-    //                                     boolean enableDecoderFallback, @Nullable Handler eventHandler,
-    //                                     @Nullable VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {
-    //    super(context, mediaCodecSelector, allowedJoiningTimeMs, enableDecoderFallback, eventHandler, eventListener, maxDroppedFramesToNotify);
-    //}
+    public TweaksMediaCodecVideoRenderer(Context context, MediaCodecSelector mediaCodecSelector, long allowedJoiningTimeMs,
+                                         boolean enableDecoderFallback, @Nullable Handler eventHandler,
+                                         @Nullable VideoRendererEventListener eventListener, int maxDroppedFramesToNotify) {
+        super(context, mediaCodecSelector, allowedJoiningTimeMs, enableDecoderFallback, eventHandler, eventListener, maxDroppedFramesToNotify);
+    }
 
     // EXO: 2.10, 2.11, 2.12
 //    @TargetApi(21)
