@@ -11,6 +11,7 @@ import android.view.TextureView.SurfaceTextureListener;
 import android.view.View;
 import android.view.ViewGroup;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+//import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.tmp.surface.textureview.TextureViewSurfaceHolder;
 
 public class TextureViewWrapper implements SurfaceWrapper {
     private int mState = SURFACE_NOT_CREATED;
@@ -23,24 +24,24 @@ public class TextureViewWrapper implements SurfaceWrapper {
         mVideoSurface.setSurfaceTextureListener(new SurfaceTextureListener() {
             @Override
             public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-//                if (mMediaPlaybackCallback != null) {
+                if (mMediaPlaybackCallback != null) {
 //                    mMediaPlaybackCallback.surfaceCreated(new TextureViewSurfaceHolder(new Surface(surface)));
-//                }
+                }
                 mState = SURFACE_CREATED;
             }
 
             @Override
             public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-//                if (mMediaPlaybackCallback != null) {
+                if (mMediaPlaybackCallback != null) {
 //                    mMediaPlaybackCallback.surfaceChanged(new TextureViewSurfaceHolder(new Surface(surface)), 4, width, height);
-//                }
+                }
             }
 
             @Override
             public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-//                if (mMediaPlaybackCallback != null) {
+                if (mMediaPlaybackCallback != null) {
 //                    mMediaPlaybackCallback.surfaceDestroyed(new TextureViewSurfaceHolder(new Surface(surface)));
-//                }
+                }
                 mState = SURFACE_NOT_CREATED;
 
                 return true;

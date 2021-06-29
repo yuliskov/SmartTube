@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
+//import com.liskovsoft.appupdatechecker2.AppUpdateChecker;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -55,7 +56,7 @@ public class AboutPresenter extends BasePresenter<Void> {
 //        OptionItem updateCheckOption = UiOptionItem.from(
 //                getContext().getString(R.string.check_for_updates),
 //                option -> AppUpdatePresenter.instance(getContext()).start(true));
-//
+
 //        settingsPresenter.appendSingleButton(updateCheckOption);
     }
 
