@@ -44,7 +44,7 @@ public class TweaksMediaCodecVideoRenderer extends DebugInfoMediaCodecVideoRende
     // EXO: 2.10, 2.11, 2.12
 //    @TargetApi(21)
 //    protected void renderOutputBufferV21(
-//            MediaCodecAdapter codec, int index, long presentationTimeUs, long releaseTimeNs) {
+//            MediaCodec codec, int index, long presentationTimeUs, long releaseTimeNs) {
 //        // Fix frame drops on SurfaceView
 //        // https://github.com/google/ExoPlayer/issues/6348
 //        // https://developer.android.com/reference/android/media/MediaCodec#releaseOutputBuffer(int,%20long)
@@ -60,13 +60,6 @@ public class TweaksMediaCodecVideoRenderer extends DebugInfoMediaCodecVideoRende
         // https://developer.android.com/reference/android/media/MediaCodec#releaseOutputBuffer(int,%20long)
         super.renderOutputBufferV21(codec, index, presentationTimeUs, 0);
     }
-
-
-//    @TargetApi(21)
-//    @Override
-//    protected void renderOutputBufferV21(MediaCodecAdapter codec, int index, long presentationTimeUs, long releaseTimeNs) {
-//        super.renderOutputBufferV21(codec, index, presentationTimeUs, releaseTimeNs);
-//    }
 
     @Override
     protected CodecMaxValues getCodecMaxValues(
