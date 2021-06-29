@@ -32,7 +32,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
         settingsPresenter.clear();
 
-//        appendColorScheme(settingsPresenter);
+        appendColorScheme(settingsPresenter);
 //        appendCardsStyle(settingsPresenter);
         //appendCardTitleLines(settingsPresenter);
 //        appendChannelSortingCategory(settingsPresenter);
