@@ -268,12 +268,12 @@ public class MainUIData {
     }
 
     private void initColorSchemes() {
-//        mColorSchemes.add(new ColorScheme(
-//                R.string.color_scheme_teal,
-//                null,
-//                null,
-//                null,
-//                mContext));
+        mColorSchemes.add(new ColorScheme(
+                R.string.color_scheme_teal,
+                null,
+                null,
+                null,
+                mContext));
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_dark_grey,
                 "App.Theme.DarkGrey.Player",
@@ -286,12 +286,12 @@ public class MainUIData {
                 "App.Theme.Red.Browse",
                 "App.Theme.Red.Preferences",
                 mContext));
-        mColorSchemes.add(new ColorScheme(
-                R.string.color_scheme_dark_grey_oled,
-                "App.Theme.DarkGrey.OLED.Player",
-                "App.Theme.DarkGrey.OLED.Browse",
-                "App.Theme.DarkGrey.Preferences",
-                mContext));
+//        mColorSchemes.add(new ColorScheme(
+//                R.string.color_scheme_dark_grey_oled,
+//                "App.Theme.DarkGrey.OLED.Player",
+//                "App.Theme.DarkGrey.OLED.Browse",
+//                "App.Theme.DarkGrey.Preferences",
+//                mContext));
 //        mColorSchemes.add(new ColorScheme(
 //                R.string.color_scheme_teal_oled,
 //                "App.Theme.Leanback.OLED.Player",
@@ -310,7 +310,7 @@ public class MainUIData {
         mBootCategoryId = Helpers.parseInt(split, 2, MediaGroup.TYPE_HOME);
         mVideoGridScale = Helpers.parseFloat(split, 3, 1.35f);
         mUIScale = Helpers.parseFloat(split, 4, 1.0f);
-        mColorSchemeIndex = Helpers.parseInt(split, 5, 1);
+        mColorSchemeIndex = Helpers.parseInt(split, 5, 2);
         mIsCardMultilineTitleEnabled = Helpers.parseBoolean(split, 6, true);
         mIsSettingsCategoryEnabled = Helpers.parseBoolean(split, 7, true);
         mChannelCategorySorting = Helpers.parseInt(split, 8, CHANNEL_SORTING_LAST_VIEWED);
