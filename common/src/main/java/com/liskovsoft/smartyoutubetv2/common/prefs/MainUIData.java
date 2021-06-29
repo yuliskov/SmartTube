@@ -268,12 +268,12 @@ public class MainUIData {
     }
 
     private void initColorSchemes() {
-        mColorSchemes.add(new ColorScheme(
-                R.string.color_scheme_teal,
-                null,
-                null,
-                null,
-                mContext));
+//        mColorSchemes.add(new ColorScheme(
+//                R.string.color_scheme_teal,
+//                null,
+//                null,
+//                null,
+//                mContext));
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_dark_grey,
                 "App.Theme.DarkGrey.Player",
@@ -292,12 +292,12 @@ public class MainUIData {
                 "App.Theme.DarkGrey.OLED.Browse",
                 "App.Theme.DarkGrey.Preferences",
                 mContext));
-        mColorSchemes.add(new ColorScheme(
-                R.string.color_scheme_teal_oled,
-                "App.Theme.Leanback.OLED.Player",
-                "App.Theme.Leanback.OLED.Browse",
-                null,
-                mContext));
+//        mColorSchemes.add(new ColorScheme(
+//                R.string.color_scheme_teal_oled,
+//                "App.Theme.Leanback.OLED.Player",
+//                "App.Theme.Leanback.OLED.Browse",
+//                null,
+//                mContext));
     }
 
     private void restoreState() {
