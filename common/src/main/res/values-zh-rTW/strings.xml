@@ -39,7 +39,7 @@
     <string name="update_changelog">更新日誌</string>
     <string name="install_update">安裝更新</string>
     <string name="msg_category_is_empty">糟糕！ 這裡什麼都沒有。</string>
-    <string name="dialog_add_to_playlist">新增到播放列表</string>
+    <string name="dialog_add_to_playlist">新增/刪除播放列表</string>
     <string name="msg_signed_users_only">只限登入用戶</string>
     <string name="msg_cant_load_content">哎呀！ 無法載入內容。</string>
     <string name="title_video_presets">影片預設</string>
@@ -56,7 +56,7 @@
     <string name="dialog_remove_account">移除帳戶</string>
     <string name="dialog_add_account">新增帳戶</string>
     <string name="default_lang">預設</string>
-    <string name="dialog_select_language">應用程式語言</string>
+    <string name="dialog_select_language">語言</string>
     <string name="subtitle_default">預設</string>
     <string name="subtitle_semi_transparent_bg">半透明背景</string>
     <string name="subtitle_style">字幕樣式</string>
@@ -125,7 +125,7 @@
     <string name="playlists_style">播放清單樣式</string>
     <string name="playlists_style_grid">格</string>
     <string name="playlists_style_rows">行</string>
-    <string name="player_show_clock">顯示時間</string>
+    <string name="player_show_clock">在彈出選單中顯示時間</string>
     <string name="player_show_remaining_time">顯示剩餘時間</string>
     <string name="open_channel_uploads">開啟頻道上傳</string>
     <string name="app_exit_shortcut">關閉應用程式</string>
@@ -202,4 +202,17 @@
     <string name="msg_player_error_source">不能下載這個影片</string>
     <string name="msg_player_error_renderer">選擇的影片格式不支援</string>
     <string name="msg_player_error_unexpected">未知影片解碼器錯誤</string>
+    <string name="video_aspect">影片長寬比</string>
+    <string name="player_tweaks">開發人員選項</string>
+    <string name="header_uploads">上傳</string>
+    <string name="player_show_global_clock">在影片頂部顯示時間</string>
+    <string name="uploads_old_look">還原上傳部分的舊外觀</string>
+    <string name="background_playback_activation">背景播放(啟用)</string>
+    <string name="channels_old_look">還原頻道部分的舊外觀</string>
+    <string name="channels_auto_load">自動載入頻道部分的內容</string>
+    <string name="return_to_background_video">返回背景播放的影片</string>
+    <string name="pin_to_sidebar">固定到側邊欄</string>
+    <string name="unpin_from_sidebar">從側邊欄取消固定</string>
+    <string name="dialog_select_country">國家</string>
+    <string name="settings_language_country">語言/國家</string>
 </resources>
