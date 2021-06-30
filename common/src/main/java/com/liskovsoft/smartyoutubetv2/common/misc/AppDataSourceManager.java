@@ -42,8 +42,8 @@ public class AppDataSourceManager {
 
         settingItems.add(new SettingsItem(
                 context.getString(R.string.settings_accounts), () -> AccountSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_account));
-        settingItems.add(new SettingsItem(
-                context.getString(R.string.settings_linked_devices), () -> RemoteControlSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_cast));
+//        settingItems.add(new SettingsItem(
+//                context.getString(R.string.settings_linked_devices), () -> RemoteControlSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_cast));
 //        settingItems.add(new SettingsItem(
 //                context.getString(R.string.settings_language), () -> LanguageSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_language));
 //        settingItems.add(new SettingsItem(
