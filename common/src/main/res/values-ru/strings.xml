@@ -215,4 +215,5 @@
     <string name="unpin_from_sidebar">Открепить от боковой панели</string>
     <string name="dialog_select_country">Страна</string>
     <string name="settings_language_country">Язык/Страна</string>
+    <string name="share_embed_link">Поделиться встраиваемой ссылкой</string>
 </resources>

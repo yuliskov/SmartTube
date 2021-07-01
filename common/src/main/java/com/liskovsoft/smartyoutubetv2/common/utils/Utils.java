@@ -76,6 +76,12 @@ public class Utils {
     }
 
     @TargetApi(17)
+    public static void displayShareEmbedVideoDialog(Context context, String videoId) {
+        Uri videoUrl = convertToEmbedVideoUrl(videoId);
+        showMultiChooser(context, videoUrl);
+    }
+
+    @TargetApi(17)
     public static void displayShareChannelDialog(Context context, String channelId) {
         Uri channelUrl = convertToFullChannelUrl(channelId);
         showMultiChooser(context, channelUrl);
@@ -96,6 +102,11 @@ public class Utils {
 
     private static Uri convertToFullVideoUrl(String videoId) {
         String url = String.format("https://www.youtube.com/watch?v=%s", videoId);
+        return Uri.parse(url);
+    }
+
+    private static Uri convertToEmbedVideoUrl(String videoId) {
+        String url = String.format("https://www.youtube.com/embed/%s", videoId);
         return Uri.parse(url);
     }
 

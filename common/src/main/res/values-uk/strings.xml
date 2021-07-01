@@ -215,4 +215,5 @@
     <string name="unpin_from_sidebar">Відкріпити від бічної панелі</string>
     <string name="dialog_select_country">Країна</string>
     <string name="settings_language_country">Мова/Країна</string>
+    <string name="share_embed_link">Поділитися вбудованим посиланням</string>
 </resources>
