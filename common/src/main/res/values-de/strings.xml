@@ -215,4 +215,5 @@
     <string name="unpin_from_sidebar">Lösen von Seitenleiste</string>
     <string name="dialog_select_country">Land</string>
     <string name="settings_language_country">Sprache/Land</string>
+    <string name="share_embed_link">Link zum Einbetten teilen</string>
 </resources>
