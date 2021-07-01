@@ -175,7 +175,12 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                             Log.e(TAG, msg);
                             MessageHelpers.showMessage(getActivity(), msg);
                         },
-                        () -> MessageHelpers.showMessage(getActivity(), R.string.remote_session_closed)
+                        () -> {
+                            // Some users seeing this.
+                            // This msg couldn't appear in normal situation.
+                            Log.d(TAG, "Remote session has been closed");
+                            //MessageHelpers.showMessage(getActivity(), R.string.remote_session_closed);
+                        }
                 );
     }
 

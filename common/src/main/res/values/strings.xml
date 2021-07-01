@@ -215,4 +215,5 @@
     <string name="unpin_from_sidebar">Unpin from sidebar</string>
     <string name="dialog_select_country">Country</string>
     <string name="settings_language_country">Language/Country</string>
+    <string name="share_embed_link">Share embed link</string>
 </resources>

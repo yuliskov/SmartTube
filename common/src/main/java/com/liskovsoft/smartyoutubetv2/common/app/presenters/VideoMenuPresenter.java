@@ -247,6 +247,13 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
                         Utils.displayShareChannelDialog(getContext(), mVideo.channelId);
                     }
                 }));
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.share_embed_link), optionItem -> {
+                    if (mVideo.videoId != null) {
+                        Utils.displayShareEmbedVideoDialog(getContext(), mVideo.videoId);
+                    }
+                }));
     }
 
     private void appendAccountSelectionButton() {
