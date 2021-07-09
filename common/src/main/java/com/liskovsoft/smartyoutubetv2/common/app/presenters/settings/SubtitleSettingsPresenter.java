@@ -33,7 +33,8 @@ public class SubtitleSettingsPresenter extends BasePresenter<Void> {
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
         settingsPresenter.clear();
 
-        appendSubtitleLanguageCategory(settingsPresenter);
+        // Can't work properly. There is no robust language detection.
+        //appendSubtitleLanguageCategory(settingsPresenter);
         appendSubtitleStyleCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.subtitle_category_title));
