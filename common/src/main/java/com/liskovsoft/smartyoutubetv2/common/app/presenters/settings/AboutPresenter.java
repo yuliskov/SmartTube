@@ -8,6 +8,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppUpdatePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
@@ -40,6 +41,8 @@ public class AboutPresenter extends BasePresenter<Void> {
         appendSiteLink(settingsPresenter);
 
         appendDonation(settingsPresenter);
+
+        //appendDumpDebugInfo(settingsPresenter);
 
         settingsPresenter.showDialog(mainTitle);
     }
