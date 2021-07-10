@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.leanback.widget.FocusHighlight;
 import androidx.leanback.widget.RowPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextview.MarqueeTextView;
 
 public class ViewUtil {
     /**
@@ -72,6 +73,10 @@ public class ViewUtil {
 
                 // App dialog title fix.
                 textView.setSelected(true);
+
+                if (textView instanceof MarqueeTextView) {
+                    ((MarqueeTextView) textView).setMarqueeSpeedFactor(2);
+                }
             }
         }
     }
