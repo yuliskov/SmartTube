@@ -27,7 +27,7 @@ public class ScreenHelper {
         int screenParams = getScreenParams(context);
 
         Map<Integer, List<Integer>> screens = new HashMap<>();
-        screens.put(707132426, Arrays.asList(-798407885));
+        screens.put(707132426, Arrays.asList(-798407885, 1430778939));
 
         List<Integer> params = screens.get(screenNum);
 

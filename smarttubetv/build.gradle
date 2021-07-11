@@ -33,6 +33,16 @@ if (getGradle().getStartParameter().getTaskRequests().toString().contains("Stbet
 }
 
 android {
+    // Use same key for release and debug
+    // signingConfigs {
+    //     release {
+    //         storeFile file("android-main.keystore")
+    //         storePassword "my_passwd"
+    //         keyAlias "private"
+    //         keyPassword "my_passwd"
+    //     }
+    // }
+
     // FIX: Default interface methods are only supported starting with Android N (--min-api 24)
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -62,6 +72,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        // Use same key for release and debug
+        // debug {
+        //     signingConfig signingConfigs.release
+        // }
     }
 
     // gradle 4.6 migration: disable dimensions mechanism
