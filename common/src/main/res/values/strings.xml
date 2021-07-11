@@ -216,4 +216,5 @@
     <string name="dialog_select_country">Country</string>
     <string name="settings_language_country">Language/Country</string>
     <string name="share_embed_link">Share embed link</string>
+    <string name="card_text_scroll_factor">Card text scroll speed</string>
 </resources>

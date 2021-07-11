@@ -73,11 +73,13 @@ public class ViewUtil {
 
                 // App dialog title fix.
                 textView.setSelected(true);
-
-                if (textView instanceof MarqueeTextView) {
-                    ((MarqueeTextView) textView).setMarqueeSpeedFactor(2);
-                }
             }
+        }
+    }
+
+    public static void setTextScrollSpeed(TextView textView, float speed) {
+        if (textView instanceof MarqueeTextView) {
+            ((MarqueeTextView) textView).setMarqueeSpeedFactor(speed);
         }
     }
 

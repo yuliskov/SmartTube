@@ -35,6 +35,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         appendColorScheme(settingsPresenter);
         appendCardsStyle(settingsPresenter);
         //appendCardTitleLines(settingsPresenter);
+        appendCardTextScrollSpeed(settingsPresenter);
         appendChannelSortingCategory(settingsPresenter);
         appendPlaylistsStyle(settingsPresenter);
         appendScaleUI(settingsPresenter);
@@ -146,6 +147,18 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.scale_ui), options);
+    }
+
+    private void appendCardTextScrollSpeed(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (float factor : new float[] {1, 1.5f, 2, 2.5f, 3}) {
+            options.add(UiOptionItem.from(String.format("%sx", factor),
+                    optionItem -> mMainUIData.setCardTextScrollSpeed(factor),
+                    Helpers.floatEquals(factor, mMainUIData.getCardTextScrollSpeed())));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.card_text_scroll_factor), options);
     }
 
     private void appendVideoGridScale(AppSettingsPresenter settingsPresenter) {
