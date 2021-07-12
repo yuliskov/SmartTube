@@ -313,14 +313,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         continueGroup(group);
     }
 
-    ///**
-    // * Called even when closing dialog window
-    // */
-    //@Override
-    //public void onViewResumed() {
-    //    maybeRefreshHeader();
-    //}
-
     @Override
     public void onCategoryFocused(int categoryId) {
         updateCategory(categoryId);

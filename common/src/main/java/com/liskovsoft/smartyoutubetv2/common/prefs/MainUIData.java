@@ -259,6 +259,8 @@ public class MainUIData {
     public void setCardTextScrollSpeed(float factor) {
         mCardTextScrollSpeed = factor;
 
+        enableCardTextAutoScroll(true);
+
         persistState();
     }
 

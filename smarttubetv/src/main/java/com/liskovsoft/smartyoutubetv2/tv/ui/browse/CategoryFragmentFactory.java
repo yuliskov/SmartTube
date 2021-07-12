@@ -17,12 +17,16 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.MultiVideoGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.VideoGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.VideoRowsFragment;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CategoryFragmentFactory extends BrowseSupportFragment.FragmentFactory<Fragment> {
     private static final String TAG = CategoryFragmentFactory.class.getSimpleName();
     private final OnHeaderViewSelectedListener mViewSelectedListener;
     private Fragment mCurrentFragment;
     private int mFragmentType = Category.TYPE_GRID;
     private int mSelectedItemIndex = -1;
+    private final Map<Integer, Fragment> mFragmentMap = new HashMap<>();
 
     public CategoryFragmentFactory() {
         this(null);
@@ -30,6 +34,15 @@ public class CategoryFragmentFactory extends BrowseSupportFragment.FragmentFacto
 
     public CategoryFragmentFactory(OnHeaderViewSelectedListener viewSelectedListener) {
         mViewSelectedListener = viewSelectedListener;
+
+        initFragmentMap();
+    }
+
+    private void initFragmentMap() {
+        mFragmentMap.put(Category.TYPE_ROW, new VideoRowsFragment());
+        mFragmentMap.put(Category.TYPE_GRID, new VideoGridFragment());
+        mFragmentMap.put(Category.TYPE_SETTINGS_GRID, new SettingsGridFragment());
+        mFragmentMap.put(Category.TYPE_MULTI_GRID, new MultiVideoGridFragment());
     }
 
     /**
@@ -43,26 +56,13 @@ public class CategoryFragmentFactory extends BrowseSupportFragment.FragmentFacto
         Row row = (Row) rowObj;
 
         HeaderItem header = row.getHeaderItem();
-        Fragment fragment = null;
+        Fragment fragment;
 
         if (header instanceof CategoryHeaderItem) {
             mFragmentType = ((CategoryHeaderItem) header).getType();
         }
 
-        switch (mFragmentType) {
-            case Category.TYPE_ROW:
-                fragment = new VideoRowsFragment();
-                break;
-            case Category.TYPE_GRID:
-                fragment = new VideoGridFragment();
-                break;
-            case Category.TYPE_SETTINGS_GRID:
-                fragment = new SettingsGridFragment();
-                break;
-            case Category.TYPE_MULTI_GRID:
-                fragment = new MultiVideoGridFragment();
-                break;
-        }
+        fragment = mFragmentMap.get(mFragmentType);
 
         if (fragment != null) {
             mCurrentFragment = fragment;
