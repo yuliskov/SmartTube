@@ -5,6 +5,7 @@ import android.os.Looper;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
+import com.liskovsoft.sharedutils.Analytics;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -51,6 +52,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
             getController().restartEngine(); // properly save position of the current track
         }
     };
+    private boolean mIsFirstTryPlay = true;
+    private boolean mIsWasError = false;
 
     public VideoLoader(SuggestionsLoader suggestionsLoader) {
         mSuggestionsLoader = suggestionsLoader;
@@ -66,6 +69,9 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void openVideo(Video item) {
+        mIsWasError = false;
+        mIsFirstTryPlay = true;
+
         mPlaylist.add(item);
 
         if (getController() != null && getController().isEngineInitialized()) { // player is initialized
@@ -272,10 +278,30 @@ public class VideoLoader extends PlayerEventListenerHelper {
                            error -> {
                                Log.e(TAG, "loadFormatInfo error: %s", error.getMessage());
                                scheduleReloadVideoTimer(1_000);
+                               mIsFirstTryPlay = false;
+                               if (!mIsWasError) {
+                                   Analytics.sendVideoStartError(getActivity(),
+                                           video.videoId,
+                                           video.title,
+                                           error.getMessage());
+                                   Log.e(TAG, "--- loadFormatInfo error: %s", error.getMessage());
+                                   Log.e(TAG, "--- loadFormatInfo video.videoId: %s", video.videoId);
+                                   Log.e(TAG, "--- loadFormatInfo video.title: %s", video.title);
+                                   mIsWasError = true;
+                               }
                            });
     }
 
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
+        if (mIsFirstTryPlay) {
+            Log.d(TAG, "--- loadFormatInfo: ");
+            Log.e(TAG, "--- loadFormatInfo video.videoId: %s", mLastVideo.videoId);
+            Log.e(TAG, "--- loadFormatInfo video.title: %s", mLastVideo.title);
+
+            Analytics.sendVideoStart(getActivity(), mLastVideo.videoId, mLastVideo.title);
+            mIsFirstTryPlay = false;
+        }
+
         if (formatInfo.isUnplayable()) {
             getController().showError(formatInfo.getPlayabilityStatus());
         } else if (formatInfo.containsDashUrl()) {
