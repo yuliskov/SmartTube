@@ -271,7 +271,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
-        mFormatInfoAction = mediaItemManager.getFormatInfoObserve(video.videoId, video.clickTrackingParams)
+        mFormatInfoAction = mediaItemManager.getFormatInfoObserve(video.videoId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::processFormatInfo,

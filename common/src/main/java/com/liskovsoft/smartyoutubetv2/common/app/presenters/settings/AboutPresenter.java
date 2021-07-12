@@ -41,6 +41,8 @@ public class AboutPresenter extends BasePresenter<Void> {
 
         appendDonation(settingsPresenter);
 
+        //appendDumpDebugInfo(settingsPresenter);
+
         settingsPresenter.showDialog(mainTitle);
     }
 
