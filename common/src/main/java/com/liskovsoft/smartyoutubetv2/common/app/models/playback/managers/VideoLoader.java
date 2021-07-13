@@ -52,7 +52,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
             getController().restartEngine(); // properly save position of the current track
         }
     };
-    private boolean mIsFirstTryPlay = true;
+    private boolean mIsWasStarted = false;
     private boolean mIsWasError = false;
 
     public VideoLoader(SuggestionsLoader suggestionsLoader) {
@@ -70,9 +70,11 @@ public class VideoLoader extends PlayerEventListenerHelper {
     @Override
     public void openVideo(Video item) {
         mIsWasError = false;
-        mIsFirstTryPlay = true;
+        mIsWasStarted = false;
 
         mPlaylist.add(item);
+
+        Analytics.sendVideoStarting(getActivity(), item.videoId, item.title);
 
         if (getController() != null && getController().isEngineInitialized()) { // player is initialized
             if (!item.equals(mLastVideo)) {
@@ -99,6 +101,14 @@ public class VideoLoader extends PlayerEventListenerHelper {
     public void onEngineError(int type) {
         Log.e(TAG, "Player error occurred: %s. Trying to fix…", type);
 
+        if (!mIsWasError) {
+            Analytics.sendVideoStartError(getActivity(),
+                    mLastVideo.videoId,
+                    mLastVideo.title,
+                    getErrorMessage(type));
+            mIsWasError = true;
+        }
+
         if (mErrorMap.get(type) != null) {
             // Some ciphered data might be stalled.
             // Might happen when the app wasn't used quite a long time.
@@ -118,6 +128,11 @@ public class VideoLoader extends PlayerEventListenerHelper {
     @Override
     public void onPlay() {
         //MessageHelpers.showMessage(getActivity(), "Start playing!");
+
+        if (!mIsWasStarted) {
+            Analytics.sendVideoStarted(getActivity(), mLastVideo.videoId, mLastVideo.title);
+            mIsWasStarted = true;
+        }
 
         // Seems fine. Buffering is gone.
         Utils.removeCallbacks(mHandler, mPendingRestartEngine);
@@ -278,32 +293,26 @@ public class VideoLoader extends PlayerEventListenerHelper {
                            error -> {
                                Log.e(TAG, "loadFormatInfo error: %s", error.getMessage());
                                scheduleReloadVideoTimer(1_000);
-                               mIsFirstTryPlay = false;
                                if (!mIsWasError) {
                                    Analytics.sendVideoStartError(getActivity(),
                                            video.videoId,
                                            video.title,
                                            error.getMessage());
-                                   Log.e(TAG, "--- loadFormatInfo error: %s", error.getMessage());
-                                   Log.e(TAG, "--- loadFormatInfo video.videoId: %s", video.videoId);
-                                   Log.e(TAG, "--- loadFormatInfo video.title: %s", video.title);
                                    mIsWasError = true;
                                }
                            });
     }
 
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
-        if (mIsFirstTryPlay) {
-            Log.d(TAG, "--- loadFormatInfo: ");
-            Log.e(TAG, "--- loadFormatInfo video.videoId: %s", mLastVideo.videoId);
-            Log.e(TAG, "--- loadFormatInfo video.title: %s", mLastVideo.title);
-
-            Analytics.sendVideoStart(getActivity(), mLastVideo.videoId, mLastVideo.title);
-            mIsFirstTryPlay = false;
-        }
-
         if (formatInfo.isUnplayable()) {
             getController().showError(formatInfo.getPlayabilityStatus());
+            if (!mIsWasError) {
+                Analytics.sendVideoStartError(getActivity(),
+                        mLastVideo.videoId,
+                        mLastVideo.title,
+                        formatInfo.getPlayabilityStatus());
+                mIsWasError = true;
+            }
         } else if (formatInfo.containsDashUrl()) {
             Log.d(TAG, "Found live video in dash format. Loading...");
             getController().openDashUrl(formatInfo.getDashManifestUrl());
