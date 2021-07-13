@@ -38,6 +38,7 @@ android {
         strtarmenia {}
         stbolshoetv {}
         stredboxtv {}
+        stsibsetru {}
     }
 }
 
