@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference android:key="main_ui_data" android:defaultValue="true,8|0|5|3|12|4|7|6,0,1.0,1.0,1,true,false"/>
+    <EditTextPreference android:key="video_player_data" android:defaultValue="0,5,false"/>
+    <EditTextPreference android:key="search_data" android:defaultValue="false"/>
+    <EditTextPreference android:key="subtitle_manager_data" android:defaultValue="1"/>
+</PreferenceScreen>
