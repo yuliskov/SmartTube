@@ -77,14 +77,6 @@ public class AppPrefs extends SharedPreferencesBase {
         return getString(PREFERRED_COUNTRY_DATA, null);
     }
 
-    public void setViewManagerData(String data) {
-        putString(VIEW_MANAGER_DATA, data);
-    }
-
-    public String getViewManagerData() {
-        return getString(VIEW_MANAGER_DATA, null);
-    }
-
     public void setData(String key, String data) {
         putString(key, data);
     }

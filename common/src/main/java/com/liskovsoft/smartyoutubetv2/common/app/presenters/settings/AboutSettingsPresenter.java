@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppUpdatePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AppData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
@@ -17,13 +18,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class AboutPresenter extends BasePresenter<Void> {
-    public AboutPresenter(Context context) {
+public class AboutSettingsPresenter extends BasePresenter<Void> {
+    private final AppUpdateChecker mUpdateChecker;
+
+    public AboutSettingsPresenter(Context context) {
         super(context);
+
+        mUpdateChecker = new AppUpdateChecker(getContext(), null);
     }
 
-    public static AboutPresenter instance(Context context) {
-        return new AboutPresenter(context);
+    public static AboutSettingsPresenter instance(Context context) {
+        return new AboutSettingsPresenter(context);
     }
 
     public void show() {
@@ -38,6 +43,8 @@ public class AboutPresenter extends BasePresenter<Void> {
 
         appendUpdateCheckButton(settingsPresenter);
 
+        appendPreferredSource(settingsPresenter);
+
         appendSiteLink(settingsPresenter);
 
         appendDonation(settingsPresenter);
@@ -48,8 +55,6 @@ public class AboutPresenter extends BasePresenter<Void> {
     }
 
     private void appendAutoUpdateSwitch(AppSettingsPresenter settingsPresenter) {
-        AppUpdateChecker mUpdateChecker = new AppUpdateChecker(getContext(), null);
-
         settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.check_updates_auto), optionItem -> {
             mUpdateChecker.enableUpdateCheck(optionItem.isSelected());
         }, mUpdateChecker.isUpdateCheckEnabled()));
@@ -84,5 +89,28 @@ public class AboutPresenter extends BasePresenter<Void> {
         if (!donateOptions.isEmpty()) {
             settingsPresenter.appendStringsCategory(getContext().getString(R.string.donation), donateOptions);
         }
+    }
+
+    private void appendPreferredSource(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        String[] updateUrls = getContext().getResources().getStringArray(R.array.update_urls);
+
+        if (updateUrls.length == 1) {
+            return;
+        }
+
+        if (mUpdateChecker.getPreferredHost() == null) {
+            mUpdateChecker.setPreferredHost(Helpers.getHost(updateUrls[0]));
+        }
+
+        for (String url : updateUrls) {
+            String hostName = Helpers.getHost(url);
+            options.add(UiOptionItem.from(hostName,
+                    optionItem -> mUpdateChecker.setPreferredHost(hostName),
+                    Helpers.equals(hostName, mUpdateChecker.getPreferredHost())));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.preferred_update_source), options);
     }
 }

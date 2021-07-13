@@ -4,7 +4,7 @@ import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AboutPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AboutSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AutoFrameRateSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.ContentBlockSettingsPresenter;
@@ -62,7 +62,7 @@ public class AppDataSourceManager {
         settingItems.add(new SettingsItem(
                 ContentBlockData.SPONSOR_BLOCK_NAME, () -> ContentBlockSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_block));
         settingItems.add(new SettingsItem(
-                context.getString(R.string.settings_about), () -> AboutPresenter.instance(presenter.getContext()).show(), R.drawable.settings_about));
+                context.getString(R.string.settings_about), () -> AboutSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_about));
 
         return settingItems;
     }
