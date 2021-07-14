@@ -216,4 +216,6 @@
     <string name="dialog_select_country">Land</string>
     <string name="settings_language_country">Sprache/Land</string>
     <string name="share_embed_link">Link zum Einbetten teilen</string>
+    <string name="card_text_scroll_factor">Scrollgeschwindigkeit des Kartentextes</string>
+    <string name="preferred_update_source">Bevorzugte Update-Quelle</string>
 </resources>
