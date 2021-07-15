@@ -24,7 +24,7 @@
     <string name="audio_max_quality">ఆటో (గరిష్ట నాణ్యత)</string>
     <string name="subtitles_disabled">ఉపశీర్షికలు నిలిపివేయబడ్డాయి</string>
     <string name="auto_frame_rate">ఆటో ఫ్రేమ్ రేటు</string>
-    <string name="frame_rate_correction">+ Fps ని పరిష్కరించండి:% 5Cn %s</string>
+    <string name="frame_rate_correction">Fps ని పరిష్కరించండి:%s</string>
     <string name="category_background_playback">నేపథ్య ప్లేబ్యాక్</string>
     <string name="not_implemented">అమలు చేయలేదు</string>
     <string name="option_background_playback_off">నిలిపివేయబడింది</string>
@@ -162,12 +162,9 @@
     <string name="dialog_add_device">పరికరాన్ని జోడించండి</string>
     <string name="dialog_remove_all_devices">అన్ని పరికరాలను తొలగించండి</string>
     <string name="device_link_enabled">లింక్ ప్రారంభించబడింది</string>
-    <string name="device_connected">పరికరం +% 5C% 22 %s% 5C% 22 + + కనెక్ట్ చేయబడింది</string>
-    <string name="device_disconnected">పరికరం +% 5C% 22 %s% 5C% 22 + + + డిస్‌కనెక్ట్ చేయబడింది</string>
     <string name="settings_ui_scale">UI స్కేల్</string>
     <string name="msg_restart_app">దయచేసి, ఈ సెట్టింగ్‌లను వర్తింపజేయడానికి అనువర్తనాన్ని పున art ప్రారంభించండి</string>
     <string name="settings_block">కంటెంట్ నిరోధించడం</string>
-    <string name="msg_applying">+% S% E2% 80% A6 ను వర్తింపజేయడం</string>
     <string name="msg_done">పూర్తి</string>
     <string name="settings_general">జనరల్</string>
     <string name="settings_video">వీడియో</string>
@@ -179,8 +176,6 @@
     <string name="content_block_interaction">ఇంటరాక్షన్ రిమైండర్ (సభ్యత్వాన్ని పొందండి)</string>
     <string name="content_block_self_promo">చెల్లించని /స్వీయ ప్రమోషన్</string>
     <string name="content_block_music_off_topic">క్లిప్ యొక్క నాన్-మ్యూజిక్ విభాగం</string>
-    <string name="confirm_segment_skip">+ విభాగాన్ని దాటవేయి +% 5C% 22 %s% 5C% 22?</string>
-    <string name="msg_skipping_segment">+ సెగ్మెంట్ +% 5C% 22 %s% 5C% 22% E2% 80% A6 ను దాటవేయడం</string>
     <string name="content_block_notification_type">నోటిఫికేషన్ రకం</string>
     <string name="content_block_notify_none">నోటిఫికేషన్ లేకుండా</string>
     <string name="content_block_notify_toast">అభినందించి త్రాగుట</string>
@@ -190,8 +185,6 @@
     <string name="btn_confirm">నిర్ధారించండి</string>
     <string name="player_low_video_quality">తక్కువ వీడియో నాణ్యత</string>
     <string name="remote_session_closed">రిమోట్ సెషన్ మూసివేయబడింది</string>
-    <string name="msg_mode_switch_error">% 5C\'t + స్విచ్ + డిస్ప్లే + మోడ్ + నుండి +% 5C% 22 %s% 5C% 22 కు</string>
-    <string name="msg_player_error">ప్లేయర్ + లోపం + సంభవించింది + %s. + పున art ప్రారంభించడం + ప్లేబ్యాక్% E2% 80% A6</string>
     <string name="video_preset_disabled">ప్రీసెట్ లేకుండా</string>
     <string name="video_preset_enabled">ప్రీసెట్ ప్రకారం తదుపరి వీడియో యొక్క ఫార్మాట్ సెట్ చేయబడుతుంది</string>
     <string name="player_sleep_timer">స్లీప్ టైమర్</string>
