@@ -67,15 +67,24 @@ android {
         // Additionally, you should extend your application from MultiDexApplication
         multiDexEnabled = true
     }
+    signingConfigs {
+        release {
+            storeFile file(STORE_FILE)
+            storePassword STORE_PASSWORD
+            keyAlias KEY_ALIAS
+            keyPassword KEY_PASSWORD
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
-        // Use same key for release and debug
-        // debug {
-        //     signingConfig signingConfigs.release
-        // }
+        debug {
+            applicationIdSuffix ".debug"
+            signingConfig signingConfigs.release
+        }
     }
 
     // gradle 4.6 migration: disable dimensions mechanism
@@ -96,11 +105,11 @@ android {
             versionCode 11000 + defaultConfig.versionCode
             applicationId "com.google.android.youtube.tv"
         }
-        // stbolshoetv {
-        //     // matchingFallbacks = ['lite']
-        //     versionCode 11000 + defaultConfig.versionCode
-        //     applicationIdSuffix ".bolshoetv"
-        // }
+        stbolshoetv {
+            // matchingFallbacks = ['lite']
+            versionCode 11000 + defaultConfig.versionCode
+            applicationId "com.liskovsoft.videomanager"
+        }
         stredboxtv {
             // matchingFallbacks = ['lite']
             versionCode 11000 + defaultConfig.versionCode

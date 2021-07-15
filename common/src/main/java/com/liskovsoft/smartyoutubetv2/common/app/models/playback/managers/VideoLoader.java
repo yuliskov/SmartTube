@@ -5,6 +5,7 @@ import android.os.Looper;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
+import com.liskovsoft.sharedutils.Analytics;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -51,6 +52,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
             getController().restartEngine(); // properly save position of the current track
         }
     };
+    private boolean mIsWasStarted = false;
+    private boolean mIsWasError = false;
 
     public VideoLoader(SuggestionsLoader suggestionsLoader) {
         mSuggestionsLoader = suggestionsLoader;
@@ -66,7 +69,12 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void openVideo(Video item) {
+        mIsWasError = false;
+        mIsWasStarted = false;
+
         mPlaylist.add(item);
+
+        Analytics.sendVideoStarting(getActivity(), item.videoId, item.title);
 
         if (getController() != null && getController().isEngineInitialized()) { // player is initialized
             if (!item.equals(mLastVideo)) {
@@ -93,6 +101,14 @@ public class VideoLoader extends PlayerEventListenerHelper {
     public void onEngineError(int type) {
         Log.e(TAG, "Player error occurred: %s. Trying to fix…", type);
 
+        if (!mIsWasError) {
+            Analytics.sendVideoStartError(getActivity(),
+                    mLastVideo.videoId,
+                    mLastVideo.title,
+                    getErrorMessage(type));
+            mIsWasError = true;
+        }
+
         if (mErrorMap.get(type) != null) {
             // Some ciphered data might be stalled.
             // Might happen when the app wasn't used quite a long time.
@@ -112,6 +128,11 @@ public class VideoLoader extends PlayerEventListenerHelper {
     @Override
     public void onPlay() {
         //MessageHelpers.showMessage(getActivity(), "Start playing!");
+
+        if (!mIsWasStarted) {
+            Analytics.sendVideoStarted(getActivity(), mLastVideo.videoId, mLastVideo.title);
+            mIsWasStarted = true;
+        }
 
         // Seems fine. Buffering is gone.
         Utils.removeCallbacks(mHandler, mPendingRestartEngine);
@@ -272,12 +293,26 @@ public class VideoLoader extends PlayerEventListenerHelper {
                            error -> {
                                Log.e(TAG, "loadFormatInfo error: %s", error.getMessage());
                                scheduleReloadVideoTimer(1_000);
+                               if (!mIsWasError) {
+                                   Analytics.sendVideoStartError(getActivity(),
+                                           video.videoId,
+                                           video.title,
+                                           error.getMessage());
+                                   mIsWasError = true;
+                               }
                            });
     }
 
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
         if (formatInfo.isUnplayable()) {
             getController().showError(formatInfo.getPlayabilityStatus());
+            if (!mIsWasError) {
+                Analytics.sendVideoStartError(getActivity(),
+                        mLastVideo.videoId,
+                        mLastVideo.title,
+                        formatInfo.getPlayabilityStatus());
+                mIsWasError = true;
+            }
         } else if (formatInfo.containsDashUrl()) {
             Log.d(TAG, "Found live video in dash format. Loading...");
             getController().openDashUrl(formatInfo.getDashManifestUrl());

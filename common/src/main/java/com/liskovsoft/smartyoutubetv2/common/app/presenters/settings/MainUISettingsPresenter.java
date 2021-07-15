@@ -33,14 +33,13 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.clear();
 
         appendColorScheme(settingsPresenter);
-        appendCardsStyle(settingsPresenter);
+//        appendCardsStyle(settingsPresenter);
         //appendCardTitleLines(settingsPresenter);
-        appendCardTextScrollSpeed(settingsPresenter);
-        appendChannelSortingCategory(settingsPresenter);
-        appendPlaylistsStyle(settingsPresenter);
+//        appendChannelSortingCategory(settingsPresenter);
+//        appendPlaylistsStyle(settingsPresenter);
         appendScaleUI(settingsPresenter);
         appendVideoGridScale(settingsPresenter);
-        appendMiscCategory(settingsPresenter);
+//        appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_main_ui), () -> {
             if (mRestartApp) {
