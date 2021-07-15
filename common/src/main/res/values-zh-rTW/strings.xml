@@ -215,4 +215,7 @@
     <string name="unpin_from_sidebar">從側邊欄取消固定</string>
     <string name="dialog_select_country">國家</string>
     <string name="settings_language_country">語言/國家</string>
+    <string name="share_embed_link">分享嵌入連結</string>
+    <string name="card_text_scroll_factor">卡片文字滾動速度</string>
+    <string name="preferred_update_source">首選更新來源</string>
 </resources>
