@@ -14,7 +14,7 @@ public class BrowseActivity extends LeanbackActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_main);
-        Analytics.sendActivityStarted(getApplicationContext(), BrowseActivity.class.getSimpleName());
+        Analytics.sendActivityStarted(BrowseActivity.class.getSimpleName());
     }
 
     @Override

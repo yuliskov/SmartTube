@@ -41,8 +41,7 @@ public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler
         for (int i = 0; i < exception.getStackTrace().length; i++) {
             stringBuilder.append(exception.getStackTrace()[i]).append("\n");
         }
-        Analytics.sendAppCrash(mContext,
-                exception.getClass().getName(),
+        Analytics.sendAppCrash(exception.getClass().getName(),
                 stringBuilder.toString(),
                 LogUtil.readLog());
 

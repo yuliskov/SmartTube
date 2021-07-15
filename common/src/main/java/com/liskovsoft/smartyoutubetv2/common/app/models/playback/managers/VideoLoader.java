@@ -74,7 +74,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
         mPlaylist.add(item);
 
-        Analytics.sendVideoStarting(getActivity(), item.videoId, item.title);
+        Analytics.sendVideoStarting(item.videoId, item.title);
 
         if (getController() != null && getController().isEngineInitialized()) { // player is initialized
             if (!item.equals(mLastVideo)) {
@@ -102,8 +102,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         Log.e(TAG, "Player error occurred: %s. Trying to fix…", type);
 
         if (!mIsWasError) {
-            Analytics.sendVideoStartError(getActivity(),
-                    mLastVideo.videoId,
+            Analytics.sendVideoStartError(mLastVideo.videoId,
                     mLastVideo.title,
                     getErrorMessage(type));
             mIsWasError = true;
@@ -130,7 +129,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         //MessageHelpers.showMessage(getActivity(), "Start playing!");
 
         if (!mIsWasStarted) {
-            Analytics.sendVideoStarted(getActivity(), mLastVideo.videoId, mLastVideo.title);
+            Analytics.sendVideoStarted(mLastVideo.videoId, mLastVideo.title);
             mIsWasStarted = true;
         }
 
@@ -294,8 +293,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
                                Log.e(TAG, "loadFormatInfo error: %s", error.getMessage());
                                scheduleReloadVideoTimer(1_000);
                                if (!mIsWasError) {
-                                   Analytics.sendVideoStartError(getActivity(),
-                                           video.videoId,
+                                   Analytics.sendVideoStartError(video.videoId,
                                            video.title,
                                            error.getMessage());
                                    mIsWasError = true;
@@ -307,9 +305,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
         if (formatInfo.isUnplayable()) {
             getController().showError(formatInfo.getPlayabilityStatus());
             if (!mIsWasError) {
-                Analytics.sendVideoStartError(getActivity(),
-                        mLastVideo.videoId,
-                        mLastVideo.title,
+                Analytics.sendVideoStartError(mLastVideo.videoId,
+mLastVideo.title,
                         formatInfo.getPlayabilityStatus());
                 mIsWasError = true;
             }

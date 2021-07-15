@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.main;
 
 import androidx.multidex.MultiDexApplication;
+
+import com.liskovsoft.sharedutils.Analytics;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AddDeviceView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
@@ -32,6 +34,7 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
 
         Thread.setDefaultUncaughtExceptionHandler(
                 new UncaughtExceptionHandler(getApplicationContext(), true));
+        Analytics.init(getApplicationContext());
 
         ViewManager viewManager = ViewManager.instance(this);
 
