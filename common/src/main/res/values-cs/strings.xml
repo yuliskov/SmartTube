@@ -211,4 +211,5 @@
     <string name="unpin_from_sidebar">Odepnout z postranního panelu</string>
     <string name="dialog_select_country">Země</string>
     <string name="settings_language_country">Jazyk/Země</string>
+    <string name="share_embed_link">Sdílet vložený odkaz</string>
 </resources>
