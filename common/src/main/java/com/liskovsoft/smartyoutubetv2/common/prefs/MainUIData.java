@@ -53,6 +53,7 @@ public class MainUIData {
     private int mBackgroundShortcut;
     private boolean mIsUploadsAutoLoadEnabled;
     private Set<Video> mPinnedItems = new LinkedHashSet<>();
+    private float mCardTextScrollSpeed;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -256,6 +257,18 @@ public class MainUIData {
         persistState();
     }
 
+    public void setCardTextScrollSpeed(float factor) {
+        mCardTextScrollSpeed = factor;
+
+        enableCardTextAutoScroll(true);
+
+        persistState();
+    }
+
+    public float getCardTextScrollSpeed() {
+        return mCardTextScrollSpeed;
+    }
+
     private void initLeftPanelCategories() {
         mLeftPanelCategories.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mLeftPanelCategories.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
@@ -324,6 +337,7 @@ public class MainUIData {
         mBackgroundShortcut = Helpers.parseInt(split, 15, BACKGROUND_SHORTCUT_HOME);
         mIsUploadsAutoLoadEnabled = Helpers.parseBoolean(split, 16, true);
         String pinnedItems = Helpers.parseStr(split, 17);
+        mCardTextScrollSpeed = Helpers.parseFloat(split, 18, 2);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArrayLegacy(selectedCategories);
@@ -350,7 +364,7 @@ public class MainUIData {
         mPrefs.setData(MAIN_UI_DATA, Helpers.mergeObject(mIsCardAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale,
                 mColorSchemeIndex, mIsCardMultilineTitleEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting,
                 mPlaylistsStyle, mAppExitShortcut, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
-                mIsReturnToLauncherEnabled, mIsUploadsOldLookEnabled, mBackgroundShortcut, mIsUploadsAutoLoadEnabled, pinnedItems));
+                mIsReturnToLauncherEnabled, mIsUploadsOldLookEnabled, mBackgroundShortcut, mIsUploadsAutoLoadEnabled, pinnedItems, mCardTextScrollSpeed));
     }
 
     public static class ColorScheme {

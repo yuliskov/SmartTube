@@ -20,6 +20,10 @@
             android:layout_centerHorizontal="true"
             android:padding="@dimen/lb_basic_card_info_padding">
 
+            <!-- Content below will be replaced. Real locations: -->
+            <!-- lb_image_card_view_themed_title.xml -->
+            <!-- lb_image_card_view_themed_content.xml -->
+
             <TextView
                 android:id="@+id/title_text"
                 android:layout_width="match_parent"

@@ -131,6 +131,11 @@ public class ComplexImageCardView extends ImageCardView {
         mIsCardTextAutoScrollEnabled = enabled;
     }
 
+    public void setTextScrollSpeed(float speed) {
+        ViewUtil.setTextScrollSpeed(findViewById(R.id.title_text), speed);
+        ViewUtil.setTextScrollSpeed(findViewById(R.id.content_text), speed);
+    }
+
     public void enableTitle(boolean enabled) {
         ViewUtil.enableView(findViewById(R.id.title_text), enabled);
     }

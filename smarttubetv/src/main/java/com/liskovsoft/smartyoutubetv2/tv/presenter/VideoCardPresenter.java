@@ -39,6 +39,7 @@ public class VideoCardPresenter extends CardEventsPresenter {
     private boolean mIsAnimatedPreviewsEnabled;
     private boolean mIsCardMultilineTitleEnabled;
     private boolean mIsCardTextAutoScrollEnabled;
+    private float mCardTextScrollSpeed;
     private int mWidth;
     private int mHeight;
 
@@ -59,6 +60,7 @@ public class VideoCardPresenter extends CardEventsPresenter {
         mIsAnimatedPreviewsEnabled = isCardAnimatedPreviewsEnabled(context);
         mIsCardMultilineTitleEnabled = isCardMultilineTitleEnabled(context);
         mIsCardTextAutoScrollEnabled = isCardTextAutoScrollEnabled(context);
+        mCardTextScrollSpeed = getCardTextScrollSpeed(context);
 
         updateDimensions(context);
 
@@ -72,6 +74,7 @@ public class VideoCardPresenter extends CardEventsPresenter {
 
         cardView.setTitleLinesNum(mIsCardMultilineTitleEnabled ? 2 : 1);
         cardView.enableTextAutoScroll(mIsCardTextAutoScrollEnabled);
+        cardView.setTextScrollSpeed(mCardTextScrollSpeed);
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
         cardView.enableBadge(isBadgeEnabled());
@@ -165,6 +168,10 @@ public class VideoCardPresenter extends CardEventsPresenter {
 
     protected boolean isCardMultilineTitleEnabled(Context context) {
         return MainUIData.instance(context).isCardMultilineTitleEnabled();
+    }
+
+    protected float getCardTextScrollSpeed(Context context) {
+        return MainUIData.instance(context).getCardTextScrollSpeed();
     }
 
     protected boolean isContentEnabled() {

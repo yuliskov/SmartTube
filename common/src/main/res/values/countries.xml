@@ -3,6 +3,7 @@
     <string-array name="supported_countries">
         <item>United States|US</item>
         <item>Great Britain|GB</item>
+        <item>Hong Kong|HK</item>
         <item>Россия|RU</item>
         <item>Україна|UA</item>
         <item>Беларусь|BY</item>
@@ -41,6 +42,6 @@
         <item>Việt Nam|VN</item>
         <item>China|CN</item>
         <item>Taiwan|TW</item>
-        <item>Indonesia|IN</item>
+        <item>Indonesia|ID</item>
     </string-array>
 </resources>

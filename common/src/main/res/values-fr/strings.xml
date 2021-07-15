@@ -215,4 +215,7 @@
     <string name="unpin_from_sidebar">Déplacer de la barre latérale</string>
     <string name="dialog_select_country">Pays</string>
     <string name="settings_language_country">Langue/Pays</string>
+    <string name="share_embed_link">Partager le lien intégré</string>
+    <string name="card_text_scroll_factor">Vitesse de défilement du texte des tuiles</string>
+    <string name="preferred_update_source">Source de mise à jour</string>
 </resources>

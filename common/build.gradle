@@ -38,6 +38,7 @@ android {
         strtarmenia {}
         stbolshoetv {}
         stredboxtv {}
+        stsibsetru {}
     }
 }
 
@@ -84,4 +85,5 @@ dependencies {
     stbetaImplementation project(path: ':appupdatechecker2')
     strtarmeniaImplementation project(path: ':appupdatechecker2')
     stredboxtvImplementation project(path: ':appupdatechecker2')
+    stsibsetruImplementation project(path: ':appupdatechecker2')
 }

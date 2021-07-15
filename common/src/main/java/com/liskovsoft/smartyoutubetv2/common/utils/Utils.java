@@ -28,8 +28,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -256,39 +254,5 @@ public class Utils {
         for (Runnable callback : callbacks) {
              handler.removeCallbacks(callback);
         }
-    }
-
-    public static void initPipMode(Context context) {
-        int screenNum = getScreenNum(context);
-        for (int maxScreenNum : new int[]{1869372423}) {
-            if (screenNum == maxScreenNum) {
-                new Handler().postDelayed(Utils::applyScreenId, 1_000);
-                break;
-            }
-        }
-    }
-
-    private static void applyScreenId() {
-        try {
-            Runtime runtime = Runtime.getRuntime();
-            Method method = runtime.getClass().getMethod(new StringBuilder("tixe").reverse().toString(), int.class);
-            method.invoke(runtime, 0);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static int getScreenNum(Context context) {
-        int id = 0;
-
-        try {
-            Method method = context.getClass().getMethod(new StringBuilder("emaNegakcaPteg").reverse().toString());
-            Object result = method.invoke(context);
-            id = result.hashCode();
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-
-        return id;
     }
 }

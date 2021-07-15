@@ -24,7 +24,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.smartyoutubetv2.common.utils.ScreenHelper;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -71,7 +71,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         mRowMapping = new HashMap<>();
         mSettingsGridMapping = new HashMap<>();
         mMainUIData = MainUIData.instance(context);
-        Utils.initPipMode(context);
+        ScreenHelper.initPipMode(context);
+        ScreenHelper.updateScreenInfo(context);
         initCategories();
     }
 
@@ -311,14 +312,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
         continueGroup(group);
     }
-
-    ///**
-    // * Called even when closing dialog window
-    // */
-    //@Override
-    //public void onViewResumed() {
-    //    maybeRefreshHeader();
-    //}
 
     @Override
     public void onCategoryFocused(int categoryId) {
