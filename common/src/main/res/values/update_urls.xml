@@ -3,5 +3,6 @@
     <string-array name="update_urls">
         <item>https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</item>
         <item>https://drive.google.com/uc?id=174NUD7rr_v-NVG6H2rTmd6JDzlJNL2i7</item>
+        <item>https://www.dropbox.com/s/8fdswjbnvawaoqq/smarttube_beta.json?dl=1</item>
     </string-array>
 </resources>
