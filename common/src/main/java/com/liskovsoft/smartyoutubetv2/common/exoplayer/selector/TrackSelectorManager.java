@@ -472,14 +472,18 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                     if (compare == 0) {
                         Log.d(TAG, "findBestMatch: Found exact match in this track list: " + mediaTrack.format);
                         result = mediaTrack;
-                        break;
+
+                        // One group could contains multiple codecs: avc, av01
+                        if (MediaTrack.codecEquals(result.format.codecs, track.format.codecs)) {
+                            break;
+                        }
                     } else if (compare > 0 && mediaTrack.compare(result) >= 0) { // select track with higher possible quality
                         result = mediaTrack;
                     }
                 }
 
                 if (prevResult.compare(result) == 0) {
-                    // Prefer the same codec if quality match
+                    // Don't let change the codec other than the original.
                     if (prevResult.format != null && MediaTrack.codecEquals(prevResult.format.codecs, track.format.codecs)) {
                         result = prevResult;
                     }
@@ -609,8 +613,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 return format1.language.compareTo(format2.language);
             }
 
-            int leftVal = format2.width + (int) format2.frameRate + (format2.codecs != null && format2.codecs.contains("avc") ? 31 : 0);
-            int rightVal = format1.width + (int) format1.frameRate + (format1.codecs != null && format1.codecs.contains("avc") ? 31 : 0);
+            int leftVal = format2.width + (int) format2.frameRate + getCodecWeight(format2.codecs);
+            int rightVal = format1.width + (int) format1.frameRate + getCodecWeight(format1.codecs);
 
             int delta = leftVal - rightVal;
             if (delta == 0) {
@@ -618,6 +622,14 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             }
 
             return leftVal - rightVal;
+        }
+
+        private int getCodecWeight(String codec) {
+            if (codec == null) {
+                return 0;
+            }
+
+            return codec.contains("avc") ? 31 : codec.contains("vp9") ? 28 : 0;
         }
     }
 }

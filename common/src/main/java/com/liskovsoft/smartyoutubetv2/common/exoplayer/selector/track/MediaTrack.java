@@ -55,4 +55,24 @@ public abstract class MediaTrack {
 
         return Helpers.equals(TrackSelectorUtil.codecNameShort(codecs1), TrackSelectorUtil.codecNameShort(codecs2));
     }
+
+    //public static int compareCodecs(String codec1, String codec2) {
+    //    if (codecEquals(codec1, codec2)) {
+    //        return 0;
+    //    }
+    //
+    //    if (codec1 == null || codec2 == null) {
+    //        return -1;
+    //    }
+    //
+    //    return getCodecWeight(codec1) - getCodecWeight(codec2);
+    //}
+    //
+    //private static int getCodecWeight(String codec) {
+    //    if (codec == null) {
+    //        return 0;
+    //    }
+    //
+    //    return codec.contains("avc") ? 31 : codec.contains("vp9") ? 28 : 0;
+    //}
 }
