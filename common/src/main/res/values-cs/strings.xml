@@ -212,4 +212,6 @@
     <string name="dialog_select_country">Země</string>
     <string name="settings_language_country">Jazyk/Země</string>
     <string name="share_embed_link">Sdílet vložený odkaz</string>
+    <string name="card_text_scroll_factor">Rychlost posouvání textu karty</string>
+    <string name="preferred_update_source">Preferovaný zdroj aktualizace</string>
 </resources>
