@@ -87,6 +87,8 @@ public class AppDataSourceManager {
                 new VideoPreset("2K     30fps    vp9+hdr", "2560,1440,30,vp9.2"),
                 new VideoPreset("2K     60fps    vp9", "2560,1440,60,vp9"),
                 new VideoPreset("2K     60fps    vp9+hdr", "2560,1440,60,vp9.2"),
+                new VideoPreset("4K     30fps    av01", "3840,2160,30,av01"),
+                new VideoPreset("4K     60fps    av01", "3840,2160,60,av01"),
                 new VideoPreset("4K     30fps    vp9", "3840,2160,30,vp9"),
                 new VideoPreset("4K     30fps    vp9+hdr", "3840,2160,30,vp9.2"),
                 new VideoPreset("4K     60fps    vp9", "3840,2160,60,vp9"),
