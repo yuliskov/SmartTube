@@ -217,5 +217,5 @@
     <string name="settings_language_country">Мова/Країна</string>
     <string name="share_embed_link">Поділитися вбудованим посиланням</string>
     <string name="card_text_scroll_factor">Швидкість прокрутки тексту картки</string>
-    <string name="preferred_update_source">Бажане джерело оновлень</string>
+    <string name="preferred_update_source">Вибрати джерело оновлень</string>
 </resources>
