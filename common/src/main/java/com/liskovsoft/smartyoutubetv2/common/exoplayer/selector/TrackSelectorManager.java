@@ -441,14 +441,14 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         invalidate();
     }
 
-    private MediaTrack findBestMatch(MediaTrack track) {
-        Log.d(TAG, "findBestMatch: Starting: " + track.format);
+    private MediaTrack findBestMatch(MediaTrack originTrack) {
+        Log.d(TAG, "findBestMatch: Starting: " + originTrack.format);
 
-        Renderer renderer = mRenderers[track.rendererIndex];
+        Renderer renderer = mRenderers[originTrack.rendererIndex];
 
-        MediaTrack result = createAutoSelection(track.rendererIndex);
+        MediaTrack result = createAutoSelection(originTrack.rendererIndex);
 
-        if (track.format != null) { // not auto selection
+        if (originTrack.format != null) { // not auto selection
             MediaTrack prevResult;
 
             for (int groupIndex = 0; groupIndex < renderer.mediaTracks.length; groupIndex++) {
@@ -467,24 +467,28 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         continue;
                     }
 
-                    int compare = track.inBounds(mediaTrack);
+                    int compare = originTrack.inBounds(mediaTrack);
 
                     if (compare == 0) {
-                        Log.d(TAG, "findBestMatch: Found exact match in this track list: " + mediaTrack.format);
+                        Log.d(TAG, "findBestMatch: Found exact match by size and fps in list: " + mediaTrack.format);
                         result = mediaTrack;
 
-                        // One group could contains multiple codecs: avc, av01
-                        if (MediaTrack.codecEquals(result.format.codecs, track.format.codecs)) {
+                        // Get ready for group with multiple codecs: avc, av01
+                        if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
                             break;
                         }
                     } else if (compare > 0 && mediaTrack.compare(result) >= 0) { // select track with higher possible quality
-                        result = mediaTrack;
+                        // Get ready for group with multiple codecs: avc, av01
+                        if (MediaTrack.codecEquals(mediaTrack, originTrack) ||
+                                !MediaTrack.codecEquals(result, originTrack)) {
+                            result = mediaTrack;
+                        }
                     }
                 }
 
                 if (prevResult.compare(result) == 0) {
                     // Don't let change the codec other than the original.
-                    if (prevResult.format != null && MediaTrack.codecEquals(prevResult.format.codecs, track.format.codecs)) {
+                    if (MediaTrack.codecEquals(prevResult, originTrack)) {
                         result = prevResult;
                     }
                 }

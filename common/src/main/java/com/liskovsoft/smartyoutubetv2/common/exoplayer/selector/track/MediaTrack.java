@@ -48,12 +48,28 @@ public abstract class MediaTrack {
         return null;
     }
 
-    public static boolean codecEquals(String codecs1, String codecs2) {
+    private static boolean codecEquals(String codecs1, String codecs2) {
         if (codecs1 == null || codecs2 == null) {
             return false;
         }
 
         return Helpers.equals(TrackSelectorUtil.codecNameShort(codecs1), TrackSelectorUtil.codecNameShort(codecs2));
+    }
+
+    private static boolean codecEquals(Format format1, Format format2) {
+        if (format1 == null || format2 == null) {
+            return false;
+        }
+
+        return codecEquals(format1.codecs, format2.codecs);
+    }
+
+    public static boolean codecEquals(MediaTrack track1, MediaTrack track2) {
+        if (track1 == null || track2 == null) {
+            return false;
+        }
+
+        return codecEquals(track1.format, track2.format);
     }
 
     //public static int compareCodecs(String codec1, String codec2) {
