@@ -72,6 +72,22 @@ public abstract class MediaTrack {
         return codecEquals(track1.format, track2.format);
     }
 
+    public static int getCodecWeight(MediaTrack track) {
+        if (track == null || track.format == null) {
+            return 0;
+        }
+
+        return getCodecWeight(track.format.codecs);
+    }
+
+    public static int getCodecWeight(String codec) {
+        if (codec == null) {
+            return 0;
+        }
+
+        return codec.contains("av01") ? 31 : codec.contains("vp9") ? 28 : codec.contains("avc") ? 14 : 0;
+    }
+
     //public static int compareCodecs(String codec1, String codec2) {
     //    if (codecEquals(codec1, codec2)) {
     //        return 0;

@@ -486,9 +486,16 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                     }
                 }
 
+                // Don't let change the codec beside needed one.
+                if (MediaTrack.codecEquals(result, originTrack)) {
+                    break;
+                }
+
+                // Formats are the same except the codecs
                 if (prevResult.compare(result) == 0) {
-                    // Don't let change the codec other than the original.
-                    if (MediaTrack.codecEquals(prevResult, originTrack)) {
+                    boolean preferPrevious = MediaTrack.getCodecWeight(prevResult) - MediaTrack.getCodecWeight(result) > 0;
+
+                    if (preferPrevious) {
                         result = prevResult;
                     }
                 }
@@ -617,8 +624,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 return format1.language.compareTo(format2.language);
             }
 
-            int leftVal = format2.width + (int) format2.frameRate + getCodecWeight(format2.codecs);
-            int rightVal = format1.width + (int) format1.frameRate + getCodecWeight(format1.codecs);
+            int leftVal = format2.width + (int) format2.frameRate + MediaTrack.getCodecWeight(format2.codecs);
+            int rightVal = format1.width + (int) format1.frameRate + MediaTrack.getCodecWeight(format1.codecs);
 
             int delta = leftVal - rightVal;
             if (delta == 0) {
@@ -626,14 +633,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             }
 
             return leftVal - rightVal;
-        }
-
-        private int getCodecWeight(String codec) {
-            if (codec == null) {
-                return 0;
-            }
-
-            return codec.contains("avc") ? 31 : codec.contains("vp9") ? 28 : 0;
         }
     }
 }
