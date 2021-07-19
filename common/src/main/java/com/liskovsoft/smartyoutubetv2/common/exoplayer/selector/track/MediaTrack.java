@@ -88,8 +88,8 @@ public abstract class MediaTrack {
         return codec.contains("vp9") ? 31 : codec.contains("avc") ? 28 : codec.contains("av01") ? 14 : 0;
     }
 
-    public static boolean preferCodec(MediaTrack first, MediaTrack second) {
-        return getCodecWeight(first) - getCodecWeight(second) > 0;
+    public static boolean preferByCodec(MediaTrack prevTrack, MediaTrack nextTrack) {
+        return getCodecWeight(prevTrack) - getCodecWeight(nextTrack) > 0;
     }
 
     //public static int compareCodecs(String codec1, String codec2) {
