@@ -471,6 +471,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
                     if (compare == 0) {
                         Log.d(TAG, "findBestMatch: Found exact match by size and fps in list: " + mediaTrack.format);
+                        
                         result = mediaTrack;
 
                         // Get ready for group with multiple codecs: avc, av01
@@ -479,8 +480,9 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         }
                     } else if (compare > 0 && mediaTrack.compare(result) >= 0) { // select track with higher possible quality
                         // Get ready for group with multiple codecs: avc, av01
+                        // Also handle situations where avc and av01 only (no vp9). E.g.: B4mIhE_15nc
                         if (MediaTrack.codecEquals(mediaTrack, originTrack) ||
-                                !MediaTrack.codecEquals(result, originTrack)) {
+                                (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferCodec(result, mediaTrack))) {
                             result = mediaTrack;
                         }
                     }
@@ -493,9 +495,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
                 // Formats are the same except the codecs
                 if (prevResult.compare(result) == 0) {
-                    boolean preferPrevious = MediaTrack.getCodecWeight(prevResult) - MediaTrack.getCodecWeight(result) > 0;
-
-                    if (preferPrevious) {
+                    if (MediaTrack.preferCodec(prevResult, result)) {
                         result = prevResult;
                     }
                 }
