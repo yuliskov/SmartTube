@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.VideoTrack
 import java.util.HashMap;
 
 public class TrackSelectorUtil {
+    public static final String CODEC_SHORT_AV1 = "av01";
     public static final String CODEC_SHORT_AVC = "avc";
     public static final String CODEC_SHORT_VP9 = "vp9";
     public static final String CODEC_SHORT_VP9_HDR = "vp9.2";
@@ -26,6 +27,7 @@ public class TrackSelectorUtil {
         mResolutionMap.put(854, 480);
         mResolutionMap.put(1280, 720);
         mResolutionMap.put(1920, 1080);
+        mResolutionMap.put(2048, 1440); // Tom Zanetti - Didn't Know
         mResolutionMap.put(2560, 1440);
         mResolutionMap.put(3840, 2160);
         mResolutionMap.put(7680, 4320);
@@ -134,7 +136,7 @@ public class TrackSelectorUtil {
 
         String codec = codecNameFull.toLowerCase();
 
-        String[] codecNames = {CODEC_SHORT_AVC, CODEC_SHORT_VP9, CODEC_SHORT_MP4A, CODEC_SHORT_VORBIS};
+        String[] codecNames = {CODEC_SHORT_AV1, CODEC_SHORT_AVC, CODEC_SHORT_VP9, CODEC_SHORT_MP4A, CODEC_SHORT_VORBIS};
 
         for (String codecName : codecNames) {
             if (codec.contains(codecName)) {

@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.presenter;
 
 import android.content.Context;
-import android.text.TextUtils.TruncateAt;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import androidx.leanback.widget.Presenter;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 public class SettingsCardPresenter extends Presenter {
     private int mDefaultBackgroundColor;
@@ -47,9 +47,9 @@ public class SettingsCardPresenter extends Presenter {
             textView.setTextColor(textColor);
 
             if (hasFocus) {
-                enableMarquee(textView);
+                ViewUtil.enableMarquee(textView);
             } else {
-                disableMarquee(textView);
+                ViewUtil.disableMarquee(textView);
             }
         });
 
@@ -74,27 +74,5 @@ public class SettingsCardPresenter extends Presenter {
 
     @Override
     public void onUnbindViewHolder(ViewHolder viewHolder) {
-    }
-
-    private void disableMarquee(TextView... textViews) {
-        if (textViews == null || textViews.length == 0) {
-            return;
-        }
-
-        for (TextView textView : textViews) {
-            textView.setEllipsize(TruncateAt.END);
-        }
-    }
-
-    private void enableMarquee(TextView... textViews) {
-        if (textViews == null || textViews.length == 0) {
-            return;
-        }
-
-        for (TextView textView : textViews) {
-            textView.setEllipsize(TruncateAt.MARQUEE);
-            textView.setMarqueeRepeatLimit(-1);
-            textView.setHorizontallyScrolling(true);
-        }
     }
 }

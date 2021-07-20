@@ -446,14 +446,14 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         invalidate();
     }
 
-    private MediaTrack findBestMatch(MediaTrack track) {
-        Log.d(TAG, "findBestMatch: Starting: " + track.format);
+    private MediaTrack findBestMatch(MediaTrack originTrack) {
+        Log.d(TAG, "findBestMatch: Starting: " + originTrack.format);
 
-        Renderer renderer = mRenderers[track.rendererIndex];
+        Renderer renderer = mRenderers[originTrack.rendererIndex];
 
-        MediaTrack result = createAutoSelection(track.rendererIndex);
+        MediaTrack result = createAutoSelection(originTrack.rendererIndex);
 
-        if (track.format != null) { // not auto selection
+        if (originTrack.format != null) { // not auto selection
             MediaTrack prevResult;
 
             for (int groupIndex = 0; groupIndex < renderer.mediaTracks.length; groupIndex++) {
@@ -478,20 +478,37 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         continue;
                     }
 
-                    int compare = track.inBounds(mediaTrack);
+                    int compare = originTrack.inBounds(mediaTrack);
 
                     if (compare == 0) {
-                        Log.d(TAG, "findBestMatch: Found exact match in this track list: " + mediaTrack.format);
-                        result = mediaTrack;
-                        break;
+                        Log.d(TAG, "findBestMatch: Found exact match by size and fps in list: " + mediaTrack.format);
+
+                        // Get ready for group with multiple codecs: avc, av01
+                        if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
+                            result = mediaTrack;
+                            break;
+                        } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
+                            result = mediaTrack;
+                        }
                     } else if (compare > 0 && mediaTrack.compare(result) >= 0) { // select track with higher possible quality
-                        result = mediaTrack;
+                        // Get ready for group with multiple codecs: avc, av01
+                        // Also handle situations where avc and av01 only (no vp9). E.g.: B4mIhE_15nc
+                        if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
+                            result = mediaTrack;
+                        } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
+                            result = mediaTrack;
+                        }
                     }
                 }
 
+                // Don't let change the codec beside needed one.
+                if (MediaTrack.codecEquals(result, originTrack)) {
+                    break;
+                }
+
+                // Formats are the same except the codecs
                 if (prevResult.compare(result) == 0) {
-                    // Prefer the same codec if quality match
-                    if (prevResult.format != null && MediaTrack.codecEquals(prevResult.format.codecs, track.format.codecs)) {
+                    if (MediaTrack.preferByCodec(prevResult, result)) {
                         result = prevResult;
                     }
                 }
@@ -620,8 +637,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 return format1.language.compareTo(format2.language);
             }
 
-            int leftVal = format2.width + (int) format2.frameRate + (format2.codecs != null && format2.codecs.contains("avc") ? 31 : 0);
-            int rightVal = format1.width + (int) format1.frameRate + (format1.codecs != null && format1.codecs.contains("avc") ? 31 : 0);
+            int leftVal = format2.width + (int) format2.frameRate + MediaTrack.getCodecWeight(format2.codecs);
+            int rightVal = format1.width + (int) format1.frameRate + MediaTrack.getCodecWeight(format1.codecs);
 
             int delta = leftVal - rightVal;
             if (delta == 0) {
