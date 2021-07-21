@@ -123,7 +123,8 @@
             android:id="@+id/playback_progress"
             android:layout_width="match_parent"
             android:layout_height="@dimen/lb_playback_transport_progressbar_height"
-            android:focusable="true" />
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
 
         <RelativeLayout android:layout_width="match_parent"
                         android:layout_height="wrap_content"
