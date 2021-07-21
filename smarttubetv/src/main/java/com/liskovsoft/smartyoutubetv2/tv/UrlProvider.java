@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.liskovsoft.youtubeapi.videoinfo.V2.VideoInfoServiceUnsigned;
@@ -58,30 +59,35 @@ public class UrlProvider extends ContentProvider {
         String videoPageUrl = uri.getQueryParameter("url");
         VideoInfo videoInfo = VideoInfoServiceUnsigned.instance().getVideoInfo(Uri.parse(videoPageUrl).getQueryParameter("v"), "");
         List<AdaptiveVideoFormat> formats = videoInfo.getAdaptiveFormats();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            formats = formats.stream()
-                    .filter(adaptiveVideoFormat -> !adaptiveVideoFormat.getMimeType().contains("av01"))
-                    .filter(adaptiveVideoFormat -> {
-                        int maxVideoHeight = 2160;
-                        if (uri.getQueryParameter("max_video_height") != null) {
-                            maxVideoHeight = Integer.parseInt(uri.getQueryParameter("max_video_height"));
-                        }
-                        if (adaptiveVideoFormat.getSize() != null) {
-                            return Integer.parseInt(adaptiveVideoFormat.getSize().split("x")[1]) <= maxVideoHeight;
-                        }
-                        return true;
-                    })
-                    .sorted((o1, o2) -> o2.getBitrate() - o1.getBitrate())
-            .collect(Collectors.toList());
-        }
         String videoUrl = null;
         String audioUrl = null;
-        for (AdaptiveVideoFormat format : formats) {
-            Log.d(TAG, "query: format=" + format);
-            if (format.getMimeType().startsWith("video") && videoUrl == null) {
-                videoUrl = format.getUrl();
-            } else if (format.getMimeType().startsWith("audio") && audioUrl == null) {
-                audioUrl = format.getUrl();
+        if (!TextUtils.isEmpty(videoInfo.getDashManifestUrl())) {
+            videoUrl = videoInfo.getDashManifestUrl();
+            Log.d(TAG, "query: use dash manifest");
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                formats = formats.stream()
+                        .filter(adaptiveVideoFormat -> !adaptiveVideoFormat.getMimeType().contains("av01"))
+                        .filter(adaptiveVideoFormat -> {
+                            int maxVideoHeight = 2160;
+                            if (uri.getQueryParameter("max_video_height") != null) {
+                                maxVideoHeight = Integer.parseInt(uri.getQueryParameter("max_video_height"));
+                            }
+                            if (adaptiveVideoFormat.getSize() != null) {
+                                return Integer.parseInt(adaptiveVideoFormat.getSize().split("x")[1]) <= maxVideoHeight;
+                            }
+                            return true;
+                        })
+                        .sorted((o1, o2) -> o2.getBitrate() - o1.getBitrate())
+                        .collect(Collectors.toList());
+            }
+            for (AdaptiveVideoFormat format : formats) {
+                Log.d(TAG, "query: format=" + format);
+                if (format.getMimeType().startsWith("video") && videoUrl == null) {
+                    videoUrl = format.getUrl();
+                } else if (format.getMimeType().startsWith("audio") && audioUrl == null) {
+                    audioUrl = format.getUrl();
+                }
             }
         }
 
