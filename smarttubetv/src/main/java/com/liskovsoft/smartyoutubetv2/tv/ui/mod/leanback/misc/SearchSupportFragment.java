@@ -741,14 +741,14 @@ public class SearchSupportFragment extends Fragment {
                 && mRowsSupportFragment != null && mRowsSupportFragment.getAdapter() == mResultAdapter) {
             focusOnResults();
         } else {
-            // Fixed moving focus to voice button when activity started
+            // MOD: Comment to fix moving focus to voice button when activity started
             //mSearchBar.requestFocus();
         }
 
         // MOD: Trying to fix lost focus on voice search (rare bug)
-        if (!mSpeechOrbView.isFocused() && !mSearchTextEditor.isFocused()) {
-            mSpeechOrbView.requestFocus();
-        }
+        //if (!mSpeechOrbView.isFocused() && !mSearchTextEditor.isFocused()) {
+        //    mSpeechOrbView.requestFocus();
+        //}
     }
 
     /**
