@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 public class UrlProvider extends ContentProvider {
     private static final String TAG = "UrlProvider";
     private final String [] COLUMNS = {"video_url", "audio_url"};
+    private final static int MAX_VIDEO_HEIGHT = 2160;
+    private final static String MAX_VIDEO_HEIGHT_PARAM = "max_video_height";
 
     public UrlProvider() {
     }
@@ -55,49 +57,53 @@ public class UrlProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
         final long startTime = System.currentTimeMillis();
-        Log.d(TAG, "query() called with: uri = [" + uri + "], projection = [" + projection + "], selection = [" + selection + "], selectionArgs = [" + selectionArgs + "], sortOrder = [" + sortOrder + "]");
-        String videoPageUrl = uri.getQueryParameter("url");
-        VideoInfo videoInfo = VideoInfoServiceUnsigned.instance().getVideoInfo(Uri.parse(videoPageUrl).getQueryParameter("v"), "");
+        final String videoPageUrl = uri.getQueryParameter("url");
+        final VideoInfo videoInfo = VideoInfoServiceUnsigned.instance()
+                .getVideoInfo(Uri.parse(videoPageUrl).getQueryParameter("v"), "");
         List<AdaptiveVideoFormat> formats = videoInfo.getAdaptiveFormats();
         String videoUrl = null;
         String audioUrl = null;
         if (!TextUtils.isEmpty(videoInfo.getDashManifestUrl())) {
             videoUrl = videoInfo.getDashManifestUrl();
-            Log.d(TAG, "query: use dash manifest");
+            Log.d(TAG, "using dash manifest");
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 formats = formats.stream()
                         .filter(adaptiveVideoFormat -> !adaptiveVideoFormat.getMimeType().contains("av01"))
                         .filter(adaptiveVideoFormat -> {
-                            int maxVideoHeight = 2160;
-                            if (uri.getQueryParameter("max_video_height") != null) {
-                                maxVideoHeight = Integer.parseInt(uri.getQueryParameter("max_video_height"));
+                            int maxVideoHeight = MAX_VIDEO_HEIGHT;
+                            if (uri.getQueryParameter(MAX_VIDEO_HEIGHT_PARAM) != null) {
+                                maxVideoHeight = Integer.parseInt(uri.getQueryParameter(MAX_VIDEO_HEIGHT_PARAM));
                             }
                             if (adaptiveVideoFormat.getSize() != null) {
                                 return Integer.parseInt(adaptiveVideoFormat.getSize().split("x")[1]) <= maxVideoHeight;
                             }
                             return true;
                         })
-                        .sorted((o1, o2) -> o2.getBitrate() - o1.getBitrate())
+                        .sorted((lhs, rhs) -> rhs.getBitrate() - lhs.getBitrate())
                         .collect(Collectors.toList());
             }
             for (AdaptiveVideoFormat format : formats) {
-                Log.d(TAG, "query: format=" + format);
                 if (format.getMimeType().startsWith("video") && videoUrl == null) {
                     videoUrl = format.getUrl();
+                    Log.d(TAG, "using video btr=" + format.getBitrate()
+                            + ", codec=" + format.getMimeType()
+                            + ", res=" + format.getSize()
+                            + ", url=" + videoUrl);
                 } else if (format.getMimeType().startsWith("audio") && audioUrl == null) {
                     audioUrl = format.getUrl();
+                    Log.d(TAG, "using audio btr=" + format.getBitrate()
+                            + ", codec=" + format.getMimeType()
+                            + ", url=" + videoUrl);
                 }
             }
         }
 
         final MatrixCursor cursor = new MatrixCursor(COLUMNS);
-        ArrayList<String> values = new ArrayList<>(COLUMNS.length);
+        final ArrayList<String> values = new ArrayList<>(COLUMNS.length);
         values.add(videoUrl);
         values.add(audioUrl);
         cursor.addRow(values);
-        Log.d(TAG, "videoUrl=" + videoUrl);
-        Log.d(TAG, "audioUrl=" + audioUrl);
         Log.d(TAG, "query elapsed:  " + (System.currentTimeMillis() - startTime));
         return cursor;
     }
