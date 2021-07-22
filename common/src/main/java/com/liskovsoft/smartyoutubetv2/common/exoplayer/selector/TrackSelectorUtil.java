@@ -29,6 +29,7 @@ public class TrackSelectorUtil {
         mResolutionMap.put(1920, 1080);
         mResolutionMap.put(2048, 1440); // Tom Zanetti - Didn't Know
         mResolutionMap.put(2560, 1440);
+        mResolutionMap.put(3120, 2160); // Мастерская Синдиката - Мы собрали суперкар КУВАЛДОЙ!
         mResolutionMap.put(3840, 2160);
         mResolutionMap.put(7680, 4320);
     }
