@@ -70,7 +70,7 @@ public class TrackSelectorUtil {
      * Build short resolution: e.g. 720p, 1080p etc<br/>
      * Try to amplify resolution of aspect ratios that differ from 16:9
      */
-    private static String buildResolutionShortString(Format format) {
+    public static String buildResolutionShortString(Format format) {
         if (format == null) {
             return "";
         }
