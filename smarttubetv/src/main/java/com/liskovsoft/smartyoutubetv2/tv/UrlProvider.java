@@ -9,6 +9,8 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import com.liskovsoft.youtubeapi.videoinfo.V2.VideoInfoServiceUnsigned;
 import com.liskovsoft.youtubeapi.videoinfo.models.VideoInfo;
 import com.liskovsoft.youtubeapi.videoinfo.models.formats.AdaptiveVideoFormat;
@@ -60,13 +62,13 @@ public class UrlProvider extends ContentProvider {
         final String videoPageUrl = uri.getQueryParameter("url");
         final VideoInfo videoInfo = VideoInfoServiceUnsigned.instance()
                 .getVideoInfo(Uri.parse(videoPageUrl).getQueryParameter("v"), "");
-        List<AdaptiveVideoFormat> formats = videoInfo.getAdaptiveFormats();
+        @Nullable List<AdaptiveVideoFormat> formats = videoInfo.getAdaptiveFormats();
         String videoUrl = null;
         String audioUrl = null;
         if (!TextUtils.isEmpty(videoInfo.getDashManifestUrl())) {
             videoUrl = videoInfo.getDashManifestUrl();
             Log.d(TAG, "using dash manifest");
-        } else {
+        } else if (formats != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 formats = formats.stream()
                         .filter(adaptiveVideoFormat -> !adaptiveVideoFormat.getMimeType().contains("av01"))
@@ -97,6 +99,8 @@ public class UrlProvider extends ContentProvider {
                             + ", url=" + videoUrl);
                 }
             }
+        } else {
+            Log.d(TAG, "error=" + videoInfo.getPlayabilityStatus());
         }
 
         final MatrixCursor cursor = new MatrixCursor(COLUMNS);
