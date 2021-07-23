@@ -71,7 +71,7 @@ public class TrackSelectorUtil {
      * Try to amplify resolution of aspect ratios that differ from 16:9
      */
     private static String buildResolutionShortString(Format format) {
-        return getVerticalResolution(format) + "p";
+        return getResolutionLabel(format) + "p";
     }
 
     private static String buildAudioPropertyString(Format format) {
@@ -144,22 +144,65 @@ public class TrackSelectorUtil {
                 "STATE_ENDED";
     }
 
-    public static int getVerticalResolution(Format format) {
+    //public static int getResolutionLabel(Format format) {
+    //    if (format == null) {
+    //        return 0;
+    //    }
+    //
+    //    int height = format.height;
+    //    int width = format.width;
+    //
+    //    if (width == Format.NO_VALUE || height == Format.NO_VALUE) {
+    //        return 0;
+    //    }
+    //
+    //    // Try to amplify resolution of aspect ratios that differ from 16:9
+    //    Integer heightAmp = mResolutionMap.get(width);
+    //
+    //    // Try to avoid square video proportions
+    //    return heightAmp != null && width > height && !VideoTrack.sizeEquals(width, height, 15) ? heightAmp : height;
+    //}
+
+    public static String getResolutionLabel(Format format) {
         if (format == null) {
-            return 0;
+            return null;
         }
 
         int height = format.height;
         int width = format.width;
 
         if (width == Format.NO_VALUE || height == Format.NO_VALUE) {
-            return 0;
+            return null;
         }
 
-        // Try to amplify resolution of aspect ratios that differ from 16:9
-        Integer heightAmp = mResolutionMap.get(width);
+        return getResolutionLabelByHeight(Math.min(height, width));
+    }
 
-        // Try to avoid square video proportions
-        return heightAmp != null && width > height && !VideoTrack.sizeEquals(width, height, 15) ? heightAmp : height;
+    private static String getResolutionLabelByHeight(int height) {
+        String qualityLabel = null;
+
+        if (height < 160) { // 256x144
+            qualityLabel = "144";
+        } else if (height < 260) { // 426x240
+            qualityLabel = "240";
+        } else if (height < 380) { // 640x360
+            qualityLabel = "360";
+        } else if (height < 500) { // 854x480
+            qualityLabel = "480";
+        } else if (height < 750) { // 1280x720
+            qualityLabel = "720";
+        } else if (height < 1150) { // 1920x1080
+            qualityLabel = "1080";
+        } else if (height < 1250) { // 2560x1182 (Мастерская Синдиката - Мы собрали суперкар КУВАЛДОЙ!)
+            qualityLabel = "1200";
+        } else if (height < 1600) { // 2560x1440
+            qualityLabel = "1440";
+        } else if (height < 2300) { // 3840x2160
+            qualityLabel = "2160";
+        } else if (height < 4500) { // 7680x4320
+            qualityLabel = "4320";
+        }
+
+        return qualityLabel;
     }
 }
