@@ -70,23 +70,8 @@ public class TrackSelectorUtil {
      * Build short resolution: e.g. 720p, 1080p etc<br/>
      * Try to amplify resolution of aspect ratios that differ from 16:9
      */
-    public static String buildResolutionShortString(Format format) {
-        if (format == null) {
-            return "";
-        }
-
-        int height = format.height;
-        int width = format.width;
-
-        if (width == Format.NO_VALUE || height == Format.NO_VALUE) {
-            return "";
-        }
-
-        // Try to amplify resolution of aspect ratios that differ from 16:9
-        Integer heightAmp = mResolutionMap.get(width);
-
-        // Try to avoid square video proportions
-        return heightAmp != null && width > height && !VideoTrack.sizeEquals(width, height, 15) ? heightAmp + "p" : height + "p";
+    private static String buildResolutionShortString(Format format) {
+        return getVerticalResolution(format) + "p";
     }
 
     private static String buildAudioPropertyString(Format format) {
@@ -157,5 +142,24 @@ public class TrackSelectorUtil {
                 playbackState == Player.STATE_READY ? "STATE_READY" :
                 playbackState == Player.STATE_IDLE ? "STATE_IDLE" :
                 "STATE_ENDED";
+    }
+
+    public static int getVerticalResolution(Format format) {
+        if (format == null) {
+            return 0;
+        }
+
+        int height = format.height;
+        int width = format.width;
+
+        if (width == Format.NO_VALUE || height == Format.NO_VALUE) {
+            return 0;
+        }
+
+        // Try to amplify resolution of aspect ratios that differ from 16:9
+        Integer heightAmp = mResolutionMap.get(width);
+
+        // Try to avoid square video proportions
+        return heightAmp != null && width > height && !VideoTrack.sizeEquals(width, height, 15) ? heightAmp : height;
     }
 }
