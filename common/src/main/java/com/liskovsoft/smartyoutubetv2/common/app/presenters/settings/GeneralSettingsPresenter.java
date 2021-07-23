@@ -40,8 +40,8 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
         settingsPresenter.clear();
 
-        appendLeftPanelCategories(settingsPresenter);
         appendBootToCategory(settingsPresenter);
+        appendLeftPanelCategories(settingsPresenter);
         appendAppExitCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
         appendBackgroundPlaybackActivationCategory(settingsPresenter);
