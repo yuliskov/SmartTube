@@ -2,8 +2,10 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.other;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.Point;
 import android.os.Build.VERSION;
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -319,13 +321,12 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private void updateDisplayInfo() {
         mDisplayInfo.clear();
 
-        String defaultMode = AppPrefs.instance(mContext).getDefaultDisplayMode();
-        defaultMode = defaultMode != null ? defaultMode : NOT_AVAILABLE;
-        String currentMode = UhdHelper.formatMode(mUhdHelper.getCurrentMode());
-        currentMode = currentMode != null ? currentMode : defaultMode;
+        String bootResolution = AppPrefs.instance(mContext).getBootResolution();
+        String currentResolution = UhdHelper.toResolution(mUhdHelper.getCurrentMode());
+        //currentMode = currentMode != null ? currentMode : defaultMode;
         mDisplayInfo.add(new Pair<>("Display dpi", String.valueOf(Helpers.getDeviceDpi(mContext))));
-        mDisplayInfo.add(new Pair<>("Display Resolution", currentMode));
-        mDisplayInfo.add(new Pair<>("Boot Resolution", defaultMode));
+        mDisplayInfo.add(new Pair<>("Display Resolution", bootResolution != null ? currentResolution : getRawDisplayResolution()));
+        mDisplayInfo.add(new Pair<>("Boot Resolution", bootResolution != null ? bootResolution : NOT_AVAILABLE));
     }
 
     private void appendPlayerWindowIndex() {
@@ -433,5 +434,14 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
 
     private String getVideoDecoderNameV2() {
         return ExoUtils.getVideoDecoderName();
+    }
+
+    private String getRawDisplayResolution() {
+        Display display = mContext.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getRealSize(size);
+        float refreshRate = display.getRefreshRate();
+
+        return String.format("%sx%s@%s", size.x, size.y, refreshRate);
     }
 }
