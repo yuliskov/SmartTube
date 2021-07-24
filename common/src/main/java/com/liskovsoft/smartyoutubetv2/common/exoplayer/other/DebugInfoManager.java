@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.other;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.Build.VERSION;
 import android.util.TypedValue;
 import android.view.Display;
@@ -323,9 +324,9 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
 
         String bootResolution = AppPrefs.instance(mContext).getBootResolution();
         String currentResolution = UhdHelper.toResolution(mUhdHelper.getCurrentMode());
-        //currentMode = currentMode != null ? currentMode : defaultMode;
+        currentResolution = currentResolution != null ? currentResolution : bootResolution;
         mDisplayInfo.add(new Pair<>("Display dpi", String.valueOf(Helpers.getDeviceDpi(mContext))));
-        mDisplayInfo.add(new Pair<>("Display Resolution", bootResolution != null ? currentResolution : getRawDisplayResolution()));
+        mDisplayInfo.add(new Pair<>("Display Resolution", bootResolution != null ? currentResolution : overrideResolution(currentResolution)));
         mDisplayInfo.add(new Pair<>("Boot Resolution", bootResolution != null ? bootResolution : NOT_AVAILABLE));
     }
 
@@ -443,5 +444,17 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         float refreshRate = display.getRefreshRate();
 
         return String.format("%sx%s@%s", size.x, size.y, refreshRate);
+    }
+
+    /**
+     * Override to hardcoded physical resolution
+     */
+    private String overrideResolution(String resolution) {
+        switch (Helpers.getDeviceName()) {
+            case "BRAVIA 4K UR3 (BRAVIA_UR3_EU)":
+                return "3840x2160@30";
+        }
+
+        return resolution;
     }
 }

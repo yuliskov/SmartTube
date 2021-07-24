@@ -393,13 +393,14 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void updateHistory() {
-        if (getController().getVideo() == null) {
+        Video video = getController().getVideo();
+
+        if (video == null || video.isRemote) {
             return;
         }
 
         RxUtils.disposeActions(mHistoryAction);
-
-        Video item = getController().getVideo();
+        
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
 
@@ -407,10 +408,10 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
         long positionSec = getController().getPositionMs() / 1_000;
 
-        if (item.mediaItem != null) {
-            historyObservable = mediaItemManager.updateHistoryPositionObserve(item.mediaItem, positionSec);
+        if (video.mediaItem != null) {
+            historyObservable = mediaItemManager.updateHistoryPositionObserve(video.mediaItem, positionSec);
         } else { // video launched form ATV channels
-            historyObservable = mediaItemManager.updateHistoryPositionObserve(item.videoId, positionSec);
+            historyObservable = mediaItemManager.updateHistoryPositionObserve(video.videoId, positionSec);
         }
 
         mHistoryAction = RxUtils.execute(historyObservable);
