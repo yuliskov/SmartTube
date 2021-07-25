@@ -302,6 +302,9 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 }
                 break;
             case Command.TYPE_DISCONNECTED:
+                if (getController() != null) {
+                    getController().finish();
+                }
                 if (getActivity() != null) {
                     // NOTE: It's not a good idea to remember connection state (mConnected) at this point.
                     //MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_disconnected, command.getDeviceName()));

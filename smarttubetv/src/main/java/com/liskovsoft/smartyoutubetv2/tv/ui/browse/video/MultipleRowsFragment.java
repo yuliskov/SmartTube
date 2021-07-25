@@ -97,6 +97,9 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         if (mVideoGroupAdapters != null) {
             mVideoGroupAdapters.clear();
         }
+
+        // Reset the position
+        setPosition(0);
     }
 
     @Override
