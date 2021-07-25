@@ -101,8 +101,8 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
-    public void onNewSession() {
-        process(PlayerEventListener::onNewSession);
+    public void onFinish() {
+        process(PlayerEventListener::onFinish);
     }
 
     @Override

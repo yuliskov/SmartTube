@@ -339,7 +339,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     public void onPipClicked() {
         getController().showControls(false);
         getController().setPlaybackMode(PlaybackEngineController.BACKGROUND_MODE_PIP);
-        getController().exit();
+        getController().finish();
     }
 
     private void intSpeedItems(AppSettingsPresenter settingsPresenter, List<OptionItem> items, float[] speedValues) {
@@ -443,7 +443,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     private boolean handleStopKey(int keyCode) {
         if (KeyHelpers.isStopKey(keyCode)) {
-            getController().exit();
+            getController().finish();
             return true;
         }
 

@@ -162,7 +162,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
             case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
                 // close player
                 if (!getController().isSuggestionsShown()) {
-                    getController().exit();
+                    getController().finish();
                 }
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_PAUSE:

@@ -7,7 +7,6 @@ import com.liskovsoft.mediaserviceinterfaces.RemoteManager;
 import com.liskovsoft.mediaserviceinterfaces.data.Command;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -41,6 +40,14 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         mRemoteControlData = RemoteControlData.instance(context);
         mRemoteControlData.setOnChange(this::tryListening);
         tryListening();
+    }
+
+    @Override
+    public void openVideo(Video item) {
+        if (item != null) {
+            Log.d(TAG, "Open video. Is remote connected: %s", mConnected);
+            item.isRemote = mConnected;
+        }
     }
 
     @Override
@@ -91,8 +98,8 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onNewSession() {
-        // User action detected. Pretend that there is no remote session.
+    public void onFinish() {
+        // User action detected. Stop remote session.
         mConnected = false;
     }
 
@@ -106,8 +113,6 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         long durationMs = -1;
 
         if (item != null && getController() != null) {
-            item.isRemote = mConnected;
-
             videoId = item.videoId;
             positionMs = getController().getPositionMs();
             durationMs = getController().getLengthMs();
@@ -173,7 +178,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                         error -> {
                             String msg = "startListening error: " + error.getMessage();
                             Log.e(TAG, msg);
-                            MessageHelpers.showMessage(getActivity(), msg);
+                            MessageHelpers.showLongMessage(getActivity(), msg);
                         },
                         () -> {
                             // Some users seeing this.
@@ -189,28 +194,24 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     }
 
     private void processCommand(Command command) {
-        //if (command.getType() != Command.TYPE_IDLE &&
-        //    command.getType() != Command.TYPE_UNDEFINED) {
-        //    // Seems that there is no robust way to detect a connection. Use carefully!
-        //    // Add remote queue row to the suggestions.
-        //    mConnected = command.getType() != Command.TYPE_DISCONNECTED;
-        //    if (getController() != null && getController().getVideo() != null) {
-        //        getController().getVideo().isRemote = mConnected;
-        //    }
-        //}
-
         switch (command.getType()) {
-            case Command.TYPE_CONNECTED:
-            case Command.TYPE_OPEN_VIDEO:
-                mConnected = true;
+            case Command.TYPE_IDLE:
+            case Command.TYPE_UNDEFINED:
+            case Command.TYPE_UPDATE_PLAYLIST:
                 break;
+            case Command.TYPE_STOP:
             case Command.TYPE_DISCONNECTED:
                 mConnected = false;
+                break;
+            default:
+                mConnected = true;
         }
 
-        if (getController() != null && getController().getVideo() != null) {
-            getController().getVideo().isRemote = mConnected;
-        }
+        Log.d(TAG, "Is remote connected: %s, command type: %s", mConnected, command.getType());
+        
+        //if (getController() != null && getController().getVideo() != null) {
+        //    getController().getVideo().isRemote = mConnected;
+        //}
 
         switch (command.getType()) {
             case Command.TYPE_OPEN_VIDEO:
@@ -288,6 +289,11 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
             case Command.TYPE_VOLUME:
                 Utils.setGlobalVolume(getActivity(), command.getVolume());
                 break;
+            case Command.TYPE_STOP:
+                if (getController() != null) {
+                    getController().finish();
+                }
+                break;
             case Command.TYPE_CONNECTED:
                 if (getActivity() != null) {
                     // NOTE: It's not a good idea to remember connection state (mConnected) at this point.
@@ -310,6 +316,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
             mVideo.playlistIndex = newVideo.playlistIndex;
             postStartPlaying(mVideo, getController().isPlaying());
         } else if (newVideo != null) {
+            newVideo.isRemote = true;
             PlaybackPresenter.instance(getActivity()).openVideo(newVideo);
         }
     }

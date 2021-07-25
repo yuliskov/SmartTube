@@ -395,7 +395,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private void updateHistory() {
         Video video = getController().getVideo();
 
-        if (video == null || video.isRemote) {
+        if (video == null) {
             return;
         }
 
