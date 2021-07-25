@@ -452,7 +452,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private String overrideResolution(String resolution) {
         switch (Helpers.getDeviceName()) {
             case "BRAVIA 4K UR3 (BRAVIA_UR3_EU)":
-                return "3840x2160@30";
+                return "3840x2160@120";
         }
 
         return resolution;
