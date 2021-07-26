@@ -398,16 +398,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         }
     }
 
-    private Category getCategory(int categoryId) {
-        for (Category category : mCategories) {
-            if (category.getId() == categoryId) {
-                return category;
-            }
-        }
-
-        return null;
-    }
-
     private void updateCategory(Category category) {
         switch (category.getType()) {
             case Category.TYPE_GRID:
@@ -510,6 +500,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 .subscribe(
                         mediaGroup -> {
                             VideoGroup videoGroup = VideoGroup.from(mediaGroup, category, position);
+                            filterIfNeeded(videoGroup);
                             getView().updateCategory(videoGroup);
 
                             // Hide loading as long as first group received
@@ -545,7 +536,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        continueGroup -> getView().updateCategory(VideoGroup.from(continueGroup, group.getCategory(), group.getPosition())),
+                        continueGroup -> {
+                            VideoGroup videoGroup = VideoGroup.from(continueGroup, group.getCategory(), group.getPosition());
+                            filterIfNeeded(videoGroup);
+                            getView().updateCategory(videoGroup);
+                        },
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
                             if (getView() != null) {
@@ -601,6 +596,37 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void updateMultiGrid(Video item) {
-        updateVideoGrid(getCategory(mCurrentCategoryId), ChannelUploadsPresenter.instance(getContext()).obtainVideoGroupObservable(item), 1, true);
+        Category category = getCategory(mCurrentCategoryId);
+
+        if (category == null) {
+            return;
+        }
+
+        updateVideoGrid(category, ChannelUploadsPresenter.instance(getContext()).obtainVideoGroupObservable(item), 1, true);
+    }
+
+    private Category getCategory(int categoryId) {
+        for (Category category : mCategories) {
+            if (category.getId() == categoryId) {
+                return category;
+            }
+        }
+
+        return null;
+    }
+
+    private void filterIfNeeded(VideoGroup videoGroup) {
+        if (mMainUIData.isHideShortsEnabled() &&
+            videoGroup.getCategory().getId() == MediaGroup.TYPE_SUBSCRIPTIONS &&
+            videoGroup.getVideos() != null) {
+            videoGroup.getVideos().removeIf(value -> {
+                if (value.title == null) {
+                    return false;
+                }
+
+                return value.title.toLowerCase().contains("#shorts") ||
+                       value.title.toLowerCase().contains("#tiktok");
+            });
+        }
     }
 }

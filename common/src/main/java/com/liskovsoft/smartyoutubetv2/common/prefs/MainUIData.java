@@ -53,6 +53,7 @@ public class MainUIData {
     private boolean mIsUploadsAutoLoadEnabled;
     private Set<Video> mPinnedItems = new LinkedHashSet<>();
     private float mCardTextScrollSpeed;
+    private boolean mIsHideShortsEnabled;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -268,6 +269,15 @@ public class MainUIData {
         return mCardTextScrollSpeed;
     }
 
+    public void hideShorts(boolean enable) {
+        mIsHideShortsEnabled = enable;
+        persistState();
+    }
+
+    public boolean isHideShortsEnabled() {
+        return mIsHideShortsEnabled;
+    }
+
     private void initLeftPanelCategories() {
         mLeftPanelCategories.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mLeftPanelCategories.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
@@ -336,6 +346,7 @@ public class MainUIData {
         mIsUploadsAutoLoadEnabled = Helpers.parseBoolean(split, 16, true);
         String pinnedItems = Helpers.parseStr(split, 17);
         mCardTextScrollSpeed = Helpers.parseFloat(split, 18, 2);
+        mIsHideShortsEnabled = Helpers.parseBoolean(split, 19, false);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArrayLegacy(selectedCategories);
@@ -359,10 +370,12 @@ public class MainUIData {
     private void persistState() {
         String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
         String pinnedItems = Helpers.mergeArray(mPinnedItems.toArray());
-        mPrefs.setData(MAIN_UI_DATA, Helpers.mergeObject(mIsCardAnimatedPreviewsEnabled, selectedCategories, mBootCategoryId, mVideoGridScale, mUIScale,
-                mColorSchemeIndex, mIsCardMultilineTitleEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting,
+        mPrefs.setData(MAIN_UI_DATA, Helpers.mergeObject(mIsCardAnimatedPreviewsEnabled, selectedCategories,
+                mBootCategoryId, mVideoGridScale, mUIScale, mColorSchemeIndex,
+                mIsCardMultilineTitleEnabled, mIsSettingsCategoryEnabled, mChannelCategorySorting,
                 mPlaylistsStyle, mAppExitShortcut, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
-                mIsReturnToLauncherEnabled, mIsUploadsOldLookEnabled, mBackgroundShortcut, mIsUploadsAutoLoadEnabled, pinnedItems, mCardTextScrollSpeed));
+                mIsReturnToLauncherEnabled, mIsUploadsOldLookEnabled, mBackgroundShortcut,
+                mIsUploadsAutoLoadEnabled, pinnedItems, mCardTextScrollSpeed, mIsHideShortsEnabled));
     }
 
     public static class ColorScheme {

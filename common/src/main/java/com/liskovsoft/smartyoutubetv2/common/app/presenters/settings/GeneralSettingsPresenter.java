@@ -139,6 +139,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts),
+                option -> mMainUIData.hideShorts(option.isSelected()),
+                mMainUIData.isHideShortsEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.return_to_launcher),
                 option -> mMainUIData.enableReturnToLauncher(option.isSelected()),
                 mMainUIData.isReturnToLauncherEnabled()));
