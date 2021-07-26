@@ -98,7 +98,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             mVideoGroupAdapters.clear();
         }
 
-        // Reset the position
+        // Reset the position (bug appeared after fragment been reused)
         setPosition(0);
     }
 

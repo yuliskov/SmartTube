@@ -27,8 +27,9 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     private final SuggestionsLoader mSuggestionsLoader;
     private final VideoLoader mVideoLoader;
     private Disposable mListeningAction;
-    private Disposable mPostPlayAction;
+    private Disposable mPostStartPlayAction;
     private Disposable mPostStateAction;
+    private Disposable mPostVolumeAction;
     private Video mVideo;
     private boolean mConnected;
 
@@ -126,9 +127,9 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
             return;
         }
 
-        RxUtils.disposeActions(mPostPlayAction);
+        RxUtils.disposeActions(mPostStartPlayAction);
 
-        mPostPlayAction = RxUtils.execute(
+        mPostStartPlayAction = RxUtils.execute(
                 mRemoteManager.postStartPlayingObserve(videoId, positionMs, durationMs, isPlaying)
         );
     }
@@ -155,6 +156,18 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
 
     private void postIdle() {
         postState(-1, -1, false);
+    }
+
+    private void postVolumeChange(int volume) {
+        if (!mRemoteControlData.isDeviceLinkEnabled()) {
+            return;
+        }
+
+        RxUtils.disposeActions(mPostVolumeAction);
+
+        mPostVolumeAction = RxUtils.execute(
+                mRemoteManager.postVolumeChangeObserve(volume)
+        );
     }
 
     private void tryListening() {
@@ -190,7 +203,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     }
 
     private void stopListening() {
-        RxUtils.disposeActions(mListeningAction, mPostPlayAction, mPostStateAction);
+        RxUtils.disposeActions(mListeningAction, mPostStartPlayAction, mPostStateAction, mPostVolumeAction);
     }
 
     private void processCommand(Command command) {
@@ -311,6 +324,15 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 }
                 break;
         }
+
+        postVolumeChange(Utils.getGlobalVolume(getActivity()));
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode) {
+        postVolumeChange(Utils.getGlobalVolume(getActivity()));
+
+        return false;
     }
 
     private void openNewVideo(Video newVideo) {

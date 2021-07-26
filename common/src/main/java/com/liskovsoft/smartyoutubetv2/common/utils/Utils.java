@@ -192,6 +192,20 @@ public class Utils {
         }
     }
 
+    public static int getGlobalVolume(Context context) {
+        if (context != null) {
+            AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            if (audioManager != null) {
+                int streamMaxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+                int streamVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+
+                return (int) Math.ceil(streamVolume / (streamMaxVolume / 100f));
+            }
+        }
+
+        return 100;
+    }
+
     /**
      * <a href="https://stackoverflow.com/questions/2891337/turning-on-screen-programmatically">More info</a>
      */
