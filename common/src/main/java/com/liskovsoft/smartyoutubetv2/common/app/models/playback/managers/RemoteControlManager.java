@@ -315,9 +315,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 }
                 break;
             case Command.TYPE_DISCONNECTED:
-                if (getController() != null) {
-                    getController().finish();
-                }
+                // Note: there are possible false calls when mobile client unloaded from the memory.
                 if (getActivity() != null) {
                     // NOTE: It's not a good idea to remember connection state (mConnected) at this point.
                     //MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_disconnected, command.getDeviceName()));
