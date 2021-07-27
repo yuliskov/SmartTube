@@ -187,8 +187,8 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         appendVideoInfo();
         appendRuntimeInfo();
         appendPlayerState();
-        appendDisplayModeId();
         appendDisplayInfo();
+        appendDisplayModeId();
         //appendPlayerWindowIndex();
         appendVersion();
         appendDeviceNameAndSDK();
@@ -307,10 +307,19 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         mDisplayModeId.clear();
 
         Mode currentMode = mUhdHelper.getCurrentMode();
-        mDisplayModeId.add(new Pair<>("Display Mode ID", currentMode != null ? String.valueOf(currentMode.getModeId()) : NOT_AVAILABLE));
-
         Mode[] supportedModes = mUhdHelper.getSupportedModes();
-        mDisplayModeId.add(new Pair<>("Display Modes Length", supportedModes != null ? String.valueOf(supportedModes.length) : NOT_AVAILABLE));
+
+        if (currentMode != null && supportedModes != null && supportedModes.length > 1) { // AFR is supported (more than one display mode).
+            String bootResolution = AppPrefs.instance(mContext).getBootResolution();
+            String currentResolution = UhdHelper.toResolution(currentMode);
+            currentResolution = currentResolution != null ? currentResolution : bootResolution;
+
+            mDisplayModeId.add(new Pair<>("Display Resolution", currentResolution));
+            mDisplayModeId.add(new Pair<>("Boot Resolution", bootResolution != null ? bootResolution : NOT_AVAILABLE));
+
+            mDisplayModeId.add(new Pair<>("Display Mode ID", String.valueOf(currentMode.getModeId())));
+            mDisplayModeId.add(new Pair<>("Display Modes Length", String.valueOf(supportedModes.length)));
+        }
     }
 
     private void appendDisplayInfo() {
@@ -322,12 +331,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private void updateDisplayInfo() {
         mDisplayInfo.clear();
 
-        String bootResolution = AppPrefs.instance(mContext).getBootResolution();
-        String currentResolution = UhdHelper.toResolution(mUhdHelper.getCurrentMode());
-        currentResolution = currentResolution != null ? currentResolution : bootResolution;
         mDisplayInfo.add(new Pair<>("Display dpi", String.valueOf(Helpers.getDeviceDpi(mContext))));
-        mDisplayInfo.add(new Pair<>("Display Resolution", bootResolution != null ? currentResolution : overrideResolution(currentResolution)));
-        mDisplayInfo.add(new Pair<>("Boot Resolution", bootResolution != null ? bootResolution : NOT_AVAILABLE));
     }
 
     private void appendPlayerWindowIndex() {
