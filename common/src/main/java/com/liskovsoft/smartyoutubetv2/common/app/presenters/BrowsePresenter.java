@@ -463,6 +463,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
                                 VideoGroup videoGroup = VideoGroup.from(mediaGroup, category);
 
+                                filterIfNeeded(videoGroup);
                                 getView().updateCategory(videoGroup);
 
                                 loadNextPortionIfNeeded(videoGroup);
