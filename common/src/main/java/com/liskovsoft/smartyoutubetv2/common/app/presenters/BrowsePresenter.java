@@ -22,11 +22,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGrou
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.utils.ScreenHelper;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -50,6 +49,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private final MediaService mMediaService;
     private final ViewManager mViewManager;
     private final MainUIData mMainUIData;
+    private final GeneralData mGeneralData;
     private final List<Category> mCategories;
     private final Map<Integer, Observable<MediaGroup>> mGridMapping;
     private final Map<Integer, Observable<List<MediaGroup>>> mRowMapping;
@@ -74,6 +74,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         mRowMapping = new HashMap<>();
         mSettingsGridMapping = new HashMap<>();
         mMainUIData = MainUIData.instance(context);
+        mGeneralData = GeneralData.instance(context);
         ScreenHelper.initPipMode(context);
         ScreenHelper.updateScreenInfo(context);
         initCategories();
@@ -124,7 +125,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         mCategories.add(new Category(MediaGroup.TYPE_HISTORY, getContext().getString(R.string.header_history), Category.TYPE_GRID, R.drawable.icon_history, true));
         mCategories.add(new Category(MediaGroup.TYPE_USER_PLAYLISTS, getContext().getString(R.string.header_playlists), Category.TYPE_ROW, R.drawable.icon_playlist, true));
 
-        if (mMainUIData.isSettingsCategoryEnabled()) {
+        if (mGeneralData.isSettingsCategoryEnabled()) {
             mCategories.add(new Category(MediaGroup.TYPE_SETTINGS, getContext().getString(R.string.header_settings), Category.TYPE_SETTINGS_GRID, R.drawable.icon_settings));
         }
     }
@@ -144,7 +145,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void initPinnedHeaders() {
-        Set<Video> pinnedItems = mMainUIData.getPinnedItems();
+        Set<Video> pinnedItems = mGeneralData.getPinnedItems();
 
         for (Video item : pinnedItems) {
             if (item != null) {
@@ -155,7 +156,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void initPinnedCallbacks() {
-        Set<Video> pinnedItems = mMainUIData.getPinnedItems();
+        Set<Video> pinnedItems = mGeneralData.getPinnedItems();
 
         for (Video item : pinnedItems) {
             if (item != null) {
@@ -172,10 +173,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         int index = 0;
 
         for (Category category : mCategories) {
-            category.setEnabled(category.getId() == MediaGroup.TYPE_SETTINGS || mMainUIData.isCategoryEnabled(category.getId()));
+            category.setEnabled(category.getId() == MediaGroup.TYPE_SETTINGS || mGeneralData.isCategoryEnabled(category.getId()));
 
             if (category.isEnabled()) {
-                if (category.getId() == mMainUIData.getBootCategoryId()) {
+                if (category.getId() == mGeneralData.getBootCategoryId()) {
                     mStartCategoryIndex = index;
                 }
                 getView().addCategory(index++, category);
@@ -327,15 +328,15 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     public boolean isItemPinned(Video item) {
-        Set<Video> items = mMainUIData.getPinnedItems();
+        Set<Video> items = mGeneralData.getPinnedItems();
 
         return items.contains(item);
     }
 
     public void pinItem(Video item) {
-        Set<Video> items = mMainUIData.getPinnedItems();
+        Set<Video> items = mGeneralData.getPinnedItems();
         items.add(item);
-        mMainUIData.setPinnedItems(items);
+        mGeneralData.setPinnedItems(items);
 
         Category category = new Category(item.hashCode(), item.title, Category.TYPE_GRID, item.cardImageUrl, true, item);
         mCategories.add(category);
@@ -345,9 +346,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     public void unpinItem(Video item) {
-        Set<Video> items = mMainUIData.getPinnedItems();
+        Set<Video> items = mGeneralData.getPinnedItems();
         items.remove(item);
-        mMainUIData.setPinnedItems(items);
+        mGeneralData.setPinnedItems(items);
 
         Category category = null;
 
@@ -621,7 +622,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void filterIfNeeded(VideoGroup videoGroup) {
-        if (mMainUIData.isHideShortsEnabled() &&
+        if (mGeneralData.isHideShortsEnabled() &&
             videoGroup.getCategory().getId() == MediaGroup.TYPE_SUBSCRIPTIONS &&
             videoGroup.getVideos() != null) {
             videoGroup.getVideos().removeIf(value -> {

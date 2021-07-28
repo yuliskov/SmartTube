@@ -10,7 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
-import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
@@ -121,7 +121,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
             ViewManager viewManager = ViewManager.instance(getContext());
 
-            if (MainUIData.instance(getContext()).isReturnToLauncherEnabled()) {
+            if (GeneralData.instance(getContext()).isReturnToLauncherEnabled()) {
                 viewManager.setSinglePlayerMode(true);
             }
         } else {

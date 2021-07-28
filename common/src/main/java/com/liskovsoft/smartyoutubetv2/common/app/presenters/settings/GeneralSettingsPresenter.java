@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.Category;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HQDialogManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
@@ -12,7 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.ArrayList;
@@ -22,13 +21,13 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 public class GeneralSettingsPresenter extends BasePresenter<Void> {
-    private final MainUIData mMainUIData;
+    private final GeneralData mGeneralData;
     private final PlayerData mPlayerData;
     private boolean mRestartApp;
 
     public GeneralSettingsPresenter(Context context) {
         super(context);
-        mMainUIData = MainUIData.instance(context);
+        mGeneralData = GeneralData.instance(context);
         mPlayerData = PlayerData.instance(context);
     }
 
@@ -58,13 +57,13 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendLeftPanelCategories(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        Map<Integer, Integer> leftPanelCategories = mMainUIData.getCategories();
+        Map<Integer, Integer> leftPanelCategories = mGeneralData.getCategories();
 
         for (Entry<Integer, Integer> category : leftPanelCategories.entrySet()) {
              options.add(UiOptionItem.from(getContext().getString(category.getKey()), optionItem -> {
-                 mMainUIData.enableCategory(category.getValue(), optionItem.isSelected());
+                 mGeneralData.enableCategory(category.getValue(), optionItem.isSelected());
                  BrowsePresenter.instance(getContext()).updateCategories();
-             }, mMainUIData.isCategoryEnabled(category.getValue())));
+             }, mGeneralData.isCategoryEnabled(category.getValue())));
         }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.side_panel_sections), options);
@@ -73,27 +72,27 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendBootToCategory(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        Map<Integer, Integer> leftPanelCategories = mMainUIData.getCategories();
+        Map<Integer, Integer> leftPanelCategories = mGeneralData.getCategories();
 
         for (Entry<Integer, Integer> category : leftPanelCategories.entrySet()) {
             options.add(
                     UiOptionItem.from(
                             getContext().getString(category.getKey()),
-                            optionItem -> mMainUIData.setBootCategoryId(category.getValue()),
-                            category.getValue().equals(mMainUIData.getBootCategoryId())
+                            optionItem -> mGeneralData.setBootCategoryId(category.getValue()),
+                            category.getValue().equals(mGeneralData.getBootCategoryId())
                     )
             );
         }
 
-        Set<Video> pinnedItems = mMainUIData.getPinnedItems();
+        Set<Video> pinnedItems = mGeneralData.getPinnedItems();
 
         for (Video item : pinnedItems) {
             if (item != null && item.title != null) {
                 options.add(
                         UiOptionItem.from(
                                 item.title,
-                                optionItem -> mMainUIData.setBootCategoryId(item.hashCode()),
-                                item.hashCode() == mMainUIData.getBootCategoryId()
+                                optionItem -> mGeneralData.setBootCategoryId(item.hashCode()),
+                                item.hashCode() == mGeneralData.getBootCategoryId()
                         )
                 );
             }
@@ -106,12 +105,12 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
-                {R.string.app_exit_none, MainUIData.EXIT_NONE},
-                {R.string.app_double_back_exit, MainUIData.EXIT_DOUBLE_BACK},
-                {R.string.app_single_back_exit, MainUIData.EXIT_SINGLE_BACK}}) {
+                {R.string.app_exit_none, GeneralData.EXIT_NONE},
+                {R.string.app_double_back_exit, GeneralData.EXIT_DOUBLE_BACK},
+                {R.string.app_single_back_exit, GeneralData.EXIT_SINGLE_BACK}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]),
-                    optionItem -> mMainUIData.setAppExitShortcut(pair[1]),
-                    mMainUIData.getAppExitShortcut() == pair[1]));
+                    optionItem -> mGeneralData.setAppExitShortcut(pair[1]),
+                    mGeneralData.getAppExitShortcut() == pair[1]));
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.app_exit_shortcut), options);
@@ -126,12 +125,12 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from("HOME",
-                option -> mMainUIData.setBackgroundShortcut(MainUIData.BACKGROUND_SHORTCUT_HOME),
-                mMainUIData.getBackgroundShortcut() == MainUIData.BACKGROUND_SHORTCUT_HOME));
+                option -> mGeneralData.setBackgroundShortcut(GeneralData.BACKGROUND_SHORTCUT_HOME),
+                mGeneralData.getBackgroundShortcut() == GeneralData.BACKGROUND_SHORTCUT_HOME));
 
         options.add(UiOptionItem.from("HOME/BACK",
-                option -> mMainUIData.setBackgroundShortcut(MainUIData.BACKGROUND_SHORTCUT_HOME_N_BACK),
-                mMainUIData.getBackgroundShortcut() == MainUIData.BACKGROUND_SHORTCUT_HOME_N_BACK));
+                option -> mGeneralData.setBackgroundShortcut(GeneralData.BACKGROUND_SHORTCUT_HOME_N_BACK),
+                mGeneralData.getBackgroundShortcut() == GeneralData.BACKGROUND_SHORTCUT_HOME_N_BACK));
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.background_playback_activation), options);
     }
@@ -140,12 +139,12 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts),
-                option -> mMainUIData.hideShorts(option.isSelected()),
-                mMainUIData.isHideShortsEnabled()));
+                option -> mGeneralData.hideShorts(option.isSelected()),
+                mGeneralData.isHideShortsEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.return_to_launcher),
-                option -> mMainUIData.enableReturnToLauncher(option.isSelected()),
-                mMainUIData.isReturnToLauncherEnabled()));
+                option -> mGeneralData.enableReturnToLauncher(option.isSelected()),
+                mGeneralData.isReturnToLauncherEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
