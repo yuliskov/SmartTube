@@ -7,26 +7,16 @@ import java.util.Map;
 
 public abstract class KeyTranslator {
     private static final String TAG = KeyTranslator.class.getSimpleName();
-    private static final int UNDEFINED = -1;
 
-    public KeyEvent translateKey(KeyEvent event) {
-        Log.d(TAG, "Received key: " + event);
-
-        int toKeyCode = UNDEFINED;
-
+    public KeyEvent translate(KeyEvent event) {
         Map<Integer, Integer> keyMapping = getKeyMapping();
-        Integer outKey = keyMapping.get(event.getKeyCode());
+        Integer newKeyCode = keyMapping.get(event.getKeyCode());
 
-        if (outKey != null) {
-            toKeyCode = outKey;
-        }
-
-        return translate(event, toKeyCode);
+        return translate(event, newKeyCode);
     }
 
-    private KeyEvent translate(KeyEvent origin, int toKeyCode) {
-        if (toKeyCode == UNDEFINED) {
-            Log.d(TAG, "No need to translate: " + origin);
+    private KeyEvent translate(KeyEvent origin, Integer newKeyCode) {
+        if (newKeyCode == null) {
             return origin;
         }
 
@@ -34,7 +24,7 @@ public abstract class KeyTranslator {
                 origin.getDownTime(),
                 origin.getEventTime(),
                 origin.getAction(),
-                toKeyCode,
+                newKeyCode,
                 origin.getRepeatCount(),
                 origin.getMetaState(),
                 origin.getDeviceId(),
@@ -43,7 +33,7 @@ public abstract class KeyTranslator {
                 origin.getSource()
         );
 
-        Log.d(TAG, "Translating to " + newKey);
+        Log.d(TAG, "Translating %s to %s", origin, newKey);
 
         return newKey;
     }

@@ -44,6 +44,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendAppExitCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
         appendBackgroundPlaybackActivationCategory(settingsPresenter);
+        appendKeyRemappingCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_general), () -> {
@@ -133,6 +134,19 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 mGeneralData.getBackgroundShortcut() == GeneralData.BACKGROUND_SHORTCUT_HOME_N_BACK));
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.background_playback_activation), options);
+    }
+
+    private void appendKeyRemappingCategory(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from("Fast Forward/Rewind -> Next/Previous",
+                option -> {
+                    mGeneralData.remapFastForwardToNext(option.isSelected());
+                    mRestartApp = true;
+                },
+                mGeneralData.isRemapFastForwardToNextEnabled()));
+
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.key_remapping), options);
     }
 
     private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {

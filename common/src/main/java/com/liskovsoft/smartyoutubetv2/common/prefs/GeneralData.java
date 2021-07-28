@@ -34,6 +34,7 @@ public class GeneralData {
     private int mBackgroundShortcut;
     private Set<Video> mPinnedItems = new LinkedHashSet<>();
     private boolean mIsHideShortsEnabled;
+    private boolean mIsRemapFastForwardToNextEnabled;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -140,6 +141,15 @@ public class GeneralData {
         return mIsHideShortsEnabled;
     }
 
+    public void remapFastForwardToNext(boolean enable) {
+        mIsRemapFastForwardToNextEnabled = enable;
+        persistState();
+    }
+
+    public boolean isRemapFastForwardToNextEnabled() {
+        return mIsRemapFastForwardToNextEnabled;
+    }
+
     private void initLeftPanelCategories() {
         mLeftPanelCategories.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mLeftPanelCategories.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
@@ -164,6 +174,7 @@ public class GeneralData {
         mBackgroundShortcut = Helpers.parseInt(split, 5, BACKGROUND_SHORTCUT_HOME);
         String pinnedItems = Helpers.parseStr(split, 6);
         mIsHideShortsEnabled = Helpers.parseBoolean(split, 7, false);
+        mIsRemapFastForwardToNextEnabled = Helpers.parseBoolean(split, 8, false);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArrayLegacy(selectedCategories);
@@ -189,6 +200,7 @@ public class GeneralData {
         String pinnedItems = Helpers.mergeArray(mPinnedItems.toArray());
         mPrefs.setData(GENERAL_DATA, Helpers.mergeObject(selectedCategories,
                 mBootCategoryId, mIsSettingsCategoryEnabled, mAppExitShortcut,
-                mIsReturnToLauncherEnabled,mBackgroundShortcut, pinnedItems, mIsHideShortsEnabled));
+                mIsReturnToLauncherEnabled,mBackgroundShortcut, pinnedItems,
+                mIsHideShortsEnabled, mIsRemapFastForwardToNextEnabled));
     }
 }

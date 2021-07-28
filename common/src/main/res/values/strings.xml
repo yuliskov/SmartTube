@@ -219,4 +219,5 @@
     <string name="card_text_scroll_factor">Card text scroll speed</string>
     <string name="preferred_update_source">Select update source</string>
     <string name="hide_shorts">Hide shorts form Subscriptions</string>
+    <string name="key_remapping">Key remapping</string>
 </resources>
