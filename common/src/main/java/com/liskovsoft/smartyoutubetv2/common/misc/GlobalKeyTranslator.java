@@ -22,9 +22,12 @@ public class GlobalKeyTranslator extends KeyTranslator {
             mKeyMapping.put(KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
         }
 
-        //mKeyMapping.put(KeyEvent.KEYCODE_BUTTON_B, KeyEvent.KEYCODE_BACK);
-        //// Fix for the unknown usb remote controller: https://smartyoutubetv.github.io/#comment-3742343397
-        //mKeyMapping.put(KeyEvent.KEYCODE_ESCAPE, KeyEvent.KEYCODE_BACK);
+        // Fix rare situations with some remotes. E.g. remote doesn't work on search page.
+        mKeyMapping.put(KeyEvent.KEYCODE_NUMPAD_ENTER, KeyEvent.KEYCODE_DPAD_CENTER);
+        mKeyMapping.put(KeyEvent.KEYCODE_ENTER, KeyEvent.KEYCODE_DPAD_CENTER);
+        mKeyMapping.put(KeyEvent.KEYCODE_BUTTON_B, KeyEvent.KEYCODE_BACK);
+        // Fix for the unknown usb remote controller: https://smartyoutubetv.github.io/#comment-3742343397
+        mKeyMapping.put(KeyEvent.KEYCODE_ESCAPE, KeyEvent.KEYCODE_BACK);
     }
 
     @Override
