@@ -52,8 +52,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
             getController().restartEngine(); // properly save position of the current track
         }
     };
-    private boolean mIsWasStarted = false;
-    private boolean mIsWasError = false;
+    private boolean mIsWasStarted;
+    private boolean mIsWasVideoStartError;
 
     public VideoLoader(SuggestionsLoader suggestionsLoader) {
         mSuggestionsLoader = suggestionsLoader;
@@ -69,7 +69,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void openVideo(Video item) {
-        mIsWasError = false;
+        mIsWasVideoStartError = false;
         mIsWasStarted = false;
 
         mPlaylist.add(item);
@@ -101,11 +101,11 @@ public class VideoLoader extends PlayerEventListenerHelper {
     public void onEngineError(int type) {
         Log.e(TAG, "Player error occurred: %s. Trying to fix…", type);
 
-        if (!mIsWasError) {
+        if (!mIsWasVideoStartError) {
             Analytics.sendVideoStartError(mLastVideo.videoId,
                     mLastVideo.title,
                     getErrorMessage(type));
-            mIsWasError = true;
+            mIsWasVideoStartError = true;
         }
 
         if (mErrorMap.get(type) != null) {
@@ -292,11 +292,11 @@ public class VideoLoader extends PlayerEventListenerHelper {
                            error -> {
                                Log.e(TAG, "loadFormatInfo error: %s", error.getMessage());
                                scheduleReloadVideoTimer(1_000);
-                               if (!mIsWasError) {
+                               if (!mIsWasVideoStartError) {
                                    Analytics.sendVideoStartError(video.videoId,
                                            video.title,
                                            error.getMessage());
-                                   mIsWasError = true;
+                                   mIsWasVideoStartError = true;
                                }
                            });
     }
@@ -304,11 +304,11 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
         if (formatInfo.isUnplayable()) {
             getController().showError(formatInfo.getPlayabilityStatus());
-            if (!mIsWasError) {
+            if (!mIsWasVideoStartError) {
                 Analytics.sendVideoStartError(mLastVideo.videoId,
-mLastVideo.title,
+                        mLastVideo.title,
                         formatInfo.getPlayabilityStatus());
-                mIsWasError = true;
+                mIsWasVideoStartError = true;
             }
         } else if (formatInfo.containsDashUrl()) {
             Log.d(TAG, "Found live video in dash format. Loading...");
@@ -333,6 +333,12 @@ mLastVideo.title,
             Log.d(TAG, "Empty format info received. Seems future live translation. No video data to pass to the player.");
             scheduleReloadVideoTimer(30 * 1_000);
             mSuggestionsLoader.loadSuggestions(mLastVideo);
+            if (!mIsWasVideoStartError) {
+                Analytics.sendVideoStartError(mLastVideo.videoId,
+                        mLastVideo.title,
+                        formatInfo.getPlayabilityStatus());
+                mIsWasVideoStartError = true;
+            }
         }
     }
 
