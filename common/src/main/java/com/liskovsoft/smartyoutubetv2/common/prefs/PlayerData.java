@@ -391,7 +391,7 @@ public class PlayerData {
         mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
         mIsRememberSpeedEachEnabled = Helpers.parseBoolean(split, 29, false);
         mVideoAspectRatio = Helpers.parseFloat(split, 30, PlaybackEngineController.ASPECT_RATIO_DEFAULT);
-        mIsGlobalClockEnabled = Helpers.parseBoolean(split, 31, true);
+        mIsGlobalClockEnabled = Helpers.parseBoolean(split, 31, false);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
