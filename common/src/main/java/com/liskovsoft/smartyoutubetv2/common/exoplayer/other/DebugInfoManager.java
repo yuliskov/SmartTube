@@ -2,8 +2,11 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.other;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.Point;
+import android.os.Build;
 import android.os.Build.VERSION;
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -184,8 +187,8 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         appendVideoInfo();
         appendRuntimeInfo();
         appendPlayerState();
-        appendDisplayModeId();
         appendDisplayInfo();
+        appendDisplayModeId();
         //appendPlayerWindowIndex();
         appendVersion();
         appendDeviceNameAndSDK();
@@ -304,10 +307,19 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         mDisplayModeId.clear();
 
         Mode currentMode = mUhdHelper.getCurrentMode();
-        mDisplayModeId.add(new Pair<>("Display Mode ID", currentMode != null ? String.valueOf(currentMode.getModeId()) : NOT_AVAILABLE));
-
         Mode[] supportedModes = mUhdHelper.getSupportedModes();
-        mDisplayModeId.add(new Pair<>("Display Modes Length", supportedModes != null ? String.valueOf(supportedModes.length) : NOT_AVAILABLE));
+
+        if (currentMode != null && supportedModes != null && supportedModes.length > 1) { // AFR is supported (more than one display mode).
+            String bootResolution = AppPrefs.instance(mContext).getBootResolution();
+            String currentResolution = UhdHelper.toResolution(currentMode);
+            currentResolution = currentResolution != null ? currentResolution : bootResolution;
+
+            mDisplayModeId.add(new Pair<>("Display Resolution", currentResolution));
+            mDisplayModeId.add(new Pair<>("Boot Resolution", bootResolution != null ? bootResolution : NOT_AVAILABLE));
+
+            mDisplayModeId.add(new Pair<>("Display Mode ID", String.valueOf(currentMode.getModeId())));
+            mDisplayModeId.add(new Pair<>("Display Modes Length", String.valueOf(supportedModes.length)));
+        }
     }
 
     private void appendDisplayInfo() {
@@ -319,13 +331,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private void updateDisplayInfo() {
         mDisplayInfo.clear();
 
-        String defaultMode = AppPrefs.instance(mContext).getDefaultDisplayMode();
-        defaultMode = defaultMode != null ? defaultMode : NOT_AVAILABLE;
-        String currentMode = UhdHelper.formatMode(mUhdHelper.getCurrentMode());
-        currentMode = currentMode != null ? currentMode : defaultMode;
         mDisplayInfo.add(new Pair<>("Display dpi", String.valueOf(Helpers.getDeviceDpi(mContext))));
-        mDisplayInfo.add(new Pair<>("Display Resolution", currentMode));
-        mDisplayInfo.add(new Pair<>("Boot Resolution", defaultMode));
     }
 
     private void appendPlayerWindowIndex() {
@@ -433,5 +439,26 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
 
     private String getVideoDecoderNameV2() {
         return ExoUtils.getVideoDecoderName();
+    }
+
+    private String getRawDisplayResolution() {
+        Display display = mContext.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getRealSize(size);
+        float refreshRate = display.getRefreshRate();
+
+        return String.format("%sx%s@%s", size.x, size.y, refreshRate);
+    }
+
+    /**
+     * Override to hardcoded physical resolution
+     */
+    private String overrideResolution(String resolution) {
+        switch (Helpers.getDeviceName()) {
+            case "BRAVIA 4K UR3 (BRAVIA_UR3_EU)":
+                return "3840x2160@120";
+        }
+
+        return resolution;
     }
 }

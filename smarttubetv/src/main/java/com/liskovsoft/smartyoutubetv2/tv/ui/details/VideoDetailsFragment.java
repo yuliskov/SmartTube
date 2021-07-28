@@ -38,6 +38,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -49,6 +50,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.tv.old.model.VideoCursorMapper;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.DetailsDescriptionPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 /*
  * VideoDetailsFragment extends DetailsFragment, a Wrapper fragment for leanback details screens.
@@ -165,6 +167,8 @@ public class VideoDetailsFragment extends DetailsSupportFragment implements Deta
         Glide.with(this)
                 .asBitmap()
                 .load(uri)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .apply(options)
                 .into(new SimpleTarget<Bitmap>(mMetrics.widthPixels, mMetrics.heightPixels) {
                     @Override
@@ -332,6 +336,8 @@ public class VideoDetailsFragment extends DetailsSupportFragment implements Deta
         Glide.with(this)
                 .asBitmap()
                 .load(mSelectedVideo.cardImageUrl)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .apply(options)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override

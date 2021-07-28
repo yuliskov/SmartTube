@@ -49,6 +49,11 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
     }
 
     @Override
+    public void onFinish() {
+        disposeActions();
+    }
+
+    @Override
     public void onScrollEnd(Video item) {
         if (item == null) {
             Log.e(TAG, "Can't scroll. Video is null.");

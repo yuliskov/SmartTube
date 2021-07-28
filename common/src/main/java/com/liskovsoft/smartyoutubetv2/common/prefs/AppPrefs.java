@@ -15,7 +15,7 @@ public class AppPrefs extends SharedPreferencesBase {
     private static final String PREFERRED_LANGUAGE_DATA = "preferred_language_data";
     private static final String PREFERRED_COUNTRY_DATA = "preferred_country_data";
     private static final String VIEW_MANAGER_DATA = "view_manager_data";
-    private String mDefaultDisplayMode;
+    private String mBootResolution;
 
     private AppPrefs(Context context) {
         super(context, R.xml.app_prefs);
@@ -37,12 +37,12 @@ public class AppPrefs extends SharedPreferencesBase {
         return getBoolean(COMPLETED_ONBOARDING, false);
     }
 
-    public void setDefaultDisplayMode(String mode) {
-        mDefaultDisplayMode = mode;
+    public void setBootResolution(String resolution) {
+        mBootResolution = resolution;
     }
 
-    public String getDefaultDisplayMode() {
-        return mDefaultDisplayMode;
+    public String getBootResolution() {
+        return mBootResolution;
     }
 
     public void setBackupData(String backupData) {

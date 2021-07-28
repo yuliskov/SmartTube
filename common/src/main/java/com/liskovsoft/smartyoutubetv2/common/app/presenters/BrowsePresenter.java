@@ -25,6 +25,8 @@ import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.utils.ScreenHelper;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -40,6 +42,7 @@ import java.util.Set;
 public class BrowsePresenter extends BasePresenter<BrowseView> implements CategoryPresenter, VideoGroupPresenter {
     private static final String TAG = BrowsePresenter.class.getSimpleName();
     private static final long HEADER_REFRESH_PERIOD_MS = 120 * 60 * 1_000;
+    private static final int MIN_GROUP_SIZE = 13;
     @SuppressLint("StaticFieldLeak")
     private static BrowsePresenter sInstance;
     private final Handler mHandler = new Handler();
@@ -398,16 +401,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         }
     }
 
-    private Category getCategory(int categoryId) {
-        for (Category category : mCategories) {
-            if (category.getId() == categoryId) {
-                return category;
-            }
-        }
-
-        return null;
-    }
-
     private void updateCategory(Category category) {
         switch (category.getType()) {
             case Category.TYPE_GRID:
@@ -473,6 +466,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
                                 VideoGroup videoGroup = VideoGroup.from(mediaGroup, category);
 
+                                filterIfNeeded(videoGroup);
                                 getView().updateCategory(videoGroup);
 
                                 loadNextPortionIfNeeded(videoGroup);
@@ -510,6 +504,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 .subscribe(
                         mediaGroup -> {
                             VideoGroup videoGroup = VideoGroup.from(mediaGroup, category, position);
+                            filterIfNeeded(videoGroup);
                             getView().updateCategory(videoGroup);
 
                             // Hide loading as long as first group received
@@ -545,7 +540,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        continueGroup -> getView().updateCategory(VideoGroup.from(continueGroup, group.getCategory(), group.getPosition())),
+                        continueGroup -> {
+                            VideoGroup videoGroup = VideoGroup.from(continueGroup, group.getCategory(), group.getPosition());
+                            filterIfNeeded(videoGroup);
+                            getView().updateCategory(videoGroup);
+                        },
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
                             if (getView() != null) {
@@ -591,7 +590,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
      * Most tiny ui has 8 cards in a row or 24 in grid.
      */
     private void loadNextPortionIfNeeded(VideoGroup videoGroup) {
-        if (mMainUIData.getUIScale() < 0.8f || mMainUIData.getVideoGridScale() < 0.8f) {
+        boolean groupTooSmall = videoGroup.getVideos() != null && videoGroup.getVideos().size() < MIN_GROUP_SIZE;
+        if (groupTooSmall || mMainUIData.getUIScale() < 0.8f || mMainUIData.getVideoGridScale() < 0.8f) {
             continueGroup(videoGroup);
         }
     }
@@ -601,6 +601,39 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void updateMultiGrid(Video item) {
-        updateVideoGrid(getCategory(mCurrentCategoryId), ChannelUploadsPresenter.instance(getContext()).obtainVideoGroupObservable(item), 1, true);
+        Category category = getCategory(mCurrentCategoryId);
+
+        if (category == null) {
+            return;
+        }
+
+        updateVideoGrid(category, ChannelUploadsPresenter.instance(getContext()).obtainVideoGroupObservable(item), 1, true);
+    }
+
+    private Category getCategory(int categoryId) {
+        for (Category category : mCategories) {
+            if (category.getId() == categoryId) {
+                return category;
+            }
+        }
+
+        return null;
+    }
+
+    private void filterIfNeeded(VideoGroup videoGroup) {
+        if (mMainUIData.isHideShortsEnabled() &&
+            videoGroup.getCategory().getId() == MediaGroup.TYPE_SUBSCRIPTIONS &&
+            videoGroup.getVideos() != null) {
+            videoGroup.getVideos().removeIf(value -> {
+                if (value.title == null) {
+                    return false;
+                }
+
+                int lengthMs = ServiceHelper.timeTextToMillis(value.badge);
+                return lengthMs > 0 && lengthMs < 60_000;
+               //value.title.toLowerCase().contains("#short") ||
+               //value.title.toLowerCase().contains("#tiktok");
+            });
+        }
     }
 }

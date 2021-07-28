@@ -219,6 +219,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             // Assuming that user wants to close the player
             // setVideo(null);
         }
+
+        mEventListener.onFinish();
     }
 
     public void skipToNext() {
@@ -649,7 +651,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void clearSuggestions() {
-        if (mRowsAdapter.size() > 1) {
+        if (mRowsAdapter != null && mRowsAdapter.size() > 1) {
             mRowsAdapter.removeItems(1, mRowsAdapter.size() - 1);
         }
 
@@ -658,7 +660,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public boolean isSuggestionsEmpty() {
-        return mRowsAdapter.size() <= 1;
+        return mRowsAdapter == null || mRowsAdapter.size() <= 1;
     }
 
     @Override
@@ -883,7 +885,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
-    public void exit() {
+    public void finish() {
         getLeanbackActivity().finish();
     }
 

@@ -84,7 +84,7 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
-    public void onNewSession() {
+    public void onFinish() {
         // NOP
     }
 

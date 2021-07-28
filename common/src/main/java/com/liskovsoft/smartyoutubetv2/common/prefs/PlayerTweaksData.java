@@ -88,6 +88,10 @@ public class PlayerTweaksData {
         return mIsSetOutputSurfaceWorkaroundEnabled;
     }
 
+    /**
+     * Need to be enabled on older version of ExoPlayer (e.g. 2.10.6).<br/>
+     * It's because there's no tweaks for modern devices.
+     */
     public void enableSetOutputSurfaceWorkaround(boolean enable) {
         mIsSetOutputSurfaceWorkaroundEnabled = enable;
         persistData();
@@ -104,14 +108,16 @@ public class PlayerTweaksData {
         mIsProfileLevelCheckSkipped = Helpers.parseBoolean(split, 3, false);
         mIsSWDecoderForced = Helpers.parseBoolean(split, 4, false);
         mIsTextureViewEnabled = Helpers.parseBoolean(split, 5, false);
-        mIsSetOutputSurfaceWorkaroundEnabled = Helpers.parseBoolean(split, 6, true);
+        // Need to be enabled on older version of ExoPlayer (e.g. 2.10.6).
+        // It's because there's no tweaks for modern devices.
+        mIsSetOutputSurfaceWorkaroundEnabled = Helpers.parseBoolean(split, 7, true);
     }
 
     private void persistData() {
         mPrefs.setData(VIDEO_PLAYER_TWEAKS_DATA, Helpers.mergeObject(
                 mIsAmlogicFixEnabled, mIsFrameDropFixEnabled, mIsSnapToVsyncDisabled,
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
-                mIsSetOutputSurfaceWorkaroundEnabled
+                null, mIsSetOutputSurfaceWorkaroundEnabled
         ));
     }
 }

@@ -152,9 +152,13 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableAmlogicFix(option.isSelected()),
                 mPlayerTweaksData.isAmlogicFixEnabled()));
 
-        options.add(UiOptionItem.from("Frame drops fix (experimental)",
-                option -> mPlayerTweaksData.enableFrameDropFix(option.isSelected()),
-                mPlayerTweaksData.isFrameDropFixEnabled()));
+        options.add(UiOptionItem.from("Ambilight fix",
+                option -> mPlayerTweaksData.enableTextureView(option.isSelected()),
+                mPlayerTweaksData.isTextureViewEnabled()));
+
+        options.add(UiOptionItem.from("Sleep timer fix",
+                option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
+                mPlayerData.isSonyTimerFixEnabled()));
 
         options.add(UiOptionItem.from("Disable snap to vsync",
                 option -> mPlayerTweaksData.disableSnapToVsync(option.isSelected()),
@@ -172,17 +176,15 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.forceSWDecoder(option.isSelected()),
                 mPlayerTweaksData.isSWDecoderForced()));
 
-        options.add(UiOptionItem.from("Enable TextureView",
-                option -> mPlayerTweaksData.enableTextureView(option.isSelected()),
-                mPlayerTweaksData.isTextureViewEnabled()));
+        options.add(UiOptionItem.from("Frame drops fix (experimental)",
+                option -> mPlayerTweaksData.enableFrameDropFix(option.isSelected()),
+                mPlayerTweaksData.isFrameDropFixEnabled()));
 
-        options.add(UiOptionItem.from("Enable set output surface workaround",
-                option -> mPlayerTweaksData.enableSetOutputSurfaceWorkaround(option.isSelected()),
-                mPlayerTweaksData.isSetOutputSurfaceWorkaroundEnabled()));
-
-        options.add(UiOptionItem.from("Sleep timer fix",
-                option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
-                mPlayerData.isSonyTimerFixEnabled()));
+        // Need to be enabled on older version of ExoPlayer (e.g. 2.10.6).
+        // It's because there's no tweaks for modern devices.
+        //options.add(UiOptionItem.from("Enable set output surface workaround",
+        //        option -> mPlayerTweaksData.enableSetOutputSurfaceWorkaround(option.isSelected()),
+        //        mPlayerTweaksData.isSetOutputSurfaceWorkaroundEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_tweaks), options);
     }
