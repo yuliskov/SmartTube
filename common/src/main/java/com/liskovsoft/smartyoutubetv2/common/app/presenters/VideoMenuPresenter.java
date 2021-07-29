@@ -14,7 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
-import com.liskovsoft.smartyoutubetv2.common.utils.ServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
@@ -29,7 +29,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     private static final String TAG = VideoMenuPresenter.class.getSimpleName();
     private final MediaItemManager mItemManager;
     private final AppSettingsPresenter mSettingsPresenter;
-    private final ServiceManager mServiceManager;
+    private final MediaServiceManager mServiceManager;
     private Disposable mPlaylistAction;
     private Disposable mAddAction;
     private Disposable mNotInterestedAction;
@@ -50,7 +50,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         super(context);
         MediaService service = YouTubeMediaService.instance();
         mItemManager = service.getMediaItemManager();
-        mServiceManager = ServiceManager.instance();
+        mServiceManager = MediaServiceManager.instance();
         mSettingsPresenter = AppSettingsPresenter.instance(context);
     }
 
@@ -112,7 +112,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mVideo = video;
         mCategory = category;
 
-        ServiceManager.instance().authCheck(this::obtainPlaylistsAndShowDialogSigned, this::prepareAndShowDialogUnsigned);
+        MediaServiceManager.instance().authCheck(this::obtainPlaylistsAndShowDialogSigned, this::prepareAndShowDialogUnsigned);
     }
 
     private void obtainPlaylistsAndShowDialogSigned() {

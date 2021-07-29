@@ -5,8 +5,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import androidx.appcompat.widget.AppCompatTextView;
 import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
-import com.liskovsoft.smartyoutubetv2.common.utils.TickleManager;
-import com.liskovsoft.smartyoutubetv2.common.utils.TickleManager.TickleListener;
+import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager.TickleListener;
 
 public class DateTimeView extends AppCompatTextView implements TickleListener {
     private TickleManager mTickleManager;

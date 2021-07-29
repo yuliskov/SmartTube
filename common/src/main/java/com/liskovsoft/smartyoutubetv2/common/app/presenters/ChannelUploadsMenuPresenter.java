@@ -9,14 +9,14 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
-import com.liskovsoft.smartyoutubetv2.common.utils.ServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.disposables.Disposable;
 
 public class ChannelUploadsMenuPresenter extends BasePresenter<Void> {
     private final MediaItemManager mItemManager;
     private final AppSettingsPresenter mSettingsPresenter;
-    private final ServiceManager mServiceManager;
+    private final MediaServiceManager mServiceManager;
     private Disposable mUnsubscribeAction;
     private Video mVideo;
 
@@ -25,7 +25,7 @@ public class ChannelUploadsMenuPresenter extends BasePresenter<Void> {
         MediaService service = YouTubeMediaService.instance();
         mItemManager = service.getMediaItemManager();
         mSettingsPresenter = AppSettingsPresenter.instance(context);
-        mServiceManager = ServiceManager.instance();
+        mServiceManager = MediaServiceManager.instance();
     }
 
     public static ChannelUploadsMenuPresenter instance(Context context) {

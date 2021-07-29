@@ -15,7 +15,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGrou
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
-import com.liskovsoft.smartyoutubetv2.common.utils.ServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -30,7 +30,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private static ChannelPresenter sInstance;
     private final MediaService mMediaService;
     private final PlaybackPresenter mPlaybackPresenter;
-    private final ServiceManager mServiceManager;
+    private final MediaServiceManager mServiceManager;
     private String mChannelId;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
@@ -39,7 +39,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         super(context);
         mMediaService = YouTubeMediaService.instance();
         mPlaybackPresenter = PlaybackPresenter.instance(context);
-        mServiceManager = ServiceManager.instance();
+        mServiceManager = MediaServiceManager.instance();
     }
 
     public static ChannelPresenter instance(Context context) {

@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.utils;
+package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import com.liskovsoft.appupdatechecker2.other.SettingsManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
@@ -9,15 +9,16 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class ServiceManager {
+public class MediaServiceManager {
     private static final String TAG = SettingsManager.class.getSimpleName();
-    private static ServiceManager sInstance;
+    private static MediaServiceManager sInstance;
     private final MediaItemManager mItemManager;
     private final MediaGroupManager mGroupManager;
     private final SignInManager mAuthManager;
@@ -33,16 +34,16 @@ public class ServiceManager {
         void onMediaGroup(MediaGroup group);
     }
 
-    public ServiceManager() {
+    public MediaServiceManager() {
         MediaService service = YouTubeMediaService.instance();
         mItemManager = service.getMediaItemManager();
         mGroupManager = service.getMediaGroupManager();
         mAuthManager = service.getSignInManager();
     }
 
-    public static ServiceManager instance() {
+    public static MediaServiceManager instance() {
         if (sInstance == null) {
-            sInstance = new ServiceManager();
+            sInstance = new MediaServiceManager();
         }
 
         return sInstance;
