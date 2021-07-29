@@ -218,4 +218,6 @@
     <string name="share_embed_link">Link zum Einbetten teilen</string>
     <string name="card_text_scroll_factor">Scrollgeschwindigkeit des Kartentextes</string>
     <string name="preferred_update_source">Bevorzugte Update-Quelle</string>
+    <string name="hide_shorts">Kurzvideos in Abos ausblenden</string>
+    <string name="key_remapping">Tastenbelegung anpassen</string>
 </resources>
