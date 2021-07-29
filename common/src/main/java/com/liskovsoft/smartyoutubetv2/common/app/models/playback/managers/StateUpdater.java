@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import android.os.Handler;
+import android.os.Looper;
 import androidx.annotation.NonNull;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
@@ -23,6 +25,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
     private static final int MAX_PERSISTENT_STATE_SIZE = 30;
     private static final long LIVE_THRESHOLD_MS = 60_000;
+    private final Handler mHandler;
     private boolean mIsPlayEnabled;
     private Video mVideo;
     private FormatItem mTempVideoFormat;
@@ -33,6 +36,12 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private Disposable mHistoryAction;
     private PlayerData mPlayerData;
     private boolean mIsPlayBlocked;
+    private final Runnable mDimScreenHandler = () -> Helpers.dimScreen(getActivity());
+    private final Runnable mUndimScreenHandler = () -> Helpers.undimScreen(getActivity());
+
+    public StateUpdater() {
+        mHandler = new Handler(Looper.getMainLooper());
+    }
 
     @Override
     public void onInitDone() { // called each time a video opened from the browser
@@ -144,13 +153,13 @@ public class StateUpdater extends PlayerEventListenerHelper {
     @Override
     public void onPlay() {
         setPlayEnabled(true);
-        Helpers.disableScreensaver(getActivity());
+        disableScreensaver();
     }
 
     @Override
     public void onPause() {
         setPlayEnabled(false);
-        Helpers.enableScreensaver(getActivity());
+        enableScreensaver();
         saveState();
     }
 
@@ -175,7 +184,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         saveState();
 
         // Take into account different playback states
-        Helpers.enableScreensaver(getActivity());
+        enableScreensaver();
     }
 
     private void clearStateOfNextVideo() {
@@ -390,6 +399,14 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     private boolean getPlayEnabled() {
         return mIsPlayEnabled;
+    }
+
+    private void enableScreensaver() {
+        Helpers.enableScreensaver(getActivity());
+    }
+
+    private void disableScreensaver() {
+        Helpers.disableScreensaver(getActivity());
     }
 
     private void updateHistory() {

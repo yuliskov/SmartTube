@@ -322,11 +322,11 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     private void openVideoInt(Video item) {
-        disposeActions();
-
         if (item == null) {
             return;
         }
+
+        disposeActions();
 
         if (item.isVideo()) {
             getController().showControls(true);
