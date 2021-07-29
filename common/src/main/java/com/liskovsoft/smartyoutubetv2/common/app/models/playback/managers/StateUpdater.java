@@ -159,11 +159,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public boolean onKeyDown(int keyCode) {
-        if (getController().isPlaying()) {
-            mScreensaverManager.disable();
-        } else {
-            mScreensaverManager.enable();
-        }
+        startStopScreensaver();
         return false;
     }
 
@@ -403,6 +399,14 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     private boolean getPlayEnabled() {
         return mIsPlayEnabled;
+    }
+
+    private void startStopScreensaver() {
+        if (getController().isPlaying()) {
+            mScreensaverManager.disable();
+        } else {
+            mScreensaverManager.enable();
+        }
     }
 
     private void updateHistory() {

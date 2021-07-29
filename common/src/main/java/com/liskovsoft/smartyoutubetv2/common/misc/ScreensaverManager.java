@@ -18,6 +18,7 @@ public class ScreensaverManager {
     private final Runnable mDimScreen = this::dimScreen;
     private final Runnable mUndimScreen = this::undimScreen;
     private boolean mIsEnabled;
+    private boolean mIsBlocked;
 
     public ScreensaverManager(Activity activity) {
         mActivity = new WeakReference<>(activity);
@@ -26,19 +27,25 @@ public class ScreensaverManager {
     }
 
     public void enable() {
+        if (mIsBlocked) {
+            return;
+        }
+
         disable();
-        mIsEnabled = true;
         //Helpers.enableScreensaver(mActivity.get());
         //Utils.removeCallbacks(mHandler, mUndimScreen);
         Utils.postDelayed(mHandler, mDimScreen, DIM_DELAY_MS);
     }
 
     public void disable() {
+        if (mIsBlocked) {
+            return;
+        }
+
         if (!mIsEnabled) {
             return;
         }
 
-        mIsEnabled = false;
         //Helpers.disableScreensaver(mActivity.get());
         Utils.removeCallbacks(mHandler, mDimScreen);
         Utils.postDelayed(mHandler, mUndimScreen, 0);
@@ -86,5 +93,10 @@ public class ScreensaverManager {
         }
 
         dimContainer.setVisibility(show ? View.VISIBLE : View.GONE);
+        mIsEnabled = show;
+    }
+
+    public void setBlocked(boolean blocked) {
+        mIsBlocked = blocked;
     }
 }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.KeyEvent;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -24,7 +23,6 @@ public class MotherActivity extends FragmentActivity {
     private static Locale sCachedLocale;
     private static int sNumActivities;
     protected static boolean sIsInPipMode;
-    private ScreensaverManager mScreensaverManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,7 +35,7 @@ public class MotherActivity extends FragmentActivity {
 
         sNumActivities++;
 
-        mScreensaverManager = new ScreensaverManager(this);
+        Helpers.disableScreensaver(this);
     }
 
     public void finishReally() {
@@ -46,13 +44,6 @@ public class MotherActivity extends FragmentActivity {
         } catch (Exception e) {
             // TextView not attached to window manager (IllegalArgumentException)
         }
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        mScreensaverManager.enable();
-
-        return super.onKeyDown(keyCode, event);
     }
 
     @Override
