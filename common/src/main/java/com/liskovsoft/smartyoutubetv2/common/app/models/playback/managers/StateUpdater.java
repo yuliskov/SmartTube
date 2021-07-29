@@ -36,8 +36,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private Disposable mHistoryAction;
     private PlayerData mPlayerData;
     private boolean mIsPlayBlocked;
-    private final Runnable mDimScreenHandler = () -> Helpers.dimScreen(getActivity());
-    private final Runnable mUndimScreenHandler = () -> Helpers.undimScreen(getActivity());
 
     public StateUpdater() {
         mHandler = new Handler(Looper.getMainLooper());

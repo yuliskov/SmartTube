@@ -129,9 +129,12 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         }
 
         boolean isSegmentFound = false;
+        SponsorSegment foundSegment = null;
 
         for (SponsorSegment segment : mSponsorSegments) {
             if (isPositionAtSegmentStart(getController().getPositionMs(), segment)) {
+                isSegmentFound = true;
+                foundSegment = segment;
                 Integer resId = mLocalizedMapping.get(segment.getCategory());
                 String localizedCategory = resId != null ? getActivity().getString(resId) : segment.getCategory();
 
@@ -145,9 +148,13 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                     confirmSkip(segment.getEndMs(), localizedCategory);
                 }
 
-                isSegmentFound = true;
                 break;
             }
+        }
+
+        // Skip each segment only once
+        if (foundSegment != null) {
+            mSponsorSegments.remove(foundSegment);
         }
 
         mIsSameSegment = isSegmentFound;
