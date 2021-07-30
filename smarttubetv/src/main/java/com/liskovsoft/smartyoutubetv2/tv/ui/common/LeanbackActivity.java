@@ -25,7 +25,7 @@ public abstract class LeanbackActivity extends MotherActivity {
     private DoubleBackManager mDoubleBackManager;
     private GeneralData mGeneralData;
     private GlobalKeyTranslator mGlobalKeyTranslator;
-    private ScreensaverManager mScreensaverManager;
+    //private ScreensaverManager mScreensaverManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +40,8 @@ public abstract class LeanbackActivity extends MotherActivity {
         mDoubleBackManager = new DoubleBackManager(this);
         mGeneralData = GeneralData.instance(this);
         mGlobalKeyTranslator = new GlobalKeyTranslator(this);
-        mScreensaverManager = new ScreensaverManager(this);
-        mScreensaverManager.setBlocked(this instanceof PlaybackActivity);
+        //mScreensaverManager = new ScreensaverManager(this);
+        //mScreensaverManager.setBlocked(this instanceof PlaybackActivity);
     }
 
     @Override
@@ -59,7 +59,7 @@ public abstract class LeanbackActivity extends MotherActivity {
             finishTheApp();
         }
 
-        mScreensaverManager.enable();
+        //mScreensaverManager.enable();
 
         return super.dispatchKeyEvent(mGlobalKeyTranslator.translate(event));
     }
@@ -73,7 +73,7 @@ public abstract class LeanbackActivity extends MotherActivity {
         super.onStart();
 
         mBackgroundManager.onStart();
-        mScreensaverManager.enable();
+        //mScreensaverManager.enable();
     }
 
     @Override

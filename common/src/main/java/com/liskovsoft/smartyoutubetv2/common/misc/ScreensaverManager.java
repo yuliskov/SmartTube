@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
@@ -14,6 +15,7 @@ import java.lang.ref.WeakReference;
 
 public class ScreensaverManager {
     private static final int DIM_DELAY_MS = 10_000;
+    private static final String TAG = ScreensaverManager.class.getSimpleName();
     private final Handler mHandler;
     private final WeakReference<Activity> mActivity;
     private final Runnable mDimScreen = this::dimScreen;
@@ -33,9 +35,9 @@ public class ScreensaverManager {
             return;
         }
 
+        Log.d(TAG, "Enable screensaver");
+
         disable();
-        //Helpers.enableScreensaver(mActivity.get());
-        //Utils.removeCallbacks(mHandler, mUndimScreen);
         Utils.postDelayed(mHandler, mDimScreen, DIM_DELAY_MS);
     }
 
@@ -44,11 +46,8 @@ public class ScreensaverManager {
             return;
         }
 
-        if (!mIsEnabled) {
-            return;
-        }
+        Log.d(TAG, "Disable screensaver");
 
-        //Helpers.disableScreensaver(mActivity.get());
         Utils.removeCallbacks(mHandler, mDimScreen);
         Utils.postDelayed(mHandler, mUndimScreen, 0);
     }
@@ -95,7 +94,6 @@ public class ScreensaverManager {
         }
 
         dimContainer.setVisibility(show ? View.VISIBLE : View.GONE);
-        mIsEnabled = show;
     }
 
     public void setBlocked(boolean blocked) {

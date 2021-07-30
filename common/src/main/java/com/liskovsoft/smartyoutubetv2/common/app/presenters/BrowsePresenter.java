@@ -26,6 +26,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.utils.ScreenHelper;
+import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -42,6 +43,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private static final String TAG = BrowsePresenter.class.getSimpleName();
     private static final long HEADER_REFRESH_PERIOD_MS = 120 * 60 * 1_000;
     private static final int MIN_GROUP_SIZE = 13;
+    private static final int SHORTS_LEN_MS = 30 * 1_000;
     @SuppressLint("StaticFieldLeak")
     private static BrowsePresenter sInstance;
     private final Handler mHandler = new Handler();
@@ -630,10 +632,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                     return false;
                 }
 
-                //int lengthMs = ServiceHelper.timeTextToMillis(value.badge);
-                return value.title.toLowerCase().contains("#short")  ||
-                       value.title.toLowerCase().contains("#shorts") ||
-                       value.title.toLowerCase().contains("#tiktok");
+                int lengthMs = ServiceHelper.timeTextToMillis(value.badge);
+                return lengthMs < SHORTS_LEN_MS;
+                //return value.title.toLowerCase().contains("#short")  ||
+                //       value.title.toLowerCase().contains("#shorts") ||
+                //       value.title.toLowerCase().contains("#tiktok");
             });
         }
     }
