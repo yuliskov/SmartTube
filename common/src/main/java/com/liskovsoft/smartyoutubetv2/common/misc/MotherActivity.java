@@ -1,9 +1,11 @@
 package com.liskovsoft.smartyoutubetv2.common.misc;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -23,6 +25,7 @@ public class MotherActivity extends FragmentActivity {
     private static Locale sCachedLocale;
     private static int sNumActivities;
     protected static boolean sIsInPipMode;
+    private ScreensaverManager mScreensaverManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,6 +37,15 @@ public class MotherActivity extends FragmentActivity {
         initTheme();
 
         sNumActivities++;
+        mScreensaverManager = new ScreensaverManager(this);
+    }
+
+    @SuppressLint("RestrictedApi")
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        mScreensaverManager.enable();
+
+        return super.dispatchKeyEvent(event);
     }
 
     public void finishReally() {
@@ -64,6 +76,13 @@ public class MotherActivity extends FragmentActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+
+        mScreensaverManager.disable();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -72,6 +91,8 @@ public class MotherActivity extends FragmentActivity {
         // Most of the fullscreen tweaks could be performed in styles but not all.
         // E.g. Hide bottom navigation bar (couldn't be done in styles).
         Helpers.makeActivityFullscreen(this);
+
+        mScreensaverManager.enable();
     }
 
     @Override
@@ -79,6 +100,10 @@ public class MotherActivity extends FragmentActivity {
         super.onConfigurationChanged(newConfig);
 
         applyCustomConfig();
+    }
+
+    public ScreensaverManager getScreensaverManager() {
+        return mScreensaverManager;
     }
 
     protected void initTheme() {

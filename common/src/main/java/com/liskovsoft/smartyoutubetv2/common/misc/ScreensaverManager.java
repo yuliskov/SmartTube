@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.lang.ref.WeakReference;
@@ -78,6 +80,11 @@ public class ScreensaverManager {
         Activity activity = mActivity.get();
 
         if (activity == null) {
+            return;
+        }
+
+        PlaybackView playbackView = PlaybackPresenter.instance(activity).getView();
+        if (show && playbackView != null && playbackView.getController().isPlaying()) {
             return;
         }
 

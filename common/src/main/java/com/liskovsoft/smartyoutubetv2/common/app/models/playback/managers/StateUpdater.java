@@ -8,7 +8,6 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
-import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
@@ -33,14 +32,12 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private AppPrefs mPrefs;
     private Disposable mHistoryAction;
     private PlayerData mPlayerData;
-    private ScreensaverManager mScreensaverManager;
     private boolean mIsPlayBlocked;
 
     @Override
     public void onInitDone() { // called each time a video opened from the browser
         mPrefs = AppPrefs.instance(getActivity());
         mPlayerData = PlayerData.instance(getActivity());
-        mScreensaverManager = new ScreensaverManager(getActivity());
 
         restoreClipData();
         resetPositionIfNeeded(mVideo); // reset position of music/live videos
@@ -142,27 +139,17 @@ public class StateUpdater extends PlayerEventListenerHelper {
         restoreSubtitleFormat();
 
         updateHistory();
-
-        mScreensaverManager.disable();
     }
 
     @Override
     public void onPlay() {
         setPlayEnabled(true);
-        mScreensaverManager.disable();
     }
 
     @Override
     public void onPause() {
         setPlayEnabled(false);
-        mScreensaverManager.enable();
         saveState();
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode) {
-        startStopScreensaver();
-        return false;
     }
 
     @Override
@@ -186,7 +173,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         saveState();
 
         // Take into account different playback states
-        mScreensaverManager.enable();
+        //mScreensaverManager.enable();
     }
 
     private void clearStateOfNextVideo() {
@@ -401,14 +388,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     private boolean getPlayEnabled() {
         return mIsPlayEnabled;
-    }
-
-    private void startStopScreensaver() {
-        if (getController().isPlaying()) {
-            mScreensaverManager.disable();
-        } else {
-            mScreensaverManager.enable();
-        }
     }
 
     private void updateHistory() {
