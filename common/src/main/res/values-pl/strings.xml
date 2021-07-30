@@ -78,7 +78,7 @@
     <string name="update_not_found">Używasz najnowszej wersji</string>
     <string name="update_in_progess">Czekaj…</string>
     <string name="player_ui_hide_behavior">Automatyczne ukrywanie interfejsu użytkownika</string>
-    <string name="player_ui_hide_never">Nigdy</string>
+    <string name="option_never">Nigdy</string>
     <string name="side_panel_sections">Ustawienia sekcji</string>
     <string name="boot_to_section">Sekcja startowa</string>
     <string name="large_ui">Duży interfejs</string>

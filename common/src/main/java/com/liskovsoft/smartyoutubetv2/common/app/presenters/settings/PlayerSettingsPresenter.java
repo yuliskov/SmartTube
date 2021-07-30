@@ -73,7 +73,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(
-                getContext().getString(R.string.player_ui_hide_never),
+                getContext().getString(R.string.option_never),
                 option -> mPlayerData.setUIHideTimoutSec(PlayerData.AUTO_HIDE_NEVER),
                 mPlayerData.getUIHideTimoutSec() == PlayerData.AUTO_HIDE_NEVER));
 

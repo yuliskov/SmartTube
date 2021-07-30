@@ -11,23 +11,26 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.lang.ref.WeakReference;
 
 public class ScreensaverManager {
-    private static final int DIM_DELAY_MS = 10_000;
     private static final String TAG = ScreensaverManager.class.getSimpleName();
+    private static final int DIM_DELAY_MS = 10_000;
     private final Handler mHandler;
     private final WeakReference<Activity> mActivity;
     private final Runnable mDimScreen = this::dimScreen;
     private final Runnable mUndimScreen = this::undimScreen;
+    private final GeneralData mGeneralData;
     private boolean mIsEnabled;
     private boolean mIsBlocked;
 
     public ScreensaverManager(Activity activity) {
         mActivity = new WeakReference<>(activity);
         mHandler = new Handler(Looper.getMainLooper());
+        mGeneralData = GeneralData.instance(activity);
         Helpers.disableScreensaver(activity);
         enable();
     }
@@ -40,7 +43,8 @@ public class ScreensaverManager {
         Log.d(TAG, "Enable screensaver");
 
         disable();
-        Utils.postDelayed(mHandler, mDimScreen, DIM_DELAY_MS);
+        Utils.postDelayed(mHandler, mDimScreen, mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER ?
+                10_000 : mGeneralData.getScreenDimmingTimoutMin() * 60 * 1_000);
     }
 
     public void disable() {
@@ -100,7 +104,15 @@ public class ScreensaverManager {
             }
         }
 
-        dimContainer.setVisibility(show ? View.VISIBLE : View.GONE);
+        if (mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER) {
+            if (show) {
+                Helpers.enableScreensaver(activity);
+            } else {
+                Helpers.disableScreensaver(activity);
+            }
+        } else {
+            dimContainer.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
     }
 
     public void setBlocked(boolean blocked) {

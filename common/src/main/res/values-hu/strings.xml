@@ -79,7 +79,7 @@
     <string name="update_not_found">A legújabb verziót használja</string>
     <string name="update_in_progess">Várj…</string>
     <string name="player_ui_hide_behavior">A felhasználói felület automatikus elrejtése</string>
-    <string name="player_ui_hide_never">Soha</string>
+    <string name="option_never">Soha</string>
     <string name="side_panel_sections">Szakaszok beállítása</string>
     <string name="boot_to_section">Boot egy szakaszba</string>
     <string name="large_ui">Nagyobb felhasználói felület</string>

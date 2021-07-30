@@ -79,7 +79,7 @@
     <string name="update_not_found">Teie versioon ei vaja uuendamist</string>
     <string name="update_in_progess">Oodake…</string>
     <string name="player_ui_hide_behavior">Peita liides</string>
-    <string name="player_ui_hide_never">Mittekunagi</string>
+    <string name="option_never">Mittekunagi</string>
     <string name="side_panel_sections">Seadistada alajaotused</string>
     <string name="boot_to_section">Alglaadida alajaotusesse</string>
     <string name="large_ui">Suurendadud liides</string>

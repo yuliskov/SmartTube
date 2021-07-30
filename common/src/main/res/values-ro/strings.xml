@@ -79,7 +79,7 @@
     <string name="update_not_found">Folosești ultima versiune</string>
     <string name="update_in_progess">Așteaptă…</string>
     <string name="player_ui_hide_behavior">Ascundere UI automată</string>
-    <string name="player_ui_hide_never">Niciodată</string>
+    <string name="option_never">Niciodată</string>
     <string name="side_panel_sections">Setează secțiunile</string>
     <string name="boot_to_section">Pornește în secțiunea</string>
     <string name="large_ui">Interfață mare</string>

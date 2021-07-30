@@ -44,6 +44,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendAppExitCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
         appendBackgroundPlaybackActivationCategory(settingsPresenter);
+        appendScreenDimmingCategory(settingsPresenter);
         appendKeyRemappingCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
@@ -147,6 +148,25 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 mGeneralData.isRemapFastForwardToNextEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.key_remapping), options);
+    }
+
+    private void appendScreenDimmingCategory(AppSettingsPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(
+                getContext().getString(R.string.option_never),
+                option -> mGeneralData.setScreenDimmingTimoutMin(GeneralData.SCREEN_DIMMING_NEVER),
+                mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER));
+
+        for (int i = 1; i <= 15; i++) {
+            int timeoutMin = i;
+            options.add(UiOptionItem.from(
+                    String.format("%s min", i),
+                    option -> mGeneralData.setScreenDimmingTimoutMin(timeoutMin),
+                    mGeneralData.getScreenDimmingTimoutMin() == i));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.screen_diming), options);
     }
 
     private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {

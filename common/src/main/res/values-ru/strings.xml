@@ -79,7 +79,7 @@
     <string name="update_not_found">Ваша версия не требует обновления</string>
     <string name="update_in_progess">Подождите…</string>
     <string name="player_ui_hide_behavior">Скрывать интерфейс</string>
-    <string name="player_ui_hide_never">Никогда</string>
+    <string name="option_never">Никогда</string>
     <string name="side_panel_sections">Настроить разделы</string>
     <string name="boot_to_section">Загружаться в раздел</string>
     <string name="large_ui">Увеличенный интерфейс</string>
@@ -220,4 +220,5 @@
     <string name="preferred_update_source">Выбрать источник обновлений</string>
     <string name="hide_shorts">Скрывать короткие видео из Подписок</string>
     <string name="key_remapping">Переопределение клавиш</string>
+    <string name="screen_diming">Затемнение экрана</string>
 </resources>

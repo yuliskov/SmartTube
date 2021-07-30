@@ -78,7 +78,7 @@
     <string name="update_not_found">Používáte poslední verzi</string>
     <string name="update_in_progess">Čekejte…</string>
     <string name="player_ui_hide_behavior">Automatické skrytí ovládání</string>
-    <string name="player_ui_hide_never">Nikdy</string>
+    <string name="option_never">Nikdy</string>
     <string name="side_panel_sections">Nastavení sekcí</string>
     <string name="boot_to_section">Spusť se do sekce</string>
     <string name="large_ui">Velké rozhraní</string>

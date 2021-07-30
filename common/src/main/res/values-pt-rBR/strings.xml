@@ -79,7 +79,7 @@
     <string name="update_not_found">Você está Usando a Versão mais Recente do SmartTube Next</string>
     <string name="update_in_progess">Espere…</string>
     <string name="player_ui_hide_behavior">Ocultar Automaticamente a Interface</string>
-    <string name="player_ui_hide_never">Nunca</string>
+    <string name="option_never">Nunca</string>
     <string name="side_panel_sections">Adicionar ou Excluir Seções</string>
     <string name="boot_to_section">Iniciar pela Seção</string>
     <string name="large_ui">Interface Completa</string>

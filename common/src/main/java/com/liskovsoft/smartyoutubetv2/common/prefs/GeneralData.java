@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class GeneralData {
+    public static final int SCREEN_DIMMING_NEVER = 0;
     private static final String GENERAL_DATA = "general_data";
     public static final int EXIT_NONE = 0;
     public static final int EXIT_DOUBLE_BACK = 1;
@@ -35,6 +36,7 @@ public class GeneralData {
     private Set<Video> mPinnedItems = new LinkedHashSet<>();
     private boolean mIsHideShortsEnabled;
     private boolean mIsRemapFastForwardToNextEnabled;
+    private int mScreenDimmingTimeoutMin;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -150,6 +152,15 @@ public class GeneralData {
         return mIsRemapFastForwardToNextEnabled;
     }
 
+    public void setScreenDimmingTimoutMin(int timeoutMin) {
+        mScreenDimmingTimeoutMin = timeoutMin;
+        persistState();
+    }
+
+    public int getScreenDimmingTimoutMin() {
+        return mScreenDimmingTimeoutMin;
+    }
+
     private void initLeftPanelCategories() {
         mLeftPanelCategories.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mLeftPanelCategories.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
@@ -175,6 +186,7 @@ public class GeneralData {
         String pinnedItems = Helpers.parseStr(split, 6);
         mIsHideShortsEnabled = Helpers.parseBoolean(split, 7, false);
         mIsRemapFastForwardToNextEnabled = Helpers.parseBoolean(split, 8, false);
+        mScreenDimmingTimeoutMin = Helpers.parseInt(split, 9, 1);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArrayLegacy(selectedCategories);
@@ -201,6 +213,6 @@ public class GeneralData {
         mPrefs.setData(GENERAL_DATA, Helpers.mergeObject(selectedCategories,
                 mBootCategoryId, mIsSettingsCategoryEnabled, mAppExitShortcut,
                 mIsReturnToLauncherEnabled,mBackgroundShortcut, pinnedItems,
-                mIsHideShortsEnabled, mIsRemapFastForwardToNextEnabled));
+                mIsHideShortsEnabled, mIsRemapFastForwardToNextEnabled, mScreenDimmingTimeoutMin));
     }
 }

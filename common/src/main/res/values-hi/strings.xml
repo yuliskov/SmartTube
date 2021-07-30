@@ -80,7 +80,7 @@
     <string name="update_not_found">आप नवीनतम संस्करण का उपयोग कर रहे हैं</string>
     <string name="update_in_progess">रुको…</string>
     <string name="player_ui_hide_behavior">ऑटो-छुपाया यूआई</string>
-    <string name="player_ui_hide_never">कभी नहीँ</string>
+    <string name="option_never">कभी नहीँ</string>
     <string name="side_panel_sections">सेट-अप सेक्शन</string>
     <string name="boot_to_section">बूट करने के लिए अनुभाग</string>
     <string name="large_ui">बड़ी यूआई</string>

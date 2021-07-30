@@ -79,7 +79,7 @@
     <string name="update_not_found">Използвате най-новата версия</string>
     <string name="update_in_progess">Изчакайте...</string>
     <string name="player_ui_hide_behavior">Автоматично скриване на потребителския интерфейс</string>
-    <string name="player_ui_hide_never">Никога</string>
+    <string name="option_never">Никога</string>
     <string name="side_panel_sections">Настрой разделите</string>
     <string name="boot_to_section">При стартиране да се визуализира раздел</string>
     <string name="large_ui">Голям потребителски интерфейс</string>

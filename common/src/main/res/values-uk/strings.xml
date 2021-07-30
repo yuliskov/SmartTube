@@ -79,7 +79,7 @@
     <string name="update_not_found">Ваша версія не потребує оновлення</string>
     <string name="update_in_progess">Хвилинку…</string>
     <string name="player_ui_hide_behavior">Приховувати інтерфейс</string>
-    <string name="player_ui_hide_never">Ніколи</string>
+    <string name="option_never">Ніколи</string>
     <string name="side_panel_sections">Налаштувати розділи</string>
     <string name="boot_to_section">Завантажуватися у розділ</string>
     <string name="large_ui">Збільшений інтерфейс</string>
@@ -220,4 +220,5 @@
     <string name="preferred_update_source">Вибрати джерело оновлень</string>
     <string name="hide_shorts">Приховувати короткі відео з Підписок</string>
     <string name="key_remapping">Перевизначення клавіш</string>
+    <string name="screen_diming">Затемнення екрану</string>
 </resources>

@@ -78,7 +78,7 @@
     <string name="update_not_found">Դուք օգտագործում եք վերջին տարբերակը</string>
     <string name="update_in_progess">Սպասեք</string>
     <string name="player_ui_hide_behavior">Թաքցնել ինտերֆեյսը</string>
-    <string name="player_ui_hide_never">Երբեք</string>
+    <string name="option_never">Երբեք</string>
     <string name="side_panel_sections">Կարգավորել բաժինները</string>
     <string name="boot_to_section">Բեռնվել նշված բաժնում</string>
     <string name="large_ui">Խոշոր ինտերֆեյս</string>

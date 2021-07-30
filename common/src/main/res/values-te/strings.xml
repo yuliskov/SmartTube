@@ -80,7 +80,7 @@
     <string name="update_not_found">మీరు తాజా సంస్కరణను ఉపయోగిస్తున్నారు</string>
     <string name="update_in_progess">వేచి ఉండండి…</string>
     <string name="player_ui_hide_behavior">ఆటో-దాచు UI</string>
-    <string name="player_ui_hide_never">ఎప్పుడూ</string>
+    <string name="option_never">ఎప్పుడూ</string>
     <string name="side_panel_sections">విభాగాలను సెటప్ చేయండి</string>
     <string name="boot_to_section">విభాగానికి బూట్ చేయండి</string>
     <string name="large_ui">పెద్ద UI</string>

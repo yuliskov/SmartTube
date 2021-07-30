@@ -79,7 +79,7 @@
     <string name="update_not_found">Phiên bản hiện tại là mới nhất</string>
     <string name="update_in_progess">Xin hãy đợi…</string>
     <string name="player_ui_hide_behavior">Tự động ẩn giao diện</string>
-    <string name="player_ui_hide_never">Không bao giờ</string>
+    <string name="option_never">Không bao giờ</string>
     <string name="side_panel_sections">Cài đặt bảng điều khiển cạnh</string>
     <string name="boot_to_section">Mặc định khi khởi động</string>
     <string name="large_ui">Giao diên lớn</string>
