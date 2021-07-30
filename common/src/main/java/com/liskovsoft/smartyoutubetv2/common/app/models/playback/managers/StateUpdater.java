@@ -142,6 +142,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
         restoreSubtitleFormat();
 
         updateHistory();
+
+        mScreensaverManager.disable();
     }
 
     @Override
