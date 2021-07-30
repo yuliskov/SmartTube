@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
@@ -23,6 +24,7 @@ public class ScreensaverManager {
     public ScreensaverManager(Activity activity) {
         mActivity = new WeakReference<>(activity);
         mHandler = new Handler(Looper.getMainLooper());
+        Helpers.disableScreensaver(activity);
         enable();
     }
 

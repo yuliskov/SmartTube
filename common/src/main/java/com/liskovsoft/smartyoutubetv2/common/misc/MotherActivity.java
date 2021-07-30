@@ -34,8 +34,6 @@ public class MotherActivity extends FragmentActivity {
         initTheme();
 
         sNumActivities++;
-
-        Helpers.disableScreensaver(this);
     }
 
     public void finishReally() {
