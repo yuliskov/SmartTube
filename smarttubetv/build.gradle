@@ -87,10 +87,14 @@ android {
             // matchingFallbacks = ['lite']
             applicationIdSuffix ".beta"
         }
-        storig {
+        ststable {
             // matchingFallbacks = ['lite']
-            applicationId "com.teamsmart.videomanager.tv"
+            applicationId "org.smartteam.smarttube.tv"
         }
+        // storig {
+        //     // matchingFallbacks = ['lite']
+        //     applicationId "com.teamsmart.videomanager.tv"
+        // }
         strtarmenia {
             // matchingFallbacks = ['lite']
             versionCode 11000 + defaultConfig.versionCode
