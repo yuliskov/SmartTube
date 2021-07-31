@@ -100,9 +100,11 @@ public class ScreensaverManager {
         }
 
         PlaybackView playbackView = PlaybackPresenter.instance(activity).getView();
-        boolean isPlaying = playbackView != null && playbackView.getController().isPlaying();
+        if (show && playbackView != null && playbackView.getController().isPlaying()) {
+            return;
+        }
 
-        if (show && !isPlaying) {
+        if (show) {
             Helpers.enableScreensaver(activity);
         } else {
             Helpers.disableScreensaver(activity);
