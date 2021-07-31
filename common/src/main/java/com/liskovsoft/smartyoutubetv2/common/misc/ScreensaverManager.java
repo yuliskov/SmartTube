@@ -18,14 +18,11 @@ import java.lang.ref.WeakReference;
 
 public class ScreensaverManager {
     private static final String TAG = ScreensaverManager.class.getSimpleName();
-    private static final int DIM_DELAY_MS = 10_000;
     private final Handler mHandler;
     private final WeakReference<Activity> mActivity;
     private final Runnable mDimScreen = this::dimScreen;
     private final Runnable mUndimScreen = this::undimScreen;
     private final GeneralData mGeneralData;
-    private boolean mIsEnabled;
-    private boolean mIsBlocked;
 
     public ScreensaverManager(Activity activity) {
         mActivity = new WeakReference<>(activity);
@@ -36,22 +33,16 @@ public class ScreensaverManager {
     }
 
     public void enable() {
-        if (mIsBlocked) {
-            return;
-        }
-
         Log.d(TAG, "Enable screensaver");
 
         disable();
-        Utils.postDelayed(mHandler, mDimScreen, mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER ?
-                10_000 : mGeneralData.getScreenDimmingTimoutMin() * 60 * 1_000);
+        int delayMs = mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER ?
+                10_000 :
+                mGeneralData.getScreenDimmingTimoutMin() * 60 * 1_000;
+        Utils.postDelayed(mHandler, mDimScreen, delayMs);
     }
 
     public void disable() {
-        if (mIsBlocked) {
-            return;
-        }
-
         Log.d(TAG, "Disable screensaver");
 
         Utils.removeCallbacks(mHandler, mDimScreen);
@@ -66,21 +57,15 @@ public class ScreensaverManager {
         showHide(false);
     }
 
-    private void setColor(int color) {
-        Activity activity = mActivity.get();
-
-        if (activity == null) {
-            return;
-        }
-
-        View dimContainer = activity.getWindow().getDecorView().findViewById(R.id.dim_container);
-
-        if (dimContainer != null) {
-            dimContainer.setBackgroundColor(color);
+    private void showHide(boolean show) {
+        if (mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER) {
+            showHideScreensaver(show);
+        } else {
+            showHideDimming(show);
         }
     }
 
-    private void showHide(boolean show) {
+    private void showHideDimming(boolean show) {
         Activity activity = mActivity.get();
 
         if (activity == null) {
@@ -104,18 +89,23 @@ public class ScreensaverManager {
             }
         }
 
-        if (mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER) {
-            if (show) {
-                Helpers.enableScreensaver(activity);
-            } else {
-                Helpers.disableScreensaver(activity);
-            }
-        } else {
-            dimContainer.setVisibility(show ? View.VISIBLE : View.GONE);
-        }
+        dimContainer.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-    public void setBlocked(boolean blocked) {
-        mIsBlocked = blocked;
+    private void showHideScreensaver(boolean show) {
+        Activity activity = mActivity.get();
+
+        if (activity == null) {
+            return;
+        }
+
+        PlaybackView playbackView = PlaybackPresenter.instance(activity).getView();
+        boolean isPlaying = playbackView != null && playbackView.getController().isPlaying();
+
+        if (show && !isPlaying) {
+            Helpers.enableScreensaver(activity);
+        } else {
+            Helpers.disableScreensaver(activity);
+        }
     }
 }
