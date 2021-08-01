@@ -479,7 +479,9 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
                             result = mediaTrack;
                         }
-                    } else if (compare > 0 && mediaTrack.compare(result) >= 0) { // select track with higher possible quality
+                    } else if (compare > 0 &&
+                            (mediaTrack.compare(result) >= 0 ||              // Select track with higher possible quality
+                            MediaTrack.preferByCodec(mediaTrack, result))) { // Or prefer codec
                         // Get ready for group with multiple codecs: avc, av01
                         // Also handle situations where avc and av01 only (no vp9). E.g.: B4mIhE_15nc
                         if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
