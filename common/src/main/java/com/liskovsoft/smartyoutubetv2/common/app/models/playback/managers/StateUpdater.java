@@ -33,6 +33,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private Disposable mHistoryAction;
     private PlayerData mPlayerData;
     private boolean mIsPlayBlocked;
+    private float mVolume = 1;
 
     @Override
     public void onInitDone() { // called each time a video opened from the browser
@@ -139,6 +140,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
         restoreSubtitleFormat();
 
         updateHistory();
+
+        restoreVolume();
     }
 
     @Override
@@ -288,6 +291,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
             updateHistory();
             persistVideoState();
+            persistVolume();
         }
     }
 
@@ -388,6 +392,14 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     private boolean getPlayEnabled() {
         return mIsPlayEnabled;
+    }
+
+    private void persistVolume() {
+        mVolume = getController().getVolume();
+    }
+
+    private void restoreVolume() {
+        getController().setVolume(mVolume);
     }
 
     private void updateHistory() {

@@ -333,7 +333,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
     @Override
     public void setVolume(float volume) {
-        if (mPlayer != null && volume > 0) {
+        if (mPlayer != null && volume >= 0) {
             mPlayer.setVolume(volume);
         }
     }
