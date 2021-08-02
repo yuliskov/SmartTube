@@ -19,9 +19,10 @@ public class IntentExtractor {
     private static final String SUBSCRIPTIONS_URL = "https://www.youtube.com/tv#/zylon-surface?c=FEsubscriptions&resume";
     private static final String HISTORY_URL = "https://www.youtube.com/tv#/zylon-surface?c=FEmy_youtube&resume";
     private static final String RECOMMENDED_URL = "https://www.youtube.com/tv#/zylon-surface?c=default&resume";
+    private static final String PLAYLIST_KEY = "list";
 
     public static String extractVideoId(Intent intent) {
-        if (intent == null || intent.getData() == null || !Intent.ACTION_VIEW.equals(intent.getAction())) {
+        if (isEmptyIntent(intent)) {
             return null;
         }
 
@@ -50,7 +51,7 @@ public class IntentExtractor {
      * Amazon: youtube://search?query=linkin+park&isVoice=true
      */
     public static String extractSearchText(Intent intent) {
-        if (intent == null || intent.getData() == null || !Intent.ACTION_VIEW.equals(intent.getAction())) {
+        if (isEmptyIntent(intent)) {
             return null;
         }
 
@@ -78,13 +79,26 @@ public class IntentExtractor {
      * Data: https://www.youtube.com/channel/UCtDjOV5nk982w35AIdVDuNw
      */
     public static String extractChannelId(Intent intent) {
-        if (intent == null || intent.getData() == null || !Intent.ACTION_VIEW.equals(intent.getAction())) {
+        if (isEmptyIntent(intent)) {
             return null;
         }
 
         String[] split = intent.getData().toString().split(CHANNEL_URL);
 
         return split.length == 2 ? split[1] : null;
+    }
+
+    /**
+     * Data: https://www.youtube.com/playlist?list=RDCLAK5uy_mk6AmqcHgCRhyJuYsQz5CCVdCF4SRGivs
+     */
+    public static String extractPlaylistId(Intent intent) {
+        if (isEmptyIntent(intent)) {
+            return null;
+        }
+
+        UrlQueryString parser = UrlQueryStringFactory.parse(intent.getData());
+
+        return parser.get(PLAYLIST_KEY);
     }
 
     private static boolean isValid(String videoId) {
@@ -113,5 +127,9 @@ public class IntentExtractor {
      */
     private static String extractVoiceQuery(Uri data) {
         return Helpers.runMultiMatcher(data.toString(), ":\\{\"query\":\"([^\"]*)\"");
+    }
+
+    private static boolean isEmptyIntent(Intent intent) {
+        return intent == null || intent.getData() == null || !Intent.ACTION_VIEW.equals(intent.getAction());
     }
 }
