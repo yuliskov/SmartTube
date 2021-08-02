@@ -2,10 +2,10 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.controller;
 
 import android.content.Context;
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
@@ -36,7 +36,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private boolean mOnSourceChanged;
     private Video mVideo;
     private PlayerEventListener mEventListener;
-    private ExoPlayer mPlayer;
+    private SimpleExoPlayer mPlayer;
     private PlayerView mPlayerView;
 
     public ExoPlayerController(Context context) {
@@ -168,7 +168,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     @Override
-    public void setPlayer(ExoPlayer player) {
+    public void setPlayer(SimpleExoPlayer player) {
         mPlayer = player;
         player.addListener(this);
     }
@@ -328,6 +328,22 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             return mPlayer.getPlaybackParameters().speed;
         } else {
             return -1;
+        }
+    }
+
+    @Override
+    public void setVolume(float volume) {
+        if (mPlayer != null && volume > 0) {
+            mPlayer.setVolume(volume);
+        }
+    }
+
+    @Override
+    public float getVolume() {
+        if (mPlayer != null) {
+            return mPlayer.getVolume();
+        } else {
+            return 1;
         }
     }
 

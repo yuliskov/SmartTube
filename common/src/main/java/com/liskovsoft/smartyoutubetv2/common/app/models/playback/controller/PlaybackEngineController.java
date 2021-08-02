@@ -59,6 +59,8 @@ public interface PlaybackEngineController {
     boolean containsMedia();
     void setSpeed(float speed);
     float getSpeed();
+    void setVolume(float volume);
+    float getVolume();
     void setVideoZoomMode(int mode);
     int getVideoZoomMode();
     void setVideoAspectRatio(float mode);

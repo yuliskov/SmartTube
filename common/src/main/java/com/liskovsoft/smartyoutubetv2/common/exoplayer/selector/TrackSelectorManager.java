@@ -24,8 +24,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class TrackSelectorManager implements TrackSelectorCallback {
-    private static final int DECODER_INIT_TIME_MS = 0; // Default - 1_000
-    private final Runnable mSelectTracks = this::fixTracksSelection;
     private final Handler mHandler = new Handler(Looper.getMainLooper());
     public static final int RENDERER_INDEX_VIDEO = 0;
     public static final int RENDERER_INDEX_AUDIO = 1;
@@ -371,12 +369,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
         if (mRenderers[rendererIndex] == null || mRenderers[rendererIndex].mediaTracks == null) {
             Log.e(TAG, "Renderer isn't initialized. Waiting for later selection...");
-            return;
-        }
-
-        if (DECODER_INIT_TIME_MS > 0 && System.currentTimeMillis() - mTracksInitTimeMs < DECODER_INIT_TIME_MS) {
-            Log.d(TAG, "Decoder probably isn't fully initialized. Deferring codec selection...");
-            Utils.postDelayed(mHandler, mSelectTracks, DECODER_INIT_TIME_MS);
             return;
         }
 

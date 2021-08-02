@@ -182,6 +182,9 @@ public class Utils {
                 );
     }
 
+    /**
+     * Volume: 0 - 100
+     */
     public static void setGlobalVolume(Context context, int volume) {
         if (context != null) {
             AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -192,6 +195,9 @@ public class Utils {
         }
     }
 
+    /**
+     * Volume: 0 - 100
+     */
     public static int getGlobalVolume(Context context) {
         if (context != null) {
             AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);

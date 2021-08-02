@@ -1,6 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.controller;
 
-import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
@@ -25,7 +25,7 @@ public interface PlayerController {
     boolean getPlay();
     boolean isPlaying();
     void release();
-    void setPlayer(ExoPlayer player);
+    void setPlayer(SimpleExoPlayer player);
     void setEventListener(PlayerEventListener eventListener);
     void setPlayerView(PlayerView playerView);
     void setTrackSelector(DefaultTrackSelector trackSelector);
@@ -39,4 +39,6 @@ public interface PlayerController {
     boolean containsMedia();
     void setSpeed(float speed);
     float getSpeed();
+    void setVolume(float volume);
+    float getVolume();
 }

@@ -357,6 +357,9 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
         DefaultTrackSelector trackSelector = new RestoreTrackSelector(new Factory());
         mPlayer = mPlayerInitializer.createPlayer(getContext(), renderersFactory, trackSelector);
+        // Try to fix decoder error on Nvidia Shield 2019.
+        // Init resources as early as possible.
+        mPlayer.setForegroundMode(true);
 
         mExoPlayerController.setPlayer(mPlayer);
         mExoPlayerController.setTrackSelector(trackSelector);
@@ -834,6 +837,16 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     @Override
     public float getSpeed() {
         return mExoPlayerController.getSpeed();
+    }
+
+    @Override
+    public void setVolume(float volume) {
+        mExoPlayerController.setVolume(volume);
+    }
+
+    @Override
+    public float getVolume() {
+        return mExoPlayerController.getVolume();
     }
 
     @Override

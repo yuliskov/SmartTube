@@ -300,7 +300,10 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 }
                 break;
             case Command.TYPE_VOLUME:
-                Utils.setGlobalVolume(getActivity(), command.getVolume());
+                //Utils.setGlobalVolume(getActivity(), command.getVolume());
+                if (getController() != null) {
+                    getController().setVolume(command.getVolume() / 100f);
+                }
                 break;
             case Command.TYPE_STOP:
                 if (getController() != null) {
@@ -323,12 +326,18 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 break;
         }
 
-        postVolumeChange(Utils.getGlobalVolume(getActivity()));
+        //postVolumeChange(Utils.getGlobalVolume(getActivity()));
+        if (getController() != null) {
+            postVolumeChange((int)(getController().getVolume() * 100));
+        }
     }
 
     @Override
     public boolean onKeyDown(int keyCode) {
-        postVolumeChange(Utils.getGlobalVolume(getActivity()));
+        //postVolumeChange(Utils.getGlobalVolume(getActivity()));
+        if (getController() != null) {
+            postVolumeChange((int)(getController().getVolume() * 100));
+        }
 
         return false;
     }
