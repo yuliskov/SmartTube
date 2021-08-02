@@ -123,25 +123,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     private void initIntentChain() {
         mIntentChain.add(intent -> {
-            String videoId = IntentExtractor.extractVideoId(intent);
-
-            if (videoId != null) {
-                PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
-                playbackPresenter.openVideo(videoId);
-
-                ViewManager viewManager = ViewManager.instance(getContext());
-
-                if (GeneralData.instance(getContext()).isReturnToLauncherEnabled()) {
-                    viewManager.setSinglePlayerMode(true);
-                }
-
-                return true;
-            }
-
-            return false;
-        });
-
-        mIntentChain.add(intent -> {
             String searchText = IntentExtractor.extractSearchText(intent);
 
             if (searchText != null || IntentExtractor.isStartVoiceCommand(intent)) {
@@ -170,6 +151,26 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
             if (playlistId != null) {
                 MessageHelpers.showMessage(getContext(), "There will be playlist processing!");
+                return true;
+            }
+
+            return false;
+        });
+
+        // Should come after playlist
+        mIntentChain.add(intent -> {
+            String videoId = IntentExtractor.extractVideoId(intent);
+
+            if (videoId != null) {
+                PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
+                playbackPresenter.openVideo(videoId);
+
+                ViewManager viewManager = ViewManager.instance(getContext());
+
+                if (GeneralData.instance(getContext()).isReturnToLauncherEnabled()) {
+                    viewManager.setSinglePlayerMode(true);
+                }
+
                 return true;
             }
 
