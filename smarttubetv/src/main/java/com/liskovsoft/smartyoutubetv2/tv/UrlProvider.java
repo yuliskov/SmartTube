@@ -16,15 +16,15 @@ import com.liskovsoft.youtubeapi.videoinfo.models.VideoInfo;
 import com.liskovsoft.youtubeapi.videoinfo.models.formats.AdaptiveVideoFormat;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class UrlProvider extends ContentProvider {
     private static final String TAG = "UrlProvider";
     private final String [] COLUMNS = {"video_url", "audio_url"};
     private final static int MAX_VIDEO_HEIGHT = 2160;
+    private final static double ASPECT_RATIO_16_9 = 16 / 9.0;
+    private final static int MAX_WIDTH_FOR_ANY_ASPECT = 1920;
     private final static String MAX_VIDEO_HEIGHT_PARAM = "max_video_height";
 
     public UrlProvider() {
@@ -78,7 +78,10 @@ public class UrlProvider extends ContentProvider {
                                 maxVideoHeight = Integer.parseInt(uri.getQueryParameter(MAX_VIDEO_HEIGHT_PARAM));
                             }
                             if (adaptiveVideoFormat.getSize() != null) {
-                                return Integer.parseInt(adaptiveVideoFormat.getSize().split("x")[1]) <= maxVideoHeight;
+                                final int width = Integer.parseInt(adaptiveVideoFormat.getSize().split("x")[0]);
+                                final int height = Integer.parseInt(adaptiveVideoFormat.getSize().split("x")[1]);
+                                final boolean isProperlyAspect = Math.abs(1.0 * width / height - ASPECT_RATIO_16_9) < 0.0001;
+                                return (isProperlyAspect && height <= maxVideoHeight) || (width <= MAX_WIDTH_FOR_ANY_ASPECT);
                             }
                             return true;
                         })
@@ -86,17 +89,17 @@ public class UrlProvider extends ContentProvider {
                         .collect(Collectors.toList());
             }
             for (AdaptiveVideoFormat format : formats) {
+                Log.d(TAG, "format size=" + format.getSize()
+                        + ", btr=" + format.getBitrate()
+                        + ", codec=" + format.getMimeType()
+                        + ", res=" + format.getSize()
+                        + ", url=" + format.getUrl());
                 if (format.getMimeType().startsWith("video") && videoUrl == null) {
                     videoUrl = format.getUrl();
-                    Log.d(TAG, "using video btr=" + format.getBitrate()
-                            + ", codec=" + format.getMimeType()
-                            + ", res=" + format.getSize()
-                            + ", url=" + videoUrl);
+                    Log.d(TAG, "format set video url=" + videoUrl);
                 } else if (format.getMimeType().startsWith("audio") && audioUrl == null) {
                     audioUrl = format.getUrl();
-                    Log.d(TAG, "using audio btr=" + format.getBitrate()
-                            + ", codec=" + format.getMimeType()
-                            + ", url=" + videoUrl);
+                    Log.d(TAG, "format set audio url=" + audioUrl);
                 }
             }
         } else {
@@ -108,7 +111,7 @@ public class UrlProvider extends ContentProvider {
         values.add(videoUrl);
         values.add(audioUrl);
         cursor.addRow(values);
-        Log.d(TAG, "query elapsed:  " + (System.currentTimeMillis() - startTime));
+        Log.d(TAG, "query elapsed: " + (System.currentTimeMillis() - startTime) + "ms.");
         return cursor;
     }
 
