@@ -233,4 +233,9 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     public void onPipClicked() {
         // NOP
     }
+
+    @Override
+    public void onScreenOffClicked() {
+        // NOP
+    }
 }

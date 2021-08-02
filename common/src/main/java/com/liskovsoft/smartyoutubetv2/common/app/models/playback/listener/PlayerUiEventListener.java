@@ -30,5 +30,6 @@ public interface PlayerUiEventListener {
     void onSearchClicked();
     void onVideoZoomClicked();
     void onPipClicked();
+    void onScreenOffClicked();
     void onControlsShown(boolean shown);
 }

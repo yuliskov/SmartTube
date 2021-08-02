@@ -23,6 +23,7 @@ public class ScreensaverManager {
     private final Runnable mDimScreen = this::dimScreen;
     private final Runnable mUndimScreen = this::undimScreen;
     private final GeneralData mGeneralData;
+    private int mDimColorResId;
 
     public ScreensaverManager(Activity activity) {
         mActivity = new WeakReference<>(activity);
@@ -45,8 +46,15 @@ public class ScreensaverManager {
     public void disable() {
         Log.d(TAG, "Disable screensaver");
 
+        mDimColorResId = R.color.dimming;
         Utils.removeCallbacks(mHandler, mDimScreen);
         Utils.postDelayed(mHandler, mUndimScreen, 0);
+    }
+
+    public void doScreenOff() {
+        disable();
+        mDimColorResId = R.color.black;
+        Utils.postDelayed(mHandler, mDimScreen, 0);
     }
 
     private void dimScreen() {
@@ -73,7 +81,8 @@ public class ScreensaverManager {
         }
 
         PlaybackView playbackView = PlaybackPresenter.instance(activity).getView();
-        if (show && playbackView != null && playbackView.getController().isPlaying()) {
+        if (show && playbackView != null && playbackView.getController().isPlaying()
+                && mDimColorResId == R.color.dimming) {
             return;
         }
 
@@ -89,6 +98,7 @@ public class ScreensaverManager {
             }
         }
 
+        dimContainer.setBackgroundResource(mDimColorResId);
         dimContainer.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 

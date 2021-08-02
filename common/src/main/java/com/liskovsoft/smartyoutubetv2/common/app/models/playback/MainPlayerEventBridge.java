@@ -344,5 +344,10 @@ public class MainPlayerEventBridge implements PlayerEventListener {
         process(PlayerUiEventListener::onPipClicked);
     }
 
+    @Override
+    public void onScreenOffClicked() {
+        process(PlayerUiEventListener::onScreenOffClicked);
+    }
+
     // End UI events
 }

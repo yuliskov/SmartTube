@@ -27,6 +27,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.OnSelectSubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -340,6 +341,13 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         getController().showControls(false);
         getController().setPlaybackMode(PlaybackEngineController.BACKGROUND_MODE_PIP);
         getController().finish();
+    }
+
+    @Override
+    public void onScreenOffClicked() {
+        if (getActivity() instanceof MotherActivity) {
+            ((MotherActivity) getActivity()).getScreensaverManager().doScreenOff();
+        }
     }
 
     private void intSpeedItems(AppSettingsPresenter settingsPresenter, List<OptionItem> items, float[] speedValues) {

@@ -632,6 +632,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         }
 
         @Override
+        public void onScreenOff() {
+            mEventListener.onScreenOffClicked();
+        }
+
+        @Override
         public void onTopEdgeFocused() {
             showControls(false);
         }

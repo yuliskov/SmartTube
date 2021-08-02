@@ -3,5 +3,4 @@
              android:id="@+id/dim_container"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             android:visibility="gone"
-             android:background="#D0000000"/>
+             android:visibility="gone"/>
