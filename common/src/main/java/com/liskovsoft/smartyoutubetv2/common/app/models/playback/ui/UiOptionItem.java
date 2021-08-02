@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui;
 
+import static com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil.CODEC_SHORT_AV1;
+
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
@@ -43,6 +45,9 @@ public class UiOptionItem implements OptionItem {
                 continue;
             }
             if (format.getTitle() != null && ((String) format.getTitle()).contains("HDR")) {
+                continue;
+            }
+            if (format.getTitle() != null && ((String) format.getTitle()).contains(CODEC_SHORT_AV1)) {
                 continue;
             }
             options.add(from(format, callback, defaultTitle));

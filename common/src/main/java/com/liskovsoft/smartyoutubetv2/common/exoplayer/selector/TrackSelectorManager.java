@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil.CODEC_SHORT_AV1;
 import static com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil.extractCodec;
 
 public class TrackSelectorManager implements TrackSelectorCallback {
@@ -475,6 +476,10 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         continue;
                     }
                     if (TrackSelectorUtil.isHdrCodec(mediaTrack.format.codecs)) {
+                        continue;
+                    }
+                    if (mediaTrack.format.codecs != null
+                            && mediaTrack.format.codecs.startsWith(CODEC_SHORT_AV1)) {
                         continue;
                     }
 
