@@ -240,6 +240,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
     @Override
     public void onViewDestroyed() {
+        super.onViewDestroyed();
         disposeActions();
     }
 

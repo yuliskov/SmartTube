@@ -141,8 +141,8 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         appendReturnToBackgroundVideoButton();
         appendAddToPlaylist(videoPlaylistInfos);
-        appendOpenChannelButton();
         appendOpenPlaylistButton();
+        appendOpenChannelButton();
         //appendOpenChannelUploadsButton();
         appendSubscribeButton();
         appendNotInterestedButton();
@@ -164,8 +164,8 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mSettingsPresenter.clear();
 
         appendReturnToBackgroundVideoButton();
-        appendOpenChannelButton();
         appendOpenPlaylistButton();
+        appendOpenChannelButton();
         appendShareButton();
         appendAccountSelectionButton();
 
@@ -211,7 +211,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        if (mVideo == null || mVideo.playlistId == null) {
+        if (mVideo == null || !mVideo.isPlaylist()) {
             return;
         }
 

@@ -71,7 +71,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void onViewDestroyed() {
-        // NOP
+        mView = new WeakReference<>(null);
     }
 
     @Override

@@ -51,6 +51,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
     @Override
     public void onViewDestroyed() {
+        super.onViewDestroyed();
         disposeActions();
     }
 

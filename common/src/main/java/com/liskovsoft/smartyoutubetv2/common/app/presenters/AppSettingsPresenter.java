@@ -84,6 +84,7 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
      */
     @Override
     public void onViewDestroyed() {
+        super.onViewDestroyed();
         clear();
     }
 

@@ -46,6 +46,7 @@ public class SignInPresenter extends BasePresenter<SignInView> {
 
     @Override
     public void onViewDestroyed() {
+        super.onViewDestroyed();
         unhold();
     }
 

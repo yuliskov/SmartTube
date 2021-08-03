@@ -99,6 +99,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
     @Override
     public void onViewDestroyed() {
+        super.onViewDestroyed();
         disposeActions();
     }
 

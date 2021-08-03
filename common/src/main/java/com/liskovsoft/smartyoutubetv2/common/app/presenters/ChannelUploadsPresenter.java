@@ -101,6 +101,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
     @Override
     public void onViewDestroyed() {
+        super.onViewDestroyed();
         disposeActions();
     }
 
@@ -149,13 +150,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     private void disposeActions() {
-        if (mUpdateAction != null && !mUpdateAction.isDisposed()) {
-            mUpdateAction.dispose();
-        }
-
-        if (mScrollAction != null && !mScrollAction.isDisposed()) {
-            mScrollAction.dispose();
-        }
+        RxUtils.disposeActions(mUpdateAction, mScrollAction);
     }
 
     private void continueVideoGroup(VideoGroup group) {
