@@ -71,6 +71,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void onViewDestroyed() {
+        // View stays in RAM after has been destroyed. Is it a bug?
         mView = new WeakReference<>(null);
     }
 
