@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
@@ -26,6 +27,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     private static ChannelUploadsPresenter sInstance;
     private final PlaybackPresenter mPlaybackPresenter;
     private final MediaGroupManager mGroupManager;
+    private final MediaItemManager mItemManager;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
     private Video mVideoItem;
@@ -34,6 +36,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         super(context);
         MediaService mediaService = YouTubeMediaService.instance();
         mGroupManager = mediaService.getMediaGroupManager();
+        mItemManager = mediaService.getMediaItemManager();
         mPlaybackPresenter = PlaybackPresenter.instance(context);
     }
 
@@ -107,7 +110,8 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     public void openChannel(Video item) {
-        if (item == null || item.mediaItem == null || !item.mediaItem.hasUploads()) {
+        // Working with uploads or playlists
+        if (item == null || (!item.hasUploads() && item.playlistId == null)) {
             return;
         }
 
@@ -134,7 +138,10 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
             return null;
         }
 
-        return mGroupManager.getGroupObserve(item.mediaItem);
+        return item.hasUploads() ?
+                mGroupManager.getGroupObserve(item.mediaItem) :
+                mItemManager.getMetadataObserve(null, item.playlistId, 0)
+                        .flatMap(mediaItemMetadata -> Observable.just(mediaItemMetadata.getSuggestions().get(0)));
     }
 
     private void updateGrid(Video item) {
@@ -158,7 +165,15 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        mScrollAction = mGroupManager.continueGroupObserve(mediaGroup)
+        Observable<MediaGroup> continuation;
+
+        if (mediaGroup.getType() == MediaGroup.TYPE_SUGGESTIONS) {
+            continuation = mItemManager.continueGroupObserve(mediaGroup);
+        } else {
+            continuation = mGroupManager.continueGroupObserve(mediaGroup);
+        }
+
+        mScrollAction = continuation
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

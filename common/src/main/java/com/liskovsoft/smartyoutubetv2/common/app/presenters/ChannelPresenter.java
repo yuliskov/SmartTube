@@ -112,7 +112,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             return false;
         }
 
-        return item.videoId != null || item.channelId != null || item.isChannelUploads();
+        return item.videoId != null || item.channelId != null || item.isChannelUploadsSection();
     }
 
     public void openChannel(Video item) {
@@ -125,7 +125,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                     openChannel(metadata.getChannelId());
                     item.channelId = metadata.getChannelId();
                 });
-            } else if (item.isChannelUploads()) {
+            } else if (item.isChannelUploadsSection()) {
                 // Maybe this is subscribed items view
                 ChannelUploadsPresenter.instance(getContext())
                         .obtainVideoGroup(item, group -> {

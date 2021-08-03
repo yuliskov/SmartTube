@@ -6,6 +6,7 @@ import android.content.Intent;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -150,7 +151,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             String playlistId = IntentExtractor.extractPlaylistId(intent);
 
             if (playlistId != null) {
-                MessageHelpers.showMessage(getContext(), "There will be playlist processing!");
+                Video video = new Video();
+                video.playlistId = playlistId;
+                ChannelUploadsPresenter.instance(getContext()).openChannel(video);
                 return true;
             }
 

@@ -33,7 +33,7 @@ public class ChannelUploadsMenuPresenter extends BasePresenter<Void> {
     }
 
     public void showMenu(Video video) {
-        if (video == null || !video.isChannelUploads()) {
+        if (video == null || !video.isChannelUploadsSection()) {
             return;
         }
 

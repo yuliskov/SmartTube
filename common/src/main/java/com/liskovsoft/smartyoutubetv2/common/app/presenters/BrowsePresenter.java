@@ -249,7 +249,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             return;
         }
 
-        if (item.isChannelUploads() && mUploadsType == Category.TYPE_MULTI_GRID) {
+        if (item.isChannelUploadsSection() && mUploadsType == Category.TYPE_MULTI_GRID) {
             if (mMainUIData.isUploadsAutoLoadEnabled()) {
                 updateMultiGrid(item);
             } else {
@@ -264,7 +264,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             return;
         }
 
-        if (item.isChannelUploads()) {
+        if (item.isChannelUploadsSection()) {
             // Below doesn't work right now. Api doesn't contains channel id.
             //ChannelPresenter.instance(getContext()).openChannel(item);
 
@@ -273,7 +273,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             } else {
                 ChannelUploadsPresenter.instance(getContext()).openChannel(item);
             }
-        } else if (item.isPlaylist()) {
+        } else if (item.isPlaylistSection()) {
             ChannelUploadsPresenter.instance(getContext()).openChannel(item);
         } else if (item.isVideo()) {
             mPlaybackPresenter.openVideo(item);
@@ -290,7 +290,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             return;
         }
 
-        if (item.isChannelUploads()) {
+        if (item.isChannelUploadsSection()) {
             ChannelUploadsMenuPresenter.instance(getContext()).showMenu(item);
         } else if (item.isVideo()) {
             item.isSubscribed = mCurrentCategoryId == MediaGroup.TYPE_SUBSCRIPTIONS;
@@ -298,7 +298,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             VideoMenuPresenter.instance(getContext()).showVideoMenu(item, category != null ? category.getData() : null);
         } else if (item.isChannel()) {
             VideoMenuPresenter.instance(getContext()).showChannelMenu(item);
-        } else if (item.isPlaylist()) {
+        } else if (item.isPlaylistSection()) {
             VideoMenuPresenter.instance(getContext()).showPlaylistMenu(item);
         }
 
