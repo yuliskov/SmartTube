@@ -141,7 +141,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
         return item.hasUploads() ?
                 mGroupManager.getGroupObserve(item.mediaItem) :
-                mItemManager.getMetadataObserve(null, item.playlistId, 0)
+                mItemManager.getMetadataObserve(item.videoId, item.playlistId, 0)
                         .flatMap(mediaItemMetadata -> Observable.just(mediaItemMetadata.getSuggestions().get(0)));
     }
 
