@@ -334,7 +334,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
             Log.d(TAG, "Found url list video. This is always LQ. Loading...");
             getController().openUrlList(formatInfo.createUrlList());
         } else if (formatInfo.isAgeRestricted()) {
-            Toast.makeText(getActivity(), formatInfo.getPlayabilityStatus(), Toast.LENGTH_LONG).show();
+            MessageHelpers.showMessage(getActivity(), formatInfo.getPlayabilityStatus());
             AccountSettingsPresenter.instance(getActivity()).show();
             getController().finish();
             YouTubeMediaService.instance().invalidateCache();
