@@ -45,6 +45,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     private boolean mIsAccountSelectionEnabled;
     private boolean mIsReturnToBackgroundVideoEnabled;
     private boolean mIsPinToSidebarEnabled;
+    private boolean mIsOpenPlaylistButtonEnabled;
 
     private VideoMenuPresenter(Context context) {
         super(context);
@@ -72,6 +73,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mIsAddToPlaylistButtonEnabled = true;
         mIsOpenChannelButtonEnabled = true;
         mIsOpenChannelUploadsButtonEnabled = true;
+        mIsOpenPlaylistButtonEnabled = true;
         mIsSubscribeButtonEnabled = true;
         mIsNotInterestedButtonEnabled = true;
         mIsShareButtonEnabled = true;
@@ -140,6 +142,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         appendReturnToBackgroundVideoButton();
         appendAddToPlaylist(videoPlaylistInfos);
         appendOpenChannelButton();
+        appendOpenPlaylistButton();
         //appendOpenChannelUploadsButton();
         appendSubscribeButton();
         appendNotInterestedButton();
@@ -162,6 +165,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         appendReturnToBackgroundVideoButton();
         appendOpenChannelButton();
+        appendOpenPlaylistButton();
         appendShareButton();
         appendAccountSelectionButton();
 
@@ -200,6 +204,19 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.open_channel), optionItem -> ChannelPresenter.instance(getContext()).openChannel(mVideo)));
+    }
+
+    private void appendOpenPlaylistButton() {
+        if (!mIsOpenPlaylistButtonEnabled) {
+            return;
+        }
+
+        if (mVideo == null || mVideo.playlistId == null) {
+            return;
+        }
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.open_playlist), optionItem -> ChannelUploadsPresenter.instance(getContext()).openChannel(mVideo)));
     }
 
     private void appendOpenChannelUploadsButton() {
