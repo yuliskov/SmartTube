@@ -472,6 +472,11 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                     if (mediaTrack == null) {
                         continue;
                     }
+                    final boolean isProperlyAspect = Math.abs(
+                            (1.0 * mediaTrack.format.width  / mediaTrack.format.height) - 16 / 9.0) < 0.0001;
+                    if (!isProperlyAspect && mediaTrack.format.width > 1920) {
+                        continue;
+                    }
                     if (mediaTrack.format.width > MAX_VIDEO_WIDTH) {
                         continue;
                     }

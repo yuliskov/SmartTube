@@ -36,6 +36,11 @@ public class UiOptionItem implements OptionItem {
         List<OptionItem> options = new ArrayList<>();
 
         for (FormatItem format : formats) {
+            final boolean isProperlyAspect = Math.abs(
+                    (1.0 * format.getWidth()  / format.getHeight()) - 16 / 9.0) < 0.0001;
+            if (!isProperlyAspect && format.getWidth() > 1920) {
+                continue;
+            }
             if (format.getWidth() > MAX_VIDEO_WIDTH) {
                 continue;
             }
