@@ -296,8 +296,16 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     private void appendPinToSidebarButton() {
-        if (!mIsPinToSidebarEnabled || mCategory == null) {
+        if (!mIsPinToSidebarEnabled) {
             return;
+        }
+
+        if (mVideo.playlistId == null && mCategory == null) {
+            return;
+        }
+
+        if (mCategory == null) {
+            mCategory = mVideo;
         }
 
         BrowsePresenter presenter = BrowsePresenter.instance(getContext());

@@ -43,7 +43,9 @@ public class MotherActivity extends FragmentActivity {
     @SuppressLint("RestrictedApi")
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        mScreensaverManager.enable();
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            mScreensaverManager.enable();
+        }
 
         return super.dispatchKeyEvent(event);
     }
