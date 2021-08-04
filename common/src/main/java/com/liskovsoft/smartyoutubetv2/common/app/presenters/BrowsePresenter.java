@@ -507,6 +507,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mediaGroup -> {
+                            if (getView() == null) {
+                                Log.e(TAG, "Browse view has been unloaded from the memory. Low RAM?");
+                                ViewManager.instance(getContext()).startView(BrowseView.class);
+                                return;
+                            }
+
                             VideoGroup videoGroup = VideoGroup.from(mediaGroup, category, position);
                             filterIfNeeded(videoGroup);
                             getView().updateCategory(videoGroup);

@@ -98,7 +98,13 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     }
 
     public void onSearch(String searchText) {
-         loadSearchResult(searchText);
+        if (getView() == null) {
+            Log.e(TAG, "Search view has been unloaded from the memory. Low RAM?");
+            startSearch(searchText);
+            return;
+        }
+
+        loadSearchResult(searchText);
     }
     
     private void loadSearchResult(String searchText) {
