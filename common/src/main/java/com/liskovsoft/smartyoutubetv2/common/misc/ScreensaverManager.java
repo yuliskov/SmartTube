@@ -29,7 +29,6 @@ public class ScreensaverManager {
         mActivity = new WeakReference<>(activity);
         mHandler = new Handler(Looper.getMainLooper());
         mGeneralData = GeneralData.instance(activity);
-        Helpers.disableScreensaver(activity);
         enable();
     }
 
@@ -66,14 +65,8 @@ public class ScreensaverManager {
     }
 
     private void showHide(boolean show) {
-        if (mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER &&
-                mDimColorResId == R.color.dimming) {
-            showHideScreensaver(show);
-            showHideDimming(false);
-        } else {
-            showHideDimming(show);
-            showHideScreensaver(false);
-        }
+        showHideDimming(show);
+        showHideScreensaver(true);
     }
 
     private void showHideDimming(boolean show) {
@@ -114,6 +107,7 @@ public class ScreensaverManager {
 
         PlaybackView playbackView = PlaybackPresenter.instance(activity).getView();
         if (show && playbackView != null && playbackView.getController().isPlaying()) {
+            Helpers.disableScreensaver(activity);
             return;
         }
 
