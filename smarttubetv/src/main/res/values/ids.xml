@@ -11,5 +11,6 @@
     <item name="action_search" type="id"/>
     <item name="action_pip" type="id"/>
     <item name="action_screen_off" type="id"/>
+    <item name="action_playlist" type="id"/>
     <item name="channel_new_content" type="id"/>
 </resources>
