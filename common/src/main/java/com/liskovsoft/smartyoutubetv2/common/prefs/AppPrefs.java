@@ -84,4 +84,20 @@ public class AppPrefs extends SharedPreferencesBase {
     public String getData(String key) {
         return getString(key, null);
     }
+
+    public String getWebProxyUri() {
+        return null;
+    }
+
+    public void setWebProxyUri(String uri) {
+        
+    }
+
+    public boolean getWebProxyEnabled() {
+        return false;
+    }
+
+    public void setWebProxyEnabled(boolean enabled) {
+        
+    }
 }

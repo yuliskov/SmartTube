@@ -226,4 +226,6 @@
     <string name="removed_from_playback_queue">Удалено из очереди воспроизведения</string>
     <string name="added_to_playback_queue">Добавлено в очередь воспроизведения</string>
     <string name="add_remove_from_playback_queue">Добавить/Удалить из очереди воспроизведения</string>
+    <string name="proxy_enabled">Прокси активирован</string>
+    <string name="proxy_disabled">Прокси деактивирован</string>
 </resources>

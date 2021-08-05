@@ -14,7 +14,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventList
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -331,7 +330,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
         if (item.isVideo()) {
             getController().showControls(true);
-            PlaybackPresenter.instance(getActivity()).openVideo(item, false);
+            loadVideo(item);
         } else if (item.isChannel()) {
             ChannelPresenter.instance(getActivity()).openChannel(item);
         } else {
