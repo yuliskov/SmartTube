@@ -300,12 +300,20 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        if (mVideo.playlistId == null && mCategory == null) {
+        if ((mVideo == null || mVideo.playlistId == null) && mCategory == null) {
             return;
         }
 
+        // Pin non-user playlist
         if (mCategory == null) {
-            mCategory = mVideo;
+            Video video = new Video();
+            video.playlistId = mVideo.playlistId;
+            video.title = String.format("%s - %s",
+                    mVideo.author != null ? mVideo.author : mVideo.title,
+                    mVideo.group != null ? mVideo.group.getTitle() : mVideo.description
+            );
+            video.cardImageUrl = mVideo.cardImageUrl;
+            mCategory = video;
         }
 
         BrowsePresenter presenter = BrowsePresenter.instance(getContext());

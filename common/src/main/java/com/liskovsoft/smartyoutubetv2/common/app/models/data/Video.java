@@ -25,7 +25,7 @@ public final class Video implements Parcelable {
     public int playlistIndex;
     public String bgImageUrl;
     public String cardImageUrl;
-    public String studio;
+    public String author;
     public String badge;
     public String previewUrl;
     public float percentWatched = -1;
@@ -53,7 +53,7 @@ public final class Video implements Parcelable {
             final String videoUrl,
             final String bgImageUrl,
             final String cardImageUrl,
-            final String studio) {
+            final String author) {
         this.id = id;
         this.category = category;
         this.title = title;
@@ -62,7 +62,7 @@ public final class Video implements Parcelable {
         this.videoUrl = videoUrl;
         this.bgImageUrl = bgImageUrl;
         this.cardImageUrl = cardImageUrl;
-        this.studio = studio;
+        this.author = author;
     }
 
     protected Video(Parcel in) {
@@ -74,7 +74,7 @@ public final class Video implements Parcelable {
         cardImageUrl = in.readString();
         videoId = in.readString();
         videoUrl = in.readString();
-        studio = in.readString();
+        author = in.readString();
     }
 
     public static Video from(MediaItem item) {
@@ -89,7 +89,7 @@ public final class Video implements Parcelable {
         video.videoUrl = item.getVideoUrl();
         video.bgImageUrl = item.getBackgroundImageUrl();
         video.cardImageUrl = item.getCardImageUrl();
-        video.studio = item.getAuthor();
+        video.author = item.getAuthor();
         video.percentWatched = item.getPercentWatched();
         video.badge = item.getBadgeText();
         video.hasNewContent = item.hasNewContent();
@@ -179,7 +179,7 @@ public final class Video implements Parcelable {
         dest.writeString(cardImageUrl);
         dest.writeString(videoId);
         dest.writeString(videoUrl);
-        dest.writeString(studio);
+        dest.writeString(author);
     }
 
     public static Video fromString(String spec) {
