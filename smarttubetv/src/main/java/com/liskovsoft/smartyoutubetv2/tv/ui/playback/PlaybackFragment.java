@@ -640,6 +640,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         }
 
         @Override
+        public void onPlaybackQueue() {
+            mEventListener.onPlaybackQueueClicked();
+        }
+
+        @Override
         public void onTopEdgeFocused() {
             showControls(false);
         }

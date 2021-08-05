@@ -43,12 +43,12 @@ public class MainPlayerEventBridge implements PlayerEventListener {
             mActivity = new WeakReference<>((Activity) context);
         }
 
-        PlayerUIManager uiManager = new PlayerUIManager();
         SuggestionsLoader suggestionsLoader = new SuggestionsLoader();
+        VideoLoader videoLoader = new VideoLoader(suggestionsLoader);
+        PlayerUIManager uiManager = new PlayerUIManager(videoLoader);
         StateUpdater stateUpdater = new StateUpdater();
         ContentBlockManager contentBlockManager = new ContentBlockManager();
 
-        VideoLoader videoLoader = new VideoLoader(suggestionsLoader);
         RemoteControlManager commandManager = new RemoteControlManager(context, suggestionsLoader, videoLoader);
         HQDialogManager hqDialogManager = new HQDialogManager(stateUpdater);
         AutoFrameRateManager autoFrameRateManager = new AutoFrameRateManager(hqDialogManager, stateUpdater);
@@ -347,6 +347,11 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     @Override
     public void onScreenOffClicked() {
         process(PlayerUiEventListener::onScreenOffClicked);
+    }
+
+    @Override
+    public void onPlaybackQueueClicked() {
+        process(PlayerUiEventListener::onPlaybackQueueClicked);
     }
 
     // End UI events

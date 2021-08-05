@@ -13,6 +13,7 @@ import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -45,6 +46,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     private static final int SUBTITLE_STYLES_ID = 45;
     private final Handler mHandler;
     private final MediaItemManager mMediaItemManager;
+    private final VideoLoader mVideoLoader;
     private boolean mEngineReady;
     private boolean mDebugViewEnabled;
     private PlayerData mPlayerData;
@@ -63,7 +65,8 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         }
     };
 
-    public PlayerUIManager() {
+    public PlayerUIManager(VideoLoader videoLoader) {
+        mVideoLoader = videoLoader;
         mHandler = new Handler(Looper.getMainLooper());
 
         MediaService service = YouTubeMediaService.instance();
@@ -348,6 +351,31 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         if (getActivity() instanceof MotherActivity) {
             ((MotherActivity) getActivity()).getScreensaverManager().doScreenOff();
         }
+    }
+
+    @Override
+    public void onPlaybackQueueClicked() {
+        Playlist playlist = mVideoLoader.getPlaylist();
+
+        String playbackQueueCategoryTitle = getActivity().getString(R.string.playback_queue_category_title);
+
+        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getActivity());
+
+        settingsPresenter.clear();
+
+        List<OptionItem> options = new ArrayList<>();
+
+        for (Video video : playlist.getAll()) {
+            options.add(0, UiOptionItem.from( // recent videos on top
+                    video.title,
+                    optionItem -> mVideoLoader.loadVideo(video),
+                    video == playlist.getCurrent())
+            );
+        }
+
+        settingsPresenter.appendRadioCategory(playbackQueueCategoryTitle, options);
+
+        settingsPresenter.showDialog(playbackQueueCategoryTitle);
     }
 
     private void intSpeedItems(AppSettingsPresenter settingsPresenter, List<OptionItem> items, float[] speedValues) {

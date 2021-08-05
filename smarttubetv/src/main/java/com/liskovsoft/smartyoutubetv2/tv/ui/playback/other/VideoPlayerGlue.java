@@ -17,7 +17,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChannelAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.HighQualityAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PipAction;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PlaylistAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PlaybackQueueAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PlaylistAddAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.RepeatAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ScreenOffAction;
@@ -72,7 +72,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
     private final VideoZoomAction mVideoZoomAction;
     private final PipAction mPipAction;
     private final ScreenOffAction mScreenOffAction;
-    private final PlaylistAction mPlaylistAction;
+    private final PlaybackQueueAction mPlaybackQueueAction;
     private String mQualityInfo;
     private QualityInfoListener mQualityInfoListener;
     private int mPreviousAction = KeyEvent.ACTION_UP;
@@ -107,7 +107,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         mVideoZoomAction = new VideoZoomAction(context);
         mPipAction = new PipAction(context);
         mScreenOffAction = new ScreenOffAction(context);
-        mPlaylistAction = new PlaylistAction(context);
+        mPlaybackQueueAction = new PlaybackQueueAction(context);
     }
 
     @Override
@@ -142,7 +142,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         adapter.add(mHighQualityAction);
         adapter.add(mChannelAction);
         adapter.add(mPlaylistAddAction);
-        adapter.add(mPlaylistAction);
+        adapter.add(mPlaybackQueueAction);
         adapter.add(mThumbsUpAction);
         adapter.add(mThumbsDownAction);
         adapter.add(mSubscribeAction);
@@ -322,6 +322,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         } else if (action == mScreenOffAction) {
             mActionListener.onScreenOff();
             handled = true;
+        } else if (action == mPlaybackQueueAction) {
+            mActionListener.onPlaybackQueue();
+            handled = true;
         }
 
         if (handled) {
@@ -446,6 +449,8 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         void onPip();
 
         void onScreenOff();
+
+        void onPlaybackQueue();
 
         void onTopEdgeFocused();
 

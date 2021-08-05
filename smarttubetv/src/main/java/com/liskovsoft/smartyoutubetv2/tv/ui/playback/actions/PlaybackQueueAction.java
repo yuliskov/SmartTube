@@ -9,13 +9,13 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 /**
  * An action for displaying a PIP icon.
  */
-public class PlaylistAction extends Action {
-    public PlaylistAction(Context context) {
-        super(R.id.action_playlist);
+public class PlaybackQueueAction extends Action {
+    public PlaybackQueueAction(Context context) {
+        super(R.id.action_playback_queue);
         Drawable uncoloredDrawable = ContextCompat.getDrawable(context, R.drawable.action_playlist);
 
         setIcon(uncoloredDrawable);
         setLabel1(context.getString(
-                R.string.action_playlist));
+                R.string.action_playback_queue));
     }
 }

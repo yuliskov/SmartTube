@@ -31,5 +31,6 @@ public interface PlayerUiEventListener {
     void onVideoZoomClicked();
     void onPipClicked();
     void onScreenOffClicked();
+    void onPlaybackQueueClicked();
     void onControlsShown(boolean shown);
 }
