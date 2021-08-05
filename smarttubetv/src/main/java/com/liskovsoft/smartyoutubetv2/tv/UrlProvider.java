@@ -26,6 +26,7 @@ public class UrlProvider extends ContentProvider {
     private final static double ASPECT_RATIO_16_9 = 16 / 9.0;
     private final static int MAX_WIDTH_FOR_ANY_ASPECT = 1920;
     private final static String MAX_VIDEO_HEIGHT_PARAM = "max_video_height";
+    private final static String AVC_CODEC_PRIORITY_PARAM = "avc_codec_priority";
 
     public UrlProvider() {
     }
@@ -69,23 +70,30 @@ public class UrlProvider extends ContentProvider {
             videoUrl = videoInfo.getDashManifestUrl();
             Log.d(TAG, "using dash manifest");
         } else if (formats != null) {
+            int maxVideoHeight = MAX_VIDEO_HEIGHT;
+            if (uri.getQueryParameter(MAX_VIDEO_HEIGHT_PARAM) != null) {
+                maxVideoHeight = Integer.parseInt(uri.getQueryParameter(MAX_VIDEO_HEIGHT_PARAM));
+            }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                int finalMaxVideoHeight = maxVideoHeight;
                 formats = formats.stream()
                         .filter(adaptiveVideoFormat -> !adaptiveVideoFormat.getMimeType().contains("av01"))
                         .filter(adaptiveVideoFormat -> {
-                            int maxVideoHeight = MAX_VIDEO_HEIGHT;
-                            if (uri.getQueryParameter(MAX_VIDEO_HEIGHT_PARAM) != null) {
-                                maxVideoHeight = Integer.parseInt(uri.getQueryParameter(MAX_VIDEO_HEIGHT_PARAM));
-                            }
                             if (adaptiveVideoFormat.getSize() != null) {
                                 final int width = Integer.parseInt(adaptiveVideoFormat.getSize().split("x")[0]);
                                 final int height = Integer.parseInt(adaptiveVideoFormat.getSize().split("x")[1]);
-                                final boolean isProperlyAspect = Math.abs(1.0 * width / height - ASPECT_RATIO_16_9) < 0.0001;
-                                return (isProperlyAspect && height <= maxVideoHeight) || (width <= MAX_WIDTH_FOR_ANY_ASPECT);
+                                final boolean isProperlyAspect = Math.abs(1.0 * width / height - ASPECT_RATIO_16_9) < 0.1;
+                                return (isProperlyAspect && height <= finalMaxVideoHeight)
+                                        || (!isProperlyAspect && width <= MAX_WIDTH_FOR_ANY_ASPECT);
                             }
                             return true;
                         })
                         .sorted((lhs, rhs) -> rhs.getBitrate() - lhs.getBitrate())
+                        .sorted((lhs, rhs) -> {
+                            final int lhsValue = lhs.getMimeType().contains("vp9") ? 1 : 0;
+                            final int rhsValue = rhs.getMimeType().contains("vp9") ? 1 : 0;
+                            return rhsValue - lhsValue;
+                        })
                         .collect(Collectors.toList());
             }
             for (AdaptiveVideoFormat format : formats) {
