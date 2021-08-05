@@ -145,7 +145,21 @@ public final class Video implements Parcelable {
      */
     @Override
     public boolean equals(@Nullable Object obj) {
-        return obj instanceof Video && hashCode() == obj.hashCode();
+        if (obj instanceof Video) {
+            if (videoId != null) {
+                return videoId.equals(((Video) obj).videoId);
+            }
+
+            if (playlistId != null) {
+                return playlistId.equals(((Video) obj).playlistId);
+            }
+
+            if (channelId != null) {
+                return channelId.equals(((Video) obj).channelId);
+            }
+        }
+
+        return false;
     }
 
     @Override
