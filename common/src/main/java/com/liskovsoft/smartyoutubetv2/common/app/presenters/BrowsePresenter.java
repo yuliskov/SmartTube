@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
@@ -48,7 +49,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private static BrowsePresenter sInstance;
     private final Handler mHandler = new Handler();
     private final PlaybackPresenter mPlaybackPresenter;
-    private final MediaService mMediaService;
     private final ViewManager mViewManager;
     private final MainUIData mMainUIData;
     private final GeneralData mGeneralData;
@@ -57,6 +57,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private final Map<Integer, Observable<List<MediaGroup>>> mRowMapping;
     private final Map<Integer, List<SettingsItem>> mSettingsGridMapping;
     private final AppDataSourceManager mDataSourcePresenter;
+    private final MediaGroupManager mGroupManager;
+    private final MediaItemManager mItemManager;
+    private final SignInManager mSignInManager;
     private Disposable mUpdateAction;
     private Disposable mContinueAction;
     private Disposable mSignCheckAction;
@@ -69,7 +72,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         super(context);
         mDataSourcePresenter = AppDataSourceManager.instance();
         mPlaybackPresenter = PlaybackPresenter.instance(context);
-        mMediaService = YouTubeMediaService.instance();
         mViewManager = ViewManager.instance(context);
         mCategories = new ArrayList<>();
         mGridMapping = new HashMap<>();
@@ -79,6 +81,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         mGeneralData = GeneralData.instance(context);
         ScreenHelper.initPipMode(context);
         ScreenHelper.updateScreenInfo(context);
+
+        MediaService mediaService = YouTubeMediaService.instance();
+        mGroupManager = mediaService.getMediaGroupManager();
+        mItemManager = mediaService.getMediaItemManager();
+        mSignInManager = mediaService.getSignInManager();
+
         initCategories();
     }
 
@@ -133,17 +141,15 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void initCategoryCallbacks() {
-        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
+        mRowMapping.put(MediaGroup.TYPE_HOME, mGroupManager.getHomeObserve());
+        mRowMapping.put(MediaGroup.TYPE_NEWS, mGroupManager.getNewsObserve());
+        mRowMapping.put(MediaGroup.TYPE_MUSIC, mGroupManager.getMusicObserve());
+        mRowMapping.put(MediaGroup.TYPE_GAMING, mGroupManager.getGamingObserve());
+        mRowMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mGroupManager.getPlaylistsObserve());
 
-        mRowMapping.put(MediaGroup.TYPE_HOME, mediaGroupManager.getHomeObserve());
-        mRowMapping.put(MediaGroup.TYPE_NEWS, mediaGroupManager.getNewsObserve());
-        mRowMapping.put(MediaGroup.TYPE_MUSIC, mediaGroupManager.getMusicObserve());
-        mRowMapping.put(MediaGroup.TYPE_GAMING, mediaGroupManager.getGamingObserve());
-        mRowMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mediaGroupManager.getPlaylistsObserve());
-
-        mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mediaGroupManager.getSubscriptionsObserve());
-        mGridMapping.put(MediaGroup.TYPE_HISTORY, mediaGroupManager.getHistoryObserve());
-        mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mediaGroupManager.getSubscribedChannelsUpdateObserve());
+        mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mGroupManager.getSubscriptionsObserve());
+        mGridMapping.put(MediaGroup.TYPE_HISTORY, mGroupManager.getHistoryObserve());
+        mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsUpdateObserve());
     }
 
     private void initPinnedHeaders() {
@@ -189,37 +195,33 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     public void updateChannelSorting() {
-        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
-
         int sortingType = mMainUIData.getChannelCategorySorting();
 
         switch (sortingType) {
             case MainUIData.CHANNEL_SORTING_UPDATE:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mediaGroupManager.getSubscribedChannelsUpdateObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsUpdateObserve());
                 break;
             case MainUIData.CHANNEL_SORTING_AZ:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mediaGroupManager.getSubscribedChannelsAZObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsAZObserve());
                 break;
             case MainUIData.CHANNEL_SORTING_LAST_VIEWED:
-                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mediaGroupManager.getSubscribedChannelsLastViewedObserve());
+                mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsLastViewedObserve());
                 break;
         }
     }
 
     public void updatePlaylistsStyle() {
-        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
-
         int playlistsStyle = mMainUIData.getPlaylistsStyle();
 
         switch (playlistsStyle) {
             case MainUIData.PLAYLISTS_STYLE_GRID:
                 mRowMapping.remove(MediaGroup.TYPE_USER_PLAYLISTS);
-                mGridMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mediaGroupManager.getEmptyPlaylistsObserve());
+                mGridMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mGroupManager.getEmptyPlaylistsObserve());
                 updateCategoryType(MediaGroup.TYPE_USER_PLAYLISTS, Category.TYPE_GRID);
                 break;
             case MainUIData.PLAYLISTS_STYLE_ROWS:
                 mGridMapping.remove(MediaGroup.TYPE_USER_PLAYLISTS);
-                mRowMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mediaGroupManager.getPlaylistsObserve());
+                mRowMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, mGroupManager.getPlaylistsObserve());
                 updateCategoryType(MediaGroup.TYPE_USER_PLAYLISTS, Category.TYPE_ROW);
                 break;
         }
@@ -544,9 +546,15 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
+        Observable<MediaGroup> continuation;
 
-        mContinueAction = mediaGroupManager.continueGroupObserve(mediaGroup)
+        if (mediaGroup.getType() == MediaGroup.TYPE_SUGGESTIONS) { // Pinned playlist
+            continuation = mItemManager.continueGroupObserve(mediaGroup);
+        } else {
+            continuation = mGroupManager.continueGroupObserve(mediaGroup);
+        }
+
+        mContinueAction = continuation
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -575,9 +583,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
         getView().showProgressBar(true);
 
-        SignInManager signInManager = mMediaService.getSignInManager();
-
-        mSignCheckAction = signInManager.isSignedObserve()
+        mSignCheckAction = mSignInManager.isSignedObserve()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
