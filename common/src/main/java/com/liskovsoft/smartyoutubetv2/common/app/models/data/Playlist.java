@@ -76,7 +76,7 @@ public class Playlist {
             }
         }
 
-        mPlaylist.add(++mCurrentIndex, video);
+        mPlaylist.add(video);
 
         // Video opened from the browser or suggestions.
         // In this case remove all next items.
@@ -84,23 +84,37 @@ public class Playlist {
         stripPrevItem();
     }
 
+    ///**
+    // * Trim playlist if one exceeds needed size or current element not last in the list
+    // */
+    //private void trimPlaylist() {
+    //    int fromIndex = 0;
+    //    int toIndex = mCurrentIndex + 1;
+    //
+    //    boolean isLastElement = mCurrentIndex == (mPlaylist.size() - 1);
+    //    boolean playlistTooBig = mPlaylist.size() > PLAYLIST_MAX_SIZE;
+    //
+    //    if (playlistTooBig) {
+    //        fromIndex = mPlaylist.size() - PLAYLIST_MAX_SIZE;
+    //    }
+    //
+    //    if (!isLastElement || playlistTooBig) {
+    //        mPlaylist = mPlaylist.subList(fromIndex, toIndex);
+    //        mCurrentIndex = mPlaylist.size() - 1;
+    //    }
+    //}
+
     /**
      * Trim playlist if one exceeds needed size or current element not last in the list
      */
     private void trimPlaylist() {
-        int fromIndex = 0;
-        int toIndex = mCurrentIndex + 1;
-
-        boolean isLastElement = mCurrentIndex == (mPlaylist.size() - 1);
         boolean playlistTooBig = mPlaylist.size() > PLAYLIST_MAX_SIZE;
 
         if (playlistTooBig) {
-            fromIndex = mPlaylist.size() - PLAYLIST_MAX_SIZE;
-        }
-
-        if (!isLastElement || playlistTooBig) {
+            int fromIndex = mPlaylist.size() - PLAYLIST_MAX_SIZE;
+            int toIndex = mPlaylist.size();
             mPlaylist = mPlaylist.subList(fromIndex, toIndex);
-            mCurrentIndex = mPlaylist.size() - 1;
+            mCurrentIndex -= fromIndex;
         }
     }
 
