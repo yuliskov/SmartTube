@@ -67,6 +67,7 @@ public class Playlist {
 
         remove(video);
         mPlaylist.add(video);
+        mCurrentIndex = mPlaylist.size() - 1;
 
         // Video opened from the browser or suggestions.
         // In this case remove all next items.
