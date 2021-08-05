@@ -7,6 +7,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -46,6 +47,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     private boolean mIsReturnToBackgroundVideoEnabled;
     private boolean mIsPinToSidebarEnabled;
     private boolean mIsOpenPlaylistButtonEnabled;
+    private boolean mIsAddToPlaybackQueueButtonEnabled;
 
     private VideoMenuPresenter(Context context) {
         super(context);
@@ -71,6 +73,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
     public void showVideoMenu(Video video, Video category) {
         mIsAddToPlaylistButtonEnabled = true;
+        mIsAddToPlaybackQueueButtonEnabled = true;
         mIsOpenChannelButtonEnabled = true;
         mIsOpenChannelUploadsButtonEnabled = true;
         mIsOpenPlaylistButtonEnabled = true;
@@ -140,7 +143,8 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mSettingsPresenter.clear();
 
         appendReturnToBackgroundVideoButton();
-        appendAddToPlaylist(videoPlaylistInfos);
+        appendAddToPlaylistButton(videoPlaylistInfos);
+        appendAddToPlaybackQueueButton();
         appendOpenPlaylistButton();
         appendOpenChannelButton();
         //appendOpenChannelUploadsButton();
@@ -164,6 +168,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mSettingsPresenter.clear();
 
         appendReturnToBackgroundVideoButton();
+        appendAddToPlaybackQueueButton();
         appendOpenPlaylistButton();
         appendOpenChannelButton();
         appendShareButton();
@@ -176,7 +181,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         }
     }
 
-    private void appendAddToPlaylist(List<VideoPlaylistInfo> videoPlaylistInfos) {
+    private void appendAddToPlaylistButton(List<VideoPlaylistInfo> videoPlaylistInfos) {
         if (!mIsAddToPlaylistButtonEnabled || videoPlaylistInfos == null) {
             return;
         }
@@ -343,6 +348,29 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
                         optionItem -> ViewManager.instance(getContext()).startView(SplashView.class)
                 )
         );
+    }
+
+    private void appendAddToPlaybackQueueButton() {
+        if (!mIsAddToPlaybackQueueButtonEnabled || mVideo == null) {
+            return;
+        }
+
+        Playlist playlist = Playlist.instance();
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(
+                        R.string.add_remove_from_playback_queue),
+                        optionItem -> {
+                            boolean containsVideo = playlist.contains(mVideo);
+
+                            if (containsVideo) {
+                                playlist.remove(mVideo);
+                            } else {
+                                playlist.add(mVideo);
+                            }
+
+                            MessageHelpers.showMessage(getContext(), containsVideo ? R.string.removed_from_playback_queue : R.string.added_to_playback_queue);
+                        }));
     }
 
     private void addToPlaylist(String playlistId, boolean checked) {

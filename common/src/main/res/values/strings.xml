@@ -223,4 +223,7 @@
     <string name="hide_shorts">Hide shorts form Subscriptions</string>
     <string name="key_remapping">Key remapping</string>
     <string name="screen_diming">Screen diming</string>
+    <string name="removed_from_playback_queue">Removed from playback queue</string>
+    <string name="added_to_playback_queue">Added to playback queue</string>
+    <string name="add_remove_from_playback_queue">Add/Remove from playback queue</string>
 </resources>

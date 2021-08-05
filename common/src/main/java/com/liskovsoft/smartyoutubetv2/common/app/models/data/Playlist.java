@@ -65,6 +65,20 @@ public class Playlist {
             return;
         }
 
+        remove(video);
+        mPlaylist.add(video);
+
+        // Video opened from the browser or suggestions.
+        // In this case remove all next items.
+        trimPlaylist();
+        stripPrevItem();
+    }
+
+    public void remove(Video video) {
+        if (Video.isEmpty(video)) {
+            return;
+        }
+
         int index = mPlaylist.indexOf(video);
 
         if (index >= 0) {
@@ -75,13 +89,14 @@ public class Playlist {
                 --mCurrentIndex;
             }
         }
+    }
 
-        mPlaylist.add(video);
+    public boolean contains(Video video) {
+        if (Video.isEmpty(video)) {
+            return false;
+        }
 
-        // Video opened from the browser or suggestions.
-        // In this case remove all next items.
-        trimPlaylist();
-        stripPrevItem();
+        return mPlaylist.contains(video);
     }
 
     ///**
@@ -103,20 +118,6 @@ public class Playlist {
     //        mCurrentIndex = mPlaylist.size() - 1;
     //    }
     //}
-
-    /**
-     * Trim playlist if one exceeds needed size or current element not last in the list
-     */
-    private void trimPlaylist() {
-        boolean playlistTooBig = mPlaylist.size() > PLAYLIST_MAX_SIZE;
-
-        if (playlistTooBig) {
-            int fromIndex = mPlaylist.size() - PLAYLIST_MAX_SIZE;
-            int toIndex = mPlaylist.size();
-            mPlaylist = mPlaylist.subList(fromIndex, toIndex);
-            mCurrentIndex -= fromIndex;
-        }
-    }
 
     /**
      * Moves to the next video in the playlist. If already at the end of the playlist, null will
@@ -170,6 +171,20 @@ public class Playlist {
 
     public List<Video> getAll() {
         return mPlaylist;
+    }
+
+    /**
+     * Trim playlist if one exceeds needed size or current element not last in the list
+     */
+    private void trimPlaylist() {
+        boolean playlistTooBig = mPlaylist.size() > PLAYLIST_MAX_SIZE;
+
+        if (playlistTooBig) {
+            int fromIndex = mPlaylist.size() - PLAYLIST_MAX_SIZE;
+            int toIndex = mPlaylist.size();
+            mPlaylist = mPlaylist.subList(fromIndex, toIndex);
+            mCurrentIndex -= fromIndex;
+        }
     }
 
     /**

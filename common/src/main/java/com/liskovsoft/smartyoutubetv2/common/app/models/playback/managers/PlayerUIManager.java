@@ -355,7 +355,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onPlaybackQueueClicked() {
-        Playlist playlist = mVideoLoader.getPlaylist();
+        Playlist playlist = Playlist.instance();
 
         String playbackQueueCategoryTitle = getActivity().getString(R.string.playback_queue_category_title);
 

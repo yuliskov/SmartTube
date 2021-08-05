@@ -223,4 +223,7 @@
     <string name="hide_shorts">Приховувати короткі відео з Підписок</string>
     <string name="key_remapping">Перевизначення клавіш</string>
     <string name="screen_diming">Затемнення екрану</string>
+    <string name="removed_from_playback_queue">Видалено з черги відтворення</string>
+    <string name="added_to_playback_queue">Додано до черги відтворення</string>
+    <string name="add_remove_from_playback_queue">Додати/Видалити з черги відтворення</string>
 </resources>

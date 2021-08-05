@@ -204,10 +204,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
         return false;
     }
 
-    public Playlist getPlaylist() {
-        return mPlaylist;
-    }
-
     private int checkSleepTimer(int playbackMode) {
         if (mPlayerData.isSonyTimerFixEnabled()) {
             if (System.currentTimeMillis() - mSleepTimerStartMs > 60 * 60 * 1_000) {
