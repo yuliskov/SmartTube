@@ -66,6 +66,8 @@ public class DelayMediaCodecAudioRenderer extends MediaCodecAudioRenderer {
                 bufferPresentationTimeUs, isDecodeOnlyBuffer, isLastBuffer, format
         );
 
+        // Disable the use of AudioTrack.getTimestamp and force ExoPlayer to go through the legacy path of using
+        // AudioTrack.getPlaybackHeadPosition instead, which might help if the first one drifts but the second one doesn't.
         if (mIsAudioSyncFixEnabled && mIsAudioSyncFixChanged) {
             Object audioSink = Helpers.getField(this, "audioSink");
             if (audioSink != null) {

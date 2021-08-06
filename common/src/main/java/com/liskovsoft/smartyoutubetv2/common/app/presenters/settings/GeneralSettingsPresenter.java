@@ -184,7 +184,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
         ProxyManager proxyManager = ProxyManager.instance(getContext());
 
-        options.add(UiOptionItem.from("Proxy config: " + proxyManager.getConfigPath(),
+        options.add(UiOptionItem.from("Web Proxy config: " + proxyManager.getConfigPath(),
                 option -> {
                     mGeneralData.enableProxy(option.isSelected());
                     proxyManager.enableProxy(option.isSelected());

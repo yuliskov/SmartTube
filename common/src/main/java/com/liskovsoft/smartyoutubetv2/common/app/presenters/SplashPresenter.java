@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
@@ -25,6 +26,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private static SplashPresenter sInstance;
     private static boolean mRunOnce;
     private final List<IntentProcessor> mIntentChain = new ArrayList<>();
+    private ProxyManager mProxyManager;
 
     private interface IntentProcessor {
         boolean process(Intent intent);
@@ -64,6 +66,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             updateChannels();
             getBackupDataOnce();
             runRemoteControlTasks();
+            configureProxy();
             mRunOnce = true;
         }
     }
@@ -95,6 +98,13 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         if (getContext() != null) {
             //Utils.startRemoteControlService(getContext());
             Utils.startRemoteControlWorkRequest(getContext());
+        }
+    }
+
+    private void configureProxy() {
+        if (getContext() != null && GeneralData.instance(getContext()).isProxyEnabled()) {
+            mProxyManager = ProxyManager.instance(getContext());
+            mProxyManager.enableProxy(true);
         }
     }
 

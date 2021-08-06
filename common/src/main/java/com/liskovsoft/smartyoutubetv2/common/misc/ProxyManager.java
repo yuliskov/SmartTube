@@ -54,7 +54,7 @@ public class ProxyManager {
 
         File configFilePath = getConfigFilePath();
         if (!FileHelpers.isFileExists(configFilePath)) {
-            FileHelpers.stringToFile("SOCKS http://myproxyaddress.com 80", configFilePath);
+            FileHelpers.stringToFile("socks://myproxyaddress.com:80", configFilePath);
         }
     }
 
@@ -102,7 +102,7 @@ public class ProxyManager {
      * @return String representation of current proxy settings.
      */
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public String getProxyUriString() {
+    public String getWebProxyUri() {
         if (mProxy == null || mProxy.type() == Proxy.Type.DIRECT) {
             return "";
         }
@@ -121,7 +121,8 @@ public class ProxyManager {
         mEnabled = enabled;
 
         if (mEnabled) {
-            loadProxyInfoFromPrefs();
+            loadProxyInfoFromStorage();
+            startProxy();
         }
     }
 
@@ -181,7 +182,7 @@ public class ProxyManager {
 
     protected void loadProxyInfoFromPrefs() {
         try {
-            String proxyUriString = mPrefs.getWebProxyUri();
+            String proxyUriString = getWebProxyUriFromPrefs();
             Log.d(TAG, "Web Proxy URI from preferences: \""
                     + proxyUriString + "\"; " + mEnabled);
             if (proxyUriString.isEmpty() || proxyUriString.equalsIgnoreCase(Proxy.Type.DIRECT.name())) {
@@ -192,19 +193,37 @@ public class ProxyManager {
                 mProxy = new Proxy(Proxy.Type.valueOf(proxyURI.getScheme().toUpperCase()),
                         InetSocketAddress.createUnresolved(proxyURI.getHost(), proxyURI.getPort()));
             }
-            mEnabled = mPrefs.getWebProxyEnabled();
-        }
-        catch (URISyntaxException e) {
+        } catch (URISyntaxException e) {
             Log.e(TAG, e);
             mProxy = Proxy.NO_PROXY;
-            mEnabled = false; // disable invalid proxy settings.
+            mEnabled = false; // Disable. Invalid proxy settings.
+        }
+    }
+
+    protected void loadProxyInfoFromStorage() {
+        try {
+            String proxyUriString = FileHelpers.getFileContents(getConfigFilePath());
+            Log.d(TAG, "Reading Web Proxy URI from external storage: \""
+                    + proxyUriString + "\"; " + mEnabled);
+            if (proxyUriString.isEmpty() || proxyUriString.equalsIgnoreCase(Proxy.Type.DIRECT.name())) {
+                mProxy = Proxy.NO_PROXY;
+            }
+            else {
+                URI proxyURI = new URI(proxyUriString);
+                mProxy = new Proxy(Proxy.Type.valueOf(proxyURI.getScheme().toUpperCase()),
+                        InetSocketAddress.createUnresolved(proxyURI.getHost(), proxyURI.getPort()));
+            }
+        } catch (URISyntaxException e) {
+            Log.e(TAG, e);
+            mProxy = Proxy.NO_PROXY;
+            mEnabled = false; // Disable. Invalid proxy settings.
         }
     }
 
     /**
      * Save proxy settings to preferences.
      * This method only save the settings, it doesn't actually configure the system to use the proxy.
-     * Use {@link #configureSystemProxy()} to configure system proxy settings.
+     * Use {@link #startProxy()} to configure system proxy settings.
      *
      * @param proxy Specify new proxy settings, if null, current proxy setting will be saved.
      * @param enable Set proxy enabled/disabled.
@@ -214,7 +233,7 @@ public class ProxyManager {
         if (proxy != null)
             mProxy = new Proxy(proxy.type(), proxy.address());
         mEnabled = enable;
-        String proxyUriString = getProxyUriString();
+        String proxyUriString = getWebProxyUri();
         mPrefs.setWebProxyUri(proxyUriString);
         mPrefs.setWebProxyEnabled(mEnabled);
         String toastMessage = enable ? mContext.getString(R.string.proxy_enabled, proxyUriString)
@@ -321,11 +340,17 @@ public class ProxyManager {
                 }
             }
         }
-        Log.d(TAG, "Web Proxy set to: " + getProxyUriString());
+        Log.d(TAG, "Web Proxy set to: " + getWebProxyUri());
         return true;
     }
 
-    public boolean configureSystemProxy() {
+    private boolean startProxy() {
+        if (!mEnabled) {
+            return false;
+        }
+
+        MessageHelpers.showMessage(mContext, "Starting proxy: %s...", getWebProxyUri());
+
         try {
             if (Build.VERSION.SDK_INT < 19) {
                 throw new UnsupportedOperationException("Web Proxy support not implemented for API level < 19");
@@ -344,5 +369,9 @@ public class ProxyManager {
 
     private File getConfigFilePath() {
         return new File(FileHelpers.getExternalFilesDir(mContext), "proxy.txt");
+    }
+
+    private String getWebProxyUriFromPrefs() {
+        return mPrefs.getWebProxyUri();
     }
 }
