@@ -124,7 +124,7 @@
     <string name="sorting_alphabetically">По алфавиту</string>
     <string name="sorting_last_viewed">Последние просмотренные</string>
     <string name="player_pause_when_seek">Пауза при перемотке</string>
-    <string name="playlists_style">Стиль плейлистов</string>
+    <string name="playlists_style">Стиль раздела Плейлисты</string>
     <string name="playlists_style_grid">Сетка</string>
     <string name="playlists_style_rows">Строки</string>
     <string name="player_show_clock">Отображать часы во всплывающем меню</string>

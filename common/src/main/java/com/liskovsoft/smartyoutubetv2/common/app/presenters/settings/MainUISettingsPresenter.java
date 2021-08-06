@@ -37,7 +37,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         //appendCardTitleLines(settingsPresenter);
         appendCardTextScrollSpeed(settingsPresenter);
         appendChannelSortingCategory(settingsPresenter);
-        appendPlaylistsStyle(settingsPresenter);
+        appendPlaylistsCategoryStyle(settingsPresenter);
         appendScaleUI(settingsPresenter);
         appendVideoGridScale(settingsPresenter);
         appendMiscCategory(settingsPresenter);
@@ -97,7 +97,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.channels_category_sorting), options);
     }
 
-    private void appendPlaylistsStyle(AppSettingsPresenter settingsPresenter) {
+    private void appendPlaylistsCategoryStyle(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {

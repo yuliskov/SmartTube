@@ -124,7 +124,7 @@
     <string name="sorting_alphabetically">Alphabetically</string>
     <string name="sorting_last_viewed">Last viewed</string>
     <string name="player_pause_when_seek">Pause when seeking</string>
-    <string name="playlists_style">Playlists style</string>
+    <string name="playlists_style">Playlists category style</string>
     <string name="playlists_style_grid">Grid</string>
     <string name="playlists_style_rows">Rows</string>
     <string name="player_show_clock">Show clock in pop-up menu</string>
