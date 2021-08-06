@@ -188,6 +188,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> {
                     mGeneralData.enableProxy(option.isSelected());
                     proxyManager.enableProxy(option.isSelected());
+                    mRestartApp = true;
                 },
                 mGeneralData.isProxyEnabled()));
 
