@@ -1,8 +1,11 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.renderer;
 
 import android.content.Context;
+import android.media.MediaCodec;
 import android.os.Handler;
 import androidx.annotation.Nullable;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.audio.AudioRendererEventListener;
 import com.google.android.exoplayer2.audio.AudioSink;
 import com.google.android.exoplayer2.audio.MediaCodecAudioRenderer;
@@ -11,10 +14,13 @@ import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
+import java.nio.ByteBuffer;
+
 public class DelayMediaCodecAudioRenderer extends MediaCodecAudioRenderer {
     private static final String TAG = DelayMediaCodecAudioRenderer.class.getSimpleName();
     private int mDelayUs;
     private boolean mIsAudioSyncFixEnabled;
+    private boolean mIsAudioSyncFixChanged;
 
     // Exo 2.9
     //public CustomMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector,
@@ -52,14 +58,15 @@ public class DelayMediaCodecAudioRenderer extends MediaCodecAudioRenderer {
         return mDelayUs / 1_000;
     }
 
-    public void enableAudioSyncFix(boolean enable) {
-        if (mIsAudioSyncFixEnabled == enable) {
-            return;
-        }
+    @Override
+    protected boolean processOutputBuffer(long positionUs, long elapsedRealtimeUs, MediaCodec codec, ByteBuffer buffer, int bufferIndex,
+                                          int bufferFlags, long bufferPresentationTimeUs, boolean isDecodeOnlyBuffer, boolean isLastBuffer, Format format) throws ExoPlaybackException {
+        boolean result = super.processOutputBuffer(
+                positionUs, elapsedRealtimeUs, codec, buffer, bufferIndex, bufferFlags,
+                bufferPresentationTimeUs, isDecodeOnlyBuffer, isLastBuffer, format
+        );
 
-        mIsAudioSyncFixEnabled = enable;
-
-        if (mIsAudioSyncFixEnabled) {
+        if (mIsAudioSyncFixEnabled && mIsAudioSyncFixChanged) {
             Object audioSink = Helpers.getField(this, "audioSink");
             if (audioSink != null) {
                 Object audioTrackPositionTracker = Helpers.getField(audioSink, "audioTrackPositionTracker");
@@ -71,7 +78,19 @@ public class DelayMediaCodecAudioRenderer extends MediaCodecAudioRenderer {
                     }
                 }
             }
+            mIsAudioSyncFixChanged = false;
         }
+
+        return result;
+    }
+
+    public void enableAudioSyncFix(boolean enable) {
+        if (mIsAudioSyncFixEnabled == enable) {
+            return;
+        }
+
+        mIsAudioSyncFixEnabled = enable;
+        mIsAudioSyncFixChanged = true;
     }
 
     public boolean isAudioSyncFixEnabled() {
