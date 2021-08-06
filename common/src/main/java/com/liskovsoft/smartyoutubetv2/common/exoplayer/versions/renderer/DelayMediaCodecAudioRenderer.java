@@ -75,10 +75,10 @@ public class DelayMediaCodecAudioRenderer extends MediaCodecAudioRenderer {
                     if (audioTimestampPoller != null) {
                         Helpers.setField(audioTimestampPoller, "audioTimestamp", null);
                         Helpers.setField(audioTimestampPoller, "state", 3);
+                        mIsAudioSyncFixChanged = false;
                     }
                 }
             }
-            mIsAudioSyncFixChanged = false;
         }
 
         return result;
