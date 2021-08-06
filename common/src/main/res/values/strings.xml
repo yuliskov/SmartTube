@@ -154,7 +154,7 @@
     <string name="share_link">Share link</string>
     <string name="subscribe_to_channel">Subscribe to channel</string>
     <string name="wait_data_loading">Please wait while data is loading…</string>
-    <string name="auto_frame_rate_pause">Auto frame rate pause</string>
+    <string name="auto_frame_rate_pause">Auto frame rate switch pause</string>
     <string name="auto_frame_rate_applying">Applying auto frame rate %sx%s@%s</string>
     <string name="audio_shift">Audio shift</string>
     <string name="player_remember_speed">Remember speed</string>

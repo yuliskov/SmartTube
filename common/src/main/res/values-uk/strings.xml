@@ -154,7 +154,7 @@
     <string name="share_link">Поділитися посиланням</string>
     <string name="subscribe_to_channel">Підписатися на канал</string>
     <string name="wait_data_loading">Зачекайте поки дані завантажуються…</string>
-    <string name="auto_frame_rate_pause">Автофреймрейт (пауза)</string>
+    <string name="auto_frame_rate_pause">Автофреймрейт (пауза при перемиканні)</string>
     <string name="auto_frame_rate_applying">Застосовується автофреймрейт %sx%s@%s</string>
     <string name="audio_shift">Зміщення аудіо</string>
     <string name="player_remember_speed">Запам\'ятовувати швидкість</string>

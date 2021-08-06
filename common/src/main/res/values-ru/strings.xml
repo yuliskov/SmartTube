@@ -154,7 +154,7 @@
     <string name="share_link">Поделиться ссылкой</string>
     <string name="subscribe_to_channel">Подписаться на канал</string>
     <string name="wait_data_loading">Подождите пока загружаются данные…</string>
-    <string name="auto_frame_rate_pause">Автофреймрейт (пауза)</string>
+    <string name="auto_frame_rate_pause">Автофреймрейт (пауза при переключении)</string>
     <string name="auto_frame_rate_applying">Применяется автофреймрейт %sx%s@%s</string>
     <string name="audio_shift">Смещение аудио</string>
     <string name="player_remember_speed">Запоминать скорость</string>
