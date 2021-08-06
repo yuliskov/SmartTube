@@ -22,6 +22,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
+import java.net.Proxy.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -120,10 +121,8 @@ public class ProxyManager {
 
         mEnabled = enabled;
 
-        if (mEnabled) {
-            loadProxyInfoFromStorage();
-            startProxy();
-        }
+        loadProxyInfoFromStorage();
+        configureProxy();
     }
 
     /**
@@ -201,6 +200,11 @@ public class ProxyManager {
     }
 
     protected void loadProxyInfoFromStorage() {
+        if (!mEnabled) {
+            mProxy = Proxy.NO_PROXY;
+            return;
+        }
+
         try {
             String proxyUriString = FileHelpers.getFileContents(getConfigFilePath());
             Log.d(TAG, "Reading Web Proxy URI from external storage: \""
@@ -223,7 +227,7 @@ public class ProxyManager {
     /**
      * Save proxy settings to preferences.
      * This method only save the settings, it doesn't actually configure the system to use the proxy.
-     * Use {@link #startProxy()} to configure system proxy settings.
+     * Use {@link #configureProxy()} to configure system proxy settings.
      *
      * @param proxy Specify new proxy settings, if null, current proxy setting will be saved.
      * @param enable Set proxy enabled/disabled.
@@ -344,21 +348,28 @@ public class ProxyManager {
         return true;
     }
 
-    private boolean startProxy() {
-        if (!mEnabled) {
+    private boolean configureProxy() {
+        if (mProxy == null) {
             return false;
         }
 
-        MessageHelpers.showMessage(mContext, "Starting proxy: %s...", getWebProxyUri());
+        if (Build.VERSION.SDK_INT < 19) {
+            Log.e(TAG, "Web Proxy support not implemented for API level < 19");
+            return false;
+        }
+
+        if (mEnabled) {
+            MessageHelpers.showMessage(mContext, "Starting proxy %s", getWebProxyUri());
+        } else {
+            MessageHelpers.showMessage(mContext, "Stopping proxy %s", getWebProxyUri());
+        }
 
         try {
-            if (Build.VERSION.SDK_INT < 19) {
-                throw new UnsupportedOperationException("Web Proxy support not implemented for API level < 19");
-            } else { // API level >= 19
-                return setWebProxyAPI19Plus();
-            }
+            // Required API level >= 19
+            return setWebProxyAPI19Plus();
         } catch (Exception e) {
             Log.e(TAG, e);
+            mEnabled = false;
             return false;
         }
     }
