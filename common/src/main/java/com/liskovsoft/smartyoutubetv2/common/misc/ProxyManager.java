@@ -7,16 +7,15 @@ import android.net.ProxyInfo;
 import android.os.Build;
 import android.os.Parcelable;
 import android.util.ArrayMap;
-import android.widget.EditText;
-import android.widget.RadioGroup;
 import androidx.annotation.RequiresApi;
+import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
-import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -41,6 +40,7 @@ import java.net.URISyntaxException;
  */
 public class ProxyManager {
     public static final String TAG = ProxyManager.class.getSimpleName();
+    @SuppressLint("StaticFieldLeak")
     private static ProxyManager sInstance;
     private final Context mContext;
     private final AppPrefs mPrefs;
@@ -51,6 +51,11 @@ public class ProxyManager {
         mContext = context;
         mPrefs = AppPrefs.instance(mContext);
         //loadProxyInfoFromPrefs();
+
+        File configFilePath = getConfigFilePath();
+        if (!FileHelpers.isFileExists(configFilePath)) {
+            FileHelpers.stringToFile("SOCKS http://myproxyaddress.com 80", configFilePath);
+        }
     }
 
     public static ProxyManager instance(Context context) {
@@ -61,7 +66,7 @@ public class ProxyManager {
         return sInstance;
     }
 
-    public static Proxy fromData(Proxy.Type proxyType, String proxyHost, int proxyPort) {
+    public static Proxy fromProxyParams(Proxy.Type proxyType, String proxyHost, int proxyPort) {
         return new Proxy(proxyType, InetSocketAddress.createUnresolved(proxyHost, proxyPort));
     }
 
@@ -334,6 +339,10 @@ public class ProxyManager {
     }
 
     public String getConfigPath() {
-        return null;
+        return getConfigFilePath().getAbsolutePath();
+    }
+
+    private File getConfigFilePath() {
+        return new File(FileHelpers.getExternalFilesDir(mContext), "proxy.txt");
     }
 }
