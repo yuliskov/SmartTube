@@ -9,10 +9,12 @@ import com.google.android.exoplayer2.audio.MediaCodecAudioRenderer;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class DelayMediaCodecAudioRenderer extends MediaCodecAudioRenderer {
     private static final String TAG = DelayMediaCodecAudioRenderer.class.getSimpleName();
     private int mDelayUs;
+    private boolean mIsAudioSyncFixEnabled;
 
     // Exo 2.9
     //public CustomMediaCodecAudioRenderer(Context context, MediaCodecSelector mediaCodecSelector,
@@ -48,5 +50,31 @@ public class DelayMediaCodecAudioRenderer extends MediaCodecAudioRenderer {
 
     public int getAudioDelayMs() {
         return mDelayUs / 1_000;
+    }
+
+    public void enableAudioSyncFix(boolean enable) {
+        if (mIsAudioSyncFixEnabled == enable) {
+            return;
+        }
+
+        mIsAudioSyncFixEnabled = enable;
+
+        if (mIsAudioSyncFixEnabled) {
+            Object audioSink = Helpers.getField(this, "audioSink");
+            if (audioSink != null) {
+                Object audioTrackPositionTracker = Helpers.getField(audioSink, "audioTrackPositionTracker");
+                if (audioTrackPositionTracker != null) {
+                    Object audioTimestampPoller = Helpers.getField(audioTrackPositionTracker, "audioTimestampPoller");
+                    if (audioTimestampPoller != null) {
+                        Helpers.setField(audioTimestampPoller, "audioTimestamp", null);
+                        Helpers.setField(audioTimestampPoller, "state", 3);
+                    }
+                }
+            }
+        }
+    }
+
+    public boolean isAudioSyncFixEnabled() {
+        return mIsAudioSyncFixEnabled;
     }
 }
