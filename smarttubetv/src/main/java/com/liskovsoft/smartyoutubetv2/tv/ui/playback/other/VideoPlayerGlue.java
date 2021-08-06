@@ -228,7 +228,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         invalidateUi(mThumbsDownAction);
     }
 
-    public void setVideoStatsActionState(boolean show) {
+    public void setDebugInfoActionState(boolean show) {
         mVideoStatsAction.setIndex(show ? ThumbsAction.INDEX_ON : ThumbsAction.INDEX_OFF);
         invalidateUi(mVideoStatsAction);
     }
@@ -305,7 +305,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
             handled = true;
         } else if (action == mVideoStatsAction) {
             incrementActionIndex(action);
-            mActionListener.onVideoStats(getActionIndex(action) == ThumbsAction.INDEX_ON);
+            mActionListener.onDebugInfo(getActionIndex(action) == ThumbsAction.INDEX_ON);
             handled = true;
         } else if (action == mVideoSpeedAction) {
             mActionListener.onVideoSpeed();
@@ -438,7 +438,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
 
         void onPlaylistAdd();
 
-        void onVideoStats(boolean enabled);
+        void onDebugInfo(boolean enabled);
 
         void onVideoSpeed();
 

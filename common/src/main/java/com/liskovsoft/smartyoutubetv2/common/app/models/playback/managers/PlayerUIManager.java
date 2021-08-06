@@ -178,9 +178,9 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     }
 
     @Override
-    public void onVideoStatsClicked(boolean enabled) {
+    public void onDebugInfoClicked(boolean enabled) {
         mDebugViewEnabled = enabled;
-        getController().showDebugView(enabled);
+        getController().showDebugInfo(enabled);
     }
 
     @Override
@@ -190,7 +190,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         if (AppSettingsPresenter.instance(getActivity()).isDialogShown()) {
             // Activate debug infos/show ui after engine restarting (buffering, sound shift, error?).
             getController().showControls(true);
-            getController().showDebugView(mDebugViewEnabled);
+            getController().showDebugInfo(mDebugViewEnabled);
             getController().setDebugButtonState(mDebugViewEnabled);
         }
     }
@@ -208,7 +208,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onViewResumed() {
         // Activate debug infos when restoring after PIP.
-        getController().showDebugView(mDebugViewEnabled);
+        getController().showDebugInfo(mDebugViewEnabled);
         getController().setDebugButtonState(mDebugViewEnabled);
     }
 
@@ -217,7 +217,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         if (getController().isInPIPMode()) {
             // UI couldn't be properly displayed in PIP mode
             getController().showControls(false);
-            getController().showDebugView(false);
+            getController().showDebugInfo(false);
             getController().setDebugButtonState(false);
         }
     }

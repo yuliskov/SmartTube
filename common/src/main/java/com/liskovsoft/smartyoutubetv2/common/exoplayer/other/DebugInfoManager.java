@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.other;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Point;
-import android.os.Build;
 import android.os.Build.VERSION;
 import android.util.TypedValue;
 import android.view.Display;
@@ -55,7 +54,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private final ViewGroup mDebugViewGroup;
     private final Activity mContext;
 
-    private boolean started;
+    private boolean mStarted;
     private LinearLayout column1;
     private LinearLayout column2;
     private UhdHelper mUhdHelper;
@@ -94,16 +93,20 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         }
     }
 
+    public boolean isShown() {
+        return mStarted;
+    }
+
     /**
      * Starts periodic updates of the {@link TextView}. Must be called from the application's main
      * thread.
      */
     private void create() {
-        if (started) {
+        if (mStarted) {
             return;
         }
 
-        started = true;
+        mStarted = true;
         mDebugViewGroup.setVisibility(View.VISIBLE);
         mUhdHelper = new UhdHelper(mContext);
         mPlayer.addListener(this);
@@ -115,11 +118,11 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
      * thread.
      */
     private void destroy() {
-        if (!started) {
+        if (!mStarted) {
             return;
         }
 
-        started = false;
+        mStarted = false;
         mDebugViewGroup.setVisibility(View.GONE);
         mPlayer.removeListener(this);
         mDebugViewGroup.removeCallbacks(this);

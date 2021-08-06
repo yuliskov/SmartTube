@@ -610,8 +610,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         }
 
         @Override
-        public void onVideoStats(boolean enabled) {
-            mEventListener.onVideoStatsClicked(enabled);
+        public void onDebugInfo(boolean enabled) {
+            mEventListener.onDebugInfoClicked(enabled);
         }
 
         @Override
@@ -719,28 +719,28 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void openDash(InputStream dashManifest) {
-        cleanupPrevTrack();
+        resetPlayerState();
 
         mExoPlayerController.openDash(dashManifest);
     }
 
     @Override
     public void openDashUrl(String dashManifestUrl) {
-        cleanupPrevTrack();
+        resetPlayerState();
 
         mExoPlayerController.openDashUrl(dashManifestUrl);
     }
 
     @Override
     public void openHlsUrl(String hlsPlaylistUrl) {
-        cleanupPrevTrack();
+        resetPlayerState();
 
         mExoPlayerController.openHlsUrl(hlsPlaylistUrl);
     }
 
     @Override
     public void openUrlList(List<String> urlList) {
-        cleanupPrevTrack();
+        resetPlayerState();
 
         mExoPlayerController.openUrlList(urlList);
     }
@@ -1012,15 +1012,19 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     @Override
     public void setDebugButtonState(boolean show) {
         if (mPlayerGlue != null) {
-            mPlayerGlue.setVideoStatsActionState(show);
+            mPlayerGlue.setDebugInfoActionState(show);
         }
     }
 
     @Override
-    public void showDebugView(boolean show) {
+    public void showDebugInfo(boolean show) {
         if (mDebugInfoManager != null) {
             mDebugInfoManager.show(show);
         }
+    }
+
+    public boolean isDebugInfoShown() {
+        return mDebugInfoManager != null && mDebugInfoManager.isShown();
     }
 
     @Override
@@ -1089,13 +1093,14 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
      * Simply recreates exoplayer objects (silently) if prev track (current from this perspective) isn't empty<br/>
      * Could help with memory leaks?
      */
-    private void cleanupPrevTrack() {
+    private void resetPlayerState() {
         // Ensure that user isn't browsing suggestions
         if (containsMedia() && !isSuggestionsShown()) {
             // save state
             Video video = getVideo();
             int repeatButtonState = getRepeatButtonState();
             boolean controlsShown = isControlsShown();
+            boolean debugShown = isDebugInfoShown();
 
             // silently recreate player objects
             destroyPlayerObjects();
@@ -1105,6 +1110,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             setVideo(video);
             setRepeatButtonState(repeatButtonState);
             showControls(controlsShown);
+            showDebugInfo(debugShown);
         }
     }
 }

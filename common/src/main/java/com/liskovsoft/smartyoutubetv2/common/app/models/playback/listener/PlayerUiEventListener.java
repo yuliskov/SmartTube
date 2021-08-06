@@ -25,7 +25,7 @@ public interface PlayerUiEventListener {
     void onTrackSelected(FormatItem track);
     void onSubtitlesClicked();
     void onPlaylistAddClicked();
-    void onVideoStatsClicked(boolean enabled);
+    void onDebugInfoClicked(boolean enabled);
     void onVideoSpeedClicked();
     void onSearchClicked();
     void onVideoZoomClicked();
