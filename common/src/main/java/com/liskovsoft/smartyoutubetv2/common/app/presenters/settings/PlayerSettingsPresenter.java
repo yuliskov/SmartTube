@@ -148,6 +148,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendTweaksCategory(AppSettingsPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from("Audio sync fix",
+                option -> mPlayerTweaksData.enableAudioSyncFix(option.isSelected()),
+                mPlayerTweaksData.isAudioSyncFixEnabled()));
+
         options.add(UiOptionItem.from("Amlogic 1080/60 fix",
                 option -> mPlayerTweaksData.enableAmlogicFix(option.isSelected()),
                 mPlayerTweaksData.isAmlogicFixEnabled()));

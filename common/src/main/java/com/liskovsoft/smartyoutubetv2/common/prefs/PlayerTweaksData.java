@@ -16,6 +16,7 @@ public class PlayerTweaksData {
     private boolean mIsSWDecoderForced;
     private boolean mIsTextureViewEnabled;
     private boolean mIsSetOutputSurfaceWorkaroundEnabled;
+    private boolean mIsAudioSyncFixEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -97,6 +98,15 @@ public class PlayerTweaksData {
         persistData();
     }
 
+    public void enableAudioSyncFix(boolean enable) {
+        mIsAudioSyncFixEnabled = enable;
+        persistData();
+    }
+
+    public boolean isAudioSyncFixEnabled() {
+        return mIsAudioSyncFixEnabled;
+    }
+
     private void restoreData() {
         String data = mPrefs.getData(VIDEO_PLAYER_TWEAKS_DATA);
 
@@ -108,16 +118,17 @@ public class PlayerTweaksData {
         mIsProfileLevelCheckSkipped = Helpers.parseBoolean(split, 3, false);
         mIsSWDecoderForced = Helpers.parseBoolean(split, 4, false);
         mIsTextureViewEnabled = Helpers.parseBoolean(split, 5, false);
-        // Need to be enabled on older version of ExoPlayer (e.g. 2.10.6).
+        // Need to be enabled (?) on older version of ExoPlayer (e.g. 2.10.6).
         // It's because there's no tweaks for modern devices.
         mIsSetOutputSurfaceWorkaroundEnabled = Helpers.parseBoolean(split, 7, true);
+        mIsAudioSyncFixEnabled = Helpers.parseBoolean(split, 8, false);
     }
 
     private void persistData() {
         mPrefs.setData(VIDEO_PLAYER_TWEAKS_DATA, Helpers.mergeObject(
                 mIsAmlogicFixEnabled, mIsFrameDropFixEnabled, mIsSnapToVsyncDisabled,
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
-                null, mIsSetOutputSurfaceWorkaroundEnabled
+                null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled
         ));
     }
 }

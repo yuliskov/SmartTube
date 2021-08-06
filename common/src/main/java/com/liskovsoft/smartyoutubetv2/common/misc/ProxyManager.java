@@ -15,6 +15,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -40,15 +41,24 @@ import java.net.URISyntaxException;
  */
 public class ProxyManager {
     public static final String TAG = ProxyManager.class.getSimpleName();
+    private static ProxyManager sInstance;
     private final Context mContext;
     private final AppPrefs mPrefs;
     private Proxy mProxy;
     private boolean mEnabled;
 
-    public ProxyManager(Context context) {
+    private ProxyManager(Context context) {
         mContext = context;
         mPrefs = AppPrefs.instance(mContext);
-        loadProxyInfoFromPrefs();
+        //loadProxyInfoFromPrefs();
+    }
+
+    public static ProxyManager instance(Context context) {
+        if (sInstance == null) {
+            sInstance = new ProxyManager(context.getApplicationContext());
+        }
+
+        return sInstance;
     }
 
     public static Proxy fromData(Proxy.Type proxyType, String proxyHost, int proxyPort) {
@@ -95,6 +105,18 @@ public class ProxyManager {
             InetSocketAddress proxyAddr = (InetSocketAddress) mProxy.address();
             return mProxy.type().name().toLowerCase() + "://" + proxyAddr.getHostString()
                     + ":" + proxyAddr.getPort();
+        }
+    }
+
+    public void enableProxy(boolean enabled) {
+        if (mEnabled == enabled) {
+            return;
+        }
+
+        mEnabled = enabled;
+
+        if (mEnabled) {
+            loadProxyInfoFromPrefs();
         }
     }
 
@@ -309,5 +331,9 @@ public class ProxyManager {
             Log.e(TAG, e);
             return false;
         }
+    }
+
+    public String getConfigPath() {
+        return null;
     }
 }

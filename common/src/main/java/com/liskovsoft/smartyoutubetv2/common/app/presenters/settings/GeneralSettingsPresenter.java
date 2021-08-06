@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
+import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -11,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.misc.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
@@ -179,6 +181,15 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.return_to_launcher),
                 option -> mGeneralData.enableReturnToLauncher(option.isSelected()),
                 mGeneralData.isReturnToLauncherEnabled()));
+
+        ProxyManager proxyManager = ProxyManager.instance(getContext());
+
+        options.add(UiOptionItem.from("Proxy config: " + proxyManager.getConfigPath(),
+                option -> {
+                    mGeneralData.enableProxy(option.isSelected());
+                    proxyManager.enableProxy(option.isSelected());
+                },
+                mGeneralData.isProxyEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
