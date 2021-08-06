@@ -1111,6 +1111,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             setRepeatButtonState(repeatButtonState);
             showControls(controlsShown);
             showDebugInfo(debugShown);
+            setDebugButtonState(debugShown);
         }
     }
 }
