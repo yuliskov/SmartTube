@@ -646,7 +646,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 }
 
                 int lengthMs = ServiceHelper.timeTextToMillis(value.badge);
-                return lengthMs < SHORTS_LEN_MS;
+                return lengthMs > 0 && lengthMs < SHORTS_LEN_MS;
                 //return value.title.toLowerCase().contains("#short")  ||
                 //       value.title.toLowerCase().contains("#shorts") ||
                 //       value.title.toLowerCase().contains("#tiktok");
