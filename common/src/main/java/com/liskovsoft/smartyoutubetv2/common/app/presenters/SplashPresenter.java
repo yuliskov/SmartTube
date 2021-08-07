@@ -6,6 +6,7 @@ import android.content.Intent;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
@@ -62,6 +63,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     private void applyRunOnceTasks() {
         if (!mRunOnce) {
+            checkTouchSupport();
             initIntentChain();
             updateChannels();
             getBackupDataOnce();
@@ -105,6 +107,13 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         if (getContext() != null && GeneralData.instance(getContext()).isProxyEnabled()) {
             mProxyManager = ProxyManager.instance(getContext());
             mProxyManager.enableProxy(true);
+        }
+    }
+
+    private void checkTouchSupport() {
+        if (Helpers.isTouchSupported(getContext())) {
+            MessageHelpers.showLongMessage(getContext(), "The app is designed for tv boxes. Phones aren't supported.");
+            ViewManager.instance(getContext()).forceFinishTheApp();
         }
     }
 

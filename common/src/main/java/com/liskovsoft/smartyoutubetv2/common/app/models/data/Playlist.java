@@ -66,8 +66,13 @@ public class Playlist {
         }
 
         remove(video);
+
+        // Replacing last element? Increase index then.
+        if (mCurrentIndex == mPlaylist.size() - 1) {
+            mCurrentIndex++;
+        }
+
         mPlaylist.add(video);
-        mCurrentIndex = mPlaylist.size() - 1;
 
         // Video opened from the browser or suggestions.
         // In this case remove all next items.
@@ -86,8 +91,16 @@ public class Playlist {
             mPlaylist.remove(video);
 
             // Shift video stack index if needed
-            if (index <= mCurrentIndex) {
+            // Don't remove current index. Except this is the last element.
+            // Give a chance to replace current element.
+            if (index < mCurrentIndex) {
                 --mCurrentIndex;
+            }
+
+            // Index out of bounds as the result of previous operation.
+            // Select last element in this case.
+            if (mCurrentIndex >= mPlaylist.size()) {
+                mCurrentIndex = mPlaylist.size() - 1;
             }
         }
     }

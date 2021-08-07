@@ -221,6 +221,7 @@ public class ProxyManager {
             Log.e(TAG, e);
             mProxy = Proxy.NO_PROXY;
             mEnabled = false; // Disable. Invalid proxy settings.
+            MessageHelpers.showLongMessage(mContext, "Invalid proxy address.");
         }
     }
 
@@ -370,6 +371,7 @@ public class ProxyManager {
         } catch (Exception e) {
             Log.e(TAG, e);
             mEnabled = false;
+            MessageHelpers.showLongMessage(mContext, e.getLocalizedMessage());
             return false;
         }
     }
