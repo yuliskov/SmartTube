@@ -322,18 +322,19 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         }
 
         BrowsePresenter presenter = BrowsePresenter.instance(getContext());
-        boolean isItemPinned = presenter.isItemPinned(mCategory);
 
         mSettingsPresenter.appendSingleButton(
-                UiOptionItem.from(getContext().getString(
-                        isItemPinned ? R.string.unpin_from_sidebar : R.string.pin_to_sidebar),
+                UiOptionItem.from(getContext().getString(R.string.pin_unpin_from_sidebar),
                         optionItem -> {
+                            // Toggle between pin/unpin while dialog is opened
+                            boolean isItemPinned = presenter.isItemPinned(mCategory);
+
                             if (isItemPinned) {
                                 presenter.unpinItem(mCategory);
                             } else {
                                 presenter.pinItem(mCategory);
                             }
-                            mSettingsPresenter.closeDialog();
+                            MessageHelpers.showMessage(getContext(), isItemPinned ? R.string.unpin_from_sidebar : R.string.pin_to_sidebar);
                         }));
     }
 
@@ -361,6 +362,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
                 UiOptionItem.from(getContext().getString(
                         R.string.add_remove_from_playback_queue),
                         optionItem -> {
+                            // Toggle between add/remove while dialog is opened
                             boolean containsVideo = playlist.contains(mVideo);
 
                             if (containsVideo) {

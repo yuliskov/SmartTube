@@ -225,7 +225,7 @@
    <string name="screen_diming">Oscura schermo</string> 
    <string name="removed_from_playback_queue">Rimosso dalla coda di riproduzione</string> 
    <string name="added_to_playback_queue">Aggiunto alla coda di riproduzione</string> 
-   <string name="add_remove_from_playback_queue">Aggiungi/Rimuovi dalla coda di riproduzione</string> 
+   <string name="add_remove_from_playback_queue">Aggiungi/Rimuovi dalla coda di riproduzione</string>
    <string name="proxy_enabled">Proxy attivato</string> 
    <string name="proxy_disabled">Proxy disattivato</string>
 </resources>
