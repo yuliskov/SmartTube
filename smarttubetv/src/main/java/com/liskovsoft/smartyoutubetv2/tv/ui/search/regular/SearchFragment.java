@@ -284,6 +284,12 @@ public class SearchFragment extends SearchSupportFragment
     }
 
     @Override
+    public String getSearchText() {
+        // NOP
+        return null;
+    }
+
+    @Override
     public void startVoiceRecognition() {
         startSearch(null, true);
     }

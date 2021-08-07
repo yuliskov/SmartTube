@@ -76,6 +76,11 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     }
 
     @Override
+    public String getSearchText() {
+        return getSearchFiledText();
+    }
+
+    @Override
     public void startVoiceRecognition() {
         startSearch(null, true);
     }

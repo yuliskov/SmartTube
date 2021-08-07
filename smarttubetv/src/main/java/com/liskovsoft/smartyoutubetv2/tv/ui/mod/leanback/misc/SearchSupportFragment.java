@@ -195,6 +195,10 @@ public class SearchSupportFragment extends Fragment {
         mSearchTextEditor.requestFocus(); // MOD: focus on search field
     }
 
+    public String getSearchFiledText() {
+        return mSearchTextEditor.getText().toString();
+    }
+
     final Runnable mStartRecognitionRunnable = new Runnable() {
         @Override
         public void run() {
@@ -328,7 +332,7 @@ public class SearchSupportFragment extends Fragment {
         // MOD: inner search bar views for improved focus handling
 
         mSearchTextEditor = mSearchBar.findViewById(R.id.lb_search_text_editor);
-        mSearchTextEditor.setSelectAllOnFocus(true); // easy clear previous search
+        mSearchTextEditor.setSelectAllOnFocus(true); // Select all on focus (easy clear previous search)
         mSearchTextEditor.setOnFocusChangeListener((v, focused) -> {
             Log.d(TAG, "on search field focused");
             if (focused && mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
