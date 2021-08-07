@@ -37,11 +37,11 @@
     <string name="video_buffer_size_low">Basso</string>
     <string name="video_buffer_size_med">Medio</string>
     <string name="video_buffer_size_high">Alto</string>
-    <string name="update_changelog">Cosa c'è di nuovo</string>
+    <string name="update_changelog">Cosa c\'è di nuovo</string>
     <string name="install_update">Installa aggiornamento</string>
-    <string name="msg_category_is_empty">Oops! Non c'è niente qui.</string>
+    <string name="msg_category_is_empty">Oops! Non c\'è niente qui.</string>
     <string name="dialog_add_to_playlist">Aggiungi alla playlist</string>
-    <string name="msg_signed_users_only">Solo utenti che hanno effettuato l'accesso</string>
+    <string name="msg_signed_users_only">Solo utenti che hanno effettuato l\'accesso</string>
     <string name="msg_cant_load_content">Oops. Non posso caricare il contenuto.</string>
     <string name="title_video_presets">Qualità video predefinita</string>
     <string name="settings_accounts">Profili</string>
@@ -94,7 +94,7 @@
     <string name="disable_update_check">Disattiva controllo aggiornamenti</string>
     <string name="show_again">Mostra ancora</string>
     <string name="check_updates_auto">Aggiornamento automatico</string>
-    <string name="select_account_on_boot">Seleziona all'avvio</string>
+    <string name="select_account_on_boot">Seleziona all\'avvio</string>
     <string name="player_other">Varie</string>
     <string name="player_full_date">Data precisa in descrizione</string>
     <string name="open_channel">Apri canale</string>
@@ -130,7 +130,7 @@
     <string name="player_show_remaining_time">Mostra tempo rimanente</string>
     <string name="update_manifest_url" translatable="false">https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.json</string>
     <string name="open_channel_uploads">Apri video caricati</string>
-    <string name="app_exit_shortcut">Esci dall'app</string>
+    <string name="app_exit_shortcut">Esci dall\'app</string>
     <string name="app_exit_none">Non uscire</string>
     <string name="app_double_back_exit">Due volte tasto indietro</string>
     <string name="app_single_back_exit">Una volta tasto indietro</string>
@@ -166,7 +166,7 @@
     <string name="device_connected">Il dispositivo \"%s\" è connesso</string>
     <string name="device_disconnected">Il dispositivo \"%s\" è stato disconnesso</string>
     <string name="settings_ui_scale">Scala IU</string>
-    <string name="msg_restart_app">Riavvia l'app per applicare le modifiche</string>
+    <string name="msg_restart_app">Riavvia l\'app per applicare le modifiche</string>
     <string name="settings_block">Content blocking</string>
     <string name="msg_applying">Applico %s…</string>
     <string name="msg_done">Fatto</string>
@@ -187,7 +187,7 @@
     <string name="content_block_notify_toast">Toast</string>
     <string name="content_block_notify_dialog">Notifica di conferma</string>
     <string name="return_to_launcher">Ritorna al launcher dai canali/cerca di ATV</string>
-    <string name="intent_force_close">Forza l'uscita se il video è stato aperto da una fonte esterna</string>
+    <string name="intent_force_close">Forza l\'uscita se il video è stato aperto da una fonte esterna</string>
     <string name="btn_confirm">Conferma</string>
     <string name="player_low_video_quality">Video in bassa qualità</string>
     <string name="remote_session_closed">La sessione remota è stata chiusa</string>
