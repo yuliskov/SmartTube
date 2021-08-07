@@ -152,9 +152,9 @@ public class Playlist {
      *
      * @return The next video in the playlist.
      */
-    public Video next() {
+    public Video getNext() {
         if ((mCurrentIndex + 1) < mPlaylist.size()) {
-            return mPlaylist.get(++mCurrentIndex);
+            return mPlaylist.get(mCurrentIndex + 1);
         }
 
         return null;
@@ -166,9 +166,9 @@ public class Playlist {
      *
      * @return The previous video in the playlist.
      */
-    public Video previous() {
+    public Video getPrevious() {
         if ((mCurrentIndex - 1) >= 0) {
-            return mPlaylist.get(--mCurrentIndex);
+            return mPlaylist.get(mCurrentIndex - 1);
         }
 
         return null;

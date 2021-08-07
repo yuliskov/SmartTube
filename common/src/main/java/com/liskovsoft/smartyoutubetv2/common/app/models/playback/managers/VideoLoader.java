@@ -131,11 +131,11 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     public void loadPrevious() {
-        openVideoInt(mPlaylist.previous());
+        openVideoInt(mPlaylist.getPrevious());
     }
 
     public void loadNext() {
-        Video next = mPlaylist.next();
+        Video next = mPlaylist.getNext();
 
         if (next == null) {
             openVideoFromNext(getController().getVideo(), true);
@@ -154,25 +154,34 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 getController().showControls(true);
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
-                //loadVideo(mLastVideo);
                 getController().setPositionMs(0);
                 getController().setPlay(true);
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
-                // close player
-                if (!getController().isSuggestionsShown()) {
+                // Close player
+                // Except when playing from queue
+                if (!getController().isSuggestionsShown() && mPlaylist.getNext() == null) {
                     getController().finish();
+                } else {
+                    onNextClicked();
+                    getController().showControls(true);
                 }
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
-                // stop player after each video
-                getController().showSuggestions(true);
-                getController().setPlay(false);
+                // Stop player after each video.
+                // Except when playing from queue
+                if (mPlaylist.getNext() == null) {
+                    getController().showSuggestions(true);
+                    getController().setPlay(false);
+                } else {
+                    onNextClicked();
+                    getController().showControls(true);
+                }
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_LIST:
                 // stop player (if not playing playlist)
                 Video video = getController().getVideo();
-                if (video != null && video.playlistId != null) {
+                if ((video != null && video.playlistId != null) || mPlaylist.getNext() != null) {
                     onNextClicked();
                     getController().showControls(true);
                 } else {
