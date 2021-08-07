@@ -145,6 +145,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         appendReturnToBackgroundVideoButton();
         appendAddToPlaylistButton(videoPlaylistInfos);
         appendAddToPlaybackQueueButton();
+        appendPinToSidebarButton();
         appendOpenPlaylistButton();
         appendOpenChannelButton();
         //appendOpenChannelUploadsButton();
@@ -152,7 +153,6 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         appendNotInterestedButton();
         appendShareButton();
         appendAccountSelectionButton();
-        appendPinToSidebarButton();
 
         if (!mSettingsPresenter.isEmpty()) {
             String title = mVideo != null ? mVideo.title : mCategory.title;
@@ -169,6 +169,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         appendReturnToBackgroundVideoButton();
         appendAddToPlaybackQueueButton();
+        appendPinToSidebarButton();
         appendOpenPlaylistButton();
         appendOpenChannelButton();
         appendShareButton();
