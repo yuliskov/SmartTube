@@ -65,6 +65,11 @@ public class Playlist {
             return;
         }
 
+        // Skip add currently playing item
+        if (video.equals(getCurrent())) {
+            return;
+        }
+
         boolean isLastElement = mPlaylist.size() > 0 && video.equals(mPlaylist.get(mPlaylist.size() - 1));
 
         remove(video);
@@ -87,8 +92,14 @@ public class Playlist {
             return;
         }
 
+        // Skip remove currently playing item
+        if (video.equals(getCurrent())) {
+            return;
+        }
+
         int index = mPlaylist.indexOf(video);
 
+        // If contains
         if (index >= 0) {
             mPlaylist.remove(video);
 
