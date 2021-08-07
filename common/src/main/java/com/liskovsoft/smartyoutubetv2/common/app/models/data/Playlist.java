@@ -65,14 +65,16 @@ public class Playlist {
             return;
         }
 
+        boolean isLastElement = mPlaylist.size() > 0 && video.equals(mPlaylist.get(mPlaylist.size() - 1));
+
         remove(video);
 
+        mPlaylist.add(video);
+
         // Replacing last element? Increase index then.
-        if (mCurrentIndex == mPlaylist.size() - 1) {
+        if (isLastElement) {
             mCurrentIndex++;
         }
-
-        mPlaylist.add(video);
 
         // Video opened from the browser or suggestions.
         // In this case remove all next items.
