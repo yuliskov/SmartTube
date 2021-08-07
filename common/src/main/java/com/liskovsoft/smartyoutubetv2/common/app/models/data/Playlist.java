@@ -174,6 +174,7 @@ public class Playlist {
             mCurrentIndex = currentPosition;
         } else {
             add(video);
+            mCurrentIndex = mPlaylist.size() - 1;
         }
     }
 
