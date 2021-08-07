@@ -214,8 +214,8 @@
     <string name="channels_auto_load">Автоматически загружать содержимое раздела Каналы</string>
     <string name="return_to_background_video">Вернуться к фоновому видео</string>
     <string name="pin_unpin_from_sidebar">Закрепить/Открепить от боковой панели</string>
-    <string name="pin_to_sidebar">Закрепить на боковой панели</string>
-    <string name="unpin_from_sidebar">Открепить от боковой панели</string>
+    <string name="pin_to_sidebar">Закреплено на боковой панели</string>
+    <string name="unpin_from_sidebar">Откреплено от боковой панели</string>
     <string name="dialog_select_country">Страна</string>
     <string name="settings_language_country">Язык/Страна</string>
     <string name="share_embed_link">Поделиться встраиваемой ссылкой</string>
