@@ -63,7 +63,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     private void applyRunOnceTasks() {
         if (!mRunOnce) {
-            checkTouchSupport();
+            //checkTouchSupport(); // Not working?
             initIntentChain();
             updateChannels();
             getBackupDataOnce();
