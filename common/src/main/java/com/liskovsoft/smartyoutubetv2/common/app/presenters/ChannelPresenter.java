@@ -156,7 +156,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         ViewManager.instance(getContext()).startView(ChannelView.class);
     }
 
-    private void disposeActions() {
+    public void disposeActions() {
         if (mUpdateAction != null && !mUpdateAction.isDisposed()) {
             mUpdateAction.dispose();
         }
