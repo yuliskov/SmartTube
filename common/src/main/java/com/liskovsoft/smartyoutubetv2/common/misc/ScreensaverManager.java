@@ -65,9 +65,7 @@ public class ScreensaverManager {
     }
 
     private void showHide(boolean show) {
-        if (mGeneralData.getScreenDimmingTimoutMin() != GeneralData.SCREEN_DIMMING_NEVER) {
-            showHideDimming(show);
-        }
+        showHideDimming(show);
         showHideScreensaver(true);
     }
 
@@ -78,9 +76,9 @@ public class ScreensaverManager {
             return;
         }
 
-        PlaybackView playbackView = PlaybackPresenter.instance(activity).getView();
-        if (show && playbackView != null && playbackView.getController().isPlaying()
-                && mDimColorResId == R.color.dimming) {
+        if (show && mDimColorResId == R.color.dimming &&
+                (isPlaying() || mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER)
+        ) {
             return;
         }
 
@@ -106,9 +104,8 @@ public class ScreensaverManager {
         if (activity == null) {
             return;
         }
-
-        PlaybackView playbackView = PlaybackPresenter.instance(activity).getView();
-        if (show && playbackView != null && playbackView.getController().isPlaying()) {
+        
+        if (show && isPlaying()) {
             Helpers.disableScreensaver(activity);
             return;
         }
@@ -118,5 +115,16 @@ public class ScreensaverManager {
         } else {
             Helpers.disableScreensaver(activity);
         }
+    }
+
+    private boolean isPlaying() {
+        Activity activity = mActivity.get();
+
+        if (activity == null) {
+            return false;
+        }
+
+        PlaybackView playbackView = PlaybackPresenter.instance(activity).getView();
+        return playbackView != null && playbackView.getController().isPlaying();
     }
 }
