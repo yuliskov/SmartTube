@@ -65,12 +65,6 @@ public class Playlist {
             return;
         }
 
-        // Don't move to top current queue item
-        if (video.isQueueItem) {
-            video.isQueueItem = false; // reset queue state
-            return;
-        }
-
         // Skip add currently playing item
         if (video.equals(getCurrent())) {
             return;

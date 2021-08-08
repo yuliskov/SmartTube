@@ -41,6 +41,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private long mPrevErrorTimeMs;
     private PlayerData mPlayerData;
     private long mSleepTimerStartMs;
+    private boolean mSkipAdd;
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
     private final Map<Integer, Integer> mErrorMap = new HashMap<>();
@@ -71,7 +72,11 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void openVideo(Video item) {
-        mPlaylist.add(item);
+        if (!mSkipAdd) {
+            mPlaylist.add(item);
+        } else {
+            mSkipAdd = false;
+        }
 
         if (getController() != null && getController().isEngineInitialized()) { // player is initialized
             if (!item.equals(mLastVideo)) {
@@ -137,7 +142,12 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     public void loadPrevious() {
-        openVideoInt(mPlaylist.getPrevious());
+        Video previous = mPlaylist.getPrevious();
+
+        if (previous != null) {
+            mSkipAdd = true;
+            openVideoInt(previous);
+        }
     }
 
     public void loadNext() {
@@ -146,6 +156,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         if (next == null) {
             openVideoFromNext(getController().getVideo(), true);
         } else {
+            mSkipAdd = true;
             openVideoInt(next);
         }
     }
@@ -219,7 +230,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
             options.add(0, UiOptionItem.from( // Add to start (recent videos on top)
                     video.title,
                     optionItem -> {
-                        video.isQueueItem = true;
+                        mSkipAdd = true;
                         openVideoInt(video);
                     },
                     video == mPlaylist.getCurrent())
