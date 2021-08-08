@@ -65,7 +65,9 @@ public class ScreensaverManager {
     }
 
     private void showHide(boolean show) {
-        showHideDimming(show);
+        if (mGeneralData.getScreenDimmingTimoutMin() != GeneralData.SCREEN_DIMMING_NEVER) {
+            showHideDimming(show);
+        }
         showHideScreensaver(true);
     }
 

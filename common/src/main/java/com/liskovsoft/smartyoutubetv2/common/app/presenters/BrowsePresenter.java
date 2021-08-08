@@ -347,7 +347,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         mCategories.add(category);
         mGridMapping.put(item.hashCode(), ChannelUploadsPresenter.instance(getContext()).obtainVideoGroupObservable(item));
 
-        getView().addCategory(-1, category); // add last
+        if (getView() != null) {
+            getView().addCategory(-1, category); // add last
+        }
     }
 
     public void unpinItem(Video item) {
@@ -366,7 +368,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
         mGridMapping.remove(item.hashCode());
 
-        getView().removeCategory(category);
+        if (getView() != null) {
+            getView().removeCategory(category);
+        }
     }
 
     private void maybeRefreshHeader() {
