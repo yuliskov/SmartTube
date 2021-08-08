@@ -78,13 +78,6 @@ public class MotherActivity extends FragmentActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-
-        mScreensaverManager.disable();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
 
@@ -95,6 +88,13 @@ public class MotherActivity extends FragmentActivity {
         Helpers.makeActivityFullscreen(this);
 
         mScreensaverManager.enable();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        mScreensaverManager.disable();
     }
 
     @Override

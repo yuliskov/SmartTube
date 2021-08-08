@@ -68,7 +68,11 @@ public class ViewManager {
     public void unregister(Class<?> viewClass) {
         mViewMapping.remove(viewClass);
     }
-    
+
+    /**
+     * Use carefully<br/>
+     * On running activity, this method invokes standard activity lifecycle: pause, resume etc...
+     */
     public void startView(Class<?> viewClass) {
         startView(viewClass, false);
     }

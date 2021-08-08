@@ -7,6 +7,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.MainPlayerEvent
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     private static final String TAG = PlaybackPresenter.class.getSimpleName();
@@ -60,7 +61,8 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
         mMainPlayerEventBridge.openVideo(item);
 
         // Focus player if needed. Useful when running player in PIP mode.
-        if (!isRunningInBackground()) {
+        // startView will stops screensaver. Avoid this with checks.
+        if (!isRunningInBackground() && !Utils.isPlayerInForeground(getContext())) {
             mViewManager.startView(PlaybackView.class);
         }
     }
