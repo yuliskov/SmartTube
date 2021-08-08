@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.MainPlayerEventBridge;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
@@ -47,7 +46,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
             return;
         }
 
-        openVideo(Video.from(videoId), true);
+        openVideo(Video.from(videoId));
     }
 
     /**
@@ -58,27 +57,12 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
             return;
         }
 
-        openVideo(item, true);
-    }
-
-    /**
-     * Opens video item from browser, search or channel views<br/>
-     * Focus player if needed. Useful when running player in PIP mode.
-     */
-    public void openVideo(Video item, boolean focusPlayer) {
-        if (item == null) {
-            return;
-        }
-
         mMainPlayerEventBridge.openVideo(item);
 
-        if (focusPlayer) {
-            focusView();
+        // Focus player if needed. Useful when running player in PIP mode.
+        if (!isRunningInBackground()) {
+            mViewManager.startView(PlaybackView.class);
         }
-    }
-
-    private void focusView() {
-        mViewManager.startView(PlaybackView.class);
     }
 
     public Video getVideo() {
@@ -89,7 +73,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
         return getView().getController().getVideo();
     }
 
-    public boolean isVideoInBackground() {
+    public boolean isRunningInBackground() {
         return getView() != null && getView().getController().isInPIPMode();
     }
 }

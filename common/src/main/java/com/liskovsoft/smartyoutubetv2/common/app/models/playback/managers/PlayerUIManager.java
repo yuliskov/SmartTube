@@ -353,31 +353,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         }
     }
 
-    @Override
-    public void onPlaybackQueueClicked() {
-        Playlist playlist = Playlist.instance();
-
-        String playbackQueueCategoryTitle = getActivity().getString(R.string.playback_queue_category_title);
-
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getActivity());
-
-        settingsPresenter.clear();
-
-        List<OptionItem> options = new ArrayList<>();
-
-        for (Video video : playlist.getAll()) {
-            options.add(0, UiOptionItem.from( // recent videos on top
-                    video.title,
-                    optionItem -> mVideoLoader.loadVideo(video),
-                    video == playlist.getCurrent())
-            );
-        }
-
-        settingsPresenter.appendRadioCategory(playbackQueueCategoryTitle, options);
-
-        settingsPresenter.showDialog(playbackQueueCategoryTitle);
-    }
-
     private void intSpeedItems(AppSettingsPresenter settingsPresenter, List<OptionItem> items, float[] speedValues) {
         for (float speed : speedValues) {
             items.add(UiOptionItem.from(

@@ -340,7 +340,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     private void appendReturnToBackgroundVideoButton() {
-        if (!mIsReturnToBackgroundVideoEnabled || !PlaybackPresenter.instance(getContext()).isVideoInBackground()) {
+        if (!mIsReturnToBackgroundVideoEnabled || !PlaybackPresenter.instance(getContext()).isRunningInBackground()) {
             return;
         }
 

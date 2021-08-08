@@ -13,7 +13,11 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -22,7 +26,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class VideoLoader extends PlayerEventListenerHelper {
@@ -200,6 +206,32 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     @Override
+    public void onPlaybackQueueClicked() {
+        String playbackQueueCategoryTitle = getActivity().getString(R.string.playback_queue_category_title);
+
+        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getActivity());
+
+        settingsPresenter.clear();
+
+        List<OptionItem> options = new ArrayList<>();
+
+        for (Video video : mPlaylist.getAll()) {
+            options.add(0, UiOptionItem.from( // Add to start (recent videos on top)
+                    video.title,
+                    optionItem -> {
+                        video.isQueueItem = true;
+                        openVideoInt(video);
+                    },
+                    video == mPlaylist.getCurrent())
+            );
+        }
+
+        settingsPresenter.appendRadioCategory(playbackQueueCategoryTitle, options);
+
+        settingsPresenter.showDialog(playbackQueueCategoryTitle);
+    }
+
+    @Override
     public void onRepeatModeClicked(int modeIndex) {
         mPlayerData.setPlaybackMode(modeIndex);
         showBriefInfo(modeIndex);
@@ -243,7 +275,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         }
     }
 
-    public void loadVideo(Video item) {
+    private void loadVideo(Video item) {
         if (item != null) {
             mPlaylist.setCurrent(item);
             mLastVideo = item;
@@ -339,7 +371,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
         if (item.isVideo()) {
             getController().showControls(true);
-            loadVideo(item);
+            PlaybackPresenter.instance(getActivity()).openVideo(item);
         } else if (item.isChannel()) {
             ChannelPresenter.instance(getActivity()).openChannel(item);
         } else {

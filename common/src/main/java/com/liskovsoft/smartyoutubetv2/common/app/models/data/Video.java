@@ -37,6 +37,7 @@ public final class Video implements Parcelable {
     public boolean isUpcoming;
     public boolean isSubscribed;
     public boolean isRemote;
+    public boolean isQueueItem;
     public int groupPosition = -1; // group position in multi-grid fragments
     public String clickTrackingParams;
 
