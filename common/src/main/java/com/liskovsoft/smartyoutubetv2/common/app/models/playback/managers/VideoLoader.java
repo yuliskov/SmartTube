@@ -393,7 +393,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private void disposeActions() {
         RxUtils.disposeActions(mFormatInfoAction, mMpdStreamAction);
         Utils.removeCallbacks(mHandler, mReloadVideoHandler, mPendingRestartEngine, mPendingNext);
-        ChannelPresenter.instance(getActivity()).disposeActions();
     }
 
     private void initErrorMap() {

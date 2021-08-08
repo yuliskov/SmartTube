@@ -115,4 +115,8 @@ public class MediaServiceManager {
                 );
 
     }
+
+    public void disposeActions() {
+        RxUtils.disposeActions(mMetadataAction, mUploadsAction, mSignCheckAction);
+    }
 }
