@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string translatable="false" name="app_name"><![CDATA[SmartTubeNext]]></string>
-    <string translatable="false" name="browse_title"><![CDATA[SmartTubeNext]]></string>
+    <string translatable="false" name="app_name"><![CDATA[SmartTubeNext Beta]]></string>
+    <string translatable="false" name="browse_title"><![CDATA[SmartTubeNext Beta]]></string>
 </resources>
