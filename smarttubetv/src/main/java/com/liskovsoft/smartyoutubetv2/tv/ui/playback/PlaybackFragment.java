@@ -952,6 +952,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void showControls(boolean show) {
+        if (isInPIPMode()) {
+            // UI couldn't be properly displayed in PIP mode
+            return;
+        }
+
         if (show) {
             showControlsOverlay(mIsAnimationEnabled);
         } else {
