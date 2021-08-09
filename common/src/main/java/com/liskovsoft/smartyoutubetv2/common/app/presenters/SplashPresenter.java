@@ -6,7 +6,6 @@ import android.content.Intent;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
@@ -64,6 +63,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private void applyRunOnceTasks() {
         if (!mRunOnce) {
             //checkTouchSupport(); // Not working?
+            // Need to be the first line and executed on earliest stage once.
+            // Inits service language and context.
+            Utils.initGlobalData(getContext());
             initIntentChain();
             updateChannels();
             getBackupDataOnce();
