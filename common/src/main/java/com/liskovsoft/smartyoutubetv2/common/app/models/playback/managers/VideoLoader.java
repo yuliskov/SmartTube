@@ -382,7 +382,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
         if (item.isVideo()) {
             getController().showControls(true);
-            PlaybackPresenter.instance(getActivity()).openVideo(item);
+            getBridge().openVideo(item);
         } else if (item.isChannel()) {
             ChannelPresenter.instance(getActivity()).openChannel(item);
         } else {

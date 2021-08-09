@@ -7,7 +7,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.MainPlayerEvent
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     private static final String TAG = PlaybackPresenter.class.getSimpleName();
@@ -51,7 +50,8 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     }
 
     /**
-     * Opens video item from browser, search or channel views
+     * Opens video item from browser, search or channel views<br/>
+     * Also prepares and start the playback view.
      */
     public void openVideo(Video item) {
         if (item == null) {
@@ -60,11 +60,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
 
         mMainPlayerEventBridge.openVideo(item);
 
-        // Focus player if needed. Useful when running player in PIP mode.
-        // startView will stops screensaver. Avoid this with checks.
-        if (!isRunningInBackground() && !Utils.isPlayerInForeground(getContext())) {
-            mViewManager.startView(PlaybackView.class);
-        }
+        mViewManager.startView(PlaybackView.class);
     }
 
     public Video getVideo() {
