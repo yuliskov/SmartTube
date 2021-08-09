@@ -1,15 +1,17 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.misc.LangUpdater;
+import com.liskovsoft.sharedutils.locale.LangUpdater;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -43,7 +45,7 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendLanguageCategory(AppSettingsPresenter settingsPresenter) {
-        Map<String, String> locales = mLangUpdater.getSupportedLocales();
+        Map<String, String> locales = getSupportedLocales();
         String language = mLangUpdater.getPreferredLocale();
 
         List<OptionItem> options = new ArrayList<>();
@@ -62,7 +64,7 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendCountryCategory(AppSettingsPresenter settingsPresenter) {
-        Map<String, String> countries = mLangUpdater.getSupportedCountries();
+        Map<String, String> countries = getSupportedCountries();
         String country = mLangUpdater.getPreferredCountry();
 
         List<OptionItem> options = new ArrayList<>();
@@ -78,5 +80,21 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.dialog_select_country), options);
+    }
+
+    /**
+     * Gets map of Human readable locale names and their respective lang codes
+     * @return locale name/code map
+     */
+    private Map<String, String> getSupportedLocales() {
+        LinkedHashMap<String, String> map = new LinkedHashMap<>();
+        map.put(getContext().getResources().getString(R.string.default_lang), "");
+        return Helpers.getMap(getContext().getResources().getStringArray(R.array.supported_languages), "|", map);
+    }
+
+    private Map<String, String> getSupportedCountries() {
+        LinkedHashMap<String, String> map = new LinkedHashMap<>();
+        map.put(getContext().getResources().getString(R.string.default_lang), "");
+        return Helpers.getMap(getContext().getResources().getStringArray(R.array.supported_countries), "|", map);
     }
 }
