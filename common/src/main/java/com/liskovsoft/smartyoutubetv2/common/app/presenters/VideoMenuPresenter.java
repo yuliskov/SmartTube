@@ -316,7 +316,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             video.playlistId = mVideo.playlistId;
             video.title = String.format("%s - %s",
                     mVideo.author != null ? mVideo.author : mVideo.title,
-                    mVideo.group != null ? mVideo.group.getTitle() : mVideo.description
+                    mVideo.group != null && mVideo.group.getTitle() != null ? mVideo.group.getTitle() : mVideo.description
             );
             video.cardImageUrl = mVideo.cardImageUrl;
             mCategory = video;
