@@ -228,6 +228,10 @@ public class Utils {
         }
     }
 
+    /**
+     * Need to be the first line and executed on earliest stage once.<br/>
+     * Inits service language and context.
+     */
     public static void initGlobalData(Context context) {
         Log.d(TAG, "initGlobalData called...");
 
