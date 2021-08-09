@@ -39,7 +39,7 @@
     <string name="video_buffer_size_high">అధిక</string>
     <string name="update_changelog">చేంజ్లాగ్</string>
     <string name="install_update">నవీకరణను ఇన్‌స్టాల్ చేయండి</string>
-    <string name="msg_category_is_empty">అయ్యో! ఇక్కడ ఏమీ లేదు.</string>
+    <string name="section_is_empty">అయ్యో! ఇక్కడ ఏమీ లేదు.</string>
     <string name="dialog_add_to_playlist">ప్లేజాబితా నుండి జోడించండి /తీసివేయండి</string>
     <string name="msg_signed_users_only">సంతకం చేసిన వినియోగదారులు మాత్రమే</string>
     <string name="msg_cant_load_content">అయ్యో. కంటెంట్‌ను లోడ్ చేయలేరు.</string>
@@ -118,7 +118,7 @@
     <string name="subtitle_black_bg">నలుపు నేపథ్యం</string>
     <string name="player_seek_preview">కోరుతున్నప్పుడు ప్రివ్యూ చేయండి</string>
     <string name="color_scheme_dark_grey_oled">డార్క్ గ్రే (OLED)</string>
-    <string name="channels_category_sorting">ఛానెల్స్ విభాగం సార్టింగ్</string>
+    <string name="channels_section_sorting">ఛానెల్స్ విభాగం సార్టింగ్</string>
     <string name="sorting_by_new_content">క్రొత్త కంటెంట్</string>
     <string name="sorting_alphabetically">అక్షరక్రమంలో</string>
     <string name="sorting_last_viewed">చివరిగా వీక్షించారు</string>

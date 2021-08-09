@@ -39,7 +39,7 @@
     <string name="video_buffer_size_high">Haut</string>
     <string name="update_changelog">Journal des modifications</string>
     <string name="install_update">Installer la mise à jour</string>
-    <string name="msg_category_is_empty">Oups! Il n\'y a rien ici.</string>
+    <string name="section_is_empty">Oups! Il n\'y a rien ici.</string>
     <string name="dialog_add_to_playlist">Ajouter à la bibliothèque</string>
     <string name="msg_signed_users_only">Utilisateurs enregistrés uniquement</string>
     <string name="msg_cant_load_content">Oups. Impossible de charger le contenu.</string>
@@ -119,7 +119,7 @@
     <string name="subtitle_black_bg">Fond noir</string>
     <string name="player_seek_preview">Aperçu pendant la recherche</string>
     <string name="color_scheme_dark_grey_oled">Sombre (OLED)</string>
-    <string name="channels_category_sorting">Classement des sections de chaînes</string>
+    <string name="channels_section_sorting">Classement des sections de chaînes</string>
     <string name="sorting_by_new_content">Nouveau contenu</string>
     <string name="sorting_alphabetically">Alphabétiquement</string>
     <string name="sorting_last_viewed">Populaire en premier</string>

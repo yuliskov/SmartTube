@@ -38,7 +38,7 @@
     <string name="video_buffer_size_high">Yüksek</string>
     <string name="update_changelog">Değişiklik günlüğü</string>
     <string name="install_update">Güncellemeyi yükle</string>
-    <string name="msg_category_is_empty">Oops! Burada hiçbir şey yok.</string>
+    <string name="section_is_empty">Oops! Burada hiçbir şey yok.</string>
     <string name="dialog_add_to_playlist">Oynatma listesine ekle</string>
     <string name="msg_signed_users_only">Yalnızca imzalı kullanıcılar</string>
     <string name="msg_cant_load_content">Oops. İçerik yüklenemiyor.</string>
@@ -116,7 +116,7 @@
     <string name="subtitle_black_bg">Siyah arka plan</string>
     <string name="player_seek_preview">Ararken önizleme</string>
     <string name="color_scheme_dark_grey_oled">Koyu Gri (OLED)</string>
-    <string name="channels_category_sorting">Kanal bölümü sıralama</string>
+    <string name="channels_section_sorting">Kanal bölümü sıralama</string>
     <string name="sorting_by_new_content">Yeni içerik</string>
     <string name="sorting_alphabetically">Alfabetik</string>
     <string name="sorting_last_viewed">Son görüntülenen</string>

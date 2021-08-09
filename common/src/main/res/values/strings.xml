@@ -39,7 +39,7 @@
     <string name="video_buffer_size_high">High</string>
     <string name="update_changelog">Changelog</string>
     <string name="install_update">Install update</string>
-    <string name="msg_category_is_empty">Oops! There is nothing in here.</string>
+    <string name="section_is_empty">Oops! There is nothing in here.</string>
     <string name="dialog_add_to_playlist">Add/Remove from playlist</string>
     <string name="msg_signed_users_only">Signed users only</string>
     <string name="msg_cant_load_content">Oops. Can\'t load content.</string>
@@ -119,12 +119,12 @@
     <string name="subtitle_black_bg">Black background</string>
     <string name="player_seek_preview">Preview while seeking</string>
     <string name="color_scheme_dark_grey_oled">Dark Grey (OLED)</string>
-    <string name="channels_category_sorting">Channels section sorting</string>
+    <string name="channels_section_sorting">Channels section sorting</string>
     <string name="sorting_by_new_content">New content</string>
     <string name="sorting_alphabetically">Alphabetically</string>
     <string name="sorting_last_viewed">Last viewed</string>
     <string name="player_pause_when_seek">Pause when seeking</string>
-    <string name="playlists_style">Playlists category style</string>
+    <string name="playlists_style">Playlists section style</string>
     <string name="playlists_style_grid">Grid</string>
     <string name="playlists_style_rows">Rows</string>
     <string name="player_show_clock">Show clock in pop-up menu</string>

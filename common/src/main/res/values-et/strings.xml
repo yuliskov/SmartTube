@@ -37,7 +37,7 @@
     <string name="video_buffer_size_high">Kõrge</string>
     <string name="update_changelog">Muudatused</string>
     <string name="install_update">Paigaldada uuendused</string>
-    <string name="msg_category_is_empty">OI. Siin ei ole midagi!.</string>
+    <string name="section_is_empty">OI. Siin ei ole midagi!.</string>
     <string name="dialog_add_to_playlist">Lisada/Eemaldada esitusnimekiri</string>
     <string name="msg_signed_users_only">Vajalik kontole sisenemine</string>
     <string name="msg_cant_load_content">Sisu ei saanud laadida!</string>
@@ -117,7 +117,7 @@
     <string name="subtitle_black_bg">Must taust</string>
     <string name="player_seek_preview">Eelvaatus kermisel</string>
     <string name="color_scheme_dark_grey_oled">Tume-hall (OLED)</string>
-    <string name="channels_category_sorting">Kanalite sorteerimine</string>
+    <string name="channels_section_sorting">Kanalite sorteerimine</string>
     <string name="sorting_by_new_content">Uus sisu</string>
     <string name="sorting_alphabetically">Tähestiku järgi</string>
     <string name="sorting_last_viewed">Viimati vaadatud</string>

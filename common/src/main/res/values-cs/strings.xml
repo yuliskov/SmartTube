@@ -37,7 +37,7 @@
     <string name="video_buffer_size_high">Vysoký</string>
     <string name="update_changelog">Seznam změn</string>
     <string name="install_update">Instalovat aktualizace</string>
-    <string name="msg_category_is_empty">Jejda! Tady nic není.</string>
+    <string name="section_is_empty">Jejda! Tady nic není.</string>
     <string name="dialog_add_to_playlist">Přidat do seznamu skladeb</string>
     <string name="msg_signed_users_only">Pouze přihlášení uživatelé</string>
     <string name="msg_cant_load_content">Jejda. Nelze načíst obsah.</string>
@@ -115,7 +115,7 @@
     <string name="subtitle_black_bg">Černé pozadí</string>
     <string name="player_seek_preview">Náhledy při přeskakování</string>
     <string name="color_scheme_dark_grey_oled">Tmavé (OLED)</string>
-    <string name="channels_category_sorting">Řazení sekce kanálu</string>
+    <string name="channels_section_sorting">Řazení sekce kanálu</string>
     <string name="sorting_by_new_content">Nový obsah</string>
     <string name="sorting_alphabetically">Abecedně</string>
     <string name="sorting_last_viewed">Poslední zhlédnuté</string>

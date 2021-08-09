@@ -36,7 +36,7 @@
     <string name="video_buffer_size_high">عالي</string>
     <string name="update_changelog">التغيير</string>
     <string name="install_update">تثبيت التحديث</string>
-    <string name="msg_category_is_empty">وجه الفتاة! لا يوجد شيء هنا.</string>
+    <string name="section_is_empty">وجه الفتاة! لا يوجد شيء هنا.</string>
     <string name="dialog_add_to_playlist">أضف إلى قائمة التشغيل</string>
     <string name="msg_signed_users_only">المستخدمون المسجلون فقط</string>
     <string name="msg_cant_load_content">Oops. Can\'t load content.</string>

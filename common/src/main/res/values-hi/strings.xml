@@ -39,7 +39,7 @@
     <string name="video_buffer_size_high">उच्च</string>
     <string name="update_changelog">बदलाव का</string>
     <string name="install_update">अद्यतन स्थापित करें</string>
-    <string name="msg_category_is_empty">ऊप्स! यहां कुछ भी नहीं है।</string>
+    <string name="section_is_empty">ऊप्स! यहां कुछ भी नहीं है।</string>
     <string name="dialog_add_to_playlist">प्लेलिस्ट में जोड़ें</string>
     <string name="msg_signed_users_only">केवल उपयोगकर्ताओं पर हस्ताक्षर किए</string>
     <string name="msg_cant_load_content">उफ़। सामग्री लोड नहीं कर सकता।</string>
@@ -117,7 +117,7 @@
     <string name="subtitle_black_bg">काले रंग की पृष्ठभूमि</string>
     <string name="player_seek_preview">तलाश करते हुए पूर्वावलोकन करें</string>
     <string name="color_scheme_dark_grey_oled">डार्क ग्रे (ओएलईडी)</string>
-    <string name="channels_category_sorting">चैनल अनुभाग छँटाई</string>
+    <string name="channels_section_sorting">चैनल अनुभाग छँटाई</string>
     <string name="sorting_by_new_content">नई सामग्री</string>
     <string name="sorting_alphabetically">वर्णक्रम</string>
     <string name="sorting_last_viewed">अंतिम बार देखा गया</string>

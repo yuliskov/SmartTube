@@ -38,7 +38,7 @@
     <string name="video_buffer_size_high">Высокий</string>
     <string name="update_changelog">Изменения</string>
     <string name="install_update">Установить обновление</string>
-    <string name="msg_category_is_empty">Ой! Здесь ничего нет.</string>
+    <string name="section_is_empty">Ой! Здесь ничего нет.</string>
     <string name="dialog_add_to_playlist">Добавить/Удалить из плейлиста</string>
     <string name="msg_signed_users_only">Необходимо войти в вккаунт</string>
     <string name="msg_cant_load_content">Не получилось загрузить содержимое</string>
@@ -119,7 +119,7 @@
     <string name="subtitle_black_bg">Черный фон</string>
     <string name="player_seek_preview">Превью при перемотке</string>
     <string name="color_scheme_dark_grey_oled">Темно-серая (OLED)</string>
-    <string name="channels_category_sorting">Сортировка раздела Каналы</string>
+    <string name="channels_section_sorting">Сортировка раздела Каналы</string>
     <string name="sorting_by_new_content">Новый контент</string>
     <string name="sorting_alphabetically">По алфавиту</string>
     <string name="sorting_last_viewed">Последние просмотренные</string>

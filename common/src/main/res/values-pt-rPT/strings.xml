@@ -38,7 +38,7 @@
     <string name="video_buffer_size_high">Alto</string>
     <string name="update_changelog">Alterações</string>
     <string name="install_update">Instalar atualização</string>
-    <string name="msg_category_is_empty">Ops! Não há nada aqui.</string>
+    <string name="section_is_empty">Ops! Não há nada aqui.</string>
     <string name="dialog_add_to_playlist">Adicionar à lista</string>
     <string name="msg_signed_users_only">Apenas utilizadores ligados</string>
     <string name="msg_cant_load_content">Oops, o conteúdo não pode ser carregado.</string>
@@ -116,7 +116,7 @@
     <string name="subtitle_black_bg">Fundo preto</string>
     <string name="player_seek_preview">Visualizar enquanto procura</string>
     <string name="color_scheme_dark_grey_oled">Cinza Escuro (OLED)</string>
-    <string name="channels_category_sorting">Classificação dos canais</string>
+    <string name="channels_section_sorting">Classificação dos canais</string>
     <string name="sorting_by_new_content">Novos conteúdos</string>
     <string name="sorting_alphabetically">Ordem alfabética</string>
     <string name="sorting_last_viewed">Ultimos vistos</string>

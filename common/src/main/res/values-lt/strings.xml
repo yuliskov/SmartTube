@@ -37,7 +37,7 @@
     <string name="video_buffer_size_high">Didelė</string>
     <string name="update_changelog">Pakeisti žurnalą</string>
     <string name="install_update">Įdiekite naujinimą</string>
-    <string name="msg_category_is_empty">Oi! Čia nieko nėra.</string>
+    <string name="section_is_empty">Oi! Čia nieko nėra.</string>
     <string name="dialog_add_to_playlist">Pridėti prie grojaraščio</string>
     <string name="msg_signed_users_only">Tik pasirašę vartotojai</string>
     <string name="msg_cant_load_content">Oi. Nepavyksta įkelti turinio.</string>
@@ -115,7 +115,7 @@
     <string name="subtitle_black_bg">Juodas fonas</string>
     <string name="player_seek_preview">Peržiūra ieškant</string>
     <string name="color_scheme_dark_grey_oled">Tamsus (OLED)</string>
-    <string name="channels_category_sorting">Kanalų sekcijų rūšiavimas</string>
+    <string name="channels_section_sorting">Kanalų sekcijų rūšiavimas</string>
     <string name="sorting_by_new_content">Naujas turinys</string>
     <string name="sorting_alphabetically">Abėcėlės tvarka</string>
     <string name="sorting_last_viewed">Paskutinį kartą peržiūrėta</string>

@@ -37,7 +37,7 @@
     <string name="video_buffer_size_high">Stort</string>
     <string name="update_changelog">Endringslogg</string>
     <string name="install_update">Installer oppdatering</string>
-    <string name="msg_category_is_empty">Beklager! Det er ingenting her inne.</string>
+    <string name="section_is_empty">Beklager! Det er ingenting her inne.</string>
     <string name="dialog_add_to_playlist">Legg til i spilleliste</string>
     <string name="msg_signed_users_only">Bare for innloggede brukere</string>
     <string name="msg_cant_load_content">Beklager. Kan ikke laste innholdet.</string>
@@ -115,7 +115,7 @@
     <string name="subtitle_black_bg">Svart bakgrunn</string>
     <string name="player_seek_preview">Forhåndsvisning mens du søker</string>
     <string name="color_scheme_dark_grey_oled">Mørk (OLED)</string>
-    <string name="channels_category_sorting">Kanalseksjonssortering</string>
+    <string name="channels_section_sorting">Kanalseksjonssortering</string>
     <string name="sorting_by_new_content">Nytt innhold</string>
     <string name="sorting_alphabetically">Alfabetisk</string>
     <string name="sorting_last_viewed">Sist sett</string>

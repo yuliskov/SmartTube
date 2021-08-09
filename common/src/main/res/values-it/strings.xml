@@ -39,7 +39,7 @@
     <string name="video_buffer_size_high">Alto</string>
     <string name="update_changelog">Cosa c\'è di nuovo</string>
     <string name="install_update">Installa aggiornamento</string>
-    <string name="msg_category_is_empty">Oops! Non c\'è niente qui.</string>
+    <string name="section_is_empty">Oops! Non c\'è niente qui.</string>
     <string name="dialog_add_to_playlist">Aggiungi alla playlist</string>
     <string name="msg_signed_users_only">Solo utenti che hanno effettuato l\'accesso</string>
     <string name="msg_cant_load_content">Oops. Non posso caricare il contenuto.</string>

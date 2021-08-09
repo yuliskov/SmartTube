@@ -39,7 +39,7 @@
     <string name="video_buffer_size_high">Alto</string>
     <string name="update_changelog">Registro de Alterações</string>
     <string name="install_update">Instalar Atualização</string>
-    <string name="msg_category_is_empty">Ops! Não há Nada aqui.</string>
+    <string name="section_is_empty">Ops! Não há Nada aqui.</string>
     <string name="dialog_add_to_playlist">Adicionar/Remover á Playlist</string>
     <string name="msg_signed_users_only">Apenas Usuários Logados</string>
     <string name="msg_cant_load_content">Ops. O Conteúdo não pode ser Carregado.</string>
@@ -119,7 +119,7 @@
     <string name="subtitle_black_bg">Fundo Preto</string>
     <string name="player_seek_preview">Visualizar Durante a Busca</string>
     <string name="color_scheme_dark_grey_oled">Cinza Escuro (OLED)</string>
-    <string name="channels_category_sorting">Classificação das Seções</string>
+    <string name="channels_section_sorting">Classificação das Seções</string>
     <string name="sorting_by_new_content">Novos Conteúdos</string>
     <string name="sorting_alphabetically">Ordem Alfabética</string>
     <string name="sorting_last_viewed">Ultimos Vistos</string>
