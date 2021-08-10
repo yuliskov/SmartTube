@@ -36,7 +36,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     private Disposable mNotInterestedAction;
     private Disposable mSubscribeAction;
     private Video mVideo;
-    private Video mCategory;
+    private Video mSection;
     private boolean mIsNotInterestedButtonEnabled;
     private boolean mIsOpenChannelButtonEnabled;
     private boolean mIsOpenChannelUploadsButtonEnabled;
@@ -71,7 +71,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         showVideoMenu(video, null);
     }
 
-    public void showVideoMenu(Video video, Video category) {
+    public void showVideoMenu(Video video, Video section) {
         mIsAddToPlaylistButtonEnabled = true;
         mIsAddToPlaybackQueueButtonEnabled = true;
         mIsOpenChannelButtonEnabled = true;
@@ -84,7 +84,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mIsReturnToBackgroundVideoEnabled = true;
         mIsPinToSidebarEnabled = true;
 
-        showMenuInt(video, category);
+        showMenuInt(video, section);
     }
 
     public void showChannelMenu(Video video) {
@@ -97,25 +97,25 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         showMenuInt(video);
     }
 
-    public void showPlaylistMenu(Video category) {
+    public void showPlaylistMenu(Video section) {
         mIsPinToSidebarEnabled = true;
 
-        showMenuInt(null, category);
+        showMenuInt(null, section);
     }
 
     private void showMenuInt(Video video) {
         showMenuInt(video, null);
     }
 
-    private void showMenuInt(Video video, Video category) {
-        if (video == null && category == null) {
+    private void showMenuInt(Video video, Video section) {
+        if (video == null && section == null) {
             return;
         }
 
         RxUtils.disposeActions(mPlaylistAction, mAddAction, mNotInterestedAction, mSubscribeAction);
 
         mVideo = video;
-        mCategory = category;
+        mSection = section;
 
         MediaServiceManager.instance().authCheck(this::obtainPlaylistsAndShowDialogSigned, this::prepareAndShowDialogUnsigned);
     }
@@ -155,7 +155,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         appendAccountSelectionButton();
 
         if (!mSettingsPresenter.isEmpty()) {
-            String title = mVideo != null ? mVideo.title : mCategory.title;
+            String title = mVideo != null ? mVideo.title : mSection.title;
             mSettingsPresenter.showDialog(title, () -> RxUtils.disposeActions(mPlaylistAction));
         }
     }
@@ -306,12 +306,12 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        if ((mVideo == null || mVideo.playlistId == null) && mCategory == null) {
+        if ((mVideo == null || mVideo.playlistId == null) && mSection == null) {
             return;
         }
 
         // Pin non-user playlist
-        if (mCategory == null) {
+        if (mSection == null) {
             Video video = new Video();
             video.playlistId = mVideo.playlistId;
             video.title = String.format("%s - %s",
@@ -319,7 +319,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
                     mVideo.group != null && mVideo.group.getTitle() != null ? mVideo.group.getTitle() : mVideo.description
             );
             video.cardImageUrl = mVideo.cardImageUrl;
-            mCategory = video;
+            mSection = video;
         }
 
         BrowsePresenter presenter = BrowsePresenter.instance(getContext());
@@ -328,12 +328,12 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
                 UiOptionItem.from(getContext().getString(R.string.pin_unpin_from_sidebar),
                         optionItem -> {
                             // Toggle between pin/unpin while dialog is opened
-                            boolean isItemPinned = presenter.isItemPinned(mCategory);
+                            boolean isItemPinned = presenter.isItemPinned(mSection);
 
                             if (isItemPinned) {
-                                presenter.unpinItem(mCategory);
+                                presenter.unpinItem(mSection);
                             } else {
-                                presenter.pinItem(mCategory);
+                                presenter.pinItem(mSection);
                             }
                             MessageHelpers.showMessage(getContext(), isItemPinned ? R.string.unpin_from_sidebar : R.string.pin_to_sidebar);
                         }));
