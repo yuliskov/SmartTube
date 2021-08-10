@@ -486,11 +486,16 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
                 // Don't let change the codec beside needed one.
                 if (MediaTrack.codecEquals(result, originTrack)) {
-                    break;
-                }
+                    if (originTrack.compare(result) == 0) { // Exact match found
+                        break;
+                    }
 
-                // Formats are the same except the codecs
-                if (prevResult.compare(result) == 0) {
+                    if (MediaTrack.codecEquals(prevResult, originTrack) && prevResult.compare(result) > 0) {
+                        result = prevResult;
+                    }
+                } else if (MediaTrack.codecEquals(prevResult, originTrack)) {
+                    result = prevResult;
+                } else if (prevResult.compare(result) == 0) { // Formats are the same except the codecs
                     if (MediaTrack.preferByCodec(prevResult, result)) {
                         result = prevResult;
                     }
