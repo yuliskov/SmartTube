@@ -9,7 +9,7 @@ import android.view.KeyEvent;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.sharedutils.locale.LangUpdater;
+import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -71,7 +71,7 @@ public class MotherActivity extends FragmentActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleContextWrapper.wrap(newBase, LangUpdater.getLocale(newBase)));
+        super.attachBaseContext(LocaleContextWrapper.wrap(newBase, LocaleUpdater.getSavedLocale(newBase)));
     }
 
     @Override
@@ -150,7 +150,7 @@ public class MotherActivity extends FragmentActivity {
 
         // Fix sudden language change.
         // Could happen when screen goes off or after PIP mode.
-        LocaleContextWrapper.apply(this);
+        LocaleUpdater.applySavedLocale(this);
 
         // Fix sudden dpi change.
         // Could happen when screen goes off or after PIP mode.

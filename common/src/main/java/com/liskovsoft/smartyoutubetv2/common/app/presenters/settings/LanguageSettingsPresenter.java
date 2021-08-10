@@ -8,7 +8,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.sharedutils.locale.LangUpdater;
+import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -17,12 +17,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class LanguageSettingsPresenter extends BasePresenter<Void> {
-    private final LangUpdater mLangUpdater;
+    private final LocaleUpdater mLangUpdater;
     private boolean mRestartApp;
 
     public LanguageSettingsPresenter(Context context) {
         super(context);
-        mLangUpdater = new LangUpdater(context);
+        mLangUpdater = new LocaleUpdater(context);
     }
 
     public static LanguageSettingsPresenter instance(Context context) {
