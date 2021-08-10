@@ -135,11 +135,12 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
     @Override
     public boolean isPlaying() {
-        if (mPlayer == null) {
-            return false;
-        }
-
         return ExoUtils.isPlaying(mPlayer);
+    }
+
+    @Override
+    public boolean isLoading() {
+        return ExoUtils.isLoading(mPlayer);
     }
 
     @Override

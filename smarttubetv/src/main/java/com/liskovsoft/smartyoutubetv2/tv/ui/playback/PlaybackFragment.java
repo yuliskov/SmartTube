@@ -776,6 +776,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
+    public boolean isLoading() {
+        return mExoPlayerController.isLoading();
+    }
+
+    @Override
     public List<FormatItem> getVideoFormats() {
         return mExoPlayerController.getVideoFormats();
     }

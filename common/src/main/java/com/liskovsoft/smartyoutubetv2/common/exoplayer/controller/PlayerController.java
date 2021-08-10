@@ -24,6 +24,7 @@ public interface PlayerController {
     void setPlay(boolean isPlaying);
     boolean getPlay();
     boolean isPlaying();
+    boolean isLoading();
     void release();
     void setPlayer(SimpleExoPlayer player);
     void setEventListener(PlayerEventListener eventListener);

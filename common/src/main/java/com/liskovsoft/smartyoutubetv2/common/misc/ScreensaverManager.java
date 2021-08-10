@@ -125,6 +125,6 @@ public class ScreensaverManager {
         }
 
         PlaybackView playbackView = PlaybackPresenter.instance(activity).getView();
-        return playbackView != null && playbackView.getController().isPlaying();
+        return playbackView != null && (playbackView.getController().isPlaying() || playbackView.getController().isLoading());
     }
 }

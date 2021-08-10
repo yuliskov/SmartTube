@@ -45,6 +45,7 @@ public interface PlaybackEngineController {
     void setPlay(boolean play);
     boolean getPlay();
     boolean isPlaying();
+    boolean isLoading();
     List<FormatItem> getVideoFormats();
     List<FormatItem> getAudioFormats();
     List<FormatItem> getSubtitleFormats();
