@@ -1,6 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.views;
 
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppDialogPresenter.SettingsCategory;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter.SettingsCategory;
 
 import java.util.List;
 

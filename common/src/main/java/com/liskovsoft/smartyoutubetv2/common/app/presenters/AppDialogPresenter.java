@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs;
+package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
