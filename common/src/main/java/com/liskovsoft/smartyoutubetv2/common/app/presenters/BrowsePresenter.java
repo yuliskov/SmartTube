@@ -18,7 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.CategoryEmptyError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppUpdatePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.BootDialogsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.ChannelUploadsMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.CategoryPresenter;
@@ -113,7 +113,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         updatePlaylistsStyle();
         updateCategories();
         getView().selectCategory(mStartCategoryIndex);
-        checkForUpdates();
+        showBootDialogs();
     }
 
     private void initCategories() {
@@ -383,9 +383,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         }
     }
 
-    private void checkForUpdates() {
-        AppUpdatePresenter updatePresenter = AppUpdatePresenter.instance(getContext());
-        updatePresenter.start(false);
+    private void showBootDialogs() {
+        BootDialogsPresenter updatePresenter = BootDialogsPresenter.instance(getContext());
+        updatePresenter.start();
         updatePresenter.unhold();
     }
 
