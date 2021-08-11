@@ -10,7 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.OnboardingView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
-import com.liskovsoft.smartyoutubetv2.common.app.views.AppSettingsView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.adddevice.AddDeviceActivity;
@@ -35,7 +35,7 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         viewManager.register(SplashView.class, SplashActivity.class); // no parent, because it's root activity
         viewManager.register(BrowseView.class, BrowseActivity.class); // no parent, because it's root activity
         viewManager.register(PlaybackView.class, PlaybackActivity.class, BrowseActivity.class);
-        viewManager.register(AppSettingsView.class, AppDialogActivity.class, PlaybackActivity.class);
+        viewManager.register(AppDialogView.class, AppDialogActivity.class, PlaybackActivity.class);
         viewManager.register(OnboardingView.class, OnboardingActivity.class, BrowseActivity.class);
         viewManager.register(DetailsView.class, VideoDetailsActivity.class, BrowseActivity.class);
         viewManager.register(SearchView.class, SearchTagsActivity.class, BrowseActivity.class);

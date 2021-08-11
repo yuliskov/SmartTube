@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.presenters;
+package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,6 +9,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
@@ -72,7 +73,7 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
             return;
         }
 
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
         settingsPresenter.clear();
 
         appendAccountSelection(accounts, settingsPresenter);
@@ -80,7 +81,7 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
         settingsPresenter.showDialog(getContext().getString(R.string.settings_accounts), this::unhold);
     }
 
-    private void appendAccountSelection(List<Account> accounts, AppSettingsPresenter settingsPresenter) {
+    private void appendAccountSelection(List<Account> accounts, AppDialogPresenter settingsPresenter) {
         List<OptionItem> optionItems = new ArrayList<>();
 
         optionItems.add(UiOptionItem.from(

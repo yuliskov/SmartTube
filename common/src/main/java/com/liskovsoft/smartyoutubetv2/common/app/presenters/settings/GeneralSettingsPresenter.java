@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
-import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -9,7 +8,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HQDial
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.ProxyManager;
@@ -38,7 +37,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     }
 
     public void show() {
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
         settingsPresenter.clear();
 
         appendBootToCategory(settingsPresenter);
@@ -58,7 +57,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         });
     }
 
-    private void appendLeftPanelCategories(AppSettingsPresenter settingsPresenter) {
+    private void appendLeftPanelCategories(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         Map<Integer, Integer> leftPanelCategories = mGeneralData.getCategories();
@@ -73,7 +72,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.side_panel_sections), options);
     }
 
-    private void appendBootToCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendBootToCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         Map<Integer, Integer> leftPanelCategories = mGeneralData.getCategories();
@@ -105,7 +104,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.boot_to_section), options);
     }
 
-    private void appendAppExitCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendAppExitCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
@@ -120,12 +119,12 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.app_exit_shortcut), options);
     }
 
-    private void appendBackgroundPlaybackCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendBackgroundPlaybackCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = HQDialogManager.createBackgroundPlaybackCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
-    private void appendBackgroundPlaybackActivationCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendBackgroundPlaybackActivationCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from("HOME",
@@ -139,7 +138,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.background_playback_activation), options);
     }
 
-    private void appendKeyRemappingCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendKeyRemappingCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from("Fast Forward/Rewind -> Next/Previous",
@@ -152,7 +151,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.key_remapping), options);
     }
 
-    private void appendScreenDimmingCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendScreenDimmingCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(
@@ -171,7 +170,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.screen_diming), options);
     }
 
-    private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts),

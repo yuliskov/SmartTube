@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.presenters;
+package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs;
 
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
@@ -11,6 +11,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -29,7 +33,7 @@ import java.util.List;
 public class VideoMenuPresenter extends BasePresenter<Void> {
     private static final String TAG = VideoMenuPresenter.class.getSimpleName();
     private final MediaItemManager mItemManager;
-    private final AppSettingsPresenter mSettingsPresenter;
+    private final AppDialogPresenter mSettingsPresenter;
     private final MediaServiceManager mServiceManager;
     private Disposable mPlaylistAction;
     private Disposable mAddAction;
@@ -54,7 +58,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         MediaService service = YouTubeMediaService.instance();
         mItemManager = service.getMediaItemManager();
         mServiceManager = MediaServiceManager.instance();
-        mSettingsPresenter = AppSettingsPresenter.instance(context);
+        mSettingsPresenter = AppDialogPresenter.instance(context);
     }
 
     public static VideoMenuPresenter instance(Context context) {

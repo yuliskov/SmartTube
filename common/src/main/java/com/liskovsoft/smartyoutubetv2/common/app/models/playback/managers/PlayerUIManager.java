@@ -13,7 +13,6 @@ import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -21,10 +20,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.Sugges
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.VideoMenuPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.OnSelectSubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
@@ -54,7 +53,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     private final Runnable mSuggestionsResetHandler = () -> getController().resetSuggestedPosition();
     private final Runnable mUiAutoHideHandler = () -> {
         // Playing the video and dialog overlay isn't shown
-        if (getController().isPlaying() && !AppSettingsPresenter.instance(getActivity()).isDialogShown()) {
+        if (getController().isPlaying() && !AppDialogPresenter.instance(getActivity()).isDialogShown()) {
             if (!getController().isSuggestionsShown()) { // don't hide when suggestions is shown
                 getController().showControls(false);
             }
@@ -158,7 +157,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         String subtitlesCategoryTitle = getActivity().getString(R.string.subtitle_category_title);
         String subtitleFormatsTitle = getActivity().getString(R.string.subtitle_language);
 
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getActivity());
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
 
         settingsPresenter.clear();
 
@@ -187,7 +186,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     public void onEngineInitialized() {
         mEngineReady = true;
 
-        if (AppSettingsPresenter.instance(getActivity()).isDialogShown()) {
+        if (AppDialogPresenter.instance(getActivity()).isDialogShown()) {
             // Activate debug infos/show ui after engine restarting (buffering, sound shift, error?).
             getController().showControls(true);
             getController().showDebugInfo(mDebugViewEnabled);
@@ -308,7 +307,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     public void onVideoSpeedClicked() {
         List<OptionItem> items = new ArrayList<>();
 
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getActivity());
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
         settingsPresenter.clear();
 
         // suppose live stream if buffering near the end
@@ -332,7 +331,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         OptionCategory videoAspectCategory = createVideoAspectCategory(
                 getActivity(), mPlayerData, () -> getController().setVideoAspectRatio(mPlayerData.getVideoAspectRatio()));
 
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getActivity());
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
         settingsPresenter.clear();
         settingsPresenter.appendRadioCategory(videoAspectCategory.title, videoAspectCategory.options);
         settingsPresenter.appendRadioCategory(videoZoomCategory.title, videoZoomCategory.options);
@@ -353,7 +352,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         }
     }
 
-    private void intSpeedItems(AppSettingsPresenter settingsPresenter, List<OptionItem> items, float[] speedValues) {
+    private void intSpeedItems(AppDialogPresenter settingsPresenter, List<OptionItem> items, float[] speedValues) {
         for (float speed : speedValues) {
             items.add(UiOptionItem.from(
                     String.valueOf(speed),

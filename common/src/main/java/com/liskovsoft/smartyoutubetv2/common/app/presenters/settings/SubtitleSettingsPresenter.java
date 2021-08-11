@@ -4,7 +4,7 @@ import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUIManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
@@ -21,7 +21,7 @@ public class SubtitleSettingsPresenter extends BasePresenter<Void> {
     }
 
     public void show() {
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
         settingsPresenter.clear();
 
         // Can't work properly. There is no robust language detection.
@@ -59,7 +59,7 @@ public class SubtitleSettingsPresenter extends BasePresenter<Void> {
     //    settingsPresenter.appendRadioCategory(subtitleLanguageTitle, options);
     //}
 
-    private void appendSubtitleStyleCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendSubtitleStyleCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = PlayerUIManager.createSubtitleStylesCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }

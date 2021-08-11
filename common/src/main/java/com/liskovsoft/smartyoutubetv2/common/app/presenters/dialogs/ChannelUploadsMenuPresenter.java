@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.presenters;
+package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs;
 
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
@@ -7,6 +7,8 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
@@ -15,7 +17,7 @@ import io.reactivex.disposables.Disposable;
 
 public class ChannelUploadsMenuPresenter extends BasePresenter<Void> {
     private final MediaItemManager mItemManager;
-    private final AppSettingsPresenter mSettingsPresenter;
+    private final AppDialogPresenter mSettingsPresenter;
     private final MediaServiceManager mServiceManager;
     private Disposable mUnsubscribeAction;
     private Video mVideo;
@@ -24,7 +26,7 @@ public class ChannelUploadsMenuPresenter extends BasePresenter<Void> {
         super(context);
         MediaService service = YouTubeMediaService.instance();
         mItemManager = service.getMediaItemManager();
-        mSettingsPresenter = AppSettingsPresenter.instance(context);
+        mSettingsPresenter = AppDialogPresenter.instance(context);
         mServiceManager = MediaServiceManager.instance();
     }
 

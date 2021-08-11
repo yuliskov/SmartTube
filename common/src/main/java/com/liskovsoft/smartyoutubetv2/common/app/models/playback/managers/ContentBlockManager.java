@@ -12,7 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventList
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -180,7 +180,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             return;
         }
 
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getActivity());
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
         settingsPresenter.clear();
 
         OptionItem sponsorBlockOption = UiOptionItem.from(

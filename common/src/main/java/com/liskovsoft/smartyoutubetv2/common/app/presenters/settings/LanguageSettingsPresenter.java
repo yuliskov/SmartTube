@@ -6,7 +6,7 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 
@@ -30,7 +30,7 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
     }
 
     public void show() {
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
         settingsPresenter.clear();
 
         appendLanguageCategory(settingsPresenter);
@@ -44,7 +44,7 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
         });
     }
 
-    private void appendLanguageCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendLanguageCategory(AppDialogPresenter settingsPresenter) {
         Map<String, String> locales = getSupportedLocales();
         String language = mLangUpdater.getPreferredLocale();
 
@@ -63,7 +63,7 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.dialog_select_language), options);
     }
 
-    private void appendCountryCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendCountryCategory(AppDialogPresenter settingsPresenter) {
         Map<String, String> countries = getSupportedCountries();
         String country = mLangUpdater.getPreferredCountry();
 

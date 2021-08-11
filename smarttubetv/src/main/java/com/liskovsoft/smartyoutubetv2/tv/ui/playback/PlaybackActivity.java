@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -230,7 +230,7 @@ public class PlaybackActivity extends LeanbackActivity {
     @Override
     public void onUserLeaveHint() {
         // Check that user not open dialog instead of really leaving the activity
-        if (!AppSettingsPresenter.instance(this).isDialogShown() && isHomePressed()) {
+        if (!AppDialogPresenter.instance(this).isDialogShown() && isHomePressed()) {
             switch (mPlaybackFragment.getPlaybackMode()) {
                 case PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND:
                     enterBackgroundPlayMode();

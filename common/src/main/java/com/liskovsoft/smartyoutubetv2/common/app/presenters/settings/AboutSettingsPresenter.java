@@ -7,10 +7,9 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppUpdatePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AppUpdatePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.prefs.AppData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.app_name),
                 AppInfoHelpers.getAppVersionName(getContext()));
 
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
         settingsPresenter.clear();
 
         appendAutoUpdateSwitch(settingsPresenter);
@@ -54,13 +53,13 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.showDialog(mainTitle);
     }
 
-    private void appendAutoUpdateSwitch(AppSettingsPresenter settingsPresenter) {
+    private void appendAutoUpdateSwitch(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.check_updates_auto), optionItem -> {
             mUpdateChecker.enableUpdateCheck(optionItem.isSelected());
         }, mUpdateChecker.isUpdateCheckEnabled()));
     }
 
-    private void appendUpdateCheckButton(AppSettingsPresenter settingsPresenter) {
+    private void appendUpdateCheckButton(AppDialogPresenter settingsPresenter) {
         OptionItem updateCheckOption = UiOptionItem.from(
                 getContext().getString(R.string.check_for_updates),
                 option -> AppUpdatePresenter.instance(getContext()).start(true));
@@ -68,14 +67,14 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendSingleButton(updateCheckOption);
     }
 
-    private void appendSiteLink(AppSettingsPresenter settingsPresenter) {
+    private void appendSiteLink(AppDialogPresenter settingsPresenter) {
         OptionItem webSiteOption = UiOptionItem.from(String.format("%s (GitHub)", getContext().getString(R.string.web_site)),
                 option -> Utils.openLink(getContext(), getContext().getString(R.string.web_site_url)));
 
         settingsPresenter.appendSingleButton(webSiteOption);
     }
 
-    private void appendDonation(AppSettingsPresenter settingsPresenter) {
+    private void appendDonation(AppDialogPresenter settingsPresenter) {
         List<OptionItem> donateOptions = new ArrayList<>();
 
         Map<String, String> donations = Helpers.getMap(getContext(), R.array.donations);
@@ -91,7 +90,7 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
         }
     }
 
-    private void appendPreferredSource(AppSettingsPresenter settingsPresenter) {
+    private void appendPreferredSource(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         String[] updateUrls = getContext().getResources().getStringArray(R.array.update_urls);

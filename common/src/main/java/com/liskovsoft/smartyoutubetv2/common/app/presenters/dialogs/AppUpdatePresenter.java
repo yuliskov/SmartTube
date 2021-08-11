@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.presenters;
+package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -8,8 +8,8 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
     @SuppressLint("StaticFieldLeak")
     private static AppUpdatePresenter sInstance;
     private final AppUpdateChecker mUpdateChecker;
-    private final AppSettingsPresenter mSettingsPresenter;
+    private final AppDialogPresenter mSettingsPresenter;
     private final String[] mUpdateManifestUrls;
     private boolean mUpdateInstalled;
     private boolean mIsForceCheck;
@@ -26,7 +26,7 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
     public AppUpdatePresenter(Context context) {
         super(context);
         mUpdateChecker = new AppUpdateChecker(context, this);
-        mSettingsPresenter = AppSettingsPresenter.instance(context);
+        mSettingsPresenter = AppDialogPresenter.instance(context);
         mUpdateManifestUrls = context.getResources().getStringArray(R.array.update_urls);
     }
 
