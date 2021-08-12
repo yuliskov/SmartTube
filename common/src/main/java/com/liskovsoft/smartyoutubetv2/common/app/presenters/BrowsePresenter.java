@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Handler;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
@@ -42,6 +41,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
 public class BrowsePresenter extends BasePresenter<BrowseView> implements CategoryPresenter, VideoGroupPresenter {
     private static final String TAG = BrowsePresenter.class.getSimpleName();
@@ -50,9 +50,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private static final int SHORTS_LEN_MS = 30 * 1_000;
     @SuppressLint("StaticFieldLeak")
     private static BrowsePresenter sInstance;
-    private final Handler mHandler = new Handler();
     private final PlaybackPresenter mPlaybackPresenter;
-    private final ViewManager mViewManager;
     private final MainUIData mMainUIData;
     private final GeneralData mGeneralData;
     private final List<Category> mCategories;
@@ -70,12 +68,22 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private long mLastUpdateTimeMs;
     private int mStartCategoryIndex;
     private int mUploadsType;
+    private final Predicate<Video> mShortsFilterPredicate = value -> {
+        if (value.title == null) {
+            return false;
+        }
+
+        int lengthMs = ServiceHelper.timeTextToMillis(value.badge);
+        return lengthMs > 0 && lengthMs < SHORTS_LEN_MS;
+        //return value.title.toLowerCase().contains("#short")  ||
+        //       value.title.toLowerCase().contains("#shorts") ||
+        //       value.title.toLowerCase().contains("#tiktok");
+    };
 
     private BrowsePresenter(Context context) {
         super(context);
         mDataSourcePresenter = AppDataSourceManager.instance();
         mPlaybackPresenter = PlaybackPresenter.instance(context);
-        mViewManager = ViewManager.instance(context);
         mCategories = new ArrayList<>();
         mGridMapping = new HashMap<>();
         mRowMapping = new HashMap<>();
@@ -653,17 +661,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         if (mGeneralData.isHideShortsEnabled() &&
             videoGroup.getCategory().getId() == MediaGroup.TYPE_SUBSCRIPTIONS &&
             videoGroup.getVideos() != null) {
-            videoGroup.getVideos().removeIf(value -> {
-                if (value.title == null) {
-                    return false;
-                }
-
-                int lengthMs = ServiceHelper.timeTextToMillis(value.badge);
-                return lengthMs > 0 && lengthMs < SHORTS_LEN_MS;
-                //return value.title.toLowerCase().contains("#short")  ||
-                //       value.title.toLowerCase().contains("#shorts") ||
-                //       value.title.toLowerCase().contains("#tiktok");
-            });
+            videoGroup.getVideos().removeIf(mShortsFilterPredicate);
         }
     }
 }
