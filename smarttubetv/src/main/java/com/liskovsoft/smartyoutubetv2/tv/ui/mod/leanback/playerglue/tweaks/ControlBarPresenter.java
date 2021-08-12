@@ -123,7 +123,11 @@ class ControlBarPresenter extends Presenter {
 
         int getChildMarginFromCenter(Context context, int numControls) {
             // Includes margin between icons plus two times half the icon width.
-            return getChildMarginDefault(context) + getControlIconWidth(context);
+            //return getChildMarginDefault(context) + getControlIconWidth(context);
+
+            // TODO: modified
+            // Decrease margin between player's buttons
+            return getChildMarginDefault(context) + getControlIconWidth(context) / 2;
         }
 
         void showControls(Presenter presenter) {
