@@ -647,10 +647,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void filterIfNeeded(VideoGroup videoGroup) {
-        // Predicates supported starting from Android 7.0 (NoClassDef found error)
         if (Build.VERSION.SDK_INT > 23 && mGeneralData.isHideShortsEnabled() &&
             videoGroup.getCategory().getId() == MediaGroup.TYPE_SUBSCRIPTIONS &&
             videoGroup.getVideos() != null) {
+            // Predicates supported starting from Android 7.0 (NoClassDef found error)
             videoGroup.getVideos().removeIf(value -> {
                 if (value.title == null) {
                     return false;
