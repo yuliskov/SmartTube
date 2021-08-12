@@ -141,12 +141,12 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
 
         adapter.add(mHighQualityAction);
         adapter.add(mChannelAction);
-        adapter.add(mPlaylistAddAction);
         adapter.add(mThumbsUpAction);
         adapter.add(mThumbsDownAction);
         adapter.add(mSubscribeAction);
-        adapter.add(mClosedCaptioningAction);
+        adapter.add(mPlaylistAddAction);
         adapter.add(mPlaybackQueueAction);
+        adapter.add(mClosedCaptioningAction);
         adapter.add(mVideoStatsAction);
     }
 
