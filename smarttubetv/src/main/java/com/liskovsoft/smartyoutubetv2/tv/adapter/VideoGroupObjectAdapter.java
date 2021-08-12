@@ -21,7 +21,7 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
             public boolean addAll(@NonNull Collection<? extends Video> c) {
                 // TODO: remove the hack someday.
                 // Dirty hack for avoiding group duplication.
-                // This could happen everywhere: Home, Subscriptions etc.
+                // Duplicated items suddenly appeared in Home and Subscriptions.
                 if (size() >= c.size() && c.contains(get(c.size() - 1))) {
                     return false;
                 }
