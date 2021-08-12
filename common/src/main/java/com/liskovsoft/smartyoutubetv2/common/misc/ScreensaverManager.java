@@ -66,7 +66,7 @@ public class ScreensaverManager {
 
     private void showHide(boolean show) {
         showHideDimming(show);
-        showHideScreensaver(true);
+        showHideScreensaver(show);
     }
 
     private void showHideDimming(boolean show) {
