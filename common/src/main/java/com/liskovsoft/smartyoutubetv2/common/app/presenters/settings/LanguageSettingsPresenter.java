@@ -46,7 +46,7 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
 
     private void appendLanguageCategory(AppDialogPresenter settingsPresenter) {
         Map<String, String> locales = getSupportedLocales();
-        String language = mLangUpdater.getPreferredLocale();
+        String language = mLangUpdater.getPreferredLanguage();
 
         List<OptionItem> options = new ArrayList<>();
 
@@ -54,7 +54,7 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
             options.add(UiOptionItem.from(
                     entry.getKey(),
                     option -> {
-                        mLangUpdater.setPreferredLocale(entry.getValue());
+                        mLangUpdater.setPreferredLanguage(entry.getValue());
                         mRestartApp = true;
                     },
                     entry.getValue().equals(language)));
