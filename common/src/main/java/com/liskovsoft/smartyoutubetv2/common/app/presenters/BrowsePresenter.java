@@ -8,6 +8,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Category;
@@ -647,11 +648,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void filterIfNeeded(VideoGroup videoGroup) {
-        if (Build.VERSION.SDK_INT > 23 && mGeneralData.isHideShortsEnabled() &&
+        if (mGeneralData.isHideShortsEnabled() &&
             videoGroup.getCategory().getId() == MediaGroup.TYPE_SUBSCRIPTIONS &&
             videoGroup.getVideos() != null) {
-            // Predicates supported starting from Android 7.0 (NoClassDef found error)
-            videoGroup.getVideos().removeIf(value -> {
+
+            // Predicate replacement function for devices with Android 6.0 and below.
+            Helpers.removeIf(videoGroup.getVideos(), value -> {
                 if (value.title == null) {
                     return false;
                 }
