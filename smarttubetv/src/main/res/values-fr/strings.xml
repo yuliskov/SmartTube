@@ -48,7 +48,8 @@
         et basé sur le livre de Cressida Cowell, la comédie d\'/action raconte l\'/histoire de Hiccup, un
         adolescent viking qui ne correspond pas exactement à la tradition de longue date de sa tribu de
         tueurs de dragons héroiques. Le monde de Hiccup est bouleversé quand il rencontre un dragon
-        qui met au défi lui et ses collégues Vikings de voir le monde d\'/un point de vue tout à fait différent.
+        qui met au défi lui et ses collégues Vikings de voir le monde d\'/un point de vue tout à 
+        fait différent.
     </string>
     <string name="maleficent_title">Maléfique</string>
     <string name="maleficent_description">L\'/histoire indicible de la méchante le plus emblématique de Disney
@@ -132,6 +133,8 @@
     <string name="badge_new_content">NOUVEAU CONTENU</string>
     <string name="badge_live">EN DIRECT</string>
     <string name="action_pip">Démarrer PIP</string>
+    <string name="action_screen_off">Écran éteint</string>
+    <string name="action_playback_queue">Afficher la file d'attente de lecture</string>
     <string name="add_device_view_description">Pour lier l’appareil, entrez ce code sur l\'application YouTube de votre téléphone dans la section Paramètres</string>
     <string name="playback_controls_repeat_pause">Répéter la pause</string>
     <string name="playback_controls_repeat_list">Répéter la liste</string>
