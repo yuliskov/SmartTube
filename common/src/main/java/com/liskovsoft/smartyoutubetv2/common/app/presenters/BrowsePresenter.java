@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
+import android.os.Build.VERSION;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
@@ -68,17 +70,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private long mLastUpdateTimeMs;
     private int mStartCategoryIndex;
     private int mUploadsType;
-    private final Predicate<Video> mShortsFilterPredicate = value -> {
-        if (value.title == null) {
-            return false;
-        }
-
-        int lengthMs = ServiceHelper.timeTextToMillis(value.badge);
-        return lengthMs > 0 && lengthMs < SHORTS_LEN_MS;
-        //return value.title.toLowerCase().contains("#short")  ||
-        //       value.title.toLowerCase().contains("#shorts") ||
-        //       value.title.toLowerCase().contains("#tiktok");
-    };
 
     private BrowsePresenter(Context context) {
         super(context);
@@ -658,10 +649,21 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void filterIfNeeded(VideoGroup videoGroup) {
-        if (mGeneralData.isHideShortsEnabled() &&
+        // Predicate supported starting from Android 7.0 (NoClassDef found error)
+        if (Build.VERSION.SDK_INT > 23 && mGeneralData.isHideShortsEnabled() &&
             videoGroup.getCategory().getId() == MediaGroup.TYPE_SUBSCRIPTIONS &&
             videoGroup.getVideos() != null) {
-            videoGroup.getVideos().removeIf(mShortsFilterPredicate);
+            videoGroup.getVideos().removeIf(value -> {
+                if (value.title == null) {
+                    return false;
+                }
+
+                int lengthMs = ServiceHelper.timeTextToMillis(value.badge);
+                return lengthMs > 0 && lengthMs < SHORTS_LEN_MS;
+                //return value.title.toLowerCase().contains("#short")  ||
+                //       value.title.toLowerCase().contains("#shorts") ||
+                //       value.title.toLowerCase().contains("#tiktok");
+            });
         }
     }
 }
