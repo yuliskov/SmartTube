@@ -106,10 +106,10 @@ public class VideoLoader extends PlayerEventListenerHelper {
             // Some ciphered data might be stalled.
             // Might happen when the app wasn't used quite a long time.
             MessageHelpers.showMessage(getActivity(), getErrorMessage(type));
-        }
 
-        // Delay to fix frequent requests
-        Utils.postDelayed(mHandler, mPendingRestartEngine, 3_000);
+            // Delay to fix frequent requests
+            Utils.postDelayed(mHandler, mPendingRestartEngine, 3_000);
+        }
     }
 
     @Override
