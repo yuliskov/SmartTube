@@ -38,7 +38,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private PlayerEventListener mEventListener;
     private SimpleExoPlayer mPlayer;
     private PlayerView mPlayerView;
-    private boolean mIsViewPaused;
+    private long mViewPauseTimeMs;
 
     public ExoPlayerController(Context context) {
         mContext = context;
@@ -298,12 +298,11 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             Log.d(TAG, "onPlayerStateChanged: " + TrackSelectorUtil.stateToString(playbackState));
         }
 
-        if (mIsViewPaused) {
+        // Fix AFR pause bug (e.g. when opening search)
+        if (isViewPausedRecently()) { // use recent check (PIP fix)
             if (!playWhenReady) {
-                // Fix AFR pause bug (e.g. when opening search)
                 setPlay(true);
             }
-            // Disable all events on paused playback view (troubles with PIP?)
             return;
         }
 
@@ -360,7 +359,13 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
     @Override
     public void onViewPaused(boolean isPaused) {
-        mIsViewPaused = isPaused;
+        if (isPaused) {
+            mViewPauseTimeMs = System.currentTimeMillis();
+        }
+    }
+
+    private boolean isViewPausedRecently() {
+        return System.currentTimeMillis() - mViewPauseTimeMs < 1_000;
     }
 
     private void setQualityInfo(String qualityInfoStr) {
