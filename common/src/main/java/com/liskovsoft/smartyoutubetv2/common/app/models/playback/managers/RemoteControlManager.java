@@ -265,7 +265,6 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 } else {
                     openNewVideo(mVideo);
                 }
-                showHideScreensaver(true);
                 break;
             case Command.TYPE_PAUSE:
                 if (getController() != null) {
@@ -276,7 +275,6 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 } else {
                     openNewVideo(mVideo);
                 }
-                showHideScreensaver(true);
                 break;
             case Command.TYPE_NEXT:
                 if (getBridge() != null) {
@@ -285,7 +283,6 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 } else {
                     openNewVideo(mVideo);
                 }
-                showHideScreensaver(true);
                 break;
             case Command.TYPE_PREVIOUS:
                 if (getBridge() != null && getController() != null) {
@@ -295,7 +292,6 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 } else {
                     openNewVideo(mVideo);
                 }
-                showHideScreensaver(true);
                 break;
             case Command.TYPE_GET_STATE:
                 if (getController() != null) {
@@ -362,20 +358,6 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         } else if (newVideo != null) {
             newVideo.isRemote = true;
             PlaybackPresenter.instance(getActivity()).openVideo(newVideo);
-        }
-
-        showHideScreensaver(true);
-    }
-
-    private void showHideScreensaver(boolean show) {
-        if (getActivity() instanceof MotherActivity) {
-            ScreensaverManager screensaverManager = ((MotherActivity) getActivity()).getScreensaverManager();
-
-            if (show) {
-                screensaverManager.enable();
-            } else {
-                screensaverManager.disable();
-            }
         }
     }
 }

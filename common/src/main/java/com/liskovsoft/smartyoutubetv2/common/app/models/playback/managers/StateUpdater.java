@@ -8,6 +8,8 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
+import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
@@ -146,11 +148,13 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onPlay() {
+        showHideScreensaver(false);
         setPlayEnabled(true);
     }
 
     @Override
     public void onPause() {
+        showHideScreensaver(true);
         setPlayEnabled(false);
         saveState();
     }
@@ -425,6 +429,18 @@ public class StateUpdater extends PlayerEventListenerHelper {
         }
 
         mHistoryAction = RxUtils.execute(historyObservable);
+    }
+
+    private void showHideScreensaver(boolean show) {
+        if (getActivity() instanceof MotherActivity) {
+            ScreensaverManager screensaverManager = ((MotherActivity) getActivity()).getScreensaverManager();
+
+            if (show) {
+                screensaverManager.enable();
+            } else {
+                screensaverManager.disable();
+            }
+        }
     }
 
     private static class State {
