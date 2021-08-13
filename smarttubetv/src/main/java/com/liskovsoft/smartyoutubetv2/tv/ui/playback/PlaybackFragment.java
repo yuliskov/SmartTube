@@ -182,6 +182,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             initializePlayer();
         }
 
+        mExoPlayerController.onViewPaused(false);
         mEventListener.onViewResumed();
     }
 
@@ -193,6 +194,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             releasePlayer();
         }
 
+        mExoPlayerController.onViewPaused(true);
         mEventListener.onViewPaused();
     }
 
