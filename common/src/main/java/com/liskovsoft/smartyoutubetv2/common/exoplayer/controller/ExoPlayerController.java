@@ -16,8 +16,6 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
@@ -300,10 +298,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             Log.d(TAG, "onPlayerStateChanged: " + TrackSelectorUtil.stateToString(playbackState));
         }
 
-        if (disablePlayerEvents()) {
-            return;
-        }
-
         boolean isPlayPressed = Player.STATE_READY == playbackState && playWhenReady;
         boolean isPausePressed = Player.STATE_READY == playbackState && !playWhenReady;
         boolean isPlaybackEnded = Player.STATE_ENDED == playbackState && playWhenReady;
@@ -358,26 +352,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     @Override
     public void onViewPaused(boolean isPaused) {
         mIsViewPaused = isPaused;
-    }
-
-    /**
-     * Fix: Exoplayer is paused when AFR switching on or off.
-     */
-    private boolean disablePlayerEvents() {
-        // Fix AFR pause bug (e.g. when opening search)
-        if (mIsViewPaused && !isInPIP()) {
-            if (!getPlay()) {
-                setPlay(true);
-            }
-            return true;
-        }
-
-        return false;
-    }
-
-    private boolean isInPIP() {
-        PlaybackView playbackView = PlaybackPresenter.instance(mContext).getView();
-        return playbackView != null && playbackView.getController().isInPIPMode();
     }
 
     private void setQualityInfo(String qualityInfoStr) {

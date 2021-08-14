@@ -57,14 +57,6 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         mAutoFrameRateHelper.saveOriginalState(getActivity());
     }
 
-    //@Override
-    //public void onSourceChanged(Video item) {
-    //    // Async audio fix by pausing beforehand.
-    //    if (mPlayerData.isAfrEnabled()) {
-    //        getController().setPlay(false);
-    //    }
-    //}
-
     @Override
     public void onViewResumed() {
         mAutoFrameRateHelper.setFpsCorrectionEnabled(mPlayerData.isAfrFpsCorrectionEnabled());
