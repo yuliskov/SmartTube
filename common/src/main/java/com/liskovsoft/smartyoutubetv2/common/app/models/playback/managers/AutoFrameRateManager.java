@@ -87,8 +87,9 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     public void onModeError(Mode newMode) {
         String msg = getActivity().getString(R.string.msg_mode_switch_error, UhdHelper.toResolution(newMode));
         Log.e(TAG, msg);
-        MessageHelpers.showMessage(getActivity(), msg);
-        //applyAfr();
+
+        // This error could appear even on success.
+        // MessageHelpers.showMessage(getActivity(), msg);
     }
 
     private void onFpsCorrectionClick() {
