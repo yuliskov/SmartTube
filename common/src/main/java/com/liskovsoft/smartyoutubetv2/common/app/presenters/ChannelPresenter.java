@@ -24,7 +24,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-import java.util.Collections;
 import java.util.List;
 
 public class ChannelPresenter extends BasePresenter<ChannelView> implements VideoGroupPresenter {
@@ -185,7 +184,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     private void updateRowsHeader(List<MediaGroup> mediaGroups) {
-        filter(mediaGroups);
+        filterIfNeeded(mediaGroups);
 
         for (MediaGroup mediaGroup : mediaGroups) {
             if (mediaGroup.getMediaItems() == null) {
@@ -224,7 +223,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     /**
      * Sort channel content: move Uploads on top.
      */
-    private void filter(List<MediaGroup> mediaGroups) {
+    private void filterIfNeeded(List<MediaGroup> mediaGroups) {
         moveToTop(mediaGroups, R.string.playlists_row_name);
         moveToTop(mediaGroups, R.string.popular_uploads_row_name);
         moveToTop(mediaGroups, R.string.uploads_row_name);

@@ -468,6 +468,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         mediaGroups -> {
+                            filterIfNeeded(mediaGroups);
+
                             for (MediaGroup mediaGroup : mediaGroups) {
                                 if (mediaGroup.isEmpty()) {
                                     Log.e(TAG, "loadRowsHeader: MediaGroup is empty. Group Name: " + mediaGroup.getTitle());
@@ -647,9 +649,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void filterIfNeeded(VideoGroup videoGroup) {
-        if (mGeneralData.isHideShortsEnabled() &&
-            videoGroup.getCategory().getId() == MediaGroup.TYPE_SUBSCRIPTIONS &&
-            videoGroup.getVideos() != null) {
+        if (videoGroup.getVideos() == null) {
+            return;
+        }
+
+        if (mGeneralData.isHideShortsEnabled() && videoGroup.getCategory().getId() == MediaGroup.TYPE_SUBSCRIPTIONS) {
 
             // Predicate replacement function for devices with Android 6.0 and below.
             Helpers.removeIf(videoGroup.getVideos(), value -> {
@@ -664,5 +668,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 //       value.title.toLowerCase().contains("#tiktok");
             });
         }
+    }
+
+    private void filterIfNeeded(List<MediaGroup> mediaGroups) {
+        if (mediaGroups == null) {
+            return;
+        }
+
+        Helpers.removeIf(mediaGroups, value -> value.getTitle() != null && value.getTitle().contains("COVID-19"));
     }
 }
