@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -58,6 +57,14 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         mAutoFrameRateHelper.saveOriginalState(getActivity());
     }
 
+    //@Override
+    //public void onSourceChanged(Video item) {
+    //    // Async audio fix by pausing beforehand.
+    //    if (mPlayerData.isAfrEnabled()) {
+    //        getController().setPlay(false);
+    //    }
+    //}
+
     @Override
     public void onViewResumed() {
         mAutoFrameRateHelper.setFpsCorrectionEnabled(mPlayerData.isAfrFpsCorrectionEnabled());
@@ -83,7 +90,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
                 newMode.getRefreshRate());
         Log.d(TAG, message);
         //MessageHelpers.showLongMessage(getActivity(), message);
-        pausePlayback();
+        maybePausePlayback();
     }
 
     @Override
@@ -139,14 +146,14 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         }
     }
 
-    private void pausePlayback() {
-        mHandler.removeCallbacks(mPlaybackResumeHandler);
-        mStateUpdater.blockPlay(false);
-
-        if (mPlayerData.getAfrPauseSec() > 0) {
+    private void maybePausePlayback() {
+        if (mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseSec() > 0) {
             mStateUpdater.blockPlay(true);
             getController().setPlay(false);
-            mHandler.postDelayed(mPlaybackResumeHandler, mPlayerData.getAfrPauseSec() * 1_000);
+            Utils.postDelayed(mHandler, mPlaybackResumeHandler, mPlayerData.getAfrPauseSec() * 1_000);
+        } else {
+            mStateUpdater.blockPlay(false);
+            Utils.removeCallbacks(mHandler, mPlaybackResumeHandler);
         }
     }
 
