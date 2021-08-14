@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.controller;
 
+import android.app.Activity;
 import android.content.Context;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Format;
@@ -16,6 +17,8 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
@@ -38,10 +41,10 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private PlayerEventListener mEventListener;
     private SimpleExoPlayer mPlayer;
     private PlayerView mPlayerView;
-    private long mViewPauseTimeMs;
+    private boolean mIsViewPaused;
 
     public ExoPlayerController(Context context) {
-        mContext = context;
+        mContext = context.getApplicationContext();
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
         mTrackSelectorManager = new TrackSelectorManager();
         mTrackFormatter = new TrackInfoFormatter2();
@@ -299,7 +302,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         }
 
         // Fix AFR pause bug (e.g. when opening search)
-        if (isViewPausedRecently()) { // use recent check (PIP fix)
+        if (isViewPaused()) { // PIP fix
             if (!playWhenReady) {
                 setPlay(true);
             }
@@ -359,13 +362,16 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
     @Override
     public void onViewPaused(boolean isPaused) {
-        if (isPaused) {
-            mViewPauseTimeMs = System.currentTimeMillis();
-        }
+        mIsViewPaused = isPaused;
     }
 
-    private boolean isViewPausedRecently() {
-        return System.currentTimeMillis() - mViewPauseTimeMs < 1_000;
+    private boolean isViewPaused() {
+        return mIsViewPaused && !isInPIP();
+    }
+
+    private boolean isInPIP() {
+        PlaybackView playbackView = PlaybackPresenter.instance(mContext).getView();
+        return playbackView != null && playbackView.getController().isInPIPMode();
     }
 
     private void setQualityInfo(String qualityInfoStr) {
