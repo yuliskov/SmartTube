@@ -476,9 +476,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                                     continue;
                                 }
 
+                                Helpers.removeDuplicates(mediaGroup.getMediaItems());
+                                filterIfNeeded(mediaGroup);
+
                                 VideoGroup videoGroup = VideoGroup.from(mediaGroup, category);
 
-                                filterIfNeeded(videoGroup);
                                 getView().updateCategory(videoGroup);
 
                                 loadNextPortionIfNeeded(videoGroup);
@@ -521,8 +523,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                                 return;
                             }
 
+                            filterIfNeeded(mediaGroup);
+
                             VideoGroup videoGroup = VideoGroup.from(mediaGroup, category, position);
-                            filterIfNeeded(videoGroup);
                             getView().updateCategory(videoGroup);
 
                             // Hide loading as long as first group received
@@ -571,8 +574,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         continueGroup -> {
+                            filterIfNeeded(continueGroup);
+
                             VideoGroup videoGroup = VideoGroup.from(continueGroup, group.getCategory(), group.getPosition());
-                            filterIfNeeded(videoGroup);
                             getView().updateCategory(videoGroup);
                         },
                         error -> {
@@ -648,20 +652,21 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         return null;
     }
 
-    private void filterIfNeeded(VideoGroup videoGroup) {
-        if (videoGroup.getVideos() == null) {
+    private void filterIfNeeded(MediaGroup mediaGroup) {
+        if (mediaGroup == null || mediaGroup.getMediaItems() == null) {
             return;
         }
 
-        if (mGeneralData.isHideShortsEnabled() && videoGroup.getCategory().getId() == MediaGroup.TYPE_SUBSCRIPTIONS) {
+        if (mGeneralData.isHideShortsEnabled() && mediaGroup.getType() == MediaGroup.TYPE_SUBSCRIPTIONS) {
 
+            // Remove Shorts
             // Predicate replacement function for devices with Android 6.0 and below.
-            Helpers.removeIf(videoGroup.getVideos(), value -> {
-                if (value.title == null) {
+            Helpers.removeIf(mediaGroup.getMediaItems(), value -> {
+                if (value.getTitle() == null) {
                     return false;
                 }
 
-                int lengthMs = ServiceHelper.timeTextToMillis(value.badge);
+                int lengthMs = ServiceHelper.timeTextToMillis(value.getBadgeText());
                 return lengthMs > 0 && lengthMs < SHORTS_LEN_MS;
                 //return value.title.toLowerCase().contains("#short")  ||
                 //       value.title.toLowerCase().contains("#shorts") ||
