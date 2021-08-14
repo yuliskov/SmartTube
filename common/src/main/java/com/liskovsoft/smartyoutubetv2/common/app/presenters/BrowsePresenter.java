@@ -47,7 +47,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private static final String TAG = BrowsePresenter.class.getSimpleName();
     private static final long HEADER_REFRESH_PERIOD_MS = 120 * 60 * 1_000;
     private static final int MIN_GROUP_SIZE = 13;
-    private static final int SHORTS_LEN_MS = 30 * 1_000;
+    private static final int SHORTS_LEN_MS = 50 * 1_000;
     @SuppressLint("StaticFieldLeak")
     private static BrowsePresenter sInstance;
     private final PlaybackPresenter mPlaybackPresenter;
