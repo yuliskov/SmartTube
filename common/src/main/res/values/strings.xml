@@ -229,4 +229,7 @@
     <string name="add_remove_from_playback_queue">Add/Remove from playback queue</string>
     <string name="proxy_enabled">Proxy enabled</string>
     <string name="proxy_disabled">Proxy disabled</string>
+    <string name="uploads_row_name">Uploads</string>
+    <string name="playlists_row_name">Created playlists</string>
+    <string name="popular_uploads_row_name">Popular uploads</string>
 </resources>

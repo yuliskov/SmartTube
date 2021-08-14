@@ -229,4 +229,7 @@
     <string name="add_remove_from_playback_queue">Добавить/Удалить из очереди воспроизведения</string>
     <string name="proxy_enabled">Прокси активирован</string>
     <string name="proxy_disabled">Прокси деактивирован</string>
+    <string name="uploads_row_name">Все видео</string>
+    <string name="playlists_row_name">Все плейлисты</string>
+    <string name="popular_uploads_row_name">Популярные</string>
 </resources>

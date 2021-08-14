@@ -5,6 +5,7 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -23,6 +24,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ChannelPresenter extends BasePresenter<ChannelView> implements VideoGroupPresenter {
@@ -183,6 +185,8 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     private void updateRowsHeader(List<MediaGroup> mediaGroups) {
+        filter(mediaGroups);
+
         for (MediaGroup mediaGroup : mediaGroups) {
             if (mediaGroup.getMediaItems() == null) {
                 Log.e(TAG, "updateRowsHeader: MediaGroup is empty. Group Name: " + mediaGroup.getTitle());
@@ -215,5 +219,28 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                         },
                         () -> getView().showProgressBar(false)
                 );
+    }
+
+    /**
+     * Sort channel content: move Uploads on top.
+     */
+    private void filter(List<MediaGroup> mediaGroups) {
+        moveToTop(mediaGroups, R.string.playlists_row_name);
+        moveToTop(mediaGroups, R.string.popular_uploads_row_name);
+        moveToTop(mediaGroups, R.string.uploads_row_name);
+    }
+
+    private void moveToTop(List<MediaGroup> mediaGroups, int rowNameResId) {
+        if (rowNameResId <= 0) {
+            return;
+        }
+
+        String rowName = getContext().getString(rowNameResId);
+
+        MediaGroup group = Helpers.removeIf(mediaGroups, value -> rowName.equals(value.getTitle()));
+
+        if (group != null) {
+            mediaGroups.add(0, group);
+        }
     }
 }
