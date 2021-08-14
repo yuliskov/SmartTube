@@ -398,6 +398,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private void initErrorMap() {
         mErrorMap.put(PlayerEventListener.ERROR_TYPE_SOURCE, R.string.msg_player_error_source);
         mErrorMap.put(PlayerEventListener.ERROR_TYPE_RENDERER, R.string.msg_player_error_renderer);
+        // Hide some errors on stable build
         mErrorMap.put(PlayerEventListener.ERROR_TYPE_UNEXPECTED, BuildConfig.FLAVOR.equals("ststable") ? -1 : R.string.msg_player_error_unexpected);
     }
 
