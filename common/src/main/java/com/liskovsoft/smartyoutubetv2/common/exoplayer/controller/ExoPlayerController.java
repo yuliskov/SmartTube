@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.controller;
 
-import android.app.Activity;
 import android.content.Context;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Format;
@@ -301,11 +300,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             Log.d(TAG, "onPlayerStateChanged: " + TrackSelectorUtil.stateToString(playbackState));
         }
 
-        // Fix AFR pause bug (e.g. when opening search)
-        if (isViewPaused()) { // PIP fix
-            if (!playWhenReady) {
-                setPlay(true);
-            }
+        if (disablePlayerEvents()) {
             return;
         }
 
@@ -365,8 +360,19 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         mIsViewPaused = isPaused;
     }
 
-    private boolean isViewPaused() {
-        return mIsViewPaused && !isInPIP();
+    /**
+     * Fix: Exoplayer is paused when AFR switching on or off.
+     */
+    private boolean disablePlayerEvents() {
+        // Fix AFR pause bug (e.g. when opening search)
+        if (mIsViewPaused && !isInPIP()) {
+            if (!getPlay()) {
+                setPlay(true);
+            }
+            return true;
+        }
+
+        return false;
     }
 
     private boolean isInPIP() {
