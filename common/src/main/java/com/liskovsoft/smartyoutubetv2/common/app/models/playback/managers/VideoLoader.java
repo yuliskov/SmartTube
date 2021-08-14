@@ -7,6 +7,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -397,12 +398,12 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private void initErrorMap() {
         mErrorMap.put(PlayerEventListener.ERROR_TYPE_SOURCE, R.string.msg_player_error_source);
         mErrorMap.put(PlayerEventListener.ERROR_TYPE_RENDERER, R.string.msg_player_error_renderer);
-        mErrorMap.put(PlayerEventListener.ERROR_TYPE_UNEXPECTED, R.string.msg_player_error_unexpected);
+        mErrorMap.put(PlayerEventListener.ERROR_TYPE_UNEXPECTED, BuildConfig.FLAVOR.equals("ststable") ? -1 : R.string.msg_player_error_unexpected);
     }
 
     private String getErrorMessage(int type) {
         Integer resId = mErrorMap.get(type);
         
-        return resId != null ? getActivity().getString(resId) : getActivity().getString(R.string.msg_player_error, type);
+        return resId == null ? getActivity().getString(R.string.msg_player_error, type) : resId > 0 ? getActivity().getString(resId) : null;
     }
 }
