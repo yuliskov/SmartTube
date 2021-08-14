@@ -19,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolde
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncHelper.AutoFrameRateListener;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.UhdHelper;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +68,8 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
     @Override
     public void onVideoLoaded(Video item) {
-        applyAfr();
+        applyAfrDelayed();
+        //applyAfr();
     }
 
     @Override
@@ -104,6 +106,10 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         if (mPlayerData.isAfrEnabled()) {
             AppDialogPresenter.instance(getActivity()).showDialogMessage("Applying AFR...", this::applyAfr, 1_000);
         }
+    }
+
+    private void applyAfrDelayed() {
+        Utils.postDelayed(mHandler, mApplyAfr, 500);
     }
 
     private void applyAfr() {
