@@ -91,7 +91,8 @@ public class MotherActivity extends FragmentActivity {
     protected void onPause() {
         super.onPause();
 
-        mScreensaverManager.disable();
+        // Probably exiting to HOME. Enable screensaver.
+        mScreensaverManager.enable();
     }
 
     @Override
