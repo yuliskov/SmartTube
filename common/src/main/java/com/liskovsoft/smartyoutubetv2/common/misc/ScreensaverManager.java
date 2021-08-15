@@ -9,7 +9,9 @@ import android.view.ViewGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AddDevicePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -77,7 +79,7 @@ public class ScreensaverManager {
         }
 
         if (show && mDimColorResId == R.color.dimming &&
-                (isPlaying() || mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER)
+                (isPlaying() || isCodeView() || mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER)
         ) {
             return;
         }
@@ -105,7 +107,7 @@ public class ScreensaverManager {
             return;
         }
         
-        if (show && isPlaying()) {
+        if (show && (isPlaying() || isCodeView())) {
             Helpers.disableScreensaver(activity);
             return;
         }
@@ -126,5 +128,15 @@ public class ScreensaverManager {
 
         PlaybackView playbackView = PlaybackPresenter.instance(activity).getView();
         return playbackView != null && (playbackView.getController().isPlaying() || playbackView.getController().isLoading());
+    }
+
+    private boolean isCodeView() {
+        Activity activity = mActivity.get();
+
+        if (activity == null) {
+            return false;
+        }
+
+        return SignInPresenter.instance(activity).getView() != null || AddDevicePresenter.instance(activity).getView() != null;
     }
 }
