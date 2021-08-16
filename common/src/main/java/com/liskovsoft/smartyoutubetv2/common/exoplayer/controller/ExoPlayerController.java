@@ -1,11 +1,13 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.controller;
 
 import android.content.Context;
+import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
@@ -311,6 +313,17 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             mEventListener.onPlayEnd();
         } else if (isBuffering) {
             mEventListener.onBuffering();
+        }
+    }
+
+    @Override
+    public void onPositionDiscontinuity(int reason) {
+        Log.e(TAG, "onPositionDiscontinuity");
+
+        // Fix video loop on 480p with legacy codes enabled
+        if (reason == Player.DISCONTINUITY_REASON_PERIOD_TRANSITION) {
+            mPlayer.stop();
+            mEventListener.onPlayEnd();
         }
     }
 

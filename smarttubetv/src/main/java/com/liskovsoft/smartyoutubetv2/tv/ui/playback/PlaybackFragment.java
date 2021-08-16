@@ -364,6 +364,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         // Try to fix decoder error on Nvidia Shield 2019.
         // Init resources as early as possible.
         //mPlayer.setForegroundMode(true);
+        //mPlayer.setRepeatMode(Player.REPEAT_MODE_OFF);
+        //mPlayer.setShuffleModeEnabled(false);
 
         mExoPlayerController.setPlayer(mPlayer);
         mExoPlayerController.setTrackSelector(trackSelector);
