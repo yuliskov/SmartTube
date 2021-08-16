@@ -229,4 +229,5 @@
     <string name="add_remove_from_playback_queue">Hinzufügen/Entfernen aus Wiedergabe-Warteschlange</string>
     <string name="proxy_enabled">Proxy aktiviert</string>
     <string name="proxy_disabled">Proxy deaktiviert</string>
+    <string name="covid_news_row_name">Nachrichten zu COVID-19</string>
 </resources>

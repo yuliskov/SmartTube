@@ -237,7 +237,9 @@ public class Utils {
         Log.d(TAG, "initGlobalData called...");
 
         // Auth token storage init
-        GlobalPreferences.instance(context);
+        // Media service language setup (I assume that context has proper language)
+        GlobalPreferences.instance(context).setContext(context);
+
         // 1) Remove downloaded apks
         // 2) Setup language
         ViewManager.instance(context).clearCaches();
