@@ -679,7 +679,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         if (mediaGroups == null) {
             return;
         }
-
-        Helpers.removeIf(mediaGroups, value -> value.getTitle() != null && value.getTitle().contains("COVID-19"));
+        
+        Helpers.removeIf(mediaGroups, value -> Helpers.equalsAny(
+                value.getTitle(),
+                getContext().getString(R.string.breaking_news_row_name),
+                getContext().getString(R.string.covid_news_row_name)
+        ));
     }
 }

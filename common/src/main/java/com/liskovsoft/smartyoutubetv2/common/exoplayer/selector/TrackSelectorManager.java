@@ -16,7 +16,6 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector.TrackSelectorCallback;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -217,7 +216,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                     continue;
                 }
 
-                mediaTrack.isSelected = groupIndex == trackGroupIndex && Helpers.contains(trackIndexes, trackIndex);
+                mediaTrack.isSelected = groupIndex == trackGroupIndex && Helpers.hasItem(trackIndexes, trackIndex);
 
                 if (mediaTrack.isSelected) {
                     renderer.selectedTrack = mediaTrack;

@@ -115,7 +115,7 @@ public class IntentExtractor {
     public static boolean isChannelUrl(Intent intent) {
         return intent != null
                 && intent.getData() != null
-                && Helpers.contains(new String[] {SUBSCRIPTIONS_URL, HISTORY_URL, RECOMMENDED_URL}, intent.getData().toString());
+                && Helpers.hasItem(new String[] {SUBSCRIPTIONS_URL, HISTORY_URL, RECOMMENDED_URL}, intent.getData().toString());
     }
 
     public static boolean isStartVoiceCommand(Intent intent) {

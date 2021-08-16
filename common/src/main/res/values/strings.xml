@@ -232,4 +232,6 @@
     <string name="uploads_row_name">Uploads</string>
     <string name="playlists_row_name">Created playlists</string>
     <string name="popular_uploads_row_name">Popular uploads</string>
+    <string name="breaking_news_row_name">Breaking news</string>
+    <string name="covid_news_row_name">COVID-19 news</string>
 </resources>
