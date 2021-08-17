@@ -7,17 +7,17 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 /**
  * Shows boot dialogs one by one.
  */
-public class BootDialogsPresenter extends BasePresenter<Void> {
+public class BootDialogPresenter extends BasePresenter<Void> {
     @SuppressLint("StaticFieldLeak")
-    private static BootDialogsPresenter sInstance;
+    private static BootDialogPresenter sInstance;
 
-    public BootDialogsPresenter(Context context) {
+    public BootDialogPresenter(Context context) {
         super(context);
     }
 
-    public static BootDialogsPresenter instance(Context context) {
+    public static BootDialogPresenter instance(Context context) {
         if (sInstance == null) {
-            sInstance = new BootDialogsPresenter(context);
+            sInstance = new BootDialogPresenter(context);
         }
 
         sInstance.setContext(context);
@@ -31,7 +31,18 @@ public class BootDialogsPresenter extends BasePresenter<Void> {
 
     public void start() {
         AppUpdatePresenter updatePresenter = AppUpdatePresenter.instance(getContext());
+        updatePresenter.setOnClose(this::startBridgePresenter);
         updatePresenter.start(false);
         updatePresenter.unhold();
+    }
+
+    private void startBridgePresenter() {
+        ATVBridgePresenter atvPresenter = ATVBridgePresenter.instance(getContext());
+        atvPresenter.start();
+        atvPresenter.unhold();
+
+        AmazonBridgePresenter amazonPresenter = AmazonBridgePresenter.instance(getContext());
+        amazonPresenter.start();
+        amazonPresenter.unhold();
     }
 }

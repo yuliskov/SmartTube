@@ -234,4 +234,5 @@
     <string name="popular_uploads_row_name">Популярные</string>
     <string name="breaking_news_row_name">Важные новости</string>
     <string name="covid_news_row_name">Новости о коронавирусе COVID-19</string>
+    <string name="enable_voice_search">Добавить голосовой поиск</string>
 </resources>

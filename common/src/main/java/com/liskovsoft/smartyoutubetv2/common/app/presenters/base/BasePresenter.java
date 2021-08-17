@@ -12,8 +12,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     private WeakReference<T> mView = new WeakReference<>(null);
     private WeakReference<Activity> mActivity = new WeakReference<>(null);
     private WeakReference<Context> mApplicationContext = new WeakReference<>(null);
-    private static boolean sIsGlobalDataInitialized;
-    private static boolean sIsGlobalDataInitializedTmp;
+    private Runnable mOnClose;
 
     public BasePresenter(Context context) {
         setContext(context);
@@ -80,17 +79,14 @@ public abstract class BasePresenter<T> implements Presenter<T> {
         // NOP
     }
 
-    //private void initGlobalData() {
-    //    if (sIsGlobalDataInitialized || getContext() == null) {
-    //        return;
-    //    }
-    //
-    //    boolean isActivity = getContext() instanceof Activity;
-    //
-    //    if (isActivity || !sIsGlobalDataInitializedTmp) {
-    //        Utils.initGlobalData(getContext());
-    //        sIsGlobalDataInitialized = isActivity;
-    //        sIsGlobalDataInitializedTmp = !isActivity;
-    //    }
-    //}
+    public void setOnClose(Runnable onClose) {
+        mOnClose = onClose;
+    }
+
+    protected void onClose() {
+        if (mOnClose != null) {
+            mOnClose.run();
+            mOnClose = null;
+        }
+    }
 }

@@ -27,7 +27,6 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private static SplashPresenter sInstance;
     private static boolean mRunOnce;
     private final List<IntentProcessor> mIntentChain = new ArrayList<>();
-    private ProxyManager mProxyManager;
 
     private interface IntentProcessor {
         boolean process(Intent intent);
@@ -108,8 +107,8 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     private void configureProxy() {
         if (getContext() != null && GeneralData.instance(getContext()).isProxyEnabled()) {
-            mProxyManager = ProxyManager.instance(getContext());
-            mProxyManager.enableProxy(true);
+            ProxyManager proxyManager = ProxyManager.instance(getContext());
+            proxyManager.enableProxy(true);
         }
     }
 

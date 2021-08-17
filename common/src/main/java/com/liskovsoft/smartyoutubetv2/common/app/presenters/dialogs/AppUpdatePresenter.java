@@ -21,7 +21,6 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
     private final AppUpdateChecker mUpdateChecker;
     private final AppDialogPresenter mSettingsPresenter;
     private final String[] mUpdateManifestUrls;
-    private boolean mUpdateInstalled;
     private boolean mIsForceCheck;
 
     public AppUpdatePresenter(Context context) {
@@ -47,7 +46,6 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
 
     public void start(boolean forceCheck) {
         mIsForceCheck = forceCheck;
-        mUpdateInstalled = false;
 
         if (forceCheck) {
             mUpdateChecker.forceCheckForUpdates(mUpdateManifestUrls);
@@ -63,6 +61,23 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
         }
     }
 
+    @Override
+    public void onUpdateError(Exception error) {
+        if (mIsForceCheck) {
+            if (AppUpdateCheckerListener.LATEST_VERSION.equals(error.getMessage())) {
+                MessageHelpers.showMessage(getContext(), R.string.update_not_found);
+            } else {
+                MessageHelpers.showMessage(getContext(), R.string.update_in_progess);
+            }
+        }
+    }
+
+    @Override
+    public void onUpdateFinish() {
+        onClose();
+        unhold();
+    }
+
     private void showUpdateDialog(String versionName, List<String> changelog, String apkPath) {
         mSettingsPresenter.clear();
 
@@ -71,12 +86,6 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
                 UiOptionItem.from(getContext().getString(R.string.install_update), optionItem -> {
                     mUpdateChecker.installUpdate();
                     SplashPresenter.instance(getContext()).saveBackupData();
-                    mUpdateInstalled = true;
-
-                    // Close the app before install
-                    // Don't go well. Users think that app is crashing.
-                    //mSettingsPresenter.closeDialog();
-                    //ViewManager.instance(getContext()).properlyFinishTheApp(getContext());
                 }, false));
         mSettingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.show_again), optionItem -> {
             mUpdateChecker.enableUpdateCheck(optionItem.isSelected());
@@ -93,16 +102,5 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
         }
 
         return options;
-    }
-
-    @Override
-    public void onError(Exception error) {
-        if (mIsForceCheck) {
-            if (AppUpdateCheckerListener.LATEST_VERSION.equals(error.getMessage())) {
-                MessageHelpers.showMessage(getContext(), R.string.update_not_found);
-            } else {
-                MessageHelpers.showMessage(getContext(), R.string.update_in_progess);
-            }
-        }
     }
 }

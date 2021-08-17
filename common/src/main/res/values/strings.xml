@@ -234,4 +234,5 @@
     <string name="popular_uploads_row_name">Popular uploads</string>
     <string name="breaking_news_row_name">Breaking news</string>
     <string name="covid_news_row_name">COVID-19 news</string>
+    <string name="enable_voice_search">Enable voice search</string>
 </resources>

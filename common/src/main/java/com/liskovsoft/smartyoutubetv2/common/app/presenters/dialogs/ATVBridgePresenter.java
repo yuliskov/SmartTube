@@ -23,7 +23,7 @@ public class ATVBridgePresenter extends BridgePresenter {
         return sInstance;
     }
 
-    public static void unhold() {
+    public void unhold() {
         sInstance = null;
     }
 
