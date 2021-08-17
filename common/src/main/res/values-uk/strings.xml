@@ -234,5 +234,5 @@
     <string name="popular_uploads_row_name">Популярні завантаження</string>
     <string name="breaking_news_row_name">Важливі новини</string>
     <string name="covid_news_row_name">Новини про коронавірус COVID-19</string>
-    <string name="enable_voice_search">Додати голосовий пошук</string>
+    <string name="enable_voice_search">Увімкнути голосовий пошук</string>
 </resources>

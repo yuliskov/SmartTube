@@ -59,14 +59,14 @@ abstract class BridgePresenter extends BasePresenter<Void> {
     private void runBridgeInstaller() {
         PackageInfo info = getPackageSignature(getPackageName());
 
-        if (info != null) { // bridge installed
+        if (info != null) { // bridge or original tube installed
             if (Helpers.isUserApp(info) && info.signatures[0].hashCode() != getPackageSignatureHash()) {
-                // Original YouTube installed
+                // Original tube installed
                 mRemoveOldApkFirst = true;
                 // Download apk first and start dialog when download complete
                 downloadPackageFromUrl(getContext(), getPackageUrl());
             }
-        } else { // bridge not installed
+        } else { // not installed
             // Download apk first and start dialog when download complete
             downloadPackageFromUrl(getContext(), getPackageUrl());
         }
