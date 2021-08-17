@@ -12,7 +12,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     private WeakReference<T> mView = new WeakReference<>(null);
     private WeakReference<Activity> mActivity = new WeakReference<>(null);
     private WeakReference<Context> mApplicationContext = new WeakReference<>(null);
-    private Runnable mOnClose;
+    private Runnable mOnDone;
 
     public BasePresenter(Context context) {
         setContext(context);
@@ -79,14 +79,14 @@ public abstract class BasePresenter<T> implements Presenter<T> {
         // NOP
     }
 
-    public void setOnClose(Runnable onClose) {
-        mOnClose = onClose;
+    public void setOnDone(Runnable onDone) {
+        mOnDone = onDone;
     }
 
-    protected void onClose() {
-        if (mOnClose != null) {
-            mOnClose.run();
-            mOnClose = null;
+    protected void onDone() {
+        if (mOnDone != null) {
+            mOnDone.run();
+            mOnDone = null;
         }
     }
 }

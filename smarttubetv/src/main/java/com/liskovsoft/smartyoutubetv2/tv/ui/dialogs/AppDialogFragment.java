@@ -147,7 +147,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     }
 
     public void onFinish() {
-        mSettingsPresenter.onClose();
+        mSettingsPresenter.onFinish();
     }
 
     public static class AppPreferenceFragment extends LeanbackPreferenceFragment {

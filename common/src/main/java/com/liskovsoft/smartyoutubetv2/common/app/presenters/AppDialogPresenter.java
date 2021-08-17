@@ -19,7 +19,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     private final Handler mHandler;
     private final Runnable mCloseDialog = this::closeDialog;
     private String mTitle;
-    private Runnable mOnClose;
+    private Runnable mOnFinish;
     private long mTimeoutMs;
 
     public static class SettingsCategory {
@@ -80,7 +80,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     }
 
     /**
-     * Called after {@link #onClose}
+     * Called after {@link #onFinish}
      */
     @Override
     public void onViewDestroyed() {
@@ -91,11 +91,11 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     /**
      * Called when user pressed back button.
      */
-    public void onClose() {
+    public void onFinish() {
         clear();
 
-        if (mOnClose != null) {
-            mOnClose.run();
+        if (mOnFinish != null) {
+            mOnFinish.run();
         }
     }
 
@@ -123,9 +123,9 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         showDialog(null, onClose);
     }
 
-    public void showDialog(String dialogTitle, Runnable onClose) {
+    public void showDialog(String dialogTitle, Runnable onFinish) {
         mTitle = dialogTitle;
-        mOnClose = onClose;
+        mOnFinish = onFinish;
 
         if (getView() != null) {
             getView().clear();

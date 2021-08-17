@@ -70,12 +70,8 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
                 MessageHelpers.showMessage(getContext(), R.string.update_in_progess);
             }
         }
-    }
 
-    @Override
-    public void onUpdateFinish() {
-        onClose();
-        unhold();
+        onDone();
     }
 
     private void showUpdateDialog(String versionName, List<String> changelog, String apkPath) {
