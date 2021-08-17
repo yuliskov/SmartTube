@@ -475,8 +475,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                                     Log.e(TAG, "loadRowsHeader: MediaGroup is empty. Group Name: " + mediaGroup.getTitle());
                                     continue;
                                 }
-
-                                Helpers.removeDuplicates(mediaGroup.getMediaItems());
+                                
                                 filterIfNeeded(mediaGroup);
 
                                 VideoGroup videoGroup = VideoGroup.from(mediaGroup, category);
