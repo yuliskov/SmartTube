@@ -9,6 +9,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 public class VideoGroupObjectAdapter extends ObjectAdapter {
@@ -29,11 +30,16 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
                 //}
 
                 // Alt method. Works with Home rows.
-                if (size() < 30) {
-                    Video firstItem = Helpers.get(c, 0);
-                    if (firstItem != null && contains(firstItem)) {
-                        return false;
-                    }
+                //if (size() < 30) {
+                //    Video firstItem = Helpers.get(c, 0);
+                //    if (firstItem != null && contains(firstItem)) {
+                //        return false;
+                //    }
+                //}
+
+                // Another alt method.
+                if (size() > 0 && size() < 30) {
+                    Helpers.removeIf(c, this::contains);
                 }
 
                 return super.addAll(c);
