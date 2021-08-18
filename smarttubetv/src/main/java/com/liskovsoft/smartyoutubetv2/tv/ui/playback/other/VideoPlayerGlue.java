@@ -122,12 +122,12 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         //adapter.add(mFastForwardAction);
         adapter.add(mSkipNextAction);
         adapter.add(mRepeatAction);
-        adapter.add(mVideoSpeedAction);
-        adapter.add(mVideoZoomAction);
         if (Helpers.isPictureInPictureSupported(getContext())) {
             adapter.add(mPipAction);
         }
         adapter.add(mScreenOffAction);
+        adapter.add(mVideoSpeedAction);
+        adapter.add(mVideoZoomAction);
         adapter.add(mSearchAction);
     }
 
@@ -143,9 +143,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         adapter.add(mChannelAction);
         adapter.add(mThumbsUpAction);
         adapter.add(mThumbsDownAction);
-        adapter.add(mSubscribeAction);
         adapter.add(mPlaylistAddAction);
         adapter.add(mPlaybackQueueAction);
+        adapter.add(mSubscribeAction);
         adapter.add(mClosedCaptioningAction);
         adapter.add(mVideoStatsAction);
     }
