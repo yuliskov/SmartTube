@@ -38,6 +38,7 @@ public class Utils {
     private static final String TASK_ID = RemoteControlWorker.class.getSimpleName();
     private static final String TAG = Utils.class.getSimpleName();
     private static final String QR_CODE_URL_TEMPLATE = "https://api.qrserver.com/v1/create-qr-code/?data=%s";
+    private static int sIsGlobalVolumeWorking = -1;
 
     /**
      * Limit the maximum size of a Map by removing oldest entries when limit reached
@@ -210,6 +211,27 @@ public class Utils {
         }
 
         return 100;
+    }
+
+    public static boolean isGlobalVolumeWorking(Context context) {
+        if (sIsGlobalVolumeWorking != -1) {
+            return sIsGlobalVolumeWorking == 1;
+        }
+
+        if (context == null) {
+            return false;
+        }
+
+        int globalVolume = Utils.getGlobalVolume(context);
+        Utils.setGlobalVolume(context, globalVolume - 2);
+        int newGlobalVolume = Utils.getGlobalVolume(context);
+        Utils.setGlobalVolume(context, globalVolume);
+
+        boolean isWorking = globalVolume != newGlobalVolume;
+
+        sIsGlobalVolumeWorking = isWorking ? 1 : 0;
+
+        return isWorking;
     }
 
     /**

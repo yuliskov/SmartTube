@@ -34,6 +34,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     private Disposable mPostVolumeAction;
     private Video mVideo;
     private boolean mConnected;
+    private int mIsGlobalVolumeWorking = -1;
 
     public RemoteControlManager(Context context, SuggestionsLoader suggestionsLoader, VideoLoader videoLoader) {
         MediaService mediaService = YouTubeMediaService.instance();
@@ -303,9 +304,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 break;
             case Command.TYPE_VOLUME:
                 //Utils.setGlobalVolume(getActivity(), command.getVolume());
-                if (getController() != null) {
-                    getController().setVolume(command.getVolume() / 100f);
-                }
+                setVolume(command.getVolume());
                 break;
             case Command.TYPE_STOP:
                 if (getController() != null) {
@@ -318,9 +317,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                     //Utils.moveAppToForeground(getActivity());
                     //MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_connected, command.getDeviceName()));
                 }
-                if (getController() != null) {
-                    postVolumeChange((int)(getController().getVolume() * 100));
-                }
+                postVolumeChange(getVolume());
                 break;
             case Command.TYPE_DISCONNECTED:
                 // Note: there are possible false calls when mobile client unloaded from the memory.
@@ -328,24 +325,19 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                     // NOTE: It's not a good idea to remember connection state (mConnected) at this point.
                     //MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_disconnected, command.getDeviceName()));
                 }
-                if (getController() != null) {
-                    getController().setVolume(1);
-                }
+
+                setVolume(100);
                 break;
         }
 
         //postVolumeChange(Utils.getGlobalVolume(getActivity()));
-        if (getController() != null) {
-            postVolumeChange((int)(getController().getVolume() * 100));
-        }
+        postVolumeChange(getVolume());
     }
 
     @Override
     public boolean onKeyDown(int keyCode) {
         //postVolumeChange(Utils.getGlobalVolume(getActivity()));
-        if (getController() != null) {
-            postVolumeChange((int)(getController().getVolume() * 100));
-        }
+        postVolumeChange(getVolume());
 
         return false;
     }
@@ -358,6 +350,39 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         } else if (newVideo != null) {
             newVideo.isRemote = true;
             PlaybackPresenter.instance(getActivity()).openVideo(newVideo);
+        }
+    }
+
+    /**
+     * Volume: 0 - 100
+     */
+    private int getVolume() {
+        if (getActivity() != null) {
+            if (Utils.isGlobalVolumeWorking(getActivity())) {
+                return Utils.getGlobalVolume(getActivity());
+            }
+        }
+        
+        if (getController() != null) {
+            return (int) getController().getVolume() * 100;
+        }
+
+        return 100;
+    }
+
+    /**
+     * Volume: 0 - 100
+     */
+    private void setVolume(int volume) {
+        if (getActivity() != null) {
+            if (Utils.isGlobalVolumeWorking(getActivity())) {
+                Utils.setGlobalVolume(getActivity(), volume);
+                return;
+            }
+        }
+
+        if (getController() != null) {
+            getController().setVolume(volume / 100f);
         }
     }
 }
