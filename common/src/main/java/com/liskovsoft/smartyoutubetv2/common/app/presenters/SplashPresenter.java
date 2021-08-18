@@ -234,47 +234,4 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             }
         }
     }
-
-    //private void applyNewIntent(Intent intent) {
-    //    String videoId = IntentExtractor.extractVideoId(intent);
-    //
-    //    if (videoId != null) {
-    //        PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
-    //        playbackPresenter.openVideo(videoId);
-    //
-    //        ViewManager viewManager = ViewManager.instance(getContext());
-    //
-    //        if (GeneralData.instance(getContext()).isReturnToLauncherEnabled()) {
-    //            viewManager.setSinglePlayerMode(true);
-    //        }
-    //    } else {
-    //        String searchText = IntentExtractor.extractSearchText(intent);
-    //
-    //        if (searchText != null || IntentExtractor.isStartVoiceCommand(intent)) {
-    //            SearchPresenter searchPresenter = SearchPresenter.instance(getContext());
-    //            searchPresenter.startSearch(searchText);
-    //        } else {
-    //            String channelId = IntentExtractor.extractChannelId(intent);
-    //
-    //            if (channelId != null) {
-    //                ChannelPresenter channelPresenter = ChannelPresenter.instance(getContext());
-    //                channelPresenter.openChannel(channelId);
-    //            } else {
-    //                String backupData = getBackupDataOnce();
-    //                if (backupData != null) {
-    //                    PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
-    //                    playbackPresenter.openVideo(backupData);
-    //                } else {
-    //                    ViewManager viewManager = ViewManager.instance(getContext());
-    //                    viewManager.startDefaultView();
-    //
-    //                    // For debug purpose when using ATV bridge.
-    //                    if (IntentExtractor.hasData(intent) && !IntentExtractor.isChannelUrl(intent)) {
-    //                        MessageHelpers.showLongMessage(getContext(), String.format("Can't process intent: %s", Helpers.toString(intent)));
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }
-    //}
 }

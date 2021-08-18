@@ -14,6 +14,7 @@ public class IntentExtractor {
      */
     private static final String[] SEARCH_KEYS = {"search_query", "query"};
     private static final String VIDEO_ID_KEY = "v";
+    private static final String VIDEO_ID_LIST_KEY = "video_ids";
     private static final String CHANNEL_URL = "/channel/";
     private static final String USER_URL = "/user/";
     private static final String SUBSCRIPTIONS_URL = "https://www.youtube.com/tv#/zylon-surface?c=FEsubscriptions&resume";
@@ -35,8 +36,16 @@ public class IntentExtractor {
         String videoId = parser.get(VIDEO_ID_KEY);
 
         if (videoId == null) {
-            // Suppose that link type is https://youtu.be/lBeMDqcWTG8
-            videoId = intent.getData().getLastPathSegment();
+            // https://youtube.com/watch_videos?video_ids=xdq_sYfmN6c,xdq_sYfmN6c
+            String idList = parser.get(VIDEO_ID_LIST_KEY);
+
+            if (idList != null) {
+                // temp solution: use one video from the list
+                videoId = idList.split(",")[0];
+            } else {
+                // Suppose that link type is https://youtu.be/lBeMDqcWTG8
+                videoId = intent.getData().getLastPathSegment();
+            }
         }
 
         if (!isValid(videoId)) {
