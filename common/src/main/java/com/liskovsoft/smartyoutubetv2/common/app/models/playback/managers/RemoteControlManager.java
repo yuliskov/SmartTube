@@ -364,7 +364,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         }
         
         if (getController() != null) {
-            return (int) getController().getVolume() * 100;
+            return (int) (getController().getVolume() * 100);
         }
 
         return 100;
