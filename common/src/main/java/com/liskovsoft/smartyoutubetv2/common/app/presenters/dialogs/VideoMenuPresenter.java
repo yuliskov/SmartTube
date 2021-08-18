@@ -149,9 +149,9 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         appendReturnToBackgroundVideoButton();
         appendAddToPlaylistButton(videoPlaylistInfos);
-        appendNotInterestedButton();
         appendAddToPlaybackQueueButton();
         appendPinToSidebarButton();
+        appendNotInterestedButton();
         appendOpenPlaylistButton();
         appendOpenChannelButton();
         //appendOpenChannelUploadsButton();

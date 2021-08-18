@@ -368,6 +368,7 @@ public class PlayerData {
     private void initDefaultFormats() {
         mDefaultVideoFormats.put("SHIELD Android TV", FormatItem.VIDEO_4K_VP9_60);
         mDefaultVideoFormats.put("AFTMM", FormatItem.VIDEO_4K_VP9_60);
+        mDefaultVideoFormats.put("UGOOS", FormatItem.VIDEO_4K_VP9_60);
     }
 
     private void restoreData() {
