@@ -277,11 +277,24 @@ public final class Video implements Parcelable {
             return;
         }
 
-        title = metadata.getTitle();
+        String newTitle = metadata.getTitle();
+
+        if (newTitle != null) {
+            title = newTitle;
+        }
+
+        String newDescription = null;
+
         // Don't sync future translation because of not precise description
         if (!metadata.isUpcoming()) {
-            description = useAltDesc ? metadata.getDescriptionAlt() : metadata.getDescription();
+            newDescription = useAltDesc ? metadata.getDescriptionAlt() : metadata.getDescription();
         }
+
+        if (newDescription != null) {
+            description = newDescription;
+        }
+
+        // No checks. This data wasn't existed before sync.
         channelId = metadata.getChannelId();
         nextMediaItem = metadata.getNextVideo();
         isLive = metadata.isLive();
