@@ -355,7 +355,7 @@ public class PlayerData {
     private FormatItem getDefaultVideoFormat() {
         FormatItem formatItem = mDefaultVideoFormats.get(Build.MODEL);
 
-        return formatItem != null ? formatItem : FormatItem.VIDEO_HD_AVC_30;
+        return formatItem != null ? formatItem : Helpers.isVP9Supported() ? FormatItem.VIDEO_4K_VP9_60 : FormatItem.VIDEO_HD_AVC_30;
     }
 
     private void initSubtitleStyles() {
@@ -365,10 +365,12 @@ public class PlayerData {
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_yellow, R.color.yellow, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
     }
 
+    /**
+     * Overrides for auto detected values
+     */
     private void initDefaultFormats() {
         mDefaultVideoFormats.put("SHIELD Android TV", FormatItem.VIDEO_4K_VP9_60);
-        mDefaultVideoFormats.put("AFTMM", FormatItem.VIDEO_4K_VP9_60);
-        mDefaultVideoFormats.put("UGOOS", FormatItem.VIDEO_4K_VP9_60);
+        //mDefaultVideoFormats.put("AFTMM", FormatItem.VIDEO_4K_VP9_60);
     }
 
     private void restoreData() {
