@@ -7,6 +7,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -21,6 +22,8 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+
+import java.util.List;
 
 public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> implements VideoGroupPresenter {
     private static final String TAG = ChannelUploadsPresenter.class.getSimpleName();
@@ -135,7 +138,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         }
     }
 
-    public Observable<MediaGroup> obtainVideoGroupObservable(Video item) {
+    public Observable<MediaGroup> obtainPlaylistObservable(Video item) {
         if (item == null) {
             return null;
         }
@@ -143,11 +146,11 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         return item.hasUploads() ?
                 mGroupManager.getGroupObserve(item.mediaItem) :
                 mItemManager.getMetadataObserve(item.videoId, item.playlistId, 0)
-                        .flatMap(mediaItemMetadata -> Observable.just(mediaItemMetadata.getSuggestions().get(0)));
+                        .flatMap(mediaItemMetadata -> Observable.just(findPlaylistRow(mediaItemMetadata)));
     }
 
     private void updateGrid(Video item) {
-        updateVideoGrid(obtainVideoGroupObservable(item));
+        updateVideoGrid(obtainPlaylistObservable(item));
     }
 
     private void disposeActions() {
@@ -220,5 +223,24 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
     public interface VideoGroupCallback {
         void onGroup(MediaGroup mediaGroup);
+    }
+
+    /**
+     * Playlist usually is the first row with media items.<br/>
+     * NOTE: before playlist may be the video description row
+     */
+    private MediaGroup findPlaylistRow(MediaItemMetadata mediaItemMetadata) {
+        if (mediaItemMetadata == null || mediaItemMetadata.getSuggestions() == null) {
+            return null;
+        }
+
+        for (MediaGroup group : mediaItemMetadata.getSuggestions()) {
+            List<MediaItem> mediaItems = group.getMediaItems();
+            if (mediaItems != null && mediaItems.size() > 0) {
+                return group;
+            }
+        }
+
+        return null;
     }
 }

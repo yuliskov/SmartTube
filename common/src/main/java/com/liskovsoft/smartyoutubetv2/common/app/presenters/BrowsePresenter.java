@@ -168,7 +168,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
         for (Video item : pinnedItems) {
             if (item != null) {
-                mGridMapping.put(item.hashCode(), ChannelUploadsPresenter.instance(getContext()).obtainVideoGroupObservable(item));
+                mGridMapping.put(item.hashCode(), ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item));
             }
         }
     }
@@ -345,7 +345,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
         Category category = new Category(item.hashCode(), item.title, Category.TYPE_GRID, item.cardImageUrl, true, item);
         mCategories.add(category);
-        mGridMapping.put(item.hashCode(), ChannelUploadsPresenter.instance(getContext()).obtainVideoGroupObservable(item));
+        mGridMapping.put(item.hashCode(), ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item));
 
         if (getView() != null) {
             getView().addCategory(-1, category); // add last
@@ -638,7 +638,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             return;
         }
 
-        updateVideoGrid(category, ChannelUploadsPresenter.instance(getContext()).obtainVideoGroupObservable(item), 1, true);
+        updateVideoGrid(category, ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item), 1, true);
     }
 
     private Category getCategory(int categoryId) {
