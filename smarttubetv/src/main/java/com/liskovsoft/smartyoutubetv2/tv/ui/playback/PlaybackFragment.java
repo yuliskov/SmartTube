@@ -448,8 +448,12 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             @Override
             public boolean dispatchSetPlayWhenReady(Player player, boolean playWhenReady) {
                 // Fix exoplayer pause when switching AFR.
-                // NOTE: may be a problems with background playback
-                return isInPIPMode() && super.dispatchSetPlayWhenReady(player, playWhenReady);
+                // NOTE: may be a problems with background playback or bluetooth button events
+                if (PlayerData.instance(getContext()).isAfrEnabled() && !isInPIPMode()) {
+                    return false;
+                }
+
+                return super.dispatchSetPlayWhenReady(player, playWhenReady);
             }
         });
     }
