@@ -398,13 +398,17 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
-
-        mServiceManager.loadMetadata(mVideo, metadata -> {
-            mVideo.channelId = metadata.getChannelId();
-            mVideo.isSubscribed = metadata.isSubscribed();
+        if (mVideo.channelId != null) {
             toggleSubscribeInt();
-        });
+        } else {
+            MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
+
+            mServiceManager.loadMetadata(mVideo, metadata -> {
+                mVideo.channelId = metadata.getChannelId();
+                mVideo.isSubscribed = metadata.isSubscribed();
+                toggleSubscribeInt();
+            });
+        }
     }
 
     private void toggleSubscribeInt() {
@@ -418,5 +422,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mSubscribeAction = RxUtils.execute(observable);
 
         MessageHelpers.showMessage(getContext(), mVideo.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel);
+
+        mVideo.isSubscribed = !mVideo.isSubscribed;
     }
 }
