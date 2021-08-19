@@ -398,15 +398,11 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        if (mVideo.channelId != null) {
+        mServiceManager.loadMetadata(mVideo, metadata -> {
+            mVideo.channelId = metadata.getChannelId();
+            mVideo.isSubscribed = metadata.isSubscribed();
             toggleSubscribeInt();
-        } else {
-            mServiceManager.loadMetadata(mVideo, metadata -> {
-                 mVideo.channelId = metadata.getChannelId();
-                 mVideo.isSubscribed = metadata.isSubscribed();
-                 toggleSubscribeInt();
-            });
-        }
+        });
         
         MessageHelpers.showMessage(getContext(), mVideo.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel);
     }
