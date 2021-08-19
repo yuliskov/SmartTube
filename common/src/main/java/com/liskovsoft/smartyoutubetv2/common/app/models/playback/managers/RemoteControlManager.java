@@ -11,8 +11,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
-import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
-import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
@@ -317,7 +315,6 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                     //Utils.moveAppToForeground(getActivity());
                     //MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_connected, command.getDeviceName()));
                 }
-                postVolumeChange(getVolume());
                 break;
             case Command.TYPE_DISCONNECTED:
                 // Note: there are possible false calls when mobile client unloaded from the memory.
@@ -325,8 +322,6 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                     // NOTE: It's not a good idea to remember connection state (mConnected) at this point.
                     //MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_disconnected, command.getDeviceName()));
                 }
-
-                setVolume(100);
                 break;
         }
 
@@ -358,13 +353,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
      */
     private int getVolume() {
         if (getActivity() != null) {
-            if (Utils.isGlobalVolumeWorking(getActivity())) {
-                return Utils.getGlobalVolume(getActivity());
-            }
-        }
-        
-        if (getController() != null) {
-            return (int) (getController().getVolume() * 100);
+            return Utils.getGlobalVolume(getActivity());
         }
 
         return 100;
@@ -375,14 +364,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
      */
     private void setVolume(int volume) {
         if (getActivity() != null) {
-            if (Utils.isGlobalVolumeWorking(getActivity())) {
-                Utils.setGlobalVolume(getActivity(), volume);
-                return;
-            }
-        }
-
-        if (getController() != null) {
-            getController().setVolume(volume / 100f);
+            Utils.setGlobalVolume(getActivity(), volume);
         }
     }
 }
