@@ -235,4 +235,5 @@
     <string name="breaking_news_row_name">Breaking news</string>
     <string name="covid_news_row_name">COVID-19 news</string>
     <string name="enable_voice_search">Enable voice search</string>
+    <string name="subscribe_unsubscribe_from_channel">Subscribe/Unsubscribe from channel</string>
 </resources>

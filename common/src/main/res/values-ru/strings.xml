@@ -235,4 +235,5 @@
     <string name="breaking_news_row_name">Важные новости</string>
     <string name="covid_news_row_name">Новости о коронавирусе COVID-19</string>
     <string name="enable_voice_search">Включить голосовой поиск</string>
+    <string name="subscribe_unsubscribe_from_channel">Подписаться/Отписаться от канала</string>
 </resources>

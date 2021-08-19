@@ -301,9 +301,8 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         }
 
         mSettingsPresenter.appendSingleButton(
-                UiOptionItem.from(getContext().getString(
-                        mVideo.isSubscribed ? R.string.unsubscribe_from_channel : R.string.subscribe_to_channel),
-                        optionItem -> subscribe()));
+                UiOptionItem.from(getContext().getString(R.string.subscribe_unsubscribe_from_channel),
+                        optionItem -> subscribeToggle()));
     }
 
     private void appendPinToSidebarButton() {
@@ -394,24 +393,24 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mAddAction = RxUtils.execute(editObserve);
     }
 
-    private void subscribe() {
+    private void subscribeToggle() {
         if (mVideo == null) {
             return;
         }
 
         if (mVideo.channelId != null) {
-            subscribeInt();
+            subscribeToggleInt();
         } else {
             mServiceManager.loadMetadata(mVideo, metadata -> {
                  mVideo.channelId = metadata.getChannelId();
-                 subscribeInt();
+                 subscribeToggleInt();
             });
         }
         
         MessageHelpers.showMessage(getContext(), mVideo.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel);
     }
 
-    private void subscribeInt() {
+    private void subscribeToggleInt() {
         if (mVideo == null) {
             return;
         }
