@@ -34,11 +34,13 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     private final Runnable mApplyAfr = this::applyAfr;
     private final Handler mHandler;
     private PlayerData mPlayerData;
+    private boolean mIsPlay;
     private final Runnable mPlaybackResumeHandler = () -> {
         if (mStateUpdater != null) {
             mStateUpdater.blockPlay(false);
         }
-        getController().setPlay(true);
+        getController().setPlay(mIsPlay);
+        getController().setAfrRunning(false);
     };
 
     public AutoFrameRateManager(HQDialogManager uiManager, StateUpdater stateUpdater) {
@@ -134,19 +136,21 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
             Log.d(TAG, msg);
 
             mAutoFrameRateHelper.apply(getActivity(), track, force);
-            //mModeSyncManager.save(track);
         }
     }
 
     private void maybePausePlayback() {
-        if (mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseSec() > 0) {
-            mStateUpdater.blockPlay(true);
+        getController().setAfrRunning(true);
+        mIsPlay = getController().getPlay();
+        mStateUpdater.blockPlay(true);
+        int delayMs = 5_000;
+
+        if (mPlayerData.getAfrPauseSec() > 0) {
             getController().setPlay(false);
-            Utils.postDelayed(mHandler, mPlaybackResumeHandler, mPlayerData.getAfrPauseSec() * 1_000);
-        } else {
-            mStateUpdater.blockPlay(false);
-            Utils.removeCallbacks(mHandler, mPlaybackResumeHandler);
+            delayMs = mPlayerData.getAfrPauseSec() * 1_000;
         }
+
+        Utils.postDelayed(mHandler, mPlaybackResumeHandler, delayMs);
     }
 
     private void addUiOptions() {

@@ -101,6 +101,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private int mPlaybackMode = PlaybackEngineController.BACKGROUND_MODE_DEFAULT;
     private MediaSessionCompat mMediaSession;
     private MediaSessionConnector mMediaSessionConnector;
+    private boolean mIsAfrRunning;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -448,8 +449,9 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             @Override
             public boolean dispatchSetPlayWhenReady(Player player, boolean playWhenReady) {
                 // Fix exoplayer pause when switching AFR.
+                // Also it's tied to activity state transitioning because window has different mode.
                 // NOTE: may be a problems with background playback or bluetooth button events
-                if (PlayerData.instance(getContext()).isAfrEnabled() && !isInPIPMode()) {
+                if (mIsAfrRunning || (!isResumed() && !isInPIPMode())) {
                     return false;
                 }
 
@@ -702,6 +704,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             mPlayerGlue.setTitle(video.title != null ? video.title : "...");
             mPlayerGlue.setSubtitle(video.description != null ? video.description : "...");
         }
+    }
+
+    @Override
+    public void setAfrRunning(boolean isRunning) {
+        mIsAfrRunning = isRunning;
     }
 
     @Override
