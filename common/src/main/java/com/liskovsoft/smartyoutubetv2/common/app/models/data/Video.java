@@ -158,6 +158,10 @@ public final class Video implements Parcelable {
             if (channelId != null) {
                 return channelId.equals(((Video) obj).channelId);
             }
+
+            if (mediaItem != null) {
+                return mediaItem.equals(((Video) obj).mediaItem);
+            }
         }
 
         return false;
@@ -165,7 +169,7 @@ public final class Video implements Parcelable {
 
     @Override
     public int hashCode() {
-        return Helpers.hashCode(videoId, playlistId, channelId);
+        return Helpers.hashCode(videoId, playlistId, channelId, mediaItem);
     }
     
     public static boolean equals(Video video1, Video video2) {
