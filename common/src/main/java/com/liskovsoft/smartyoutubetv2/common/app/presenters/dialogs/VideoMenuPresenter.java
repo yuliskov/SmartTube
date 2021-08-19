@@ -403,8 +403,6 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             mVideo.isSubscribed = metadata.isSubscribed();
             toggleSubscribeInt();
         });
-        
-        MessageHelpers.showMessage(getContext(), mVideo.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel);
     }
 
     private void toggleSubscribeInt() {
@@ -416,5 +414,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
                 mItemManager.unsubscribeObserve(mVideo.channelId) : mItemManager.subscribeObserve(mVideo.channelId);
 
         mSubscribeAction = RxUtils.execute(observable);
+
+        MessageHelpers.showMessage(getContext(), mVideo.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel);
     }
 }
