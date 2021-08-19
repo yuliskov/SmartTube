@@ -398,14 +398,13 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        if (mVideo.channelId != null) {
+        if (mVideo.isSynced) {
             toggleSubscribeInt();
         } else {
             MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
 
             mServiceManager.loadMetadata(mVideo, metadata -> {
-                mVideo.channelId = metadata.getChannelId();
-                mVideo.isSubscribed = metadata.isSubscribed();
+                mVideo.sync(metadata);
                 toggleSubscribeInt();
             });
         }

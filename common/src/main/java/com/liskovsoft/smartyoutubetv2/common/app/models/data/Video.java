@@ -39,6 +39,7 @@ public final class Video implements Parcelable {
     public boolean isRemote;
     public int groupPosition = -1; // group position in multi-grid fragments
     public String clickTrackingParams;
+    public boolean isSynced;
 
     public Video() {
         
@@ -272,6 +273,10 @@ public final class Video implements Parcelable {
         return mediaItem != null && mediaItem.getType() == MediaItem.TYPE_PLAYLISTS_SECTION;
     }
 
+    public void sync(MediaItemMetadata metadata) {
+        sync(metadata, false);
+    }
+
     public void sync(MediaItemMetadata metadata, boolean useAltDesc) {
         if (metadata == null) {
             return;
@@ -300,6 +305,7 @@ public final class Video implements Parcelable {
         isLive = metadata.isLive();
         isSubscribed = metadata.isSubscribed();
         isUpcoming = metadata.isUpcoming();
+        isSynced = true;
     }
 
     // Builder for Video object.
