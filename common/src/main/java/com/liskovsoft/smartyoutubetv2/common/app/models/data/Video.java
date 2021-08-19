@@ -164,7 +164,7 @@ public final class Video implements Parcelable {
 
     @Override
     public int hashCode() {
-        return Helpers.hashCode(title, description, videoId, playlistId, channelId);
+        return Helpers.hashCode(videoId, playlistId, channelId);
     }
     
     public static boolean equals(Video video1, Video video2) {
