@@ -398,7 +398,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
+        MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
 
         mServiceManager.loadMetadata(mVideo, metadata -> {
             mVideo.channelId = metadata.getChannelId();
