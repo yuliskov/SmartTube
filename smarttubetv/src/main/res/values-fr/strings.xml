@@ -134,7 +134,7 @@
     <string name="badge_live">EN DIRECT</string>
     <string name="action_pip">Démarrer PIP</string>
     <string name="action_screen_off">Écran éteint</string>
-    <string name="action_playback_queue">Afficher la file d'attente de lecture</string>
+    <string name="action_playback_queue">Afficher la file d\'attente de lecture</string>
     <string name="add_device_view_description">Pour lier l’appareil, entrez ce code sur l\'application YouTube de votre téléphone dans la section Paramètres</string>
     <string name="playback_controls_repeat_pause">Répéter la pause</string>
     <string name="playback_controls_repeat_list">Répéter la liste</string>
