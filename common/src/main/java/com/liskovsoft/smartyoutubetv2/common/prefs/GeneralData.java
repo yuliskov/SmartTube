@@ -174,6 +174,7 @@ public class GeneralData {
 
     public void enableBridgeCheck(boolean enable) {
         mIsBridgeCheckEnabled = enable;
+        persistState();
     }
 
     public boolean isBridgeCheckEnabled() {
