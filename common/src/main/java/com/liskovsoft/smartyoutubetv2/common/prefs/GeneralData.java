@@ -38,6 +38,7 @@ public class GeneralData {
     private boolean mIsRemapFastForwardToNextEnabled;
     private int mScreenDimmingTimeoutMin;
     private boolean mIsProxyEnabled;
+    private boolean mIsBridgeCheckEnabled;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -171,6 +172,14 @@ public class GeneralData {
         return mIsProxyEnabled;
     }
 
+    public void enableBridgeCheck(boolean enable) {
+        mIsBridgeCheckEnabled = enable;
+    }
+
+    public boolean isBridgeCheckEnabled() {
+        return mIsBridgeCheckEnabled;
+    }
+
     private void initLeftPanelCategories() {
         mLeftPanelCategories.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mLeftPanelCategories.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
@@ -198,6 +207,7 @@ public class GeneralData {
         mIsRemapFastForwardToNextEnabled = Helpers.parseBoolean(split, 8, false);
         mScreenDimmingTimeoutMin = Helpers.parseInt(split, 9, 1);
         mIsProxyEnabled = Helpers.parseBoolean(split, 10, false);
+        mIsBridgeCheckEnabled = Helpers.parseBoolean(split, 11, true);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArrayLegacy(selectedCategories);

@@ -15,9 +15,11 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 
 abstract class BridgePresenter extends BasePresenter<Void> {
     private static final String TAG = BridgePresenter.class.getSimpleName();
+    private final GeneralData mGeneralData;
     private boolean mRemoveOldApkFirst;
     private String mBridgePath;
     private final DownloadListener mListener = new DownloadListener() {
@@ -33,10 +35,16 @@ abstract class BridgePresenter extends BasePresenter<Void> {
 
     public BridgePresenter(Context context) {
         super(context);
+
+        mGeneralData = GeneralData.instance(context);
     }
 
     public void start() {
         if (!checkLauncher()) {
+            return;
+        }
+
+        if (!mGeneralData.isBridgeCheckEnabled()) {
             return;
         }
         
@@ -52,6 +60,11 @@ abstract class BridgePresenter extends BasePresenter<Void> {
                 option -> installBridgeIfNeeded());
 
         settingsPresenter.appendSingleButton(updateCheckOption);
+        settingsPresenter.appendSingleSwitch(
+                UiOptionItem.from(getContext().getString(R.string.show_again),
+                optionItem -> mGeneralData.enableBridgeCheck(optionItem.isSelected()),
+                mGeneralData.isBridgeCheckEnabled())
+        );
 
         settingsPresenter.showDialog(getContext().getString(R.string.enable_voice_search));
     }
