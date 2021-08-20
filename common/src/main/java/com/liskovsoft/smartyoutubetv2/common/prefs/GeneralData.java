@@ -235,6 +235,6 @@ public class GeneralData {
                 mBootCategoryId, mIsSettingsCategoryEnabled, mAppExitShortcut,
                 mIsReturnToLauncherEnabled,mBackgroundShortcut, pinnedItems,
                 mIsHideShortsEnabled, mIsRemapFastForwardToNextEnabled, mScreenDimmingTimeoutMin,
-                mIsProxyEnabled));
+                mIsProxyEnabled, mIsBridgeCheckEnabled));
     }
 }
