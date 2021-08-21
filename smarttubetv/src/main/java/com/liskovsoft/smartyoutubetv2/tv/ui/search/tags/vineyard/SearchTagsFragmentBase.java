@@ -133,19 +133,22 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     private void setupListeners() {
         setOnItemViewClickedListener((itemViewHolder, item, rowViewHolder, row) -> onItemViewClicked(item));
         setOnItemViewSelectedListener((itemViewHolder, item, rowViewHolder, row) -> onItemViewSelected(item));
-        if (!hasPermission(Manifest.permission.RECORD_AUDIO)) {
-            setSpeechRecognitionCallback(() -> {
-                if (isAdded()) {
-                    try {
-                        startActivityForResult(getRecognizerIntent(), REQUEST_SPEECH);
-                    } catch (ActivityNotFoundException e) {
-                        Log.e(TAG, "Cannot find activity for speech recognizer", e);
-                    }
-                } else {
-                    Log.e(TAG, "Can't perform search. Fragment is detached.");
-                }
-            });
-        }
+
+        // Use system speech recognition dialog instead of internal one
+        // This could lead to problems with dpi.
+        //if (!hasPermission(Manifest.permission.RECORD_AUDIO)) {
+        //    setSpeechRecognitionCallback(() -> {
+        //        if (isAdded()) {
+        //            try {
+        //                startActivityForResult(getRecognizerIntent(), REQUEST_SPEECH);
+        //            } catch (ActivityNotFoundException e) {
+        //                Log.e(TAG, "Cannot find activity for speech recognizer", e);
+        //            }
+        //        } else {
+        //            Log.e(TAG, "Can't perform search. Fragment is detached.");
+        //        }
+        //    });
+        //}
     }
 
     private boolean hasPermission(final String permission) {
