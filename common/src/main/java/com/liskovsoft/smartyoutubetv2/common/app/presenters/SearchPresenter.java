@@ -109,6 +109,8 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     }
     
     private void loadSearchResult(String searchText) {
+        Log.d(TAG, "Start search for '%s'", searchText);
+
         disposeActions();
         getView().showProgressBar(true);
 
@@ -120,7 +122,10 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mediaGroup -> getView().updateSearch(VideoGroup.from(mediaGroup)),
+                        mediaGroup -> {
+                            Log.d(TAG, "Receiving results for '%s'", searchText);
+                            getView().updateSearch(VideoGroup.from(mediaGroup));
+                        },
                         error -> Log.e(TAG, "loadSearchData error: %s", error.getMessage()),
                         () -> getView().showProgressBar(false)
                 );
