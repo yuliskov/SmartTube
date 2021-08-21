@@ -195,7 +195,7 @@ public class SearchSupportFragment extends Fragment {
         mSearchTextEditor.requestFocus(); // MOD: focus on search field
     }
 
-    public String getSearchFiledText() {
+    public String getSearchBarText() {
         return mSearchTextEditor.getText().toString();
     }
 
@@ -213,6 +213,7 @@ public class SearchSupportFragment extends Fragment {
     SpeechOrbView mSpeechOrbView;
     SearchResultProvider mProvider;
     String mPendingQuery = null;
+    SearchOrbView mSearchOrbView;
 
     OnItemViewSelectedListener mOnItemViewSelectedListener;
     private OnItemViewClickedListener mOnItemViewClickedListener;
@@ -345,6 +346,10 @@ public class SearchSupportFragment extends Fragment {
                 }
             }
         });
+
+        // MOD: commit search button
+        mSearchOrbView = mSearchBar.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.lb_search_bar_search_orb);
+        mSearchOrbView.setOnOrbClickedListener(v -> submitQuery(getSearchBarText()));
         
         //mSearchTextEditor.setOnClickListener(v -> {
         //    Log.d(TAG, "on search field clicked");

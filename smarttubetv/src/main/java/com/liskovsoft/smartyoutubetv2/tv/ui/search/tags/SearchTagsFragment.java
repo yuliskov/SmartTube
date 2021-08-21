@@ -77,7 +77,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
 
     @Override
     public String getSearchText() {
-        return getSearchFiledText();
+        return getSearchBarText();
     }
 
     @Override
