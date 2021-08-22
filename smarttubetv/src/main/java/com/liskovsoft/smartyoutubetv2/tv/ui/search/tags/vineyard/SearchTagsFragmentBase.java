@@ -3,11 +3,8 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.vineyard;
 import android.Manifest;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +14,7 @@ import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.RowPresenter.ViewHolder;
+import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.SearchTagsProvider;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
@@ -34,8 +32,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         implements SearchSupportFragment.SearchResultProvider, SearchView {
     private static final String TAG = SearchTagsFragmentBase.class.getSimpleName();
     private static final int REQUEST_SPEECH = 0x00000010;
-    
-    private Handler mHandler;
+
     private TagAdapter mSearchTagsAdapter;
     private ObjectAdapter mItemResultsAdapter;
     private ArrayObjectAdapter mResultsAdapter;
@@ -53,7 +50,6 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         mResultsPresenter = new CustomListRowPresenter();
         mResultsAdapter = new ArrayObjectAdapter(mResultsPresenter);
         mSearchTagsAdapter = new TagAdapter(getActivity(), "");
-        mHandler = new Handler();
         setSearchResultProvider(this);
         setupListeners();
     }
@@ -137,7 +133,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         // Use system speech recognition dialog instead of internal one.
         // More robust. Works in all cases but could lead to problems with dpi.
         // NOTE: to revert to internal dialog just comment out code below.
-        if (!hasPermission(Manifest.permission.RECORD_AUDIO)) {
+        if (!PermissionHelpers.hasPermission(getContext(), Manifest.permission.RECORD_AUDIO)) {
             setSpeechRecognitionCallback(() -> {
                 if (isAdded()) {
                     try {
@@ -152,12 +148,6 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         }
     }
 
-    private boolean hasPermission(final String permission) {
-        final Context context = getActivity();
-        return PackageManager.PERMISSION_GRANTED == context.getPackageManager().checkPermission(
-                permission, context.getPackageName());
-    }
-
     protected void loadSearchTags(String searchQuery) {
         searchTaggedPosts(searchQuery);
     }
@@ -166,9 +156,6 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         mSearchTagsAdapter.setTag(query);
         mResultsAdapter.clear();
         mSearchTagsAdapter.clear();
-        //mResultsHeader = new HeaderItem(0, getString(R.string.text_search_results, query));
-        //mResultsAdapter.add(new ListRow(mSearchTagsAdapter));
-        //mResultsAdapter.add(new ListRow(mItemResultsAdapter));
         performTagSearch(mSearchTagsAdapter);
     }
 
