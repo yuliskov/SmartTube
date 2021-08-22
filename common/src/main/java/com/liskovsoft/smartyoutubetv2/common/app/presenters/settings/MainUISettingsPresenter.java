@@ -152,7 +152,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
     private void appendCardTextScrollSpeed(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        for (float factor : new float[] {1, 1.5f, 2, 2.5f, 3, 3.5f, 4}) {
+        for (float factor : new float[] {1, 1.5f, 2, 2.5f, 3, 3.5f, 4, 4.5f, 5, 5.5f, 6, 6.5f, 7, 7.5f, 8}) {
             options.add(UiOptionItem.from(String.format("%sx", Helpers.formatFloat(factor)),
                     optionItem -> mMainUIData.setCardTextScrollSpeed(factor),
                     Helpers.floatEquals(factor, mMainUIData.getCardTextScrollSpeed())));

@@ -31,6 +31,7 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolde
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.UhdHelper;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -244,26 +245,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         //mVideoInfo.add(new Pair<>("Aspect Ratio", par));
         String videoCodecName = getVideoDecoderNameV2();
         mVideoInfo.add(new Pair<>("Video Decoder Name", videoCodecName));
-        mVideoInfo.add(new Pair<>("Hardware Accelerated", String.valueOf(isHardwareAccelerated(videoCodecName))));
-    }
-
-    /**
-     * <a href="https://github.com/google/ExoPlayer/issues/4757">More info</a>
-     * @param videoCodecName name from CodecInfo
-     * @return is accelerated
-     */
-    private boolean isHardwareAccelerated(String videoCodecName) {
-        if (videoCodecName == null) {
-            return false;
-        }
-
-        for (String name : new String[]{"omx.google.", "c2.android."}) {
-            if (videoCodecName.toLowerCase().startsWith(name)) {
-                return false;
-            }
-        }
-
-        return true;
+        mVideoInfo.add(new Pair<>("Hardware Accelerated", String.valueOf(Helpers.isHardwareAccelerated(videoCodecName))));
     }
 
     private void appendRuntimeInfo() {
