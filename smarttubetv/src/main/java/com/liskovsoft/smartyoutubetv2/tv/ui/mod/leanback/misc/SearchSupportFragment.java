@@ -32,6 +32,7 @@ import androidx.leanback.widget.SearchOrbView;
 import androidx.leanback.widget.SpeechOrbView;
 import androidx.leanback.widget.SpeechRecognitionCallback;
 import androidx.leanback.widget.VerticalGridView;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -340,15 +341,18 @@ public class SearchSupportFragment extends Fragment {
                 mRowsSupportFragment.getVerticalGridView().clearFocus();
 
                 if (getContext() != null) {
-                    // https://stackoverflow.com/questions/5105354/how-to-show-soft-keyboard-when-edittext-is-focused
-                    InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                    Helpers.showKeyboard(getContext());
                 }
             }
         });
 
         // MOD: commit search button
         mSearchOrbView = mSearchBar.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.lb_search_bar_search_orb);
+        mSearchOrbView.setOnFocusChangeListener((v, focused) -> {
+            if (focused) {
+                Helpers.hideKeyboard(getContext(), v);
+            }
+        });
         mSearchOrbView.setOnOrbClickedListener(v -> submitQuery(getSearchBarText()));
         
         //mSearchTextEditor.setOnClickListener(v -> {
