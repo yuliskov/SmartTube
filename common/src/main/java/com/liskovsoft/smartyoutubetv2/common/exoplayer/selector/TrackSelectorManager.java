@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import static com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil.CODEC_SHORT_AV1;
+import static com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil.CODEC_SHORT_VP9;
 import static com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil.extractCodec;
 
 public class TrackSelectorManager implements TrackSelectorCallback {
@@ -470,6 +471,10 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
                 for (MediaTrack mediaTrack : trackGroup) {
                     if (mediaTrack == null) {
+                        continue;
+                    }
+                    final boolean isVerticalVideo = 1.0 * mediaTrack.format.width / mediaTrack.format.height <= 1.0;
+                    if (isVerticalVideo && mediaTrack.format.codecs != null && mediaTrack.format.codecs.startsWith(CODEC_SHORT_VP9)) {
                         continue;
                     }
                     final boolean isProperlyAspect = Math.abs(

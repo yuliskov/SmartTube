@@ -84,8 +84,13 @@ public class UrlProvider extends ContentProvider {
                                 final int width = Integer.parseInt(adaptiveVideoFormat.getSize().split("x")[0]);
                                 final int height = Integer.parseInt(adaptiveVideoFormat.getSize().split("x")[1]);
                                 final boolean isProperlyAspect = Math.abs(1.0 * width / height - ASPECT_RATIO_16_9) < 0.1;
+                                final boolean isVerticalVideo = 1.0 * width / height <= 1.0;
+                                final boolean isVp9Codec = adaptiveVideoFormat.getMimeType().contains("vp9");
                                 return (isProperlyAspect && height <= finalMaxVideoHeight)
-                                        || (!isProperlyAspect && width <= MAX_WIDTH_FOR_ULTRA_WIDE_ASPECT);
+                                        // skip ultra wide video greater than 1920
+                                        || (!isProperlyAspect && width <= MAX_WIDTH_FOR_ULTRA_WIDE_ASPECT)
+                                        // skip vp9 and vertical
+                                        || (isVp9Codec && isVerticalVideo);
                             }
                             return true;
                         })
