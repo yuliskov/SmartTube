@@ -126,7 +126,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         if (Helpers.isPictureInPictureSupported(getContext())) {
             adapter.add(mPipAction);
         }
-        adapter.add(mScreenOffAction);
+//        adapter.add(mScreenOffAction);
         adapter.add(mVideoZoomAction);
         adapter.add(mSearchAction);
     }
