@@ -37,11 +37,11 @@ public class ScreensaverManager {
     public void enable() {
         Log.d(TAG, "Enable screensaver");
 
-        disable();
-        int delayMs = mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER ?
-                10_000 :
-                mGeneralData.getScreenDimmingTimoutMin() * 60 * 1_000;
-        Utils.postDelayed(mHandler, mDimScreen, delayMs);
+//        disable();
+//        int delayMs = mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER ?
+//                10_000 :
+//                mGeneralData.getScreenDimmingTimoutMin() * 60 * 1_000;
+        Utils.postDelayed(mHandler, mDimScreen, 0);
     }
 
     public void disable() {
@@ -68,7 +68,7 @@ public class ScreensaverManager {
 
     private void showHide(boolean show) {
 //        showHideDimming(show);
-//        showHideScreensaver(show);
+        showHideScreensaver(show);
     }
 
     private void showHideDimming(boolean show) {
