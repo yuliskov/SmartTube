@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.Toast;
+
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
@@ -16,6 +18,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.Play
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SignInPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -52,8 +56,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
             getController().restartEngine(); // properly save position of the current track
         }
     };
-    private boolean mIsWasStarted = false;
-    private boolean mIsWasError = false;
+    private boolean mIsWasStarted;
+    private boolean mIsWasVideoStartError;
 
     public VideoLoader(SuggestionsLoader suggestionsLoader) {
         mSuggestionsLoader = suggestionsLoader;
@@ -69,12 +73,12 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void openVideo(Video item) {
-        mIsWasError = false;
+        mIsWasVideoStartError = false;
         mIsWasStarted = false;
 
         mPlaylist.add(item);
 
-        Analytics.sendVideoStarting(getActivity(), item.videoId, item.title);
+        Analytics.sendVideoStarting(item.videoId, item.title);
 
         if (getController() != null && getController().isEngineInitialized()) { // player is initialized
             if (!item.equals(mLastVideo)) {
@@ -101,12 +105,11 @@ public class VideoLoader extends PlayerEventListenerHelper {
     public void onEngineError(int type) {
         Log.e(TAG, "Player error occurred: %s. Trying to fix…", type);
 
-        if (!mIsWasError) {
-            Analytics.sendVideoStartError(getActivity(),
-                    mLastVideo.videoId,
+        if (!mIsWasVideoStartError) {
+            Analytics.sendVideoStartError(mLastVideo.videoId,
                     mLastVideo.title,
                     getErrorMessage(type));
-            mIsWasError = true;
+            mIsWasVideoStartError = true;
         }
 
         if (mErrorMap.get(type) != null) {
@@ -130,7 +133,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         //MessageHelpers.showMessage(getActivity(), "Start playing!");
 
         if (!mIsWasStarted) {
-            Analytics.sendVideoStarted(getActivity(), mLastVideo.videoId, mLastVideo.title);
+            Analytics.sendVideoStarted(mLastVideo.videoId, mLastVideo.title);
             mIsWasStarted = true;
         }
 
@@ -183,7 +186,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
             case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
                 // close player
                 if (!getController().isSuggestionsShown()) {
-                    getController().exit();
+                    getController().finish();
                 }
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
@@ -293,12 +296,11 @@ public class VideoLoader extends PlayerEventListenerHelper {
                            error -> {
                                Log.e(TAG, "loadFormatInfo error: %s", error.getMessage());
                                scheduleReloadVideoTimer(1_000);
-                               if (!mIsWasError) {
-                                   Analytics.sendVideoStartError(getActivity(),
-                                           video.videoId,
+                               if (!mIsWasVideoStartError) {
+                                   Analytics.sendVideoStartError(video.videoId,
                                            video.title,
                                            error.getMessage());
-                                   mIsWasError = true;
+                                   mIsWasVideoStartError = true;
                                }
                            });
     }
@@ -306,12 +308,11 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
         if (formatInfo.isUnplayable()) {
             getController().showError(formatInfo.getPlayabilityStatus());
-            if (!mIsWasError) {
-                Analytics.sendVideoStartError(getActivity(),
-                        mLastVideo.videoId,
+            if (!mIsWasVideoStartError) {
+                Analytics.sendVideoStartError(mLastVideo.videoId,
                         mLastVideo.title,
                         formatInfo.getPlayabilityStatus());
-                mIsWasError = true;
+                mIsWasVideoStartError = true;
             }
         } else if (formatInfo.containsDashUrl()) {
             Log.d(TAG, "Found live video in dash format. Loading...");
@@ -332,10 +333,21 @@ public class VideoLoader extends PlayerEventListenerHelper {
         } else if (formatInfo.containsUrlListInfo()) {
             Log.d(TAG, "Found url list video. This is always LQ. Loading...");
             getController().openUrlList(formatInfo.createUrlList());
+        } else if (formatInfo.isAgeRestricted()) {
+            MessageHelpers.showMessage(getActivity(), formatInfo.getPlayabilityStatus());
+            AccountSettingsPresenter.instance(getActivity()).show();
+            getController().finish();
+            YouTubeMediaService.instance().invalidateCache();
         } else {
             Log.d(TAG, "Empty format info received. Seems future live translation. No video data to pass to the player.");
             scheduleReloadVideoTimer(30 * 1_000);
             mSuggestionsLoader.loadSuggestions(mLastVideo);
+            if (!mIsWasVideoStartError) {
+                Analytics.sendVideoStartError(mLastVideo.videoId,
+                        mLastVideo.title,
+                        formatInfo.getPlayabilityStatus());
+                mIsWasVideoStartError = true;
+            }
         }
     }
 

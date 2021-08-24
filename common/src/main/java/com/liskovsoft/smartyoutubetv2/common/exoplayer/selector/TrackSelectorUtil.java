@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.VideoTrack
 import java.util.HashMap;
 
 public class TrackSelectorUtil {
+    public static final String CODEC_SHORT_AV1 = "av01";
     public static final String CODEC_SHORT_AVC = "avc";
     public static final String CODEC_SHORT_VP9 = "vp9";
     public static final String CODEC_SHORT_VP9_HDR = "vp9.2";
@@ -26,7 +27,9 @@ public class TrackSelectorUtil {
         mResolutionMap.put(854, 480);
         mResolutionMap.put(1280, 720);
         mResolutionMap.put(1920, 1080);
+        mResolutionMap.put(2048, 1440); // Tom Zanetti - Didn't Know
         mResolutionMap.put(2560, 1440);
+        mResolutionMap.put(3120, 2160); // Мастерская Синдиката - Мы собрали суперкар КУВАЛДОЙ!
         mResolutionMap.put(3840, 2160);
         mResolutionMap.put(7680, 4320);
     }
@@ -68,22 +71,7 @@ public class TrackSelectorUtil {
      * Try to amplify resolution of aspect ratios that differ from 16:9
      */
     private static String buildResolutionShortString(Format format) {
-        if (format == null) {
-            return "";
-        }
-
-        int height = format.height;
-        int width = format.width;
-
-        if (width == Format.NO_VALUE || height == Format.NO_VALUE) {
-            return "";
-        }
-
-        // Try to amplify resolution of aspect ratios that differ from 16:9
-        Integer heightAmp = mResolutionMap.get(width);
-
-        // Try to avoid square video proportions
-        return heightAmp != null && width > height && !VideoTrack.sizeEquals(width, height, 15) ? heightAmp + "p" : height + "p";
+        return getResolutionLabel(format) + "p";
     }
 
     private static String buildAudioPropertyString(Format format) {
@@ -134,7 +122,7 @@ public class TrackSelectorUtil {
 
         String codec = codecNameFull.toLowerCase();
 
-        String[] codecNames = {CODEC_SHORT_AVC, CODEC_SHORT_VP9, CODEC_SHORT_MP4A, CODEC_SHORT_VORBIS};
+        String[] codecNames = {CODEC_SHORT_AV1, CODEC_SHORT_AVC, CODEC_SHORT_VP9, CODEC_SHORT_MP4A, CODEC_SHORT_VORBIS};
 
         for (String codecName : codecNames) {
             if (codec.contains(codecName)) {
@@ -154,5 +142,67 @@ public class TrackSelectorUtil {
                 playbackState == Player.STATE_READY ? "STATE_READY" :
                 playbackState == Player.STATE_IDLE ? "STATE_IDLE" :
                 "STATE_ENDED";
+    }
+
+    //public static int getResolutionLabel(Format format) {
+    //    if (format == null) {
+    //        return 0;
+    //    }
+    //
+    //    int height = format.height;
+    //    int width = format.width;
+    //
+    //    if (width == Format.NO_VALUE || height == Format.NO_VALUE) {
+    //        return 0;
+    //    }
+    //
+    //    // Try to amplify resolution of aspect ratios that differ from 16:9
+    //    Integer heightAmp = mResolutionMap.get(width);
+    //
+    //    // Try to avoid square video proportions
+    //    return heightAmp != null && width > height && !VideoTrack.sizeEquals(width, height, 15) ? heightAmp : height;
+    //}
+
+    public static String getResolutionLabel(Format format) {
+        if (format == null) {
+            return null;
+        }
+
+        int height = format.height;
+        int width = format.width;
+
+        if (width == Format.NO_VALUE || height == Format.NO_VALUE) {
+            return null;
+        }
+
+        return getResolutionLabelByHeight(Math.min(height, width));
+    }
+
+    private static String getResolutionLabelByHeight(int height) {
+        String qualityLabel = null;
+
+        if (height < 160) { // 256x144
+            qualityLabel = "144";
+        } else if (height < 260) { // 426x240
+            qualityLabel = "240";
+        } else if (height < 380) { // 640x360
+            qualityLabel = "360";
+        } else if (height < 500) { // 854x480
+            qualityLabel = "480";
+        } else if (height < 750) { // 1280x720
+            qualityLabel = "720";
+        } else if (height < 1150) { // 1920x1080
+            qualityLabel = "1080";
+        } else if (height < 1250) { // 2560x1182 (Мастерская Синдиката - Мы собрали суперкар КУВАЛДОЙ!)
+            qualityLabel = "1200";
+        } else if (height < 1600) { // 2560x1440
+            qualityLabel = "1440";
+        } else if (height < 2300) { // 3840x2160
+            qualityLabel = "2160";
+        } else if (height < 4500) { // 7680x4320
+            qualityLabel = "4320";
+        }
+
+        return qualityLabel;
     }
 }

@@ -515,7 +515,7 @@ public class UhdHelper {
         mListener = null;
     }
 
-    public static String formatMode(Mode mode) {
+    public static String toResolution(Mode mode) {
         if (mode == null) {
             return null;
         }

@@ -108,6 +108,8 @@ public class ComplexImageView extends RelativeLayout {
 
         Glide.with(getContext().getApplicationContext()) // FIX: "You cannot start a load for a destroyed activity"
                 .load(mPreviewUrl)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE) // ensure start animation from beginning
                 .skipMemoryCache(true) // ensure start animation from beginning
                 .into(mPreviewImage);

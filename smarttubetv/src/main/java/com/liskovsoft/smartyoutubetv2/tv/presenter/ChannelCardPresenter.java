@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.text.TextUtils.TruncateAt;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
@@ -72,9 +72,9 @@ public class ChannelCardPresenter extends CardEventsPresenter {
             textView.setTextColor(textColor);
 
             if (hasFocus) {
-                enableMarquee(textView);
+                ViewUtil.enableMarquee(textView);
             } else {
-                disableMarquee(textView);
+                ViewUtil.disableMarquee(textView);
             }
         });
 
@@ -103,6 +103,8 @@ public class ChannelCardPresenter extends CardEventsPresenter {
 
         Glide.with(context)
                 .load(video.cardImageUrl)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .apply(RequestOptions.errorOf(mDefaultCardImage))
                 .listener(mErrorListener)
                 .into(imageView);
@@ -113,28 +115,6 @@ public class ChannelCardPresenter extends CardEventsPresenter {
         // Remove references to images so that the garbage collector can free up memory.
         ImageView imageView = viewHolder.view.findViewById(R.id.channel_image);
         imageView.setImageDrawable(null);
-    }
-
-    private void disableMarquee(TextView... textViews) {
-        if (textViews == null || textViews.length == 0) {
-            return;
-        }
-
-        for (TextView textView : textViews) {
-            textView.setEllipsize(TruncateAt.END);
-        }
-    }
-
-    private void enableMarquee(TextView... textViews) {
-        if (textViews == null || textViews.length == 0) {
-            return;
-        }
-
-        for (TextView textView : textViews) {
-            textView.setEllipsize(TruncateAt.MARQUEE);
-            textView.setMarqueeRepeatLimit(-1);
-            textView.setHorizontallyScrolling(true);
-        }
     }
 
     private void updateDimensions(Context context) {

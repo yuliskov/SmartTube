@@ -217,5 +217,6 @@
     <string name="settings_language_country">Язык/Страна</string>
     <string name="share_embed_link">Поделиться встраиваемой ссылкой</string>
     <string name="card_text_scroll_factor">Скорость прокрутки текста карточки</string>
-    <string name="preferred_update_source">Предпочитаемый источник обновлений</string>
+    <string name="preferred_update_source">Выбрать источник обновлений</string>
+    <string name="hide_shorts">Скрывать короткие видео из Подписок</string>
 </resources>

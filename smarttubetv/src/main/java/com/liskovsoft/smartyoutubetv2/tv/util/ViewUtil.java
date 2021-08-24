@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.util;
 
+import android.os.Build.VERSION;
+import android.text.BidiFormatter;
 import android.text.Layout;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
@@ -63,6 +65,13 @@ public class ViewUtil {
     public static void enableMarquee(TextView... textViews) {
         if (textViews == null || textViews.length == 0) {
             return;
+        }
+
+        if (VERSION.SDK_INT > 17) {
+            if (BidiFormatter.getInstance().isRtlContext()) {
+                // TODO: fix marquee on rtl languages
+                return;
+            }
         }
 
         for (TextView textView : textViews) {

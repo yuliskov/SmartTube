@@ -9,6 +9,7 @@ import android.util.DisplayMetrics;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.app.BackgroundManager;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -117,6 +118,8 @@ public class UriBackgroundManager {
         Glide.with(mActivity)
                 .asBitmap()
                 .load(uri)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
                 .apply(options)
                 .into(new SimpleTarget<Bitmap>(width, height) {
                     @Override

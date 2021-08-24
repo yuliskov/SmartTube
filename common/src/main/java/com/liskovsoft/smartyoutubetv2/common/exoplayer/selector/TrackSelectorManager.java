@@ -24,6 +24,8 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil.CODEC_SHORT_AV1;
+import static com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil.CODEC_SHORT_VP9;
 import static com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil.extractCodec;
 
 public class TrackSelectorManager implements TrackSelectorCallback {
@@ -446,14 +448,14 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         invalidate();
     }
 
-    private MediaTrack findBestMatch(MediaTrack track) {
-        Log.d(TAG, "findBestMatch: Starting: " + track.format);
+    private MediaTrack findBestMatch(MediaTrack originTrack) {
+        Log.d(TAG, "findBestMatch: Starting: " + originTrack.format);
 
-        Renderer renderer = mRenderers[track.rendererIndex];
+        Renderer renderer = mRenderers[originTrack.rendererIndex];
 
-        MediaTrack result = createAutoSelection(track.rendererIndex);
+        MediaTrack result = createAutoSelection(originTrack.rendererIndex);
 
-        if (track.format != null) { // not auto selection
+        if (originTrack.format != null) { // not auto selection
             MediaTrack prevResult;
 
             for (int groupIndex = 0; groupIndex < renderer.mediaTracks.length; groupIndex++) {
@@ -471,27 +473,57 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                     if (mediaTrack == null) {
                         continue;
                     }
+                    final boolean isVerticalVideo = 1.0 * mediaTrack.format.width / mediaTrack.format.height <= 1.0;
+                    if (isVerticalVideo && mediaTrack.format.codecs != null && mediaTrack.format.codecs.startsWith(CODEC_SHORT_VP9)) {
+                        continue;
+                    }
+                    final boolean isProperlyAspect = Math.abs(
+                            (1.0 * mediaTrack.format.width  / mediaTrack.format.height) - 16 / 9.0) < 0.1;
+                    if (!isProperlyAspect && mediaTrack.format.width > 1920) {
+                        continue;
+                    }
                     if (mediaTrack.format.width > MAX_VIDEO_WIDTH) {
                         continue;
                     }
                     if (TrackSelectorUtil.isHdrCodec(mediaTrack.format.codecs)) {
                         continue;
                     }
+                    if (mediaTrack.format.codecs != null
+                            && mediaTrack.format.codecs.startsWith(CODEC_SHORT_AV1)) {
+                        continue;
+                    }
 
-                    int compare = track.inBounds(mediaTrack);
+                    int compare = originTrack.inBounds(mediaTrack);
 
                     if (compare == 0) {
-                        Log.d(TAG, "findBestMatch: Found exact match in this track list: " + mediaTrack.format);
-                        result = mediaTrack;
-                        break;
+                        Log.d(TAG, "findBestMatch: Found exact match by size and fps in list: " + mediaTrack.format);
+
+                        // Get ready for group with multiple codecs: avc, av01
+                        if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
+                            result = mediaTrack;
+                            break;
+                        } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
+                            result = mediaTrack;
+                        }
                     } else if (compare > 0 && mediaTrack.compare(result) >= 0) { // select track with higher possible quality
-                        result = mediaTrack;
+                        // Get ready for group with multiple codecs: avc, av01
+                        // Also handle situations where avc and av01 only (no vp9). E.g.: B4mIhE_15nc
+                        if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
+                            result = mediaTrack;
+                        } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
+                            result = mediaTrack;
+                        }
                     }
                 }
 
+                // Don't let change the codec beside needed one.
+                if (MediaTrack.codecEquals(result, originTrack)) {
+                    break;
+                }
+
+                // Formats are the same except the codecs
                 if (prevResult.compare(result) == 0) {
-                    // Prefer the same codec if quality match
-                    if (prevResult.format != null && MediaTrack.codecEquals(prevResult.format.codecs, track.format.codecs)) {
+                    if (MediaTrack.preferByCodec(prevResult, result)) {
                         result = prevResult;
                     }
                 }
@@ -620,8 +652,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 return format1.language.compareTo(format2.language);
             }
 
-            int leftVal = format2.width + (int) format2.frameRate + (format2.codecs != null && format2.codecs.contains("avc") ? 31 : 0);
-            int rightVal = format1.width + (int) format1.frameRate + (format1.codecs != null && format1.codecs.contains("avc") ? 31 : 0);
+            int leftVal = format2.width + (int) format2.frameRate + MediaTrack.getCodecWeight(format2.codecs);
+            int rightVal = format1.width + (int) format1.frameRate + MediaTrack.getCodecWeight(format1.codecs);
 
             int delta = leftVal - rightVal;
             if (delta == 0) {

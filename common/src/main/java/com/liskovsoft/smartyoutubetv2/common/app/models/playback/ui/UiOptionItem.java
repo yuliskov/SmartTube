@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui;
 
+import static com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil.CODEC_SHORT_AV1;
+
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
@@ -34,6 +36,15 @@ public class UiOptionItem implements OptionItem {
         List<OptionItem> options = new ArrayList<>();
 
         for (FormatItem format : formats) {
+            final boolean isVerticalVideo = 1.0 * format.getWidth() / format.getHeight() <= 1.0;
+            if (isVerticalVideo && format.getTitle() != null && ((String) format.getTitle()).contains("vp9")) {
+                continue;
+            }
+            final boolean isProperlyAspect = Math.abs(
+                    (1.0 * format.getWidth()  / format.getHeight()) - 16 / 9.0) < 0.1;
+            if (!isProperlyAspect && format.getWidth() > 1920) {
+                continue;
+            }
             if (format.getWidth() > MAX_VIDEO_WIDTH) {
                 continue;
             }
@@ -43,6 +54,9 @@ public class UiOptionItem implements OptionItem {
                 continue;
             }
             if (format.getTitle() != null && ((String) format.getTitle()).contains("HDR")) {
+                continue;
+            }
+            if (format.getTitle() != null && ((String) format.getTitle()).contains(CODEC_SHORT_AV1)) {
                 continue;
             }
             options.add(from(format, callback, defaultTitle));

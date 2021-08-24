@@ -436,7 +436,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
                 case STATE_ORIGINAL:
                     mOriginalMode = mode;
 
-                    AppPrefs.instance(mContext).setDefaultDisplayMode(UhdHelper.formatMode(mode));
+                    AppPrefs.instance(mContext).setBootResolution(UhdHelper.toResolution(mode));
                     break;
             }
         }
@@ -504,7 +504,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
 
         if (mNewMode != null) {
             mOriginalMode = mNewMode;
-            AppPrefs.instance(mContext).setDefaultDisplayMode(UhdHelper.formatMode(mOriginalMode));
+            AppPrefs.instance(mContext).setBootResolution(UhdHelper.toResolution(mOriginalMode));
         }
     }
 

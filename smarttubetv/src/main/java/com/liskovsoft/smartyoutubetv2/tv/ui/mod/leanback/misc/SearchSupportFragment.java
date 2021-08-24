@@ -793,11 +793,15 @@ public class SearchSupportFragment extends Fragment {
                 && mRowsSupportFragment != null && mRowsSupportFragment.getAdapter() == mResultAdapter) {
             focusOnResults();
         } else {
-            // Fixed moving focus to voice button when activity stated
+            // MOD: Comment to fix moving focus to voice button when activity started
             //mSearchBar.requestFocus();
         }
     }
 
+    /**
+     * Select rows container after query submit<br/>
+     * May helps with "hide kbd on back properly"
+     */
     protected void focusOnResults() {
         if (mRowsSupportFragment == null || mRowsSupportFragment.getVerticalGridView() == null
                 || mResultAdapter.size() == 0) {

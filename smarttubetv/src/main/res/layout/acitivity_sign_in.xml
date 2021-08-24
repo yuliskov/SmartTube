@@ -74,7 +74,7 @@
             android:textColor="#909090"
             android:textSize="15dp"
             android:paddingLeft="45dp"
-            android:text="3    Ввойдите в аккаунт Google">
+            android:text="3    Войдите в аккаунт Google">
         </TextView>
     </LinearLayout>
 

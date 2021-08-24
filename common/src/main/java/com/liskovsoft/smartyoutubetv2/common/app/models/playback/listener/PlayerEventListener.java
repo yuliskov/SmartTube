@@ -5,5 +5,5 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 public interface PlayerEventListener extends PlayerUiEventListener, PlayerEngineEventListener, ViewEventListener {
     void openVideo(Video item);
     void onInitDone();
-    void onNewSession();
+    void onFinish();
 }

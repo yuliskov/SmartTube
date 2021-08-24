@@ -47,8 +47,6 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
             return;
         }
 
-        mMainPlayerEventBridge.onNewSession();
-
         openVideo(Video.from(videoId), true);
     }
 
@@ -59,8 +57,6 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
         if (item == null) {
             return;
         }
-
-        mMainPlayerEventBridge.onNewSession();
 
         openVideo(item, true);
     }
