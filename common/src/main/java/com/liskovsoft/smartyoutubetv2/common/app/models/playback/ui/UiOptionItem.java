@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui;
 import android.os.Build;
 
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,8 @@ public class UiOptionItem implements OptionItem {
 
         for (FormatItem format : formats) {
             final boolean isVerticalVideo = 1.0 * format.getWidth() / format.getHeight() <= 1.0;
-            if (isVerticalVideo && format.getTitle() != null && ((String) format.getTitle()).contains("vp9")) {
+            if (isVerticalVideo && format.getTitle() != null
+                    && ((String) format.getTitle()).contains(TrackSelectorUtil.CODEC_SHORT_VP9)) {
                 continue;
             }
             final boolean isProperlyAspect = Math.abs(
@@ -46,13 +48,14 @@ public class UiOptionItem implements OptionItem {
             }
             if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT
                     && format.getTitle() != null
-                    && ((String) format.getTitle()).contains("vp9")) {
+                    && ((String) format.getTitle()).contains(TrackSelectorUtil.CODEC_SHORT_VP9)) {
                 continue;
             }
             if (format.getTitle() != null && ((String) format.getTitle()).contains("HDR")) {
                 continue;
             }
-            if (format.getTitle() != null && ((String) format.getTitle()).contains("av01")) {
+            if (format.getTitle() != null
+                    && ((String) format.getTitle()).contains(TrackSelectorUtil.CODEC_SHORT_AV1)) {
                 continue;
             }
             options.add(from(format, callback, defaultTitle));
