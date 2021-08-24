@@ -7,7 +7,6 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -380,10 +379,10 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
         disposeActions();
 
-        if (item.isVideo()) {
+        if (item.hasVideo()) {
             getController().showControls(true);
             getBridge().openVideo(item);
-        } else if (item.isChannel()) {
+        } else if (item.hasChannel()) {
             ChannelPresenter.instance(getActivity()).openChannel(item);
         } else {
             Log.e(TAG, "Video item doesn't contain needed data!");

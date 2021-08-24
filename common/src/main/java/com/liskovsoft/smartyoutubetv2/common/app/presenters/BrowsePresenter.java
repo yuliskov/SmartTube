@@ -278,9 +278,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             }
         } else if (item.isPlaylistSection()) {
             ChannelUploadsPresenter.instance(getContext()).openChannel(item);
-        } else if (item.isVideo()) {
+        } else if (item.hasVideo()) {
             mPlaybackPresenter.openVideo(item);
-        } else if (item.isChannel()) {
+        } else if (item.hasChannel()) {
             ChannelPresenter.instance(getContext()).openChannel(item);
         }
 
@@ -295,11 +295,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
         if (item.isChannelUploadsSection()) {
             ChannelUploadsMenuPresenter.instance(getContext()).showMenu(item);
-        } else if (item.isVideo()) {
+        } else if (item.hasVideo()) {
             item.isSubscribed = mCurrentCategoryId == MediaGroup.TYPE_SUBSCRIPTIONS;
             Category category = getCategory(mCurrentCategoryId);
             VideoMenuPresenter.instance(getContext()).showVideoMenu(item, category != null ? category.getData() : null);
-        } else if (item.isChannel()) {
+        } else if (item.hasChannel()) {
             VideoMenuPresenter.instance(getContext()).showChannelMenu(item);
         } else if (item.isPlaylistSection()) {
             VideoMenuPresenter.instance(getContext()).showPlaylistMenu(item);

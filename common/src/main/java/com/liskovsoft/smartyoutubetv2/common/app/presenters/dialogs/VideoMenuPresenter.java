@@ -222,7 +222,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        if (mVideo == null || !mVideo.isPlaylist()) {
+        if (mVideo == null || !mVideo.hasPlaylist()) {
             return;
         }
 

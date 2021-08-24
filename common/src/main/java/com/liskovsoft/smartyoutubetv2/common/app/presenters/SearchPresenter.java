@@ -73,9 +73,9 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
             return;
         }
 
-        if (item.isVideo()) {
+        if (item.hasVideo()) {
             mPlaybackPresenter.openVideo(item);
-        } else if (item.isChannel()) {
+        } else if (item.hasChannel()) {
             ChannelPresenter.instance(getContext()).openChannel(item);
         }
     }
@@ -86,9 +86,9 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
             return;
         }
 
-        if (item.isVideo()) {
+        if (item.hasVideo()) {
             VideoMenuPresenter.instance(getContext()).showVideoMenu(item);
-        } else if (item.isChannel()) {
+        } else if (item.hasChannel()) {
             VideoMenuPresenter.instance(getContext()).showChannelMenu(item);
         }
     }

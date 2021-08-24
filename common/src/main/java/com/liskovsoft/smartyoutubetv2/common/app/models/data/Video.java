@@ -249,24 +249,24 @@ public final class Video implements Parcelable {
     //    return s;
     //}
 
-    public boolean isVideo() {
+    public boolean hasVideo() {
         return videoId != null;
     }
 
-    public boolean isChannel() {
-        return videoId == null && channelId != null;
+    public boolean hasChannel() {
+        return channelId != null;
     }
 
-    public boolean isPlaylist() {
-        return mediaItem != null && mediaItem.getType() == MediaItem.TYPE_PLAYLIST;
-    }
-
-    public boolean isPlaylistItem() {
-        return playlistIndex > 0;
+    public boolean hasPlaylist() {
+        return playlistId != null;
     }
 
     public boolean hasUploads() {
         return mediaItem != null && mediaItem.hasUploads();
+    }
+
+    public boolean isPlaylistItem() {
+        return playlistIndex > 0;
     }
 
     public boolean isChannelUploadsSection() {

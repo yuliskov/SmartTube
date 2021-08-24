@@ -69,18 +69,18 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
     @Override
     public void onVideoItemClicked(Video item) {
-        if (item.isVideo()) {
+        if (item.hasVideo()) {
             mPlaybackPresenter.openVideo(item);
-        } else if (item.isChannel()) {
+        } else if (item.hasChannel()) {
             openChannel(item);
         }
     }
 
     @Override
     public void onVideoItemLongClicked(Video item) {
-        if (item.isVideo()) {
+        if (item.hasVideo()) {
             VideoMenuPresenter.instance(getContext()).showVideoMenu(item);
-        } else if (item.isChannel()) {
+        } else if (item.hasChannel()) {
             VideoMenuPresenter.instance(getContext()).showChannelMenu(item);
         }
     }

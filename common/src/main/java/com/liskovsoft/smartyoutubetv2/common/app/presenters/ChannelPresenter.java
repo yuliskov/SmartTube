@@ -69,9 +69,9 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
     @Override
     public void onVideoItemClicked(Video item) {
-        if (item.isVideo()) {
+        if (item.hasVideo()) {
             mPlaybackPresenter.openVideo(item);
-        } else if (item.isChannel()) {
+        } else if (item.hasChannel()) {
             openChannel(item);
         }
     }
