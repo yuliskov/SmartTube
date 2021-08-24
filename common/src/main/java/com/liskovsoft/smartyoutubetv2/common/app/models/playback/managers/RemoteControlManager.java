@@ -32,6 +32,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     private Disposable mPostVolumeAction;
     private Video mVideo;
     private boolean mConnected;
+    private int mIsGlobalVolumeWorking = -1;
 
     public RemoteControlManager(Context context, SuggestionsLoader suggestionsLoader, VideoLoader videoLoader) {
         MediaService mediaService = YouTubeMediaService.instance();
@@ -300,7 +301,8 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 }
                 break;
             case Command.TYPE_VOLUME:
-                Utils.setGlobalVolume(getActivity(), command.getVolume());
+                //Utils.setGlobalVolume(getActivity(), command.getVolume());
+                setVolume(command.getVolume());
                 break;
             case Command.TYPE_STOP:
                 if (getController() != null) {
@@ -323,12 +325,14 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 break;
         }
 
-        postVolumeChange(Utils.getGlobalVolume(getActivity()));
+        //postVolumeChange(Utils.getGlobalVolume(getActivity()));
+        postVolumeChange(getVolume());
     }
 
     @Override
     public boolean onKeyDown(int keyCode) {
-        postVolumeChange(Utils.getGlobalVolume(getActivity()));
+        //postVolumeChange(Utils.getGlobalVolume(getActivity()));
+        postVolumeChange(getVolume());
 
         return false;
     }
@@ -341,6 +345,26 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         } else if (newVideo != null) {
             newVideo.isRemote = true;
             PlaybackPresenter.instance(getActivity()).openVideo(newVideo);
+        }
+    }
+
+    /**
+     * Volume: 0 - 100
+     */
+    private int getVolume() {
+        if (getActivity() != null) {
+            return Utils.getGlobalVolume(getActivity());
+        }
+
+        return 100;
+    }
+
+    /**
+     * Volume: 0 - 100
+     */
+    private void setVolume(int volume) {
+        if (getActivity() != null) {
+            Utils.setGlobalVolume(getActivity(), volume);
         }
     }
 }

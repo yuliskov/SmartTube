@@ -38,7 +38,7 @@
     <string name="video_buffer_size_high">Korkea</string>
     <string name="update_changelog">Muutokset</string>
     <string name="install_update">Asenna päivitykset</string>
-    <string name="msg_category_is_empty">Oops! Täällä ei ole mitään.</string>
+    <string name="section_is_empty">Oops! Täällä ei ole mitään.</string>
     <string name="dialog_add_to_playlist">Lisää/Poista soittolistasta</string>
     <string name="msg_signed_users_only">Vain kirjautuneille</string>
     <string name="msg_cant_load_content">Oops. Sisältöä ei voida ladata.</string>
@@ -79,7 +79,7 @@
     <string name="update_not_found">Sinulla on uusin versio käytössä.</string>
     <string name="update_in_progess">Odota…</string>
     <string name="player_ui_hide_behavior">Piilota valikko automaattisesti</string>
-    <string name="player_ui_hide_never">Ei koskaan</string>
+    <string name="option_never">Ei koskaan</string>
     <string name="side_panel_sections">Järjestä valikot</string>
     <string name="boot_to_section">Käynnistä valikkoon</string>
     <string name="large_ui">Suuri valikko</string>
@@ -117,7 +117,7 @@
     <string name="subtitle_black_bg">Tumma tausta</string>
     <string name="player_seek_preview">Esikatselu</string>
     <string name="color_scheme_dark_grey_oled">Tumman harmaa (OLED)</string>
-    <string name="channels_category_sorting">Kanavien lajittelu</string>
+    <string name="channels_section_sorting">Kanavien lajittelu</string>
     <string name="sorting_by_new_content">Uusi sisältö</string>
     <string name="sorting_alphabetically">Aakkosittain</string>
     <string name="sorting_last_viewed">Viimeksi katsotut</string>

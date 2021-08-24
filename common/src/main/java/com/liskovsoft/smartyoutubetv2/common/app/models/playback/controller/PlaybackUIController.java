@@ -19,7 +19,7 @@ public interface PlaybackUIController {
     void setDislikeButtonState(boolean dislike);
     void setSubscribeButtonState(boolean subscribe);
     void setDebugButtonState(boolean show);
-    void showDebugView(boolean show);
+    void showDebugInfo(boolean show);
     List<SubtitleStyle> getSubtitleStyles();
     void setSubtitleStyle(SubtitleStyle subtitleStyle);
     SubtitleStyle getSubtitleStyle();

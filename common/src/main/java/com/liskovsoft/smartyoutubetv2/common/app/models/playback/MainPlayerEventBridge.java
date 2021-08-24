@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import androidx.fragment.app.Fragment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerUiEventListener;
@@ -43,12 +42,12 @@ public class MainPlayerEventBridge implements PlayerEventListener {
             mActivity = new WeakReference<>((Activity) context);
         }
 
-        PlayerUIManager uiManager = new PlayerUIManager();
         SuggestionsLoader suggestionsLoader = new SuggestionsLoader();
+        VideoLoader videoLoader = new VideoLoader(suggestionsLoader);
+        PlayerUIManager uiManager = new PlayerUIManager(videoLoader);
         StateUpdater stateUpdater = new StateUpdater();
         ContentBlockManager contentBlockManager = new ContentBlockManager();
 
-        VideoLoader videoLoader = new VideoLoader(suggestionsLoader);
         RemoteControlManager commandManager = new RemoteControlManager(context, suggestionsLoader, videoLoader);
         HQDialogManager hqDialogManager = new HQDialogManager(stateUpdater);
         AutoFrameRateManager autoFrameRateManager = new AutoFrameRateManager(hqDialogManager, stateUpdater);
@@ -320,8 +319,8 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
-    public void onVideoStatsClicked(boolean enabled) {
-        process(listener -> listener.onVideoStatsClicked(enabled));
+    public void onDebugInfoClicked(boolean enabled) {
+        process(listener -> listener.onDebugInfoClicked(enabled));
     }
 
     @Override
@@ -342,6 +341,16 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     @Override
     public void onPipClicked() {
         process(PlayerUiEventListener::onPipClicked);
+    }
+
+    @Override
+    public void onScreenOffClicked() {
+        process(PlayerUiEventListener::onScreenOffClicked);
+    }
+
+    @Override
+    public void onPlaybackQueueClicked() {
+        process(PlayerUiEventListener::onPlaybackQueueClicked);
     }
 
     // End UI events

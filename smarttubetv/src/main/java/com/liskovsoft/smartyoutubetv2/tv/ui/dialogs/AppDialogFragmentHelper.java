@@ -8,7 +8,7 @@ import androidx.preference.Preference;
 import androidx.preference.SwitchPreference;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter.SettingsCategory;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter.SettingsCategory;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreference;
 

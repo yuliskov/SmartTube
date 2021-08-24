@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer.other;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Point;
-import android.os.Build;
 import android.os.Build.VERSION;
 import android.util.TypedValue;
 import android.view.Display;
@@ -32,6 +31,7 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolde
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.UhdHelper;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +55,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
     private final ViewGroup mDebugViewGroup;
     private final Activity mContext;
 
-    private boolean started;
+    private boolean mStarted;
     private LinearLayout column1;
     private LinearLayout column2;
     private UhdHelper mUhdHelper;
@@ -94,16 +94,20 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         }
     }
 
+    public boolean isShown() {
+        return mStarted;
+    }
+
     /**
      * Starts periodic updates of the {@link TextView}. Must be called from the application's main
      * thread.
      */
     private void create() {
-        if (started) {
+        if (mStarted) {
             return;
         }
 
-        started = true;
+        mStarted = true;
         mDebugViewGroup.setVisibility(View.VISIBLE);
         mUhdHelper = new UhdHelper(mContext);
         mPlayer.addListener(this);
@@ -115,11 +119,11 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
      * thread.
      */
     private void destroy() {
-        if (!started) {
+        if (!mStarted) {
             return;
         }
 
-        started = false;
+        mStarted = false;
         mDebugViewGroup.setVisibility(View.GONE);
         mPlayer.removeListener(this);
         mDebugViewGroup.removeCallbacks(this);
@@ -241,26 +245,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         //mVideoInfo.add(new Pair<>("Aspect Ratio", par));
         String videoCodecName = getVideoDecoderNameV2();
         mVideoInfo.add(new Pair<>("Video Decoder Name", videoCodecName));
-        mVideoInfo.add(new Pair<>("Hardware Accelerated", String.valueOf(isHardwareAccelerated(videoCodecName))));
-    }
-
-    /**
-     * <a href="https://github.com/google/ExoPlayer/issues/4757">More info</a>
-     * @param videoCodecName name from CodecInfo
-     * @return is accelerated
-     */
-    private boolean isHardwareAccelerated(String videoCodecName) {
-        if (videoCodecName == null) {
-            return false;
-        }
-
-        for (String name : new String[]{"omx.google.", "c2.android."}) {
-            if (videoCodecName.toLowerCase().startsWith(name)) {
-                return false;
-            }
-        }
-
-        return true;
+        mVideoInfo.add(new Pair<>("Hardware Accelerated", String.valueOf(Helpers.isHardwareAccelerated(videoCodecName))));
     }
 
     private void appendRuntimeInfo() {
@@ -314,7 +299,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
             String currentResolution = UhdHelper.toResolution(currentMode);
             currentResolution = currentResolution != null ? currentResolution : bootResolution;
 
-            mDisplayModeId.add(new Pair<>("Display Resolution", currentResolution));
+            mDisplayModeId.add(new Pair<>("Current Resolution", currentResolution));
             mDisplayModeId.add(new Pair<>("Boot Resolution", bootResolution != null ? bootResolution : NOT_AVAILABLE));
 
             mDisplayModeId.add(new Pair<>("Display Mode ID", String.valueOf(currentMode.getModeId())));

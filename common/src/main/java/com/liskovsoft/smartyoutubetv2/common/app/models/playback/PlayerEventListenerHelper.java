@@ -210,7 +210,7 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
-    public void onVideoStatsClicked(boolean enabled) {
+    public void onDebugInfoClicked(boolean enabled) {
         // NOP
     }
 
@@ -231,6 +231,16 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
 
     @Override
     public void onPipClicked() {
+        // NOP
+    }
+
+    @Override
+    public void onScreenOffClicked() {
+        // NOP
+    }
+
+    @Override
+    public void onPlaybackQueueClicked() {
         // NOP
     }
 }

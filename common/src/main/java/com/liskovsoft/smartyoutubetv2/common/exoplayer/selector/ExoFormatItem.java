@@ -213,7 +213,7 @@ public class ExoFormatItem implements FormatItem {
     /**
      * "2560,1440,30,vp9"
      */
-    public static ExoFormatItem fromVideoPreset(String spec) {
+    public static ExoFormatItem fromVideoSpec(String spec, boolean isPreset) {
         if (spec == null) {
             return null;
         }
@@ -229,10 +229,10 @@ public class ExoFormatItem implements FormatItem {
         float frameRate = Helpers.parseFloat(split[2]);
         String codec = split[3];
 
-        return from(TYPE_VIDEO, TrackSelectorManager.RENDERER_INDEX_VIDEO, null, codec, width, height, frameRate,null,true);
+        return from(TYPE_VIDEO, TrackSelectorManager.RENDERER_INDEX_VIDEO, null, codec, width, height, frameRate,null,isPreset);
     }
 
-    public static FormatItem fromVideoData(int resolution, int format, int frameRate) {
+    public static FormatItem fromVideoParams(int resolution, int format, int frameRate) {
         ExoFormatItem formatItem = new ExoFormatItem();
         MediaTrack mediaTrack = MediaTrack.forRendererIndex(TrackSelectorManager.RENDERER_INDEX_VIDEO);
         formatItem.mTrack = mediaTrack;
@@ -306,7 +306,7 @@ public class ExoFormatItem implements FormatItem {
         return formatItem;
     }
 
-    public static FormatItem fromSubtitleData(String langCode) {
+    public static FormatItem fromSubtitleParams(String langCode) {
         if (langCode != null) {
             // Only first part or lang code is accepted.
             // E.g.: en, ru...

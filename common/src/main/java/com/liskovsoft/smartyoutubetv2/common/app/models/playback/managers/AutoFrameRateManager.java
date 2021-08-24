@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
-import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -11,7 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventList
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.AutoFrameRateHelper;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
@@ -19,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolde
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncHelper.AutoFrameRateListener;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.UhdHelper;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,11 +34,13 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     private final Runnable mApplyAfr = this::applyAfr;
     private final Handler mHandler;
     private PlayerData mPlayerData;
+    private boolean mIsPlay;
     private final Runnable mPlaybackResumeHandler = () -> {
         if (mStateUpdater != null) {
             mStateUpdater.blockPlay(false);
         }
-        getController().setPlay(true);
+        getController().setPlay(mIsPlay);
+        getController().setAfrRunning(false);
     };
 
     public AutoFrameRateManager(HQDialogManager uiManager, StateUpdater stateUpdater) {
@@ -67,7 +69,9 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
     @Override
     public void onVideoLoaded(Video item) {
-        applyAfr();
+        // Sometimes AFR is not working on activity startup. Trying to fix with delay.
+        applyAfrDelayed();
+        //applyAfr();
     }
 
     @Override
@@ -80,15 +84,16 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
                 newMode.getRefreshRate());
         Log.d(TAG, message);
         //MessageHelpers.showLongMessage(getActivity(), message);
-        pausePlayback();
+        maybePausePlayback();
     }
 
     @Override
     public void onModeError(Mode newMode) {
         String msg = getActivity().getString(R.string.msg_mode_switch_error, UhdHelper.toResolution(newMode));
         Log.e(TAG, msg);
-        MessageHelpers.showMessage(getActivity(), msg);
-        //applyAfr();
+
+        // This error could appear even on success.
+        // MessageHelpers.showMessage(getActivity(), msg);
     }
 
     private void onFpsCorrectionClick() {
@@ -101,8 +106,12 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
     private void applyAfrWrapper() {
         if (mPlayerData.isAfrEnabled()) {
-            AppSettingsPresenter.instance(getActivity()).showDialogMessage("Applying AFR...", this::applyAfr, 1_000);
+            AppDialogPresenter.instance(getActivity()).showDialogMessage("Applying AFR...", this::applyAfr, 1_000);
         }
+    }
+
+    private void applyAfrDelayed() {
+        Utils.postDelayed(mHandler, mApplyAfr, 500);
     }
 
     private void applyAfr() {
@@ -127,19 +136,21 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
             Log.d(TAG, msg);
 
             mAutoFrameRateHelper.apply(getActivity(), track, force);
-            //mModeSyncManager.save(track);
         }
     }
 
-    private void pausePlayback() {
-        mHandler.removeCallbacks(mPlaybackResumeHandler);
-        mStateUpdater.blockPlay(false);
+    private void maybePausePlayback() {
+        getController().setAfrRunning(true);
+        mIsPlay = getController().getPlay();
+        mStateUpdater.blockPlay(true);
+        int delayMs = 5_000;
 
         if (mPlayerData.getAfrPauseSec() > 0) {
-            mStateUpdater.blockPlay(true);
             getController().setPlay(false);
-            mHandler.postDelayed(mPlaybackResumeHandler, mPlayerData.getAfrPauseSec() * 1_000);
+            delayMs = mPlayerData.getAfrPauseSec() * 1_000;
         }
+
+        Utils.postDelayed(mHandler, mPlaybackResumeHandler, delayMs);
     }
 
     private void addUiOptions() {
@@ -200,7 +211,8 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         List<OptionItem> options = new ArrayList<>();
 
         for (int pauseSec : new int[] {0, 1, 2, 3, 4, 5, 6, 7}) {
-            options.add(UiOptionItem.from(String.format("%s sec", pauseSec),
+            String optionTitle = pauseSec == 0 ? context.getString(R.string.option_never) : String.format("%s sec", pauseSec);
+            options.add(UiOptionItem.from(optionTitle,
                     optionItem -> {
                         playerData.setAfrPauseSec(pauseSec);
                         playerData.setAfrEnabled(true);

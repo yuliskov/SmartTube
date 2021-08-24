@@ -38,7 +38,7 @@
     <string name="video_buffer_size_high">Maximum</string>
     <string name="update_changelog">Wat is er nieuw ?</string>
     <string name="install_update">Update installeren</string>
-    <string name="msg_category_is_empty">Niets gevonden</string>
+    <string name="section_is_empty">Niets gevonden</string>
     <string name="dialog_add_to_playlist">In/uit playlist</string>
     <string name="msg_signed_users_only">Enkel voor aangemelde gebruikers</string>
     <string name="msg_cant_load_content">Kan inhoud niet laden</string>
@@ -79,7 +79,7 @@
     <string name="update_not_found">Je gebruikt reeds de nieuwste versie</string>
     <string name="update_in_progess">Even geduld</string>
     <string name="player_ui_hide_behavior">Player verbergen</string>
-    <string name="player_ui_hide_never">Nooit</string>
+    <string name="option_never">Nooit</string>
     <string name="side_panel_sections">Rubrieken</string>
     <string name="boot_to_section">Opstarten met rubriek</string>
     <string name="large_ui">Grote weergave</string>
@@ -117,7 +117,7 @@
     <string name="subtitle_black_bg">Zwarte achtergrond</string>
     <string name="player_seek_preview">Preview tijdens snel zoeken</string>
     <string name="color_scheme_dark_grey_oled">Donker (OLED)</string>
-    <string name="channels_category_sorting">Kanalen sorteren</string>
+    <string name="channels_section_sorting">Kanalen sorteren</string>
     <string name="sorting_by_new_content">Nieuwe video\'s</string>
     <string name="sorting_alphabetically">Alfabetisch</string>
     <string name="sorting_last_viewed">Laatst bekeken</string>

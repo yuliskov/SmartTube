@@ -14,8 +14,8 @@ android {
     defaultConfig {
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 1
-        versionName "0.1"
+        versionCode 10
+        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -34,6 +34,7 @@ android {
 
     productFlavors {
         stbeta {}
+        ststable {}
         storig {}
         strtarmenia {}
         stbolshoetv {}
@@ -79,10 +80,12 @@ dependencies {
 
     implementation 'androidx.browser:browser:' + browserXVersion
 
-    storigImplementation project(path: ':leanbackassistant')
-    storigImplementation project(path: ':appupdatechecker2')
     stbetaImplementation project(path: ':leanbackassistant')
     stbetaImplementation project(path: ':appupdatechecker2')
+    ststableImplementation project(path: ':leanbackassistant')
+    ststableImplementation project(path: ':appupdatechecker2')
+    storigImplementation project(path: ':leanbackassistant')
+    storigImplementation project(path: ':appupdatechecker2')
     strtarmeniaImplementation project(path: ':appupdatechecker2')
     stredboxtvImplementation project(path: ':appupdatechecker2')
     stsibsetruImplementation project(path: ':appupdatechecker2')

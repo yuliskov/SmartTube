@@ -4,7 +4,7 @@ import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 
@@ -24,7 +24,7 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
     }
 
     public void show() {
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
         settingsPresenter.clear();
         
         appendMiscCategory(settingsPresenter);
@@ -32,7 +32,7 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_search));
     }
 
-    private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(getContext().getString(R.string.instant_voice_search),

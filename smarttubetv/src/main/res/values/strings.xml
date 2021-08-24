@@ -133,6 +133,8 @@
     <string name="badge_new_content">NEW CONTENT</string>
     <string name="badge_live">LIVE</string>
     <string name="action_pip">Start PIP</string>
+    <string name="action_screen_off">Screen off</string>
+    <string name="action_playback_queue">Show playback queue</string>
     <string name="add_device_view_description">To link the device enter this code on your phone\'s YouTube app in section Settings/Watch on TV</string>
     <string name="playback_controls_repeat_pause">Repeat Pause</string>
     <string name="playback_controls_repeat_list">Repeat List</string>

@@ -92,7 +92,8 @@ public class VideoTrack extends MediaTrack {
 
         String id1 = format.id;
         String id2 = track2.format.id;
-        float frameRate1 = format.frameRate;
+        // Low fps (e.g. 8fps) on original track could break whole comparison
+        float frameRate1 = format.frameRate < 10 ? 30 : format.frameRate;
         float frameRate2 = track2.format.frameRate;
         String codecs1 = format.codecs;
         String codecs2 = track2.format.codecs;

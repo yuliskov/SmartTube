@@ -19,6 +19,7 @@
     <string name="title_video_formats">Formats vidéo</string>
     <string name="title_audio_formats">Formats audio</string>
     <string name="subtitle_category_title">Sous-titres</string>
+    <string name="playback_queue_category_title">File d\'attente pour la lecture</string>
     <string name="video_max_quality">Auto (qualité maximale)</string>
     <string name="audio_max_quality">Auto (qualité maximale)</string>
     <string name="subtitles_disabled">Désactivé</string>
@@ -38,7 +39,7 @@
     <string name="video_buffer_size_high">Haut</string>
     <string name="update_changelog">Journal des modifications</string>
     <string name="install_update">Installer la mise à jour</string>
-    <string name="msg_category_is_empty">Oups! Il n\'y a rien ici.</string>
+    <string name="section_is_empty">Oups! Il n\'y a rien ici.</string>
     <string name="dialog_add_to_playlist">Ajouter à la bibliothèque</string>
     <string name="msg_signed_users_only">Utilisateurs enregistrés uniquement</string>
     <string name="msg_cant_load_content">Oups. Impossible de charger le contenu.</string>
@@ -79,7 +80,7 @@
     <string name="update_not_found">Vous utilisez la dernière version</string>
     <string name="update_in_progess">Attendre…</string>
     <string name="player_ui_hide_behavior">Interface utilisateur de saisie automatique</string>
-    <string name="player_ui_hide_never">Jamais</string>
+    <string name="option_never">Jamais</string>
     <string name="side_panel_sections">Organisation de sections</string>
     <string name="boot_to_section">Démarrer à la section</string>
     <string name="large_ui">Grande interface utilisateur</string>
@@ -97,6 +98,7 @@
     <string name="player_other">Divers</string>
     <string name="player_full_date">Date précise dans la description</string>
     <string name="open_channel">Ouvrir la chaîne</string>
+    <string name="open_playlist">Ouvrir la playlist</string>
     <string name="not_interested">Pas intéressé</string>
     <string name="you_wont_see_this_video">La vidéo a été supprimée de la recommandation</string>
     <string name="settings_search">Recherche</string>
@@ -117,7 +119,7 @@
     <string name="subtitle_black_bg">Fond noir</string>
     <string name="player_seek_preview">Aperçu pendant la recherche</string>
     <string name="color_scheme_dark_grey_oled">Sombre (OLED)</string>
-    <string name="channels_category_sorting">Classement des sections de chaînes</string>
+    <string name="channels_section_sorting">Classement des sections de chaînes</string>
     <string name="sorting_by_new_content">Nouveau contenu</string>
     <string name="sorting_alphabetically">Alphabétiquement</string>
     <string name="sorting_last_viewed">Populaire en premier</string>
@@ -212,10 +214,19 @@
     <string name="channels_auto_load">Chargement automatique du contenu de la section Chaînes</string>
     <string name="return_to_background_video">Retour à la vidéo en arrière-plan</string>
     <string name="pin_to_sidebar">Épingler à la barre latérale</string>
+    <string name="pin_unpin_from_sidebar">Épingler/Dépingler à partir de la barre latérale</string>
     <string name="unpin_from_sidebar">Déplacer de la barre latérale</string>
     <string name="dialog_select_country">Pays</string>
     <string name="settings_language_country">Langue/Pays</string>
     <string name="share_embed_link">Partager le lien intégré</string>
     <string name="card_text_scroll_factor">Vitesse de défilement du texte des tuiles</string>
     <string name="preferred_update_source">Source de mise à jour</string>
+    <string name="hide_shorts">Masquer les passages de demande d\'Abonnements</string>
+    <string name="key_remapping">Remplacement des touches</string>
+    <string name="screen_diming">Gradation de l\'écran</string>
+    <string name="removed_from_playback_queue">Suppression de la file d\'attente de lecture</string>
+    <string name="added_to_playback_queue">Ajouté à la file d\'attente de lecture</string>
+    <string name="add_remove_from_playback_queue">Ajouter/Supprimer de la file d\'attente de lecture</string>
+    <string name="proxy_enabled">Proxy activé</string>
+    <string name="proxy_disabled">Proxy désactivé</string>
 </resources>

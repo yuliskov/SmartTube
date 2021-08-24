@@ -10,7 +10,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
@@ -66,7 +66,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void createAndShowDialog(List<Account> accounts) {
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
         settingsPresenter.clear();
 
         appendSelectAccountOnBoot(settingsPresenter);
@@ -91,7 +91,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         });
     }
 
-    private void appendSelectAccountSection(List<Account> accounts, AppSettingsPresenter settingsPresenter) {
+    private void appendSelectAccountSection(List<Account> accounts, AppDialogPresenter settingsPresenter) {
         List<OptionItem> optionItems = new ArrayList<>();
 
         optionItems.add(UiOptionItem.from(
@@ -111,7 +111,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.dialog_account_list), optionItems);
     }
 
-    private void appendRemoveAccountSection(List<Account> accounts, AppSettingsPresenter settingsPresenter) {
+    private void appendRemoveAccountSection(List<Account> accounts, AppDialogPresenter settingsPresenter) {
         List<OptionItem> optionItems = new ArrayList<>();
 
         for (Account account : accounts) {
@@ -129,12 +129,12 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.dialog_remove_account), optionItems);
     }
 
-    private void appendAddAccountButton(AppSettingsPresenter settingsPresenter) {
+    private void appendAddAccountButton(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleButton(UiOptionItem.from(
                 getContext().getString(R.string.dialog_add_account), option -> SignInPresenter.instance(getContext()).start()));
     }
 
-    private void appendSelectAccountOnBoot(AppSettingsPresenter settingsPresenter) {
+    private void appendSelectAccountOnBoot(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.select_account_on_boot), optionItem -> {
             AccountsData.instance(getContext()).selectAccountOnBoot(optionItem.isSelected());
         }, AccountsData.instance(getContext()).isSelectAccountOnBootEnabled()));

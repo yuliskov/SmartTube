@@ -38,6 +38,8 @@ public class Utils {
     private static final String TASK_ID = RemoteControlWorker.class.getSimpleName();
     private static final String TAG = Utils.class.getSimpleName();
     private static final String QR_CODE_URL_TEMPLATE = "https://api.qrserver.com/v1/create-qr-code/?data=%s";
+    private static final int GLOBAL_VOLUME_TYPE = AudioManager.STREAM_MUSIC;
+    private static final String GLOBAL_VOLUME_SERVICE = Context.AUDIO_SERVICE;
 
     /**
      * Limit the maximum size of a Map by removing oldest entries when limit reached
@@ -182,28 +184,45 @@ public class Utils {
                 );
     }
 
+    /**
+     * Volume: 0 - 100
+     */
     public static void setGlobalVolume(Context context, int volume) {
         if (context != null) {
-            AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            AudioManager audioManager = (AudioManager) context.getSystemService(GLOBAL_VOLUME_SERVICE);
             if (audioManager != null) {
-                int streamMaxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, (int) Math.ceil(streamMaxVolume / 100f * volume), 0);
+                int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE);
+                audioManager.setStreamVolume(GLOBAL_VOLUME_TYPE, (int) Math.ceil(streamMaxVolume / 100f * volume), 0);
             }
         }
     }
 
+    /**
+     * Volume: 0 - 100
+     */
     public static int getGlobalVolume(Context context) {
         if (context != null) {
-            AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            AudioManager audioManager = (AudioManager) context.getSystemService(GLOBAL_VOLUME_SERVICE);
             if (audioManager != null) {
-                int streamMaxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-                int streamVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                int streamMaxVolume = audioManager.getStreamMaxVolume(GLOBAL_VOLUME_TYPE);
+                int streamVolume = audioManager.getStreamVolume(GLOBAL_VOLUME_TYPE);
 
                 return (int) Math.ceil(streamVolume / (streamMaxVolume / 100f));
             }
         }
 
         return 100;
+    }
+
+    public static boolean isGlobalVolumeEnabled(Context context) {
+        if (context != null) {
+            AudioManager audioManager = (AudioManager) context.getSystemService(GLOBAL_VOLUME_SERVICE);
+            if (audioManager != null) {
+                return audioManager.isVolumeFixed();
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -222,11 +241,18 @@ public class Utils {
         }
     }
 
+    /**
+     * Need to be the first line and executed on earliest stage once.<br/>
+     * Inits media service language and context.<br/>
+     * NOTE: this command should run before using any of the media service api.
+     */
     public static void initGlobalData(Context context) {
         Log.d(TAG, "initGlobalData called...");
 
-        // Auth token storage init
+        // 1) Auth token storage init
+        // 2) Media service language setup (I assume that context has proper language)
         GlobalPreferences.instance(context);
+
         // 1) Remove downloaded apks
         // 2) Setup language
         ViewManager.instance(context).clearCaches();

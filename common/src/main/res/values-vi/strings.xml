@@ -38,7 +38,7 @@
     <string name="video_buffer_size_high">Cao</string>
     <string name="update_changelog">Nhật ký thay đổi</string>
     <string name="install_update">Cài đặt bản cập nhật</string>
-    <string name="msg_category_is_empty">Xin lỗi! Không có gì ở đây.</string>
+    <string name="section_is_empty">Xin lỗi! Không có gì ở đây.</string>
     <string name="dialog_add_to_playlist">Thêm vào danh sách phát</string>
     <string name="msg_signed_users_only">Chỉ người dùng đã đăng nhập</string>
     <string name="msg_cant_load_content">Xin lỗi. Không thể tải nội dung.</string>
@@ -79,7 +79,7 @@
     <string name="update_not_found">Phiên bản hiện tại là mới nhất</string>
     <string name="update_in_progess">Xin hãy đợi…</string>
     <string name="player_ui_hide_behavior">Tự động ẩn giao diện</string>
-    <string name="player_ui_hide_never">Không bao giờ</string>
+    <string name="option_never">Không bao giờ</string>
     <string name="side_panel_sections">Cài đặt bảng điều khiển cạnh</string>
     <string name="boot_to_section">Mặc định khi khởi động</string>
     <string name="large_ui">Giao diên lớn</string>
@@ -117,7 +117,7 @@
     <string name="subtitle_black_bg">Nền đen</string>
     <string name="player_seek_preview">Xem trước trong khi tua</string>
     <string name="color_scheme_dark_grey_oled">Màu xám đen (OLED)</string>
-    <string name="channels_category_sorting">Phân loại thành phần kênh</string>
+    <string name="channels_section_sorting">Phân loại thành phần kênh</string>
     <string name="sorting_by_new_content">Nội dung mới</string>
     <string name="sorting_alphabetically">Theo bảng chữ cái</string>
     <string name="sorting_last_viewed">Xem lần cuối</string>

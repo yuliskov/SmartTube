@@ -11,7 +11,6 @@ import android.view.TextureView.SurfaceTextureListener;
 import android.view.View;
 import android.view.ViewGroup;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-//import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.tmp.surface.textureview.TextureViewSurfaceHolder;
 
 public class TextureViewWrapper implements SurfaceWrapper {
     private int mState = SURFACE_NOT_CREATED;

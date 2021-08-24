@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
-
 import com.google.android.exoplayer2.text.CaptionStyleCompat;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -13,7 +12,9 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.Sub
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PlayerData {
     private static final String VIDEO_PLAYER_DATA = "video_player_data";
@@ -41,6 +42,7 @@ public class PlayerData {
     private FormatItem mSubtitleFormat;
     private int mVideoBufferType;
     private final List<SubtitleStyle> mSubtitleStyles = new ArrayList<>();
+    private final Map<String, FormatItem> mDefaultVideoFormats = new HashMap<>();
     private int mSubtitleStyleIndex;
     private int mVideoZoomMode;
     private float mVideoAspectRatio;
@@ -61,6 +63,7 @@ public class PlayerData {
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
         initSubtitleStyles();
+        initDefaultFormats();
         restoreData();
     }
 
@@ -345,11 +348,29 @@ public class PlayerData {
         return mIsSonyTimerFixEnabled;
     }
 
+    public FormatItem getDefaultAudioFormat() {
+        return FormatItem.AUDIO_HQ_MP4A;
+    }
+
+    public FormatItem getDefaultVideoFormat() {
+        FormatItem formatItem = mDefaultVideoFormats.get(Build.MODEL);
+
+        return formatItem != null ? formatItem : Helpers.isVP9Supported() ? FormatItem.VIDEO_4K_VP9_60 : FormatItem.VIDEO_HD_AVC_30;
+    }
+
     private void initSubtitleStyles() {
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_default, R.color.light_grey, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_semi_transparent_bg, R.color.light_grey, R.color.semi_grey, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_black_bg, R.color.light_grey, R.color.black, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_yellow, R.color.yellow, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
+    }
+
+    /**
+     * Overrides for auto detected values
+     */
+    private void initDefaultFormats() {
+        mDefaultVideoFormats.put("SHIELD Android TV", FormatItem.VIDEO_4K_VP9_60);
+        //mDefaultVideoFormats.put("AFTMM", FormatItem.VIDEO_4K_VP9_60);
     }
 
     private void restoreData() {

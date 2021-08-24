@@ -120,6 +120,65 @@ public class CustomOverridesRenderersFactory extends CustomRenderersFactoryBase 
     //}
 
     // 2.10, 2.11
+    @Override
+    protected void buildAudioRenderers(Context context, @ExtensionRendererMode int extensionRendererMode, MediaCodecSelector mediaCodecSelector,
+                                       @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys,
+                                       boolean enableDecoderFallback, AudioProcessor[] audioProcessors, Handler eventHandler,
+                                       AudioRendererEventListener eventListener, ArrayList<Renderer> out) {
+        super.buildAudioRenderers(context, extensionRendererMode, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys,
+                enableDecoderFallback, audioProcessors, eventHandler, eventListener, out);
+
+        if (mPlayerData.getAudioDelayMs() == 0 && !mPlayerTweaksData.isAudioSyncFixEnabled()) {
+            // Improve performance a bit by eliminating calculations presented in custom renderer.
+
+            return;
+        }
+
+        DelayMediaCodecAudioRenderer audioRenderer =
+                new DelayMediaCodecAudioRenderer(context, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys, enableDecoderFallback,
+                        eventHandler, eventListener, new DefaultAudioSink(AudioCapabilities.getCapabilities(context), audioProcessors));
+
+        audioRenderer.setAudioDelayMs(mPlayerData.getAudioDelayMs());
+        audioRenderer.enableAudioSyncFix(mPlayerTweaksData.isAudioSyncFixEnabled());
+
+        replaceAudioRenderer(out, audioRenderer);
+    }
+
+    // 2.10, 2.11
+    @Override
+    protected void buildVideoRenderers(Context context, int extensionRendererMode, MediaCodecSelector mediaCodecSelector,
+                                       @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys,
+                                       boolean enableDecoderFallback, Handler eventHandler, VideoRendererEventListener eventListener,
+                                       long allowedVideoJoiningTimeMs, ArrayList<Renderer> out) {
+        super.buildVideoRenderers(context, extensionRendererMode, mediaCodecSelector, drmSessionManager, playClearSamplesWithoutKeys,
+                enableDecoderFallback, eventHandler, eventListener, allowedVideoJoiningTimeMs, out);
+
+        if (!mPlayerTweaksData.isFrameDropFixEnabled() && !mPlayerTweaksData.isAmlogicFixEnabled()) {
+            // Improve performance a bit by eliminating some if conditions presented in tweaks.
+            // But we need to obtain codec real name somehow. So use interceptor below.
+
+            DebugInfoMediaCodecVideoRenderer videoRenderer =
+                    new DebugInfoMediaCodecVideoRenderer(context, mediaCodecSelector, allowedVideoJoiningTimeMs, drmSessionManager,
+                        playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
+
+            replaceVideoRenderer(out, videoRenderer);
+            videoRenderer.enableSetOutputSurfaceWorkaround(mPlayerTweaksData.isSetOutputSurfaceWorkaroundEnabled());
+
+            return;
+        }
+
+        TweaksMediaCodecVideoRenderer videoRenderer =
+                new TweaksMediaCodecVideoRenderer(context, mediaCodecSelector, allowedVideoJoiningTimeMs, drmSessionManager,
+                        playClearSamplesWithoutKeys, enableDecoderFallback, eventHandler, eventListener, MAX_DROPPED_VIDEO_FRAME_COUNT_TO_NOTIFY);
+
+        videoRenderer.enableFrameDropFix(mPlayerTweaksData.isFrameDropFixEnabled());
+        videoRenderer.enableAmlogicFix(mPlayerTweaksData.isAmlogicFixEnabled());
+        videoRenderer.enableSetOutputSurfaceWorkaround(mPlayerTweaksData.isSetOutputSurfaceWorkaroundEnabled());
+
+        replaceVideoRenderer(out, videoRenderer);
+    }
+
+    // Exo 2.12, 2.13
     //@Override
     //protected void buildAudioRenderers(Context context, @ExtensionRendererMode int extensionRendererMode, MediaCodecSelector mediaCodecSelector,
     //                                   @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean playClearSamplesWithoutKeys,

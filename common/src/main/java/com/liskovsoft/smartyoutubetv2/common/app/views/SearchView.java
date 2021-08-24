@@ -7,5 +7,6 @@ public interface SearchView {
     void clearSearch();
     void showProgressBar(boolean show);
     void startSearch(String searchText);
+    String getSearchText();
     void startVoiceRecognition();
 }

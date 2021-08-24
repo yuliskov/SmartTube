@@ -13,7 +13,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
-import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
 import java.util.HashMap;
@@ -68,7 +68,11 @@ public class ViewManager {
     public void unregister(Class<?> viewClass) {
         mViewMapping.remove(viewClass);
     }
-    
+
+    /**
+     * Use carefully<br/>
+     * On running activity, this method invokes standard activity lifecycle: pause, resume etc...
+     */
     public void startView(Class<?> viewClass) {
         startView(viewClass, false);
     }
@@ -324,7 +328,7 @@ public class ViewManager {
         clearCaches();
 
         // We need to destroy the app only if settings are changed
-        if (MainUIData.instance(mContext).isSettingsCategoryEnabled()) {
+        if (GeneralData.instance(mContext).isSettingsCategoryEnabled()) {
             destroyApp();
         }
     }

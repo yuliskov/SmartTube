@@ -2,8 +2,6 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.dialogs;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.leanback.preference.LeanbackPreferenceDialogFragment;
@@ -16,29 +14,28 @@ import androidx.preference.PreferenceFragment;
 import androidx.preference.PreferenceScreen;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter.SettingsCategory;
-import com.liskovsoft.smartyoutubetv2.common.app.views.AppSettingsView;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter.SettingsCategory;
+import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.RadioListPreferenceDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreference;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreferenceDialogFragment;
-import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import java.util.List;
 
 public class AppDialogFragment extends LeanbackSettingsFragment
-        implements DialogPreference.TargetFragment, AppSettingsView {
+        implements DialogPreference.TargetFragment, AppDialogView {
     private static final String TAG = AppDialogFragment.class.getSimpleName();
     private AppPreferenceFragment mPreferenceFragment;
-    private AppSettingsPresenter mSettingsPresenter;
+    private AppDialogPresenter mSettingsPresenter;
     private boolean mIsStateSaved;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mSettingsPresenter = AppSettingsPresenter.instance(getActivity());
+        mSettingsPresenter = AppDialogPresenter.instance(getActivity());
         mSettingsPresenter.setView(this);
     }
 
@@ -150,7 +147,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     }
 
     public void onFinish() {
-        mSettingsPresenter.onClose();
+        mSettingsPresenter.onFinish();
     }
 
     public static class AppPreferenceFragment extends LeanbackPreferenceFragment {

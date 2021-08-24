@@ -1,11 +1,13 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.controller;
 
 import android.content.Context;
+import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
@@ -36,11 +38,12 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private boolean mOnSourceChanged;
     private Video mVideo;
     private PlayerEventListener mEventListener;
-    private ExoPlayer mPlayer;
+    private SimpleExoPlayer mPlayer;
     private PlayerView mPlayerView;
+    private boolean mIsViewPaused;
 
     public ExoPlayerController(Context context) {
-        mContext = context;
+        mContext = context.getApplicationContext();
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
         mTrackSelectorManager = new TrackSelectorManager();
         mTrackFormatter = new TrackInfoFormatter2();
@@ -135,11 +138,12 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
     @Override
     public boolean isPlaying() {
-        if (mPlayer == null) {
-            return false;
-        }
-
         return ExoUtils.isPlaying(mPlayer);
+    }
+
+    @Override
+    public boolean isLoading() {
+        return ExoUtils.isLoading(mPlayer);
     }
 
     @Override
@@ -157,7 +161,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
         if (mPlayer != null) {
             mPlayer.removeListener(this);
-            //mPlayer.stop();
+            mPlayer.stop();
             mPlayer.release();
             mPlayer = null;
         }
@@ -168,7 +172,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     @Override
-    public void setPlayer(ExoPlayer player) {
+    public void setPlayer(SimpleExoPlayer player) {
         mPlayer = player;
         player.addListener(this);
     }
@@ -280,12 +284,12 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     public void onPlayerError(ExoPlaybackException error) {
         Log.e(TAG, "onPlayerError: " + error);
 
-        if (error.type == ExoPlaybackException.TYPE_UNEXPECTED &&
-            error.getCause() instanceof IllegalArgumentException) {
-            // Maybe it's because of auto frame rate.
-            // Such error may occur when pausing activity.
-            return;
-        }
+        //if (error.type == ExoPlaybackException.TYPE_UNEXPECTED &&
+        //    error.getCause() instanceof IllegalArgumentException) {
+        //    // Maybe it's because of auto frame rate.
+        //    // Such error may occur when pausing activity.
+        //    return;
+        //}
 
         mEventListener.onEngineError(error.type);
     }
@@ -313,6 +317,17 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     @Override
+    public void onPositionDiscontinuity(int reason) {
+        Log.e(TAG, "onPositionDiscontinuity");
+
+        // Fix video loop on 480p with legacy codes enabled
+        if (reason == Player.DISCONTINUITY_REASON_PERIOD_TRANSITION) {
+            mPlayer.stop();
+            mEventListener.onPlayEnd();
+        }
+    }
+
+    @Override
     public void setSpeed(float speed) {
         if (mPlayer != null && speed > 0) {
             mPlayer.setPlaybackParameters(new PlaybackParameters(speed, 1.0f));
@@ -329,6 +344,27 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         } else {
             return -1;
         }
+    }
+
+    @Override
+    public void setVolume(float volume) {
+        if (mPlayer != null && volume >= 0) {
+            mPlayer.setVolume(volume);
+        }
+    }
+
+    @Override
+    public float getVolume() {
+        if (mPlayer != null) {
+            return mPlayer.getVolume();
+        } else {
+            return 1;
+        }
+    }
+
+    @Override
+    public void onViewPaused(boolean isPaused) {
+        mIsViewPaused = isPaused;
     }
 
     private void setQualityInfo(String qualityInfoStr) {

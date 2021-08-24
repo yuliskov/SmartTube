@@ -38,7 +38,7 @@
     <string name="video_buffer_size_high">Υψηλή</string>
     <string name="update_changelog">Αλλαγές (changelog)</string>
     <string name="install_update">Εγκατάσταση Αναβάθμισης</string>
-    <string name="msg_category_is_empty">Ωχ! Δεν υπάρχει τίποτα εδώ.</string>
+    <string name="section_is_empty">Ωχ! Δεν υπάρχει τίποτα εδώ.</string>
     <string name="dialog_add_to_playlist">Προσθήκη στο Playlist</string>
     <string name="msg_signed_users_only">Μόνο Εγεγραμμένοι Χρήστες</string>
     <string name="msg_cant_load_content">Ωχ! Δεν ήταν δυνατή η φόρτωση περιεχομένου.</string>
@@ -79,7 +79,7 @@
     <string name="update_not_found">Χρησιμοποιειτε τη τελευταία έκδοση.</string>
     <string name="update_in_progess">Περιμένετε…</string>
     <string name="player_ui_hide_behavior">Αυτόματη απόκρυψη UI</string>
-    <string name="player_ui_hide_never">Ποτέ</string>
+    <string name="option_never">Ποτέ</string>
     <string name="side_panel_sections">Ρυθμίσεις Ενοτήτων</string>
     <string name="boot_to_section">Εκκίνση στην Ενότητα</string>
     <string name="large_ui">Μεγάλο UI</string>
@@ -116,7 +116,7 @@
     <string name="subtitle_black_bg">Μαύρο Φόντο</string>
     <string name="player_seek_preview">Προεπισκόπηση κατά την αναζήτηση</string>
     <string name="color_scheme_dark_grey_oled">Μαύρο Γκρι (OLED)</string>
-    <string name="channels_category_sorting">Ταξινόμηση ενότητας καναλιού</string>
+    <string name="channels_section_sorting">Ταξινόμηση ενότητας καναλιού</string>
     <string name="sorting_by_new_content">Νέο Περιεχόμενο</string>
     <string name="sorting_alphabetically">Αλφαβητικά</string>
     <string name="sorting_last_viewed">Τελευταίες Προβολές</string>

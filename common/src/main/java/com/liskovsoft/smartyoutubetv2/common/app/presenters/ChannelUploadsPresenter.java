@@ -3,13 +3,16 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -20,12 +23,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import java.util.List;
+
 public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> implements VideoGroupPresenter {
     private static final String TAG = ChannelUploadsPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static ChannelUploadsPresenter sInstance;
     private final PlaybackPresenter mPlaybackPresenter;
     private final MediaGroupManager mGroupManager;
+    private final MediaItemManager mItemManager;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
     private Video mVideoItem;
@@ -34,6 +40,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         super(context);
         MediaService mediaService = YouTubeMediaService.instance();
         mGroupManager = mediaService.getMediaGroupManager();
+        mItemManager = mediaService.getMediaItemManager();
         mPlaybackPresenter = PlaybackPresenter.instance(context);
     }
 
@@ -98,6 +105,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
     @Override
     public void onViewDestroyed() {
+        super.onViewDestroyed();
         disposeActions();
     }
 
@@ -107,7 +115,8 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     public void openChannel(Video item) {
-        if (item == null || item.mediaItem == null || !item.mediaItem.hasUploads()) {
+        // Working with uploads or playlists
+        if (item == null || (!item.hasUploads() && item.playlistId == null)) {
             return;
         }
 
@@ -129,26 +138,23 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         }
     }
 
-    public Observable<MediaGroup> obtainVideoGroupObservable(Video item) {
+    public Observable<MediaGroup> obtainPlaylistObservable(Video item) {
         if (item == null) {
             return null;
         }
 
-        return mGroupManager.getGroupObserve(item.mediaItem);
+        return item.hasUploads() ?
+                mGroupManager.getGroupObserve(item.mediaItem) :
+                mItemManager.getMetadataObserve(item.videoId, item.playlistId, 0)
+                        .flatMap(mediaItemMetadata -> Observable.just(findPlaylistRow(mediaItemMetadata)));
     }
 
     private void updateGrid(Video item) {
-        updateVideoGrid(obtainVideoGroupObservable(item));
+        updateVideoGrid(obtainPlaylistObservable(item));
     }
 
     private void disposeActions() {
-        if (mUpdateAction != null && !mUpdateAction.isDisposed()) {
-            mUpdateAction.dispose();
-        }
-
-        if (mScrollAction != null && !mScrollAction.isDisposed()) {
-            mScrollAction.dispose();
-        }
+        RxUtils.disposeActions(mUpdateAction, mScrollAction);
     }
 
     private void continueVideoGroup(VideoGroup group) {
@@ -158,7 +164,15 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
         MediaGroup mediaGroup = group.getMediaGroup();
 
-        mScrollAction = mGroupManager.continueGroupObserve(mediaGroup)
+        Observable<MediaGroup> continuation;
+
+        if (mediaGroup.getType() == MediaGroup.TYPE_SUGGESTIONS) {
+            continuation = mItemManager.continueGroupObserve(mediaGroup);
+        } else {
+            continuation = mGroupManager.continueGroupObserve(mediaGroup);
+        }
+
+        mScrollAction = continuation
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -209,5 +223,24 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
     public interface VideoGroupCallback {
         void onGroup(MediaGroup mediaGroup);
+    }
+
+    /**
+     * Playlist usually is the first row with media items.<br/>
+     * NOTE: before playlist may be the video description row
+     */
+    private MediaGroup findPlaylistRow(MediaItemMetadata mediaItemMetadata) {
+        if (mediaItemMetadata == null || mediaItemMetadata.getSuggestions() == null) {
+            return null;
+        }
+
+        for (MediaGroup group : mediaItemMetadata.getSuggestions()) {
+            List<MediaItem> mediaItems = group.getMediaItems();
+            if (mediaItems != null && mediaItems.size() > 0) {
+                return group;
+            }
+        }
+
+        return null;
     }
 }

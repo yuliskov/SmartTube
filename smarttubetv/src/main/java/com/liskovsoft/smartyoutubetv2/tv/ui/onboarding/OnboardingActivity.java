@@ -43,6 +43,6 @@ public class OnboardingActivity extends FragmentActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        mPresenter.onClose();
+        mPresenter.onFinish();
     }
 }

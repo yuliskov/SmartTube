@@ -5,17 +5,19 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
-import com.liskovsoft.smartyoutubetv2.common.utils.ServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -30,7 +32,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private static ChannelPresenter sInstance;
     private final MediaService mMediaService;
     private final PlaybackPresenter mPlaybackPresenter;
-    private final ServiceManager mServiceManager;
+    private final MediaServiceManager mServiceManager;
     private String mChannelId;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
@@ -39,7 +41,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         super(context);
         mMediaService = YouTubeMediaService.instance();
         mPlaybackPresenter = PlaybackPresenter.instance(context);
-        mServiceManager = ServiceManager.instance();
+        mServiceManager = MediaServiceManager.instance();
     }
 
     public static ChannelPresenter instance(Context context) {
@@ -99,6 +101,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
     @Override
     public void onViewDestroyed() {
+        super.onViewDestroyed();
         disposeActions();
     }
 
@@ -112,7 +115,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             return false;
         }
 
-        return item.videoId != null || item.channelId != null || item.isChannelUploads();
+        return item.videoId != null || item.channelId != null || item.isChannelUploadsSection();
     }
 
     public void openChannel(Video item) {
@@ -125,7 +128,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                     openChannel(metadata.getChannelId());
                     item.channelId = metadata.getChannelId();
                 });
-            } else if (item.isChannelUploads()) {
+            } else if (item.isChannelUploadsSection()) {
                 // Maybe this is subscribed items view
                 ChannelUploadsPresenter.instance(getContext())
                         .obtainVideoGroup(item, group -> {
@@ -156,13 +159,8 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     private void disposeActions() {
-        if (mUpdateAction != null && !mUpdateAction.isDisposed()) {
-            mUpdateAction.dispose();
-        }
-
-        if (mScrollAction != null && !mScrollAction.isDisposed()) {
-            mScrollAction.dispose();
-        }
+        RxUtils.disposeActions(mUpdateAction, mScrollAction);
+        mServiceManager.disposeActions();
     }
 
     private void updateRows(String channelId) {
@@ -186,6 +184,8 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     private void updateRowsHeader(List<MediaGroup> mediaGroups) {
+        filterIfNeeded(mediaGroups);
+
         for (MediaGroup mediaGroup : mediaGroups) {
             if (mediaGroup.getMediaItems() == null) {
                 Log.e(TAG, "updateRowsHeader: MediaGroup is empty. Group Name: " + mediaGroup.getTitle());
@@ -218,5 +218,28 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                         },
                         () -> getView().showProgressBar(false)
                 );
+    }
+
+    /**
+     * Sort channel content: move Uploads on top.
+     */
+    private void filterIfNeeded(List<MediaGroup> mediaGroups) {
+        moveToTop(mediaGroups, R.string.playlists_row_name);
+        moveToTop(mediaGroups, R.string.popular_uploads_row_name);
+        moveToTop(mediaGroups, R.string.uploads_row_name);
+    }
+
+    private void moveToTop(List<MediaGroup> mediaGroups, int rowNameResId) {
+        if (rowNameResId <= 0) {
+            return;
+        }
+
+        String rowName = getContext().getString(rowNameResId);
+
+        MediaGroup group = Helpers.removeIf(mediaGroups, value -> rowName.equals(value.getTitle()));
+
+        if (group != null) {
+            mediaGroups.add(0, group);
+        }
     }
 }

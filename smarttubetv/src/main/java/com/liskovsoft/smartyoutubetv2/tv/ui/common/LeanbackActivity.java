@@ -8,8 +8,11 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
-import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.misc.GlobalKeyTranslator;
+import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.DoubleBackManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
 
 /**
  * This parent class contains common methods that run in every activity such as search.
@@ -20,7 +23,9 @@ public abstract class LeanbackActivity extends MotherActivity {
     private ViewManager mViewManager;
     private ModeSyncManager mModeSyncManager;
     private DoubleBackManager mDoubleBackManager;
-    private MainUIData mMainUiData;
+    private GeneralData mGeneralData;
+    private GlobalKeyTranslator mGlobalKeyTranslator;
+    //private ScreensaverManager mScreensaverManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +38,10 @@ public abstract class LeanbackActivity extends MotherActivity {
         mViewManager = ViewManager.instance(this);
         mModeSyncManager = ModeSyncManager.instance();
         mDoubleBackManager = new DoubleBackManager(this);
-        mMainUiData = MainUIData.instance(this);
+        mGeneralData = GeneralData.instance(this);
+        mGlobalKeyTranslator = new GlobalKeyTranslator(this);
+        //mScreensaverManager = new ScreensaverManager(this);
+        //mScreensaverManager.setBlocked(this instanceof PlaybackActivity);
     }
 
     @Override
@@ -51,7 +59,9 @@ public abstract class LeanbackActivity extends MotherActivity {
             finishTheApp();
         }
 
-        return super.dispatchKeyEvent(event);
+        //mScreensaverManager.enable();
+
+        return super.dispatchKeyEvent(mGlobalKeyTranslator.translate(event));
     }
 
     public UriBackgroundManager getBackgroundManager() {
@@ -63,6 +73,7 @@ public abstract class LeanbackActivity extends MotherActivity {
         super.onStart();
 
         mBackgroundManager.onStart();
+        //mScreensaverManager.enable();
     }
 
     @Override
@@ -92,11 +103,11 @@ public abstract class LeanbackActivity extends MotherActivity {
     public void finish() {
         // user pressed back key
         if (!mViewManager.startParentView(this)) {
-            switch (mMainUiData.getAppExitShortcut()) {
-                case MainUIData.EXIT_DOUBLE_BACK:
+            switch (mGeneralData.getAppExitShortcut()) {
+                case GeneralData.EXIT_DOUBLE_BACK:
                     mDoubleBackManager.enableDoubleBackExit();
                     break;
-                case MainUIData.EXIT_SINGLE_BACK:
+                case GeneralData.EXIT_SINGLE_BACK:
                     finishTheApp();
                     break;
             }

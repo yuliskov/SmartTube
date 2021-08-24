@@ -38,7 +38,7 @@
     <string name="video_buffer_size_high">Visok</string>
     <string name="update_changelog">Seznam sprememb</string>
     <string name="install_update">Namesti posodobitve</string>
-    <string name="msg_category_is_empty">Ups! Nič ni tukaj.</string>
+    <string name="section_is_empty">Ups! Nič ni tukaj.</string>
     <string name="dialog_add_to_playlist">Dodaj na seznam predvajanja</string>
     <string name="msg_signed_users_only">Samo za prijavljene uporabnike</string>
     <string name="msg_cant_load_content">Ups. Ne morem naložiti vsebine.</string>
@@ -79,7 +79,7 @@
     <string name="update_not_found">Uporabljaš zadnjo verzijo</string>
     <string name="update_in_progess">Počakaj…</string>
     <string name="player_ui_hide_behavior">Samodejno skrij UI</string>
-    <string name="player_ui_hide_never">Nikoli</string>
+    <string name="option_never">Nikoli</string>
     <string name="side_panel_sections">Nastavi kategorije</string>
     <string name="boot_to_section">Kategorija ob zagonu</string>
     <string name="large_ui">Velik UI</string>
@@ -116,7 +116,7 @@
     <string name="subtitle_black_bg">Črno ozadje</string>
     <string name="player_seek_preview">Predogled med previjanjem</string>
     <string name="color_scheme_dark_grey_oled">Temnosiva (OLED)</string>
-    <string name="channels_category_sorting">Sortiranje v kategoriji kanalov</string>
+    <string name="channels_section_sorting">Sortiranje v kategoriji kanalov</string>
     <string name="sorting_by_new_content">Nova vsebina</string>
     <string name="sorting_alphabetically">Po abecedi</string>
     <string name="sorting_last_viewed">Nazadnje gledano</string>

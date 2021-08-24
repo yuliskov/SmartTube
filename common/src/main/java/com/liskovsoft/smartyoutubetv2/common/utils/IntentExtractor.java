@@ -14,14 +14,16 @@ public class IntentExtractor {
      */
     private static final String[] SEARCH_KEYS = {"search_query", "query"};
     private static final String VIDEO_ID_KEY = "v";
+    private static final String VIDEO_ID_LIST_KEY = "video_ids";
     private static final String CHANNEL_URL = "/channel/";
     private static final String USER_URL = "/user/";
     private static final String SUBSCRIPTIONS_URL = "https://www.youtube.com/tv#/zylon-surface?c=FEsubscriptions&resume";
     private static final String HISTORY_URL = "https://www.youtube.com/tv#/zylon-surface?c=FEmy_youtube&resume";
     private static final String RECOMMENDED_URL = "https://www.youtube.com/tv#/zylon-surface?c=default&resume";
+    private static final String PLAYLIST_KEY = "list";
 
     public static String extractVideoId(Intent intent) {
-        if (intent == null || intent.getData() == null || !Intent.ACTION_VIEW.equals(intent.getAction())) {
+        if (isEmptyIntent(intent)) {
             return null;
         }
 
@@ -34,8 +36,16 @@ public class IntentExtractor {
         String videoId = parser.get(VIDEO_ID_KEY);
 
         if (videoId == null) {
-            // Suppose that link type is https://youtu.be/lBeMDqcWTG8
-            videoId = intent.getData().getLastPathSegment();
+            // https://youtube.com/watch_videos?video_ids=xdq_sYfmN6c,xdq_sYfmN6c
+            String idList = parser.get(VIDEO_ID_LIST_KEY);
+
+            if (idList != null) {
+                // temp solution: use one video from the list
+                videoId = idList.split(",")[0];
+            } else {
+                // Suppose that link type is https://youtu.be/lBeMDqcWTG8
+                videoId = intent.getData().getLastPathSegment();
+            }
         }
 
         if (!isValid(videoId)) {
@@ -50,7 +60,7 @@ public class IntentExtractor {
      * Amazon: youtube://search?query=linkin+park&isVoice=true
      */
     public static String extractSearchText(Intent intent) {
-        if (intent == null || intent.getData() == null || !Intent.ACTION_VIEW.equals(intent.getAction())) {
+        if (isEmptyIntent(intent)) {
             return null;
         }
 
@@ -78,13 +88,26 @@ public class IntentExtractor {
      * Data: https://www.youtube.com/channel/UCtDjOV5nk982w35AIdVDuNw
      */
     public static String extractChannelId(Intent intent) {
-        if (intent == null || intent.getData() == null || !Intent.ACTION_VIEW.equals(intent.getAction())) {
+        if (isEmptyIntent(intent)) {
             return null;
         }
 
         String[] split = intent.getData().toString().split(CHANNEL_URL);
 
         return split.length == 2 ? split[1] : null;
+    }
+
+    /**
+     * Data: https://www.youtube.com/playlist?list=RDCLAK5uy_mk6AmqcHgCRhyJuYsQz5CCVdCF4SRGivs
+     */
+    public static String extractPlaylistId(Intent intent) {
+        if (isEmptyIntent(intent)) {
+            return null;
+        }
+
+        UrlQueryString parser = UrlQueryStringFactory.parse(intent.getData());
+
+        return parser.get(PLAYLIST_KEY);
     }
 
     private static boolean isValid(String videoId) {
@@ -101,7 +124,7 @@ public class IntentExtractor {
     public static boolean isChannelUrl(Intent intent) {
         return intent != null
                 && intent.getData() != null
-                && Helpers.contains(new String[] {SUBSCRIPTIONS_URL, HISTORY_URL, RECOMMENDED_URL}, intent.getData().toString());
+                && Helpers.hasItem(new String[] {SUBSCRIPTIONS_URL, HISTORY_URL, RECOMMENDED_URL}, intent.getData().toString());
     }
 
     public static boolean isStartVoiceCommand(Intent intent) {
@@ -113,5 +136,9 @@ public class IntentExtractor {
      */
     private static String extractVoiceQuery(Uri data) {
         return Helpers.runMultiMatcher(data.toString(), ":\\{\"query\":\"([^\"]*)\"");
+    }
+
+    private static boolean isEmptyIntent(Intent intent) {
+        return intent == null || intent.getData() == null || !Intent.ACTION_VIEW.equals(intent.getAction());
     }
 }
