@@ -9,6 +9,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -51,6 +52,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
     @Override
     public void onViewDestroyed() {
+        super.onViewDestroyed();
         disposeActions();
     }
 
@@ -97,10 +99,21 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     }
 
     public void onSearch(String searchText) {
-         loadSearchResult(searchText);
+        // Restore the search in case the view unloaded from the memory
+        mSearchText = searchText;
+
+        if (getView() == null) {
+            Log.e(TAG, "Search view has been unloaded from the memory. Low RAM?");
+            startSearch(searchText);
+            return;
+        }
+
+        loadSearchResult(searchText);
     }
     
     private void loadSearchResult(String searchText) {
+        Log.d(TAG, "Start search for '%s'", searchText);
+
         disposeActions();
         getView().showProgressBar(true);
 
@@ -112,7 +125,10 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mediaGroup -> getView().updateSearch(VideoGroup.from(mediaGroup)),
+                        mediaGroup -> {
+                            Log.d(TAG, "Receiving results for '%s'", searchText);
+                            getView().updateSearch(VideoGroup.from(mediaGroup));
+                        },
                         error -> Log.e(TAG, "loadSearchData error: %s", error.getMessage()),
                         () -> getView().showProgressBar(false)
                 );

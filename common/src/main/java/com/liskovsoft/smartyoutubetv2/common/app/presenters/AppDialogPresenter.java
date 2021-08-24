@@ -6,20 +6,20 @@ import android.os.Handler;
 import android.os.Looper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.AppSettingsView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
+public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     @SuppressLint("StaticFieldLeak")
-    private static AppSettingsPresenter sInstance;
+    private static AppDialogPresenter sInstance;
     private final List<SettingsCategory> mCategories;
     private final Handler mHandler;
     private final Runnable mCloseDialog = this::closeDialog;
     private String mTitle;
-    private Runnable mOnClose;
+    private Runnable mOnFinish;
     private long mTimeoutMs;
 
     public static class SettingsCategory {
@@ -63,15 +63,15 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
         public List<OptionItem> items;
     }
 
-    public AppSettingsPresenter(Context context) {
+    public AppDialogPresenter(Context context) {
         super(context);
         mCategories = new ArrayList<>();
         mHandler = new Handler(Looper.getMainLooper());
     }
 
-    public static AppSettingsPresenter instance(Context context) {
+    public static AppDialogPresenter instance(Context context) {
         if (sInstance == null) {
-            sInstance = new AppSettingsPresenter(context);
+            sInstance = new AppDialogPresenter(context);
         }
 
         sInstance.setContext(context);
@@ -80,21 +80,22 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
     }
 
     /**
-     * Called after {@link #onClose}
+     * Called after {@link #onFinish}
      */
     @Override
     public void onViewDestroyed() {
+        super.onViewDestroyed();
         clear();
     }
 
     /**
      * Called when user pressed back button.
      */
-    public void onClose() {
+    public void onFinish() {
         clear();
 
-        if (mOnClose != null) {
-            mOnClose.run();
+        if (mOnFinish != null) {
+            mOnFinish.run();
         }
     }
 
@@ -122,16 +123,16 @@ public class AppSettingsPresenter extends BasePresenter<AppSettingsView> {
         showDialog(null, onClose);
     }
 
-    public void showDialog(String dialogTitle, Runnable onClose) {
+    public void showDialog(String dialogTitle, Runnable onFinish) {
         mTitle = dialogTitle;
-        mOnClose = onClose;
+        mOnFinish = onFinish;
 
         if (getView() != null) {
             getView().clear();
             onViewInitialized();
         }
 
-        ViewManager.instance(getContext()).startView(AppSettingsView.class, true);
+        ViewManager.instance(getContext()).startView(AppDialogView.class, true);
 
         setupTimeout();
     }

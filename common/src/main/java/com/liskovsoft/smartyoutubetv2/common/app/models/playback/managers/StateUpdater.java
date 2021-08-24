@@ -10,6 +10,8 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
+import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
@@ -35,6 +37,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private Disposable mHistoryAction;
     private PlayerData mPlayerData;
     private boolean mIsPlayBlocked;
+    private float mVolume = 1;
 
     @Override
     public void onInitDone() { // called each time a video opened from the browser
@@ -141,18 +144,20 @@ public class StateUpdater extends PlayerEventListenerHelper {
         restoreSubtitleFormat();
 
         updateHistory();
+
+        restoreVolume();
     }
 
     @Override
     public void onPlay() {
+        showHideScreensaver(false);
         setPlayEnabled(true);
-        Helpers.disableScreensaver(getActivity());
     }
 
     @Override
     public void onPause() {
+        showHideScreensaver(true);
         setPlayEnabled(false);
-        Helpers.enableScreensaver(getActivity());
         saveState();
     }
 
@@ -177,7 +182,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         saveState();
 
         // Take into account different playback states
-        Helpers.enableScreensaver(getActivity());
+        //mScreensaverManager.enable();
     }
 
     private void clearStateOfNextVideo() {
@@ -296,6 +301,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
             updateHistory();
             persistVideoState();
+            persistVolume();
         }
     }
 
@@ -398,6 +404,14 @@ public class StateUpdater extends PlayerEventListenerHelper {
         return mIsPlayEnabled;
     }
 
+    private void persistVolume() {
+        mVolume = getController().getVolume();
+    }
+
+    private void restoreVolume() {
+        getController().setVolume(mVolume);
+    }
+
     private void updateHistory() {
         Video video = getController().getVideo();
 
@@ -421,6 +435,18 @@ public class StateUpdater extends PlayerEventListenerHelper {
         }
 
         mHistoryAction = RxUtils.execute(historyObservable);
+    }
+
+    private void showHideScreensaver(boolean show) {
+        if (getActivity() instanceof MotherActivity) {
+            ScreensaverManager screensaverManager = ((MotherActivity) getActivity()).getScreensaverManager();
+
+            if (show) {
+                screensaverManager.enable();
+            } else {
+                screensaverManager.disable();
+            }
+        }
     }
 
     private static class State {

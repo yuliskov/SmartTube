@@ -26,6 +26,13 @@
     <dimen name="lb_basic_card_content_text_size">12sp</dimen>
     -->
 
+    <!-- Search items left margin (except first one) -->
+    <!-- Problems here: external search dialog won't overlap correctly -->
+    <!--<dimen name="lb_search_bar_items_margin_start">20dp</dimen>-->
+
+    <!-- Make search bar more compact so more buttons could be added after it. -->
+    <dimen name="lb_search_bar_items_width">500dp</dimen>
+
     <!-- Increase player time text size -->
     <dimen name="lb_playback_controls_time_text_size">16sp</dimen>
 

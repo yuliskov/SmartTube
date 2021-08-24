@@ -6,7 +6,7 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -29,14 +29,15 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
     }
 
     public void show() {
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
         settingsPresenter.clear();
 
         appendColorScheme(settingsPresenter);
 //        appendCardsStyle(settingsPresenter);
         //appendCardTitleLines(settingsPresenter);
+//        appendCardTextScrollSpeed(settingsPresenter);
 //        appendChannelSortingCategory(settingsPresenter);
-//        appendPlaylistsStyle(settingsPresenter);
+//        appendPlaylistsCategoryStyle(settingsPresenter);
         appendScaleUI(settingsPresenter);
         appendVideoGridScale(settingsPresenter);
 //        appendMiscCategory(settingsPresenter);
@@ -49,7 +50,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         });
     }
 
-    private void appendCardsStyle(AppSettingsPresenter settingsPresenter) {
+    private void appendCardsStyle(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         OptionItem animatedPreviewsOption = UiOptionItem.from(getContext().getString(R.string.card_animated_previews),
@@ -68,7 +69,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.cards_style), options);
     }
 
-    private void appendCardTitleLines(AppSettingsPresenter settingsPresenter) {
+    private void appendCardTitleLines(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         for (int linesNum : new int[] {1, 2, 3, 4}) {
@@ -80,7 +81,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.card_title_lines_num), options);
     }
 
-    private void appendChannelSortingCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendChannelSortingCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
@@ -93,10 +94,10 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
             }, mMainUIData.getChannelCategorySorting() == pair[1]));
         }
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.channels_category_sorting), options);
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.channels_section_sorting), options);
     }
 
-    private void appendPlaylistsStyle(AppSettingsPresenter settingsPresenter) {
+    private void appendPlaylistsCategoryStyle(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
@@ -111,7 +112,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.playlists_style), options);
     }
 
-    private void appendColorScheme(AppSettingsPresenter settingsPresenter) {
+    private void appendColorScheme(AppDialogPresenter settingsPresenter) {
         List<ColorScheme> colorSchemes = mMainUIData.getColorSchemes();
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.color_scheme), fromColorSchemes(colorSchemes));
@@ -133,7 +134,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         return styleOptions;
     }
 
-    private void appendScaleUI(AppSettingsPresenter settingsPresenter) {
+    private void appendScaleUI(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         for (float scale : new float[] {0.6f, 0.65f, 0.7f, 0.75f, 0.8f, 0.85f, 0.9f, 0.95f, 1.0f, 1.05f, 1.1f, 1.15f, 1.2f, 1.25f, 1.3f, 1.35f, 1.4f}) {
@@ -148,10 +149,10 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.scale_ui), options);
     }
 
-    private void appendCardTextScrollSpeed(AppSettingsPresenter settingsPresenter) {
+    private void appendCardTextScrollSpeed(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        for (float factor : new float[] {1, 1.5f, 2, 2.5f, 3, 3.5f, 4}) {
+        for (float factor : new float[] {1, 1.5f, 2, 2.5f, 3, 3.5f, 4, 4.5f, 5, 5.5f, 6, 6.5f, 7, 7.5f, 8}) {
             options.add(UiOptionItem.from(String.format("%sx", Helpers.formatFloat(factor)),
                     optionItem -> mMainUIData.setCardTextScrollSpeed(factor),
                     Helpers.floatEquals(factor, mMainUIData.getCardTextScrollSpeed())));
@@ -160,7 +161,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.card_text_scroll_factor), options);
     }
 
-    private void appendVideoGridScale(AppSettingsPresenter settingsPresenter) {
+    private void appendVideoGridScale(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         for (float scale : new float[] {0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f, 1.1f, 1.2f, 1.25f, 1.3f, 1.35f, 1.4f, 1.5f}) {
@@ -172,7 +173,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.video_grid_scale), options);
     }
 
-    private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(getContext().getString(R.string.channels_old_look),

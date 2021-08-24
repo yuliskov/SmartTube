@@ -19,6 +19,7 @@
     <string name="title_video_formats">Video formats</string>
     <string name="title_audio_formats">Audio formats</string>
     <string name="subtitle_category_title">Subtitles</string>
+    <string name="playback_queue_category_title">Playback queue</string>
     <string name="video_max_quality">Auto (max quality)</string>
     <string name="audio_max_quality">Auto (max quality)</string>
     <string name="subtitles_disabled">Subtitles disabled</string>
@@ -38,7 +39,7 @@
     <string name="video_buffer_size_high">High</string>
     <string name="update_changelog">Changelog</string>
     <string name="install_update">Install update</string>
-    <string name="msg_category_is_empty">Oops! There is nothing in here.</string>
+    <string name="section_is_empty">Oops! There is nothing in here.</string>
     <string name="dialog_add_to_playlist">Add/Remove from playlist</string>
     <string name="msg_signed_users_only">Signed users only</string>
     <string name="msg_cant_load_content">Oops. Can\'t load content.</string>
@@ -79,7 +80,7 @@
     <string name="update_not_found">You\'re using the latest version</string>
     <string name="update_in_progess">Wait…</string>
     <string name="player_ui_hide_behavior">Auto-hide UI</string>
-    <string name="player_ui_hide_never">Never</string>
+    <string name="option_never">Never</string>
     <string name="side_panel_sections">Set-up sections</string>
     <string name="boot_to_section">Boot to section</string>
     <string name="large_ui">Large UI</string>
@@ -97,6 +98,7 @@
     <string name="player_other">Misc</string>
     <string name="player_full_date">Precise date in description</string>
     <string name="open_channel">Open channel</string>
+    <string name="open_playlist">Open playlist</string>
     <string name="not_interested">Not interested</string>
     <string name="you_wont_see_this_video">Video has been removed from recommended</string>
     <string name="settings_search">Search</string>
@@ -117,12 +119,12 @@
     <string name="subtitle_black_bg">Black background</string>
     <string name="player_seek_preview">Preview while seeking</string>
     <string name="color_scheme_dark_grey_oled">Dark Grey (OLED)</string>
-    <string name="channels_category_sorting">Channels section sorting</string>
+    <string name="channels_section_sorting">Channels section sorting</string>
     <string name="sorting_by_new_content">New content</string>
     <string name="sorting_alphabetically">Alphabetically</string>
     <string name="sorting_last_viewed">Last viewed</string>
     <string name="player_pause_when_seek">Pause when seeking</string>
-    <string name="playlists_style">Playlists style</string>
+    <string name="playlists_style">Playlists section style</string>
     <string name="playlists_style_grid">Grid</string>
     <string name="playlists_style_rows">Rows</string>
     <string name="player_show_clock">Show clock in pop-up menu</string>
@@ -152,7 +154,7 @@
     <string name="share_link">Share link</string>
     <string name="subscribe_to_channel">Subscribe to channel</string>
     <string name="wait_data_loading">Please wait while data is loading…</string>
-    <string name="auto_frame_rate_pause">Auto frame rate pause</string>
+    <string name="auto_frame_rate_pause">Auto frame rate switch pause</string>
     <string name="auto_frame_rate_applying">Applying auto frame rate %sx%s@%s</string>
     <string name="audio_shift">Audio shift</string>
     <string name="player_remember_speed">Remember speed</string>
@@ -211,12 +213,27 @@
     <string name="channels_old_look">Revert old look of Channels section</string>
     <string name="channels_auto_load">Auto load Channels section content</string>
     <string name="return_to_background_video">Return to video running in background</string>
-    <string name="pin_to_sidebar">Pin to sidebar</string>
-    <string name="unpin_from_sidebar">Unpin from sidebar</string>
+    <string name="pin_unpin_from_sidebar">Pin/Unpin from sidebar</string>
+    <string name="pin_to_sidebar">Pinned to sidebar</string>
+    <string name="unpin_from_sidebar">Unpinned from sidebar</string>
     <string name="dialog_select_country">Country</string>
     <string name="settings_language_country">Language/Country</string>
     <string name="share_embed_link">Share embed link</string>
     <string name="card_text_scroll_factor">Card text scroll speed</string>
     <string name="preferred_update_source">Select update source</string>
     <string name="hide_shorts">Hide shorts form Subscriptions</string>
+    <string name="key_remapping">Key remapping</string>
+    <string name="screen_diming">Screen diming</string>
+    <string name="removed_from_playback_queue">Removed from playback queue</string>
+    <string name="added_to_playback_queue">Added to playback queue</string>
+    <string name="add_remove_from_playback_queue">Add/Remove from playback queue</string>
+    <string name="proxy_enabled">Proxy enabled</string>
+    <string name="proxy_disabled">Proxy disabled</string>
+    <string name="uploads_row_name">Uploads</string>
+    <string name="playlists_row_name">Created playlists</string>
+    <string name="popular_uploads_row_name">Popular uploads</string>
+    <string name="breaking_news_row_name">Breaking news</string>
+    <string name="covid_news_row_name">COVID-19 news</string>
+    <string name="enable_voice_search">Enable voice search</string>
+    <string name="subscribe_unsubscribe_from_channel">Subscribe/Unsubscribe from channel</string>
 </resources>

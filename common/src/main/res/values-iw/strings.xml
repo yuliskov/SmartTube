@@ -41,7 +41,7 @@ So, make a copy of values-he and name it values-iw. Keep both in your structure.
     <string name="video_buffer_size_high">גבוה</string>
     <string name="update_changelog">ערוץ יומן</string>
     <string name="install_update">התקן עדכון</string>
-    <string name="msg_category_is_empty">אופסי! אין כאן כלום.</string>
+    <string name="section_is_empty">אופסי! אין כאן כלום.</string>
     <string name="dialog_add_to_playlist">הוסף לרשימת ההשמעה</string>
     <string name="msg_signed_users_only">משתמשים רשומים בלבד</string>
     <string name="msg_cant_load_content">אופסי. לא ניתן לטעון תוכן.</string>
@@ -82,7 +82,7 @@ So, make a copy of values-he and name it values-iw. Keep both in your structure.
     <string name="update_not_found">אתה משתמש בגרסה האחרונה</string>
     <string name="update_in_progess">המתן…</string>
     <string name="player_ui_hide_behavior">הסתרת ממשק אוטומטית</string>
-    <string name="player_ui_hide_never">אף פעם</string>
+    <string name="option_never">אף פעם</string>
     <string name="side_panel_sections">קטעי הגדרה</string>
     <string name="boot_to_section">אתחול למקטע</string>
     <string name="large_ui">ממשק משתמש גדול</string>
@@ -119,7 +119,7 @@ So, make a copy of values-he and name it values-iw. Keep both in your structure.
     <string name="subtitle_black_bg">רקע שחור</string>
     <string name="player_seek_preview">תצוגה מקדימה בעת חיפוש</string>
     <string name="color_scheme_dark_grey_oled">כהה (OLED)</string>
-    <string name="channels_category_sorting">מיון מקטעי ערוץ</string>
+    <string name="channels_section_sorting">מיון מקטעי ערוץ</string>
     <string name="sorting_by_new_content">תוכן חדש</string>
     <string name="sorting_alphabetically">אלפאבתית</string>
     <string name="sorting_last_viewed">נראה לאחרונה</string>

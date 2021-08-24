@@ -10,7 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.Play
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
@@ -38,7 +38,7 @@ public class HQDialogManager extends PlayerEventListenerHelper {
     private final Set<Runnable> mHideListeners = new HashSet<>();
     private final StateUpdater mStateUpdater;
     private PlayerData mPlayerData;
-    private AppSettingsPresenter mSettingsPresenter;;
+    private AppDialogPresenter mSettingsPresenter;;
 
     public HQDialogManager(StateUpdater stateUpdater) {
         mStateUpdater = stateUpdater;
@@ -47,7 +47,7 @@ public class HQDialogManager extends PlayerEventListenerHelper {
     @Override
     public void onInitDone() {
         mPlayerData = PlayerData.instance(getActivity());
-        mSettingsPresenter = AppSettingsPresenter.instance(getActivity());
+        mSettingsPresenter = AppDialogPresenter.instance(getActivity());
     }
 
     @Override
@@ -248,7 +248,8 @@ public class HQDialogManager extends PlayerEventListenerHelper {
 
         result.add(0, UiOptionItem.from(
                 context.getString(R.string.video_preset_disabled),
-                optionItem -> setFormat(FormatItem.VIDEO_AUTO, playerData, onFormatSelected),
+                //optionItem -> setFormat(FormatItem.VIDEO_AUTO, playerData, onFormatSelected),
+                optionItem -> setFormat(playerData.getDefaultVideoFormat(), playerData, onFormatSelected),
                 !isPresetSelection));
 
         return result;

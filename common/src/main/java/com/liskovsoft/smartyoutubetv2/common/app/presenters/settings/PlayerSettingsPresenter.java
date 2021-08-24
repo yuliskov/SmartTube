@@ -7,7 +7,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.Player
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
@@ -30,7 +30,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     }
 
     public void show() {
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
         settingsPresenter.clear();
 
         appendVideoPresetsCategory(settingsPresenter);
@@ -48,7 +48,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_player_ui));
     }
 
-    private void appendOKButtonCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendOKButtonCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(
@@ -69,11 +69,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_ok_button_behavior), options);
     }
 
-    private void appendUIAutoHideCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendUIAutoHideCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(
-                getContext().getString(R.string.player_ui_hide_never),
+                getContext().getString(R.string.option_never),
                 option -> mPlayerData.setUIHideTimoutSec(PlayerData.AUTO_HIDE_NEVER),
                 mPlayerData.getUIHideTimoutSec() == PlayerData.AUTO_HIDE_NEVER));
 
@@ -88,27 +88,27 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_ui_hide_behavior), options);
     }
 
-    private void appendVideoBufferCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendVideoBufferCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = HQDialogManager.createVideoBufferCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
-    private void appendVideoPresetsCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendVideoPresetsCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = HQDialogManager.createVideoPresetsCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
-    private void appendVideoZoomCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendVideoZoomCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = PlayerUIManager.createVideoZoomCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
-    private void appendAudioShiftCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendAudioShiftCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = HQDialogManager.createAudioShiftCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
-    private void appendSeekingPreviewCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendSeekingPreviewCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
@@ -124,7 +124,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_seek_preview), options);
     }
 
-    private void appendRememberSpeedCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendRememberSpeedCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_remember_speed_none),
@@ -145,8 +145,12 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_remember_speed), options);
     }
 
-    private void appendTweaksCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendTweaksCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from("Audio sync fix",
+                option -> mPlayerTweaksData.enableAudioSyncFix(option.isSelected()),
+                mPlayerTweaksData.isAudioSyncFixEnabled()));
 
         options.add(UiOptionItem.from("Amlogic 1080/60 fix",
                 option -> mPlayerTweaksData.enableAmlogicFix(option.isSelected()),
@@ -189,7 +193,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_tweaks), options);
     }
 
-    private void appendMiscCategory(AppSettingsPresenter settingsPresenter) {
+    private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         //options.add(UiOptionItem.from(getContext().getString(R.string.player_full_date),

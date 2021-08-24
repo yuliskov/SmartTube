@@ -38,7 +38,7 @@
     <string name="video_buffer_size_high">Mare</string>
     <string name="update_changelog">Ce este nou</string>
     <string name="install_update">Instalează Actualizare</string>
-    <string name="msg_category_is_empty">Oops! Nu-i nimic aici.</string>
+    <string name="section_is_empty">Oops! Nu-i nimic aici.</string>
     <string name="dialog_add_to_playlist">Adaugă în playlist</string>
     <string name="msg_signed_users_only">Trebuie să fi logat</string>
     <string name="msg_cant_load_content">Oops. Conţinutul nu a put fi încărcat.</string>
@@ -79,7 +79,7 @@
     <string name="update_not_found">Folosești ultima versiune</string>
     <string name="update_in_progess">Așteaptă…</string>
     <string name="player_ui_hide_behavior">Ascundere UI automată</string>
-    <string name="player_ui_hide_never">Niciodată</string>
+    <string name="option_never">Niciodată</string>
     <string name="side_panel_sections">Setează secțiunile</string>
     <string name="boot_to_section">Pornește în secțiunea</string>
     <string name="large_ui">Interfață mare</string>

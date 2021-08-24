@@ -1,28 +1,28 @@
 package com.liskovsoft.smartyoutubetv2.common.misc;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.sharedutils.locale.LangHelper;
+import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
-
-import java.util.Locale;
 
 public class MotherActivity extends FragmentActivity {
     private static final String TAG = MotherActivity.class.getSimpleName();
     private static final float DEFAULT_DENSITY = 2.0f; // xhdpi
     private static final float DEFAULT_WIDTH = 1920f; // xhdpi
     private static DisplayMetrics sCachedDisplayMetrics;
-    private static Locale sCachedLocale;
     private static int sNumActivities;
     protected static boolean sIsInPipMode;
+    private ScreensaverManager mScreensaverManager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,6 +34,17 @@ public class MotherActivity extends FragmentActivity {
         initTheme();
 
         sNumActivities++;
+        mScreensaverManager = new ScreensaverManager(this);
+    }
+
+    @SuppressLint("RestrictedApi")
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            mScreensaverManager.enable();
+        }
+
+        return super.dispatchKeyEvent(event);
     }
 
     public void finishReally() {
@@ -60,7 +71,7 @@ public class MotherActivity extends FragmentActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleContextWrapper.wrap(newBase, getLocale(newBase)));
+        super.attachBaseContext(LocaleContextWrapper.wrap(newBase, LocaleUpdater.getSavedLocale(newBase)));
     }
 
     @Override
@@ -72,6 +83,15 @@ public class MotherActivity extends FragmentActivity {
         // Most of the fullscreen tweaks could be performed in styles but not all.
         // E.g. Hide bottom navigation bar (couldn't be done in styles).
         Helpers.makeActivityFullscreen(this);
+
+        mScreensaverManager.enable();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        
+        mScreensaverManager.disable();
     }
 
     @Override
@@ -79,6 +99,10 @@ public class MotherActivity extends FragmentActivity {
         super.onConfigurationChanged(newConfig);
 
         applyCustomConfig();
+    }
+
+    public ScreensaverManager getScreensaverManager() {
+        return mScreensaverManager;
     }
 
     protected void initTheme() {
@@ -121,22 +145,12 @@ public class MotherActivity extends FragmentActivity {
         getResources().getDisplayMetrics().setTo(sCachedDisplayMetrics);
     }
 
-    private static Locale getLocale(Context context) {
-        if (sCachedLocale == null) {
-            LangUpdater updater = new LangUpdater(context);
-            String langCode = updater.getUpdatedLocale();
-            sCachedLocale = LangHelper.parseLangCode(langCode);
-        }
-
-        return sCachedLocale;
-    }
-
     private void applyCustomConfig() {
         // NOTE: dpi should come after locale update to prevent resources overriding.
 
         // Fix sudden language change.
         // Could happen when screen goes off or after PIP mode.
-        LocaleContextWrapper.apply(this, getLocale(this));
+        LocaleUpdater.applySavedLocale(this);
 
         // Fix sudden dpi change.
         // Could happen when screen goes off or after PIP mode.

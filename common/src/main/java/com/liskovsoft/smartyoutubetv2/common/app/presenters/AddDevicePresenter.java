@@ -42,6 +42,7 @@ public class AddDevicePresenter extends BasePresenter<AddDeviceView> {
 
     @Override
     public void onViewDestroyed() {
+        super.onViewDestroyed();
         unhold();
     }
 

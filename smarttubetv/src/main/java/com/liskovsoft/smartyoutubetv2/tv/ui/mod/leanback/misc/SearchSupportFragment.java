@@ -36,6 +36,7 @@ import androidx.leanback.widget.SearchOrbView;
 import androidx.leanback.widget.SpeechOrbView;
 import androidx.leanback.widget.SpeechRecognitionCallback;
 import androidx.leanback.widget.VerticalGridView;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 
@@ -201,6 +202,10 @@ public class SearchSupportFragment extends Fragment {
         mSearchTextEditor.requestFocus(); // MOD: focus on search field
     }
 
+    public String getSearchBarText() {
+        return mSearchTextEditor.getText().toString();
+    }
+
     final Runnable mStartRecognitionRunnable = new Runnable() {
         @Override
         public void run() {
@@ -215,6 +220,7 @@ public class SearchSupportFragment extends Fragment {
     SpeechOrbView mSpeechOrbView;
     SearchResultProvider mProvider;
     String mPendingQuery = null;
+    SearchOrbView mSearchOrbView;
 
     OnItemViewSelectedListener mOnItemViewSelectedListener;
     private OnItemViewClickedListener mOnItemViewClickedListener;
@@ -338,7 +344,7 @@ public class SearchSupportFragment extends Fragment {
         // MOD: inner search bar views for improved focus handling
 
         mSearchTextEditor = mSearchBar.findViewById(R.id.lb_search_text_editor);
-        mSearchTextEditor.setSelectAllOnFocus(true); // easy clear previous search
+        mSearchTextEditor.setSelectAllOnFocus(true); // Select all on focus (easy clear previous search)
         mSearchTextEditor.setOnFocusChangeListener((v, focused) -> {
             Log.d(TAG, "on search field focused");
             if (focused && mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
@@ -349,9 +355,7 @@ public class SearchSupportFragment extends Fragment {
                 mRowsSupportFragment.getVerticalGridView().clearFocus();
 
                 if (getContext() != null) {
-                    // https://stackoverflow.com/questions/5105354/how-to-show-soft-keyboard-when-edittext-is-focused
-                    InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                    Helpers.showKeyboard(getContext());
                 }
             }
         });

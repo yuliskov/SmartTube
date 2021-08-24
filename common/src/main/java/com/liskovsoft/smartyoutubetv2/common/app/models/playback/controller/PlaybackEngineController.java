@@ -45,6 +45,7 @@ public interface PlaybackEngineController {
     void setPlay(boolean play);
     boolean getPlay();
     boolean isPlaying();
+    boolean isLoading();
     List<FormatItem> getVideoFormats();
     List<FormatItem> getAudioFormats();
     List<FormatItem> getSubtitleFormats();
@@ -59,6 +60,8 @@ public interface PlaybackEngineController {
     boolean containsMedia();
     void setSpeed(float speed);
     float getSpeed();
+    void setVolume(float volume);
+    float getVolume();
     void setVideoZoomMode(int mode);
     int getVideoZoomMode();
     void setVideoAspectRatio(float mode);

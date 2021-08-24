@@ -37,7 +37,7 @@
     <string name="video_buffer_size_high">Augsts</string>
     <string name="update_changelog">Izmaiņu žurnāls</string>
     <string name="install_update">Instalēt atjauninājumu</string>
-    <string name="msg_category_is_empty">Oops! Te nekā nav.</string>
+    <string name="section_is_empty">Oops! Te nekā nav.</string>
     <string name="dialog_add_to_playlist">Pievienot atskaņošanas sarakstam</string>
     <string name="msg_signed_users_only">Tikai parakstījušies lietotāji</string>
     <string name="msg_cant_load_content">Oops. Nevaru ielādēt šo saturu.</string>
@@ -78,7 +78,7 @@
     <string name="update_not_found">Tev ir jaunākā lietotnes versija</string>
     <string name="update_in_progess">Gaidi…</string>
     <string name="player_ui_hide_behavior">Automātiski paslēpt UI</string>
-    <string name="player_ui_hide_never">Nekad</string>
+    <string name="option_never">Nekad</string>
     <string name="side_panel_sections">Izvēlēties sekcijas</string>
     <string name="boot_to_section">Atverot lietotni parādīt</string>
     <string name="large_ui">Liels UI</string>
@@ -115,7 +115,7 @@
     <string name="subtitle_black_bg">Melns fons</string>
     <string name="player_seek_preview">Priekšskatīt, kamēr meklējat</string>
     <string name="color_scheme_dark_grey_oled">Tumšs (OLED)</string>
-    <string name="channels_category_sorting">Kanālu sadaļu šķirošana</string>
+    <string name="channels_section_sorting">Kanālu sadaļu šķirošana</string>
     <string name="sorting_by_new_content">Jauns saturs</string>
     <string name="sorting_alphabetically">Alfabētiski</string>
     <string name="sorting_last_viewed">Pēdējais skatītais</string>

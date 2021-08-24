@@ -19,6 +19,7 @@
     <string name="title_video_formats">Videoformate</string>
     <string name="title_audio_formats">Audioformate</string>
     <string name="subtitle_category_title">Untertitel</string>
+    <string name="playback_queue_category_title">Wiedergabe-Warteschlange</string>
     <string name="video_max_quality">Auto (maximale Qualität)</string>
     <string name="audio_max_quality">Auto (maximale Qualität)</string>
     <string name="subtitles_disabled">Untertitel deaktiviert</string>
@@ -38,7 +39,7 @@
     <string name="video_buffer_size_high">Hoch</string>
     <string name="update_changelog">Changelog</string>
     <string name="install_update">Update installieren</string>
-    <string name="msg_category_is_empty">Hier ist nichts drin</string>
+    <string name="section_is_empty">Hier ist nichts drin</string>
     <string name="dialog_add_to_playlist">Hinzufügen/Entfernen aus Wiedergabeliste</string>
     <string name="msg_signed_users_only">Nur angemeldete Nutzer</string>
     <string name="msg_cant_load_content">Inhalt kann nicht geladen werden</string>
@@ -79,7 +80,7 @@
     <string name="update_not_found">Sie verwenden die neueste Version</string>
     <string name="update_in_progess">Warte…</string>
     <string name="player_ui_hide_behavior">Oberfläche automatisch ausblenden</string>
-    <string name="player_ui_hide_never">Niemals</string>
+    <string name="option_never">Niemals</string>
     <string name="side_panel_sections">Kategorien einrichten</string>
     <string name="boot_to_section">Starte in Kategorie</string>
     <string name="large_ui">Große Oberfläche</string>
@@ -97,6 +98,7 @@
     <string name="player_other">Sonstige</string>
     <string name="player_full_date">Genaues Datum in der Beschreibung</string>
     <string name="open_channel">Kanal öffnen</string>
+    <string name="open_playlist">Wiedergabeliste öffnen</string>
     <string name="not_interested">Kein Interesse</string>
     <string name="you_wont_see_this_video">Video wurde aus den Empfehlungen entfernt</string>
     <string name="settings_search">Suche</string>
@@ -117,7 +119,7 @@
     <string name="subtitle_black_bg">Schwarzer Hintergrund</string>
     <string name="player_seek_preview">Vorschau beim Spulen anzeigen</string>
     <string name="color_scheme_dark_grey_oled">Dunkel (OLED)</string>
-    <string name="channels_category_sorting">Kanäle-Kategorie sortieren</string>
+    <string name="channels_section_sorting">Kanäle-Kategorie sortieren</string>
     <string name="sorting_by_new_content">Neue Videos</string>
     <string name="sorting_alphabetically">Alphabetisch</string>
     <string name="sorting_last_viewed">Zuletzt angesehen</string>
@@ -211,11 +213,21 @@
     <string name="channels_old_look">Altes Aussehen der Kanäle-Kategorie</string>
     <string name="channels_auto_load">Inhalt der Kanäle-Kategorie automatisch laden</string>
     <string name="return_to_background_video">Zurück zum Video im Hintergrund</string>
-    <string name="pin_to_sidebar">Anheften an Seitenleiste</string>
-    <string name="unpin_from_sidebar">Lösen von Seitenleiste</string>
+    <string name="pin_unpin_from_sidebar">Anheften/Ablösen von Seitenleiste</string>
+    <string name="pin_to_sidebar">An Seitenleiste angeheftet</string>
+    <string name="unpin_from_sidebar">Von Seitenleiste abgelöst</string>
     <string name="dialog_select_country">Land</string>
     <string name="settings_language_country">Sprache/Land</string>
     <string name="share_embed_link">Link zum Einbetten teilen</string>
     <string name="card_text_scroll_factor">Scrollgeschwindigkeit des Kartentextes</string>
-    <string name="preferred_update_source">Bevorzugte Update-Quelle</string>
+    <string name="preferred_update_source">Update-Quelle auswählen</string>
+    <string name="hide_shorts">Kurzvideos in Abos ausblenden</string>
+    <string name="key_remapping">Tastenbelegung anpassen</string>
+    <string name="screen_diming">Bildschirm dimmen</string>
+    <string name="removed_from_playback_queue">Aus Wiedergabe-Warteschlange entfernt</string>
+    <string name="added_to_playback_queue">Zur Wiedergabe-Warteschlange hinzugefügt</string>
+    <string name="add_remove_from_playback_queue">Hinzufügen/Entfernen aus Wiedergabe-Warteschlange</string>
+    <string name="proxy_enabled">Proxy aktiviert</string>
+    <string name="proxy_disabled">Proxy deaktiviert</string>
+    <string name="covid_news_row_name">Nachrichten zu COVID-19</string>
 </resources>

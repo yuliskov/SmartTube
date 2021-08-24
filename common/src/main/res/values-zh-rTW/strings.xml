@@ -38,7 +38,7 @@
     <string name="video_buffer_size_high">高</string>
     <string name="update_changelog">更新日誌</string>
     <string name="install_update">安裝更新</string>
-    <string name="msg_category_is_empty">糟糕！ 這裡什麼都沒有。</string>
+    <string name="section_is_empty">糟糕！ 這裡什麼都沒有。</string>
     <string name="dialog_add_to_playlist">新增/刪除播放列表</string>
     <string name="msg_signed_users_only">只限登入用戶</string>
     <string name="msg_cant_load_content">哎呀！ 無法載入內容。</string>
@@ -79,7 +79,7 @@
     <string name="update_not_found">已經是最新版本</string>
     <string name="update_in_progess">請稍等……</string>
     <string name="player_ui_hide_behavior">自動隱藏使用者介面</string>
-    <string name="player_ui_hide_never">從不</string>
+    <string name="option_never">從不</string>
     <string name="side_panel_sections">設定側邊選單</string>
     <string name="boot_to_section">預設開啟頁面</string>
     <string name="large_ui">大使用者介面</string>
@@ -117,7 +117,7 @@
     <string name="subtitle_black_bg">背景播放</string>
     <string name="player_seek_preview">搜尋時預覽</string>
     <string name="color_scheme_dark_grey_oled">深灰色（OLED）</string>
-    <string name="channels_category_sorting">頻道排序</string>
+    <string name="channels_section_sorting">頻道排序</string>
     <string name="sorting_by_new_content">新活動</string>
     <string name="sorting_alphabetically">A-Z</string>
     <string name="sorting_last_viewed">上次觀看</string>

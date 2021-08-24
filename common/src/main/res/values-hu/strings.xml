@@ -38,7 +38,7 @@
     <string name="video_buffer_size_high">Magas</string>
     <string name="update_changelog">Változások</string>
     <string name="install_update">Új verzió telepítése</string>
-    <string name="msg_category_is_empty">Hoppá! Itt nincs semmi.</string>
+    <string name="section_is_empty">Hoppá! Itt nincs semmi.</string>
     <string name="dialog_add_to_playlist">Lejátszási listához adva</string>
     <string name="msg_signed_users_only">Csak bejelentkezett felhasználóknak</string>
     <string name="msg_cant_load_content">Hoppá. Nem lehet betölteni a tartalmat.</string>
@@ -79,7 +79,7 @@
     <string name="update_not_found">A legújabb verziót használja</string>
     <string name="update_in_progess">Várj…</string>
     <string name="player_ui_hide_behavior">A felhasználói felület automatikus elrejtése</string>
-    <string name="player_ui_hide_never">Soha</string>
+    <string name="option_never">Soha</string>
     <string name="side_panel_sections">Szakaszok beállítása</string>
     <string name="boot_to_section">Boot egy szakaszba</string>
     <string name="large_ui">Nagyobb felhasználói felület</string>
@@ -117,7 +117,7 @@
     <string name="subtitle_black_bg">Fekete háttér</string>
     <string name="player_seek_preview">Előnézet gyorstekeréskor</string>
     <string name="color_scheme_dark_grey_oled">Sötétszürke (OLED)</string>
-    <string name="channels_category_sorting">Csatornaszekciók rendezése</string>
+    <string name="channels_section_sorting">Csatornaszekciók rendezése</string>
     <string name="sorting_by_new_content">Új tartalom</string>
     <string name="sorting_alphabetically">Abc szerint</string>
     <string name="sorting_last_viewed">Utoljára nézett</string>

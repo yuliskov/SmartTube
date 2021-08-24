@@ -25,6 +25,7 @@ import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowPresenter;
 import androidx.leanback.widget.RowPresenter.ViewHolder;
 import com.google.android.exoplayer2.ControlDispatcher;
+import com.google.android.exoplayer2.DefaultControlDispatcher;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -39,7 +40,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -53,6 +54,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.Sub
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.renderer.CustomOverridesRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
@@ -99,6 +101,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private int mPlaybackMode = PlaybackEngineController.BACKGROUND_MODE_DEFAULT;
     private MediaSessionCompat mMediaSession;
     private MediaSessionConnector mMediaSessionConnector;
+    private boolean mIsAfrRunning;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -182,6 +185,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             initializePlayer();
         }
 
+        mExoPlayerController.onViewPaused(false);
         mEventListener.onViewResumed();
     }
 
@@ -193,6 +197,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             releasePlayer();
         }
 
+        mExoPlayerController.onViewPaused(true);
         mEventListener.onViewPaused();
     }
 
@@ -284,7 +289,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     private void releasePlayer() {
         // Inside dialogs we could change engine settings on fly
-        if (AppSettingsPresenter.instance(getContext()).isDialogShown()) {
+        if (AppDialogPresenter.instance(getContext()).isDialogShown()) {
             Log.d(TAG, "releasePlayer: Engine release is blocked by dialog. Exiting...");
             return;
         }
@@ -357,6 +362,9 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
         DefaultTrackSelector trackSelector = new RestoreTrackSelector(new Factory());
         mPlayer = mPlayerInitializer.createPlayer(getContext(), renderersFactory, trackSelector);
+        // Try to fix decoder error on Nvidia Shield 2019.
+        // Init resources as early as possible.
+        mPlayer.setForegroundMode(false);
 
         mExoPlayerController.setPlayer(mPlayer);
         mExoPlayerController.setTrackSelector(trackSelector);
@@ -434,6 +442,20 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             @Override
             public void onSkipToNext(Player player, ControlDispatcher controlDispatcher) {
                 mEventListener.onNextClicked();
+            }
+        });
+
+        mMediaSessionConnector.setControlDispatcher(new DefaultControlDispatcher() {
+            @Override
+            public boolean dispatchSetPlayWhenReady(Player player, boolean playWhenReady) {
+                // Fix exoplayer pause when switching AFR.
+                // Also it's tied to activity state transitioning because window has different mode.
+                // NOTE: may be a problems with background playback or bluetooth button events
+                if (mIsAfrRunning || (!isResumed() && !isInPIPMode())) {
+                    return false;
+                }
+
+                return super.dispatchSetPlayWhenReady(player, playWhenReady);
             }
         });
     }
@@ -607,8 +629,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         }
 
         @Override
-        public void onVideoStats(boolean enabled) {
-            mEventListener.onVideoStatsClicked(enabled);
+        public void onDebugInfo(boolean enabled) {
+            mEventListener.onDebugInfoClicked(enabled);
         }
 
         @Override
@@ -629,6 +651,16 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         @Override
         public void onPip() {
             mEventListener.onPipClicked();
+        }
+
+        @Override
+        public void onScreenOff() {
+            mEventListener.onScreenOffClicked();
+        }
+
+        @Override
+        public void onPlaybackQueue() {
+            mEventListener.onPlaybackQueueClicked();
         }
 
         @Override
@@ -675,6 +707,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
+    public void setAfrRunning(boolean isRunning) {
+        mIsAfrRunning = isRunning;
+    }
+
+    @Override
     public void loadStoryboard() {
         if (mPlayerGlue.getSeekProvider() instanceof StoryboardSeekDataProvider) {
             ((StoryboardSeekDataProvider) mPlayerGlue.getSeekProvider()).setVideo(getVideo(), mExoPlayerController.getLengthMs());
@@ -706,28 +743,28 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void openDash(InputStream dashManifest) {
-        cleanupPrevTrack();
+        resetPlayerState();
 
         mExoPlayerController.openDash(dashManifest);
     }
 
     @Override
     public void openDashUrl(String dashManifestUrl) {
-        cleanupPrevTrack();
+        resetPlayerState();
 
         mExoPlayerController.openDashUrl(dashManifestUrl);
     }
 
     @Override
     public void openHlsUrl(String hlsPlaylistUrl) {
-        cleanupPrevTrack();
+        resetPlayerState();
 
         mExoPlayerController.openHlsUrl(hlsPlaylistUrl);
     }
 
     @Override
     public void openUrlList(List<String> urlList) {
-        cleanupPrevTrack();
+        resetPlayerState();
 
         mExoPlayerController.openUrlList(urlList);
     }
@@ -760,6 +797,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     @Override
     public boolean isPlaying() {
         return mExoPlayerController.isPlaying();
+    }
+
+    @Override
+    public boolean isLoading() {
+        return mExoPlayerController.isLoading();
     }
 
     @Override
@@ -829,6 +871,16 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     @Override
     public float getSpeed() {
         return mExoPlayerController.getSpeed();
+    }
+
+    @Override
+    public void setVolume(float volume) {
+        mExoPlayerController.setVolume(volume);
+    }
+
+    @Override
+    public float getVolume() {
+        return mExoPlayerController.getVolume();
     }
 
     @Override
@@ -929,6 +981,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void showControls(boolean show) {
+        if (isInPIPMode()) {
+            // UI couldn't be properly displayed in PIP mode
+            return;
+        }
+
         if (show) {
             showControlsOverlay(mIsAnimationEnabled);
         } else {
@@ -989,15 +1046,19 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     @Override
     public void setDebugButtonState(boolean show) {
         if (mPlayerGlue != null) {
-            mPlayerGlue.setVideoStatsActionState(show);
+            mPlayerGlue.setDebugInfoActionState(show);
         }
     }
 
     @Override
-    public void showDebugView(boolean show) {
+    public void showDebugInfo(boolean show) {
         if (mDebugInfoManager != null) {
             mDebugInfoManager.show(show);
         }
+    }
+
+    public boolean isDebugInfoShown() {
+        return mDebugInfoManager != null && mDebugInfoManager.isShown();
     }
 
     @Override
@@ -1066,13 +1127,14 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
      * Simply recreates exoplayer objects (silently) if prev track (current from this perspective) isn't empty<br/>
      * Could help with memory leaks?
      */
-    private void cleanupPrevTrack() {
+    private void resetPlayerState() {
         // Ensure that user isn't browsing suggestions
         if (containsMedia() && !isSuggestionsShown()) {
             // save state
             Video video = getVideo();
             int repeatButtonState = getRepeatButtonState();
             boolean controlsShown = isControlsShown();
+            boolean debugShown = isDebugInfoShown();
 
             // silently recreate player objects
             destroyPlayerObjects();
@@ -1082,6 +1144,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             setVideo(video);
             setRepeatButtonState(repeatButtonState);
             showControls(controlsShown);
+            showDebugInfo(debugShown);
+            setDebugButtonState(debugShown);
         }
     }
 }

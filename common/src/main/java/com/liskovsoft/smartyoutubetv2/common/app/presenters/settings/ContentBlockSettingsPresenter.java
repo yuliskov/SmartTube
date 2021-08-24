@@ -5,7 +5,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
 
@@ -31,7 +31,7 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
     }
 
     public void show() {
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
         settingsPresenter.clear();
         
         appendSponsorBlockSwitch(settingsPresenter);
@@ -41,7 +41,7 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.showDialog(ContentBlockData.SPONSOR_BLOCK_NAME);
     }
 
-    private void appendSponsorBlockSwitch(AppSettingsPresenter settingsPresenter) {
+    private void appendSponsorBlockSwitch(AppDialogPresenter settingsPresenter) {
         OptionItem sponsorBlockOption = UiOptionItem.from(CONTENT_BLOCK_TITLE,
                 option -> mContentBlockData.setSponsorBlockEnabled(option.isSelected()),
                 mContentBlockData.isSponsorBlockEnabled()
@@ -50,7 +50,7 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendSingleSwitch(sponsorBlockOption);
     }
 
-    private void appendNotificationTypeSection(AppSettingsPresenter settingsPresenter) {
+    private void appendNotificationTypeSection(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         int notificationType = mContentBlockData.getNotificationType();
@@ -68,7 +68,7 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.content_block_notification_type), options);
     }
 
-    private void appendCategoriesSection(AppSettingsPresenter settingsPresenter) {
+    private void appendCategoriesSection(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         Set<String> categories = mContentBlockData.getCategories();

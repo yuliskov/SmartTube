@@ -28,7 +28,7 @@ public class DetailsDescriptionPresenter extends AbstractDetailsDescriptionPrese
 
         if (video != null) {
             viewHolder.getTitle().setText(video.title);
-            viewHolder.getSubtitle().setText(video.studio);
+            viewHolder.getSubtitle().setText(video.author);
             viewHolder.getBody().setText(video.description);
         }
     }

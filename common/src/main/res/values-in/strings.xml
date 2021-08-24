@@ -38,7 +38,7 @@
     <string name="video_buffer_size_high">Tinggi</string>
     <string name="update_changelog">Changelog</string>
     <string name="install_update">Memasang pembaharuan</string>
-    <string name="msg_category_is_empty">Ups! Tidak ada apa-apa di sini.</string>
+    <string name="section_is_empty">Ups! Tidak ada apa-apa di sini.</string>
     <string name="dialog_add_to_playlist">Tambahkan ke Daftar Putar</string>
     <string name="msg_signed_users_only">Hanya pengguna yang terdaftar</string>
     <string name="msg_cant_load_content">Ups. Tidak dapat memuat konten.</string>
@@ -79,7 +79,7 @@
     <string name="update_not_found">Anda menggunakan versi terbaru</string>
     <string name="update_in_progess">Harap tunggu sebentar…</string>
     <string name="player_ui_hide_behavior">Sembunyikan UI otomatis</string>
-    <string name="player_ui_hide_never">Tidak pernah</string>
+    <string name="option_never">Tidak pernah</string>
     <string name="side_panel_sections">Bagian penyiapan</string>
     <string name="boot_to_section">Boot ke bagian</string>
     <string name="large_ui">UI besar</string>
@@ -116,7 +116,7 @@
     <string name="subtitle_black_bg">Latar belakang hitam</string>
     <string name="player_seek_preview">Pratinjau sambil mencari</string>
     <string name="color_scheme_dark_grey_oled">Abu-abu Tua (OLED)</string>
-    <string name="channels_category_sorting">Penyortiran bagian saluran</string>
+    <string name="channels_section_sorting">Penyortiran bagian saluran</string>
     <string name="sorting_by_new_content">Konten baru</string>
     <string name="sorting_alphabetically">Menurut abjad</string>
     <string name="sorting_last_viewed">Terakhir dilihat</string>

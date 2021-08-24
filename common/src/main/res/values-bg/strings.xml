@@ -38,7 +38,7 @@
     <string name="video_buffer_size_high">Високо</string>
     <string name="update_changelog">Промени в актуализацията</string>
     <string name="install_update">Инсталирайте актуализация</string>
-    <string name="msg_category_is_empty">Ами сега...тук няма нищо.</string>
+    <string name="section_is_empty">Ами сега...тук няма нищо.</string>
     <string name="dialog_add_to_playlist">Добави към плейлист</string>
     <string name="msg_signed_users_only">Само вписани потребители</string>
     <string name="msg_cant_load_content">Ами сега...не може да се зареди съдържанието.</string>
@@ -79,7 +79,7 @@
     <string name="update_not_found">Използвате най-новата версия</string>
     <string name="update_in_progess">Изчакайте...</string>
     <string name="player_ui_hide_behavior">Автоматично скриване на потребителския интерфейс</string>
-    <string name="player_ui_hide_never">Никога</string>
+    <string name="option_never">Никога</string>
     <string name="side_panel_sections">Настрой разделите</string>
     <string name="boot_to_section">При стартиране да се визуализира раздел</string>
     <string name="large_ui">Голям потребителски интерфейс</string>
@@ -117,7 +117,7 @@
     <string name="subtitle_black_bg">Черен фон</string>
     <string name="player_seek_preview">Визуализиране при търсене</string>
     <string name="color_scheme_dark_grey_oled">Тъмно сиво (OLED)</string>
-    <string name="channels_category_sorting">Сортиране на видеоклиповете</string>
+    <string name="channels_section_sorting">Сортиране на видеоклиповете</string>
     <string name="sorting_by_new_content">Ново съдържание</string>
     <string name="sorting_alphabetically">Азбучен ред</string>
     <string name="sorting_last_viewed">Последно гледани</string>

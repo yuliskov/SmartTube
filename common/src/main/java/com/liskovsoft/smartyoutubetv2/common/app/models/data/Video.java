@@ -25,7 +25,7 @@ public final class Video implements Parcelable {
     public int playlistIndex;
     public String bgImageUrl;
     public String cardImageUrl;
-    public String studio;
+    public String author;
     public String badge;
     public String previewUrl;
     public float percentWatched = -1;
@@ -39,6 +39,7 @@ public final class Video implements Parcelable {
     public boolean isRemote;
     public int groupPosition = -1; // group position in multi-grid fragments
     public String clickTrackingParams;
+    public boolean isSynced;
 
     public Video() {
         
@@ -53,7 +54,7 @@ public final class Video implements Parcelable {
             final String videoUrl,
             final String bgImageUrl,
             final String cardImageUrl,
-            final String studio) {
+            final String author) {
         this.id = id;
         this.category = category;
         this.title = title;
@@ -62,7 +63,7 @@ public final class Video implements Parcelable {
         this.videoUrl = videoUrl;
         this.bgImageUrl = bgImageUrl;
         this.cardImageUrl = cardImageUrl;
-        this.studio = studio;
+        this.author = author;
     }
 
     protected Video(Parcel in) {
@@ -74,7 +75,7 @@ public final class Video implements Parcelable {
         cardImageUrl = in.readString();
         videoId = in.readString();
         videoUrl = in.readString();
-        studio = in.readString();
+        author = in.readString();
     }
 
     public static Video from(MediaItem item) {
@@ -89,7 +90,7 @@ public final class Video implements Parcelable {
         video.videoUrl = item.getVideoUrl();
         video.bgImageUrl = item.getBackgroundImageUrl();
         video.cardImageUrl = item.getCardImageUrl();
-        video.studio = item.getAuthor();
+        video.author = item.getAuthor();
         video.percentWatched = item.getPercentWatched();
         video.badge = item.getBadgeText();
         video.hasNewContent = item.hasNewContent();
@@ -145,12 +146,30 @@ public final class Video implements Parcelable {
      */
     @Override
     public boolean equals(@Nullable Object obj) {
-        return obj instanceof Video && hashCode() == obj.hashCode();
+        if (obj instanceof Video) {
+            if (videoId != null) {
+                return videoId.equals(((Video) obj).videoId);
+            }
+
+            if (playlistId != null) {
+                return playlistId.equals(((Video) obj).playlistId);
+            }
+
+            if (channelId != null) {
+                return channelId.equals(((Video) obj).channelId);
+            }
+
+            if (mediaItem != null) {
+                return mediaItem.equals(((Video) obj).mediaItem);
+            }
+        }
+
+        return false;
     }
 
     @Override
     public int hashCode() {
-        return Helpers.hashCode(title, description, videoId, playlistId, channelId);
+        return Helpers.hashCode(videoId, playlistId, channelId, mediaItem);
     }
     
     public static boolean equals(Video video1, Video video2) {
@@ -179,7 +198,7 @@ public final class Video implements Parcelable {
         dest.writeString(cardImageUrl);
         dest.writeString(videoId);
         dest.writeString(videoUrl);
-        dest.writeString(studio);
+        dest.writeString(author);
     }
 
     public static Video fromString(String spec) {
@@ -238,16 +257,28 @@ public final class Video implements Parcelable {
         return videoId == null && channelId != null;
     }
 
-    public boolean isChannelUploads() {
-        return mediaItem != null && mediaItem.getType() == MediaItem.TYPE_CHANNELS_SECTION;
+    public boolean isPlaylist() {
+        return mediaItem != null && mediaItem.getType() == MediaItem.TYPE_PLAYLIST;
     }
 
     public boolean isPlaylistItem() {
         return playlistIndex > 0;
     }
 
-    public boolean isPlaylist() {
+    public boolean hasUploads() {
+        return mediaItem != null && mediaItem.hasUploads();
+    }
+
+    public boolean isChannelUploadsSection() {
+        return mediaItem != null && mediaItem.getType() == MediaItem.TYPE_CHANNELS_SECTION;
+    }
+
+    public boolean isPlaylistSection() {
         return mediaItem != null && mediaItem.getType() == MediaItem.TYPE_PLAYLISTS_SECTION;
+    }
+
+    public void sync(MediaItemMetadata metadata) {
+        sync(metadata, false);
     }
 
     public void sync(MediaItemMetadata metadata, boolean useAltDesc) {
@@ -255,16 +286,30 @@ public final class Video implements Parcelable {
             return;
         }
 
-        title = metadata.getTitle();
+        String newTitle = metadata.getTitle();
+
+        if (newTitle != null) {
+            title = newTitle;
+        }
+
+        String newDescription = null;
+
         // Don't sync future translation because of not precise description
         if (!metadata.isUpcoming()) {
-            description = useAltDesc ? metadata.getDescriptionAlt() : metadata.getDescription();
+            newDescription = useAltDesc ? metadata.getDescriptionAlt() : metadata.getDescription();
         }
+
+        if (newDescription != null) {
+            description = newDescription;
+        }
+
+        // No checks. This data wasn't existed before sync.
         channelId = metadata.getChannelId();
         nextMediaItem = metadata.getNextVideo();
         isLive = metadata.isLive();
         isSubscribed = metadata.isSubscribed();
         isUpcoming = metadata.isUpcoming();
+        isSynced = true;
     }
 
     // Builder for Video object.

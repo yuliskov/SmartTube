@@ -19,6 +19,7 @@
     <string name="title_video_formats">Відеоформат</string>
     <string name="title_audio_formats">Аудіоформат</string>
     <string name="subtitle_category_title">Субтитри</string>
+    <string name="playback_queue_category_title">Черга відтворення</string>
     <string name="video_max_quality">Авто (макс. якість)</string>
     <string name="audio_max_quality">Авто (макс. якість)</string>
     <string name="subtitles_disabled">Субтитри відключені</string>
@@ -38,7 +39,7 @@
     <string name="video_buffer_size_high">Високий</string>
     <string name="update_changelog">Зміни</string>
     <string name="install_update">Встановити оновлення</string>
-    <string name="msg_category_is_empty">Халепа! Тут нічого нема.</string>
+    <string name="section_is_empty">Халепа! Тут нічого нема.</string>
     <string name="dialog_add_to_playlist">Додати/Видалити із плейлиста</string>
     <string name="msg_signed_users_only">Необхідно увійти в обліковий запис</string>
     <string name="msg_cant_load_content">Неможливо завантажити вміст</string>
@@ -79,7 +80,7 @@
     <string name="update_not_found">Ваша версія не потребує оновлення</string>
     <string name="update_in_progess">Хвилинку…</string>
     <string name="player_ui_hide_behavior">Приховувати інтерфейс</string>
-    <string name="player_ui_hide_never">Ніколи</string>
+    <string name="option_never">Ніколи</string>
     <string name="side_panel_sections">Налаштувати розділи</string>
     <string name="boot_to_section">Завантажуватися у розділ</string>
     <string name="large_ui">Збільшений інтерфейс</string>
@@ -97,6 +98,7 @@
     <string name="player_other">Різне</string>
     <string name="player_full_date">Точна дата в описі</string>
     <string name="open_channel">Перейти до каналу</string>
+    <string name="open_playlist">Відкрити плейлист</string>
     <string name="not_interested">Більше не радити</string>
     <string name="you_wont_see_this_video">Це відео більше не з\`явиться серед рекомендацій</string>
     <string name="settings_search">Пошук</string>
@@ -117,12 +119,12 @@
     <string name="subtitle_black_bg">Чорний фон</string>
     <string name="player_seek_preview">Прев\'ю при перемотуванні</string>
     <string name="color_scheme_dark_grey_oled">Темно-сіра (OLED)</string>
-    <string name="channels_category_sorting">Сортування розділу Канали</string>
+    <string name="channels_section_sorting">Сортування розділу Канали</string>
     <string name="sorting_by_new_content">Новий контент</string>
     <string name="sorting_alphabetically">За абеткою</string>
     <string name="sorting_last_viewed">Останні переглянуті</string>
     <string name="player_pause_when_seek">Пауза при перемотуванні</string>
-    <string name="playlists_style">Стиль плейлистів</string>
+    <string name="playlists_style">Стиль розділу Плейлисти</string>
     <string name="playlists_style_grid">Сітка</string>
     <string name="playlists_style_rows">Рядки</string>
     <string name="player_show_clock">Відображати годинник у спливаючому меню</string>
@@ -152,7 +154,7 @@
     <string name="share_link">Поділитися посиланням</string>
     <string name="subscribe_to_channel">Підписатися на канал</string>
     <string name="wait_data_loading">Зачекайте поки дані завантажуються…</string>
-    <string name="auto_frame_rate_pause">Автофреймрейт (пауза)</string>
+    <string name="auto_frame_rate_pause">Автофреймрейт (пауза при перемиканні)</string>
     <string name="auto_frame_rate_applying">Застосовується автофреймрейт %sx%s@%s</string>
     <string name="audio_shift">Зміщення аудіо</string>
     <string name="player_remember_speed">Запам\'ятовувати швидкість</string>
@@ -211,12 +213,27 @@
     <string name="channels_old_look">Повернути старий вигляд розділу Канали</string>
     <string name="channels_auto_load">Автоматично завантажувати вміст розділу Канали</string>
     <string name="return_to_background_video">Повернутися до фонового відео</string>
-    <string name="pin_to_sidebar">Прикріпити до бічної панелі</string>
-    <string name="unpin_from_sidebar">Відкріпити від бічної панелі</string>
+    <string name="pin_unpin_from_sidebar">Прикріпити/Відкріпити від бічної панелі</string>
+    <string name="pin_to_sidebar">Прикріплено до бічної панелі</string>
+    <string name="unpin_from_sidebar">Відкріплено від бічної панелі</string>
     <string name="dialog_select_country">Країна</string>
     <string name="settings_language_country">Мова/Країна</string>
     <string name="share_embed_link">Поділитися вбудованим посиланням</string>
     <string name="card_text_scroll_factor">Швидкість прокрутки тексту картки</string>
     <string name="preferred_update_source">Вибрати джерело оновлень</string>
     <string name="hide_shorts">Приховувати короткі відео з Підписок</string>
+    <string name="key_remapping">Перевизначення клавіш</string>
+    <string name="screen_diming">Затемнення екрану</string>
+    <string name="removed_from_playback_queue">Видалено з черги відтворення</string>
+    <string name="added_to_playback_queue">Додано до черги відтворення</string>
+    <string name="add_remove_from_playback_queue">Додати/Видалити з черги відтворення</string>
+    <string name="proxy_enabled">Проксі активовано</string>
+    <string name="proxy_disabled">Проксі деактивовано</string>
+    <string name="uploads_row_name">Завантаження</string>
+    <string name="playlists_row_name">Створені списки відтворення</string>
+    <string name="popular_uploads_row_name">Популярні завантаження</string>
+    <string name="breaking_news_row_name">Важливі новини</string>
+    <string name="covid_news_row_name">Новини про коронавірус COVID-19</string>
+    <string name="enable_voice_search">Увімкнути голосовий пошук</string>
+    <string name="subscribe_unsubscribe_from_channel">Підписатися/Відписатися від каналу</string>
 </resources>

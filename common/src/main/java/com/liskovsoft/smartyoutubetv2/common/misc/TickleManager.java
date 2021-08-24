@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.utils;
+package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.os.Handler;
 import android.os.Looper;

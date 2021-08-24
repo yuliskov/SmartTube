@@ -37,7 +37,7 @@
     <string name="video_buffer_size_high">Wysoki</string>
     <string name="update_changelog">Changelog</string>
     <string name="install_update">Zainstaluj aktualizację</string>
-    <string name="msg_category_is_empty">Ups! Nic tu nie ma.</string>
+    <string name="section_is_empty">Ups! Nic tu nie ma.</string>
     <string name="dialog_add_to_playlist">Dodaj do listy odtwarzania</string>
     <string name="msg_signed_users_only">Tylko zalogowani użytkownicy</string>
     <string name="msg_cant_load_content">Ups. Nie można załadować treści.</string>
@@ -78,7 +78,7 @@
     <string name="update_not_found">Używasz najnowszej wersji</string>
     <string name="update_in_progess">Czekaj…</string>
     <string name="player_ui_hide_behavior">Automatyczne ukrywanie interfejsu użytkownika</string>
-    <string name="player_ui_hide_never">Nigdy</string>
+    <string name="option_never">Nigdy</string>
     <string name="side_panel_sections">Ustawienia sekcji</string>
     <string name="boot_to_section">Sekcja startowa</string>
     <string name="large_ui">Duży interfejs</string>
@@ -115,7 +115,7 @@
     <string name="subtitle_black_bg">Czarne tło</string>
     <string name="player_seek_preview">Podgląd podczas przewijania</string>
     <string name="color_scheme_dark_grey_oled">Ciemno szary (OLED)</string>
-    <string name="channels_category_sorting">Sortowanie sekcji kanałów</string>
+    <string name="channels_section_sorting">Sortowanie sekcji kanałów</string>
     <string name="sorting_by_new_content">Nowe filmy</string>
     <string name="sorting_alphabetically">Alfabetycznie</string>
     <string name="sorting_last_viewed">Ostatnio oglądane</string>

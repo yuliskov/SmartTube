@@ -27,10 +27,6 @@ public class OnboardingPresenter extends BasePresenter<OnboardingView> {
         return sInstance;
     }
 
-    public void onClose() {
-        completeOnboarding();
-    }
-
     public void onFinish() {
         completeOnboarding();
 

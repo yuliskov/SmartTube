@@ -9,7 +9,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AddDevicePresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
@@ -50,7 +50,7 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void createAndShowDialog() {
-        AppSettingsPresenter settingsPresenter = AppSettingsPresenter.instance(getContext());
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
         settingsPresenter.clear();
 
         //appendLinkEnableSwitch(settingsPresenter);
@@ -60,7 +60,7 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.showDialog(getContext().getString(R.string.settings_linked_devices), this::unhold);
     }
 
-    private void appendRemoveAllDevicesButton(AppSettingsPresenter settingsPresenter) {
+    private void appendRemoveAllDevicesButton(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         OptionItem confirmItem = UiOptionItem.from(
@@ -76,12 +76,12 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.dialog_remove_all_devices), options);
     }
 
-    private void appendAddDeviceButton(AppSettingsPresenter settingsPresenter) {
+    private void appendAddDeviceButton(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleButton(UiOptionItem.from(
                 getContext().getString(R.string.dialog_add_device), option -> AddDevicePresenter.instance(getContext()).start()));
     }
 
-    private void appendLinkEnableSwitch(AppSettingsPresenter settingsPresenter) {
+    private void appendLinkEnableSwitch(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.device_link_enabled), optionItem -> {
             mDeviceLinkData.enableDeviceLink(optionItem.isSelected());
         }, mDeviceLinkData.isDeviceLinkEnabled()));

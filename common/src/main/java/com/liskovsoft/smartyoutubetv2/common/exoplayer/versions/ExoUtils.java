@@ -20,6 +20,14 @@ public class ExoUtils {
         return player.isPlaying();
     }
 
+    public static boolean isLoading(ExoPlayer player) {
+        if (player == null) {
+            return false;
+        }
+
+        return player.isLoading();
+    }
+
     public static MediaCodecInfo getCapsDecoderInfo(String mimeType) {
         MediaCodecInfo info = null;
 
