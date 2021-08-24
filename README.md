@@ -39,8 +39,8 @@ You can use either of the following methods to install the app:
 
 **The app has a built-in updater** with changelog. You can also find all releases and the **changelog** on the [Telegram channel @SmartTubeNextNewsEN](https://t.me/s/SmartTubeNextNewsEN) (no login required) or on [Github](https://github.com/yuliskov/SmartTubeNext/releases/).
 
-> latest [**beta download**](https://github.com/yuliskov/SmartYouTubeTV/releases/download/beta/smarttube_beta.apk)
-> latest [stable download](https://github.com/yuliskov/SmartTubeNext/releases/latest)
+> latest [**beta download**](https://github.com/yuliskov/SmartTubeNext/releases/download/latest/smarttube_beta.apk)    
+> latest [stable download](https://github.com/yuliskov/SmartTubeNext/releases/download/latest/smarttube_stable.apk)
 
 
 ### Updating
