@@ -359,13 +359,17 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
-        if (formatInfo.isUnplayable()) {
+        if (formatInfo.isUnplayable() || formatInfo.isAgeRestricted()) {
             getController().showError(formatInfo.getPlayabilityStatus());
             if (!mIsWasVideoStartError) {
                 Analytics.sendVideoStartError(mLastVideo.videoId,
                         mLastVideo.title,
                         formatInfo.getPlayabilityStatus());
                 mIsWasVideoStartError = true;
+            }
+            if (formatInfo.isAgeRestricted()) {
+                SignInPresenter.instance(getActivity()).start();
+                getController().finish();
             }
         } else if (formatInfo.containsDashUrl()) {
             Log.d(TAG, "Found live video in dash format. Loading...");
