@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector;
 
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Pair;
@@ -30,6 +31,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     //private static final TrackSelection.Factory FIXED_FACTORY = new FixedTrackSelection.Factory();
     //private static final TrackSelection.Factory RANDOM_FACTORY = new RandomTrackSelection.Factory();
     private static final String TAG = TrackSelectorManager.class.getSimpleName();
+    private final static int MAX_VIDEO_WIDTH = (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ? 1280 :
+            Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ? 1920 : 3840);
 
     private DefaultTrackSelector mTrackSelector;
     //private TrackSelection.Factory mTrackSelectionFactory;
@@ -455,6 +458,25 @@ public class TrackSelectorManager implements TrackSelectorCallback {
 
                 for (MediaTrack mediaTrack : trackGroup) {
                     if (mediaTrack == null) {
+                        continue;
+                    }
+                    final boolean isVerticalVideo = 1.0 * mediaTrack.format.width / mediaTrack.format.height <= 1.0;
+                    if (isVerticalVideo && mediaTrack.format.codecs != null && mediaTrack.format.codecs.startsWith(TrackSelectorUtil.CODEC_SHORT_VP9)) {
+                        continue;
+                    }
+                    final boolean isProperlyAspect = Math.abs(
+                            (1.0 * mediaTrack.format.width  / mediaTrack.format.height) - 16 / 9.0) < 0.1;
+                    if (!isProperlyAspect && mediaTrack.format.width > 1920) {
+                        continue;
+                    }
+                    if (mediaTrack.format.width > MAX_VIDEO_WIDTH) {
+                        continue;
+                    }
+                    if (TrackSelectorUtil.isHdrCodec(mediaTrack.format.codecs)) {
+                        continue;
+                    }
+                    if (mediaTrack.format.codecs != null
+                            && mediaTrack.format.codecs.startsWith(TrackSelectorUtil.CODEC_SHORT_AV1)) {
                         continue;
                     }
 
