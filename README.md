@@ -20,7 +20,7 @@ stability, voice search and casting support **might** be worse than in the offic
 
 ## Installation
 
-> [![video of the installation](images/new/zPV0imF.jpg)](images/new/zPV0imF.mp4?raw=true) 
+> [![video of the installation](images/new/zPV0imF.jpg)](images/new/zPV0imF.mp4) 
 > (click to watch installation video)
 
 **Do not** download SmartTubeNext from any **app store**, APK websites or blogs; these were uploaded by other people and may contain malware or ads. SmartTubeNext is not officially published on any app store. Sadly, the Google PlayStore does not allow ad-free Youtube apps using unofficial APIs.
