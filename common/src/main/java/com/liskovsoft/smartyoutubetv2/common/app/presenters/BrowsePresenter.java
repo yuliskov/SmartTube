@@ -18,7 +18,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.CategoryEmptyError;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.BootDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.ChannelUploadsMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.CategoryPresenter;
@@ -381,9 +380,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void showBootDialogs() {
-        BootDialogPresenter updatePresenter = BootDialogPresenter.instance(getContext());
-        updatePresenter.start();
-        updatePresenter.unhold();
+//        BootDialogPresenter updatePresenter = BootDialogPresenter.instance(getContext());
+//        updatePresenter.start();
+//        updatePresenter.unhold();
     }
 
     public void refresh() {

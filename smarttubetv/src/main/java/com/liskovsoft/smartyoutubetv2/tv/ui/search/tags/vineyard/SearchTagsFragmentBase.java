@@ -50,7 +50,6 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         mResultsPresenter = new CustomListRowPresenter();
         mResultsAdapter = new ArrayObjectAdapter(mResultsPresenter);
         mSearchTagsAdapter = new TagAdapter(getActivity(), "", getSearchTextEditorId());
-        mHandler = new Handler();
         setSearchResultProvider(this);
         setupListeners();
     }
