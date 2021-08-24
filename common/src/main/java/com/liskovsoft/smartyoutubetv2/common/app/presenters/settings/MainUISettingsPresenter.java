@@ -35,9 +35,9 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         appendColorScheme(settingsPresenter);
 //        appendCardsStyle(settingsPresenter);
         //appendCardTitleLines(settingsPresenter);
-        appendCardTextScrollSpeed(settingsPresenter);
-        appendChannelSortingCategory(settingsPresenter);
-        appendPlaylistsCategoryStyle(settingsPresenter);
+//        appendCardTextScrollSpeed(settingsPresenter);
+//        appendChannelSortingCategory(settingsPresenter);
+//        appendPlaylistsCategoryStyle(settingsPresenter);
         appendScaleUI(settingsPresenter);
         appendVideoGridScale(settingsPresenter);
 //        appendMiscCategory(settingsPresenter);
