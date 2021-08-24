@@ -142,8 +142,8 @@ If you want to support my developments you are welcome to buy me a cup of coffee
 
 You can report in our Telegram group or via [issue tracker on Github](https://github.com/yuliskov/SmartTubeNext/issues) (account required).
 
-> **Telegram group (international)**: [@SmartTubeNext_en](http://t.me/SmartTubeNext_en)
-> **Telegram group (Russian/UA/BY)**: [@SmartTubeNext](http://t.me/SmartTubeNext)
+> **Telegram group (international)**: [@SmartTubeNext_en](http://t.me/SmartTubeNext_en)  
+> **Telegram group (Russian/UA/BY)**: [@SmartTubeNext](http://t.me/SmartTubeNext)  
 > **Email**: first.hash at gmail dot com
 
 The international group is in **English only**. But don't worry if your English is not perfect, we have a friendly international community.
