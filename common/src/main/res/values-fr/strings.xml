@@ -235,5 +235,5 @@
     <string name="breaking_news_row_name">Dernières nouvelles</string>
     <string name="covid_news_row_name">Nouvelles du COVID-19</string>
     <string name="enable_voice_search">Activer la recherche vocale</string>
-    <string name="subscribe_unsubscribe_from_channel">S'abonner/se désabonner de la chaîne</string>
+    <string name="subscribe_unsubscribe_from_channel">S\'abonner/se désabonner de la chaîne</string>
 </resources>
