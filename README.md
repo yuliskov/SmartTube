@@ -128,7 +128,6 @@ If you want to support my developments you are welcome to buy me a cup of coffee
 
 > [Donation Alerts (**VISA**, **PayPal**)](https://www.donationalerts.com/r/firsthash)  
 > [QIWI (RU)](https://qiwi.com/n/GUESS025)  
-> [PrivatBank (UA)](https://privatbank.ua/ru/sendmoney?payment=9e46a6ef78)  
 > **BTC**: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx  
 > **LTC**: ltc1qgc24eq9jl9cq78qnd5jpqhemkajg9vudwyd8pw  
 > **ETH**: 0xe455E21a085ae195a097cd4F456051A9916A5064  
