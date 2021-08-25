@@ -20,6 +20,8 @@ public class UiOptionItem implements OptionItem {
 
     private final static int MAX_VIDEO_WIDTH = (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ? 1280 :
             Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ? 1920 : 3840);
+    private final static float MAX_FRAME_RATE =
+            Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1 ? 30f : 60f;
 
     public static List<OptionItem> from(List<FormatItem> formats, OptionCallback callback) {
         return from(formats, callback, null);
@@ -44,6 +46,9 @@ public class UiOptionItem implements OptionItem {
                 continue;
             }
             if (format.getWidth() > MAX_VIDEO_WIDTH) {
+                continue;
+            }
+            if (format.getFrameRate() > MAX_FRAME_RATE) {
                 continue;
             }
             if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT

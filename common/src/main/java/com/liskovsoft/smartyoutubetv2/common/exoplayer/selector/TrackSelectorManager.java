@@ -33,6 +33,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     private static final String TAG = TrackSelectorManager.class.getSimpleName();
     private final static int MAX_VIDEO_WIDTH = (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ? 1280 :
             Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ? 1920 : 3840);
+    private final static float MAX_FRAME_RATE =
+            Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1 ? 30f : 60f;
 
     private DefaultTrackSelector mTrackSelector;
     //private TrackSelection.Factory mTrackSelectionFactory;
@@ -470,6 +472,9 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         continue;
                     }
                     if (mediaTrack.format.width > MAX_VIDEO_WIDTH) {
+                        continue;
+                    }
+                    if (mediaTrack.format.frameRate > MAX_FRAME_RATE) {
                         continue;
                     }
                     if (TrackSelectorUtil.isHdrCodec(mediaTrack.format.codecs)) {
