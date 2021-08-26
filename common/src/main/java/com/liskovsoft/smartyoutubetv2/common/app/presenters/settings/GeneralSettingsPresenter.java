@@ -177,19 +177,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from(
-                getContext().getString(R.string.app_backup),
-                option -> {
-                    BackupAndRestoreManager backupManager = new BackupAndRestoreManager(getContext());
-
-                    if (getContext() instanceof MotherActivity) {
-                        ((MotherActivity) getContext()).addOnPermissions(backupManager);
-                    }
-
-                    backupManager.checkPermAndBackup();
-                    MessageHelpers.showMessage(getContext(), R.string.msg_done);
-                }));
-
-        options.add(UiOptionItem.from(
                 getContext().getString(R.string.app_restore),
                 option -> {
                     BackupAndRestoreManager restoreManager = new BackupAndRestoreManager(getContext());
@@ -199,6 +186,19 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     }
 
                     restoreManager.checkPermAndRestore();
+                    MessageHelpers.showMessage(getContext(), R.string.msg_done);
+                }));
+
+        options.add(UiOptionItem.from(
+                getContext().getString(R.string.app_backup),
+                option -> {
+                    BackupAndRestoreManager backupManager = new BackupAndRestoreManager(getContext());
+
+                    if (getContext() instanceof MotherActivity) {
+                        ((MotherActivity) getContext()).addOnPermissions(backupManager);
+                    }
+
+                    backupManager.checkPermAndBackup();
                     MessageHelpers.showMessage(getContext(), R.string.msg_done);
                 }));
 
