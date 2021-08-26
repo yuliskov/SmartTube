@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
@@ -37,6 +38,15 @@ public class MotherActivity extends FragmentActivity {
 
         sNumActivities++;
         mScreensaverManager = new ScreensaverManager(this);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            mScreensaverManager.enable();
+        }
+
+        return super.dispatchTouchEvent(event);
     }
 
     @SuppressLint("RestrictedApi")

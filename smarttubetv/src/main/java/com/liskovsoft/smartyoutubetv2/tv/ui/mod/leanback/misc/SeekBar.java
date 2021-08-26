@@ -22,8 +22,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import androidx.annotation.RestrictTo;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
@@ -55,6 +57,10 @@ public final class SeekBar extends View {
          * Called to perform AccessibilityNodeInfoCompat.ACTION_SCROLL_BACKWARD
          */
         public abstract boolean onAccessibilitySeekBackward();
+        /**
+         * Touch event handling
+         */
+        public abstract boolean onAccessibilitySeekProgress(int progress);
     }
 
     private static class SeekBarRectangle {
@@ -314,5 +320,133 @@ public final class SeekBar extends View {
         }
 
         invalidate();
+    }
+
+    // Touch interceptor
+
+    private int mScaledTouchSlop;
+    private int mPaddingLeft;
+    private int mPaddingRight;
+    private int mTouchProgressOffset;
+    private float mTouchDownX;
+    private boolean mIsDragging;
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                mTouchDownX = event.getX();
+                startDrag(event);
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                if (mIsDragging) {
+                    trackTouchEvent(event);
+                } else {
+                    final float x = event.getX();
+                    if (Math.abs(x - mTouchDownX) > mScaledTouchSlop) {
+                        startDrag(event);
+                    }
+                }
+                break;
+
+            case MotionEvent.ACTION_UP:
+                if (mIsDragging) {
+                    trackTouchEvent(event);
+                    onStopTrackingTouch();
+                    setPressed(false);
+                } else {
+                    // Touch up when we never crossed the touch slop threshold should
+                    // be interpreted as a tap-seek to that location.
+                    onStartTrackingTouch();
+                    trackTouchEvent(event);
+                    onStopTrackingTouch();
+                }
+                // ProgressBar doesn't know to repaint the thumb drawable
+                // in its inactive state when the touch stops (because the
+                // value has not apparently changed)
+                invalidate();
+                break;
+
+            case MotionEvent.ACTION_CANCEL:
+                if (mIsDragging) {
+                    onStopTrackingTouch();
+                    setPressed(false);
+                }
+                invalidate(); // see above explanation
+                break;
+        }
+        return true;
+    }
+
+    private void startDrag(MotionEvent event) {
+        setPressed(true);
+
+        onStartTrackingTouch();
+        trackTouchEvent(event);
+        attemptClaimDrag();
+    }
+
+    private void setHotspot(float x, float y) {
+        final Drawable bg = getBackground();
+        if (bg != null) {
+            bg.setHotspot(x, y);
+        }
+    }
+    
+    private void trackTouchEvent(MotionEvent event) {
+        final int x = Math.round(event.getX());
+        final int y = Math.round(event.getY());
+        final int width = getWidth();
+        final int availableWidth = width;
+
+        final float scale;
+        float progress = 0.0f;
+        if (x < mPaddingLeft) {
+            scale = 0.0f;
+        } else if (x > width - mPaddingRight) {
+            scale = 1.0f;
+        } else {
+            scale = (x - mPaddingLeft) / (float) availableWidth;
+            progress = mTouchProgressOffset;
+        }
+
+        final int range = getMax() - getMin();
+        progress += scale * range + getMin();
+
+        setHotspot(x, y);
+        setProgress(Math.round(progress));
+        if (mAccessibilitySeekListener != null) {
+            mAccessibilitySeekListener.onAccessibilitySeekProgress(mProgress);
+        }
+    }
+
+    /**
+     * Tries to claim the user's drag motion, and requests disallowing any
+     * ancestors from stealing events in the drag.
+     */
+    private void attemptClaimDrag() {
+        //if (mParent != null) {
+        //    mParent.requestDisallowInterceptTouchEvent(true);
+        //}
+    }
+
+    /**
+     * This is called when the user has started touching this widget.
+     */
+    void onStartTrackingTouch() {
+        mIsDragging = true;
+    }
+
+    /**
+     * This is called when the user either releases his touch or the touch is
+     * canceled.
+     */
+    void onStopTrackingTouch() {
+        mIsDragging = false;
+    }
+
+    public synchronized int getMin() {
+        return 0;
     }
 }

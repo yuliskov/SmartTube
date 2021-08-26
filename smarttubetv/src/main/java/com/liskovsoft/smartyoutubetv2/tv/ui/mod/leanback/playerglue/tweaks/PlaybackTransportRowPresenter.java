@@ -510,6 +510,13 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                 public boolean onAccessibilitySeekBackward() {
                     return onBackward();
                 }
+
+                @Override
+                public boolean onAccessibilitySeekProgress(int progress) {
+                    mSeekClient.onSeekPositionChanged((long)((double) (progress) / Integer.MAX_VALUE * mTotalTimeInMs));
+                    mSeekClient.onSeekFinished(false);
+                    return true;
+                }
             });
             mProgressBar.setMax(Integer.MAX_VALUE); //current progress will be a fraction of this
             mControlsDock = (ViewGroup) rootView.findViewById(R.id.controls_dock);
