@@ -29,6 +29,12 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         mBackupDirs.add(new File(FileHelpers.getBackupDir(mContext), "Backup"));
     }
 
+    //public void checkPermAndBackup() {
+    //    MediaServiceManager.instance().authCheck(
+    //            this::checkPermAndBackupInt, null
+    //    );
+    //}
+
     public void checkPermAndRestore() {
         if (FileHelpers.isExternalStorageReadable()) {
             if (PermissionHelpers.hasStoragePermissions(mContext)) {
@@ -62,7 +68,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
         }
 
         for (File dataDir : mDataDirs) {
-            if (dataDir.isDirectory()) {
+            if (dataDir.isDirectory() && !FileHelpers.isEmpty(dataDir)) {
                 FileHelpers.copy(dataDir, new File(currentBackup, dataDir.getName()));
             }
         }
@@ -93,7 +99,7 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
 
             File sourceBackupDir = new File(currentBackup, dataDir.getName());
 
-            if (sourceBackupDir.exists()) {
+            if (sourceBackupDir.exists() && !FileHelpers.isEmpty(sourceBackupDir)) {
                 FileHelpers.copy(sourceBackupDir, dataDir);
             }
         }
