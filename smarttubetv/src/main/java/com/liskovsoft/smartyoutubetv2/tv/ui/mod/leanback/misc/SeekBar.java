@@ -28,7 +28,7 @@ import android.view.View;
 import androidx.annotation.RestrictTo;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import androidx.leanback.R;
-import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.ContentBlockManager.SeekBarSegment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +57,7 @@ public final class SeekBar extends View {
         public abstract boolean onAccessibilitySeekBackward();
     }
 
-    private static class SeekBarSegment {
+    private static class SeekBarRectangle {
         public final RectF rect = new RectF();
         private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     }
@@ -78,8 +78,8 @@ public final class SeekBar extends View {
     private int mActiveRadius;
     private int mBarHeight;
     private int mActiveBarHeight;
-    private List<SponsorSegment> mSponsorSegments;
-    private final List<SeekBarSegment> mSeekBarSegments = new ArrayList<>();
+    private List<SeekBarSegment> mSegments;
+    private final List<SeekBarRectangle> mSeekBarRectangles = new ArrayList<>();
 
     private AccessibilitySeekListener mAccessibilitySeekListener;
 
@@ -127,6 +127,7 @@ public final class SeekBar extends View {
             int direction, Rect previouslyFocusedRect) {
         super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
         calculate();
+        calculateSegments();
     }
 
     @Override
@@ -145,8 +146,8 @@ public final class SeekBar extends View {
         }
         canvas.drawRoundRect(mProgressRect, radius, radius, mProgressPaint);
 
-        for (SeekBarSegment segment : mSeekBarSegments) {
-            canvas.drawRoundRect(segment.rect, radius, radius, segment.paint);
+        for (SeekBarRectangle rectangle : mSeekBarRectangles) {
+            canvas.drawRoundRect(rectangle.rect, radius, radius, rectangle.paint);
         }
 
         canvas.drawCircle(mKnobx, getHeight() / 2, radius, mKnobPaint);
@@ -274,15 +275,15 @@ public final class SeekBar extends View {
         return super.performAccessibilityAction(action, arguments);
     }
 
-    public void setSponsorSegments(List<SponsorSegment> segments) {
-        //mSponsorSegments = segments;
-        //calculateSponsorSegments();
+    public void setSegments(List<SeekBarSegment> segments) {
+        mSegments = segments;
+        calculateSegments();
     }
 
-    private void calculateSponsorSegments() {
-        mSeekBarSegments.clear();
+    private void calculateSegments() {
+        mSeekBarRectangles.clear();
 
-        if (mSponsorSegments == null) {
+        if (mSegments == null) {
             return;
         }
 
@@ -295,13 +296,21 @@ public final class SeekBar extends View {
         final int radius = isFocused() ? mActiveRadius : mBarHeight / 2;
         final int progressWidth = width - radius * 2;
 
-        for (SponsorSegment sponsorSegment : mSponsorSegments) {
-            float rightPixels = sponsorSegment.getEndMs() / (float) mMax * progressWidth;
-            float leftPixels = sponsorSegment.getStartMs() / (float) mMax * progressWidth;
-            SeekBarSegment segment = new SeekBarSegment();
-            segment.rect.set(leftPixels, verticalPadding, mBarHeight / 2 + rightPixels, height - verticalPadding);
-            segment.paint.setColor(Color.GREEN);
-            mSeekBarSegments.add(segment);
+        for (SeekBarSegment segment : mSegments) {
+            if (segment.endProgress > mMax || segment.endProgress < 0) {
+                continue;
+            }
+
+            if (segment.startProgress > mMax || segment.startProgress < 0) {
+                continue;
+            }
+
+            float rightPixels = segment.endProgress / (float) mMax * progressWidth;
+            float leftPixels = segment.startProgress / (float) mMax * progressWidth;
+            SeekBarRectangle rect = new SeekBarRectangle();
+            rect.rect.set(leftPixels, verticalPadding, mBarHeight / 2 + rightPixels, height - verticalPadding);
+            rect.paint.setColor(segment.color);
+            mSeekBarRectangles.add(rect);
         }
 
         invalidate();

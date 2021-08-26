@@ -1,9 +1,12 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import android.graphics.Color;
+import androidx.core.content.ContextCompat;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
+import com.liskovsoft.sharedutils.configparser.AssetPropertyParser2;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -21,6 +24,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +41,13 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     private Disposable mSegmentsAction;
     private boolean mIsSameSegment;
     private Map<String, Integer> mLocalizedMapping;
+    private Map<String, Integer> mSegmentColorMapping;
+
+    public static class SeekBarSegment {
+        public int startProgress;
+        public int endProgress;
+        public int color = Color.GREEN;
+    }
 
     @Override
     public void onInitDone() {
@@ -44,6 +55,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         mMediaItemManager = mediaService.getMediaItemManager();
         mContentBlockData = ContentBlockData.instance(getActivity());
         initLocalizedMapping();
+        initSegmentColorMapping();
     }
 
     private void initLocalizedMapping() {
@@ -54,6 +66,16 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         mLocalizedMapping.put(SponsorSegment.CATEGORY_SELF_PROMO, R.string.content_block_self_promo);
         mLocalizedMapping.put(SponsorSegment.CATEGORY_INTERACTION, R.string.content_block_interaction);
         mLocalizedMapping.put(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC, R.string.content_block_music_off_topic);
+    }
+
+    private void initSegmentColorMapping() {
+        mSegmentColorMapping = new HashMap<>();
+        mSegmentColorMapping.put(SponsorSegment.CATEGORY_SPONSOR, Color.GREEN);
+        mSegmentColorMapping.put(SponsorSegment.CATEGORY_INTRO, Color.CYAN);
+        mSegmentColorMapping.put(SponsorSegment.CATEGORY_OUTRO, Color.BLUE);
+        mSegmentColorMapping.put(SponsorSegment.CATEGORY_SELF_PROMO, Color.YELLOW);
+        mSegmentColorMapping.put(SponsorSegment.CATEGORY_INTERACTION, Color.MAGENTA);
+        mSegmentColorMapping.put(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC, Color.GRAY);
     }
 
     @Override
@@ -89,7 +111,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             return;
         }
 
-        getController().setSponsorSegments(null);
+        getController().setSeekBarSegments(null);
 
         mSegmentsAction = mMediaItemManager.getSponsorSegmentsObserve(item.videoId, mContentBlockData.getCategories())
                 .subscribeOn(Schedulers.newThread())
@@ -98,7 +120,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                         segments -> {
                             mVideo = item;
                             mSponsorSegments = segments;
-                            getController().setSponsorSegments(segments);
+                            getController().setSeekBarSegments(toSeekBarSegments(segments));
                             startPlaybackWatcher();
                         },
                         error -> Log.d(TAG, "It's ok. Nothing to block in this video. Error msg: %s", error.getMessage())
@@ -198,5 +220,23 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         settingsPresenter.setCloseTimeoutMs(skipPositionMs - getController().getPositionMs());
 
         settingsPresenter.showDialog(ContentBlockData.SPONSOR_BLOCK_NAME);
+    }
+
+    public List<SeekBarSegment> toSeekBarSegments(List<SponsorSegment> segments) {
+        if (segments == null) {
+            return null;
+        }
+
+        List<SeekBarSegment> result = new ArrayList<>();
+
+        for (SponsorSegment sponsorSegment : segments) {
+            SeekBarSegment seekBarSegment = new SeekBarSegment();
+            seekBarSegment.startProgress = (int) (((double) sponsorSegment.getStartMs() / getController().getLengthMs()) * Integer.MAX_VALUE);
+            seekBarSegment.endProgress = (int) (((double) sponsorSegment.getEndMs() / getController().getLengthMs()) * Integer.MAX_VALUE);
+            seekBarSegment.color = mSegmentColorMapping.get(sponsorSegment.getCategory());
+            result.add(seekBarSegment);
+        }
+
+        return result;
     }
 }
