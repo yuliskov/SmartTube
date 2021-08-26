@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -23,6 +24,7 @@ public class MotherActivity extends FragmentActivity {
     private static int sNumActivities;
     protected static boolean sIsInPipMode;
     private ScreensaverManager mScreensaverManager;
+    private OnPermissions mOnPermissions;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -155,5 +157,21 @@ public class MotherActivity extends FragmentActivity {
         // Fix sudden dpi change.
         // Could happen when screen goes off or after PIP mode.
         initDpi();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (mOnPermissions != null) {
+            mOnPermissions.onPermissions(requestCode, permissions, grantResults);
+            mOnPermissions = null;
+        }
+    }
+
+    public void addOnPermissions(OnPermissions onPermissions) {
+        mOnPermissions = onPermissions;
+    }
+
+    public interface OnPermissions {
+        void onPermissions(int requestCode, String[] permissions, int[] grantResults);
     }
 }

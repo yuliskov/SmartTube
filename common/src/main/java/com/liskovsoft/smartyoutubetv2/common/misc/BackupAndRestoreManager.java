@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Handler;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
@@ -11,14 +12,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BackupAndRestoreManager {
+public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
     private static final String TAG = BackupAndRestoreManager.class.getSimpleName();
     private final Context mContext;
     private final List<File> mDataDirs;
     private static final String SHARED_PREFS_SUBDIR = "shared_prefs";
     private final List<File> mBackupDirs;
-    private boolean mIsFirstRun;
-    private boolean mIsUpdate;
     private Runnable mPendingHandler;
 
     public BackupAndRestoreManager(Context context) {
@@ -29,28 +28,6 @@ public class BackupAndRestoreManager {
         mBackupDirs = new ArrayList<>();
         mBackupDirs.add(new File(FileHelpers.getBackupDir(mContext), "Backup"));
     }
-
-    //private void runDialog() {
-    //    // permissions dialog should be closed at this point
-    //    if (mIsFirstRun) {
-    //        boolean backupFound = false;
-    //
-    //        for (File backupDir : mBackupDirs) {
-    //            if (backupDir.isDirectory()) {
-    //                backupFound = true;
-    //                checkPermAndProposeRestore();
-    //                break;
-    //            }
-    //        }
-    //
-    //        if (!backupFound) {
-    //            // app might be upgraded from older version
-    //            checkPermAndBackup();
-    //        }
-    //    } else if (mIsUpdate) {
-    //        checkPermAndBackup();
-    //    }
-    //}
 
     public void checkPermAndRestore() {
         if (FileHelpers.isExternalStorageReadable()) {
@@ -129,17 +106,17 @@ public class BackupAndRestoreManager {
         PermissionHelpers.verifyStoragePermissions(mContext);
     }
 
-    //@Override
-    //public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-    //    if (requestCode == PermissionHelpers.REQUEST_EXTERNAL_STORAGE) {
-    //        if (grantResults.length >= 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-    //            Log.d(TAG, "REQUEST_EXTERNAL_STORAGE permission has been granted");
-    //
-    //            if (mPendingHandler != null) {
-    //                mPendingHandler.run();
-    //                mPendingHandler = null;
-    //            }
-    //        }
-    //    }
-    //}
+    @Override
+    public void onPermissions(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == PermissionHelpers.REQUEST_EXTERNAL_STORAGE) {
+            if (grantResults.length >= 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "REQUEST_EXTERNAL_STORAGE permission has been granted");
+
+                if (mPendingHandler != null) {
+                    mPendingHandler.run();
+                    mPendingHandler = null;
+                }
+            }
+        }
+    }
 }

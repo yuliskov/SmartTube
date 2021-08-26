@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.BackupAndRestoreManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -178,14 +179,26 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(
                 getContext().getString(R.string.app_backup),
                 option -> {
-                    new BackupAndRestoreManager(getContext()).checkPermAndBackup();
+                    BackupAndRestoreManager backupManager = new BackupAndRestoreManager(getContext());
+
+                    if (getContext() instanceof MotherActivity) {
+                        ((MotherActivity) getContext()).addOnPermissions(backupManager);
+                    }
+
+                    backupManager.checkPermAndBackup();
                     MessageHelpers.showMessage(getContext(), R.string.msg_done);
                 }));
 
         options.add(UiOptionItem.from(
                 getContext().getString(R.string.app_restore),
                 option -> {
-                    new BackupAndRestoreManager(getContext()).checkPermAndRestore();
+                    BackupAndRestoreManager restoreManager = new BackupAndRestoreManager(getContext());
+
+                    if (getContext() instanceof MotherActivity) {
+                        ((MotherActivity) getContext()).addOnPermissions(restoreManager);
+                    }
+
+                    restoreManager.checkPermAndRestore();
                     MessageHelpers.showMessage(getContext(), R.string.msg_done);
                 }));
 
