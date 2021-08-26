@@ -37,13 +37,14 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         appendSponsorBlockSwitch(settingsPresenter);
         appendNotificationTypeSection(settingsPresenter);
         appendCategoriesSection(settingsPresenter);
+        appendMiscSection(settingsPresenter);
 
         settingsPresenter.showDialog(ContentBlockData.SPONSOR_BLOCK_NAME);
     }
 
     private void appendSponsorBlockSwitch(AppDialogPresenter settingsPresenter) {
         OptionItem sponsorBlockOption = UiOptionItem.from(CONTENT_BLOCK_TITLE,
-                option -> mContentBlockData.setSponsorBlockEnabled(option.isSelected()),
+                option -> mContentBlockData.enableSponsorBlock(option.isSelected()),
                 mContentBlockData.isSponsorBlockEnabled()
         );
 
@@ -93,5 +94,15 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.content_block_categories), options);
+    }
+
+    private void appendMiscSection(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.skip_each_segment_once),
+                optionItem -> mContentBlockData.enableSkipEachSegmentOnce(optionItem.isSelected()),
+                mContentBlockData.isSkipEachSegmentOnceEnabled()));
+
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 }

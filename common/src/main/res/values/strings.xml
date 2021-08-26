@@ -240,4 +240,5 @@
     <string name="app_backup_restore">Backup/Restore</string>
     <string name="app_backup">Backup data</string>
     <string name="app_restore">Restore data from backup</string>
+    <string name="skip_each_segment_once">Don\'t skip segments again</string>
 </resources>
