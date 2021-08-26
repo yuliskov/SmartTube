@@ -28,6 +28,10 @@ import android.view.View;
 import androidx.annotation.RestrictTo;
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import androidx.leanback.R;
+import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP;
 
@@ -38,7 +42,6 @@ import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP;
  */
 @RestrictTo(LIBRARY_GROUP)
 public final class SeekBar extends View {
-
     /**
      * @hide
      */
@@ -52,6 +55,11 @@ public final class SeekBar extends View {
          * Called to perform AccessibilityNodeInfoCompat.ACTION_SCROLL_BACKWARD
          */
         public abstract boolean onAccessibilitySeekBackward();
+    }
+
+    private static class SeekBarSegment {
+        public final RectF rect = new RectF();
+        private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     }
 
     private final RectF mProgressRect = new RectF();
@@ -70,6 +78,8 @@ public final class SeekBar extends View {
     private int mActiveRadius;
     private int mBarHeight;
     private int mActiveBarHeight;
+    private List<SponsorSegment> mSponsorSegments;
+    private final List<SeekBarSegment> mSeekBarSegments = new ArrayList<>();
 
     private AccessibilitySeekListener mAccessibilitySeekListener;
 
@@ -134,6 +144,11 @@ public final class SeekBar extends View {
             canvas.drawRoundRect(mSecondProgressRect, radius, radius, mSecondProgressPaint);
         }
         canvas.drawRoundRect(mProgressRect, radius, radius, mProgressPaint);
+
+        for (SeekBarSegment segment : mSeekBarSegments) {
+            canvas.drawRoundRect(segment.rect, radius, radius, segment.paint);
+        }
+
         canvas.drawCircle(mKnobx, getHeight() / 2, radius, mKnobPaint);
     }
 
@@ -259,4 +274,36 @@ public final class SeekBar extends View {
         return super.performAccessibilityAction(action, arguments);
     }
 
+    public void setSponsorSegments(List<SponsorSegment> segments) {
+        //mSponsorSegments = segments;
+        //calculateSponsorSegments();
+    }
+
+    private void calculateSponsorSegments() {
+        mSeekBarSegments.clear();
+
+        if (mSponsorSegments == null) {
+            return;
+        }
+
+        final int barHeight = isFocused() ? mActiveBarHeight : mBarHeight;
+
+        final int width = getWidth();
+        final int height = getHeight();
+        final int verticalPadding = (height - barHeight) / 2;
+
+        final int radius = isFocused() ? mActiveRadius : mBarHeight / 2;
+        final int progressWidth = width - radius * 2;
+
+        for (SponsorSegment sponsorSegment : mSponsorSegments) {
+            float rightPixels = sponsorSegment.getEndMs() / (float) mMax * progressWidth;
+            float leftPixels = sponsorSegment.getStartMs() / (float) mMax * progressWidth;
+            SeekBarSegment segment = new SeekBarSegment();
+            segment.rect.set(leftPixels, verticalPadding, mBarHeight / 2 + rightPixels, height - verticalPadding);
+            segment.paint.setColor(Color.GREEN);
+            mSeekBarSegments.add(segment);
+        }
+
+        invalidate();
+    }
 }

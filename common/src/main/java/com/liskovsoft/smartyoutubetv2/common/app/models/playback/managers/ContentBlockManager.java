@@ -89,6 +89,8 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             return;
         }
 
+        getController().setSponsorSegments(null);
+
         mSegmentsAction = mMediaItemManager.getSponsorSegmentsObserve(item.videoId, mContentBlockData.getCategories())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -96,6 +98,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                         segments -> {
                             mVideo = item;
                             mSponsorSegments = segments;
+                            getController().setSponsorSegments(segments);
                             startPlaybackWatcher();
                         },
                         error -> Log.d(TAG, "It's ok. Nothing to block in this video. Error msg: %s", error.getMessage())

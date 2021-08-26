@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller;
 
+import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 
@@ -26,4 +27,5 @@ public interface PlaybackUIController {
     void loadStoryboard();
     void showError(String errorInfo);
     void showProgressBar(boolean show);
+    void setSponsorSegments(List<SponsorSegment> segments);
 }
