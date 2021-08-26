@@ -208,7 +208,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
         settingsPresenter.clear();
 
-        OptionItem sponsorBlockOption = UiOptionItem.from(
+        OptionItem acceptOption = UiOptionItem.from(
                 getActivity().getString(R.string.confirm_segment_skip, category),
                 option -> {
                     settingsPresenter.closeDialog();
@@ -216,7 +216,13 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                 }
         );
 
-        settingsPresenter.appendSingleButton(sponsorBlockOption);
+        OptionItem cancelOption = UiOptionItem.from(
+                getActivity().getString(R.string.cancel_segment_skip),
+                option -> settingsPresenter.closeDialog()
+        );
+
+        settingsPresenter.appendSingleButton(acceptOption);
+        settingsPresenter.appendSingleButton(cancelOption);
         settingsPresenter.setCloseTimeoutMs(skipPositionMs - getController().getPositionMs());
 
         settingsPresenter.showDialog(ContentBlockData.SPONSOR_BLOCK_NAME);

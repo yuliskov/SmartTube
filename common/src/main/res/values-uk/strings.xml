@@ -181,6 +181,7 @@
     <string name="content_block_self_promo">Самореклама</string>
     <string name="content_block_music_off_topic">Немузична секція кліпу</string>
     <string name="confirm_segment_skip">Пропустити сегмент \"%s\"?</string>
+    <string name="cancel_segment_skip">Скасувати пропуск сегменту</string>
     <string name="msg_skipping_segment">Пропуск сегменту \"%s\"…</string>
     <string name="content_block_notification_type">Тип повідомлень</string>
     <string name="content_block_notify_none">Без повідомлень</string>

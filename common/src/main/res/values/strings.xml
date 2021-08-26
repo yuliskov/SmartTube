@@ -181,6 +181,7 @@
     <string name="content_block_self_promo">Unpaid/self promotion</string>
     <string name="content_block_music_off_topic">Non-music section of clip</string>
     <string name="confirm_segment_skip">Skip segment \"%s\"?</string>
+    <string name="cancel_segment_skip">Cancel segment skip</string>
     <string name="msg_skipping_segment">Skipping segment \"%s\"…</string>
     <string name="content_block_notification_type">Notification type</string>
     <string name="content_block_notify_none">Without notification</string>
