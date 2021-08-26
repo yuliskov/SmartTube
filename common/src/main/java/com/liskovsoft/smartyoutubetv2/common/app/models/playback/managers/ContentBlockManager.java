@@ -231,8 +231,10 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
         for (SponsorSegment sponsorSegment : segments) {
             SeekBarSegment seekBarSegment = new SeekBarSegment();
-            seekBarSegment.startProgress = (int) (((double) sponsorSegment.getStartMs() / getController().getLengthMs()) * Integer.MAX_VALUE);
-            seekBarSegment.endProgress = (int) (((double) sponsorSegment.getEndMs() / getController().getLengthMs()) * Integer.MAX_VALUE);
+            double startRatio = (double) sponsorSegment.getStartMs() / getController().getLengthMs(); // Range: [0, 1]
+            double endRatio = (double) sponsorSegment.getEndMs() / getController().getLengthMs(); // Range: [0, 1]
+            seekBarSegment.startProgress = (int) (startRatio * Integer.MAX_VALUE); // Could safely cast to int
+            seekBarSegment.endProgress = (int) (endRatio * Integer.MAX_VALUE); // Could safely cast to int
             seekBarSegment.color = mSegmentColorMapping.get(sponsorSegment.getCategory());
             result.add(seekBarSegment);
         }
