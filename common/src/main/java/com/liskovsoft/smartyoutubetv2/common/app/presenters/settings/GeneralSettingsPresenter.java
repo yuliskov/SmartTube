@@ -11,6 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.misc.BackupAndRestoreManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -47,6 +48,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendBackgroundPlaybackActivationCategory(settingsPresenter);
         appendScreenDimmingCategory(settingsPresenter);
         appendKeyRemappingCategory(settingsPresenter);
+        appendAppBackupCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_general), () -> {
@@ -168,6 +170,26 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.screen_diming), options);
+    }
+
+    private void appendAppBackupCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(
+                getContext().getString(R.string.app_backup),
+                option -> {
+                    new BackupAndRestoreManager(getContext()).checkPermAndBackup();
+                    MessageHelpers.showMessage(getContext(), R.string.msg_done);
+                }));
+
+        options.add(UiOptionItem.from(
+                getContext().getString(R.string.app_restore),
+                option -> {
+                    new BackupAndRestoreManager(getContext()).checkPermAndRestore();
+                    MessageHelpers.showMessage(getContext(), R.string.msg_done);
+                }));
+
+        settingsPresenter.appendStringsCategory(getContext().getString(R.string.app_backup_restore), options);
     }
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
