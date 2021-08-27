@@ -237,7 +237,7 @@
   <string name="covid_news_row_name">कोविड-19 समाचार </string>
   <string name="enable_voice_search">ध्वनि खोज सक्षम </string>
   <string name="subscribe_unsubscribe_from_channel">चैनल से जुड़े/निकले </string>
-  <string name="app_backup_restore">बैकअप/बहाल करे </string>
+  <string name="app_backup_restore">बैकअप/बहाल करे \n%s</string>
   <string name="app_backup">बैकअप डाटा </string>
   <string name="app_restore">बैकअप से बहाल करे </string>
   <string name="skip_each_segment_once">भाग दोबारा न छोड़े</string>

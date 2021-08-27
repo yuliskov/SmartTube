@@ -125,4 +125,12 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
             }
         }
     }
+
+    public String getBackupPath() {
+        if (mBackupDirs.size() > 0) {
+            return mBackupDirs.get(0).toString();
+        }
+
+        return null;
+    }
 }

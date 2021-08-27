@@ -176,33 +176,27 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendAppBackupCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        BackupAndRestoreManager backupManager = new BackupAndRestoreManager(getContext());
+
+        if (getContext() instanceof MotherActivity) {
+            ((MotherActivity) getContext()).addOnPermissions(backupManager);
+        }
+
         options.add(UiOptionItem.from(
                 getContext().getString(R.string.app_restore),
                 option -> {
-                    BackupAndRestoreManager restoreManager = new BackupAndRestoreManager(getContext());
-
-                    if (getContext() instanceof MotherActivity) {
-                        ((MotherActivity) getContext()).addOnPermissions(restoreManager);
-                    }
-
-                    restoreManager.checkPermAndRestore();
+                    backupManager.checkPermAndRestore();
                     MessageHelpers.showMessage(getContext(), R.string.msg_done);
                 }));
 
         options.add(UiOptionItem.from(
                 getContext().getString(R.string.app_backup),
                 option -> {
-                    BackupAndRestoreManager backupManager = new BackupAndRestoreManager(getContext());
-
-                    if (getContext() instanceof MotherActivity) {
-                        ((MotherActivity) getContext()).addOnPermissions(backupManager);
-                    }
-
                     backupManager.checkPermAndBackup();
                     MessageHelpers.showMessage(getContext(), R.string.msg_done);
                 }));
 
-        settingsPresenter.appendStringsCategory(getContext().getString(R.string.app_backup_restore), options);
+        settingsPresenter.appendStringsCategory(getContext().getString(R.string.app_backup_restore, backupManager.getBackupPath()), options);
     }
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
