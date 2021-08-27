@@ -156,6 +156,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
             openVideoFromNext(getController().getVideo(), true);
         } else {
             mSkipAdd = true;
+            mLastVideo = null; // in case next video is the same
             openVideoInt(next);
         }
     }
