@@ -41,6 +41,15 @@ public class MotherActivity extends FragmentActivity {
     }
 
     @Override
+    public boolean dispatchGenericMotionEvent(MotionEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            mScreensaverManager.enable();
+        }
+
+        return super.dispatchGenericMotionEvent(event);
+    }
+
+    @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             mScreensaverManager.enable();
