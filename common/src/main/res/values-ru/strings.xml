@@ -237,7 +237,7 @@
     <string name="covid_news_row_name">Новости о коронавирусе COVID-19</string>
     <string name="enable_voice_search">Включить голосовой поиск</string>
     <string name="subscribe_unsubscribe_from_channel">Подписаться/Отписаться от канала</string>
-    <string name="app_backup_restore">Бэкап и восстановление\n%s</string>
+    <string name="app_backup_restore">Бэкап и восстановление</string>
     <string name="app_backup">Создать бэкап данных</string>
     <string name="app_restore">Восстановить данные из бэкапа</string>
     <string name="skip_each_segment_once">Не пропускать повторно сегменты</string>
