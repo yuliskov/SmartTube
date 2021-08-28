@@ -301,19 +301,30 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        Video section = new Video();
-        if (mVideo.hasPlaylist()) {
-            section.playlistId = mVideo.playlistId;
-        } else if (mVideo.hasUploads()) {
-            section.mediaItem = mVideo.mediaItem;
-        }
-        section.title = String.format("%s - %s",
-                mVideo.group != null && mVideo.group.getTitle() != null ? mVideo.group.getTitle() : mVideo.title,
-                mVideo.author != null ? mVideo.author : mVideo.description
-        );
-        section.cardImageUrl = mVideo.cardImageUrl;
+        pinToSidebar(createPinnedSection(mVideo));
+    }
 
-        pinToSidebar(section);
+    private Video createPinnedSection(Video video) {
+        if (video == null) {
+            return null;
+        }
+
+        Video section = new Video();
+
+        if (video.hasPlaylist()) {
+            section.playlistId = video.playlistId;
+        } else if (video.hasUploads()) {
+            section.mediaItem = video.mediaItem;
+        }
+
+        section.title = String.format("%s - %s",
+                video.group != null && video.group.getTitle() != null ? video.group.getTitle() : video.title,
+                video.author != null ? video.author : video.description
+        );
+
+        section.cardImageUrl = video.cardImageUrl;
+
+        return section;
     }
 
     private void pinToSidebar(Video section) {
