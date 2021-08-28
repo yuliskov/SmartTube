@@ -157,7 +157,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private void cleanupPinnedItems() {
         Set<Video> pinnedItems = mGeneralData.getPinnedItems();
 
-        Helpers.removeIf(pinnedItems, value -> value.hasVideo() || !value.hasPlaylist());
+        Helpers.removeIf(pinnedItems, value -> value.hasVideo() || (!value.hasPlaylist() && !value.hasUploads()));
     }
 
     private void initPinnedHeaders() {

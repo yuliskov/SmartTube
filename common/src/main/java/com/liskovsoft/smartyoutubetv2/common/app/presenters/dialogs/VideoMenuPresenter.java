@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -296,18 +297,26 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        if (mVideo == null || mVideo.playlistId == null) {
+        if (mVideo == null || (!mVideo.hasPlaylist() && !mVideo.hasUploads())) {
             return;
         }
 
         Video section = new Video();
-        section.playlistId = mVideo.playlistId;
+        if (mVideo.hasPlaylist()) {
+            section.playlistId = mVideo.playlistId;
+        } else if (mVideo.hasUploads()) {
+            section.mediaItem = mVideo.mediaItem;
+        }
         section.title = String.format("%s - %s",
-                mVideo.author != null ? mVideo.author : mVideo.title,
-                mVideo.group != null && mVideo.group.getTitle() != null ? mVideo.group.getTitle() : mVideo.description
+                mVideo.group != null && mVideo.group.getTitle() != null ? mVideo.group.getTitle() : mVideo.title,
+                mVideo.author != null ? mVideo.author : mVideo.description
         );
         section.cardImageUrl = mVideo.cardImageUrl;
 
+        pinToSidebar(section);
+    }
+
+    private void pinToSidebar(Video section) {
         BrowsePresenter presenter = BrowsePresenter.instance(getContext());
 
         mSettingsPresenter.appendSingleButton(
