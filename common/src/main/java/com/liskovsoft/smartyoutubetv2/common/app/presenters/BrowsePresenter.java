@@ -267,7 +267,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             return;
         }
 
-        if (item.isChannelUploadsSection()) {
+        if (item.hasUploads()) {
             // Below doesn't work right now. Api doesn't contains channel id.
             //ChannelPresenter.instance(getContext()).openChannel(item);
 
@@ -276,12 +276,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             } else {
                 ChannelUploadsPresenter.instance(getContext()).openChannel(item);
             }
-        } else if (item.isPlaylistSection()) {
-            ChannelUploadsPresenter.instance(getContext()).openChannel(item);
         } else if (item.hasVideo()) {
             mPlaybackPresenter.openVideo(item);
         } else if (item.hasChannel()) {
             ChannelPresenter.instance(getContext()).openChannel(item);
+        } else if (item.hasPlaylist()) {
+            ChannelUploadsPresenter.instance(getContext()).openChannel(item);
         }
 
         updateRefreshTime();
@@ -293,16 +293,21 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             return;
         }
 
-        if (item.isChannelUploadsSection()) {
+        //if (item.isChannelUploadsSection()) { // We need to be sure we exactly on Channels section
+        //    ChannelUploadsMenuPresenter.instance(getContext()).showMenu(item);
+        //} else if (item.hasChannel()) {
+        //    VideoMenuPresenter.instance(getContext()).showChannelMenu(item);
+        //} else if (item.hasPlaylist()) {
+        //    VideoMenuPresenter.instance(getContext()).showPlaylistMenu(item);
+        //} else if (item.hasVideo()) {
+        //    Category category = getCategory(mCurrentCategoryId);
+        //    VideoMenuPresenter.instance(getContext()).showVideoMenu(item, category != null ? category.getData() : null);
+        //}
+
+        if (item.isChannelUploadsSection()) { // We need to be sure we exactly on Channels section
             ChannelUploadsMenuPresenter.instance(getContext()).showMenu(item);
-        } else if (item.hasVideo()) {
-            item.isSubscribed = mCurrentCategoryId == MediaGroup.TYPE_SUBSCRIPTIONS;
-            Category category = getCategory(mCurrentCategoryId);
-            VideoMenuPresenter.instance(getContext()).showVideoMenu(item, category != null ? category.getData() : null);
-        } else if (item.hasChannel()) {
-            VideoMenuPresenter.instance(getContext()).showChannelMenu(item);
-        } else if (item.isPlaylistSection()) {
-            VideoMenuPresenter.instance(getContext()).showPlaylistMenu(item);
+        } else {
+            VideoMenuPresenter.instance(getContext()).showMenu(item);
         }
 
         updateRefreshTime();

@@ -72,6 +72,18 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         showMenuInt(video);
     }
 
+    public void showMenu(Video item) {
+        if (item.hasUploads()) {
+            showPlaylistMenu(item);
+        } else if (item.hasChannel()) {
+            showChannelMenu(item);
+        } else if (item.hasPlaylist()) {
+            showPlaylistMenu(item);
+        } else if (item.hasVideo()) {
+            showVideoMenu(item);
+        }
+    }
+
     public void showVideoMenu(Video video) {
         showVideoMenu(video, null);
     }
@@ -104,6 +116,9 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
     public void showPlaylistMenu(Video section) {
         mIsPinToSidebarEnabled = true;
+        mIsOpenPlaylistButtonEnabled = true;
+        mIsAccountSelectionEnabled = true;
+        mIsReturnToBackgroundVideoEnabled = true;
 
         showMenuInt(null, section);
     }

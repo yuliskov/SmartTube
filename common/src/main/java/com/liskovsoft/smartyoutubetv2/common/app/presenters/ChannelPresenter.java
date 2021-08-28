@@ -78,7 +78,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
     @Override
     public void onVideoItemLongClicked(Video item) {
-        VideoMenuPresenter.instance(getContext()).showVideoMenu(item);
+        VideoMenuPresenter.instance(getContext()).showMenu(item);
     }
 
     @Override
