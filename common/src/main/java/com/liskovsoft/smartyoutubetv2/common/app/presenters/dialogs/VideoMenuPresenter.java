@@ -73,15 +73,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     public void showMenu(Video item) {
-        if (item.hasUploads()) {
-            showPlaylistMenu(item);
-        } else if (item.hasChannel()) {
-            showChannelMenu(item);
-        } else if (item.hasPlaylist()) {
-            showPlaylistMenu(item);
-        } else if (item.hasVideo()) {
-            showVideoMenu(item);
-        }
+        showVideoMenu(item);
     }
 
     public void showVideoMenu(Video video) {
@@ -102,25 +94,6 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mIsPinToSidebarEnabled = true;
 
         showMenuInt(video, section);
-    }
-
-    public void showChannelMenu(Video video) {
-        mIsSubscribeButtonEnabled = true;
-        mIsShareButtonEnabled = true;
-        mIsOpenChannelButtonEnabled = true;
-        mIsAccountSelectionEnabled = true;
-        mIsReturnToBackgroundVideoEnabled = true;
-
-        showMenuInt(video);
-    }
-
-    public void showPlaylistMenu(Video section) {
-        mIsPinToSidebarEnabled = true;
-        mIsOpenPlaylistButtonEnabled = true;
-        mIsAccountSelectionEnabled = true;
-        mIsReturnToBackgroundVideoEnabled = true;
-
-        showMenuInt(null, section);
     }
 
     private void showMenuInt(Video video) {
@@ -204,6 +177,10 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
     private void appendAddToPlaylistButton(List<VideoPlaylistInfo> videoPlaylistInfos) {
         if (!mIsAddToPlaylistButtonEnabled || videoPlaylistInfos == null) {
+            return;
+        }
+
+        if (mVideo == null || !mVideo.hasVideo()) {
             return;
         }
 
