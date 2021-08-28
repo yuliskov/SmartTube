@@ -233,7 +233,7 @@
     <string name="uploads_row_name">Uploads</string>
     <string name="playlists_row_name">Erstellte Wiedergabelisten</string>
     <string name="popular_uploads_row_name">Beliebte Uploads</string>
-    <string name="breaking_news_row_name">Eilmeldungen (Nachrichten)</string>
+    <string name="breaking_news_row_name">Aktuelle Nachrichten</string>
     <string name="covid_news_row_name">Nachrichten zu COVID-19</string>
     <string name="enable_voice_search">Sprachsuche aktivieren</string>
     <string name="subscribe_unsubscribe_from_channel">Kanal abonnieren/nicht mehr abonnieren</string>
