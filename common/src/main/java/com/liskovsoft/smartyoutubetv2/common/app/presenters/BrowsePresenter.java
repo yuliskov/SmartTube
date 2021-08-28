@@ -114,6 +114,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void initCategories() {
+        cleanupPinnedItems();
+
         initCategoryHeaders();
         initPinnedHeaders();
 
@@ -150,6 +152,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         mGridMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, mGroupManager.getSubscriptionsObserve());
         mGridMapping.put(MediaGroup.TYPE_HISTORY, mGroupManager.getHistoryObserve());
         mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsUpdateObserve());
+    }
+
+    private void cleanupPinnedItems() {
+        Set<Video> pinnedItems = mGeneralData.getPinnedItems();
+
+        Helpers.removeIf(pinnedItems, value -> value.hasVideo() || !value.hasPlaylist());
     }
 
     private void initPinnedHeaders() {
