@@ -297,7 +297,41 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        pinToSidebar(createPinnedSection(mVideo));
+        if (mVideo == null || (!mVideo.hasPlaylist() && !mVideo.hasUploads())) {
+            return;
+        }
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.pin_unpin_from_sidebar),
+                        optionItem -> {
+                            if (mVideo.hasPlaylist()) {
+                                pinToSidebar(createPinnedSection(mVideo));
+                            } else {
+                                mServiceManager.loadChannelUploads(mVideo, group -> {
+                                    if (group.getMediaItems() != null) {
+                                        MediaItem firstItem = group.getMediaItems().get(0);
+
+                                        Video video = Video.from(firstItem);
+                                        video.title = group.getTitle();
+                                        pinToSidebar(createPinnedSection(video));
+                                    }
+                                });
+                            }
+                        }));
+    }
+
+    private void pinToSidebar(Video section) {
+        BrowsePresenter presenter = BrowsePresenter.instance(getContext());
+
+        // Toggle between pin/unpin while dialog is opened
+        boolean isItemPinned = presenter.isItemPinned(section);
+
+        if (isItemPinned) {
+            presenter.unpinItem(section);
+        } else {
+            presenter.pinItem(section);
+        }
+        MessageHelpers.showMessage(getContext(), isItemPinned ? R.string.unpin_from_sidebar : R.string.pin_to_sidebar);
     }
 
     private Video createPinnedSection(Video video) {
@@ -306,43 +340,14 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         }
 
         Video section = new Video();
-
-        if (video.hasPlaylist()) {
-            section.playlistId = video.playlistId;
-        } else if (video.hasUploads()) {
-            section.mediaItem = video.mediaItem;
-        }
-
+        section.playlistId = video.playlistId;
         section.title = String.format("%s - %s",
                 video.group != null && video.group.getTitle() != null ? video.group.getTitle() : video.title,
                 video.author != null ? video.author : video.description
         );
-
         section.cardImageUrl = video.cardImageUrl;
 
         return section;
-    }
-
-    private void pinToSidebar(Video section) {
-        if (section == null) {
-            return;
-        }
-
-        BrowsePresenter presenter = BrowsePresenter.instance(getContext());
-
-        mSettingsPresenter.appendSingleButton(
-                UiOptionItem.from(getContext().getString(R.string.pin_unpin_from_sidebar),
-                        optionItem -> {
-                            // Toggle between pin/unpin while dialog is opened
-                            boolean isItemPinned = presenter.isItemPinned(section);
-
-                            if (isItemPinned) {
-                                presenter.unpinItem(section);
-                            } else {
-                                presenter.pinItem(section);
-                            }
-                            MessageHelpers.showMessage(getContext(), isItemPinned ? R.string.unpin_from_sidebar : R.string.pin_to_sidebar);
-                        }));
     }
 
     private void appendReturnToBackgroundVideoButton() {
