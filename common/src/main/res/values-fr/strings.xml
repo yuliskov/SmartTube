@@ -223,7 +223,7 @@
     <string name="preferred_update_source">Source de mise à jour</string>
     <string name="hide_shorts">Masquer les passages de demande d\'Abonnements</string>
     <string name="key_remapping">Remplacement des touches</string>
-    <string name="screen_diming">Gradation de l\'écran</string>
+    <string name="screen_dimming">Gradation de l\'écran</string>
     <string name="removed_from_playback_queue">Suppression de la file d\'attente de lecture</string>
     <string name="added_to_playback_queue">Ajouté à la file d\'attente de lecture</string>
     <string name="add_remove_from_playback_queue">Ajouter/Supprimer de la file d\'attente de lecture</string>

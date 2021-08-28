@@ -219,7 +219,7 @@
   <string name="preferred_update_source">अद्यतन स्रोत का चयन करें</string>
   <string name="hide_shorts">शॉर्ट्स को छुपाएं</string>
   <string name="key_remapping">कुंजी बदले</string>
-  <string name="screen_diming">स्क्रीन मंद करे</string>
+  <string name="screen_dimming">स्क्रीन मंद करे</string>
   <string name="removed_from_playback_queue">प्लेबैक कतार से हटाया गया</string>
   <string name="added_to_playback_queue">प्लेबैक कतार में जोड़ा गया</string>
   <string name="add_remove_from_playback_queue">प्लेबैक कतार से जोड़ें/निकालें</string>

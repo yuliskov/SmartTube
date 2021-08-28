@@ -223,7 +223,7 @@
     <string name="preferred_update_source">アップデートソースの選択</string>
     <string name="hide_shorts">登録チャンネルからショートを隠す</string>
     <string name="key_remapping">キーリマッピング</string>
-    <string name="screen_diming">画面減光</string>
+    <string name="screen_dimming">画面減光</string>
     <string name="removed_from_playback_queue">再生キューから削除されました</string>
     <string name="added_to_playback_queue">再生キューに追加されました</string>
     <string name="add_remove_from_playback_queue">再生キューに追加・削除</string>

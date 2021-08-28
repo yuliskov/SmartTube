@@ -170,7 +170,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     mGeneralData.getScreenDimmingTimoutMin() == i));
         }
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.screen_diming), options);
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.screen_dimming), options);
     }
 
     private void appendAppBackupCategory(AppDialogPresenter settingsPresenter) {

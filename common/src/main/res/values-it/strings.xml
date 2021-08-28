@@ -222,7 +222,7 @@
    <string name="preferred_update_source">Seleziona fonte aggiornamenti</string> 
    <string name="hide_shorts">Nascondi i video Shorts dalle iscrizioni </string> 
    <string name="key_remapping">Rimappatura dei tasti</string> 
-   <string name="screen_diming">Oscura schermo</string> 
+   <string name="screen_dimming">Oscura schermo</string>
    <string name="removed_from_playback_queue">Rimosso dalla coda di riproduzione</string> 
    <string name="added_to_playback_queue">Aggiunto alla coda di riproduzione</string> 
    <string name="add_remove_from_playback_queue">Aggiungi/Rimuovi dalla coda di riproduzione</string>
