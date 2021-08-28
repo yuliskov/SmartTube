@@ -288,7 +288,11 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     private void appendSubscribeButton() {
-        if (!mIsSubscribeButtonEnabled || mVideo == null) {
+        if (!mIsSubscribeButtonEnabled) {
+            return;
+        }
+
+        if (mVideo == null || (!mVideo.hasChannel() && !mVideo.hasVideo())) {
             return;
         }
 
@@ -349,7 +353,11 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     private void appendAddToPlaybackQueueButton() {
-        if (!mIsAddToPlaybackQueueButtonEnabled || mVideo == null) {
+        if (!mIsAddToPlaybackQueueButtonEnabled) {
+            return;
+        }
+
+        if (mVideo == null || !mVideo.hasVideo()) {
             return;
         }
 
