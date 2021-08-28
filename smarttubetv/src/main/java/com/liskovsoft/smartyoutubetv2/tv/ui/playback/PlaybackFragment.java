@@ -358,18 +358,18 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     private void createPlayer() {
-        DefaultRenderersFactory renderersFactory = new CustomOverridesRenderersFactory(getContext());
+        mExoPlayerController.setEventListener(mEventListener);
 
         // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
         DefaultTrackSelector trackSelector = new RestoreTrackSelector(new AdaptiveTrackSelection.Factory());
+        mExoPlayerController.setTrackSelector(trackSelector);
+
+        DefaultRenderersFactory renderersFactory = new CustomOverridesRenderersFactory(getContext());
         mPlayer = mPlayerInitializer.createPlayer(getContext(), renderersFactory, trackSelector);
         // Try to fix decoder error on Nvidia Shield 2019.
         // Init resources as early as possible.
         mPlayer.setForegroundMode(false);
-
         mExoPlayerController.setPlayer(mPlayer);
-        mExoPlayerController.setTrackSelector(trackSelector);
-        mExoPlayerController.setEventListener(mEventListener);
     }
 
     private void createPlayerGlue() {
