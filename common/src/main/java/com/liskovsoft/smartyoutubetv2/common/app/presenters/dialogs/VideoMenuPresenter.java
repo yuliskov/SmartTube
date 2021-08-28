@@ -297,15 +297,11 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        if (mVideo == null || (!mVideo.hasPlaylist() && !mVideo.hasUploads())) {
-            return;
-        }
-
         pinToSidebar(createPinnedSection(mVideo));
     }
 
     private Video createPinnedSection(Video video) {
-        if (video == null) {
+        if (video == null || (!video.hasPlaylist() && !video.hasUploads())) {
             return null;
         }
 
@@ -328,6 +324,10 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     private void pinToSidebar(Video section) {
+        if (section == null) {
+            return;
+        }
+
         BrowsePresenter presenter = BrowsePresenter.instance(getContext());
 
         mSettingsPresenter.appendSingleButton(
