@@ -311,9 +311,9 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
                                     if (group.getMediaItems() != null) {
                                         MediaItem firstItem = group.getMediaItems().get(0);
 
-                                        Video video = Video.from(firstItem);
-                                        video.title = group.getTitle();
-                                        pinToSidebar(createPinnedSection(video));
+                                        Video section = createPinnedSection(Video.from(firstItem));
+                                        section.title = mVideo.title;
+                                        pinToSidebar(section);
                                     }
                                 });
                             }
