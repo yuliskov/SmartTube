@@ -183,6 +183,12 @@ public class StateUpdater extends PlayerEventListenerHelper {
         //mScreensaverManager.enable();
     }
 
+    @Override
+    public void onBuffering() {
+        // Check LIVE threshold and set speed to normal
+        restoreSpeed(getController().getVideo());
+    }
+
     private void clearStateOfNextVideo() {
         if (getController().getVideo() != null && getController().getVideo().nextMediaItem != null) {
             resetPosition(getController().getVideo().nextMediaItem.getVideoId());
@@ -298,36 +304,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
             persistVolume();
         }
     }
-
-    //private void restorePosition(Video item) {
-    //    State state = mStates.get(item.videoId);
-    //
-    //    // internal storage has priority over item data loaded from network
-    //    if (state == null) {
-    //        // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
-    //        boolean containsWebPosition = item.percentWatched > 10 && item.percentWatched < 100;
-    //        if (containsWebPosition) {
-    //            // Web state is buggy on short videos (e.g. video clips)
-    //            boolean isLongVideo = getController().getLengthMs() > MUSIC_VIDEO_LENGTH_MS;
-    //            if (isLongVideo) {
-    //                state = new State(item.videoId, getNewPosition(item.percentWatched));
-    //            }
-    //        }
-    //    }
-    //
-    //    // Do I need to check that item isn't live? (state != null && !item.isLive)
-    //    if (state != null) {
-    //        long remainsMs = getController().getLengthMs() - state.positionMs;
-    //        boolean isVideoEnded = remainsMs < 1_000;
-    //        if (!isVideoEnded || !getPlayEnabled()) {
-    //            getController().setPositionMs(state.positionMs);
-    //        }
-    //    }
-    //
-    //    if (!mIsPlayBlocked) {
-    //        getController().setPlay(getPlayEnabled());
-    //    }
-    //}
 
     private void restorePosition(Video item) {
         State state = mStates.get(item.videoId);
