@@ -69,11 +69,11 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
     private void initSegmentColorMapping() {
         mSegmentColorMapping = new HashMap<>();
-        mSegmentColorMapping.put(SponsorSegment.CATEGORY_SPONSOR, Color.GREEN);
-        mSegmentColorMapping.put(SponsorSegment.CATEGORY_INTRO, Color.CYAN);
-        mSegmentColorMapping.put(SponsorSegment.CATEGORY_OUTRO, Color.BLUE);
-        mSegmentColorMapping.put(SponsorSegment.CATEGORY_SELF_PROMO, Color.YELLOW);
-        mSegmentColorMapping.put(SponsorSegment.CATEGORY_INTERACTION, Color.MAGENTA);
+        mSegmentColorMapping.put(SponsorSegment.CATEGORY_SPONSOR, ContextCompat.getColor(getActivity(), R.color.green));
+        mSegmentColorMapping.put(SponsorSegment.CATEGORY_INTRO, ContextCompat.getColor(getActivity(), R.color.cyan));
+        mSegmentColorMapping.put(SponsorSegment.CATEGORY_OUTRO, ContextCompat.getColor(getActivity(), R.color.blue));
+        mSegmentColorMapping.put(SponsorSegment.CATEGORY_SELF_PROMO, ContextCompat.getColor(getActivity(), R.color.yellow));
+        mSegmentColorMapping.put(SponsorSegment.CATEGORY_INTERACTION, ContextCompat.getColor(getActivity(), R.color.magenta));
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC, ContextCompat.getColor(getActivity(), R.color.brown));
     }
 
