@@ -6,7 +6,6 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
-import com.liskovsoft.sharedutils.configparser.AssetPropertyParser2;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -75,7 +74,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_OUTRO, Color.BLUE);
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_SELF_PROMO, Color.YELLOW);
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_INTERACTION, Color.MAGENTA);
-        mSegmentColorMapping.put(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC, Color.GRAY);
+        mSegmentColorMapping.put(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC, ContextCompat.getColor(getActivity(), R.color.brown));
     }
 
     @Override
