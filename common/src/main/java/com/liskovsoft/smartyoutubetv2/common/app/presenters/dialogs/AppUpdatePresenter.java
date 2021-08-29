@@ -9,6 +9,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 
@@ -56,7 +57,8 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
 
     @Override
     public void onUpdateFound(String versionName, List<String> changelog, String apkPath) {
-        if (getContext() != null) {
+        // Don't show update dialog if player opened
+        if (getContext() != null && PlaybackPresenter.instance(getContext()).getView() == null) {
             showUpdateDialog(versionName, changelog, apkPath);
         }
     }
