@@ -8,6 +8,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,23 +75,23 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
 
         Set<String> categories = mContentBlockData.getCategories();
 
-        for (String[] pair : new String[][] {
-                {getContext().getString(R.string.content_block_sponsor), SponsorSegment.CATEGORY_SPONSOR},
-                {getContext().getString(R.string.content_block_intro), SponsorSegment.CATEGORY_INTRO},
-                {getContext().getString(R.string.content_block_outro), SponsorSegment.CATEGORY_OUTRO},
-                {getContext().getString(R.string.content_block_interaction), SponsorSegment.CATEGORY_INTERACTION},
-                {getContext().getString(R.string.content_block_self_promo), SponsorSegment.CATEGORY_SELF_PROMO},
-                {getContext().getString(R.string.content_block_music_off_topic), SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC}
+        for (CharSequence[] pair : new CharSequence[][] {
+                {getString(R.string.content_block_sponsor, R.color.green), SponsorSegment.CATEGORY_SPONSOR},
+                {getString(R.string.content_block_intro, R.color.cyan), SponsorSegment.CATEGORY_INTRO},
+                {getString(R.string.content_block_outro, R.color.blue), SponsorSegment.CATEGORY_OUTRO},
+                {getString(R.string.content_block_self_promo, R.color.yellow), SponsorSegment.CATEGORY_SELF_PROMO},
+                {getString(R.string.content_block_interaction, R.color.magenta), SponsorSegment.CATEGORY_INTERACTION},
+                {getString(R.string.content_block_music_off_topic, R.color.brown), SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC}
         }) {
             options.add(UiOptionItem.from(pair[0],
                     optionItem -> {
                         if (optionItem.isSelected()) {
-                            mContentBlockData.addCategory(pair[1]);
+                            mContentBlockData.addCategory((String) pair[1]);
                         } else {
-                            mContentBlockData.removeCategory(pair[1]);
+                            mContentBlockData.removeCategory((String) pair[1]);
                         }
                     },
-                    categories.contains(pair[1])));
+                    categories.contains((String) pair[1])));
         }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.content_block_categories), options);
@@ -104,5 +105,9 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
                 mContentBlockData.isSkipEachSegmentOnceEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
+    }
+
+    private CharSequence getString(int strResId, int colorResId) {
+        return Utils.color(getContext().getString(strResId), getContext().getColor(colorResId));
     }
 }
