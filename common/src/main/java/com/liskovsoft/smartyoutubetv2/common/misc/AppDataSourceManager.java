@@ -132,17 +132,17 @@ public class AppDataSourceManager {
                 new VideoPreset("1440p    60fps    vp9", "2560,1440,60,vp9"),
                 new VideoPreset("1440p    30fps    vp9+hdr", "2560,1440,30,vp9.2"),
                 new VideoPreset("1440p    60fps    vp9+hdr", "2560,1440,60,vp9.2"),
-                new VideoPreset("2160p    30fps    av01", "3840,2160,30,av01"),
+                new VideoPreset("2160p    30fps    av01", "3840,2160,60,av01"), // tmp fps fix
                 new VideoPreset("2160p    60fps    av01", "3840,2160,60,av01"),
-                new VideoPreset("2160p    30fps    vp9", "3840,2160,30,vp9"),
+                new VideoPreset("2160p    30fps    vp9", "3840,2160,60,vp9"), // tmp fps fix
                 new VideoPreset("2160p    60fps    vp9", "3840,2160,60,vp9"),
-                new VideoPreset("2160p    30fps    vp9+hdr", "3840,2160,30,vp9.2"),
+                new VideoPreset("2160p    30fps    vp9+hdr", "3840,2160,60,vp9.2"), // tmp fps fix
                 new VideoPreset("2160p    60fps    vp9+hdr", "3840,2160,60,vp9.2"),
-                new VideoPreset("4320p    30fps    av01", "7680,4320,30,av01"),
+                new VideoPreset("4320p    30fps    av01", "7680,4320,60,av01"), // tmp fps fix
                 new VideoPreset("4320p    60fps    av01", "7680,4320,60,av01"),
-                new VideoPreset("4320p    30fps    vp9", "7680,4320,30,vp9"),
+                new VideoPreset("4320p    30fps    vp9", "7680,4320,60,vp9"), // tmp fps fix
                 new VideoPreset("4320p    60fps    vp9", "7680,4320,60,vp9"),
-                new VideoPreset("4320p    30fps    vp9+hdr", "7680,4320,30,vp9.2"),
+                new VideoPreset("4320p    30fps    vp9+hdr", "7680,4320,60,vp9.2"), // tmp fps fix
                 new VideoPreset("4320p    60fps    vp9+hdr", "7680,4320,60,vp9.2")
         };
 
