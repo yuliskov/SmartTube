@@ -14,7 +14,7 @@ public class CategoryEmptyError implements ErrorFragmentData {
 
     @Override
     public void onAction() {
-        // NOP
+        ViewManager.instance(mContext).startView(SignInView.class);
     }
 
     @Override
@@ -24,6 +24,6 @@ public class CategoryEmptyError implements ErrorFragmentData {
 
     @Override
     public String getActionText() {
-        return null;
+        return mContext.getString(R.string.action_signin);
     }
 }
