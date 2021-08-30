@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
+import androidx.core.content.ContextCompat;
 import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -108,6 +109,6 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
     }
 
     private CharSequence getString(int strResId, int colorResId) {
-        return Utils.color(getContext().getString(strResId), getContext().getColor(colorResId));
+        return Utils.color(getContext().getString(strResId), ContextCompat.getColor(getContext(), colorResId));
     }
 }
