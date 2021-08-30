@@ -87,7 +87,6 @@ class ControlBarPresenter extends Presenter {
                 throw new IllegalStateException("Couldn't find control_bar");
             }
             mControlBar.setDefaultFocusToMiddle(mDefaultFocusToMiddle);
-            mControlBar.setFocusRecovery(mFocusRecovery);
             mControlBar.setOnChildFocusedListener(new ControlBar.OnChildFocusedListener() {
                 @Override
                 public void onChildFocusedListener(View child, View focused) {
@@ -196,7 +195,6 @@ class ControlBarPresenter extends Presenter {
     private static int sChildMarginDefault;
     private static int sControlIconWidth;
     boolean mDefaultFocusToMiddle = true;
-    boolean mFocusRecovery;
 
     /**
      * Constructor for a ControlBarPresenter.
@@ -299,9 +297,5 @@ class ControlBarPresenter extends Presenter {
      */
     void setDefaultFocusToMiddle(boolean defaultFocusToMiddle) {
         mDefaultFocusToMiddle = defaultFocusToMiddle;
-    }
-
-    void setFocusRecovery(boolean focusRecovery) {
-        mFocusRecovery = focusRecovery;
     }
 }
