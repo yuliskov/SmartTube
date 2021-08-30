@@ -217,15 +217,19 @@ public class ErrorSupportFragment extends BrandedSupportFragment {
             mButton.setText(mButtonText);
             mButton.setOnClickListener(mButtonClickListener);
             mButton.setVisibility(TextUtils.isEmpty(mButtonText) ? View.GONE : View.VISIBLE);
-            // MOD: don't autofocus
+            // MOD: don't autofocus (you could lose BACK key).
             //mButton.requestFocus();
+
+            if (!TextUtils.isEmpty(mButtonText)) {
+                mButton.requestFocus();
+            }
         }
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        // MOD: don't autofocus
+        // MOD: don't autofocus (you could lose BACK key)
         //mErrorFrame.requestFocus();
     }
 
