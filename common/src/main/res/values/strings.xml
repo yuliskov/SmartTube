@@ -93,7 +93,7 @@
     <string name="color_scheme_dark_grey">Dark Grey</string>
     <string name="disable_update_check">Disable update check</string>
     <string name="show_again">Show again</string>
-    <string name="check_updates_auto">Auto-update</string>
+    <string name="check_updates_auto">Notify about new version</string>
     <string name="select_account_on_boot">Select on boot</string>
     <string name="player_other">Misc</string>
     <string name="player_full_date">Precise date in description</string>
