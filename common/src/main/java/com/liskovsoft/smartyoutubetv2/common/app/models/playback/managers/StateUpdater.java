@@ -181,6 +181,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
         // Take into account different playback states
         //mScreensaverManager.enable();
+
+        showHideScreensaver(true);
     }
 
     @Override

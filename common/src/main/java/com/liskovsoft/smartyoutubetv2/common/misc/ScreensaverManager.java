@@ -79,7 +79,7 @@ public class ScreensaverManager {
         }
 
         if (show && mDimColorResId == R.color.dimming &&
-                (isPlaying() || isCodeView() || mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER)
+                (isPlaying() || isSigning() || mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER)
         ) {
             return;
         }
@@ -107,7 +107,7 @@ public class ScreensaverManager {
             return;
         }
         
-        if (show && (isPlaying() || isCodeView())) {
+        if (show && (isPlaying() || isSigning())) {
             Helpers.disableScreensaver(activity);
             return;
         }
@@ -130,7 +130,7 @@ public class ScreensaverManager {
         return playbackView != null && (playbackView.getController().isPlaying() || playbackView.getController().isLoading());
     }
 
-    private boolean isCodeView() {
+    private boolean isSigning() {
         Activity activity = mActivity.get();
 
         if (activity == null) {
