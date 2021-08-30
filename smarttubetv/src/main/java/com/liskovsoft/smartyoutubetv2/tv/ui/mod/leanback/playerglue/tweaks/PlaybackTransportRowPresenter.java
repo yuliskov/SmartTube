@@ -840,8 +840,10 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
         mPlaybackControlsPresenter = new ControlBarPresenter(com.liskovsoft.smartyoutubetv2.tv.R.layout.lb_control_bar);
         mPlaybackControlsPresenter.setDefaultFocusToMiddle(false);
+        mPlaybackControlsPresenter.setFocusRecovery(false);
         mSecondaryControlsPresenter = new ControlBarPresenter(com.liskovsoft.smartyoutubetv2.tv.R.layout.lb_control_bar);
         mSecondaryControlsPresenter.setDefaultFocusToMiddle(false);
+        mSecondaryControlsPresenter.setFocusRecovery(false);
 
         mPlaybackControlsPresenter.setOnControlSelectedListener(mOnControlSelectedListener);
         mSecondaryControlsPresenter.setOnControlSelectedListener(mOnControlSelectedListener);
