@@ -144,10 +144,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         return item.hasUploads() ?
                 mGroupManager.getGroupObserve(item.mediaItem) :
                 mItemManager.getMetadataObserve(item.videoId, item.playlistId, 0)
-                        .flatMap(mediaItemMetadata -> {
-                            MediaGroup playlistRow = findPlaylistRow(mediaItemMetadata);
-                            return playlistRow != null ? Observable.just(playlistRow) : Observable.empty();
-                        });
+                        .flatMap(mediaItemMetadata -> Observable.just(findPlaylistRow(mediaItemMetadata)));
     }
 
     private void updateGrid(Video item) {
