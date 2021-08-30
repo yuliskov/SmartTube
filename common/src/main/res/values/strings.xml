@@ -42,7 +42,7 @@
     <string name="section_is_empty">Oops! There is nothing in here.</string>
     <string name="dialog_add_to_playlist">Add/Remove from playlist</string>
     <string name="msg_signed_users_only">Signed users only</string>
-    <string name="msg_cant_load_content">Oops. Can\'t load content.</string>
+    <string name="msg_cant_load_content">Oops. Can\'t load content.\nTry to login again via settings.</string>
     <string name="title_video_presets">Video presets</string>
     <string name="settings_accounts">Accounts</string>
     <string name="settings_left_panel">Edit categories</string>
