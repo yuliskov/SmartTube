@@ -34,6 +34,7 @@ class ControlBar extends LinearLayout {
     // MOD: set to static to preserve focus between UI create/destroy
     int mLastFocusIndex = -1;
     boolean mDefaultFocusToMiddle = true;
+    boolean mFocusRecovery = true;
 
     public ControlBar(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -45,6 +46,13 @@ class ControlBar extends LinearLayout {
 
     void setDefaultFocusToMiddle(boolean defaultFocusToMiddle) {
         mDefaultFocusToMiddle = defaultFocusToMiddle;
+    }
+
+    /**
+     * MOD: enable/disable focus restoration
+     */
+    void setFocusRecovery(boolean focusRecovery) {
+        mFocusRecovery = focusRecovery;
     }
 
     void resetFocus() {
@@ -91,7 +99,9 @@ class ControlBar extends LinearLayout {
     @Override
     public void requestChildFocus(View child, View focused) {
         super.requestChildFocus(child, focused);
-        mLastFocusIndex = indexOfChild(child);
+        if (mFocusRecovery) {
+            mLastFocusIndex = indexOfChild(child);
+        }
         if (mOnChildFocusedListener != null) {
             mOnChildFocusedListener.onChildFocusedListener(child, focused);
         }
