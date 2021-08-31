@@ -42,7 +42,7 @@
     <string name="section_is_empty">Hier ist nichts drin</string>
     <string name="dialog_add_to_playlist">Hinzufügen/Entfernen aus Wiedergabeliste</string>
     <string name="msg_signed_users_only">Nur angemeldete Nutzer</string>
-    <string name="msg_cant_load_content">Inhalt kann nicht geladen werden</string>
+    <string name="msg_cant_load_content">Inhalt kann nicht geladen werden.\n1) Überprüfen Sie die Internetverbindung.\n2) Versuchen Sie, sich mit Ihrem Konto anzumelden.</string>
     <string name="title_video_presets">Video-Voreinstellungen</string>
     <string name="settings_accounts">Konten</string>
     <string name="settings_left_panel">Kategorien bearbeiten</string>
@@ -93,7 +93,7 @@
     <string name="color_scheme_dark_grey">Dunkel</string>
     <string name="disable_update_check">Update-Prüfung deaktivieren</string>
     <string name="show_again">Erneut anzeigen</string>
-    <string name="check_updates_auto">Automatische Updates</string>
+    <string name="check_updates_auto">Über neue Version benachrichtigen</string>
     <string name="select_account_on_boot">Konto beim Start auswählen</string>
     <string name="player_other">Sonstige</string>
     <string name="player_full_date">Genaues Datum in der Beschreibung</string>
