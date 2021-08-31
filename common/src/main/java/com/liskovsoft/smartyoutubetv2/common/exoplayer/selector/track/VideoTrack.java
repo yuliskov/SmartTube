@@ -6,7 +6,9 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUti
 public class VideoTrack extends MediaTrack {
     private static final int SIZE_EQUITY_THRESHOLD_PERCENT = 5; // was 15 before
     private static final int COMPARE_TYPE_IN_BOUNDS = 0;
-    private static final int COMPARE_TYPE_IN_BOUNDS_PROFILE = 1;
+    private static final int COMPARE_TYPE_IN_BOUNDS_NO_FPS = 4;
+    private static final int COMPARE_TYPE_IN_BOUNDS_PRESET = 1;
+    private static final int COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS = 3;
     private static final int COMPARE_TYPE_NORMAL = 2;
 
     public VideoTrack(int rendererIndex) {
@@ -62,7 +64,7 @@ public class VideoTrack extends MediaTrack {
         }
 
         // Detect profile based on format id presence
-        return format.id == null ? compare(track2, COMPARE_TYPE_IN_BOUNDS_PROFILE) : compare(track2, COMPARE_TYPE_IN_BOUNDS);
+        return format.id == null ? compare(track2, COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS) : compare(track2, COMPARE_TYPE_IN_BOUNDS_NO_FPS);
     }
 
     @Override
@@ -102,8 +104,12 @@ public class VideoTrack extends MediaTrack {
 
         if (type == COMPARE_TYPE_IN_BOUNDS) {
             result = inBounds(id1, id2, size1, size2, frameRate1, frameRate2, codecs1, codecs2);
-        } else if (type == COMPARE_TYPE_IN_BOUNDS_PROFILE) {
+        } else if (type == COMPARE_TYPE_IN_BOUNDS_NO_FPS) {
+            result = inBounds(id1, id2, size1, size2, -1, -1, codecs1, codecs2);
+        } else if (type == COMPARE_TYPE_IN_BOUNDS_PRESET) {
             result = inBoundsProfile(id1, id2, size1, size2, frameRate1, frameRate2, codecs1, codecs2);
+        } else if (type == COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS) {
+            result = inBoundsProfile(id1, id2, size1, size2, -1, -1, codecs1, codecs2);
         } else {
             result = compare(id1, id2, size1, size2, frameRate1, frameRate2, codecs1, codecs2);
         }
