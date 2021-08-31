@@ -24,7 +24,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private static final String TAG = StateUpdater.class.getSimpleName();
     private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
     private static final int MAX_PERSISTENT_STATE_SIZE = 30;
-    private static final long LIVE_THRESHOLD_MS = 60_000;
+    private static final long LIVE_THRESHOLD_MS = 10_000;
     private boolean mIsPlayEnabled;
     private Video mVideo;
     private FormatItem mTempVideoFormat;
