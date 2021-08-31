@@ -63,8 +63,13 @@ public class VideoTrack extends MediaTrack {
             return -1;
         }
 
+        // MultiFpsFormat: 25/50, 30/60. Currently no more that 720p.
+        boolean isMultiFpsFormat = sizeLessOrEquals(format.height, 720);
+
         // Detect profile based on format id presence
-        return format.id == null ? compare(track2, COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS) : compare(track2, COMPARE_TYPE_IN_BOUNDS_NO_FPS);
+        return format.id == null ?
+                compare(track2, isMultiFpsFormat ? COMPARE_TYPE_IN_BOUNDS_PRESET : COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS) :
+                compare(track2, isMultiFpsFormat ? COMPARE_TYPE_IN_BOUNDS : COMPARE_TYPE_IN_BOUNDS_NO_FPS);
     }
 
     @Override
