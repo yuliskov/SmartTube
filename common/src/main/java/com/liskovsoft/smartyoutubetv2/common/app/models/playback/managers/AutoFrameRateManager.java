@@ -34,11 +34,12 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     private final Runnable mApplyAfr = this::applyAfr;
     private final Handler mHandler;
     private PlayerData mPlayerData;
+    private boolean mIsPlay;
     private final Runnable mPlaybackResumeHandler = () -> {
         if (mStateUpdater != null) {
             mStateUpdater.blockPlay(false);
         }
-        getController().setPlay(true);
+        getController().setPlay(mIsPlay);
         getController().setAfrRunning(false);
     };
 
@@ -140,15 +141,13 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
     private void maybePausePlayback() {
         getController().setAfrRunning(true);
+        mIsPlay = getController().getPlay();
         mStateUpdater.blockPlay(true);
         int delayMs = 5_000;
 
         if (mPlayerData.getAfrPauseSec() > 0) {
             getController().setPlay(false);
             delayMs = mPlayerData.getAfrPauseSec() * 1_000;
-        } else {
-            // Fix sudden pause appeared in latest releases
-            getController().setPlay(true);
         }
 
         Utils.postDelayed(mHandler, mPlaybackResumeHandler, delayMs);

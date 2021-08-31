@@ -369,6 +369,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         // Try to fix decoder error on Nvidia Shield 2019.
         // Init resources as early as possible.
         mPlayer.setForegroundMode(false);
+        // Fix afr pause bug
+        mPlayer.setPlayWhenReady(true);
         mExoPlayerController.setPlayer(mPlayer);
     }
 
@@ -446,6 +448,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             }
         });
 
+        // Fix exoplayer pause when switching AFR. The code seems buggy.
         mMediaSessionConnector.setControlDispatcher(new DefaultControlDispatcher() {
             @Override
             public boolean dispatchSetPlayWhenReady(Player player, boolean playWhenReady) {
