@@ -63,7 +63,7 @@ public class VideoTrack extends MediaTrack {
             return -1;
         }
 
-        // MultiFpsFormat: 25/50, 30/60. Currently no more that 720p.
+        // NOTE: MultiFpsFormat: 25/50, 30/60. Currently no more that 720p.
         boolean isMultiFpsFormat = sizeLessOrEquals(format.height, 720);
 
         // Detect profile based on format id presence
