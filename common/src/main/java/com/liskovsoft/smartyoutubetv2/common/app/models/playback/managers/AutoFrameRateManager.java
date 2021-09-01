@@ -28,19 +28,15 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     private static final int AUTO_FRAME_RATE_ID = 21;
     private static final int AUTO_FRAME_RATE_DELAY_ID = 22;
     private final HQDialogManager mUiManager;
-    private StateUpdater mStateUpdater;
+    private final StateUpdater mStateUpdater;
     private final AutoFrameRateHelper mAutoFrameRateHelper;
     private final ModeSyncManager mModeSyncManager;
     private final Runnable mApplyAfr = this::applyAfr;
     private final Handler mHandler;
     private PlayerData mPlayerData;
-    private boolean mIsPlay;
     private final Runnable mPlaybackResumeHandler = () -> {
-        if (mStateUpdater != null) {
-            mStateUpdater.blockPlay(false);
-        }
-        getController().setPlay(mIsPlay);
         getController().setAfrRunning(false);
+        restorePlayback();
     };
 
     public AutoFrameRateManager(HQDialogManager uiManager, StateUpdater stateUpdater) {
@@ -69,6 +65,10 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
     @Override
     public void onVideoLoaded(Video item) {
+        if (mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseSec() > 0) {
+            mStateUpdater.blockPlay(true);
+        }
+
         // Sometimes AFR is not working on activity startup. Trying to fix with delay.
         applyAfrDelayed();
         //applyAfr();
@@ -92,8 +92,15 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         String msg = getActivity().getString(R.string.msg_mode_switch_error, UhdHelper.toResolution(newMode));
         Log.e(TAG, msg);
 
+        restorePlayback();
+
         // This error could appear even on success.
         // MessageHelpers.showMessage(getActivity(), msg);
+    }
+
+    @Override
+    public void onModeCancel(Mode newMode) {
+        restorePlayback();
     }
 
     private void onFpsCorrectionClick() {
@@ -141,7 +148,6 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
     private void maybePausePlayback() {
         getController().setAfrRunning(true);
-        mIsPlay = getController().getPlay();
         mStateUpdater.blockPlay(true);
         int delayMs = 5_000;
 
@@ -151,6 +157,11 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         }
 
         Utils.postDelayed(mHandler, mPlaybackResumeHandler, delayMs);
+    }
+
+    private void restorePlayback() {
+        mStateUpdater.blockPlay(false);
+        getController().setPlay(true);
     }
 
     private void addUiOptions() {
