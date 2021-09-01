@@ -70,8 +70,8 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     @Override
     public void onVideoLoaded(Video item) {
         // Sometimes AFR is not working on activity startup. Trying to fix with delay.
-        //applyAfrDelayed();
-        applyAfr();
+        applyAfrDelayed();
+        //applyAfr();
     }
 
     @Override
