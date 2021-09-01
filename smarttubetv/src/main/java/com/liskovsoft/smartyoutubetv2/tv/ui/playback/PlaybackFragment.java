@@ -370,7 +370,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         // Init resources as early as possible.
         mPlayer.setForegroundMode(false);
         // Fix afr pause bug
-        mPlayer.setPlayWhenReady(true);
+        //mPlayer.setPlayWhenReady(true);
         mExoPlayerController.setPlayer(mPlayer);
     }
 
