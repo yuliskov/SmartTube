@@ -218,8 +218,9 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     @Override
     public void showError(ErrorFragmentData data) {
-        //replaceMainFragment(new ErrorDialogFragment(data));
-        showErrorIfEmpty(data);
+        replaceMainFragment(new ErrorDialogFragment(data));
+        // Why show only if empty?
+        //showErrorIfEmpty(data);
     }
 
     private void showErrorIfEmpty(ErrorFragmentData data) {
