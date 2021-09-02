@@ -31,7 +31,7 @@ class ControlBar extends LinearLayout {
 
     private int mChildMarginFromCenter;
     private OnChildFocusedListener mOnChildFocusedListener;
-    // MOD: set to static to preserve focus between UI create/destroy
+    // Can't set to static. Because we have two control bars.
     int mLastFocusIndex = -1;
     boolean mDefaultFocusToMiddle = true;
     boolean mFocusRecovery = true;
