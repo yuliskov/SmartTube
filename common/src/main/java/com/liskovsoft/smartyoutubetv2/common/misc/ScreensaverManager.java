@@ -34,6 +34,28 @@ public class ScreensaverManager {
         enable();
     }
 
+    /**
+     * Screen off check
+     */
+    public void enableChecked() {
+        if (mDimColorResId == R.color.black) {
+            return;
+        }
+
+        enable();
+    }
+
+    /**
+     * Screen off check
+     */
+    public void disableChecked() {
+        if (mDimColorResId == R.color.black) {
+            return;
+        }
+
+        disable();
+    }
+
     public void enable() {
         Log.d(TAG, "Enable screensaver");
 

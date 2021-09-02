@@ -180,7 +180,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         saveState();
 
         // Don't enable screensaver here or you'll broke 'screen off' logic.
-        //showHideScreensaver(true);
+        showHideScreensaver(true);
     }
 
     @Override
@@ -412,9 +412,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
             ScreensaverManager screensaverManager = ((MotherActivity) getActivity()).getScreensaverManager();
 
             if (show) {
-                screensaverManager.enable();
+                screensaverManager.enableChecked();
             } else {
-                screensaverManager.disable();
+                screensaverManager.disableChecked();
             }
         }
     }
