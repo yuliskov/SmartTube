@@ -179,10 +179,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
     public void onPlayEnd() {
         saveState();
 
-        // Take into account different playback states
-        //mScreensaverManager.enable();
-
-        showHideScreensaver(true);
+        // Don't enable screensaver here or you'll broke 'screen off' logic.
+        //showHideScreensaver(true);
     }
 
     @Override
