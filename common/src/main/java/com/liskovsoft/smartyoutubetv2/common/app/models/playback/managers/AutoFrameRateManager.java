@@ -98,7 +98,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     }
 
     @Override
-    public void onModeCancel(Mode newMode) {
+    public void onCancel() {
         restorePlayback();
     }
 

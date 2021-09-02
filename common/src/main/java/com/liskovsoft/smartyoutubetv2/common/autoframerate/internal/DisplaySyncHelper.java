@@ -35,7 +35,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
     public interface AutoFrameRateListener {
         void onModeStart(Mode newMode);
         void onModeError(Mode newMode);
-        void onModeCancel(Mode newMode);
+        void onCancel();
     }
 
     public DisplaySyncHelper(Context context) {
@@ -372,7 +372,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
             if (closerMode == null) {
                 String msg = "Could not find closer refresh rate for " + videoFramerate + "fps";
                 Log.i(TAG, msg);
-                mListener.onModeCancel(mNewMode);
+                mListener.onCancel();
                 return false;
             }
 
@@ -381,7 +381,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
 
             if (!force && closerMode.equals(currentMode)) {
                 Log.i(TAG, "Do not need to change mode.");
-                mListener.onModeCancel(mNewMode);
+                mListener.onCancel();
                 return false;
             }
 

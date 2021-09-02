@@ -17,6 +17,7 @@ public class AutoFrameRateHelper {
     private long mPrevCall;
     private HashMap<Float, Float> mFrameRateMapping;
     private boolean mIsFpsCorrectionEnabled;
+    private AutoFrameRateListener mListener;
 
     public AutoFrameRateHelper() {
         mSyncHelper = new DisplaySyncHelperAlt(null);
@@ -83,21 +84,33 @@ public class AutoFrameRateHelper {
 
         if (activity == null) {
             Log.e(TAG, "Activity in null. exiting...");
-            return;
-        }
-
-        if (!isSupported()) {
-            Log.e(TAG, "Autoframerate not supported. Exiting...");
+            if (mListener != null) {
+                mListener.onCancel();
+            }
             return;
         }
 
         if (format == null) {
             Log.e(TAG, "Can't apply mode change: format is null");
+            if (mListener != null) {
+                mListener.onCancel();
+            }
+            return;
+        }
+
+        if (!isSupported()) {
+            Log.e(TAG, "Autoframerate not supported. Exiting...");
+            if (mListener != null) {
+                mListener.onCancel();
+            }
             return;
         }
 
         if (System.currentTimeMillis() - mPrevCall < THROTTLE_INTERVAL_MS) {
             Log.e(TAG, "Throttling afr calls...");
+            if (mListener != null) {
+                mListener.onCancel();
+            }
             return;
         } else {
             mPrevCall = System.currentTimeMillis();
@@ -149,6 +162,7 @@ public class AutoFrameRateHelper {
     }
 
     public void setListener(AutoFrameRateListener listener) {
+        mListener = listener;
         mSyncHelper.setListener(listener);
     }
 
