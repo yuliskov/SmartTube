@@ -115,7 +115,7 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
     static final String TAG = "PlaybackTransportGlue";
     static final boolean DEBUG = false;
 
-    T mPlayerAdapter;
+    final T mPlayerAdapter;
     PlaybackControlsRow mControlsRow;
     PlaybackRowPresenter mControlsRowPresenter;
     PlaybackControlsRow.PlayPauseAction mPlayPauseAction;
@@ -221,13 +221,6 @@ public abstract class PlaybackBaseControlGlue<T extends PlayerAdapter> extends P
 
     public final T getPlayerAdapter() {
         return mPlayerAdapter;
-    }
-
-    /**
-     * MOD: add setter to make player glue reusable
-     */
-    public void setPlayerAdapter(T adapter) {
-        mPlayerAdapter = adapter;
     }
 
     @Override
