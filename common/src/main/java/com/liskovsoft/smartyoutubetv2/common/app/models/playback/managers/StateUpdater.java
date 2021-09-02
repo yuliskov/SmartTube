@@ -367,12 +367,12 @@ public class StateUpdater extends PlayerEventListenerHelper {
         mIsPlayBlocked = block;
     }
 
-    private void setPlayEnabled(boolean isPlayEnabled) {
+    public void setPlayEnabled(boolean isPlayEnabled) {
         Log.d(TAG, "setPlayEnabled %s", isPlayEnabled);
         mIsPlayEnabled = isPlayEnabled;
     }
 
-    private boolean getPlayEnabled() {
+    public boolean getPlayEnabled() {
         return mIsPlayEnabled;
     }
 

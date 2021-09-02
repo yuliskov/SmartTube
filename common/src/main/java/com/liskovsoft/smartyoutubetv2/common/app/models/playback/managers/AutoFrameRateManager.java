@@ -34,6 +34,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     private final Runnable mApplyAfr = this::applyAfr;
     private final Handler mHandler;
     private PlayerData mPlayerData;
+    private boolean mIsPlay;
     private final Runnable mPlaybackResumeHandler = () -> {
         getController().setAfrRunning(false);
         restorePlayback();
@@ -65,8 +66,8 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
     @Override
     public void onVideoLoaded(Video item) {
-        if (mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseSec() > 0) {
-            mStateUpdater.blockPlay(true);
+        if (mPlayerData.isAfrEnabled()) {
+            savePlayback();
         }
 
         // Sometimes AFR is not working on activity startup. Trying to fix with delay.
@@ -148,7 +149,6 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
     private void maybePausePlayback() {
         getController().setAfrRunning(true);
-        mStateUpdater.blockPlay(true);
         int delayMs = 5_000;
 
         if (mPlayerData.getAfrPauseSec() > 0) {
@@ -159,9 +159,14 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         Utils.postDelayed(mHandler, mPlaybackResumeHandler, delayMs);
     }
 
+    private void savePlayback() {
+        mStateUpdater.blockPlay(true);
+        mIsPlay = mStateUpdater.getPlayEnabled();
+    }
+
     private void restorePlayback() {
         mStateUpdater.blockPlay(false);
-        getController().setPlay(true);
+        getController().setPlay(mIsPlay);
     }
 
     private void addUiOptions() {
