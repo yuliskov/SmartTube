@@ -42,6 +42,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 public class BrowsePresenter extends BasePresenter<BrowseView> implements CategoryPresenter, VideoGroupPresenter {
     private static final String TAG = BrowsePresenter.class.getSimpleName();
@@ -56,7 +57,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private final List<Category> mCategories;
     private final Map<Integer, Observable<MediaGroup>> mGridMapping;
     private final Map<Integer, Observable<List<MediaGroup>>> mRowMapping;
-    private final Map<Integer, List<SettingsItem>> mSettingsGridMapping;
+    private final Map<Integer, Callable<List<SettingsItem>>> mSettingsGridMapping;
     private final AppDataSourceManager mDataSourcePresenter;
     private final MediaGroupManager mGroupManager;
     private final MediaItemManager mItemManager;
@@ -185,7 +186,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void initSettingsSubCategories() {
-        mSettingsGridMapping.put(MediaGroup.TYPE_SETTINGS, mDataSourcePresenter.getSettingItems(this));
+        mSettingsGridMapping.put(MediaGroup.TYPE_SETTINGS, () -> mDataSourcePresenter.getSettingItems(this));
     }
 
     public void updateCategories() {
@@ -438,7 +439,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                 updateVideoRows(category, groups, category.isAuthOnly());
                 break;
             case Category.TYPE_SETTINGS_GRID:
-                List<SettingsItem> items = mSettingsGridMapping.get(category.getId());
+                Callable<List<SettingsItem>> items = mSettingsGridMapping.get(category.getId());
                 updateSettingsGrid(category, items);
                 break;
             case Category.TYPE_MULTI_GRID:
@@ -450,8 +451,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         updateRefreshTime();
     }
 
-    private void updateSettingsGrid(Category category, List<SettingsItem> items) {
-        getView().updateCategory(SettingsGroup.from(items, category));
+    private void updateSettingsGrid(Category category, Callable<List<SettingsItem>> items) {
+        getView().updateCategory(SettingsGroup.from(Helpers.get(items), category));
         getView().showProgressBar(false);
     }
 
