@@ -43,7 +43,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     public AutoFrameRateManager(HQDialogManager uiManager, StateUpdater stateUpdater) {
         mUiManager = uiManager;
         mStateUpdater = stateUpdater;
-        mAutoFrameRateHelper = new AutoFrameRateHelper();
+        mAutoFrameRateHelper = AutoFrameRateHelper.instance();
         mAutoFrameRateHelper.setListener(this);
         mModeSyncManager = ModeSyncManager.instance();
         mModeSyncManager.setAfrHelper(mAutoFrameRateHelper);
@@ -158,14 +158,14 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     }
 
     private void savePlayback() {
-        if (mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseSec() > 0) {
+        if (mAutoFrameRateHelper.isSupported() && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseSec() > 0) {
             mStateUpdater.blockPlay(true);
             mIsPlay = mStateUpdater.getPlayEnabled();
         }
     }
 
     private void restorePlayback() {
-        if (mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseSec() > 0) {
+        if (mAutoFrameRateHelper.isSupported() && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseSec() > 0) {
             mStateUpdater.blockPlay(false);
             getController().setPlay(mIsPlay);
         }

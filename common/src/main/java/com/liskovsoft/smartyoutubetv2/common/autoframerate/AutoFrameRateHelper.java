@@ -12,6 +12,7 @@ import java.util.HashMap;
 
 public class AutoFrameRateHelper {
     private static final String TAG = AutoFrameRateHelper.class.getSimpleName();
+    private static AutoFrameRateHelper sInstance;
     private final DisplaySyncHelper mSyncHelper;
     private static final long THROTTLE_INTERVAL_MS = 5_000;
     private long mPrevCall;
@@ -19,10 +20,18 @@ public class AutoFrameRateHelper {
     private boolean mIsFpsCorrectionEnabled;
     private AutoFrameRateListener mListener;
 
-    public AutoFrameRateHelper() {
+    private AutoFrameRateHelper() {
         mSyncHelper = new DisplaySyncHelperAlt(null);
 
         initFrameRateMapping();
+    }
+
+    public static AutoFrameRateHelper instance() {
+        if (sInstance == null) {
+            sInstance = new AutoFrameRateHelper();
+        }
+
+        return sInstance;
     }
 
     public void apply(Activity activity, FormatItem format) {
