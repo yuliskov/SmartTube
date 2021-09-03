@@ -43,7 +43,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     public AutoFrameRateManager(HQDialogManager uiManager, StateUpdater stateUpdater) {
         mUiManager = uiManager;
         mStateUpdater = stateUpdater;
-        mAutoFrameRateHelper = AutoFrameRateHelper.instance();
+        mAutoFrameRateHelper = AutoFrameRateHelper.instance(null);
         mAutoFrameRateHelper.setListener(this);
         mModeSyncManager = ModeSyncManager.instance();
         mModeSyncManager.setAfrHelper(mAutoFrameRateHelper);

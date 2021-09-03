@@ -54,7 +54,7 @@ public class AppDataSourceManager {
         //        context.getString(R.string.settings_ui_scale), () -> UIScaleSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_ui_scale));
         settingItems.add(new SettingsItem(
                 context.getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_player));
-        if (AutoFrameRateHelper.instance().isSupported()) {
+        if (AutoFrameRateHelper.instance(context).isSupported()) {
             settingItems.add(new SettingsItem(
                     context.getString(R.string.auto_frame_rate), () -> AutoFrameRateSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_afr));
         }
