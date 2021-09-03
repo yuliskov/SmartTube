@@ -64,7 +64,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
         if (getController() != null) {
             // Save state of the previous video.
             // In case video opened from phone and other stuff.
-            saveState();
+            if (!item.equals(mVideo)) { // video might be opened twice (when remote connection enabled). Fix for that.
+                saveState();
+            }
 
             // Restore format according to profile on every new video
             restoreVideoFormat();

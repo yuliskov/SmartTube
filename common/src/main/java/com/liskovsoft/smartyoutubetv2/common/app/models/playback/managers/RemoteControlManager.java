@@ -343,7 +343,6 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
             mVideo.playlistIndex = newVideo.playlistIndex;
             postStartPlaying(mVideo, getController().isPlaying());
         } else if (newVideo != null) {
-            mVideo = newVideo; // Sometimes video might be opened twice. Fix for that.
             newVideo.isRemote = true;
             PlaybackPresenter.instance(getActivity()).openVideo(newVideo);
         }
