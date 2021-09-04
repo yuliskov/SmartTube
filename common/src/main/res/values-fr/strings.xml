@@ -181,6 +181,7 @@
     <string name="content_block_self_promo">Non rémunéré/auto-promotion</string>
     <string name="content_block_music_off_topic">Section non musicale du clip</string>
     <string name="confirm_segment_skip">Ignorer le segment \"%s\"?</string>
+    <string name="cancel_segment_skip">Annuler le saut de segment</string>
     <string name="msg_skipping_segment">Sauter segment \"%s\"…</string>
     <string name="content_block_notification_type">Type de notification</string>
     <string name="content_block_notify_none">Sans notification</string>
@@ -236,4 +237,8 @@
     <string name="covid_news_row_name">Nouvelles du COVID-19</string>
     <string name="enable_voice_search">Activer la recherche vocale</string>
     <string name="subscribe_unsubscribe_from_channel">S\'abonner/se désabonner de la chaîne</string>
+    <string name="app_backup_restore">Sauvegarde/Restauration</string>
+    <string name="app_backup">Sauvegarde des données</string>
+    <string name="app_restore">Restaurer des données à partir d'une sauvegarde</string>
+    <string name="skip_each_segment_once">Ne plus sautez encore de segments</string>
 </resources>
