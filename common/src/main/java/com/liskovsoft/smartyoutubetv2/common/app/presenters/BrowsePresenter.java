@@ -54,7 +54,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private final PlaybackPresenter mPlaybackPresenter;
     private final MainUIData mMainUIData;
     private final GeneralData mGeneralData;
-    private final List<BrowseSection> mCategories;
+    private final List<BrowseSection> mSections;
     private final Map<Integer, Observable<MediaGroup>> mGridMapping;
     private final Map<Integer, Observable<List<MediaGroup>>> mRowMapping;
     private final Map<Integer, Callable<List<SettingsItem>>> mSettingsGridMapping;
@@ -65,7 +65,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private Disposable mUpdateAction;
     private Disposable mContinueAction;
     private Disposable mSignCheckAction;
-    private int mCurrentCategoryId;
+    private int mCurrentSectionId;
     private long mLastUpdateTimeMs;
     private int mStartCategoryIndex;
     private int mUploadsType;
@@ -74,7 +74,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         super(context);
         mDataSourcePresenter = AppDataSourceManager.instance();
         mPlaybackPresenter = PlaybackPresenter.instance(context);
-        mCategories = new ArrayList<>();
+        mSections = new ArrayList<>();
         mGridMapping = new HashMap<>();
         mRowMapping = new HashMap<>();
         mSettingsGridMapping = new HashMap<>();
@@ -129,17 +129,17 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     private void initCategoryHeaders() {
         mUploadsType = mMainUIData.isUploadsOldLookEnabled() ? BrowseSection.TYPE_GRID : BrowseSection.TYPE_MULTI_GRID;
 
-        mCategories.add(new BrowseSection(MediaGroup.TYPE_HOME, getContext().getString(R.string.header_home), BrowseSection.TYPE_ROW, R.drawable.icon_home));
-        mCategories.add(new BrowseSection(MediaGroup.TYPE_GAMING, getContext().getString(R.string.header_gaming), BrowseSection.TYPE_ROW, R.drawable.icon_gaming));
-        mCategories.add(new BrowseSection(MediaGroup.TYPE_NEWS, getContext().getString(R.string.header_news), BrowseSection.TYPE_ROW, R.drawable.icon_news));
-        mCategories.add(new BrowseSection(MediaGroup.TYPE_MUSIC, getContext().getString(R.string.header_music), BrowseSection.TYPE_ROW, R.drawable.icon_music));
-        mCategories.add(new BrowseSection(MediaGroup.TYPE_CHANNEL_UPLOADS, getContext().getString(R.string.header_channels), mUploadsType, R.drawable.icon_channels, true));
-        mCategories.add(new BrowseSection(MediaGroup.TYPE_SUBSCRIPTIONS, getContext().getString(R.string.header_subscriptions), BrowseSection.TYPE_GRID, R.drawable.icon_subscriptions, true));
-        mCategories.add(new BrowseSection(MediaGroup.TYPE_HISTORY, getContext().getString(R.string.header_history), BrowseSection.TYPE_GRID, R.drawable.icon_history, true));
-        mCategories.add(new BrowseSection(MediaGroup.TYPE_USER_PLAYLISTS, getContext().getString(R.string.header_playlists), BrowseSection.TYPE_ROW, R.drawable.icon_playlist, true));
+        mSections.add(new BrowseSection(MediaGroup.TYPE_HOME, getContext().getString(R.string.header_home), BrowseSection.TYPE_ROW, R.drawable.icon_home));
+        mSections.add(new BrowseSection(MediaGroup.TYPE_GAMING, getContext().getString(R.string.header_gaming), BrowseSection.TYPE_ROW, R.drawable.icon_gaming));
+        mSections.add(new BrowseSection(MediaGroup.TYPE_NEWS, getContext().getString(R.string.header_news), BrowseSection.TYPE_ROW, R.drawable.icon_news));
+        mSections.add(new BrowseSection(MediaGroup.TYPE_MUSIC, getContext().getString(R.string.header_music), BrowseSection.TYPE_ROW, R.drawable.icon_music));
+        mSections.add(new BrowseSection(MediaGroup.TYPE_CHANNEL_UPLOADS, getContext().getString(R.string.header_channels), mUploadsType, R.drawable.icon_channels, true));
+        mSections.add(new BrowseSection(MediaGroup.TYPE_SUBSCRIPTIONS, getContext().getString(R.string.header_subscriptions), BrowseSection.TYPE_GRID, R.drawable.icon_subscriptions, true));
+        mSections.add(new BrowseSection(MediaGroup.TYPE_HISTORY, getContext().getString(R.string.header_history), BrowseSection.TYPE_GRID, R.drawable.icon_history, true));
+        mSections.add(new BrowseSection(MediaGroup.TYPE_USER_PLAYLISTS, getContext().getString(R.string.header_playlists), BrowseSection.TYPE_ROW, R.drawable.icon_playlist, true));
 
         if (mGeneralData.isSettingsCategoryEnabled()) {
-            mCategories.add(new BrowseSection(MediaGroup.TYPE_SETTINGS, getContext().getString(R.string.header_settings), BrowseSection.TYPE_SETTINGS_GRID, R.drawable.icon_settings));
+            mSections.add(new BrowseSection(MediaGroup.TYPE_SETTINGS, getContext().getString(R.string.header_settings), BrowseSection.TYPE_SETTINGS_GRID, R.drawable.icon_settings));
         }
     }
 
@@ -170,7 +170,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         for (Video item : pinnedItems) {
             if (item != null) {
                 BrowseSection category = new BrowseSection(item.hashCode(), item.title, BrowseSection.TYPE_GRID, item.cardImageUrl, true, item);
-                mCategories.add(category);
+                mSections.add(category);
             }
         }
     }
@@ -192,7 +192,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     public void updateCategories() {
         int index = 0;
 
-        for (BrowseSection category : mCategories) {
+        for (BrowseSection category : mSections) {
             category.setEnabled(category.getId() == MediaGroup.TYPE_SETTINGS || mGeneralData.isCategoryEnabled(category.getId()));
 
             if (category.isEnabled()) {
@@ -240,11 +240,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void updateCategoryType(int categoryId, int categoryType) {
-        if (categoryType == -1 || categoryId == -1 || mCategories == null) {
+        if (categoryType == -1 || categoryId == -1 || mSections == null) {
             return;
         }
 
-        for (BrowseSection category : mCategories) {
+        for (BrowseSection category : mSections) {
             if (category.getId() == categoryId) {
                 category.setType(categoryType);
                 break;
@@ -341,7 +341,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
     @Override
     public void onCategoryFocused(int categoryId) {
-        updateCategory(categoryId);
+        updateSection(categoryId);
     }
 
     @Override
@@ -361,7 +361,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         mGeneralData.setPinnedItems(items);
 
         BrowseSection category = new BrowseSection(item.hashCode(), item.title, BrowseSection.TYPE_GRID, item.cardImageUrl, true, item);
-        mCategories.add(category);
+        mSections.add(category);
         mGridMapping.put(item.hashCode(), ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item));
 
         if (getView() != null) {
@@ -374,11 +374,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         items.remove(item);
         mGeneralData.setPinnedItems(items);
 
-        BrowseSection category = null;
+        BrowseSection section = null;
 
-        for (BrowseSection cat : mCategories) {
+        for (BrowseSection cat : mSections) {
             if (cat.getId() == item.hashCode()) {
-                category = cat;
+                section = cat;
                 break;
             }
         }
@@ -386,7 +386,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         mGridMapping.remove(item.hashCode());
 
         if (getView() != null) {
-            getView().removeSection(category);
+            getView().removeSection(section);
         }
     }
 
@@ -404,66 +404,66 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     public void refresh() {
-        updateCategory(mCurrentCategoryId);
+        updateSection(mCurrentSectionId);
     }
 
     private void updateRefreshTime() {
         mLastUpdateTimeMs = System.currentTimeMillis();
     }
 
-    private void updateCategory(int categoryId) {
+    private void updateSection(int sectionId) {
         disposeActions();
 
-        mCurrentCategoryId = categoryId;
+        mCurrentSectionId = sectionId;
 
-        if (getView() == null || categoryId < 0) {
+        if (getView() == null || sectionId < 0) {
             return;
         }
 
-        BrowseSection category = getCategory(categoryId);
+        BrowseSection section = getSection(sectionId);
 
-        if (category != null) {
-            Log.d(TAG, "Update category %s", category.getTitle());
-            updateCategory(category);
+        if (section != null) {
+            Log.d(TAG, "Update section %s", section.getTitle());
+            updateSection(section);
         }
     }
 
-    private void updateCategory(BrowseSection category) {
-        switch (category.getType()) {
+    private void updateSection(BrowseSection section) {
+        switch (section.getType()) {
             case BrowseSection.TYPE_GRID:
-                Observable<MediaGroup> group = mGridMapping.get(category.getId());
-                updateVideoGrid(category, group, category.isAuthOnly());
+                Observable<MediaGroup> group = mGridMapping.get(section.getId());
+                updateVideoGrid(section, group, section.isAuthOnly());
                 break;
             case BrowseSection.TYPE_ROW:
-                Observable<List<MediaGroup>> groups = mRowMapping.get(category.getId());
-                updateVideoRows(category, groups, category.isAuthOnly());
+                Observable<List<MediaGroup>> groups = mRowMapping.get(section.getId());
+                updateVideoRows(section, groups, section.isAuthOnly());
                 break;
             case BrowseSection.TYPE_SETTINGS_GRID:
-                Callable<List<SettingsItem>> items = mSettingsGridMapping.get(category.getId());
-                updateSettingsGrid(category, items);
+                Callable<List<SettingsItem>> items = mSettingsGridMapping.get(section.getId());
+                updateSettingsGrid(section, items);
                 break;
             case BrowseSection.TYPE_MULTI_GRID:
-                Observable<MediaGroup> group2 = mGridMapping.get(category.getId());
-                updateVideoGrid(category, group2, 0, category.isAuthOnly());
+                Observable<MediaGroup> group2 = mGridMapping.get(section.getId());
+                updateVideoGrid(section, group2, 0, section.isAuthOnly());
                 break;
         }
 
         updateRefreshTime();
     }
 
-    private void updateSettingsGrid(BrowseSection category, Callable<List<SettingsItem>> items) {
-        getView().updateSection(SettingsGroup.from(Helpers.get(items), category));
+    private void updateSettingsGrid(BrowseSection section, Callable<List<SettingsItem>> items) {
+        getView().updateSection(SettingsGroup.from(Helpers.get(items), section));
         getView().showProgressBar(false);
     }
 
-    private void updateVideoRows(BrowseSection category, Observable<List<MediaGroup>> groups, boolean authCheck) {
-        Log.d(TAG, "loadRowsHeader: Start loading category: " + category.getTitle());
+    private void updateVideoRows(BrowseSection section, Observable<List<MediaGroup>> groups, boolean authCheck) {
+        Log.d(TAG, "loadRowsHeader: Start loading section: " + section.getTitle());
 
-        authCheck(authCheck, () -> updateVideoRows(category, groups));
+        authCheck(authCheck, () -> updateVideoRows(section, groups));
     }
 
-    private void updateVideoGrid(BrowseSection category, Observable<MediaGroup> group, boolean authCheck) {
-        updateVideoGrid(category, group, -1, authCheck);
+    private void updateVideoGrid(BrowseSection section, Observable<MediaGroup> group, boolean authCheck) {
+        updateVideoGrid(section, group, -1, authCheck);
     }
 
     private void updateVideoGrid(BrowseSection category, Observable<MediaGroup> group, int position, boolean authCheck) {
@@ -472,13 +472,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         authCheck(authCheck, () -> updateVideoGrid(category, group, position));
     }
 
-    private void updateVideoRows(BrowseSection category, Observable<List<MediaGroup>> groups) {
-        Log.d(TAG, "updateRowsHeader: Start loading category: " + category.getTitle());
+    private void updateVideoRows(BrowseSection section, Observable<List<MediaGroup>> groups) {
+        Log.d(TAG, "updateRowsHeader: Start loading section: " + section.getTitle());
 
         disposeActions();
         getView().showProgressBar(true);
 
-        getView().updateSection(VideoGroup.from(category, true));
+        getView().updateSection(VideoGroup.from(section, true));
 
         mUpdateAction = groups
                 .subscribeOn(Schedulers.newThread())
@@ -495,7 +495,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                                 
                                 filterIfNeeded(mediaGroup);
 
-                                VideoGroup videoGroup = VideoGroup.from(mediaGroup, category);
+                                VideoGroup videoGroup = VideoGroup.from(mediaGroup, section);
 
                                 getView().updateSection(videoGroup);
 
@@ -514,13 +514,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
                         });
     }
 
-    private void updateVideoGrid(BrowseSection category, Observable<MediaGroup> group, int position) {
-        Log.d(TAG, "updateGridHeader: Start loading category: " + category.getTitle());
+    private void updateVideoGrid(BrowseSection section, Observable<MediaGroup> group, int position) {
+        Log.d(TAG, "updateGridHeader: Start loading section: " + section.getTitle());
 
         disposeActions();
         getView().showProgressBar(true);
 
-        getView().updateSection(VideoGroup.from(category, position, true));
+        getView().updateSection(VideoGroup.from(section, position, true));
 
         if (group == null) {
             // No group. Maybe just clear.
@@ -541,7 +541,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
 
                             filterIfNeeded(mediaGroup);
 
-                            VideoGroup videoGroup = VideoGroup.from(mediaGroup, category, position);
+                            VideoGroup videoGroup = VideoGroup.from(mediaGroup, section, position);
                             getView().updateSection(videoGroup);
 
                             // Hide loading as long as first group received
@@ -649,7 +649,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     private void updateMultiGrid(Video item) {
-        BrowseSection category = getCategory(mCurrentCategoryId);
+        BrowseSection category = getSection(mCurrentSectionId);
 
         if (category == null) {
             return;
@@ -658,9 +658,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         updateVideoGrid(category, ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item), 1, true);
     }
 
-    private BrowseSection getCategory(int categoryId) {
-        for (BrowseSection category : mCategories) {
-            if (category.getId() == categoryId) {
+    private BrowseSection getSection(int sectionId) {
+        for (BrowseSection category : mSections) {
+            if (category.getId() == sectionId) {
                 return category;
             }
         }
