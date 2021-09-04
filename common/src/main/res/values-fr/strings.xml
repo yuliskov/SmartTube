@@ -239,6 +239,6 @@
     <string name="subscribe_unsubscribe_from_channel">S\'abonner/se désabonner de la chaîne</string>
     <string name="app_backup_restore">Sauvegarde/Restauration</string>
     <string name="app_backup">Sauvegarde des données</string>
-    <string name="app_restore">Restaurer des données à partir d'une sauvegarde</string>
+    <string name="app_restore">Restaurer des données à partir d\'une sauvegarde</string>
     <string name="skip_each_segment_once">Ne plus sautez encore de segments</string>
 </resources>

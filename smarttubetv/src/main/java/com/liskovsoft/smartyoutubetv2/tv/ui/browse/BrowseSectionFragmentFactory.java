@@ -20,19 +20,19 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.VideoRowsFragment;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CategoryFragmentFactory extends BrowseSupportFragment.FragmentFactory<Fragment> {
-    private static final String TAG = CategoryFragmentFactory.class.getSimpleName();
+public class BrowseSectionFragmentFactory extends BrowseSupportFragment.FragmentFactory<Fragment> {
+    private static final String TAG = BrowseSectionFragmentFactory.class.getSimpleName();
     private final OnHeaderViewSelectedListener mViewSelectedListener;
     private Fragment mCurrentFragment;
     private int mFragmentType = Category.TYPE_GRID;
     private int mSelectedItemIndex = -1;
     private final Map<Integer, Fragment> mFragmentMap = new HashMap<>();
 
-    public CategoryFragmentFactory() {
+    public BrowseSectionFragmentFactory() {
         this(null);
     }
 
-    public CategoryFragmentFactory(OnHeaderViewSelectedListener viewSelectedListener) {
+    public BrowseSectionFragmentFactory(OnHeaderViewSelectedListener viewSelectedListener) {
         mViewSelectedListener = viewSelectedListener;
 
         initFragmentMap();
