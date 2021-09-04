@@ -1,6 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 
-public class Category {
+public class BrowseSection {
     public static final int TYPE_GRID = 0;
     public static final int TYPE_ROW = 1;
     public static final int TYPE_SETTINGS_GRID = 2;
@@ -14,27 +14,27 @@ public class Category {
     private boolean mEnabled;
     private int mType;
 
-    public Category(int id, String title, int type, int resId) {
+    public BrowseSection(int id, String title, int type, int resId) {
         this(id, title, type, resId, false);
     }
 
-    public Category(int id, String title, int type, String iconUrl) {
+    public BrowseSection(int id, String title, int type, String iconUrl) {
         this(id, title, type, iconUrl, false);
     }
 
-    public Category(int id, String title, int type, String iconUrl, boolean isAuthOnly) {
+    public BrowseSection(int id, String title, int type, String iconUrl, boolean isAuthOnly) {
         this(id, title, type, -1, iconUrl, isAuthOnly, null);
     }
 
-    public Category(int id, String title, int type, String iconUrl, boolean isAuthOnly, Video data) {
+    public BrowseSection(int id, String title, int type, String iconUrl, boolean isAuthOnly, Video data) {
         this(id, title, type, -1, iconUrl, isAuthOnly, data);
     }
 
-    public Category(int id, String title, int type, int resId, boolean isAuthOnly) {
+    public BrowseSection(int id, String title, int type, int resId, boolean isAuthOnly) {
         this(id, title, type, resId, null, isAuthOnly, null);
     }
 
-    public Category(int id, String title, int type, int resId, String iconUrl, boolean isAuthOnly, Video data) {
+    public BrowseSection(int id, String title, int type, int resId, String iconUrl, boolean isAuthOnly, Video data) {
         mId = id;
         mTitle = title;
         mType = type;

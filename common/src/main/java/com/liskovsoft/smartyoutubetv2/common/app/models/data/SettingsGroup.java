@@ -4,9 +4,9 @@ import java.util.List;
 
 public class SettingsGroup {
     private List<SettingsItem> mItems;
-    private Category mCategory;
+    private BrowseSection mCategory;
 
-    public static SettingsGroup from(List<SettingsItem> items, Category category) {
+    public static SettingsGroup from(List<SettingsItem> items, BrowseSection category) {
         SettingsGroup settingsGroup = new SettingsGroup();
         settingsGroup.mItems = items;
         settingsGroup.mCategory = category;
@@ -18,7 +18,7 @@ public class SettingsGroup {
         return mItems;
     }
 
-    public Category getCategory() {
+    public BrowseSection getCategory() {
         return mCategory;
     }
 

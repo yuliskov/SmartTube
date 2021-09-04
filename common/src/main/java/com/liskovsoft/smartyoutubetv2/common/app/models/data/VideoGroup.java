@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,19 +13,19 @@ public class VideoGroup {
     private String mTitle;
     private List<Video> mVideos;
     private MediaGroup mMediaGroup;
-    private Category mCategory;
+    private BrowseSection mCategory;
     private int mPosition;
     private boolean mIsNew;
 
-    public static VideoGroup from(Category category) {
+    public static VideoGroup from(BrowseSection category) {
         return from(null, category);
     }
 
-    public static VideoGroup from(Category category, boolean isNew) {
+    public static VideoGroup from(BrowseSection category, boolean isNew) {
         return from(null, category, -1, isNew);
     }
 
-    public static VideoGroup from(Category category, int groupPosition, boolean isNew) {
+    public static VideoGroup from(BrowseSection category, int groupPosition, boolean isNew) {
         return from(null, category, groupPosition, isNew);
     }
 
@@ -34,19 +33,19 @@ public class VideoGroup {
         return from(mediaGroup, null);
     }
 
-    public static VideoGroup from(MediaGroup mediaGroup, Category category) {
+    public static VideoGroup from(MediaGroup mediaGroup, BrowseSection category) {
         return from(mediaGroup, category, -1);
     }
 
-    public static VideoGroup from(MediaGroup mediaGroup, Category category, boolean isNew) {
+    public static VideoGroup from(MediaGroup mediaGroup, BrowseSection category, boolean isNew) {
         return from(mediaGroup, category, -1, isNew);
     }
 
-    public static VideoGroup from(MediaGroup mediaGroup, Category category, int groupPosition) {
+    public static VideoGroup from(MediaGroup mediaGroup, BrowseSection category, int groupPosition) {
         return from(mediaGroup, category, groupPosition, false);
     }
 
-    public static VideoGroup from(MediaGroup mediaGroup, Category category, int groupPosition, boolean isNew) {
+    public static VideoGroup from(MediaGroup mediaGroup, BrowseSection category, int groupPosition, boolean isNew) {
         VideoGroup videoGroup = new VideoGroup();
         videoGroup.mCategory = category;
         videoGroup.mPosition = groupPosition;
@@ -94,7 +93,7 @@ public class VideoGroup {
         return mMediaGroup;
     }
 
-    public Category getCategory() {
+    public BrowseSection getCategory() {
         return mCategory;
     }
 
