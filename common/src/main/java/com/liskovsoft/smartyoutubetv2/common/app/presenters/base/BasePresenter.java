@@ -13,6 +13,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     private WeakReference<Activity> mActivity = new WeakReference<>(null);
     private WeakReference<Context> mApplicationContext = new WeakReference<>(null);
     private Runnable mOnDone;
+    private static boolean sRunOnce;
 
     public BasePresenter(Context context) {
         setContext(context);
@@ -34,6 +35,12 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     public void setContext(Context context) {
         if (context == null) {
             return;
+        }
+
+        if (!sRunOnce) {
+            sRunOnce = true;
+            // Init shared prefs used inside remote control service.
+            Utils.initGlobalData(context);
         }
 
         // Localization fix: prefer Activity context

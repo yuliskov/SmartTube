@@ -39,7 +39,9 @@ public class DisplaySyncHelper implements UhdHelperListener {
     }
 
     public DisplaySyncHelper(Context context) {
-        mContext = context;
+        if (context != null) {
+            mContext = context.getApplicationContext();
+        }
     }
 
     public Mode getOriginalMode() {
