@@ -40,7 +40,7 @@
     <string name="update_changelog">Registro modifiche</string>
     <string name="install_update">Installa aggiornamento</string>
     <string name="section_is_empty">Oops! Qui non c\'è niente.</string>
-    <string name="dialog_add_to_playlist">Aggiungi/Rimuovi dalla playlist</string>
+    <string name="dialog_add_to_playlist">Aggiungi o rimuovi dalla playlist</string>
     <string name="msg_signed_users_only">Solo utenti che hanno effettuato l\'accesso</string>
     <string name="msg_cant_load_content">Oops. Non posso caricare il contenuto.</string>
     <string name="title_video_presets">Preimpostazioni video</string>
@@ -158,8 +158,8 @@
     <string name="auto_frame_rate_applying">Applica frequenza automatica fotogrammi %sx%s@%s</string>
     <string name="audio_shift">Modifica audio</string>
     <string name="player_remember_speed">Ricorda velocità</string>
-    <string name="mark_channel_as_watched">Segna come visto</string>
-    <string name="channel_marked_as_watched">Il canale è stato segnato come visto</string>
+    <string name="mark_channel_as_watched">Segna come già visto</string>
+    <string name="channel_marked_as_watched">Il canale è stato segnato come già visto</string>
     <string name="dialog_add_device">Aggiungi dispositivo</string>
     <string name="dialog_remove_all_devices">Rimuovi tutti i dispositivi</string>
     <string name="device_link_enabled">Collegamento abilitato</string>
@@ -175,14 +175,14 @@
     <string name="content_block_confirm_skip">Conferma salto</string>
     <string name="content_block_categories">Categorie</string>
     <string name="content_block_sponsor">Sponsor</string>
-    <string name="content_block_intro">Interruzione/animazione intro</string>
+    <string name="content_block_intro">Intermezzo/animazione introduttiva</string>
     <string name="content_block_outro">Titoli di coda/crediti</string>
     <string name="content_block_interaction">Promemoria di interazione (iscrizione)</string>
-    <string name="content_block_self_promo">Non pagato/auto promozione</string>
+    <string name="content_block_self_promo">Non retribuito/autopromozione</string>
     <string name="content_block_music_off_topic">Sezione non musicale della clip</string>
-    <string name="confirm_segment_skip">Salto segmento \"%s\"?</string>
+    <string name="confirm_segment_skip">Salto il segmento \"%s\"?</string>
     <string name="cancel_segment_skip">Cancella salto segmento</string>
-    <string name="msg_skipping_segment">Sto saltando segmento \"%s\"…</string>
+    <string name="msg_skipping_segment">Sto saltando il segmento \"%s\"…</string>
     <string name="content_block_notification_type">Tipo di notifica</string>
     <string name="content_block_notify_none">Senza notifica</string>
     <string name="content_block_notify_toast">Toast</string>
@@ -214,20 +214,20 @@
     <string name="channels_old_look">Reimposta vecchio look sezione canali </string>
     <string name="channels_auto_load">Caricamento automatico contenuto sezione canali</string>
     <string name="return_to_background_video">Torna al video in esecuzione in background</string>
-    <string name="pin_unpin_from_sidebar">Fissa/Rimuovi dalla barra laterale</string>
+    <string name="pin_unpin_from_sidebar">Fissa o rimuovi dalla barra laterale</string>
     <string name="pin_to_sidebar">Fissa alla barra laterale</string>
     <string name="unpin_from_sidebar">Rimuovi dalla barra laterale</string>
     <string name="dialog_select_country">Nazione</string>
-    <string name="settings_language_country">Lingua/Nazione</string>
+    <string name="settings_language_country">Lingua e nazione</string>
     <string name="share_embed_link">Condividi link incorporato</string>
     <string name="card_text_scroll_factor">Velocità scorrimento testo titoli video</string>
     <string name="preferred_update_source">Seleziona fonte aggiornamenti</string>
     <string name="hide_shorts">Nascondi i video Shorts dalle iscrizioni </string>
-    <string name="key_remapping">Rimappatura dei tasti</string>
+    <string name="key_remapping">Rimappatura tasti</string>
     <string name="screen_dimming">Oscura schermo</string>
     <string name="removed_from_playback_queue">Rimosso dalla coda di riproduzione</string>
     <string name="added_to_playback_queue">Aggiunto alla coda di riproduzione</string>
-    <string name="add_remove_from_playback_queue">Aggiungi/Rimuovi dalla coda di riproduzione</string>
+    <string name="add_remove_from_playback_queue">Aggiungi o rimuovi dalla coda di riproduzione</string>
     <string name="proxy_enabled">Proxy attivato</string>
     <string name="proxy_disabled">Proxy disattivato</string>
     <string name="uploads_row_name">Caricamenti</string>
@@ -236,9 +236,11 @@
     <string name="breaking_news_row_name">Ultime notizie</string>
     <string name="covid_news_row_name">Notizie su COVID-19</string>
     <string name="enable_voice_search">Abilita ricerca vocale</string>
-    <string name="subscribe_unsubscribe_from_channel">Iscriviti/Disiscriviti dal canale</string>
-    <string name="app_backup_restore">Backup/Ripristino</string>
+    <string name="subscribe_unsubscribe_from_channel">Iscriviti o disiscriviti dal canale</string>
+    <string name="app_backup_restore">Backup e ripristino</string>
     <string name="app_backup">Backup dati</string>
     <string name="app_restore">Ripristino dati dal backup</string>
     <string name="skip_each_segment_once">Non saltare più i segmenti</string>
 </resources>
+
+
