@@ -85,6 +85,10 @@ public class VideoGroup {
         return mTitle;
     }
 
+    public void setTitle(String title) {
+        mTitle = title;
+    }
+
     public int getId() {
         return mId;
     }

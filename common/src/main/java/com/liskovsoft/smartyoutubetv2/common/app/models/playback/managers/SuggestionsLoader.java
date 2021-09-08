@@ -6,6 +6,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
@@ -143,6 +144,11 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
         // Free a lot of memory
         if (video.isRemote || !getController().isSuggestionsShown()) {
             getController().clearSuggestions();
+
+            // Add loading... row
+            VideoGroup group = new VideoGroup();
+            group.setTitle(getActivity().getString(R.string.wait_data_loading));
+            getController().updateSuggestions(group);
         }
     }
 
