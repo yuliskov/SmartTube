@@ -54,10 +54,10 @@ public class AppDataSourceManager {
         //        context.getString(R.string.settings_ui_scale), () -> UIScaleSettingsPresenter.instance(context).show(), R.drawable.settings_ui_scale));
         settingItems.add(new SettingsItem(
                 context.getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(context).show(), R.drawable.settings_player));
-        if (AutoFrameRateHelper.instance(context).isSupported()) {
-            settingItems.add(new SettingsItem(
-                    context.getString(R.string.auto_frame_rate), () -> AutoFrameRateSettingsPresenter.instance(context).show(), R.drawable.settings_afr));
-        }
+        // Don't add afr support check here.
+        // Users want even fake afr settings.
+        settingItems.add(new SettingsItem(
+                context.getString(R.string.auto_frame_rate), () -> AutoFrameRateSettingsPresenter.instance(context).show(), R.drawable.settings_afr));
         settingItems.add(new SettingsItem(
                 context.getString(R.string.subtitle_category_title), () -> SubtitleSettingsPresenter.instance(context).show(), R.drawable.settings_subtitles));
         settingItems.add(new SettingsItem(
