@@ -71,7 +71,6 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoEventsOverrideFr
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue.OnActionClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView;
-import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -698,7 +697,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     @Override
     public boolean isSuggestionsEmpty() {
         // Ignore first row. It's player controls row.
-        return mRowsAdapter == null || mRowsAdapter.size() <= 1 || ViewUtil.isListRowEmpty(mRowsAdapter.get(1));
+        return mRowsAdapter == null || mRowsAdapter.size() <= 1;
     }
 
     @Override
