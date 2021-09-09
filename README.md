@@ -126,7 +126,7 @@ To enable voice search, an additional app must be installed alongside SmartTubeN
 
 If you want to support my developments you are welcome to buy me a cup of coffee :)
 
-> [Donation Alerts (**VISA**, **PayPal**)](https://www.donationalerts.com/r/firsthash)  
+> [BountySource (**PayPal**, **VISA**)](https://salt.bountysource.com/checkout/amount?team=smarttube)  
 > [QIWI (RU)](https://qiwi.com/n/GUESS025)  
 > **BTC**: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx  
 > **LTC**: ltc1qgc24eq9jl9cq78qnd5jpqhemkajg9vudwyd8pw  
