@@ -20,6 +20,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.BootDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.ChannelUploadsMenuPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.CategoryPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
@@ -279,21 +280,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
             return;
         }
 
-        if (item.hasUploads()) {
-            // Below doesn't work right now. Api doesn't contains channel id.
-            //ChannelPresenter.instance(getContext()).openChannel(item);
-
-            if (mUploadsType == BrowseSection.TYPE_MULTI_GRID) { // Is Channels new look enabled?
-                updateMultiGrid(item);
-            } else {
-                ChannelUploadsPresenter.instance(getContext()).openChannel(item);
-            }
-        } else if (item.hasVideo()) {
-            mPlaybackPresenter.openVideo(item);
-        } else if (item.hasChannel()) {
-            ChannelPresenter.instance(getContext()).openChannel(item);
-        } else if (item.hasPlaylist()) {
-            ChannelUploadsPresenter.instance(getContext()).openChannel(item);
+        if (mUploadsType == BrowseSection.TYPE_MULTI_GRID && item.hasUploads()) { // Is Channels new look enabled?
+            updateMultiGrid(item);
+        } else {
+            VideoActionPresenter.instance(getContext()).apply(item);
         }
 
         updateRefreshTime();
@@ -304,17 +294,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
         if (getView() == null) {
             return;
         }
-
-        //if (item.isChannelUploadsSection()) { // We need to be sure we exactly on Channels section
-        //    ChannelUploadsMenuPresenter.instance(getContext()).showMenu(item);
-        //} else if (item.hasChannel()) {
-        //    VideoMenuPresenter.instance(getContext()).showChannelMenu(item);
-        //} else if (item.hasPlaylist()) {
-        //    VideoMenuPresenter.instance(getContext()).showPlaylistMenu(item);
-        //} else if (item.hasVideo()) {
-        //    Category category = getCategory(mCurrentCategoryId);
-        //    VideoMenuPresenter.instance(getContext()).showVideoMenu(item, category != null ? category.getData() : null);
-        //}
 
         if (item.isChannelUploadsSection()) { // We need to be sure we exactly on Channels section
             ChannelUploadsMenuPresenter.instance(getContext()).showMenu(item);
