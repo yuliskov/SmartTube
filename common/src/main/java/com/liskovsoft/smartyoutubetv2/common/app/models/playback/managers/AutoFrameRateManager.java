@@ -196,7 +196,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
                     getActivity(), PlayerData.instance(getActivity()),
                     () -> {}, this::onResolutionSwitchClick, this::onFpsCorrectionClick);
 
-            OptionCategory afrDelayCategory = createAutoFrameRatePauseCategory(
+            OptionCategory afrPauseCategory = createAutoFrameRatePauseCategory(
                     getActivity(), PlayerData.instance(getActivity()));
 
             // Create nested dialogs
@@ -208,11 +208,11 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
                 dialogPresenter.appendCheckedCategory(afrCategory.title, afrCategory.options);
                 dialogPresenter.showDialog(afrCategory.title, mApplyAfr);
             }));
-            options.add(UiOptionItem.from(afrDelayCategory.title, optionItem -> {
+            options.add(UiOptionItem.from(afrPauseCategory.title, optionItem -> {
                 AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
                 dialogPresenter.clear();
-                dialogPresenter.appendRadioCategory(afrDelayCategory.title, afrDelayCategory.options);
-                dialogPresenter.showDialog(afrDelayCategory.title, mApplyAfr);
+                dialogPresenter.appendRadioCategory(afrPauseCategory.title, afrPauseCategory.options);
+                dialogPresenter.showDialog(afrPauseCategory.title, mApplyAfr);
             }));
 
             mUiManager.addCategory(OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_STRING, getActivity().getString(R.string.auto_frame_rate), options));
