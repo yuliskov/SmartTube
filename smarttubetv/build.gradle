@@ -78,6 +78,8 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            shrinkResources true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
@@ -113,6 +115,8 @@ android {
             // matchingFallbacks = ['lite']
             versionCode 11000 + defaultConfig.versionCode
             applicationId "com.liskovsoft.videomanager"
+            ndk { abiFilters 'armeabi-v7a' }
+            resConfigs "ru"
         }
         stredboxtv {
             // matchingFallbacks = ['lite']
