@@ -42,7 +42,7 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
 
         appendUpdateCheckButton(settingsPresenter);
 
-        appendPreferredSource(settingsPresenter);
+        appendUpdateSource(settingsPresenter);
 
         appendSiteLink(settingsPresenter);
 
@@ -90,7 +90,7 @@ public class AboutSettingsPresenter extends BasePresenter<Void> {
         }
     }
 
-    private void appendPreferredSource(AppDialogPresenter settingsPresenter) {
+    private void appendUpdateSource(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         String[] updateUrls = getContext().getResources().getStringArray(R.array.update_urls);
