@@ -37,8 +37,9 @@ build/
 # my other stuff
 /smartyoutubetv2/release
 /smarttube/release
-/smarttube/output
 /smarttubetv/release
+# gradle 6 fix
+/smarttube/output
 /smarttubetv/output
 /smarttubemobile/release
 google-services.json
