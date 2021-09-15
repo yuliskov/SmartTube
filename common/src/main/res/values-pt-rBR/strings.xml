@@ -223,7 +223,7 @@
     <string name="preferred_update_source">Selecionar a Fonte de Atualização</string>
     <string name="hide_shorts">Esconder Videos Curtos das Inscrições</string>
     <string name="key_remapping">Remapeamento da Tecla</string>
-    <string name="screen_diming">Escurecer a Tela</string>
+    <string name="screen_dimming">Escurecer a Tela</string>
     <string name="removed_from_playback_queue">Removido da fila de Reprodução</string>
     <string name="added_to_playback_queue">Adicionado à fila de Reprodução</string>
     <string name="add_remove_from_playback_queue">Adicionar/Remover da fila de Reprodução</string>

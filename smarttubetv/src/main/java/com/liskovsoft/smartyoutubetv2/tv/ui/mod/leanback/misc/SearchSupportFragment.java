@@ -763,6 +763,10 @@ public class SearchSupportFragment extends Fragment {
     }
 
     void submitQuery(String query) {
+        if (query == null) {
+            return;
+        }
+
         queryComplete();
         if (null != mProvider) {
             mProvider.onQueryTextSubmit(query);

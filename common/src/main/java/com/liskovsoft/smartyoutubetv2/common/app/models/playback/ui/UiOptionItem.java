@@ -88,15 +88,15 @@ public class UiOptionItem implements OptionItem {
         return uiOptionItem;
     }
 
-    public static OptionItem from(String title, OptionCallback callback) {
+    public static OptionItem from(CharSequence title, OptionCallback callback) {
         return from(title, callback, false);
     }
 
-    public static OptionItem from(String title, OptionCallback callback, boolean isChecked) {
+    public static OptionItem from(CharSequence title, OptionCallback callback, boolean isChecked) {
         return from(title, callback, isChecked, null);
     }
 
-    public static OptionItem from(String title, OptionCallback callback, boolean isChecked, Object data) {
+    public static OptionItem from(CharSequence title, OptionCallback callback, boolean isChecked, Object data) {
         UiOptionItem uiOptionItem = new UiOptionItem();
 
         uiOptionItem.mTitle = title;

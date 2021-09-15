@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
@@ -31,7 +32,6 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     @SuppressLint("StaticFieldLeak")
     private static ChannelPresenter sInstance;
     private final MediaService mMediaService;
-    private final PlaybackPresenter mPlaybackPresenter;
     private final MediaServiceManager mServiceManager;
     private String mChannelId;
     private Disposable mUpdateAction;
@@ -40,7 +40,6 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     public ChannelPresenter(Context context) {
         super(context);
         mMediaService = YouTubeMediaService.instance();
-        mPlaybackPresenter = PlaybackPresenter.instance(context);
         mServiceManager = MediaServiceManager.instance();
     }
 
@@ -69,16 +68,12 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
     @Override
     public void onVideoItemClicked(Video item) {
-        if (item.isVideo()) {
-            mPlaybackPresenter.openVideo(item);
-        } else if (item.isChannel()) {
-            openChannel(item);
-        }
+        VideoActionPresenter.instance(getContext()).apply(item);
     }
 
     @Override
     public void onVideoItemLongClicked(Video item) {
-        VideoMenuPresenter.instance(getContext()).showVideoMenu(item);
+        VideoMenuPresenter.instance(getContext()).showMenu(item);
     }
 
     @Override

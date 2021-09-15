@@ -26,7 +26,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private static final String TAG = StateUpdater.class.getSimpleName();
     private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
     private static final int MAX_PERSISTENT_STATE_SIZE = 30;
-    private static final long LIVE_THRESHOLD_MS = 60_000;
+    private static final long LIVE_THRESHOLD_MS = 10_000;
     private boolean mIsPlayEnabled;
     private Video mVideo;
     private FormatItem mTempVideoFormat;
@@ -66,7 +66,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
         if (getController() != null) {
             // Save state of the previous video.
             // In case video opened from phone and other stuff.
-            saveState();
+            if (!item.equals(mVideo)) { // video might be opened twice (when remote connection enabled). Fix for that.
+                saveState();
+            }
 
             // Restore format according to profile on every new video
             restoreVideoFormat();
@@ -181,8 +183,14 @@ public class StateUpdater extends PlayerEventListenerHelper {
     public void onPlayEnd() {
         saveState();
 
-        // Take into account different playback states
-        //mScreensaverManager.enable();
+        // Don't enable screensaver here or you'll broke 'screen off' logic.
+        showHideScreensaver(true);
+    }
+
+    @Override
+    public void onBuffering() {
+        // Check LIVE threshold and set speed to normal
+        restoreSpeed(getController().getVideo());
     }
 
     private void clearStateOfNextVideo() {
@@ -305,36 +313,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
         }
     }
 
-    //private void restorePosition(Video item) {
-    //    State state = mStates.get(item.videoId);
-    //
-    //    // internal storage has priority over item data loaded from network
-    //    if (state == null) {
-    //        // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
-    //        boolean containsWebPosition = item.percentWatched > 10 && item.percentWatched < 100;
-    //        if (containsWebPosition) {
-    //            // Web state is buggy on short videos (e.g. video clips)
-    //            boolean isLongVideo = getController().getLengthMs() > MUSIC_VIDEO_LENGTH_MS;
-    //            if (isLongVideo) {
-    //                state = new State(item.videoId, getNewPosition(item.percentWatched));
-    //            }
-    //        }
-    //    }
-    //
-    //    // Do I need to check that item isn't live? (state != null && !item.isLive)
-    //    if (state != null) {
-    //        long remainsMs = getController().getLengthMs() - state.positionMs;
-    //        boolean isVideoEnded = remainsMs < 1_000;
-    //        if (!isVideoEnded || !getPlayEnabled()) {
-    //            getController().setPositionMs(state.positionMs);
-    //        }
-    //    }
-    //
-    //    if (!mIsPlayBlocked) {
-    //        getController().setPlay(getPlayEnabled());
-    //    }
-    //}
-
     private void restorePosition(Video item) {
         State state = mStates.get(item.videoId);
 
@@ -395,12 +373,12 @@ public class StateUpdater extends PlayerEventListenerHelper {
         mIsPlayBlocked = block;
     }
 
-    private void setPlayEnabled(boolean isPlayEnabled) {
+    public void setPlayEnabled(boolean isPlayEnabled) {
         Log.d(TAG, "setPlayEnabled %s", isPlayEnabled);
         mIsPlayEnabled = isPlayEnabled;
     }
 
-    private boolean getPlayEnabled() {
+    public boolean getPlayEnabled() {
         return mIsPlayEnabled;
     }
 
@@ -442,9 +420,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
             ScreensaverManager screensaverManager = ((MotherActivity) getActivity()).getScreensaverManager();
 
             if (show) {
-                screensaverManager.enable();
+                screensaverManager.enableChecked();
             } else {
-                screensaverManager.disable();
+                screensaverManager.disableChecked();
             }
         }
     }

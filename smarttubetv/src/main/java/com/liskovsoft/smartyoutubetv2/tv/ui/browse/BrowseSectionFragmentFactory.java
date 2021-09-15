@@ -6,7 +6,7 @@ import androidx.leanback.app.HeadersSupportFragment.OnHeaderViewSelectedListener
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.Row;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.Category;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.CategoryFragment;
@@ -20,29 +20,29 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.VideoRowsFragment;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CategoryFragmentFactory extends BrowseSupportFragment.FragmentFactory<Fragment> {
-    private static final String TAG = CategoryFragmentFactory.class.getSimpleName();
+public class BrowseSectionFragmentFactory extends BrowseSupportFragment.FragmentFactory<Fragment> {
+    private static final String TAG = BrowseSectionFragmentFactory.class.getSimpleName();
     private final OnHeaderViewSelectedListener mViewSelectedListener;
     private Fragment mCurrentFragment;
-    private int mFragmentType = Category.TYPE_GRID;
+    private int mFragmentType = BrowseSection.TYPE_GRID;
     private int mSelectedItemIndex = -1;
     private final Map<Integer, Fragment> mFragmentMap = new HashMap<>();
 
-    public CategoryFragmentFactory() {
+    public BrowseSectionFragmentFactory() {
         this(null);
     }
 
-    public CategoryFragmentFactory(OnHeaderViewSelectedListener viewSelectedListener) {
+    public BrowseSectionFragmentFactory(OnHeaderViewSelectedListener viewSelectedListener) {
         mViewSelectedListener = viewSelectedListener;
 
         initFragmentMap();
     }
 
     private void initFragmentMap() {
-        mFragmentMap.put(Category.TYPE_ROW, new VideoRowsFragment());
-        mFragmentMap.put(Category.TYPE_GRID, new VideoGridFragment());
-        mFragmentMap.put(Category.TYPE_SETTINGS_GRID, new SettingsGridFragment());
-        mFragmentMap.put(Category.TYPE_MULTI_GRID, new MultiVideoGridFragment());
+        mFragmentMap.put(BrowseSection.TYPE_ROW, new VideoRowsFragment());
+        mFragmentMap.put(BrowseSection.TYPE_GRID, new VideoGridFragment());
+        mFragmentMap.put(BrowseSection.TYPE_SETTINGS_GRID, new SettingsGridFragment());
+        mFragmentMap.put(BrowseSection.TYPE_MULTI_GRID, new MultiVideoGridFragment());
     }
 
     /**

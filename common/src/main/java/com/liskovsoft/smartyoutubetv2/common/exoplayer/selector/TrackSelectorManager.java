@@ -493,7 +493,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         // Get ready for group with multiple codecs: avc, av01
                         if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
                             result = mediaTrack;
-                            break;
+                            // Don't do break. Cause we don't know there 30/60 fps.
+                            //break;
                         } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
                             result = mediaTrack;
                         }

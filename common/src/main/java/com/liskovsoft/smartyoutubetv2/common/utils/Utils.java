@@ -12,6 +12,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.Window;
 import android.view.WindowManager;
 import androidx.browser.customtabs.CustomTabsIntent;
@@ -294,5 +297,13 @@ public class Utils {
         for (Runnable callback : callbacks) {
              handler.removeCallbacks(callback);
         }
+    }
+
+    public static CharSequence color(CharSequence string, int color) {
+        SpannableString spannableString = new SpannableString(string);
+        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(color);
+        spannableString.setSpan(foregroundColorSpan, 0, spannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return spannableString;
     }
 }
