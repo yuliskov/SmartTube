@@ -9,7 +9,7 @@ stability, voice search and casting support **might** be worse than in the offic
 
 **Do you have any question?** Ctrl+F or ⌘F this readme first!
 
-[**Installation**](#Installation) | [**FAQ**](#FAQ) | [Support / Chat](#Support) | [Changelog](https://t.me/s/SmartTubeNextNewsEN) | [source code](https://github.com/yuliskov/SmartTubeNext)
+[**Installation**](#Installation) | [**FAQ**](#FAQ) | [Support / Chat](#Support) | [Changelog](https://t.me/s/SmartTubeNextNewsEN) | [Donation](#Donation) | [source code](https://github.com/yuliskov/SmartTubeNext)
 
 
 ## Device support
@@ -128,7 +128,6 @@ If you want to support my developments you are welcome to buy me a cup of coffee
 
 <!-- > [BountySource (**PayPal**, **VISA**)](https://salt.bountysource.com/checkout/amount?team=smarttube)   -->
 > [Patreon (**PayPal**)](https://www.patreon.com/smarttube)  
-> [QIWI (RU)](https://qiwi.com/n/GUESS025)  
 > [QIWI (RU)](https://qiwi.com/n/GUESS025)  
 > **BTC**: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx  
 > **LTC**: ltc1qgc24eq9jl9cq78qnd5jpqhemkajg9vudwyd8pw  
