@@ -359,6 +359,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
+        boolean isLive = formatInfo.isLive() || formatInfo.isLiveContent();
+
         if (formatInfo.isUnplayable() || formatInfo.isAgeRestricted()) {
             getController().showError(formatInfo.getPlayabilityStatus());
             if (!mIsWasVideoStartError) {
@@ -374,7 +376,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         } else if (formatInfo.containsDashUrl()) {
             Log.d(TAG, "Found live video in dash format. Loading...");
             getController().openDashUrl(formatInfo.getDashManifestUrl());
-        } else if (formatInfo.containsHlsUrl() && formatInfo.isLive()) {
+        } else if (formatInfo.containsHlsUrl() && isLive) {
             Log.d(TAG, "Found live video (current or past live stream) in hls format. Loading...");
             getController().openHlsUrl(formatInfo.getHlsManifestUrl());
         } else if (formatInfo.containsDashVideoInfo() && !mPlayerData.isLowQualityEnabled()) {
