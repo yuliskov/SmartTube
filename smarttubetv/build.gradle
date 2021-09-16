@@ -69,10 +69,15 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            // Enable minification
+            shrinkResources true
+            minifyEnabled true
+
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            // signingConfig signingConfigs.release
         }
-        // Use same key for release and debug
+        // Use same key for release and debug for testing
         // debug {
         //     signingConfig signingConfigs.release
         // }
