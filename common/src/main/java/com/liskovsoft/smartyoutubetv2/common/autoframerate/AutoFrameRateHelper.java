@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.autoframerate;
 
 import android.app.Activity;
-import android.content.Context;
 import android.util.Pair;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolder.Mode;
@@ -13,30 +12,16 @@ import java.util.HashMap;
 
 public class AutoFrameRateHelper {
     private static final String TAG = AutoFrameRateHelper.class.getSimpleName();
-    private static AutoFrameRateHelper sInstance;
     private final DisplaySyncHelper mSyncHelper;
     private static final long THROTTLE_INTERVAL_MS = 5_000;
     private long mPrevCall;
     private HashMap<Float, Float> mFrameRateMapping;
     private boolean mIsFpsCorrectionEnabled;
-    private AutoFrameRateListener mListener;
 
-    private AutoFrameRateHelper(Context context) {
-        mSyncHelper = new DisplaySyncHelperAlt(context);
+    public AutoFrameRateHelper() {
+        mSyncHelper = new DisplaySyncHelperAlt(null);
 
         initFrameRateMapping();
-    }
-
-    public static AutoFrameRateHelper instance(Context context) {
-        if (sInstance == null) {
-            sInstance = new AutoFrameRateHelper(context);
-        }
-
-        if (context != null) {
-            sInstance.setContext(context);
-        }
-
-        return sInstance;
     }
 
     public void apply(Activity activity, FormatItem format) {
@@ -72,7 +57,7 @@ public class AutoFrameRateHelper {
     }
 
     public void saveOriginalState(Activity activity) {
-        setContext(activity);
+        setActivity(activity);
 
         if (activity == null) {
             Log.e(TAG, "Activity in null. exiting...");
@@ -94,37 +79,25 @@ public class AutoFrameRateHelper {
     }
 
     public void apply(Activity activity, FormatItem format, boolean force) {
-        setContext(activity);
+        setActivity(activity);
 
         if (activity == null) {
             Log.e(TAG, "Activity in null. exiting...");
-            if (mListener != null) {
-                mListener.onCancel();
-            }
-            return;
-        }
-
-        if (format == null) {
-            Log.e(TAG, "Can't apply mode change: format is null");
-            if (mListener != null) {
-                mListener.onCancel();
-            }
             return;
         }
 
         if (!isSupported()) {
             Log.e(TAG, "Autoframerate not supported. Exiting...");
-            if (mListener != null) {
-                mListener.onCancel();
-            }
+            return;
+        }
+
+        if (format == null) {
+            Log.e(TAG, "Can't apply mode change: format is null");
             return;
         }
 
         if (System.currentTimeMillis() - mPrevCall < THROTTLE_INTERVAL_MS) {
             Log.e(TAG, "Throttling afr calls...");
-            if (mListener != null) {
-                mListener.onCancel();
-            }
             return;
         } else {
             mPrevCall = System.currentTimeMillis();
@@ -176,7 +149,6 @@ public class AutoFrameRateHelper {
     }
 
     public void setListener(AutoFrameRateListener listener) {
-        mListener = listener;
         mSyncHelper.setListener(listener);
     }
 
@@ -215,7 +187,7 @@ public class AutoFrameRateHelper {
     //    mSyncHelper.resetMode(mActivity.getWindow());
     //}
 
-    private void setContext(Context activity) {
+    private void setActivity(Activity activity) {
         mSyncHelper.setContext(activity);
     }
 }

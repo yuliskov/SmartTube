@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -42,6 +41,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     private Disposable mNotInterestedAction;
     private Disposable mSubscribeAction;
     private Video mVideo;
+    private Video mSection;
     private boolean mIsNotInterestedButtonEnabled;
     private boolean mIsOpenChannelButtonEnabled;
     private boolean mIsOpenChannelUploadsButtonEnabled;
@@ -72,11 +72,11 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         showMenuInt(video);
     }
 
-    public void showMenu(Video item) {
-        showVideoMenu(item);
+    public void showVideoMenu(Video video) {
+        showVideoMenu(video, null);
     }
 
-    public void showVideoMenu(Video video) {
+    public void showVideoMenu(Video video, Video section) {
         mIsAddToPlaylistButtonEnabled = true;
         mIsAddToPlaybackQueueButtonEnabled = true;
         mIsOpenChannelButtonEnabled = true;
@@ -89,17 +89,38 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mIsReturnToBackgroundVideoEnabled = true;
         mIsPinToSidebarEnabled = true;
 
+        showMenuInt(video, section);
+    }
+
+    public void showChannelMenu(Video video) {
+        mIsSubscribeButtonEnabled = true;
+        mIsShareButtonEnabled = true;
+        mIsOpenChannelButtonEnabled = true;
+        mIsAccountSelectionEnabled = true;
+        mIsReturnToBackgroundVideoEnabled = true;
+
         showMenuInt(video);
     }
 
+    public void showPlaylistMenu(Video section) {
+        mIsPinToSidebarEnabled = true;
+
+        showMenuInt(null, section);
+    }
+
     private void showMenuInt(Video video) {
-        if (video == null) {
+        showMenuInt(video, null);
+    }
+
+    private void showMenuInt(Video video, Video section) {
+        if (video == null && section == null) {
             return;
         }
 
         RxUtils.disposeActions(mPlaylistAction, mAddAction, mNotInterestedAction, mSubscribeAction);
 
         mVideo = video;
+        mSection = section;
 
         MediaServiceManager.instance().authCheck(this::obtainPlaylistsAndShowDialogSigned, this::prepareAndShowDialogUnsigned);
     }
@@ -128,10 +149,10 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         appendReturnToBackgroundVideoButton();
         appendAddToPlaylistButton(videoPlaylistInfos);
-        appendNotInterestedButton();
-        appendOpenPlaylistButton();
         appendAddToPlaybackQueueButton();
+        appendNotInterestedButton();
         appendPinToSidebarButton();
+        appendOpenPlaylistButton();
         appendOpenChannelButton();
         //appendOpenChannelUploadsButton();
         appendSubscribeButton();
@@ -139,7 +160,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         appendAccountSelectionButton();
 
         if (!mSettingsPresenter.isEmpty()) {
-            String title = mVideo != null ? mVideo.title : null;
+            String title = mVideo != null ? mVideo.title : mSection.title;
             mSettingsPresenter.showDialog(title, () -> RxUtils.disposeActions(mPlaylistAction));
         }
     }
@@ -153,8 +174,8 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         appendReturnToBackgroundVideoButton();
         appendAddToPlaybackQueueButton();
-        appendOpenPlaylistButton();
         appendPinToSidebarButton();
+        appendOpenPlaylistButton();
         appendOpenChannelButton();
         appendShareButton();
         appendAccountSelectionButton();
@@ -168,10 +189,6 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
     private void appendAddToPlaylistButton(List<VideoPlaylistInfo> videoPlaylistInfos) {
         if (!mIsAddToPlaylistButtonEnabled || videoPlaylistInfos == null) {
-            return;
-        }
-
-        if (mVideo == null || !mVideo.hasVideo()) {
             return;
         }
 
@@ -205,7 +222,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        if (mVideo == null || !mVideo.hasPlaylist()) {
+        if (mVideo == null || !mVideo.isPlaylist()) {
             return;
         }
 
@@ -279,11 +296,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     private void appendSubscribeButton() {
-        if (!mIsSubscribeButtonEnabled) {
-            return;
-        }
-
-        if (mVideo == null || (!mVideo.hasChannel() && !mVideo.hasVideo())) {
+        if (!mIsSubscribeButtonEnabled || mVideo == null) {
             return;
         }
 
@@ -297,57 +310,37 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        if (mVideo == null || (!mVideo.hasPlaylist() && !mVideo.hasUploads())) {
+        if ((mVideo == null || mVideo.playlistId == null) && mSection == null) {
             return;
         }
+
+        // Pin non-user playlist
+        if (mSection == null) {
+            Video video = new Video();
+            video.playlistId = mVideo.playlistId;
+            video.title = String.format("%s - %s",
+                    mVideo.author != null ? mVideo.author : mVideo.title,
+                    mVideo.group != null && mVideo.group.getTitle() != null ? mVideo.group.getTitle() : mVideo.description
+            );
+            video.cardImageUrl = mVideo.cardImageUrl;
+            mSection = video;
+        }
+
+        BrowsePresenter presenter = BrowsePresenter.instance(getContext());
 
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.pin_unpin_from_sidebar),
                         optionItem -> {
-                            if (mVideo.hasPlaylist()) {
-                                pinToSidebar(createPinnedSection(mVideo));
+                            // Toggle between pin/unpin while dialog is opened
+                            boolean isItemPinned = presenter.isItemPinned(mSection);
+
+                            if (isItemPinned) {
+                                presenter.unpinItem(mSection);
                             } else {
-                                mServiceManager.loadChannelUploads(mVideo, group -> {
-                                    if (group.getMediaItems() != null) {
-                                        MediaItem firstItem = group.getMediaItems().get(0);
-
-                                        Video section = createPinnedSection(Video.from(firstItem));
-                                        section.title = mVideo.title;
-                                        pinToSidebar(section);
-                                    }
-                                });
+                                presenter.pinItem(mSection);
                             }
+                            MessageHelpers.showMessage(getContext(), isItemPinned ? R.string.unpin_from_sidebar : R.string.pin_to_sidebar);
                         }));
-    }
-
-    private void pinToSidebar(Video section) {
-        BrowsePresenter presenter = BrowsePresenter.instance(getContext());
-
-        // Toggle between pin/unpin while dialog is opened
-        boolean isItemPinned = presenter.isItemPinned(section);
-
-        if (isItemPinned) {
-            presenter.unpinItem(section);
-        } else {
-            presenter.pinItem(section);
-        }
-        MessageHelpers.showMessage(getContext(), isItemPinned ? R.string.unpin_from_sidebar : R.string.pin_to_sidebar);
-    }
-
-    private Video createPinnedSection(Video video) {
-        if (video == null || (!video.hasPlaylist() && !video.hasUploads())) {
-            return null;
-        }
-
-        Video section = new Video();
-        section.playlistId = video.playlistId;
-        section.title = String.format("%s - %s",
-                video.group != null && video.group.getTitle() != null ? video.group.getTitle() : video.title,
-                video.author != null ? video.author : video.description
-        );
-        section.cardImageUrl = video.cardImageUrl;
-
-        return section;
     }
 
     private void appendReturnToBackgroundVideoButton() {
@@ -364,11 +357,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     private void appendAddToPlaybackQueueButton() {
-        if (!mIsAddToPlaybackQueueButtonEnabled) {
-            return;
-        }
-
-        if (mVideo == null || !mVideo.hasVideo()) {
+        if (!mIsAddToPlaybackQueueButtonEnabled || mVideo == null) {
             return;
         }
 
@@ -412,7 +401,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         if (mVideo.isSynced) {
             toggleSubscribeInt();
         } else {
-            //MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
+            MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
 
             mServiceManager.loadMetadata(mVideo, metadata -> {
                 mVideo.sync(metadata);

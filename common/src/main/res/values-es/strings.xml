@@ -19,7 +19,6 @@
     <string name="title_video_formats">Formatos de vídeo</string>
     <string name="title_audio_formats">Formatos de audio</string>
     <string name="subtitle_category_title">Subtítulos</string>
-    <string name="playback_queue_category_title">Cola de reproducción</string>
     <string name="video_max_quality">Auto (calidad máxima)</string>
     <string name="audio_max_quality">Auto (calidad máxima)</string>
     <string name="subtitles_disabled">Subtítulos deshabilitados</string>
@@ -98,7 +97,6 @@
     <string name="player_other">Miscelánea</string>
     <string name="player_full_date">Fecha precisa en descripción</string>
     <string name="open_channel">Abrir canal</string>
-    <string name="open_playlist">Abrir lista de reproducción</string>
     <string name="not_interested">No interesado</string>
     <string name="you_wont_see_this_video">Vídeo eliminado de recomendaciones</string>
     <string name="settings_search">Buscar</string>
@@ -130,7 +128,7 @@
     <string name="player_show_clock">Mostrar reloj en menu emergente</string>
     <string name="player_show_remaining_time">Mostrar tiempo restante</string>
     <string name="open_channel_uploads">Abrir cargas del canal</string>
-    <string name="app_exit_shortcut">Salir de la aplicación</string>
+    <string name="app_exit_shortcut">ESalir de la aplicación</string>
     <string name="app_exit_none">No salir</string>
     <string name="app_double_back_exit">Atrás doble</string>
     <string name="app_single_back_exit">Atrás simple</string>
@@ -181,7 +179,6 @@
     <string name="content_block_self_promo">Autopromoción</string>
     <string name="content_block_music_off_topic">Sección no musical</string>
     <string name="confirm_segment_skip">Saltar segmento \"%s\"?</string>
-    <string name="cancel_segment_skip">Cancelar salto de segmento</string>
     <string name="msg_skipping_segment">Saltando segmento \"%s\"…</string>
     <string name="content_block_notification_type">Tipo de notificación</string>
     <string name="content_block_notify_none">Sin notificación</string>
@@ -214,31 +211,8 @@
     <string name="channels_old_look">Revertir antiguo aspecto de sección canales</string>
     <string name="channels_auto_load">Auto carga de contenido sección canales</string>
     <string name="return_to_background_video">Volver al vídeo reproduciéndose de fondo</string>
-    <string name="pin_unpin_from_sidebar">Fijar/desfijar de barra lateral</string>
-    <string name="pin_to_sidebar">Fijado a barra lateral</string>
-    <string name="unpin_from_sidebar">Desfijado de barra lateral</string>
+    <string name="pin_to_sidebar">Fijar a la barra lateral</string>
+    <string name="unpin_from_sidebar">Desfijar de la barra lateral</string>
     <string name="dialog_select_country">País</string>
     <string name="settings_language_country">Idioma/País</string>
-    <string name="share_embed_link">Compartir enlace embebido</string>
-    <string name="card_text_scroll_factor">Velocidad scroll texto tarjeta</string>
-    <string name="preferred_update_source">Seleccionar fuente actualizaciones</string>
-    <string name="hide_shorts">Ocultar cortos de suscripciones</string>
-    <string name="key_remapping">Remapeo de teclas</string>
-    <string name="screen_dimming">Atenuación de pantalla</string>
-    <string name="removed_from_playback_queue">Eliminado de cola de reproducción</string>
-    <string name="added_to_playback_queue">Añadido a cola de reproducción</string>
-    <string name="add_remove_from_playback_queue">Añadir/Eliminar de cola de reproducción</string>
-    <string name="proxy_enabled">Proxy activado</string>
-    <string name="proxy_disabled">Proxy desactivado</string>
-    <string name="uploads_row_name">Cargas</string>
-    <string name="playlists_row_name">Listas de reproducción creadas</string>
-    <string name="popular_uploads_row_name">Cargas populares</string>
-    <string name="breaking_news_row_name">Últimas noticias</string>
-    <string name="covid_news_row_name">Noticias COVID-19</string>
-    <string name="enable_voice_search">Activar búsqueda por voz</string>
-    <string name="subscribe_unsubscribe_from_channel">Suscribirse/Desuscribirse de canal</string>
-    <string name="app_backup_restore">Copia de seguridad/Restaurar</string>
-    <string name="app_backup">Copia de seguridad</string>
-    <string name="app_restore">Restaurar copia de seguridad</string>
-    <string name="skip_each_segment_once">No saltar segmentos de nuevo</string>
 </resources>

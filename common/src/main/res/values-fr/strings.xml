@@ -181,7 +181,6 @@
     <string name="content_block_self_promo">Non rémunéré/auto-promotion</string>
     <string name="content_block_music_off_topic">Section non musicale du clip</string>
     <string name="confirm_segment_skip">Ignorer le segment \"%s\"?</string>
-    <string name="cancel_segment_skip">Annuler le saut de segment</string>
     <string name="msg_skipping_segment">Sauter segment \"%s\"…</string>
     <string name="content_block_notification_type">Type de notification</string>
     <string name="content_block_notify_none">Sans notification</string>
@@ -224,21 +223,10 @@
     <string name="preferred_update_source">Source de mise à jour</string>
     <string name="hide_shorts">Masquer les passages de demande d\'Abonnements</string>
     <string name="key_remapping">Remplacement des touches</string>
-    <string name="screen_dimming">Gradation de l\'écran</string>
+    <string name="screen_diming">Gradation de l\'écran</string>
     <string name="removed_from_playback_queue">Suppression de la file d\'attente de lecture</string>
     <string name="added_to_playback_queue">Ajouté à la file d\'attente de lecture</string>
     <string name="add_remove_from_playback_queue">Ajouter/Supprimer de la file d\'attente de lecture</string>
     <string name="proxy_enabled">Proxy activé</string>
     <string name="proxy_disabled">Proxy désactivé</string>
-    <string name="uploads_row_name">Uploads</string>
-    <string name="playlists_row_name">Playlists créé</string>
-    <string name="popular_uploads_row_name">Uploads populaires</string>
-    <string name="breaking_news_row_name">Dernières nouvelles</string>
-    <string name="covid_news_row_name">Nouvelles du COVID-19</string>
-    <string name="enable_voice_search">Activer la recherche vocale</string>
-    <string name="subscribe_unsubscribe_from_channel">S\'abonner/se désabonner de la chaîne</string>
-    <string name="app_backup_restore">Sauvegarde/Restauration</string>
-    <string name="app_backup">Sauvegarde des données</string>
-    <string name="app_restore">Restaurer des données à partir d\'une sauvegarde</string>
-    <string name="skip_each_segment_once">Ne plus sautez encore de segments</string>
 </resources>

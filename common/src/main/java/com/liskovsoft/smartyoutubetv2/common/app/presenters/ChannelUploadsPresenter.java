@@ -69,16 +69,20 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
     @Override
     public void onVideoItemClicked(Video item) {
-        if (item.hasVideo()) {
+        if (item.isVideo()) {
             mPlaybackPresenter.openVideo(item);
-        } else if (item.hasChannel()) {
+        } else if (item.isChannel()) {
             openChannel(item);
         }
     }
 
     @Override
     public void onVideoItemLongClicked(Video item) {
-        VideoMenuPresenter.instance(getContext()).showMenu(item);
+        if (item.isVideo()) {
+            VideoMenuPresenter.instance(getContext()).showVideoMenu(item);
+        } else if (item.isChannel()) {
+            VideoMenuPresenter.instance(getContext()).showChannelMenu(item);
+        }
     }
 
     @Override
@@ -139,8 +143,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
             return null;
         }
 
-        disposeActions();
-
         return item.hasUploads() ?
                 mGroupManager.getGroupObserve(item.mediaItem) :
                 mItemManager.getMetadataObserve(item.videoId, item.playlistId, 0)
@@ -157,8 +159,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
     private void continueVideoGroup(VideoGroup group) {
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
-
-        disposeActions();
 
         getView().showProgressBar(true);
 
@@ -188,8 +188,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     private void updateVideoGrid(Observable<MediaGroup> group) {
         Log.d(TAG, "updateVideoGrid: Start loading group...");
 
-        disposeActions();
-
         getView().showProgressBar(true);
 
         mUpdateAction = group
@@ -211,8 +209,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
     private void updateVideoGrid(MediaItem mediaItem, VideoGroupCallback callback) {
         Log.d(TAG, "updateVideoGrid: Start loading group...");
-
-        disposeActions();
 
         Observable<MediaGroup> group = mGroupManager.getGroupObserve(mediaItem);
 

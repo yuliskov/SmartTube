@@ -94,7 +94,7 @@ public class MediaServiceManager {
     }
 
     public void authCheck(Runnable onSuccess, Runnable onError) {
-        if (onSuccess == null && onError == null) {
+        if (onSuccess == null || onError == null) {
             return;
         }
 
@@ -106,13 +106,9 @@ public class MediaServiceManager {
                 .subscribe(
                         isSigned -> {
                             if (isSigned) {
-                                if (onSuccess != null) {
-                                    onSuccess.run();
-                                }
+                                onSuccess.run();
                             } else {
-                                if (onError != null) {
-                                    onError.run();
-                                }
+                                onError.run();
                             }
                         },
                         error -> Log.e(TAG, "Sign check error: %s", error.getMessage())

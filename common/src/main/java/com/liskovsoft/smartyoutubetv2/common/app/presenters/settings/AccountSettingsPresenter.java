@@ -29,6 +29,8 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
     private static AccountSettingsPresenter sInstance;
     private final SignInManager mSignInManager;
     private Disposable mAccountsAction;
+    private final List<Account> mPendingRemove = new ArrayList<>();
+    private Account mSelectedAccount = null;
 
     public AccountSettingsPresenter(Context context) {
         super(context);
@@ -48,6 +50,8 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
 
     public void unhold() {
         RxUtils.disposeActions(mAccountsAction);
+        mPendingRemove.clear();
+        mSelectedAccount = null;
         sInstance = null;
     }
 
@@ -70,19 +74,37 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         appendAddAccountButton(settingsPresenter);
         appendRemoveAccountSection(accounts, settingsPresenter);
 
-        settingsPresenter.showDialog(getContext().getString(R.string.settings_accounts), this::unhold);
+        settingsPresenter.showDialog(getContext().getString(R.string.settings_accounts), () -> {
+            for (Account account : mPendingRemove) {
+                mSignInManager.removeAccount(account);
+            }
+
+            if (!mPendingRemove.isEmpty()) {
+                MessageHelpers.showMessage(getContext(), R.string.msg_done);
+            }
+
+            if (!mPendingRemove.contains(mSelectedAccount)) {
+                mSignInManager.selectAccount(mSelectedAccount);
+            }
+
+            unhold();
+        });
     }
 
     private void appendSelectAccountSection(List<Account> accounts, AppDialogPresenter settingsPresenter) {
         List<OptionItem> optionItems = new ArrayList<>();
 
         optionItems.add(UiOptionItem.from(
-                getContext().getString(R.string.dialog_account_none), optionItem -> mSignInManager.selectAccount(null), true
+                getContext().getString(R.string.dialog_account_none), optionItem -> mSelectedAccount = null, true
         ));
 
         for (Account account : accounts) {
+            if (account.isSelected()) {
+                mSelectedAccount = account;
+            }
+
             optionItems.add(UiOptionItem.from(
-                    formatAccount(account), option -> mSignInManager.selectAccount(account), account.isSelected()
+                    formatAccount(account), option -> mSelectedAccount = account, account.isSelected()
             ));
         }
 
@@ -96,15 +118,15 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
             optionItems.add(UiOptionItem.from(
                     formatAccount(account), option -> {
                         if (option.isSelected()) {
-                            mSignInManager.removeAccount(account);
-                            settingsPresenter.closeDialog();
-                            MessageHelpers.showMessage(getContext(), R.string.msg_done);
+                            mPendingRemove.add(account);
+                        } else {
+                            mPendingRemove.remove(account);
                         }
-                    }
+                    }, false
             ));
         }
 
-        settingsPresenter.appendStringsCategory(getContext().getString(R.string.dialog_remove_account), optionItems);
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.dialog_remove_account), optionItems);
     }
 
     private void appendAddAccountButton(AppDialogPresenter settingsPresenter) {

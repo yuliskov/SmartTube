@@ -181,10 +181,6 @@ public class TrackSelectorUtil {
     private static String getResolutionLabelByHeight(int height) {
         String qualityLabel = null;
 
-        // Non-regular examples
-        // Мастерская Синдиката - Мы собрали суперкар КУВАЛДОЙ! - 2560x1182
-        // [AMATORY] ALL STARS: LIVE IN MOSCOW 2021 - 2560x1088 
-
         if (height < 160) { // 256x144
             qualityLabel = "144";
         } else if (height < 260) { // 426x240
@@ -195,13 +191,15 @@ public class TrackSelectorUtil {
             qualityLabel = "480";
         } else if (height < 750) { // 1280x720
             qualityLabel = "720";
-        } else if (height < 1085) { // 1920x1080
+        } else if (height < 1150) { // 1920x1080
             qualityLabel = "1080";
-        } else if (height < 1500) { // 2560x1440
+        } else if (height < 1250) { // 2560x1182 (Мастерская Синдиката - Мы собрали суперкар КУВАЛДОЙ!)
+            qualityLabel = "1200";
+        } else if (height < 1600) { // 2560x1440
             qualityLabel = "1440";
-        } else if (height < 2200) { // 3840x2160
+        } else if (height < 2300) { // 3840x2160
             qualityLabel = "2160";
-        } else if (height < 4400) { // 7680x4320
+        } else if (height < 4500) { // 7680x4320
             qualityLabel = "4320";
         }
 

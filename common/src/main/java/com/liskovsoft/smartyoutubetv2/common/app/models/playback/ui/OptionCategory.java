@@ -6,7 +6,6 @@ public class OptionCategory {
     public static final int TYPE_RADIO = 0;
     public static final int TYPE_CHECKED = 1;
     public static final int TYPE_SINGLE = 2;
-    public static final int TYPE_STRING = 3;
     public final int id;
     public final int type;
     public final String title;

@@ -8,7 +8,6 @@
         <item>Eesti keel|et_EE</item>
         <item>Deutsch|de_DE</item>
         <item>Romanian|ro</item>
-        <item>Swedish|se</item>
         <item>Español|es</item>
         <item>Español (Argentina)|es_AR</item>
         <item>Polski|pl</item>
@@ -37,6 +36,5 @@
         <item>简体中文|zh_CN</item>
         <item>繁体中文|zh_TW</item>
         <item>Indonesian|in</item>
-        <item>日本語|ja</item>
     </string-array>
 </resources>

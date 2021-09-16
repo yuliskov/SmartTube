@@ -18,14 +18,15 @@ public class ContentBlockData {
     private static final String CONTENT_BLOCK_DATA = "content_block_data";
     @SuppressLint("StaticFieldLeak")
     private static ContentBlockData sInstance;
+    private final Context mContext;
     private final AppPrefs mAppPrefs;
     private boolean mIsSponsorBlockEnabled;
     private final Set<String> mCategories = new HashSet<>();
     private int mNotificationType;
-    private boolean mIsSkipEachSegmentOnceEnabled;
 
     private ContentBlockData(Context context) {
-        mAppPrefs = AppPrefs.instance(context);
+        mContext = context;
+        mAppPrefs = AppPrefs.instance(mContext);
         restoreState();
     }
 
@@ -41,7 +42,7 @@ public class ContentBlockData {
         return mIsSponsorBlockEnabled;
     }
 
-    public void enableSponsorBlock(boolean enabled) {
+    public void setSponsorBlockEnabled(boolean enabled) {
         mIsSponsorBlockEnabled = enabled;
         persistData();
     }
@@ -69,15 +70,6 @@ public class ContentBlockData {
         persistData();
     }
 
-    public boolean isSkipEachSegmentOnceEnabled() {
-        return mIsSkipEachSegmentOnceEnabled;
-    }
-
-    public void enableSkipEachSegmentOnce(boolean enabled) {
-        mIsSkipEachSegmentOnceEnabled = enabled;
-        persistData();
-    }
-
     private void restoreState() {
         String data = mAppPrefs.getData(CONTENT_BLOCK_DATA);
 
@@ -86,7 +78,6 @@ public class ContentBlockData {
         mIsSponsorBlockEnabled = Helpers.parseBoolean(split, 0, false);
         mNotificationType = Helpers.parseInt(split, 1, NOTIFICATION_TYPE_TOAST);
         String categories = Helpers.parseStr(split, 2);
-        mIsSkipEachSegmentOnceEnabled = Helpers.parseBoolean(split, 3, true);
 
         if (categories != null) {
             String[] categoriesArr = Helpers.splitArray(categories);
@@ -112,6 +103,6 @@ public class ContentBlockData {
     private void persistData() {
         String categories = Helpers.mergeArray(mCategories.toArray());
 
-        mAppPrefs.setData(CONTENT_BLOCK_DATA, Helpers.mergeObject(mIsSponsorBlockEnabled, mNotificationType, categories, mIsSkipEachSegmentOnceEnabled));
+        mAppPrefs.setData(CONTENT_BLOCK_DATA, Helpers.mergeObject(mIsSponsorBlockEnabled, mNotificationType, categories));
     }
 }

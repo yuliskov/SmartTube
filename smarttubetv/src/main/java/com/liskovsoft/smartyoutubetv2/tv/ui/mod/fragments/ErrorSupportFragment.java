@@ -217,7 +217,7 @@ public class ErrorSupportFragment extends BrandedSupportFragment {
             mButton.setText(mButtonText);
             mButton.setOnClickListener(mButtonClickListener);
             mButton.setVisibility(TextUtils.isEmpty(mButtonText) ? View.GONE : View.VISIBLE);
-            // MOD: don't autofocus (header menu will be collapsed).
+            // MOD: don't autofocus
             //mButton.requestFocus();
         }
     }
@@ -225,7 +225,7 @@ public class ErrorSupportFragment extends BrandedSupportFragment {
     @Override
     public void onStart() {
         super.onStart();
-        // MOD: don't autofocus (header menu will be collapsed).
+        // MOD: don't autofocus
         //mErrorFrame.requestFocus();
     }
 

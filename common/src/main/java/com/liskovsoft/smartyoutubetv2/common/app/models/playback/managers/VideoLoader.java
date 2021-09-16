@@ -10,6 +10,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.sharedutils.Analytics;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -176,7 +177,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     public void loadNext() {
         Video next = mPlaylist.getNext();
-        mLastVideo = null; // in case next video is the same as previous
 
         if (next == null) {
             openVideoFromNext(getController().getVideo(), true);
@@ -359,8 +359,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
-        boolean isLive = formatInfo.isLive() || formatInfo.isLiveContent();
-
         if (formatInfo.isUnplayable() || formatInfo.isAgeRestricted()) {
             getController().showError(formatInfo.getPlayabilityStatus());
             if (!mIsWasVideoStartError) {
@@ -376,8 +374,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
         } else if (formatInfo.containsDashUrl()) {
             Log.d(TAG, "Found live video in dash format. Loading...");
             getController().openDashUrl(formatInfo.getDashManifestUrl());
-        } else if (formatInfo.containsHlsUrl() && isLive) {
-            Log.d(TAG, "Found live video (current or past live stream) in hls format. Loading...");
+        } else if (formatInfo.containsHlsUrl()) {
+            Log.d(TAG, "Found live video (current and past) in hls format. Loading...");
             getController().openHlsUrl(formatInfo.getHlsManifestUrl());
         } else if (formatInfo.containsDashVideoInfo() && !mPlayerData.isLowQualityEnabled()) {
             Log.d(TAG, "Found regular video in dash format. Loading...");
@@ -434,10 +432,10 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
         disposeActions();
 
-        if (item.hasVideo()) {
+        if (item.isVideo()) {
             getController().showControls(true);
             getBridge().openVideo(item);
-        } else if (item.hasChannel()) {
+        } else if (item.isChannel()) {
             ChannelPresenter.instance(getActivity()).openChannel(item);
         } else {
             Log.e(TAG, "Video item doesn't contain needed data!");

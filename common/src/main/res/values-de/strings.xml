@@ -42,7 +42,7 @@
     <string name="section_is_empty">Hier ist nichts drin</string>
     <string name="dialog_add_to_playlist">Hinzufügen/Entfernen aus Wiedergabeliste</string>
     <string name="msg_signed_users_only">Nur angemeldete Nutzer</string>
-    <string name="msg_cant_load_content">Inhalt kann nicht geladen werden.\n1) Überprüfen Sie die Internetverbindung.\n2) Versuchen Sie, sich mit Ihrem Konto anzumelden.</string>
+    <string name="msg_cant_load_content">Inhalt kann nicht geladen werden</string>
     <string name="title_video_presets">Video-Voreinstellungen</string>
     <string name="settings_accounts">Konten</string>
     <string name="settings_left_panel">Kategorien bearbeiten</string>
@@ -54,8 +54,8 @@
     <string name="settings_about">Über</string>
     <string name="dialog_account_list">Konto auswählen</string>
     <string name="dialog_account_none">Kein Konto</string>
-    <string name="dialog_remove_account">Abmelden</string>
-    <string name="dialog_add_account">Anmelden</string>
+    <string name="dialog_remove_account">Konto entfernen</string>
+    <string name="dialog_add_account">Konto hinzufügen</string>
     <string name="default_lang">Standard</string>
     <string name="dialog_select_language">Sprache</string>
     <string name="subtitle_default">Standard</string>
@@ -93,7 +93,7 @@
     <string name="color_scheme_dark_grey">Dunkel</string>
     <string name="disable_update_check">Update-Prüfung deaktivieren</string>
     <string name="show_again">Erneut anzeigen</string>
-    <string name="check_updates_auto">Über neue Version benachrichtigen</string>
+    <string name="check_updates_auto">Automatische Updates</string>
     <string name="select_account_on_boot">Konto beim Start auswählen</string>
     <string name="player_other">Sonstige</string>
     <string name="player_full_date">Genaues Datum in der Beschreibung</string>
@@ -120,7 +120,7 @@
     <string name="player_seek_preview">Vorschau beim Spulen anzeigen</string>
     <string name="color_scheme_dark_grey_oled">Dunkel (OLED)</string>
     <string name="channels_section_sorting">Kanäle-Kategorie sortieren</string>
-    <string name="sorting_by_new_content">Neue Inhalte</string>
+    <string name="sorting_by_new_content">Neue Videos</string>
     <string name="sorting_alphabetically">Alphabetisch</string>
     <string name="sorting_last_viewed">Zuletzt angesehen</string>
     <string name="player_pause_when_seek">Pause beim Spulen</string>
@@ -180,8 +180,7 @@
     <string name="content_block_interaction">Interaktionserinnerung (Abo)</string>
     <string name="content_block_self_promo">Eigenwerbung</string>
     <string name="content_block_music_off_topic">Musikvideo: Intro/Outro</string>
-    <string name="confirm_segment_skip">Segment \"%s\" überspringen</string>
-    <string name="cancel_segment_skip">Segment nicht überspringen</string>
+    <string name="confirm_segment_skip">Segment \"%s\" überspringen?</string>
     <string name="msg_skipping_segment">Segment \"%s\" überspringen…</string>
     <string name="content_block_notification_type">Benachrichtigungstyp</string>
     <string name="content_block_notify_none">Ohne Benachrichtigung</string>
@@ -224,21 +223,11 @@
     <string name="preferred_update_source">Update-Quelle auswählen</string>
     <string name="hide_shorts">Kurzvideos in Abos ausblenden</string>
     <string name="key_remapping">Tastenbelegung anpassen</string>
-    <string name="screen_dimming">Bildschirm dimmen</string>
+    <string name="screen_diming">Bildschirm dimmen</string>
     <string name="removed_from_playback_queue">Aus Wiedergabe-Warteschlange entfernt</string>
     <string name="added_to_playback_queue">Zur Wiedergabe-Warteschlange hinzugefügt</string>
     <string name="add_remove_from_playback_queue">Hinzufügen/Entfernen aus Wiedergabe-Warteschlange</string>
     <string name="proxy_enabled">Proxy aktiviert</string>
     <string name="proxy_disabled">Proxy deaktiviert</string>
-    <string name="uploads_row_name">Uploads</string>
-    <string name="playlists_row_name">Erstellte Wiedergabelisten</string>
-    <string name="popular_uploads_row_name">Beliebte Uploads</string>
-    <string name="breaking_news_row_name">Eilmeldungen</string>
     <string name="covid_news_row_name">Nachrichten zu COVID-19</string>
-    <string name="enable_voice_search">Sprachsuche aktivieren</string>
-    <string name="subscribe_unsubscribe_from_channel">Kanal abonnieren/nicht mehr abonnieren</string>
-    <string name="app_backup_restore">Sichern/Wiederherstellen</string>
-    <string name="app_backup">Daten sichern</string>
-    <string name="app_restore">Daten aus Sicherung wiederherstellen</string>
-    <string name="skip_each_segment_once">Jedes Segment nur einmal überspringen</string>
 </resources>

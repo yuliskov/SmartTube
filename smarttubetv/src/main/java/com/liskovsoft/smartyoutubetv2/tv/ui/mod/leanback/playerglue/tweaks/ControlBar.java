@@ -25,16 +25,13 @@ import java.util.ArrayList;
 class ControlBar extends LinearLayout {
 
     public interface OnChildFocusedListener {
-
         public void onChildFocusedListener(View child, View focused);
     }
 
     private int mChildMarginFromCenter;
     private OnChildFocusedListener mOnChildFocusedListener;
-    // Can't set to static. Because we have two control bars.
     int mLastFocusIndex = -1;
     boolean mDefaultFocusToMiddle = true;
-    boolean mFocusRecovery = true;
 
     public ControlBar(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -46,17 +43,6 @@ class ControlBar extends LinearLayout {
 
     void setDefaultFocusToMiddle(boolean defaultFocusToMiddle) {
         mDefaultFocusToMiddle = defaultFocusToMiddle;
-    }
-
-    /**
-     * MOD: enable/disable focus restoration
-     */
-    void setFocusRecovery(boolean focusRecovery) {
-        mFocusRecovery = focusRecovery;
-    }
-
-    void resetFocus() {
-        mLastFocusIndex = -1;
     }
 
     int getDefaultFocusIndex() {
@@ -97,11 +83,9 @@ class ControlBar extends LinearLayout {
     }
 
     @Override
-    public void requestChildFocus(View child, View focused) {
+    public void requestChildFocus (View child, View focused) {
         super.requestChildFocus(child, focused);
-        if (mFocusRecovery) {
-            mLastFocusIndex = indexOfChild(child);
-        }
+        mLastFocusIndex = indexOfChild(child);
         if (mOnChildFocusedListener != null) {
             mOnChildFocusedListener.onChildFocusedListener(child, focused);
         }

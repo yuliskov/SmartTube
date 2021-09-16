@@ -74,12 +74,12 @@ public class AccountSelectionPresenter extends BasePresenter<Void> {
             return;
         }
 
-        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
-        dialogPresenter.clear();
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
+        settingsPresenter.clear();
 
-        appendAccountSelection(accounts, dialogPresenter);
+        appendAccountSelection(accounts, settingsPresenter);
 
-        dialogPresenter.showDialog(getContext().getString(R.string.settings_accounts), this::unhold);
+        settingsPresenter.showDialog(getContext().getString(R.string.settings_accounts), this::unhold);
     }
 
     private void appendAccountSelection(List<Account> accounts, AppDialogPresenter settingsPresenter) {

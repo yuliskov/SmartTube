@@ -245,7 +245,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onSuggestionItemLongClicked(Video item) {
-        VideoMenuPresenter.instance(getActivity()).showMenu(item);
+        VideoMenuPresenter.instance(getActivity()).showVideoMenu(item);
     }
 
     private void showBriefInfo(boolean subscribed) {

@@ -38,7 +38,7 @@ public class HQDialogManager extends PlayerEventListenerHelper {
     private final Set<Runnable> mHideListeners = new HashSet<>();
     private final StateUpdater mStateUpdater;
     private PlayerData mPlayerData;
-    private AppDialogPresenter mAppDialogPresenter;;
+    private AppDialogPresenter mSettingsPresenter;;
 
     public HQDialogManager(StateUpdater stateUpdater) {
         mStateUpdater = stateUpdater;
@@ -47,7 +47,7 @@ public class HQDialogManager extends PlayerEventListenerHelper {
     @Override
     public void onInitDone() {
         mPlayerData = PlayerData.instance(getActivity());
-        mAppDialogPresenter = AppDialogPresenter.instance(getActivity());
+        mSettingsPresenter = AppDialogPresenter.instance(getActivity());
     }
 
     @Override
@@ -57,7 +57,7 @@ public class HQDialogManager extends PlayerEventListenerHelper {
 
     @Override
     public void onHighQualityClicked() {
-        mAppDialogPresenter.clear();
+        mSettingsPresenter.clear();
 
         addQualityCategories();
         addVideoBufferCategory();
@@ -68,7 +68,7 @@ public class HQDialogManager extends PlayerEventListenerHelper {
         appendOptions(mCategoriesInt);
         appendOptions(mCategories);
 
-        mAppDialogPresenter.showDialog(getActivity().getString(R.string.playback_settings), this::onDialogHide);
+        mSettingsPresenter.showDialog(getActivity().getString(R.string.playback_settings), this::onDialogHide);
     }
 
     private void addQualityCategories() {
@@ -168,16 +168,13 @@ public class HQDialogManager extends PlayerEventListenerHelper {
         for (OptionCategory category : categories.values()) {
             switch (category.type) {
                 case OptionCategory.TYPE_RADIO:
-                    mAppDialogPresenter.appendRadioCategory(category.title, category.options);
+                    mSettingsPresenter.appendRadioCategory(category.title, category.options);
                     break;
                 case OptionCategory.TYPE_CHECKED:
-                    mAppDialogPresenter.appendCheckedCategory(category.title, category.options);
-                    break;
-                case OptionCategory.TYPE_STRING:
-                    mAppDialogPresenter.appendStringsCategory(category.title, category.options);
+                    mSettingsPresenter.appendCheckedCategory(category.title, category.options);
                     break;
                 case OptionCategory.TYPE_SINGLE:
-                    mAppDialogPresenter.appendSingleSwitch(category.option);
+                    mSettingsPresenter.appendSingleSwitch(category.option);
                     break;
             }
         }

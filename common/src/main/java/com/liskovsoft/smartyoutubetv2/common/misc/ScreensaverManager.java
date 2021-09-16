@@ -34,28 +34,6 @@ public class ScreensaverManager {
         enable();
     }
 
-    /**
-     * Screen off check
-     */
-    public void enableChecked() {
-        if (mDimColorResId == R.color.black) {
-            return;
-        }
-
-        enable();
-    }
-
-    /**
-     * Screen off check
-     */
-    public void disableChecked() {
-        if (mDimColorResId == R.color.black) {
-            return;
-        }
-
-        disable();
-    }
-
     public void enable() {
         Log.d(TAG, "Enable screensaver");
 
@@ -101,7 +79,7 @@ public class ScreensaverManager {
         }
 
         if (show && mDimColorResId == R.color.dimming &&
-                (isPlaying() || isSigning() || mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER)
+                (isPlaying() || isCodeView() || mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER)
         ) {
             return;
         }
@@ -129,7 +107,7 @@ public class ScreensaverManager {
             return;
         }
         
-        if (show && (isPlaying() || isSigning())) {
+        if (show && (isPlaying() || isCodeView())) {
             Helpers.disableScreensaver(activity);
             return;
         }
@@ -152,7 +130,7 @@ public class ScreensaverManager {
         return playbackView != null && (playbackView.getController().isPlaying() || playbackView.getController().isLoading());
     }
 
-    private boolean isSigning() {
+    private boolean isCodeView() {
         Activity activity = mActivity.get();
 
         if (activity == null) {
