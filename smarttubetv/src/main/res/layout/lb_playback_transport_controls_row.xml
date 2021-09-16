@@ -119,7 +119,7 @@
             </RelativeLayout>
         </RelativeLayout>
 
-        <androidx.leanback.widget.SeekBar
+        <com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar
             android:id="@+id/playback_progress"
             android:layout_width="match_parent"
             android:layout_height="@dimen/lb_playback_transport_progressbar_height"

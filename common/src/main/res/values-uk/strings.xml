@@ -42,7 +42,7 @@
     <string name="section_is_empty">Халепа! Тут нічого нема.</string>
     <string name="dialog_add_to_playlist">Додати/Видалити із плейлиста</string>
     <string name="msg_signed_users_only">Необхідно увійти в обліковий запис</string>
-    <string name="msg_cant_load_content">Неможливо завантажити вміст</string>
+    <string name="msg_cant_load_content">Не вдалося завантажити вміст.\n1) Перевірте мережеве з\`єднання.\n2) Спробуйте увійти в обліковий запис.</string>
     <string name="title_video_presets">Відео пресети</string>
     <string name="settings_accounts">Облікові записи</string>
     <string name="settings_left_panel">Налаштувати категорії</string>
@@ -54,8 +54,8 @@
     <string name="settings_about">Про додаток</string>
     <string name="dialog_account_list">Обрати обліковий запис</string>
     <string name="dialog_account_none">Не обрано</string>
-    <string name="dialog_remove_account">Видалити обліковий запис</string>
-    <string name="dialog_add_account">Додати обліковий запис</string>
+    <string name="dialog_remove_account">Вийти з облікового запису</string>
+    <string name="dialog_add_account">Увійти в обліковий запис</string>
     <string name="default_lang">За замовчуванням</string>
     <string name="dialog_select_language">Мова</string>
     <string name="subtitle_default">Звичайні</string>
@@ -93,7 +93,7 @@
     <string name="color_scheme_dark_grey">Темно-сіра</string>
     <string name="disable_update_check">Не перевіряти оновлення</string>
     <string name="show_again">Нагадувати постійно</string>
-    <string name="check_updates_auto">Автоматичне оновлення</string>
+    <string name="check_updates_auto">Повідомляти про нову версію</string>
     <string name="select_account_on_boot">Обирати на старті</string>
     <string name="player_other">Різне</string>
     <string name="player_full_date">Точна дата в описі</string>
@@ -181,6 +181,7 @@
     <string name="content_block_self_promo">Самореклама</string>
     <string name="content_block_music_off_topic">Немузична секція кліпу</string>
     <string name="confirm_segment_skip">Пропустити сегмент \"%s\"?</string>
+    <string name="cancel_segment_skip">Скасувати пропуск сегменту</string>
     <string name="msg_skipping_segment">Пропуск сегменту \"%s\"…</string>
     <string name="content_block_notification_type">Тип повідомлень</string>
     <string name="content_block_notify_none">Без повідомлень</string>
@@ -223,7 +224,7 @@
     <string name="preferred_update_source">Вибрати джерело оновлень</string>
     <string name="hide_shorts">Приховувати короткі відео з Підписок</string>
     <string name="key_remapping">Перевизначення клавіш</string>
-    <string name="screen_diming">Затемнення екрану</string>
+    <string name="screen_dimming">Затемнення екрану</string>
     <string name="removed_from_playback_queue">Видалено з черги відтворення</string>
     <string name="added_to_playback_queue">Додано до черги відтворення</string>
     <string name="add_remove_from_playback_queue">Додати/Видалити з черги відтворення</string>
@@ -236,4 +237,8 @@
     <string name="covid_news_row_name">Новини про коронавірус COVID-19</string>
     <string name="enable_voice_search">Увімкнути голосовий пошук</string>
     <string name="subscribe_unsubscribe_from_channel">Підписатися/Відписатися від каналу</string>
+    <string name="app_backup_restore">Бекап та відновлення</string>
+    <string name="app_backup">Створити бекап даних</string>
+    <string name="app_restore">Відновити дані з бекапу</string>
+    <string name="skip_each_segment_once">Не пропускати повторно сегменти</string>
 </resources>

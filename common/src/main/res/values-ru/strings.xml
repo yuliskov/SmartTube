@@ -41,7 +41,7 @@
     <string name="section_is_empty">Ой! Здесь ничего нет.</string>
     <string name="dialog_add_to_playlist">Добавить/Удалить из плейлиста</string>
     <string name="msg_signed_users_only">Необходимо войти в вккаунт</string>
-    <string name="msg_cant_load_content">Не получилось загрузить содержимое</string>
+    <string name="msg_cant_load_content">Не получилось загрузить содержимое.\n1) Проверьте сетевое подключение.\n2) Попробуйте войти в аккаунт.</string>
     <string name="title_video_presets">Профили видео</string>
     <string name="settings_accounts">Аккаунты</string>
     <string name="settings_left_panel">Настроить категории</string>
@@ -53,8 +53,8 @@
     <string name="settings_about">О приложении</string>
     <string name="dialog_account_list">Выбрать аккаунт</string>
     <string name="dialog_account_none">Не выбран</string>
-    <string name="dialog_remove_account">Удалить аккаунт</string>
-    <string name="dialog_add_account">Добавить аккаунт</string>
+    <string name="dialog_remove_account">Выйти из аккаунта</string>
+    <string name="dialog_add_account">Войти в аккаунт</string>
     <string name="default_lang">По умолчанию</string>
     <string name="dialog_select_language">Язык</string>
     <string name="header_channels">Каналы</string>
@@ -93,7 +93,7 @@
     <string name="color_scheme_dark_grey">Темно-серая</string>
     <string name="disable_update_check">Не проверять обновления</string>
     <string name="show_again">Напоминать постоянно</string>
-    <string name="check_updates_auto">Автообновление</string>
+    <string name="check_updates_auto">Сообщать о новой версии</string>
     <string name="select_account_on_boot">Выбирать на старте</string>
     <string name="player_other">Разное</string>
     <string name="player_full_date">Точная дата в описании</string>
@@ -181,6 +181,7 @@
     <string name="content_block_self_promo">Самореклама</string>
     <string name="content_block_music_off_topic">Немузыкальная секция клипа</string>
     <string name="confirm_segment_skip">Пропустить сегмент \"%s\"?</string>
+    <string name="cancel_segment_skip">Отменить пропуск сегмента</string>
     <string name="msg_skipping_segment">Пропуск сегмента \"%s\"…</string>
     <string name="content_block_notification_type">Тип уведомлений</string>
     <string name="content_block_notify_none">Без уведомлений</string>
@@ -223,7 +224,7 @@
     <string name="preferred_update_source">Выбрать источник обновлений</string>
     <string name="hide_shorts">Скрывать короткие видео из Подписок</string>
     <string name="key_remapping">Переопределение клавиш</string>
-    <string name="screen_diming">Затемнение экрана</string>
+    <string name="screen_dimming">Затемнение экрана</string>
     <string name="removed_from_playback_queue">Удалено из очереди воспроизведения</string>
     <string name="added_to_playback_queue">Добавлено в очередь воспроизведения</string>
     <string name="add_remove_from_playback_queue">Добавить/Удалить из очереди воспроизведения</string>
@@ -236,4 +237,8 @@
     <string name="covid_news_row_name">Новости о коронавирусе COVID-19</string>
     <string name="enable_voice_search">Включить голосовой поиск</string>
     <string name="subscribe_unsubscribe_from_channel">Подписаться/Отписаться от канала</string>
+    <string name="app_backup_restore">Бэкап и восстановление</string>
+    <string name="app_backup">Создать бэкап данных</string>
+    <string name="app_restore">Восстановить данные из бэкапа</string>
+    <string name="skip_each_segment_once">Не пропускать повторно сегменты</string>
 </resources>

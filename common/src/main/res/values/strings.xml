@@ -42,7 +42,7 @@
     <string name="section_is_empty">Oops! There is nothing in here.</string>
     <string name="dialog_add_to_playlist">Add/Remove from playlist</string>
     <string name="msg_signed_users_only">Signed users only</string>
-    <string name="msg_cant_load_content">Oops. Can\'t load content.</string>
+    <string name="msg_cant_load_content">Can\'t load content.\n1) Check network connection.\n2) Try to sign in to your account.</string>
     <string name="title_video_presets">Video presets</string>
     <string name="settings_accounts">Accounts</string>
     <string name="settings_left_panel">Edit categories</string>
@@ -54,8 +54,8 @@
     <string name="settings_about">About</string>
     <string name="dialog_account_list">Select account</string>
     <string name="dialog_account_none">None</string>
-    <string name="dialog_remove_account">Remove account</string>
-    <string name="dialog_add_account">Add account</string>
+    <string name="dialog_remove_account">Sign out</string>
+    <string name="dialog_add_account">Sign in</string>
     <string name="default_lang">Default</string>
     <string name="dialog_select_language">Language</string>
     <string name="subtitle_default">Default</string>
@@ -93,7 +93,7 @@
     <string name="color_scheme_dark_grey">Dark Grey</string>
     <string name="disable_update_check">Disable update check</string>
     <string name="show_again">Show again</string>
-    <string name="check_updates_auto">Auto-update</string>
+    <string name="check_updates_auto">Notify about new version</string>
     <string name="select_account_on_boot">Select on boot</string>
     <string name="player_other">Misc</string>
     <string name="player_full_date">Precise date in description</string>
@@ -181,6 +181,7 @@
     <string name="content_block_self_promo">Unpaid/self promotion</string>
     <string name="content_block_music_off_topic">Non-music section of clip</string>
     <string name="confirm_segment_skip">Skip segment \"%s\"?</string>
+    <string name="cancel_segment_skip">Cancel segment skip</string>
     <string name="msg_skipping_segment">Skipping segment \"%s\"…</string>
     <string name="content_block_notification_type">Notification type</string>
     <string name="content_block_notify_none">Without notification</string>
@@ -223,7 +224,7 @@
     <string name="preferred_update_source">Select update source</string>
     <string name="hide_shorts">Hide shorts form Subscriptions</string>
     <string name="key_remapping">Key remapping</string>
-    <string name="screen_diming">Screen diming</string>
+    <string name="screen_dimming">Screen dimming</string>
     <string name="removed_from_playback_queue">Removed from playback queue</string>
     <string name="added_to_playback_queue">Added to playback queue</string>
     <string name="add_remove_from_playback_queue">Add/Remove from playback queue</string>
@@ -236,4 +237,8 @@
     <string name="covid_news_row_name">COVID-19 news</string>
     <string name="enable_voice_search">Enable voice search</string>
     <string name="subscribe_unsubscribe_from_channel">Subscribe/Unsubscribe from channel</string>
+    <string name="app_backup_restore">Backup/Restore</string>
+    <string name="app_backup">Backup data</string>
+    <string name="app_restore">Restore data from backup</string>
+    <string name="skip_each_segment_once">Don\'t skip segments again</string>
 </resources>

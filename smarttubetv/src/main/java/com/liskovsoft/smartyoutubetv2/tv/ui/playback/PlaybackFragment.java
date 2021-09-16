@@ -31,7 +31,7 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection.Factory;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -40,6 +40,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.ContentBlockManager.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
@@ -54,7 +55,6 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.Sub
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.renderer.CustomOverridesRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
@@ -63,6 +63,7 @@ import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewPressedListene
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.surfacefragment.SurfaceSupportFragmentGlueHost;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.BackboneQueueNavigator;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.StoryboardSeekDataProvider;
@@ -357,18 +358,20 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     private void createPlayer() {
-        DefaultRenderersFactory renderersFactory = new CustomOverridesRenderersFactory(getContext());
+        mExoPlayerController.setEventListener(mEventListener);
 
         // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
-        DefaultTrackSelector trackSelector = new RestoreTrackSelector(new Factory());
+        DefaultTrackSelector trackSelector = new RestoreTrackSelector(new AdaptiveTrackSelection.Factory());
+        mExoPlayerController.setTrackSelector(trackSelector);
+
+        DefaultRenderersFactory renderersFactory = new CustomOverridesRenderersFactory(getContext());
         mPlayer = mPlayerInitializer.createPlayer(getContext(), renderersFactory, trackSelector);
         // Try to fix decoder error on Nvidia Shield 2019.
         // Init resources as early as possible.
-        mPlayer.setForegroundMode(false);
-
+        mPlayer.setForegroundMode(true);
+        // Fix afr pause bug
+        //mPlayer.setPlayWhenReady(true);
         mExoPlayerController.setPlayer(mPlayer);
-        mExoPlayerController.setTrackSelector(trackSelector);
-        mExoPlayerController.setEventListener(mEventListener);
     }
 
     private void createPlayerGlue() {
@@ -445,6 +448,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             }
         });
 
+        // Fix exoplayer pause when switching AFR. The code seems buggy.
         mMediaSessionConnector.setControlDispatcher(new DefaultControlDispatcher() {
             @Override
             public boolean dispatchSetPlayWhenReady(Player player, boolean playWhenReady) {
@@ -692,6 +696,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public boolean isSuggestionsEmpty() {
+        // Ignore first row. It's player controls row.
         return mRowsAdapter == null || mRowsAdapter.size() <= 1;
     }
 
@@ -734,6 +739,14 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             getProgressBarManager().show();
         } else {
             getProgressBarManager().hide();
+        }
+    }
+
+    @Override
+    public void setSeekBarSegments(List<SeekBarSegment> segments) {
+        SeekBar seekBar = getActivity().findViewById(R.id.playback_progress);
+        if (seekBar != null) {
+            seekBar.setSegments(segments);
         }
     }
 

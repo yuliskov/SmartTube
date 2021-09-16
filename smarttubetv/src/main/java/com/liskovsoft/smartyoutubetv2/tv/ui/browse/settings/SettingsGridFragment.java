@@ -48,6 +48,11 @@ public class SettingsGridFragment extends GridFragment implements SettingsCatego
         }
     }
 
+    @Override
+    protected void showOrHideTitle() {
+        // NOP. Always show Browse fragment title
+    }
+
     private void applyPendingUpdates() {
         for (SettingsGroup group : mPendingUpdates) {
             update(group);

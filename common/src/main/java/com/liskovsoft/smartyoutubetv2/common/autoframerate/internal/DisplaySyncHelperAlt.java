@@ -1,9 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.autoframerate.internal;
 
-import android.app.Activity;
-import android.view.Window;
-import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolder.Mode;
+import android.content.Context;
 
 import java.util.HashMap;
 
@@ -11,7 +8,7 @@ public class DisplaySyncHelperAlt extends DisplaySyncHelper {
     private static final String TAG = DisplaySyncHelperAlt.class.getSimpleName();
     private static final float UI_LAGGING_THRESHOLD = 30;
 
-    public DisplaySyncHelperAlt(Activity context) {
+    public DisplaySyncHelperAlt(Context context) {
         super(context);
     }
 

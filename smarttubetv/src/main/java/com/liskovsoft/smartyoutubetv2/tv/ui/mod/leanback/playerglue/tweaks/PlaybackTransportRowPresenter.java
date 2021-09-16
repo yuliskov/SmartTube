@@ -39,8 +39,8 @@ import androidx.leanback.widget.PlaybackSeekDataProvider;
 import androidx.leanback.widget.PlaybackSeekUi;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.RowPresenter;
-import androidx.leanback.widget.SeekBar;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.OnControlClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.OnControlSelectedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue.QualityInfoListener;
@@ -510,6 +510,13 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                 public boolean onAccessibilitySeekBackward() {
                     return onBackward();
                 }
+
+                @Override
+                public boolean onAccessibilitySeekProgress(int progress) {
+                    mSeekClient.onSeekPositionChanged((long)((double) (progress) / Integer.MAX_VALUE * mTotalTimeInMs));
+                    mSeekClient.onSeekFinished(false);
+                    return true;
+                }
             });
             mProgressBar.setMax(Integer.MAX_VALUE); //current progress will be a fraction of this
             mControlsDock = (ViewGroup) rootView.findViewById(R.id.controls_dock);
@@ -833,8 +840,10 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
         mPlaybackControlsPresenter = new ControlBarPresenter(com.liskovsoft.smartyoutubetv2.tv.R.layout.lb_control_bar);
         mPlaybackControlsPresenter.setDefaultFocusToMiddle(false);
+        mPlaybackControlsPresenter.setFocusRecovery(true);
         mSecondaryControlsPresenter = new ControlBarPresenter(com.liskovsoft.smartyoutubetv2.tv.R.layout.lb_control_bar);
         mSecondaryControlsPresenter.setDefaultFocusToMiddle(false);
+        mSecondaryControlsPresenter.setFocusRecovery(true);
 
         mPlaybackControlsPresenter.setOnControlSelectedListener(mOnControlSelectedListener);
         mSecondaryControlsPresenter.setOnControlSelectedListener(mOnControlSelectedListener);
@@ -908,6 +917,10 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             vh.setControlsMode(ViewHolder.CONTROLS_MODE_FULL);
             vh.mProgressBar.requestFocus();
         }
+
+        // MOD: reset player focus
+        //vh.mControlsVh.mControlBar.resetFocus();
+        //vh.mSecondaryControlsVh.mControlBar.resetFocus();
     }
 
     private static int getDefaultProgressColor(Context context) {
