@@ -7,7 +7,7 @@
     <string name="header_music">Musica</string>
     <string name="header_news">Notizie</string>
     <string name="header_gaming">Videogiochi</string>
-    <string name="header_playlists">Playlists</string>
+    <string name="header_playlists">Playlist</string>
     <string name="header_settings">Opzioni</string>
     <string name="header_channels">Canali</string>
     <string name="subscriptions_signin_title">Novità dai canali che segui</string>
@@ -19,7 +19,7 @@
     <string name="title_video_formats">Formati video</string>
     <string name="title_audio_formats">Formati audio</string>
     <string name="subtitle_category_title">Sottotitoli</string>
-    <string name="playback_queue_category_title">Coda riproduzione</string>
+    <string name="playback_queue_category_title">Coda di riproduzione</string>
     <string name="video_max_quality">Auto (qualità massima)</string>
     <string name="audio_max_quality">Auto (qualità massima)</string>
     <string name="subtitles_disabled">Sottotitoli disattivati</string>
@@ -42,7 +42,7 @@
     <string name="section_is_empty">Oops! Qui non c\'è niente.</string>
     <string name="dialog_add_to_playlist">Aggiungi o rimuovi dalla playlist</string>
     <string name="msg_signed_users_only">Solo utenti che hanno effettuato l\'accesso</string>
-    <string name="msg_cant_load_content">Oops. Non posso caricare il contenuto.</string>
+    <string name="msg_cant_load_content">Non posso caricare il contenuto.\n1) Controlla la connessione di rete.\n2) Prova ad accedere al tuo account.</string>
     <string name="title_video_presets">Preimpostazioni video</string>
     <string name="settings_accounts">Profili</string>
     <string name="settings_left_panel">Modifica categorie</string>
@@ -80,7 +80,7 @@
     <string name="update_not_found">Stai usando la versione più recente</string>
     <string name="update_in_progess">Attendere…</string>
     <string name="player_ui_hide_behavior">Nascondi IU automaticamente</string>
-    <string name="player_ui_hide_never">Mai</string>
+    <string name="option_never">Mai</string>
     <string name="side_panel_sections">Modifica sezioni</string>
     <string name="boot_to_section">Accedi alla sezione</string>
     <string name="large_ui">IU grande</string>
@@ -119,7 +119,7 @@
     <string name="subtitle_black_bg">Sfondo nero</string>
     <string name="player_seek_preview">Anteprima durante avanzamento</string>
     <string name="color_scheme_dark_grey_oled">Grigio scuro (OLED)</string>
-    <string name="channel_section_sorting">Ordinamento canali</string>
+    <string name="channels_section_sorting">Ordinamento canali</string>
     <string name="sorting_by_new_content">Nuovo contenuto</string>
     <string name="sorting_alphabetically">Alfabetico</string>
     <string name="sorting_last_viewed">Ultimo visto</string>
@@ -222,16 +222,16 @@
     <string name="share_embed_link">Condividi link incorporato</string>
     <string name="card_text_scroll_factor">Velocità scorrimento testo titoli video</string>
     <string name="preferred_update_source">Seleziona fonte aggiornamenti</string>
-    <string name="hide_shorts">Nascondi i video Shorts dalle iscrizioni </string>
+    <string name="hide_shorts">Nascondi i video corti dalle iscrizioni </string>
     <string name="key_remapping">Rimappatura tasti</string>
     <string name="screen_dimming">Oscura schermo</string>
     <string name="removed_from_playback_queue">Rimosso dalla coda di riproduzione</string>
     <string name="added_to_playback_queue">Aggiunto alla coda di riproduzione</string>
-    <string name="add_remove_from_playback_queue">Aggiungi o rimuovi dalla coda di riproduzione</string>
+    <string name="add_remove_from_playback_queue">Aggiungi o rimuovi dalla coda</string>
     <string name="proxy_enabled">Proxy attivato</string>
     <string name="proxy_disabled">Proxy disattivato</string>
     <string name="uploads_row_name">Caricamenti</string>
-    <string name="playlists_row_name">Playlists create</string>
+    <string name="playlists_row_name">Playlist create</string>
     <string name="popular_uploads_row_name">Caricamenti popolari</string>
     <string name="breaking_news_row_name">Ultime notizie</string>
     <string name="covid_news_row_name">Notizie su COVID-19</string>
@@ -242,5 +242,3 @@
     <string name="app_restore">Ripristino dati dal backup</string>
     <string name="skip_each_segment_once">Non saltare più i segmenti</string>
 </resources>
-
-
