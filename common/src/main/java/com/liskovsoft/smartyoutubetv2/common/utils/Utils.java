@@ -306,4 +306,13 @@ public class Utils {
 
         return spannableString;
     }
+
+    public static boolean deviceHasBuggyLongPress() {
+        switch (Helpers.getDeviceName()) {
+            case "DuneHD":
+                return true;
+        }
+
+        return false;
+    }
 }
