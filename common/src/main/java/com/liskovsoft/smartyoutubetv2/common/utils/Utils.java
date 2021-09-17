@@ -43,6 +43,7 @@ public class Utils {
     private static final String QR_CODE_URL_TEMPLATE = "https://api.qrserver.com/v1/create-qr-code/?data=%s";
     private static final int GLOBAL_VOLUME_TYPE = AudioManager.STREAM_MUSIC;
     private static final String GLOBAL_VOLUME_SERVICE = Context.AUDIO_SERVICE;
+    private static Boolean deviceHasBuggyLongPress;
 
     /**
      * Limit the maximum size of a Map by removing oldest entries when limit reached
@@ -308,11 +309,25 @@ public class Utils {
     }
 
     public static boolean deviceHasBuggyLongPress() {
-        switch (Helpers.getDeviceName()) {
-            case "tv175h (thor32tv)":
-                return true;
+        if (deviceHasBuggyLongPress != null) {
+            return deviceHasBuggyLongPress;
         }
 
-        return false;
+        String deviceName = Helpers.getDeviceName();
+        deviceHasBuggyLongPress = false;
+
+        // Dune HD devices
+        for (String devicePrefix : new String[] {
+           "tv993a", "tv794a", "tv793a", "tv393a", "tv292b", "tv292a", "tv274a", "tv174c", "tv174b",
+           "tv174a", "tv175v", "tv175u", "tv175x", "tv175p", "tv175n", "tv175l", "tv175j", "tv175h",
+           "tv175f", "tv175e", "tv173b", "tv175a",
+        }) {
+            if (deviceName.startsWith(devicePrefix)) {
+                deviceHasBuggyLongPress = true;
+                break;
+            }
+        }
+
+        return deviceHasBuggyLongPress;
     }
 }
