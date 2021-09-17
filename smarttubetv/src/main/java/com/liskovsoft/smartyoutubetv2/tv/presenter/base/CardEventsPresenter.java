@@ -3,17 +3,13 @@ package com.liskovsoft.smartyoutubetv2.tv.presenter.base;
 import android.view.KeyEvent;
 import androidx.leanback.widget.Presenter;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 
 public abstract class CardEventsPresenter extends Presenter {
     private OnItemViewPressedListener mLongPressedListener;
     private OnItemViewPressedListener mMenuPressedListener;
 
     public void setOnItemViewLongPressedListener(OnItemViewPressedListener listener) {
-        if (Utils.deviceHasBuggyLongPress()) {
-            return;
-        }
-
         mLongPressedListener = listener;
     }
 
@@ -26,7 +22,9 @@ public abstract class CardEventsPresenter extends Presenter {
      */
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, Object item) {
-        if (mLongPressedListener != null) {
+        boolean longPressDisabled = GeneralData.instance(viewHolder.view.getContext()).isOkButtonLongPressDisabled();
+
+        if (mLongPressedListener != null && !longPressDisabled) {
             viewHolder.view.setOnLongClickListener(v -> {
                 if (mLongPressedListener != null) {
                     mLongPressedListener.onItemPressed(viewHolder, item);

@@ -241,4 +241,5 @@
     <string name="app_backup">Створити бекап даних</string>
     <string name="app_restore">Відновити дані з бекапу</string>
     <string name="skip_each_segment_once">Не пропускати повторно сегменти</string>
+    <string name="disable_ok_long_press">Не обробляти довге утримання кнопки ОК</string>
 </resources>

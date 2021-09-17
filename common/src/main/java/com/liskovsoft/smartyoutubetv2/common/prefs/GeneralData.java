@@ -39,6 +39,7 @@ public class GeneralData {
     private int mScreenDimmingTimeoutMin;
     private boolean mIsProxyEnabled;
     private boolean mIsBridgeCheckEnabled;
+    private boolean mIsOkButtonLongPressDisabled;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -181,6 +182,15 @@ public class GeneralData {
         return mIsBridgeCheckEnabled;
     }
 
+    public void disableOkButtonLongPress(boolean enable) {
+        mIsOkButtonLongPressDisabled = enable;
+        persistState();
+    }
+    
+    public boolean isOkButtonLongPressDisabled() {
+        return mIsOkButtonLongPressDisabled;
+    }
+
     private void initLeftPanelCategories() {
         mLeftPanelCategories.put(R.string.header_home, MediaGroup.TYPE_HOME);
         mLeftPanelCategories.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
@@ -209,6 +219,7 @@ public class GeneralData {
         mScreenDimmingTimeoutMin = Helpers.parseInt(split, 9, 1);
         mIsProxyEnabled = Helpers.parseBoolean(split, 10, false);
         mIsBridgeCheckEnabled = Helpers.parseBoolean(split, 11, true);
+        mIsOkButtonLongPressDisabled = Helpers.parseBoolean(split, 12, false);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArrayLegacy(selectedCategories);
@@ -236,6 +247,6 @@ public class GeneralData {
                 mBootCategoryId, mIsSettingsCategoryEnabled, mAppExitShortcut,
                 mIsReturnToLauncherEnabled,mBackgroundShortcut, pinnedItems,
                 mIsHideShortsEnabled, mIsRemapFastForwardToNextEnabled, mScreenDimmingTimeoutMin,
-                mIsProxyEnabled, mIsBridgeCheckEnabled));
+                mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled));
     }
 }

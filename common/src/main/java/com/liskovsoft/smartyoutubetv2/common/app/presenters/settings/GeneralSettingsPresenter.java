@@ -202,6 +202,11 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        // Disable long press on buggy controllers.
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_ok_long_press),
+                option -> mGeneralData.disableOkButtonLongPress(option.isSelected()),
+                mGeneralData.isOkButtonLongPressDisabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts),
                 option -> mGeneralData.hideShorts(option.isSelected()),
                 mGeneralData.isHideShortsEnabled()));

@@ -241,4 +241,5 @@
     <string name="app_backup">Backup data</string>
     <string name="app_restore">Restore data from backup</string>
     <string name="skip_each_segment_once">Don\'t skip segments again</string>
+    <string name="disable_ok_long_press">Disable OK button long press</string>
 </resources>
