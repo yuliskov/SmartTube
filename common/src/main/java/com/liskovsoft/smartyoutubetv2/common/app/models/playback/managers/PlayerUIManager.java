@@ -426,6 +426,9 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
             if (controlsShown) {
                 enableSuggestionsResetTimeout();
             }
+
+            // Disable chain key processing. Could help with G20s controller bug.
+            return true;
         }
 
         return false;
