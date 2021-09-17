@@ -59,12 +59,12 @@ abstract class BridgePresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.enable_voice_search),
                 option -> installBridgeIfNeeded());
 
-        settingsPresenter.appendSingleButton(updateCheckOption);
         settingsPresenter.appendSingleSwitch(
                 UiOptionItem.from(getContext().getString(R.string.show_again),
                 optionItem -> mGeneralData.enableBridgeCheck(optionItem.isSelected()),
                 mGeneralData.isBridgeCheckEnabled())
         );
+        settingsPresenter.appendSingleButton(updateCheckOption);
 
         settingsPresenter.showDialog(getContext().getString(R.string.enable_voice_search));
     }
