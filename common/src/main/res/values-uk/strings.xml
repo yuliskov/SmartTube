@@ -242,5 +242,5 @@
     <string name="app_restore">Відновити дані з бекапу</string>
     <string name="skip_each_segment_once">Не пропускати повторно сегменти</string>
     <string name="disable_ok_long_press">Не обробляти довге утримання кнопки ОК</string>
-    <string name="player_time_correction">Корегувати час відносно швидкості відтворення</string>
+    <string name="player_time_correction">Відображати час з урахуванням швидкості відтворення</string>
 </resources>
