@@ -30,7 +30,7 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
     public RestoreTrackSelector(Factory trackSelectionFactory) {
         super(trackSelectionFactory);
         // Could help with Shield resolution bug?
-        setParameters(buildUponParameters().setForceHighestSupportedBitrate(true));
+        //setParameters(buildUponParameters().setForceHighestSupportedBitrate(true));
     }
 
     public void setOnTrackSelectCallback(TrackSelectorCallback callback) {
