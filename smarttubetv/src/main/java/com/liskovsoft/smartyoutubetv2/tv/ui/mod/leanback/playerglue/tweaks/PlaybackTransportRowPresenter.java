@@ -663,7 +663,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         void setTotalTime(long totalTimeMs) {
             if (mTotalTimeInMs != totalTimeMs) {
                 mTotalTimeInMs = totalTimeMs;
-                onSetDurationLabel(applySpeedCorrection(totalTimeMs));
+                onSetDurationLabel(applyTimeCorrection(totalTimeMs));
             }
         }
 
@@ -691,7 +691,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         void setCurrentPosition(long currentTimeMs) {
             if (currentTimeMs != mCurrentTimeInMs) {
                 mCurrentTimeInMs = currentTimeMs;
-                onSetCurrentPositionLabel(applySpeedCorrection(currentTimeMs));
+                onSetCurrentPositionLabel(applyTimeCorrection(currentTimeMs));
             }
             if (!mInSeek) {
                 int progressRatio = 0;
@@ -717,7 +717,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
             if (mEndingTimeInMs != endingTimeMs) {
                 mEndingTimeInMs = endingTimeMs;
-                onSetEndingTimeLabel(applySpeedCorrection(endingTimeMs));
+                onSetEndingTimeLabel(applyTimeCorrection(endingTimeMs));
             }
         }
 
@@ -754,7 +754,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
         void updateTotalTime() {
             // Update total time with respect of speed
-            long newTotalTimeMs = applySpeedCorrection(mTotalTimeInMs);
+            long newTotalTimeMs = applyTimeCorrection(mTotalTimeInMs);
 
             if (mNewTotalTimeInMs != newTotalTimeMs) {
                 mNewTotalTimeInMs = newTotalTimeMs;
@@ -762,7 +762,11 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             }
         }
 
-        long applySpeedCorrection(long timeMs) {
+        long applyTimeCorrection(long timeMs) {
+            if (!mPlayerData.isTimeCorrectionEnabled()) {
+                return timeMs;
+            }
+
             timeMs = (long) (timeMs / mPlayerData.getSpeed());
 
             return timeMs >= 0 ? timeMs : 0;

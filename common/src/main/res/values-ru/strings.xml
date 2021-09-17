@@ -242,4 +242,5 @@
     <string name="app_restore">Восстановить данные из бэкапа</string>
     <string name="skip_each_segment_once">Не пропускать повторно сегменты</string>
     <string name="disable_ok_long_press">Не обрабатывать долгое удержание кнопки ОК</string>
+    <string name="player_time_correction">Исправлять время относительно скорости воспроизведения</string>
 </resources>

@@ -59,6 +59,7 @@ public class PlayerData {
     private boolean mIsSonyTimerFixEnabled;
     private boolean mIsQualityInfoEnabled;
     private boolean mIsRememberSpeedEachEnabled;
+    private boolean mIsTimeCorrectionEnabled;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -348,6 +349,15 @@ public class PlayerData {
         return mIsSonyTimerFixEnabled;
     }
 
+    public void enableTimeCorrection(boolean enable) {
+        mIsTimeCorrectionEnabled = enable;
+        persistData();
+    }
+
+    public boolean isTimeCorrectionEnabled() {
+        return mIsTimeCorrectionEnabled;
+    }
+
     public FormatItem getDefaultAudioFormat() {
         return FormatItem.AUDIO_HQ_MP4A;
     }
@@ -409,6 +419,7 @@ public class PlayerData {
         mIsRememberSpeedEachEnabled = Helpers.parseBoolean(split, 29, false);
         mVideoAspectRatio = Helpers.parseFloat(split, 30, PlaybackEngineController.ASPECT_RATIO_DEFAULT);
         mIsGlobalClockEnabled = Helpers.parseBoolean(split, 31, false);
+        mIsTimeCorrectionEnabled = Helpers.parseBoolean(split, 32, true);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -423,6 +434,6 @@ public class PlayerData {
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs,
                 mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
                 mIsLowQualityEnabled, mIsSonyTimerFixEnabled, null, null, // old player tweaks
-                mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled));
+                mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled));
     }
 }

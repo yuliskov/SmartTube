@@ -200,6 +200,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         //        option -> mPlayerData.enableAbsoluteDate(option.isSelected()),
         //        mPlayerData.isAbsoluteDateEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_time_correction),
+                option -> mPlayerData.enableTimeCorrection(option.isSelected()),
+                mPlayerData.isTimeCorrectionEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_pause_when_seek),
                 option -> mPlayerData.enablePauseOnSeek(option.isSelected()),
                 mPlayerData.isPauseOnSeekEnabled()));
