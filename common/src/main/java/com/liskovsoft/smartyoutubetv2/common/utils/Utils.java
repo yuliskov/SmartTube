@@ -309,7 +309,7 @@ public class Utils {
 
     public static boolean deviceHasBuggyLongPress() {
         switch (Helpers.getDeviceName()) {
-            case "DuneHD":
+            case "tv175h (thor32tv)":
                 return true;
         }
 
