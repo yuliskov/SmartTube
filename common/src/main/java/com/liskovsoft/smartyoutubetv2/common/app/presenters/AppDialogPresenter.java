@@ -140,7 +140,6 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     public void closeDialog() {
         if (getView() != null) {
             getView().finish();
-            setView(null); // Stacked dialogs isDialogShown fix
         }
     }
 

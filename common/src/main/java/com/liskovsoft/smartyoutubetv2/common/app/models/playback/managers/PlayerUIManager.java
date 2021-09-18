@@ -90,43 +90,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         }
     }
 
-    //@Override
-    //public boolean onKeyDown(int keyCode) {
-    //    disableUiAutoHideTimeout();
-    //    disableSuggestionsResetTimeout();
-    //
-    //    boolean controlsShown = getController().isControlsShown();
-    //
-    //    if (KeyHelpers.isBackKey(keyCode)) {
-    //        enableSuggestionsResetTimeout();
-    //    } else if (KeyHelpers.isMenuKey(keyCode)) {
-    //        getController().showControls(!controlsShown);
-    //
-    //        if (controlsShown) {
-    //            enableSuggestionsResetTimeout();
-    //        }
-    //    } else if (KeyHelpers.isConfirmKey(keyCode) && !controlsShown) {
-    //        switch (mPlayerData.getOKButtonBehavior()) {
-    //            case PlayerData.ONLY_UI:
-    //                getController().showControls(true);
-    //                return true; // don't show ui
-    //            case PlayerData.UI_AND_PAUSE:
-    //                // NOP
-    //                break;
-    //            case PlayerData.ONLY_PAUSE:
-    //                getController().setPlay(!getController().getPlay());
-    //                return true; // don't show ui
-    //        }
-    //    } else if (KeyHelpers.isStopKey(keyCode)) {
-    //        getController().exit();
-    //        return true;
-    //    }
-    //
-    //    enableUiAutoHideTimeout();
-    //
-    //    return false;
-    //}
-
     @Override
     public boolean onKeyDown(int keyCode) {
         disableUiAutoHideTimeout();
