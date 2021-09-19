@@ -241,4 +241,6 @@
     <string name="app_backup">Daten sichern</string>
     <string name="app_restore">Daten aus Sicherung wiederherstellen</string>
     <string name="skip_each_segment_once">Jedes Segment nur einmal überspringen</string>
+    <string name="disable_ok_long_press">Langes Drücken der OK-Taste deaktivieren</string>
+    <string name="player_time_correction">Anzeige der Zeit in Bezug auf die Geschwindigkeit</string>
 </resources>
