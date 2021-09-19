@@ -517,6 +517,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
         mCardPresenter.setOnItemViewLongPressedListener(new ItemViewLongClickedListener());
+        mCardPresenter.setOnItemViewMenuPressedListener(new ItemViewLongClickedListener());
     }
 
     private final class ItemViewLongClickedListener implements OnItemViewPressedListener {
