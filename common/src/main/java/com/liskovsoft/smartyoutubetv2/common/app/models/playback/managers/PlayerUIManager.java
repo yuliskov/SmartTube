@@ -275,7 +275,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
         // suppose live stream if buffering near the end
         // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
-        intSpeedItems(settingsPresenter, items, new float[]{0.25f, 0.5f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f, 1.0f, 1.1f, 1.15f, 1.25f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f, 3.0f});
+        intSpeedItems(settingsPresenter, items, new float[]{0.25f, 0.5f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f, 1.0f, 1.1f, 1.15f, 1.25f, 1.3f, 1.4f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f, 3.0f});
 
         settingsPresenter.appendRadioCategory(getActivity().getString(R.string.video_speed), items);
         settingsPresenter.showDialog();
@@ -322,7 +322,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
                     optionItem -> {
                         mPlayerData.setSpeed(speed);
                         getController().setSpeed(speed);
-                        //settingsPresenter.closeDialog();
+                        settingsPresenter.closeDialog();
                     },
                     getController().getSpeed() == speed));
         }
@@ -382,8 +382,9 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     private boolean handleMenuKey(int keyCode) {
         boolean controlsShown = getController().isControlsShown();
+        boolean suggestionsShown = getController().isSuggestionsShown();
 
-        if (KeyHelpers.isMenuKey(keyCode)) {
+        if (KeyHelpers.isMenuKey(keyCode) && !suggestionsShown) {
             getController().showControls(!controlsShown);
 
             if (controlsShown) {
