@@ -728,10 +728,10 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
             if (mEndingTime != null) {
                 if (mPlayerData.isRemainingTimeEnabled()) {
-                    //formatTime(remainingTimeMs, mTempBuilder);
-                    //mEndingTime.setText(String.format(mRemainingTimeFormat, mTempBuilder.toString()));
-                    //mEndingTime.setVisibility(View.VISIBLE);
-                    
+                    formatTime(remainingTimeMs, mTempBuilder);
+                    mEndingTime.setText(String.format(mRemainingTimeFormat, mTempBuilder.toString()));
+                    mEndingTime.setVisibility(View.VISIBLE);
+                } else if (mPlayerData.isEndingTimeEnabled()) {
                     mEndingTime.setText(String.format(mEndingTimeFormat,
                             DateFormatter.formatTimeShort(mEndingTime.getContext(), System.currentTimeMillis() + remainingTimeMs)));
                     mEndingTime.setVisibility(View.VISIBLE);

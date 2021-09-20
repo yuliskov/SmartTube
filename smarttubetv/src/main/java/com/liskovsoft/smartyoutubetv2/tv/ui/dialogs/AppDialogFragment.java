@@ -154,7 +154,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
         private static final String TAG = AppPreferenceFragment.class.getSimpleName();
         private List<SettingsCategory> mCategories;
         private Context mExtractedContext;
-        private AppDialogFragmentHelper mManager;
+        private AppDialogFragmentManager mManager;
         private String mTitle;
         private int mBackStackCount;
 
@@ -162,7 +162,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
         public void onCreatePreferences(Bundle bundle, String s) {
             // Note, place in field with different name to avoid field overlapping
             mExtractedContext = (Context) Helpers.getField(this, "mStyledContext");
-            mManager = new AppDialogFragmentHelper(mExtractedContext);
+            mManager = new AppDialogFragmentManager(mExtractedContext);
 
             initPrefs();
 

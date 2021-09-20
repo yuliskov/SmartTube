@@ -129,6 +129,7 @@
     <string name="playlists_style_rows">Рядки</string>
     <string name="player_show_clock">Відображати годинник у спливаючому меню</string>
     <string name="player_show_remaining_time">Відображати час, що залишився</string>
+    <string name="player_show_ending_time">Відображати час закінчення</string>
     <string name="open_channel_uploads">Відкрити завантаження</string>
     <string name="app_exit_shortcut">Вихід з додатку</string>
     <string name="app_exit_none">Не виходити</string>

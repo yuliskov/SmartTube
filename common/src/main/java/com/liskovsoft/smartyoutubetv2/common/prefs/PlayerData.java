@@ -61,6 +61,7 @@ public class PlayerData {
     private boolean mIsRememberSpeedEachEnabled;
     private boolean mIsTimeCorrectionEnabled;
     private boolean mIsGlobalEndingTimeEnabled;
+    private boolean mIsEndingTimeEnabled;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -155,6 +156,15 @@ public class PlayerData {
 
     public void enableRemainingTime(boolean enable) {
         mIsRemainingTimeEnabled = enable;
+        persistData();
+    }
+
+    public boolean isEndingTimeEnabled() {
+        return mIsEndingTimeEnabled;
+    }
+
+    public void enableEndingTime(boolean enable) {
+        mIsEndingTimeEnabled = enable;
         persistData();
     }
 
@@ -431,6 +441,7 @@ public class PlayerData {
         mIsGlobalClockEnabled = Helpers.parseBoolean(split, 31, false);
         mIsTimeCorrectionEnabled = Helpers.parseBoolean(split, 32, true);
         mIsGlobalEndingTimeEnabled = Helpers.parseBoolean(split, 33, false);
+        mIsEndingTimeEnabled = Helpers.parseBoolean(split, 34, false);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -446,6 +457,6 @@ public class PlayerData {
                 mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
                 mIsLowQualityEnabled, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
-                mIsGlobalEndingTimeEnabled));
+                mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled));
     }
 }

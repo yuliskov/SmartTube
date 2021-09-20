@@ -245,8 +245,8 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
             onFpsCorrectionCallback.run();
         }, playerData.isAfrFpsCorrectionEnabled());
 
-        afrResSwitchOption.setRequire(afrEnableOption);
-        afrFpsCorrectionOption.setRequire(afrEnableOption);
+        afrResSwitchOption.setRequired(afrEnableOption);
+        afrFpsCorrectionOption.setRequired(afrEnableOption);
 
         options.add(afrEnableOption);
         options.add(afrResSwitchOption);

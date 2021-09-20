@@ -16,8 +16,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class AppDialogFragmentHelper {
+public class AppDialogFragmentManager {
     private final Context mStyledContext;
+    private final Runnable mOnChange;
 
     public static class ListPreferenceData {
         public final CharSequence[] entries;
@@ -33,8 +34,13 @@ public class AppDialogFragmentHelper {
         }
     }
 
-    public AppDialogFragmentHelper(Context styledContext) {
+    public AppDialogFragmentManager(Context styledContext) {
+        this(styledContext, null);
+    }
+
+    public AppDialogFragmentManager(Context styledContext, Runnable onChange) {
         mStyledContext = styledContext;
+        mOnChange = onChange;
     }
 
     public Preference createPreference(SettingsCategory category) {
@@ -161,14 +167,25 @@ public class AppDialogFragmentHelper {
 
                     if (item.isSelected() != isSelected) {
                         if (isSelected) {
-                            OptionItem[] requiredItems = item.getRequire();
+                            OptionItem[] requiredItems = item.getRequired();
 
                             if (requiredItems != null) {
                                 for (OptionItem requiredItem : requiredItems) {
                                     if (!requiredItem.isSelected()) {
                                         MessageHelpers.showMessageThrottled(mStyledContext, mStyledContext.getString(R.string.require_checked, requiredItem.getTitle()));
-                                        //return false;
                                     }
+                                }
+                            }
+
+                            OptionItem[] radioItems = item.getRadio();
+
+                            if (radioItems != null) {
+                                for (OptionItem radioItem : radioItems) {
+                                    radioItem.onSelect(false);
+                                }
+
+                                if (mOnChange != null) {
+                                    mOnChange.run();
                                 }
                             }
                         }
