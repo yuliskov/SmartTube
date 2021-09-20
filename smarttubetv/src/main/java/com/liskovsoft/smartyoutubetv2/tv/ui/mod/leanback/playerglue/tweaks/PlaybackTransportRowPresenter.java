@@ -40,6 +40,7 @@ import androidx.leanback.widget.PlaybackSeekUi;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.RowPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.OnControlClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.OnControlSelectedListener;
@@ -92,10 +93,11 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         final ViewGroup mTopEdge;
         final SeekBar mProgressBar;
         final ThumbsBar mThumbsBar;
+        final String mRemainingTimeFormat;
         final String mEndingTimeFormat;
         long mTotalTimeInMs = Long.MIN_VALUE;
         long mCurrentTimeInMs = Long.MIN_VALUE;
-        long mEndingTimeInMs = Long.MIN_VALUE;
+        long mRemainingTimeInMs = Long.MIN_VALUE;
         long mSecondaryProgressInMs;
         final StringBuilder mTempBuilder = new StringBuilder();
         ControlBarPresenter.ViewHolder mControlsVh;
@@ -414,7 +416,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             mQualityInfo = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.quality_info);
             mDateTime = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.date_time);
             mEndingTime = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.ending_time);
-            mEndingTimeFormat = rootView.getContext().getString(com.liskovsoft.smartyoutubetv2.tv.R.string.player_remaining_time);
+            mEndingTimeFormat = rootView.getContext().getString(com.liskovsoft.smartyoutubetv2.tv.R.string.player_ending_time);
+            mRemainingTimeFormat = rootView.getContext().getString(com.liskovsoft.smartyoutubetv2.tv.R.string.player_remaining_time);
             mAdditionalInfo = (ViewGroup) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.additional_info);
             mTopEdge = (ViewGroup) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.top_edge);
             mTopEdge.setOnFocusChangeListener((v, hasFocus) -> {
@@ -712,21 +715,25 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         }
 
         void setEndingTime(long currentTimeMs) {
-            long endingTimeMs = mTotalTimeInMs - currentTimeMs;
+            long remainingTimeMs = mTotalTimeInMs - currentTimeMs;
 
-            if (mEndingTimeInMs != endingTimeMs) {
-                mEndingTimeInMs = endingTimeMs;
-                onSetEndingTimeLabel(endingTimeMs);
+            if (mRemainingTimeInMs != remainingTimeMs) {
+                mRemainingTimeInMs = remainingTimeMs;
+                onSetEndingTimeLabel(remainingTimeMs);
             }
         }
 
-        protected void onSetEndingTimeLabel(long endingTimeMs) {
-            endingTimeMs = applySpeedCorrection(endingTimeMs);
+        protected void onSetEndingTimeLabel(long remainingTimeMs) {
+            remainingTimeMs = applySpeedCorrection(remainingTimeMs);
 
             if (mEndingTime != null) {
                 if (mPlayerData.isRemainingTimeEnabled()) {
-                    formatTime(endingTimeMs, mTempBuilder);
-                    mEndingTime.setText(String.format(mEndingTimeFormat, mTempBuilder.toString()));
+                    //formatTime(remainingTimeMs, mTempBuilder);
+                    //mEndingTime.setText(String.format(mRemainingTimeFormat, mTempBuilder.toString()));
+                    //mEndingTime.setVisibility(View.VISIBLE);
+                    
+                    mEndingTime.setText(String.format(mEndingTimeFormat,
+                            DateFormatter.formatTimeShort(mEndingTime.getContext(), System.currentTimeMillis() + remainingTimeMs)));
                     mEndingTime.setVisibility(View.VISIBLE);
                 } else {
                     mEndingTime.setVisibility(View.GONE);
