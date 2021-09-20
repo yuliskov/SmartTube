@@ -208,8 +208,8 @@
     <string name="video_aspect">Соотношение сторон</string>
     <string name="player_tweaks">Для разработчиков</string>
     <string name="header_uploads">Загрузки</string>
-    <string name="player_show_global_clock">Постоянно отображать часы на экране</string>
-    <string name="player_show_global_ending_time">Постоянно отображать время окончания видео на экране</string>
+    <string name="player_show_global_clock">Постоянно отображать на экране часы</string>
+    <string name="player_show_global_ending_time">Постоянно отображать на экране время окончания видео</string>
     <string name="uploads_old_look">Вернуть старый вид раздела Загрузки</string>
     <string name="background_playback_activation">Фоновое воспроизведение (активация)</string>
     <string name="channels_old_look">Вернуть старый вид раздела Каналы</string>
