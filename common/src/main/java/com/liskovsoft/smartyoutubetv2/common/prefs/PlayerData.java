@@ -365,7 +365,7 @@ public class PlayerData {
     public FormatItem getDefaultVideoFormat() {
         FormatItem formatItem = mDefaultVideoFormats.get(Build.MODEL);
 
-        return formatItem != null ? formatItem : Helpers.isVP9Supported() ? FormatItem.VIDEO_4K_VP9_60 : FormatItem.VIDEO_HD_AVC_30;
+        return formatItem != null ? formatItem : Helpers.isVP9Supported() ? FormatItem.VIDEO_FHD_VP9_60 : FormatItem.VIDEO_HD_AVC_30;
     }
 
     private void initSubtitleStyles() {
