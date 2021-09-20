@@ -94,7 +94,6 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         final ThumbsBar mThumbsBar;
         final String mEndingTimeFormat;
         long mTotalTimeInMs = Long.MIN_VALUE;
-        long mNewTotalTimeInMs = Long.MIN_VALUE;
         long mCurrentTimeInMs = Long.MIN_VALUE;
         long mEndingTimeInMs = Long.MIN_VALUE;
         long mSecondaryProgressInMs;
@@ -663,7 +662,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         void setTotalTime(long totalTimeMs) {
             if (mTotalTimeInMs != totalTimeMs) {
                 mTotalTimeInMs = totalTimeMs;
-                onSetDurationLabel(applyTimeCorrection(totalTimeMs));
+                onSetDurationLabel(totalTimeMs);
             }
         }
 
@@ -691,7 +690,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         void setCurrentPosition(long currentTimeMs) {
             if (currentTimeMs != mCurrentTimeInMs) {
                 mCurrentTimeInMs = currentTimeMs;
-                onSetCurrentPositionLabel(applyTimeCorrection(currentTimeMs));
+                onSetCurrentPositionLabel(currentTimeMs);
             }
             if (!mInSeek) {
                 int progressRatio = 0;
@@ -717,11 +716,13 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
             if (mEndingTimeInMs != endingTimeMs) {
                 mEndingTimeInMs = endingTimeMs;
-                onSetEndingTimeLabel(applyTimeCorrection(endingTimeMs));
+                onSetEndingTimeLabel(endingTimeMs);
             }
         }
 
         protected void onSetEndingTimeLabel(long endingTimeMs) {
+            endingTimeMs = applySpeedCorrection(endingTimeMs);
+
             if (mEndingTime != null) {
                 if (mPlayerData.isRemainingTimeEnabled()) {
                     formatTime(endingTimeMs, mTempBuilder);
@@ -753,20 +754,13 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         }
 
         void updateTotalTime() {
-            // Update total time with respect of speed
-            long newTotalTimeMs = applyTimeCorrection(mTotalTimeInMs);
-
-            if (mNewTotalTimeInMs != newTotalTimeMs) {
-                mNewTotalTimeInMs = newTotalTimeMs;
-                onSetDurationLabel(newTotalTimeMs);
-            }
+            onSetDurationLabel(mTotalTimeInMs);
         }
 
-        long applyTimeCorrection(long timeMs) {
-            if (!mPlayerData.isTimeCorrectionEnabled()) {
-                return timeMs;
-            }
-
+        /**
+         * Correct time with respect of speed
+         */
+        long applySpeedCorrection(long timeMs) {
             timeMs = (long) (timeMs / mPlayerData.getSpeed());
 
             return timeMs >= 0 ? timeMs : 0;
