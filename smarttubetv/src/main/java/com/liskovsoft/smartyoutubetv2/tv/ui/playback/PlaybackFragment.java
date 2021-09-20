@@ -404,6 +404,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private void initializeGlobalClock() {
         DateTimeView clock = getActivity().findViewById(R.id.global_time);
         clock.showDate(false);
+        clock.showEndingTime(true);
         clock.setVisibility(PlayerData.instance(getContext()).isGlobalClockEnabled() ? View.VISIBLE : View.GONE);
     }
 
