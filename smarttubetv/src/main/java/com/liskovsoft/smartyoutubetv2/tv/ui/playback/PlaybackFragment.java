@@ -71,6 +71,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoEventsOverrideFr
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue.OnActionClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.EndingTimeView;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -355,6 +356,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         initializePlayerRows();
 
         initializeGlobalClock();
+
+        initializeGlobalEndingTime();
     }
 
     private void createPlayer() {
@@ -404,8 +407,12 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private void initializeGlobalClock() {
         DateTimeView clock = getActivity().findViewById(R.id.global_time);
         clock.showDate(false);
-        clock.showEndingTime(true);
         clock.setVisibility(PlayerData.instance(getContext()).isGlobalClockEnabled() ? View.VISIBLE : View.GONE);
+    }
+
+    private void initializeGlobalEndingTime() {
+        EndingTimeView endingTime = getActivity().findViewById(R.id.global_ending_time);
+        endingTime.setVisibility(View.VISIBLE);
     }
 
     private void createMediaSession() {
