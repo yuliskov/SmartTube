@@ -137,7 +137,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     public void onVideoLoaded(Video item) {
         // Restore formats again.
         // Maybe this could help with Shield format problem.
-        restoreFormats();
+        //restoreFormats();
 
         // In this state video length is not undefined.
         restorePosition(item);
