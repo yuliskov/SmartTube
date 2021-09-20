@@ -60,6 +60,7 @@ public class PlayerData {
     private boolean mIsQualityInfoEnabled;
     private boolean mIsRememberSpeedEachEnabled;
     private boolean mIsTimeCorrectionEnabled;
+    private boolean mIsGlobalEndingTimeEnabled;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -136,6 +137,15 @@ public class PlayerData {
 
     public void enableGlobalClock(boolean enable) {
         mIsGlobalClockEnabled = enable;
+        persistData();
+    }
+
+    public boolean isGlobalEndingTimeEnabled() {
+        return mIsGlobalEndingTimeEnabled;
+    }
+
+    public void enableGlobalEndingTime(boolean enable) {
+        mIsGlobalEndingTimeEnabled = enable;
         persistData();
     }
 
@@ -420,6 +430,7 @@ public class PlayerData {
         mVideoAspectRatio = Helpers.parseFloat(split, 30, PlaybackEngineController.ASPECT_RATIO_DEFAULT);
         mIsGlobalClockEnabled = Helpers.parseBoolean(split, 31, false);
         mIsTimeCorrectionEnabled = Helpers.parseBoolean(split, 32, true);
+        mIsGlobalEndingTimeEnabled = Helpers.parseBoolean(split, 33, false);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -434,6 +445,7 @@ public class PlayerData {
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs,
                 mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
                 mIsLowQualityEnabled, mIsSonyTimerFixEnabled, null, null, // old player tweaks
-                mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled));
+                mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
+                mIsGlobalEndingTimeEnabled));
     }
 }

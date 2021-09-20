@@ -412,7 +412,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     private void initializeGlobalEndingTime() {
         EndingTimeView endingTime = getActivity().findViewById(R.id.global_ending_time);
-        endingTime.setVisibility(View.VISIBLE);
+        endingTime.setVisibility(PlayerData.instance(getContext()).isGlobalEndingTimeEnabled() ? View.VISIBLE : View.GONE);
     }
 
     private void createMediaSession() {
