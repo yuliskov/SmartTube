@@ -49,7 +49,10 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:visibility="gone"
+            android:textColor="@color/white"
             android:shadowColor="@color/black"
+            android:shadowDx="1.5"
+            android:shadowDy="1.3"
             android:shadowRadius="1.6"
             android:textStyle="bold"
             style="?attr/playbackControlsTimeStyle"/>
@@ -60,7 +63,10 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:visibility="gone"
+            android:textColor="@color/white"
             android:shadowColor="@color/black"
+            android:shadowDx="1.5"
+            android:shadowDy="1.3"
             android:shadowRadius="1.6"
             android:textStyle="bold"
             style="?attr/playbackControlsTimeStyle"/>
