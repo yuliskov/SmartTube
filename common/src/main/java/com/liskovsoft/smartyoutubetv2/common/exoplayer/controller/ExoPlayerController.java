@@ -242,7 +242,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
         Log.d(TAG, "onTracksChanged: start: groups length: " + trackGroups.length);
 
-        notifyOnVideoLoad();
+        //notifyOnVideoLoad();
 
         if (trackGroups.length == 0) {
             Log.i(TAG, "onTracksChanged: Hmm. Strange. Received empty groups, no selections. Why is this happens only on next/prev videos?");
@@ -296,6 +296,10 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "onPlayerStateChanged: " + TrackSelectorUtil.stateToString(playbackState));
+        }
+
+        if (Player.STATE_READY == playbackState) {
+            notifyOnVideoLoad();
         }
 
         boolean isPlayPressed = Player.STATE_READY == playbackState && playWhenReady;
