@@ -129,6 +129,7 @@
     <string name="playlists_style_rows">Righe</string>
     <string name="player_show_clock">Mostra orologio nel menu a comparsa</string>
     <string name="player_show_remaining_time">Mostra tempo rimanente</string>
+																	
     <string name="open_channel_uploads">Apri video caricati</string>
     <string name="app_exit_shortcut">Esci dall\'app</string>
     <string name="app_exit_none">Non uscire</string>
@@ -175,8 +176,8 @@
     <string name="content_block_confirm_skip">Conferma salto</string>
     <string name="content_block_categories">Categorie</string>
     <string name="content_block_sponsor">Sponsor</string>
-    <string name="content_block_intro">Intermezzo/animazione introduttiva</string>
-    <string name="content_block_outro">Titoli di coda/crediti</string>
+    <string name="content_block_intro">Introduzione - Intermezzo</string>
+    <string name="content_block_outro">Titoli di coda - Ringraziamenti</string>
     <string name="content_block_interaction">Promemoria di interazione (iscrizione)</string>
     <string name="content_block_self_promo">Non retribuito/autopromozione</string>
     <string name="content_block_music_off_topic">Sezione non musicale della clip</string>
@@ -187,7 +188,7 @@
     <string name="content_block_notify_none">Senza notifica</string>
     <string name="content_block_notify_toast">Toast</string>
     <string name="content_block_notify_dialog">Notifica di conferma</string>
-    <string name="return_to_launcher">Ritorna al launcher dai canali/cerca di ATV</string>
+    <string name="return_to_launcher">Torna al launcher dai canali/ricerca ATV</string>
     <string name="intent_force_close">Forza l\'uscita se il video è stato aperto da una fonte esterna</string>
     <string name="btn_confirm">Conferma</string>
     <string name="player_low_video_quality">Video in bassa qualità</string>
@@ -209,6 +210,7 @@
     <string name="player_tweaks">Opzioni sviluppatore</string>
     <string name="header_uploads">Caricamenti</string>
     <string name="player_show_global_clock">Mostra orologio in alto a destra nel video</string>
+    <string name="player_show_global_ending_time">Mostra sempre l'ora di fine del video sullo schermo</string>
     <string name="uploads_old_look">Reimposta vecchio look sezione caricamenti</string>
     <string name="background_playback_activation">Riproduzione in background (attivazione)</string>
     <string name="channels_old_look">Reimposta vecchio look sezione canali </string>
@@ -241,4 +243,6 @@
     <string name="app_backup">Backup dati</string>
     <string name="app_restore">Ripristino dati dal backup</string>
     <string name="skip_each_segment_once">Non saltare più i segmenti</string>
+    <string name="disable_ok_long_press">Disabilita pressione prolungata tasto OK</string>
+    <string name="player_time_correction">Visualizza l'ora in base alla velocità</string>
 </resources>
