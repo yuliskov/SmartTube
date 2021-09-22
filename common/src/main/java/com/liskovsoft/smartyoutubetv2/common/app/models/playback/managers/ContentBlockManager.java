@@ -105,11 +105,12 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     }
 
     private void updateSponsorSegmentsAndWatch(Video item) {
-        if (item == null || item.videoId == null) {
+        if (item == null || item.videoId == null || mContentBlockData.getCategories().isEmpty()) {
             mSponsorSegments = null;
             return;
         }
 
+        // Reset colors
         getController().setSeekBarSegments(null);
 
         mSegmentsAction = mMediaItemManager.getSponsorSegmentsObserve(item.videoId, mContentBlockData.getCategories())
