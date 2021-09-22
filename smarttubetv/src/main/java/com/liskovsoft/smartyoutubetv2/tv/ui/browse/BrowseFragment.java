@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.leanback.app.BrowseSupportFragment;
+import androidx.leanback.app.HeadersSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRowPresenter;
@@ -29,6 +30,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.ErrorDialogFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.headers.CustomHeadersSupportFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 
 import java.util.LinkedHashMap;
@@ -110,6 +112,11 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         // Restore state after crash
         selectSectionItem(mRestoredItemIndex);
         mRestoredItemIndex = -1;
+    }
+
+    @Override
+    public HeadersSupportFragment onCreateHeadersSupportFragment() {
+        return new CustomHeadersSupportFragment();
     }
 
     private void setupEventListeners() {
