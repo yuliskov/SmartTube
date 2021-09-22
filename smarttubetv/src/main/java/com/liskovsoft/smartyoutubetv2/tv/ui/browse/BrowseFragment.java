@@ -130,9 +130,17 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
                         getHeadersSupportFragment().setSelectedPosition(newPosition);
                     } else {
                         // update section when clicked or pressed
-                        mBrowsePresenter.onCategoryFocused((int) headerId);
+                        mBrowsePresenter.onSectionFocused((int) headerId);
                         startHeadersTransition(false);
                     }
+                }
+        );
+
+        ((LongPressHeadersSupportFragment) getHeadersSupportFragment()).setOnHeaderLongPressedListener(
+                (viewHolder, row) -> {
+                    long headerId = row.getHeaderItem().getId();
+
+                    mBrowsePresenter.onSectionLongPressed((int) headerId);
                 }
         );
 
@@ -162,7 +170,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mSectionFragmentFactory = new BrowseSectionFragmentFactory(
                 (viewHolder, row) -> {
                     focusOnChildFragment();
-                    mBrowsePresenter.onCategoryFocused(getSelectedHeaderId());
+                    mBrowsePresenter.onSectionFocused(getSelectedHeaderId());
                 }
         );
 

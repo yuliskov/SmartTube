@@ -8,6 +8,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -74,6 +75,16 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
     public void showMenu(Video item) {
         showVideoMenu(item);
+    }
+
+    public void showMenu(BrowseSection section) {
+        if (section == null || section.getData() == null) {
+            return;
+        }
+
+        mIsPinToSidebarEnabled = true;
+
+        showMenuInt(section.getData());
     }
 
     public void showVideoMenu(Video video) {

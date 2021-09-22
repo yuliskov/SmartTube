@@ -22,7 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.BootDialogPr
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.ChannelUploadsMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoMenuPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.CategoryPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.SectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -45,7 +45,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
-public class BrowsePresenter extends BasePresenter<BrowseView> implements CategoryPresenter, VideoGroupPresenter {
+public class BrowsePresenter extends BasePresenter<BrowseView> implements SectionPresenter, VideoGroupPresenter {
     private static final String TAG = BrowsePresenter.class.getSimpleName();
     private static final long HEADER_REFRESH_PERIOD_MS = 120 * 60 * 1_000;
     private static final int MIN_GROUP_SIZE = 13;
@@ -319,8 +319,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Catego
     }
 
     @Override
-    public void onCategoryFocused(int categoryId) {
-        updateSection(categoryId);
+    public void onSectionFocused(int sectionId) {
+        updateSection(sectionId);
+    }
+
+    @Override
+    public void onSectionLongPressed(int sectionId) {
+        VideoMenuPresenter.instance(getContext()).showMenu(getSection(sectionId));
     }
 
     @Override
