@@ -78,7 +78,7 @@
     <string name="player_only_pause">一時停止のみ</string>
     <string name="check_for_updates">アップデートを確認</string>
     <string name="update_not_found">最新バージョンを使用しています</string>
-    <string name="update_in_progess">しばらくお待ちください…</string>
+    <string name="update_in_progress">しばらくお待ちください…</string>
     <string name="player_ui_hide_behavior">UIを自動で隠す</string>
     <string name="option_never">二度と</string>
     <string name="side_panel_sections">設定項目</string>

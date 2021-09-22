@@ -78,7 +78,7 @@
     <string name="player_only_pause">Jeda saja</string>
     <string name="check_for_updates">Periksa pembaruan</string>
     <string name="update_not_found">Anda menggunakan versi terbaru</string>
-    <string name="update_in_progess">Harap tunggu sebentar…</string>
+    <string name="update_in_progress">Harap tunggu sebentar…</string>
     <string name="player_ui_hide_behavior">Sembunyikan UI otomatis</string>
     <string name="option_never">Tidak pernah</string>
     <string name="side_panel_sections">Bagian penyiapan</string>

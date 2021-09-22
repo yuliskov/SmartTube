@@ -78,7 +78,7 @@
   <string name="player_only_pause">Endast pausa</string>
   <string name="check_for_updates">Sök efter uppdateringar</string>
   <string name="update_not_found">Du använder den senaste versionen</string>
-  <string name="update_in_progess">Vänta…</string>
+  <string name="update_in_progress">Vänta…</string>
   <string name="player_ui_hide_behavior">Göm användargränssnitt automatiskt</string>
   <string name="option_never">Aldrig</string>
   <string name="side_panel_sections">Visa/Dölj sektioner</string>

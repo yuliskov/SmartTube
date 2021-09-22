@@ -77,7 +77,7 @@
     <string name="player_only_pause">Само пауза</string>
     <string name="check_for_updates">Провери за актуализации</string>
     <string name="update_not_found">Използвате най-новата версия</string>
-    <string name="update_in_progess">Изчакайте...</string>
+    <string name="update_in_progress">Изчакайте...</string>
     <string name="player_ui_hide_behavior">Автоматично скриване на потребителския интерфейс</string>
     <string name="option_never">Никога</string>
     <string name="side_panel_sections">Настрой разделите</string>

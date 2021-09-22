@@ -78,7 +78,7 @@
     <string name="player_only_pause">Sólo pausa</string>
     <string name="check_for_updates">Buscar actualizaciones</string>
     <string name="update_not_found">Estás usando la última versión</string>
-    <string name="update_in_progess">Espera…</string>
+    <string name="update_in_progress">Espera…</string>
     <string name="player_ui_hide_behavior">Auto-ocultar interfaz</string>
     <string name="option_never">Nunca</string>
     <string name="side_panel_sections">Secciones visibles</string>

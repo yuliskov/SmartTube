@@ -187,6 +187,12 @@ public class AppDialogFragmentManager {
                                 if (mOnChange != null) {
                                     mOnChange.run();
                                 }
+
+                                // Update UI
+                                ListPreferenceData newPrefData = createListPreferenceData(category.items);
+                                pref.setEntries(newPrefData.entries);
+                                pref.setEntryValues(newPrefData.values);
+                                pref.setValues(newPrefData.defaultValues);
                             }
                         }
 

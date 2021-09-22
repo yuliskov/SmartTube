@@ -77,7 +77,7 @@
   <string name="player_only_pause">केवल रोके</string>
   <string name="check_for_updates">अद्यतन के लिए जांचे</string>
   <string name="update_not_found">आप नवीनतम संस्करण का उपयोग कर रहे हैं</string>
-  <string name="update_in_progess">कृपया इंतज़ार करे…</string>
+  <string name="update_in_progress">कृपया इंतज़ार करे…</string>
   <string name="player_ui_hide_behavior">यूआई स्वतः छुपाये</string>
   <string name="option_never">कभी नहीँ</string>
   <string name="side_panel_sections">सेट-अप सेक्शन</string>

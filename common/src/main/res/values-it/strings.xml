@@ -78,7 +78,7 @@
     <string name="player_only_pause">Solo pausa</string>
     <string name="check_for_updates">Cerca aggiornamenti</string>
     <string name="update_not_found">Stai usando la versione più recente</string>
-    <string name="update_in_progess">Attendere…</string>
+    <string name="update_in_progress">Attendere…</string>
     <string name="player_ui_hide_behavior">Nascondi IU automaticamente</string>
     <string name="option_never">Mai</string>
     <string name="side_panel_sections">Modifica sezioni</string>
