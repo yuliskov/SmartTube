@@ -77,12 +77,12 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         Set<String> categories = mContentBlockData.getCategories();
 
         for (CharSequence[] pair : new CharSequence[][] {
-                {getString(R.string.content_block_sponsor, R.color.green), SponsorSegment.CATEGORY_SPONSOR},
-                {getString(R.string.content_block_intro, R.color.cyan), SponsorSegment.CATEGORY_INTRO},
-                {getString(R.string.content_block_outro, R.color.blue), SponsorSegment.CATEGORY_OUTRO},
-                {getString(R.string.content_block_self_promo, R.color.yellow), SponsorSegment.CATEGORY_SELF_PROMO},
-                {getString(R.string.content_block_interaction, R.color.magenta), SponsorSegment.CATEGORY_INTERACTION},
-                {getString(R.string.content_block_music_off_topic, R.color.brown), SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC}
+                {getColoredString(R.string.content_block_sponsor, R.color.green), SponsorSegment.CATEGORY_SPONSOR},
+                {getColoredString(R.string.content_block_intro, R.color.cyan), SponsorSegment.CATEGORY_INTRO},
+                {getColoredString(R.string.content_block_outro, R.color.blue), SponsorSegment.CATEGORY_OUTRO},
+                {getColoredString(R.string.content_block_self_promo, R.color.yellow), SponsorSegment.CATEGORY_SELF_PROMO},
+                {getColoredString(R.string.content_block_interaction, R.color.magenta), SponsorSegment.CATEGORY_INTERACTION},
+                {getColoredString(R.string.content_block_music_off_topic, R.color.brown), SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC}
         }) {
             options.add(UiOptionItem.from(pair[0],
                     optionItem -> {
@@ -105,10 +105,15 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
                 optionItem -> mContentBlockData.enableSkipEachSegmentOnce(optionItem.isSelected()),
                 mContentBlockData.isSkipEachSegmentOnceEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.sponsor_color_markers),
+                optionItem -> mContentBlockData.enableColorMarkers(optionItem.isSelected()),
+                mContentBlockData.isColorMarkersEnabled()));
+
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 
-    private CharSequence getString(int strResId, int colorResId) {
-        return Utils.color(getContext().getString(strResId), ContextCompat.getColor(getContext(), colorResId));
+    private CharSequence getColoredString(int strResId, int colorResId) {
+        return mContentBlockData.isColorMarkersEnabled() ?
+                Utils.color(getContext().getString(strResId), ContextCompat.getColor(getContext(), colorResId)) : getContext().getString(strResId);
     }
 }

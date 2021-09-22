@@ -120,7 +120,9 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                         segments -> {
                             mVideo = item;
                             mSponsorSegments = segments;
-                            getController().setSeekBarSegments(toSeekBarSegments(segments));
+                            if (mContentBlockData.isColorMarkersEnabled()) {
+                                getController().setSeekBarSegments(toSeekBarSegments(segments));
+                            }
                             startPlaybackWatcher();
                         },
                         error -> Log.d(TAG, "It's ok. Nothing to block in this video. Error msg: %s", error.getMessage())

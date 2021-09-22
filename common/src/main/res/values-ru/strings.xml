@@ -245,4 +245,5 @@
     <string name="skip_each_segment_once">Не пропускать повторно сегменты</string>
     <string name="disable_ok_long_press">Не обрабатывать долгое удержание кнопки ОК</string>
     <string name="player_time_correction">Отображать время с учетом скорости воспроизведения</string>
+    <string name="sponsor_color_markers">Цветовые метки на шкале прогресса</string>
 </resources>

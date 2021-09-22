@@ -23,6 +23,7 @@ public class ContentBlockData {
     private final Set<String> mCategories = new HashSet<>();
     private int mNotificationType;
     private boolean mIsSkipEachSegmentOnceEnabled;
+    private boolean mIsColorMarkersEnabled;
 
     private ContentBlockData(Context context) {
         mAppPrefs = AppPrefs.instance(context);
@@ -78,6 +79,15 @@ public class ContentBlockData {
         persistData();
     }
 
+    public boolean isColorMarkersEnabled() {
+        return mIsColorMarkersEnabled;
+    }
+
+    public void enableColorMarkers(boolean enabled) {
+        mIsColorMarkersEnabled = enabled;
+        persistData();
+    }
+
     private void restoreState() {
         String data = mAppPrefs.getData(CONTENT_BLOCK_DATA);
 
@@ -87,6 +97,7 @@ public class ContentBlockData {
         mNotificationType = Helpers.parseInt(split, 1, NOTIFICATION_TYPE_TOAST);
         String categories = Helpers.parseStr(split, 2);
         mIsSkipEachSegmentOnceEnabled = Helpers.parseBoolean(split, 3, true);
+        mIsColorMarkersEnabled = Helpers.parseBoolean(split, 4, true);
 
         if (categories != null) {
             String[] categoriesArr = Helpers.splitArray(categories);
@@ -112,6 +123,8 @@ public class ContentBlockData {
     private void persistData() {
         String categories = Helpers.mergeArray(mCategories.toArray());
 
-        mAppPrefs.setData(CONTENT_BLOCK_DATA, Helpers.mergeObject(mIsSponsorBlockEnabled, mNotificationType, categories, mIsSkipEachSegmentOnceEnabled));
+        mAppPrefs.setData(CONTENT_BLOCK_DATA, Helpers.mergeObject(
+                mIsSponsorBlockEnabled, mNotificationType, categories, mIsSkipEachSegmentOnceEnabled, mIsColorMarkersEnabled
+        ));
     }
 }
