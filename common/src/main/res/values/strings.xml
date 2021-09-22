@@ -174,7 +174,7 @@
     <string name="settings_general">General</string>
     <string name="settings_video">Video</string>
     <string name="content_block_confirm_skip">Confirm on skip</string>
-    <string name="content_block_categories">Skip categories</string>
+    <string name="content_block_categories">Skip segments</string>
     <string name="content_block_sponsor">Sponsor</string>
     <string name="content_block_intro">Intermission/intro animation</string>
     <string name="content_block_outro">Endcards/credits</string>

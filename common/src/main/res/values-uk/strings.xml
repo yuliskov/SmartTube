@@ -174,7 +174,7 @@
     <string name="settings_general">Загальні</string>
     <string name="settings_video">Відео</string>
     <string name="content_block_confirm_skip">Підтвердження при пропуску</string>
-    <string name="content_block_categories">Пропускати категорії</string>
+    <string name="content_block_categories">Пропускати сегменти</string>
     <string name="content_block_sponsor">Спонсорський блок</string>
     <string name="content_block_intro">Вступ</string>
     <string name="content_block_outro">Кінцевий екран/титри</string>
@@ -242,7 +242,7 @@
     <string name="app_backup_restore">Бекап та відновлення</string>
     <string name="app_backup">Створити бекап даних</string>
     <string name="app_restore">Відновити дані з бекапу</string>
-    <string name="skip_each_segment_once">Не пропускати повторно сегменти</string>
+    <string name="skip_each_segment_once">Не пропускати сегменти повторно</string>
     <string name="disable_ok_long_press">Не обробляти довге утримання кнопки ОК</string>
     <string name="player_time_correction">Відображати час з урахуванням швидкості відтворення</string>
     <string name="sponsor_color_markers">Кольорові помітки на шкалі прогресу</string>
