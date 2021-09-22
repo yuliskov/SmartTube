@@ -208,7 +208,8 @@
     <string name="video_aspect">Seitenverhältnis</string>
     <string name="player_tweaks">Entwickleroptionen</string>
     <string name="header_uploads">Uploads</string>
-    <string name="player_show_global_clock">Uhr auf dem Video anzeigen</string>
+    <string name="player_show_global_clock">Uhr dauerhaft auf dem Bildschirm anzeigen</string>
+    <string name="player_show_global_ending_time">Video-Endzeit dauerhaft auf dem Bildschirm anzeigen</string>
     <string name="uploads_old_look">Altes Aussehen der Uploads-Kategorie</string>
     <string name="background_playback_activation">Hintergrund-Wiedergabe (Taste)</string>
     <string name="channels_old_look">Altes Aussehen der Kanäle-Kategorie</string>
@@ -242,5 +243,5 @@
     <string name="app_restore">Daten aus Sicherung wiederherstellen</string>
     <string name="skip_each_segment_once">Jedes Segment nur einmal überspringen</string>
     <string name="disable_ok_long_press">Langes Drücken der OK-Taste deaktivieren</string>
-    <string name="player_time_correction">Anzeige der Zeit in Bezug auf die Geschwindigkeit</string>
+    <string name="player_time_correction">Anzeige der Zeit in Abhängigkeit von der Geschwindigkeit</string>
 </resources>
