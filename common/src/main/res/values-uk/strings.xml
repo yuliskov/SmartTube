@@ -174,7 +174,7 @@
     <string name="settings_general">Загальні</string>
     <string name="settings_video">Відео</string>
     <string name="content_block_confirm_skip">Підтвердження при пропуску</string>
-    <string name="content_block_categories">Категорії</string>
+    <string name="content_block_categories">Пропускати категорії</string>
     <string name="content_block_sponsor">Спонсорський блок</string>
     <string name="content_block_intro">Вступ</string>
     <string name="content_block_outro">Кінцевий екран/титри</string>
