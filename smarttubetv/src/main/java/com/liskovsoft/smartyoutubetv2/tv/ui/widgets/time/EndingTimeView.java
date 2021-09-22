@@ -82,7 +82,8 @@ public class EndingTimeView extends AppCompatTextView implements TickleListener 
             return null;
         }
 
-        return getContext().getString(R.string.player_ending_time, DateFormatter.formatTimeShort(getContext(), System.currentTimeMillis() + remainingTimeMs));
+        return String.format("⌛: %s", DateFormatter.formatTimeShort(getContext(), System.currentTimeMillis() + remainingTimeMs));
+        //return getContext().getString(R.string.player_ending_time, DateFormatter.formatTimeShort(getContext(), System.currentTimeMillis() + remainingTimeMs));
     }
 
     private long applySpeedCorrection(long timeMs) {
