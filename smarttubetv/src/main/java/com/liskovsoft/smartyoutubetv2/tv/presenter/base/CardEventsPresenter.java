@@ -6,15 +6,10 @@ import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 
 public abstract class CardEventsPresenter extends Presenter {
-    private OnItemViewPressedListener mLongPressedListener;
-    private OnItemViewPressedListener mMenuPressedListener;
+    private OnItemViewLongPressedListener mLongPressedListener;
 
-    public void setOnItemViewLongPressedListener(OnItemViewPressedListener listener) {
+    public void setOnItemViewLongPressedListener(OnItemViewLongPressedListener listener) {
         mLongPressedListener = listener;
-    }
-
-    public void setOnItemViewMenuPressedListener(OnItemViewPressedListener listener) {
-        mMenuPressedListener = listener;
     }
 
     /**
@@ -27,7 +22,7 @@ public abstract class CardEventsPresenter extends Presenter {
         if (mLongPressedListener != null && !longPressDisabled) {
             viewHolder.view.setOnLongClickListener(v -> {
                 if (mLongPressedListener != null) {
-                    mLongPressedListener.onItemPressed(viewHolder, item);
+                    mLongPressedListener.onItemLongPressed(viewHolder, item);
 
                     return true; // don't provoke single click event
                 }
@@ -36,12 +31,12 @@ public abstract class CardEventsPresenter extends Presenter {
             });
         }
 
-        if (mMenuPressedListener != null) {
+        if (mLongPressedListener != null) {
             viewHolder.view.setOnKeyListener((v, keyCode, event) -> {
-                if (mMenuPressedListener != null) {
+                if (mLongPressedListener != null) {
                     if (KeyHelpers.isMenuKey(keyCode)) {
                         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                            mMenuPressedListener.onItemPressed(viewHolder, item);
+                            mLongPressedListener.onItemLongPressed(viewHolder, item);
                         }
                     }
                 }
@@ -57,7 +52,7 @@ public abstract class CardEventsPresenter extends Presenter {
             viewHolder.view.setOnLongClickListener(null);
         }
 
-        if (mMenuPressedListener != null) {
+        if (mLongPressedListener != null) {
             viewHolder.view.setOnKeyListener(null);
         }
     }

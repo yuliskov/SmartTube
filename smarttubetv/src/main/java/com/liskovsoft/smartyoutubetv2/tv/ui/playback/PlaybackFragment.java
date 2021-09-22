@@ -59,7 +59,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewPressedListener;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewLongPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
@@ -524,13 +524,12 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private void setupEventListeners() {
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
-        mCardPresenter.setOnItemViewLongPressedListener(new ItemViewLongClickedListener());
-        mCardPresenter.setOnItemViewMenuPressedListener(new ItemViewLongClickedListener());
+        mCardPresenter.setOnItemViewLongPressedListener(new ItemViewLongPressedListener());
     }
 
-    private final class ItemViewLongClickedListener implements OnItemViewPressedListener {
+    private final class ItemViewLongPressedListener implements OnItemViewLongPressedListener {
         @Override
-        public void onItemPressed(
+        public void onItemLongPressed(
                 Presenter.ViewHolder itemViewHolder,
                 Object item) {
 

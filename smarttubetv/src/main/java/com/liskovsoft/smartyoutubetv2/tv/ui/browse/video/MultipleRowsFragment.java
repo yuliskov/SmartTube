@@ -20,7 +20,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGrou
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewPressedListener;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewLongPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
@@ -84,8 +84,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
     private void setupEventListeners() {
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
-        mCardPresenter.setOnItemViewLongPressedListener(new ItemViewLongClickedListener());
-        mCardPresenter.setOnItemViewMenuPressedListener(new ItemViewLongClickedListener());
+        mCardPresenter.setOnItemViewLongPressedListener(new ItemViewLongPressedListener());
     }
 
     @Override
@@ -189,9 +188,9 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
         }
     }
 
-    private final class ItemViewLongClickedListener implements OnItemViewPressedListener {
+    private final class ItemViewLongPressedListener implements OnItemViewLongPressedListener {
         @Override
-        public void onItemPressed(Presenter.ViewHolder itemViewHolder, Object item) {
+        public void onItemLongPressed(Presenter.ViewHolder itemViewHolder, Object item) {
 
             if (item instanceof Video) {
                 mMainPresenter.onVideoItemLongClicked((Video) item);
