@@ -30,7 +30,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.ErrorDialogFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.headers.CustomHeadersSupportFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.headers.LongPressHeadersSupportFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 
 import java.util.LinkedHashMap;
@@ -116,7 +116,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     @Override
     public HeadersSupportFragment onCreateHeadersSupportFragment() {
-        return new CustomHeadersSupportFragment();
+        return new LongPressHeadersSupportFragment();
     }
 
     private void setupEventListeners() {

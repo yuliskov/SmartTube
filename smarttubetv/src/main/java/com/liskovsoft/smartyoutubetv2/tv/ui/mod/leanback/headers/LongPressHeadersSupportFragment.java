@@ -7,10 +7,9 @@ import androidx.leanback.widget.ItemBridgeAdapter;
 import androidx.leanback.widget.Row;
 import androidx.leanback.widget.RowHeaderPresenter;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 
-public class CustomHeadersSupportFragment extends HeadersSupportFragment {
-    public CustomHeadersSupportFragment() {
+public class LongPressHeadersSupportFragment extends HeadersSupportFragment {
+    public LongPressHeadersSupportFragment() {
         Helpers.setField(this, "mAdapterListener", mCustomAdapterListener);
     }
 
@@ -18,9 +17,9 @@ public class CustomHeadersSupportFragment extends HeadersSupportFragment {
             new ItemBridgeAdapter.AdapterListener() {
                 @Override
                 public void onCreate(final ItemBridgeAdapter.ViewHolder viewHolder) {
-                    OnHeaderClickedListener customOnHeaderClickedListener = (OnHeaderClickedListener) Helpers.getField(CustomHeadersSupportFragment.this, "mOnHeaderClickedListener");
-                    ItemBridgeAdapter.Wrapper customWrapper = (ItemBridgeAdapter.Wrapper) Helpers.getField(CustomHeadersSupportFragment.this, "mWrapper");
-                    OnLayoutChangeListener customLayoutChangeListener = (OnLayoutChangeListener) Helpers.getField(CustomHeadersSupportFragment.this, "sLayoutChangeListener");
+                    OnHeaderClickedListener customOnHeaderClickedListener = (OnHeaderClickedListener) Helpers.getField(LongPressHeadersSupportFragment.this, "mOnHeaderClickedListener");
+                    ItemBridgeAdapter.Wrapper customWrapper = (ItemBridgeAdapter.Wrapper) Helpers.getField(LongPressHeadersSupportFragment.this, "mWrapper");
+                    OnLayoutChangeListener customLayoutChangeListener = (OnLayoutChangeListener) Helpers.getField(LongPressHeadersSupportFragment.this, "sLayoutChangeListener");
 
                     View headerView = viewHolder.getViewHolder().view;
                     headerView.setOnClickListener(new View.OnClickListener() {
