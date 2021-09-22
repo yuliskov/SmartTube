@@ -199,7 +199,7 @@
   <string name="video_preset_enabled">Format för nästa video kommer att ställas in enligt förinställningen</string>
   <string name="player_sleep_timer">Automatisk avstängning efter..</string>
   <string name="player_show_quality_info">Visa info om video kvaliten</string>
-  <string name="player_remember_each_speed">Kom ihåg hastighet för varje video/string>
+  <string name="player_remember_each_speed">Kom ihåg hastighet för varje video</string>
   <string name="player_remember_speed_none">Inget</string>
   <string name="player_remember_speed_all">Samma för alla videos</string>
   <string name="player_remember_speed_each">För varje video</string>

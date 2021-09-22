@@ -192,7 +192,7 @@
     <string name="intent_force_close">Keluar paksa jika video telah dibuka dari sumber eksternal </string>
     <string name="btn_confirm">Konfirmasi</string>
     <string name="player_low_video_quality">Kualitas video rendah</string>
-	 <string name="remote_session_closed">Sesi jarak jauh telah ditutup/string>
+    <string name="remote_session_closed">Sesi jarak jauh telah ditutup</string>
     <string name="msg_mode_switch_error">Tidak dapat mengganti mode tampilan ke \"%s\"</string>
     <string name="msg_player_error">Terjadi kesalahan player %s. Memulai ulang pemutaran…</string>
     <string name="video_preset_disabled">Tanpa prasetel</string>
