@@ -112,14 +112,14 @@ To enable voice search, an additional app must be installed alongside SmartTubeN
 **On Amazon Fire TV**, to enable voice search support you need to: 
 
 1. uninstall the original YouTube app (no root required on Amazon FireTV stick)
-2. download and install the Amazon Bridge SmartTubeNext app: https://bit.ly/3reaXjz (e.g. via _Downloader for AFTVnews_)
+2. download and install the Amazon Bridge SmartTubeNext app: https://is.gd/stn_bridge_amazon (e.g. via _Downloader for AFTVnews_)
 
 
 **On all other Android devices**, sadly root is required to enable this:
 
 1. root your device (search for a guide for your specific device)
 2. uninstall the official YouTube app using root (`adb shell pm uninstall com.google.android.youtube.tv`)
-3. download and install the ATV Bridge SmartTubeNext app: https://bit.ly/36HSx1a
+3. download and install the ATV Bridge SmartTubeNext app: https://is.gd/stn_bridge_atv
 
 
 ## Donation
