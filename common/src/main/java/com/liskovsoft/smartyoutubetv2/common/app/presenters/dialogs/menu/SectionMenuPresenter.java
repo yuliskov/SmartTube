@@ -24,7 +24,9 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
     private final AppDialogPresenter mSettingsPresenter;
     private final MediaServiceManager mServiceManager;
     private Video mVideo;
+    private BrowseSection mSection;
     private boolean mIsPinToSidebarEnabled;
+    private boolean mIsPinSectionToSidebarEnabled;
     private boolean mIsReturnToBackgroundVideoEnabled;
 
     private SectionMenuPresenter(Context context) {
@@ -40,24 +42,22 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
     }
 
     public void showMenu(BrowseSection section) {
-        if (section == null || section.getData() == null) {
-            return;
-        }
-
         mIsReturnToBackgroundVideoEnabled = true;
         mIsPinToSidebarEnabled = true;
+        mIsPinSectionToSidebarEnabled = true;
 
-        showMenuInt(section.getData());
+        showMenuInt(section);
     }
 
-    private void showMenuInt(Video video) {
-        if (video == null) {
+    private void showMenuInt(BrowseSection section) {
+        if (section == null) {
             return;
         }
 
         disposeActions();
 
-        mVideo = video;
+        mSection = section;
+        mVideo = section.getData();
 
         MediaServiceManager.instance().authCheck(this::obtainPlaylistsAndShowDialogSigned, this::prepareAndShowDialogUnsigned);
     }
@@ -75,6 +75,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
 
         appendReturnToBackgroundVideoButton();
         appendPinToSidebarButton();
+        appendPinSectionToSidebarButton();
 
         if (!mSettingsPresenter.isEmpty()) {
             String title = mVideo != null ? mVideo.title : null;
@@ -91,6 +92,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
 
         appendReturnToBackgroundVideoButton();
         appendPinToSidebarButton();
+        appendPinSectionToSidebarButton();
 
         if (mSettingsPresenter.isEmpty()) {
             MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
@@ -129,6 +131,16 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
                                 });
                             }
                         }));
+    }
+
+    private void appendPinSectionToSidebarButton() {
+        if (!mIsPinSectionToSidebarEnabled) {
+            return;
+        }
+
+        if (mSection == null || mVideo != null) {
+            return;
+        }
     }
 
     private void togglePinToSidebar(Video section) {
