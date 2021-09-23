@@ -113,7 +113,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         }
 
         mSettingsPresenter.appendSingleButton(
-                UiOptionItem.from(getContext().getString(R.string.unpinned_from_sidebar),
+                UiOptionItem.from(getContext().getString(R.string.unpin_from_sidebar),
                         optionItem -> {
                             if (mVideo.hasPlaylist()) {
                                 togglePinToSidebar(createPinnedSection(mVideo));
