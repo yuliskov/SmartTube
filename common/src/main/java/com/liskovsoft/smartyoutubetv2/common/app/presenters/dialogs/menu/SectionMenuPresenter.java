@@ -103,6 +103,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         appendRefreshButton();
         appendUnpinFromSidebarButton();
         appendUnpinSectionFromSidebarButton();
+        appendAccountSelectionButton();
 
         if (mSettingsPresenter.isEmpty()) {
             MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
