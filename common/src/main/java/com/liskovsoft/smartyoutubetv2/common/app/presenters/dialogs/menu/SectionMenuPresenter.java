@@ -26,7 +26,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
     private final MediaServiceManager mServiceManager;
     private Video mVideo;
     private BrowseSection mSection;
-    private boolean mIsPinToSidebarEnabled;
+    private boolean mIsUnpinFromSidebarEnabled;
     private boolean mIsUnpinSectionFromSidebarEnabled;
     private boolean mIsReturnToBackgroundVideoEnabled;
 
@@ -44,7 +44,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
 
     public void showMenu(BrowseSection section) {
         mIsReturnToBackgroundVideoEnabled = true;
-        mIsPinToSidebarEnabled = true;
+        mIsUnpinFromSidebarEnabled = true;
         mIsUnpinSectionFromSidebarEnabled = true;
 
         showMenuInt(section);
@@ -75,7 +75,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         mSettingsPresenter.clear();
 
         appendReturnToBackgroundVideoButton();
-        appendPinToSidebarButton();
+        appendUnpinFromSidebarButton();
         appendUnpinSectionFromSidebarButton();
 
         if (!mSettingsPresenter.isEmpty()) {
@@ -92,7 +92,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         mSettingsPresenter.clear();
 
         appendReturnToBackgroundVideoButton();
-        appendPinToSidebarButton();
+        appendUnpinFromSidebarButton();
         appendUnpinSectionFromSidebarButton();
 
         if (mSettingsPresenter.isEmpty()) {
@@ -102,12 +102,8 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         }
     }
 
-    private void disposeActions() {
-        //RxUtils.disposeActions(mPlaylistAction);
-    }
-
-    private void appendPinToSidebarButton() {
-        if (!mIsPinToSidebarEnabled) {
+    private void appendUnpinFromSidebarButton() {
+        if (!mIsUnpinFromSidebarEnabled) {
             return;
         }
 
@@ -143,8 +139,12 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        GeneralData.instance(getContext()).enableSection(mSection.getId(), false);
-        BrowsePresenter.instance(getContext()).updateSections();
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.unpin_from_sidebar),
+                        optionItem -> {
+                            GeneralData.instance(getContext()).enableSection(mSection.getId(), false);
+                            BrowsePresenter.instance(getContext()).updateSections();
+                        }));
     }
 
     private void togglePinToSidebar(Video section) {
@@ -188,5 +188,9 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
                         optionItem -> ViewManager.instance(getContext()).startView(SplashView.class)
                 )
         );
+    }
+
+    private void disposeActions() {
+        //RxUtils.disposeActions(mPlaylistAction);
     }
 }
