@@ -107,7 +107,8 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         if (mSettingsPresenter.isEmpty()) {
             MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
         } else {
-            mSettingsPresenter.showDialog(mVideo.title, this::disposeActions);
+            String title = mSection != null ? mSection.getTitle() : null;
+            mSettingsPresenter.showDialog(title, this::disposeActions);
         }
     }
 
