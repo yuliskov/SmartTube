@@ -178,6 +178,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
 
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.refresh_section), optionItem -> {
+                    BrowsePresenter.instance(getContext()).getView().focusOnContent();
                     BrowsePresenter.instance(getContext()).refresh();
                     mSettingsPresenter.closeDialog();
                 }));
