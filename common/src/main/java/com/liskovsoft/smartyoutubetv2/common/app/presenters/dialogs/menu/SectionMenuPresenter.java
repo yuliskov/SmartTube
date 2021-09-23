@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -143,7 +144,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        if (mSection == null || mVideo != null) {
+        if (mSection == null || mSection.getId() == MediaGroup.TYPE_SETTINGS || mVideo != null) {
             return;
         }
 
@@ -168,6 +169,10 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
 
     private void appendRefreshButton() {
         if (!mIsRefreshEnabled) {
+            return;
+        }
+
+        if (mSection == null || mSection.getId() == MediaGroup.TYPE_SETTINGS) {
             return;
         }
 
