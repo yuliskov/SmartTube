@@ -247,4 +247,5 @@
     <string name="disable_ok_long_press">Disable OK button long press</string>
     <string name="player_time_correction">Display the time with respect of speed</string>
     <string name="sponsor_color_markers">Color markers on progress bar</string>
+    <string name="refresh_section">Refresh section</string>
 </resources>

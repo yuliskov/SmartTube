@@ -13,6 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
@@ -29,6 +30,8 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
     private boolean mIsUnpinFromSidebarEnabled;
     private boolean mIsUnpinSectionFromSidebarEnabled;
     private boolean mIsReturnToBackgroundVideoEnabled;
+    private boolean mIsAccountSelectionEnabled;
+    private boolean mIsRefreshEnabled;
 
     private SectionMenuPresenter(Context context) {
         super(context);
@@ -46,6 +49,8 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         mIsReturnToBackgroundVideoEnabled = true;
         mIsUnpinFromSidebarEnabled = true;
         mIsUnpinSectionFromSidebarEnabled = true;
+        mIsAccountSelectionEnabled = true;
+        mIsRefreshEnabled = true;
 
         showMenuInt(section);
     }
@@ -75,8 +80,10 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         mSettingsPresenter.clear();
 
         appendReturnToBackgroundVideoButton();
+        appendRefreshButton();
         appendUnpinFromSidebarButton();
         appendUnpinSectionFromSidebarButton();
+        appendAccountSelectionButton();
 
         if (!mSettingsPresenter.isEmpty()) {
             String title = mVideo != null ? mVideo.title : null;
@@ -92,6 +99,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         mSettingsPresenter.clear();
 
         appendReturnToBackgroundVideoButton();
+        appendRefreshButton();
         appendUnpinFromSidebarButton();
         appendUnpinSectionFromSidebarButton();
 
@@ -145,6 +153,28 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
                             GeneralData.instance(getContext()).enableSection(mSection.getId(), false);
                             BrowsePresenter.instance(getContext()).updateSections();
                         }));
+    }
+
+    private void appendAccountSelectionButton() {
+        if (!mIsAccountSelectionEnabled) {
+            return;
+        }
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.dialog_account_list), optionItem -> {
+                    AccountSelectionPresenter.instance(getContext()).show(true);
+                }));
+    }
+
+    private void appendRefreshButton() {
+        if (!mIsRefreshEnabled) {
+            return;
+        }
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.refresh_section), optionItem -> {
+                    BrowsePresenter.instance(getContext()).refresh();
+                }));
     }
 
     private void togglePinToSidebar(Video section) {
