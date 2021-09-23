@@ -174,7 +174,7 @@
     <string name="settings_general">Generali</string>
     <string name="settings_video">Video</string>
     <string name="content_block_confirm_skip">Conferma salto</string>
-    <string name="content_block_categories">Categorie</string>
+    <string name="content_block_categories">Salta segmenti</string>
     <string name="content_block_sponsor">Sponsor</string>
     <string name="content_block_intro">Introduzione - Intermezzo</string>
     <string name="content_block_outro">Titoli di coda - Ringraziamenti</string>
@@ -245,4 +245,5 @@
     <string name="skip_each_segment_once">Non saltare più i segmenti</string>
     <string name="disable_ok_long_press">Disabilita pressione prolungata tasto OK</string>
     <string name="player_time_correction">Visualizza l\'ora in base alla velocità</string>
+    <string name="sponsor_color_markers">Indicatori di colore sulla barra di avanzamento</string>																		   
 </resources>
