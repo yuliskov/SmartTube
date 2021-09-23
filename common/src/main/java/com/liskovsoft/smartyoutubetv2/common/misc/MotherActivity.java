@@ -69,6 +69,14 @@ public class MotherActivity extends FragmentActivity {
         return super.dispatchKeyEvent(event);
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        boolean result = super.onKeyDown(keyCode, event);
+
+        // Fix buggy G20s menu key (focus lost on key press)
+        return (event.getAction() == KeyEvent.ACTION_UP && KeyHelpers.isMenuKey(keyCode)) || result;
+    }
+
     public void finishReally() {
         try {
             super.finish();
