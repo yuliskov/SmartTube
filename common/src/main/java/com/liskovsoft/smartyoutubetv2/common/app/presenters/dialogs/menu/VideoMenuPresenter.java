@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs;
+package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
@@ -8,7 +8,6 @@ import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -19,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
@@ -75,16 +75,6 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
     public void showMenu(Video item) {
         showVideoMenu(item);
-    }
-
-    public void showMenu(BrowseSection section) {
-        if (section == null || section.getData() == null) {
-            return;
-        }
-
-        mIsPinToSidebarEnabled = true;
-
-        showMenuInt(section.getData());
     }
 
     public void showVideoMenu(Video video) {
@@ -316,7 +306,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
                 UiOptionItem.from(getContext().getString(R.string.pin_unpin_from_sidebar),
                         optionItem -> {
                             if (mVideo.hasPlaylist()) {
-                                pinToSidebar(createPinnedSection(mVideo));
+                                togglePinToSidebar(createPinnedSection(mVideo));
                             } else {
                                 mServiceManager.loadChannelUploads(mVideo, group -> {
                                     if (group.getMediaItems() != null) {
@@ -324,14 +314,14 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
                                         Video section = createPinnedSection(Video.from(firstItem));
                                         section.title = mVideo.title;
-                                        pinToSidebar(section);
+                                        togglePinToSidebar(section);
                                     }
                                 });
                             }
                         }));
     }
 
-    private void pinToSidebar(Video section) {
+    private void togglePinToSidebar(Video section) {
         BrowsePresenter presenter = BrowsePresenter.instance(getContext());
 
         // Toggle between pin/unpin while dialog is opened

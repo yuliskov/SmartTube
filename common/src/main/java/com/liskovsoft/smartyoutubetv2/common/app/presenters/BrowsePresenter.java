@@ -19,9 +19,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.errors.CategoryEmptyErro
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.BootDialogPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.ChannelUploadsMenuPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.ChannelUploadsMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoMenuPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.SectionMenuPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.SectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
@@ -325,7 +326,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     @Override
     public void onSectionLongPressed(int sectionId) {
-        VideoMenuPresenter.instance(getContext()).showMenu(getSection(sectionId));
+        SectionMenuPresenter.instance(getContext()).showMenu(getSection(sectionId));
     }
 
     @Override
