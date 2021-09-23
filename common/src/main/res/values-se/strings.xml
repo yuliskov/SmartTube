@@ -217,8 +217,8 @@
   <string name="channels_auto_load">Ladda automatiskt kanalernas innehåll</string>
   <string name="return_to_background_video">Återgå till video som spelas i bakgrunden</string>
   <string name="pin_unpin_from_sidebar">Fäst/Ta bort fråm sidpanel</string>
-  <string name="pin_to_sidebar">Fäst på sidpanel</string>
-  <string name="unpin_from_sidebar">Ta bort från sidpanel</string>
+  <string name="pinned_to_sidebar">Fäst på sidpanel</string>
+  <string name="unpinned_from_sidebar">Ta bort från sidpanel</string>
   <string name="dialog_select_country">Land</string>
   <string name="settings_language_country">Språk/Country</string>
   <string name="share_embed_link">Dela inbädda länk</string>

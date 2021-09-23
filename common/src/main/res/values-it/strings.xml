@@ -217,8 +217,8 @@
     <string name="channels_auto_load">Caricamento automatico contenuto sezione canali</string>
     <string name="return_to_background_video">Torna al video in esecuzione in background</string>
     <string name="pin_unpin_from_sidebar">Fissa o rimuovi dalla barra laterale</string>
-    <string name="pin_to_sidebar">Fissa alla barra laterale</string>
-    <string name="unpin_from_sidebar">Rimuovi dalla barra laterale</string>
+    <string name="pinned_to_sidebar">Fissa alla barra laterale</string>
+    <string name="unpinned_from_sidebar">Rimuovi dalla barra laterale</string>
     <string name="dialog_select_country">Nazione</string>
     <string name="settings_language_country">Lingua e nazione</string>
     <string name="share_embed_link">Condividi link incorporato</string>

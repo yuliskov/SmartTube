@@ -211,6 +211,6 @@
     <string name="channels_old_look">Hoàn nguyên giao diện cũ của phần Kênh</string>
     <string name="channels_auto_load">Tự động tải nội dung phần Kênh</string>
     <string name="return_to_background_video">Quay lại video đang chạy trong nền</string>
-    <string name="pin_to_sidebar">Ghim vào thanh bên</string>
-    <string name="unpin_from_sidebar">Bỏ ghim khỏi thanh bên</string>
+    <string name="pinned_to_sidebar">Ghim vào thanh bên</string>
+    <string name="unpinned_from_sidebar">Bỏ ghim khỏi thanh bên</string>
 </resources>

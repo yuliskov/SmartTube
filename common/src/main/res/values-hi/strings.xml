@@ -210,8 +210,8 @@
   <string name="channels_auto_load">चैनल अनुभाग सामग्री स्वतः लोड करे</string>
   <string name="return_to_background_video">पृष्ठभूमि में चल रहे वीडियो पर लौटें</string>
   <string name="pin_unpin_from_sidebar">साइडबार से पिन/अनपिन करें</string>
-  <string name="pin_to_sidebar">साइडबार पर पिन किया गया</string>
-  <string name="unpin_from_sidebar">साइडबार से अनपिन किया गया</string>
+  <string name="pinned_to_sidebar">साइडबार पर पिन किया गया</string>
+  <string name="unpinned_from_sidebar">साइडबार से अनपिन किया गया</string>
   <string name="dialog_select_country">देश</string>
   <string name="settings_language_country">भाषा/देश</string>
   <string name="share_embed_link">एम्बेड लिंक साझा करें</string>

@@ -215,8 +215,8 @@
   <string name="open_playlist">Avaa soittolista</string>
   <string name="cancel_segment_skip">Peruuta osion ohitus</string>
   <string name="pin_unpin_from_sidebar">Pidä/poista sivuvalikosta</string>
-  <string name="pin_to_sidebar">Pidetään sivuvalikossa</string>
-  <string name="unpin_from_sidebar">Poistettu sivuvalikosta</string>
+  <string name="pinned_to_sidebar">Pidetään sivuvalikossa</string>
+  <string name="unpinned_from_sidebar">Poistettu sivuvalikosta</string>
   <string name="dialog_select_country">Maa</string>
   <string name="settings_language_country">Kieli/maa</string>
   <string name="share_embed_link">Jaa linkki</string>

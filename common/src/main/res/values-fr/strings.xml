@@ -214,9 +214,9 @@
     <string name="channels_old_look">Restaurer l\'ancienne apparence dans la section des chaînes</string>
     <string name="channels_auto_load">Chargement automatique du contenu de la section Chaînes</string>
     <string name="return_to_background_video">Retour à la vidéo en arrière-plan</string>
-    <string name="pin_to_sidebar">Épingler à la barre latérale</string>
+    <string name="pinned_to_sidebar">Épingler à la barre latérale</string>
     <string name="pin_unpin_from_sidebar">Épingler/Dépingler à partir de la barre latérale</string>
-    <string name="unpin_from_sidebar">Déplacer de la barre latérale</string>
+    <string name="unpinned_from_sidebar">Déplacer de la barre latérale</string>
     <string name="dialog_select_country">Pays</string>
     <string name="settings_language_country">Langue/Pays</string>
     <string name="share_embed_link">Partager le lien intégré</string>

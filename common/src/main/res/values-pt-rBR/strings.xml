@@ -214,8 +214,8 @@
     <string name="channels_auto_load">Carregar Conteúdo da Seção de Canais Automaticamente</string>
     <string name="return_to_background_video">Voltar ao Vídeo em Execução em Segundo Plano</string>
     <string name="pin_unpin_from_sidebar">Fixar/Desafixar da Barra Lateral</string>
-    <string name="pin_to_sidebar">Fixar na Barra Lateral</string>
-    <string name="unpin_from_sidebar">Desafixar da Barra Lateral</string>
+    <string name="pinned_to_sidebar">Fixar na Barra Lateral</string>
+    <string name="unpinned_from_sidebar">Desafixar da Barra Lateral</string>
     <string name="dialog_select_country">País</string>
     <string name="settings_language_country">Idioma/País</string>
     <string name="share_embed_link">Compartilhar Link</string>
