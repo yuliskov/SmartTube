@@ -86,7 +86,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         appendAccountSelectionButton();
 
         if (!mSettingsPresenter.isEmpty()) {
-            String title = mVideo != null ? mVideo.title : null;
+            String title = mSection != null ? mSection.getTitle() : null;
             mSettingsPresenter.showDialog(title, this::disposeActions);
         }
     }
@@ -174,6 +174,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.refresh_section), optionItem -> {
                     BrowsePresenter.instance(getContext()).refresh();
+                    mSettingsPresenter.closeDialog();
                 }));
     }
 
