@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
 public class SectionMenuPresenter extends BasePresenter<Void> {
@@ -26,7 +27,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
     private Video mVideo;
     private BrowseSection mSection;
     private boolean mIsPinToSidebarEnabled;
-    private boolean mIsPinSectionToSidebarEnabled;
+    private boolean mIsUnpinSectionFromSidebarEnabled;
     private boolean mIsReturnToBackgroundVideoEnabled;
 
     private SectionMenuPresenter(Context context) {
@@ -44,7 +45,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
     public void showMenu(BrowseSection section) {
         mIsReturnToBackgroundVideoEnabled = true;
         mIsPinToSidebarEnabled = true;
-        mIsPinSectionToSidebarEnabled = true;
+        mIsUnpinSectionFromSidebarEnabled = true;
 
         showMenuInt(section);
     }
@@ -75,7 +76,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
 
         appendReturnToBackgroundVideoButton();
         appendPinToSidebarButton();
-        appendPinSectionToSidebarButton();
+        appendUnpinSectionFromSidebarButton();
 
         if (!mSettingsPresenter.isEmpty()) {
             String title = mVideo != null ? mVideo.title : null;
@@ -92,7 +93,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
 
         appendReturnToBackgroundVideoButton();
         appendPinToSidebarButton();
-        appendPinSectionToSidebarButton();
+        appendUnpinSectionFromSidebarButton();
 
         if (mSettingsPresenter.isEmpty()) {
             MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
@@ -133,14 +134,17 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
                         }));
     }
 
-    private void appendPinSectionToSidebarButton() {
-        if (!mIsPinSectionToSidebarEnabled) {
+    private void appendUnpinSectionFromSidebarButton() {
+        if (!mIsUnpinSectionFromSidebarEnabled) {
             return;
         }
 
         if (mSection == null || mVideo != null) {
             return;
         }
+
+        GeneralData.instance(getContext()).enableSection(mSection.getId(), false);
+        BrowsePresenter.instance(getContext()).updateSections();
     }
 
     private void togglePinToSidebar(Video section) {
