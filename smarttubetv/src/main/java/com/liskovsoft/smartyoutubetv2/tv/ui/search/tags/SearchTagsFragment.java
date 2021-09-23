@@ -11,7 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewLongPressedListener;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.vineyard.SearchTagsFragmentBase;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
@@ -161,7 +161,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         return isVoice;
     }
 
-    private final class ItemViewLongPressedListener implements OnItemViewLongPressedListener {
+    private final class ItemViewLongPressedListener implements OnItemLongPressedListener {
         @Override
         public void onItemLongPressed(Presenter.ViewHolder itemViewHolder, Object item) {
             if (item instanceof Video) {

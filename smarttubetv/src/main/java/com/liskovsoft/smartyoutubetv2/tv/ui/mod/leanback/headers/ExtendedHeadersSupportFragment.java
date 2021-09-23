@@ -10,10 +10,10 @@ import androidx.leanback.widget.RowHeaderPresenter;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 
-public class LongPressHeadersSupportFragment extends HeadersSupportFragment {
+public class ExtendedHeadersSupportFragment extends HeadersSupportFragment {
     public interface OnHeaderLongPressedListener {
         /**
-         * Called when a header item has been clicked.
+         * Called when a header item has been long pressed.
          *
          * @param viewHolder Row ViewHolder object corresponding to the selected Header.
          * @param row Row object corresponding to the selected Header.
@@ -23,7 +23,7 @@ public class LongPressHeadersSupportFragment extends HeadersSupportFragment {
 
     private OnHeaderLongPressedListener mOnHeaderLongPressedListener;
 
-    public LongPressHeadersSupportFragment() {
+    public ExtendedHeadersSupportFragment() {
         Helpers.setField(this, "mAdapterListener", mCustomAdapterListener);
     }
 
@@ -35,14 +35,15 @@ public class LongPressHeadersSupportFragment extends HeadersSupportFragment {
             new ItemBridgeAdapter.AdapterListener() {
                 @Override
                 public void onCreate(final ItemBridgeAdapter.ViewHolder viewHolder) {
-                    OnHeaderClickedListener customOnHeaderClickedListener = (OnHeaderClickedListener) Helpers.getField(LongPressHeadersSupportFragment.this, "mOnHeaderClickedListener");
-                    ItemBridgeAdapter.Wrapper customWrapper = (ItemBridgeAdapter.Wrapper) Helpers.getField(LongPressHeadersSupportFragment.this, "mWrapper");
-                    OnLayoutChangeListener customLayoutChangeListener = (OnLayoutChangeListener) Helpers.getField(LongPressHeadersSupportFragment.this, "sLayoutChangeListener");
+                    ItemBridgeAdapter.Wrapper wrapper = (ItemBridgeAdapter.Wrapper) Helpers.getField(ExtendedHeadersSupportFragment.this, "mWrapper");
+                    OnLayoutChangeListener layoutChangeListener = (OnLayoutChangeListener) Helpers.getField(ExtendedHeadersSupportFragment.this, "sLayoutChangeListener");
 
                     View headerView = viewHolder.getViewHolder().view;
                     headerView.setOnClickListener(v -> {
-                        if (customOnHeaderClickedListener != null) {
-                            customOnHeaderClickedListener.onHeaderClicked(
+                        OnHeaderClickedListener onHeaderClickedListener =
+                                (OnHeaderClickedListener) Helpers.getField(ExtendedHeadersSupportFragment.this, "mOnHeaderClickedListener");
+                        if (onHeaderClickedListener != null) {
+                            onHeaderClickedListener.onHeaderClicked(
                                     (RowHeaderPresenter.ViewHolder) viewHolder.getViewHolder(),
                                     (Row) viewHolder.getItem());
                         }
@@ -63,20 +64,24 @@ public class LongPressHeadersSupportFragment extends HeadersSupportFragment {
                     // NEW CODE
                     headerView.setOnKeyListener((v, keyCode, event) -> {
                         if (mOnHeaderLongPressedListener != null) {
-                            if (KeyHelpers.isMenuKey(keyCode) && event.getAction() == KeyEvent.ACTION_DOWN) {
-                                mOnHeaderLongPressedListener.onHeaderLongPressed(
-                                        (RowHeaderPresenter.ViewHolder) viewHolder.getViewHolder(),
-                                        (Row) viewHolder.getItem());
+                            if (KeyHelpers.isMenuKey(keyCode)) {
+                                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                                    mOnHeaderLongPressedListener.onHeaderLongPressed(
+                                            (RowHeaderPresenter.ViewHolder) viewHolder.getViewHolder(),
+                                            (Row) viewHolder.getItem());
+                                }
+
+                                //return true; // buggy G20s menu key fix?
                             }
                         }
 
                         return false; // enable navigation events
                     });
 
-                    if (customWrapper != null) {
-                        viewHolder.itemView.addOnLayoutChangeListener(customLayoutChangeListener);
+                    if (wrapper != null) {
+                        viewHolder.itemView.addOnLayoutChangeListener(layoutChangeListener);
                     } else {
-                        headerView.addOnLayoutChangeListener(customLayoutChangeListener);
+                        headerView.addOnLayoutChangeListener(layoutChangeListener);
                     }
                 }
 

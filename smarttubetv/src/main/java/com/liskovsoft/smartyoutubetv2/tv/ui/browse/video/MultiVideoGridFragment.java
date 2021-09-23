@@ -22,8 +22,8 @@ import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomVerticalGridPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.base.CardEventsPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewLongPressedListener;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.ExtendedCardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
@@ -41,8 +41,8 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
     private final List<VideoGroup> mPendingUpdates2 = new ArrayList<>();
     private UriBackgroundManager mBackgroundManager;
     private VideoGroupPresenter mMainPresenter;
-    private CardEventsPresenter mCardPresenter1;
-    private CardEventsPresenter mCardPresenter2;
+    private ExtendedCardPresenter mCardPresenter1;
+    private ExtendedCardPresenter mCardPresenter2;
     private int mSelectedItemIndex1 = -1;
     private int mSelectedItemIndex2 = -1;
     private float mVideoGridScale;
@@ -280,7 +280,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         return mGridAdapter2.size() == 0;
     }
 
-    private final class ItemViewLongPressedListener implements OnItemViewLongPressedListener {
+    private final class ItemViewLongPressedListener implements OnItemLongPressedListener {
         @Override
         public void onItemLongPressed(Presenter.ViewHolder itemViewHolder, Object item) {
             if (item instanceof Video) {
