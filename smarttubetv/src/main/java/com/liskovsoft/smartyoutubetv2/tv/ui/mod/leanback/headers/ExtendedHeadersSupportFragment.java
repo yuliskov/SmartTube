@@ -70,8 +70,6 @@ public class ExtendedHeadersSupportFragment extends HeadersSupportFragment {
                                             (RowHeaderPresenter.ViewHolder) viewHolder.getViewHolder(),
                                             (Row) viewHolder.getItem());
                                 }
-
-                                //return true; // buggy G20s menu key fix?
                             }
                         }
 
