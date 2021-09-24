@@ -217,8 +217,8 @@
     <string name="channels_auto_load">Muat otomatis konten bagian Saluran</string>
     <string name="return_to_background_video">Kembali ke video yang berjalan di latar belakang</string>
     <string name="pin_unpin_from_sidebar">Sematkan/Lepas sematan dari bilah sisi</string>
-    <string name="pin_to_sidebar">Disematkan ke bilah sisi</string>
-    <string name="unpin_from_sidebar">Lepas pin dari sidebar</string>
+    <string name="pinned_to_sidebar">Disematkan ke bilah sisi</string>
+    <string name="unpinned_from_sidebar">Lepas pin dari sidebar</string>
     <string name="dialog_select_country">Negara</string>
     <string name="settings_language_country">Bahasa/Country</string>
     <string name="share_embed_link">Bagikan tautan semat</string>

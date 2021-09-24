@@ -328,7 +328,7 @@ public class ViewManager {
         clearCaches();
 
         // We need to destroy the app only if settings are changed
-        if (GeneralData.instance(mContext).isSettingsCategoryEnabled()) {
+        if (GeneralData.instance(mContext).isSettingsSectionEnabled()) {
             destroyApp();
         }
     }

@@ -30,7 +30,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.ErrorDialogFragment;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.headers.LongPressHeadersSupportFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.headers.ExtendedHeadersSupportFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 
 import java.util.LinkedHashMap;
@@ -116,7 +116,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     @Override
     public HeadersSupportFragment onCreateHeadersSupportFragment() {
-        return new LongPressHeadersSupportFragment();
+        return new ExtendedHeadersSupportFragment();
     }
 
     private void setupEventListeners() {
@@ -136,7 +136,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
                 }
         );
 
-        ((LongPressHeadersSupportFragment) getHeadersSupportFragment()).setOnHeaderLongPressedListener(
+        ((ExtendedHeadersSupportFragment) getHeadersSupportFragment()).setOnHeaderLongPressedListener(
                 (viewHolder, row) -> {
                     long headerId = row.getHeaderItem().getId();
 
@@ -300,6 +300,11 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
             setSelectedPosition(index);
             mFocusOnChildFragment = true;
         }
+    }
+
+    @Override
+    public void focusOnContent() {
+        startHeadersTransition(false);
     }
 
     private void focusOnChildFragment() {

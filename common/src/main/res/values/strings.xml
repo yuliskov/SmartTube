@@ -217,8 +217,9 @@
     <string name="channels_auto_load">Auto load Channels section content</string>
     <string name="return_to_background_video">Return to video running in background</string>
     <string name="pin_unpin_from_sidebar">Pin/Unpin from sidebar</string>
-    <string name="pin_to_sidebar">Pinned to sidebar</string>
-    <string name="unpin_from_sidebar">Unpinned from sidebar</string>
+    <string name="pinned_to_sidebar">Pinned to sidebar</string>
+    <string name="unpin_from_sidebar">Unpin from sidebar</string>
+    <string name="unpinned_from_sidebar">Unpinned from sidebar</string>
     <string name="dialog_select_country">Country</string>
     <string name="settings_language_country">Language/Country</string>
     <string name="share_embed_link">Share embed link</string>
@@ -246,4 +247,5 @@
     <string name="disable_ok_long_press">Disable OK button long press</string>
     <string name="player_time_correction">Display the time with respect of speed</string>
     <string name="sponsor_color_markers">Color markers on progress bar</string>
+    <string name="refresh_section">Refresh section</string>
 </resources>

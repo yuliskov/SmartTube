@@ -19,9 +19,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.errors.CategoryEmptyErro
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.BootDialogPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.ChannelUploadsMenuPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.ChannelUploadsMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoMenuPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.SectionMenuPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.SectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
@@ -68,7 +69,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private Disposable mSignCheckAction;
     private int mCurrentSectionId;
     private long mLastUpdateTimeMs;
-    private int mStartCategoryIndex;
+    private int mStartSectionIndex;
     private int mUploadsType;
 
     private BrowsePresenter(Context context) {
@@ -110,8 +111,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         updateChannelSorting();
         updatePlaylistsStyle();
-        updateCategories();
-        getView().selectSection(mStartCategoryIndex);
+        updateSections();
+        getView().selectSection(mStartSectionIndex);
         showBootDialogs();
     }
 
@@ -139,7 +140,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mSections.add(new BrowseSection(MediaGroup.TYPE_HISTORY, getContext().getString(R.string.header_history), BrowseSection.TYPE_GRID, R.drawable.icon_history, true));
         mSections.add(new BrowseSection(MediaGroup.TYPE_USER_PLAYLISTS, getContext().getString(R.string.header_playlists), BrowseSection.TYPE_ROW, R.drawable.icon_playlist, true));
 
-        if (mGeneralData.isSettingsCategoryEnabled()) {
+        if (mGeneralData.isSettingsSectionEnabled()) {
             mSections.add(new BrowseSection(MediaGroup.TYPE_SETTINGS, getContext().getString(R.string.header_settings), BrowseSection.TYPE_SETTINGS_GRID, R.drawable.icon_settings));
         }
     }
@@ -190,19 +191,19 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mSettingsGridMapping.put(MediaGroup.TYPE_SETTINGS, () -> mDataSourcePresenter.getSettingItems(this));
     }
 
-    public void updateCategories() {
+    public void updateSections() {
         int index = 0;
 
-        for (BrowseSection category : mSections) {
-            category.setEnabled(category.getId() == MediaGroup.TYPE_SETTINGS || mGeneralData.isCategoryEnabled(category.getId()));
+        for (BrowseSection section : mSections) {
+            section.setEnabled(section.getId() == MediaGroup.TYPE_SETTINGS || mGeneralData.isBrowseSectionEnabled(section.getId()));
 
-            if (category.isEnabled()) {
-                if (category.getId() == mGeneralData.getBootCategoryId()) {
-                    mStartCategoryIndex = index;
+            if (section.isEnabled()) {
+                if (section.getId() == mGeneralData.getBootSectionId()) {
+                    mStartSectionIndex = index;
                 }
-                getView().addSection(index++, category);
+                getView().addSection(index++, section);
             } else {
-                getView().removeSection(category);
+                getView().removeSection(section);
             }
         }
     }
@@ -325,7 +326,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     @Override
     public void onSectionLongPressed(int sectionId) {
-        VideoMenuPresenter.instance(getContext()).showMenu(getSection(sectionId));
+        SectionMenuPresenter.instance(getContext()).showMenu(getSection(sectionId));
     }
 
     @Override

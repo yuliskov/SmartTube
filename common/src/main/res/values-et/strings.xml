@@ -211,8 +211,8 @@
     <string name="channels_old_look">Kanalite vana vaade</string>
     <string name="channels_auto_load">Automaatselt kuvada minu kanalid</string>
     <string name="return_to_background_video">Naastaa taustavideo juurde</string>
-    <string name="pin_to_sidebar">Kinnitada külgpaneelile</string>
-    <string name="unpin_from_sidebar">Kustutada külgpaneelilt</string>
+    <string name="pinned_to_sidebar">Kinnitada külgpaneelile</string>
+    <string name="unpinned_from_sidebar">Kustutada külgpaneelilt</string>
     <string name="dialog_select_country">Riik</string>
     <string name="settings_language_country">Keel/Riik</string>
 </resources>

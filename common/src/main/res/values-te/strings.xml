@@ -205,8 +205,8 @@
     <string name="channels_old_look">ఛానెల్స్ విభాగం యొక్క పాత రూపాన్ని తిరిగి మార్చండి</string>
     <string name="channels_auto_load">ఆటో లోడ్ ఛానెల్స్ విభాగం కంటెంట్</string>
     <string name="return_to_background_video">నేపథ్యంలో నడుస్తున్న వీడియోకు తిరిగి వెళ్ళు</string>
-    <string name="pin_to_sidebar">సైడ్‌బార్‌కు పిన్ చేయండి</string>
-    <string name="unpin_from_sidebar">సైడ్‌బార్ నుండి అన్‌పిన్ చేయండి</string>
+    <string name="pinned_to_sidebar">సైడ్‌బార్‌కు పిన్ చేయండి</string>
+    <string name="unpinned_from_sidebar">సైడ్‌బార్ నుండి అన్‌పిన్ చేయండి</string>
     <string name="dialog_select_country">దేశం</string>
     <string name="settings_language_country">భాష /దేశం</string>
     <string name="share_embed_link">పొందుపరచండి లింక్‌ను భాగస్వామ్యం చేయండి</string>

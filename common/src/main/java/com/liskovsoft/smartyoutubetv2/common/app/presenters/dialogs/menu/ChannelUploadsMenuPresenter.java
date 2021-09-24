@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs;
+package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;

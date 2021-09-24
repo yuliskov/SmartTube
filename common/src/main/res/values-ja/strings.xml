@@ -214,8 +214,8 @@
     <string name="channels_auto_load">チャンネルセクションの内容を自動読み込み</string>
     <string name="return_to_background_video">バックグラウンド再生中の動画に戻る</string>
     <string name="pin_unpin_from_sidebar">サイドバーにピン留め・ピン解除</string>
-    <string name="pin_to_sidebar">サイドバーにピン留め</string>
-    <string name="unpin_from_sidebar">サイドバーからのピン解除</string>
+    <string name="pinned_to_sidebar">サイドバーにピン留め</string>
+    <string name="unpinned_from_sidebar">サイドバーからのピン解除</string>
     <string name="dialog_select_country">国</string>
     <string name="settings_language_country">言語/国</string>
     <string name="share_embed_link">埋め込みリンクを共有</string>

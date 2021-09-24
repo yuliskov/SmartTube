@@ -18,7 +18,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomVerticalGridPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewLongPressedListener;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
@@ -157,7 +157,7 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
         return mGridAdapter.size() == 0;
     }
 
-    private final class ItemViewLongPressedListener implements OnItemViewLongPressedListener {
+    private final class ItemViewLongPressedListener implements OnItemLongPressedListener {
         @Override
         public void onItemLongPressed(Presenter.ViewHolder itemViewHolder, Object item) {
             if (item instanceof Video) {

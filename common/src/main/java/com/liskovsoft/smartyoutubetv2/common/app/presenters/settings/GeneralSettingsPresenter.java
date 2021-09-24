@@ -63,13 +63,13 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendLeftPanelCategories(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        Map<Integer, Integer> leftPanelCategories = mGeneralData.getCategories();
+        Map<Integer, Integer> leftPanelCategories = mGeneralData.getSections();
 
         for (Entry<Integer, Integer> category : leftPanelCategories.entrySet()) {
              options.add(UiOptionItem.from(getContext().getString(category.getKey()), optionItem -> {
-                 mGeneralData.enableCategory(category.getValue(), optionItem.isSelected());
-                 BrowsePresenter.instance(getContext()).updateCategories();
-             }, mGeneralData.isCategoryEnabled(category.getValue())));
+                 mGeneralData.enableSection(category.getValue(), optionItem.isSelected());
+                 BrowsePresenter.instance(getContext()).updateSections();
+             }, mGeneralData.isBrowseSectionEnabled(category.getValue())));
         }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.side_panel_sections), options);
@@ -78,14 +78,14 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendBootToCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        Map<Integer, Integer> leftPanelCategories = mGeneralData.getCategories();
+        Map<Integer, Integer> leftPanelCategories = mGeneralData.getSections();
 
         for (Entry<Integer, Integer> category : leftPanelCategories.entrySet()) {
             options.add(
                     UiOptionItem.from(
                             getContext().getString(category.getKey()),
-                            optionItem -> mGeneralData.setBootCategoryId(category.getValue()),
-                            category.getValue().equals(mGeneralData.getBootCategoryId())
+                            optionItem -> mGeneralData.setBootSectionId(category.getValue()),
+                            category.getValue().equals(mGeneralData.getBootSectionId())
                     )
             );
         }
@@ -97,8 +97,8 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 options.add(
                         UiOptionItem.from(
                                 item.title,
-                                optionItem -> mGeneralData.setBootCategoryId(item.hashCode()),
-                                item.hashCode() == mGeneralData.getBootCategoryId()
+                                optionItem -> mGeneralData.setBootSectionId(item.hashCode()),
+                                item.hashCode() == mGeneralData.getBootSectionId()
                         )
                 );
             }

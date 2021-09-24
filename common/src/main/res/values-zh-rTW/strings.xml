@@ -211,8 +211,8 @@
     <string name="channels_old_look">還原頻道部分的舊外觀</string>
     <string name="channels_auto_load">自動載入頻道部分的內容</string>
     <string name="return_to_background_video">返回背景播放的影片</string>
-    <string name="pin_to_sidebar">固定到側邊欄</string>
-    <string name="unpin_from_sidebar">從側邊欄取消固定</string>
+    <string name="pinned_to_sidebar">固定到側邊欄</string>
+    <string name="unpinned_from_sidebar">從側邊欄取消固定</string>
     <string name="dialog_select_country">國家</string>
     <string name="settings_language_country">語言/國家</string>
     <string name="share_embed_link">分享嵌入連結</string>

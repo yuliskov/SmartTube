@@ -215,8 +215,8 @@
     <string name="channels_auto_load">Auto carga de contenido sección canales</string>
     <string name="return_to_background_video">Volver al vídeo reproduciéndose de fondo</string>
     <string name="pin_unpin_from_sidebar">Fijar/desfijar de barra lateral</string>
-    <string name="pin_to_sidebar">Fijado a barra lateral</string>
-    <string name="unpin_from_sidebar">Desfijado de barra lateral</string>
+    <string name="pinned_to_sidebar">Fijado a barra lateral</string>
+    <string name="unpinned_from_sidebar">Desfijado de barra lateral</string>
     <string name="dialog_select_country">País</string>
     <string name="settings_language_country">Idioma/País</string>
     <string name="share_embed_link">Compartir enlace embebido</string>

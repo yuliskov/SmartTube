@@ -211,8 +211,8 @@
     <string name="channels_old_look"> 还原频道部分的旧外观 </string>
     <string name="channels_auto_load"> 自动加载频道部分的内容 </string>
     <string name="return_to_background_video"> 返回背景播放的视频 </string>
-    <string name="pin_to_sidebar"> 固定到侧边栏 </string>
-    <string name="unpin_from_sidebar"> 从侧边栏取消固定 </string>
+    <string name="pinned_to_sidebar"> 固定到侧边栏 </string>
+    <string name="unpinned_from_sidebar"> 从侧边栏取消固定 </string>
     <string name="dialog_select_country"> 国家 </string>
     <string name="settings_language_country"> 语言 / 国家 </string>
     <string name="share_embed_link">分享嵌入连结</string>

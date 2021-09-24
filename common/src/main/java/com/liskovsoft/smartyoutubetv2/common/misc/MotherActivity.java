@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -66,6 +67,14 @@ public class MotherActivity extends FragmentActivity {
         }
 
         return super.dispatchKeyEvent(event);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        boolean result = super.onKeyDown(keyCode, event);
+
+        // Fix buggy G20s menu key (focus lost on key press)
+        return (event.getAction() == KeyEvent.ACTION_DOWN && KeyHelpers.isMenuKey(keyCode)) || result;
     }
 
     public void finishReally() {
