@@ -37,7 +37,7 @@
     <string name="video_buffer_size_low">Niedrig</string>
     <string name="video_buffer_size_med">Mittel</string>
     <string name="video_buffer_size_high">Hoch</string>
-    <string name="update_changelog">Changelog</string>
+    <string name="update_changelog">Änderungsprotokoll</string>
     <string name="install_update">Update installieren</string>
     <string name="section_is_empty">Hier ist nichts drin</string>
     <string name="dialog_add_to_playlist">Hinzufügen/Entfernen aus Wiedergabeliste</string>
@@ -247,5 +247,5 @@
     <string name="disable_ok_long_press">Langes Drücken der OK-Taste deaktivieren</string>
     <string name="player_time_correction">Anzeige der Zeit in Abhängigkeit von der Geschwindigkeit</string>
     <string name="sponsor_color_markers">Farbige Markierungen auf dem Fortschrittsbalken</string>
-    <string name="refresh_section">Bereich aktualisieren</string>
+    <string name="refresh_section">Kategorie aktualisieren</string>
 </resources>
