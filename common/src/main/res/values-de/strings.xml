@@ -129,6 +129,7 @@
     <string name="playlists_style_rows">Reihe</string>
     <string name="player_show_clock">Uhr im Player anzeigen</string>
     <string name="player_show_remaining_time">Verbleibende Zeit anzeigen</string>
+    <string name="player_show_ending_time">Endzeit anzeigen</string>
     <string name="open_channel_uploads">Kanal-Videos öffnen</string>
     <string name="app_exit_shortcut">App beenden</string>
     <string name="app_exit_none">Nicht beenden</string>
@@ -173,7 +174,7 @@
     <string name="settings_general">Allgemein</string>
     <string name="settings_video">Video</string>
     <string name="content_block_confirm_skip">Überspringen bestätigen</string>
-    <string name="content_block_categories">Kategorien</string>
+    <string name="content_block_categories">Segmente überspringen</string>
     <string name="content_block_sponsor">Sponsor/Bezahlte Werbung</string>
     <string name="content_block_intro">Intro/Unterbrechung</string>
     <string name="content_block_outro">Outro/Abspann</string>
@@ -217,6 +218,7 @@
     <string name="return_to_background_video">Zurück zum Video im Hintergrund</string>
     <string name="pin_unpin_from_sidebar">Anheften/Ablösen von Seitenleiste</string>
     <string name="pinned_to_sidebar">An Seitenleiste angeheftet</string>
+    <string name="unpin_from_sidebar">Ablösen von Seitenleiste</string>
     <string name="unpinned_from_sidebar">Von Seitenleiste abgelöst</string>
     <string name="dialog_select_country">Land</string>
     <string name="settings_language_country">Sprache/Land</string>
@@ -244,4 +246,6 @@
     <string name="skip_each_segment_once">Jedes Segment nur einmal überspringen</string>
     <string name="disable_ok_long_press">Langes Drücken der OK-Taste deaktivieren</string>
     <string name="player_time_correction">Anzeige der Zeit in Abhängigkeit von der Geschwindigkeit</string>
+    <string name="sponsor_color_markers">Farbige Markierungen auf dem Fortschrittsbalken</string>
+    <string name="refresh_section">Bereich aktualisieren</string>
 </resources>
