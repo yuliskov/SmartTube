@@ -329,7 +329,7 @@ public class ViewManager {
 
         // We need to destroy the app only if settings are changed
         if (GeneralData.instance(mContext).isSettingsSectionEnabled()) {
-            destroyApp();
+            //destroyApp();
         }
     }
 
