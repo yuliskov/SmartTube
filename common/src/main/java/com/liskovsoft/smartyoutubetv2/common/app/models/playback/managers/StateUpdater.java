@@ -106,8 +106,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onEngineInitialized() {
-        // Fragment might be destroyed by system at this point.
-        // So, to be sure, repeat format selection.
+        // Restore before video loaded.
+        // So we'll sure that format will be applied on earliest point.
         restoreFormats();
 
         // Show user info instead of black screen.
@@ -137,7 +137,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     public void onVideoLoaded(Video item) {
         // Restore formats again.
         // Maybe this could help with Shield format problem.
-        restoreFormats();
+        //restoreFormats();
 
         // In this state video length is not undefined.
         restorePosition(item);
