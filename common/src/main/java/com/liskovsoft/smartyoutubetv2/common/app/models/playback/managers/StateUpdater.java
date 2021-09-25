@@ -107,7 +107,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     @Override
     public void onEngineInitialized() {
         // Restore before video loaded.
-        // So we'll sure that format will be applied on earliest point.
+        // This way we override auto track selection mechanism.
         restoreFormats();
 
         // Show user info instead of black screen.
