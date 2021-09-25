@@ -248,4 +248,5 @@
     <string name="player_time_correction">Відображати час з урахуванням швидкості відтворення</string>
     <string name="sponsor_color_markers">Кольорові помітки на шкалі прогресу</string>
     <string name="refresh_section">Оновити розділ</string>
+    <string name="option_disabled">Відключено</string>
 </resources>

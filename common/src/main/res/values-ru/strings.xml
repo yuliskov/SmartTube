@@ -248,4 +248,5 @@
     <string name="player_time_correction">Отображать время с учетом скорости воспроизведения</string>
     <string name="sponsor_color_markers">Цветовые метки на шкале прогресса</string>
     <string name="refresh_section">Обновить раздел</string>
+    <string name="option_disabled">Отключено</string>
 </resources>
