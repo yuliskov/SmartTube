@@ -16,8 +16,8 @@
     <string name="library_signin_to_show_more">Melden Sie sich an, um diese Inhalte anzuzeigen</string>
     <string name="library_signin_subtitle">Melden Sie sich an, um Ihre Wiedergabelisten anzuzeigen</string>
     <string name="action_signin">ANMELDEN</string>
-    <string name="title_video_formats">Videoformate</string>
-    <string name="title_audio_formats">Audioformate</string>
+    <string name="title_video_formats">Video-Formate</string>
+    <string name="title_audio_formats">Audio-Formate</string>
     <string name="subtitle_category_title">Untertitel</string>
     <string name="playback_queue_category_title">Wiedergabe-Warteschlange</string>
     <string name="video_max_quality">Auto (maximale Qualität)</string>
@@ -210,7 +210,7 @@
     <string name="player_tweaks">Entwickleroptionen</string>
     <string name="header_uploads">Uploads</string>
     <string name="player_show_global_clock">Uhr dauerhaft auf dem Bildschirm anzeigen</string>
-    <string name="player_show_global_ending_time">Video-Endzeit dauerhaft auf dem Bildschirm anzeigen</string>
+    <string name="player_show_global_ending_time">Endzeit dauerhaft auf dem Bildschirm anzeigen</string>
     <string name="uploads_old_look">Altes Aussehen der Uploads-Kategorie</string>
     <string name="background_playback_activation">Hintergrund-Wiedergabe (Taste)</string>
     <string name="channels_old_look">Altes Aussehen der Kanäle-Kategorie</string>
@@ -248,4 +248,5 @@
     <string name="player_time_correction">Anzeige der Zeit in Abhängigkeit von der Geschwindigkeit</string>
     <string name="sponsor_color_markers">Farbige Markierungen auf dem Fortschrittsbalken</string>
     <string name="refresh_section">Kategorie aktualisieren</string>
+    <string name="option_disabled">Deaktiviert</string>
 </resources>
