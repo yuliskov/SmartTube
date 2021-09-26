@@ -19,7 +19,7 @@
     <string name="title_video_formats">Video-Formate</string>
     <string name="title_audio_formats">Audio-Formate</string>
     <string name="subtitle_category_title">Untertitel</string>
-    <string name="playback_queue_category_title">Wiedergabe-Warteschlange</string>
+    <string name="playback_queue_category_title">Warteschlange</string>
     <string name="video_max_quality">Auto (maximale Qualität)</string>
     <string name="audio_max_quality">Auto (maximale Qualität)</string>
     <string name="subtitles_disabled">Untertitel deaktiviert</string>
@@ -228,9 +228,9 @@
     <string name="hide_shorts">Kurzvideos in Abos ausblenden</string>
     <string name="key_remapping">Tastenbelegung anpassen</string>
     <string name="screen_dimming">Bildschirm dimmen</string>
-    <string name="removed_from_playback_queue">Aus Wiedergabe-Warteschlange entfernt</string>
-    <string name="added_to_playback_queue">Zur Wiedergabe-Warteschlange hinzugefügt</string>
-    <string name="add_remove_from_playback_queue">Hinzufügen/Entfernen aus Wiedergabe-Warteschlange</string>
+    <string name="removed_from_playback_queue">Aus Warteschlange entfernt</string>
+    <string name="added_to_playback_queue">Zur Warteschlange hinzugefügt</string>
+    <string name="add_remove_from_playback_queue">Hinzufügen/Entfernen aus Warteschlange</string>
     <string name="proxy_enabled">Proxy aktiviert</string>
     <string name="proxy_disabled">Proxy deaktiviert</string>
     <string name="uploads_row_name">Uploads</string>
