@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ContentBlockManager extends PlayerEventListenerHelper implements MetadataListener {
     private static final String TAG = ContentBlockManager.class.getSimpleName();
-    private static final long SEGMENT_CHECK_DURATION_MS = 1_000;
+    private static final long SEGMENT_CHECK_LENGTH_MS = 3_000;
     private MediaItemManager mMediaItemManager;
     private ContentBlockData mContentBlockData;
     private Video mVideo;
@@ -189,7 +189,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
     private boolean isPositionAtSegmentStart(long positionMs, SponsorSegment segment) {
         // Note. Getting into account playback speed. Also check that the zone is long enough.
-        float checkEndMs = segment.getStartMs() + SEGMENT_CHECK_DURATION_MS * getController().getSpeed();
+        float checkEndMs = segment.getStartMs() + SEGMENT_CHECK_LENGTH_MS * getController().getSpeed();
         return positionMs >= segment.getStartMs() && positionMs <= checkEndMs && checkEndMs <= segment.getEndMs();
     }
 
