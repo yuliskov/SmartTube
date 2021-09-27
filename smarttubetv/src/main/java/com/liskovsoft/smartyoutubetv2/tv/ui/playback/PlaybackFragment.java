@@ -365,8 +365,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mExoPlayerController.setEventListener(mEventListener);
 
         // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
-        // Previous: new AdaptiveTrackSelection.Factory()
-        DefaultTrackSelector trackSelector = new RestoreTrackSelector(new FixedTrackSelection.Factory());
+        DefaultTrackSelector trackSelector = new RestoreTrackSelector(new AdaptiveTrackSelection.Factory());
         mExoPlayerController.setTrackSelector(trackSelector);
 
         DefaultRenderersFactory renderersFactory = new CustomOverridesRenderersFactory(getContext());
