@@ -24,7 +24,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private static final String TAG = StateUpdater.class.getSimpleName();
     private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
     private static final int MAX_PERSISTENT_STATE_SIZE = 30;
-    private static final long LIVE_THRESHOLD_MS = 30_000;
+    private static final long ENDING_THRESHOLD_MS = 60_000;
     private boolean mIsPlayEnabled;
     private Video mVideo;
     private FormatItem mTempVideoFormat;
@@ -337,9 +337,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void restoreSpeed(Video item) {
-        boolean isLive = getController().getLengthMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
+        boolean isEnding = getController().getLengthMs() - getController().getPositionMs() < ENDING_THRESHOLD_MS;
 
-        if (isLive) {
+        if (item.isLive && isEnding) {
             getController().setSpeed(1.0f);
         } else {
             State state = mStates.get(item.videoId);
