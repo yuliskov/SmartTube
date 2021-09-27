@@ -40,13 +40,15 @@ public class ExoPlayerInitializer {
         // HDR fix?
         //trackSelector.setParameters(trackSelector.buildUponParameters().setTunnelingAudioSessionId(C.generateAudioSessionIdV21(context)));
 
-        // Prev initializer
-        //SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(context, renderersFactory, trackSelector, loadControl);
+        // Old initializer
+        SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(context, renderersFactory, trackSelector, loadControl);
 
-        SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(
-                context, renderersFactory, trackSelector, loadControl,
-                null, new DummyBandwidthMeter(), new AnalyticsCollector.Factory(), Util.getLooper()
-        );
+        // New initializer
+        //SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(
+        //        context, renderersFactory, trackSelector, loadControl,
+        //        null, new DummyBandwidthMeter(), new AnalyticsCollector.Factory(), Util.getLooper()
+        //);
+
         enableAudioFocus(player);
 
         return player;
