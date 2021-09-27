@@ -1,14 +1,20 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.other;
 
 import android.content.Context;
+import android.os.Handler;
+import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.analytics.AnalyticsCollector;
 import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultAllocator;
+import com.google.android.exoplayer2.upstream.TransferListener;
+import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerController;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -34,7 +40,13 @@ public class ExoPlayerInitializer {
         // HDR fix?
         //trackSelector.setParameters(trackSelector.buildUponParameters().setTunnelingAudioSessionId(C.generateAudioSessionIdV21(context)));
 
-        SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(context, renderersFactory, trackSelector, loadControl);
+        // Prev initializer
+        //SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(context, renderersFactory, trackSelector, loadControl);
+
+        SimpleExoPlayer player = ExoPlayerFactory.newSimpleInstance(
+                context, renderersFactory, trackSelector, loadControl,
+                null, new DummyBandwidthMeter(), new AnalyticsCollector.Factory(), Util.getLooper()
+        );
         enableAudioFocus(player);
 
         return player;
@@ -87,5 +99,28 @@ public class ExoPlayerInitializer {
         // Normal buffer is a default one
 
         return baseBuilder.createDefaultLoadControl();
+    }
+
+    private static final class DummyBandwidthMeter implements BandwidthMeter {
+        @Override
+        public long getBitrateEstimate() {
+            return 0;
+        }
+
+        @Nullable
+        @Override
+        public TransferListener getTransferListener() {
+            return null;
+        }
+
+        @Override
+        public void addEventListener(Handler eventHandler, EventListener eventListener) {
+            // Do nothing.
+        }
+
+        @Override
+        public void removeEventListener(EventListener eventListener) {
+            // Do nothing.
+        }
     }
 }
