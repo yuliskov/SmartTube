@@ -16,10 +16,10 @@
     <string name="library_signin_to_show_more">Melden Sie sich an, um diese Inhalte anzuzeigen</string>
     <string name="library_signin_subtitle">Melden Sie sich an, um Ihre Wiedergabelisten anzuzeigen</string>
     <string name="action_signin">ANMELDEN</string>
-    <string name="title_video_formats">Videoformate</string>
-    <string name="title_audio_formats">Audioformate</string>
+    <string name="title_video_formats">Video-Formate</string>
+    <string name="title_audio_formats">Audio-Formate</string>
     <string name="subtitle_category_title">Untertitel</string>
-    <string name="playback_queue_category_title">Wiedergabe-Warteschlange</string>
+    <string name="playback_queue_category_title">Warteschlange</string>
     <string name="video_max_quality">Auto (maximale Qualität)</string>
     <string name="audio_max_quality">Auto (maximale Qualität)</string>
     <string name="subtitles_disabled">Untertitel deaktiviert</string>
@@ -37,7 +37,7 @@
     <string name="video_buffer_size_low">Niedrig</string>
     <string name="video_buffer_size_med">Mittel</string>
     <string name="video_buffer_size_high">Hoch</string>
-    <string name="update_changelog">Changelog</string>
+    <string name="update_changelog">Änderungsprotokoll</string>
     <string name="install_update">Update installieren</string>
     <string name="section_is_empty">Hier ist nichts drin</string>
     <string name="dialog_add_to_playlist">Hinzufügen/Entfernen aus Wiedergabeliste</string>
@@ -78,7 +78,7 @@
     <string name="player_only_pause">Nur Pause</string>
     <string name="check_for_updates">Nach Updates suchen</string>
     <string name="update_not_found">Sie verwenden die neueste Version</string>
-    <string name="update_in_progress">Warte…</string>
+    <string name="update_in_progress">Bitte warten…</string>
     <string name="player_ui_hide_behavior">Oberfläche automatisch ausblenden</string>
     <string name="option_never">Niemals</string>
     <string name="side_panel_sections">Kategorien einrichten</string>
@@ -129,6 +129,7 @@
     <string name="playlists_style_rows">Reihe</string>
     <string name="player_show_clock">Uhr im Player anzeigen</string>
     <string name="player_show_remaining_time">Verbleibende Zeit anzeigen</string>
+    <string name="player_show_ending_time">Endzeit anzeigen</string>
     <string name="open_channel_uploads">Kanal-Videos öffnen</string>
     <string name="app_exit_shortcut">App beenden</string>
     <string name="app_exit_none">Nicht beenden</string>
@@ -173,7 +174,7 @@
     <string name="settings_general">Allgemein</string>
     <string name="settings_video">Video</string>
     <string name="content_block_confirm_skip">Überspringen bestätigen</string>
-    <string name="content_block_categories">Kategorien</string>
+    <string name="content_block_categories">Segmente überspringen</string>
     <string name="content_block_sponsor">Sponsor/Bezahlte Werbung</string>
     <string name="content_block_intro">Intro/Unterbrechung</string>
     <string name="content_block_outro">Outro/Abspann</string>
@@ -209,7 +210,7 @@
     <string name="player_tweaks">Entwickleroptionen</string>
     <string name="header_uploads">Uploads</string>
     <string name="player_show_global_clock">Uhr dauerhaft auf dem Bildschirm anzeigen</string>
-    <string name="player_show_global_ending_time">Video-Endzeit dauerhaft auf dem Bildschirm anzeigen</string>
+    <string name="player_show_global_ending_time">Endzeit dauerhaft auf dem Bildschirm anzeigen</string>
     <string name="uploads_old_look">Altes Aussehen der Uploads-Kategorie</string>
     <string name="background_playback_activation">Hintergrund-Wiedergabe (Taste)</string>
     <string name="channels_old_look">Altes Aussehen der Kanäle-Kategorie</string>
@@ -217,6 +218,7 @@
     <string name="return_to_background_video">Zurück zum Video im Hintergrund</string>
     <string name="pin_unpin_from_sidebar">Anheften/Ablösen von Seitenleiste</string>
     <string name="pinned_to_sidebar">An Seitenleiste angeheftet</string>
+    <string name="unpin_from_sidebar">Ablösen von Seitenleiste</string>
     <string name="unpinned_from_sidebar">Von Seitenleiste abgelöst</string>
     <string name="dialog_select_country">Land</string>
     <string name="settings_language_country">Sprache/Land</string>
@@ -226,9 +228,9 @@
     <string name="hide_shorts">Kurzvideos in Abos ausblenden</string>
     <string name="key_remapping">Tastenbelegung anpassen</string>
     <string name="screen_dimming">Bildschirm dimmen</string>
-    <string name="removed_from_playback_queue">Aus Wiedergabe-Warteschlange entfernt</string>
-    <string name="added_to_playback_queue">Zur Wiedergabe-Warteschlange hinzugefügt</string>
-    <string name="add_remove_from_playback_queue">Hinzufügen/Entfernen aus Wiedergabe-Warteschlange</string>
+    <string name="removed_from_playback_queue">Aus Warteschlange entfernt</string>
+    <string name="added_to_playback_queue">Zur Warteschlange hinzugefügt</string>
+    <string name="add_remove_from_playback_queue">Hinzufügen/Entfernen aus Warteschlange</string>
     <string name="proxy_enabled">Proxy aktiviert</string>
     <string name="proxy_disabled">Proxy deaktiviert</string>
     <string name="uploads_row_name">Uploads</string>
@@ -244,4 +246,7 @@
     <string name="skip_each_segment_once">Jedes Segment nur einmal überspringen</string>
     <string name="disable_ok_long_press">Langes Drücken der OK-Taste deaktivieren</string>
     <string name="player_time_correction">Anzeige der Zeit in Abhängigkeit von der Geschwindigkeit</string>
+    <string name="sponsor_color_markers">Farbige Markierungen auf dem Fortschrittsbalken</string>
+    <string name="refresh_section">Kategorie aktualisieren</string>
+    <string name="option_disabled">Deaktiviert</string>
 </resources>
