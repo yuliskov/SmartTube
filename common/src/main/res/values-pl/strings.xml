@@ -178,4 +178,22 @@
     <string name="content_block_music_off_topic">Niemuzyczna część teledysku</string>
     <string name="confirm_segment_skip">Pominąć fragment \"%s\"?</string>
     <string name="msg_skipping_segment">Pomijam fragment \"%s\"…</string>
+    <string name="preferred_update_source">Wybierz źródło aktualizacji</string>
+    <string name="background_playback_activation">Odtwarzanie w tle (aktywacja)</string>
+    <string name="key_remapping">Mapowanie przycisków</string>
+    <string name="screen_dimming">Przyciemnianie ekranu</string>
+    <string name="removed_from_playback_queue">Usunięty z kolejki odtwarzania</string>
+    <string name="added_to_playback_queue">Dodany do kolejki odtwarzania</string>
+    <string name="add_remove_from_playback_queue">Dodaj/Usuń z kolejki odtwarzania</string>
+    <string name="proxy_enabled">Proxy włączone</string>
+    <string name="proxy_disabled">Proxy wyłączone</string>
+    <string name="msg_player_error_source">Nie można pobrać wideo</string>
+    <string name="msg_player_error_renderer">Format tego wideo nie jest obsługiwany</string>
+    <string name="msg_mode_switch_error">Nie można zmienić trybu odtwarzania na \"%s\"</string>
+    <string name="msg_player_error">Wystąpił błąd odtwarzacza %s. Restartowanie odwtarzania…</string>
+    <string name="player_tweaks">Opcje developerskie</string>
+    <string name="enable_voice_search">Włącz wyszukiwanie głosowe</string>
+
+
+
 </resources>
