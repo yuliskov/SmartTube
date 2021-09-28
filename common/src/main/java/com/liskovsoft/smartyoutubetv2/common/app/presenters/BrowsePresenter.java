@@ -103,6 +103,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         return sInstance;
     }
 
+    public static void unhold() {
+        sInstance = null;
+    }
+
     @Override
     public void onViewInitialized() {
         if (getView() == null) {
@@ -188,7 +192,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void initSettingsSubCategories() {
-        mSettingsGridMapping.put(MediaGroup.TYPE_SETTINGS, () -> mDataSourcePresenter.getSettingItems(this));
+        mSettingsGridMapping.put(MediaGroup.TYPE_SETTINGS, () -> mDataSourcePresenter.getSettingItems(getContext()));
     }
 
     public void updateSections() {

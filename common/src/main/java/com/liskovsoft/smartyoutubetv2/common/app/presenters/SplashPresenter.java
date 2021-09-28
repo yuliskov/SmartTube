@@ -25,7 +25,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private static final String TAG = SplashPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static SplashPresenter sInstance;
-    private static boolean mRunOnce;
+    private static boolean sRunOnce;
     private final List<IntentProcessor> mIntentChain = new ArrayList<>();
 
     private interface IntentProcessor {
@@ -47,8 +47,8 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     }
 
     public static void unhold() {
-        mRunOnce = false;
         sInstance = null;
+        sRunOnce = false;
     }
 
     @Override
@@ -61,7 +61,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     }
 
     private void applyRunOnceTasks() {
-        if (!mRunOnce) {
+        if (!sRunOnce) {
             //checkTouchSupport(); // Not working?
             // Need to be the first line and executed on earliest stage once.
             // Inits service language and context.
@@ -71,7 +71,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             getBackupDataOnce();
             runRemoteControlTasks();
             configureProxy();
-            mRunOnce = true;
+            sRunOnce = true;
         }
     }
 

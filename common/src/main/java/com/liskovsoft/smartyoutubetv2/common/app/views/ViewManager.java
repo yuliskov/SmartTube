@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
@@ -327,6 +328,7 @@ public class ViewManager {
 
     public void forceFinishTheApp() {
         SplashPresenter.unhold();
+        BrowsePresenter.unhold();
         clearCaches();
 
         // We need to destroy the app only if settings are changed
