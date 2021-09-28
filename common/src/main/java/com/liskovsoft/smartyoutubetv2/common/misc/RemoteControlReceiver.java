@@ -14,6 +14,7 @@ public class RemoteControlReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "Initializing remote control listener...");
 
+        // Autostart fix on some devices?
         //Utils.startRemoteControlService(context);
 
         Utils.startRemoteControlWorkRequest(context);
