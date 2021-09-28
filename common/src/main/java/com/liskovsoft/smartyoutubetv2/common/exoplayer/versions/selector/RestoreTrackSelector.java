@@ -114,6 +114,12 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
     //    return selectionPair;
     //}
 
+    @Override
+    public void setParameters(Parameters parameters) {
+        // Fix dropping to 144p by disabling any overrides.
+        invalidate();
+    }
+
     // Exo 2.10 and up
     @Nullable
     @Override
