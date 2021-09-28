@@ -48,7 +48,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         mTrackFormatter = new TrackInfoFormatter2();
 
         // Trying to fix format downgrade to 144p
-        mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(PlayerData.instance(context).getDefaultVideoFormat()));
+        mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(PlayerData.instance(context).getFormat(FormatItem.TYPE_VIDEO)));
     }
 
     @Override
