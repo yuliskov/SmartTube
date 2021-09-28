@@ -46,7 +46,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         return sInstance;
     }
 
-    public void unhold() {
+    public static void unhold() {
         mRunOnce = false;
         sInstance = null;
     }

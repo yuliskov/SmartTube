@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
+import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
@@ -253,6 +254,7 @@ public class ViewManager {
     public void clearCaches() {
         YouTubeMediaService.instance().invalidateCache();
         FileHelpers.deleteCache(mContext);
+        LocaleUpdater.clearCache();
     }
 
     //public void restartApp() {
@@ -324,11 +326,12 @@ public class ViewManager {
     }
 
     public void forceFinishTheApp() {
-        SplashPresenter.instance(mContext).unhold();
+        SplashPresenter.unhold();
         clearCaches();
 
         // We need to destroy the app only if settings are changed
         if (GeneralData.instance(mContext).isSettingsSectionEnabled()) {
+            // Don't destroy the app. Let remote functions continue to work in background.
             //destroyApp();
         }
     }
