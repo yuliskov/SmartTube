@@ -23,6 +23,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackInfoFormatt
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.io.InputStream;
 import java.util.List;
@@ -45,6 +46,9 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
         mTrackSelectorManager = new TrackSelectorManager();
         mTrackFormatter = new TrackInfoFormatter2();
+
+        // Trying to fix format downgrade to 144p
+        mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(PlayerData.instance(context).getDefaultVideoFormat()));
     }
 
     @Override
@@ -216,11 +220,11 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     @Override
-    public void selectFormat(FormatItem option) {
-        if (option != null) {
-            mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(option));
+    public void selectFormat(FormatItem formatItem) {
+        if (formatItem != null) {
+            mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(formatItem));
             // TODO: move to the {@link #onTrackChanged()} somehow
-            mEventListener.onTrackSelected(option);
+            mEventListener.onTrackSelected(formatItem);
         }
     }
 
