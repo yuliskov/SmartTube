@@ -196,7 +196,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     MessageHelpers.showMessage(getContext(), R.string.msg_done);
                 }));
 
-        settingsPresenter.appendStringsCategory(getContext().getString(R.string.app_backup_restore), options);
+        settingsPresenter.appendStringsCategory(String.format("%s\n%s", getContext().getString(R.string.app_backup_restore), backupManager.getBackupPath()), options);
     }
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
