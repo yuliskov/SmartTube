@@ -303,7 +303,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         // Significantly improves next video loading time!
         if (current.nextMediaItem != null) {
             openVideoInt(Video.from(current.nextMediaItem));
-        } else {
+        } else if (!current.isSynced) { // Maybe there's nothing left. E.g. when casting from phone
             // Wait in a loop while suggestions have been loaded...
             if (showLoadingMsg) {
                 MessageHelpers.showMessageThrottled(getActivity(), R.string.wait_data_loading);
