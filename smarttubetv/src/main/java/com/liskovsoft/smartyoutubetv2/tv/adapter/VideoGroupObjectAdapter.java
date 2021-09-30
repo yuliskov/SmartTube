@@ -1,50 +1,46 @@
 package com.liskovsoft.smartyoutubetv2.tv.adapter;
 
-import androidx.annotation.NonNull;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.Presenter;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 public class VideoGroupObjectAdapter extends ObjectAdapter {
     private static final String TAG = VideoGroupObjectAdapter.class.getSimpleName();
-    private final List<Video> mVideoItems;
+    private final List<Video> mVideoItems = new ArrayList<>();
     
     public VideoGroupObjectAdapter(VideoGroup videoGroup, Presenter presenter) {
         super(presenter);
-        mVideoItems = new ArrayList<Video>() {
-            @Override
-            public boolean addAll(@NonNull Collection<? extends Video> c) {
-                // TODO: remove the hack someday.
-                // Dirty hack for avoiding group duplication.
-                // Duplicated items suddenly appeared in Home and Subscriptions.
-
-                //if (size() >= c.size() && c.contains(get(c.size() - 1))) {
-                //    return false;
-                //}
-
-                // Alt method. Works with Home rows.
-                //if (size() < 30) {
-                //    Video firstItem = Helpers.get(c, 0);
-                //    if (firstItem != null && contains(firstItem)) {
-                //        return false;
-                //    }
-                //}
-
-                // Another alt method.
-                if (size() > 0 && size() < 30) {
-                    Helpers.removeIf(c, this::contains);
-                }
-
-                return super.addAll(c);
-            }
-        };
+        //mVideoItems = new ArrayList<Video>() {
+        //    @Override
+        //    public boolean addAll(@NonNull Collection<? extends Video> c) {
+        //        // TODO: remove the hack someday.
+        //        // Dirty hack for avoiding group duplication.
+        //        // Duplicated items suddenly appeared in Home and Subscriptions.
+        //
+        //        //if (size() >= c.size() && c.contains(get(c.size() - 1))) {
+        //        //    return false;
+        //        //}
+        //
+        //        // Alt method. Works with Home rows.
+        //        //if (size() < 30) {
+        //        //    Video firstItem = Helpers.get(c, 0);
+        //        //    if (firstItem != null && contains(firstItem)) {
+        //        //        return false;
+        //        //    }
+        //        //}
+        //
+        //        // Another alt method.
+        //        if (size() > 0 && size() < 30) {
+        //            Helpers.removeIf(c, this::contains);
+        //        }
+        //
+        //        return super.addAll(c);
+        //    }
+        //};
 
         if (videoGroup != null) {
             append(videoGroup);
