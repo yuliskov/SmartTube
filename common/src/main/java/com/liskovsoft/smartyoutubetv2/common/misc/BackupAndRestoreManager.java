@@ -104,8 +104,8 @@ public class BackupAndRestoreManager implements MotherActivity.OnPermissions {
             }
         }
 
-        // to apply settings we need to kill the app
-        new Handler(mContext.getMainLooper()).postDelayed(() -> ViewManager.instance(mContext).forceFinishTheApp(), 1_000);
+        // To apply settings we need to kill the app
+        new Handler(mContext.getMainLooper()).postDelayed(() -> ViewManager.instance(mContext).forceFinishTheApp(true), 1_000);
     }
 
     private void verifyStoragePermissionsAndReturn() {

@@ -94,7 +94,8 @@ public class MotherActivity extends FragmentActivity {
             boolean noActivities = sNumActivities == 0;
             boolean singlePipActivity = sNumActivities == 1 && sIsInPipMode;
             if (noActivities || singlePipActivity) {
-                ViewManager.instance(this).forceFinishTheApp();
+                // Don't destroy the app. Let remote functions continue to work in background.
+                ViewManager.instance(this).forceFinishTheApp(false);
             }
         }
     }

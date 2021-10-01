@@ -326,15 +326,13 @@ public class ViewManager {
         }
     }
 
-    public void forceFinishTheApp() {
+    public void forceFinishTheApp(boolean kill) {
         SplashPresenter.unhold();
         BrowsePresenter.unhold();
         clearCaches();
 
-        // We need to destroy the app only if settings are changed
-        if (GeneralData.instance(mContext).isSettingsSectionEnabled()) {
-            // Don't destroy the app. Let remote functions continue to work in background.
-            //destroyApp();
+        if (kill) {
+            destroyApp();
         }
     }
 
