@@ -83,7 +83,7 @@
     <string name="side_panel_sections">Ustawienia sekcji</string>
     <string name="boot_to_section">Sekcja startowa</string>
     <string name="large_ui">Duży interfejs</string>
-    <string name="video_grid_scale">Skalowanie siatki wiedo</string>
+    <string name="video_grid_scale">Skalowanie siatki wideo</string>
     <string name="scale_ui">Skalowanie interfejsu</string>
     <string name="color_scheme">Schemat kolorów</string>
     <string name="color_scheme_default">Domyślny</string>
