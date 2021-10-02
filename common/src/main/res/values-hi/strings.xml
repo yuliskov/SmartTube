@@ -211,7 +211,7 @@
   <string name="return_to_background_video">पृष्ठभूमि में चल रहे वीडियो पर लौटें</string>
   <string name="pin_unpin_from_sidebar">साइडबार से पिन/अनपिन करें</string>
   <string name="pinned_to_sidebar">साइडबार पर पिन किया गया</string>
-  <string name="unpinned_from_sidebar">साइडबार से अनपिन किया गया</string>
+  <string name="unpinned_from_sidebar">साइडबार से पिन निकाला गया</string>
   <string name="dialog_select_country">देश</string>
   <string name="settings_language_country">भाषा/देश</string>
   <string name="share_embed_link">एम्बेड लिंक साझा करें</string>
@@ -243,4 +243,10 @@
   <string name="skip_each_segment_once">भाग दोबारा न छोड़े</string>
   <string name="player_time_correction">गति अनुसार समय दिखाए</string>
   <string name="disable_ok_long_press">OK कुंजी का देर तक दबाना बंद करे</string>
+  <string name="player_show_ending_time">समाप्ति समय दिखाए</string>
+  <string name="player_show_global_ending_time">समाप्ति समय हमेशा दिखाए</string>
+  <string name="unpin_from_sidebar">साइडबार से पिन किया गया निकाले</string>
+  <string name="option_disabled">अक्षम</string>
+  <string name="refresh_section">अनुभाग रिफ्रेश</string>
+  <string name="sponsor_color_markers">प्रोग्रेस बार पर रंगीन भाग</string>
 </resources>
