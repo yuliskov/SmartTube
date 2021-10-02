@@ -222,6 +222,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         moveToTop(mediaGroups, R.string.playlists_row_name);
         moveToTop(mediaGroups, R.string.popular_uploads_row_name);
         moveToTop(mediaGroups, R.string.uploads_row_name);
+        moveToTop(mediaGroups, R.string.live_now_row_name);
     }
 
     private void moveToTop(List<MediaGroup> mediaGroups, int rowNameResId) {

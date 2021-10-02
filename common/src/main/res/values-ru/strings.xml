@@ -249,4 +249,5 @@
     <string name="sponsor_color_markers">Цветовые метки на шкале прогресса</string>
     <string name="refresh_section">Обновить раздел</string>
     <string name="option_disabled">Отключено</string>
+    <string name="live_now_row_name">Сейчас в эфире</string>
 </resources>
