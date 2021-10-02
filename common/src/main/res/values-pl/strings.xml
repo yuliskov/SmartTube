@@ -39,7 +39,7 @@
     <string name="update_changelog">Lista zmian</string>
     <string name="install_update">Zainstaluj aktualizację</string>
     <string name="section_is_empty">Ups! Nic tu nie ma.</string>
-    <string name="dialog_add_to_playlist">Dodaj do/Usuń z listy odtwarzania</string>
+    <string name="dialog_add_to_playlist">Dodaj do/Usuń z playlisty</string>
     <string name="msg_signed_users_only">Tylko zalogowani użytkownicy</string>
     <string name="msg_cant_load_content">Ups. Nie można załadować treści.</string>
     <string name="title_video_presets">Ustawienia wideo</string>
@@ -52,7 +52,7 @@
     <string name="settings_linked_devices">Połączone urządzenia</string>
     <string name="settings_about">Informacje</string>
     <string name="dialog_account_list">Wybierz konto</string>
-    <string name="dialog_account_none">Żaden</string>
+    <string name="dialog_account_none">Żadne</string>
     <string name="dialog_remove_account">Usuń konto</string>
     <string name="dialog_add_account">Dodaj konto</string>
     <string name="default_lang">Domyślny</string>
@@ -83,7 +83,7 @@
     <string name="side_panel_sections">Ustawienia sekcji</string>
     <string name="boot_to_section">Sekcja startowa</string>
     <string name="large_ui">Duży interfejs</string>
-    <string name="video_grid_scale">Skalowanie siatki wiedo</string>
+    <string name="video_grid_scale">Skalowanie siatki wideo</string>
     <string name="scale_ui">Skalowanie interfejsu</string>
     <string name="color_scheme">Schemat kolorów</string>
     <string name="color_scheme_default">Domyślny</string>
@@ -132,8 +132,8 @@
     <string name="open_channel_uploads">Otwórz przesłane filmy</string>
     <string name="app_exit_shortcut">Wyjście z aplikacji</string>
     <string name="app_exit_none">Nie zamykaj</string>
-    <string name="app_double_back_exit">Podwójne kliknięcie wstecz</string>
-    <string name="app_single_back_exit">Pojedyncze kliknięcie wstecz</string>
+    <string name="app_double_back_exit">Podwójne kliknięcie przycisku wstecz</string>
+    <string name="app_single_back_exit">Pojedyncze kliknięcie przycisku wstecz</string>
     <string name="action_video_zoom">Wideo zoom</string>
     <string name="video_zoom">Wideo zoom</string>
     <string name="video_zoom_default">Domyślnie</string>
@@ -233,7 +233,7 @@
     <string name="proxy_enabled">Proxy włączone</string>
     <string name="proxy_disabled">Proxy wyłączone</string>
     <string name="uploads_row_name">Przesłane</string>
-    <string name="playlists_row_name">Utworzone listy odtwarzania</string>
+    <string name="playlists_row_name">Utworzone playlisty</string>
     <string name="popular_uploads_row_name">Popularne</string>
     <string name="breaking_news_row_name">Najnowsze informacje</string>
     <string name="covid_news_row_name">Informacje o COVID-19</string>
