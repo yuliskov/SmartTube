@@ -304,10 +304,16 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     @Override
     public void focusOnContent() {
+        // Fix: "Can not perform this action after onSaveInstanceState"?
+        if (!Utils.checkActivity(getActivity())) {
+            return;
+        }
+
         startHeadersTransition(false);
     }
 
     private void focusOnChildFragment() {
+        // Fix: "Can not perform this action after onSaveInstanceState"?
         if (!Utils.checkActivity(getActivity())) {
             return;
         }
