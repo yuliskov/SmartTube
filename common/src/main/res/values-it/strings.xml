@@ -28,7 +28,7 @@
     <string name="category_background_playback">Riproduzione in background</string>
     <string name="not_implemented">Non implementato</string>
     <string name="option_background_playback_off">Disattivato</string>
-    <string name="option_background_playback_pip">Picture in picture</string>
+    <string name="option_background_playback_pip">Immagine nell'immagine (PiP)</string>
     <string name="option_background_playback_only_audio">Solo audio</string>
     <string name="playback_settings">Opzioni riproduzione</string>
     <string name="video_speed">Velocità video</string>
@@ -178,15 +178,15 @@
     <string name="content_block_sponsor">Sponsor</string>
     <string name="content_block_intro">Introduzione - Intermezzo</string>
     <string name="content_block_outro">Titoli di coda - Ringraziamenti</string>
-    <string name="content_block_interaction">Promemoria di interazione (iscrizione)</string>
-    <string name="content_block_self_promo">Non retribuito/autopromozione</string>
+    <string name="content_block_interaction">Promemoria di iscrizione al canale</string>
+    <string name="content_block_self_promo">Non retribuito - Autopromozione</string>
     <string name="content_block_music_off_topic">Sezione non musicale della clip</string>
     <string name="confirm_segment_skip">Salto il segmento \"%s\"?</string>
     <string name="cancel_segment_skip">Cancella salto segmento</string>
     <string name="msg_skipping_segment">Sto saltando il segmento \"%s\"…</string>
     <string name="content_block_notification_type">Tipo di notifica</string>
     <string name="content_block_notify_none">Senza notifica</string>
-    <string name="content_block_notify_toast">Toast</string>
+    <string name="content_block_notify_toast">Notifica breve (toast)</string>
     <string name="content_block_notify_dialog">Notifica di conferma</string>
     <string name="return_to_launcher">Torna al launcher dai canali/ricerca ATV</string>
     <string name="intent_force_close">Forza l\'uscita se il video è stato aperto da una fonte esterna</string>
@@ -245,6 +245,9 @@
     <string name="app_restore">Ripristino dati dal backup</string>
     <string name="skip_each_segment_once">Non saltare più i segmenti</string>
     <string name="disable_ok_long_press">Disabilita pressione prolungata tasto OK</string>
-    <string name="player_time_correction">Visualizza l\'ora in base alla velocità</string>
+    <string name="player_time_correction">Visualizza la durata in base alla velocità</string>
     <string name="sponsor_color_markers">Indicatori di colore sulla barra di avanzamento</string>																		   
+    <string name="refresh_section">Aggiorna sezione</string>
+    <string name="option_disabled">Disabilitato</string>
+    <string name="live_now_row_name">In diretta</string>
 </resources>
