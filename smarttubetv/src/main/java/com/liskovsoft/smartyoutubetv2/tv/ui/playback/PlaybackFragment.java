@@ -958,7 +958,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void finish() {
-        getLeanbackActivity().finish();
+        LeanbackActivity activity = getLeanbackActivity();
+
+        if (activity != null) {
+            activity.finish();
+        }
     }
 
     @Override
