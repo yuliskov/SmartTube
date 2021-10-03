@@ -178,7 +178,7 @@ public class Utils {
     public static void startRemoteControlWorkRequest(Context context) {
         PeriodicWorkRequest workRequest =
                 new PeriodicWorkRequest.Builder(
-                        RemoteControlWorker.class, 30, TimeUnit.MINUTES
+                        RemoteControlWorker.class, 10, TimeUnit.MINUTES
                 ).build();
 
         WorkManager
