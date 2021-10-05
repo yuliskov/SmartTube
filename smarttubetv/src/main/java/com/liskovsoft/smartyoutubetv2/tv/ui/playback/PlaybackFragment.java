@@ -751,7 +751,12 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void setSeekBarSegments(List<SeekBarSegment> segments) {
+        if (getActivity() == null) {
+            return;
+        }
+
         SeekBar seekBar = getActivity().findViewById(R.id.playback_progress);
+
         if (seekBar != null) {
             seekBar.setSegments(segments);
         }
