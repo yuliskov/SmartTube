@@ -6,6 +6,7 @@ import android.os.IBinder;
 import androidx.annotation.Nullable;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 
 public class RemoteControlService extends Service {
     private static final String TAG = RemoteControlService.class.getSimpleName();
@@ -22,6 +23,8 @@ public class RemoteControlService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand: %s", Helpers.toString(intent));
 
-        return super.onStartCommand(intent, flags, startId);
+        PlaybackPresenter.instance(getApplicationContext()); // init RemoteControlListener
+
+        return START_STICKY;
     }
 }

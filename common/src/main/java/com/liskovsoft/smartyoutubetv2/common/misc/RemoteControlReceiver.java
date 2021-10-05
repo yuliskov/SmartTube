@@ -14,12 +14,12 @@ public class RemoteControlReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "Initializing remote control listener...");
 
-        // Autostart fix on some devices?
+        // Fix unload from the memory on some devices?
         Utils.startRemoteControlService(context);
 
-        Utils.startRemoteControlWorkRequest(context);
+        //Utils.startRemoteControlWorkRequest(context);
 
         // Couldn't success inside periodic work request
-        PlaybackPresenter.instance(context); // init RemoteControlListener
+        //PlaybackPresenter.instance(context); // init RemoteControlListener
     }
 }

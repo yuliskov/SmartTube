@@ -160,6 +160,10 @@ public class Utils {
 
         //context.startService(serviceIntent);
 
+        bindService(context, serviceIntent);
+    }
+
+    private static void bindService(Context context, Intent serviceIntent) {
         // https://medium.com/@debuggingisfun/android-auto-stop-background-service-336e8b3ff03c
         // https://medium.com/@debuggingisfun/android-o-work-around-background-service-limitation-e697b2192bc3
         context.getApplicationContext().bindService(serviceIntent, new ServiceConnection() {
