@@ -158,9 +158,10 @@ public class Utils {
         // Fake service to prevent the app from destroying
         Intent serviceIntent = new Intent(context, RemoteControlService.class);
 
-        //context.startService(serviceIntent);
+        context.stopService(serviceIntent);
+        context.startService(serviceIntent);
 
-        bindService(context, serviceIntent);
+        //bindService(context, serviceIntent);
     }
 
     private static void bindService(Context context, Intent serviceIntent) {
