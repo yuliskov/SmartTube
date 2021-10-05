@@ -400,7 +400,9 @@ public class PlayerData {
      */
     private void initDefaultFormats() {
         mDefaultVideoFormats.put("SHIELD Android TV", FormatItem.VIDEO_4K_VP9_60);
-        //mDefaultVideoFormats.put("AFTMM", FormatItem.VIDEO_4K_VP9_60);
+        mDefaultVideoFormats.put("AFTMM", FormatItem.VIDEO_4K_VP9_60); // Stick 4K 2018
+        mDefaultVideoFormats.put("AFTKA", FormatItem.VIDEO_4K_VP9_60); // Stick 4K Max 2021
+        mDefaultVideoFormats.put("P1", FormatItem.VIDEO_FHD_AVC_60); // Chinese projector (see annoying emails)
     }
 
     private void restoreData() {
