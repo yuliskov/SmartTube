@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -33,7 +34,7 @@ public class RemoteControlService extends Service {
 
         // https://stackoverflow.com/questions/46445265/android-8-0-java-lang-illegalstateexception-not-allowed-to-start-service-inten
         if (VERSION.SDK_INT >= 26) {
-            startForeground(1, new Notification());
+            startForeground(1, createNotification());
         }
     }
 
@@ -49,17 +50,34 @@ public class RemoteControlService extends Service {
     }
 
     private void showNotification() {
+        int NOTIFICATION_ID = 12345;
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(NOTIFICATION_ID, createNotification());
+    }
+
+    private Notification createNotification() {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.generic_channels)
                         .setContentTitle(getApplicationContext().getString(R.string.device_link_enabled))
                         .setContentText(getApplicationContext().getString(R.string.device_link_enabled));
-        int NOTIFICATION_ID = 12345;
 
         Intent targetIntent = new Intent(this, ViewManager.instance(getApplicationContext()).getRootActivity());
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(contentIntent);
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(NOTIFICATION_ID, builder.build());
+
+        if (VERSION.SDK_INT >= 26) {
+            String channelId = getApplicationContext().getPackageName();
+            NotificationChannel channel = new NotificationChannel(
+                    channelId,
+                    getApplicationContext().getString(R.string.search_label),
+                    NotificationManager.IMPORTANCE_HIGH);
+            notificationManager.createNotificationChannel(channel);
+            builder.setChannelId(channelId);
+        }
+
+        return builder.build();
     }
 }
