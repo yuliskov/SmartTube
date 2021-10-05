@@ -148,7 +148,7 @@ public class Utils {
     }
 
     /**
-     * Could help with "Can not perform this action after onSaveInstanceState"?
+     * NOTE: Below won't help with "Can not perform this action after onSaveInstanceState"
      */
     public static boolean checkActivity(Activity activity) {
         return activity != null && !activity.isDestroyed() && !activity.isFinishing();

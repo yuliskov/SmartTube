@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +52,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private int mRestoredHeaderIndex = -1;
     private int mRestoredItemIndex = -1;
     private boolean mFocusOnChildFragment;
-    private GestureDetector mGestureDetector;
+    private boolean mIsStateSaved;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,6 +83,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         outState.putInt(SELECTED_HEADER_INDEX, getSelectedPosition());
         // Not robust. Because tab content often changed after reloading.
         outState.putInt(SELECTED_ITEM_INDEX, mSectionFragmentFactory.getCurrentFragmentItemIndex());
+
+        mIsStateSaved = true;
     }
 
     @Override
@@ -131,7 +132,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
                     } else {
                         // update section when clicked or pressed
                         mBrowsePresenter.onSectionFocused((int) headerId);
-                        startHeadersTransition(false);
+                        startHeadersTransitionSafe(false);
                     }
                 }
         );
@@ -304,22 +305,12 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     @Override
     public void focusOnContent() {
-        // Fix: "Can not perform this action after onSaveInstanceState"?
-        if (!Utils.checkActivity(getActivity())) {
-            return;
-        }
-
-        startHeadersTransition(false);
+        startHeadersTransitionSafe(false);
     }
 
     private void focusOnChildFragment() {
-        // Fix: "Can not perform this action after onSaveInstanceState"?
-        if (!Utils.checkActivity(getActivity())) {
-            return;
-        }
-
         if (mFocusOnChildFragment) {
-            startHeadersTransition(false);
+            startHeadersTransitionSafe(false);
             mFocusOnChildFragment = false;
         }
     }
@@ -329,6 +320,18 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         if (index >= 0) {
             mSectionFragmentFactory.setCurrentFragmentItemIndex(index);
         }
+    }
+
+    /**
+     * Fix: IllegalStateException: "Can not perform this action after onSaveInstanceState"
+     */
+    private void startHeadersTransitionSafe(boolean withHeaders) {
+        // Fix: IllegalStateException: "Can not perform this action after onSaveInstanceState"
+        if (mIsStateSaved || !Utils.checkActivity(getActivity())) {
+            return;
+        }
+
+        startHeadersTransition(withHeaders);
     }
 
     private void restoreMainFragment() {
