@@ -10,6 +10,7 @@ import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.IBinder;
 import android.text.Spannable;
@@ -158,10 +159,21 @@ public class Utils {
         // Fake service to prevent the app from destroying
         Intent serviceIntent = new Intent(context, RemoteControlService.class);
 
-        context.stopService(serviceIntent);
-        context.startService(serviceIntent);
+        //if (VERSION.SDK_INT < 26) {
+        //    context.stopService(serviceIntent);
+        //    context.startService(serviceIntent);
+        //} else {
+        //    bindService(context, serviceIntent);
+        //}
 
-        //bindService(context, serviceIntent);
+        // https://stackoverflow.com/questions/46445265/android-8-0-java-lang-illegalstateexception-not-allowed-to-start-service-inten
+        if (VERSION.SDK_INT >= 26) {
+            context.startForegroundService(serviceIntent);
+            context.startForegroundService(serviceIntent);
+        } else {
+            context.stopService(serviceIntent);
+            context.startService(serviceIntent);
+        }
     }
 
     private static void bindService(Context context, Intent serviceIntent) {
