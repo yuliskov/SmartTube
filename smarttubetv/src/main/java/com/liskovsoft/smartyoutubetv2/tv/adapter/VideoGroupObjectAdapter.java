@@ -9,9 +9,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 public class VideoGroupObjectAdapter extends ObjectAdapter {
     private static final String TAG = VideoGroupObjectAdapter.class.getSimpleName();
@@ -39,14 +37,16 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
                 //}
 
                 // Another alt method.
-                //if (size() > 0 && size() < 30) {
-                //    Helpers.removeIf(c, this::contains);
-                //}
+                if (size() > 0 && size() < 30) {
+                    Helpers.removeIf(c, this::contains);
+                }
 
-                // Latest alt dubs fix method.
-                Set<Video> uniqueItems = new LinkedHashSet<>(c);
+                // Latest alt dubs fix method (not works).
+                //Set<Video> uniqueItems = new LinkedHashSet<>(c);
 
-                return super.addAll(uniqueItems);
+                //return super.addAll(uniqueItems);
+
+                return super.addAll(c);
             }
         };
 
