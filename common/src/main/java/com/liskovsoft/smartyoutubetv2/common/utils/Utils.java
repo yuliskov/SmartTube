@@ -8,6 +8,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -162,21 +163,8 @@ public class Utils {
     }
 
     public static void startRemoteControlService(Context context) {
-        if (isServiceRunning(context, RemoteControlService.class)) {
-            return;
-        }
-
         // Service that prevents the app from destroying
-        Intent serviceIntent = new Intent(context, RemoteControlService.class);
-
-        // https://stackoverflow.com/questions/46445265/android-8-0-java-lang-illegalstateexception-not-allowed-to-start-service-inten
-        if (VERSION.SDK_INT >= 26) {
-            context.startForegroundService(serviceIntent);
-            context.startForegroundService(serviceIntent);
-        } else {
-            context.stopService(serviceIntent);
-            context.startService(serviceIntent);
-        }
+        startService(context, RemoteControlService.class);
     }
 
     private static void bindService(Context context, Intent serviceIntent) {
@@ -331,7 +319,7 @@ public class Utils {
     }
 
     @SuppressWarnings("deprecation")
-    public static boolean isServiceRunning(Context context, Class<?> serviceClass) {
+    public static boolean isServiceRunning(Context context, Class<? extends Service> serviceClass) {
         ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceClass.getName().equals(service.service.getClassName())) {
@@ -371,5 +359,22 @@ public class Utils {
         }
 
         return builder.build();
+    }
+
+    public static void startService(Context context, Class<? extends Service> serviceCls) {
+        if (isServiceRunning(context, serviceCls)) {
+            return;
+        }
+
+        Intent serviceIntent = new Intent(context, serviceCls);
+
+        // https://stackoverflow.com/questions/46445265/android-8-0-java-lang-illegalstateexception-not-allowed-to-start-service-inten
+        if (VERSION.SDK_INT >= 26) {
+            context.startForegroundService(serviceIntent);
+            context.startForegroundService(serviceIntent);
+        } else {
+            context.stopService(serviceIntent);
+            context.startService(serviceIntent);
+        }
     }
 }

@@ -32,6 +32,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.utils.ScreenHelper;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
@@ -118,6 +119,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         updateSections();
         getView().selectSection(mStartSectionIndex);
         showBootDialogs();
+        Utils.startRemoteControlService(getContext());
     }
 
     private void initCategories() {
