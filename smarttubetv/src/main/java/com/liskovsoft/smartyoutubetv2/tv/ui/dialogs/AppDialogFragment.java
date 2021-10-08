@@ -29,7 +29,6 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     private static final String TAG = AppDialogFragment.class.getSimpleName();
     private AppPreferenceFragment mPreferenceFragment;
     private AppDialogPresenter mSettingsPresenter;
-    private boolean mIsActive;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,20 +36,6 @@ public class AppDialogFragment extends LeanbackSettingsFragment
 
         mSettingsPresenter = AppDialogPresenter.instance(getActivity());
         mSettingsPresenter.setView(this);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        mIsActive = true;
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        mIsActive = false;
     }
 
     @Override
@@ -64,18 +49,22 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     public void onPreferenceStartInitialScreen() {
         // FIX: Can not perform this action after onSaveInstanceState
         // Possible fix: Unable to add window -- token android.os.BinderProxy is not valid; is your activity running?
-        if (!mIsActive || !Utils.checkActivity(getActivity())) {
+        if (!Utils.checkActivity(getActivity())) {
             return;
         }
 
-        // Fix mSettingsPresenter in null after init stage.
-        // Seems concurrency between dialogs.
-        mSettingsPresenter.setView(this);
+        try {
+            // Fix mSettingsPresenter in null after init stage.
+            // Seems concurrency between dialogs.
+            mSettingsPresenter.setView(this);
 
-        mPreferenceFragment = buildPreferenceFragment();
-        startPreferenceFragment(mPreferenceFragment);
+            mPreferenceFragment = buildPreferenceFragment();
+            startPreferenceFragment(mPreferenceFragment);
 
-        mSettingsPresenter.onViewInitialized();
+            mSettingsPresenter.onViewInitialized();
+        } catch (IllegalStateException e) {
+            // NOP
+        }
     }
 
     @Override
