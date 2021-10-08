@@ -38,6 +38,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
+import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -163,8 +164,10 @@ public class Utils {
     }
 
     public static void startRemoteControlService(Context context) {
-        // Service that prevents the app from destroying
-        startService(context, RemoteControlService.class);
+        if (RemoteControlData.instance(context).isDeviceLinkEnabled()) {
+            // Service that prevents the app from destroying
+            startService(context, RemoteControlService.class);
+        }
     }
 
     private static void bindService(Context context, Intent serviceIntent) {
