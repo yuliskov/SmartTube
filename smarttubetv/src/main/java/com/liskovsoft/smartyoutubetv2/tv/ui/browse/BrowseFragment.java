@@ -52,7 +52,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private int mRestoredHeaderIndex = -1;
     private int mRestoredItemIndex = -1;
     private boolean mFocusOnChildFragment;
-    private boolean mIsStateSaved;
+    private boolean mIsActive;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,7 +73,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         setupUi();
 
         enableMainFragmentScaling(false);
-        mIsStateSaved = false;
     }
 
     @Override
@@ -84,8 +83,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         outState.putInt(SELECTED_HEADER_INDEX, getSelectedPosition());
         // Not robust. Because tab content often changed after reloading.
         outState.putInt(SELECTED_ITEM_INDEX, mSectionFragmentFactory.getCurrentFragmentItemIndex());
-
-        mIsStateSaved = true;
     }
 
     @Override
@@ -328,7 +325,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
      */
     private void startHeadersTransitionSafe(boolean withHeaders) {
         // Fix: IllegalStateException: "Can not perform this action after onSaveInstanceState"
-        if (mIsStateSaved || !Utils.checkActivity(getActivity())) {
+        if (!mIsActive || !Utils.checkActivity(getActivity())) {
             return;
         }
 
@@ -389,6 +386,20 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         }
 
         mIsFragmentCreated = false;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        mIsActive = true;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        mIsActive = false;
     }
 
     /**

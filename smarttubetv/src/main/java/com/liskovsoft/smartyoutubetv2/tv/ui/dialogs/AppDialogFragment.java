@@ -29,7 +29,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     private static final String TAG = AppDialogFragment.class.getSimpleName();
     private AppPreferenceFragment mPreferenceFragment;
     private AppDialogPresenter mSettingsPresenter;
-    private boolean mIsStateSaved;
+    private boolean mIsActive;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,7 +37,20 @@ public class AppDialogFragment extends LeanbackSettingsFragment
 
         mSettingsPresenter = AppDialogPresenter.instance(getActivity());
         mSettingsPresenter.setView(this);
-        mIsStateSaved = false;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        mIsActive = true;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        mIsActive = false;
     }
 
     @Override
@@ -48,16 +61,10 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mIsStateSaved = true;
-    }
-
-    @Override
     public void onPreferenceStartInitialScreen() {
         // FIX: Can not perform this action after onSaveInstanceState
         // Possible fix: Unable to add window -- token android.os.BinderProxy is not valid; is your activity running?
-        if (mIsStateSaved || !Utils.checkActivity(getActivity())) {
+        if (!mIsActive || !Utils.checkActivity(getActivity())) {
             return;
         }
 
