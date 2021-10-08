@@ -73,6 +73,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         setupUi();
 
         enableMainFragmentScaling(false);
+        mIsStateSaved = false;
     }
 
     @Override

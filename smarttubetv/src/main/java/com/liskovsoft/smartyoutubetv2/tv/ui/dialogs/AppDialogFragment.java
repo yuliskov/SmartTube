@@ -37,6 +37,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
 
         mSettingsPresenter = AppDialogPresenter.instance(getActivity());
         mSettingsPresenter.setView(this);
+        mIsStateSaved = false;
     }
 
     @Override
