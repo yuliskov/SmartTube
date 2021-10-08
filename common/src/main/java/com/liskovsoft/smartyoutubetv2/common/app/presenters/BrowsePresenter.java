@@ -119,7 +119,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         updateSections();
         getView().selectSection(mStartSectionIndex);
         showBootDialogs();
-        Utils.startRemoteControlService(getContext());
+        Utils.updateRemoteControlService(getContext());
     }
 
     private void initCategories() {

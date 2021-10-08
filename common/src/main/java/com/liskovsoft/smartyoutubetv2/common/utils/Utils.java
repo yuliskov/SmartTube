@@ -163,10 +163,12 @@ public class Utils {
         return activity != null && !activity.isDestroyed() && !activity.isFinishing();
     }
 
-    public static void startRemoteControlService(Context context) {
+    public static void updateRemoteControlService(Context context) {
         if (RemoteControlData.instance(context).isDeviceLinkEnabled()) {
             // Service that prevents the app from destroying
             startService(context, RemoteControlService.class);
+        } else {
+            stopService(context, RemoteControlService.class);
         }
     }
 
@@ -344,8 +346,7 @@ public class Utils {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(iconResId)
-                        .setContentTitle(context.getString(titleResId))
-                        .setContentText(context.getString(titleResId));
+                        .setContentTitle(context.getString(titleResId));
 
         Intent targetIntent = new Intent(context, activityCls);
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -374,10 +375,18 @@ public class Utils {
         // https://stackoverflow.com/questions/46445265/android-8-0-java-lang-illegalstateexception-not-allowed-to-start-service-inten
         if (VERSION.SDK_INT >= 26) {
             context.startForegroundService(serviceIntent);
-            context.startForegroundService(serviceIntent);
         } else {
-            context.stopService(serviceIntent);
             context.startService(serviceIntent);
         }
+    }
+
+    public static void stopService(Context context, Class<? extends Service> serviceCls) {
+        if (!isServiceRunning(context, serviceCls)) {
+            return;
+        }
+
+        Intent serviceIntent = new Intent(context, serviceCls);
+
+        context.stopService(serviceIntent);
     }
 }
