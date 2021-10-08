@@ -129,7 +129,7 @@
     <string name="playlists_style_rows">Lignes</string>
     <string name="player_show_clock">Afficher l’horloge</string>
     <string name="player_show_remaining_time">Afficher le temps restant</string>
-    <string name="player_show_ending_time">Afficher l'heure de fin</string>
+    <string name="player_show_ending_time">Afficher l\'heure de fin</string>
     <string name="open_channel_uploads">Ouvrir les vidéos de la chaîne</string>
     <string name="app_exit_shortcut">Sortir de l’application</string>
     <string name="app_exit_none">Ne pas sortir de l\'application</string>
@@ -219,7 +219,6 @@
     <string name="pin_unpin_from_sidebar">Épingler/Dépingler à partir de la barre latérale</string>
     <string name="unpinned_from_sidebar">Déplacer de la barre latérale</string>
     <string name="unpin_from_sidebar">Déplacer dans barre latérale</string>
-    <string name="unpinned_from_sidebar">Déplacer de la barre latérale</string>
     <string name="dialog_select_country">Pays</string>
     <string name="settings_language_country">Langue/Pays</string>
     <string name="share_embed_link">Partager le lien intégré</string>
