@@ -11,6 +11,7 @@ public class RemoteControlData extends DataChangeBase {
     private final Context mContext;
     private final AppPrefs mAppPrefs;
     private boolean mIsDeviceLinkEnabled;
+    private boolean mIsRunInBackgroundEnabled;
 
     private RemoteControlData(Context context) {
         mContext = context;
@@ -35,16 +36,26 @@ public class RemoteControlData extends DataChangeBase {
         return mIsDeviceLinkEnabled;
     }
 
+    public void enableRunInBackground(boolean select) {
+        mIsRunInBackgroundEnabled = select;
+        persistState();
+    }
+
+    public boolean isRunInBackgroundEnabled() {
+        return mIsRunInBackgroundEnabled;
+    }
+
     private void restoreState() {
         String data = mAppPrefs.getData(DEVICE_LINK_DATA);
 
         String[] split = Helpers.splitObjectLegacy(data);
 
-        mIsDeviceLinkEnabled = Helpers.parseBoolean(split, 0, true);
+        mIsDeviceLinkEnabled = Helpers.parseBoolean(split, 1, true);
+        mIsRunInBackgroundEnabled = Helpers.parseBoolean(split, 2, true);
     }
 
     protected void persistState() {
-        mAppPrefs.setData(DEVICE_LINK_DATA, Helpers.mergeObject(mIsDeviceLinkEnabled));
+        mAppPrefs.setData(DEVICE_LINK_DATA, Helpers.mergeObject(null, mIsDeviceLinkEnabled, mIsRunInBackgroundEnabled));
 
         super.persistState();
     }

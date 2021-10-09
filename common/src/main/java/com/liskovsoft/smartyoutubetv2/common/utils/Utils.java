@@ -164,7 +164,7 @@ public class Utils {
     }
 
     public static void updateRemoteControlService(Context context) {
-        if (RemoteControlData.instance(context).isDeviceLinkEnabled()) {
+        if (RemoteControlData.instance(context).isRunInBackgroundEnabled()) {
             // Service that prevents the app from destroying
             startService(context, RemoteControlService.class);
         } else {
@@ -340,13 +340,14 @@ public class Utils {
     }
 
     @SuppressWarnings("deprecation")
-    public static Notification createNotification(Context context, int iconResId, int titleResId, Class<? extends Activity> activityCls) {
+    public static Notification createNotification(Context context, int iconResId, int titleResId, int contentResId, Class<? extends Activity> activityCls) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(iconResId)
-                        .setContentTitle(context.getString(titleResId));
+                        .setContentTitle(context.getString(titleResId))
+                        .setContentText(context.getString(contentResId));
 
         Intent targetIntent = new Intent(context, activityCls);
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);

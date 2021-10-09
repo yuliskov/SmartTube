@@ -250,4 +250,7 @@
     <string name="refresh_section">Обновить раздел</string>
     <string name="option_disabled">Отключено</string>
     <string name="live_now_row_name">Сейчас в эфире</string>
+    <string name="run_in_background">Работать в фоновом режиме</string>
+    <string name="settings_remote_control">Дистанционное управление</string>
+    <string name="background_service_started">Фоновый сервис запущен</string>
 </resources>

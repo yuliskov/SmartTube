@@ -50,7 +50,8 @@ public class RemoteControlService extends Service {
         return Utils.createNotification(
                 getApplicationContext(),
                 R.drawable.generic_channels,
-                R.string.device_link_enabled,
+                R.string.settings_remote_control,
+                R.string.background_service_started,
                 ViewManager.instance(getApplicationContext()).getRootActivity());
     }
 }

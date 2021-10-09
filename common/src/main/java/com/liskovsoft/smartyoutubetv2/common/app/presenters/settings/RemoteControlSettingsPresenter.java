@@ -54,11 +54,18 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
         settingsPresenter.clear();
 
-        appendLinkEnableSwitch(settingsPresenter);
+        appendRunInBackgroundSwitch(settingsPresenter);
         appendAddDeviceButton(settingsPresenter);
         appendRemoveAllDevicesButton(settingsPresenter);
 
-        settingsPresenter.showDialog(getContext().getString(R.string.settings_linked_devices), this::unhold);
+        settingsPresenter.showDialog(getContext().getString(R.string.settings_remote_control), this::unhold);
+    }
+
+    private void appendAddDeviceButton(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.appendSingleButton(UiOptionItem.from(
+                getContext().getString(R.string.dialog_add_device), option -> {
+                    AddDevicePresenter.instance(getContext()).start();
+                }));
     }
 
     private void appendRemoveAllDevicesButton(AppDialogPresenter settingsPresenter) {
@@ -66,8 +73,6 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
 
         OptionItem confirmItem = UiOptionItem.from(
                 getContext().getString(R.string.btn_confirm), option -> {
-                    mDeviceLinkData.enableDeviceLink(false);
-                    Utils.updateRemoteControlService(getContext());
                     RxUtils.execute(mRemoteManager.resetDataObserve());
                     MessageHelpers.showMessage(getContext(), R.string.msg_done);
                     settingsPresenter.closeDialog();
@@ -79,19 +84,17 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.dialog_remove_all_devices), options);
     }
 
-    private void appendAddDeviceButton(AppDialogPresenter settingsPresenter) {
-        settingsPresenter.appendSingleButton(UiOptionItem.from(
-                getContext().getString(R.string.dialog_add_device), option -> {
-                    mDeviceLinkData.enableDeviceLink(true);
-                    Utils.updateRemoteControlService(getContext());
-                    AddDevicePresenter.instance(getContext()).start();
-                }));
-    }
+    //private void appendLinkEnableSwitch(AppDialogPresenter settingsPresenter) {
+    //    settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.device_link_enabled), optionItem -> {
+    //        mDeviceLinkData.enableDeviceLink(optionItem.isSelected());
+    //        Utils.updateRemoteControlService(getContext());
+    //    }, mDeviceLinkData.isDeviceLinkEnabled()));
+    //}
 
-    private void appendLinkEnableSwitch(AppDialogPresenter settingsPresenter) {
-        settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.device_link_enabled), optionItem -> {
-            mDeviceLinkData.enableDeviceLink(optionItem.isSelected());
+    private void appendRunInBackgroundSwitch(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.run_in_background), optionItem -> {
+            mDeviceLinkData.enableRunInBackground(optionItem.isSelected());
             Utils.updateRemoteControlService(getContext());
-        }, mDeviceLinkData.isDeviceLinkEnabled()));
+        }, mDeviceLinkData.isRunInBackgroundEnabled()));
     }
 }
