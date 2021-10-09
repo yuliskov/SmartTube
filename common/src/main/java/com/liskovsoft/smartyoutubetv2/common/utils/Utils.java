@@ -365,6 +365,11 @@ public class Utils {
         return builder.build();
     }
 
+    public static void showNotification(Context context, int notificationId, Notification notification) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(notificationId, notification);
+    }
+
     public static void startService(Context context, Class<? extends Service> serviceCls) {
         if (isServiceRunning(context, serviceCls)) {
             return;
