@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.signin;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,6 +9,7 @@ import androidx.leanback.widget.GuidanceStylist;
 import androidx.leanback.widget.GuidedAction;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SignInView;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 import java.util.List;
@@ -56,7 +58,7 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
     @NonNull
     public GuidanceStylist.Guidance onCreateGuidance(@NonNull Bundle savedInstanceState) {
         String title = getString(R.string.signin_view_title);
-        String description = getString(R.string.signin_view_description, SIGN_IN_URL);
+        String description = getString(R.string.signin_view_description, Utils.color(SIGN_IN_URL, Color.RED));
         return new GuidanceStylist.Guidance(title, description, "", null);
     }
 
