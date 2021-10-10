@@ -214,7 +214,9 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
                         UiOptionItem.from(getContext().getString(R.string.dialog_add_to, playlistInfo.getTitle()),
                                 optionItem -> {
                                     addToPlaylist(playlistInfo.getPlaylistId(), !playlistInfo.isSelected());
-                                    MessageHelpers.showMessage(getContext(), !playlistInfo.isSelected() ? R.string.removed : R.string.added);
+                                    MessageHelpers.showMessage(getContext(), playlistInfo.isSelected() ?
+                                            getContext().getString(R.string.removed_from, playlistInfo.getTitle()) :
+                                            getContext().getString(R.string.added_to, playlistInfo.getTitle()));
                                     mSettingsPresenter.closeDialog();
                                 }
                         )

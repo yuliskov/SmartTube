@@ -254,6 +254,6 @@
     <string name="settings_remote_control">Дистанционное управление</string>
     <string name="background_service_started">Фоновый сервис запущен</string>
     <string name="dialog_add_to">Добавить/Удалить из %s</string>
-    <string name="removed">Добавлено</string>
-    <string name="added">Удалено</string>
+    <string name="added_to">Добавлено в %s</string>
+    <string name="removed_from">Удалено из %s</string>
 </resources>
