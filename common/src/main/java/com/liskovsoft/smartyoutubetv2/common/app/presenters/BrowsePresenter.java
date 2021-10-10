@@ -167,6 +167,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         Set<Video> pinnedItems = mGeneralData.getPinnedItems();
 
         Helpers.removeIf(pinnedItems, value -> {
+            if (value == null) {
+                return true;
+            }
+
             value.videoId = null;
             return value.playlistId == null;
         });
