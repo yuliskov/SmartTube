@@ -40,6 +40,7 @@ public class GeneralData {
     private boolean mIsProxyEnabled;
     private boolean mIsBridgeCheckEnabled;
     private boolean mIsOkButtonLongPressDisabled;
+    private String mLastPlaylistId;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -155,12 +156,12 @@ public class GeneralData {
         return mIsRemapFastForwardToNextEnabled;
     }
 
-    public void setScreenDimmingTimoutMin(int timeoutMin) {
+    public void setScreenDimmingTimeoutMin(int timeoutMin) {
         mScreenDimmingTimeoutMin = timeoutMin;
         persistState();
     }
 
-    public int getScreenDimmingTimoutMin() {
+    public int getScreenDimmingTimeoutMin() {
         return mScreenDimmingTimeoutMin;
     }
 
@@ -189,6 +190,15 @@ public class GeneralData {
     
     public boolean isOkButtonLongPressDisabled() {
         return mIsOkButtonLongPressDisabled;
+    }
+
+    public void setLastPlaylistId(String playlistId) {
+        mLastPlaylistId = playlistId;
+        persistState();
+    }
+
+    public String getLastPlaylistId() {
+        return mLastPlaylistId;
     }
 
     private void initLeftPanelCategories() {
@@ -220,6 +230,7 @@ public class GeneralData {
         mIsProxyEnabled = Helpers.parseBoolean(split, 10, false);
         mIsBridgeCheckEnabled = Helpers.parseBoolean(split, 11, true);
         mIsOkButtonLongPressDisabled = Helpers.parseBoolean(split, 12, false);
+        mLastPlaylistId = Helpers.parseStr(split, 13);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArrayLegacy(selectedCategories);
@@ -246,6 +257,6 @@ public class GeneralData {
         mPrefs.setData(GENERAL_DATA, Helpers.mergeObject(selectedCategories, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut,
                 mIsReturnToLauncherEnabled,mBackgroundShortcut, pinnedItems,
                 mIsHideShortsEnabled, mIsRemapFastForwardToNextEnabled, mScreenDimmingTimeoutMin,
-                mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled));
+                mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId));
     }
 }

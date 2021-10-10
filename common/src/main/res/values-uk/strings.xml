@@ -253,4 +253,7 @@
     <string name="run_in_background">Працювати у фоновому режимі</string>
     <string name="settings_remote_control">Дистанційне керування</string>
     <string name="background_service_started">Фоновий сервіс запущений</string>
+    <string name="dialog_add_to">Додати/Видалити із %s</string>
+    <string name="removed">Додано</string>
+    <string name="added">Видалено</string>
 </resources>

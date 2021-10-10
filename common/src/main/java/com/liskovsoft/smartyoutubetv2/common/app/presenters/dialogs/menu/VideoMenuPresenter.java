@@ -21,6 +21,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
@@ -128,6 +129,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mSettingsPresenter.clear();
 
         appendReturnToBackgroundVideoButton();
+        appendAddToLastPlaylistButton(videoPlaylistInfos);
         appendAddToPlaylistButton(videoPlaylistInfos);
         appendNotInterestedButton();
         appendOpenPlaylistButton();
@@ -181,11 +183,46 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         for (VideoPlaylistInfo playlistInfo : videoPlaylistInfos) {
             options.add(UiOptionItem.from(
                     playlistInfo.getTitle(),
-                    (item) -> addToPlaylist(playlistInfo.getPlaylistId(), item.isSelected()),
+                    (item) -> {
+                        addToPlaylist(playlistInfo.getPlaylistId(), item.isSelected());
+                        GeneralData.instance(getContext()).setLastPlaylistId(playlistInfo.getPlaylistId());
+                    },
                     playlistInfo.isSelected()));
         }
 
         mSettingsPresenter.appendCheckedCategory(getContext().getString(R.string.dialog_add_to_playlist), options);
+    }
+
+    private void appendAddToLastPlaylistButton(List<VideoPlaylistInfo> videoPlaylistInfos) {
+        if (!mIsAddToPlaylistButtonEnabled || videoPlaylistInfos == null) {
+            return;
+        }
+
+        if (mVideo == null || !mVideo.hasVideo()) {
+            return;
+        }
+
+        String playlistId = GeneralData.instance(getContext()).getLastPlaylistId();
+
+        if (playlistId == null) {
+            return;
+        }
+
+        for (VideoPlaylistInfo playlistInfo : videoPlaylistInfos) {
+            if (playlistInfo.getPlaylistId().equals(playlistId)) {
+                mSettingsPresenter.appendSingleButton(
+                        UiOptionItem.from(getContext().getString(R.string.dialog_add_to, playlistInfo.getTitle()),
+                                optionItem -> {
+                                    addToPlaylist(playlistInfo.getPlaylistId(), !playlistInfo.isSelected());
+                                    MessageHelpers.showMessage(getContext(), !playlistInfo.isSelected() ? R.string.removed : R.string.added);
+                                    mSettingsPresenter.closeDialog();
+                                }
+                        )
+                );
+
+                break;
+            }
+        }
     }
 
     private void appendOpenChannelButton() {

@@ -253,4 +253,7 @@
     <string name="run_in_background">Работать в фоновом режиме</string>
     <string name="settings_remote_control">Дистанционное управление</string>
     <string name="background_service_started">Фоновый сервис запущен</string>
+    <string name="dialog_add_to">Добавить/Удалить из %s</string>
+    <string name="removed">Добавлено</string>
+    <string name="added">Удалено</string>
 </resources>

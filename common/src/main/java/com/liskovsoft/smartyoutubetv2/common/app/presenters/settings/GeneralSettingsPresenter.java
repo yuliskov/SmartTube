@@ -159,15 +159,15 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(
                 getContext().getString(R.string.option_never),
-                option -> mGeneralData.setScreenDimmingTimoutMin(GeneralData.SCREEN_DIMMING_NEVER),
-                mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER));
+                option -> mGeneralData.setScreenDimmingTimeoutMin(GeneralData.SCREEN_DIMMING_NEVER),
+                mGeneralData.getScreenDimmingTimeoutMin() == GeneralData.SCREEN_DIMMING_NEVER));
 
         for (int i = 1; i <= 15; i++) {
             int timeoutMin = i;
             options.add(UiOptionItem.from(
                     String.format("%s min", i),
-                    option -> mGeneralData.setScreenDimmingTimoutMin(timeoutMin),
-                    mGeneralData.getScreenDimmingTimoutMin() == i));
+                    option -> mGeneralData.setScreenDimmingTimeoutMin(timeoutMin),
+                    mGeneralData.getScreenDimmingTimeoutMin() == i));
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.screen_dimming), options);
