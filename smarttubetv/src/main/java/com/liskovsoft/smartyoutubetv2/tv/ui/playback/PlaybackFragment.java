@@ -423,7 +423,15 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mMediaSession = new MediaSessionCompat(getContext(), getContext().getPackageName());
         mMediaSession.setActive(true);
         mMediaSessionConnector = new MediaSessionConnector(mMediaSession);
-        mMediaSessionConnector.setPlayer(mPlayer);
+
+        try {
+            mMediaSessionConnector.setPlayer(mPlayer);
+        } catch (NoSuchMethodError e) {
+            // Android 9, Sony
+            // No virtual method setState(IJFJ)Landroid/media/session/PlaybackState$Builder;
+            // in class Landroid/media/session/PlaybackState$Builder;
+            return;
+        }
 
         mMediaSessionConnector.setMediaMetadataProvider(player -> {
             if (getVideo() == null) {
