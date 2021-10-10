@@ -339,6 +339,10 @@ public class Utils {
         notificationManager.cancel(notificationId);
     }
 
+    public static Notification createNotification(Context context, int iconResId, int titleResId, Class<? extends Activity> activityCls) {
+        return createNotification(context, iconResId, titleResId, -1, activityCls);
+    }
+
     @SuppressWarnings("deprecation")
     public static Notification createNotification(Context context, int iconResId, int titleResId, int contentResId, Class<? extends Activity> activityCls) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -346,8 +350,11 @@ public class Utils {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(iconResId)
-                        .setContentTitle(context.getString(titleResId))
-                        .setContentText(context.getString(contentResId));
+                        .setContentTitle(context.getString(titleResId));
+
+        if (contentResId > 0) {
+            builder.setContentText(context.getString(contentResId));
+        }
 
         Intent targetIntent = new Intent(context, activityCls);
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
