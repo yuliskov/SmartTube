@@ -41,7 +41,7 @@
   <string name="section_is_empty">ओह! यहां कुछ नहीं है।</string>
   <string name="dialog_add_to_playlist">प्लेलिस्ट में जोड़ें</string>
   <string name="msg_signed_users_only">केवल पंजीकृत उपयोगकर्ता</string>
-  <string name="msg_cant_load_content">ओह! सामग्री लोड नहीं की जा सकती</string>
+  <string name="msg_cant_load_content">ओह! सामग्री लोड नहीं की जा सकती \n1) नेटवर्क कनेक्शन जांचें \n2) अपने खाते में साइन इन करने का प्रयास करें</string>
   <string name="title_video_presets">वीडियो प्रीसेट</string>
   <string name="settings_accounts">खाता</string>
   <string name="settings_left_panel">श्रेणियों को संपादित करें</string>
@@ -49,7 +49,7 @@
   <string name="settings_other">अन्य</string>
   <string name="settings_player">वीडियो प्लेयर</string>
   <string name="settings_language">भाषा: हिन्दी</string>
-  <string name="settings_linked_devices">लिंक किए गए उपकरण</string>
+  <string name="settings_linked_devices">जोड़े गए उपकरण</string>
   <string name="settings_about">के बारे में</string>
   <string name="dialog_account_list">खाता चुनें</string>
   <string name="dialog_account_none">कोई नहीं</string>
@@ -158,7 +158,7 @@
   <string name="channel_marked_as_watched">चैनल देखा हुआ चिन्हित किया गया</string>
   <string name="dialog_add_device">उपकरण जोड़े</string>
   <string name="dialog_remove_all_devices">सभी उपकरण निकाले</string>
-  <string name="device_link_enabled">लिंक सक्षम</string>
+  <string name="device_link_enabled">उपकरण जोड़ना चालू</string>
   <string name="device_connected">\"%s\" उपकरण जोड़ा गया</string>
   <string name="device_disconnected">\"%s\" उपकरण हटाया गया</string>
   <string name="settings_ui_scale">ui पैमाना</string>
@@ -249,4 +249,8 @@
   <string name="option_disabled">अक्षम</string>
   <string name="refresh_section">अनुभाग रिफ्रेश</string>
   <string name="sponsor_color_markers">प्रोग्रेस बार पर रंगीन भाग</string>
+  <string name="live_now_row_name">लाइव</string>
+  <string name="run_in_background">पृष्ठभूमि में चलाएँ</string>
+  <string name="settings_remote_control">रिमोट कंट्रोल</string>
+  <string name="background_service_started">पृष्ठभूमि सेवा शुरू हुई</string>
 </resources>
