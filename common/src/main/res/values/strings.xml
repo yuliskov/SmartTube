@@ -253,7 +253,8 @@
     <string name="run_in_background">Run in the background</string>
     <string name="settings_remote_control">Remote control</string>
     <string name="background_service_started">Background service started</string>
-    <string name="dialog_add_to">Add/Remove from %s</string>
+    <string name="dialog_add_to">Add to %s</string>
+    <string name="dialog_remove_from">Remove from %s</string>
     <string name="added_to">Added to %s</string>
     <string name="removed_from">Removed from %s</string>
 </resources>

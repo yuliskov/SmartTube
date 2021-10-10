@@ -211,12 +211,13 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         for (VideoPlaylistInfo playlistInfo : videoPlaylistInfos) {
             if (playlistInfo.getPlaylistId().equals(playlistId)) {
                 mSettingsPresenter.appendSingleButton(
-                        UiOptionItem.from(getContext().getString(R.string.dialog_add_to, playlistInfo.getTitle()),
+                        UiOptionItem.from(getContext().getString(
+                                playlistInfo.isSelected() ? R.string.dialog_remove_from : R.string.dialog_add_to, playlistInfo.getTitle()),
                                 optionItem -> {
                                     addToPlaylist(playlistInfo.getPlaylistId(), !playlistInfo.isSelected());
-                                    MessageHelpers.showMessage(getContext(), playlistInfo.isSelected() ?
-                                            getContext().getString(R.string.removed_from, playlistInfo.getTitle()) :
-                                            getContext().getString(R.string.added_to, playlistInfo.getTitle()));
+                                    MessageHelpers.showMessage(getContext(), getContext().getString(
+                                            playlistInfo.isSelected() ? R.string.removed_from : R.string.added_to, playlistInfo.getTitle()
+                                    ));
                                     mSettingsPresenter.closeDialog();
                                 }
                         )
