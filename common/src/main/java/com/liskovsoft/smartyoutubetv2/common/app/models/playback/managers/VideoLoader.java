@@ -196,6 +196,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 if (mPlaylist.getNext() == null) {
                     getController().showSuggestions(true);
                     getController().setPlay(false);
+                    getController().setPositionMs(0);
                 } else {
                     onNextClicked();
                     getController().showControls(true);
@@ -210,6 +211,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 } else {
                     getController().showSuggestions(true);
                     getController().setPlay(false);
+                    getController().setPositionMs(0);
                 }
                 break;
         }
