@@ -274,7 +274,10 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         if (mOnSourceChanged) {
             mOnSourceChanged = false;
             mEventListener.onVideoLoaded(mVideo);
-            mTrackSelectorManager.fixTracksSelection();
+
+            // Produce thread sync problems
+            // Attempt to read from field 'java.util.TreeMap$Node java.util.TreeMap$Node.left' on a null object reference
+            //mTrackSelectorManager.fixTracksSelection();
         }
     }
 
