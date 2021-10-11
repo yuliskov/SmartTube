@@ -250,4 +250,7 @@
     <string name="refresh_section">Aggiorna sezione</string>
     <string name="option_disabled">Disabilitato</string>
     <string name="live_now_row_name">In diretta</string>
+    <string name="run_in_background">Avvia in background</string>
+    <string name="settings_remote_control">Controllo remoto</string>
+    <string name="background_service_started">Servizio di background avviato</string>
 </resources>
