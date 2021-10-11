@@ -162,6 +162,12 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     @Override
+    public void onSourceChanged(Video item) {
+        // Fix simultaneous video loading (when click on suggestion after video ends)
+        disposeActions();
+    }
+
+    @Override
     public void onPlayEnd() {
         int playbackMode = checkSleepTimer(mPlayerData.getPlaybackMode());
 
