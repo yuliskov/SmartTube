@@ -249,4 +249,12 @@
     <string name="sponsor_color_markers">Farbige Markierungen auf dem Fortschrittsbalken</string>
     <string name="refresh_section">Kategorie aktualisieren</string>
     <string name="option_disabled">Deaktiviert</string>
+    <string name="live_now_row_name">Jetzt live</string>
+    <string name="run_in_background">Im Hintergrund ausführen</string>
+    <string name="settings_remote_control">Fernsteuerung</string>
+    <string name="background_service_started">Hintergrunddienst gestartet</string>
+    <string name="dialog_add_to">Hinzufügen zu %s</string>
+    <string name="dialog_remove_from">Entfernen aus %s</string>
+    <string name="added_to">Hinzugefügt zu %s</string>
+    <string name="removed_from">Entfernt aus %s</string>
 </resources>
