@@ -68,10 +68,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private Disposable mUpdateAction;
     private Disposable mContinueAction;
     private Disposable mSignCheckAction;
-    private int mCurrentSectionId;
+    private BrowseSection mCurrentSection;
     private long mLastUpdateTimeMs;
     private int mStartSectionIndex;
-    private int mUploadsType;
 
     private BrowsePresenter(Context context) {
         super(context);
@@ -135,13 +134,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void initCategoryHeaders() {
-        mUploadsType = mMainUIData.isUploadsOldLookEnabled() ? BrowseSection.TYPE_GRID : BrowseSection.TYPE_MULTI_GRID;
+        int uploadsType = mMainUIData.isUploadsOldLookEnabled() ? BrowseSection.TYPE_GRID : BrowseSection.TYPE_MULTI_GRID;
 
         mSections.add(new BrowseSection(MediaGroup.TYPE_HOME, getContext().getString(R.string.header_home), BrowseSection.TYPE_ROW, R.drawable.icon_home));
         mSections.add(new BrowseSection(MediaGroup.TYPE_GAMING, getContext().getString(R.string.header_gaming), BrowseSection.TYPE_ROW, R.drawable.icon_gaming));
         mSections.add(new BrowseSection(MediaGroup.TYPE_NEWS, getContext().getString(R.string.header_news), BrowseSection.TYPE_ROW, R.drawable.icon_news));
         mSections.add(new BrowseSection(MediaGroup.TYPE_MUSIC, getContext().getString(R.string.header_music), BrowseSection.TYPE_ROW, R.drawable.icon_music));
-        mSections.add(new BrowseSection(MediaGroup.TYPE_CHANNEL_UPLOADS, getContext().getString(R.string.header_channels), mUploadsType, R.drawable.icon_channels, true));
+        mSections.add(new BrowseSection(MediaGroup.TYPE_CHANNEL_UPLOADS, getContext().getString(R.string.header_channels), uploadsType, R.drawable.icon_channels, true));
         mSections.add(new BrowseSection(MediaGroup.TYPE_SUBSCRIPTIONS, getContext().getString(R.string.header_subscriptions), BrowseSection.TYPE_GRID, R.drawable.icon_subscriptions, true));
         mSections.add(new BrowseSection(MediaGroup.TYPE_HISTORY, getContext().getString(R.string.header_history), BrowseSection.TYPE_GRID, R.drawable.icon_history, true));
         mSections.add(new BrowseSection(MediaGroup.TYPE_USER_PLAYLISTS, getContext().getString(R.string.header_playlists), BrowseSection.TYPE_ROW, R.drawable.icon_playlist, true));
@@ -276,7 +275,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        if (item.isChannelUploadsSection() && mUploadsType == BrowseSection.TYPE_MULTI_GRID) {
+        if (mCurrentSection.getType() == BrowseSection.TYPE_MULTI_GRID && item.isChannelUploadsSection()) {
             if (mMainUIData.isUploadsAutoLoadEnabled()) {
                 updateMultiGrid(item);
             } else {
@@ -291,7 +290,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        if (mUploadsType == BrowseSection.TYPE_MULTI_GRID && item.hasUploads()) { // Is Channels new look enabled?
+        if (mCurrentSection.getType() == BrowseSection.TYPE_MULTI_GRID && item.hasUploads()) { // Is Channels new look enabled?
             updateMultiGrid(item);
         } else {
             VideoActionPresenter.instance(getContext()).apply(item);
@@ -399,7 +398,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public void refresh() {
-        updateSection(mCurrentSectionId);
+        updateSection(mCurrentSection.getId());
     }
 
     private void updateRefreshTime() {
@@ -409,17 +408,15 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private void updateSection(int sectionId) {
         disposeActions();
 
-        mCurrentSectionId = sectionId;
+        mCurrentSection = getSection(sectionId);
 
         if (getView() == null || sectionId < 0) {
             return;
         }
 
-        BrowseSection section = getSection(sectionId);
-
-        if (section != null) {
-            Log.d(TAG, "Update section %s", section.getTitle());
-            updateSection(section);
+        if (mCurrentSection != null) {
+            Log.d(TAG, "Update section %s", mCurrentSection.getTitle());
+            updateSection(mCurrentSection);
         }
     }
 
@@ -644,13 +641,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void updateMultiGrid(Video item) {
-        BrowseSection category = getSection(mCurrentSectionId);
-
-        if (category == null) {
+        if (mCurrentSection == null) {
             return;
         }
 
-        updateVideoGrid(category, ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item), 1, true);
+        updateVideoGrid(mCurrentSection, ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item), 1, true);
     }
 
     private BrowseSection getSection(int sectionId) {
