@@ -89,13 +89,18 @@ public class VideoTrack extends MediaTrack {
         int size1;
         int size2;
 
-        if (format.width > format.height && track2.format.width > track2.format.height) {
-            size1 = format.width;
-            size2 = track2.format.width;
-        } else {
-            size1 = format.height;
-            size2 = track2.format.height;
-        }
+        //if (format.width > format.height && track2.format.width > track2.format.height) {
+        //    size1 = format.width;
+        //    size2 = track2.format.width;
+        //} else {
+        //    size1 = format.height;
+        //    size2 = track2.format.height;
+        //}
+
+        // 'Almost square format' fix. Letterbox formats should also work.
+        // 4:3 format example: https://www.youtube.com/watch?v=m8nsUcAwkj8&t=1042s
+        size1 = format.height;
+        size2 = track2.format.height;
 
         String id1 = format.id;
         String id2 = track2.format.id;
