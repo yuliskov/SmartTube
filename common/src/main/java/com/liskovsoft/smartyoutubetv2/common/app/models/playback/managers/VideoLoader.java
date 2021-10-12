@@ -163,6 +163,11 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onPlayEnd() {
+        // Fix simultaneous videos loading (e.g. when playback ends and user opens new video)
+        if (isActionsRunning()) {
+            return;
+        }
+
         int playbackMode = checkSleepTimer(mPlayerData.getPlaybackMode());
 
         switch (playbackMode) {
@@ -392,6 +397,10 @@ public class VideoLoader extends PlayerEventListenerHelper {
         } else {
             Log.e(TAG, "Video item doesn't contain needed data!");
         }
+    }
+
+    private boolean isActionsRunning() {
+        return RxUtils.isAnyActionRunning(mFormatInfoAction, mMpdStreamAction);
     }
 
     private void disposeActions() {
