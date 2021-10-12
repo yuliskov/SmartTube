@@ -461,9 +461,12 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                                 onBackward();
                             } else {
                                 // MOD: resume immediately after seeking
-                                if (!mPlayerData.isPauseOnSeekEnabled()) {
-                                    stopSeek(false);
+
+                                if (mPlayerData.isPauseOnSeekEnabled() && keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+                                    return true;
                                 }
+
+                                stopSeek(false);
                             }
                             return true;
                         case KeyEvent.KEYCODE_DPAD_RIGHT:
@@ -474,18 +477,21 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                                 onForward();
                             } else {
                                 // MOD: resume immediately after seeking
-                                if (!mPlayerData.isPauseOnSeekEnabled()) {
-                                    stopSeek(false);
+
+                                if (mPlayerData.isPauseOnSeekEnabled() && keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+                                    return true;
                                 }
+
+                                stopSeek(false);
                             }
                             return true;
-                        case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE: // MOD: act as OK?
+                        //case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE: // MOD: act as OK? (handled somewhere else, inside player glue)
                         case KeyEvent.KEYCODE_DPAD_CENTER:
                         case KeyEvent.KEYCODE_ENTER:
                             if (!mInSeek) {
                                 return false; // use pause toggle handler
                             }
-                            if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
+                            if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
                                 stopSeek(false);
                             }
                             // Fix: is video is paused previously then you should click OK twice to play
