@@ -15,9 +15,10 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.Playb
 
 public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
         extends PlaybackTransportControlGlue<T> implements TopEdgeFocusListener, PlayerView {
-    private QualityInfoListener mQualityInfoListener;
     private String mQualityInfo;
+    private QualityInfoListener mQualityInfoListener;
     private ControlsVisibilityListener mVisibilityListener;
+    private PlayPauseListener mPlayPauseListener;
 
     /**
      * Constructor for the glue.
@@ -76,6 +77,7 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
                 
                 mQualityInfoListener = viewHolder.mQualityInfoListener;
                 mVisibilityListener = viewHolder.mVisibilityListener;
+                mPlayPauseListener = viewHolder.mPlayPauseListener;
                 viewHolder.mTopEdgeFocusListener = MaxControlsVideoPlayerGlue.this;
                 updateQualityInfo();
                 updateVisibility();
@@ -108,6 +110,24 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
         }
     }
 
+    @Override
+    public void play() {
+        super.play();
+
+        if (mPlayPauseListener != null) {
+            mPlayPauseListener.onPlay(true);
+        }
+    }
+
+    @Override
+    public void pause() {
+        super.pause();
+
+        if (mPlayPauseListener != null) {
+            mPlayPauseListener.onPlay(false);
+        }
+    }
+
     private void updateQualityInfo() {
         if (mQualityInfoListener != null) {
             mQualityInfoListener.onQualityInfoChanged(mQualityInfo);
@@ -126,6 +146,10 @@ public abstract class MaxControlsVideoPlayerGlue<T extends PlayerAdapter>
 
     public interface ControlsVisibilityListener {
         void onVisibilityChange(boolean isVisible);
+    }
+
+    public interface PlayPauseListener {
+        void onPlay(boolean play);
     }
 
     public abstract void onTopEdgeFocused();

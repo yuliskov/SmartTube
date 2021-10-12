@@ -44,6 +44,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.OnControlClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.OnControlSelectedListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue.PlayPauseListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue.QualityInfoListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.seekpreview.ThumbsBar;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue.ControlsVisibilityListener;
@@ -111,6 +112,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
         Client mSeekClient;
         boolean mInSeek;
+        boolean mIsPlaying = true;
         PlaybackSeekDataProvider mSeekDataProvider;
         long[] mPositions;
         int mPositionsLength;
@@ -121,6 +123,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         // MOD: update quality info
         final QualityInfoListener mQualityInfoListener = this::setQualityInfo;
         final ControlsVisibilityListener mVisibilityListener = this::updateVisibility;
+        final PlayPauseListener mPlayPauseListener = this::onPlay;
         TopEdgeFocusListener mTopEdgeFocusListener = null;
 
         final PlaybackControlsRow.OnPlaybackProgressCallback mListener =
@@ -480,12 +483,13 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                         case KeyEvent.KEYCODE_DPAD_CENTER:
                         case KeyEvent.KEYCODE_ENTER:
                             if (!mInSeek) {
-                                return false;
+                                return false; // use pause toggle handler
                             }
                             if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
                                 stopSeek(false);
                             }
-                            return true;
+                            // Fix: is video is paused previously then you should click OK twice to play
+                            return mIsPlaying; // use pause toggle handler only if playback is paused
                         case KeyEvent.KEYCODE_BACK:
                         case KeyEvent.KEYCODE_ESCAPE:
                             if (!mInSeek) {
@@ -758,6 +762,10 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             } else {
                 mDateTime.setVisibility(View.GONE);
             }
+        }
+
+        void onPlay(boolean play) {
+            mIsPlaying = play;
         }
 
         void updateTotalTime() {
