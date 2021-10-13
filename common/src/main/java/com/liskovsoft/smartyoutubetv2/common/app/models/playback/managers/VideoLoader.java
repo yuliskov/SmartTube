@@ -164,9 +164,9 @@ public class VideoLoader extends PlayerEventListenerHelper {
     @Override
     public void onPlayEnd() {
         // Fix simultaneous videos loading (e.g. when playback ends and user opens new video)
-        //if (isActionsRunning()) {
-        //    return;
-        //}
+        if (isActionsRunning()) {
+            return;
+        }
 
         int playbackMode = checkSleepTimer(mPlayerData.getPlaybackMode());
 
