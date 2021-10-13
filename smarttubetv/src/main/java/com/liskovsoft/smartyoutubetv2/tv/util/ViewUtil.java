@@ -10,6 +10,9 @@ import android.widget.TextView;
 import androidx.leanback.widget.FocusHighlight;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.RowPresenter;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.BaseRequestOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextview.MarqueeTextView;
 
@@ -124,5 +127,11 @@ public class ViewUtil {
         }
 
         return true;
+    }
+
+    public static RequestOptions glideOptions() {
+        return new RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.NONE) // ensure start animation from beginning
+                .skipMemoryCache(true); // ensure start animation from beginning
     }
 }

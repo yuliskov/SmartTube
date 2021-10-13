@@ -25,6 +25,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 public class IconHeaderItemPresenter extends RowHeaderPresenter {
     private static final String TAG = IconHeaderItemPresenter.class.getSimpleName();
@@ -70,9 +71,7 @@ public class IconHeaderItemPresenter extends RowHeaderPresenter {
             if (mIconUrl != null) {
                 Glide.with(rootView.getContext())
                         .load(mIconUrl)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .skipMemoryCache(true)
-                        .apply(RequestOptions.errorOf(mDefaultIcon))
+                        .apply(ViewUtil.glideOptions().error(mDefaultIcon))
                         .listener(mErrorListener)
                         .into(iconView);
             } else {

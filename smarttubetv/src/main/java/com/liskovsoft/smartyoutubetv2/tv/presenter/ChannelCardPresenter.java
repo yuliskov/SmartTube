@@ -103,9 +103,7 @@ public class ChannelCardPresenter extends ExtendedCardPresenter {
 
         Glide.with(context)
                 .load(video.cardImageUrl)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .apply(RequestOptions.errorOf(mDefaultCardImage))
+                .apply(ViewUtil.glideOptions().error(mDefaultCardImage))
                 .listener(mErrorListener)
                 .into(imageView);
     }

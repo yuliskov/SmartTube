@@ -25,6 +25,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.ExtendedCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview.ComplexImageCardView;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 /*
  * A CardPresenter is used to generate Views and bind Objects to them on demand.
@@ -132,9 +133,7 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
 
         Glide.with(context)
                 .load(video.cardImageUrl)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .apply(RequestOptions.errorOf(mDefaultCardImage))
+                .apply(ViewUtil.glideOptions().error(mDefaultCardImage))
                 .listener(mErrorListener)
                 .into(cardView.getMainImageView());
     }
