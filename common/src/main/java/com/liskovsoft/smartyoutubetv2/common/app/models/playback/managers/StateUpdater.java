@@ -139,7 +139,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
         // Maybe this could help with Shield format problem.
         // NOTE: produce multi thread exception:
         // Attempt to read from field 'java.util.TreeMap$TreeMapEntry java.util.TreeMap$TreeMapEntry.left' on a null object reference (TrackSelectorManager.java:181)
-        restoreFormats();
+        //restoreFormats();
 
         // In this state video length is not undefined.
         restorePosition(item);
