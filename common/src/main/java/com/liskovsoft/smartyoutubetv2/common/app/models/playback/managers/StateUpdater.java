@@ -69,7 +69,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
             }
 
             // Restore format according to profile on every new video
-            restoreVideoFormat();
+            //restoreVideoFormat();
         }
     }
 
