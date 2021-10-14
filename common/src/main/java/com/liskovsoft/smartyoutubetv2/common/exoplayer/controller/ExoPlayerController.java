@@ -47,7 +47,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         mTrackSelectorManager = new TrackSelectorManager();
         mTrackFormatter = new TrackInfoFormatter2();
 
-        mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(PlayerData.instance(context).getFormat(FormatItem.TYPE_VIDEO)));
+        //mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(PlayerData.instance(context).getFormat(FormatItem.TYPE_VIDEO)));
     }
 
     @Override
