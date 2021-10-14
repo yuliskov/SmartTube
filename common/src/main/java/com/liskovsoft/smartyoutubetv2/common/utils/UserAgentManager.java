@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class UserAgentManager {
     private static final String USER_AGENT_TMPL = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/%s Safari/537.36";
-    private static final String[] CHROME_VERSIONS = {
+    private final String[] CHROME_VERSIONS = {
                 "74.0.3729.129",
                 "76.0.3780.3",
                 "76.0.3780.2",
@@ -1583,7 +1583,7 @@ public class UserAgentManager {
                 "69.0.3497.28"
     };
 
-    public static String randomUserAgent() {
+    public String randomUserAgent() {
         int rnd = new Random().nextInt(CHROME_VERSIONS.length);
         return String.format(USER_AGENT_TMPL, CHROME_VERSIONS[rnd]);
     }
