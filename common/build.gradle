@@ -83,6 +83,7 @@ dependencies {
     stbetaImplementation project(path: ':leanbackassistant')
     stbetaImplementation project(path: ':appupdatechecker2')
     ststableImplementation project(path: ':leanbackassistant')
+    stbolshoetvImplementation project(path: ':leanbackassistant')
     ststableImplementation project(path: ':appupdatechecker2')
     storigImplementation project(path: ':leanbackassistant')
     storigImplementation project(path: ':appupdatechecker2')
