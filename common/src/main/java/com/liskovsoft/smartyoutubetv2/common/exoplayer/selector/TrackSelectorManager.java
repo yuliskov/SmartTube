@@ -320,6 +320,12 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     }
 
     private void updateRendererSelection(int rendererIndex, TrackGroupArray groups, Parameters params, Definition definition) {
+        // Format selection fix
+        // Probably could help with multi thread issue
+        if (mSelectedTracks[rendererIndex] == null) {
+            return;
+        }
+
         initRenderer(rendererIndex, groups, params);
 
         setOverride(rendererIndex, groups.indexOf(definition.group), definition.tracks);
