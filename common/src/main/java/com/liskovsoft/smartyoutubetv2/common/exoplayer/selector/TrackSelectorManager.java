@@ -10,6 +10,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector.Parameters;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector.SelectionOverride;
 import com.google.android.exoplayer2.trackselection.MappingTrackSelector.MappedTrackInfo;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelection.Definition;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -320,15 +321,29 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     }
 
     private void updateRendererSelection(int rendererIndex, TrackGroupArray groups, Parameters params, Definition definition) {
-        // Format selection fix
-        // Probably could help with multi thread issue
-        if (mSelectedTracks[rendererIndex] == null) {
-            return;
-        }
-
         initRenderer(rendererIndex, groups, params);
 
+        definition = getOverride(rendererIndex, groups, params, definition);
+
         setOverride(rendererIndex, groups.indexOf(definition.group), definition.tracks);
+    }
+
+    private Definition getOverride(int rendererIndex, TrackGroupArray rendererTrackGroups, Parameters params, Definition original) {
+        Definition definition = original;
+
+        if (params.hasSelectionOverride(rendererIndex, rendererTrackGroups)) {
+            SelectionOverride override = params.getSelectionOverride(rendererIndex, rendererTrackGroups);
+
+            if (override != null) {
+                definition = new TrackSelection.Definition(
+                                rendererTrackGroups.get(override.groupIndex),
+                                override.tracks,
+                                override.reason,
+                                override.data);
+            }
+        }
+
+        return definition;
     }
 
     @Override

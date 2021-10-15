@@ -114,11 +114,11 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
     //    return selectionPair;
     //}
 
-    @Override
-    public void setParameters(Parameters parameters) {
-        // Fix dropping to 144p by disabling any overrides.
-        invalidate();
-    }
+    //@Override
+    //public void setParameters(Parameters parameters) {
+    //    // Fix dropping to 144p by disabling any overrides.
+    //    invalidate();
+    //}
 
     // Exo 2.10 and up
     @Nullable
@@ -139,7 +139,7 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
         Definition definition = super.selectVideoTrack(groups, formatSupports, mixedMimeTypeAdaptationSupports, params, enableAdaptiveTrackSelection);
 
         // Don't invoke if track already has been selected by the app
-        if (mCallback != null && definition != null && !params.hasSelectionOverride(TrackSelectorManager.RENDERER_INDEX_VIDEO, groups)) {
+        if (mCallback != null && definition != null) {
             mCallback.updateVideoTrackSelection(groups, params, definition);
         }
 
@@ -165,7 +165,7 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
                 mixedMimeTypeAdaptationSupports, params, enableAdaptiveTrackSelection);
 
         // Don't invoke if track already has been selected by the app
-        if (mCallback != null && definitionPair != null && !params.hasSelectionOverride(TrackSelectorManager.RENDERER_INDEX_AUDIO, groups)) {
+        if (mCallback != null && definitionPair != null) {
             mCallback.updateAudioTrackSelection(groups, params, definitionPair.first);
         }
 
@@ -190,7 +190,7 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
         Pair<Definition, TextTrackScore> definitionPair = super.selectTextTrack(groups, formatSupport, params, selectedAudioLanguage);
 
         // Don't invoke if track already has been selected by the app
-        if (mCallback != null && definitionPair != null && !params.hasSelectionOverride(TrackSelectorManager.RENDERER_INDEX_SUBTITLE, groups)) {
+        if (mCallback != null && definitionPair != null) {
             mCallback.updateSubtitleTrackSelection(groups, params, definitionPair.first);
         }
 
