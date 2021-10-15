@@ -312,7 +312,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     }
 
     private Pair<Definition, MediaTrack> createRendererSelection(int rendererIndex, TrackGroupArray groups, Parameters params) {
-        if (mSelectedTracks[rendererIndex] == null) {
+        if (mSelectedTracks[rendererIndex] == null || params.hasSelectionOverride(rendererIndex, groups)) {
             return null;
         }
 
