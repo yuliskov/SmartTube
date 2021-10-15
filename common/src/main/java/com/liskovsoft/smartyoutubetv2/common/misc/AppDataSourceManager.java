@@ -44,12 +44,12 @@ public class AppDataSourceManager {
 //                context.getString(R.string.settings_language_country), () -> LanguageSettingsPresenter.instance(context).show(), R.drawable.settings_language));
 //        settingItems.add(new SettingsItem(
 //                context.getString(R.string.settings_general), () -> GeneralSettingsPresenter.instance(context).show(), R.drawable.settings_app));
-//        settingItems.add(new SettingsItem(
-//                context.getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(context).show(), R.drawable.settings_main_ui));
-        //settingItems.add(new SettingsItem(
-        //        context.getString(R.string.settings_ui_scale), () -> UIScaleSettingsPresenter.instance(context).show(), R.drawable.settings_ui_scale));
         settingItems.add(new SettingsItem(
-                context.getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(context).show(), R.drawable.settings_player));
+                context.getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(context).show(), R.drawable.settings_main_ui));
+//        settingItems.add(new SettingsItem(
+//                context.getString(R.string.settings_ui_scale), () -> UIScaleSettingsPresenter.instance(context).show(), R.drawable.settings_ui_scale));
+//        settingItems.add(new SettingsItem(
+//                context.getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(context).show(), R.drawable.settings_player));
         // Don't add afr support check here.
         // Users want even fake afr settings.
 //        settingItems.add(new SettingsItem(
