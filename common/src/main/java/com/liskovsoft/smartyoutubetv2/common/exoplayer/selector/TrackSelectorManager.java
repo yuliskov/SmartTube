@@ -400,7 +400,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         MediaTrack matchedTrack = findBestMatch(track);
 
         setOverride(matchedTrack.rendererIndex, matchedTrack.groupIndex, matchedTrack.trackIndex);
-        //updateSelection(matchedTrack.rendererIndex, matchedTrack.groupIndex, matchedTrack.trackIndex);
+        updateSelection(matchedTrack.rendererIndex, matchedTrack.groupIndex, matchedTrack.trackIndex);
 
         // save immediately
         applyOverride(rendererIndex);
