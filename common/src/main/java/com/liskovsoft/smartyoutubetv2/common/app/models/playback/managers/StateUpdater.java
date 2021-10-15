@@ -108,7 +108,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     public void onEngineInitialized() {
         // Restore before video loaded.
         // This way we override auto track selection mechanism.
-        restoreFormats();
+        //restoreFormats();
 
         // Show user info instead of black screen.
         if (!getPlayEnabled()) {
