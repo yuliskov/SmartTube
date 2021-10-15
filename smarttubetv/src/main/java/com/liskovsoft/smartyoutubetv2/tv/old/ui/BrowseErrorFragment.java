@@ -46,7 +46,7 @@ public class BrowseErrorFragment extends ErrorSupportFragment {
         setTitle(getResources().getString(R.string.app_name));
 
         mSpinnerFragment = new SpinnerFragment();
-        getFragmentManager().beginTransaction().add(R.id.main_frame, mSpinnerFragment).commit();
+        getFragmentManager().beginTransaction().add(R.id.main_frame, mSpinnerFragment).commitAllowingStateLoss();
     }
 
     @Override
@@ -55,7 +55,7 @@ public class BrowseErrorFragment extends ErrorSupportFragment {
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                getFragmentManager().beginTransaction().remove(mSpinnerFragment).commit();
+                getFragmentManager().beginTransaction().remove(mSpinnerFragment).commitAllowingStateLoss();
                 setErrorContent();
             }
         }, TIMER_DELAY);
@@ -65,7 +65,7 @@ public class BrowseErrorFragment extends ErrorSupportFragment {
     public void onStop() {
         super.onStop();
         mHandler.removeCallbacksAndMessages(null);
-        getFragmentManager().beginTransaction().remove(mSpinnerFragment).commit();
+        getFragmentManager().beginTransaction().remove(mSpinnerFragment).commitAllowingStateLoss();
     }
 
     private void setErrorContent() {
@@ -77,7 +77,7 @@ public class BrowseErrorFragment extends ErrorSupportFragment {
         setButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                getFragmentManager().beginTransaction().remove(BrowseErrorFragment.this).commit();
+                getFragmentManager().beginTransaction().remove(BrowseErrorFragment.this).commitAllowingStateLoss();
                 getFragmentManager().popBackStack();
             }
         });

@@ -156,7 +156,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
         if (suggestions == null) {
             String msg = "loadSuggestions: Can't obtain suggestions for video: " + video.title;
             Log.e(TAG, msg);
-            MessageHelpers.showMessage(getActivity(), msg);
+            //MessageHelpers.showMessage(getActivity(), msg);
             return;
         }
 

@@ -77,7 +77,7 @@
     <string name="player_only_pause">Sadece duraklat</string>
     <string name="check_for_updates">Güncellemeleri kontrol et</string>
     <string name="update_not_found">En son sürümü kullanıyorsunuz</string>
-    <string name="update_in_progess">Bekleyin…</string>
+    <string name="update_in_progress">Bekleyin…</string>
     <string name="player_ui_hide_behavior">Kullanıcı arayüzünü otomatik gizle</string>
     <string name="option_never">Asla</string>
     <string name="side_panel_sections">Sekmeleri ayarla</string>

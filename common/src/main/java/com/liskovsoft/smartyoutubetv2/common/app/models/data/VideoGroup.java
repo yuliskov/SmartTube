@@ -57,8 +57,7 @@ public class VideoGroup {
 
         videoGroup.mMediaGroup = mediaGroup;
         videoGroup.mTitle = mediaGroup.getTitle();
-        // TODO: replace with real id
-        videoGroup.mId = mediaGroup.hashCode();
+        videoGroup.mId = mediaGroup.getId();
         videoGroup.mVideos = new ArrayList<>();
 
         if (mediaGroup.getMediaItems() == null) {

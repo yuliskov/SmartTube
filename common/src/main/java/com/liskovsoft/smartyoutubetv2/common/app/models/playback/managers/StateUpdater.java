@@ -26,7 +26,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
     private static final String TAG = StateUpdater.class.getSimpleName();
     private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
     private static final int MAX_PERSISTENT_STATE_SIZE = 30;
-    private static final long LIVE_THRESHOLD_MS = 10_000;
+    private static final long LIVE_THRESHOLD_MS = 60_000;
     private boolean mIsPlayEnabled;
     private Video mVideo;
     private FormatItem mTempVideoFormat;
@@ -71,7 +71,7 @@ public class StateUpdater extends PlayerEventListenerHelper {
             }
 
             // Restore format according to profile on every new video
-            restoreVideoFormat();
+            //restoreVideoFormat();
         }
     }
 
@@ -108,11 +108,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onEngineInitialized() {
-        // Fragment might be destroyed by system at this point.
-        // So, to be sure, repeat format selection.
-        restoreVideoFormat();
-        restoreAudioFormat();
-        restoreSubtitleFormat();
+        // Restore before video loaded.
+        // This way we override auto track selection mechanism.
+        //restoreFormats();
 
         // Show user info instead of black screen.
         if (!getPlayEnabled()) {
@@ -139,6 +137,12 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onVideoLoaded(Video item) {
+        // Restore formats again.
+        // Maybe this could help with Shield format problem.
+        // NOTE: produce multi thread exception:
+        // Attempt to read from field 'java.util.TreeMap$TreeMapEntry java.util.TreeMap$TreeMapEntry.left' on a null object reference (TrackSelectorManager.java:181)
+        restoreFormats();
+
         // In this state video length is not undefined.
         restorePosition(item);
         restoreSpeed(item);
@@ -341,9 +345,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void restoreSpeed(Video item) {
-        boolean isLive = getController().getLengthMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
+        boolean isLiveThreshold = getController().getLengthMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
 
-        if (isLive) {
+        if (item.isLive && isLiveThreshold) {
             getController().setSpeed(1.0f);
         } else {
             State state = mStates.get(item.videoId);
@@ -388,6 +392,12 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     private void restoreVolume() {
         getController().setVolume(mVolume);
+    }
+
+    private void restoreFormats() {
+        restoreVideoFormat();
+        restoreAudioFormat();
+        restoreSubtitleFormat();
     }
 
     private void updateHistory() {

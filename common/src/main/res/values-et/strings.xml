@@ -77,7 +77,7 @@
     <string name="player_only_pause">Ainult paus</string>
     <string name="check_for_updates">Kontrollida uuendusi</string>
     <string name="update_not_found">Teie versioon ei vaja uuendamist</string>
-    <string name="update_in_progess">Oodake…</string>
+    <string name="update_in_progress">Oodake…</string>
     <string name="player_ui_hide_behavior">Peita liides</string>
     <string name="option_never">Mittekunagi</string>
     <string name="side_panel_sections">Seadistada alajaotused</string>
@@ -211,8 +211,8 @@
     <string name="channels_old_look">Kanalite vana vaade</string>
     <string name="channels_auto_load">Automaatselt kuvada minu kanalid</string>
     <string name="return_to_background_video">Naastaa taustavideo juurde</string>
-    <string name="pin_to_sidebar">Kinnitada külgpaneelile</string>
-    <string name="unpin_from_sidebar">Kustutada külgpaneelilt</string>
+    <string name="pinned_to_sidebar">Kinnitada külgpaneelile</string>
+    <string name="unpinned_from_sidebar">Kustutada külgpaneelilt</string>
     <string name="dialog_select_country">Riik</string>
     <string name="settings_language_country">Keel/Riik</string>
 </resources>

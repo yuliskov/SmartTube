@@ -78,7 +78,7 @@
     <string name="player_only_pause">Speler pauzeren</string>
     <string name="check_for_updates">Controleren op update</string>
     <string name="update_not_found">Je beschikt al over de nieuwste versie.</string>
-    <string name="update_in_progess">Even geduld…</string>
+    <string name="update_in_progress">Even geduld…</string>
     <string name="player_ui_hide_behavior">Speler verbergen</string>
     <string name="option_never">Nooit</string>
     <string name="side_panel_sections">Rubrieken</string>
@@ -215,8 +215,8 @@
     <string name="channels_auto_load">Kanaalinhoud automatisch laden</string>
     <string name="return_to_background_video">Terug naar achtergrondvideo</string>
     <string name="pin_unpin_from_sidebar">Vast-/Losmaken aan/van zijbalk</string>
-    <string name="pin_to_sidebar">Vastgemaakt aan de zijbalk</string>
-    <string name="unpin_from_sidebar">Losgemaakt van de zijbalk</string>
+    <string name="pinned_to_sidebar">Vastgemaakt aan de zijbalk</string>
+    <string name="unpinned_from_sidebar">Losgemaakt van de zijbalk</string>
     <string name="dialog_select_country">Land</string>
     <string name="settings_language_country">Taal/Land</string>
     <string name="share_embed_link">Insluitlink delen</string>

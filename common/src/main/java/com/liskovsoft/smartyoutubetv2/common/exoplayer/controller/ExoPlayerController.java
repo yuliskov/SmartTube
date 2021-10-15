@@ -23,6 +23,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackInfoFormatt
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.io.InputStream;
 import java.util.List;
@@ -45,6 +46,8 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
         mTrackSelectorManager = new TrackSelectorManager();
         mTrackFormatter = new TrackInfoFormatter2();
+
+        //mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(PlayerData.instance(context).getFormat(FormatItem.TYPE_VIDEO)));
     }
 
     @Override
@@ -216,11 +219,11 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     @Override
-    public void selectFormat(FormatItem option) {
-        if (option != null) {
-            mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(option));
+    public void selectFormat(FormatItem formatItem) {
+        if (formatItem != null) {
+            mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(formatItem));
             // TODO: move to the {@link #onTrackChanged()} somehow
-            mEventListener.onTrackSelected(option);
+            mEventListener.onTrackSelected(formatItem);
         }
     }
 
@@ -274,7 +277,10 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         if (mOnSourceChanged) {
             mOnSourceChanged = false;
             mEventListener.onVideoLoaded(mVideo);
-            mTrackSelectorManager.fixTracksSelection();
+
+            // Produce thread sync problems
+            // Attempt to read from field 'java.util.TreeMap$Node java.util.TreeMap$Node.left' on a null object reference
+            //mTrackSelectorManager.fixTracksSelection();
         }
     }
 
@@ -297,6 +303,10 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "onPlayerStateChanged: " + TrackSelectorUtil.stateToString(playbackState));
         }
+
+        //if (Player.STATE_READY == playbackState) {
+        //    notifyOnVideoLoad();
+        //}
 
         boolean isPlayPressed = Player.STATE_READY == playbackState && playWhenReady;
         boolean isPausePressed = Player.STATE_READY == playbackState && !playWhenReady;

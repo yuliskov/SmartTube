@@ -29,7 +29,6 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     private static final String TAG = AppDialogFragment.class.getSimpleName();
     private AppPreferenceFragment mPreferenceFragment;
     private AppDialogPresenter mSettingsPresenter;
-    private boolean mIsStateSaved;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,27 +46,25 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        mIsStateSaved = true;
-    }
-
-    @Override
     public void onPreferenceStartInitialScreen() {
         // FIX: Can not perform this action after onSaveInstanceState
         // Possible fix: Unable to add window -- token android.os.BinderProxy is not valid; is your activity running?
-        if (mIsStateSaved || !Utils.checkActivity(getActivity())) {
+        if (!Utils.checkActivity(getActivity())) {
             return;
         }
 
-        // Fix mSettingsPresenter in null after init stage.
-        // Seems concurrency between dialogs.
-        mSettingsPresenter.setView(this);
+        try {
+            // Fix mSettingsPresenter in null after init stage.
+            // Seems concurrency between dialogs.
+            mSettingsPresenter.setView(this);
 
-        mPreferenceFragment = buildPreferenceFragment();
-        startPreferenceFragment(mPreferenceFragment);
+            mPreferenceFragment = buildPreferenceFragment();
+            startPreferenceFragment(mPreferenceFragment);
 
-        mSettingsPresenter.onViewInitialized();
+            mSettingsPresenter.onViewInitialized();
+        } catch (IllegalStateException e) {
+            // NOP
+        }
     }
 
     @Override
@@ -154,7 +151,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
         private static final String TAG = AppPreferenceFragment.class.getSimpleName();
         private List<SettingsCategory> mCategories;
         private Context mExtractedContext;
-        private AppDialogFragmentHelper mManager;
+        private AppDialogFragmentManager mManager;
         private String mTitle;
         private int mBackStackCount;
 
@@ -162,7 +159,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
         public void onCreatePreferences(Bundle bundle, String s) {
             // Note, place in field with different name to avoid field overlapping
             mExtractedContext = (Context) Helpers.getField(this, "mStyledContext");
-            mManager = new AppDialogFragmentHelper(mExtractedContext);
+            mManager = new AppDialogFragmentManager(mExtractedContext);
 
             initPrefs();
 

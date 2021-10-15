@@ -101,7 +101,7 @@ public class ScreensaverManager {
         }
 
         if (show && mDimColorResId == R.color.dimming &&
-                (isPlaying() || isSigning() || mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER)
+                (isPlaying() || isSigning() || mGeneralData.getScreenDimmingTimeoutMin() == GeneralData.SCREEN_DIMMING_NEVER)
         ) {
             return;
         }

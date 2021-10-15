@@ -9,11 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
+import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
-import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
-import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
 import java.util.HashMap;
@@ -27,10 +27,9 @@ public class ViewManager {
     private final Context mContext;
     private final Map<Class<?>, Class<? extends Activity>> mViewMapping;
     private final Map<Class<? extends Activity>, Class<? extends Activity>> mParentMapping;
-    private final Stack<Class<?>> mActivityStack;
-    private final AppPrefs mPrefs;
-    private Class<?> mRootActivity;
-    private Class<?> mDefaultTop;
+    private final Stack<Class<? extends Activity>> mActivityStack;
+    private Class<? extends Activity> mRootActivity;
+    private Class<? extends Activity> mDefaultTop;
     private long mPrevThrottleTimeMS;
     private boolean mIsMoveToBackEnabled;
     private boolean mIsFinishing;
@@ -42,7 +41,6 @@ public class ViewManager {
         mViewMapping = new HashMap<>();
         mParentMapping = new HashMap<>();
         mActivityStack = new Stack<>();
-        mPrefs = AppPrefs.instance(context);
     }
 
     public static ViewManager instance(Context context) {
@@ -67,6 +65,14 @@ public class ViewManager {
 
     public void unregister(Class<?> viewClass) {
         mViewMapping.remove(viewClass);
+    }
+
+    public Class<? extends Activity> getActivity(Class<?> viewClass) {
+        return mViewMapping.get(viewClass);
+    }
+
+    public Class<? extends Activity> getRootActivity() {
+        return mRootActivity;
     }
 
     /**
@@ -183,7 +189,7 @@ public class ViewManager {
             return;
         }
 
-        Class<?> activityClass = activity.getClass();
+        Class<? extends Activity> activityClass = activity.getClass();
 
         // Open from phone's history fix. Not parent? Make the root then.
         if (mParentMapping.get(activityClass) == null) {
@@ -211,7 +217,7 @@ public class ViewManager {
         return result;
     }
 
-    public void setRoot(@NonNull Class<?> rootActivity) {
+    public void setRoot(@NonNull Class<? extends Activity> rootActivity) {
         mRootActivity = rootActivity;
     }
 
@@ -253,6 +259,7 @@ public class ViewManager {
     public void clearCaches() {
         YouTubeMediaService.instance().invalidateCache();
         FileHelpers.deleteCache(mContext);
+        LocaleUpdater.clearCache();
     }
 
     //public void restartApp() {
@@ -323,12 +330,12 @@ public class ViewManager {
         }
     }
 
-    public void forceFinishTheApp() {
-        SplashPresenter.instance(mContext).unhold();
+    public void forceFinishTheApp(boolean kill) {
+        SplashPresenter.unhold();
+        BrowsePresenter.unhold();
         clearCaches();
 
-        // We need to destroy the app only if settings are changed
-        if (GeneralData.instance(mContext).isSettingsCategoryEnabled()) {
+        if (kill) {
             destroyApp();
         }
     }

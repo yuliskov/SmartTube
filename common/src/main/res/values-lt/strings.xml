@@ -76,7 +76,7 @@
     <string name="player_only_pause">Pristabdykite tik</string>
     <string name="check_for_updates">Patikrinkite, ar yra naujinių</string>
     <string name="update_not_found">Naudojate naujausią versiją</string>
-    <string name="update_in_progess">Palaukite…</string>
+    <string name="update_in_progress">Palaukite…</string>
     <string name="player_ui_hide_behavior">Automatiškai slėpti vartotojo sąsają</string>
     <string name="option_never">Niekada</string>
     <string name="side_panel_sections">Nustatymo skyriai</string>

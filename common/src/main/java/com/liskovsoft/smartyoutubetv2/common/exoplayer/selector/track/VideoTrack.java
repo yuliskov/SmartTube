@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track;
 
+import com.google.android.exoplayer2.Format;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 
@@ -89,7 +90,9 @@ public class VideoTrack extends MediaTrack {
         int size1;
         int size2;
 
-        if (format.width > format.height && track2.format.width > track2.format.height) {
+        // Proper non-widescreen (4:3) format handling.
+        // 4:3 example: https://www.youtube.com/watch?v=m8nsUcAwkj8&t=1042s
+        if (isWideScreen(format) && isWideScreen(track2.format)) {
             size1 = format.width;
             size2 = track2.format.width;
         } else {
@@ -186,5 +189,16 @@ public class VideoTrack extends MediaTrack {
         }
 
         return result;
+    }
+
+    /**
+     * Check widescreen: 16:9, 16:8, 16:7 etc<br/>
+     */
+    private boolean isWideScreen(Format format) {
+        if (format == null) {
+            return false;
+        }
+
+        return format.width / (float) format.height >= 1.77;
     }
 }

@@ -89,7 +89,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
      * @param parameters supplied externally from {@link RestoreTrackSelector}
      */
     private void initRenderer(int rendererIndex, MappedTrackInfo trackInfo, Parameters parameters) {
-        if (mRenderers[rendererIndex] != null) {
+        if (mRenderers[rendererIndex] != null && mRenderers[rendererIndex].mediaTracks != null) {
             return;
         }
 
@@ -105,7 +105,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
      * @param parameters supplied externally from {@link RestoreTrackSelector}
      */
     private void initRenderer(int rendererIndex, TrackGroupArray groups, Parameters parameters) {
-        if (mRenderers[rendererIndex] != null) {
+        if (mRenderers[rendererIndex] != null && mRenderers[rendererIndex].mediaTracks != null) {
             return;
         }
 

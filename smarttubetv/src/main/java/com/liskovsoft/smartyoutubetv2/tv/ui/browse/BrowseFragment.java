@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.leanback.app.BrowseSupportFragment;
+import androidx.leanback.app.HeadersSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRowPresenter;
@@ -29,6 +29,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.ErrorDialogFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.headers.ExtendedHeadersSupportFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 
 import java.util.LinkedHashMap;
@@ -51,7 +52,6 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private int mRestoredHeaderIndex = -1;
     private int mRestoredItemIndex = -1;
     private boolean mFocusOnChildFragment;
-    private GestureDetector mGestureDetector;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,6 +112,11 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mRestoredItemIndex = -1;
     }
 
+    @Override
+    public HeadersSupportFragment onCreateHeadersSupportFragment() {
+        return new ExtendedHeadersSupportFragment();
+    }
+
     private void setupEventListeners() {
         getHeadersSupportFragment().setOnHeaderClickedListener(
                 (viewHolder, row) -> {
@@ -123,9 +128,17 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
                         getHeadersSupportFragment().setSelectedPosition(newPosition);
                     } else {
                         // update section when clicked or pressed
-                        mBrowsePresenter.onCategoryFocused((int) headerId);
-                        startHeadersTransition(false);
+                        mBrowsePresenter.onSectionFocused((int) headerId);
+                        startHeadersTransitionSafe(false);
                     }
+                }
+        );
+
+        ((ExtendedHeadersSupportFragment) getHeadersSupportFragment()).setOnHeaderLongPressedListener(
+                (viewHolder, row) -> {
+                    long headerId = row.getHeaderItem().getId();
+
+                    mBrowsePresenter.onSectionLongPressed((int) headerId);
                 }
         );
 
@@ -155,7 +168,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mSectionFragmentFactory = new BrowseSectionFragmentFactory(
                 (viewHolder, row) -> {
                     focusOnChildFragment();
-                    mBrowsePresenter.onCategoryFocused(getSelectedHeaderId());
+                    mBrowsePresenter.onSectionFocused(getSelectedHeaderId());
                 }
         );
 
@@ -287,13 +300,14 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         }
     }
 
-    private void focusOnChildFragment() {
-        if (!Utils.checkActivity(getActivity())) {
-            return;
-        }
+    @Override
+    public void focusOnContent() {
+        startHeadersTransitionSafe(false);
+    }
 
+    private void focusOnChildFragment() {
         if (mFocusOnChildFragment) {
-            startHeadersTransition(false);
+            startHeadersTransitionSafe(false);
             mFocusOnChildFragment = false;
         }
     }
@@ -302,6 +316,22 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     public void selectSectionItem(int index) {
         if (index >= 0) {
             mSectionFragmentFactory.setCurrentFragmentItemIndex(index);
+        }
+    }
+
+    /**
+     * Fix: IllegalStateException: "Can not perform this action after onSaveInstanceState"
+     */
+    private void startHeadersTransitionSafe(boolean withHeaders) {
+        // Fix: IllegalStateException: "Can not perform this action after onSaveInstanceState"
+        if (!Utils.checkActivity(getActivity())) {
+            return;
+        }
+
+        try {
+            startHeadersTransition(withHeaders);
+        } catch (IllegalStateException e) {
+            // NOP
         }
     }
 

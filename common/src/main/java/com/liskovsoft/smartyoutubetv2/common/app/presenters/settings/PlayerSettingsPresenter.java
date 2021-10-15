@@ -42,6 +42,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendUIAutoHideCategory(settingsPresenter);
         appendSeekingPreviewCategory(settingsPresenter);
         appendRememberSpeedCategory(settingsPresenter);
+        appendEndingTimeCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
         appendTweaksCategory(settingsPresenter);
 
@@ -193,12 +194,43 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_tweaks), options);
     }
 
+    private void appendEndingTimeCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.option_disabled),
+                option -> {
+                    mPlayerData.enableRemainingTime(false);
+                    mPlayerData.enableEndingTime(false);
+                },
+                !mPlayerData.isRemainingTimeEnabled() && !mPlayerData.isEndingTimeEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_remaining_time),
+                option -> {
+                    mPlayerData.enableRemainingTime(true);
+                    mPlayerData.enableEndingTime(false);
+                },
+                mPlayerData.isRemainingTimeEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_ending_time),
+                option -> {
+                    mPlayerData.enableEndingTime(true);
+                    mPlayerData.enableRemainingTime(false);
+                },
+                mPlayerData.isEndingTimeEnabled()));
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_show_ending_time), options);
+    }
+
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         //options.add(UiOptionItem.from(getContext().getString(R.string.player_full_date),
         //        option -> mPlayerData.enableAbsoluteDate(option.isSelected()),
         //        mPlayerData.isAbsoluteDateEnabled()));
+
+        //options.add(UiOptionItem.from(getContext().getString(R.string.player_time_correction),
+        //        option -> mPlayerData.enableTimeCorrection(option.isSelected()),
+        //        mPlayerData.isTimeCorrectionEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_pause_when_seek),
                 option -> mPlayerData.enablePauseOnSeek(option.isSelected()),
@@ -212,9 +244,21 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerData.enableGlobalClock(option.isSelected()),
                 mPlayerData.isGlobalClockEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_remaining_time),
-                option -> mPlayerData.enableRemainingTime(option.isSelected()),
-                mPlayerData.isRemainingTimeEnabled()));
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_global_ending_time),
+                option -> mPlayerData.enableGlobalEndingTime(option.isSelected()),
+                mPlayerData.isGlobalEndingTimeEnabled()));
+
+        //OptionItem remainingTime = UiOptionItem.from(getContext().getString(R.string.player_show_remaining_time),
+        //        option -> mPlayerData.enableRemainingTime(option.isSelected()), mPlayerData.isRemainingTimeEnabled());
+        //
+        //OptionItem endingTime = UiOptionItem.from(getContext().getString(R.string.player_show_ending_time),
+        //        option -> mPlayerData.enableEndingTime(option.isSelected()), mPlayerData.isEndingTimeEnabled());
+        //
+        //remainingTime.setRadio(endingTime);
+        //endingTime.setRadio(remainingTime);
+        //
+        //options.add(remainingTime);
+        //options.add(endingTime);
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_quality_info),
                 option -> mPlayerData.enableQualityInfo(option.isSelected()),

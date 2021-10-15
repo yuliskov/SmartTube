@@ -188,6 +188,11 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onPlayEnd() {
+        // Fix simultaneous videos loading (e.g. when playback ends and user opens new video)
+        if (isActionsRunning()) {
+            return;
+        }
+
         int playbackMode = checkSleepTimer(mPlayerData.getPlaybackMode());
 
         switch (playbackMode) {
@@ -215,6 +220,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 if (mPlaylist.getNext() == null) {
                     getController().showSuggestions(true);
                     getController().setPlay(false);
+                    getController().setPositionMs(0);
                 } else {
                     onNextClicked();
                     getController().showControls(true);
@@ -229,6 +235,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 } else {
                     getController().showSuggestions(true);
                     getController().setPlay(false);
+                    getController().setPositionMs(0);
                 }
                 break;
         }
@@ -328,7 +335,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         // Significantly improves next video loading time!
         if (current.nextMediaItem != null) {
             openVideoInt(Video.from(current.nextMediaItem));
-        } else {
+        } else if (!current.isSynced) { // Maybe there's nothing left. E.g. when casting from phone
             // Wait in a loop while suggestions have been loaded...
             if (showLoadingMsg) {
                 MessageHelpers.showMessageThrottled(getActivity(), R.string.wait_data_loading);
@@ -442,6 +449,10 @@ public class VideoLoader extends PlayerEventListenerHelper {
         } else {
             Log.e(TAG, "Video item doesn't contain needed data!");
         }
+    }
+
+    private boolean isActionsRunning() {
+        return RxUtils.isAnyActionRunning(mFormatInfoAction, mMpdStreamAction);
     }
 
     private void disposeActions() {

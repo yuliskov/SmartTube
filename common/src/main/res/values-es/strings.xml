@@ -78,7 +78,7 @@
     <string name="player_only_pause">Sólo pausa</string>
     <string name="check_for_updates">Buscar actualizaciones</string>
     <string name="update_not_found">Estás usando la última versión</string>
-    <string name="update_in_progess">Espera…</string>
+    <string name="update_in_progress">Espera…</string>
     <string name="player_ui_hide_behavior">Auto-ocultar interfaz</string>
     <string name="option_never">Nunca</string>
     <string name="side_panel_sections">Secciones visibles</string>
@@ -215,8 +215,8 @@
     <string name="channels_auto_load">Auto carga de contenido sección canales</string>
     <string name="return_to_background_video">Volver al vídeo reproduciéndose de fondo</string>
     <string name="pin_unpin_from_sidebar">Fijar/desfijar de barra lateral</string>
-    <string name="pin_to_sidebar">Fijado a barra lateral</string>
-    <string name="unpin_from_sidebar">Desfijado de barra lateral</string>
+    <string name="pinned_to_sidebar">Fijado a barra lateral</string>
+    <string name="unpinned_from_sidebar">Desfijado de barra lateral</string>
     <string name="dialog_select_country">País</string>
     <string name="settings_language_country">Idioma/País</string>
     <string name="share_embed_link">Compartir enlace embebido</string>

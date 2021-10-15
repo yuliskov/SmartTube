@@ -35,4 +35,5 @@ public interface PlayerEngineEventListener {
     void onEngineReleased();
     void onEngineError(int type);
     void onTrackChanged(FormatItem track);
+    void onTrackSelected(FormatItem track);
 }

@@ -57,7 +57,9 @@ public class SignInPresenter extends BasePresenter<SignInView> {
     }
 
     public void onActionClicked() {
-        getView().close();
+        if (getView() != null) {
+            getView().close();
+        }
     }
 
     private void updateUserCode() {

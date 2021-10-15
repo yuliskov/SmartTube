@@ -16,7 +16,8 @@ public class UiOptionItem implements OptionItem {
     private FormatItem mFormat;
     private OptionCallback mCallback;
     private Object mData;
-    private OptionItem[] mCheckedRules;
+    private OptionItem[] mRequiredItems;
+    private OptionItem[] mRadioItems;
 
     private final static int MAX_VIDEO_WIDTH = (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ? 1280 :
             Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ? 1920 : 3840);
@@ -150,16 +151,30 @@ public class UiOptionItem implements OptionItem {
     }
 
     @Override
-    public void setRequire(OptionItem... rules) {
-        if (rules == null || rules.length == 0) {
-            mCheckedRules = null;
+    public void setRequired(OptionItem... items) {
+        if (items == null || items.length == 0) {
+            mRequiredItems = null;
         }
 
-        mCheckedRules = rules;
+        mRequiredItems = items;
     }
 
     @Override
-    public OptionItem[] getRequire() {
-        return mCheckedRules;
+    public OptionItem[] getRequired() {
+        return mRequiredItems;
+    }
+
+    @Override
+    public void setRadio(OptionItem... items) {
+        if (items == null || items.length == 0) {
+            mRadioItems = null;
+        }
+
+        mRadioItems = items;
+    }
+
+    @Override
+    public OptionItem[] getRadio() {
+        return mRadioItems;
     }
 }

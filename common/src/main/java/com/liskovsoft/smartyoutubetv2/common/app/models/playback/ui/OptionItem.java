@@ -7,6 +7,8 @@ public interface OptionItem {
     boolean isSelected();
     void onSelect(boolean isSelected);
     Object getData();
-    void setRequire(OptionItem... rules);
-    OptionItem[] getRequire();
+    void setRequired(OptionItem... items);
+    OptionItem[] getRequired();
+    void setRadio(OptionItem... items);
+    OptionItem[] getRadio();
 }

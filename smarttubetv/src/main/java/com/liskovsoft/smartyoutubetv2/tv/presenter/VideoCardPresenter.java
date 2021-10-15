@@ -22,15 +22,16 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.base.CardEventsPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.ExtendedCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.complexcardview.ComplexImageCardView;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 /*
  * A CardPresenter is used to generate Views and bind Objects to them on demand.
  * It contains an Image CardView
  */
-public class VideoCardPresenter extends CardEventsPresenter {
+public class VideoCardPresenter extends ExtendedCardPresenter {
     private static final String TAG = VideoCardPresenter.class.getSimpleName();
     private int mDefaultBackgroundColor = -1;
     private int mDefaultTextColor = -1;
@@ -132,9 +133,7 @@ public class VideoCardPresenter extends CardEventsPresenter {
 
         Glide.with(context)
                 .load(video.cardImageUrl)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .apply(RequestOptions.errorOf(mDefaultCardImage))
+                .apply(ViewUtil.glideOptions().error(mDefaultCardImage))
                 .listener(mErrorListener)
                 .into(cardView.getMainImageView());
     }

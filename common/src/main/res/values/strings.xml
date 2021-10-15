@@ -78,7 +78,7 @@
     <string name="player_only_pause">Only pause</string>
     <string name="check_for_updates">Check for updates</string>
     <string name="update_not_found">You\'re using the latest version</string>
-    <string name="update_in_progess">Wait…</string>
+    <string name="update_in_progress">Wait…</string>
     <string name="player_ui_hide_behavior">Auto-hide UI</string>
     <string name="option_never">Never</string>
     <string name="side_panel_sections">Set-up sections</string>
@@ -129,6 +129,7 @@
     <string name="playlists_style_rows">Rows</string>
     <string name="player_show_clock">Show clock in pop-up menu</string>
     <string name="player_show_remaining_time">Show remaining time</string>
+    <string name="player_show_ending_time">Show ending time</string>
     <string name="open_channel_uploads">Open channel uploads</string>
     <string name="app_exit_shortcut">Exit from the app</string>
     <string name="app_exit_none">Don\'t exit</string>
@@ -173,7 +174,7 @@
     <string name="settings_general">General</string>
     <string name="settings_video">Video</string>
     <string name="content_block_confirm_skip">Confirm on skip</string>
-    <string name="content_block_categories">Categories</string>
+    <string name="content_block_categories">Skip segments</string>
     <string name="content_block_sponsor">Sponsor</string>
     <string name="content_block_intro">Intermission/intro animation</string>
     <string name="content_block_outro">Endcards/credits</string>
@@ -208,15 +209,17 @@
     <string name="video_aspect">Aspect ratio</string>
     <string name="player_tweaks">Developer options</string>
     <string name="header_uploads">Uploads</string>
-    <string name="player_show_global_clock">Show clock on top of the video</string>
+    <string name="player_show_global_clock">Show clock on screen constantly</string>
+    <string name="player_show_global_ending_time">Show video ending time on screen constantly</string>
     <string name="uploads_old_look">Revert old look of Uploads section</string>
     <string name="background_playback_activation">Background playback (activation)</string>
     <string name="channels_old_look">Revert old look of Channels section</string>
     <string name="channels_auto_load">Auto load Channels section content</string>
     <string name="return_to_background_video">Return to video running in background</string>
     <string name="pin_unpin_from_sidebar">Pin/Unpin from sidebar</string>
-    <string name="pin_to_sidebar">Pinned to sidebar</string>
-    <string name="unpin_from_sidebar">Unpinned from sidebar</string>
+    <string name="pinned_to_sidebar">Pinned to sidebar</string>
+    <string name="unpin_from_sidebar">Unpin from sidebar</string>
+    <string name="unpinned_from_sidebar">Unpinned from sidebar</string>
     <string name="dialog_select_country">Country</string>
     <string name="settings_language_country">Language/Country</string>
     <string name="share_embed_link">Share embed link</string>
@@ -241,4 +244,17 @@
     <string name="app_backup">Backup data</string>
     <string name="app_restore">Restore data from backup</string>
     <string name="skip_each_segment_once">Don\'t skip segments again</string>
+    <string name="disable_ok_long_press">Disable OK button long press</string>
+    <string name="player_time_correction">Display the time with respect of speed</string>
+    <string name="sponsor_color_markers">Color markers on progress bar</string>
+    <string name="refresh_section">Refresh section</string>
+    <string name="option_disabled">Disabled</string>
+    <string name="live_now_row_name">Live now</string>
+    <string name="run_in_background">Run in the background</string>
+    <string name="settings_remote_control">Remote control</string>
+    <string name="background_service_started">Background service started</string>
+    <string name="dialog_add_to">Add to %s</string>
+    <string name="dialog_remove_from">Remove from %s</string>
+    <string name="added_to">Added to %s</string>
+    <string name="removed_from">Removed from %s</string>
 </resources>

@@ -80,7 +80,7 @@ So, make a copy of values-he and name it values-iw. Keep both in your structure.
     <string name="player_only_pause">השהייה בלבד</string>
     <string name="check_for_updates">בדיקת עדכונים</string>
     <string name="update_not_found">אתה משתמש בגרסה האחרונה</string>
-    <string name="update_in_progess">המתן…</string>
+    <string name="update_in_progress">המתן…</string>
     <string name="player_ui_hide_behavior">הסתרת ממשק אוטומטית</string>
     <string name="option_never">אף פעם</string>
     <string name="side_panel_sections">קטעי הגדרה</string>

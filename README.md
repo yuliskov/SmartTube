@@ -9,7 +9,7 @@ stability, voice search and casting support **might** be worse than in the offic
 
 **Do you have any question?** Ctrl+F or ⌘F this readme first!
 
-[**Installation**](#Installation) | [**FAQ**](#FAQ) | [Support / Chat](#Support) | [Changelog](https://t.me/s/SmartTubeNextNewsEN) | [source code](https://github.com/yuliskov/SmartTubeNext)
+[**Installation**](#Installation) | [**FAQ**](#FAQ) | [Support / Chat](#Support) | [Changelog](https://t.me/s/SmartTubeNextNewsEN) | [Donation](#Donation) | [source code](https://github.com/yuliskov/SmartTubeNext)
 
 
 ## Device support
@@ -29,8 +29,7 @@ There is a **beta release** (recommended) and a **stable release**. Beta gets ne
 
 You can use either of the following methods to install the app:
 
-- (**easiest**) install [Downloader by AFTVnews](https://www.aftvnews.com/downloader/) on your Android TV enter `is.gd/stnbeta` (for beta), then read, understand and confirm the security prompts.
-  <small>You can also enter [**99273**](https://aftv.news/99273) (for beta) or [**67072**](https://aftv.news/67072) (for stable), but this requires an extra step to install the AFTVnews Downloader browser addon if you haven't already.</small>
+- (**easiest**) install [Downloader by AFTVnews](https://www.aftvnews.com/downloader/) on your Android TV, open it and enter `is.gd/stn_beta` or `is.gd/stn_stable`, then read, understand and confirm the security prompts. (<small>You can also enter [**79015**](https://aftv.news/79015) (for beta) or [**28544**](https://aftv.news/28544) (for stable), but this requires an extra step to install the AFTVnews Downloader browser addon if you haven't already.</small>)
 - install a file transfer app on your Android TV, download the APK on your phone or computer and transfer it to your TV (e.g. [_Send Files to TV_](https://sendfilestotv.app/)\*)
 - download the APK onto a USB stick, put the USB stick into your TV and use a file manager app (e.g. [_FX File Explorer_](https://play.google.com/store/apps/details?id=nextapp.fx)\* or [_FileCommander_](https://play.google.com/store/apps/details?id=com.mobisystems.fileman)\*). Android's preinstalled file manager does not work!
 - if you are an advanced user, you can install it using ADB. [guide](https://fossbytes.com/side-load-apps-android-tv/#h-how-to-sideload-apps-on-your-android-tv-using-adb) | [alternative guide](https://www.aftvnews.com/sideload/)
@@ -39,7 +38,8 @@ You can use either of the following methods to install the app:
 
 **The app has a built-in updater** with changelog. You can also find all releases and the **changelog** on the [Telegram channel @SmartTubeNextNewsEN](https://t.me/s/SmartTubeNextNewsEN) (no login required) or on [Github](https://github.com/yuliskov/SmartTubeNext/releases/).
 
-> latest [**beta download**](https://github.com/yuliskov/SmartTubeNext/releases/download/latest/smarttube_beta.apk)    
+> latest [**beta download**](https://github.com/yuliskov/SmartTubeNext/releases/download/latest/smarttube_beta.apk)
+>
 > latest [stable download](https://github.com/yuliskov/SmartTubeNext/releases/download/latest/smarttube_stable.apk)
 
 
@@ -112,14 +112,14 @@ To enable voice search, an additional app must be installed alongside SmartTubeN
 **On Amazon Fire TV**, to enable voice search support you need to: 
 
 1. uninstall the original YouTube app (no root required on Amazon FireTV stick)
-2. download and install the Amazon Bridge SmartTubeNext app: https://bit.ly/3reaXjz (e.g. via _Downloader for AFTVnews_)
+2. download and install the Amazon Bridge SmartTubeNext app: https://is.gd/stn_bridge_amazon (e.g. via _Downloader for AFTVnews_)
 
 
 **On all other Android devices**, sadly root is required to enable this:
 
 1. root your device (search for a guide for your specific device)
 2. uninstall the official YouTube app using root (`adb shell pm uninstall com.google.android.youtube.tv`)
-3. download and install the ATV Bridge SmartTubeNext app: https://bit.ly/36HSx1a
+3. download and install the ATV Bridge SmartTubeNext app: https://is.gd/stn_bridge_atv
 
 
 ## Donation
@@ -128,8 +128,8 @@ If you want to support my developments you are welcome to buy me a cup of coffee
 
 <!-- > [BountySource (**PayPal**, **VISA**)](https://salt.bountysource.com/checkout/amount?team=smarttube)   -->
 > [Patreon (**PayPal**)](https://www.patreon.com/smarttube)  
-> [QIWI (RU)](https://qiwi.com/n/GUESS025)  
-> [QIWI (RU)](https://qiwi.com/n/GUESS025)  
+> [QIWI (RU, Visa)](https://qiwi.com/n/GUESS025)  
+> [DonatePay (RU, **PayPal**, Visa)](https://new.donatepay.ru/@459197)  
 > **BTC**: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx  
 > **LTC**: ltc1qgc24eq9jl9cq78qnd5jpqhemkajg9vudwyd8pw  
 > **ETH**: 0xe455E21a085ae195a097cd4F456051A9916A5064  

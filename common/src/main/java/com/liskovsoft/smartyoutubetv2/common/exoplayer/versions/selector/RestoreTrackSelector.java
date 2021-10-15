@@ -29,6 +29,8 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
 
     public RestoreTrackSelector(Factory trackSelectionFactory) {
         super(trackSelectionFactory);
+        // Could help with Shield resolution bug?
+        //setParameters(buildUponParameters().setForceHighestSupportedBitrate(true));
     }
 
     public void setOnTrackSelectCallback(TrackSelectorCallback callback) {
@@ -111,6 +113,12 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
     //
     //    return selectionPair;
     //}
+
+    @Override
+    public void setParameters(Parameters parameters) {
+        // Fix dropping to 144p by disabling any overrides.
+        invalidate();
+    }
 
     // Exo 2.10 and up
     @Nullable

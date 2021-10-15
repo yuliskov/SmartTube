@@ -23,7 +23,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoMenuPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.OnSelectSubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
@@ -89,43 +89,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
             enableUiAutoHideTimeout();
         }
     }
-
-    //@Override
-    //public boolean onKeyDown(int keyCode) {
-    //    disableUiAutoHideTimeout();
-    //    disableSuggestionsResetTimeout();
-    //
-    //    boolean controlsShown = getController().isControlsShown();
-    //
-    //    if (KeyHelpers.isBackKey(keyCode)) {
-    //        enableSuggestionsResetTimeout();
-    //    } else if (KeyHelpers.isMenuKey(keyCode)) {
-    //        getController().showControls(!controlsShown);
-    //
-    //        if (controlsShown) {
-    //            enableSuggestionsResetTimeout();
-    //        }
-    //    } else if (KeyHelpers.isConfirmKey(keyCode) && !controlsShown) {
-    //        switch (mPlayerData.getOKButtonBehavior()) {
-    //            case PlayerData.ONLY_UI:
-    //                getController().showControls(true);
-    //                return true; // don't show ui
-    //            case PlayerData.UI_AND_PAUSE:
-    //                // NOP
-    //                break;
-    //            case PlayerData.ONLY_PAUSE:
-    //                getController().setPlay(!getController().getPlay());
-    //                return true; // don't show ui
-    //        }
-    //    } else if (KeyHelpers.isStopKey(keyCode)) {
-    //        getController().exit();
-    //        return true;
-    //    }
-    //
-    //    enableUiAutoHideTimeout();
-    //
-    //    return false;
-    //}
 
     @Override
     public boolean onKeyDown(int keyCode) {
@@ -312,7 +275,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
         // suppose live stream if buffering near the end
         // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
-        intSpeedItems(settingsPresenter, items, new float[]{0.25f, 0.5f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f, 1.0f, 1.1f, 1.15f, 1.25f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f, 3.0f});
+        intSpeedItems(settingsPresenter, items, new float[]{0.25f, 0.5f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f, 1.0f, 1.1f, 1.15f, 1.2f, 1.25f, 1.3f, 1.4f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f, 3.0f});
 
         settingsPresenter.appendRadioCategory(getActivity().getString(R.string.video_speed), items);
         settingsPresenter.showDialog();
@@ -419,8 +382,9 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     private boolean handleMenuKey(int keyCode) {
         boolean controlsShown = getController().isControlsShown();
+        boolean suggestionsShown = getController().isSuggestionsShown();
 
-        if (KeyHelpers.isMenuKey(keyCode)) {
+        if (KeyHelpers.isMenuKey(keyCode) && !suggestionsShown) {
             getController().showControls(!controlsShown);
 
             if (controlsShown) {

@@ -77,7 +77,7 @@
   <string name="player_only_pause">Vain pysäytys</string>
   <string name="check_for_updates">Tarkista päivitykset</string>
   <string name="update_not_found">Uusin versio on jo käytössä.</string>
-  <string name="update_in_progess">Odota…</string>
+  <string name="update_in_progress">Odota…</string>
   <string name="player_ui_hide_behavior">Piilota valikko automaattisesti</string>
   <string name="option_never">Ei koskaan</string>
   <string name="side_panel_sections">Järjestä valikot</string>
@@ -215,8 +215,8 @@
   <string name="open_playlist">Avaa soittolista</string>
   <string name="cancel_segment_skip">Peruuta osion ohitus</string>
   <string name="pin_unpin_from_sidebar">Pidä/poista sivuvalikosta</string>
-  <string name="pin_to_sidebar">Pidetään sivuvalikossa</string>
-  <string name="unpin_from_sidebar">Poistettu sivuvalikosta</string>
+  <string name="pinned_to_sidebar">Pidetään sivuvalikossa</string>
+  <string name="unpinned_from_sidebar">Poistettu sivuvalikosta</string>
   <string name="dialog_select_country">Maa</string>
   <string name="settings_language_country">Kieli/maa</string>
   <string name="share_embed_link">Jaa linkki</string>
