@@ -362,11 +362,11 @@ public class Utils {
 
         if (VERSION.SDK_INT >= 26) {
             String channelId = context.getPackageName();
-            NotificationChannel channel = new NotificationChannel(
-                    channelId,
-                    context.getString(R.string.search_label),
-                    NotificationManager.IMPORTANCE_HIGH);
-            notificationManager.createNotificationChannel(channel);
+//            NotificationChannel channel = new NotificationChannel(
+//                    channelId,
+//                    context.getString(R.string.search_label),
+//                    NotificationManager.IMPORTANCE_HIGH);
+//            notificationManager.createNotificationChannel(channel);
             builder.setChannelId(channelId);
         }
 
