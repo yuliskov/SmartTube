@@ -194,7 +194,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     /**
      * We need to circle through the tracks to remove previously selected marks
      */
-    private void updateSelection(int rendererIndex, int trackGroupIndex, int[] trackIndexes) {
+    private void updateSelection(int rendererIndex, int trackGroupIndex, int... trackIndexes) {
         if (mRenderers[rendererIndex] == null) {
             return;
         }
@@ -304,6 +304,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             Definition definition = new Definition(groups.get(matchedTrack.groupIndex), matchedTrack.trackIndex);
             definitionPair = new Pair<>(definition, matchedTrack);
             setOverride(matchedTrack.rendererIndex, matchedTrack.groupIndex, matchedTrack.trackIndex);
+            updateSelection(matchedTrack.rendererIndex, matchedTrack.groupIndex, matchedTrack.trackIndex);
         } else {
             Log.e(TAG, "Can't create selection. No match for the track %s", selectedTrack);
         }
@@ -326,6 +327,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         definition = getOverride(rendererIndex, groups, params, definition);
 
         setOverride(rendererIndex, groups.indexOf(definition.group), definition.tracks);
+        updateSelection(rendererIndex, groups.indexOf(definition.group), definition.tracks);
     }
 
     private Definition getOverride(int rendererIndex, TrackGroupArray rendererTrackGroups, Parameters params, Definition original) {
@@ -398,6 +400,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         MediaTrack matchedTrack = findBestMatch(track);
 
         setOverride(matchedTrack.rendererIndex, matchedTrack.groupIndex, matchedTrack.trackIndex);
+        //updateSelection(matchedTrack.rendererIndex, matchedTrack.groupIndex, matchedTrack.trackIndex);
 
         // save immediately
         applyOverride(rendererIndex);
@@ -561,8 +564,6 @@ public class TrackSelectorManager implements TrackSelectorCallback {
         } else {
             mRenderers[rendererIndex].override = new SelectionOverride(groupIndex, trackIndexes);
         }
-
-        updateSelection(rendererIndex, groupIndex, trackIndexes);
     }
 
     private boolean hasSelection(int rendererIndex) {
