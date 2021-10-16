@@ -11,6 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCatego
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
@@ -251,15 +252,8 @@ public class HQDialogManager extends PlayerEventListenerHelper {
 
         result.add(0, UiOptionItem.from(
                 context.getString(R.string.video_preset_disabled),
-                //optionItem -> setFormat(FormatItem.VIDEO_AUTO, playerData, onFormatSelected),
                 optionItem -> setFormat(playerData.getDefaultVideoFormat(), playerData, onFormatSelected),
                 !isPresetSelection));
-
-        result.add(1, UiOptionItem.from(
-                context.getString(R.string.video_preset_adaptive),
-                //optionItem -> setFormat(FormatItem.VIDEO_AUTO, playerData, onFormatSelected),
-                optionItem -> setFormat(null, playerData, onFormatSelected),
-                selectedFormat == null));
 
         return result;
     }

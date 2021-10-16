@@ -214,8 +214,11 @@ public class ExoFormatItem implements FormatItem {
      * "2560,1440,30,vp9"
      */
     public static ExoFormatItem fromVideoSpec(String spec, boolean isPreset) {
-        if (spec == null) {
-            return null;
+        if (spec == null) { // Adaptive selection
+            ExoFormatItem formatItem = new ExoFormatItem();
+            formatItem.mIsPreset = isPreset;
+            formatItem.mType = TrackSelectorManager.RENDERER_INDEX_VIDEO;
+            return formatItem;
         }
 
         String[] split = spec.split(",");

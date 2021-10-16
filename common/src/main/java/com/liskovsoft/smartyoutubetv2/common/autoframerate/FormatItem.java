@@ -18,12 +18,12 @@ public interface FormatItem {
     int getId();
     CharSequence getTitle();
     boolean isDefault();
+    boolean isSelected();
+    boolean isPreset();
     float getFrameRate();
     int getWidth();
     int getHeight();
-    boolean isSelected();
     int getType();
-    boolean isPreset();
 
     static FormatItem checkFormat(FormatItem format, int type) {
         return format != null && format.getType() == type ? format : null;
