@@ -255,6 +255,12 @@ public class HQDialogManager extends PlayerEventListenerHelper {
                 optionItem -> setFormat(playerData.getDefaultVideoFormat(), playerData, onFormatSelected),
                 !isPresetSelection));
 
+        result.add(1, UiOptionItem.from(
+                context.getString(R.string.video_preset_adaptive),
+                //optionItem -> setFormat(FormatItem.VIDEO_AUTO, playerData, onFormatSelected),
+                optionItem -> setFormat(null, playerData, onFormatSelected),
+                selectedFormat == null));
+
         return result;
     }
 
