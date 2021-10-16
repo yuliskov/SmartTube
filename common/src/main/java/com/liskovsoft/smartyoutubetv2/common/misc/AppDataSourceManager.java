@@ -144,7 +144,7 @@ public class AppDataSourceManager {
                 new VideoPreset("4320p    60fps    vp9", "7680,4320,60,vp9"),
                 new VideoPreset("4320p    30fps    vp9+hdr", "7680,4320,30,vp9.2"),
                 new VideoPreset("4320p    60fps    vp9+hdr", "7680,4320,60,vp9.2"),
-                new VideoPreset("Adaptive", null)
+                //new VideoPreset("Adaptive", null)
         };
 
         return presets;
