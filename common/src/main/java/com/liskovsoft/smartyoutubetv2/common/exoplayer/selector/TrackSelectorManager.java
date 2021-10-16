@@ -182,10 +182,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
             return;
         }
 
-        // Avoid using multiple selections
-        if (trackIndexes != null && trackIndexes.length != 0) {
-            trackIndexes = new int[] {trackIndexes[0]};
-        }
+        // Adaptive selection should be disabled in RestoreTrackSelector (e.g trackIndexes.length == 1)
 
         // We need to circle through the tracks to remove previously selected marks.
 

@@ -136,7 +136,7 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
 
         Log.d(TAG, "selectVideoTrack: choose default video processing");
 
-        Definition definition = super.selectVideoTrack(groups, formatSupports, mixedMimeTypeAdaptationSupports, params, enableAdaptiveTrackSelection);
+        Definition definition = super.selectVideoTrack(groups, formatSupports, mixedMimeTypeAdaptationSupports, params, false);
 
         // Don't invoke if track already has been selected by the app
         if (mCallback != null && definition != null) {
@@ -162,7 +162,7 @@ public class RestoreTrackSelector extends DefaultTrackSelector {
         Log.d(TAG, "selectAudioTrack: choose default audio processing");
 
         Pair<Definition, AudioTrackScore> definitionPair = super.selectAudioTrack(groups, formatSupports,
-                mixedMimeTypeAdaptationSupports, params, enableAdaptiveTrackSelection);
+                mixedMimeTypeAdaptationSupports, params, false);
 
         // Don't invoke if track already has been selected by the app
         if (mCallback != null && definitionPair != null) {
