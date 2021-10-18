@@ -294,7 +294,11 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         Mode currentMode = mUhdHelper.getCurrentMode();
         Mode[] supportedModes = mUhdHelper.getSupportedModes();
 
-        if (currentMode != null && supportedModes != null && supportedModes.length > 1) { // AFR is supported (more than one display mode).
+        boolean isAfrSupported = currentMode != null && supportedModes != null && supportedModes.length > 1;
+
+        mDisplayModeId.add(new Pair<>("Software Auto Frame Rate", isAfrSupported ? "supported" : NOT_AVAILABLE));
+
+        if (isAfrSupported) {
             String bootResolution = AppPrefs.instance(mContext).getBootResolution();
             String currentResolution = UhdHelper.toResolution(currentMode);
             currentResolution = currentResolution != null ? currentResolution : bootResolution;
