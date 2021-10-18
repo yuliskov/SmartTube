@@ -69,7 +69,7 @@ public class VideoTrack extends MediaTrack {
 
         // Detect profile based on format id presence
         return format.id == null ?
-                compare(track2, isMultiFpsFormat ? COMPARE_TYPE_IN_BOUNDS_PRESET : COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS) :
+                compare(track2, isMultiFpsFormat ? COMPARE_TYPE_IN_BOUNDS_PRESET : COMPARE_TYPE_IN_BOUNDS_PRESET) :
                 compare(track2, isMultiFpsFormat ? COMPARE_TYPE_IN_BOUNDS : COMPARE_TYPE_IN_BOUNDS_NO_FPS);
     }
 
