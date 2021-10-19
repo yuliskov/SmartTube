@@ -210,6 +210,7 @@
     <string name="player_tweaks">Options de développeur</string>
     <string name="header_uploads">Uploads</string>
     <string name="player_show_global_clock">Afficher l’horloge en haut de la vidéo</string>
+    <string name="player_show_global_ending_time">Afficher en permanence l\'heure de fin de la vidéo à l\'écran</string>
     <string name="uploads_old_look">Restaurer l\'ancienne apparence dans la section Uploads</string>
     <string name="background_playback_activation">Activation de la lecture en arrière-plan</string>
     <string name="channels_old_look">Restaurer l\'ancienne apparence dans la section des chaînes</string>
@@ -249,4 +250,12 @@
     <string name="refresh_section">Rafraîchir la section</string>
     <string name="option_disabled">Désactivée</string>
     <string name="live_now_row_name">En direct maintenant</string>
+    <string name="run_in_background">Exécuter en arrière-plan</string>
+    <string name="settings_remote_control">Télécommande</string>
+    <string name="background_service_started">Démarrage du service d\'arrière-plan</string>
+    <string name="dialog_add_to">Ajouter à %s</string>
+    <string name="dialog_remove_from">Retirer de %s</string>
+    <string name="added_to">Ajouté à %s</string>
+    <string name="removed_from">Retiré de %s</string>
+    <string name="video_preset_adaptive">Adaptive</string>
 </resources>
