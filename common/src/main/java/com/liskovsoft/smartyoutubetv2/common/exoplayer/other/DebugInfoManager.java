@@ -288,27 +288,43 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         }
     }
 
+    //private void updateDisplayModeId() {
+    //    mDisplayModeId.clear();
+    //
+    //    Mode currentMode = mUhdHelper.getCurrentMode();
+    //    Mode[] supportedModes = mUhdHelper.getSupportedModes();
+    //
+    //    boolean isAfrSupported = currentMode != null && supportedModes != null && supportedModes.length > 1;
+    //
+    //    mDisplayModeId.add(new Pair<>("Software Auto Frame Rate", isAfrSupported ? "supported" : NOT_AVAILABLE));
+    //
+    //    if (isAfrSupported) {
+    //        String bootResolution = AppPrefs.instance(mContext).getBootResolution();
+    //        String currentResolution = UhdHelper.toResolution(currentMode);
+    //        currentResolution = currentResolution != null ? currentResolution : bootResolution;
+    //
+    //        mDisplayModeId.add(new Pair<>("Current/UI Resolution", currentResolution));
+    //        mDisplayModeId.add(new Pair<>("Boot Resolution", bootResolution != null ? bootResolution : NOT_AVAILABLE));
+    //
+    //        mDisplayModeId.add(new Pair<>("Display Mode ID", String.valueOf(currentMode.getModeId())));
+    //        mDisplayModeId.add(new Pair<>("Display Modes Length", String.valueOf(supportedModes.length)));
+    //    }
+    //}
+
     private void updateDisplayModeId() {
         mDisplayModeId.clear();
 
         Mode currentMode = mUhdHelper.getCurrentMode();
         Mode[] supportedModes = mUhdHelper.getSupportedModes();
 
-        boolean isAfrSupported = currentMode != null && supportedModes != null && supportedModes.length > 1;
+        String bootResolution = AppPrefs.instance(mContext).getBootResolution();
+        String currentResolution = UhdHelper.toResolution(currentMode);
 
-        mDisplayModeId.add(new Pair<>("Software Auto Frame Rate", isAfrSupported ? "supported" : NOT_AVAILABLE));
+        mDisplayModeId.add(new Pair<>("Current/UI Resolution", currentResolution != null ? currentResolution : NOT_AVAILABLE));
+        mDisplayModeId.add(new Pair<>("Boot Resolution", bootResolution != null ? bootResolution : NOT_AVAILABLE));
 
-        if (isAfrSupported) {
-            String bootResolution = AppPrefs.instance(mContext).getBootResolution();
-            String currentResolution = UhdHelper.toResolution(currentMode);
-            currentResolution = currentResolution != null ? currentResolution : bootResolution;
-
-            mDisplayModeId.add(new Pair<>("Current Resolution", currentResolution));
-            mDisplayModeId.add(new Pair<>("Boot Resolution", bootResolution != null ? bootResolution : NOT_AVAILABLE));
-
-            mDisplayModeId.add(new Pair<>("Display Mode ID", String.valueOf(currentMode.getModeId())));
-            mDisplayModeId.add(new Pair<>("Display Modes Length", String.valueOf(supportedModes.length)));
-        }
+        mDisplayModeId.add(new Pair<>("Display Mode ID", currentMode != null ? String.valueOf(currentMode.getModeId()) : NOT_AVAILABLE));
+        mDisplayModeId.add(new Pair<>("Display Modes Length", supportedModes != null ? String.valueOf(supportedModes.length) : NOT_AVAILABLE));
     }
 
     private void appendDisplayInfo() {
