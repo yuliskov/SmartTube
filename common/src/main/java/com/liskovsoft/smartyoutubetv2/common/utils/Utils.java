@@ -364,7 +364,7 @@ public class Utils {
             String channelId = context.getPackageName();
             NotificationChannel channel = new NotificationChannel(
                     channelId,
-                    context.getString(R.string.search_label),
+                    context.getString(titleResId),
                     NotificationManager.IMPORTANCE_HIGH);
             notificationManager.createNotificationChannel(channel);
             builder.setChannelId(channelId);
