@@ -47,7 +47,14 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         mTrackSelectorManager = new TrackSelectorManager();
         mTrackFormatter = new TrackInfoFormatter2();
 
-        //mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(PlayerData.instance(context).getFormat(FormatItem.TYPE_VIDEO)));
+        initFormats();
+    }
+
+    private void initFormats() {
+        PlayerData playerData = PlayerData.instance(mContext);
+        mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(playerData.getFormat(FormatItem.TYPE_VIDEO)));
+        mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(playerData.getFormat(FormatItem.TYPE_AUDIO)));
+        mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(playerData.getFormat(FormatItem.TYPE_SUBTITLE)));
     }
 
     @Override
@@ -81,19 +88,10 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private void openMediaSource(MediaSource mediaSource) {
         setQualityInfo("");
 
-        if (mPlayer == null) {
-            return;
-        }
-
+        mOnSourceChanged = true;
+        mTrackSelectorManager.invalidate();
         mPlayer.prepare(mediaSource);
-
-        if (mEventListener != null) {
-            mTrackSelectorManager.invalidate();
-            mOnSourceChanged = true;
-            mEventListener.onSourceChanged(mVideo);
-        } else {
-            MessageHelpers.showMessage(mContext, "Oops. Event listener didn't initialized yet");
-        }
+        mEventListener.onSourceChanged(mVideo);
     }
 
     @Override

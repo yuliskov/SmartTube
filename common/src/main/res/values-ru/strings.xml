@@ -257,4 +257,5 @@
     <string name="dialog_remove_from">Удалить из %s</string>
     <string name="added_to">Добавлено в %s</string>
     <string name="removed_from">Удалено из %s</string>
+    <string name="video_preset_adaptive">Адаптивный</string>
 </resources>
