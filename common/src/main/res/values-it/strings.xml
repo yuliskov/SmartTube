@@ -257,4 +257,5 @@
     <string name="dialog_remove_from">Rimuovi da %s</string>
     <string name="added_to">Aggiunto a %s</string>
     <string name="removed_from">Rimosso da %s</string>
+    <string name="video_preset_adaptive">Adattivo</string>
 </resources>
