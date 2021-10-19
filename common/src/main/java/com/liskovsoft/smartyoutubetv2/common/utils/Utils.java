@@ -3,6 +3,12 @@ package com.liskovsoft.smartyoutubetv2.common.utils;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -10,11 +16,16 @@ import android.content.ServiceConnection;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.IBinder;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.Window;
 import android.view.WindowManager;
 import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.core.app.NotificationCompat;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
@@ -27,6 +38,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
+import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -144,16 +156,23 @@ public class Utils {
         }
     }
 
+    /**
+     * NOTE: Below won't help with "Can not perform this action after onSaveInstanceState"
+     */
     public static boolean checkActivity(Activity activity) {
         return activity != null && !activity.isDestroyed() && !activity.isFinishing();
     }
 
-    public static void startRemoteControlService(Context context) {
-        // Fake service to prevent the app from destroying
-        Intent serviceIntent = new Intent(context, RemoteControlService.class);
+    public static void updateRemoteControlService(Context context) {
+        if (RemoteControlData.instance(context).isRunInBackgroundEnabled()) {
+            // Service that prevents the app from destroying
+            startService(context, RemoteControlService.class);
+        } else {
+            stopService(context, RemoteControlService.class);
+        }
+    }
 
-        //context.startService(serviceIntent);
-
+    private static void bindService(Context context, Intent serviceIntent) {
         // https://medium.com/@debuggingisfun/android-auto-stop-background-service-336e8b3ff03c
         // https://medium.com/@debuggingisfun/android-o-work-around-background-service-limitation-e697b2192bc3
         context.getApplicationContext().bindService(serviceIntent, new ServiceConnection() {
@@ -294,5 +313,93 @@ public class Utils {
         for (Runnable callback : callbacks) {
              handler.removeCallbacks(callback);
         }
+    }
+
+    public static CharSequence color(CharSequence string, int color) {
+        SpannableString spannableString = new SpannableString(string);
+        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(color);
+        spannableString.setSpan(foregroundColorSpan, 0, spannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        return spannableString;
+    }
+
+    @SuppressWarnings("deprecation")
+    public static boolean isServiceRunning(Context context, Class<? extends Service> serviceClass) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void cancelNotification(Context context, int notificationId) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(notificationId);
+    }
+
+    public static Notification createNotification(Context context, int iconResId, int titleResId, Class<? extends Activity> activityCls) {
+        return createNotification(context, iconResId, titleResId, -1, activityCls);
+    }
+
+    @SuppressWarnings("deprecation")
+    public static Notification createNotification(Context context, int iconResId, int titleResId, int contentResId, Class<? extends Activity> activityCls) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(context)
+                        .setSmallIcon(iconResId)
+                        .setContentTitle(context.getString(titleResId));
+
+        if (contentResId > 0) {
+            builder.setContentText(context.getString(contentResId));
+        }
+
+        Intent targetIntent = new Intent(context, activityCls);
+        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, targetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(contentIntent);
+
+        if (VERSION.SDK_INT >= 26) {
+            String channelId = context.getPackageName();
+//            NotificationChannel channel = new NotificationChannel(
+//                    channelId,
+//                    context.getString(R.string.search_label),
+//                    NotificationManager.IMPORTANCE_HIGH);
+//            notificationManager.createNotificationChannel(channel);
+            builder.setChannelId(channelId);
+        }
+
+        return builder.build();
+    }
+
+    public static void showNotification(Context context, int notificationId, Notification notification) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(notificationId, notification);
+    }
+
+    public static void startService(Context context, Class<? extends Service> serviceCls) {
+        if (isServiceRunning(context, serviceCls)) {
+            return;
+        }
+
+        Intent serviceIntent = new Intent(context, serviceCls);
+
+        // https://stackoverflow.com/questions/46445265/android-8-0-java-lang-illegalstateexception-not-allowed-to-start-service-inten
+        if (VERSION.SDK_INT >= 26) {
+            context.startForegroundService(serviceIntent);
+        } else {
+            context.startService(serviceIntent);
+        }
+    }
+
+    public static void stopService(Context context, Class<? extends Service> serviceCls) {
+        if (!isServiceRunning(context, serviceCls)) {
+            return;
+        }
+
+        Intent serviceIntent = new Intent(context, serviceCls);
+
+        context.stopService(serviceIntent);
     }
 }

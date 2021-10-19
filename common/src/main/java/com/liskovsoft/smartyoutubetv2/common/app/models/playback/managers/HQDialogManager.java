@@ -38,7 +38,7 @@ public class HQDialogManager extends PlayerEventListenerHelper {
     private final Set<Runnable> mHideListeners = new HashSet<>();
     private final StateUpdater mStateUpdater;
     private PlayerData mPlayerData;
-    private AppDialogPresenter mSettingsPresenter;;
+    private AppDialogPresenter mAppDialogPresenter;;
 
     public HQDialogManager(StateUpdater stateUpdater) {
         mStateUpdater = stateUpdater;
@@ -47,7 +47,7 @@ public class HQDialogManager extends PlayerEventListenerHelper {
     @Override
     public void onInitDone() {
         mPlayerData = PlayerData.instance(getActivity());
-        mSettingsPresenter = AppDialogPresenter.instance(getActivity());
+        mAppDialogPresenter = AppDialogPresenter.instance(getActivity());
     }
 
     @Override
@@ -57,7 +57,7 @@ public class HQDialogManager extends PlayerEventListenerHelper {
 
     @Override
     public void onHighQualityClicked() {
-        mSettingsPresenter.clear();
+        mAppDialogPresenter.clear();
 
         addQualityCategories();
         addVideoBufferCategory();
@@ -68,7 +68,7 @@ public class HQDialogManager extends PlayerEventListenerHelper {
         appendOptions(mCategoriesInt);
         appendOptions(mCategories);
 
-        mSettingsPresenter.showDialog(getActivity().getString(R.string.playback_settings), this::onDialogHide);
+        mAppDialogPresenter.showDialog(getActivity().getString(R.string.playback_settings), this::onDialogHide);
     }
 
     private void addQualityCategories() {
@@ -168,13 +168,16 @@ public class HQDialogManager extends PlayerEventListenerHelper {
         for (OptionCategory category : categories.values()) {
             switch (category.type) {
                 case OptionCategory.TYPE_RADIO:
-                    mSettingsPresenter.appendRadioCategory(category.title, category.options);
+                    mAppDialogPresenter.appendRadioCategory(category.title, category.options);
                     break;
                 case OptionCategory.TYPE_CHECKED:
-                    mSettingsPresenter.appendCheckedCategory(category.title, category.options);
+                    mAppDialogPresenter.appendCheckedCategory(category.title, category.options);
+                    break;
+                case OptionCategory.TYPE_STRING:
+                    mAppDialogPresenter.appendStringsCategory(category.title, category.options);
                     break;
                 case OptionCategory.TYPE_SINGLE:
-                    mSettingsPresenter.appendSingleSwitch(category.option);
+                    mAppDialogPresenter.appendSingleSwitch(category.option);
                     break;
             }
         }
@@ -295,7 +298,7 @@ public class HQDialogManager extends PlayerEventListenerHelper {
 
         List<OptionItem> options = new ArrayList<>();
 
-        for (int delayMs : Helpers.range(-2_000, 2_000, 50)) {
+        for (int delayMs : Helpers.range(-4_000, 4_000, 50)) {
             options.add(UiOptionItem.from(String.format("%s sec", Helpers.toString(delayMs / 1_000f)),
                     optionItem -> {
                         playerData.setAudioDelayMs(delayMs);

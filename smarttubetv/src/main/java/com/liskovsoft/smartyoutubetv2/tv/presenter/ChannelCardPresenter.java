@@ -23,11 +23,11 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.base.CardEventsPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.ExtendedCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.GridFragmentHelper;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
-public class ChannelCardPresenter extends CardEventsPresenter {
+public class ChannelCardPresenter extends ExtendedCardPresenter {
     private static final String TAG = VideoCardPresenter.class.getSimpleName();
     private int mDefaultBackgroundColor;
     private int mDefaultTextColor;
@@ -103,9 +103,7 @@ public class ChannelCardPresenter extends CardEventsPresenter {
 
         Glide.with(context)
                 .load(video.cardImageUrl)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .apply(RequestOptions.errorOf(mDefaultCardImage))
+                .apply(ViewUtil.glideOptions().error(mDefaultCardImage))
                 .listener(mErrorListener)
                 .into(imageView);
     }

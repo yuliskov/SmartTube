@@ -33,6 +33,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
     private static final String TAG = TrackSelectorManager.class.getSimpleName();
     private final static int MAX_VIDEO_WIDTH = (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ? 1280 :
             Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ? 1920 : 3840);
+    private final static float MAX_FRAME_RATE =
+            Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1 ? 30f : 60f;
 
     private DefaultTrackSelector mTrackSelector;
     //private TrackSelection.Factory mTrackSelectionFactory;
@@ -87,7 +89,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
      * @param parameters supplied externally from {@link RestoreTrackSelector}
      */
     private void initRenderer(int rendererIndex, MappedTrackInfo trackInfo, Parameters parameters) {
-        if (mRenderers[rendererIndex] != null) {
+        if (mRenderers[rendererIndex] != null && mRenderers[rendererIndex].mediaTracks != null) {
             return;
         }
 
@@ -103,7 +105,7 @@ public class TrackSelectorManager implements TrackSelectorCallback {
      * @param parameters supplied externally from {@link RestoreTrackSelector}
      */
     private void initRenderer(int rendererIndex, TrackGroupArray groups, Parameters parameters) {
-        if (mRenderers[rendererIndex] != null) {
+        if (mRenderers[rendererIndex] != null && mRenderers[rendererIndex].mediaTracks != null) {
             return;
         }
 
@@ -472,6 +474,9 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                     if (mediaTrack.format.width > MAX_VIDEO_WIDTH) {
                         continue;
                     }
+                    if (mediaTrack.format.frameRate > MAX_FRAME_RATE) {
+                        continue;
+                    }
                     if (TrackSelectorUtil.isHdrCodec(mediaTrack.format.codecs)) {
                         continue;
                     }
@@ -488,7 +493,8 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                         // Get ready for group with multiple codecs: avc, av01
                         if (MediaTrack.codecEquals(mediaTrack, originTrack)) {
                             result = mediaTrack;
-                            break;
+                            // Don't do break. Cause we don't know there 30/60 fps.
+                            //break;
                         } else if (!MediaTrack.codecEquals(result, originTrack) && !MediaTrack.preferByCodec(result, mediaTrack)) {
                             result = mediaTrack;
                         }

@@ -78,7 +78,7 @@
     <string name="player_only_pause">Seulement pause</string>
     <string name="check_for_updates">Rechercher les mises à jour</string>
     <string name="update_not_found">Vous utilisez la dernière version</string>
-    <string name="update_in_progess">Attendre…</string>
+    <string name="update_in_progress">Attendre…</string>
     <string name="player_ui_hide_behavior">Interface utilisateur de saisie automatique</string>
     <string name="option_never">Jamais</string>
     <string name="side_panel_sections">Organisation de sections</string>
@@ -129,6 +129,7 @@
     <string name="playlists_style_rows">Lignes</string>
     <string name="player_show_clock">Afficher l’horloge</string>
     <string name="player_show_remaining_time">Afficher le temps restant</string>
+    <string name="player_show_ending_time">Afficher l\'heure de fin</string>
     <string name="open_channel_uploads">Ouvrir les vidéos de la chaîne</string>
     <string name="app_exit_shortcut">Sortir de l’application</string>
     <string name="app_exit_none">Ne pas sortir de l\'application</string>
@@ -181,6 +182,7 @@
     <string name="content_block_self_promo">Non rémunéré/auto-promotion</string>
     <string name="content_block_music_off_topic">Section non musicale du clip</string>
     <string name="confirm_segment_skip">Ignorer le segment \"%s\"?</string>
+    <string name="cancel_segment_skip">Annuler le saut de segment</string>
     <string name="msg_skipping_segment">Sauter segment \"%s\"…</string>
     <string name="content_block_notification_type">Type de notification</string>
     <string name="content_block_notify_none">Sans notification</string>
@@ -213,9 +215,10 @@
     <string name="channels_old_look">Restaurer l\'ancienne apparence dans la section des chaînes</string>
     <string name="channels_auto_load">Chargement automatique du contenu de la section Chaînes</string>
     <string name="return_to_background_video">Retour à la vidéo en arrière-plan</string>
-    <string name="pin_to_sidebar">Épingler à la barre latérale</string>
+    <string name="pinned_to_sidebar">Épingler à la barre latérale</string>
     <string name="pin_unpin_from_sidebar">Épingler/Dépingler à partir de la barre latérale</string>
-    <string name="unpin_from_sidebar">Déplacer de la barre latérale</string>
+    <string name="unpinned_from_sidebar">Déplacer de la barre latérale</string>
+    <string name="unpin_from_sidebar">Déplacer dans barre latérale</string>
     <string name="dialog_select_country">Pays</string>
     <string name="settings_language_country">Langue/Pays</string>
     <string name="share_embed_link">Partager le lien intégré</string>
@@ -223,10 +226,27 @@
     <string name="preferred_update_source">Source de mise à jour</string>
     <string name="hide_shorts">Masquer les passages de demande d\'Abonnements</string>
     <string name="key_remapping">Remplacement des touches</string>
-    <string name="screen_diming">Gradation de l\'écran</string>
+    <string name="screen_dimming">Gradation de l\'écran</string>
     <string name="removed_from_playback_queue">Suppression de la file d\'attente de lecture</string>
     <string name="added_to_playback_queue">Ajouté à la file d\'attente de lecture</string>
     <string name="add_remove_from_playback_queue">Ajouter/Supprimer de la file d\'attente de lecture</string>
     <string name="proxy_enabled">Proxy activé</string>
     <string name="proxy_disabled">Proxy désactivé</string>
+    <string name="uploads_row_name">Uploads</string>
+    <string name="playlists_row_name">Playlists créé</string>
+    <string name="popular_uploads_row_name">Uploads populaires</string>
+    <string name="breaking_news_row_name">Dernières nouvelles</string>
+    <string name="covid_news_row_name">Nouvelles du COVID-19</string>
+    <string name="enable_voice_search">Activer la recherche vocale</string>
+    <string name="subscribe_unsubscribe_from_channel">S\'abonner/se désabonner de la chaîne</string>
+    <string name="app_backup_restore">Sauvegarde/Restauration</string>
+    <string name="app_backup">Sauvegarde des données</string>
+    <string name="app_restore">Restaurer des données à partir d\'une sauvegarde</string>
+    <string name="skip_each_segment_once">Ne plus sautez encore de segments</string>
+    <string name="disable_ok_long_press">Désactiver le bouton OK pression longue</string>
+    <string name="player_time_correction">Affichage de l\'heure en fonction de la vitesse</string>
+    <string name="sponsor_color_markers">Marqueurs de couleur sur la barre de progression</string>
+    <string name="refresh_section">Rafraîchir la section</string>
+    <string name="option_disabled">Désactivée</string>
+    <string name="live_now_row_name">En direct maintenant</string>
 </resources>

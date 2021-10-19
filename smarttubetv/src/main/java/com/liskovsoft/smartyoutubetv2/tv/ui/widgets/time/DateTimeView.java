@@ -4,10 +4,13 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import androidx.appcompat.widget.AppCompatTextView;
-import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager.TickleListener;
+import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
 
+/**
+ * Note, same view is used inside player and in as global time view
+ */
 public class DateTimeView extends AppCompatTextView implements TickleListener {
     private TickleManager mTickleManager;
     private boolean mIsDateEnabled = true;
@@ -50,11 +53,10 @@ public class DateTimeView extends AppCompatTextView implements TickleListener {
     @Override
     public void onTickle() {
         if (getVisibility() == View.VISIBLE) {
-            if (mIsDateEnabled) {
-                setText(DateFormatter.getCurrentDateTimeShort(getContext()));
-            } else {
-                setText(DateFormatter.getCurrentTimeShort(getContext()));
-            }
+            setText(mIsDateEnabled ?
+                    DateFormatter.getCurrentDateTimeShort(getContext()) :
+                    DateFormatter.getCurrentTimeShort(getContext())
+            );
         }
     }
 
@@ -66,6 +68,9 @@ public class DateTimeView extends AppCompatTextView implements TickleListener {
         mTickleManager.removeListener(this);
     }
 
+    /**
+     * Note, same view is used inside player and in as global time view
+     */
     public void showDate(boolean show) {
         mIsDateEnabled = show;
     }

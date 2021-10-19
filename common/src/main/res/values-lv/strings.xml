@@ -76,7 +76,7 @@
     <string name="player_only_pause">Tikai pauze</string>
     <string name="check_for_updates">Pārbaudīt atjauninājumus</string>
     <string name="update_not_found">Tev ir jaunākā lietotnes versija</string>
-    <string name="update_in_progess">Gaidi…</string>
+    <string name="update_in_progress">Gaidi…</string>
     <string name="player_ui_hide_behavior">Automātiski paslēpt UI</string>
     <string name="option_never">Nekad</string>
     <string name="side_panel_sections">Izvēlēties sekcijas</string>

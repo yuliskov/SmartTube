@@ -59,6 +59,9 @@ public class PlayerData {
     private boolean mIsSonyTimerFixEnabled;
     private boolean mIsQualityInfoEnabled;
     private boolean mIsRememberSpeedEachEnabled;
+    private boolean mIsTimeCorrectionEnabled;
+    private boolean mIsGlobalEndingTimeEnabled;
+    private boolean mIsEndingTimeEnabled;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -138,12 +141,30 @@ public class PlayerData {
         persistData();
     }
 
+    public boolean isGlobalEndingTimeEnabled() {
+        return mIsGlobalEndingTimeEnabled;
+    }
+
+    public void enableGlobalEndingTime(boolean enable) {
+        mIsGlobalEndingTimeEnabled = enable;
+        persistData();
+    }
+
     public boolean isRemainingTimeEnabled() {
         return mIsRemainingTimeEnabled;
     }
 
     public void enableRemainingTime(boolean enable) {
         mIsRemainingTimeEnabled = enable;
+        persistData();
+    }
+
+    public boolean isEndingTimeEnabled() {
+        return mIsEndingTimeEnabled;
+    }
+
+    public void enableEndingTime(boolean enable) {
+        mIsEndingTimeEnabled = enable;
         persistData();
     }
 
@@ -348,6 +369,15 @@ public class PlayerData {
         return mIsSonyTimerFixEnabled;
     }
 
+    public void enableTimeCorrection(boolean enable) {
+        mIsTimeCorrectionEnabled = enable;
+        persistData();
+    }
+
+    public boolean isTimeCorrectionEnabled() {
+        return mIsTimeCorrectionEnabled;
+    }
+
     public FormatItem getDefaultAudioFormat() {
         return FormatItem.AUDIO_HQ_MP4A;
     }
@@ -355,7 +385,7 @@ public class PlayerData {
     public FormatItem getDefaultVideoFormat() {
         FormatItem formatItem = mDefaultVideoFormats.get(Build.MODEL);
 
-        return formatItem != null ? formatItem : Helpers.isVP9Supported() ? FormatItem.VIDEO_4K_VP9_60 : FormatItem.VIDEO_HD_AVC_30;
+        return formatItem != null ? formatItem : Helpers.isVP9Supported() ? FormatItem.VIDEO_FHD_VP9_60 : FormatItem.VIDEO_HD_AVC_30;
     }
 
     private void initSubtitleStyles() {
@@ -370,7 +400,9 @@ public class PlayerData {
      */
     private void initDefaultFormats() {
         mDefaultVideoFormats.put("SHIELD Android TV", FormatItem.VIDEO_4K_VP9_60);
-        //mDefaultVideoFormats.put("AFTMM", FormatItem.VIDEO_4K_VP9_60);
+        mDefaultVideoFormats.put("AFTMM", FormatItem.VIDEO_4K_VP9_60); // Stick 4K 2018
+        mDefaultVideoFormats.put("AFTKA", FormatItem.VIDEO_4K_VP9_60); // Stick 4K Max 2021
+        mDefaultVideoFormats.put("P1", FormatItem.VIDEO_FHD_AVC_60); // Chinese projector (see annoying emails)
     }
 
     private void restoreData() {
@@ -413,6 +445,9 @@ public class PlayerData {
         mIsRememberSpeedEachEnabled = Helpers.parseBoolean(split, 29, false);
         mVideoAspectRatio = Helpers.parseFloat(split, 30, PlaybackEngineController.ASPECT_RATIO_DEFAULT);
         mIsGlobalClockEnabled = Helpers.parseBoolean(split, 31, false);
+        mIsTimeCorrectionEnabled = Helpers.parseBoolean(split, 32, true);
+        mIsGlobalEndingTimeEnabled = Helpers.parseBoolean(split, 33, false);
+        mIsEndingTimeEnabled = Helpers.parseBoolean(split, 34, false);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -427,6 +462,7 @@ public class PlayerData {
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs,
                 mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
                 mIsLowQualityEnabled, mIsSonyTimerFixEnabled, null, null, // old player tweaks
-                mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled));
+                mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
+                mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled));
     }
 }

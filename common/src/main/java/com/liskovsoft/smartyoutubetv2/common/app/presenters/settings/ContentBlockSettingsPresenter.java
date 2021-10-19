@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
+import androidx.core.content.ContextCompat;
 import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -8,6 +9,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,13 +39,14 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         appendSponsorBlockSwitch(settingsPresenter);
         appendNotificationTypeSection(settingsPresenter);
         appendCategoriesSection(settingsPresenter);
+        appendMiscSection(settingsPresenter);
 
         settingsPresenter.showDialog(ContentBlockData.SPONSOR_BLOCK_NAME);
     }
 
     private void appendSponsorBlockSwitch(AppDialogPresenter settingsPresenter) {
         OptionItem sponsorBlockOption = UiOptionItem.from(CONTENT_BLOCK_TITLE,
-                option -> mContentBlockData.setSponsorBlockEnabled(option.isSelected()),
+                option -> mContentBlockData.enableSponsorBlock(option.isSelected()),
                 mContentBlockData.isSponsorBlockEnabled()
         );
 
@@ -73,25 +76,44 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
 
         Set<String> categories = mContentBlockData.getCategories();
 
-        for (String[] pair : new String[][] {
-                {getContext().getString(R.string.content_block_sponsor), SponsorSegment.CATEGORY_SPONSOR},
-                {getContext().getString(R.string.content_block_intro), SponsorSegment.CATEGORY_INTRO},
-                {getContext().getString(R.string.content_block_outro), SponsorSegment.CATEGORY_OUTRO},
-                {getContext().getString(R.string.content_block_interaction), SponsorSegment.CATEGORY_INTERACTION},
-                {getContext().getString(R.string.content_block_self_promo), SponsorSegment.CATEGORY_SELF_PROMO},
-                {getContext().getString(R.string.content_block_music_off_topic), SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC}
+        for (CharSequence[] pair : new CharSequence[][] {
+                {getColoredString(R.string.content_block_sponsor, R.color.green), SponsorSegment.CATEGORY_SPONSOR},
+                {getColoredString(R.string.content_block_intro, R.color.cyan), SponsorSegment.CATEGORY_INTRO},
+                {getColoredString(R.string.content_block_outro, R.color.blue), SponsorSegment.CATEGORY_OUTRO},
+                {getColoredString(R.string.content_block_self_promo, R.color.yellow), SponsorSegment.CATEGORY_SELF_PROMO},
+                {getColoredString(R.string.content_block_interaction, R.color.magenta), SponsorSegment.CATEGORY_INTERACTION},
+                {getColoredString(R.string.content_block_music_off_topic, R.color.brown), SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC}
         }) {
             options.add(UiOptionItem.from(pair[0],
                     optionItem -> {
                         if (optionItem.isSelected()) {
-                            mContentBlockData.addCategory(pair[1]);
+                            mContentBlockData.addCategory((String) pair[1]);
                         } else {
-                            mContentBlockData.removeCategory(pair[1]);
+                            mContentBlockData.removeCategory((String) pair[1]);
                         }
                     },
-                    categories.contains(pair[1])));
+                    categories.contains((String) pair[1])));
         }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.content_block_categories), options);
+    }
+
+    private void appendMiscSection(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.skip_each_segment_once),
+                optionItem -> mContentBlockData.enableSkipEachSegmentOnce(optionItem.isSelected()),
+                mContentBlockData.isSkipEachSegmentOnceEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.sponsor_color_markers),
+                optionItem -> mContentBlockData.enableColorMarkers(optionItem.isSelected()),
+                mContentBlockData.isColorMarkersEnabled()));
+
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
+    }
+
+    private CharSequence getColoredString(int strResId, int colorResId) {
+        return mContentBlockData.isColorMarkersEnabled() ?
+                Utils.color(getContext().getString(strResId), ContextCompat.getColor(getContext(), colorResId)) : getContext().getString(strResId);
     }
 }

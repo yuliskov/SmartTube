@@ -16,10 +16,13 @@ public class UiOptionItem implements OptionItem {
     private FormatItem mFormat;
     private OptionCallback mCallback;
     private Object mData;
-    private OptionItem[] mCheckedRules;
+    private OptionItem[] mRequiredItems;
+    private OptionItem[] mRadioItems;
 
     private final static int MAX_VIDEO_WIDTH = (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT ? 1280 :
             Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1 ? 1920 : 3840);
+    private final static float MAX_FRAME_RATE =
+            Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP_MR1 ? 30f : 60f;
 
     public static List<OptionItem> from(List<FormatItem> formats, OptionCallback callback) {
         return from(formats, callback, null);
@@ -44,6 +47,9 @@ public class UiOptionItem implements OptionItem {
                 continue;
             }
             if (format.getWidth() > MAX_VIDEO_WIDTH) {
+                continue;
+            }
+            if (format.getFrameRate() > MAX_FRAME_RATE) {
                 continue;
             }
             if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT
@@ -83,15 +89,15 @@ public class UiOptionItem implements OptionItem {
         return uiOptionItem;
     }
 
-    public static OptionItem from(String title, OptionCallback callback) {
+    public static OptionItem from(CharSequence title, OptionCallback callback) {
         return from(title, callback, false);
     }
 
-    public static OptionItem from(String title, OptionCallback callback, boolean isChecked) {
+    public static OptionItem from(CharSequence title, OptionCallback callback, boolean isChecked) {
         return from(title, callback, isChecked, null);
     }
 
-    public static OptionItem from(String title, OptionCallback callback, boolean isChecked, Object data) {
+    public static OptionItem from(CharSequence title, OptionCallback callback, boolean isChecked, Object data) {
         UiOptionItem uiOptionItem = new UiOptionItem();
 
         uiOptionItem.mTitle = title;
@@ -145,16 +151,30 @@ public class UiOptionItem implements OptionItem {
     }
 
     @Override
-    public void setRequire(OptionItem... rules) {
-        if (rules == null || rules.length == 0) {
-            mCheckedRules = null;
+    public void setRequired(OptionItem... items) {
+        if (items == null || items.length == 0) {
+            mRequiredItems = null;
         }
 
-        mCheckedRules = rules;
+        mRequiredItems = items;
     }
 
     @Override
-    public OptionItem[] getRequire() {
-        return mCheckedRules;
+    public OptionItem[] getRequired() {
+        return mRequiredItems;
+    }
+
+    @Override
+    public void setRadio(OptionItem... items) {
+        if (items == null || items.length == 0) {
+            mRadioItems = null;
+        }
+
+        mRadioItems = items;
+    }
+
+    @Override
+    public OptionItem[] getRadio() {
+        return mRadioItems;
     }
 }

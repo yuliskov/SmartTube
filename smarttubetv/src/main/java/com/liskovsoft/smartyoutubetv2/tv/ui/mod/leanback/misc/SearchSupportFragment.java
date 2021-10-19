@@ -419,7 +419,7 @@ public class SearchSupportFragment extends Fragment {
         if (getChildFragmentManager().findFragmentById(R.id.lb_results_frame) == null) {
             mRowsSupportFragment = new RowsSupportFragment();
             getChildFragmentManager().beginTransaction()
-                    .replace(R.id.lb_results_frame, mRowsSupportFragment).commit();
+                    .replace(R.id.lb_results_frame, mRowsSupportFragment).commitAllowingStateLoss();
         } else {
             mRowsSupportFragment = (RowsSupportFragment) getChildFragmentManager()
                     .findFragmentById(R.id.lb_results_frame);
@@ -763,6 +763,10 @@ public class SearchSupportFragment extends Fragment {
     }
 
     void submitQuery(String query) {
+        if (query == null) {
+            return;
+        }
+
         queryComplete();
         if (null != mProvider) {
             mProvider.onQueryTextSubmit(query);

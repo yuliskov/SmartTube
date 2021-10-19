@@ -2,8 +2,9 @@ apply from: gradle.ext.sharedModulesConstants
 
 buildscript {
     repositories {
-        jcenter()
         google()
+        mavenCentral()
+        jcenter()
     }
 
     dependencies {
@@ -12,12 +13,12 @@ buildscript {
 
         // Check that you have the Google Services Gradle plugin v4.3.2 or later
         // (if not, add it).
-        classpath 'com.google.gms:google-services:4.3.3'
+        classpath 'com.google.gms:google-services:4.3.10'
 
         // Add the Crashlytics Gradle plugin.
         // https://firebase.google.com/docs/crashlytics/get-started?platform=android
         // https://firebase.google.com/docs/android/setup
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.3.0'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.7.1'
     }
 }
 
@@ -58,8 +59,8 @@ android {
         applicationId "com.liskovsoft.smarttubetv"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 413
-        versionName "12.23"
+        versionCode 514
+        versionName "13.24"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
@@ -78,6 +79,8 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            shrinkResources true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
@@ -113,6 +116,8 @@ android {
             // matchingFallbacks = ['lite']
             versionCode 11000 + defaultConfig.versionCode
             applicationId "com.liskovsoft.videomanager"
+            ndk { abiFilters 'armeabi-v7a' }
+            resConfigs "ru"
         }
         stredboxtv {
             // matchingFallbacks = ['lite']

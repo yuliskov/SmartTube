@@ -160,15 +160,13 @@ public class VideoDetailsFragment extends DetailsSupportFragment implements Deta
     }
 
     private void updateBackground(String uri) {
-        RequestOptions options = new RequestOptions()
+        RequestOptions options = ViewUtil.glideOptions()
                 .centerCrop()
                 .error(mDefaultBackground);
 
         Glide.with(this)
                 .asBitmap()
                 .load(uri)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
                 .apply(options)
                 .into(new SimpleTarget<Bitmap>(mMetrics.widthPixels, mMetrics.heightPixels) {
                     @Override
@@ -329,15 +327,13 @@ public class VideoDetailsFragment extends DetailsSupportFragment implements Deta
     private void setupDetailsOverviewRow() {
         final DetailsOverviewRow row = new DetailsOverviewRow(mSelectedVideo);
 
-        RequestOptions options = new RequestOptions()
+        RequestOptions options = ViewUtil.glideOptions()
                 .error(R.drawable.default_background_gradient)
                 .dontAnimate();
 
         Glide.with(this)
                 .asBitmap()
                 .load(mSelectedVideo.cardImageUrl)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
                 .apply(options)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override

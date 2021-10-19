@@ -28,7 +28,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     private static final int AUTO_FRAME_RATE_ID = 21;
     private static final int AUTO_FRAME_RATE_DELAY_ID = 22;
     private final HQDialogManager mUiManager;
-    private StateUpdater mStateUpdater;
+    private final StateUpdater mStateUpdater;
     private final AutoFrameRateHelper mAutoFrameRateHelper;
     private final ModeSyncManager mModeSyncManager;
     private final Runnable mApplyAfr = this::applyAfr;
@@ -36,17 +36,14 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     private PlayerData mPlayerData;
     private boolean mIsPlay;
     private final Runnable mPlaybackResumeHandler = () -> {
-        if (mStateUpdater != null) {
-            mStateUpdater.blockPlay(false);
-        }
-        getController().setPlay(mIsPlay);
         getController().setAfrRunning(false);
+        restorePlayback();
     };
 
     public AutoFrameRateManager(HQDialogManager uiManager, StateUpdater stateUpdater) {
         mUiManager = uiManager;
         mStateUpdater = stateUpdater;
-        mAutoFrameRateHelper = new AutoFrameRateHelper();
+        mAutoFrameRateHelper = AutoFrameRateHelper.instance(null);
         mAutoFrameRateHelper.setListener(this);
         mModeSyncManager = ModeSyncManager.instance();
         mModeSyncManager.setAfrHelper(mAutoFrameRateHelper);
@@ -69,6 +66,8 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
     @Override
     public void onVideoLoaded(Video item) {
+        savePlayback();
+
         // Sometimes AFR is not working on activity startup. Trying to fix with delay.
         applyAfrDelayed();
         //applyAfr();
@@ -92,8 +91,15 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         String msg = getActivity().getString(R.string.msg_mode_switch_error, UhdHelper.toResolution(newMode));
         Log.e(TAG, msg);
 
+        restorePlayback();
+
         // This error could appear even on success.
         // MessageHelpers.showMessage(getActivity(), msg);
+    }
+
+    @Override
+    public void onCancel() {
+        restorePlayback();
     }
 
     private void onFpsCorrectionClick() {
@@ -141,8 +147,6 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
     private void maybePausePlayback() {
         getController().setAfrRunning(true);
-        mIsPlay = getController().getPlay();
-        mStateUpdater.blockPlay(true);
         int delayMs = 5_000;
 
         if (mPlayerData.getAfrPauseSec() > 0) {
@@ -151,6 +155,20 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         }
 
         Utils.postDelayed(mHandler, mPlaybackResumeHandler, delayMs);
+    }
+
+    private void savePlayback() {
+        if (mAutoFrameRateHelper.isSupported() && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseSec() > 0) {
+            mStateUpdater.blockPlay(true);
+            mIsPlay = mStateUpdater.getPlayEnabled();
+        }
+    }
+
+    private void restorePlayback() {
+        if (mAutoFrameRateHelper.isSupported() && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseSec() > 0) {
+            mStateUpdater.blockPlay(false);
+            getController().setPlay(mIsPlay);
+        }
     }
 
     private void addUiOptions() {
@@ -171,6 +189,38 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
             mUiManager.removeOnDialogHide(mApplyAfr);
         }
     }
+
+    // Avoid nested dialogs. They have problems with timings. So player controls may hide without user interaction.
+    //private void addUiOptions() {
+    //    if (mAutoFrameRateHelper.isSupported()) {
+    //        OptionCategory afrCategory = createAutoFrameRateCategory(
+    //                getActivity(), PlayerData.instance(getActivity()),
+    //                () -> {}, this::onResolutionSwitchClick, this::onFpsCorrectionClick);
+    //
+    //        OptionCategory afrPauseCategory = createAutoFrameRatePauseCategory(
+    //                getActivity(), PlayerData.instance(getActivity()));
+    //
+    //        // Create nested dialogs
+    //
+    //        List<OptionItem> options = new ArrayList<>();
+    //        options.add(UiOptionItem.from(afrCategory.title, optionItem -> {
+    //            AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
+    //            dialogPresenter.clear();
+    //            dialogPresenter.appendCheckedCategory(afrCategory.title, afrCategory.options);
+    //            dialogPresenter.showDialog(afrCategory.title, mApplyAfr);
+    //        }));
+    //        options.add(UiOptionItem.from(afrPauseCategory.title, optionItem -> {
+    //            AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
+    //            dialogPresenter.clear();
+    //            dialogPresenter.appendRadioCategory(afrPauseCategory.title, afrPauseCategory.options);
+    //            dialogPresenter.showDialog(afrPauseCategory.title, mApplyAfr);
+    //        }));
+    //
+    //        mUiManager.addCategory(OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_STRING, getActivity().getString(R.string.auto_frame_rate), options));
+    //    } else {
+    //        mUiManager.removeCategory(AUTO_FRAME_RATE_ID);
+    //    }
+    //}
 
     public static OptionCategory createAutoFrameRateCategory(Context context, PlayerData playerData) {
         return createAutoFrameRateCategory(context, playerData, () -> {}, () -> {}, () -> {});
@@ -195,8 +245,8 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
             onFpsCorrectionCallback.run();
         }, playerData.isAfrFpsCorrectionEnabled());
 
-        afrResSwitchOption.setRequire(afrEnableOption);
-        afrFpsCorrectionOption.setRequire(afrEnableOption);
+        afrResSwitchOption.setRequired(afrEnableOption);
+        afrFpsCorrectionOption.setRequired(afrEnableOption);
 
         options.add(afrEnableOption);
         options.add(afrResSwitchOption);

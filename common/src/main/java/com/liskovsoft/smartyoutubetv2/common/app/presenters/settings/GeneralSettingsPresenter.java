@@ -11,6 +11,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.misc.BackupAndRestoreManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -47,6 +49,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendBackgroundPlaybackActivationCategory(settingsPresenter);
         appendScreenDimmingCategory(settingsPresenter);
         appendKeyRemappingCategory(settingsPresenter);
+        appendAppBackupCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_general), () -> {
@@ -60,13 +63,13 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendLeftPanelCategories(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        Map<Integer, Integer> leftPanelCategories = mGeneralData.getCategories();
+        Map<Integer, Integer> leftPanelCategories = mGeneralData.getSections();
 
         for (Entry<Integer, Integer> category : leftPanelCategories.entrySet()) {
              options.add(UiOptionItem.from(getContext().getString(category.getKey()), optionItem -> {
-                 mGeneralData.enableCategory(category.getValue(), optionItem.isSelected());
-                 BrowsePresenter.instance(getContext()).updateCategories();
-             }, mGeneralData.isCategoryEnabled(category.getValue())));
+                 mGeneralData.enableSection(category.getValue(), optionItem.isSelected());
+                 BrowsePresenter.instance(getContext()).updateSections();
+             }, mGeneralData.isBrowseSectionEnabled(category.getValue())));
         }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.side_panel_sections), options);
@@ -75,14 +78,14 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendBootToCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        Map<Integer, Integer> leftPanelCategories = mGeneralData.getCategories();
+        Map<Integer, Integer> leftPanelCategories = mGeneralData.getSections();
 
         for (Entry<Integer, Integer> category : leftPanelCategories.entrySet()) {
             options.add(
                     UiOptionItem.from(
                             getContext().getString(category.getKey()),
-                            optionItem -> mGeneralData.setBootCategoryId(category.getValue()),
-                            category.getValue().equals(mGeneralData.getBootCategoryId())
+                            optionItem -> mGeneralData.setBootSectionId(category.getValue()),
+                            category.getValue().equals(mGeneralData.getBootSectionId())
                     )
             );
         }
@@ -94,8 +97,8 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 options.add(
                         UiOptionItem.from(
                                 item.title,
-                                optionItem -> mGeneralData.setBootCategoryId(item.hashCode()),
-                                item.hashCode() == mGeneralData.getBootCategoryId()
+                                optionItem -> mGeneralData.setBootSectionId(item.hashCode()),
+                                item.hashCode() == mGeneralData.getBootSectionId()
                         )
                 );
             }
@@ -156,22 +159,53 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(
                 getContext().getString(R.string.option_never),
-                option -> mGeneralData.setScreenDimmingTimoutMin(GeneralData.SCREEN_DIMMING_NEVER),
-                mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER));
+                option -> mGeneralData.setScreenDimmingTimeoutMin(GeneralData.SCREEN_DIMMING_NEVER),
+                mGeneralData.getScreenDimmingTimeoutMin() == GeneralData.SCREEN_DIMMING_NEVER));
 
         for (int i = 1; i <= 15; i++) {
             int timeoutMin = i;
             options.add(UiOptionItem.from(
                     String.format("%s min", i),
-                    option -> mGeneralData.setScreenDimmingTimoutMin(timeoutMin),
-                    mGeneralData.getScreenDimmingTimoutMin() == i));
+                    option -> mGeneralData.setScreenDimmingTimeoutMin(timeoutMin),
+                    mGeneralData.getScreenDimmingTimeoutMin() == i));
         }
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.screen_diming), options);
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.screen_dimming), options);
+    }
+
+    private void appendAppBackupCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        BackupAndRestoreManager backupManager = new BackupAndRestoreManager(getContext());
+
+        if (getContext() instanceof MotherActivity) {
+            ((MotherActivity) getContext()).addOnPermissions(backupManager);
+        }
+
+        options.add(UiOptionItem.from(
+                String.format("%s\n%s", getContext().getString(R.string.app_restore), backupManager.getBackupPath()),
+                option -> {
+                    backupManager.checkPermAndRestore();
+                    MessageHelpers.showMessage(getContext(), R.string.msg_done);
+                }));
+
+        options.add(UiOptionItem.from(
+                String.format("%s\n%s", getContext().getString(R.string.app_backup), backupManager.getBackupPath()),
+                option -> {
+                    backupManager.checkPermAndBackup();
+                    MessageHelpers.showMessage(getContext(), R.string.msg_done);
+                }));
+
+        settingsPresenter.appendStringsCategory(getContext().getString(R.string.app_backup_restore), options);
     }
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
+
+        // Disable long press on buggy controllers.
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_ok_long_press),
+                option -> mGeneralData.disableOkButtonLongPress(option.isSelected()),
+                mGeneralData.isOkButtonLongPressDisabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts),
                 option -> mGeneralData.hideShorts(option.isSelected()),

@@ -10,7 +10,6 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.sharedutils.Analytics;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -177,6 +176,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     public void loadNext() {
         Video next = mPlaylist.getNext();
+        mLastVideo = null; // in case next video is the same as previous
 
         if (next == null) {
             openVideoFromNext(getController().getVideo(), true);
@@ -188,6 +188,11 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     @Override
     public void onPlayEnd() {
+        // Fix simultaneous videos loading (e.g. when playback ends and user opens new video)
+        if (isActionsRunning()) {
+            return;
+        }
+
         int playbackMode = checkSleepTimer(mPlayerData.getPlaybackMode());
 
         switch (playbackMode) {
@@ -215,6 +220,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 if (mPlaylist.getNext() == null) {
                     getController().showSuggestions(true);
                     getController().setPlay(false);
+                    getController().setPositionMs(0);
                 } else {
                     onNextClicked();
                     getController().showControls(true);
@@ -229,6 +235,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 } else {
                     getController().showSuggestions(true);
                     getController().setPlay(false);
+                    getController().setPositionMs(0);
                 }
                 break;
         }
@@ -328,7 +335,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         // Significantly improves next video loading time!
         if (current.nextMediaItem != null) {
             openVideoInt(Video.from(current.nextMediaItem));
-        } else {
+        } else if (!current.isSynced) { // Maybe there's nothing left. E.g. when casting from phone
             // Wait in a loop while suggestions have been loaded...
             if (showLoadingMsg) {
                 MessageHelpers.showMessageThrottled(getActivity(), R.string.wait_data_loading);
@@ -359,6 +366,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
+        boolean isLive = formatInfo.isLive() || formatInfo.isLiveContent();
+
         if (formatInfo.isUnplayable() || formatInfo.isAgeRestricted()) {
             getController().showError(formatInfo.getPlayabilityStatus());
             if (!mIsWasVideoStartError) {
@@ -374,8 +383,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
         } else if (formatInfo.containsDashUrl()) {
             Log.d(TAG, "Found live video in dash format. Loading...");
             getController().openDashUrl(formatInfo.getDashManifestUrl());
-        } else if (formatInfo.containsHlsUrl()) {
-            Log.d(TAG, "Found live video (current and past) in hls format. Loading...");
+        } else if (formatInfo.containsHlsUrl() && isLive) {
+            Log.d(TAG, "Found live video (current or past live stream) in hls format. Loading...");
             getController().openHlsUrl(formatInfo.getHlsManifestUrl());
         } else if (formatInfo.containsDashVideoInfo() && !mPlayerData.isLowQualityEnabled()) {
             Log.d(TAG, "Found regular video in dash format. Loading...");
@@ -432,14 +441,18 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
         disposeActions();
 
-        if (item.isVideo()) {
+        if (item.hasVideo()) {
             getController().showControls(true);
             getBridge().openVideo(item);
-        } else if (item.isChannel()) {
+        } else if (item.hasChannel()) {
             ChannelPresenter.instance(getActivity()).openChannel(item);
         } else {
             Log.e(TAG, "Video item doesn't contain needed data!");
         }
+    }
+
+    private boolean isActionsRunning() {
+        return RxUtils.isAnyActionRunning(mFormatInfoAction, mMpdStreamAction);
     }
 
     private void disposeActions() {

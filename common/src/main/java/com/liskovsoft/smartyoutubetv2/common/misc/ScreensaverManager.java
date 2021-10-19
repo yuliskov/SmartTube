@@ -34,14 +34,36 @@ public class ScreensaverManager {
         enable();
     }
 
+    /**
+     * Screen off check
+     */
+    public void enableChecked() {
+        if (mDimColorResId == R.color.black) {
+            return;
+        }
+
+        enable();
+    }
+
+    /**
+     * Screen off check
+     */
+    public void disableChecked() {
+        if (mDimColorResId == R.color.black) {
+            return;
+        }
+
+        disable();
+    }
+
     public void enable() {
         Log.d(TAG, "Enable screensaver");
 
-        disable();
-        int delayMs = mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER ?
-                10_000 :
-                mGeneralData.getScreenDimmingTimoutMin() * 60 * 1_000;
-        Utils.postDelayed(mHandler, mDimScreen, delayMs);
+//        disable();
+//        int delayMs = mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER ?
+//                10_000 :
+//                mGeneralData.getScreenDimmingTimoutMin() * 60 * 1_000;
+        Utils.postDelayed(mHandler, mDimScreen, 0);
     }
 
     public void disable() {
@@ -68,7 +90,7 @@ public class ScreensaverManager {
 
     private void showHide(boolean show) {
 //        showHideDimming(show);
-//        showHideScreensaver(show);
+        showHideScreensaver(show);
     }
 
     private void showHideDimming(boolean show) {
@@ -79,7 +101,7 @@ public class ScreensaverManager {
         }
 
         if (show && mDimColorResId == R.color.dimming &&
-                (isPlaying() || isCodeView() || mGeneralData.getScreenDimmingTimoutMin() == GeneralData.SCREEN_DIMMING_NEVER)
+                (isPlaying() || isSigning() || mGeneralData.getScreenDimmingTimeoutMin() == GeneralData.SCREEN_DIMMING_NEVER)
         ) {
             return;
         }
@@ -107,7 +129,7 @@ public class ScreensaverManager {
             return;
         }
         
-        if (show && (isPlaying() || isCodeView())) {
+        if (show && (isPlaying() || isSigning())) {
             Helpers.disableScreensaver(activity);
             return;
         }
@@ -130,7 +152,7 @@ public class ScreensaverManager {
         return playbackView != null && (playbackView.getController().isPlaying() || playbackView.getController().isLoading());
     }
 
-    private boolean isCodeView() {
+    private boolean isSigning() {
         Activity activity = mActivity.get();
 
         if (activity == null) {

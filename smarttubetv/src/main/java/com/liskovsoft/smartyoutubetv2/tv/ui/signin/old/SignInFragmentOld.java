@@ -84,7 +84,7 @@ public class SignInFragmentOld extends ErrorSupportFragment implements SignInVie
         setButtonText("DONE");
         setButtonClickListener(arg0 -> {
             getActivity().finish();
-            //getFragmentManager().beginTransaction().remove(SignInFragment.this).commit();
+            //getFragmentManager().beginTransaction().remove(SignInFragment.this).commitAllowingStateLoss();
             //getFragmentManager().popBackStack();
         });
     }

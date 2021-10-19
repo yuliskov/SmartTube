@@ -22,8 +22,8 @@ import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.ChannelCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomVerticalGridPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.base.CardEventsPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewPressedListener;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.ExtendedCardPresenter;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.interfaces.VideoCategoryFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
@@ -41,8 +41,8 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
     private final List<VideoGroup> mPendingUpdates2 = new ArrayList<>();
     private UriBackgroundManager mBackgroundManager;
     private VideoGroupPresenter mMainPresenter;
-    private CardEventsPresenter mCardPresenter1;
-    private CardEventsPresenter mCardPresenter2;
+    private ExtendedCardPresenter mCardPresenter1;
+    private ExtendedCardPresenter mCardPresenter2;
     private int mSelectedItemIndex1 = -1;
     private int mSelectedItemIndex2 = -1;
     private float mVideoGridScale;
@@ -133,10 +133,8 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         setOnItemViewSelectedListener1(new ItemViewSelectedListener1());
         setOnItemViewClickedListener2(new ItemViewClickedListener2());
         setOnItemViewSelectedListener2(new ItemViewSelectedListener2());
-        mCardPresenter1.setOnItemViewLongPressedListener(new ItemViewLongClickedListener());
-        mCardPresenter1.setOnItemViewMenuPressedListener(new ItemViewLongClickedListener());
-        mCardPresenter2.setOnItemViewLongPressedListener(new ItemViewLongClickedListener());
-        mCardPresenter2.setOnItemViewMenuPressedListener(new ItemViewLongClickedListener());
+        mCardPresenter1.setOnItemViewLongPressedListener(new ItemViewLongPressedListener());
+        mCardPresenter2.setOnItemViewLongPressedListener(new ItemViewLongPressedListener());
     }
 
     private void applyPendingUpdates() {
@@ -282,9 +280,9 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         return mGridAdapter2.size() == 0;
     }
 
-    private final class ItemViewLongClickedListener implements OnItemViewPressedListener {
+    private final class ItemViewLongPressedListener implements OnItemLongPressedListener {
         @Override
-        public void onItemPressed(Presenter.ViewHolder itemViewHolder, Object item) {
+        public void onItemLongPressed(Presenter.ViewHolder itemViewHolder, Object item) {
             if (item instanceof Video) {
                 mMainPresenter.onVideoItemLongClicked((Video) item);
             } else {

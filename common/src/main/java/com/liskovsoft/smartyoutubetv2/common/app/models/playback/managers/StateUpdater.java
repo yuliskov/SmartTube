@@ -66,10 +66,12 @@ public class StateUpdater extends PlayerEventListenerHelper {
         if (getController() != null) {
             // Save state of the previous video.
             // In case video opened from phone and other stuff.
-            saveState();
+            if (!item.equals(mVideo)) { // video might be opened twice (when remote connection enabled). Fix for that.
+                saveState();
+            }
 
             // Restore format according to profile on every new video
-            restoreVideoFormat();
+            //restoreVideoFormat();
         }
     }
 
@@ -106,11 +108,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onEngineInitialized() {
-        // Fragment might be destroyed by system at this point.
-        // So, to be sure, repeat format selection.
-        restoreVideoFormat();
-        restoreAudioFormat();
-        restoreSubtitleFormat();
+        // Restore before video loaded.
+        // This way we override auto track selection mechanism.
+        //restoreFormats();
 
         // Show user info instead of black screen.
         if (!getPlayEnabled()) {
@@ -137,6 +137,12 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     @Override
     public void onVideoLoaded(Video item) {
+        // Restore formats again.
+        // Maybe this could help with Shield format problem.
+        // NOTE: produce multi thread exception:
+        // Attempt to read from field 'java.util.TreeMap$TreeMapEntry java.util.TreeMap$TreeMapEntry.left' on a null object reference (TrackSelectorManager.java:181)
+        restoreFormats();
+
         // In this state video length is not undefined.
         restorePosition(item);
         restoreSpeed(item);
@@ -181,8 +187,14 @@ public class StateUpdater extends PlayerEventListenerHelper {
     public void onPlayEnd() {
         saveState();
 
-        // Take into account different playback states
-        //mScreensaverManager.enable();
+        // Don't enable screensaver here or you'll broke 'screen off' logic.
+        showHideScreensaver(true);
+    }
+
+    @Override
+    public void onBuffering() {
+        // Check LIVE threshold and set speed to normal
+        restoreSpeed(getController().getVideo());
     }
 
     private void clearStateOfNextVideo() {
@@ -305,36 +317,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
         }
     }
 
-    //private void restorePosition(Video item) {
-    //    State state = mStates.get(item.videoId);
-    //
-    //    // internal storage has priority over item data loaded from network
-    //    if (state == null) {
-    //        // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
-    //        boolean containsWebPosition = item.percentWatched > 10 && item.percentWatched < 100;
-    //        if (containsWebPosition) {
-    //            // Web state is buggy on short videos (e.g. video clips)
-    //            boolean isLongVideo = getController().getLengthMs() > MUSIC_VIDEO_LENGTH_MS;
-    //            if (isLongVideo) {
-    //                state = new State(item.videoId, getNewPosition(item.percentWatched));
-    //            }
-    //        }
-    //    }
-    //
-    //    // Do I need to check that item isn't live? (state != null && !item.isLive)
-    //    if (state != null) {
-    //        long remainsMs = getController().getLengthMs() - state.positionMs;
-    //        boolean isVideoEnded = remainsMs < 1_000;
-    //        if (!isVideoEnded || !getPlayEnabled()) {
-    //            getController().setPositionMs(state.positionMs);
-    //        }
-    //    }
-    //
-    //    if (!mIsPlayBlocked) {
-    //        getController().setPlay(getPlayEnabled());
-    //    }
-    //}
-
     private void restorePosition(Video item) {
         State state = mStates.get(item.videoId);
 
@@ -363,9 +345,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void restoreSpeed(Video item) {
-        boolean isLive = getController().getLengthMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
+        boolean isLiveThreshold = getController().getLengthMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
 
-        if (isLive) {
+        if (item.isLive && isLiveThreshold) {
             getController().setSpeed(1.0f);
         } else {
             State state = mStates.get(item.videoId);
@@ -395,12 +377,12 @@ public class StateUpdater extends PlayerEventListenerHelper {
         mIsPlayBlocked = block;
     }
 
-    private void setPlayEnabled(boolean isPlayEnabled) {
+    public void setPlayEnabled(boolean isPlayEnabled) {
         Log.d(TAG, "setPlayEnabled %s", isPlayEnabled);
         mIsPlayEnabled = isPlayEnabled;
     }
 
-    private boolean getPlayEnabled() {
+    public boolean getPlayEnabled() {
         return mIsPlayEnabled;
     }
 
@@ -410,6 +392,12 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
     private void restoreVolume() {
         getController().setVolume(mVolume);
+    }
+
+    private void restoreFormats() {
+        restoreVideoFormat();
+        restoreAudioFormat();
+        restoreSubtitleFormat();
     }
 
     private void updateHistory() {
@@ -442,9 +430,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
             ScreensaverManager screensaverManager = ((MotherActivity) getActivity()).getScreensaverManager();
 
             if (show) {
-                screensaverManager.enable();
+                screensaverManager.enableChecked();
             } else {
-                screensaverManager.disable();
+                screensaverManager.disableChecked();
             }
         }
     }

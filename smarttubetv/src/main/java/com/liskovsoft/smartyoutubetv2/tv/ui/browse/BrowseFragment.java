@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +9,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.leanback.app.BrowseSupportFragment;
+import androidx.leanback.app.HeadersSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRowPresenter;
@@ -18,7 +18,7 @@ import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.PresenterSelector;
 import androidx.leanback.widget.TitleHelper;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.Category;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.ErrorFragmentData;
@@ -29,6 +29,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.IconHeaderItemPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.ErrorDialogFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.headers.ExtendedHeadersSupportFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 
 import java.util.LinkedHashMap;
@@ -41,17 +42,16 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private static final String TAG = BrowseFragment.class.getSimpleName();
     private static final String SELECTED_HEADER_INDEX = "SelectedHeaderIndex";
     private static final String SELECTED_ITEM_INDEX = "SelectedItemIndex";
-    private ArrayObjectAdapter mCategoryRowAdapter;
+    private ArrayObjectAdapter mSectionRowAdapter;
     private BrowsePresenter mBrowsePresenter;
-    private Map<Integer, Category> mCategories;
-    private CategoryFragmentFactory mCategoryFragmentFactory;
+    private Map<Integer, BrowseSection> mSections;
+    private BrowseSectionFragmentFactory mSectionFragmentFactory;
     private Handler mHandler;
     private ProgressBarManager mProgressBarManager;
     private boolean mIsFragmentCreated;
     private int mRestoredHeaderIndex = -1;
     private int mRestoredItemIndex = -1;
     private boolean mFocusOnChildFragment;
-    private GestureDetector mGestureDetector;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,7 +61,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mRestoredItemIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_ITEM_INDEX, -1) : -1;
         mIsFragmentCreated = true;
 
-        mCategories = new LinkedHashMap<>();
+        mSections = new LinkedHashMap<>();
         mHandler = new Handler();
         mBrowsePresenter = BrowsePresenter.instance(getContext());
         mBrowsePresenter.setView(this);
@@ -81,7 +81,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         // Store position in case activity is crashed
         outState.putInt(SELECTED_HEADER_INDEX, getSelectedPosition());
         // Not robust. Because tab content often changed after reloading.
-        outState.putInt(SELECTED_ITEM_INDEX, mCategoryFragmentFactory.getCurrentFragmentItemIndex());
+        outState.putInt(SELECTED_ITEM_INDEX, mSectionFragmentFactory.getCurrentFragmentItemIndex());
     }
 
     @Override
@@ -104,12 +104,17 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mBrowsePresenter.onViewInitialized();
 
         // Restore state after crash
-        selectCategory(mRestoredHeaderIndex);
+        selectSection(mRestoredHeaderIndex);
         mRestoredHeaderIndex = -1;
 
         // Restore state after crash
-        selectItem(mRestoredItemIndex);
+        selectSectionItem(mRestoredItemIndex);
         mRestoredItemIndex = -1;
+    }
+
+    @Override
+    public HeadersSupportFragment onCreateHeadersSupportFragment() {
+        return new ExtendedHeadersSupportFragment();
     }
 
     private void setupEventListeners() {
@@ -123,9 +128,17 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
                         getHeadersSupportFragment().setSelectedPosition(newPosition);
                     } else {
                         // update section when clicked or pressed
-                        mBrowsePresenter.onCategoryFocused((int) headerId);
-                        startHeadersTransition(false);
+                        mBrowsePresenter.onSectionFocused((int) headerId);
+                        startHeadersTransitionSafe(false);
                     }
+                }
+        );
+
+        ((ExtendedHeadersSupportFragment) getHeadersSupportFragment()).setOnHeaderLongPressedListener(
+                (viewHolder, row) -> {
+                    long headerId = row.getHeaderItem().getId();
+
+                    mBrowsePresenter.onSectionLongPressed((int) headerId);
                 }
         );
 
@@ -134,7 +147,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     private int indexOf(long headerId) {
         int index = 0;
-        for (Integer id : mCategories.keySet()) {
+        for (Integer id : mSections.keySet()) {
             if (id == headerId) {
                 return index;
             }
@@ -147,19 +160,19 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private void setupAdapter() {
         // Map category results from the database to ListRow objects.
         // This Adapter is used to render the MainFragment sidebar labels.
-        mCategoryRowAdapter = new ArrayObjectAdapter(new ListRowPresenter());
-        setAdapter(mCategoryRowAdapter);
+        mSectionRowAdapter = new ArrayObjectAdapter(new ListRowPresenter());
+        setAdapter(mSectionRowAdapter);
     }
 
     private void setupFragmentFactory() {
-        mCategoryFragmentFactory = new CategoryFragmentFactory(
+        mSectionFragmentFactory = new BrowseSectionFragmentFactory(
                 (viewHolder, row) -> {
                     focusOnChildFragment();
-                    mBrowsePresenter.onCategoryFocused(getSelectedHeaderId());
+                    mBrowsePresenter.onSectionFocused(getSelectedHeaderId());
                 }
         );
 
-        getMainFragmentRegistry().registerFragment(PageRow.class, mCategoryFragmentFactory);
+        getMainFragmentRegistry().registerFragment(PageRow.class, mSectionFragmentFactory);
     }
 
     private void setupUi() {
@@ -205,11 +218,11 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private int getSelectedHeaderId() {
-        if (getSelectedPosition() >= mCategoryRowAdapter.size()) {
+        if (getSelectedPosition() >= mSectionRowAdapter.size()) {
             return -1;
         }
 
-        return (int) ((PageRow) mCategoryRowAdapter.get(getSelectedPosition())).getHeaderItem().getId();
+        return (int) ((PageRow) mSectionRowAdapter.get(getSelectedPosition())).getHeaderItem().getId();
     }
     
     public void updateErrorIfEmpty(ErrorFragmentData data) {
@@ -218,12 +231,13 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     @Override
     public void showError(ErrorFragmentData data) {
-        //replaceMainFragment(new ErrorDialogFragment(data));
-        showErrorIfEmpty(data);
+        replaceMainFragment(new ErrorDialogFragment(data));
+        // Why show only if empty?
+        //showErrorIfEmpty(data);
     }
 
     private void showErrorIfEmpty(ErrorFragmentData data) {
-        if (mCategoryFragmentFactory.isEmpty()) {
+        if (mSectionFragmentFactory.isEmpty()) {
             replaceMainFragment(new ErrorDialogFragment(data));
         }
     }
@@ -241,92 +255,109 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     @Override
-    public void addCategory(int index, Category category) {
+    public void addSection(int index, BrowseSection category) {
         if (category == null) {
             return;
         }
 
-        if (mCategories.get(category.getId()) == null) {
-            mCategories.put(category.getId(), category);
+        if (mSections.get(category.getId()) == null) {
+            mSections.put(category.getId(), category);
             createHeader(index, category);
         }
     }
 
     @Override
-    public void removeCategory(Category category) {
+    public void removeSection(BrowseSection category) {
         if (category == null) {
             return;
         }
 
-        mCategories.remove(category.getId());
+        mSections.remove(category.getId());
         removeHeader(category);
     }
 
     @Override
-    public void updateCategory(VideoGroup group) {
+    public void updateSection(VideoGroup group) {
         restoreMainFragment();
 
-        mCategoryFragmentFactory.updateCurrentFragment(group);
+        mSectionFragmentFactory.updateCurrentFragment(group);
 
         fixInvisibleSearchOrb();
     }
 
     @Override
-    public void updateCategory(SettingsGroup group) {
+    public void updateSection(SettingsGroup group) {
         restoreMainFragment();
 
-        mCategoryFragmentFactory.updateCurrentFragment(group);
+        mSectionFragmentFactory.updateCurrentFragment(group);
     }
 
     @Override
-    public void selectCategory(int index) {
-        if (index >= 0 && index < mCategoryRowAdapter.size()) {
+    public void selectSection(int index) {
+        if (index >= 0 && index < mSectionRowAdapter.size()) {
             setSelectedPosition(index);
             mFocusOnChildFragment = true;
         }
     }
 
-    private void focusOnChildFragment() {
-        if (!Utils.checkActivity(getActivity())) {
-            return;
-        }
+    @Override
+    public void focusOnContent() {
+        startHeadersTransitionSafe(false);
+    }
 
+    private void focusOnChildFragment() {
         if (mFocusOnChildFragment) {
-            startHeadersTransition(false);
+            startHeadersTransitionSafe(false);
             mFocusOnChildFragment = false;
         }
     }
 
     @Override
-    public void selectItem(int index) {
+    public void selectSectionItem(int index) {
         if (index >= 0) {
-            mCategoryFragmentFactory.setCurrentFragmentItemIndex(index);
+            mSectionFragmentFactory.setCurrentFragmentItemIndex(index);
+        }
+    }
+
+    /**
+     * Fix: IllegalStateException: "Can not perform this action after onSaveInstanceState"
+     */
+    private void startHeadersTransitionSafe(boolean withHeaders) {
+        // Fix: IllegalStateException: "Can not perform this action after onSaveInstanceState"
+        if (!Utils.checkActivity(getActivity())) {
+            return;
+        }
+
+        try {
+            startHeadersTransition(withHeaders);
+        } catch (IllegalStateException e) {
+            // NOP
         }
     }
 
     private void restoreMainFragment() {
-        Fragment currentFragment = mCategoryFragmentFactory.getCurrentFragment();
+        Fragment currentFragment = mSectionFragmentFactory.getCurrentFragment();
 
         if (currentFragment != null) {
             replaceMainFragment(currentFragment);
         }
     }
 
-    private void createHeader(int index, Category header) {
+    private void createHeader(int index, BrowseSection header) {
         HeaderItem headerItem = new CategoryHeaderItem(header);
 
         PageRow pageRow = new PageRow(headerItem);
-        if (index == -1 || mCategoryRowAdapter.size() < index) {
-            mCategoryRowAdapter.add(pageRow); // add to the end
+        if (index == -1 || mSectionRowAdapter.size() < index) {
+            mSectionRowAdapter.add(pageRow); // add to the end
         } else {
-            mCategoryRowAdapter.add(index, pageRow);
+            mSectionRowAdapter.add(index, pageRow);
         }
     }
 
-    private void removeHeader(Category header) {
+    private void removeHeader(BrowseSection header) {
         Object foundHeader = null;
 
-        for (Object item : mCategoryRowAdapter.unmodifiableList()) {
+        for (Object item : mSectionRowAdapter.unmodifiableList()) {
             if (((PageRow) item).getHeaderItem().getId() == header.getId()) {
                 foundHeader = item;
                 break;
@@ -334,13 +365,13 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         }
 
         if (foundHeader != null) {
-            mCategoryRowAdapter.remove(foundHeader);
+            mSectionRowAdapter.remove(foundHeader);
         }
     }
 
     @Override
-    public void clearCategory(Category category) {
-        mCategoryFragmentFactory.clearCurrentFragment();
+    public void clearSection(BrowseSection category) {
+        mSectionFragmentFactory.clearCurrentFragment();
     }
 
     @Override

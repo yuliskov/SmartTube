@@ -9,7 +9,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 public class VideoGroupObjectAdapter extends ObjectAdapter {
@@ -41,6 +40,11 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
                 if (size() > 0 && size() < 30) {
                     Helpers.removeIf(c, this::contains);
                 }
+
+                // Latest alt dubs fix method (not works).
+                //Set<Video> uniqueItems = new LinkedHashSet<>(c);
+
+                //return super.addAll(uniqueItems);
 
                 return super.addAll(c);
             }

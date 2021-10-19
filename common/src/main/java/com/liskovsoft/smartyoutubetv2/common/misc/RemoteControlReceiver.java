@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 public class RemoteControlReceiver extends BroadcastReceiver {
@@ -14,11 +13,12 @@ public class RemoteControlReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "Initializing remote control listener...");
 
-        //Utils.startRemoteControlService(context);
+        // Fix unload from the memory on some devices?
+        Utils.updateRemoteControlService(context);
 
-        Utils.startRemoteControlWorkRequest(context);
+        //Utils.startRemoteControlWorkRequest(context);
 
         // Couldn't success inside periodic work request
-        PlaybackPresenter.instance(context); // init RemoteControlListener
+        //PlaybackPresenter.instance(context); // init RemoteControlListener
     }
 }

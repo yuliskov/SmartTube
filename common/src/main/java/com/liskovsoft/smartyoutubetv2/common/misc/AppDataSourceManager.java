@@ -3,18 +3,16 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AutoFrameRateSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.ContentBlockSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.RemoteControlSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.GeneralSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.LanguageSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.MainUISettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.PlayerSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.RemoteControlSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SearchSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.SubtitleSettingsPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.UIScaleSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.VideoPreset;
 import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
 
@@ -35,40 +33,35 @@ public class AppDataSourceManager {
         return sInstance;
     }
 
-    public List<SettingsItem> getSettingItems(BasePresenter<?> presenter) {
+    public List<SettingsItem> getSettingItems(Context context) {
         List<SettingsItem> settingItems = new ArrayList<>();
-        Context context = presenter.getContext();
 
         settingItems.add(new SettingsItem(
-                context.getString(R.string.settings_accounts), () -> AccountSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_account));
+                context.getString(R.string.settings_accounts), () -> AccountSettingsPresenter.instance(context).show(), R.drawable.settings_account));
 //        settingItems.add(new SettingsItem(
-//                context.getString(R.string.settings_linked_devices), () -> RemoteControlSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_cast));
+//                context.getString(R.string.settings_remote_control), () -> RemoteControlSettingsPresenter.instance(context).show(), R.drawable.settings_cast));
 //        settingItems.add(new SettingsItem(
-//                context.getString(R.string.settings_language), () -> LanguageSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_language));
+//                context.getString(R.string.settings_language_country), () -> LanguageSettingsPresenter.instance(context).show(), R.drawable.settings_language));
 //        settingItems.add(new SettingsItem(
-//                context.getString(R.string.settings_general), () -> GeneralSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_app));
-//        settingItems.add(new SettingsItem(
-//                context.getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_main_ui));
-//        settingItems.add(new SettingsItem(
-//                context.getString(R.string.settings_language_country), () -> LanguageSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_language));
-//        settingItems.add(new SettingsItem(
-//                context.getString(R.string.settings_general), () -> GeneralSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_app));
+//                context.getString(R.string.settings_general), () -> GeneralSettingsPresenter.instance(context).show(), R.drawable.settings_app));
         settingItems.add(new SettingsItem(
-                context.getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_main_ui));
-        //settingItems.add(new SettingsItem(
-        //        context.getString(R.string.settings_ui_scale), () -> UIScaleSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_ui_scale));
+                context.getString(R.string.settings_main_ui), () -> MainUISettingsPresenter.instance(context).show(), R.drawable.settings_main_ui));
 //        settingItems.add(new SettingsItem(
-//                context.getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_player));
+//                context.getString(R.string.settings_ui_scale), () -> UIScaleSettingsPresenter.instance(context).show(), R.drawable.settings_ui_scale));
 //        settingItems.add(new SettingsItem(
-//                context.getString(R.string.auto_frame_rate), () -> AutoFrameRateSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_afr));
+//                context.getString(R.string.settings_player), () -> PlayerSettingsPresenter.instance(context).show(), R.drawable.settings_player));
+        // Don't add afr support check here.
+        // Users want even fake afr settings.
 //        settingItems.add(new SettingsItem(
-//                context.getString(R.string.subtitle_category_title), () -> SubtitleSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_subtitles));
+//                context.getString(R.string.auto_frame_rate), () -> AutoFrameRateSettingsPresenter.instance(context).show(), R.drawable.settings_afr));
 //        settingItems.add(new SettingsItem(
-//                context.getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_search));
+//                context.getString(R.string.subtitle_category_title), () -> SubtitleSettingsPresenter.instance(context).show(), R.drawable.settings_subtitles));
 //        settingItems.add(new SettingsItem(
-//                ContentBlockData.SPONSOR_BLOCK_NAME, () -> ContentBlockSettingsPresenter.instance(presenter.getContext()).show(), R.drawable.settings_block));
+//                context.getString(R.string.settings_search), () -> SearchSettingsPresenter.instance(context).show(), R.drawable.settings_search));
 //        settingItems.add(new SettingsItem(
-//                context.getString(R.string.settings_about), () -> AboutPresenter.instance(presenter.getContext()).show(), R.drawable.settings_about));
+//                ContentBlockData.SPONSOR_BLOCK_NAME, () -> ContentBlockSettingsPresenter.instance(context).show(), R.drawable.settings_block));
+//        settingItems.add(new SettingsItem(
+//                context.getString(R.string.settings_about), () -> AboutSettingsPresenter.instance(context).show(), R.drawable.settings_about));
 
         return settingItems;
     }

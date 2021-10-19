@@ -17,6 +17,6 @@ public class SignInActivityOld extends LeanbackActivity {
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(android.R.id.content, new SignInFragmentOld());
-        ft.commit();
+        ft.commitAllowingStateLoss();
     }
 }

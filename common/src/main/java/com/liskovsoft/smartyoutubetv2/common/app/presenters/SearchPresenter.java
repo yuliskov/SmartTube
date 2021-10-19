@@ -9,7 +9,8 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoMenuPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -25,7 +26,6 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     @SuppressLint("StaticFieldLeak")
     private static SearchPresenter sInstance;
     private final MediaService mMediaService;
-    private final PlaybackPresenter mPlaybackPresenter;
     private final ViewManager mViewManager;
     private final SearchData mSearchData;
     private Disposable mScrollAction;
@@ -35,7 +35,6 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     private SearchPresenter(Context context) {
         super(context);
         mMediaService = YouTubeMediaService.instance();
-        mPlaybackPresenter = PlaybackPresenter.instance(context);
         mViewManager = ViewManager.instance(context);
         mSearchData = SearchData.instance(context);
     }
@@ -73,11 +72,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
             return;
         }
 
-        if (item.isVideo()) {
-            mPlaybackPresenter.openVideo(item);
-        } else if (item.isChannel()) {
-            ChannelPresenter.instance(getContext()).openChannel(item);
-        }
+        VideoActionPresenter.instance(getContext()).apply(item);
     }
 
     @Override
@@ -86,11 +81,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
             return;
         }
 
-        if (item.isVideo()) {
-            VideoMenuPresenter.instance(getContext()).showVideoMenu(item);
-        } else if (item.isChannel()) {
-            VideoMenuPresenter.instance(getContext()).showChannelMenu(item);
-        }
+        VideoMenuPresenter.instance(getContext()).showMenu(item);
     }
 
     @Override

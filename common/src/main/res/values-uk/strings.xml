@@ -42,7 +42,7 @@
     <string name="section_is_empty">Халепа! Тут нічого нема.</string>
     <string name="dialog_add_to_playlist">Додати/Видалити із плейлиста</string>
     <string name="msg_signed_users_only">Необхідно увійти в обліковий запис</string>
-    <string name="msg_cant_load_content">Неможливо завантажити вміст</string>
+    <string name="msg_cant_load_content">Не вдалося завантажити вміст.\n1) Перевірте мережеве з\`єднання.\n2) Спробуйте увійти в обліковий запис.</string>
     <string name="title_video_presets">Відео пресети</string>
     <string name="settings_accounts">Облікові записи</string>
     <string name="settings_left_panel">Налаштувати категорії</string>
@@ -54,8 +54,8 @@
     <string name="settings_about">Про додаток</string>
     <string name="dialog_account_list">Обрати обліковий запис</string>
     <string name="dialog_account_none">Не обрано</string>
-    <string name="dialog_remove_account">Видалити обліковий запис</string>
-    <string name="dialog_add_account">Додати обліковий запис</string>
+    <string name="dialog_remove_account">Вийти з облікового запису</string>
+    <string name="dialog_add_account">Увійти в обліковий запис</string>
     <string name="default_lang">За замовчуванням</string>
     <string name="dialog_select_language">Мова</string>
     <string name="subtitle_default">Звичайні</string>
@@ -78,7 +78,7 @@
     <string name="player_only_pause">Тільки пауза</string>
     <string name="check_for_updates">Перевірити оновлення</string>
     <string name="update_not_found">Ваша версія не потребує оновлення</string>
-    <string name="update_in_progess">Хвилинку…</string>
+    <string name="update_in_progress">Хвилинку…</string>
     <string name="player_ui_hide_behavior">Приховувати інтерфейс</string>
     <string name="option_never">Ніколи</string>
     <string name="side_panel_sections">Налаштувати розділи</string>
@@ -93,7 +93,7 @@
     <string name="color_scheme_dark_grey">Темно-сіра</string>
     <string name="disable_update_check">Не перевіряти оновлення</string>
     <string name="show_again">Нагадувати постійно</string>
-    <string name="check_updates_auto">Автоматичне оновлення</string>
+    <string name="check_updates_auto">Повідомляти про нову версію</string>
     <string name="select_account_on_boot">Обирати на старті</string>
     <string name="player_other">Різне</string>
     <string name="player_full_date">Точна дата в описі</string>
@@ -129,6 +129,7 @@
     <string name="playlists_style_rows">Рядки</string>
     <string name="player_show_clock">Відображати годинник у спливаючому меню</string>
     <string name="player_show_remaining_time">Відображати час, що залишився</string>
+    <string name="player_show_ending_time">Відображати час закінчення</string>
     <string name="open_channel_uploads">Відкрити завантаження</string>
     <string name="app_exit_shortcut">Вихід з додатку</string>
     <string name="app_exit_none">Не виходити</string>
@@ -173,7 +174,7 @@
     <string name="settings_general">Загальні</string>
     <string name="settings_video">Відео</string>
     <string name="content_block_confirm_skip">Підтвердження при пропуску</string>
-    <string name="content_block_categories">Категорії</string>
+    <string name="content_block_categories">Пропускати сегменти</string>
     <string name="content_block_sponsor">Спонсорський блок</string>
     <string name="content_block_intro">Вступ</string>
     <string name="content_block_outro">Кінцевий екран/титри</string>
@@ -181,6 +182,7 @@
     <string name="content_block_self_promo">Самореклама</string>
     <string name="content_block_music_off_topic">Немузична секція кліпу</string>
     <string name="confirm_segment_skip">Пропустити сегмент \"%s\"?</string>
+    <string name="cancel_segment_skip">Скасувати пропуск сегменту</string>
     <string name="msg_skipping_segment">Пропуск сегменту \"%s\"…</string>
     <string name="content_block_notification_type">Тип повідомлень</string>
     <string name="content_block_notify_none">Без повідомлень</string>
@@ -207,15 +209,17 @@
     <string name="video_aspect">Співвідношення сторін</string>
     <string name="player_tweaks">Для розробників</string>
     <string name="header_uploads">Завантаження</string>
-    <string name="player_show_global_clock">Відображати годинник поверх відео</string>
+    <string name="player_show_global_clock">Постійно відображати на екрані годинник</string>
+    <string name="player_show_global_ending_time">Постійно відображати на екрані час закінчення відео</string>
     <string name="uploads_old_look">Повернути старий вигляд розділу Завантаження</string>
     <string name="background_playback_activation">Фонове відтворення (активація)</string>
     <string name="channels_old_look">Повернути старий вигляд розділу Канали</string>
     <string name="channels_auto_load">Автоматично завантажувати вміст розділу Канали</string>
     <string name="return_to_background_video">Повернутися до фонового відео</string>
     <string name="pin_unpin_from_sidebar">Прикріпити/Відкріпити від бічної панелі</string>
-    <string name="pin_to_sidebar">Прикріплено до бічної панелі</string>
-    <string name="unpin_from_sidebar">Відкріплено від бічної панелі</string>
+    <string name="pinned_to_sidebar">Прикріплено до бічної панелі</string>
+    <string name="unpin_from_sidebar">Відкріпити від бічної панелі</string>
+    <string name="unpinned_from_sidebar">Відкріплено від бічної панелі</string>
     <string name="dialog_select_country">Країна</string>
     <string name="settings_language_country">Мова/Країна</string>
     <string name="share_embed_link">Поділитися вбудованим посиланням</string>
@@ -223,7 +227,7 @@
     <string name="preferred_update_source">Вибрати джерело оновлень</string>
     <string name="hide_shorts">Приховувати короткі відео з Підписок</string>
     <string name="key_remapping">Перевизначення клавіш</string>
-    <string name="screen_diming">Затемнення екрану</string>
+    <string name="screen_dimming">Затемнення екрану</string>
     <string name="removed_from_playback_queue">Видалено з черги відтворення</string>
     <string name="added_to_playback_queue">Додано до черги відтворення</string>
     <string name="add_remove_from_playback_queue">Додати/Видалити з черги відтворення</string>
@@ -236,4 +240,21 @@
     <string name="covid_news_row_name">Новини про коронавірус COVID-19</string>
     <string name="enable_voice_search">Увімкнути голосовий пошук</string>
     <string name="subscribe_unsubscribe_from_channel">Підписатися/Відписатися від каналу</string>
+    <string name="app_backup_restore">Бекап та відновлення</string>
+    <string name="app_backup">Створити бекап даних</string>
+    <string name="app_restore">Відновити дані з бекапу</string>
+    <string name="skip_each_segment_once">Не пропускати сегменти повторно</string>
+    <string name="disable_ok_long_press">Не обробляти довге утримання кнопки ОК</string>
+    <string name="player_time_correction">Відображати час з урахуванням швидкості відтворення</string>
+    <string name="sponsor_color_markers">Кольорові помітки на шкалі прогресу</string>
+    <string name="refresh_section">Оновити розділ</string>
+    <string name="option_disabled">Відключено</string>
+    <string name="live_now_row_name">У прямому ефірі зараз</string>
+    <string name="run_in_background">Працювати у фоновому режимі</string>
+    <string name="settings_remote_control">Дистанційне керування</string>
+    <string name="background_service_started">Фоновий сервіс запущений</string>
+    <string name="dialog_add_to">Додати у %s</string>
+    <string name="dialog_remove_from">Видалити із %s</string>
+    <string name="added_to">Додано у %s</string>
+    <string name="removed_from">Видалено із %s</string>
 </resources>

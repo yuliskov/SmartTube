@@ -1,12 +1,15 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track;
 
+import com.google.android.exoplayer2.Format;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 
 public class VideoTrack extends MediaTrack {
     private static final int SIZE_EQUITY_THRESHOLD_PERCENT = 5; // was 15 before
     private static final int COMPARE_TYPE_IN_BOUNDS = 0;
-    private static final int COMPARE_TYPE_IN_BOUNDS_PROFILE = 1;
+    private static final int COMPARE_TYPE_IN_BOUNDS_NO_FPS = 4;
+    private static final int COMPARE_TYPE_IN_BOUNDS_PRESET = 1;
+    private static final int COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS = 3;
     private static final int COMPARE_TYPE_NORMAL = 2;
 
     public VideoTrack(int rendererIndex) {
@@ -61,8 +64,13 @@ public class VideoTrack extends MediaTrack {
             return -1;
         }
 
+        // NOTE: MultiFpsFormat: 25/50, 30/60. Currently no more that 720p.
+        boolean isMultiFpsFormat = sizeLessOrEquals(format.height, 720);
+
         // Detect profile based on format id presence
-        return format.id == null ? compare(track2, COMPARE_TYPE_IN_BOUNDS_PROFILE) : compare(track2, COMPARE_TYPE_IN_BOUNDS);
+        return format.id == null ?
+                compare(track2, isMultiFpsFormat ? COMPARE_TYPE_IN_BOUNDS_PRESET : COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS) :
+                compare(track2, isMultiFpsFormat ? COMPARE_TYPE_IN_BOUNDS : COMPARE_TYPE_IN_BOUNDS_NO_FPS);
     }
 
     @Override
@@ -82,7 +90,9 @@ public class VideoTrack extends MediaTrack {
         int size1;
         int size2;
 
-        if (format.width > format.height && track2.format.width > track2.format.height) {
+        // Proper non-widescreen (4:3) format handling.
+        // 4:3 example: https://www.youtube.com/watch?v=m8nsUcAwkj8&t=1042s
+        if (isWideScreen(format) && isWideScreen(track2.format)) {
             size1 = format.width;
             size2 = track2.format.width;
         } else {
@@ -102,8 +112,12 @@ public class VideoTrack extends MediaTrack {
 
         if (type == COMPARE_TYPE_IN_BOUNDS) {
             result = inBounds(id1, id2, size1, size2, frameRate1, frameRate2, codecs1, codecs2);
-        } else if (type == COMPARE_TYPE_IN_BOUNDS_PROFILE) {
+        } else if (type == COMPARE_TYPE_IN_BOUNDS_NO_FPS) {
+            result = inBounds(id1, id2, size1, size2, -1, -1, codecs1, codecs2);
+        } else if (type == COMPARE_TYPE_IN_BOUNDS_PRESET) {
             result = inBoundsProfile(id1, id2, size1, size2, frameRate1, frameRate2, codecs1, codecs2);
+        } else if (type == COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS) {
+            result = inBoundsProfile(id1, id2, size1, size2, -1, -1, codecs1, codecs2);
         } else {
             result = compare(id1, id2, size1, size2, frameRate1, frameRate2, codecs1, codecs2);
         }
@@ -175,5 +189,16 @@ public class VideoTrack extends MediaTrack {
         }
 
         return result;
+    }
+
+    /**
+     * Check widescreen: 16:9, 16:8, 16:7 etc<br/>
+     */
+    private boolean isWideScreen(Format format) {
+        if (format == null) {
+            return false;
+        }
+
+        return format.width / (float) format.height >= 1.77;
     }
 }

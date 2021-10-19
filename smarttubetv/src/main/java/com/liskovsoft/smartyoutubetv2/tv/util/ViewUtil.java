@@ -8,7 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.leanback.widget.FocusHighlight;
+import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.RowPresenter;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.BaseRequestOptions;
+import com.bumptech.glide.request.RequestOptions;
+import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextview.MarqueeTextView;
 
 public class ViewUtil {
@@ -112,5 +117,21 @@ public class ViewUtil {
                 view.setLayoutParams(lp);
             }
         }
+    }
+
+    public static boolean isListRowEmpty(Object obj) {
+        if (obj instanceof ListRow) {
+            ListRow row = (ListRow) obj;
+            VideoGroupObjectAdapter adapter = (VideoGroupObjectAdapter) row.getAdapter();
+            return adapter == null || adapter.size() == 0;
+        }
+
+        return true;
+    }
+
+    public static RequestOptions glideOptions() {
+        return new RequestOptions()
+                .diskCacheStrategy(DiskCacheStrategy.NONE) // ensure start animation from beginning
+                .skipMemoryCache(true); // ensure start animation from beginning
     }
 }

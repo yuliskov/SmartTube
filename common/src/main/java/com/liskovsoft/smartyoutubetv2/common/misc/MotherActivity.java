@@ -6,9 +6,12 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -23,6 +26,7 @@ public class MotherActivity extends FragmentActivity {
     private static int sNumActivities;
     protected static boolean sIsInPipMode;
     private ScreensaverManager mScreensaverManager;
+    private OnPermissions mOnPermissions;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,6 +41,24 @@ public class MotherActivity extends FragmentActivity {
         mScreensaverManager = new ScreensaverManager(this);
     }
 
+    @Override
+    public boolean dispatchGenericMotionEvent(MotionEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            mScreensaverManager.enable();
+        }
+
+        return super.dispatchGenericMotionEvent(event);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN) {
+            mScreensaverManager.enable();
+        }
+
+        return super.dispatchTouchEvent(event);
+    }
+
     @SuppressLint("RestrictedApi")
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
@@ -45,6 +67,14 @@ public class MotherActivity extends FragmentActivity {
         }
 
         return super.dispatchKeyEvent(event);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        boolean result = super.onKeyDown(keyCode, event);
+
+        // Fix buggy G20s menu key (focus lost on key press)
+        return (event.getAction() == KeyEvent.ACTION_DOWN && KeyHelpers.isMenuKey(keyCode)) || result;
     }
 
     public void finishReally() {
@@ -64,7 +94,8 @@ public class MotherActivity extends FragmentActivity {
             boolean noActivities = sNumActivities == 0;
             boolean singlePipActivity = sNumActivities == 1 && sIsInPipMode;
             if (noActivities || singlePipActivity) {
-                ViewManager.instance(this).forceFinishTheApp();
+                // Don't destroy the app. Let remote functions continue to work in background.
+                ViewManager.instance(this).forceFinishTheApp(false);
             }
         }
     }
@@ -155,5 +186,21 @@ public class MotherActivity extends FragmentActivity {
         // Fix sudden dpi change.
         // Could happen when screen goes off or after PIP mode.
         initDpi();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (mOnPermissions != null) {
+            mOnPermissions.onPermissions(requestCode, permissions, grantResults);
+            mOnPermissions = null;
+        }
+    }
+
+    public void addOnPermissions(OnPermissions onPermissions) {
+        mOnPermissions = onPermissions;
+    }
+
+    public interface OnPermissions {
+        void onPermissions(int requestCode, String[] permissions, int[] grantResults);
     }
 }

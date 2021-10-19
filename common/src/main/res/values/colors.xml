@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="white">#ffffff</color>
-    <color name="white_50">#7dffffff</color>
-    <color name="white_70">#b2ffffff</color>
+    <color name="white">#FFFFFF</color>
+    <color name="white_50">#7DFFFFFF</color>
+    <color name="white_70">#B2FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="red">#ff0000</color>
-    <color name="semi_red">#e52d27</color>
-    <color name="light_red">#ff8080</color>
-    <color name="dark_red">#b31217</color>
-    <color name="transparent">#00ffffff</color>
-    <color name="light_blue">#2793e6</color>
-    <color name="yellow">#CDDC39</color>
+    <color name="red">#FF0000</color>
+    <color name="semi_red">#E52D27</color>
+    <color name="light_red">#FF8080</color>
+    <color name="dark_red">#B31217</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="light_blue">#2793E6</color>
+    <!--<color name="yellow">#CDDC39</color>-->
     <color name="light_grey">#E4E4E4</color>
-    <color name="leanback">#0096a6</color>
+    <color name="leanback">#0096A6</color>
     <color name="semi_grey">#64000000</color>
     <color name="grey">#282828</color>
     <color name="dimming">#D0000000</color>
+    <color name="green">#00FF00</color>
+    <color name="cyan">#00FFFF</color>
+    <color name="blue">#0000FF</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="magenta">#FF00FF</color>
+    <color name="brown">#964B00</color>
 </resources>

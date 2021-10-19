@@ -17,6 +17,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 public class UriBackgroundManager {
     private static final String TAG = UriBackgroundManager.class.getSimpleName();
@@ -111,15 +112,13 @@ public class UriBackgroundManager {
         int width = mMetrics.widthPixels;
         int height = mMetrics.heightPixels;
 
-        RequestOptions options = new RequestOptions()
+        RequestOptions options = ViewUtil.glideOptions()
                 .centerCrop()
                 .error(mDefaultBackground);
 
         Glide.with(mActivity)
                 .asBitmap()
                 .load(uri)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
                 .apply(options)
                 .into(new SimpleTarget<Bitmap>(width, height) {
                     @Override

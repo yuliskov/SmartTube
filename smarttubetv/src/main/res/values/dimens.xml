@@ -17,7 +17,7 @@
     <!-- Old value: 15dp -->
     <dimen name="settings_image_padding">25dp</dimen>
     <!-- Old value: 100dp -->
-    <dimen name="settings_card_width">120dp</dimen>
+    <dimen name="settings_card_width">128dp</dimen>
     <dimen name="settings_card_height">100dp</dimen>
 
     <!-- Card view default size -->
@@ -29,6 +29,14 @@
     <!-- Search items left margin (except first one) -->
     <!-- Problems here: external search dialog won't overlap correctly -->
     <!--<dimen name="lb_search_bar_items_margin_start">20dp</dimen>-->
+
+    <!-- Decrease Browse fragment content top padding. -->
+    <!-- Old value: 167dp -->
+    <dimen name="lb_browse_rows_margin_top">130dp</dimen>
+
+    <!-- Increase this value to hide left strip from Browse fragment (when headers collapsed) -->
+    <!-- Old value: 238dp -->
+    <dimen name="lb_browse_rows_margin_start">265dp</dimen>
 
     <!-- Make search bar more compact so more buttons could be added after it. -->
     <dimen name="lb_search_bar_items_width">500dp</dimen>

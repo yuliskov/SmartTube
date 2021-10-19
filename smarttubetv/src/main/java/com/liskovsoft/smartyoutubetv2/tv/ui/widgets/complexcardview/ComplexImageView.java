@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 public class ComplexImageView extends RelativeLayout {
     private ImageView mMainImage;
@@ -108,10 +109,7 @@ public class ComplexImageView extends RelativeLayout {
 
         Glide.with(getContext().getApplicationContext()) // FIX: "You cannot start a load for a destroyed activity"
                 .load(mPreviewUrl)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .diskCacheStrategy(DiskCacheStrategy.NONE) // ensure start animation from beginning
-                .skipMemoryCache(true) // ensure start animation from beginning
+                .apply(ViewUtil.glideOptions())
                 .into(mPreviewImage);
     }
 

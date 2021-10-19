@@ -26,10 +26,10 @@ public class GeneralData {
     private static GeneralData sInstance;
     private final Context mContext;
     private final AppPrefs mPrefs;
-    private boolean mIsSettingsCategoryEnabled;
-    private int mBootCategoryId;
-    private final Map<Integer, Integer> mLeftPanelCategories = new LinkedHashMap<>();
-    private final Set<Integer> mEnabledLeftPanelCategories = new HashSet<>();
+    private boolean mIsSettingsSectionEnabled;
+    private int mBootSectionId;
+    private final Map<Integer, Integer> mSections = new LinkedHashMap<>();
+    private final Set<Integer> mEnabledSections = new HashSet<>();
     private int mAppExitShortcut;
     private boolean mIsReturnToLauncherEnabled;
     private int mBackgroundShortcut;
@@ -39,6 +39,8 @@ public class GeneralData {
     private int mScreenDimmingTimeoutMin;
     private boolean mIsProxyEnabled;
     private boolean mIsBridgeCheckEnabled;
+    private boolean mIsOkButtonLongPressDisabled;
+    private String mLastPlaylistId;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -55,43 +57,43 @@ public class GeneralData {
         return sInstance;
     }
 
-    public Map<Integer, Integer> getCategories() {
-        return mLeftPanelCategories;
+    public Map<Integer, Integer> getSections() {
+        return mSections;
     }
 
-    public void enableCategory(int categoryId, boolean enabled) {
+    public void enableSection(int sectionId, boolean enabled) {
         if (enabled) {
-            mEnabledLeftPanelCategories.add(categoryId);
+            mEnabledSections.add(sectionId);
         } else {
-            mEnabledLeftPanelCategories.remove(categoryId);
+            mEnabledSections.remove(sectionId);
         }
 
         persistState();
     }
 
-    public boolean isCategoryEnabled(int categoryId) {
+    public boolean isBrowseSectionEnabled(int categoryId) {
         // Enable by default pinned sidebar items
-        return mEnabledLeftPanelCategories.contains(categoryId) || !mLeftPanelCategories.containsValue(categoryId);
+        return mEnabledSections.contains(categoryId) || !mSections.containsValue(categoryId);
     }
 
-    public void setBootCategoryId(int categoryId) {
-        mBootCategoryId = categoryId;
+    public void setBootSectionId(int sectionId) {
+        mBootSectionId = sectionId;
 
         persistState();
     }
 
-    public int getBootCategoryId() {
-        return mBootCategoryId;
+    public int getBootSectionId() {
+        return mBootSectionId;
     }
 
-    public void enableSettingsCategory(boolean enabled) {
-        mIsSettingsCategoryEnabled = enabled;
+    public void enableSettingsSection(boolean enabled) {
+        mIsSettingsSectionEnabled = enabled;
 
         persistState();
     }
 
-    public boolean isSettingsCategoryEnabled() {
-        return mIsSettingsCategoryEnabled;
+    public boolean isSettingsSectionEnabled() {
+        return mIsSettingsSectionEnabled;
     }
 
     public int getAppExitShortcut() {
@@ -154,12 +156,12 @@ public class GeneralData {
         return mIsRemapFastForwardToNextEnabled;
     }
 
-    public void setScreenDimmingTimoutMin(int timeoutMin) {
+    public void setScreenDimmingTimeoutMin(int timeoutMin) {
         mScreenDimmingTimeoutMin = timeoutMin;
         persistState();
     }
 
-    public int getScreenDimmingTimoutMin() {
+    public int getScreenDimmingTimeoutMin() {
         return mScreenDimmingTimeoutMin;
     }
 
@@ -181,15 +183,33 @@ public class GeneralData {
         return mIsBridgeCheckEnabled;
     }
 
+    public void disableOkButtonLongPress(boolean enable) {
+        mIsOkButtonLongPressDisabled = enable;
+        persistState();
+    }
+    
+    public boolean isOkButtonLongPressDisabled() {
+        return mIsOkButtonLongPressDisabled;
+    }
+
+    public void setLastPlaylistId(String playlistId) {
+        mLastPlaylistId = playlistId;
+        persistState();
+    }
+
+    public String getLastPlaylistId() {
+        return mLastPlaylistId;
+    }
+
     private void initLeftPanelCategories() {
-        mLeftPanelCategories.put(R.string.header_home, MediaGroup.TYPE_HOME);
-        mLeftPanelCategories.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
-        mLeftPanelCategories.put(R.string.header_news, MediaGroup.TYPE_NEWS);
-        mLeftPanelCategories.put(R.string.header_music, MediaGroup.TYPE_MUSIC);
-        mLeftPanelCategories.put(R.string.header_channels, MediaGroup.TYPE_CHANNEL_UPLOADS);
-        mLeftPanelCategories.put(R.string.header_subscriptions, MediaGroup.TYPE_SUBSCRIPTIONS);
-        mLeftPanelCategories.put(R.string.header_history, MediaGroup.TYPE_HISTORY);
-        mLeftPanelCategories.put(R.string.header_playlists, MediaGroup.TYPE_USER_PLAYLISTS);
+        mSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
+        mSections.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
+        mSections.put(R.string.header_news, MediaGroup.TYPE_NEWS);
+        mSections.put(R.string.header_music, MediaGroup.TYPE_MUSIC);
+        mSections.put(R.string.header_channels, MediaGroup.TYPE_CHANNEL_UPLOADS);
+        mSections.put(R.string.header_subscriptions, MediaGroup.TYPE_SUBSCRIPTIONS);
+        mSections.put(R.string.header_history, MediaGroup.TYPE_HISTORY);
+        mSections.put(R.string.header_playlists, MediaGroup.TYPE_USER_PLAYLISTS);
     }
 
     private void restoreState() {
@@ -198,8 +218,8 @@ public class GeneralData {
         String[] split = Helpers.splitObjectLegacy(data);
 
         String selectedCategories = Helpers.parseStr(split, 0);
-        mBootCategoryId = Helpers.parseInt(split, 1, MediaGroup.TYPE_HOME);
-        mIsSettingsCategoryEnabled = Helpers.parseBoolean(split, 2, true);
+        mBootSectionId = Helpers.parseInt(split, 1, MediaGroup.TYPE_HOME);
+        mIsSettingsSectionEnabled = Helpers.parseBoolean(split, 2, true);
         mAppExitShortcut = Helpers.parseInt(split, 3, EXIT_DOUBLE_BACK);
         mIsReturnToLauncherEnabled = Helpers.parseBoolean(split, 4, true);
         mBackgroundShortcut = Helpers.parseInt(split, 5, BACKGROUND_SHORTCUT_HOME);
@@ -209,15 +229,17 @@ public class GeneralData {
         mScreenDimmingTimeoutMin = Helpers.parseInt(split, 9, 1);
         mIsProxyEnabled = Helpers.parseBoolean(split, 10, false);
         mIsBridgeCheckEnabled = Helpers.parseBoolean(split, 11, true);
+        mIsOkButtonLongPressDisabled = Helpers.parseBoolean(split, 12, false);
+        mLastPlaylistId = Helpers.parseStr(split, 13);
 
         if (selectedCategories != null) {
             String[] selectedCategoriesArr = Helpers.splitArrayLegacy(selectedCategories);
 
             for (String categoryId : selectedCategoriesArr) {
-                mEnabledLeftPanelCategories.add(Helpers.parseInt(categoryId));
+                mEnabledSections.add(Helpers.parseInt(categoryId));
             }
         } else {
-            mEnabledLeftPanelCategories.addAll(mLeftPanelCategories.values());
+            mEnabledSections.addAll(mSections.values());
         }
 
         if (pinnedItems != null) {
@@ -230,12 +252,11 @@ public class GeneralData {
     }
 
     private void persistState() {
-        String selectedCategories = Helpers.mergeArray(mEnabledLeftPanelCategories.toArray());
+        String selectedCategories = Helpers.mergeArray(mEnabledSections.toArray());
         String pinnedItems = Helpers.mergeArray(mPinnedItems.toArray());
-        mPrefs.setData(GENERAL_DATA, Helpers.mergeObject(selectedCategories,
-                mBootCategoryId, mIsSettingsCategoryEnabled, mAppExitShortcut,
+        mPrefs.setData(GENERAL_DATA, Helpers.mergeObject(selectedCategories, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut,
                 mIsReturnToLauncherEnabled,mBackgroundShortcut, pinnedItems,
                 mIsHideShortsEnabled, mIsRemapFastForwardToNextEnabled, mScreenDimmingTimeoutMin,
-                mIsProxyEnabled, mIsBridgeCheckEnabled));
+                mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId));
     }
 }

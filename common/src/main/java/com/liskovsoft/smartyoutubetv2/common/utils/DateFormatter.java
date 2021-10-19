@@ -9,14 +9,18 @@ import java.util.Locale;
 
 public class DateFormatter {
     public static String getCurrentDateTimeShort(Context context) {
-        return getCurrentTimeShort(context, true, true);
+        return getDateTimeShort(context, true, true, System.currentTimeMillis());
     }
 
     public static String getCurrentTimeShort(Context context) {
-        return getCurrentTimeShort(context, false, true);
+        return getDateTimeShort(context, false, true, System.currentTimeMillis());
     }
 
-    private static String getCurrentTimeShort(Context context, boolean showDate, boolean showTime) {
+    public static String formatTimeShort(Context context, long currentTimeMs) {
+        return getDateTimeShort(context, false, true, currentTimeMs);
+    }
+
+    private static String getDateTimeShort(Context context, boolean showDate, boolean showTime, long currentTimeMs) {
         String datePattern = "EEE d MMM";
 
         // details: https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
@@ -28,7 +32,7 @@ public class DateFormatter {
                         showTime ? timePattern : ""),
                 Locale.getDefault()
         );
-        String currentTime = serverFormat.format(new Date());
+        String currentTime = serverFormat.format(new Date(currentTimeMs));
 
         return String.format("%1$s", currentTime);
     }

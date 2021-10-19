@@ -31,8 +31,9 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection.Factory;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.FixedTrackSelection;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -40,6 +41,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.ContentBlockManager.SeekBarSegment;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
@@ -54,15 +56,15 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.Sub
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.renderer.CustomOverridesRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewPressedListener;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.surfacefragment.SurfaceSupportFragmentGlueHost;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.BackboneQueueNavigator;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.StoryboardSeekDataProvider;
@@ -70,6 +72,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoEventsOverrideFr
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue.OnActionClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView;
+import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.EndingTimeView;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -354,21 +357,23 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         initializePlayerRows();
 
         initializeGlobalClock();
+
+        initializeGlobalEndingTime();
     }
 
     private void createPlayer() {
-        DefaultRenderersFactory renderersFactory = new CustomOverridesRenderersFactory(getContext());
+        mExoPlayerController.setEventListener(mEventListener);
 
         // Use default or pass your bandwidthMeter here: bandwidthMeter = new DefaultBandwidthMeter.Builder(getContext()).build()
-        DefaultTrackSelector trackSelector = new RestoreTrackSelector(new Factory());
+        DefaultTrackSelector trackSelector = new RestoreTrackSelector(new AdaptiveTrackSelection.Factory());
+        mExoPlayerController.setTrackSelector(trackSelector);
+
+        DefaultRenderersFactory renderersFactory = new CustomOverridesRenderersFactory(getContext());
         mPlayer = mPlayerInitializer.createPlayer(getContext(), renderersFactory, trackSelector);
         // Try to fix decoder error on Nvidia Shield 2019.
         // Init resources as early as possible.
-        mPlayer.setForegroundMode(false);
-
+        //mPlayer.setForegroundMode(true);
         mExoPlayerController.setPlayer(mPlayer);
-        mExoPlayerController.setTrackSelector(trackSelector);
-        mExoPlayerController.setEventListener(mEventListener);
     }
 
     private void createPlayerGlue() {
@@ -404,6 +409,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         clock.setVisibility(PlayerData.instance(getContext()).isGlobalClockEnabled() ? View.VISIBLE : View.GONE);
     }
 
+    private void initializeGlobalEndingTime() {
+        EndingTimeView endingTime = getActivity().findViewById(R.id.global_ending_time);
+        endingTime.setVisibility(PlayerData.instance(getContext()).isGlobalEndingTimeEnabled() ? View.VISIBLE : View.GONE);
+    }
+
     private void createMediaSession() {
         if (VERSION.SDK_INT <= 19) {
             // Fix Android 4.4 bug: java.lang.IllegalArgumentException: MediaButtonReceiver component may not be null
@@ -413,7 +423,15 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mMediaSession = new MediaSessionCompat(getContext(), getContext().getPackageName());
         mMediaSession.setActive(true);
         mMediaSessionConnector = new MediaSessionConnector(mMediaSession);
-        mMediaSessionConnector.setPlayer(mPlayer);
+
+        try {
+            mMediaSessionConnector.setPlayer(mPlayer);
+        } catch (NoSuchMethodError e) {
+            // Android 9, Sony
+            // No virtual method setState(IJFJ)Landroid/media/session/PlaybackState$Builder;
+            // in class Landroid/media/session/PlaybackState$Builder;
+            return;
+        }
 
         mMediaSessionConnector.setMediaMetadataProvider(player -> {
             if (getVideo() == null) {
@@ -445,6 +463,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             }
         });
 
+        // Fix exoplayer pause when switching AFR. The code seems buggy.
         mMediaSessionConnector.setControlDispatcher(new DefaultControlDispatcher() {
             @Override
             public boolean dispatchSetPlayWhenReady(Player player, boolean playWhenReady) {
@@ -512,12 +531,12 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private void setupEventListeners() {
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
-        mCardPresenter.setOnItemViewLongPressedListener(new ItemViewLongClickedListener());
+        mCardPresenter.setOnItemViewLongPressedListener(new ItemViewLongPressedListener());
     }
 
-    private final class ItemViewLongClickedListener implements OnItemViewPressedListener {
+    private final class ItemViewLongPressedListener implements OnItemLongPressedListener {
         @Override
-        public void onItemPressed(
+        public void onItemLongPressed(
                 Presenter.ViewHolder itemViewHolder,
                 Object item) {
 
@@ -692,6 +711,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public boolean isSuggestionsEmpty() {
+        // Ignore first row. It's player controls row.
         return mRowsAdapter == null || mRowsAdapter.size() <= 1;
     }
 
@@ -734,6 +754,19 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             getProgressBarManager().show();
         } else {
             getProgressBarManager().hide();
+        }
+    }
+
+    @Override
+    public void setSeekBarSegments(List<SeekBarSegment> segments) {
+        if (getActivity() == null) {
+            return;
+        }
+
+        SeekBar seekBar = getActivity().findViewById(R.id.playback_progress);
+
+        if (seekBar != null) {
+            seekBar.setSegments(segments);
         }
     }
 
@@ -938,7 +971,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void finish() {
-        getLeanbackActivity().finish();
+        LeanbackActivity activity = getLeanbackActivity();
+
+        if (activity != null) {
+            activity.finish();
+        }
     }
 
     @Override

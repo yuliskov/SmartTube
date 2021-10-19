@@ -39,10 +39,12 @@ import androidx.leanback.widget.PlaybackSeekDataProvider;
 import androidx.leanback.widget.PlaybackSeekUi;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.RowPresenter;
-import androidx.leanback.widget.SeekBar;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.utils.DateFormatter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.OnControlClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.ControlBarPresenter.OnControlSelectedListener;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue.PlayPauseListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue.QualityInfoListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.seekpreview.ThumbsBar;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue.ControlsVisibilityListener;
@@ -92,11 +94,11 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         final ViewGroup mTopEdge;
         final SeekBar mProgressBar;
         final ThumbsBar mThumbsBar;
+        final String mRemainingTimeFormat;
         final String mEndingTimeFormat;
         long mTotalTimeInMs = Long.MIN_VALUE;
-        long mNewTotalTimeInMs = Long.MIN_VALUE;
         long mCurrentTimeInMs = Long.MIN_VALUE;
-        long mEndingTimeInMs = Long.MIN_VALUE;
+        long mRemainingTimeInMs = Long.MIN_VALUE;
         long mSecondaryProgressInMs;
         final StringBuilder mTempBuilder = new StringBuilder();
         ControlBarPresenter.ViewHolder mControlsVh;
@@ -110,6 +112,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
         Client mSeekClient;
         boolean mInSeek;
+        boolean mIsPlaying = true;
         PlaybackSeekDataProvider mSeekDataProvider;
         long[] mPositions;
         int mPositionsLength;
@@ -120,6 +123,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         // MOD: update quality info
         final QualityInfoListener mQualityInfoListener = this::setQualityInfo;
         final ControlsVisibilityListener mVisibilityListener = this::updateVisibility;
+        final PlayPauseListener mPlayPauseListener = this::onPlay;
         TopEdgeFocusListener mTopEdgeFocusListener = null;
 
         final PlaybackControlsRow.OnPlaybackProgressCallback mListener =
@@ -415,7 +419,8 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             mQualityInfo = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.quality_info);
             mDateTime = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.date_time);
             mEndingTime = (TextView) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.ending_time);
-            mEndingTimeFormat = rootView.getContext().getString(com.liskovsoft.smartyoutubetv2.tv.R.string.player_remaining_time);
+            mEndingTimeFormat = rootView.getContext().getString(com.liskovsoft.smartyoutubetv2.tv.R.string.player_ending_time);
+            mRemainingTimeFormat = rootView.getContext().getString(com.liskovsoft.smartyoutubetv2.tv.R.string.player_remaining_time);
             mAdditionalInfo = (ViewGroup) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.additional_info);
             mTopEdge = (ViewGroup) rootView.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.top_edge);
             mTopEdge.setOnFocusChangeListener((v, hasFocus) -> {
@@ -456,9 +461,12 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                                 onBackward();
                             } else {
                                 // MOD: resume immediately after seeking
-                                if (!mPlayerData.isPauseOnSeekEnabled()) {
-                                    stopSeek(false);
+
+                                if (mPlayerData.isPauseOnSeekEnabled() && keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+                                    return true;
                                 }
+
+                                stopSeek(false);
                             }
                             return true;
                         case KeyEvent.KEYCODE_DPAD_RIGHT:
@@ -469,21 +477,25 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                                 onForward();
                             } else {
                                 // MOD: resume immediately after seeking
-                                if (!mPlayerData.isPauseOnSeekEnabled()) {
-                                    stopSeek(false);
+
+                                if (mPlayerData.isPauseOnSeekEnabled() && keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+                                    return true;
                                 }
-                            }
-                            return true;
-                        case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE: // MOD: act as OK?
-                        case KeyEvent.KEYCODE_DPAD_CENTER:
-                        case KeyEvent.KEYCODE_ENTER:
-                            if (!mInSeek) {
-                                return false;
-                            }
-                            if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
+
                                 stopSeek(false);
                             }
                             return true;
+                        //case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE: // MOD: act as OK? (handled somewhere else, inside player glue)
+                        case KeyEvent.KEYCODE_DPAD_CENTER:
+                        case KeyEvent.KEYCODE_ENTER:
+                            if (!mInSeek) {
+                                return false; // use pause toggle handler
+                            }
+                            if (keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
+                                stopSeek(false);
+                            }
+                            // Fix: is video is paused previously then you should click OK twice to play
+                            return mIsPlaying; // use pause toggle handler only if playback is paused
                         case KeyEvent.KEYCODE_BACK:
                         case KeyEvent.KEYCODE_ESCAPE:
                             if (!mInSeek) {
@@ -509,6 +521,13 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                 @Override
                 public boolean onAccessibilitySeekBackward() {
                     return onBackward();
+                }
+
+                @Override
+                public boolean onAccessibilitySeekProgress(int progress) {
+                    mSeekClient.onSeekPositionChanged((long)((double) (progress) / Integer.MAX_VALUE * mTotalTimeInMs));
+                    mSeekClient.onSeekFinished(false);
+                    return true;
                 }
             });
             mProgressBar.setMax(Integer.MAX_VALUE); //current progress will be a fraction of this
@@ -656,7 +675,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         void setTotalTime(long totalTimeMs) {
             if (mTotalTimeInMs != totalTimeMs) {
                 mTotalTimeInMs = totalTimeMs;
-                onSetDurationLabel(applySpeedCorrection(totalTimeMs));
+                onSetDurationLabel(totalTimeMs);
             }
         }
 
@@ -684,7 +703,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         void setCurrentPosition(long currentTimeMs) {
             if (currentTimeMs != mCurrentTimeInMs) {
                 mCurrentTimeInMs = currentTimeMs;
-                onSetCurrentPositionLabel(applySpeedCorrection(currentTimeMs));
+                onSetCurrentPositionLabel(currentTimeMs);
             }
             if (!mInSeek) {
                 int progressRatio = 0;
@@ -706,19 +725,25 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         }
 
         void setEndingTime(long currentTimeMs) {
-            long endingTimeMs = mTotalTimeInMs - currentTimeMs;
+            long remainingTimeMs = mTotalTimeInMs - currentTimeMs;
 
-            if (mEndingTimeInMs != endingTimeMs) {
-                mEndingTimeInMs = endingTimeMs;
-                onSetEndingTimeLabel(applySpeedCorrection(endingTimeMs));
+            if (mRemainingTimeInMs != remainingTimeMs) {
+                mRemainingTimeInMs = remainingTimeMs;
+                onSetEndingTimeLabel(remainingTimeMs);
             }
         }
 
-        protected void onSetEndingTimeLabel(long endingTimeMs) {
+        protected void onSetEndingTimeLabel(long remainingTimeMs) {
+            remainingTimeMs = applySpeedCorrection(remainingTimeMs);
+
             if (mEndingTime != null) {
                 if (mPlayerData.isRemainingTimeEnabled()) {
-                    formatTime(endingTimeMs, mTempBuilder);
-                    mEndingTime.setText(String.format(mEndingTimeFormat, mTempBuilder.toString()));
+                    formatTime(remainingTimeMs, mTempBuilder);
+                    mEndingTime.setText(String.format(mRemainingTimeFormat, mTempBuilder.toString()));
+                    mEndingTime.setVisibility(View.VISIBLE);
+                } else if (mPlayerData.isEndingTimeEnabled()) {
+                    mEndingTime.setText(String.format(mEndingTimeFormat,
+                            DateFormatter.formatTimeShort(mEndingTime.getContext(), System.currentTimeMillis() + remainingTimeMs)));
                     mEndingTime.setVisibility(View.VISIBLE);
                 } else {
                     mEndingTime.setVisibility(View.GONE);
@@ -745,16 +770,17 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             }
         }
 
-        void updateTotalTime() {
-            // Update total time with respect of speed
-            long newTotalTimeMs = applySpeedCorrection(mTotalTimeInMs);
-
-            if (mNewTotalTimeInMs != newTotalTimeMs) {
-                mNewTotalTimeInMs = newTotalTimeMs;
-                onSetDurationLabel(newTotalTimeMs);
-            }
+        void onPlay(boolean play) {
+            mIsPlaying = play;
         }
 
+        void updateTotalTime() {
+            onSetDurationLabel(mTotalTimeInMs);
+        }
+
+        /**
+         * Correct time with respect of speed
+         */
         long applySpeedCorrection(long timeMs) {
             timeMs = (long) (timeMs / mPlayerData.getSpeed());
 
@@ -833,8 +859,10 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
 
         mPlaybackControlsPresenter = new ControlBarPresenter(com.liskovsoft.smartyoutubetv2.tv.R.layout.lb_control_bar);
         mPlaybackControlsPresenter.setDefaultFocusToMiddle(false);
+        mPlaybackControlsPresenter.setFocusRecovery(true);
         mSecondaryControlsPresenter = new ControlBarPresenter(com.liskovsoft.smartyoutubetv2.tv.R.layout.lb_control_bar);
         mSecondaryControlsPresenter.setDefaultFocusToMiddle(false);
+        mSecondaryControlsPresenter.setFocusRecovery(true);
 
         mPlaybackControlsPresenter.setOnControlSelectedListener(mOnControlSelectedListener);
         mSecondaryControlsPresenter.setOnControlSelectedListener(mOnControlSelectedListener);
@@ -908,6 +936,10 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
             vh.setControlsMode(ViewHolder.CONTROLS_MODE_FULL);
             vh.mProgressBar.requestFocus();
         }
+
+        // MOD: reset player focus
+        //vh.mControlsVh.mControlBar.resetFocus();
+        //vh.mSecondaryControlsVh.mControlBar.resetFocus();
     }
 
     private static int getDefaultProgressColor(Context context) {

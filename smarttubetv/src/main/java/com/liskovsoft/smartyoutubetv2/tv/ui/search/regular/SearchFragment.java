@@ -32,7 +32,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
-import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemViewPressedListener;
+import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
@@ -117,8 +117,7 @@ public class SearchFragment extends SearchSupportFragment
     private void setupEventListeners() {
         setOnItemViewClickedListener(new ItemViewClickedListener());
         setOnItemViewSelectedListener(new ItemViewSelectedListener());
-        mCardPresenter.setOnItemViewLongPressedListener(new ItemViewLongClickedListener());
-        mCardPresenter.setOnItemViewMenuPressedListener(new ItemViewLongClickedListener());
+        mCardPresenter.setOnItemViewLongPressedListener(new ItemViewLongPressedListener());
     }
 
     @Override
@@ -210,9 +209,9 @@ public class SearchFragment extends SearchSupportFragment
         }
     }
 
-    private final class ItemViewLongClickedListener implements OnItemViewPressedListener {
+    private final class ItemViewLongPressedListener implements OnItemLongPressedListener {
         @Override
-        public void onItemPressed(Presenter.ViewHolder itemViewHolder, Object item) {
+        public void onItemLongPressed(Presenter.ViewHolder itemViewHolder, Object item) {
 
             if (item instanceof Video) {
                 mSearchPresenter.onVideoItemLongClicked((Video) item);
