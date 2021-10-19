@@ -80,6 +80,7 @@ public class MotherActivity extends FragmentActivity {
     public void finishReally() {
         try {
             super.finish();
+            System.exit(0);
         } catch (Exception e) {
             // TextView not attached to window manager (IllegalArgumentException)
         }
