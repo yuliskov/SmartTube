@@ -107,7 +107,7 @@ You can adjust the playback speed pressing the speed-indicator icon (gauge) in t
 
 ### Voice Search
 
-To enable voice search, an additional app must be installed alongside SmartTubeNext. This _bridge app_ can intercept the System's attempts to open the original YouTube app and open SmartTubeNext instead. For this to work, you must uninstall the original YouTube app. We know this sucks, but you can always reinstall it if you change your mind.
+To enable global voice search, an additional app must be installed alongside SmartTubeNext. This _bridge app_ can intercept the System's attempts to open the original YouTube app and open SmartTubeNext instead. For this to work, you must uninstall the original YouTube app. We know this sucks, but you can always reinstall it if you change your mind. The _bridge app_ will not show up in your launcher and you do cannot to launch it directly; it is only used internally by the system's voice search. On some devices, you need to explicitly say "Youtube" when searching (e.g. say "youtube cute cats" instead of just "cute cats").
 
 **On Amazon Fire TV**, to enable voice search support you need to: 
 
