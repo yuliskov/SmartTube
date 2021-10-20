@@ -80,10 +80,10 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
 
         mSettingsPresenter.clear();
 
-        appendReturnToBackgroundVideoButton();
+//        appendReturnToBackgroundVideoButton();
         appendRefreshButton();
-        appendUnpinFromSidebarButton();
-        appendUnpinSectionFromSidebarButton();
+//        appendUnpinFromSidebarButton();
+//        appendUnpinSectionFromSidebarButton();
         appendAccountSelectionButton();
 
         if (!mSettingsPresenter.isEmpty()) {
@@ -99,10 +99,10 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
 
         mSettingsPresenter.clear();
 
-        appendReturnToBackgroundVideoButton();
+//        appendReturnToBackgroundVideoButton();
         appendRefreshButton();
-        appendUnpinFromSidebarButton();
-        appendUnpinSectionFromSidebarButton();
+//        appendUnpinFromSidebarButton();
+//        appendUnpinSectionFromSidebarButton();
         appendAccountSelectionButton();
 
         if (mSettingsPresenter.isEmpty()) {
