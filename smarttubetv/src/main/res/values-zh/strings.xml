@@ -129,8 +129,13 @@
 	<string name="require_checked">需要 \"%s\"</string>
 	<string name="msg_press_again_to_exit">再按一次离开</string>
 	<string name="player_remaining_time">剩余：%s</string>
+	<string name="player_ending_time">结束于 %s</string>
 	<string name="badge_new_content">新的内容</string>
 	<string name="badge_live">LIVE</string>
 	<string name="action_pip">开始画中画</string>
+	<string name="action_screen_off">屏幕关闭</string>
+	<string name="action_playback_queue">显示播放队列</string>
 	<string name="add_device_view_description">要链接该设备，请在「设置」→「在电视上观看」输入此代码</string>
+	<string name="playback_controls_repeat_pause">暂停重复</string>
+	<string name="playback_controls_repeat_list">重复列表</string>
 </resources>
