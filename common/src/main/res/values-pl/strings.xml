@@ -248,4 +248,13 @@
     <string name="sponsor_color_markers">Kolorowe znaczniki paska postępu</string>
     <string name="refresh_section">Odśwież sekcję</string>
     <string name="option_disabled">Wyłączone</string>
+    <string name="live_now_row_name">Teraz na żywo</string>
+    <string name="run_in_background">Uruchom w tle</string>
+    <string name="settings_remote_control">Zdalne sterowanie</string>
+    <string name="background_service_started">Usługa w tle została uruchomiona</string>
+    <string name="dialog_add_to">Dodaj do %s</string>
+    <string name="dialog_remove_from">Usuń z %s</string>
+    <string name="added_to">Dodano do %s</string>
+    <string name="removed_from">Usunięto z %s</string>
+    <string name="video_preset_adaptive">Adaptacyjny</string>
 </resources>
