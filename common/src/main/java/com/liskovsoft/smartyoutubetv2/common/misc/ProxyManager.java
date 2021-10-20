@@ -207,6 +207,12 @@ public class ProxyManager {
 
         try {
             String proxyUriString = FileHelpers.getFileContents(getConfigFilePath());
+
+            if (proxyUriString == null) {
+                MessageHelpers.showLongMessage(mContext, "Oops. Can't find proxy config file. Exiting...");
+                return;
+            }
+
             Log.d(TAG, "Reading Web Proxy URI from external storage: \""
                     + proxyUriString + "\"; " + mEnabled);
             if (proxyUriString.isEmpty() || proxyUriString.equalsIgnoreCase(Proxy.Type.DIRECT.name())) {
