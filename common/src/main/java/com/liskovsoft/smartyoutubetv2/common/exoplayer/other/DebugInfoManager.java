@@ -320,7 +320,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         String bootResolution = AppPrefs.instance(mContext).getBootResolution();
         String currentResolution = UhdHelper.toResolution(currentMode);
 
-        mDisplayModeId.add(new Pair<>("Current/UI Resolution", currentResolution != null ? currentResolution : NOT_AVAILABLE));
+        mDisplayModeId.add(new Pair<>("UI Resolution", currentResolution != null ? currentResolution : NOT_AVAILABLE));
         mDisplayModeId.add(new Pair<>("Boot Resolution", bootResolution != null ? bootResolution : NOT_AVAILABLE));
 
         mDisplayModeId.add(new Pair<>("Display Mode ID", currentMode != null ? String.valueOf(currentMode.getModeId()) : NOT_AVAILABLE));
