@@ -128,6 +128,7 @@
     <string name="playlists_style_rows">Řady</string>
     <string name="player_show_clock">Zobraz hodiny</string>
     <string name="player_show_remaining_time">Ukaž zbývající čas</string>
+	<string name="player_show_ending_time">Ukaž čas ukončení</string>
     <string name="open_channel_uploads">Otevřít videa kanálu</string>
     <string name="app_exit_shortcut">Ukončit aplikaci</string>
     <string name="app_exit_none">Neukončovat</string>
@@ -208,6 +209,7 @@
     <string name="player_tweaks">Vývojářské možnosti</string>
     <string name="header_uploads">Nahraná videa</string>
     <string name="player_show_global_clock">Zobrazit hodiny v horní části videa</string>
+	<string name="player_show_global_ending_time">Trvale zobrazit čas ukončení na obrazovce</string>
     <string name="uploads_old_look">Vrátit zpět starý vzhled sekce Nahraná videa</string>
     <string name="background_playback_activation">Přehrávání na pozadí (aktivace)</string>
     <string name="channels_old_look">Vrátit zpět starý vzhled sekce Kanály</string>
@@ -215,7 +217,8 @@
     <string name="return_to_background_video">Zpět na video běžící na pozadí</string>
     <string name="pin_unpin_from_sidebar">Připnout/Odepnout k postrannímu panelu</string>
     <string name="pinned_to_sidebar">Připnout na postranní panel</string>
-    <string name="unpinned_from_sidebar">Odepnout z postranního panelu</string>
+    <string name="unpin_from_sidebar">Odepnout z postranního panelu</string>
+    <string name="unpinned_from_sidebar">Odepnuto z postranního panelu</string>
     <string name="dialog_select_country">Země</string>
     <string name="settings_language_country">Jazyk/Země</string>
     <string name="share_embed_link">Sdílet vložený odkaz</string>
@@ -240,4 +243,18 @@
     <string name="app_backup">Zálohovat data</string>
     <string name="app_restore">Obnovit data ze zálohy</string>
     <string name="skip_each_segment_once">Znovu nepřeskakovat segmenty</string>
+    <string name="disable_ok_long_press">Deaktivovat dlouhé stisknutí tlačítka OK</string>
+    <string name="player_time_correction">Zobrazit čas s ohledem na rychlost</string>
+    <string name="sponsor_color_markers">Barevné značky na ukazateli průběhu</string>
+    <string name="refresh_section">Aktualizovat sekci</string>
+    <string name="option_disabled">Zakázáno</string>
+    <string name="live_now_row_name">Nyní živě</string>
+    <string name="run_in_background">Běžet na pozadí</string>
+    <string name="settings_remote_control">Dálkové ovládání</string>
+    <string name="background_service_started">Služba na pozadí spuštěna</string>
+    <string name="dialog_add_to">Přidat do %s</string>
+    <string name="dialog_remove_from">Odebrat z %s</string>
+    <string name="added_to">Přidáno do %s</string>
+    <string name="removed_from">Odebráno z %s</string>
+    <string name="video_preset_adaptive">Adaptivní</string>
 </resources>
