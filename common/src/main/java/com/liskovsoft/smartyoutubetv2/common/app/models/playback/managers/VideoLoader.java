@@ -2,8 +2,6 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.Toast;
-
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
@@ -20,7 +18,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -355,16 +352,16 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::processFormatInfo,
-                           error -> {
-                               Log.e(TAG, "loadFormatInfo error: %s", error.getMessage());
-                               scheduleReloadVideoTimer(1_000);
-                               if (!mIsWasVideoStartError) {
-                                   Analytics.sendVideoStartError(video.videoId,
-                                           video.title,
-                                           error.getMessage());
-                                   mIsWasVideoStartError = true;
-                               }
-                           });
+                        error -> {
+                            Log.e(TAG, "loadFormatInfo error: %s", error.getMessage());
+                            scheduleReloadVideoTimer(1_000);
+                            if (!mIsWasVideoStartError) {
+                                Analytics.sendVideoStartError(video.videoId,
+                                        video.title,
+                                        error.getMessage());
+                                mIsWasVideoStartError = true;
+                            }
+                        });
     }
 
     private void processFormatInfo(MediaItemFormatInfo formatInfo) {
@@ -475,7 +472,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
     private String getErrorMessage(int type) {
         Integer resId = mErrorMap.get(type);
-        
+
         return resId == null ? getActivity().getString(R.string.msg_player_error, type) : resId > 0 ? getActivity().getString(resId) : null;
     }
 }
