@@ -49,7 +49,7 @@ public class RemoteControlService extends Service {
     private Notification createNotification() {
         return Utils.createNotification(
                 getApplicationContext(),
-                R.drawable.generic_channels,
+                getApplicationInfo().icon,
                 R.string.background_service_started,
                 ViewManager.instance(getApplicationContext()).getRootActivity());
     }
