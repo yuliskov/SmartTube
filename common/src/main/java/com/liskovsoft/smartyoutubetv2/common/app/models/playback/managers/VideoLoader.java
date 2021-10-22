@@ -88,7 +88,9 @@ public class VideoLoader extends PlayerEventListenerHelper {
             mSkipAdd = false;
         }
 
-        Analytics.sendVideoStarting(item.videoId, item.title);
+        if (item != null) {
+            Analytics.sendVideoStarting(item.videoId, item.title);
+        }
 
         if (getController() != null && getController().isEngineInitialized()) { // player is initialized
             if (!item.equals(mLastVideo)) {
@@ -115,7 +117,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     public void onEngineError(int type) {
         Log.e(TAG, "Player error occurred: %s. Trying to fix…", type);
 
-        if (!mIsWasVideoStartError) {
+        if (!mIsWasVideoStartError && mLastVideo != null) {
             Analytics.sendVideoStartError(mLastVideo.videoId,
                     mLastVideo.title,
                     getErrorMessage(type));
@@ -142,7 +144,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
     public void onPlay() {
         //MessageHelpers.showMessage(getActivity(), "Start playing!");
 
-        if (!mIsWasStarted) {
+        if (!mIsWasStarted && mLastVideo != null) {
             Analytics.sendVideoStarted(mLastVideo.videoId, mLastVideo.title);
             mIsWasStarted = true;
         }
@@ -370,7 +372,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
 
         if (formatInfo.isUnplayable() || formatInfo.isAgeRestricted()) {
             getController().showError(formatInfo.getPlayabilityStatus());
-            if (!mIsWasVideoStartError) {
+            if (!mIsWasVideoStartError && mLastVideo != null) {
                 Analytics.sendVideoStartError(mLastVideo.videoId,
                         mLastVideo.title,
                         formatInfo.getPlayabilityStatus());
@@ -408,7 +410,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
             Log.d(TAG, "Empty format info received. Seems future live translation. No video data to pass to the player.");
             scheduleReloadVideoTimer(30 * 1_000);
             mSuggestionsLoader.loadSuggestions(mLastVideo);
-            if (!mIsWasVideoStartError) {
+            if (!mIsWasVideoStartError && mLastVideo != null) {
                 Analytics.sendVideoStartError(mLastVideo.videoId,
                         mLastVideo.title,
                         formatInfo.getPlayabilityStatus());
