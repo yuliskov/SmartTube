@@ -19,7 +19,7 @@
     <string name="title_video_formats">Format video</string>
     <string name="title_audio_formats">Format audio</string>
     <string name="subtitle_category_title">Subtitle</string>
-    <string name="playback_queue_category_title">Antrian pemutarane</string>																	
+    <string name="playback_queue_category_title">Antrian pemutaran</string>																	
     <string name="video_max_quality">Otomatis (kualitas maks)</string>
     <string name="audio_max_quality">Otomatis (kualitas maks)</string>
     <string name="subtitles_disabled">Subtitel dinonaktifkan</string>
@@ -27,7 +27,7 @@
     <string name="frame_rate_correction">Perbaiki fps:\n%s</string>
     <string name="category_background_playback">Pemutaran latar belakang</string>
     <string name="not_implemented">Tidak diimplementasikan</string>
-    <string name="option_background_playback_off">Dengan disabilitas</string>
+    <string name="option_background_playback_off">Dimatikan</string>
     <string name="option_background_playback_pip">Gambar di dalam gambar</string>
     <string name="option_background_playback_only_audio">Hanya audio</string>
     <string name="playback_settings">Pengaturan pemutaran</string>
@@ -35,9 +35,9 @@
     <string name="resolution_switch">Ganti resolusi</string>
     <string name="video_buffer">Buffer video</string>
     <string name="video_buffer_size_low">Rendah</string>
-    <string name="video_buffer_size_med">Medium</string>
+    <string name="video_buffer_size_med">Sedang</string>
     <string name="video_buffer_size_high">Tinggi</string>
-    <string name="update_changelog">Changelog</string>
+    <string name="update_changelog">Catatan perubahan</string>
     <string name="install_update">Memasang pembaharuan</string>
     <string name="section_is_empty">Ups! Tidak ada apa-apa di sini.</string>
     <string name="dialog_add_to_playlist">Tambahkan ke Daftar Putar</string>
@@ -140,11 +140,11 @@
     <string name="video_zoom_default">Bawaan</string>
     <string name="video_zoom_fit_width">Sesuaikan lebar</string>
     <string name="video_zoom_fit_height">Tinggi pas</string>
-    <string name="video_zoom_fit_both">Cocokkan lebar atau tinggi</string>
+    <string name="video_zoom_fit_both">Sesuai dengan lebar atau tinggi</string>
     <string name="video_zoom_stretch">Meregang</string>
     <string name="color_scheme_teal">Hijau Kebiruan</string>
     <string name="color_scheme_teal_oled">Hijau Kebiruan (OLED)</string>
-    <string name="player_seek_preview_none">Dengan disabilitas</string>
+    <string name="player_seek_preview_none">Tanpa pratinjau</string>
     <string name="player_seek_preview_single">Bingkai tunggal</string>
     <string name="player_seek_preview_carousel">Karosel</string>
     <string name="player_seek_preview_carousel_slow">Karosel (lambat)</string>
@@ -186,7 +186,7 @@
     <string name="msg_skipping_segment">Melewati segmen \"%s\"…</string>
     <string name="content_block_notification_type">Jenis pemberitahuan</string>
     <string name="content_block_notify_none">Tanpa pemberitahuan</string>
-    <string name="content_block_notify_toast">Toast</string>
+    <string name="content_block_notify_toast">Pop Up</string>
     <string name="content_block_notify_dialog">Dialog konfirmasi</string>
     <string name="return_to_launcher">Kembali ke Launcher dari saluran/pencarian ATV</string>
     <string name="intent_force_close">Keluar paksa jika video telah dibuka dari sumber eksternal </string>
@@ -221,7 +221,7 @@
     <string name="unpin_from_sidebar">lepaskan pin dari bilah sisi</string>
     <string name="unpinned_from_sidebar">Lepas pin dari bilah sisi</string
     <string name="dialog_select_country">Negara</string>
-    <string name="settings_language_country">Bahasa/Country</string>
+    <string name="settings_language_country">Bahasa/Negara</string>
     <string name="share_embed_link">Bagikan tautan semat</string>
     <string name="card_text_scroll_factor">Kecepatan gulir teks kartu</string>
     <string name="preferred_update_source">Pilih sumber pembaruan</string>
@@ -231,8 +231,8 @@
     <string name="removed_from_playback_queue">Dihapus dari antrean pemutaran</string>
     <string name="added_to_playback_queue">Ditambahkan ke antrian pemutaran</string>
     <string name="add_remove_from_playback_queue">Tambah/Hapus dari antrian pemutaran</string>
-    <string name="proxy_enabled">Proksi diaktifkan</string>
-    <string name="proxy_disabled">Proksi dinonaktifkan</string>
+    <string name="proxy_enabled">Proxy diaktifkan</string>
+    <string name="proxy_disabled">Proxy dinonaktifkan</string>
     <string name="uploads_row_name">Unggah</string>
     <string name="playlists_row_name">Daftar putar yang dibuat</string>
     <string name="popular_uploads_row_name">Unggahan populer</string>
