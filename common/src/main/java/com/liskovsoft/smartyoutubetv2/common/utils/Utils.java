@@ -339,21 +339,21 @@ public class Utils {
         notificationManager.cancel(notificationId);
     }
 
-    public static Notification createNotification(Context context, int iconResId, int titleResId, Class<? extends Activity> activityCls) {
-        return createNotification(context, iconResId, titleResId, -1, activityCls);
+    public static Notification createNotification(Context context, int iconResId, String title, Class<? extends Activity> activityCls) {
+        return createNotification(context, iconResId, title, null, activityCls);
     }
 
     @SuppressWarnings("deprecation")
-    public static Notification createNotification(Context context, int iconResId, int titleResId, int contentResId, Class<? extends Activity> activityCls) {
+    public static Notification createNotification(Context context, int iconResId, String title, String content, Class<? extends Activity> activityCls) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(iconResId)
-                        .setContentTitle(context.getString(titleResId));
+                        .setContentTitle(title);
 
-        if (contentResId > 0) {
-            builder.setContentText(context.getString(contentResId));
+        if (content != null) {
+            builder.setContentText(content);
         }
 
         Intent targetIntent = new Intent(context, activityCls);
@@ -364,7 +364,7 @@ public class Utils {
             String channelId = context.getPackageName();
             NotificationChannel channel = new NotificationChannel(
                     channelId,
-                    context.getString(titleResId),
+                    title,
                     NotificationManager.IMPORTANCE_HIGH);
             notificationManager.createNotificationChannel(channel);
             builder.setChannelId(channelId);
