@@ -139,7 +139,7 @@ public class IntentExtractor {
     }
 
     private static boolean isEmptyIntent(Intent intent) {
-        return intent == null || extractUri(intent) == null || !Intent.ACTION_VIEW.equals(intent.getAction());
+        return intent == null || (!Intent.ACTION_VIEW.equals(intent.getAction()) && !Intent.ACTION_SEND.equals(intent.getAction())) || extractUri(intent) == null;
     }
 
     private static Uri extractUri(Intent intent) {
