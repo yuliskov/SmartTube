@@ -1027,6 +1027,10 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             showControlsOverlay(mIsAnimationEnabled);
         } else {
             hideControlsOverlay(mIsAnimationEnabled);
+
+            if (!mExoPlayerController.containsMedia()) {
+                finish();
+            }
         }
     }
 
