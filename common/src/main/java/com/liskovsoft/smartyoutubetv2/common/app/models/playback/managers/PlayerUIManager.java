@@ -375,6 +375,10 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     private boolean handleBackKey(int keyCode) {
         if (KeyHelpers.isBackKey(keyCode)) {
             enableSuggestionsResetTimeout();
+
+            if (!getController().containsMedia()) {
+                getController().finish();
+            }
         }
 
         return false;
