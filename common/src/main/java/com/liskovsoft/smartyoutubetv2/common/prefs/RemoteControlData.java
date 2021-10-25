@@ -50,8 +50,8 @@ public class RemoteControlData extends DataChangeBase {
 
         String[] split = Helpers.splitObjectLegacy(data);
 
-        mIsDeviceLinkEnabled = Helpers.parseBoolean(split, 1, true);
-        mIsRunInBackgroundEnabled = Helpers.parseBoolean(split, 2, true);
+        mIsDeviceLinkEnabled = false;
+        mIsRunInBackgroundEnabled = false;
     }
 
     protected void persistState() {

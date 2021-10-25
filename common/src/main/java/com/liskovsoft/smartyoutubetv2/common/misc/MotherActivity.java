@@ -80,7 +80,6 @@ public class MotherActivity extends FragmentActivity {
     public void finishReally() {
         try {
             super.finish();
-            System.exit(0);
         } catch (Exception e) {
             // TextView not attached to window manager (IllegalArgumentException)
         }
@@ -96,7 +95,7 @@ public class MotherActivity extends FragmentActivity {
             boolean singlePipActivity = sNumActivities == 1 && sIsInPipMode;
             if (noActivities || singlePipActivity) {
                 // Don't destroy the app. Let remote functions continue to work in background.
-                ViewManager.instance(this).forceFinishTheApp(false);
+                ViewManager.instance(this).forceFinishTheApp(true);
             }
         }
     }
