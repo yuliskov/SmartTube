@@ -185,9 +185,9 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableFrameDropFix(option.isSelected()),
                 mPlayerTweaksData.isFrameDropFixEnabled()));
 
-        options.add(UiOptionItem.from("Finish activity workaround",
-                option -> mPlayerTweaksData.enableFinishActivityWorkaround(option.isSelected()),
-                mPlayerTweaksData.isFinishActivityWorkaroundEnabled()));
+        options.add(UiOptionItem.from("Activity crash workaround",
+                option -> mPlayerTweaksData.enableActivityCrashWorkaround(option.isSelected()),
+                mPlayerTweaksData.isActivityCrashWorkaroundEnabled()));
 
         // Need to be enabled on older version of ExoPlayer (e.g. 2.10.6).
         // It's because there's no tweaks for modern devices.
