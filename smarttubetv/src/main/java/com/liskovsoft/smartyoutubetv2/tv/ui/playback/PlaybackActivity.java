@@ -166,9 +166,13 @@ public class PlaybackActivity extends LeanbackActivity {
             // Ensure to opening this activity when the user is returning to the app
             mViewManager.blockTop(this);
             mViewManager.startParentView(this);
-        } else if (!mPlayerTweaksData.isActivityFinishWorkaroundEnabled()) {
-            mPlaybackFragment.onFinish();
-            super.finish();
+        } else {
+            if (mPlayerTweaksData.isActivityFinishWorkaroundEnabled()) {
+                moveTaskToBack(true);
+            } else {
+                mPlaybackFragment.onFinish();
+                super.finish();
+            }
         }
     }
 
