@@ -17,7 +17,7 @@ public class PlayerTweaksData {
     private boolean mIsTextureViewEnabled;
     private boolean mIsSetOutputSurfaceWorkaroundEnabled;
     private boolean mIsAudioSyncFixEnabled;
-    private boolean mIsActivityCrashWorkaroundEnabled;
+    private boolean mIsActivityFinishWorkaroundEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -111,15 +111,15 @@ public class PlayerTweaksData {
     /**
      * Fix crashes on chinese projectors
      */
-    public boolean isActivityCrashWorkaroundEnabled() {
-        return mIsActivityCrashWorkaroundEnabled;
+    public boolean isActivityFinishWorkaroundEnabled() {
+        return mIsActivityFinishWorkaroundEnabled;
     }
 
     /**
      * Fix crashes on chinese projectors
      */
-    public void enableActivityCrashWorkaround(boolean enable) {
-        mIsActivityCrashWorkaroundEnabled = enable;
+    public void enableActivityFinishWorkaround(boolean enable) {
+        mIsActivityFinishWorkaroundEnabled = enable;
         persistData();
     }
 
@@ -138,14 +138,14 @@ public class PlayerTweaksData {
         // It's because there's no tweaks for modern devices.
         mIsSetOutputSurfaceWorkaroundEnabled = Helpers.parseBoolean(split, 7, true);
         mIsAudioSyncFixEnabled = Helpers.parseBoolean(split, 8, false);
-        mIsActivityCrashWorkaroundEnabled = Helpers.parseBoolean(split, 9, false);
+        mIsActivityFinishWorkaroundEnabled = Helpers.parseBoolean(split, 9, false);
     }
 
     private void persistData() {
         mPrefs.setData(VIDEO_PLAYER_TWEAKS_DATA, Helpers.mergeObject(
                 mIsAmlogicFixEnabled, mIsFrameDropFixEnabled, mIsSnapToVsyncDisabled,
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
-                null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsActivityCrashWorkaroundEnabled
+                null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsActivityFinishWorkaroundEnabled
         ));
     }
 }
