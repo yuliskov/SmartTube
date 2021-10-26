@@ -17,6 +17,7 @@ public class PlayerTweaksData {
     private boolean mIsTextureViewEnabled;
     private boolean mIsSetOutputSurfaceWorkaroundEnabled;
     private boolean mIsAudioSyncFixEnabled;
+    private boolean mIsFinishActivityWorkaroundEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -107,6 +108,21 @@ public class PlayerTweaksData {
         return mIsAudioSyncFixEnabled;
     }
 
+    /**
+     * Fix crashes on chinese projectors
+     */
+    public boolean isFinishActivityWorkaroundEnabled() {
+        return mIsFinishActivityWorkaroundEnabled;
+    }
+
+    /**
+     * Fix crashes on chinese projectors
+     */
+    public void enableFinishActivityWorkaround(boolean enable) {
+        mIsFinishActivityWorkaroundEnabled = enable;
+        persistData();
+    }
+
     private void restoreData() {
         String data = mPrefs.getData(VIDEO_PLAYER_TWEAKS_DATA);
 
@@ -122,13 +138,14 @@ public class PlayerTweaksData {
         // It's because there's no tweaks for modern devices.
         mIsSetOutputSurfaceWorkaroundEnabled = Helpers.parseBoolean(split, 7, true);
         mIsAudioSyncFixEnabled = Helpers.parseBoolean(split, 8, false);
+        mIsFinishActivityWorkaroundEnabled = Helpers.parseBoolean(split, 9, false);
     }
 
     private void persistData() {
         mPrefs.setData(VIDEO_PLAYER_TWEAKS_DATA, Helpers.mergeObject(
                 mIsAmlogicFixEnabled, mIsFrameDropFixEnabled, mIsSnapToVsyncDisabled,
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
-                null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled
+                null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsFinishActivityWorkaroundEnabled
         ));
     }
 }

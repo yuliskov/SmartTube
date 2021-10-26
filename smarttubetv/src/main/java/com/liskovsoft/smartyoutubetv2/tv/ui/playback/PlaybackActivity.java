@@ -13,6 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 
@@ -33,6 +34,7 @@ public class PlaybackActivity extends LeanbackActivity {
     private long mFinishCalledMs;
     private ViewManager mViewManager;
     private GeneralData mGeneralData;
+    private PlayerTweaksData mPlayerTweaksData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class PlaybackActivity extends LeanbackActivity {
         }
         mViewManager = ViewManager.instance(this);
         mGeneralData = GeneralData.instance(this);
+        mPlayerTweaksData = PlayerTweaksData.instance(this);
     }
 
     @Override
@@ -163,7 +166,7 @@ public class PlaybackActivity extends LeanbackActivity {
             // Ensure to opening this activity when the user is returning to the app
             mViewManager.blockTop(this);
             mViewManager.startParentView(this);
-        } else {
+        } else if (!mPlayerTweaksData.isFinishActivityWorkaroundEnabled()) {
             mPlaybackFragment.onFinish();
             super.finish();
         }
