@@ -129,7 +129,7 @@ public class ScreensaverManager {
             return;
         }
         
-        if (show && (isPlaying() || isSigning())) {
+        if (show && (isPlaying() || isSigning() || mGeneralData.getScreenDimmingTimeoutMin() == GeneralData.SCREEN_DIMMING_NEVER)) {
             Helpers.disableScreensaver(activity);
             return;
         }
