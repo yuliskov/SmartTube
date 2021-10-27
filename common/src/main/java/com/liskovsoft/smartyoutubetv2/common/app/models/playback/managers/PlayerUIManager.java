@@ -211,11 +211,31 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         VideoMenuPresenter.instance(getActivity()).showMenu(item);
     }
 
-    private void showBriefInfo(boolean subscribed) {
+    private void showSubscribeInfo(boolean subscribed) {
         if (subscribed) {
             MessageHelpers.showMessage(getActivity(), R.string.subscribed_to_channel);
         } else {
             MessageHelpers.showMessage(getActivity(), R.string.unsubscribed_from_channel);
+        }
+    }
+
+    private void showRepeatInfo(int modeIndex) {
+        switch (modeIndex) {
+            case PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL:
+                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_all);
+                break;
+            case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
+                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_one);
+                break;
+            case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
+                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_pause);
+                break;
+            case PlaybackEngineController.PLAYBACK_MODE_LIST:
+                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_pause_alt);
+                break;
+            case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
+                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_none);
+                break;
         }
     }
 
@@ -233,7 +253,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
             callMediaItemObservable(mMediaItemManager::unsubscribeObserve);
         }
 
-        showBriefInfo(subscribed);
+        showSubscribeInfo(subscribed);
     }
 
     @Override
@@ -313,6 +333,12 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         if (getActivity() instanceof MotherActivity) {
             ((MotherActivity) getActivity()).getScreensaverManager().doScreenOff();
         }
+    }
+
+    @Override
+    public void onRepeatModeClicked(int modeIndex) {
+        mPlayerData.setPlaybackMode(modeIndex);
+        showRepeatInfo(modeIndex);
     }
 
     private void intSpeedItems(AppDialogPresenter settingsPresenter, List<OptionItem> items, float[] speedValues) {

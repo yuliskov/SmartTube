@@ -250,12 +250,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onRepeatModeClicked(int modeIndex) {
-        mPlayerData.setPlaybackMode(modeIndex);
-        showBriefInfo(modeIndex);
-    }
-
-    @Override
     public boolean onKeyDown(int keyCode) {
         mSleepTimerStartMs = System.currentTimeMillis();
 
@@ -271,26 +265,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
         }
 
         return playbackMode;
-    }
-
-    private void showBriefInfo(int modeIndex) {
-        switch (modeIndex) {
-            case PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL:
-                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_all);
-                break;
-            case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
-                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_one);
-                break;
-            case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
-                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_pause);
-                break;
-            case PlaybackEngineController.PLAYBACK_MODE_LIST:
-                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_pause_alt);
-                break;
-            case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
-                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_none);
-                break;
-        }
     }
 
     private void loadVideo(Video item) {
