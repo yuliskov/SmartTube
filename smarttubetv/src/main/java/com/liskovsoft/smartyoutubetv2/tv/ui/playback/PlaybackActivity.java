@@ -167,7 +167,7 @@ public class PlaybackActivity extends LeanbackActivity {
             mViewManager.blockTop(this);
             mViewManager.startParentView(this);
         } else {
-            if (mPlayerTweaksData.isActivityFinishWorkaroundEnabled()) {
+            if (mPlayerTweaksData.isKeepFinishedActivityEnabled()) {
                 moveTaskToBack(true);
             } else {
                 mPlaybackFragment.onFinish();

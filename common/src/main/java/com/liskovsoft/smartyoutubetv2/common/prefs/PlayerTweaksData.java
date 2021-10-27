@@ -17,7 +17,7 @@ public class PlayerTweaksData {
     private boolean mIsTextureViewEnabled;
     private boolean mIsSetOutputSurfaceWorkaroundEnabled;
     private boolean mIsAudioSyncFixEnabled;
-    private boolean mIsActivityFinishWorkaroundEnabled;
+    private boolean mIsKeepFinishedActivityEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -111,15 +111,15 @@ public class PlayerTweaksData {
     /**
      * Fix crashes on chinese projectors
      */
-    public boolean isActivityFinishWorkaroundEnabled() {
-        return mIsActivityFinishWorkaroundEnabled;
+    public boolean isKeepFinishedActivityEnabled() {
+        return mIsKeepFinishedActivityEnabled;
     }
 
     /**
      * Fix crashes on chinese projectors
      */
-    public void enableActivityFinishWorkaround(boolean enable) {
-        mIsActivityFinishWorkaroundEnabled = enable;
+    public void enableKeepFinishedActivity(boolean enable) {
+        mIsKeepFinishedActivityEnabled = enable;
         persistData();
     }
 
@@ -138,14 +138,14 @@ public class PlayerTweaksData {
         // It's because there's no tweaks for modern devices.
         mIsSetOutputSurfaceWorkaroundEnabled = Helpers.parseBoolean(split, 7, true);
         mIsAudioSyncFixEnabled = Helpers.parseBoolean(split, 8, false);
-        mIsActivityFinishWorkaroundEnabled = Helpers.parseBoolean(split, 9, false);
+        mIsKeepFinishedActivityEnabled = Helpers.parseBoolean(split, 9, false);
     }
 
     private void persistData() {
         mPrefs.setData(VIDEO_PLAYER_TWEAKS_DATA, Helpers.mergeObject(
                 mIsAmlogicFixEnabled, mIsFrameDropFixEnabled, mIsSnapToVsyncDisabled,
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
-                null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsActivityFinishWorkaroundEnabled
+                null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled
         ));
     }
 }
