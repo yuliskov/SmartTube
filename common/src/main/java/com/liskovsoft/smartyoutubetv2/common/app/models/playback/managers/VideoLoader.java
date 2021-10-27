@@ -178,6 +178,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
             case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
                 getController().setPositionMs(0);
                 getController().setPlay(true);
+                Utils.showRepeatInfo(getActivity(), playbackMode);
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
                 // Close player
@@ -188,6 +189,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
                     onNextClicked();
                     getController().showControls(true);
                 }
+                Utils.showRepeatInfo(getActivity(), playbackMode);
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
                 // Stop player after each video.
@@ -196,6 +198,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
                     getController().showSuggestions(true);
                     getController().setPlay(false);
                     getController().setPositionMs(0);
+                    Utils.showRepeatInfo(getActivity(), playbackMode);
                 } else {
                     onNextClicked();
                     getController().showControls(true);
@@ -211,6 +214,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
                     getController().showSuggestions(true);
                     getController().setPlay(false);
                     getController().setPositionMs(0);
+                    Utils.showRepeatInfo(getActivity(), playbackMode);
                 }
                 break;
         }

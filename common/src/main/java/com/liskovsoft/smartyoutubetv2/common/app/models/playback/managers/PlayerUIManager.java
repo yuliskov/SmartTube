@@ -30,6 +30,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.Sub
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 
@@ -219,26 +220,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         }
     }
 
-    private void showRepeatInfo(int modeIndex) {
-        switch (modeIndex) {
-            case PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL:
-                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_all);
-                break;
-            case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
-                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_one);
-                break;
-            case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
-                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_pause);
-                break;
-            case PlaybackEngineController.PLAYBACK_MODE_LIST:
-                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_pause_alt);
-                break;
-            case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
-                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_none);
-                break;
-        }
-    }
-
     @Override
     public void onSubscribeClicked(boolean subscribed) {
         if (!mIsMetadataLoaded) {
@@ -338,7 +319,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onRepeatModeClicked(int modeIndex) {
         mPlayerData.setPlaybackMode(modeIndex);
-        showRepeatInfo(modeIndex);
+        Utils.showRepeatInfo(getActivity(), modeIndex);
     }
 
     private void intSpeedItems(AppDialogPresenter settingsPresenter, List<OptionItem> items, float[] speedValues) {

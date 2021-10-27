@@ -30,9 +30,11 @@ import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -405,5 +407,25 @@ public class Utils {
         Intent serviceIntent = new Intent(context, serviceCls);
 
         context.stopService(serviceIntent);
+    }
+
+    public static void showRepeatInfo(Context context, int modeIndex) {
+        switch (modeIndex) {
+            case PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL:
+                MessageHelpers.showMessage(context, R.string.repeat_mode_all);
+                break;
+            case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
+                MessageHelpers.showMessage(context, R.string.repeat_mode_one);
+                break;
+            case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
+                MessageHelpers.showMessage(context, R.string.repeat_mode_pause);
+                break;
+            case PlaybackEngineController.PLAYBACK_MODE_LIST:
+                MessageHelpers.showMessage(context, R.string.repeat_mode_pause_alt);
+                break;
+            case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
+                MessageHelpers.showMessage(context, R.string.repeat_mode_none);
+                break;
+        }
     }
 }
