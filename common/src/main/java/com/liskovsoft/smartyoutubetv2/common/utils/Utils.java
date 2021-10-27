@@ -164,6 +164,10 @@ public class Utils {
     }
 
     public static void updateRemoteControlService(Context context) {
+        if (context == null) {
+            return;
+        }
+
         if (RemoteControlData.instance(context).isRunInBackgroundEnabled()) {
             // Service that prevents the app from destroying
             startService(context, RemoteControlService.class);
