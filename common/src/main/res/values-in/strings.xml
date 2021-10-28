@@ -81,7 +81,7 @@
     <string name="update_in_progress">Harap tunggu sebentar…</string>
     <string name="player_ui_hide_behavior">Sembunyikan UI otomatis</string>
     <string name="option_never">Tidak pernah</string>
-    <string name="side_panel_sections">Bagian penyiapan</string>
+    <string name="side_panel_sections">Bagian bilah sisi</string>
     <string name="boot_to_section">Boot ke bagian</string>
     <string name="large_ui">UI besar</string>
     <string name="video_grid_scale">Skala kisi video</string>
@@ -101,7 +101,7 @@
     <string name="open_playlist">Buka daftar putar</string>												   
     <string name="not_interested">Tidak tertarik</string>
     <string name="you_wont_see_this_video">Video telah dihapus dari yang direkomendasikan</string>
-    <string name="settings_search">Cari</string>
+    <string name="settings_search">Pencarian</string>
     <string name="dialog_search">Cari</string>
     <string name="instant_voice_search">Pencarian suara instan</string>
     <string name="option_background_playback_behind">Mainkan di belakang</string>
@@ -208,7 +208,7 @@
     <string name="msg_player_error_unexpected">Kesalahan dekoder video tidak dikenal</string>
     <string name="video_aspect">Rasio aspek</string>
     <string name="player_tweaks">Opsi pengembang</string>
-    <string name="header_uploads">Unggah</string>
+    <string name="header_uploads">Unggahan</string>
     <string name="player_show_global_clock">Tampilkan jam di layar terus-menerus</string>
     <string name="player_show_global_ending_time">Tampilkan waktu akhir video di layar terus-menerus</string>
     <string name="uploads_old_look">Kembalikan tampilan lama bagian Unggahan</string>
@@ -228,12 +228,12 @@
     <string name="hide_shorts">Sembunyikan video pendek dari Langganan</string>
     <string name="key_remapping">Pemetaan ulang tombol</string>
     <string name="screen_dimming">Peredupan layar</string>
-    <string name="removed_from_playback_queue">Dihapus dari antrean pemutaran</string>
+    <string name="removed_from_playback_queue">Dihapus dari antrian pemutaran</string>
     <string name="added_to_playback_queue">Ditambahkan ke antrian pemutaran</string>
     <string name="add_remove_from_playback_queue">Tambah/Hapus dari antrian pemutaran</string>
     <string name="proxy_enabled">Proxy diaktifkan</string>
     <string name="proxy_disabled">Proxy dinonaktifkan</string>
-    <string name="uploads_row_name">Unggah</string>
+    <string name="uploads_row_name">Unggahan</string>
     <string name="playlists_row_name">Daftar putar yang dibuat</string>
     <string name="popular_uploads_row_name">Unggahan populer</string>
     <string name="breaking_news_row_name">Berita terbaru</string>
@@ -254,7 +254,7 @@
     <string name="settings_remote_control">Pengendali jarak jauh</string>
     <string name="background_service_started">Layanan latar belakang dimulai</string>
     <string name="dialog_add_to">Tambahkan ke %s</string>
-    <string name="dialog_remove_from">Remove from %s</string>
+    <string name="dialog_remove_from">Hapus dari %s</string>
     <string name="added_to">Ditambahkan ke %s</string>
     <string name="removed_from">Dihapus dari %s</string>
     <string name="video_preset_adaptive">Adaptif</string>	
