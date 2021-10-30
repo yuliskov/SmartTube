@@ -122,16 +122,14 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     }
 
     private void applyAfr() {
-        FormatItem videoFormat = getController().getVideoFormat();
-
         if (mPlayerData.isAfrEnabled()) {
+            FormatItem videoFormat = getController().getVideoFormat();
             applyAfr(videoFormat, false);
+            // Send data to AFR daemon
+            TvQuickActions.sendStartAFR(getActivity(), videoFormat);
         } else {
             restoreAfr();
         }
-
-        // Send data to AFR daemon
-        TvQuickActions.sendStartAFR(getActivity(), videoFormat.getHeight(), videoFormat.getFrameRate());
     }
 
     private void restoreAfr() {
@@ -141,13 +139,17 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         mModeSyncManager.save(null);
     }
 
-    private void applyAfr(FormatItem track, boolean force) {
-        if (track != null) {
+    private void applyAfr(FormatItem videoFormat, boolean force) {
+        if (videoFormat != null) {
             String msg = String.format("Applying afr... fps: %s, resolution: %sx%s, activity: %s",
-                    track.getFrameRate(), track.getWidth(), track.getHeight(), getActivity().getClass().getSimpleName());
+                    videoFormat.getFrameRate(),
+                    videoFormat.getWidth(),
+                    videoFormat.getHeight(),
+                    getActivity().getClass().getSimpleName()
+            );
             Log.d(TAG, msg);
 
-            mAutoFrameRateHelper.apply(getActivity(), track, force);
+            mAutoFrameRateHelper.apply(getActivity(), videoFormat, force);
         }
     }
 
