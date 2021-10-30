@@ -18,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolde
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncHelper.AutoFrameRateListener;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.UhdHelper;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.utils.TvQuickActions;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
@@ -121,11 +122,16 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     }
 
     private void applyAfr() {
+        FormatItem videoFormat = getController().getVideoFormat();
+
         if (mPlayerData.isAfrEnabled()) {
-            applyAfr(getController().getVideoFormat(), false);
+            applyAfr(videoFormat, false);
         } else {
             restoreAfr();
         }
+
+        // Send data to AFR daemon
+        TvQuickActions.sendStartAFR(getActivity(), videoFormat.getHeight(), videoFormat.getFrameRate());
     }
 
     private void restoreAfr() {
