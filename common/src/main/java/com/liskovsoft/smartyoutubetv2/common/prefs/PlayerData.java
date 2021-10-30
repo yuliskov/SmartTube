@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build;
 import com.google.android.exoplayer2.text.CaptionStyleCompat;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
@@ -379,7 +380,9 @@ public class PlayerData {
     }
 
     public FormatItem getDefaultAudioFormat() {
-        return FormatItem.AUDIO_HQ_MP4A;
+        String language = LocaleUtility.getCurrentLanguage(mPrefs.getContext());
+
+        return ExoFormatItem.fromAudioSpecs(String.format("%s,%s", "mp4a", language));
     }
 
     public FormatItem getDefaultVideoFormat() {

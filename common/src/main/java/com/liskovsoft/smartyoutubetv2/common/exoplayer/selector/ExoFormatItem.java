@@ -303,6 +303,23 @@ public class ExoFormatItem implements FormatItem {
         return formatItem;
     }
 
+    public static ExoFormatItem fromAudioSpecs(String spec) {
+        if (spec == null) {
+            return null;
+        }
+
+        String[] split = spec.split(",");
+
+        if (split.length != 2) {
+            return null;
+        }
+
+        String codec = Helpers.parseStr(split[0]);
+        String language = Helpers.parseStr(split[1]);
+
+        return from(TYPE_AUDIO, TrackSelectorManager.RENDERER_INDEX_AUDIO, null, codec, 0, 0, 0, language, false);
+    }
+
     public static FormatItem fromSubtitleParams(String langCode) {
         if (langCode != null) {
             // Only first part or lang code is accepted.
