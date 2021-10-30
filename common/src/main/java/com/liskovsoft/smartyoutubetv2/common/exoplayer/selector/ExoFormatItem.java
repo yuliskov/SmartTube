@@ -174,7 +174,7 @@ public class ExoFormatItem implements FormatItem {
             case TYPE_AUDIO:
                 // Fake format. It's used in app internal comparison routine.
                 mediaTrack.format = Format.createAudioSampleFormat(
-                        id, null, codecs, -1, -1,0, 0, null, null, 0, null);
+                        id, null, codecs, -1, -1,0, 0, null, null, 0, language);
                 break;
             case TYPE_SUBTITLE:
                 // Fake format. It's used in app internal comparison routine.
