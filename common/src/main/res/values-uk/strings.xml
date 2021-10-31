@@ -259,5 +259,5 @@
     <string name="removed_from">Видалено із %s</string>
     <string name="video_preset_adaptive">Адаптивний</string>
     <string name="content_block_preview_recap">Зміст попереднього епізоду</string>
-    <string name="content_block_highlight">Зміст відео</string>
+    <string name="content_block_highlight">Короткий зміст відео</string>
 </resources>
