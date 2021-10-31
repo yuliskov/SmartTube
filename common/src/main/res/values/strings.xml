@@ -258,4 +258,6 @@
     <string name="added_to">Added to %s</string>
     <string name="removed_from">Removed from %s</string>
     <string name="video_preset_adaptive">Adaptive</string>
+    <string name="content_block_preview_recap">Preview or recap of the video</string>
+    <string name="content_block_highlight">Point or highlight of the video</string>
 </resources>
