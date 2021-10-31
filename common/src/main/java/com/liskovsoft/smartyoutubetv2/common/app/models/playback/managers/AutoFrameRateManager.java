@@ -103,6 +103,11 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         restorePlayback();
     }
 
+    @Override
+    public void onFinish() {
+        TvQuickActions.sendStopAFR(getActivity());
+    }
+
     private void onFpsCorrectionClick() {
         mAutoFrameRateHelper.setFpsCorrectionEnabled(mPlayerData.isAfrFpsCorrectionEnabled());
     }
