@@ -108,6 +108,11 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         TvQuickActions.sendStopAFR(getActivity());
     }
 
+    @Override
+    public void onViewPaused() {
+        TvQuickActions.sendStopAFR(getActivity());
+    }
+
     private void onFpsCorrectionClick() {
         mAutoFrameRateHelper.setFpsCorrectionEnabled(mPlayerData.isAfrFpsCorrectionEnabled());
     }

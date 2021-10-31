@@ -189,7 +189,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
                     onNextClicked();
                     getController().showControls(true);
                 }
-                Utils.showRepeatInfo(getActivity(), playbackMode);
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
                 // Stop player after each video.
