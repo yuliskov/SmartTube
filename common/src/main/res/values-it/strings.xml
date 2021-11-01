@@ -258,4 +258,6 @@
     <string name="added_to">Aggiunto a %s</string>
     <string name="removed_from">Rimosso da %s</string>
     <string name="video_preset_adaptive">Adattivo</string>
+    <string name="content_block_preview_recap">Anteprima o riassunto del video</string>
+    <string name="content_block_highlight">Parti più importanti del video</string>
 </resources>
