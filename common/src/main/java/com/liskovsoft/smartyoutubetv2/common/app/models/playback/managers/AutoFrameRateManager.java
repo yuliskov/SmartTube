@@ -104,7 +104,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     }
 
     @Override
-    public void onEngineReleased() {
+    public void onFinish() {
         if (mPlayerData.isAfrEnabled()) {
             TvQuickActions.sendStopAFR(getActivity());
         }
@@ -132,7 +132,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         if (mPlayerData.isAfrEnabled()) {
             FormatItem videoFormat = getController().getVideoFormat();
             applyAfr(videoFormat, false);
-            // Send data to AFR daemon
+            // Send data to AFR daemon via tvQuickActions app
             TvQuickActions.sendStartAFR(getActivity(), videoFormat);
         } else {
             restoreAfr();
