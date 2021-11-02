@@ -77,8 +77,8 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_SELF_PROMO, ContextCompat.getColor(getActivity(), R.color.yellow));
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_INTERACTION, ContextCompat.getColor(getActivity(), R.color.magenta));
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC, ContextCompat.getColor(getActivity(), R.color.brown));
-        mSegmentColorMapping.put(SponsorSegment.CATEGORY_PREVIEW_RECAP, ContextCompat.getColor(getActivity(), R.color.white));
-        mSegmentColorMapping.put(SponsorSegment.CATEGORY_HIGHLIGHT, ContextCompat.getColor(getActivity(), R.color.red));
+        mSegmentColorMapping.put(SponsorSegment.CATEGORY_PREVIEW_RECAP, ContextCompat.getColor(getActivity(), R.color.light_blue));
+        mSegmentColorMapping.put(SponsorSegment.CATEGORY_HIGHLIGHT, ContextCompat.getColor(getActivity(), R.color.white));
     }
 
     @Override

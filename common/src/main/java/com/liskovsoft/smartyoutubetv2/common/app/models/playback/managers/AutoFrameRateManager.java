@@ -104,13 +104,10 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     }
 
     @Override
-    public void onFinish() {
-        TvQuickActions.sendStopAFR(getActivity());
-    }
-
-    @Override
-    public void onViewPaused() {
-        TvQuickActions.sendStopAFR(getActivity());
+    public void onEngineReleased() {
+        if (mPlayerData.isAfrEnabled()) {
+            TvQuickActions.sendStopAFR(getActivity());
+        }
     }
 
     private void onFpsCorrectionClick() {

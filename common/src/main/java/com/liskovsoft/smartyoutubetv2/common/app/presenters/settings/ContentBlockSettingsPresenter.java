@@ -83,8 +83,8 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
                 {getColoredString(R.string.content_block_self_promo, R.color.yellow), SponsorSegment.CATEGORY_SELF_PROMO},
                 {getColoredString(R.string.content_block_interaction, R.color.magenta), SponsorSegment.CATEGORY_INTERACTION},
                 {getColoredString(R.string.content_block_music_off_topic, R.color.brown), SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC},
-                {getColoredString(R.string.content_block_preview_recap, R.color.white), SponsorSegment.CATEGORY_PREVIEW_RECAP},
-                {getColoredString(R.string.content_block_highlight, R.color.red), SponsorSegment.CATEGORY_HIGHLIGHT}
+                {getColoredString(R.string.content_block_preview_recap, R.color.light_blue), SponsorSegment.CATEGORY_PREVIEW_RECAP},
+                {getColoredString(R.string.content_block_highlight, R.color.white), SponsorSegment.CATEGORY_HIGHLIGHT}
         }) {
             options.add(UiOptionItem.from(pair[0],
                     optionItem -> {
