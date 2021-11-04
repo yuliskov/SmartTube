@@ -18,6 +18,7 @@ public class PlayerTweaksData {
     private boolean mIsSetOutputSurfaceWorkaroundEnabled;
     private boolean mIsAudioSyncFixEnabled;
     private boolean mIsKeepFinishedActivityEnabled;
+    private boolean mIsLiveStreamFixEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -123,6 +124,15 @@ public class PlayerTweaksData {
         persistData();
     }
 
+    public void enableLiveStreamFix(boolean enable) {
+        mIsLiveStreamFixEnabled = enable;
+        persistData();
+    }
+
+    public boolean isLiveStreamFixEnabled() {
+        return mIsLiveStreamFixEnabled;
+    }
+
     private void restoreData() {
         String data = mPrefs.getData(VIDEO_PLAYER_TWEAKS_DATA);
 
@@ -139,13 +149,15 @@ public class PlayerTweaksData {
         mIsSetOutputSurfaceWorkaroundEnabled = Helpers.parseBoolean(split, 7, true);
         mIsAudioSyncFixEnabled = Helpers.parseBoolean(split, 8, false);
         mIsKeepFinishedActivityEnabled = Helpers.parseBoolean(split, 9, false);
+        mIsLiveStreamFixEnabled = Helpers.parseBoolean(split, 10, false);
     }
 
     private void persistData() {
         mPrefs.setData(VIDEO_PLAYER_TWEAKS_DATA, Helpers.mergeObject(
                 mIsAmlogicFixEnabled, mIsFrameDropFixEnabled, mIsSnapToVsyncDisabled,
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
-                null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled
+                null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled,
+                mIsLiveStreamFixEnabled
         ));
     }
 }
