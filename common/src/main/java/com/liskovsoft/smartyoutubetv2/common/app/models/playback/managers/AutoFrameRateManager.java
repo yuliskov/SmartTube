@@ -33,6 +33,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     private final AutoFrameRateHelper mAutoFrameRateHelper;
     private final ModeSyncManager mModeSyncManager;
     private final Runnable mApplyAfr = this::applyAfr;
+    private final Runnable mApplyAfrStop = this::applyAfrStop;
     private final Handler mHandler;
     private PlayerData mPlayerData;
     private boolean mIsPlay;
@@ -104,10 +105,19 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     }
 
     @Override
-    public void onFinish() {
+    public void onEngineReleased() {
         if (mPlayerData.isAfrEnabled()) {
-            TvQuickActions.sendStopAFR(getActivity());
+            applyAfrStopDelayed();
         }
+    }
+
+    private void applyAfrStopDelayed() {
+        Utils.postDelayed(mHandler, mApplyAfrStop, 200);
+    }
+
+    private void applyAfrStop() {
+        // Send data to AFR daemon via tvQuickActions app
+        TvQuickActions.sendStopAFR(getActivity());
     }
 
     private void onFpsCorrectionClick() {
