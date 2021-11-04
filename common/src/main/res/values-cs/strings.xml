@@ -128,7 +128,7 @@
     <string name="playlists_style_rows">Řady</string>
     <string name="player_show_clock">Zobraz hodiny</string>
     <string name="player_show_remaining_time">Ukaž zbývající čas</string>
-	<string name="player_show_ending_time">Ukaž čas ukončení</string>
+    <string name="player_show_ending_time">Ukaž čas ukončení</string>
     <string name="open_channel_uploads">Otevřít videa kanálu</string>
     <string name="app_exit_shortcut">Ukončit aplikaci</string>
     <string name="app_exit_none">Neukončovat</string>
@@ -209,7 +209,7 @@
     <string name="player_tweaks">Vývojářské možnosti</string>
     <string name="header_uploads">Nahraná videa</string>
     <string name="player_show_global_clock">Zobrazit hodiny v horní části videa</string>
-	<string name="player_show_global_ending_time">Trvale zobrazit čas ukončení na obrazovce</string>
+    <string name="player_show_global_ending_time">Trvale zobrazit čas ukončení na obrazovce</string>
     <string name="uploads_old_look">Vrátit zpět starý vzhled sekce Nahraná videa</string>
     <string name="background_playback_activation">Přehrávání na pozadí (aktivace)</string>
     <string name="channels_old_look">Vrátit zpět starý vzhled sekce Kanály</string>
@@ -257,4 +257,6 @@
     <string name="added_to">Přidáno do %s</string>
     <string name="removed_from">Odebráno z %s</string>
     <string name="video_preset_adaptive">Adaptivní</string>
+    <string name="content_block_preview_recap">Náhled nebo shrnutí videa</string>
+    <string name="content_block_highlight">Pointa videa</string>
 </resources>
