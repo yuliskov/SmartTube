@@ -260,4 +260,6 @@
     <string name="video_preset_adaptive">Adaptive</string>
     <string name="content_block_preview_recap">Preview or recap of the video</string>
     <string name="content_block_highlight">Point or highlight of the video</string>
+    <string name="removed_from_history">Video has been removed from history</string>
+    <string name="remove_from_history">Remove from history</string>
 </resources>

@@ -269,14 +269,14 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         }
 
         mSettingsPresenter.appendSingleButton(
-                UiOptionItem.from(getContext().getString(R.string.not_interested), optionItem -> {
+                UiOptionItem.from(getContext().getString(mVideo.belongToHistory() ? R.string.remove_from_history : R.string.not_interested), optionItem -> {
                     mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem)
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
                                     var -> {},
                                     error -> Log.e(TAG, "Mark as 'not interested' error: %s", error.getMessage()),
-                                    () -> MessageHelpers.showMessage(getContext(), R.string.you_wont_see_this_video)
+                                    () -> MessageHelpers.showMessage(getContext(), mVideo.belongToHistory() ? R.string.removed_from_history : R.string.you_wont_see_this_video)
                             );
                     mSettingsPresenter.closeDialog();
                 }));

@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -275,6 +276,10 @@ public final class Video implements Parcelable {
 
     public boolean isPlaylistSection() {
         return mediaItem != null && mediaItem.getType() == MediaItem.TYPE_PLAYLISTS_SECTION;
+    }
+
+    public boolean belongToHistory() {
+        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_HISTORY;
     }
 
     public void sync(MediaItemMetadata metadata) {
