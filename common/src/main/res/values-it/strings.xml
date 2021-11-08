@@ -260,4 +260,6 @@
     <string name="video_preset_adaptive">Adattivo</string>
     <string name="content_block_preview_recap">Anteprima o riassunto del video</string>
     <string name="content_block_highlight">Parti più importanti del video</string>
+    <string name="removed_from_history">Il video è stato rimosso dalla cronologia</string>
+    <string name="remove_from_history">Rimuovi dalla cronologia</string>
 </resources>
