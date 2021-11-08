@@ -70,7 +70,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             updateChannels();
             getBackupDataOnce();
             runRemoteControlTasks();
-            configureConnection();
+            dontKeepConnection();
             configureProxy();
             sRunOnce = true;
         }
@@ -106,7 +106,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         }
     }
 
-    private void configureConnection() {
+    private void dontKeepConnection() {
         System.setProperty("http.keepAlive", "false");
     }
 
