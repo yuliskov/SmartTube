@@ -262,4 +262,10 @@
     <string name="content_block_highlight">Краткое содержание видео</string>
     <string name="removed_from_history">Видео удалено из истории</string>
     <string name="remove_from_history">Удалить из истории</string>
+    <string name="upload_date">Дата загрузки</string>
+    <string name="upload_date_any">Всё время</string>
+    <string name="upload_date_today">Сегодня</string>
+    <string name="upload_date_this_week">Эта неделя</string>
+    <string name="upload_date_this_month">Этот месяц</string>
+    <string name="upload_date_this_year">Этот год</string>
 </resources>

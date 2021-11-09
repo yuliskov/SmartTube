@@ -262,4 +262,10 @@
     <string name="content_block_highlight">Point or highlight of the video</string>
     <string name="removed_from_history">Video has been removed from history</string>
     <string name="remove_from_history">Remove from history</string>
+    <string name="upload_date">Upload date</string>
+    <string name="upload_date_any">All time</string>
+    <string name="upload_date_today">Today</string>
+    <string name="upload_date_this_week">This week</string>
+    <string name="upload_date_this_month">This month</string>
+    <string name="upload_date_this_year">This year</string>
 </resources>

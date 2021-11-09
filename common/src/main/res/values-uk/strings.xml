@@ -262,4 +262,10 @@
     <string name="content_block_highlight">Короткий зміст відео</string>
     <string name="removed_from_history">Відео видалено із історії</string>
     <string name="remove_from_history">Видалити із історії</string>
+    <string name="upload_date">Дата завантаження</string>
+    <string name="upload_date_any">Увесь час</string>
+    <string name="upload_date_today">Сьогодні</string>
+    <string name="upload_date_this_week">Цей тиждень</string>
+    <string name="upload_date_this_month">Цей місяць</string>
+    <string name="upload_date_this_year">Цей рік</string>
 </resources>
