@@ -181,6 +181,15 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         }
     }
 
+    public void onSearchSettingsClicked() {
+        // show search dialog
+        String searchText = getView().getSearchText();
+
+        if (searchText != null) {
+            loadSearchResult(searchText);
+        }
+    }
+
     private void disposeActions() {
         RxUtils.disposeActions(mLoadAction, mScrollAction);
     }

@@ -215,6 +215,7 @@ public class SearchSupportFragment extends Fragment {
     SearchResultProvider mProvider;
     String mPendingQuery = null;
     SearchOrbView mSearchOrbView;
+    SearchOrbView mSearchSettingsOrbView;
 
     OnItemViewSelectedListener mOnItemViewSelectedListener;
     private OnItemViewClickedListener mOnItemViewClickedListener;
@@ -354,6 +355,15 @@ public class SearchSupportFragment extends Fragment {
             }
         });
         mSearchOrbView.setOnOrbClickedListener(v -> submitQuery(getSearchBarText()));
+
+        // MOD: search settings button
+        mSearchSettingsOrbView = mSearchBar.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.search_settings_orb);
+        mSearchSettingsOrbView.setOnFocusChangeListener((v, focused) -> {
+            if (focused) {
+                Helpers.hideKeyboard(getContext(), v);
+            }
+        });
+        mSearchSettingsOrbView.setOnOrbClickedListener(v -> onSearchSettingsClicked());
         
         //mSearchTextEditor.setOnClickListener(v -> {
         //    Log.d(TAG, "on search field clicked");
@@ -710,6 +720,10 @@ public class SearchSupportFragment extends Fragment {
         }
         recognizerIntent.putExtra(EXTRA_LEANBACK_BADGE_PRESENT, mBadgeDrawable != null);
         return recognizerIntent;
+    }
+
+    public void onSearchSettingsClicked() {
+        // NOP
     }
 
     void retrieveResults(String searchQuery) {

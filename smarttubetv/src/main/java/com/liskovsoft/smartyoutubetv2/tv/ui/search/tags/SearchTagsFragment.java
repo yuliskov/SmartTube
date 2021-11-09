@@ -188,6 +188,11 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         }
     }
 
+    @Override
+    public void onSearchSettingsClicked() {
+        mSearchPresenter.onSearchSettingsClicked();
+    }
+
     private void checkScrollEnd(Video item) {
         int size = mItemResultsAdapter.size();
         int index = mItemResultsAdapter.indexOf(item);
