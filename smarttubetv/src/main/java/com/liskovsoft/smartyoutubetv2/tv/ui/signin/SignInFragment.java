@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.signin;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.leanback.app.GuidedStepSupportFragment;
 import androidx.leanback.widget.GuidanceStylist;
 import androidx.leanback.widget.GuidedAction;
@@ -57,7 +58,7 @@ public class SignInFragment extends GuidedStepSupportFragment implements SignInV
     public GuidanceStylist.Guidance onCreateGuidance(@NonNull Bundle savedInstanceState) {
         String title = getString(R.string.signin_view_title);
         String description = getString(R.string.signin_view_description, SIGN_IN_URL);
-        return new GuidanceStylist.Guidance(title, description, "", null);
+        return new GuidanceStylist.Guidance(title, description, "", ContextCompat.getDrawable(getContext(), R.drawable.activate_account_qrcode));
     }
 
     @Override
