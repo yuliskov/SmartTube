@@ -260,4 +260,12 @@
     <string name="video_preset_adaptive">Adaptiv</string>
     <string name="content_block_preview_recap">Vorschau/Video-Zusammenfassung</string>
     <string name="content_block_highlight">Video-Highlights</string>
+    <string name="removed_from_history">Video wurde aus dem Verlauf entfernt</string>
+    <string name="remove_from_history">Aus dem Verlauf entfernen</string>
+    <string name="upload_date">Upload-Datum</string>
+    <string name="upload_date_any">Beliebig</string>
+    <string name="upload_date_today">Heute</string>
+    <string name="upload_date_this_week">Diese Woche</string>
+    <string name="upload_date_this_month">Dieser Monat</string>
+    <string name="upload_date_this_year">Dieses Jahr</string>
 </resources>
