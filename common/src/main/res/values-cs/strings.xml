@@ -226,7 +226,7 @@
     <string name="preferred_update_source">Preferovaný zdroj aktualizace</string>
     <string name="hide_shorts">Skrýt Shorts z Předplatného</string>
     <string name="key_remapping">Přenastavení tlačítek</string>
-    <string name="screen_diming">Ztmavení obrazovky</string>
+    <string name="screen_dimming">Ztmavení obrazovky</string>
     <string name="removed_from_playback_queue">Smazáno z fronty přehrávání</string>
     <string name="added_to_playback_queue">Přidáno do fronty přehrávání</string>
     <string name="add_remove_from_playback_queue">Přidat do/Smazat z fronty přehrávání</string>
@@ -259,4 +259,12 @@
     <string name="video_preset_adaptive">Adaptivní</string>
     <string name="content_block_preview_recap">Náhled nebo shrnutí videa</string>
     <string name="content_block_highlight">Pointa videa</string>
+    <string name="removed_from_history">Video bylo smazáno z historie</string>
+    <string name="remove_from_history">Smazat z historie</string>
+    <string name="upload_date">Datum nahrání</string>
+    <string name="upload_date_any">Za celou dobu</string>
+    <string name="upload_date_today">Dnes</string>
+    <string name="upload_date_this_week">Tento týden</string>
+    <string name="upload_date_this_month">Tento měsíc</string>
+    <string name="upload_date_this_year">Tento rok</string>
 </resources>
