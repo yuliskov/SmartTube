@@ -262,7 +262,7 @@
     <string name="content_block_highlight">Parti più importanti del video</string>
     <string name="removed_from_history">Il video è stato rimosso dalla cronologia</string>
     <string name="remove_from_history">Rimuovi dalla cronologia</string>
-    <string name="upload_date"><Data di caricamento</string>
+    <string name="upload_date">Data di caricamento</string>
     <string name="upload_date_any">Qualsiasi data</string>
     <string name="upload_date_today">Oggi</string>
     <string name="upload_date_this_week">Questa settimana</string>
