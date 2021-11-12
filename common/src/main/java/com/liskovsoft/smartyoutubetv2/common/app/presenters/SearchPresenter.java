@@ -224,6 +224,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
                         if (searchText != null) {
                             loadSearchResult(searchText);
+                            settingsPresenter.closeDialog();
                         }
                     },
                     mSearchOptions == pair[1]));
