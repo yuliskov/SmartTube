@@ -96,6 +96,7 @@ public class MotherActivity extends FragmentActivity {
             if (noActivities || singlePipActivity) {
                 // Don't destroy the app. Let remote functions continue to work in background.
                 ViewManager.instance(this).forceFinishTheApp(false);
+                sCachedDisplayMetrics = null; // recreate metric data (if ones changed via settings)
             }
         }
     }
