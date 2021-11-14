@@ -6,7 +6,6 @@ import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.SearchOptions;
-import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -19,7 +18,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMe
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -40,7 +38,6 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     private Disposable mScrollAction;
     private Disposable mLoadAction;
     private String mSearchText;
-    private int mSearchOptions;
 
     private SearchPresenter(Context context) {
         super(context);
@@ -122,7 +119,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
         getView().clearSearch();
 
-        mLoadAction = mediaGroupManager.getSearchObserve(searchText, mSearchOptions)
+        mLoadAction = mediaGroupManager.getSearchObserve(searchText, mSearchData.getSearchOptions())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -219,7 +216,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                 {R.string.upload_date_this_year, SearchOptions.UPLOAD_DATE_THIS_YEAR}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]),
                     optionItem -> {
-                        mSearchOptions = pair[1];
+                        mSearchData.setSearchOptions(pair[1]);
                         String searchText = getView().getSearchText();
 
                         if (searchText != null) {
@@ -227,7 +224,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                             settingsPresenter.closeDialog();
                         }
                     },
-                    mSearchOptions == pair[1]));
+                    mSearchData.getSearchOptions() == pair[1]));
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.upload_date), options);

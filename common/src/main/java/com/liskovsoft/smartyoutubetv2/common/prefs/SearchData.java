@@ -11,6 +11,7 @@ public class SearchData {
     private final Context mContext;
     private final AppPrefs mAppPrefs;
     private boolean mIsInstantVoiceSearchEnabled;
+    private int mSearchOptions;
 
     private SearchData(Context context) {
         mContext = context;
@@ -35,15 +36,25 @@ public class SearchData {
         return mIsInstantVoiceSearchEnabled;
     }
 
+    public void setSearchOptions(int searchOptions) {
+        mSearchOptions = searchOptions;
+        persistData();
+    }
+
+    public int getSearchOptions() {
+        return mSearchOptions;
+    }
+
     private void restoreData() {
         String data = mAppPrefs.getData(SEARCH_DATA);
 
         String[] split = Helpers.splitObjectLegacy(data);
 
         mIsInstantVoiceSearchEnabled = Helpers.parseBoolean(split, 0, false);
+        mSearchOptions = Helpers.parseInt(split, 1, 0);
     }
 
     private void persistData() {
-        mAppPrefs.setData(SEARCH_DATA, Helpers.mergeObject(mIsInstantVoiceSearchEnabled));
+        mAppPrefs.setData(SEARCH_DATA, Helpers.mergeObject(mIsInstantVoiceSearchEnabled, mSearchOptions));
     }
 }
