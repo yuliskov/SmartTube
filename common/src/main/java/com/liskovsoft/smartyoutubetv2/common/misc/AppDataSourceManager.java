@@ -110,6 +110,10 @@ public class AppDataSourceManager {
 
     public VideoPreset[] getVideoPresets() {
         VideoPreset[] presets = {
+                new VideoPreset("360p     30fps    avc", "640,360,30,avc"),
+                new VideoPreset("360p     30fps    vp9", "640,360,30,vp9"),
+                new VideoPreset("360p     60fps    avc", "640,360,60,avc"),
+                new VideoPreset("360p     60fps    vp9", "640,360,60,vp9"),
                 new VideoPreset("480p     30fps    avc", "854,480,30,avc"),
                 new VideoPreset("480p     30fps    vp9", "854,480,30,vp9"),
                 new VideoPreset("480p     60fps    avc", "854,480,60,avc"),
