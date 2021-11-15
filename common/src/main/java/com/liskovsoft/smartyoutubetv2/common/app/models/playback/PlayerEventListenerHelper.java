@@ -25,7 +25,7 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     public Activity getActivity() {
         return mEventBridge.getActivity();
     }
-
+    
     @Override
     public void onInitDone() {
         // NOP

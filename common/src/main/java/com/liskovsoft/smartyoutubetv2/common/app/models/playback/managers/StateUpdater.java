@@ -42,8 +42,12 @@ public class StateUpdater extends PlayerEventListenerHelper {
         mPrefs = AppPrefs.instance(getActivity());
         mPlayerData = PlayerData.instance(getActivity());
 
-        restoreClipData();
-        resetPositionIfNeeded(mVideo); // reset position of music/live videos
+        if (mStates.size() == 0) {
+            restoreClipData();
+            // onInitDone usually called after openVideo
+            // So, we need to repeat some things again.
+            resetPositionOfNewVideo(mVideo);
+        }
     }
 
     /**
@@ -57,8 +61,8 @@ public class StateUpdater extends PlayerEventListenerHelper {
         mVideo = item;
         mTempVideoFormat = null;
 
-        resetPositionIfNeeded(item); // reset position of music videos
-        resetSpeedIfNeeded();
+        resetPositionOfNewVideo(item);
+        resetSpeedOfNewVideo();
 
         // Ensure that we aren't running on presenter init stage
         if (getController() != null) {
@@ -200,8 +204,11 @@ public class StateUpdater extends PlayerEventListenerHelper {
             resetPosition(getController().getVideo().nextMediaItem.getVideoId());
         }
     }
-    
-    private void resetPositionIfNeeded(Video item) {
+
+    /**
+     * Reset position of currently opened music and live videos.
+     */
+    private void resetPositionOfNewVideo(Video item) {
         if (item == null) {
             return;
         }
@@ -210,8 +217,19 @@ public class StateUpdater extends PlayerEventListenerHelper {
 
         // Reset position of music videos
         if (state != null && (state.lengthMs < MUSIC_VIDEO_LENGTH_MS || item.isLive)) {
-            resetPosition(item.videoId);
+            resetPosition(item);
         }
+    }
+
+    private void resetSpeedOfNewVideo() {
+        if (mPlayerData != null && !mPlayerData.isRememberSpeedEnabled()) {
+            mPlayerData.setSpeed(1.0f);
+        }
+    }
+
+    private void resetPosition(Video video) {
+        video.percentWatched = 0;
+        resetPosition(video.videoId);
     }
 
     private void resetPosition(String videoId) {
@@ -288,26 +306,31 @@ public class StateUpdater extends PlayerEventListenerHelper {
         Video video = getController().getVideo();
 
         if (video != null) {
-            // Exceptional cases:
-            // 1) Track is ended
-            // 2) Pause on end enabled
-            long lengthMs = getController().getLengthMs();
-            long positionMs = getController().getPositionMs();
-            long remainsMs = lengthMs - positionMs;
-            boolean isPositionActual = remainsMs > 1_000;
-            if (isPositionActual || !getPlayEnabled()) { // Is pause after each video enabled?
-                mStates.put(video.videoId, new State(video.videoId, positionMs, lengthMs, getController().getSpeed()));
-                // Sync video. You could safely use it later to restore state.
-                video.percentWatched = positionMs / (lengthMs / 100f);
-            } else {
-                // Reset position when video almost ended
-                resetPosition(video.videoId);
-                video.percentWatched = 0;
-            }
-
+            savePosition(video);
             updateHistory();
             persistVideoState();
             persistVolume();
+        }
+    }
+
+    private void savePosition(Video video) {
+        // Exceptional cases:
+        // 1) Track is ended
+        // 2) Pause on end enabled
+        // 3) Watching live stream in real time
+        long lengthMs = getController().getLengthMs();
+        long positionMs = getController().getPositionMs();
+        long remainsMs = lengthMs - positionMs;
+        boolean isPositionActual = remainsMs > 1_000;
+        boolean isRealLiveStream = video.isLive && remainsMs < LIVE_THRESHOLD_MS;
+        if ((isPositionActual && !isRealLiveStream) || !getPlayEnabled()) { // Is pause after each video enabled?
+            mStates.put(video.videoId, new State(video.videoId, positionMs, lengthMs, getController().getSpeed()));
+            // Sync video. You could safely use it later to restore state.
+            video.percentWatched = positionMs / (lengthMs / 100f);
+        } else {
+            // Reset position when video almost ended
+            resetPosition(video);
+            video.percentWatched = 0;
         }
     }
 
@@ -346,12 +369,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
         } else {
             State state = mStates.get(item.videoId);
             getController().setSpeed(state != null && mPlayerData.isRememberSpeedEachEnabled() ? state.speed : mPlayerData.getSpeed());
-        }
-    }
-
-    private void resetSpeedIfNeeded() {
-        if (mPlayerData != null && !mPlayerData.isRememberSpeedEnabled()) {
-            mPlayerData.setSpeed(1.0f);
         }
     }
 
