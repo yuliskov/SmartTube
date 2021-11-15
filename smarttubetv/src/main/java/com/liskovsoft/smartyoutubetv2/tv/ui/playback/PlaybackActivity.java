@@ -90,6 +90,9 @@ public class PlaybackActivity extends LeanbackActivity {
         } else if (keyCode == KeyEvent.KEYCODE_BUTTON_R2) {
             mPlaybackFragment.fastForward();
             return true;
+        } else if (keyCode == KeyEvent.KEYCODE_MEDIA_STOP) { // shortcut for closing PIP
+            finish();
+            return true;
         }
 
         return super.onKeyDown(keyCode, event);
