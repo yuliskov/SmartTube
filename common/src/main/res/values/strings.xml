@@ -268,4 +268,5 @@
     <string name="upload_date_this_week">This week</string>
     <string name="upload_date_this_month">This month</string>
     <string name="upload_date_this_year">This year</string>
+    <string name="double_refresh_rate">Double refresh rate</string>
 </resources>

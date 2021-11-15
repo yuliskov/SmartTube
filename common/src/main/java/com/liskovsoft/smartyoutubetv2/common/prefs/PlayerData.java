@@ -63,6 +63,7 @@ public class PlayerData {
     private boolean mIsTimeCorrectionEnabled;
     private boolean mIsGlobalEndingTimeEnabled;
     private boolean mIsEndingTimeEnabled;
+    private boolean mIsDoubleRefreshRateEnabled;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -261,6 +262,15 @@ public class PlayerData {
         persistData();
     }
 
+    public boolean isDoubleRefreshRateEnabled() {
+        return mIsDoubleRefreshRateEnabled;
+    }
+
+    public void setDoubleRefreshRateEnabled(boolean enabled) {
+        mIsDoubleRefreshRateEnabled = enabled;
+        persistData();
+    }
+
     public FormatItem getFormat(int type) {
         FormatItem format = null;
 
@@ -447,6 +457,7 @@ public class PlayerData {
         mIsTimeCorrectionEnabled = Helpers.parseBoolean(split, 32, true);
         mIsGlobalEndingTimeEnabled = Helpers.parseBoolean(split, 33, false);
         mIsEndingTimeEnabled = Helpers.parseBoolean(split, 34, false);
+        mIsDoubleRefreshRateEnabled = Helpers.parseBoolean(split, 35, true);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -462,6 +473,6 @@ public class PlayerData {
                 mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
                 mIsLowQualityEnabled, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
-                mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled));
+                mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled));
     }
 }

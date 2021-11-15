@@ -255,6 +255,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         String title = context.getString(R.string.auto_frame_rate);
         String fpsCorrection = context.getString(R.string.frame_rate_correction, "24->23.97, 30->29.97, 60->59.94");
         String resolutionSwitch = context.getString(R.string.resolution_switch);
+        String doubleRefreshRate = context.getString(R.string.double_refresh_rate);
         List<OptionItem> options = new ArrayList<>();
 
         OptionItem afrEnableOption = UiOptionItem.from(title, optionItem -> {
@@ -269,13 +270,19 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
             playerData.setAfrFpsCorrectionEnabled(optionItem.isSelected());
             onFpsCorrectionCallback.run();
         }, playerData.isAfrFpsCorrectionEnabled());
+        OptionItem doubleRefreshRateOption = UiOptionItem.from(fpsCorrection, optionItem -> {
+            playerData.setDoubleRefreshRateEnabled(optionItem.isSelected());
+            onFpsCorrectionCallback.run();
+        }, playerData.isDoubleRefreshRateEnabled());
 
         afrResSwitchOption.setRequired(afrEnableOption);
         afrFpsCorrectionOption.setRequired(afrEnableOption);
+        doubleRefreshRateOption.setRequired(afrEnableOption);
 
         options.add(afrEnableOption);
         options.add(afrResSwitchOption);
         options.add(afrFpsCorrectionOption);
+        options.add(doubleRefreshRateOption);
 
         return OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_CHECKED, title, options);
     }

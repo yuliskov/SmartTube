@@ -268,4 +268,5 @@
     <string name="upload_date_this_week">Цей тиждень</string>
     <string name="upload_date_this_month">Цей місяць</string>
     <string name="upload_date_this_year">Цей рік</string>
+    <string name="double_refresh_rate">Подвоювати частоту</string>
 </resources>
