@@ -62,6 +62,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     public void onViewResumed() {
         mAutoFrameRateHelper.setFpsCorrectionEnabled(mPlayerData.isAfrFpsCorrectionEnabled());
         mAutoFrameRateHelper.setResolutionSwitchEnabled(mPlayerData.isAfrResSwitchEnabled(), false);
+        mAutoFrameRateHelper.setDoubleRefreshRateEnabled(mPlayerData.isDoubleRefreshRateEnabled());
 
         addUiOptions();
     }
@@ -126,6 +127,10 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
     private void onResolutionSwitchClick() {
         mAutoFrameRateHelper.setResolutionSwitchEnabled(mPlayerData.isAfrResSwitchEnabled(), mPlayerData.isAfrEnabled());
+    }
+
+    private void onDoubleRefreshRateClick() {
+        mAutoFrameRateHelper.setDoubleRefreshRateEnabled(mPlayerData.isDoubleRefreshRateEnabled());
     }
 
     private void applyAfrWrapper() {
@@ -200,7 +205,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         if (mAutoFrameRateHelper.isSupported()) {
             OptionCategory afrCategory = createAutoFrameRateCategory(
                     getActivity(), PlayerData.instance(getActivity()),
-                    () -> {}, this::onResolutionSwitchClick, this::onFpsCorrectionClick);
+                    () -> {}, this::onResolutionSwitchClick, this::onFpsCorrectionClick, this::onDoubleRefreshRateClick);
 
             OptionCategory afrDelayCategory = createAutoFrameRatePauseCategory(
                     getActivity(), PlayerData.instance(getActivity()));
@@ -248,10 +253,11 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     //}
 
     public static OptionCategory createAutoFrameRateCategory(Context context, PlayerData playerData) {
-        return createAutoFrameRateCategory(context, playerData, () -> {}, () -> {}, () -> {});
+        return createAutoFrameRateCategory(context, playerData, () -> {}, () -> {}, () -> {}, () -> {});
     }
 
-    private static OptionCategory createAutoFrameRateCategory(Context context, PlayerData playerData, Runnable onAfrCallback, Runnable onResolutionCallback, Runnable onFpsCorrectionCallback) {
+    private static OptionCategory createAutoFrameRateCategory(Context context, PlayerData playerData,
+            Runnable onAfrCallback, Runnable onResolutionCallback, Runnable onFpsCorrectionCallback, Runnable onDoubleRefreshRateCallback) {
         String title = context.getString(R.string.auto_frame_rate);
         String fpsCorrection = context.getString(R.string.frame_rate_correction, "24->23.97, 30->29.97, 60->59.94");
         String resolutionSwitch = context.getString(R.string.resolution_switch);
@@ -272,7 +278,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         }, playerData.isAfrFpsCorrectionEnabled());
         OptionItem doubleRefreshRateOption = UiOptionItem.from(fpsCorrection, optionItem -> {
             playerData.setDoubleRefreshRateEnabled(optionItem.isSelected());
-            onFpsCorrectionCallback.run();
+            onDoubleRefreshRateCallback.run();
         }, playerData.isDoubleRefreshRateEnabled());
 
         afrResSwitchOption.setRequired(afrEnableOption);
