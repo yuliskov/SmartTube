@@ -276,7 +276,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
             playerData.setAfrFpsCorrectionEnabled(optionItem.isSelected());
             onFpsCorrectionCallback.run();
         }, playerData.isAfrFpsCorrectionEnabled());
-        OptionItem doubleRefreshRateOption = UiOptionItem.from(fpsCorrection, optionItem -> {
+        OptionItem doubleRefreshRateOption = UiOptionItem.from(doubleRefreshRate, optionItem -> {
             playerData.setDoubleRefreshRateEnabled(optionItem.isSelected());
             onDoubleRefreshRateCallback.run();
         }, playerData.isDoubleRefreshRateEnabled());
