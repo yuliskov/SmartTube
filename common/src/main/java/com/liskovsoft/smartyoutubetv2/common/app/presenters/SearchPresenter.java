@@ -38,6 +38,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     private Disposable mScrollAction;
     private Disposable mLoadAction;
     private String mSearchText;
+    private int mSearchOptions;
 
     private SearchPresenter(Context context) {
         super(context);
@@ -66,6 +67,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     public void onViewInitialized() {
         startSearchInt(mSearchText);
         mSearchText = null;
+        mSearchOptions = 0;
     }
 
     @Override
@@ -119,7 +121,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
         getView().clearSearch();
 
-        mLoadAction = mediaGroupManager.getSearchObserve(searchText, mSearchData.getSearchOptions())
+        mLoadAction = mediaGroupManager.getSearchObserve(searchText, mSearchOptions)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -216,15 +218,15 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                 {R.string.upload_date_this_year, SearchOptions.UPLOAD_DATE_THIS_YEAR}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]),
                     optionItem -> {
-                        mSearchData.setSearchOptions(pair[1]);
+                        mSearchOptions = pair[1];
                         String searchText = getView().getSearchText();
 
-                        if (searchText != null) {
+                        if (searchText != null && !searchText.isEmpty()) {
                             loadSearchResult(searchText);
                             settingsPresenter.closeDialog();
                         }
                     },
-                    mSearchData.getSearchOptions() == pair[1]));
+                    mSearchOptions == pair[1]));
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.upload_date), options);
