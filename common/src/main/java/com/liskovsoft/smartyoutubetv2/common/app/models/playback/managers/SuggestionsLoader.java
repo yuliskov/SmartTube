@@ -4,7 +4,6 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
-import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -90,7 +89,7 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
                 .subscribe(
                         continueMediaGroup -> {
                             getController().showProgressBar(false);
-                            getController().updateSuggestions(VideoGroup.from(continueMediaGroup, group.getCategory()));
+                            getController().updateSuggestions(VideoGroup.from(continueMediaGroup, group.getSection()));
                         },
                         error -> {
                             getController().showProgressBar(false);

@@ -96,7 +96,7 @@ public class VideoGroup {
         return mMediaGroup;
     }
 
-    public BrowseSection getCategory() {
+    public BrowseSection getSection() {
         return mCategory;
     }
 
