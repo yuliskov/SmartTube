@@ -383,7 +383,9 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         Video section = new Video();
         section.playlistId = video.playlistId;
         section.title = String.format("%s - %s",
-                video.group != null && video.group.getTitle() != null ? video.group.getTitle() : video.title,
+                video.videoId != null && video.group != null && video.group.getTitle() != null ?
+                        video.group.getTitle() : // Is single video? Then get title from the group playlist.
+                        video.title,            // Item itself is the playlist.
                 video.author != null ? video.author : video.description
         );
         section.cardImageUrl = video.cardImageUrl;
