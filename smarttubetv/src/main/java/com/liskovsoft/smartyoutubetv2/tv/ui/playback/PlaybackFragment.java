@@ -440,7 +440,9 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
             MediaMetadataCompat.Builder metadataBuilder = new MediaMetadataCompat.Builder();
 
+            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, getVideo().title);
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, getVideo().title);
+            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, getVideo().description);
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, getVideo().description);
 
             return metadataBuilder.build();
