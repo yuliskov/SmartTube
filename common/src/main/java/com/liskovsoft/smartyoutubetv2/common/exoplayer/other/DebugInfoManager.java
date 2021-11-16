@@ -25,13 +25,13 @@ import com.google.android.exoplayer2.mediacodec.MediaCodecInfo;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
+import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolder.Mode;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.UhdHelper;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -195,7 +195,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         appendDisplayModeId();
         //appendPlayerWindowIndex();
         appendVersion();
-        appendDeviceNameAndSDK();
+        appendDeviceNameSDKCache();
 
         // Schedule next update
         mDebugViewGroup.removeCallbacks(this);
@@ -348,9 +348,13 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
         appendRow(mAppVersion, AppInfoHelpers.getAppVersionName(mContext));
     }
 
-    private void appendDeviceNameAndSDK() {
+    private void appendDeviceNameSDKCache() {
         appendRow("Device Name", Helpers.getDeviceName());
         appendRow("Android SDK", VERSION.SDK_INT);
+        appendRow("Disk cache size (MB)", String.valueOf(
+                (FileHelpers.getDirSize(FileHelpers.getInternalCacheDir(mContext)) + FileHelpers.getDirSize(FileHelpers.getExternalCacheDir(mContext)))
+                        / 1024 / 1024
+        ));
     }
 
     private void appendRow(String name, boolean val) {
