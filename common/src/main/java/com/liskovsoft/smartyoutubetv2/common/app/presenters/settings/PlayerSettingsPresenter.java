@@ -149,6 +149,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendTweaksCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from("Notification fix",
+                option -> mPlayerTweaksData.enableNotificationFix(option.isSelected()),
+                mPlayerTweaksData.isNotificationFixEnabled()));
+
         options.add(UiOptionItem.from("Live stream fix (1080/AVC)",
                 option -> mPlayerTweaksData.enableLiveStreamFix(option.isSelected()),
                 mPlayerTweaksData.isLiveStreamFixEnabled()));

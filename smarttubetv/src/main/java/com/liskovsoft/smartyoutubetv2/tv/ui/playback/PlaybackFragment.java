@@ -56,6 +56,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.Sub
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.renderer.CustomOverridesRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
@@ -434,7 +435,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         }
 
         mMediaSessionConnector.setMediaMetadataProvider(player -> {
-            if (getVideo() == null) {
+            if (getVideo() == null || PlayerTweaksData.instance(getContext()).isNotificationFixEnabled()) {
                 return null;
             }
 
