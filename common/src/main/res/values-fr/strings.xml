@@ -259,5 +259,14 @@
     <string name="removed_from">Retiré de %s</string>
     <string name="video_preset_adaptive">Adaptatif</string>
     <string name="content_block_preview_recap">Aperçu ou récap de la vidéo</string>
-    <string name="content_block_highlight">Point ou point culminant de la vidéo</string>
+    <string name="content_block_highlight">Point ou point fort de la vidéo</string>
+    <string name="removed_from_history">La vidéo a été retirée de l'historique</string>
+    <string name="remove_from_history">Retirer de l'historique</string>
+    <string name="upload_date">Date d'upload</string>
+    <string name="upload_date_any">Tout temps</string>
+    <string name="upload_date_today">Aujourd'hui</string>
+    <string name="upload_date_this_week">Cette semaine</string>
+    <string name="upload_date_this_month">Ce mois-ci</string>
+    <string name="upload_date_this_year">Cette année</string>
+    <string name="double_refresh_rate">Double taux de rafraîchissement</string>
 </resources>
