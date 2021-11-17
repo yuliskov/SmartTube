@@ -5,6 +5,8 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.mylogger.Log;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class VideoGroup {
@@ -34,6 +36,15 @@ public class VideoGroup {
 
     public static VideoGroup from(MediaGroup mediaGroup, BrowseSection category) {
         return from(mediaGroup, category, -1);
+    }
+
+    public static VideoGroup from(Video item) {
+        VideoGroup videoGroup = new VideoGroup();
+        videoGroup.mId = item.group.getId();
+        videoGroup.mTitle = item.group.getTitle();
+        videoGroup.mVideos = Collections.singletonList(item);
+
+        return videoGroup;
     }
 
     public static VideoGroup from(MediaGroup mediaGroup, BrowseSection category, int groupPosition) {

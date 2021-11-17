@@ -308,7 +308,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         if (item.isChannelUploadsSection()) { // We need to be sure we exactly on Channels section
             ChannelUploadsMenuPresenter.instance(getContext()).showMenu(item);
         } else {
-            VideoMenuPresenter.instance(getContext()).showMenu(item);
+            VideoMenuPresenter.instance(getContext()).showMenu(item, videoItem -> {
+                VideoGroup removedGroup = VideoGroup.from(videoItem);
+                removedGroup.setAction(VideoGroup.ACTION_REMOVE);
+                getView().updateSection(removedGroup);
+            });
         }
 
         updateRefreshTime();

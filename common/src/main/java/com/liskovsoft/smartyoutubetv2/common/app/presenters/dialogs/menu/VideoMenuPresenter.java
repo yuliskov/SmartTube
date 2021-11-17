@@ -55,6 +55,11 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     private boolean mIsPinToSidebarEnabled;
     private boolean mIsOpenPlaylistButtonEnabled;
     private boolean mIsAddToPlaybackQueueButtonEnabled;
+    private VideoMenuCallback mCallback;
+
+    public interface VideoMenuCallback {
+        void onItemRemoved(Video item);
+    }
 
     private VideoMenuPresenter(Context context) {
         super(context);
@@ -72,6 +77,11 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mIsAddToPlaylistButtonEnabled = true;
 
         showMenuInt(video);
+    }
+
+    public void showMenu(Video item, VideoMenuCallback callback) {
+        mCallback = callback;
+        showVideoMenu(item);
     }
 
     public void showMenu(Video item) {
@@ -276,7 +286,12 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
                             .subscribe(
                                     var -> {},
                                     error -> Log.e(TAG, "Mark as 'not interested' error: %s", error.getMessage()),
-                                    () -> MessageHelpers.showMessage(getContext(), mVideo.belongToHistory() ? R.string.removed_from_history : R.string.you_wont_see_this_video)
+                                    () -> {
+                                        MessageHelpers.showMessage(getContext(), mVideo.belongToHistory() ? R.string.removed_from_history : R.string.you_wont_see_this_video);
+                                        if (mCallback != null) {
+                                            mCallback.onItemRemoved(mVideo);
+                                        }
+                                    }
                             );
                     mSettingsPresenter.closeDialog();
                 }));
