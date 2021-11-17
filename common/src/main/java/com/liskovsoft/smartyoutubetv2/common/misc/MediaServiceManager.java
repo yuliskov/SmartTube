@@ -16,6 +16,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import java.util.List;
+
 public class MediaServiceManager {
     private static final String TAG = SettingsManager.class.getSimpleName();
     private static MediaServiceManager sInstance;
@@ -25,6 +27,7 @@ public class MediaServiceManager {
     private Disposable mMetadataAction;
     private Disposable mUploadsAction;
     private Disposable mSignCheckAction;
+    private Disposable mRowsAction;
 
     public interface OnMetadata {
         void onMetadata(MediaItemMetadata metadata);
@@ -32,6 +35,10 @@ public class MediaServiceManager {
 
     public interface OnMediaGroup {
         void onMediaGroup(MediaGroup group);
+    }
+
+    public interface OnMediaGroupList {
+        void onMediaGroupList(List<MediaGroup> group);
     }
 
     public MediaServiceManager() {
@@ -90,6 +97,24 @@ public class MediaServiceManager {
                 .subscribe(
                         onMediaGroup::onMediaGroup,
                         error -> Log.e(TAG, "loadChannelUploads error: %s", error.getMessage())
+                );
+    }
+
+    public void loadChannelRows(Video item, OnMediaGroupList onMediaGroupList) {
+        if (item == null) {
+            return;
+        }
+
+        RxUtils.disposeActions(mRowsAction);
+
+        Observable<List<MediaGroup>> observable = mGroupManager.getChannelObserve(item.mediaItem);
+
+        mRowsAction = observable
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        onMediaGroupList::onMediaGroupList,
+                        error -> Log.e(TAG, "loadChannelRows error: %s", error.getMessage())
                 );
     }
 

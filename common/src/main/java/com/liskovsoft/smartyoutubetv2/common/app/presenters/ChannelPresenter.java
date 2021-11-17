@@ -34,6 +34,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private final MediaService mMediaService;
     private final MediaServiceManager mServiceManager;
     private String mChannelId;
+    private List<MediaGroup> mMediaGroups;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
 
@@ -58,6 +59,9 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         if (mChannelId != null) {
             getView().clear();
             updateRows(mChannelId);
+        } else if (mMediaGroups != null) {
+            getView().clear();
+            updateRows(mMediaGroups);
         }
     }
 
@@ -98,6 +102,8 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     public void onViewDestroyed() {
         super.onViewDestroyed();
         disposeActions();
+        mChannelId = null;
+        mMediaGroups = null;
     }
 
     @Override
@@ -173,12 +179,20 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        this::updateRowsHeader,
+                        this::updateRows,
                         error -> Log.e(TAG, "updateRows error: %s", error.getMessage())
                  );
     }
 
-    private void updateRowsHeader(List<MediaGroup> mediaGroups) {
+    public void updateRows(List<MediaGroup> mediaGroups) {
+        if (getView() == null) { // starting from outside (e.g. MediaServiceManager)
+            disposeActions();
+            mChannelId = null;
+            mMediaGroups = mediaGroups;
+            ViewManager.instance(getContext()).startView(ChannelView.class);
+            return;
+        }
+
         filterIfNeeded(mediaGroups);
 
         for (MediaGroup mediaGroup : mediaGroups) {
