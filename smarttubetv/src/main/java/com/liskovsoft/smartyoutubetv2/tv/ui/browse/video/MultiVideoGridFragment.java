@@ -194,7 +194,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
         }
 
         // Clear both because second grid is dependable on first one
-        if (group.isNew()) {
+        if (group.getAction() == VideoGroup.ACTION_REPLACE) {
             clear1();
             clear2();
         }
@@ -214,7 +214,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
             return;
         }
 
-        if (group.isNew()) {
+        if (group.getAction() == VideoGroup.ACTION_REPLACE) {
             clear2();
         }
 

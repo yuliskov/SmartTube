@@ -117,7 +117,7 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             return;
         }
 
-        if (group.isNew()) {
+        if (group.getAction() == VideoGroup.ACTION_REPLACE) {
             clear();
         }
 

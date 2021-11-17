@@ -472,7 +472,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         disposeActions();
         getView().showProgressBar(true);
 
-        getView().updateSection(VideoGroup.from(section, true));
+        VideoGroup firstGroup = VideoGroup.from(section);
+        firstGroup.setAction(VideoGroup.ACTION_REPLACE);
+        getView().updateSection(firstGroup);
 
         mUpdateAction = groups
                 .subscribeOn(Schedulers.newThread())
@@ -514,7 +516,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         disposeActions();
         getView().showProgressBar(true);
 
-        getView().updateSection(VideoGroup.from(section, position, true));
+        VideoGroup firstGroup = VideoGroup.from(section, position);
+        firstGroup.setAction(VideoGroup.ACTION_REPLACE);
+        getView().updateSection(firstGroup);
 
         if (group == null) {
             // No group. Maybe just clear.

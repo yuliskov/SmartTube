@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VideoGroup {
+    public static final int ACTION_APPEND = 0;
+    public static final int ACTION_REPLACE = 1;
+    public static final int ACTION_REMOVE = 2;
     private static final String TAG = VideoGroup.class.getSimpleName();
     private int mId;
     private String mTitle;
@@ -15,41 +18,28 @@ public class VideoGroup {
     private MediaGroup mMediaGroup;
     private BrowseSection mCategory;
     private int mPosition;
-    private boolean mIsNew;
+    private int mAction;
 
     public static VideoGroup from(BrowseSection category) {
         return from(null, category);
-    }
-
-    public static VideoGroup from(BrowseSection category, boolean isNew) {
-        return from(null, category, -1, isNew);
-    }
-
-    public static VideoGroup from(BrowseSection category, int groupPosition, boolean isNew) {
-        return from(null, category, groupPosition, isNew);
     }
 
     public static VideoGroup from(MediaGroup mediaGroup) {
         return from(mediaGroup, null);
     }
 
+    public static VideoGroup from(BrowseSection category, int groupPosition) {
+        return from(null, category, groupPosition);
+    }
+
     public static VideoGroup from(MediaGroup mediaGroup, BrowseSection category) {
         return from(mediaGroup, category, -1);
     }
 
-    public static VideoGroup from(MediaGroup mediaGroup, BrowseSection category, boolean isNew) {
-        return from(mediaGroup, category, -1, isNew);
-    }
-
     public static VideoGroup from(MediaGroup mediaGroup, BrowseSection category, int groupPosition) {
-        return from(mediaGroup, category, groupPosition, false);
-    }
-
-    public static VideoGroup from(MediaGroup mediaGroup, BrowseSection category, int groupPosition, boolean isNew) {
         VideoGroup videoGroup = new VideoGroup();
         videoGroup.mCategory = category;
         videoGroup.mPosition = groupPosition;
-        videoGroup.mIsNew = isNew;
 
         if (mediaGroup == null) {
             return videoGroup;
@@ -112,7 +102,11 @@ public class VideoGroup {
         return mPosition;
     }
 
-    public boolean isNew() {
-        return mIsNew;
+    public int getAction() {
+        return mAction;
+    }
+
+    public void setAction(int action) {
+        mAction = action;
     }
 }
