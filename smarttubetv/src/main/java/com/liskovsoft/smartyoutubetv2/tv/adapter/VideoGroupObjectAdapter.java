@@ -105,4 +105,14 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
             notifyItemRangeRemoved(0, itemCount);
         }
     }
+
+    public void remove(VideoGroup group) {
+        for (Video video : group.getVideos()) {
+            int index = mVideoItems.indexOf(video);
+            if (index != -1) {
+                mVideoItems.remove(video);
+                notifyItemRangeRemoved(index, 1);
+            }
+        }
+    }
 }

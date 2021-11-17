@@ -287,7 +287,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
                                     var -> {},
                                     error -> Log.e(TAG, "Mark as 'not interested' error: %s", error.getMessage()),
                                     () -> {
-                                        MessageHelpers.showMessage(getContext(), mVideo.belongToHistory() ? R.string.removed_from_history : R.string.you_wont_see_this_video);
+                                        //MessageHelpers.showMessage(getContext(), mVideo.belongToHistory() ? R.string.removed_from_history : R.string.you_wont_see_this_video);
                                         if (mCallback != null) {
                                             mCallback.onItemRemoved(mVideo);
                                         }
