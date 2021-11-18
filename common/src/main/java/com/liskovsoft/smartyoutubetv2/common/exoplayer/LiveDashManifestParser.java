@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer;
 
 import android.net.Uri;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.source.dash.manifest.DashManifest;
 import com.google.android.exoplayer2.source.dash.manifest.DashManifestParser;
 import com.google.android.exoplayer2.source.dash.manifest.Period;
@@ -34,6 +35,10 @@ public class LiveDashManifestParser extends DashManifestParser {
 
     private static long getFirstSegmentNum(DashManifest manifest) {
         return manifest.getPeriod(0).adaptationSets.get(0).representations.get(0).getIndex().getFirstSegmentNum();
+    }
+
+    private static long getSegmentCount(DashManifest manifest) {
+        return manifest.getPeriod(0).adaptationSets.get(0).representations.get(0).getIndex().getSegmentCount(C.TIME_UNSET);
     }
 
     private void appendManifest(DashManifest newManifest) {
