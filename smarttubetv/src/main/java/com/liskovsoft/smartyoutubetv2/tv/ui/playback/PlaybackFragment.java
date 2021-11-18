@@ -982,6 +982,15 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
+    public void finishReally() {
+        LeanbackActivity activity = getLeanbackActivity();
+
+        if (activity != null) {
+            activity.finishReally();
+        }
+    }
+
+    @Override
     public boolean isSuggestionsShown() {
         return isControlsOverlayVisible() && getPlayerRowIndex() != 0;
     }
