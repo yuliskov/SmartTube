@@ -268,4 +268,6 @@
     <string name="upload_date_this_week">Diese Woche</string>
     <string name="upload_date_this_month">Dieser Monat</string>
     <string name="upload_date_this_year">Dieses Jahr</string>
+    <string name="double_refresh_rate">Doppelte Bildrate</string>
+    <string name="upload_date_last_hour">Letzte Stunde</string>
 </resources>
