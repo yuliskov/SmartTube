@@ -11,6 +11,7 @@ import com.google.android.exoplayer2.source.dash.manifest.Representation.MultiSe
 import com.google.android.exoplayer2.source.dash.manifest.SegmentBase.SegmentList;
 import com.google.android.exoplayer2.source.dash.manifest.SegmentBase.SegmentTimelineElement;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.mylogger.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +22,7 @@ import java.util.List;
  */
 @SuppressWarnings("unchecked")
 public class LiveDashManifestParser extends DashManifestParser {
+    private static final String TAG = LiveDashManifestParser.class.getSimpleName();
     private DashManifest mOldManifest;
     private long mOldSegmentNum;
 
@@ -45,6 +47,8 @@ public class LiveDashManifestParser extends DashManifestParser {
         if (newManifest == null) {
             return;
         }
+
+        //Log.d(TAG, getSegmentCount(newManifest));
 
         long newSegmentNum = getFirstSegmentNum(newManifest);
 
