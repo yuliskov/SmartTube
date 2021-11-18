@@ -212,6 +212,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
         for (int[] pair : new int[][] {
                 {R.string.upload_date_any, 0},
+                {R.string.upload_date_last_hour, SearchOptions.UPLOAD_DATE_LAST_HOUR},
                 {R.string.upload_date_today, SearchOptions.UPLOAD_DATE_TODAY},
                 {R.string.upload_date_this_week, SearchOptions.UPLOAD_DATE_THIS_WEEK},
                 {R.string.upload_date_this_month, SearchOptions.UPLOAD_DATE_THIS_MONTH},
