@@ -42,7 +42,7 @@ public class VideoActionPresenter extends BasePresenter<Void> {
     }
 
     private void chooseChannelPresenter(Video item) {
-        if (item.hasVideo()) {
+        if (item.hasVideo() || item.description == null) { // games section stream lists (no description)
             ChannelPresenter.instance(getContext()).openChannel(item);
             return;
         }
