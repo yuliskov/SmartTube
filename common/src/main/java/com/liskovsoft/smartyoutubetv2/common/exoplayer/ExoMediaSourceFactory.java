@@ -156,6 +156,7 @@ public class ExoMediaSourceFactory {
                                 buildDataSourceFactory(USE_BANDWIDTH_METER)
                         )
                                 .setManifestParser(new LiveDashManifestParser()) // Don't make static! Need state reset for each live source.
+                                .setLoadErrorHandlingPolicy(new MyDefaultLoadErrorHandlingPolicy())
                                 .createMediaSource(uri);
                 if (mEventLogger != null) {
                     dashSource.addEventListener(mMainHandler, mEventLogger);
