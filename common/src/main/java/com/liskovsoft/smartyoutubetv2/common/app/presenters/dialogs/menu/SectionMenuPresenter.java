@@ -127,6 +127,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
                         optionItem -> {
                             if (mVideo.hasPlaylist()) {
                                 togglePinToSidebar(createPinnedSection(mVideo));
+                                mSettingsPresenter.closeDialog();
                             } else {
                                 mServiceManager.loadChannelUploads(mVideo, group -> {
                                     if (group.getMediaItems() != null) {
@@ -135,6 +136,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
                                         Video section = createPinnedSection(Video.from(firstItem));
                                         section.title = mVideo.title;
                                         togglePinToSidebar(section);
+                                        mSettingsPresenter.closeDialog();
                                     }
                                 });
                             }
@@ -155,6 +157,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
                         optionItem -> {
                             GeneralData.instance(getContext()).enableSection(mSection.getId(), false);
                             BrowsePresenter.instance(getContext()).updateSections();
+                            mSettingsPresenter.closeDialog();
                         }));
     }
 

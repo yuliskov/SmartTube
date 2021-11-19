@@ -204,7 +204,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         int index = 0;
 
         for (BrowseSection section : mSections) {
-            section.setEnabled(section.getId() == MediaGroup.TYPE_SETTINGS || mGeneralData.isBrowseSectionEnabled(section.getId()));
+            section.setEnabled(section.getId() == MediaGroup.TYPE_SETTINGS || mGeneralData.isSectionEnabled(section.getId()));
 
             if (section.isEnabled()) {
                 if (section.getId() == mGeneralData.getBootSectionId()) {
