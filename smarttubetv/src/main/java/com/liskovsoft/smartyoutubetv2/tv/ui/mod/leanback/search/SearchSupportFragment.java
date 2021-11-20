@@ -30,6 +30,7 @@ import androidx.leanback.widget.SearchOrbView;
 import androidx.leanback.widget.SpeechOrbView;
 import androidx.leanback.widget.SpeechRecognitionCallback;
 import androidx.leanback.widget.VerticalGridView;
+import com.liskovsoft.sharedutils.BuildConfig;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
  */
 public class SearchSupportFragment extends Fragment {
     static final String TAG = SearchSupportFragment.class.getSimpleName();
-    static final boolean DEBUG = false;
+    static final boolean DEBUG = BuildConfig.DEBUG;
 
     private static final String EXTRA_LEANBACK_BADGE_PRESENT = "LEANBACK_BADGE_PRESENT";
     private static final String ARG_PREFIX = SearchSupportFragment.class.getCanonicalName();
