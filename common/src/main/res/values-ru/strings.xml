@@ -270,5 +270,5 @@
     <string name="upload_date_this_year">Этот год</string>
     <string name="double_refresh_rate">Удваивать частоту</string>
     <string name="upload_date_last_hour">Последний час</string>
-    <string name="focus_on_search_results">Фокус на результатах поиска</string>
+    <string name="focus_on_search_results">Автофокусировка на результатах поиска</string>
 </resources>
