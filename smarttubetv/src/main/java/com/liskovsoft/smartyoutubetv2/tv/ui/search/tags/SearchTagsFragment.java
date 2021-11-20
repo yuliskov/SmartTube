@@ -126,11 +126,11 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     }
 
     @Override
-    protected void focusOnResults() {
+    protected void focusResults() {
         // Disable annoying focus on video results when clicking on tags etc.
 
         //if (!TextUtils.isEmpty(mNewQuery)) {
-        //    super.focusOnResults();
+        //    super.focusResults();
         //    if (getRowsSupportFragment() != null) {
         //        // Move selection to the videos (second row)
         //        getRowsSupportFragment().setSelectedPosition(1);

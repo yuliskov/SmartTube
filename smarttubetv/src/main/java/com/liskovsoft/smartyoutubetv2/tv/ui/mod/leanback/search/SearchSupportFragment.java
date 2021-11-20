@@ -419,7 +419,7 @@ public class SearchSupportFragment extends Fragment {
 
     private void resultsAvailable() {
         if ((mStatus & QUERY_COMPLETE) != 0) {
-            focusOnResults();
+            focusResults();
         }
         updateSearchBarNextFocusId();
     }
@@ -745,7 +745,7 @@ public class SearchSupportFragment extends Fragment {
     void queryComplete() {
         if (DEBUG) Log.v(TAG, "queryComplete");
         mStatus |= QUERY_COMPLETE;
-        focusOnResults();
+        focusResults();
     }
 
     void updateSearchBarVisibility() {
@@ -768,7 +768,7 @@ public class SearchSupportFragment extends Fragment {
     void updateFocus() {
         if (mResultAdapter != null && mResultAdapter.size() > 0
                 && mRowsSupportFragment != null && mRowsSupportFragment.getAdapter() == mResultAdapter) {
-            focusOnResults();
+            focusResults();
         } else {
             // MOD: Comment to fix moving focus to voice button when activity started
             //mSearchBar.requestFocus();
@@ -779,7 +779,7 @@ public class SearchSupportFragment extends Fragment {
      * Select rows container after query submit<br/>
      * May helps with "hide kbd on back properly"
      */
-    protected void focusOnResults() {
+    protected void focusResults() {
         if (mRowsSupportFragment == null || mRowsSupportFragment.getVerticalGridView() == null
                 || mResultAdapter.size() == 0) {
             return;
