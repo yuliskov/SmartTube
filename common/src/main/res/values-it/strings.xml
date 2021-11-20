@@ -268,4 +268,6 @@
     <string name="upload_date_this_week">Questa settimana</string>
     <string name="upload_date_this_month">Questo mese</string>
     <string name="upload_date_this_year">Quest\'anno</string>
+    <string name="double_refresh_rate">Doppia frequenza di aggiornamento</string>
+    <string name="upload_date_last_hour">Ultima ora</string>
 </resources>
