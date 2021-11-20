@@ -8,6 +8,10 @@ public class TvQuickActions {
     private final static String PACKAGE = "dev.vodik7.tvquickactions";
 
     public static void sendStopAFR(Context context) {
+        if (context == null) {
+            return;
+        }
+
         Intent intent = new Intent();
         intent.setPackage(PACKAGE);
         intent.setAction(PACKAGE + ".STOP_AFR");
