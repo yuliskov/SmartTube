@@ -12,6 +12,7 @@ public class SearchData {
     private final AppPrefs mAppPrefs;
     private boolean mIsInstantVoiceSearchEnabled;
     private int mSearchOptions;
+    private boolean mIsFocusOnResultsEnabled;
 
     private SearchData(Context context) {
         mContext = context;
@@ -36,6 +37,15 @@ public class SearchData {
         return mIsInstantVoiceSearchEnabled;
     }
 
+    public void setFocusOnResultsEnabled(boolean enabled) {
+        mIsFocusOnResultsEnabled = enabled;
+        persistData();
+    }
+
+    public boolean isFocusOnResultsEnabled() {
+        return mIsFocusOnResultsEnabled;
+    }
+
     public void setSearchOptions(int searchOptions) {
         mSearchOptions = searchOptions;
         persistData();
@@ -52,9 +62,10 @@ public class SearchData {
 
         mIsInstantVoiceSearchEnabled = Helpers.parseBoolean(split, 0, false);
         mSearchOptions = Helpers.parseInt(split, 1, 0);
+        mIsFocusOnResultsEnabled = Helpers.parseBoolean(split, 2, false);
     }
 
     private void persistData() {
-        mAppPrefs.setData(SEARCH_DATA, Helpers.mergeObject(mIsInstantVoiceSearchEnabled, mSearchOptions));
+        mAppPrefs.setData(SEARCH_DATA, Helpers.mergeObject(mIsInstantVoiceSearchEnabled, mSearchOptions, mIsFocusOnResultsEnabled));
     }
 }

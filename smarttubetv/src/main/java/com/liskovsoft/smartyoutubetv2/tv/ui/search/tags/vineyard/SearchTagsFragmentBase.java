@@ -202,6 +202,9 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
             if (!containsAdapter(adapter)) {
                 index = Math.min(index, mResultsAdapter.size());
                 mResultsAdapter.add(index, new ListRow(adapter));
+            } else {
+                // Anyway notify about changes (helps with auto focus on results)
+                mResultsAdapter.notifyArrayItemRangeChanged(index, 1);
             }
         }
     }
