@@ -70,6 +70,8 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     public void clearSearch() {
         mSearchQuery = null;
         mItemResultsAdapter.clear();
+        // Notify about changes (could help with search autofocus)
+        detachAdapter(1);
     }
 
     @Override

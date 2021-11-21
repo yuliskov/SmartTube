@@ -440,6 +440,8 @@ public class SearchSupportFragment extends Fragment {
         // VerticalGridView should not be focusable (see b/26894680 for details).
         list.setFocusable(false);
         list.setFocusableInTouchMode(false);
+        // MOD: disable scroll
+        //list.setFocusScrollStrategy(VerticalGridView.FOCUS_SCROLL_ITEM);
     }
 
     @Override
