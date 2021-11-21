@@ -144,11 +144,11 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         appendAddToPlaylistButton(videoPlaylistInfos);
         appendNotInterestedButton();
         appendOpenPlaylistButton();
-        appendAddToPlaybackQueueButton();
         appendPinToSidebarButton();
         appendOpenChannelButton();
         //appendOpenChannelUploadsButton();
         appendSubscribeButton();
+        appendAddToPlaybackQueueButton();
         appendShareButton();
         appendAccountSelectionButton();
 
@@ -166,10 +166,10 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mSettingsPresenter.clear();
 
         appendReturnToBackgroundVideoButton();
-        appendAddToPlaybackQueueButton();
         appendOpenPlaylistButton();
         appendPinToSidebarButton();
         appendOpenChannelButton();
+        appendAddToPlaybackQueueButton();
         appendShareButton();
         appendAccountSelectionButton();
 
