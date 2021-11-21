@@ -17,8 +17,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMe
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -246,10 +246,10 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
         String rowName = getContext().getString(rowNameResId);
 
-        MediaGroup group = Helpers.removeIf(mediaGroups, value -> rowName.equals(value.getTitle()));
+        List<MediaGroup> group = Helpers.removeIf(mediaGroups, value -> rowName.equals(value.getTitle()));
 
         if (group != null) {
-            mediaGroups.add(0, group);
+            mediaGroups.addAll(0, group);
         }
     }
 }
