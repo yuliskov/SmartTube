@@ -19,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresen
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -248,7 +249,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         }
 
         mSettingsPresenter.appendSingleButton(
-                UiOptionItem.from(getContext().getString(R.string.open_channel), optionItem -> ChannelPresenter.instance(getContext()).openChannel(mVideo)));
+                UiOptionItem.from(getContext().getString(R.string.open_channel), optionItem -> chooseChannelPresenter(mVideo)));
     }
 
     private void appendOpenPlaylistButton() {
@@ -493,5 +494,25 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         MessageHelpers.showMessage(getContext(), mVideo.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel);
 
         mVideo.isSubscribed = !mVideo.isSubscribed;
+    }
+
+    private void chooseChannelPresenter(Video item) {
+        if (item.hasVideo() || item.badge == null) { // games section stream lists (no badge)
+            ChannelPresenter.instance(getContext()).openChannel(item);
+            return;
+        }
+
+        // Special cases, like new mix format (try search: 'Mon mix')
+        MediaServiceManager.instance().loadChannelRows(item, group -> {
+            if (group == null || group.size() == 0) {
+                return;
+            }
+
+            if (group.size() == 1) {
+                ChannelUploadsPresenter.instance(getContext()).updateGrid(group.get(0));
+            } else {
+                ChannelPresenter.instance(getContext()).updateRows(group);
+            }
+        });
     }
 }
