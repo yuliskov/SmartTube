@@ -191,6 +191,10 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     }
 
     public void onSearchSettingsClicked() {
+        if (getView() == null) {
+            return;
+        }
+
         showSettingsDialog();
     }
 
