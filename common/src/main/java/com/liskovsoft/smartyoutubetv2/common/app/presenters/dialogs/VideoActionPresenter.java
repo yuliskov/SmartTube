@@ -55,10 +55,10 @@ public class VideoActionPresenter extends BasePresenter<Void> {
 
             if (group.size() == 1) {
                 // Start first video or open full list?
-                if (group.get(0).getMediaItems() != null) {
-                    PlaybackPresenter.instance(getContext()).openVideo(Video.from(group.get(0).getMediaItems().get(0)));
-                }
-                //ChannelUploadsPresenter.instance(getContext()).updateGrid(group.get(0));
+                //if (group.get(0).getMediaItems() != null) {
+                //    PlaybackPresenter.instance(getContext()).openVideo(Video.from(group.get(0).getMediaItems().get(0)));
+                //}
+                ChannelUploadsPresenter.instance(getContext()).updateGrid(group.get(0));
             } else {
                 ChannelPresenter.instance(getContext()).updateRows(group);
             }
