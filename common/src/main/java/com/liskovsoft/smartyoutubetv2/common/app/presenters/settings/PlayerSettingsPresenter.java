@@ -165,7 +165,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableAmlogicFix(option.isSelected()),
                 mPlayerTweaksData.isAmlogicFixEnabled()));
 
-        options.add(UiOptionItem.from("Ambilight fix",
+        options.add(UiOptionItem.from("Ambilight/Aspect ratio fix",
                 option -> mPlayerTweaksData.enableTextureView(option.isSelected()),
                 mPlayerTweaksData.isTextureViewEnabled()));
 
