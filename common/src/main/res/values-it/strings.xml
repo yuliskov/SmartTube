@@ -270,4 +270,5 @@
     <string name="upload_date_this_year">Quest\'anno</string>
     <string name="double_refresh_rate">Doppia frequenza di aggiornamento</string>
     <string name="upload_date_last_hour">Ultima ora</string>
+    <string name="focus_on_search_results">Autofocus sui risultati della ricerca</string>
 </resources>
