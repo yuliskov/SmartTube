@@ -469,7 +469,9 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        if (mVideo.isSynced) {
+        // Until synced we won't really know weather we subscribed to a channel.
+        // Exclusion: channel item (can't be synced)
+        if (mVideo.isSynced || mVideo.isChannel()) {
             toggleSubscribeInt();
         } else {
             MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
