@@ -470,7 +470,8 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         // Until synced we won't really know weather we subscribed to a channel.
         // Exclusion: channel item (can't be synced)
-        if (mVideo.isSynced || mVideo.isChannel() || mVideo.belongsToSubscribed()) {
+        // Note, regular items (from subscribed section etc) aren't contain channel id
+        if (mVideo.isSynced || mVideo.isChannel()) {
             toggleSubscribeInt();
         } else {
             MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
@@ -486,8 +487,6 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         if (mVideo == null) {
             return;
         }
-
-        mVideo.isSubscribed = mVideo.belongsToSubscribed();
 
         Observable<Void> observable = mVideo.isSubscribed ?
                 mItemManager.unsubscribeObserve(mVideo.channelId) : mItemManager.subscribeObserve(mVideo.channelId);
