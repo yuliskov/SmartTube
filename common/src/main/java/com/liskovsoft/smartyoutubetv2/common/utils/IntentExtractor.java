@@ -127,6 +127,12 @@ public class IntentExtractor {
                 && Helpers.hasItem(new String[] {SUBSCRIPTIONS_URL, HISTORY_URL, RECOMMENDED_URL}, extractUri(intent).toString());
     }
 
+    public static boolean isRootUrl(Intent intent) {
+        return intent != null
+                && extractUri(intent) != null
+                && (extractUri(intent).toString().endsWith(".com/") || extractUri(intent).toString().endsWith(".com"));
+    }
+
     public static boolean isStartVoiceCommand(Intent intent) {
         return intent != null && extractUri(intent) != null && extractUri(intent).toString().contains("launch=voice");
     }
