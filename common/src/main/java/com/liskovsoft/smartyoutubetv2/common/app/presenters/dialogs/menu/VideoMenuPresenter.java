@@ -19,7 +19,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresen
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -280,7 +279,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         }
 
         mSettingsPresenter.appendSingleButton(
-                UiOptionItem.from(getContext().getString(mVideo.belongToHistory() ? R.string.remove_from_history : R.string.not_interested), optionItem -> {
+                UiOptionItem.from(getContext().getString(mVideo.belongsToHistory() ? R.string.remove_from_history : R.string.not_interested), optionItem -> {
                     mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem)
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
@@ -471,7 +470,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         // Until synced we won't really know weather we subscribed to a channel.
         // Exclusion: channel item (can't be synced)
-        if (mVideo.isSynced || mVideo.isChannel()) {
+        if (mVideo.isSynced || mVideo.isChannel() || mVideo.belongsToSubscribed()) {
             toggleSubscribeInt();
         } else {
             MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
@@ -487,6 +486,8 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         if (mVideo == null) {
             return;
         }
+
+        mVideo.isSubscribed = mVideo.belongsToSubscribed();
 
         Observable<Void> observable = mVideo.isSubscribed ?
                 mItemManager.unsubscribeObserve(mVideo.channelId) : mItemManager.subscribeObserve(mVideo.channelId);
