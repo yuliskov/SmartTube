@@ -200,7 +200,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         } else {
             presenter.pinItem(section);
         }
-        MessageHelpers.showMessage(getContext(), isItemPinned ? R.string.unpinned_from_sidebar : R.string.pinned_to_sidebar);
+        //MessageHelpers.showMessage(getContext(), isItemPinned ? R.string.unpinned_from_sidebar : R.string.pinned_to_sidebar);
     }
 
     private Video createPinnedSection(Video video) {
