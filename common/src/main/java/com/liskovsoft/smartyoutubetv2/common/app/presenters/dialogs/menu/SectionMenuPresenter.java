@@ -19,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
 public class SectionMenuPresenter extends BasePresenter<Void> {
@@ -60,6 +61,8 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         if (section == null) {
             return;
         }
+
+        updateEnabledMenuItems();
 
         disposeActions();
 
@@ -234,5 +237,18 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
 
     private void disposeActions() {
         //RxUtils.disposeActions(mPlaylistAction);
+    }
+
+    private void updateEnabledMenuItems() {
+        MainUIData mainUIData = MainUIData.instance(getContext());
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PIN_TO_SIDEBAR)) {
+            mIsUnpinFromSidebarEnabled = false;
+            mIsUnpinSectionFromSidebarEnabled = false;
+        }
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SELECT_ACCOUNT)) {
+            mIsAccountSelectionEnabled = false;
+        }
     }
 }
