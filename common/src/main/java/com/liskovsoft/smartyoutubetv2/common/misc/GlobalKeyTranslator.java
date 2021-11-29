@@ -28,6 +28,8 @@ public class GlobalKeyTranslator extends KeyTranslator {
         mKeyMapping.put(KeyEvent.KEYCODE_BUTTON_B, KeyEvent.KEYCODE_BACK);
         // Fix for the unknown usb remote controller: https://smartyoutubetv.github.io/#comment-3742343397
         mKeyMapping.put(KeyEvent.KEYCODE_ESCAPE, KeyEvent.KEYCODE_BACK);
+
+        mKeyMapping.put(25, KeyEvent.KEYCODE_BACK);
     }
 
     @Override
