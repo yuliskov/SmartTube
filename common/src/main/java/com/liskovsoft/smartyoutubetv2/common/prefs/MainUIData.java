@@ -15,6 +15,10 @@ public class MainUIData {
     public static final int CHANNEL_SORTING_LAST_VIEWED = 2;
     public static final int PLAYLISTS_STYLE_GRID = 0;
     public static final int PLAYLISTS_STYLE_ROWS = 1;
+    public static final int MENU_ITEM_RECENT_PLAYLIST = 0b1;
+    public static final int MENU_ITEM_ADD_TO_QUEUE = 0b10;
+    public static final int MENU_ITEM_PIN_TO_SIDEBAR = 0b100;
+    public static final int MENU_ITEM_SHARE_LINK = 0b1000;
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
     private final Context mContext;
@@ -32,6 +36,7 @@ public class MainUIData {
     private boolean mIsUploadsOldLookEnabled;
     private boolean mIsUploadsAutoLoadEnabled;
     private float mCardTextScrollSpeed;
+    private int mMenuItems;
 
     private MainUIData(Context context) {
         mContext = context;
@@ -165,6 +170,20 @@ public class MainUIData {
         return mCardTextScrollSpeed;
     }
 
+    public void enableMenuItem(int menuItems) {
+        mMenuItems |= menuItems;
+        persistState();
+    }
+
+    public void disableMenuItem(int menuItems) {
+        mMenuItems &= ~menuItems;
+        persistState();
+    }
+
+    public boolean isMenuItemEnabled(int menuItems) {
+        return (mMenuItems & menuItems) == menuItems;
+    }
+
     private void initColorSchemes() {
         mColorSchemes.add(new ColorScheme(
                 R.string.color_scheme_teal,
@@ -215,13 +234,14 @@ public class MainUIData {
         mIsUploadsOldLookEnabled = Helpers.parseBoolean(split, 9, false);
         mIsUploadsAutoLoadEnabled = Helpers.parseBoolean(split, 10, true);
         mCardTextScrollSpeed = Helpers.parseFloat(split, 11, 2);
+        mMenuItems = Helpers.parseInt(split, 12, Integer.MAX_VALUE); // all by default
     }
 
     private void persistState() {
         mPrefs.setData(MAIN_UI_DATA, Helpers.mergeObject(mIsCardAnimatedPreviewsEnabled,
                 mVideoGridScale, mUIScale, mColorSchemeIndex, mIsCardMultilineTitleEnabled,
                 mChannelCategorySorting, mPlaylistsStyle, mCardTitleLinesNum, mIsCardTextAutoScrollEnabled,
-                mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed));
+                mIsUploadsOldLookEnabled, mIsUploadsAutoLoadEnabled, mCardTextScrollSpeed, mMenuItems));
     }
 
     public static class ColorScheme {

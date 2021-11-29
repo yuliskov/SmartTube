@@ -271,4 +271,6 @@
     <string name="double_refresh_rate">Удваивать частоту</string>
     <string name="upload_date_last_hour">Последний час</string>
     <string name="focus_on_search_results">Автофокусировка на результатах поиска</string>
+    <string name="context_menu">Контекстное меню</string>
+    <string name="add_remove_from_recent_playlist">Добавить/Удалить из недавнего плейлиста</string>
 </resources>
