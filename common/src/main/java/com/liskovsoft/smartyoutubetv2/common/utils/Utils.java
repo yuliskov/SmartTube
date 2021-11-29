@@ -170,7 +170,7 @@ public class Utils {
     }
 
     public static void updateRemoteControlService(Context context) {
-        if (context == null) {
+        if (context == null || Build.MODEL.equals("NV501WAC")) { // Eltex NPE fix
             return;
         }
 
