@@ -267,4 +267,7 @@
     <string name="upload_date_this_week">Tento týden</string>
     <string name="upload_date_this_month">Tento měsíc</string>
     <string name="upload_date_this_year">Tento rok</string>
+    <string name="double_refresh_rate">Dvojitá obnovovací frekvence</string>
+    <string name="upload_date_last_hour">Za poslední hodinu</string>
+    <string name="focus_on_search_results">Automatické zaměření na výsledek vyhledávání</string>
 </resources>
