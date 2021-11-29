@@ -526,5 +526,9 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PIN_TO_SIDEBAR)) {
             mIsPinToSidebarEnabled = false;
         }
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SELECT_ACCOUNT)) {
+            mIsAccountSelectionEnabled = false;
+        }
     }
 }

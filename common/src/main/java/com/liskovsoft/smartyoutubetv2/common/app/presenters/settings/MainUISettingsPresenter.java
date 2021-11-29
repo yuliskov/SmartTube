@@ -179,9 +179,10 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
 
         for (int[] pair : new int[][] {
                 {R.string.add_remove_from_recent_playlist, MainUIData.MENU_ITEM_RECENT_PLAYLIST},
+                {R.string.pin_unpin_from_sidebar, MainUIData.MENU_ITEM_PIN_TO_SIDEBAR},
                 {R.string.add_remove_from_playback_queue, MainUIData.MENU_ITEM_ADD_TO_QUEUE},
                 {R.string.share_link, MainUIData.MENU_ITEM_SHARE_LINK},
-                {R.string.pin_unpin_from_sidebar, MainUIData.MENU_ITEM_PIN_TO_SIDEBAR}}) {
+                {R.string.dialog_account_list, MainUIData.MENU_ITEM_SELECT_ACCOUNT}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
                 if (optionItem.isSelected()) {
                     mMainUIData.enableMenuItem(pair[1]);
