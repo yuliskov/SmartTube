@@ -34,10 +34,14 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
@@ -427,5 +431,35 @@ public class Utils {
                 MessageHelpers.showMessage(context, R.string.repeat_mode_none);
                 break;
         }
+    }
+
+    /**
+     * Channels could be of two types: regular (usr channel) and playlist channel (contains single row, try search: 'Mon mix')
+     */
+    public static void chooseChannelPresenter(Context context, Video item) {
+        if (item.hasVideo()) { // regular channel
+            ChannelPresenter.instance(context).openChannel(item);
+            return;
+        }
+
+        LoadingManager.showLoading(context, true);
+
+        MediaServiceManager.instance().loadChannelRows(item, group -> {
+            LoadingManager.showLoading(context, false);
+
+            if (group == null || group.size() == 0) {
+                return;
+            }
+
+            if (group.size() == 1) {
+                // Start first video or open full list?
+                //if (group.get(0).getMediaItems() != null) {
+                //    PlaybackPresenter.instance(context).openVideo(Video.from(group.get(0).getMediaItems().get(0)));
+                //}
+                ChannelUploadsPresenter.instance(context).updateGrid(group.get(0));
+            } else {
+                ChannelPresenter.instance(context).updateRows(group);
+            }
+        });
     }
 }
