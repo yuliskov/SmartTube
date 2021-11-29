@@ -222,7 +222,7 @@
     <string name="unpinned_from_sidebar">Kenar çubuğundan kaldırıldı</string>
     <string name="dialog_select_country">Ülke</string>
     <string name="settings_language_country">Dil/Ülke</string>
-    <string name="share_embed_link">Video URL'sini paylaş</string>
+    <string name="share_embed_link">Video URL\'sini paylaş</string>
     <string name="card_text_scroll_factor">Kart metin kaydırma hızı</string>
     <string name="preferred_update_source">Güncelleme kaynağını seç</string>
     <string name="hide_shorts">Aboneliklerde Shortsları gizle</string>
