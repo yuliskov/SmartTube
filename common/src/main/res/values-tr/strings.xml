@@ -13,7 +13,7 @@
     <string name="subscriptions_signin_title">Sevdiğiniz kanallardan en son haberleri görün</string>
     <string name="subscriptions_signin_subtitle">Aboneliklerinizi görmek için oturum açın</string>
     <string name="subscriptions_signin_button_text">OTURUM AÇ</string>
-    <string name="library_signin_to_show_more">Beğendiğiniz, kaydettiğiniz veya abone olduğunuz videoları izleyin</string>
+    <string name="library_signin_to_show_more">Beğendiğiniz, kaydettiğiniz ya da abone olduğunuz videoları izleyin</string>
     <string name="library_signin_subtitle">Kitaplığınızı görmek için oturum açın</string>
     <string name="action_signin">OTURUM AÇ</string>
     <string name="title_video_formats">Video Formatları</string>
@@ -40,7 +40,7 @@
     <string name="update_changelog">Değişiklik günlüğü</string>
     <string name="install_update">Güncellemeyi yükle</string>
     <string name="section_is_empty">Oops! Burada hiçbir şey yok.</string>
-    <string name="dialog_add_to_playlist">Oynatma listesine ekle/çıkar</string>
+    <string name="dialog_add_to_playlist">Oynatma listesine Ekle/Çıkar</string>
     <string name="msg_signed_users_only">Yalnızca imzalı kullanıcılar</string>
     <string name="msg_cant_load_content">İçerik yüklenemiyor.\n1) Ağ bağlantısını kontrol edin.\n2) Hesabınızda oturum açmayı deneyin.</string>
     <string name="title_video_presets">Video ön ayarları</string>
@@ -81,10 +81,10 @@
     <string name="update_in_progress">Bekleyin…</string>
     <string name="player_ui_hide_behavior">Kullanıcı arayüzünü otomatik gizle</string>
     <string name="option_never">Asla</string>
-    <string name="side_panel_sections">Sekmeleri ayarla</string>
-    <string name="boot_to_section">Açılışta başlanacak sekme</string>
+    <string name="side_panel_sections">Bölümleri ayarla</string>
+    <string name="boot_to_section">Açılışta başlanacak bölüm</string>
     <string name="large_ui">Büyük kullanıcı arayüzü</string>
-    <string name="video_grid_scale">Video grid ölçeği</string>
+    <string name="video_grid_scale">Video ızgara ölçeği</string>
     <string name="scale_ui">Kullanıcı arayüz ölçeği</string>
     <string name="color_scheme">Temalar</string>
     <string name="color_scheme_default">Varsayılan</string>
@@ -119,7 +119,7 @@
     <string name="subtitle_black_bg">Siyah arka plan</string>
     <string name="player_seek_preview">Ararken önizleme</string>
     <string name="color_scheme_dark_grey_oled">Koyu Gri (OLED)</string>
-    <string name="channels_section_sorting">Kanal bölümü sıralama</string>
+    <string name="channels_section_sorting">Kanallar bölümü sıralaması</string>
     <string name="sorting_by_new_content">Yeni içerik</string>
     <string name="sorting_alphabetically">Alfabetik</string>
     <string name="sorting_last_viewed">Son görüntülenen</string>
@@ -140,7 +140,7 @@
     <string name="video_zoom_default">Varsayılan</string>
     <string name="video_zoom_fit_width">Genişliğe sığdır</string>
     <string name="video_zoom_fit_height">Yüksekliğe sığdır</string>
-    <string name="video_zoom_fit_both">Genişliğe veya yüksekliğe sığdır</string>
+    <string name="video_zoom_fit_both">Genişliğe ya da yüksekliğe sığdır</string>
     <string name="video_zoom_stretch">Uzat</string>
     <string name="color_scheme_teal">Turkuaz</string>
     <string name="color_scheme_teal_oled">Turkuaz (OLED)</string>
@@ -152,7 +152,7 @@
     <string name="unsubscribe_from_channel">Kanal aboneliğini iptal et</string>
     <string name="card_title_lines_num">Kart başlık satır sayısı</string>
     <string name="card_auto_scrolled_title">Otomatik kaydırılan kırpılmış başlık</string>
-    <string name="share_link">Linki paylaş</string>
+    <string name="share_link">Bağlantıyı paylaş</string>
     <string name="subscribe_to_channel">Kanala abone ol</string>
     <string name="wait_data_loading">Veriler yüklenirken lütfen bekleyin…</string>
     <string name="auto_frame_rate_pause">Otomatik kare hızı duraklaması</string>
@@ -210,19 +210,19 @@
     <string name="player_tweaks">Geliştirici seçenekleri</string>
     <string name="header_uploads">Yüklemeler</string>
     <string name="player_show_global_clock">Saati ekranda sürekli göster</string>
-    <string name="player_show_global_ending_time">Video bitiş zamanını ekranda sürekli göster</string>
+    <string name="player_show_global_ending_time">Video bitiş saatini ekranda sürekli göster</string>
     <string name="uploads_old_look">Yüklemeler bölümünün eski görünümününe geri dön</string>
     <string name="background_playback_activation">Arka planda oynatma (etkinleştirme)</string>
     <string name="channels_old_look">Kanallar bölümünün eski görünümününe geri dön</string>
     <string name="channels_auto_load">Kanallar bölümü içeriğini otomatik yükle</string>
     <string name="return_to_background_video">Arka planda çalışan videoya dön</string>
-    <string name="pin_unpin_from_sidebar">Kenar çubuğuna sabitle/kaldır</string>
+    <string name="pin_unpin_from_sidebar">Kenar çubuğuna Sabitle/Kaldır</string>
     <string name="pinned_to_sidebar">Kenar çubuğuna sabitlendi</string>
     <string name="unpin_from_sidebar">Kenar çubuğundan kaldır</string>
     <string name="unpinned_from_sidebar">Kenar çubuğundan kaldırıldı</string>
     <string name="dialog_select_country">Ülke</string>
     <string name="settings_language_country">Dil/Ülke</string>
-    <string name="share_embed_link">Video URL\'sini paylaş</string>
+    <string name="share_embed_link">Yerleştirme video bağlantısını paylaş</string>
     <string name="card_text_scroll_factor">Kart metin kaydırma hızı</string>
     <string name="preferred_update_source">Güncelleme kaynağını seç</string>
     <string name="hide_shorts">Aboneliklerde Shortsları gizle</string>
@@ -244,7 +244,7 @@
     <string name="app_backup">Veriyi yedekle</string>
     <string name="app_restore">Veriyi yedekten geri yükle</string>
     <string name="skip_each_segment_once">Bölümleri tekrar atlama</string>
-    <string name="disable_ok_long_press">TAMAM düğme uzun basmayı devre dışı bırak</string>
+    <string name="disable_ok_long_press">TAMAM düğmesine uzun basmayı devre dışı bırak</string>
     <string name="player_time_correction">Hıza göre zamanı göster</string>
     <string name="sponsor_color_markers">İlerleme çubuğunda renkli işaretçiler</string>
     <string name="refresh_section">Bölümü yenile</string>
@@ -271,4 +271,7 @@
     <string name="double_refresh_rate">Çift yenileme hızı</string>
     <string name="upload_date_last_hour">Son bir saat</string>
     <string name="focus_on_search_results">Arama sonuçlarına otomatik odaklan</string>
+    <string name="context_menu">İçerik menüsü</string>
+    <string name="add_remove_from_recent_playlist">Son oynatma listesinden Ekle/Kaldır</string>
+    <string name="player_ending_time">Bitiş saati: %s</string>
 </resources>
