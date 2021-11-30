@@ -241,11 +241,15 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     public void rewind() {
-        mPlayerGlue.rewind();
+        if (mPlayerGlue != null) {
+            mPlayerGlue.rewind();
+        }
     }
 
     public void fastForward() {
-        mPlayerGlue.fastForward();
+        if (mPlayerGlue != null) {
+            mPlayerGlue.fastForward();
+        }
     }
 
     private int getPlayerRowIndex() {
