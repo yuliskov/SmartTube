@@ -271,4 +271,6 @@
     <string name="double_refresh_rate">Doppia frequenza di aggiornamento</string>
     <string name="upload_date_last_hour">Ultima ora</string>
     <string name="focus_on_search_results">Autofocus sui risultati della ricerca</string>
+    <string name="context_menu">Menu contestuale</string>
+    <string name="add_remove_from_recent_playlist">Aggiungi o rimuovi dalla recente playlist</string>
 </resources>
