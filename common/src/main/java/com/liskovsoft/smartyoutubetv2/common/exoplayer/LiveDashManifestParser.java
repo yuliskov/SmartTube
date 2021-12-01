@@ -35,28 +35,20 @@ public class LiveDashManifestParser extends DashManifestParser {
         return mOldManifest;
     }
 
-    private static long getLastSegmentNum(DashManifest manifest) {
-        DashSegmentIndex dashSegmentIndex = manifest.getPeriod(0).adaptationSets.get(0).representations.get(0).getIndex();
-        return dashSegmentIndex.getFirstSegmentNum() + dashSegmentIndex.getSegmentCount(DashSegmentIndex.INDEX_UNBOUNDED) - 1;
-    }
-
-    private static long getSegmentCount(DashManifest manifest) {
-        return manifest.getPeriod(0).adaptationSets.get(0).representations.get(0).getIndex().getSegmentCount(C.TIME_UNSET);
-    }
-
     private void appendManifest(DashManifest newManifest) {
         if (newManifest == null) {
             return;
         }
 
-        //Log.d(TAG, getSegmentCount(newManifest));
-
+        // Even 4+ hours streams could have different length.
+        // So, we should take into account last segment num instead of first one.
         long newSegmentNum = getLastSegmentNum(newManifest);
 
-        if (newSegmentNum == 0) { // Short stream. No need to do something special.
-            mOldManifest = newManifest;
-            return;
-        }
+        // No need this anymore
+        //if (newSegmentNum == 0) { // Short stream. No need to do something special.
+        //    mOldManifest = newManifest;
+        //    return;
+        //}
 
         if (mOldManifest == null) {
             //newManifest.availabilityStartTimeMs = -1;
@@ -154,5 +146,19 @@ public class LiveDashManifestParser extends DashManifestParser {
             //oldSegmentTimeline.addAll(
             //        newSegmentList.segmentTimeline.subList(newSegmentList.segmentTimeline.size() - (int) segmentNumShift - 1, newSegmentList.segmentTimeline.size()));
         }
+    }
+
+    private static long getFirstSegmentNum(DashManifest manifest) {
+        DashSegmentIndex dashSegmentIndex = manifest.getPeriod(0).adaptationSets.get(0).representations.get(0).getIndex();
+        return dashSegmentIndex.getFirstSegmentNum();
+    }
+
+    private static long getLastSegmentNum(DashManifest manifest) {
+        DashSegmentIndex dashSegmentIndex = manifest.getPeriod(0).adaptationSets.get(0).representations.get(0).getIndex();
+        return dashSegmentIndex.getFirstSegmentNum() + dashSegmentIndex.getSegmentCount(DashSegmentIndex.INDEX_UNBOUNDED) - 1;
+    }
+
+    private static long getSegmentCount(DashManifest manifest) {
+        return manifest.getPeriod(0).adaptationSets.get(0).representations.get(0).getIndex().getSegmentCount(C.TIME_UNSET);
     }
 }
