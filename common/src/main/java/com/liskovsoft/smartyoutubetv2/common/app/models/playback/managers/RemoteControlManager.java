@@ -7,7 +7,6 @@ import com.liskovsoft.mediaserviceinterfaces.RemoteManager;
 import com.liskovsoft.mediaserviceinterfaces.data.Command;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
-import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -199,7 +198,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                             // Some users seeing this.
                             // This msg couldn't appear in normal situation.
                             Log.d(TAG, "Remote session has been closed");
-                            MessageHelpers.showMessage(getActivity(), R.string.remote_session_closed);
+                            //MessageHelpers.showMessage(getActivity(), R.string.remote_session_closed);
                         }
                 );
     }
