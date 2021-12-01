@@ -192,7 +192,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(
                 String.format("%s\n%s", getContext().getString(R.string.app_backup), backupManager.getBackupPath()),
                 option -> {
-                    mGeneralData.enableSettingsSection(true); // prevent UI lock
+                    mGeneralData.enableSettingsSection(true); // prevent Settings lock
                     backupManager.checkPermAndBackup();
                     MessageHelpers.showMessage(getContext(), R.string.msg_done);
                 }));
