@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.exoplayer;
 
 import android.net.Uri;
 import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.source.dash.DashSegmentIndex;
 import com.google.android.exoplayer2.source.dash.manifest.DashManifest;
 import com.google.android.exoplayer2.source.dash.manifest.DashManifestParser;
 import com.google.android.exoplayer2.source.dash.manifest.Period;
@@ -11,7 +12,6 @@ import com.google.android.exoplayer2.source.dash.manifest.Representation.MultiSe
 import com.google.android.exoplayer2.source.dash.manifest.SegmentBase.SegmentList;
 import com.google.android.exoplayer2.source.dash.manifest.SegmentBase.SegmentTimelineElement;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.sharedutils.mylogger.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,8 +35,9 @@ public class LiveDashManifestParser extends DashManifestParser {
         return mOldManifest;
     }
 
-    private static long getFirstSegmentNum(DashManifest manifest) {
-        return manifest.getPeriod(0).adaptationSets.get(0).representations.get(0).getIndex().getFirstSegmentNum();
+    private static long getLastSegmentNum(DashManifest manifest) {
+        DashSegmentIndex dashSegmentIndex = manifest.getPeriod(0).adaptationSets.get(0).representations.get(0).getIndex();
+        return dashSegmentIndex.getFirstSegmentNum() + dashSegmentIndex.getSegmentCount(DashSegmentIndex.INDEX_UNBOUNDED) - 1;
     }
 
     private static long getSegmentCount(DashManifest manifest) {
@@ -50,7 +51,7 @@ public class LiveDashManifestParser extends DashManifestParser {
 
         //Log.d(TAG, getSegmentCount(newManifest));
 
-        long newSegmentNum = getFirstSegmentNum(newManifest);
+        long newSegmentNum = getLastSegmentNum(newManifest);
 
         if (newSegmentNum == 0) { // Short stream. No need to do something special.
             mOldManifest = newManifest;
