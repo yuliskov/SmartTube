@@ -145,9 +145,9 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mSettingsPresenter.clear();
 
         appendReturnToBackgroundVideoButton();
+        appendNotInterestedButton();
         appendAddToRecentPlaylistButton(videoPlaylistInfos);
         appendAddToPlaylistButton(videoPlaylistInfos);
-        appendNotInterestedButton();
         appendOpenPlaylistButton();
         appendPinToSidebarButton();
         appendOpenChannelButton();
