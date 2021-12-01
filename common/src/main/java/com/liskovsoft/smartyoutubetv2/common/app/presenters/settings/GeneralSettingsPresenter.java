@@ -215,6 +215,13 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.enableReturnToLauncher(option.isSelected()),
                 mGeneralData.isReturnToLauncherEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_settings_section),
+                option -> {
+                    mGeneralData.enableSettingsSection(!option.isSelected());
+                    mRestartApp = true;
+                },
+                !mGeneralData.isSettingsSectionEnabled()));
+
         ProxyManager proxyManager = ProxyManager.instance(getContext());
 
         options.add(UiOptionItem.from("Web Proxy config: " + proxyManager.getConfigPath(),
