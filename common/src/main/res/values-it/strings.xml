@@ -43,7 +43,7 @@
     <string name="dialog_add_to_playlist">Aggiungi o rimuovi dalla playlist</string>
     <string name="msg_signed_users_only">Solo utenti che hanno effettuato l\'accesso</string>
     <string name="msg_cant_load_content">Non posso caricare il contenuto.\n1) Controlla la connessione di rete.\n2) Prova ad accedere al tuo account.</string>
-    <string name="title_video_presets">Preimpostazioni video</string>
+    <string name="title_video_presets">Preset video</string>
     <string name="settings_accounts">Profili</string>
     <string name="settings_left_panel">Modifica categorie</string>
     <string name="settings_themes">Temi</string>
@@ -51,7 +51,7 @@
     <string name="settings_player">Riproduttore video</string>
     <string name="settings_language">Lingua</string>
     <string name="settings_linked_devices">Dispositivi connessi</string>
-    <string name="settings_about">Info</string>
+    <string name="settings_about">Informazioni</string>
     <string name="dialog_account_list">Seleziona profilo</string>
     <string name="dialog_account_none">Nessuno</string>
     <string name="dialog_remove_account">Rimuovi profilo</string>
@@ -68,7 +68,7 @@
     <string name="card_animated_previews">Anteprime animate</string>
     <string name="web_site">Sito web</string>
     <string name="donation">Donazioni</string>
-    <string name="dialog_about">Info</string>
+    <string name="dialog_about">Informazioni</string>
     <string name="dialog_player_ui">Riproduttore video</string>
     <string name="player_show_ui_on_pause">Mostra IU in pausa</string>
     <string name="player_pause_on_ok">Tasto OK mette in pausa</string>
@@ -105,7 +105,7 @@
     <string name="dialog_search">Cerca</string>
     <string name="instant_voice_search">Ricerca vocale istantanea</string>
     <string name="option_background_playback_behind">Riproduci in background</string>
-    <string name="next_video_info_is_not_loaded_yet">Info prossimo video non ancora disponibili</string>
+    <string name="next_video_info_is_not_loaded_yet">Le informazioni sul video successivo non sono ancora disponibili</string>
     <string name="card_multiline_title">Titoli multilinea</string>
     <string name="cards_style">Stile riquadri</string>
     <string name="repeat_mode_all">Riproduci tutti i video uno per uno</string>
@@ -176,19 +176,19 @@
     <string name="content_block_confirm_skip">Conferma salto</string>
     <string name="content_block_categories">Salta segmenti</string>
     <string name="content_block_sponsor">Sponsor</string>
-    <string name="content_block_intro">Introduzione - Intermezzo</string>
-    <string name="content_block_outro">Titoli di coda - Ringraziamenti</string>
+    <string name="content_block_intro">Introduzione</string>
+    <string name="content_block_outro">Titoli di coda e ringraziamenti</string>
     <string name="content_block_interaction">Promemoria di iscrizione al canale</string>
-    <string name="content_block_self_promo">Non retribuito - Autopromozione</string>
+    <string name="content_block_self_promo">Autopromozione non retribuita</string>
     <string name="content_block_music_off_topic">Sezione non musicale della clip</string>
     <string name="confirm_segment_skip">Salto il segmento \"%s\"?</string>
-    <string name="cancel_segment_skip">Cancella salto segmento</string>
+    <string name="cancel_segment_skip">Cancella salta il segmento</string>
     <string name="msg_skipping_segment">Sto saltando il segmento \"%s\"…</string>
     <string name="content_block_notification_type">Tipo di notifica</string>
     <string name="content_block_notify_none">Senza notifica</string>
     <string name="content_block_notify_toast">Notifica breve (toast)</string>
     <string name="content_block_notify_dialog">Notifica di conferma</string>
-    <string name="return_to_launcher">Torna al launcher dai canali/ricerca ATV</string>
+    <string name="return_to_launcher">Torna al launcher dai canali o ricerca ATV</string>
     <string name="intent_force_close">Forza l\'uscita se il video è stato aperto da una fonte esterna</string>
     <string name="btn_confirm">Conferma</string>
     <string name="player_low_video_quality">Video in bassa qualità</string>
@@ -198,7 +198,7 @@
     <string name="video_preset_disabled">Senza preset</string>
     <string name="video_preset_enabled">Il formato del video successivo sarà impostato in base al preset</string>
     <string name="player_sleep_timer">Timer spegnimento</string>
-    <string name="player_show_quality_info">Visualizza info qualità video</string>
+    <string name="player_show_quality_info">Visualizza informazioni sulla qualità video</string>
     <string name="player_remember_each_speed">Ricorda la velocità di ogni video</string>
     <string name="player_remember_speed_none">Nessuna</string>
     <string name="player_remember_speed_all">Stessa in tutti i video</string>
@@ -273,4 +273,5 @@
     <string name="focus_on_search_results">Autofocus sui risultati della ricerca</string>
     <string name="context_menu">Menu contestuale</string>
     <string name="add_remove_from_recent_playlist">Aggiungi o rimuovi dalla recente playlist</string>
+    <string name="hide_settings_section">Nascondi la sezione delle Impostazioni (pericoloso!)</string>
 </resources>
