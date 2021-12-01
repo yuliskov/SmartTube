@@ -444,6 +444,9 @@ public class Utils {
 
         LoadingManager.showLoading(context, true);
 
+        // Just in case we're opening channel inside a channel
+        ChannelPresenter.instance(context).clear();
+
         MediaServiceManager.instance().loadChannelRows(item, group -> {
             LoadingManager.showLoading(context, false);
 

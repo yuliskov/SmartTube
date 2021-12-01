@@ -252,4 +252,10 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             mediaGroups.addAll(0, group);
         }
     }
+
+    public void clear() {
+        if (getView() != null) {
+            getView().clear();
+        }
+    }
 }

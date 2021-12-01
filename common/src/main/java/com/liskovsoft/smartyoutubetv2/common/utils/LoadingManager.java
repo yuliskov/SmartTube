@@ -2,8 +2,10 @@ package com.liskovsoft.smartyoutubetv2.common.utils;
 
 import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 
@@ -20,6 +22,11 @@ public class LoadingManager {
             BrowseView browseView = BrowsePresenter.instance(context).getView();
             if (browseView != null) {
                 browseView.showProgressBar(show);
+            }
+        } else if (topView == ChannelView.class) {
+            ChannelView channelView = ChannelPresenter.instance(context).getView();
+            if (channelView != null) {
+                channelView.showProgressBar(show);
             }
         }
     }
