@@ -271,4 +271,6 @@
     <string name="double_refresh_rate">Doppelte Bildrate</string>
     <string name="upload_date_last_hour">Letzte Stunde</string>
     <string name="focus_on_search_results">Autofokus auf Suchergebnisse</string>
+    <string name="context_menu">Kontextmenü</string>
+    <string name="add_remove_from_recent_playlist">Hinzufügen/Entfernen aus letzter Wiedergabeliste</string>
 </resources>
