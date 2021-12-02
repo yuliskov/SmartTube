@@ -299,7 +299,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         List<OptionItem> options = new ArrayList<>();
 
         for (int pauseSec : new int[] {0, 1, 2, 3, 4, 5, 6, 7}) {
-            String optionTitle = pauseSec == 0 ? context.getString(R.string.option_never) : String.format("%s sec", pauseSec);
+            String optionTitle = pauseSec == 0 ? context.getString(R.string.option_never) : String.format(R.string.auto_frame_rate_sec, pauseSec);
             options.add(UiOptionItem.from(optionTitle,
                     optionItem -> {
                         playerData.setAfrPauseSec(pauseSec);
