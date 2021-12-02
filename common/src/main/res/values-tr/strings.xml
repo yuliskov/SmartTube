@@ -274,4 +274,8 @@
     <string name="context_menu">İçerik menüsü</string>
     <string name="add_remove_from_recent_playlist">Son oynatma listesinden Ekle/Kaldır</string>
     <string name="player_ending_time">Bitiş saati: %s</string>
+    <string name="auto_frame_rate_sec">%s sn</string>
+    <string name="audio_shift_sec">%s sn</string>
+    <string name="ui_hide_timeout_sec">%s sn</string>
+    <string name="screen_dimming_timeout_min">%s dk</string>
 </resources>
