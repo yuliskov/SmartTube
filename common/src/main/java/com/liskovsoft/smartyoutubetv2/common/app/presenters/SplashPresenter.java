@@ -57,7 +57,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
         showAccountSelection();
 
-        applyNewIntent(getView().getNewIntent());
+        if (getView() != null) {
+            applyNewIntent(getView().getNewIntent());
+        }
     }
 
     private void applyRunOnceTasks() {
