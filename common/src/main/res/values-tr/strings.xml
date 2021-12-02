@@ -274,4 +274,5 @@
     <string name="context_menu">İçerik menüsü</string>
     <string name="add_remove_from_recent_playlist">Son oynatma listesinden Ekle/Kaldır</string>
     <string name="player_ending_time">Bitiş saati: %s</string>
+    <string name="hide_settings_section">Ayarlar bölümünü gizle (tehlikeli!)</string>
 </resources>
