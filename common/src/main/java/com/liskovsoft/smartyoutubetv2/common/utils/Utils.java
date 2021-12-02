@@ -444,9 +444,6 @@ public class Utils {
 
         LoadingManager.showLoading(context, true);
 
-        // Just in case we're opening channel inside a channel
-        ChannelPresenter.instance(context).clear();
-
         MediaServiceManager.instance().loadChannelRows(item, group -> {
             LoadingManager.showLoading(context, false);
 
@@ -461,6 +458,9 @@ public class Utils {
                 //}
                 ChannelUploadsPresenter.instance(context).updateGrid(group.get(0));
             } else {
+                // Just in case we're opening channel inside a channel
+                // TODO: clear only once, on start
+                ChannelPresenter.instance(context).clear();
                 ChannelPresenter.instance(context).updateRows(group);
             }
         });
