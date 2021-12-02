@@ -165,7 +165,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         for (int i = 1; i <= 15; i++) {
             int timeoutMin = i;
             options.add(UiOptionItem.from(
-                    String.format("%s min", i),
+                    String.format(R.string.screen_dimming_timeout_min, i),
                     option -> mGeneralData.setScreenDimmingTimeoutMin(timeoutMin),
                     mGeneralData.getScreenDimmingTimeoutMin() == i));
         }
