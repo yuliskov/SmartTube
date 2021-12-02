@@ -274,4 +274,5 @@
     <string name="context_menu">Context menu</string>
     <string name="add_remove_from_recent_playlist">Add/Remove from recent playlist</string>
     <string name="hide_settings_section">Hide Settings section (dangerous!)</string>
+    <string name="volume">Volume %s%%</string>
 </resources>

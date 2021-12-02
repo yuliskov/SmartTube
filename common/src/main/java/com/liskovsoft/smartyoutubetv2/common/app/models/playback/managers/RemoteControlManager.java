@@ -7,6 +7,7 @@ import com.liskovsoft.mediaserviceinterfaces.RemoteManager;
 import com.liskovsoft.mediaserviceinterfaces.data.Command;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
@@ -364,6 +365,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
      */
     private void setVolume(int volume) {
         if (getActivity() != null) {
+            MessageHelpers.showMessage(getActivity(), getActivity().getString(R.string.volume, volume));
             Utils.setGlobalVolume(getActivity(), volume);
         }
     }

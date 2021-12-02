@@ -202,7 +202,8 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     }
 
     private void messageSkip(long skipPositionMs, String category) {
-        MessageHelpers.showMessage(getActivity(), getActivity().getString(R.string.msg_skipping_segment, category));
+        MessageHelpers.showMessage(getActivity(),
+                String.format("%s: %s", ContentBlockData.SPONSOR_BLOCK_NAME, getActivity().getString(R.string.msg_skipping_segment, category)));
         getController().setPositionMs(skipPositionMs);
     }
 
