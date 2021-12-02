@@ -274,4 +274,8 @@
     <string name="context_menu">Context menu</string>
     <string name="add_remove_from_recent_playlist">Add/Remove from recent playlist</string>
     <string name="hide_settings_section">Hide Settings section (dangerous!)</string>
+    <string name="auto_frame_rate_sec">%s sec</string>
+    <string name="audio_shift_sec">%s sec</string>
+    <string name="ui_hide_timeout_sec">%s sec</string>
+    <string name="screen_dimming_timeout_min">%s min</string>
 </resources>
