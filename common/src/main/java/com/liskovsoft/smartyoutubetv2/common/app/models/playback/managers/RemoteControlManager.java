@@ -365,8 +365,10 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
      */
     private void setVolume(int volume) {
         if (getActivity() != null) {
-            MessageHelpers.showMessage(getActivity(), getActivity().getString(R.string.volume, volume));
             Utils.setGlobalVolume(getActivity(), volume);
+            // Check that volume is set.
+            // Because global value may not be supported (see FireTV Stick).
+            MessageHelpers.showMessageThrottled(getActivity(), getActivity().getString(R.string.volume, Utils.getGlobalVolume(getActivity())));
         }
     }
 }
