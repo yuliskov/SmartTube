@@ -81,7 +81,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         for (int i = 1; i <= 15; i++) {
             int timeoutSec = i;
             options.add(UiOptionItem.from(
-                    String.format("%s sec", i),
+                    String.format(R.string.ui_hide_timeout_sec, i),
                     option -> mPlayerData.setUIHideTimoutSec(timeoutSec),
                     mPlayerData.getUIHideTimoutSec() == i));
         }
