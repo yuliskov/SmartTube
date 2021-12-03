@@ -273,4 +273,6 @@
     <string name="focus_on_search_results">Autofokus auf Suchergebnisse</string>
     <string name="context_menu">Kontextmenü</string>
     <string name="add_remove_from_recent_playlist">Hinzufügen/Entfernen aus letzter Wiedergabeliste</string>
+    <string name="hide_settings_section">Einstellungen-Kategorie ausblenden (gefährlich!)</string>
+    <string name="volume">Lautstärke %s%%</string>
 </resources>
