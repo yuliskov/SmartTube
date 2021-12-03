@@ -8,7 +8,7 @@
     <string name="header_news">Notizie</string>
     <string name="header_gaming">Videogiochi</string>
     <string name="header_playlists">Playlist</string>
-    <string name="header_settings">Opzioni</string>
+    <string name="header_settings">Impostazioni</string>
     <string name="header_channels">Canali</string>
     <string name="subscriptions_signin_title">Novità dai canali che segui</string>
     <string name="subscriptions_signin_subtitle">Accedi per vedere i canali che segui</string>
@@ -217,9 +217,9 @@
     <string name="channels_auto_load">Caricamento automatico contenuto sezione canali</string>
     <string name="return_to_background_video">Torna al video in esecuzione in background</string>
     <string name="pin_unpin_from_sidebar">Fissa o rimuovi dalla barra laterale</string>
-    <string name="pinned_to_sidebar">Fissa alla barra laterale</string>
+    <string name="pinned_to_sidebar">Fissato alla barra laterale</string>
     <string name="unpin_from_sidebar">Rimuovi dalla barra laterale</string>
-    <string name="unpinned_from_sidebar">Sbloccato dalla barra laterale</string>																   
+    <string name="unpinned_from_sidebar">Rimosso dalla barra laterale</string>																   
     <string name="dialog_select_country">Nazione</string>
     <string name="settings_language_country">Lingua e nazione</string>
     <string name="share_embed_link">Condividi link incorporato</string>
