@@ -269,4 +269,10 @@
     <string name="upload_date_this_month">Ce mois-ci</string>
     <string name="upload_date_this_year">Cette année</string>
     <string name="double_refresh_rate">Double taux de rafraîchissement</string>
+     <string name="upload_date_last_hour">Dernière heure</string>
+    <string name="focus_on_search_results">Autofocus sur les résultats de recherche</string>
+    <string name="context_menu">Menu contextuel</string>
+    <string name="add_remove_from_recent_playlist">Ajouter/Supprimer de la liste de lecture récente</string>
+    <string name="hide_settings_section">Masquer la section Paramètres (dangereux!)</string>
+    <string name="volume">Volume %s%%</string>
 </resources>
