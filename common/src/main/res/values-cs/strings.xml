@@ -270,4 +270,8 @@
     <string name="double_refresh_rate">Dvojitá obnovovací frekvence</string>
     <string name="upload_date_last_hour">Za poslední hodinu</string>
     <string name="focus_on_search_results">Automatické zaměření na výsledek vyhledávání</string>
+    <string name="context_menu">Kontextová nabídka</string>
+    <string name="add_remove_from_recent_playlist">Přidat/odebrat z nedávného playlistu</string>
+    <string name="hide_settings_section">Skryj sekci Nastavení (nebezpečné!)</string>
+    <string name="volume">Hlasitost %s%%</string>
 </resources>
