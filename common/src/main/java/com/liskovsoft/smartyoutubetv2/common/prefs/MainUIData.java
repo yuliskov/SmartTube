@@ -20,6 +20,7 @@ public class MainUIData {
     public static final int MENU_ITEM_PIN_TO_SIDEBAR = 0b100;
     public static final int MENU_ITEM_SHARE_LINK = 0b1000;
     public static final int MENU_ITEM_SELECT_ACCOUNT = 0b10000;
+    public static final int MENU_ITEM_NOT_INTERESTED = 0b100000;
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
     private final Context mContext;

@@ -530,5 +530,9 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SELECT_ACCOUNT)) {
             mIsAccountSelectionEnabled = false;
         }
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_NOT_INTERESTED)) {
+            mIsNotInterestedButtonEnabled = false;
+        }
     }
 }
