@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.common.exoplayer;
+package com.liskovsoft.smartyoutubetv2.common.exoplayer.errors;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ParserException;
