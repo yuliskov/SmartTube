@@ -79,7 +79,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
     @Override
     public void openUrlList(List<String> urlList) {
-        //String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
         MediaSource mediaSource = mMediaSourceFactory.fromUrlList(urlList);
         openMediaSource(mediaSource);
     }
