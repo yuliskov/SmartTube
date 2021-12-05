@@ -82,9 +82,6 @@ public class LiveDashManifestParser extends DashManifestParser {
 
         //long oldSegmentNum = getFirstSegmentNum(mManifest);
 
-        // Last segments sometimes may produce 404 error (see DrLupo streams).
-        //newSegmentNum -= 5;
-
         Period oldPeriod = mOldManifest.getPeriod(0);
         Period newPeriod = newManifest.getPeriod(0);
 
