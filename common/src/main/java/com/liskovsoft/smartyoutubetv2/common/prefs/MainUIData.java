@@ -21,6 +21,7 @@ public class MainUIData {
     public static final int MENU_ITEM_SHARE_LINK = 0b1000;
     public static final int MENU_ITEM_SELECT_ACCOUNT = 0b10000;
     public static final int MENU_ITEM_NOT_INTERESTED = 0b100000;
+    public static final int MENU_ITEM_REMOVE_FROM_HISTORY = 0b1000000;
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
     private final Context mContext;

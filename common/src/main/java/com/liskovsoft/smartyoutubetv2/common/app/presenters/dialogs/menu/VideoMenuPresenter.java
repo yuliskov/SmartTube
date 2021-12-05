@@ -46,6 +46,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     private Disposable mSubscribeAction;
     private Video mVideo;
     private boolean mIsNotInterestedButtonEnabled;
+    private boolean mIsRemoveFromHistoryButtonEnabled;
     private boolean mIsOpenChannelButtonEnabled;
     private boolean mIsOpenChannelUploadsButtonEnabled;
     private boolean mIsSubscribeButtonEnabled;
@@ -100,6 +101,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         mIsOpenPlaylistButtonEnabled = true;
         mIsSubscribeButtonEnabled = true;
         mIsNotInterestedButtonEnabled = true;
+        mIsRemoveFromHistoryButtonEnabled = true;
         mIsShareButtonEnabled = true;
         mIsAccountSelectionEnabled = true;
         mIsReturnToBackgroundVideoEnabled = true;
@@ -284,7 +286,15 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     private void appendNotInterestedButton() {
-        if (!mIsNotInterestedButtonEnabled || mVideo == null || mVideo.mediaItem == null || mVideo.mediaItem.getFeedbackToken() == null) {
+        if (mVideo == null || mVideo.mediaItem == null || mVideo.mediaItem.getFeedbackToken() == null) {
+            return;
+        }
+
+        if (mVideo.belongsToHistory() && !mIsRemoveFromHistoryButtonEnabled) {
+            return;
+        }
+
+        if (!mVideo.belongsToHistory() && !mIsNotInterestedButtonEnabled) {
             return;
         }
 
@@ -533,6 +543,10 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_NOT_INTERESTED)) {
             mIsNotInterestedButtonEnabled = false;
+        }
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY)) {
+            mIsRemoveFromHistoryButtonEnabled = false;
         }
     }
 }
