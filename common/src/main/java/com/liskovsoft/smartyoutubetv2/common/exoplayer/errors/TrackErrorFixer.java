@@ -7,7 +7,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack
 import java.util.Set;
 
 public class TrackErrorFixer {
-    private static final long BLACKLIST_INTERVAL_MS = 10_000;
+    private static final long BLACKLIST_INTERVAL_MS = 3_000;
     private final TrackSelectorManager mTrackSelectorManager;
     private long mSelectionTimeMs;
 
