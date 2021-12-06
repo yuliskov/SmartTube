@@ -237,7 +237,8 @@ public class MainUIData {
         mIsUploadsOldLookEnabled = Helpers.parseBoolean(split, 9, false);
         mIsUploadsAutoLoadEnabled = Helpers.parseBoolean(split, 10, true);
         mCardTextScrollSpeed = Helpers.parseFloat(split, 11, 2);
-        mMenuItems = Helpers.parseInt(split, 12, Integer.MAX_VALUE); // all by default
+        mMenuItems = Helpers.parseInt(split, 12,
+                Integer.MAX_VALUE & ~(MENU_ITEM_RECENT_PLAYLIST | MENU_ITEM_ADD_TO_QUEUE | MENU_ITEM_SHARE_LINK | MENU_ITEM_SELECT_ACCOUNT));
     }
 
     private void persistState() {

@@ -150,11 +150,11 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         appendNotInterestedButton();
         appendAddToRecentPlaylistButton(videoPlaylistInfos);
         appendAddToPlaylistButton(videoPlaylistInfos);
-        appendOpenPlaylistButton();
-        appendPinToSidebarButton();
         appendOpenChannelButton();
         //appendOpenChannelUploadsButton();
         appendSubscribeButton();
+        appendOpenPlaylistButton();
+        appendPinToSidebarButton();
         appendAddToPlaybackQueueButton();
         appendShareButton();
         appendAccountSelectionButton();
@@ -174,8 +174,8 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         appendReturnToBackgroundVideoButton();
         appendOpenPlaylistButton();
-        appendPinToSidebarButton();
         appendOpenChannelButton();
+        appendPinToSidebarButton();
         appendAddToPlaybackQueueButton();
         appendShareButton();
         appendAccountSelectionButton();
