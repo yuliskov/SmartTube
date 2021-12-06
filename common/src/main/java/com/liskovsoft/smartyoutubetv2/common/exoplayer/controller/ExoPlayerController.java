@@ -17,7 +17,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackInfoFormatter2;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
@@ -34,7 +33,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private final ExoMediaSourceFactory mMediaSourceFactory;
     private final TrackSelectorManager mTrackSelectorManager;
     private final TrackInfoFormatter2 mTrackFormatter;
-    private final TrackErrorFixer mTrackErrorFixer;
     private boolean mOnSourceChanged;
     private Video mVideo;
     private PlayerEventListener mEventListener;
@@ -47,7 +45,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
         mTrackSelectorManager = new TrackSelectorManager();
         mTrackFormatter = new TrackInfoFormatter2();
-        mTrackErrorFixer = new TrackErrorFixer(mTrackSelectorManager);
 
         initFormats();
     }
@@ -287,9 +284,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     public void onPlayerError(ExoPlaybackException error) {
         Log.e(TAG, "onPlayerError: " + error);
 
-        if (mTrackErrorFixer.fixError(error)) {
-            return;
-        }
+        // Player is released at this point. So, there is no sense to restore the playback here.
 
         //if (error.type == ExoPlaybackException.TYPE_UNEXPECTED &&
         //    error.getCause() instanceof IllegalArgumentException) {
