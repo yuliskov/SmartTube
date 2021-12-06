@@ -6,17 +6,19 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorMan
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.MediaTrack;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 public class TrackErrorFixer {
-    private static final int BLACKLIST_CHECK_INTERVAL_MS = 1_000;
-    private static final int BLACKLIST_CLEAR_INTERVAL_MS = 5_000;
-    private static final int SELECT_FIRST_TRACK_INTERVAL_MS = 30_000;
+    private static final int BLACKLIST_CHECK_MS = 1_000;
+    private static final int BLACKLIST_CLEAR_MS = 5_000;
+    private static final int SELECT_FIRST_TRACK_MS = 30_000;
     private final TrackSelectorManager mTrackSelectorManager;
     private final Handler mHandler;
     private long mSelectionTimeMs;
-    private final Set<MediaTrack> mBlacklistedTracks = new HashSet<>();
+    private final Map<MediaTrack, Long> mBlacklistedTracks = new HashMap<>();
     private InvalidResponseCodeException mLastEx;
     private final Runnable mSelectFirstTrack = this::selectFirstTrack;
 
@@ -41,7 +43,7 @@ public class TrackErrorFixer {
             return false;
         }
 
-        if (System.currentTimeMillis() - mSelectionTimeMs < BLACKLIST_CHECK_INTERVAL_MS) {
+        if (System.currentTimeMillis() - mSelectionTimeMs < BLACKLIST_CHECK_MS) {
             return false;
         }
 
@@ -55,7 +57,7 @@ public class TrackErrorFixer {
             return false;
         }
 
-        if (System.currentTimeMillis() - mSelectionTimeMs > BLACKLIST_CLEAR_INTERVAL_MS) {
+        if (System.currentTimeMillis() - mSelectionTimeMs > BLACKLIST_CLEAR_MS) {
             mBlacklistedTracks.clear();
         }
 
@@ -64,11 +66,11 @@ public class TrackErrorFixer {
 
         for (MediaTrack track : tracks) {
             if (track.isSelected) {
-                mBlacklistedTracks.add(track);
+                addToBlacklist(track);
             } else {
                 tmpTrack = track;
-                if (!mBlacklistedTracks.contains(track)) {
-                    mBlacklistedTracks.add(track);
+                if (!isBlacklisted(track)) {
+                    addToBlacklist(track);
                     break;
                 }
             }
@@ -77,7 +79,7 @@ public class TrackErrorFixer {
         if (tmpTrack != null) {
             mTrackSelectorManager.selectTrack(tmpTrack);
             mSelectionTimeMs = System.currentTimeMillis();
-            Utils.postDelayed(mHandler, mSelectFirstTrack, SELECT_FIRST_TRACK_INTERVAL_MS);
+            Utils.postDelayed(mHandler, mSelectFirstTrack, SELECT_FIRST_TRACK_MS);
             return true;
         }
 
@@ -95,7 +97,7 @@ public class TrackErrorFixer {
         MediaTrack tmpTrack = null;
 
         for (MediaTrack track : tracks) {
-            mBlacklistedTracks.add(track);
+            addToBlacklist(track);
             tmpTrack = track;
             break;
         }
@@ -110,5 +112,19 @@ public class TrackErrorFixer {
         String url = ex.dataSpec.uri.toString();
 
         return url.contains("mime/audio");
+    }
+
+    private boolean isBlacklisted(MediaTrack track) {
+        for (Entry<MediaTrack, Long> entry : mBlacklistedTracks.entrySet()) {
+            if (track == entry.getKey() && System.currentTimeMillis() - entry.getValue() < BLACKLIST_CLEAR_MS) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void addToBlacklist(MediaTrack track) {
+        mBlacklistedTracks.put(track, System.currentTimeMillis());
     }
 }
