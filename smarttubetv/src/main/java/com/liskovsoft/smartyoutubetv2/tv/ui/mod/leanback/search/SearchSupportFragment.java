@@ -1,18 +1,26 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.search;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.text.Editable;
+import android.text.Selection;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.CompletionInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
+
 import androidx.fragment.app.Fragment;
 import androidx.leanback.R;
 import androidx.leanback.app.BrowseSupportFragment;
@@ -30,13 +38,12 @@ import androidx.leanback.widget.SearchOrbView;
 import androidx.leanback.widget.SpeechOrbView;
 import androidx.leanback.widget.SpeechRecognitionCallback;
 import androidx.leanback.widget.VerticalGridView;
-import com.liskovsoft.sharedutils.BuildConfig;
+
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 /**
  * A fragment to handle searches. An application will supply an implementation
@@ -226,6 +233,7 @@ public class SearchSupportFragment extends Fragment {
     private ExternalQuery mExternalQuery;
 
     private SpeechRecognizer mSpeechRecognizer;
+    private boolean mScrollToEndAfterTextChanged;
 
     int mStatus;
     boolean mAutoStartRecognition = false; // MOD: don't start search immediately
@@ -318,6 +326,9 @@ public class SearchSupportFragment extends Fragment {
             public void onSearchQuerySubmit(String query) {
                 if (DEBUG) Log.v(TAG, String.format("onSearchQuerySubmit %s", query));
                 submitQuery(query);
+                mScrollToEndAfterTextChanged = true;
+                InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(mSearchBar.getWindowToken(), 0);
             }
 
             @Override
@@ -338,6 +349,10 @@ public class SearchSupportFragment extends Fragment {
         mSearchTextEditor.setOnFocusChangeListener((v, focused) -> {
             Log.d(TAG, "on search field focused");
             if (focused && mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
+                // scroll cursor to end after transition from lb_search_bar_speech_orb
+                mScrollToEndAfterTextChanged = mSearchTextEditor.getText().length() == 0;
+                Selection.setSelection(mSearchTextEditor.getText(), mSearchTextEditor.length());
+
                 mRowsSupportFragment.getVerticalGridView().clearFocus();
 
                 if (getContext() != null) {
@@ -346,24 +361,41 @@ public class SearchSupportFragment extends Fragment {
             }
         });
 
-        // MOD: commit search button
-        mSearchOrbView = mSearchBar.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.lb_search_bar_search_orb);
-        mSearchOrbView.setOnFocusChangeListener((v, focused) -> {
-            if (focused) {
-                Helpers.hideKeyboard(getContext(), v);
+        mSearchTextEditor.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (mScrollToEndAfterTextChanged) {
+                    Selection.setSelection(mSearchTextEditor.getText(), mSearchTextEditor.length());
+                    mScrollToEndAfterTextChanged = false;
+                }
             }
         });
+        mSearchOrbView = mSearchBar.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.lb_search_bar_search_orb);
+        mSearchOrbView.setOnFocusChangeListener((v, focused) -> {
+                    if (focused) {
+                        Helpers.hideKeyboard(getContext(), v);
+                    }
+                }
+        );
         mSearchOrbView.setOnOrbClickedListener(v -> submitQuery(getSearchBarText()));
 
-        // MOD: search settings button
         mSearchSettingsOrbView = mSearchBar.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.search_settings_orb);
+        mSearchSettingsOrbView.setOnOrbClickedListener(v -> onSearchSettingsClicked());
         mSearchSettingsOrbView.setOnFocusChangeListener((v, focused) -> {
             if (focused) {
                 Helpers.hideKeyboard(getContext(), v);
             }
         });
-        mSearchSettingsOrbView.setOnOrbClickedListener(v -> onSearchSettingsClicked());
-        
         //mSearchTextEditor.setOnClickListener(v -> {
         //    Log.d(TAG, "on search field clicked");
         //
@@ -375,7 +407,21 @@ public class SearchSupportFragment extends Fragment {
         //});
 
         mSpeechOrbView = mSearchBar.findViewById(R.id.lb_search_bar_speech_orb);
-
+        mSpeechOrbView.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                mSpeechOrbView.showListening();
+                mSpeechOrbView.callOnClick();
+            } else {
+                mSpeechOrbView.showNotListening();
+                if (mSpeechRecognizer != null) {
+                    mSpeechRecognizer.stopListening();
+                }
+            }
+        });
+        mSpeechOrbView.setClickable(false);
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.N_MR1) {
+            mSpeechOrbView.setVisibility(View.INVISIBLE);
+        }
         // End MOD
 
         readArguments(getArguments());
@@ -440,8 +486,6 @@ public class SearchSupportFragment extends Fragment {
         // VerticalGridView should not be focusable (see b/26894680 for details).
         list.setFocusable(false);
         list.setFocusableInTouchMode(false);
-        // MOD: disable scroll
-        //list.setFocusScrollStrategy(VerticalGridView.FOCUS_SCROLL_ITEM);
     }
 
     @Override
@@ -460,15 +504,20 @@ public class SearchSupportFragment extends Fragment {
             mSearchBar.startRecognition();
         } else {
             // Ensure search bar state consistency when using external recognizer
-            mSearchBar.stopRecognition();
+//            mSearchBar.stopRecognition();
         }
     }
 
     @Override
     public void onPause() {
-        releaseRecognizer();
         mIsPaused = true;
         super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        releaseRecognizer();
+        super.onStop();
     }
 
     @Override
@@ -513,7 +562,7 @@ public class SearchSupportFragment extends Fragment {
      */
     public void startRecognition() {
         if (mIsPaused) {
-            mPendingStartRecognitionWhenPaused = true;
+            mPendingStartRecognitionWhenPaused = false;
         } else {
             mSearchBar.startRecognition();
         }
@@ -848,6 +897,13 @@ public class SearchSupportFragment extends Fragment {
         mSearchBar.setSearchQuery(query);
     }
 
+    public void pressKeySearch() {
+        if (mSearchBar.hasFocus() && !mSearchBar.isRecognizing()) {
+            mSpeechOrbView.showListening();
+            mSpeechOrbView.callOnClick();
+        }
+    }
+
     static class ExternalQuery {
         String mQuery;
         boolean mSubmit;
@@ -856,5 +912,9 @@ public class SearchSupportFragment extends Fragment {
             mQuery = query;
             mSubmit = submit;
         }
+    }
+
+    protected int getSearchTextEditorId() {
+        return mSearchTextEditor != null ? mSearchTextEditor.getId() : 0;
     }
 }
