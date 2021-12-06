@@ -380,22 +380,25 @@ public class SearchSupportFragment extends Fragment {
                 }
             }
         });
+
+        // MOD: commit search button
         mSearchOrbView = mSearchBar.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.lb_search_bar_search_orb);
         mSearchOrbView.setOnFocusChangeListener((v, focused) -> {
-                    if (focused) {
-                        Helpers.hideKeyboard(getContext(), v);
-                    }
-                }
-        );
+            if (focused) {
+                Helpers.hideKeyboard(getContext(), v);
+            }
+        });
         mSearchOrbView.setOnOrbClickedListener(v -> submitQuery(getSearchBarText()));
 
+        // MOD: search settings button
         mSearchSettingsOrbView = mSearchBar.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.search_settings_orb);
-        mSearchSettingsOrbView.setOnOrbClickedListener(v -> onSearchSettingsClicked());
         mSearchSettingsOrbView.setOnFocusChangeListener((v, focused) -> {
             if (focused) {
                 Helpers.hideKeyboard(getContext(), v);
             }
         });
+        mSearchSettingsOrbView.setOnOrbClickedListener(v -> onSearchSettingsClicked());
+
         //mSearchTextEditor.setOnClickListener(v -> {
         //    Log.d(TAG, "on search field clicked");
         //
