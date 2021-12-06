@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build;
 import com.google.android.exoplayer2.text.CaptionStyleCompat;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.locale.LocaleUtility;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
@@ -62,6 +63,7 @@ public class PlayerData {
     private boolean mIsTimeCorrectionEnabled;
     private boolean mIsGlobalEndingTimeEnabled;
     private boolean mIsEndingTimeEnabled;
+    private boolean mIsDoubleRefreshRateEnabled;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -260,6 +262,15 @@ public class PlayerData {
         persistData();
     }
 
+    public boolean isDoubleRefreshRateEnabled() {
+        return mIsDoubleRefreshRateEnabled;
+    }
+
+    public void setDoubleRefreshRateEnabled(boolean enabled) {
+        mIsDoubleRefreshRateEnabled = enabled;
+        persistData();
+    }
+
     public FormatItem getFormat(int type) {
         FormatItem format = null;
 
@@ -379,7 +390,9 @@ public class PlayerData {
     }
 
     public FormatItem getDefaultAudioFormat() {
-        return FormatItem.AUDIO_HQ_MP4A;
+        String language = LocaleUtility.getCurrentLanguage(mPrefs.getContext());
+
+        return ExoFormatItem.fromAudioSpecs(String.format("%s,%s", "mp4a", language));
     }
 
     public FormatItem getDefaultVideoFormat() {
@@ -448,6 +461,7 @@ public class PlayerData {
         mIsTimeCorrectionEnabled = Helpers.parseBoolean(split, 32, true);
         mIsGlobalEndingTimeEnabled = Helpers.parseBoolean(split, 33, false);
         mIsEndingTimeEnabled = Helpers.parseBoolean(split, 34, false);
+        mIsDoubleRefreshRateEnabled = Helpers.parseBoolean(split, 35, true);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -463,6 +477,6 @@ public class PlayerData {
                 mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
                 mIsLowQualityEnabled, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
-                mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled));
+                mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled));
     }
 }

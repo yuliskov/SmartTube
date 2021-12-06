@@ -30,6 +30,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.Sub
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 
@@ -211,7 +212,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         VideoMenuPresenter.instance(getActivity()).showMenu(item);
     }
 
-    private void showBriefInfo(boolean subscribed) {
+    private void showSubscribeInfo(boolean subscribed) {
         if (subscribed) {
             MessageHelpers.showMessage(getActivity(), R.string.subscribed_to_channel);
         } else {
@@ -233,7 +234,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
             callMediaItemObservable(mMediaItemManager::unsubscribeObserve);
         }
 
-        showBriefInfo(subscribed);
+        showSubscribeInfo(subscribed);
     }
 
     @Override
@@ -315,6 +316,12 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         }
     }
 
+    @Override
+    public void onRepeatModeClicked(int modeIndex) {
+        mPlayerData.setPlaybackMode(modeIndex);
+        Utils.showRepeatInfo(getActivity(), modeIndex);
+    }
+
     private void intSpeedItems(AppDialogPresenter settingsPresenter, List<OptionItem> items, float[] speedValues) {
         for (float speed : speedValues) {
             items.add(UiOptionItem.from(
@@ -375,6 +382,11 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     private boolean handleBackKey(int keyCode) {
         if (KeyHelpers.isBackKey(keyCode)) {
             enableSuggestionsResetTimeout();
+
+            // Close future stream with single back click
+            if (!getController().containsMedia()) {
+                getController().finish();
+            }
         }
 
         return false;

@@ -56,6 +56,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.Sub
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.renderer.CustomOverridesRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
@@ -240,11 +241,15 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     public void rewind() {
-        mPlayerGlue.rewind();
+        if (mPlayerGlue != null) {
+            mPlayerGlue.rewind();
+        }
     }
 
     public void fastForward() {
-        mPlayerGlue.fastForward();
+        if (mPlayerGlue != null) {
+            mPlayerGlue.fastForward();
+        }
     }
 
     private int getPlayerRowIndex() {
@@ -372,7 +377,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mPlayer = mPlayerInitializer.createPlayer(getContext(), renderersFactory, trackSelector);
         // Try to fix decoder error on Nvidia Shield 2019.
         // Init resources as early as possible.
-        mPlayer.setForegroundMode(true);
+        //mPlayer.setForegroundMode(true);
         mExoPlayerController.setPlayer(mPlayer);
     }
 
@@ -434,13 +439,15 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         }
 
         mMediaSessionConnector.setMediaMetadataProvider(player -> {
-            if (getVideo() == null) {
+            if (getVideo() == null || PlayerTweaksData.instance(getContext()).isNotificationFixEnabled()) {
                 return null;
             }
 
             MediaMetadataCompat.Builder metadataBuilder = new MediaMetadataCompat.Builder();
 
+            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, getVideo().title);
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, getVideo().title);
+            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, getVideo().description);
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, getVideo().description);
 
             return metadataBuilder.build();
@@ -975,6 +982,15 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         if (activity != null) {
             activity.finish();
+        }
+    }
+
+    @Override
+    public void finishReally() {
+        LeanbackActivity activity = getLeanbackActivity();
+
+        if (activity != null) {
+            activity.finishReally();
         }
     }
 

@@ -15,6 +15,7 @@ import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 
@@ -71,10 +72,15 @@ public class MotherActivity extends FragmentActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MEDIA_STOP) { // shortcut for closing PIP
+            PlaybackPresenter.instance(this).forceFinish();
+            return true;
+        }
+
         boolean result = super.onKeyDown(keyCode, event);
 
         // Fix buggy G20s menu key (focus lost on key press)
-        return (event.getAction() == KeyEvent.ACTION_DOWN && KeyHelpers.isMenuKey(keyCode)) || result;
+        return KeyHelpers.isMenuKey(keyCode) || result;
     }
 
     public void finishReally() {
@@ -95,7 +101,8 @@ public class MotherActivity extends FragmentActivity {
             boolean singlePipActivity = sNumActivities == 1 && sIsInPipMode;
             if (noActivities || singlePipActivity) {
                 // Don't destroy the app. Let remote functions continue to work in background.
-                ViewManager.instance(this).forceFinishTheApp(true);
+                ViewManager.instance(this).forceFinishTheApp(false);
+                sCachedDisplayMetrics = null; // recreate metric data (if ones changed via settings)
             }
         }
     }

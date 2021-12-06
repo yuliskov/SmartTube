@@ -174,7 +174,7 @@ public class ExoFormatItem implements FormatItem {
             case TYPE_AUDIO:
                 // Fake format. It's used in app internal comparison routine.
                 mediaTrack.format = Format.createAudioSampleFormat(
-                        id, null, codecs, -1, -1,0, 0, null, null, 0, null);
+                        id, null, codecs, -1, -1,0, 0, null, null, 0, language);
                 break;
             case TYPE_SUBTITLE:
                 // Fake format. It's used in app internal comparison routine.
@@ -304,6 +304,23 @@ public class ExoFormatItem implements FormatItem {
                 null, null, codec, -1, -1,0, 0, null, null, 0, null);
 
         return formatItem;
+    }
+
+    public static ExoFormatItem fromAudioSpecs(String spec) {
+        if (spec == null) {
+            return null;
+        }
+
+        String[] split = spec.split(",");
+
+        if (split.length != 2) {
+            return null;
+        }
+
+        String codec = Helpers.parseStr(split[0]);
+        String language = Helpers.parseStr(split[1]);
+
+        return from(TYPE_AUDIO, TrackSelectorManager.RENDERER_INDEX_AUDIO, null, codec, 0, 0, 0, language, false);
     }
 
     public static FormatItem fromSubtitleParams(String langCode) {

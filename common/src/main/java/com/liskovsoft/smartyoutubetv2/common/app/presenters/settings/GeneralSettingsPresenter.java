@@ -42,8 +42,8 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
         settingsPresenter.clear();
 
-        appendBootToCategory(settingsPresenter);
-        appendLeftPanelCategories(settingsPresenter);
+        appendBootToSection(settingsPresenter);
+        appendEnabledSections(settingsPresenter);
         appendAppExitCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
         appendBackgroundPlaybackActivationCategory(settingsPresenter);
@@ -60,32 +60,32 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         });
     }
 
-    private void appendLeftPanelCategories(AppDialogPresenter settingsPresenter) {
+    private void appendEnabledSections(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        Map<Integer, Integer> leftPanelCategories = mGeneralData.getSections();
+        Map<Integer, Integer> sections = mGeneralData.getDefaultSections();
 
-        for (Entry<Integer, Integer> category : leftPanelCategories.entrySet()) {
-             options.add(UiOptionItem.from(getContext().getString(category.getKey()), optionItem -> {
-                 mGeneralData.enableSection(category.getValue(), optionItem.isSelected());
+        for (Entry<Integer, Integer> section : sections.entrySet()) {
+             options.add(UiOptionItem.from(getContext().getString(section.getKey()), optionItem -> {
+                 mGeneralData.enableSection(section.getValue(), optionItem.isSelected());
                  BrowsePresenter.instance(getContext()).updateSections();
-             }, mGeneralData.isBrowseSectionEnabled(category.getValue())));
+             }, mGeneralData.isSectionEnabled(section.getValue())));
         }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.side_panel_sections), options);
     }
 
-    private void appendBootToCategory(AppDialogPresenter settingsPresenter) {
+    private void appendBootToSection(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        Map<Integer, Integer> leftPanelCategories = mGeneralData.getSections();
+        Map<Integer, Integer> sections = mGeneralData.getDefaultSections();
 
-        for (Entry<Integer, Integer> category : leftPanelCategories.entrySet()) {
+        for (Entry<Integer, Integer> section : sections.entrySet()) {
             options.add(
                     UiOptionItem.from(
-                            getContext().getString(category.getKey()),
-                            optionItem -> mGeneralData.setBootSectionId(category.getValue()),
-                            category.getValue().equals(mGeneralData.getBootSectionId())
+                            getContext().getString(section.getKey()),
+                            optionItem -> mGeneralData.setBootSectionId(section.getValue()),
+                            section.getValue().equals(mGeneralData.getBootSectionId())
                     )
             );
         }
@@ -165,7 +165,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         for (int i = 1; i <= 15; i++) {
             int timeoutMin = i;
             options.add(UiOptionItem.from(
-                    String.format("%s min", i),
+                    getContext().getString(R.string.screen_dimming_timeout_min, i),
                     option -> mGeneralData.setScreenDimmingTimeoutMin(timeoutMin),
                     mGeneralData.getScreenDimmingTimeoutMin() == i));
         }
@@ -192,6 +192,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(
                 String.format("%s\n%s", getContext().getString(R.string.app_backup), backupManager.getBackupPath()),
                 option -> {
+                    mGeneralData.enableSettingsSection(true); // prevent Settings lock
                     backupManager.checkPermAndBackup();
                     MessageHelpers.showMessage(getContext(), R.string.msg_done);
                 }));
@@ -214,6 +215,13 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.return_to_launcher),
                 option -> mGeneralData.enableReturnToLauncher(option.isSelected()),
                 mGeneralData.isReturnToLauncherEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_settings_section),
+                option -> {
+                    mGeneralData.enableSettingsSection(!option.isSelected());
+                    mRestartApp = true;
+                },
+                !mGeneralData.isSettingsSectionEnabled()));
 
         ProxyManager proxyManager = ProxyManager.instance(getContext());
 

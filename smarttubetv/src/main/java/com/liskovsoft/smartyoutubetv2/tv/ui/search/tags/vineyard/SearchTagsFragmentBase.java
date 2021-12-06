@@ -23,7 +23,7 @@ import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.PaginationAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.TagAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SearchSupportFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.search.SearchSupportFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
 
     private TagAdapter mSearchTagsAdapter;
     private ObjectAdapter mItemResultsAdapter;
-    private ArrayObjectAdapter mResultsAdapter;
+    private ArrayObjectAdapter mResultsAdapter; // contains tags adapter and results adapter (see attachAdapter method)
     private ListRowPresenter mResultsPresenter;
 
     private boolean mIsStopping;
@@ -203,6 +203,12 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
                 index = Math.min(index, mResultsAdapter.size());
                 mResultsAdapter.add(index, new ListRow(adapter));
             }
+        }
+    }
+
+    protected void detachAdapter(int index) {
+        if (mResultsAdapter != null && index < mResultsAdapter.size()) {
+            mResultsAdapter.removeItems(index, 1);
         }
     }
 

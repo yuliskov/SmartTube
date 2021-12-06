@@ -26,9 +26,12 @@
     <dimen name="lb_basic_card_content_text_size">12sp</dimen>
     -->
 
-    <!-- Search items left margin (except first one) -->
+    <!-- Search items left margin (except first one). Original value: 70dp -->
     <!-- Problems here: external search dialog won't overlap correctly -->
     <!--<dimen name="lb_search_bar_items_margin_start">20dp</dimen>-->
+
+    <!-- Margin for items from the right side of search field. -->
+    <dimen name="search_bar_right_items_margin">20dp</dimen>
 
     <!-- Decrease Browse fragment content top padding. -->
     <!-- Old value: 167dp -->

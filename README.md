@@ -29,7 +29,7 @@ There is a **beta release** (recommended) and a **stable release**. Beta gets ne
 
 You can use either of the following methods to install the app:
 
-- (**easiest**) install [Downloader by AFTVnews](https://www.aftvnews.com/downloader/) on your Android TV, open it and enter `is.gd/stn_beta` or `is.gd/stn_stable`, then read, understand and confirm the security prompts. (<small>You can also enter [**79015**](https://aftv.news/79015) (for beta) or [**28544**](https://aftv.news/28544) (for stable), but this requires an extra step to install the AFTVnews Downloader browser addon if you haven't already.</small>)
+- (**easiest**) install [Downloader by AFTVnews](https://www.aftvnews.com/downloader/) on your Android TV, open it and enter `kutt.it/stn_beta` or `kutt.it/stn_stable`, then read, understand and confirm the security prompts. (<small>You can also enter [**79015**](https://aftv.news/79015) (for beta) or [**28544**](https://aftv.news/28544) (for stable), but this requires an extra step to install the AFTVnews Downloader browser addon if you haven't already.</small>)
 - install a file transfer app on your Android TV, download the APK on your phone or computer and transfer it to your TV (e.g. [_Send Files to TV_](https://sendfilestotv.app/)\*)
 - download the APK onto a USB stick, put the USB stick into your TV and use a file manager app (e.g. [_FX File Explorer_](https://play.google.com/store/apps/details?id=nextapp.fx)\* or [_FileCommander_](https://play.google.com/store/apps/details?id=com.mobisystems.fileman)\*). Android's preinstalled file manager does not work!
 - if you are an advanced user, you can install it using ADB. [guide](https://fossbytes.com/side-load-apps-android-tv/#h-how-to-sideload-apps-on-your-android-tv-using-adb) | [alternative guide](https://www.aftvnews.com/sideload/)
@@ -107,19 +107,19 @@ You can adjust the playback speed pressing the speed-indicator icon (gauge) in t
 
 ### Voice Search
 
-To enable voice search, an additional app must be installed alongside SmartTubeNext. This _bridge app_ can intercept the System's attempts to open the original YouTube app and open SmartTubeNext instead. For this to work, you must uninstall the original YouTube app. We know this sucks, but you can always reinstall it if you change your mind.
+To enable global voice search, an additional app must be installed alongside SmartTubeNext. This _bridge app_ can intercept the System's attempts to open the original YouTube app and open SmartTubeNext instead. For this to work, you must uninstall the original YouTube app. We know this sucks, but you can always reinstall it if you change your mind. The _bridge app_ will not show up in your launcher and you do cannot to launch it directly; it is only used internally by the system's voice search. On some devices, you need to explicitly say "Youtube" when searching (e.g. say "youtube cute cats" instead of just "cute cats").
 
 **On Amazon Fire TV**, to enable voice search support you need to: 
 
 1. uninstall the original YouTube app (no root required on Amazon FireTV stick)
-2. download and install the Amazon Bridge SmartTubeNext app: https://is.gd/stn_bridge_amazon (e.g. via _Downloader for AFTVnews_)
+2. download and install the Amazon Bridge SmartTubeNext app: https://kutt.it/stn_bridge_amazon (e.g. via _Downloader for AFTVnews_)
 
 
 **On all other Android devices**, sadly root is required to enable this:
 
 1. root your device (search for a guide for your specific device)
 2. uninstall the official YouTube app using root (`adb shell pm uninstall com.google.android.youtube.tv`)
-3. download and install the ATV Bridge SmartTubeNext app: https://is.gd/stn_bridge_atv
+3. download and install the ATV Bridge SmartTubeNext app: https://kutt.it/stn_bridge_atv (e.g. via _Downloader for AFTVnews_)
 
 
 ## Donation

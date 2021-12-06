@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer;
 
 import android.net.Uri;
+import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.source.dash.DashSegmentIndex;
 import com.google.android.exoplayer2.source.dash.manifest.DashManifest;
 import com.google.android.exoplayer2.source.dash.manifest.DashManifestParser;
 import com.google.android.exoplayer2.source.dash.manifest.Period;
@@ -20,35 +22,35 @@ import java.util.List;
  */
 @SuppressWarnings("unchecked")
 public class LiveDashManifestParser extends DashManifestParser {
-    private DashManifest mManifest;
+    private static final String TAG = LiveDashManifestParser.class.getSimpleName();
+    private DashManifest mOldManifest;
     private long mOldSegmentNum;
 
     @Override
     public DashManifest parse(Uri uri, InputStream inputStream) throws IOException {
         DashManifest manifest = super.parse(uri, inputStream);
 
-        updateManifest(manifest);
+        appendManifest(manifest);
 
-        return mManifest;
+        return mOldManifest;
     }
 
-    private static long getFirstSegmentNum(DashManifest manifest) {
-        return manifest.getPeriod(0).adaptationSets.get(0).representations.get(0).getIndex().getFirstSegmentNum();
-    }
-
-    private void updateManifest(DashManifest newManifest) {
+    private void appendManifest(DashManifest newManifest) {
         if (newManifest == null) {
             return;
         }
 
-        long newSegmentNum = getFirstSegmentNum(newManifest);
+        // Even 4+ hours streams could have different length.
+        // So, we should take into account last segment num instead of first one.
+        long newSegmentNum = getLastSegmentNum(newManifest);
 
-        if (newSegmentNum == 0) { // Short stream. No need to do something special.
-            mManifest = newManifest;
-            return;
-        }
+        // No need this anymore
+        //if (newSegmentNum == 0) { // Short stream. No need to do something special.
+        //    mOldManifest = newManifest;
+        //    return;
+        //}
 
-        if (mManifest == null) {
+        if (mOldManifest == null) {
             //newManifest.availabilityStartTimeMs = -1;
             Period newPeriod = newManifest.getPeriod(0);
             // TODO: modified
@@ -73,19 +75,19 @@ public class LiveDashManifestParser extends DashManifestParser {
                 }
             }
 
-            mManifest = newManifest;
+            mOldManifest = newManifest;
 
             return;
         }
 
         //long oldSegmentNum = getFirstSegmentNum(mManifest);
 
-        Period oldPeriod = mManifest.getPeriod(0);
+        Period oldPeriod = mOldManifest.getPeriod(0);
         Period newPeriod = newManifest.getPeriod(0);
 
         for (int i = 0; i < oldPeriod.adaptationSets.size(); i++) {
             for (int j = 0; j < oldPeriod.adaptationSets.get(i).representations.size(); j++) {
-                updateRepresentation(
+                appendRepresentation(
                         oldPeriod.adaptationSets.get(i).representations.get(j),
                         newPeriod.adaptationSets.get(i).representations.get(j),
                         newSegmentNum - mOldSegmentNum
@@ -98,20 +100,20 @@ public class LiveDashManifestParser extends DashManifestParser {
         //mManifest.timeShiftBufferDepthMs += (newSegmentNum - oldSegmentNum) * 5_000;
     }
 
-    private static void updateRepresentation(Representation representation1, Representation representation2, long segmentNumShift) {
+    private static void appendRepresentation(Representation oldRepresentation, Representation newRepresentation, long segmentNumShift) {
         if (segmentNumShift <= 0) {
             return;
         }
 
-        MultiSegmentRepresentation oldRepresentation = (MultiSegmentRepresentation) representation1;
-        MultiSegmentRepresentation newRepresentation = (MultiSegmentRepresentation) representation2;
+        MultiSegmentRepresentation oldMultiRepresentation = (MultiSegmentRepresentation) oldRepresentation;
+        MultiSegmentRepresentation newMultiRepresentation = (MultiSegmentRepresentation) newRepresentation;
 
         // TODO: modified
         //SegmentList oldSegmentList = (SegmentList) oldRepresentation.segmentBase;
-        SegmentList oldSegmentList = (SegmentList) Helpers.getField(oldRepresentation, "segmentBase");
+        SegmentList oldSegmentList = (SegmentList) Helpers.getField(oldMultiRepresentation, "segmentBase");
         // TODO: modified
         //SegmentList newSegmentList = (SegmentList) newRepresentation.segmentBase;
-        SegmentList newSegmentList = (SegmentList) Helpers.getField(newRepresentation, "segmentBase");
+        SegmentList newSegmentList = (SegmentList) Helpers.getField(newMultiRepresentation, "segmentBase");
 
         // TODO: modified
         //List<RangedUri> oldMediaSegments = oldSegmentList.mediaSegments;
@@ -144,5 +146,19 @@ public class LiveDashManifestParser extends DashManifestParser {
             //oldSegmentTimeline.addAll(
             //        newSegmentList.segmentTimeline.subList(newSegmentList.segmentTimeline.size() - (int) segmentNumShift - 1, newSegmentList.segmentTimeline.size()));
         }
+    }
+
+    private static long getFirstSegmentNum(DashManifest manifest) {
+        DashSegmentIndex dashSegmentIndex = manifest.getPeriod(0).adaptationSets.get(0).representations.get(0).getIndex();
+        return dashSegmentIndex.getFirstSegmentNum();
+    }
+
+    private static long getLastSegmentNum(DashManifest manifest) {
+        DashSegmentIndex dashSegmentIndex = manifest.getPeriod(0).adaptationSets.get(0).representations.get(0).getIndex();
+        return dashSegmentIndex.getFirstSegmentNum() + dashSegmentIndex.getSegmentCount(DashSegmentIndex.INDEX_UNBOUNDED) - 1;
+    }
+
+    private static long getSegmentCount(DashManifest manifest) {
+        return manifest.getPeriod(0).adaptationSets.get(0).representations.get(0).getIndex().getSegmentCount(C.TIME_UNSET);
     }
 }

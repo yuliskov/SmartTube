@@ -21,6 +21,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -202,6 +203,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
             case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
                 getController().setPositionMs(0);
                 getController().setPlay(true);
+                Utils.showRepeatInfo(getActivity(), playbackMode);
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
                 // Close player
@@ -220,6 +222,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
                     getController().showSuggestions(true);
                     getController().setPlay(false);
                     getController().setPositionMs(0);
+                    Utils.showRepeatInfo(getActivity(), playbackMode);
                 } else {
                     onNextClicked();
                     getController().showControls(true);
@@ -235,6 +238,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
                     getController().showSuggestions(true);
                     getController().setPlay(false);
                     getController().setPositionMs(0);
+                    Utils.showRepeatInfo(getActivity(), playbackMode);
                 }
                 break;
         }
@@ -274,12 +278,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onRepeatModeClicked(int modeIndex) {
-        mPlayerData.setPlaybackMode(modeIndex);
-        showBriefInfo(modeIndex);
-    }
-
-    @Override
     public boolean onKeyDown(int keyCode) {
         mSleepTimerStartMs = System.currentTimeMillis();
 
@@ -295,26 +293,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
         }
 
         return playbackMode;
-    }
-
-    private void showBriefInfo(int modeIndex) {
-        switch (modeIndex) {
-            case PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL:
-                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_all);
-                break;
-            case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
-                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_one);
-                break;
-            case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
-                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_pause);
-                break;
-            case PlaybackEngineController.PLAYBACK_MODE_LIST:
-                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_pause_alt);
-                break;
-            case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
-                MessageHelpers.showMessage(getActivity(), R.string.repeat_mode_none);
-                break;
-        }
     }
 
     private void loadVideo(Video item) {
@@ -379,8 +357,8 @@ public class VideoLoader extends PlayerEventListenerHelper {
                 SignInPresenter.instance(getActivity()).start();
                 getController().finish();
             }
-        } else if (formatInfo.containsDashUrl()) {
-            Log.d(TAG, "Found live video in dash format. Loading...");
+        } else if (formatInfo.containsDashUrl() && isLive && !PlayerTweaksData.instance(getActivity()).isLiveStreamFixEnabled()) {
+            Log.d(TAG, "Found live video (current or past live stream) in dash format. Loading...");
             getController().openDashUrl(formatInfo.getDashManifestUrl());
         } else if (formatInfo.containsHlsUrl() && isLive) {
             Log.d(TAG, "Found live video (current or past live stream) in hls format. Loading...");

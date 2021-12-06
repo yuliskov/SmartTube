@@ -153,7 +153,7 @@ public class Playlist {
      * @return The next video in the playlist.
      */
     public Video getNext() {
-        if ((mCurrentIndex + 1) < mPlaylist.size()) {
+        if (mCurrentIndex >= 0 && (mCurrentIndex + 1) < mPlaylist.size()) {
             return mPlaylist.get(mCurrentIndex + 1);
         }
 

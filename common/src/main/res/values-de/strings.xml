@@ -258,4 +258,21 @@
     <string name="added_to">Hinzugefügt zu %s</string>
     <string name="removed_from">Entfernt aus %s</string>
     <string name="video_preset_adaptive">Adaptiv</string>
+    <string name="content_block_preview_recap">Vorschau/Video-Zusammenfassung</string>
+    <string name="content_block_highlight">Video-Highlights</string>
+    <string name="removed_from_history">Video wurde aus dem Verlauf entfernt</string>
+    <string name="remove_from_history">Aus dem Verlauf entfernen</string>
+    <string name="upload_date">Upload-Datum</string>
+    <string name="upload_date_any">Beliebig</string>
+    <string name="upload_date_today">Heute</string>
+    <string name="upload_date_this_week">Diese Woche</string>
+    <string name="upload_date_this_month">Dieser Monat</string>
+    <string name="upload_date_this_year">Dieses Jahr</string>
+    <string name="double_refresh_rate">Doppelte Bildrate</string>
+    <string name="upload_date_last_hour">Letzte Stunde</string>
+    <string name="focus_on_search_results">Autofokus auf Suchergebnisse</string>
+    <string name="context_menu">Kontextmenü</string>
+    <string name="add_remove_from_recent_playlist">Hinzufügen/Entfernen aus letzter Wiedergabeliste</string>
+    <string name="hide_settings_section">Einstellungen-Kategorie ausblenden (gefährlich!)</string>
+    <string name="volume">Lautstärke %s%%</string>
 </resources>

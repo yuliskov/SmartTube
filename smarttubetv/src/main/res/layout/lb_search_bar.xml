@@ -75,4 +75,34 @@
                     android:hint="@string/lb_search_bar_hint"
                     android:textSize="@dimen/lb_search_bar_text_size"/>
     </RelativeLayout>
+
+    <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.search.SearchSettingsOrbView
+        android:id="@+id/search_settings_orb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/search_bar_right_items_margin"
+        android:layout_toEndOf="@+id/lb_search_bar_items"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:searchOrbColor="#FFFFFF"
+        app:searchOrbBrightColor="#FFFFFF"
+        app:searchOrbIconColor="#000000"
+    >
+    </com.liskovsoft.smartyoutubetv2.tv.ui.widgets.search.SearchSettingsOrbView>
+
+    <androidx.leanback.widget.SearchOrbView
+        android:id="@+id/lb_search_bar_search_orb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/search_bar_right_items_margin"
+        android:layout_toEndOf="@+id/search_settings_orb"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:searchOrbColor="#FFFFFF"
+        app:searchOrbBrightColor="#FFFFFF"
+        app:searchOrbIconColor="#000000"
+    >
+    </androidx.leanback.widget.SearchOrbView>
 </merge>

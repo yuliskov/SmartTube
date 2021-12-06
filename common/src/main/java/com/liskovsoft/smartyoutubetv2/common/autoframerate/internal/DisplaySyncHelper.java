@@ -29,6 +29,7 @@ public class DisplaySyncHelper implements UhdHelperListener {
     private Mode mNewMode;
     // switch not only framerate but resolution too
     private boolean mIsResolutionSwitchEnabled;
+    private boolean mIsDoubleRefreshRateEnabled = true;
     private int mModeLength = -1;
     private AutoFrameRateListener mListener;
 
@@ -203,7 +204,11 @@ public class DisplaySyncHelper implements UhdHelperListener {
         return null;
     }
 
-    protected HashMap<Integer, int[]> getRateMapping() {
+    private HashMap<Integer, int[]> getRateMapping() {
+        return mIsDoubleRefreshRateEnabled ? getDoubleRateMapping() : getSingleRateMapping();
+    }
+
+    private HashMap<Integer, int[]> getSingleRateMapping() {
         HashMap<Integer, int[]> relatedRates = new HashMap<>();
         relatedRates.put(1500, new int[]{3000, 6000});
         relatedRates.put(2397, new int[]{2397, 2400, 3000, 6000});
@@ -213,6 +218,25 @@ public class DisplaySyncHelper implements UhdHelperListener {
         relatedRates.put(3000, new int[]{3000, 6000});
         relatedRates.put(5000, new int[]{5000, 2500});
         relatedRates.put(5994, new int[]{5994, 6000, 3000});
+        relatedRates.put(6000, new int[]{6000, 3000});
+        return relatedRates;
+    }
+
+    /**
+     * ExoPlayer reports wrong for 60 and 30 fps formats.<br/>
+     * Do workarounds: 60 => 59.94, 30 => 59.94
+     */
+    private HashMap<Integer, int[]> getDoubleRateMapping() {
+        HashMap<Integer, int[]> relatedRates = new HashMap<>();
+        relatedRates.put(1500, new int[]{6000, 3000});
+        relatedRates.put(2397, new int[]{4794, 4800, 2397, 2400});
+        relatedRates.put(2400, new int[]{4800, 2400});
+        relatedRates.put(2497, new int[]{4994, 5000, 2497, 2500});
+        relatedRates.put(2500, new int[]{5000, 2500});
+        relatedRates.put(2997, new int[]{5994, 6000, 2997, 3000});
+        relatedRates.put(3000, new int[]{6000, 3000});
+        relatedRates.put(5000, new int[]{5000, 2500});
+        relatedRates.put(5994, new int[]{5994, 6000, 2997, 3000});
         relatedRates.put(6000, new int[]{6000, 3000});
         return relatedRates;
     }
@@ -519,6 +543,10 @@ public class DisplaySyncHelper implements UhdHelperListener {
 
     public boolean isResolutionSwitchEnabled() {
         return mIsResolutionSwitchEnabled;
+    }
+
+    public void setDoubleRefreshRateEnabled(boolean enabled) {
+        mIsDoubleRefreshRateEnabled = enabled;
     }
 
     public void setContext(Context context) {

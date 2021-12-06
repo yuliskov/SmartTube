@@ -30,12 +30,18 @@ import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlService;
 import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
@@ -164,6 +170,10 @@ public class Utils {
     }
 
     public static void updateRemoteControlService(Context context) {
+        if (context == null || Helpers.equalsAny(Build.MODEL, "NV501", "NV501WAC")) { // Eltex NPE fix
+            return;
+        }
+
         if (RemoteControlData.instance(context).isRunInBackgroundEnabled()) {
             // Service that prevents the app from destroying
             startService(context, RemoteControlService.class);
@@ -339,21 +349,21 @@ public class Utils {
         notificationManager.cancel(notificationId);
     }
 
-    public static Notification createNotification(Context context, int iconResId, int titleResId, Class<? extends Activity> activityCls) {
-        return createNotification(context, iconResId, titleResId, -1, activityCls);
+    public static Notification createNotification(Context context, int iconResId, String title, Class<? extends Activity> activityCls) {
+        return createNotification(context, iconResId, title, null, activityCls);
     }
 
     @SuppressWarnings("deprecation")
-    public static Notification createNotification(Context context, int iconResId, int titleResId, int contentResId, Class<? extends Activity> activityCls) {
+    public static Notification createNotification(Context context, int iconResId, String title, String content, Class<? extends Activity> activityCls) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(iconResId)
-                        .setContentTitle(context.getString(titleResId));
+                        .setContentTitle(title);
 
-        if (contentResId > 0) {
-            builder.setContentText(context.getString(contentResId));
+        if (content != null) {
+            builder.setContentText(content);
         }
 
         Intent targetIntent = new Intent(context, activityCls);
@@ -401,5 +411,58 @@ public class Utils {
         Intent serviceIntent = new Intent(context, serviceCls);
 
         context.stopService(serviceIntent);
+    }
+
+    public static void showRepeatInfo(Context context, int modeIndex) {
+        switch (modeIndex) {
+            case PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL:
+                MessageHelpers.showMessage(context, R.string.repeat_mode_all);
+                break;
+            case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
+                MessageHelpers.showMessage(context, R.string.repeat_mode_one);
+                break;
+            case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
+                MessageHelpers.showMessage(context, R.string.repeat_mode_pause);
+                break;
+            case PlaybackEngineController.PLAYBACK_MODE_LIST:
+                MessageHelpers.showMessage(context, R.string.repeat_mode_pause_alt);
+                break;
+            case PlaybackEngineController.PLAYBACK_MODE_CLOSE:
+                MessageHelpers.showMessage(context, R.string.repeat_mode_none);
+                break;
+        }
+    }
+
+    /**
+     * Channels could be of two types: regular (usr channel) and playlist channel (contains single row, try search: 'Mon mix')
+     */
+    public static void chooseChannelPresenter(Context context, Video item) {
+        if (item.hasVideo()) { // regular channel
+            ChannelPresenter.instance(context).openChannel(item);
+            return;
+        }
+
+        LoadingManager.showLoading(context, true);
+
+        MediaServiceManager.instance().loadChannelRows(item, group -> {
+            LoadingManager.showLoading(context, false);
+
+            if (group == null || group.size() == 0) {
+                return;
+            }
+
+            if (group.size() == 1) {
+                // Start first video or open full list?
+                //if (group.get(0).getMediaItems() != null) {
+                //    PlaybackPresenter.instance(context).openVideo(Video.from(group.get(0).getMediaItems().get(0)));
+                //}
+                ChannelUploadsPresenter.instance(context).updateGrid(group.get(0));
+            } else {
+                // Just in case we're opening channel inside a channel
+                // TODO: clear only once, on start
+                ChannelPresenter.instance(context).clear();
+                ChannelPresenter.instance(context).updateRows(group);
+            }
+        });
     }
 }

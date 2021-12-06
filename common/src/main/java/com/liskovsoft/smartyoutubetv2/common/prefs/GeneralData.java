@@ -28,7 +28,7 @@ public class GeneralData {
     private final AppPrefs mPrefs;
     private boolean mIsSettingsSectionEnabled;
     private int mBootSectionId;
-    private final Map<Integer, Integer> mSections = new LinkedHashMap<>();
+    private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
     private final Set<Integer> mEnabledSections = new HashSet<>();
     private int mAppExitShortcut;
     private boolean mIsReturnToLauncherEnabled;
@@ -45,7 +45,7 @@ public class GeneralData {
     private GeneralData(Context context) {
         mContext = context;
         mPrefs = AppPrefs.instance(context);
-        initLeftPanelCategories();
+        initSections();
         restoreState();
     }
 
@@ -57,8 +57,8 @@ public class GeneralData {
         return sInstance;
     }
 
-    public Map<Integer, Integer> getSections() {
-        return mSections;
+    public Map<Integer, Integer> getDefaultSections() {
+        return mDefaultSections;
     }
 
     public void enableSection(int sectionId, boolean enabled) {
@@ -71,9 +71,9 @@ public class GeneralData {
         persistState();
     }
 
-    public boolean isBrowseSectionEnabled(int categoryId) {
-        // Enable by default pinned sidebar items
-        return mEnabledSections.contains(categoryId) || !mSections.containsValue(categoryId);
+    public boolean isSectionEnabled(int categoryId) {
+        return mEnabledSections.contains(categoryId) ||
+                Helpers.findFirst(mPinnedItems, item -> item.hashCode() == categoryId) != null; // by default enable all pinned items
     }
 
     public void setBootSectionId(int sectionId) {
@@ -201,15 +201,15 @@ public class GeneralData {
         return mLastPlaylistId;
     }
 
-    private void initLeftPanelCategories() {
-        mSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
-        mSections.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
-        mSections.put(R.string.header_news, MediaGroup.TYPE_NEWS);
-        mSections.put(R.string.header_music, MediaGroup.TYPE_MUSIC);
-        mSections.put(R.string.header_channels, MediaGroup.TYPE_CHANNEL_UPLOADS);
-        mSections.put(R.string.header_subscriptions, MediaGroup.TYPE_SUBSCRIPTIONS);
-        mSections.put(R.string.header_history, MediaGroup.TYPE_HISTORY);
-        mSections.put(R.string.header_playlists, MediaGroup.TYPE_USER_PLAYLISTS);
+    private void initSections() {
+        mDefaultSections.put(R.string.header_home, MediaGroup.TYPE_HOME);
+        mDefaultSections.put(R.string.header_gaming, MediaGroup.TYPE_GAMING);
+        mDefaultSections.put(R.string.header_news, MediaGroup.TYPE_NEWS);
+        mDefaultSections.put(R.string.header_music, MediaGroup.TYPE_MUSIC);
+        mDefaultSections.put(R.string.header_channels, MediaGroup.TYPE_CHANNEL_UPLOADS);
+        mDefaultSections.put(R.string.header_subscriptions, MediaGroup.TYPE_SUBSCRIPTIONS);
+        mDefaultSections.put(R.string.header_history, MediaGroup.TYPE_HISTORY);
+        mDefaultSections.put(R.string.header_playlists, MediaGroup.TYPE_USER_PLAYLISTS);
     }
 
     private void restoreState() {
@@ -217,7 +217,7 @@ public class GeneralData {
 
         String[] split = Helpers.splitObjectLegacy(data);
 
-        String selectedCategories = Helpers.parseStr(split, 0);
+        String selectedSections = Helpers.parseStr(split, 0);
         mBootSectionId = Helpers.parseInt(split, 1, MediaGroup.TYPE_HOME);
         mIsSettingsSectionEnabled = Helpers.parseBoolean(split, 2, true);
         mAppExitShortcut = Helpers.parseInt(split, 3, EXIT_DOUBLE_BACK);
@@ -232,14 +232,14 @@ public class GeneralData {
         mIsOkButtonLongPressDisabled = Helpers.parseBoolean(split, 12, false);
         mLastPlaylistId = Helpers.parseStr(split, 13);
 
-        if (selectedCategories != null) {
-            String[] selectedCategoriesArr = Helpers.splitArrayLegacy(selectedCategories);
+        if (selectedSections != null) {
+            String[] selectedSectionsArr = Helpers.splitArrayLegacy(selectedSections);
 
-            for (String categoryId : selectedCategoriesArr) {
-                mEnabledSections.add(Helpers.parseInt(categoryId));
+            for (String sectionId : selectedSectionsArr) {
+                mEnabledSections.add(Helpers.parseInt(sectionId));
             }
         } else {
-            mEnabledSections.addAll(mSections.values());
+            mEnabledSections.addAll(mDefaultSections.values());
         }
 
         if (pinnedItems != null) {

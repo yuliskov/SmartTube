@@ -61,10 +61,20 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.showDialog(getContext().getString(R.string.settings_remote_control), this::unhold);
     }
 
+    private void appendRunInBackgroundSwitch(AppDialogPresenter settingsPresenter) {
+        settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.run_in_background), optionItem -> {
+            mDeviceLinkData.enableRunInBackground(optionItem.isSelected());
+            Utils.updateRemoteControlService(getContext());
+        }, mDeviceLinkData.isRunInBackgroundEnabled()));
+    }
+
     private void appendAddDeviceButton(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleButton(UiOptionItem.from(
                 getContext().getString(R.string.dialog_add_device), option -> {
                     AddDevicePresenter.instance(getContext()).start();
+
+                    mDeviceLinkData.enableRunInBackground(true);
+                    Utils.updateRemoteControlService(getContext());
                 }));
     }
 
@@ -76,25 +86,14 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
                     RxUtils.execute(mRemoteManager.resetDataObserve());
                     MessageHelpers.showMessage(getContext(), R.string.msg_done);
                     settingsPresenter.closeDialog();
+
+                    mDeviceLinkData.enableRunInBackground(false);
+                    Utils.updateRemoteControlService(getContext());
                 }
         );
 
         options.add(confirmItem);
 
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.dialog_remove_all_devices), options);
-    }
-
-    //private void appendLinkEnableSwitch(AppDialogPresenter settingsPresenter) {
-    //    settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.device_link_enabled), optionItem -> {
-    //        mDeviceLinkData.enableDeviceLink(optionItem.isSelected());
-    //        Utils.updateRemoteControlService(getContext());
-    //    }, mDeviceLinkData.isDeviceLinkEnabled()));
-    //}
-
-    private void appendRunInBackgroundSwitch(AppDialogPresenter settingsPresenter) {
-        settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.run_in_background), optionItem -> {
-            mDeviceLinkData.enableRunInBackground(optionItem.isSelected());
-            Utils.updateRemoteControlService(getContext());
-        }, mDeviceLinkData.isRunInBackgroundEnabled()));
     }
 }

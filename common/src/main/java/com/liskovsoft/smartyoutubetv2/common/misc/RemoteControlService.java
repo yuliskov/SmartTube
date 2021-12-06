@@ -47,10 +47,13 @@ public class RemoteControlService extends Service {
     }
 
     private Notification createNotification() {
+        String remoteControl = getString(R.string.settings_remote_control);
+        String serviceStarted = getString(R.string.background_service_started);
+
         return Utils.createNotification(
                 getApplicationContext(),
                 getApplicationInfo().icon,
-                R.string.background_service_started,
+                String.format("%s: %s", remoteControl, serviceStarted),
                 ViewManager.instance(getApplicationContext()).getRootActivity());
     }
 }

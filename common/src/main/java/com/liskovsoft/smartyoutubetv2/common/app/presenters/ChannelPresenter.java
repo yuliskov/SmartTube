@@ -17,8 +17,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMe
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -34,6 +34,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private final MediaService mMediaService;
     private final MediaServiceManager mServiceManager;
     private String mChannelId;
+    private List<MediaGroup> mMediaGroups;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
 
@@ -58,6 +59,9 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         if (mChannelId != null) {
             getView().clear();
             updateRows(mChannelId);
+        } else if (mMediaGroups != null) {
+            getView().clear();
+            updateRows(mMediaGroups);
         }
     }
 
@@ -98,6 +102,8 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     public void onViewDestroyed() {
         super.onViewDestroyed();
         disposeActions();
+        mChannelId = null;
+        mMediaGroups = null;
     }
 
     @Override
@@ -173,12 +179,20 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        this::updateRowsHeader,
+                        this::updateRows,
                         error -> Log.e(TAG, "updateRows error: %s", error.getMessage())
                  );
     }
 
-    private void updateRowsHeader(List<MediaGroup> mediaGroups) {
+    public void updateRows(List<MediaGroup> mediaGroups) {
+        if (getView() == null) { // starting from outside (e.g. MediaServiceManager)
+            disposeActions();
+            mChannelId = null;
+            mMediaGroups = mediaGroups;
+            ViewManager.instance(getContext()).startView(ChannelView.class);
+            return;
+        }
+
         filterIfNeeded(mediaGroups);
 
         for (MediaGroup mediaGroup : mediaGroups) {
@@ -232,10 +246,16 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
         String rowName = getContext().getString(rowNameResId);
 
-        MediaGroup group = Helpers.removeIf(mediaGroups, value -> rowName.equals(value.getTitle()));
+        List<MediaGroup> group = Helpers.removeIf(mediaGroups, value -> rowName.equals(value.getTitle()));
 
         if (group != null) {
-            mediaGroups.add(0, group);
+            mediaGroups.addAll(0, group);
+        }
+    }
+
+    public void clear() {
+        if (getView() != null) {
+            getView().clear();
         }
     }
 }

@@ -257,5 +257,22 @@
     <string name="dialog_remove_from">Retirer de %s</string>
     <string name="added_to">Ajouté à %s</string>
     <string name="removed_from">Retiré de %s</string>
-    <string name="video_preset_adaptive">Adaptive</string>
+    <string name="video_preset_adaptive">Adaptatif</string>
+    <string name="content_block_preview_recap">Aperçu ou récap de la vidéo</string>
+    <string name="content_block_highlight">Point ou point fort de la vidéo</string>
+    <string name="removed_from_history">La vidéo a été retirée de l\'historique</string>
+    <string name="remove_from_history">Retirer de l\'historique</string>
+    <string name="upload_date">Date d\'upload</string>
+    <string name="upload_date_any">Tout temps</string>
+    <string name="upload_date_today">Aujourd\'hui</string>
+    <string name="upload_date_this_week">Cette semaine</string>
+    <string name="upload_date_this_month">Ce mois-ci</string>
+    <string name="upload_date_this_year">Cette année</string>
+    <string name="double_refresh_rate">Double taux de rafraîchissement</string>
+     <string name="upload_date_last_hour">Dernières heures</string>
+    <string name="focus_on_search_results">Autofocus sur les résultats de recherche</string>
+    <string name="context_menu">Menu contextuel</string>
+    <string name="add_remove_from_recent_playlist">Ajouter/Supprimer de la playlist récente</string>
+    <string name="hide_settings_section">Masquer la section Paramètres (dangereux!)</string>
+    <string name="volume">Volume %s%%</string>
 </resources>

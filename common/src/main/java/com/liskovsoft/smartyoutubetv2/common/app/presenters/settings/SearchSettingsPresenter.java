@@ -39,6 +39,10 @@ public class SearchSettingsPresenter extends BasePresenter<Void> {
                 option -> mSearchData.setInstantVoiceSearchEnabled(option.isSelected()),
                 mSearchData.isInstantVoiceSearchEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.focus_on_search_results),
+                option -> mSearchData.setFocusOnResultsEnabled(option.isSelected()),
+                mSearchData.isFocusOnResultsEnabled()));
+
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.dialog_search), options);
     }
 }
