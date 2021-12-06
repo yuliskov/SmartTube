@@ -17,7 +17,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
@@ -42,7 +41,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
     private long mPrevErrorTimeMs;
     private PlayerData mPlayerData;
     private long mSleepTimerStartMs;
-    private long mAudioBlacklistedMs;
     private boolean mSkipAdd;
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
@@ -104,10 +102,6 @@ public class VideoLoader extends PlayerEventListenerHelper {
     @Override
     public void onEngineError(int type) {
         Log.e(TAG, "Player error occurred: %s. Trying to fix…", type);
-
-        if (blacklistAudioTrack(type)) {
-            return;
-        }
 
         if (mErrorMap.get(type) != null) {
             // Some ciphered data might be stalled.
@@ -407,43 +401,5 @@ public class VideoLoader extends PlayerEventListenerHelper {
         Integer resId = mErrorMap.get(type);
         
         return resId == null ? getActivity().getString(R.string.msg_player_error, type) : resId > 0 ? getActivity().getString(resId) : null;
-    }
-
-    /**
-     * Blacklisting audio track for certain live streams.<br/>
-     * Last segment of such streams produce 404 error.<br/>
-     * See DrLupo streams, for example.
-     */
-    private boolean blacklistAudioTrack(int errorType) {
-        if (errorType != PlayerEventListener.ERROR_TYPE_SOURCE) {
-            return false;
-        }
-
-        if (!getController().getVideo().isLive) {
-            return false;
-        }
-
-        if (System.currentTimeMillis() - mAudioBlacklistedMs < 1_000) {
-            return false;
-        }
-
-        List<FormatItem> audioFormats = getController().getAudioFormats();
-        FormatItem newFormat = null;
-
-        for (FormatItem formatItem : audioFormats) {
-            if (!formatItem.isSelected()) {
-                newFormat = formatItem;
-                break;
-            }
-        }
-
-        if (newFormat != null) {
-            getController().setFormat(newFormat);
-            getController().reloadPlayback();
-            mAudioBlacklistedMs = System.currentTimeMillis();
-            return true;
-        }
-
-        return false;
     }
 }

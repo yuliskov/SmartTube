@@ -32,7 +32,9 @@ import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.MyDefaultDashChunkSource;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.MyDefaultLoadErrorHandlingPolicy;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
 import com.liskovsoft.youtubeapi.app.AppConstants;
 
 import java.io.IOException;
@@ -55,6 +57,7 @@ public class ExoMediaSourceFactory {
     private static final boolean USE_BANDWIDTH_METER = false;
     private Handler mMainHandler;
     private MediaSourceEventListener mEventLogger;
+    private TrackErrorFixer mTrackErrorFixer;
 
     private ExoMediaSourceFactory(Context context) {
         mContext = context;
@@ -150,7 +153,7 @@ public class ExoMediaSourceFactory {
             case C.TYPE_DASH:
                 DashMediaSource dashSource =
                         new DashMediaSource.Factory(
-                                new DefaultDashChunkSource.Factory(mMediaDataSourceFactory),
+                                new MyDefaultDashChunkSource.Factory(mMediaDataSourceFactory, mTrackErrorFixer),
                                 buildDataSourceFactory(USE_BANDWIDTH_METER)
                         )
                                 .setManifestParser(new LiveDashManifestParser()) // Don't make static! Need state reset for each live source.
@@ -361,4 +364,8 @@ public class ExoMediaSourceFactory {
     //                periods);
     //    }
     //}
+
+    public void setTrackErrorFixer(TrackErrorFixer trackErrorFixer) {
+        mTrackErrorFixer = trackErrorFixer;
+    }
 }
