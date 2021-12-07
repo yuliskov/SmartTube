@@ -154,14 +154,14 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
 
     private void searchTaggedPosts(String query) {
         mSearchTagsAdapter.setTag(query);
-        mResultsAdapter.clear();
-        mSearchTagsAdapter.clear();
         performTagSearch(mSearchTagsAdapter);
     }
 
     private void performTagSearch(PaginationAdapter adapter) {
         String query = adapter.getAdapterOptions().get(PaginationAdapter.KEY_TAG);
         mSearchTagsProvider.search(query, results -> {
+            mResultsAdapter.clear();
+            adapter.clear();
             adapter.addAllItems(results);
             attachAdapter(0, adapter);
             // Same suggestions in the keyboard
