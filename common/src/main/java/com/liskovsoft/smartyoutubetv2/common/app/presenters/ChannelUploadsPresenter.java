@@ -35,6 +35,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
     private Video mVideoItem;
+    private MediaGroup mMediaGroup;
 
     public ChannelUploadsPresenter(Context context) {
         super(context);
@@ -59,6 +60,9 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         if (mVideoItem != null) {
             getView().clear();
             updateGrid(mVideoItem);
+        } else if (mMediaGroup != null) {
+            getView().clear();
+            updateGrid(mMediaGroup);
         }
     }
 
@@ -103,6 +107,8 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     public void onViewDestroyed() {
         super.onViewDestroyed();
         disposeActions();
+        mVideoItem = null;
+        mMediaGroup = null;
     }
 
     @Override
@@ -196,17 +202,27 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        mediaGroup -> {
-                            getView().update(VideoGroup.from(mediaGroup));
-
-                            // Hide loading as long as first group received
-                            if (mediaGroup.getMediaItems() != null) {
-                                getView().showProgressBar(false);
-                            }
-                        },
+                        this::updateGrid,
                         error -> Log.e(TAG, "updateGridHeader error: %s", error.getMessage()),
                         () -> getView().showProgressBar(false)
                 );
+    }
+
+    public void updateGrid(MediaGroup mediaGroup) {
+        if (getView() == null) { // starting from outside (e.g. MediaServiceManager)
+            disposeActions();
+            mVideoItem = null;
+            mMediaGroup = mediaGroup;
+            ViewManager.instance(getContext()).startView(ChannelUploadsView.class);
+            return;
+        }
+
+        getView().update(VideoGroup.from(mediaGroup));
+
+        // Hide loading as long as first group received
+        if (mediaGroup.getMediaItems() != null) {
+            getView().showProgressBar(false);
+        }
     }
 
     private void updateVideoGrid(MediaItem mediaItem, VideoGroupCallback callback) {

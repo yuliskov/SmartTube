@@ -23,7 +23,7 @@ import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.PaginationAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.vineyard.TagAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SearchSupportFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.search.SearchSupportFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
 
     private TagAdapter mSearchTagsAdapter;
     private ObjectAdapter mItemResultsAdapter;
-    private ArrayObjectAdapter mResultsAdapter;
+    private ArrayObjectAdapter mResultsAdapter; // contains tags adapter and results adapter (see attachAdapter method)
     private ListRowPresenter mResultsPresenter;
 
     private boolean mIsStopping;
@@ -49,7 +49,6 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         mProgressBarManager = new ProgressBarManager();
         mResultsPresenter = new CustomListRowPresenter();
         mResultsAdapter = new ArrayObjectAdapter(mResultsPresenter);
-        mSearchTagsAdapter = new TagAdapter(getActivity(), "", getSearchTextEditorId());
         setSearchResultProvider(this);
         setupListeners();
     }
@@ -59,7 +58,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
         View root = super.onCreateView(inflater, container, savedInstanceState);
 
         mProgressBarManager.setRootView((ViewGroup) root);
-
+        mSearchTagsAdapter = new TagAdapter(getActivity(), "", getSearchTextEditorId());
         return root;
     }
 
@@ -154,14 +153,14 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
 
     private void searchTaggedPosts(String query) {
         mSearchTagsAdapter.setTag(query);
-        mResultsAdapter.clear();
-        mSearchTagsAdapter.clear();
         performTagSearch(mSearchTagsAdapter);
     }
 
     private void performTagSearch(PaginationAdapter adapter) {
         String query = adapter.getAdapterOptions().get(PaginationAdapter.KEY_TAG);
         mSearchTagsProvider.search(query, results -> {
+            mResultsAdapter.clear();
+            adapter.clear();
             adapter.addAllItems(results);
             attachAdapter(0, adapter);
             // Same suggestions in the keyboard
@@ -203,6 +202,12 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
                 index = Math.min(index, mResultsAdapter.size());
                 mResultsAdapter.add(index, new ListRow(adapter));
             }
+        }
+    }
+
+    protected void detachAdapter(int index) {
+        if (mResultsAdapter != null && index < mResultsAdapter.size()) {
+            mResultsAdapter.removeItems(index, 1);
         }
     }
 

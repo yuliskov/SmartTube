@@ -241,4 +241,19 @@
   <string name="app_backup">Tallenna asetukset</string>
   <string name="app_restore">Palauta asetukset</string>
   <string name="skip_each_segment_once">Älä hyppää osioita uudelleen</string>
+  <string name="disable_ok_long_press">Poista käytöstä pitkä OK painallus</string>
+  <string name="sponsor_color_markers">Värimerkitty aikajana</string>
+  <string name="refresh_section">Päivitä näkymä</string>
+  <string name="option_disabled">Ei käytössä</string>
+  <string name="live_now_row_name">Livenä nyt</string>
+  <string name="run_in_background">Toista taustalla</string>
+  <string name="settings_remote_control">Kaukosäädin</string>
+  <string name="background_service_started">Toista taustalla</string>
+  <string name="dialog_add_to">Lisää %s</string>
+  <string name="dialog_remove_from">Poista %s</string>
+  <string name="added_to">Lisätty %s</string>
+  <string name="removed_from">Poistettu %s</string>
+  <string name="video_preset_adaptive">Mukautuva</string>
+  <string name="player_time_correction">Näytä aika suhteessa nopeuteen </string>
+  <string name="player_show_global_ending_time">Näytä loppuaika koko ajan</string>
 </resources>

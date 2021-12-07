@@ -11,13 +11,13 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.ExoMediaSourceFactory;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackInfoFormatter2;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
@@ -34,6 +34,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private final ExoMediaSourceFactory mMediaSourceFactory;
     private final TrackSelectorManager mTrackSelectorManager;
     private final TrackInfoFormatter2 mTrackFormatter;
+    private final TrackErrorFixer mTrackErrorFixer;
     private boolean mOnSourceChanged;
     private Video mVideo;
     private PlayerEventListener mEventListener;
@@ -46,6 +47,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
         mTrackSelectorManager = new TrackSelectorManager();
         mTrackFormatter = new TrackInfoFormatter2();
+        mTrackErrorFixer = new TrackErrorFixer(mTrackSelectorManager);
 
         initFormats();
     }
@@ -80,7 +82,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
     @Override
     public void openUrlList(List<String> urlList) {
-        //String userAgent = Util.getUserAgent(getActivity(), "VideoPlayerGlue");
         MediaSource mediaSource = mMediaSourceFactory.fromUrlList(urlList);
         openMediaSource(mediaSource);
     }
@@ -160,7 +161,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
         if (mPlayer != null) {
             mPlayer.removeListener(this);
-            mPlayer.stop();
+            //mPlayer.stop();
             mPlayer.release();
             mPlayer = null;
         }
@@ -285,6 +286,10 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     @Override
     public void onPlayerError(ExoPlaybackException error) {
         Log.e(TAG, "onPlayerError: " + error);
+
+        if (mTrackErrorFixer.fixError(error)) {
+            return;
+        }
 
         //if (error.type == ExoPlaybackException.TYPE_UNEXPECTED &&
         //    error.getCause() instanceof IllegalArgumentException) {

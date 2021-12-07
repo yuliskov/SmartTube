@@ -253,4 +253,9 @@
   <string name="run_in_background">पृष्ठभूमि में चलाएँ</string>
   <string name="settings_remote_control">रिमोट कंट्रोल</string>
   <string name="background_service_started">पृष्ठभूमि सेवा शुरू हुई</string>
+  <string name="dialog_add_to">%s में जोड़े</string>
+  <string name="dialog_remove_from">%s से निकाले</string>
+  <string name="added_to">%s में जोड़ा गया</string>
+  <string name="removed_from">%s से निकाला गया</string>
+  <string name="video_preset_adaptive">अनुकूलनीय</string>
 </resources>

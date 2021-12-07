@@ -177,7 +177,7 @@
     <string name="content_block_categories">Пропускати сегменти</string>
     <string name="content_block_sponsor">Спонсорський блок</string>
     <string name="content_block_intro">Вступ</string>
-    <string name="content_block_outro">Кінцевий екран/титри</string>
+    <string name="content_block_outro">Заключний екран/титри</string>
     <string name="content_block_interaction">Нагадування про підписку</string>
     <string name="content_block_self_promo">Самореклама</string>
     <string name="content_block_music_off_topic">Немузична секція кліпу</string>
@@ -258,4 +258,21 @@
     <string name="added_to">Додано у %s</string>
     <string name="removed_from">Видалено із %s</string>
     <string name="video_preset_adaptive">Адаптивний</string>
+    <string name="content_block_preview_recap">Зміст попереднього епізоду</string>
+    <string name="content_block_highlight">Короткий зміст відео</string>
+    <string name="removed_from_history">Відео видалено із історії</string>
+    <string name="remove_from_history">Видалити із історії</string>
+    <string name="upload_date">Дата завантаження</string>
+    <string name="upload_date_any">Увесь час</string>
+    <string name="upload_date_today">Сьогодні</string>
+    <string name="upload_date_this_week">Цей тиждень</string>
+    <string name="upload_date_this_month">Цей місяць</string>
+    <string name="upload_date_this_year">Цей рік</string>
+    <string name="double_refresh_rate">Подвоювати частоту</string>
+    <string name="upload_date_last_hour">Остання година</string>
+    <string name="focus_on_search_results">Автофокусування на результатах пошуку</string>
+    <string name="context_menu">Контекстне меню</string>
+    <string name="add_remove_from_recent_playlist">Додати/Видалити з недавнього плейлиста</string>
+    <string name="hide_settings_section">Приховувати розділ Налаштування (небезпечно!)</string>
+    <string name="volume">Гучність %s%%</string>
 </resources>

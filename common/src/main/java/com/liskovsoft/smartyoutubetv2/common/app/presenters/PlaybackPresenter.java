@@ -74,4 +74,10 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     public boolean isRunningInBackground() {
         return getView() != null && getView().getController().isInPIPMode();
     }
+
+    public void forceFinish() {
+        if (getView() != null) {
+            getView().getController().finishReally();
+        }
+    }
 }

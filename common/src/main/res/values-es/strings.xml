@@ -129,7 +129,8 @@
     <string name="playlists_style_rows">Filas</string>
     <string name="player_show_clock">Mostrar reloj en menu emergente</string>
     <string name="player_show_remaining_time">Mostrar tiempo restante</string>
-    <string name="open_channel_uploads">Abrir cargas del canal</string>
+    <string name="player_show_ending_time">Mostrar tiempo finalización</string>
+    <string name="open_channel_uploads">Abrir subidas del canal</string>
     <string name="app_exit_shortcut">Salir de la aplicación</string>
     <string name="app_exit_none">No salir</string>
     <string name="app_double_back_exit">Atrás doble</string>
@@ -208,7 +209,8 @@
     <string name="video_aspect">Ratio de aspecto</string>
     <string name="player_tweaks">Opciones de desarrollador</string>
     <string name="header_uploads">Subidas</string>
-    <string name="player_show_global_clock">Mostrar reloj encima del vídeo</string>
+    <string name="player_show_global_clock">Fijar reloj en pantalla</string>
+    <string name="player_show_global_ending_time">Fijar tiempo finalización vídeo en pantalla</string>
     <string name="uploads_old_look">Revertir antiguo aspecto de sección subidas</string>
     <string name="background_playback_activation">Reproducción de fondo (activación)</string>
     <string name="channels_old_look">Revertir antiguo aspecto de sección canales</string>
@@ -216,6 +218,7 @@
     <string name="return_to_background_video">Volver al vídeo reproduciéndose de fondo</string>
     <string name="pin_unpin_from_sidebar">Fijar/desfijar de barra lateral</string>
     <string name="pinned_to_sidebar">Fijado a barra lateral</string>
+    <string name="unpin_from_sidebar">Desfijar de barra lateral</string>
     <string name="unpinned_from_sidebar">Desfijado de barra lateral</string>
     <string name="dialog_select_country">País</string>
     <string name="settings_language_country">Idioma/País</string>
@@ -230,9 +233,9 @@
     <string name="add_remove_from_playback_queue">Añadir/Eliminar de cola de reproducción</string>
     <string name="proxy_enabled">Proxy activado</string>
     <string name="proxy_disabled">Proxy desactivado</string>
-    <string name="uploads_row_name">Cargas</string>
+    <string name="uploads_row_name">Subidas</string>
     <string name="playlists_row_name">Listas de reproducción creadas</string>
-    <string name="popular_uploads_row_name">Cargas populares</string>
+    <string name="popular_uploads_row_name">Subidas populares</string>
     <string name="breaking_news_row_name">Últimas noticias</string>
     <string name="covid_news_row_name">Noticias COVID-19</string>
     <string name="enable_voice_search">Activar búsqueda por voz</string>
@@ -241,4 +244,18 @@
     <string name="app_backup">Copia de seguridad</string>
     <string name="app_restore">Restaurar copia de seguridad</string>
     <string name="skip_each_segment_once">No saltar segmentos de nuevo</string>
+    <string name="disable_ok_long_press">Desabilitar pulsación larga botón OK</string>
+    <string name="player_time_correction">Mostrar el tiempo respecto a la velocidad</string>
+    <string name="sponsor_color_markers">Marcas de color en la barra de progreso</string>
+    <string name="refresh_section">Refrescar sección</string>
+    <string name="option_disabled">Deshabilitada</string>
+    <string name="live_now_row_name">En directo ahora</string>
+    <string name="run_in_background">Ejecución de fondo</string>
+    <string name="settings_remote_control">Control remoto</string>
+    <string name="background_service_started">Tarea de fondo iniciada</string>
+    <string name="dialog_add_to">Añadir a %s</string>
+    <string name="dialog_remove_from">Eliminar de %s</string>
+    <string name="added_to">Añadido a %s</string>
+    <string name="removed_from">Eliminado de %s</string>
+    <string name="video_preset_adaptive">Adaptativo</string>
 </resources>

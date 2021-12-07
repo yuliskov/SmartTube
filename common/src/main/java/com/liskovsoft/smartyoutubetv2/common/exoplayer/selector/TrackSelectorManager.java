@@ -610,9 +610,12 @@ public class TrackSelectorManager implements TrackSelectorCallback {
                 return 1;
             }
 
-            // sort subtitles by language code
+            // sort subtitles/audio tracks by language code
             if (format1.language != null && format2.language != null) {
-                return format1.language.compareTo(format2.language);
+                int result = format1.language.compareTo(format2.language);
+                if (result != 0) {
+                    return result;
+                }
             }
 
             int leftVal = format2.width + (int) format2.frameRate + MediaTrack.getCodecWeight(format2.codecs);

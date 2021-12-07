@@ -130,6 +130,9 @@ public class ViewUtil {
     }
 
     public static RequestOptions glideOptions() {
+        //return new RequestOptions()
+        //        .skipMemoryCache(true);
+
         return new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.NONE) // ensure start animation from beginning
                 .skipMemoryCache(true); // ensure start animation from beginning

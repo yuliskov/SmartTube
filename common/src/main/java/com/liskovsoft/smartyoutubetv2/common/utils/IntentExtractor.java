@@ -27,12 +27,12 @@ public class IntentExtractor {
             return null;
         }
 
-        if (extractVoiceQuery(intent.getData()) != null) {
+        if (extractVoiceQuery(extractUri(intent)) != null) {
             return null;
         }
 
         // Don't Uri directly or you might get UnsupportedOperationException on some urls.
-        UrlQueryString parser = UrlQueryStringFactory.parse(intent.getData());
+        UrlQueryString parser = UrlQueryStringFactory.parse(extractUri(intent));
         String videoId = parser.get(VIDEO_ID_KEY);
 
         if (videoId == null) {
@@ -44,7 +44,7 @@ public class IntentExtractor {
                 videoId = idList.split(",")[0];
             } else {
                 // Suppose that link type is https://youtu.be/lBeMDqcWTG8
-                videoId = intent.getData().getLastPathSegment();
+                videoId = extractUri(intent).getLastPathSegment();
             }
         }
 
@@ -64,14 +64,14 @@ public class IntentExtractor {
             return null;
         }
 
-        String voiceQuery = extractVoiceQuery(intent.getData());
+        String voiceQuery = extractVoiceQuery(extractUri(intent));
 
         if (voiceQuery != null) {
             return voiceQuery;
         }
 
         // Don't Uri directly or you might get UnsupportedOperationException on some urls.
-        UrlQueryString parser = UrlQueryStringFactory.parse(intent.getData());
+        UrlQueryString parser = UrlQueryStringFactory.parse(extractUri(intent));
 
         for (String searchKey : SEARCH_KEYS) {
             String searchText = parser.get(searchKey);
@@ -92,7 +92,7 @@ public class IntentExtractor {
             return null;
         }
 
-        String[] split = intent.getData().toString().split(CHANNEL_URL);
+        String[] split = extractUri(intent).toString().split(CHANNEL_URL);
 
         return split.length == 2 ? split[1] : null;
     }
@@ -105,7 +105,7 @@ public class IntentExtractor {
             return null;
         }
 
-        UrlQueryString parser = UrlQueryStringFactory.parse(intent.getData());
+        UrlQueryString parser = UrlQueryStringFactory.parse(extractUri(intent));
 
         return parser.get(PLAYLIST_KEY);
     }
@@ -115,7 +115,7 @@ public class IntentExtractor {
     }
 
     public static boolean hasData(Intent intent) {
-        return intent != null && intent.getData() != null;
+        return intent != null && extractUri(intent) != null;
     }
 
     /**
@@ -123,12 +123,18 @@ public class IntentExtractor {
      */
     public static boolean isChannelUrl(Intent intent) {
         return intent != null
-                && intent.getData() != null
-                && Helpers.hasItem(new String[] {SUBSCRIPTIONS_URL, HISTORY_URL, RECOMMENDED_URL}, intent.getData().toString());
+                && extractUri(intent) != null
+                && Helpers.hasItem(new String[] {SUBSCRIPTIONS_URL, HISTORY_URL, RECOMMENDED_URL}, extractUri(intent).toString());
+    }
+
+    public static boolean isRootUrl(Intent intent) {
+        return intent != null
+                && extractUri(intent) != null
+                && (extractUri(intent).toString().endsWith(".com/") || extractUri(intent).toString().endsWith(".com"));
     }
 
     public static boolean isStartVoiceCommand(Intent intent) {
-        return intent != null && intent.getData() != null && intent.getData().toString().contains("launch=voice");
+        return intent != null && extractUri(intent) != null && extractUri(intent).toString().contains("launch=voice");
     }
 
     /**
@@ -139,6 +145,16 @@ public class IntentExtractor {
     }
 
     private static boolean isEmptyIntent(Intent intent) {
-        return intent == null || intent.getData() == null || !Intent.ACTION_VIEW.equals(intent.getAction());
+        return intent == null || (!Intent.ACTION_VIEW.equals(intent.getAction()) && !Intent.ACTION_SEND.equals(intent.getAction())) || extractUri(intent) == null;
+    }
+
+    private static Uri extractUri(Intent intent) {
+        if (intent == null) {
+            return null;
+        }
+
+        return intent.getData() != null ? intent.getData() :
+                intent.getStringExtra(Intent.EXTRA_TEXT) != null ?
+                        Uri.parse(intent.getStringExtra(Intent.EXTRA_TEXT)) : null;
     }
 }

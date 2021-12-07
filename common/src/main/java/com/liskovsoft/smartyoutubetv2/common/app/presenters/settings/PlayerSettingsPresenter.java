@@ -81,7 +81,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         for (int i = 1; i <= 15; i++) {
             int timeoutSec = i;
             options.add(UiOptionItem.from(
-                    String.format("%s sec", i),
+                    getContext().getString(R.string.ui_hide_timeout_sec, i),
                     option -> mPlayerData.setUIHideTimoutSec(timeoutSec),
                     mPlayerData.getUIHideTimoutSec() == i));
         }
@@ -149,6 +149,14 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendTweaksCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from("Notification fix",
+                option -> mPlayerTweaksData.enableNotificationFix(option.isSelected()),
+                mPlayerTweaksData.isNotificationFixEnabled()));
+
+        options.add(UiOptionItem.from("Live stream fix (1080/AVC)",
+                option -> mPlayerTweaksData.enableLiveStreamFix(option.isSelected()),
+                mPlayerTweaksData.isLiveStreamFixEnabled()));
+
         options.add(UiOptionItem.from("Audio sync fix",
                 option -> mPlayerTweaksData.enableAudioSyncFix(option.isSelected()),
                 mPlayerTweaksData.isAudioSyncFixEnabled()));
@@ -157,7 +165,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableAmlogicFix(option.isSelected()),
                 mPlayerTweaksData.isAmlogicFixEnabled()));
 
-        options.add(UiOptionItem.from("Ambilight fix",
+        options.add(UiOptionItem.from("Ambilight/Aspect ratio fix",
                 option -> mPlayerTweaksData.enableTextureView(option.isSelected()),
                 mPlayerTweaksData.isTextureViewEnabled()));
 
@@ -184,6 +192,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from("Frame drops fix (experimental)",
                 option -> mPlayerTweaksData.enableFrameDropFix(option.isSelected()),
                 mPlayerTweaksData.isFrameDropFixEnabled()));
+
+        options.add(UiOptionItem.from("Keep finished activity",
+                option -> mPlayerTweaksData.enableKeepFinishedActivity(option.isSelected()),
+                mPlayerTweaksData.isKeepFinishedActivityEnabled()));
 
         // Need to be enabled on older version of ExoPlayer (e.g. 2.10.6).
         // It's because there's no tweaks for modern devices.

@@ -9,6 +9,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.MediaServiceSearchTagProvider;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.vineyard.Tag;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.VideoCardPresenter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListener;
@@ -22,6 +23,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     private String mSearchQuery;
     private String mNewQuery;
     private VideoCardPresenter mCardPresenter;
+    private SearchData mSearchData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         mSearchPresenter.setView(this);
         mCardPresenter = new VideoCardPresenter();
         mItemResultsAdapter = new VideoGroupObjectAdapter(mCardPresenter);
+        mSearchData = SearchData.instance(getContext());
 
         setupEventListeners();
         setItemResultsAdapter(mItemResultsAdapter);
@@ -67,6 +70,8 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     public void clearSearch() {
         mSearchQuery = null;
         mItemResultsAdapter.clear();
+        // Notify about changes (could help with search autofocus)
+        detachAdapter(1);
     }
 
     @Override
@@ -127,15 +132,13 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
 
     @Override
     protected void focusOnResults() {
-        // Disable annoying focus on video results when clicking on tags etc.
-
-        //if (!TextUtils.isEmpty(mNewQuery)) {
-        //    super.focusOnResults();
-        //    if (getRowsSupportFragment() != null) {
-        //        // Move selection to the videos (second row)
-        //        getRowsSupportFragment().setSelectedPosition(1);
-        //    }
-        //}
+        if (mSearchData.isFocusOnResultsEnabled() && !TextUtils.isEmpty(mNewQuery)) {
+            super.focusOnResults();
+            if (getRowsSupportFragment() != null) {
+                // Move selection to the videos (second row)
+                getRowsSupportFragment().setSelectedPosition(1);
+            }
+        }
     }
 
     private void loadSearchResult(String searchQuery) {
@@ -186,6 +189,11 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         if (item instanceof Video) {
             checkScrollEnd((Video) item);
         }
+    }
+
+    @Override
+    public void onSearchSettingsClicked() {
+        mSearchPresenter.onSearchSettingsClicked();
     }
 
     private void checkScrollEnd(Video item) {

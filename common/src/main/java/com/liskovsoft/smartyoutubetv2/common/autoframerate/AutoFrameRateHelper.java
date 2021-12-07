@@ -7,22 +7,21 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolder.Mode;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncHelper;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncHelper.AutoFrameRateListener;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplaySyncHelperAlt;
 
 import java.util.HashMap;
 
 public class AutoFrameRateHelper {
     private static final String TAG = AutoFrameRateHelper.class.getSimpleName();
     private static AutoFrameRateHelper sInstance;
-    private final DisplaySyncHelper mSyncHelper;
     private static final long THROTTLE_INTERVAL_MS = 5_000;
+    private final DisplaySyncHelper mSyncHelper;
     private long mPrevCall;
     private HashMap<Float, Float> mFrameRateMapping;
     private boolean mIsFpsCorrectionEnabled;
     private AutoFrameRateListener mListener;
 
     private AutoFrameRateHelper(Context context) {
-        mSyncHelper = new DisplaySyncHelperAlt(context);
+        mSyncHelper = new DisplaySyncHelper(context);
 
         initFrameRateMapping();
     }
@@ -186,6 +185,10 @@ public class AutoFrameRateHelper {
 
     public void setFpsCorrectionEnabled(boolean enabled) {
         mIsFpsCorrectionEnabled = enabled;
+    }
+
+    public void setDoubleRefreshRateEnabled(boolean enabled) {
+        mSyncHelper.setDoubleRefreshRateEnabled(enabled);
     }
 
     private void resetStats() {

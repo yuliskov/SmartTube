@@ -65,6 +65,8 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         mLocalizedMapping.put(SponsorSegment.CATEGORY_SELF_PROMO, R.string.content_block_self_promo);
         mLocalizedMapping.put(SponsorSegment.CATEGORY_INTERACTION, R.string.content_block_interaction);
         mLocalizedMapping.put(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC, R.string.content_block_music_off_topic);
+        mLocalizedMapping.put(SponsorSegment.CATEGORY_PREVIEW_RECAP, R.string.content_block_preview_recap);
+        mLocalizedMapping.put(SponsorSegment.CATEGORY_HIGHLIGHT, R.string.content_block_highlight);
     }
 
     private void initSegmentColorMapping() {
@@ -75,6 +77,8 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_SELF_PROMO, ContextCompat.getColor(getActivity(), R.color.yellow));
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_INTERACTION, ContextCompat.getColor(getActivity(), R.color.magenta));
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC, ContextCompat.getColor(getActivity(), R.color.brown));
+        mSegmentColorMapping.put(SponsorSegment.CATEGORY_PREVIEW_RECAP, ContextCompat.getColor(getActivity(), R.color.light_blue));
+        mSegmentColorMapping.put(SponsorSegment.CATEGORY_HIGHLIGHT, ContextCompat.getColor(getActivity(), R.color.white));
     }
 
     @Override
@@ -198,7 +202,8 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     }
 
     private void messageSkip(long skipPositionMs, String category) {
-        MessageHelpers.showMessage(getActivity(), getActivity().getString(R.string.msg_skipping_segment, category));
+        MessageHelpers.showMessage(getActivity(),
+                String.format("%s: %s", ContentBlockData.SPONSOR_BLOCK_NAME, getActivity().getString(R.string.msg_skipping_segment, category)));
         getController().setPositionMs(skipPositionMs);
     }
 

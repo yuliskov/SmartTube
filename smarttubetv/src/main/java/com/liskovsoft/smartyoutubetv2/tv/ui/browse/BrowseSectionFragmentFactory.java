@@ -17,16 +17,12 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.MultiVideoGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.VideoGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.VideoRowsFragment;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class BrowseSectionFragmentFactory extends BrowseSupportFragment.FragmentFactory<Fragment> {
     private static final String TAG = BrowseSectionFragmentFactory.class.getSimpleName();
     private final OnHeaderViewSelectedListener mViewSelectedListener;
     private Fragment mCurrentFragment;
     private int mFragmentType = BrowseSection.TYPE_GRID;
     private int mSelectedItemIndex = -1;
-    private final Map<Integer, Fragment> mFragmentMap = new HashMap<>();
 
     public BrowseSectionFragmentFactory() {
         this(null);
@@ -34,15 +30,6 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
 
     public BrowseSectionFragmentFactory(OnHeaderViewSelectedListener viewSelectedListener) {
         mViewSelectedListener = viewSelectedListener;
-
-        initFragmentMap();
-    }
-
-    private void initFragmentMap() {
-        mFragmentMap.put(BrowseSection.TYPE_ROW, new VideoRowsFragment());
-        mFragmentMap.put(BrowseSection.TYPE_GRID, new VideoGridFragment());
-        mFragmentMap.put(BrowseSection.TYPE_SETTINGS_GRID, new SettingsGridFragment());
-        mFragmentMap.put(BrowseSection.TYPE_MULTI_GRID, new MultiVideoGridFragment());
     }
 
     /**
@@ -56,13 +43,27 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
         Row row = (Row) rowObj;
 
         HeaderItem header = row.getHeaderItem();
-        Fragment fragment;
 
         if (header instanceof CategoryHeaderItem) {
             mFragmentType = ((CategoryHeaderItem) header).getType();
         }
 
-        fragment = mFragmentMap.get(mFragmentType);
+        Fragment fragment = null;
+
+        switch (mFragmentType) {
+            case BrowseSection.TYPE_ROW:
+                fragment = new VideoRowsFragment();
+                break;
+            case BrowseSection.TYPE_GRID:
+                fragment = new VideoGridFragment();
+                break;
+            case BrowseSection.TYPE_SETTINGS_GRID:
+                fragment = new SettingsGridFragment();
+                break;
+            case BrowseSection.TYPE_MULTI_GRID:
+                fragment = new MultiVideoGridFragment();
+                break;
+        }
 
         if (fragment != null) {
             mCurrentFragment = fragment;

@@ -57,7 +57,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
         showAccountSelection();
 
-        applyNewIntent(getView().getNewIntent());
+        if (getView() != null) {
+            applyNewIntent(getView().getNewIntent());
+        }
     }
 
     private void applyRunOnceTasks() {
@@ -70,6 +72,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             updateChannels();
             getBackupDataOnce();
             runRemoteControlTasks();
+            dontKeepConnection();
             configureProxy();
             sRunOnce = true;
         }
@@ -103,6 +106,10 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             //Utils.startRemoteControlService(getContext());
             Utils.startRemoteControlWorkRequest(getContext());
         }
+    }
+
+    private void dontKeepConnection() {
+        System.setProperty("http.keepAlive", "false");
     }
 
     private void configureProxy() {
@@ -219,7 +226,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             viewManager.startDefaultView();
 
             // For debug purpose when using ATV bridge.
-            if (IntentExtractor.hasData(intent) && !IntentExtractor.isChannelUrl(intent)) {
+            if (IntentExtractor.hasData(intent) && !IntentExtractor.isChannelUrl(intent) && !IntentExtractor.isRootUrl(intent)) {
                 MessageHelpers.showLongMessage(getContext(), String.format("Can't process intent: %s", Helpers.toString(intent)));
             }
 

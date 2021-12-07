@@ -19,6 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
 public class SectionMenuPresenter extends BasePresenter<Void> {
@@ -60,6 +61,8 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         if (section == null) {
             return;
         }
+
+        updateEnabledMenuItems();
 
         disposeActions();
 
@@ -127,6 +130,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
                         optionItem -> {
                             if (mVideo.hasPlaylist()) {
                                 togglePinToSidebar(createPinnedSection(mVideo));
+                                mSettingsPresenter.closeDialog();
                             } else {
                                 mServiceManager.loadChannelUploads(mVideo, group -> {
                                     if (group.getMediaItems() != null) {
@@ -135,6 +139,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
                                         Video section = createPinnedSection(Video.from(firstItem));
                                         section.title = mVideo.title;
                                         togglePinToSidebar(section);
+                                        mSettingsPresenter.closeDialog();
                                     }
                                 });
                             }
@@ -155,6 +160,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
                         optionItem -> {
                             GeneralData.instance(getContext()).enableSection(mSection.getId(), false);
                             BrowsePresenter.instance(getContext()).updateSections();
+                            mSettingsPresenter.closeDialog();
                         }));
     }
 
@@ -197,7 +203,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         } else {
             presenter.pinItem(section);
         }
-        MessageHelpers.showMessage(getContext(), isItemPinned ? R.string.unpinned_from_sidebar : R.string.pinned_to_sidebar);
+        //MessageHelpers.showMessage(getContext(), isItemPinned ? R.string.unpinned_from_sidebar : R.string.pinned_to_sidebar);
     }
 
     private Video createPinnedSection(Video video) {
@@ -231,5 +237,18 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
 
     private void disposeActions() {
         //RxUtils.disposeActions(mPlaylistAction);
+    }
+
+    private void updateEnabledMenuItems() {
+        MainUIData mainUIData = MainUIData.instance(getContext());
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PIN_TO_SIDEBAR)) {
+            mIsUnpinFromSidebarEnabled = false;
+            mIsUnpinSectionFromSidebarEnabled = false;
+        }
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SELECT_ACCOUNT)) {
+            mIsAccountSelectionEnabled = false;
+        }
     }
 }

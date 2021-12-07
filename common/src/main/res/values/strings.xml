@@ -258,4 +258,25 @@
     <string name="added_to">Added to %s</string>
     <string name="removed_from">Removed from %s</string>
     <string name="video_preset_adaptive">Adaptive</string>
+    <string name="content_block_preview_recap">Preview or recap of the video</string>
+    <string name="content_block_highlight">Point or highlight of the video</string>
+    <string name="removed_from_history">Video has been removed from history</string>
+    <string name="remove_from_history">Remove from history</string>
+    <string name="upload_date">Upload date</string>
+    <string name="upload_date_any">All time</string>
+    <string name="upload_date_today">Today</string>
+    <string name="upload_date_this_week">This week</string>
+    <string name="upload_date_this_month">This month</string>
+    <string name="upload_date_this_year">This year</string>
+    <string name="double_refresh_rate">Double refresh rate</string>
+    <string name="upload_date_last_hour">Last hour</string>
+    <string name="focus_on_search_results">Autofocus on search results</string>
+    <string name="context_menu">Context menu</string>
+    <string name="add_remove_from_recent_playlist">Add/Remove from recent playlist</string>
+    <string name="hide_settings_section">Hide Settings section (dangerous!)</string>
+    <string name="volume">Volume %s%%</string>
+    <string name="auto_frame_rate_sec">%s sec</string>
+    <string name="audio_shift_sec">%s sec</string>
+    <string name="ui_hide_timeout_sec">%s sec</string>
+    <string name="screen_dimming_timeout_min">%s min</string>
 </resources>

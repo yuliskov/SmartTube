@@ -203,7 +203,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         int index = 0;
 
         for (BrowseSection section : mSections) {
-            section.setEnabled(section.getId() == MediaGroup.TYPE_SETTINGS || mGeneralData.isBrowseSectionEnabled(section.getId()));
+            section.setEnabled(section.getId() == MediaGroup.TYPE_SETTINGS || mGeneralData.isSectionEnabled(section.getId()));
 
             if (section.isEnabled()) {
                 if (section.getId() == mGeneralData.getBootSectionId()) {
@@ -307,7 +307,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         if (item.isChannelUploadsSection()) { // We need to be sure we exactly on Channels section
             ChannelUploadsMenuPresenter.instance(getContext()).showMenu(item);
         } else {
-            VideoMenuPresenter.instance(getContext()).showMenu(item);
+            VideoMenuPresenter.instance(getContext()).showMenu(item, videoItem -> {
+                VideoGroup removedGroup = VideoGroup.from(videoItem);
+                removedGroup.setAction(VideoGroup.ACTION_REMOVE);
+                getView().updateSection(removedGroup);
+            });
         }
 
         updateRefreshTime();
@@ -471,7 +475,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         disposeActions();
         getView().showProgressBar(true);
 
-        getView().updateSection(VideoGroup.from(section, true));
+        VideoGroup firstGroup = VideoGroup.from(section);
+        firstGroup.setAction(VideoGroup.ACTION_REPLACE);
+        getView().updateSection(firstGroup);
 
         mUpdateAction = groups
                 .subscribeOn(Schedulers.newThread())
@@ -513,7 +519,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         disposeActions();
         getView().showProgressBar(true);
 
-        getView().updateSection(VideoGroup.from(section, position, true));
+        VideoGroup firstGroup = VideoGroup.from(section, position);
+        firstGroup.setAction(VideoGroup.ACTION_REPLACE);
+        getView().updateSection(firstGroup);
 
         if (group == null) {
             // No group. Maybe just clear.
@@ -585,7 +593,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         continueGroup -> {
                             filterIfNeeded(continueGroup);
 
-                            VideoGroup videoGroup = VideoGroup.from(continueGroup, group.getCategory(), group.getPosition());
+                            VideoGroup videoGroup = VideoGroup.from(continueGroup, group.getSection(), group.getPosition());
                             getView().updateSection(videoGroup);
                         },
                         error -> {
