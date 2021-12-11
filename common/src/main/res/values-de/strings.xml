@@ -275,4 +275,8 @@
     <string name="add_remove_from_recent_playlist">Hinzufügen/Entfernen aus letzter Wiedergabeliste</string>
     <string name="hide_settings_section">Einstellungen-Kategorie ausblenden (gefährlich!)</string>
     <string name="volume">Lautstärke %s%%</string>
+    <string name="auto_frame_rate_sec">%s sec</string>
+    <string name="audio_shift_sec">%s sec</string>
+    <string name="ui_hide_timeout_sec">%s sec</string>
+    <string name="screen_dimming_timeout_min">%s min</string>
 </resources>
