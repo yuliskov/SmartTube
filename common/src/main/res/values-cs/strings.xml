@@ -1,7 +1,7 @@
 <resources>
     <string name="header_home">Domov</string>
     <string name="title_search">Vyhledávání</string>
-    <string name="header_subscriptions">Předplatné</string>
+    <string name="header_subscriptions">Odběry</string>
     <string name="header_history">Historie</string>
     <string name="header_music">Hudba</string>
     <string name="header_news">Zprávy</string>
@@ -10,7 +10,7 @@
     <string name="header_settings">Nastavení</string>
     <string name="header_channels">Kanály</string>
     <string name="subscriptions_signin_title">Podívejte se na nejnovější z vašich oblíbených kanálů</string>
-    <string name="subscriptions_signin_subtitle">Přihlaste se a podívejte se na své předplatné</string>
+    <string name="subscriptions_signin_subtitle">Přihlaste se a podívejte se na své odběry</string>
     <string name="subscriptions_signin_button_text">PŘIHLÁSIT SE</string>
     <string name="library_signin_to_show_more">Sledujte videa, která se vám líbila, uložila nebo odebíráte</string>
     <string name="library_signin_subtitle">Chcete-li zobrazit svou knihovnu, přihlaste se</string>
@@ -224,7 +224,7 @@
     <string name="share_embed_link">Sdílet vložený odkaz</string>
     <string name="card_text_scroll_factor">Rychlost posouvání textu karty</string>
     <string name="preferred_update_source">Preferovaný zdroj aktualizace</string>
-    <string name="hide_shorts">Skrýt Shorts z Předplatného</string>
+    <string name="hide_shorts">Skrýt Shorts z Odběrů</string>
     <string name="key_remapping">Přenastavení tlačítek</string>
     <string name="screen_dimming">Ztmavení obrazovky</string>
     <string name="removed_from_playback_queue">Smazáno z fronty přehrávání</string>
@@ -274,4 +274,8 @@
     <string name="add_remove_from_recent_playlist">Přidat/odebrat z nedávného playlistu</string>
     <string name="hide_settings_section">Skryj sekci Nastavení (nebezpečné!)</string>
     <string name="volume">Hlasitost %s%%</string>
+    <string name="auto_frame_rate_sec">%s sek</string>
+    <string name="audio_shift_sec">%s sek</string>
+    <string name="ui_hide_timeout_sec">%s sek</string>
+    <string name="screen_dimming_timeout_min">%s min</string>
 </resources>
