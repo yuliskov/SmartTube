@@ -33,7 +33,8 @@ public class RemoteControlData extends DataChangeBase {
     }
 
     public boolean isDeviceLinkEnabled() {
-        return mIsDeviceLinkEnabled;
+        // Merge device link and background service (saves memory)
+        return isRunInBackgroundEnabled();
     }
 
     public void enableRunInBackground(boolean select) {

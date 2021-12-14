@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
+import android.os.Build.VERSION;
 import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 
@@ -93,7 +95,7 @@ public class ContentBlockData {
 
         String[] split = Helpers.splitObjectLegacy(data);
 
-        mIsSponsorBlockEnabled = Helpers.parseBoolean(split, 0, true);
+        mIsSponsorBlockEnabled = Helpers.parseBoolean(split, 0, VERSION.SDK_INT > 19); // Android 4 may have memory problems
         mNotificationType = Helpers.parseInt(split, 1, NOTIFICATION_TYPE_TOAST);
         String categories = Helpers.parseStr(split, 2);
         mIsSkipEachSegmentOnceEnabled = Helpers.parseBoolean(split, 3, true);
