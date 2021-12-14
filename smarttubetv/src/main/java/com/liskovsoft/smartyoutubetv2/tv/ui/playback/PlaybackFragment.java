@@ -347,7 +347,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         // OOM fix on Eltex?
         //System.gc();
-        Runtime.getRuntime().gc();
+        //Runtime.getRuntime().gc();
     }
 
     private void createPlayerObjects() {
