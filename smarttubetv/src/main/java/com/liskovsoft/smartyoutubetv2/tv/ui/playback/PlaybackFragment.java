@@ -344,6 +344,10 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mDebugInfoManager = null;
         mMediaSessionConnector = null;
         mMediaSession = null;
+
+        // OOM fix on Eltex?
+        //System.gc();
+        Runtime.getRuntime().gc();
     }
 
     private void createPlayerObjects() {
