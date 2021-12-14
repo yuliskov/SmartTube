@@ -93,9 +93,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         mTrackSelectorManager.invalidate();
         mPlayer.prepare(mediaSource);
         mEventListener.onSourceChanged(mVideo);
-
-        // OOM fix on Eltex and others???
-        System.gc();
     }
 
     @Override
