@@ -129,7 +129,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.unpin_from_sidebar),
                         optionItem -> {
-                            if (mVideo.hasPlaylist()) {
+                            if (mVideo.hasPlaylist() || mVideo.hasChannel()) {
                                 togglePinToSidebar(createPinnedSection(mVideo));
                                 mSettingsPresenter.closeDialog();
                             } else {
@@ -208,12 +208,13 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
     }
 
     private Video createPinnedSection(Video video) {
-        if (video == null || (!video.hasPlaylist() && !video.hasUploads())) {
+        if (video == null || (!video.hasPlaylist() && !video.hasChannel() && !video.hasUploads())) {
             return null;
         }
 
         Video section = new Video();
         section.playlistId = video.playlistId;
+        section.channelId = video.channelId;
         section.title = String.format("%s - %s",
                 video.group != null && video.group.getTitle() != null ? video.group.getTitle() : video.title,
                 video.author != null ? video.author : video.description
