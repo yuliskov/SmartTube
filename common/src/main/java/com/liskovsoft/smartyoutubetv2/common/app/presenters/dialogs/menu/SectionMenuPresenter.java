@@ -121,7 +121,8 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        if (mVideo == null || (!mVideo.hasPlaylist() && !mVideo.hasUploads())) {
+        // Prepare to new channel playlists
+        if (mVideo == null || (!mVideo.hasPlaylist() && !mVideo.hasUploads() && !mVideo.hasChannel())) {
             return;
         }
 

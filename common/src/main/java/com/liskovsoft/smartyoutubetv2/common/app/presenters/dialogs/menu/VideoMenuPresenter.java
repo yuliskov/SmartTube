@@ -192,7 +192,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        if (mVideo == null || !mVideo.hasVideo()) {
+        if (mVideo == null || !mVideo.hasVideo() || mVideo.isPlaylist()) {
             return;
         }
 
@@ -259,8 +259,10 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
+        // Prepare to special type of channels that work as playlist
         mSettingsPresenter.appendSingleButton(
-                UiOptionItem.from(getContext().getString(R.string.open_channel), optionItem -> Utils.chooseChannelPresenter(getContext(), mVideo)));
+                UiOptionItem.from(getContext().getString(
+                        mVideo.isPlaylist() ? R.string.open_playlist : R.string.open_channel), optionItem -> Utils.chooseChannelPresenter(getContext(), mVideo)));
     }
 
     private void appendOpenPlaylistButton() {
@@ -269,6 +271,11 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         }
 
         if (mVideo == null || !mVideo.hasPlaylist()) {
+            return;
+        }
+
+        // Prepare to special type of channels that work as playlist
+        if (mVideo.isPlaylist() && ChannelPresenter.canOpenChannel(mVideo)) {
             return;
         }
 
@@ -363,6 +370,11 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
+        // Prepare to special type of channels that work as playlist
+        if (mVideo.mediaItem != null && mVideo.mediaItem.getType() == MediaItem.TYPE_PLAYLIST) {
+            return;
+        }
+
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.subscribe_unsubscribe_from_channel),
                         optionItem -> toggleSubscribe()));
@@ -373,14 +385,14 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        if (mVideo == null || (!mVideo.hasPlaylist() && !mVideo.hasUploads())) {
+        if (mVideo == null || (!mVideo.hasPlaylist() && !mVideo.hasUploads() && !mVideo.isPlaylist())) {
             return;
         }
 
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.pin_unpin_from_sidebar),
                         optionItem -> {
-                            if (mVideo.hasPlaylist()) {
+                            if (mVideo.hasPlaylist() || mVideo.isPlaylist()) {
                                 togglePinToSidebar(createPinnedSection(mVideo));
                             } else {
                                 mServiceManager.loadChannelUploads(mVideo, group -> {
@@ -411,7 +423,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     private Video createPinnedSection(Video video) {
-        if (video == null || (!video.hasPlaylist() && !video.hasUploads())) {
+        if (video == null || (!video.hasPlaylist() && !video.hasUploads() && !mVideo.isPlaylist())) {
             return null;
         }
 
@@ -420,6 +432,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         Video section = new Video();
         section.playlistId = video.playlistId;
+        section.channelId = video.channelId;
         section.title = String.format("%s - %s",
                 video.title != null && isSectionItem ? video.title : groupTitle != null ? groupTitle : video.title,
                 video.author != null ? video.author : video.description

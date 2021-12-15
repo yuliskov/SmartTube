@@ -171,7 +171,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             }
 
             value.videoId = null;
-            return value.playlistId == null;
+            return value.playlistId == null && value.channelId == null;
         });
     }
 
@@ -191,7 +191,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         for (Video item : pinnedItems) {
             if (item != null) {
-                mGridMapping.put(item.hashCode(), ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item));
+                mGridMapping.put(item.hashCode(), createPinnedAction(item));
             }
         }
     }
@@ -360,7 +360,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         BrowseSection category = new BrowseSection(item.hashCode(), item.title, BrowseSection.TYPE_GRID, item.cardImageUrl, true, item);
         mSections.add(category);
-        mGridMapping.put(item.hashCode(), ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item));
+        mGridMapping.put(item.hashCode(), createPinnedAction(item));
 
         if (getView() != null) {
             getView().addSection(-1, category); // add last
@@ -701,5 +701,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 getContext().getString(R.string.breaking_news_row_name),
                 getContext().getString(R.string.covid_news_row_name)
         ));
+    }
+
+    private Observable<MediaGroup> createPinnedAction(Video item) {
+        return item.playlistId != null ?
+                ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item) :
+                mGroupManager.getChannelObserve(item.channelId).map(list -> list.get(0));
     }
 }
