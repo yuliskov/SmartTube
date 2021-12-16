@@ -275,4 +275,5 @@
     <string name="add_remove_from_recent_playlist">Додати/Видалити з недавнього плейлиста</string>
     <string name="hide_settings_section">Приховувати розділ Налаштування (небезпечно!)</string>
     <string name="volume">Гучність %s%%</string>
+    <string name="mark_all_channels_watched">Відмітити усі канали як переглядені</string>
 </resources>

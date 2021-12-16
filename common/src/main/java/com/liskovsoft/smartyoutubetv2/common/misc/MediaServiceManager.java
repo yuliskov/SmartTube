@@ -6,6 +6,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -28,6 +29,7 @@ public class MediaServiceManager {
     private Disposable mUploadsAction;
     private Disposable mSignCheckAction;
     private Disposable mRowsAction;
+    private Disposable mSubscribedChannelsAction;
 
     public interface OnMetadata {
         void onMetadata(MediaItemMetadata metadata);
@@ -87,9 +89,17 @@ public class MediaServiceManager {
             return;
         }
 
+        loadChannelUploads(item.mediaItem, onMediaGroup);
+    }
+
+    public void loadChannelUploads(MediaItem item, OnMediaGroup onMediaGroup) {
+        if (item == null) {
+            return;
+        }
+
         RxUtils.disposeActions(mUploadsAction);
 
-        Observable<MediaGroup> observable = mGroupManager.getGroupObserve(item.mediaItem);
+        Observable<MediaGroup> observable = mGroupManager.getGroupObserve(item);
 
         mUploadsAction = observable
                 .subscribeOn(Schedulers.newThread())
@@ -97,6 +107,20 @@ public class MediaServiceManager {
                 .subscribe(
                         onMediaGroup::onMediaGroup,
                         error -> Log.e(TAG, "loadChannelUploads error: %s", error.getMessage())
+                );
+    }
+
+    public void loadSubscribedChannels(OnMediaGroup onMediaGroup) {
+        RxUtils.disposeActions(mSubscribedChannelsAction);
+
+        Observable<MediaGroup> observable = mGroupManager.getSubscribedChannelsUpdateObserve();
+
+        mSubscribedChannelsAction = observable
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        onMediaGroup::onMediaGroup,
+                        error -> Log.e(TAG, "loadSubscribedChannels error: %s", error.getMessage())
                 );
     }
 

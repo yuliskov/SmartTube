@@ -22,6 +22,8 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
+import java.util.Iterator;
+
 public class SectionMenuPresenter extends BasePresenter<Void> {
     private static final String TAG = SectionMenuPresenter.class.getSimpleName();
     private final MediaItemManager mItemManager;
@@ -33,6 +35,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
     private boolean mIsUnpinSectionFromSidebarEnabled;
     private boolean mIsReturnToBackgroundVideoEnabled;
     private boolean mIsAccountSelectionEnabled;
+    private boolean mIsMarkAllChannelsWatchedEnabled;
     private boolean mIsRefreshEnabled;
 
     private SectionMenuPresenter(Context context) {
@@ -53,6 +56,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         mIsUnpinSectionFromSidebarEnabled = true;
         mIsAccountSelectionEnabled = true;
         mIsRefreshEnabled = true;
+        mIsMarkAllChannelsWatchedEnabled = true;
 
         showMenuInt(section);
     }
@@ -87,6 +91,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         appendRefreshButton();
         appendUnpinFromSidebarButton();
         appendUnpinSectionFromSidebarButton();
+        appendMarkAllChannelsWatchedButton();
         appendAccountSelectionButton();
 
         if (!mSettingsPresenter.isEmpty()) {
@@ -235,6 +240,45 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
                         optionItem -> ViewManager.instance(getContext()).startView(SplashView.class)
                 )
         );
+    }
+
+    private void appendMarkAllChannelsWatchedButton() {
+        if (!mIsMarkAllChannelsWatchedEnabled) {
+            return;
+        }
+
+        if (mSection == null || mSection.getId() != MediaGroup.TYPE_CHANNEL_UPLOADS) {
+            return;
+        }
+
+        mSettingsPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.mark_all_channels_watched), optionItem -> {
+                    MediaServiceManager serviceManager = MediaServiceManager.instance();
+
+                    MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
+
+                    serviceManager.loadSubscribedChannels(group -> {
+                        Iterator<MediaItem> iterator = group.getMediaItems().iterator();
+
+                        processNextChannel(serviceManager, iterator);
+                    });
+                }));
+    }
+
+    private void processNextChannel(MediaServiceManager serviceManager, Iterator<MediaItem> iterator) {
+        if (iterator.hasNext()) {
+            MediaItem next = iterator.next();
+
+            if (!next.hasNewContent()) {
+                processNextChannel(serviceManager, iterator);
+                return;
+            }
+
+            MessageHelpers.showMessage(getContext(), next.getTitle());
+            serviceManager.loadChannelUploads(next, (groupTmp) -> processNextChannel(serviceManager, iterator));
+        } else {
+            MessageHelpers.showMessage(getContext(), R.string.msg_done);
+        }
     }
 
     private void disposeActions() {
