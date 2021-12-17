@@ -225,7 +225,7 @@
     <string name="share_embed_link">Condividi link incorporato</string>
     <string name="card_text_scroll_factor">Velocità scorrimento testo titoli video</string>
     <string name="preferred_update_source">Seleziona fonte aggiornamenti</string>
-    <string name="hide_shorts">Nascondi i video corti dalle iscrizioni </string>
+    <string name="hide_shorts">Nascondi i video corti dalle Iscrizioni </string>
     <string name="key_remapping">Rimappatura tasti</string>
     <string name="screen_dimming">Oscura schermo</string>
     <string name="removed_from_playback_queue">Rimosso dalla coda di riproduzione</string>
@@ -274,4 +274,10 @@
     <string name="context_menu">Menu contestuale</string>
     <string name="add_remove_from_recent_playlist">Aggiungi o rimuovi dalla recente playlist</string>
     <string name="hide_settings_section">Nascondi la sezione delle Impostazioni (pericoloso!)</string>
+    <string name="volume">Volume %s%%</string>
+    <string name="auto_frame_rate_sec">%s sec</string>
+    <string name="audio_shift_sec">%s sec</string>
+    <string name="ui_hide_timeout_sec">%s sec</string>
+    <string name="screen_dimming_timeout_min">%s min</string>
+    <string name="mark_all_channels_watched">Segna tutti i canali come già visti</string>
 </resources>
