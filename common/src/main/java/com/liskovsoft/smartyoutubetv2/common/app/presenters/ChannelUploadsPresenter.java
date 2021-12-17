@@ -217,6 +217,10 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
             return;
         }
 
+        if (ViewManager.instance(getContext()).getTopView() != ChannelUploadsView.class) {
+            ViewManager.instance(getContext()).startView(ChannelUploadsView.class);
+        }
+
         getView().update(VideoGroup.from(mediaGroup));
 
         // Hide loading as long as first group received

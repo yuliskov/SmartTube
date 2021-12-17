@@ -193,6 +193,10 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             return;
         }
 
+        if (ViewManager.instance(getContext()).getTopView() != ChannelView.class) {
+            ViewManager.instance(getContext()).startView(ChannelView.class);
+        }
+
         filterIfNeeded(mediaGroups);
 
         for (MediaGroup mediaGroup : mediaGroups) {
