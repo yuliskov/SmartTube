@@ -138,7 +138,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
                 if (isAdded()) {
                     try {
                         startActivityForResult(getRecognizerIntent(), REQUEST_SPEECH);
-                    } catch (ActivityNotFoundException e) {
+                    } catch (ActivityNotFoundException | NullPointerException e) {
                         Log.e(TAG, "Cannot find activity for speech recognizer", e);
                     }
                 } else {
