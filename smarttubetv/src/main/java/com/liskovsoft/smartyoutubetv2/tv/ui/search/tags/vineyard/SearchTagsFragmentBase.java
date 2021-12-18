@@ -138,8 +138,10 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
                 if (isAdded()) {
                     try {
                         startActivityForResult(getRecognizerIntent(), REQUEST_SPEECH);
-                    } catch (ActivityNotFoundException | NullPointerException e) {
+                    } catch (ActivityNotFoundException e) {
                         Log.e(TAG, "Cannot find activity for speech recognizer", e);
+                    } catch (NullPointerException e) {
+                        Log.e(TAG, "Speech recognizer can't obtain applicationInfo", e);
                     }
                 } else {
                     Log.e(TAG, "Can't perform search. Fragment is detached.");
