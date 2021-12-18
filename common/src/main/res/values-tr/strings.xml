@@ -280,4 +280,5 @@
     <string name="audio_shift_sec">%s sn</string>
     <string name="ui_hide_timeout_sec">%s sn</string>
     <string name="screen_dimming_timeout_min">%s dk</string>
+    <string name="mark_all_channels_watched">Tüm kanalları izlendi olarak işaretle</string>
 </resources>
