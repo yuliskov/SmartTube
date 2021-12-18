@@ -33,7 +33,6 @@ import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.FixedTrackSelection;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -439,7 +438,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         }
 
         mMediaSessionConnector.setMediaMetadataProvider(player -> {
-            if (getVideo() == null || PlayerTweaksData.instance(getContext()).isNotificationFixEnabled()) {
+            if (getVideo() == null || PlayerTweaksData.instance(getContext()).isPlaybackNotificationsDisabled()) {
                 return null;
             }
 

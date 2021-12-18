@@ -62,7 +62,8 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendRunInBackgroundSwitch(AppDialogPresenter settingsPresenter) {
-        settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.run_in_background), optionItem -> {
+        settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.settings_remote_control), optionItem -> {
+            // Remote link depends on background service
             mDeviceLinkData.enableRunInBackground(optionItem.isSelected());
             Utils.updateRemoteControlService(getContext());
         }, mDeviceLinkData.isRunInBackgroundEnabled()));

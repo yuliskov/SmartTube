@@ -149,9 +149,9 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendTweaksCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from("Hide ATV playback notifications",
-                option -> mPlayerTweaksData.enableNotificationFix(option.isSelected()),
-                mPlayerTweaksData.isNotificationFixEnabled()));
+        options.add(UiOptionItem.from("Disable playback notifications",
+                option -> mPlayerTweaksData.disablePlaybackNotifications(option.isSelected()),
+                mPlayerTweaksData.isPlaybackNotificationsDisabled()));
 
         options.add(UiOptionItem.from("Live stream fix (1080/AVC)",
                 option -> mPlayerTweaksData.enableLiveStreamFix(option.isSelected()),

@@ -19,7 +19,7 @@ public class PlayerTweaksData {
     private boolean mIsAudioSyncFixEnabled;
     private boolean mIsKeepFinishedActivityEnabled;
     private boolean mIsLiveStreamFixEnabled;
-    private boolean mIsNotificationFixEnabled;
+    private boolean mIsPlaybackNotificationsDisabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -52,8 +52,8 @@ public class PlayerTweaksData {
         return mIsFrameDropFixEnabled;
     }
 
-    public void disableSnapToVsync(boolean enable) {
-        mIsSnapToVsyncDisabled = enable;
+    public void disableSnapToVsync(boolean disable) {
+        mIsSnapToVsyncDisabled = disable;
         persistData();
     }
 
@@ -134,13 +134,13 @@ public class PlayerTweaksData {
         return mIsLiveStreamFixEnabled;
     }
 
-    public void enableNotificationFix(boolean enable) {
-        mIsNotificationFixEnabled = enable;
+    public void disablePlaybackNotifications(boolean disable) {
+        mIsPlaybackNotificationsDisabled = disable;
         persistData();
     }
 
-    public boolean isNotificationFixEnabled() {
-        return mIsNotificationFixEnabled;
+    public boolean isPlaybackNotificationsDisabled() {
+        return mIsPlaybackNotificationsDisabled;
     }
 
     private void restoreData() {
@@ -160,7 +160,7 @@ public class PlayerTweaksData {
         mIsAudioSyncFixEnabled = Helpers.parseBoolean(split, 8, false);
         mIsKeepFinishedActivityEnabled = Helpers.parseBoolean(split, 9, false);
         mIsLiveStreamFixEnabled = Helpers.parseBoolean(split, 10, false);
-        mIsNotificationFixEnabled = Helpers.parseBoolean(split, 11, false);
+        mIsPlaybackNotificationsDisabled = Helpers.parseBoolean(split, 11, !Helpers.isAndroidTV(mPrefs.getContext()));
     }
 
     private void persistData() {
@@ -168,7 +168,7 @@ public class PlayerTweaksData {
                 mIsAmlogicFixEnabled, mIsFrameDropFixEnabled, mIsSnapToVsyncDisabled,
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
                 null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled,
-                mIsLiveStreamFixEnabled, mIsNotificationFixEnabled
+                mIsLiveStreamFixEnabled, mIsPlaybackNotificationsDisabled
         ));
     }
 }
