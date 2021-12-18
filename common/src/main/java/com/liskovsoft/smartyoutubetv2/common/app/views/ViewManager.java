@@ -12,6 +12,7 @@ import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -143,7 +144,8 @@ public class ViewManager {
 
         Class<?> lastActivity;
 
-        if (mDefaultTop != null) {
+        // Check that PIP window isn't closed by the user
+        if (mDefaultTop != null && PlaybackPresenter.instance(mContext).isRunningInBackground()) {
             lastActivity = mDefaultTop;
         } else if (!mActivityStack.isEmpty()) {
             lastActivity = mActivityStack.peek();
