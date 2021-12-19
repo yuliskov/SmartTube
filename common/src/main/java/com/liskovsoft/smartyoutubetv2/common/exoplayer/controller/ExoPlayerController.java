@@ -91,9 +91,9 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private void openMediaSource(MediaSource mediaSource) {
         setQualityInfo("");
 
+        mTrackSelectorManager.invalidate();
         mOnSourceChanged = true;
         mEventListener.onSourceChanged(mVideo);
-        mTrackSelectorManager.invalidate();
         mPlayer.prepare(mediaSource);
     }
 
