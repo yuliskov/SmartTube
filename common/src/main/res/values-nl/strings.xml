@@ -266,4 +266,15 @@
     <string name="upload_date_this_month">Deze maand</string>
     <string name="upload_date_this_year">Dit jaar</string>
     <string name="double_refresh_rate">Dubbelde verversingssnelheid</string>
+    <string name="upload_date_last_hour">Laatste uur</string>
+    <string name="focus_on_search_results">Autofocus op zoekresultaten</string>
+    <string name="context_menu">Contextmenu</string>
+    <string name="add_remove_from_recent_playlist">Toevoegen/verwijderen uit recente afspeellijst</string>
+    <string name="hide_settings_section">Sectie Instellingen verbergen (gevaarlijk!)</string>
+    <string name="volume">Volume %s%%</string>
+    <string name="auto_frame_rate_sec">%s sec</string>
+    <string name="audio_shift_sec">%s sec</string>
+    <string name="ui_hide_timeout_sec">%s sec</string>
+    <string name="screen_dimming_timeout_min">%s min</string>
+    <string name="mark_all_channels_watched">Markeer alle kanalen als bekeken</string>
 </resources>
