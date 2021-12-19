@@ -51,7 +51,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
         mMediaSourceFactory.setTrackErrorFixer(new TrackErrorFixer(mTrackSelectorManager));
 
-        initFormats();
+        //initFormats();
     }
 
     private void initFormats() {
@@ -92,9 +92,9 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         setQualityInfo("");
 
         mOnSourceChanged = true;
+        mEventListener.onSourceChanged(mVideo);
         mTrackSelectorManager.invalidate();
         mPlayer.prepare(mediaSource);
-        mEventListener.onSourceChanged(mVideo);
     }
 
     @Override
@@ -227,9 +227,8 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     @Override
     public void selectFormat(FormatItem formatItem) {
         if (formatItem != null) {
-            mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(formatItem));
-            // TODO: move to the {@link #onTrackChanged()} somehow
             mEventListener.onTrackSelected(formatItem);
+            mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(formatItem));
         }
     }
 

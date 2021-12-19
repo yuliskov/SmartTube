@@ -199,6 +199,11 @@ public class StateUpdater extends PlayerEventListenerHelper {
         restoreSpeed(getController().getVideo());
     }
 
+    @Override
+    public void onSourceChanged(Video item) {
+        restoreFormats();
+    }
+
     private void clearStateOfNextVideo() {
         if (getController().getVideo() != null && getController().getVideo().nextMediaItem != null) {
             resetPosition(getController().getVideo().nextMediaItem.getVideoId());
