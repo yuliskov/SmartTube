@@ -166,8 +166,24 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 mPlayerTweaksData.isAmlogicFixEnabled()));
 
         options.add(UiOptionItem.from("Ambilight/Aspect ratio fix",
-                option -> mPlayerTweaksData.enableTextureView(option.isSelected()),
+                option -> {
+                    mPlayerTweaksData.enableTextureView(option.isSelected());
+                    if (option.isSelected()) {
+                        // Tunneled playback works only with SurfaceView
+                        mPlayerTweaksData.enableTunneledPlayback(false);
+                    }
+                },
                 mPlayerTweaksData.isTextureViewEnabled()));
+
+        options.add(UiOptionItem.from("Tunneled video playback (Android 5+)",
+                option -> {
+                    mPlayerTweaksData.enableTunneledPlayback(option.isSelected());
+                    if (option.isSelected()) {
+                        // Tunneled playback works only with SurfaceView
+                        mPlayerTweaksData.enableTextureView(false);
+                    }
+                },
+                mPlayerTweaksData.isTunneledPlaybackEnabled()));
 
         options.add(UiOptionItem.from("Sleep timer fix",
                 option -> mPlayerData.enableSonyTimerFix(option.isSelected()),

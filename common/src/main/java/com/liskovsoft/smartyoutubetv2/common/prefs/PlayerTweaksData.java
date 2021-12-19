@@ -20,6 +20,7 @@ public class PlayerTweaksData {
     private boolean mIsKeepFinishedActivityEnabled;
     private boolean mIsLiveStreamFixEnabled;
     private boolean mIsPlaybackNotificationsDisabled;
+    private boolean mIsTunneledPlaybackEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -143,6 +144,15 @@ public class PlayerTweaksData {
         return mIsPlaybackNotificationsDisabled;
     }
 
+    public boolean isTunneledPlaybackEnabled() {
+        return mIsTunneledPlaybackEnabled;
+    }
+
+    public void enableTunneledPlayback(boolean enable) {
+        mIsTunneledPlaybackEnabled = enable;
+        persistData();
+    }
+
     private void restoreData() {
         String data = mPrefs.getData(VIDEO_PLAYER_TWEAKS_DATA);
 
@@ -161,6 +171,7 @@ public class PlayerTweaksData {
         mIsKeepFinishedActivityEnabled = Helpers.parseBoolean(split, 9, false);
         mIsLiveStreamFixEnabled = Helpers.parseBoolean(split, 10, false);
         mIsPlaybackNotificationsDisabled = Helpers.parseBoolean(split, 11, !Helpers.isAndroidTV(mPrefs.getContext()));
+        mIsTunneledPlaybackEnabled = Helpers.parseBoolean(split, 12, false);
     }
 
     private void persistData() {
@@ -168,7 +179,7 @@ public class PlayerTweaksData {
                 mIsAmlogicFixEnabled, mIsFrameDropFixEnabled, mIsSnapToVsyncDisabled,
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
                 null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled,
-                mIsLiveStreamFixEnabled, mIsPlaybackNotificationsDisabled
+                mIsLiveStreamFixEnabled, mIsPlaybackNotificationsDisabled, mIsTunneledPlaybackEnabled
         ));
     }
 }

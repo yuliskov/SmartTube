@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.controller;
 
 import android.content.Context;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.PlaybackParameters;
@@ -24,6 +25,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorMan
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 
 import java.io.InputStream;
 import java.util.List;
@@ -190,6 +192,11 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     @Override
     public void setTrackSelector(DefaultTrackSelector trackSelector) {
         mTrackSelectorManager.setTrackSelector(trackSelector);
+
+        if (mContext != null && trackSelector != null && PlayerTweaksData.instance(mContext).isTunneledPlaybackEnabled()) {
+            // Enable tunneling if supported by the current media and device configuration.
+            trackSelector.setParameters(trackSelector.buildUponParameters().setTunnelingAudioSessionId(C.generateAudioSessionIdV21(mContext)));
+        }
     }
 
     @Override
