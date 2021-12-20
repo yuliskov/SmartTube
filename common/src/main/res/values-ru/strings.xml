@@ -115,8 +115,8 @@
     <string name="repeat_mode_none">Завершать воспроизведение после одного видео</string>
     <string name="subscribed_to_channel">Подписка на канал оформлена</string>
     <string name="unsubscribed_from_channel">Подписка на канал отменена</string>
-    <string name="subtitle_yellow">Желтые</string>
-    <string name="subtitle_black_bg">Черный фон</string>
+    <string name="subtitle_yellow">Жёлтые</string>
+    <string name="subtitle_black_bg">Чёрный фон</string>
     <string name="player_seek_preview">Превью при перемотке</string>
     <string name="color_scheme_dark_grey_oled">Тёмно-серая (OLED)</string>
     <string name="channels_section_sorting">Сортировка раздела Каналы</string>
