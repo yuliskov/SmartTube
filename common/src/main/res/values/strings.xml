@@ -280,4 +280,6 @@
     <string name="ui_hide_timeout_sec">%s sec</string>
     <string name="screen_dimming_timeout_min">%s min</string>
     <string name="mark_all_channels_watched">Mark all channels as watched</string>
+    <string name="move_section_up">Move section up</string>
+    <string name="move_section_down">Move section down</string>
 </resources>

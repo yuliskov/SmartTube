@@ -37,6 +37,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
     private boolean mIsAccountSelectionEnabled;
     private boolean mIsMarkAllChannelsWatchedEnabled;
     private boolean mIsRefreshEnabled;
+    private boolean mIsMoveSectionEnabled;
 
     private SectionMenuPresenter(Context context) {
         super(context);
@@ -57,6 +58,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         mIsAccountSelectionEnabled = true;
         mIsRefreshEnabled = true;
         mIsMarkAllChannelsWatchedEnabled = true;
+        mIsMoveSectionEnabled = true;
 
         showMenuInt(section);
     }
@@ -93,6 +95,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         appendUnpinSectionFromSidebarButton();
         appendMarkAllChannelsWatchedButton();
         appendAccountSelectionButton();
+        appendMoveSectionButton();
 
         if (!mSettingsPresenter.isEmpty()) {
             String title = mSection != null ? mSection.getTitle() : null;
@@ -112,6 +115,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         appendUnpinFromSidebarButton();
         appendUnpinSectionFromSidebarButton();
         appendAccountSelectionButton();
+        appendMoveSectionButton();
 
         if (mSettingsPresenter.isEmpty()) {
             MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
@@ -196,6 +200,34 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
                     BrowsePresenter.instance(getContext()).refresh();
                     mSettingsPresenter.closeDialog();
                 }));
+    }
+
+    private void appendMoveSectionButton() {
+        if (!mIsMoveSectionEnabled) {
+            return;
+        }
+
+        if (mSection == null) {
+            return;
+        }
+
+        GeneralData generalData = GeneralData.instance(getContext());
+
+        if (generalData.canMoveSectionUp(mSection.getId())) {
+            mSettingsPresenter.appendSingleButton(
+                    UiOptionItem.from(getContext().getString(R.string.move_section_up), optionItem -> {
+                        mSettingsPresenter.closeDialog();
+                        BrowsePresenter.instance(getContext()).updateSections();
+                    }));
+        }
+
+        if (generalData.canMoveSectionDown(mSection.getId())) {
+            mSettingsPresenter.appendSingleButton(
+                    UiOptionItem.from(getContext().getString(R.string.move_section_down), optionItem -> {
+                        mSettingsPresenter.closeDialog();
+                        BrowsePresenter.instance(getContext()).updateSections();
+                    }));
+        }
     }
 
     private void togglePinToSidebar(Video section) {
