@@ -339,7 +339,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     @Override
     public void onSectionLongPressed(int sectionId) {
-        SectionMenuPresenter.instance(getContext()).showMenu(getSection(sectionId));
+        SectionMenuPresenter.instance(getContext()).showMenu(findSectionById(sectionId));
     }
 
     @Override
@@ -414,7 +414,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private void updateSection(int sectionId) {
         disposeActions();
 
-        mCurrentSection = getSection(sectionId);
+        mCurrentSection = findSectionById(sectionId);
 
         if (getView() == null || sectionId < 0) {
             return;
@@ -658,7 +658,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         updateVideoGrid(mCurrentSection, ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item), 1, true);
     }
 
-    private BrowseSection getSection(int sectionId) {
+    private BrowseSection findSectionById(int sectionId) {
         for (BrowseSection category : mSections) {
             if (category.getId() == sectionId) {
                 return category;
