@@ -41,6 +41,8 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -203,6 +205,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     public void updateSections() {
         int index = 0;
 
+        sortSections();
+
         for (BrowseSection section : mSections) { // contains sections and pinned items!
             section.setEnabled(section.getId() == MediaGroup.TYPE_SETTINGS || mGeneralData.isSectionEnabled(section.getId()));
 
@@ -215,6 +219,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 getView().removeSection(section);
             }
         }
+    }
+
+    private void sortSections() {
+        Collections.sort(mSections, Comparator.comparingInt(o -> mGeneralData.getSectionIndex(o.getId())));
     }
 
     public void updateChannelSorting() {

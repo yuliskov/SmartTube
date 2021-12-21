@@ -96,6 +96,17 @@ public class GeneralData {
                 Helpers.findFirst(mPinnedItems, item -> item.hashCode() == sectionId) != null; // by default enable all pinned items
     }
 
+    public void setSectionIndex(int sectionId, int index) {
+        // 1) distinguish section from pinned item
+        // 2) add pinned items after the sections
+    }
+
+    public int getSectionIndex(int sectionId) {
+        // 1) distinguish section from pinned item
+        // 2) add pinned items after the sections
+        return 0;
+    }
+
     public void setBootSectionId(int sectionId) {
         mBootSectionId = sectionId;
 
