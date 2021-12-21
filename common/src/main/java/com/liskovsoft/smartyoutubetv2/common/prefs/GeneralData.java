@@ -120,19 +120,19 @@ public class GeneralData {
         return index;
     }
 
-    public void shiftSectionUp(int sectionId) {
+    public void moveSectionUp(int sectionId) {
         shiftSection(sectionId, -1);
     }
 
-    public void shiftSectionDown(int sectionId) {
+    public void moveSectionDown(int sectionId) {
         shiftSection(sectionId, 1);
     }
 
-    public boolean canShiftSectionUp(int sectionId) {
+    public boolean canMoveSectionUp(int sectionId) {
         return canShiftSection(sectionId, -1);
     }
 
-    public boolean canShiftSectionDown(int sectionId) {
+    public boolean canMoveSectionDown(int sectionId) {
         return canShiftSection(sectionId, 1);
     }
 
