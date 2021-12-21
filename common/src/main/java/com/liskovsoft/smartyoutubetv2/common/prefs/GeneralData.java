@@ -7,11 +7,12 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.utils.HashList;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class GeneralData {
     public static final int SCREEN_DIMMING_NEVER = 0;
@@ -28,8 +29,8 @@ public class GeneralData {
     private boolean mIsSettingsSectionEnabled;
     private int mBootSectionId;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
-    private final Set<Integer> mEnabledSections = new LinkedHashSet<>();
-    private final Set<Video> mPinnedItems = new LinkedHashSet<>();
+    private final List<Integer> mEnabledSections = new HashList<>();
+    private final List<Video> mPinnedItems = new HashList<>();
     private int mAppExitShortcut;
     private boolean mIsReturnToLauncherEnabled;
     private int mBackgroundShortcut;
@@ -56,7 +57,7 @@ public class GeneralData {
         return sInstance;
     }
 
-    public Set<Video> getPinnedItems() {
+    public Collection<Video> getPinnedItems() {
         return mPinnedItems;
     }
 
@@ -84,7 +85,7 @@ public class GeneralData {
         persistState();
     }
 
-    public Set<Integer> getEnabledSections() {
+    public Collection<Integer> getEnabledSections() {
         return mEnabledSections;
     }
 
@@ -96,15 +97,96 @@ public class GeneralData {
                 Helpers.findFirst(mPinnedItems, item -> item.hashCode() == sectionId) != null; // by default enable all pinned items
     }
 
-    public void setSectionIndex(int sectionId, int index) {
-        // 1) distinguish section from pinned item
-        // 2) add pinned items after the sections
-    }
+    //public void setSectionIndex(int sectionId, int index) {
+    //    // 1) distinguish section from pinned item
+    //    // 2) add pinned items after the sections
+    //}
 
     public int getSectionIndex(int sectionId) {
-        // 1) distinguish section from pinned item
-        // 2) add pinned items after the sections
-        return 0;
+        // 1) Distinguish section from pinned item
+        // 2) Add pinned items after the sections
+
+        int index = findSectionIndex(sectionId);
+
+        if (index == -1) {
+            index = findPinnedItemIndex(sectionId);
+
+            // Add pinned items after the sections
+            if (index != -1) {
+                index += mEnabledSections.size();
+            }
+        }
+
+        return index;
+    }
+
+    public void shiftSectionUp(int sectionId) {
+        shiftSection(sectionId, -1);
+    }
+
+    public void shiftSectionDown(int sectionId) {
+        shiftSection(sectionId, 1);
+    }
+
+    public boolean canShiftSectionUp(int sectionId) {
+        return canShiftSection(sectionId, -1);
+    }
+
+    public boolean canShiftSectionDown(int sectionId) {
+        return canShiftSection(sectionId, 1);
+    }
+
+    private int findSectionIndex(int sectionId) {
+        return mEnabledSections.indexOf(sectionId);
+    }
+
+    private boolean canShiftSection(int sectionId, int shift) {
+        int index = findSectionIndex(sectionId);
+
+        if (index != -1) {
+            return index + shift >= 0 && index + shift < mEnabledSections.size();
+        }
+
+        index = findPinnedItemIndex(sectionId);
+
+        if (index != -1) {
+            return  index + shift >= 0 && index + shift < mEnabledSections.size();
+        }
+
+        return false;
+    }
+
+    private void shiftSection(int sectionId, int shift) {
+        if (!canShiftSection(sectionId, shift)) {
+            return;
+        }
+
+        int index = findSectionIndex(sectionId);
+
+        if (index != -1) {
+            mEnabledSections.add(index + shift, mEnabledSections.get(index));
+            return;
+        }
+
+        index = findPinnedItemIndex(sectionId);
+
+        if (index != -1) {
+            mPinnedItems.add(index + shift, mPinnedItems.get(index));
+        }
+    }
+
+    private int findPinnedItemIndex(int sectionId) {
+        int index = -1;
+
+        for (Video item : mPinnedItems) {
+            // Distinguish pinned items by hashCode!
+            if (item.hashCode() == sectionId) {
+                index = mPinnedItems.indexOf(item);
+                break;
+            }
+        }
+
+        return index;
     }
 
     public void setBootSectionId(int sectionId) {

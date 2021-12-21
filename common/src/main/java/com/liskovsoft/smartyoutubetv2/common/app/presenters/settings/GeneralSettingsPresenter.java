@@ -18,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -90,7 +91,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
             );
         }
 
-        Set<Video> pinnedItems = mGeneralData.getPinnedItems();
+        Collection<Video> pinnedItems = mGeneralData.getPinnedItems();
 
         for (Video item : pinnedItems) {
             if (item != null && item.title != null) {

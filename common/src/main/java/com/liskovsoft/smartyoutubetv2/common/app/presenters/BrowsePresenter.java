@@ -41,6 +41,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -165,7 +166,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void cleanupPinnedItems() {
-        Set<Video> pinnedItems = mGeneralData.getPinnedItems();
+        Collection<Video> pinnedItems = mGeneralData.getPinnedItems();
 
         Helpers.removeIf(pinnedItems, value -> {
             if (value == null) {
@@ -178,7 +179,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void initPinnedHeaders() {
-        Set<Video> pinnedItems = mGeneralData.getPinnedItems();
+        Collection<Video> pinnedItems = mGeneralData.getPinnedItems();
 
         for (Video item : pinnedItems) {
             if (item != null) {
@@ -189,7 +190,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void initPinnedCallbacks() {
-        Set<Video> pinnedItems = mGeneralData.getPinnedItems();
+        Collection<Video> pinnedItems = mGeneralData.getPinnedItems();
 
         for (Video item : pinnedItems) {
             if (item != null) {
@@ -356,7 +357,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public boolean isItemPinned(Video item) {
-        Set<Video> items = mGeneralData.getPinnedItems();
+        Collection<Video> items = mGeneralData.getPinnedItems();
 
         return items.contains(item);
     }
