@@ -59,7 +59,7 @@
     <string name="default_lang">Predefinita</string>
     <string name="dialog_select_language">Lingua</string>
     <string name="subtitle_default">Predefinito</string>
-    <string name="subtitle_white_semi_transparent">Sfondo semitrasparente</string>
+    <string name="subtitle_white_semi_transparent">Sfondo bianco o semitrasparente</string>
     <string name="subtitle_style">Stile sottotitoli</string>
     <string name="subtitle_language">Lingua sottotitoli</string>
     <string name="action_search">Inizia ricerca</string>
@@ -115,8 +115,8 @@
     <string name="repeat_mode_none">Ferma dopo un video</string>
     <string name="subscribed_to_channel">Iscritto al canale</string>
     <string name="unsubscribed_from_channel">Disiscritto dal canale</string>
-    <string name="subtitle_yellow_transparent">Giallo</string>
-    <string name="subtitle_white_black">Sfondo nero</string>
+    <string name="subtitle_yellow_transparent">Sfondo giallo o trasparente</string>
+    <string name="subtitle_white_black">Sfondo bianco o nero</string>
     <string name="player_seek_preview">Anteprima durante avanzamento</string>
     <string name="color_scheme_dark_grey_oled">Grigio scuro (OLED)</string>
     <string name="channels_section_sorting">Ordinamento canali</string>
