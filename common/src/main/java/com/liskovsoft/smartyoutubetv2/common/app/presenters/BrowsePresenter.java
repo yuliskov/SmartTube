@@ -354,9 +354,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public void pinItem(Video item) {
-        Set<Video> items = mGeneralData.getPinnedItems();
-        items.add(item);
-        mGeneralData.setPinnedItems(items);
+        mGeneralData.addPinnedItem(item);
 
         BrowseSection category = new BrowseSection(item.hashCode(), item.title, BrowseSection.TYPE_GRID, item.cardImageUrl, true, item);
         mSections.add(category);
@@ -368,9 +366,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public void unpinItem(Video item) {
-        Set<Video> items = mGeneralData.getPinnedItems();
-        items.remove(item);
-        mGeneralData.setPinnedItems(items);
+        mGeneralData.removePinnedItem(item);
 
         BrowseSection section = null;
 

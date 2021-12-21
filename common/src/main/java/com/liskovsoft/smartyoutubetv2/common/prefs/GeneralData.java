@@ -8,7 +8,6 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -29,11 +28,11 @@ public class GeneralData {
     private boolean mIsSettingsSectionEnabled;
     private int mBootSectionId;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
-    private final Set<Integer> mEnabledSections = new HashSet<>();
+    private final Set<Integer> mEnabledSections = new LinkedHashSet<>();
+    private final Set<Video> mPinnedItems = new LinkedHashSet<>();
     private int mAppExitShortcut;
     private boolean mIsReturnToLauncherEnabled;
     private int mBackgroundShortcut;
-    private Set<Video> mPinnedItems = new LinkedHashSet<>();
     private boolean mIsHideShortsEnabled;
     private boolean mIsRemapFastForwardToNextEnabled;
     private int mScreenDimmingTimeoutMin;
@@ -61,8 +60,13 @@ public class GeneralData {
         return mPinnedItems;
     }
 
-    public void setPinnedItems(Set<Video> items) {
-        mPinnedItems = items;
+    public void addPinnedItem(Video item) {
+        mPinnedItems.add(item);
+        persistState();
+    }
+
+    public void removePinnedItem(Video item) {
+        mPinnedItems.remove(item);
         persistState();
     }
 
