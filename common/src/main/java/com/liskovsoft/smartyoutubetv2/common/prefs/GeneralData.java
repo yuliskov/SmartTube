@@ -137,6 +137,10 @@ public class GeneralData {
     }
 
     private int findSectionIndex(int sectionId) {
+        if (sectionId == MediaGroup.TYPE_SETTINGS) {
+            return mEnabledSections.size();
+        }
+
         return mEnabledSections.indexOf(sectionId);
     }
 

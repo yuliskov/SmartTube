@@ -217,6 +217,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
             mSettingsPresenter.appendSingleButton(
                     UiOptionItem.from(getContext().getString(R.string.move_section_up), optionItem -> {
                         mSettingsPresenter.closeDialog();
+                        generalData.moveSectionUp(mSection.getId());
                         BrowsePresenter.instance(getContext()).updateSections();
                     }));
         }
@@ -225,6 +226,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
             mSettingsPresenter.appendSingleButton(
                     UiOptionItem.from(getContext().getString(R.string.move_section_down), optionItem -> {
                         mSettingsPresenter.closeDialog();
+                        generalData.moveSectionDown(mSection.getId());
                         BrowsePresenter.instance(getContext()).updateSections();
                     }));
         }
