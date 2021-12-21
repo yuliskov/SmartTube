@@ -59,7 +59,7 @@
     <string name="default_lang">Standard</string>
     <string name="dialog_select_language">Sprache</string>
     <string name="subtitle_default">Standard</string>
-    <string name="subtitle_white_semi_transparent">Halbtransparenter Hintergrund</string>
+    <string name="subtitle_white_semi_transparent">Weiß auf halbtransparentem Hintergrund</string>
     <string name="subtitle_style">Untertitel-Stil</string>
     <string name="subtitle_language">Untertitel-Sprache</string>
     <string name="action_search">Suche starten</string>
@@ -115,8 +115,8 @@
     <string name="repeat_mode_none">Stoppen nach jedem Video</string>
     <string name="subscribed_to_channel">Kanal abonniert</string>
     <string name="unsubscribed_from_channel">Kanal nicht mehr abonniert</string>
-    <string name="subtitle_yellow_transparent">Gelb</string>
-    <string name="subtitle_white_black">Schwarzer Hintergrund</string>
+    <string name="subtitle_yellow_transparent">Gelb auf transparentem Hintergrund</string>
+    <string name="subtitle_white_black">Weiß auf schwarzem Hintergrund</string>
     <string name="player_seek_preview">Vorschau beim Spulen anzeigen</string>
     <string name="color_scheme_dark_grey_oled">Dunkel (OLED)</string>
     <string name="channels_section_sorting">Kanäle-Kategorie sortieren</string>
@@ -280,4 +280,6 @@
     <string name="ui_hide_timeout_sec">%s sec</string>
     <string name="screen_dimming_timeout_min">%s min</string>
     <string name="mark_all_channels_watched">Alle Kanäle als gesehen markieren</string>
+    <string name="move_section_up">Kategorie nach oben verschieben</string>
+    <string name="move_section_down">Kategorie nach unten verschieben</string>
 </resources>
