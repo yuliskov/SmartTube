@@ -20,6 +20,10 @@ public class HashList<T> extends ArrayList<T> {
             remove(element);
         }
 
-        super.add(index, element);
+        if (index >= 0 && index < size()) {
+            super.add(index, element);
+        } else {
+            super.add(element);
+        }
     }
 }

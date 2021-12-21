@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -193,6 +194,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(
                 String.format("%s\n%s", getContext().getString(R.string.app_backup), backupManager.getBackupPath()),
                 option -> {
+                    mGeneralData.enableSection(MediaGroup.TYPE_SETTINGS, true); // prevent Settings lock
                     mGeneralData.enableSettingsSection(true); // prevent Settings lock
                     backupManager.checkPermAndBackup();
                     MessageHelpers.showMessage(getContext(), R.string.msg_done);

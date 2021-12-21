@@ -77,12 +77,33 @@ public class GeneralData {
 
     public void enableSection(int sectionId, boolean enabled) {
         if (enabled) {
-            mEnabledSections.add(sectionId);
+            int index = getDefaultSectionIndex(sectionId);
+
+            if (index == -1) {
+                mEnabledSections.add(sectionId);
+            } else {
+                mEnabledSections.add(index, sectionId);
+            }
         } else {
-            mEnabledSections.remove(sectionId);
+            mEnabledSections.remove((Object) sectionId);
         }
 
         persistState();
+    }
+
+    private int getDefaultSectionIndex(int sectionId) {
+        int index = -1;
+
+        Collection<Integer> values = mDefaultSections.values();
+
+        for (int item : values) {
+            index++;
+            if (item == sectionId) {
+                break;
+            }
+        }
+
+        return index;
     }
 
     public Collection<Integer> getEnabledSections() {
@@ -137,10 +158,6 @@ public class GeneralData {
     }
 
     private int findSectionIndex(int sectionId) {
-        if (sectionId == MediaGroup.TYPE_SETTINGS) {
-            return mEnabledSections.size();
-        }
-
         return mEnabledSections.indexOf(sectionId);
     }
 
@@ -320,6 +337,7 @@ public class GeneralData {
         mDefaultSections.put(R.string.header_subscriptions, MediaGroup.TYPE_SUBSCRIPTIONS);
         mDefaultSections.put(R.string.header_history, MediaGroup.TYPE_HISTORY);
         mDefaultSections.put(R.string.header_playlists, MediaGroup.TYPE_USER_PLAYLISTS);
+        mDefaultSections.put(R.string.header_settings, MediaGroup.TYPE_SETTINGS);
     }
 
     private void restoreState() {
@@ -327,7 +345,7 @@ public class GeneralData {
 
         String[] split = Helpers.splitObjectLegacy(data);
 
-        String selectedSections = Helpers.parseStr(split, 0);
+        // Zero index is skipped. Selected sections were there.
         mBootSectionId = Helpers.parseInt(split, 1, MediaGroup.TYPE_HOME);
         mIsSettingsSectionEnabled = Helpers.parseBoolean(split, 2, true);
         mAppExitShortcut = Helpers.parseInt(split, 3, EXIT_DOUBLE_BACK);
@@ -341,6 +359,7 @@ public class GeneralData {
         mIsBridgeCheckEnabled = Helpers.parseBoolean(split, 11, true);
         mIsOkButtonLongPressDisabled = Helpers.parseBoolean(split, 12, false);
         mLastPlaylistId = Helpers.parseStr(split, 13);
+        String selectedSections = Helpers.parseStr(split, 14);
 
         if (selectedSections != null) {
             String[] selectedSectionsArr = Helpers.splitArrayLegacy(selectedSections);
@@ -364,9 +383,10 @@ public class GeneralData {
     private void persistState() {
         String selectedCategories = Helpers.mergeArray(mEnabledSections.toArray());
         String pinnedItems = Helpers.mergeArray(mPinnedItems.toArray());
-        mPrefs.setData(GENERAL_DATA, Helpers.mergeObject(selectedCategories, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut,
+        // Zero index is skipped. Selected sections were there.
+        mPrefs.setData(GENERAL_DATA, Helpers.mergeObject(null, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut,
                 mIsReturnToLauncherEnabled,mBackgroundShortcut, pinnedItems,
                 mIsHideShortsEnabled, mIsRemapFastForwardToNextEnabled, mScreenDimmingTimeoutMin,
-                mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId));
+                mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId, selectedCategories));
     }
 }

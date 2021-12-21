@@ -276,6 +276,6 @@
     <string name="hide_settings_section">Прятать раздел Настройки (опасно!)</string>
     <string name="volume">Громкость %s%%</string>
     <string name="mark_all_channels_watched">Отметить все каналы как просмотренные</string>
-    <string name="move_section_up">Переместить секцию выше</string>
-    <string name="move_section_down">Переместить секцию ниже</string>
+    <string name="move_section_up">Переместить раздел выше</string>
+    <string name="move_section_down">Переместить раздел ниже</string>
 </resources>
