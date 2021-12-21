@@ -169,6 +169,7 @@ public class GeneralData {
 
         if (index != -1) {
             mEnabledSections.add(index + shift, mEnabledSections.get(index));
+            persistState();
             return;
         }
 
@@ -176,6 +177,7 @@ public class GeneralData {
 
         if (index != -1) {
             mPinnedItems.add(index + shift, mPinnedItems.get(index));
+            persistState();
         }
     }
 
