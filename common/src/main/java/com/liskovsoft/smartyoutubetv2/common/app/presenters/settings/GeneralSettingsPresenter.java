@@ -131,12 +131,12 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from("HOME",
-                option -> mGeneralData.setBackgroundShortcut(GeneralData.BACKGROUND_SHORTCUT_HOME),
-                mGeneralData.getBackgroundShortcut() == GeneralData.BACKGROUND_SHORTCUT_HOME));
+                option -> mGeneralData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME),
+                mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME));
 
         options.add(UiOptionItem.from("HOME/BACK",
-                option -> mGeneralData.setBackgroundShortcut(GeneralData.BACKGROUND_SHORTCUT_HOME_N_BACK),
-                mGeneralData.getBackgroundShortcut() == GeneralData.BACKGROUND_SHORTCUT_HOME_N_BACK));
+                option -> mGeneralData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_N_BACK),
+                mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_N_BACK));
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.background_playback_activation), options);
     }

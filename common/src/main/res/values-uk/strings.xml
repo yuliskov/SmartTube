@@ -59,7 +59,7 @@
     <string name="default_lang">За замовчуванням</string>
     <string name="dialog_select_language">Мова</string>
     <string name="subtitle_default">Звичайні</string>
-    <string name="subtitle_semi_transparent_bg">Напівпрозорий фон</string>
+    <string name="subtitle_white_semi_transparent">Білі на напівпрозорому фоні</string>
     <string name="subtitle_style">Стиль субтитрів</string>
     <string name="subtitle_language">Мова субтитрів</string>
     <string name="action_search">Почати пошук</string>
@@ -115,8 +115,8 @@
     <string name="repeat_mode_none">Завершувати відтворення після одного відео</string>
     <string name="subscribed_to_channel">Підписка на канал оформлена</string>
     <string name="unsubscribed_from_channel">Підписка на канал скасована</string>
-    <string name="subtitle_yellow">Жовті</string>
-    <string name="subtitle_black_bg">Чорний фон</string>
+    <string name="subtitle_yellow_transparent">Жовті на прозорому фоні</string>
+    <string name="subtitle_white_black">Білі на чорному фоні</string>
     <string name="player_seek_preview">Прев\'ю при перемотуванні</string>
     <string name="color_scheme_dark_grey_oled">Темно-сіра (OLED)</string>
     <string name="channels_section_sorting">Сортування розділу Канали</string>

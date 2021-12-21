@@ -58,7 +58,7 @@
   <string name="default_lang">डिफ़ॉल्ट</string>
   <string name="dialog_select_language">भाषा</string>
   <string name="subtitle_default">डिफ़ॉल्ट</string>
-  <string name="subtitle_semi_transparent_bg">अर्द्धपारदर्शी पृष्ठभूमि</string>
+  <string name="subtitle_white_semi_transparent">अर्द्धपारदर्शी पृष्ठभूमि</string>
   <string name="subtitle_style">उपशीर्षक शैली</string>
   <string name="subtitle_language">उपशीर्षक भाषा</string>
   <string name="action_search">खोज शुरू करे</string>
@@ -112,8 +112,8 @@
   <string name="repeat_mode_none">एक वीडियो के बाद प्लेबैक रोकें</string>
   <string name="subscribed_to_channel">चैनल के सदस्यता बने </string>
   <string name="unsubscribed_from_channel">चैनल की सदस्यता समाप्त करें</string>
-  <string name="subtitle_yellow">पीला</string>
-  <string name="subtitle_black_bg">श्याम वर्ण पृष्ठभूमि</string>
+  <string name="subtitle_yellow_transparent">पीला</string>
+  <string name="subtitle_white_black">श्याम वर्ण पृष्ठभूमि</string>
   <string name="player_seek_preview">देखते हुए पूर्वावलोकन करें</string>
   <string name="color_scheme_dark_grey_oled">गहरा स्लेटी(ओएलईडी)</string>
   <string name="channels_section_sorting">चैनल अनुभाग छँटाई</string>

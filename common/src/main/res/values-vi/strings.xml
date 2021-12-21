@@ -58,7 +58,7 @@
     <string name="default_lang">Mặc định</string>
     <string name="dialog_select_language">Ngôn ngữ ứng dụng</string>
     <string name="subtitle_default">Mặc định</string>
-    <string name="subtitle_semi_transparent_bg">Nền nửa trong suốt</string>
+    <string name="subtitle_white_semi_transparent">Nền nửa trong suốt</string>
     <string name="subtitle_style">Kiểu phụ đề</string>
     <string name="subtitle_language">Ngôn ngữ phụ đề</string>
     <string name="action_search">Bắt đầu tìm kiếm</string>
@@ -113,8 +113,8 @@
     <string name="repeat_mode_none">Dừng phát lại sau một video</string>
     <string name="subscribed_to_channel">Đã đăng ký kênh</string>
     <string name="unsubscribed_from_channel">Đã hủy đăng ký kênh</string>
-    <string name="subtitle_yellow">Vàng</string>
-    <string name="subtitle_black_bg">Nền đen</string>
+    <string name="subtitle_yellow_transparent">Vàng</string>
+    <string name="subtitle_white_black">Nền đen</string>
     <string name="player_seek_preview">Xem trước trong khi tua</string>
     <string name="color_scheme_dark_grey_oled">Màu xám đen (OLED)</string>
     <string name="channels_section_sorting">Phân loại thành phần kênh</string>

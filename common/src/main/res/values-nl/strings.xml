@@ -59,7 +59,7 @@
     <string name="default_lang">Standaard</string>
     <string name="dialog_select_language">Taal</string>
     <string name="subtitle_default">Standaard</string>
-    <string name="subtitle_semi_transparent_bg">Doorzichtige achtergrond</string>
+    <string name="subtitle_white_semi_transparent">Doorzichtige achtergrond</string>
     <string name="subtitle_style">Ondertitelstijl</string>
     <string name="subtitle_language">Ondertiteltaal</string>
     <string name="action_search">Zoeken</string>
@@ -115,8 +115,8 @@
     <string name="repeat_mode_none">Stoppen na elke video</string>
     <string name="subscribed_to_channel">Je bent nu geabonneerd</string>
     <string name="unsubscribed_from_channel">Je bent niet meer geabonneerd</string>
-    <string name="subtitle_yellow">Geel</string>
-    <string name="subtitle_black_bg">Zwarte achtergrond</string>
+    <string name="subtitle_yellow_transparent">Geel</string>
+    <string name="subtitle_white_black">Zwarte achtergrond</string>
     <string name="player_seek_preview">Voorvertoning weergeven tijdens snelzoeken</string>
     <string name="color_scheme_dark_grey_oled">Donker (OLED)</string>
     <string name="channels_section_sorting">Kanalen sorteren</string>

@@ -158,7 +158,7 @@ public class PlaybackActivity extends LeanbackActivity {
 
         // NOTE: block back button for PIP.
         // User pressed PIP button in the player.
-        if (!isBackPressed() || mGeneralData.getBackgroundShortcut() == GeneralData.BACKGROUND_SHORTCUT_HOME_N_BACK) {
+        if (!isBackPressed() || mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_N_BACK) {
             enterPipMode();
         }
 
@@ -185,7 +185,7 @@ public class PlaybackActivity extends LeanbackActivity {
     private boolean doNotFinish() {
         sIsInPipMode = isInPipMode();
         return sIsInPipMode || (mPlaybackFragment.getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND
-        && mGeneralData.getBackgroundShortcut() == GeneralData.BACKGROUND_SHORTCUT_HOME_N_BACK);
+        && mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_N_BACK);
     }
 
     private boolean doNotDestroy() {

@@ -57,7 +57,7 @@
     <string name="default_lang">Noklusējums</string>
     <string name="dialog_select_language">App language</string>
     <string name="subtitle_default">Noklusējums</string>
-    <string name="subtitle_semi_transparent_bg">Puscaurspīdīgs fons</string>
+    <string name="subtitle_white_semi_transparent">Puscaurspīdīgs fons</string>
     <string name="subtitle_style">Subtitru stils</string>
     <string name="subtitle_language">Subtitru valoda</string>
     <string name="action_search">Sākt meklēt</string>
@@ -111,8 +111,8 @@
     <string name="repeat_mode_none">Pārtraukt atskaņošanu pēc viena videoklipa</string>
     <string name="subscribed_to_channel">Tu esi pierakstījies</string>
     <string name="unsubscribed_from_channel">Tu esi atrakstījies</string>
-    <string name="subtitle_yellow">Dzeltens</string>
-    <string name="subtitle_black_bg">Melns fons</string>
+    <string name="subtitle_yellow_transparent">Dzeltens</string>
+    <string name="subtitle_white_black">Melns fons</string>
     <string name="player_seek_preview">Priekšskatīt, kamēr meklējat</string>
     <string name="color_scheme_dark_grey_oled">Tumšs (OLED)</string>
     <string name="channels_section_sorting">Kanālu sadaļu šķirošana</string>

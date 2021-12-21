@@ -58,7 +58,7 @@
     <string name="default_lang">Domyślny</string>
     <string name="dialog_select_language">Język aplikacji</string>
     <string name="subtitle_default">Domyślny</string>
-    <string name="subtitle_semi_transparent_bg">Półprzeźroczyste tło</string>
+    <string name="subtitle_white_semi_transparent">Półprzeźroczyste tło</string>
     <string name="subtitle_style">Styl napisów</string>
     <string name="subtitle_language">Język napisów</string>
     <string name="action_search">Zacznij szukać</string>
@@ -114,8 +114,8 @@
     <string name="repeat_mode_none">Zakończ odtwarzanie po obejrzeniu</string>
     <string name="subscribed_to_channel">Zasubksyrbowano kanał</string>
     <string name="unsubscribed_from_channel">Odsubskrybowano kanał</string>
-    <string name="subtitle_yellow">Żółty</string>
-    <string name="subtitle_black_bg">Czarne tło</string>
+    <string name="subtitle_yellow_transparent">Żółty</string>
+    <string name="subtitle_white_black">Czarne tło</string>
     <string name="player_seek_preview">Podgląd podczas przewijania</string>
     <string name="color_scheme_dark_grey_oled">Ciemno szary (OLED)</string>
     <string name="channels_section_sorting">Sortowanie sekcji kanałów</string>

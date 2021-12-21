@@ -57,7 +57,7 @@
     <string name="default_lang">Լռելյայն</string>
     <string name="dialog_select_language">Ծրագրի լեզուն</string>
     <string name="subtitle_default">Լռելյայն</string>
-    <string name="subtitle_semi_transparent_bg">Կիսաթափանցիկ ֆոն</string>
+    <string name="subtitle_white_semi_transparent">Կիսաթափանցիկ ֆոն</string>
     <string name="subtitle_style">Ենթագրերի ոճեր</string>
     <string name="subtitle_language">Ենթագրերի լեզու</string>
     <string name="action_search">Սկսեք որոնումը</string>
@@ -111,8 +111,8 @@
     <string name="repeat_mode_none">Դադարեցնել նվագարկումը նվագացանկից դուրս յուրաքանչյուր տեսանյութից հետո</string>
     <string name="subscribed_to_channel">Բաժանորդագրությունը կատարված է</string>
     <string name="unsubscribed_from_channel">Բաժանորդագրությունը հեռացված է</string>
-    <string name="subtitle_yellow">Դեղին</string>
-    <string name="subtitle_black_bg">Սև ֆոն</string>
+    <string name="subtitle_yellow_transparent">Դեղին</string>
+    <string name="subtitle_white_black">Սև ֆոն</string>
     <string name="player_seek_preview">Որոնելիս ցույց տալ նախադիտումը</string>
     <string name="color_scheme_dark_grey_oled">Մուգ մոխրագույն (OLED)</string>
     <string name="channels_section_sorting">Ալիքի բաժնի դասավորությունը</string>

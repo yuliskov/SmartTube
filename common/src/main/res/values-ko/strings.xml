@@ -59,7 +59,7 @@
 	<string name="default_lang">기본</string>
 	<string name="dialog_select_language">언어</string>
 	<string name="subtitle_default">기본</string>
-	<string name="subtitle_semi_transparent_bg">반투명한 배경</string>
+	<string name="subtitle_white_semi_transparent">반투명한 배경</string>
 	<string name="subtitle_style">자막 스타일</string>
 	<string name="subtitle_language">자막 언어</string>
 	<string name="action_search">검색 시작</string>
@@ -115,8 +115,8 @@
 	<string name="repeat_mode_none">영상 한개 마다 재생 정지</string>
 	<string name="subscribed_to_channel">채널을 구독했습니다</string>
 	<string name="unsubscribed_from_channel">채널 구독을 취소했습니다</string>
-	<string name="subtitle_yellow">노란색</string>
-	<string name="subtitle_black_bg">검정색 배경</string>
+	<string name="subtitle_yellow_transparent">노란색</string>
+	<string name="subtitle_white_black">검정색 배경</string>
 	<string name="player_seek_preview">탐색바 사용중 미리보기</string>
 	<string name="color_scheme_dark_grey_oled">어두운 회색(OLED)</string>
 	<string name="channels_section_sorting">채널 섹션의 정렬</string>

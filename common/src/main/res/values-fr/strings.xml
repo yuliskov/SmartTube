@@ -59,7 +59,7 @@
     <string name="default_lang">Par défaut</string>
     <string name="dialog_select_language">Langue de l\'application</string>
     <string name="subtitle_default">Par défaut</string>
-    <string name="subtitle_semi_transparent_bg">Arrière-plan semi-transparent</string>
+    <string name="subtitle_white_semi_transparent">Arrière-plan semi-transparent</string>
     <string name="subtitle_style">Style de sous-titre</string>
     <string name="subtitle_language">Langue des sous-titres</string>
     <string name="action_search">Commencer recherche</string>
@@ -115,8 +115,8 @@
     <string name="repeat_mode_none">Arrêtez la lecture après une vidéo</string>
     <string name="subscribed_to_channel">Abonné(e) à la chaîne</string>
     <string name="unsubscribed_from_channel">Désabonné de la chaîne</string>
-    <string name="subtitle_yellow">Jaune</string>
-    <string name="subtitle_black_bg">Fond noir</string>
+    <string name="subtitle_yellow_transparent">Jaune</string>
+    <string name="subtitle_white_black">Fond noir</string>
     <string name="player_seek_preview">Aperçu pendant la recherche</string>
     <string name="color_scheme_dark_grey_oled">Sombre (OLED)</string>
     <string name="channels_section_sorting">Classement des sections de chaînes</string>

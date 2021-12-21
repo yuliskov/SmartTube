@@ -61,7 +61,7 @@ So, make a copy of values-he and name it values-iw. Keep both in your structure.
     <string name="default_lang">ברירת מחדל</string>
     <string name="dialog_select_language">שפת היישום</string>
     <string name="subtitle_default">ברירת מחדל</string>
-    <string name="subtitle_semi_transparent_bg">רקע שקוף למחצה</string>
+    <string name="subtitle_white_semi_transparent">רקע שקוף למחצה</string>
     <string name="subtitle_style">סגנון כתוביות</string>
     <string name="subtitle_language">שפת כתוביות</string>
     <string name="action_search">התחל חיפוש</string>
@@ -115,8 +115,8 @@ So, make a copy of values-he and name it values-iw. Keep both in your structure.
     <string name="repeat_mode_none">הפסק הפעלה לאחר סרטון אחד</string>
     <string name="subscribed_to_channel">הרשם לערוץ</string>
     <string name="unsubscribed_from_channel">ביטול רישום לערוץ</string>
-    <string name="subtitle_yellow">צהוב</string>
-    <string name="subtitle_black_bg">רקע שחור</string>
+    <string name="subtitle_yellow_transparent">צהוב</string>
+    <string name="subtitle_white_black">רקע שחור</string>
     <string name="player_seek_preview">תצוגה מקדימה בעת חיפוש</string>
     <string name="color_scheme_dark_grey_oled">כהה (OLED)</string>
     <string name="channels_section_sorting">מיון מקטעי ערוץ</string>

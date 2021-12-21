@@ -59,7 +59,7 @@
     <string name="default_lang">Bawaan</string>
     <string name="dialog_select_language">Bahasa aplikasi</string>
     <string name="subtitle_default">Bawaan</string>
-    <string name="subtitle_semi_transparent_bg">Latar belakang semitransparan</string>
+    <string name="subtitle_white_semi_transparent">Latar belakang semitransparan</string>
     <string name="subtitle_style">Gaya subtitle</string>
     <string name="subtitle_language">Bahasa subtitle</string>
     <string name="action_search">Mulai mencari</string>
@@ -115,8 +115,8 @@
     <string name="repeat_mode_none">Hentikan pemutaran setelah satu video</string>
     <string name="subscribed_to_channel">Berlangganan ke saluran</string>
     <string name="unsubscribed_from_channel">Berhenti berlangganan dari saluran</string>
-    <string name="subtitle_yellow">Kuning</string>
-    <string name="subtitle_black_bg">Latar belakang hitam</string>
+    <string name="subtitle_yellow_transparent">Kuning</string>
+    <string name="subtitle_white_black">Latar belakang hitam</string>
     <string name="player_seek_preview">Pratinjau sambil mencari</string>
     <string name="color_scheme_dark_grey_oled">Abu-abu Tua (OLED)</string>
     <string name="channels_section_sorting">Penyortiran bagian saluran</string>

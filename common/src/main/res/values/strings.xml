@@ -59,7 +59,7 @@
     <string name="default_lang">Default</string>
     <string name="dialog_select_language">Language</string>
     <string name="subtitle_default">Default</string>
-    <string name="subtitle_semi_transparent_bg">Semitransparent background</string>
+    <string name="subtitle_white_semi_transparent">White on semitransparent background</string>
     <string name="subtitle_style">Subtitle style</string>
     <string name="subtitle_language">Subtitle language</string>
     <string name="action_search">Start search</string>
@@ -115,8 +115,8 @@
     <string name="repeat_mode_none">Stop playback after one video</string>
     <string name="subscribed_to_channel">Subscribed to channel</string>
     <string name="unsubscribed_from_channel">Unsubscribed from channel</string>
-    <string name="subtitle_yellow">Yellow</string>
-    <string name="subtitle_black_bg">Black background</string>
+    <string name="subtitle_yellow_transparent">Yellow on transparent background</string>
+    <string name="subtitle_white_black">White on black background</string>
     <string name="player_seek_preview">Preview while seeking</string>
     <string name="color_scheme_dark_grey_oled">Dark Grey (OLED)</string>
     <string name="channels_section_sorting">Channels section sorting</string>

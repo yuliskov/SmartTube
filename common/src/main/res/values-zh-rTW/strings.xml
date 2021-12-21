@@ -59,7 +59,7 @@
     <string name="default_lang">預設</string>
     <string name="dialog_select_language">語言</string>
     <string name="subtitle_default">預設</string>
-    <string name="subtitle_semi_transparent_bg">半透明背景</string>
+    <string name="subtitle_white_semi_transparent">半透明背景</string>
     <string name="subtitle_style">字幕樣式</string>
     <string name="subtitle_language">字幕語言</string>
     <string name="action_search">開始搜尋</string>
@@ -115,8 +115,8 @@
     <string name="repeat_mode_none">影片結束後停止播放</string>
     <string name="subscribed_to_channel">訂閱頻道</string>
     <string name="unsubscribed_from_channel">取消訂閱</string>
-    <string name="subtitle_yellow">黃色</string>
-    <string name="subtitle_black_bg">背景播放</string>
+    <string name="subtitle_yellow_transparent">黃色</string>
+    <string name="subtitle_white_black">背景播放</string>
     <string name="player_seek_preview">搜尋時預覽</string>
     <string name="color_scheme_dark_grey_oled">深灰色（OLED）</string>
     <string name="channels_section_sorting">頻道排序</string>

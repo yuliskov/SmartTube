@@ -58,7 +58,7 @@
     <string name="default_lang">Privzeto</string>
     <string name="dialog_select_language">Jezik aplikacije</string>
     <string name="subtitle_default">Privzeto</string>
-    <string name="subtitle_semi_transparent_bg">Polprosojno ozadje</string>
+    <string name="subtitle_white_semi_transparent">Polprosojno ozadje</string>
     <string name="subtitle_style">Oblika podnapisov</string>
     <string name="subtitle_language">Jezik podnapisov</string>
     <string name="action_search">Začni iskanje</string>
@@ -112,8 +112,8 @@
     <string name="repeat_mode_none">Ustavi predvajanje po enem videu</string>
     <string name="subscribed_to_channel">Naročen na kanal</string>
     <string name="unsubscribed_from_channel">Odjavljen iz kanala</string>
-    <string name="subtitle_yellow">Rumeni</string>
-    <string name="subtitle_black_bg">Črno ozadje</string>
+    <string name="subtitle_yellow_transparent">Rumeni</string>
+    <string name="subtitle_white_black">Črno ozadje</string>
     <string name="player_seek_preview">Predogled med previjanjem</string>
     <string name="color_scheme_dark_grey_oled">Temnosiva (OLED)</string>
     <string name="channels_section_sorting">Sortiranje v kategoriji kanalov</string>

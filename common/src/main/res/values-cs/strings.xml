@@ -58,7 +58,7 @@
     <string name="default_lang">Výchozí</string>
     <string name="dialog_select_language">Jazyk aplikace</string>
     <string name="subtitle_default">Výchozí</string>
-    <string name="subtitle_semi_transparent_bg">Poloprůhledné pozadí</string>
+    <string name="subtitle_white_semi_transparent">Poloprůhledné pozadí</string>
     <string name="subtitle_style">Styl titulek</string>
     <string name="subtitle_language">Jazyk titulek</string>
     <string name="action_search">Spustit hledání</string>
@@ -114,8 +114,8 @@
     <string name="repeat_mode_none">Ukončit přehrávání po jednom videu</string>
     <string name="subscribed_to_channel">Přihlášen k odběru kanálu</string>
     <string name="unsubscribed_from_channel">Odhlášen z odběru kanálu</string>
-    <string name="subtitle_yellow">Žlutá</string>
-    <string name="subtitle_black_bg">Černé pozadí</string>
+    <string name="subtitle_yellow_transparent">Žlutá</string>
+    <string name="subtitle_white_black">Černé pozadí</string>
     <string name="player_seek_preview">Náhledy při přeskakování</string>
     <string name="color_scheme_dark_grey_oled">Tmavé (OLED)</string>
     <string name="channels_section_sorting">Řazení sekce kanálu</string>

@@ -59,7 +59,7 @@
     <string name="default_lang">Predvolené</string>
     <string name="dialog_select_language">Jazyk</string>
     <string name="subtitle_default">Predvolené</string>
-    <string name="subtitle_semi_transparent_bg">Polopriehľadné pozadie</string>
+    <string name="subtitle_white_semi_transparent">Polopriehľadné pozadie</string>
     <string name="subtitle_style">Štýl titulkov</string>
     <string name="subtitle_language">Jazyk titulkov</string>
     <string name="action_search">Hľadať</string>
@@ -115,8 +115,8 @@
     <string name="repeat_mode_none">Vypnúť prehrávanie po jednom videu</string>
     <string name="subscribed_to_channel">Prihlásený na odber kanála</string>
     <string name="unsubscribed_from_channel">Odber kanála bol zrušený</string>
-    <string name="subtitle_yellow">Žlté</string>
-    <string name="subtitle_black_bg">Čierne pozadie</string>
+    <string name="subtitle_yellow_transparent">Žlté</string>
+    <string name="subtitle_white_black">Čierne pozadie</string>
     <string name="player_seek_preview">Náhľady pri preskakovaní</string>
     <string name="color_scheme_dark_grey_oled">Tmavo-šedá (OLED)</string>
     <string name="channels_section_sorting">Zoradenie sekcie kanálov</string>

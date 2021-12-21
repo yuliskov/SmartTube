@@ -57,7 +57,7 @@
     <string name="default_lang">Standard</string>
     <string name="dialog_select_language">Språk</string>
     <string name="subtitle_default">Standard</string>
-    <string name="subtitle_semi_transparent_bg">Semitransparent bakgrunn</string>
+    <string name="subtitle_white_semi_transparent">Semitransparent bakgrunn</string>
     <string name="subtitle_style">Undertekststil</string>
     <string name="subtitle_language">Undertekst språk</string>
     <string name="action_search">Start søk</string>
@@ -111,8 +111,8 @@
     <string name="repeat_mode_none">Stopp avspilling etter en video</string>
     <string name="subscribed_to_channel">Abonnerer på kanalen</string>
     <string name="unsubscribed_from_channel">Avslutter abonnering på kanalen</string>
-    <string name="subtitle_yellow">Gul</string>
-    <string name="subtitle_black_bg">Svart bakgrunn</string>
+    <string name="subtitle_yellow_transparent">Gul</string>
+    <string name="subtitle_white_black">Svart bakgrunn</string>
     <string name="player_seek_preview">Forhåndsvisning mens du søker</string>
     <string name="color_scheme_dark_grey_oled">Mørk (OLED)</string>
     <string name="channels_section_sorting">Kanalseksjonssortering</string>

@@ -20,8 +20,8 @@ public class GeneralData {
     public static final int EXIT_NONE = 0;
     public static final int EXIT_DOUBLE_BACK = 1;
     public static final int EXIT_SINGLE_BACK = 2;
-    public static final int BACKGROUND_SHORTCUT_HOME = 0;
-    public static final int BACKGROUND_SHORTCUT_HOME_N_BACK = 1;
+    public static final int BACKGROUND_PLAYBACK_SHORTCUT_HOME = 0;
+    public static final int BACKGROUND_PLAYBACK_SHORTCUT_HOME_N_BACK = 1;
     @SuppressLint("StaticFieldLeak")
     private static GeneralData sInstance;
     private final Context mContext;
@@ -57,6 +57,15 @@ public class GeneralData {
         return sInstance;
     }
 
+    public Set<Video> getPinnedItems() {
+        return mPinnedItems;
+    }
+
+    public void setPinnedItems(Set<Video> items) {
+        mPinnedItems = items;
+        persistState();
+    }
+
     public Map<Integer, Integer> getDefaultSections() {
         return mDefaultSections;
     }
@@ -71,9 +80,9 @@ public class GeneralData {
         persistState();
     }
 
-    public boolean isSectionEnabled(int categoryId) {
-        return mEnabledSections.contains(categoryId) ||
-                Helpers.findFirst(mPinnedItems, item -> item.hashCode() == categoryId) != null; // by default enable all pinned items
+    public boolean isSectionEnabled(int sectionId) {
+        return mEnabledSections.contains(sectionId) ||
+                Helpers.findFirst(mPinnedItems, item -> item.hashCode() == sectionId) != null; // by default enable all pinned items
     }
 
     public void setBootSectionId(int sectionId) {
@@ -114,11 +123,11 @@ public class GeneralData {
         return mIsReturnToLauncherEnabled;
     }
 
-    public int getBackgroundShortcut() {
+    public int getBackgroundPlaybackShortcut() {
         return mBackgroundShortcut;
     }
 
-    public void setBackgroundShortcut(int type) {
+    public void setBackgroundPlaybackShortcut(int type) {
         PlayerData playerData = PlayerData.instance(mContext);
 
         if (playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_DEFAULT) {
@@ -126,15 +135,6 @@ public class GeneralData {
         }
 
         mBackgroundShortcut = type;
-        persistState();
-    }
-
-    public Set<Video> getPinnedItems() {
-        return mPinnedItems;
-    }
-
-    public void setPinnedItems(Set<Video> items) {
-        mPinnedItems = items;
         persistState();
     }
 
@@ -222,7 +222,7 @@ public class GeneralData {
         mIsSettingsSectionEnabled = Helpers.parseBoolean(split, 2, true);
         mAppExitShortcut = Helpers.parseInt(split, 3, EXIT_DOUBLE_BACK);
         mIsReturnToLauncherEnabled = Helpers.parseBoolean(split, 4, true);
-        mBackgroundShortcut = Helpers.parseInt(split, 5, BACKGROUND_SHORTCUT_HOME);
+        mBackgroundShortcut = Helpers.parseInt(split, 5, BACKGROUND_PLAYBACK_SHORTCUT_HOME);
         String pinnedItems = Helpers.parseStr(split, 6);
         mIsHideShortsEnabled = Helpers.parseBoolean(split, 7, false);
         mIsRemapFastForwardToNextEnabled = Helpers.parseBoolean(split, 8, false);

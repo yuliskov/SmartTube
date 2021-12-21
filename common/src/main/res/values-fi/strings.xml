@@ -58,7 +58,7 @@
   <string name="default_lang">Oletus</string>
   <string name="dialog_select_language">Sovelluksen kieli</string>
   <string name="subtitle_default">Oletus</string>
-  <string name="subtitle_semi_transparent_bg">Osittain läpinäkyvä</string>
+  <string name="subtitle_white_semi_transparent">Osittain läpinäkyvä</string>
   <string name="subtitle_style">Tekstityksen tyyli</string>
   <string name="subtitle_language">Tekstityksen kieli</string>
   <string name="action_search">Haku</string>
@@ -113,8 +113,8 @@
   <string name="repeat_mode_none">Pysäytä toisto jokaisen videon jälkeen</string>
   <string name="subscribed_to_channel">Kanava tilattu</string>
   <string name="unsubscribed_from_channel">Poista tilaus</string>
-  <string name="subtitle_yellow">Keltainen</string>
-  <string name="subtitle_black_bg">Tumma tausta</string>
+  <string name="subtitle_yellow_transparent">Keltainen</string>
+  <string name="subtitle_white_black">Tumma tausta</string>
   <string name="player_seek_preview">Esikatselu</string>
   <string name="color_scheme_dark_grey_oled">Tummanharmaa (OLED)</string>
   <string name="channels_section_sorting">Kanavien lajittelu</string>

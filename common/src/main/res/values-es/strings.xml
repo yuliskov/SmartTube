@@ -59,7 +59,7 @@
     <string name="default_lang">Por defecto</string>
     <string name="dialog_select_language">Idioma de la aplicación</string>
     <string name="subtitle_default">Por defecto</string>
-    <string name="subtitle_semi_transparent_bg">Fondo semitransparente</string>
+    <string name="subtitle_white_semi_transparent">Fondo semitransparente</string>
     <string name="subtitle_style">Estilo subtítulos</string>
     <string name="subtitle_language">Idioma subtítulos</string>
     <string name="action_search">Iniciar búsqueda</string>
@@ -115,8 +115,8 @@
     <string name="repeat_mode_none">Parar después de un vídeo</string>
     <string name="subscribed_to_channel">Suscrito al canal</string>
     <string name="unsubscribed_from_channel">Subscripción al canal anulada</string>
-    <string name="subtitle_yellow">Amarillo</string>
-    <string name="subtitle_black_bg">Fondo negro</string>
+    <string name="subtitle_yellow_transparent">Amarillo</string>
+    <string name="subtitle_white_black">Fondo negro</string>
     <string name="player_seek_preview">Previsualizar mientras busca</string>
     <string name="color_scheme_dark_grey_oled">Oscuro (OLED)</string>
     <string name="channels_section_sorting">Orden sección canales</string>
