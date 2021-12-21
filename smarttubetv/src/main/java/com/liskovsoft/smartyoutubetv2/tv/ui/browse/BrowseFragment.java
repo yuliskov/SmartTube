@@ -255,14 +255,16 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     @Override
-    public void addSection(int index, BrowseSection category) {
-        if (category == null) {
+    public void addSection(int index, BrowseSection section) {
+        if (section == null) {
             return;
         }
 
-        if (mSections.get(category.getId()) == null) {
-            mSections.put(category.getId(), category);
-            createHeader(index, category);
+        removeSection(section);
+
+        if (mSections.get(section.getId()) == null) {
+            mSections.put(section.getId(), section);
+            createHeader(index, section);
         }
     }
 
