@@ -88,6 +88,9 @@ public class GeneralData {
         return mEnabledSections;
     }
 
+    /**
+     * Contains sections and pinned items!
+     */
     public boolean isSectionEnabled(int sectionId) {
         return mEnabledSections.contains(sectionId) ||
                 Helpers.findFirst(mPinnedItems, item -> item.hashCode() == sectionId) != null; // by default enable all pinned items

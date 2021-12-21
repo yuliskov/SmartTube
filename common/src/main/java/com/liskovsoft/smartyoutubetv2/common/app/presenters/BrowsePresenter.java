@@ -203,7 +203,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     public void updateSections() {
         int index = 0;
 
-        for (BrowseSection section : mSections) {
+        for (BrowseSection section : mSections) { // contains sections and pinned items!
             section.setEnabled(section.getId() == MediaGroup.TYPE_SETTINGS || mGeneralData.isSectionEnabled(section.getId()));
 
             if (section.isEnabled()) {
