@@ -253,6 +253,8 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
 
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.mark_all_channels_watched), optionItem -> {
+                    mSettingsPresenter.closeDialog();
+
                     MediaServiceManager serviceManager = MediaServiceManager.instance();
 
                     MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
