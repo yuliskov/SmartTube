@@ -7,14 +7,14 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 public class PlayerTweaksData {
     private static final String VIDEO_PLAYER_TWEAKS_DATA = "video_player_tweaks_data";
     public static final int PLAYER_BUTTON_VIDEO_ZOOM = 0b1;
-    public static final int PLAYER_BUTTON_ADD_TO_QUEUE = 0b10;
-    public static final int PLAYER_BUTTON_PIN_TO_SIDEBAR = 0b100;
-    public static final int PLAYER_BUTTON_SHARE_LINK = 0b1000;
-    public static final int PLAYER_BUTTON_SELECT_ACCOUNT = 0b10000;
-    public static final int PLAYER_BUTTON_NOT_INTERESTED = 0b100000;
-    public static final int PLAYER_BUTTON_REMOVE_FROM_HISTORY = 0b1000000;
-    public static final int PLAYER_BUTTON_MOVE_SECTION_UP = 0b10000000;
-    public static final int PLAYER_BUTTON_MOVE_SECTION_DOWN = 0b100000000;
+    public static final int PLAYER_BUTTON_SEARCH = 0b10;
+    public static final int PLAYER_BUTTON_PIP = 0b100;
+    public static final int PLAYER_BUTTON_SCREEN_OFF = 0b1000;
+    public static final int PLAYER_BUTTON_PLAYBACK_QUEUE = 0b10000;
+    public static final int PLAYER_BUTTON_VIDEO_SPEED = 0b100000;
+    public static final int PLAYER_BUTTON_VIDEO_STATS = 0b1000000;
+    public static final int PLAYER_BUTTON_OPEN_CHANNEL = 0b10000000;
+    public static final int PLAYER_BUTTON_SUBTITLES = 0b100000000;
     @SuppressLint("StaticFieldLeak")
     private static PlayerTweaksData sInstance;
     private final AppPrefs mPrefs;

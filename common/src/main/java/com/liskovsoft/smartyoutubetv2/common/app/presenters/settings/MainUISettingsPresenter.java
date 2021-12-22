@@ -207,7 +207,15 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
-                {R.string.action_video_zoom, PlayerTweaksData.PLAYER_BUTTON_VIDEO_ZOOM}
+                {R.string.action_video_stats, PlayerTweaksData.PLAYER_BUTTON_VIDEO_STATS},
+                {R.string.action_playback_queue, PlayerTweaksData.PLAYER_BUTTON_PLAYBACK_QUEUE},
+                {R.string.action_screen_off, PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF},
+                {R.string.action_video_zoom, PlayerTweaksData.PLAYER_BUTTON_VIDEO_ZOOM},
+                {R.string.action_channel, PlayerTweaksData.PLAYER_BUTTON_OPEN_CHANNEL},
+                {R.string.action_search, PlayerTweaksData.PLAYER_BUTTON_SEARCH},
+                {R.string.action_pip, PlayerTweaksData.PLAYER_BUTTON_PIP},
+                {R.string.action_video_speed, PlayerTweaksData.PLAYER_BUTTON_VIDEO_SPEED},
+                {R.string.action_subtitles, PlayerTweaksData.PLAYER_BUTTON_SUBTITLES}
         }) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
                 if (optionItem.isSelected()) {
