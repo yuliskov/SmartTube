@@ -6,6 +6,15 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class PlayerTweaksData {
     private static final String VIDEO_PLAYER_TWEAKS_DATA = "video_player_tweaks_data";
+    public static final int PLAYER_BUTTON_VIDEO_ZOOM = 0b1;
+    public static final int PLAYER_BUTTON_ADD_TO_QUEUE = 0b10;
+    public static final int PLAYER_BUTTON_PIN_TO_SIDEBAR = 0b100;
+    public static final int PLAYER_BUTTON_SHARE_LINK = 0b1000;
+    public static final int PLAYER_BUTTON_SELECT_ACCOUNT = 0b10000;
+    public static final int PLAYER_BUTTON_NOT_INTERESTED = 0b100000;
+    public static final int PLAYER_BUTTON_REMOVE_FROM_HISTORY = 0b1000000;
+    public static final int PLAYER_BUTTON_MOVE_SECTION_UP = 0b10000000;
+    public static final int PLAYER_BUTTON_MOVE_SECTION_DOWN = 0b100000000;
     @SuppressLint("StaticFieldLeak")
     private static PlayerTweaksData sInstance;
     private final AppPrefs mPrefs;
@@ -21,6 +30,7 @@ public class PlayerTweaksData {
     private boolean mIsLiveStreamFixEnabled;
     private boolean mIsPlaybackNotificationsDisabled;
     private boolean mIsTunneledPlaybackEnabled;
+    private int mPlayerButtons;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -153,6 +163,20 @@ public class PlayerTweaksData {
         persistData();
     }
 
+    public void enablePlayerButton(int playerButtons) {
+        mPlayerButtons |= playerButtons;
+        persistData();
+    }
+
+    public void disablePlayerButton(int playerButtons) {
+        mPlayerButtons &= ~playerButtons;
+        persistData();
+    }
+
+    public boolean isPlayerButtonEnabled(int menuItems) {
+        return (mPlayerButtons & menuItems) == menuItems;
+    }
+
     private void restoreData() {
         String data = mPrefs.getData(VIDEO_PLAYER_TWEAKS_DATA);
 
@@ -172,6 +196,7 @@ public class PlayerTweaksData {
         mIsLiveStreamFixEnabled = Helpers.parseBoolean(split, 10, false);
         mIsPlaybackNotificationsDisabled = Helpers.parseBoolean(split, 11, !Helpers.isAndroidTV(mPrefs.getContext()));
         mIsTunneledPlaybackEnabled = Helpers.parseBoolean(split, 12, false);
+        mPlayerButtons = Helpers.parseInt(split, 13, Integer.MAX_VALUE); // all buttons
     }
 
     private void persistData() {
@@ -179,7 +204,7 @@ public class PlayerTweaksData {
                 mIsAmlogicFixEnabled, mIsFrameDropFixEnabled, mIsSnapToVsyncDisabled,
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
                 null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled,
-                mIsLiveStreamFixEnabled, mIsPlaybackNotificationsDisabled, mIsTunneledPlaybackEnabled
+                mIsLiveStreamFixEnabled, mIsPlaybackNotificationsDisabled, mIsTunneledPlaybackEnabled, mPlayerButtons
         ));
     }
 }

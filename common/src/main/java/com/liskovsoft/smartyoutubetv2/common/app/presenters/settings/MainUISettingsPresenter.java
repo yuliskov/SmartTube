@@ -11,17 +11,20 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData.ColorScheme;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainUISettingsPresenter extends BasePresenter<Void> {
     private final MainUIData mMainUIData;
+    private final PlayerTweaksData mPlayerTweaksData;
     private boolean mRestartApp;
 
     public MainUISettingsPresenter(Context context) {
         super(context);
         mMainUIData = MainUIData.instance(context);
+        mPlayerTweaksData = PlayerTweaksData.instance(context);
     }
 
     public static MainUISettingsPresenter instance(Context context) {
@@ -41,6 +44,7 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         appendScaleUI(settingsPresenter);
         appendVideoGridScale(settingsPresenter);
         appendContextMenuItemsCategory(settingsPresenter);
+        appendPlayerButtonsCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.dialog_main_ui), () -> {
@@ -197,6 +201,24 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.context_menu), options);
+    }
+
+    private void appendPlayerButtonsCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.action_video_zoom, PlayerTweaksData.PLAYER_BUTTON_VIDEO_ZOOM}
+        }) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
+                if (optionItem.isSelected()) {
+                    mPlayerTweaksData.enablePlayerButton(pair[1]);
+                } else {
+                    mPlayerTweaksData.disablePlayerButton(pair[1]);
+                }
+            }, mPlayerTweaksData.isPlayerButtonEnabled(pair[1])));
+        }
+
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_buttons), options);
     }
 
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
