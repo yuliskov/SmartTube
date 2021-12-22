@@ -332,5 +332,13 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SELECT_ACCOUNT)) {
             mIsAccountSelectionEnabled = false;
         }
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_MOVE_SECTION_UP)) {
+            mIsMoveSectionEnabled = false;
+        }
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_MOVE_SECTION_DOWN)) {
+            mIsMoveSectionEnabled = false;
+        }
     }
 }
