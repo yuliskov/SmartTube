@@ -290,4 +290,5 @@
     <string name="action_subtitles">Субтитри</string>
     <string name="action_like">Подобається</string>
     <string name="action_dislike">Неподобається</string>
+    <string name="action_play_pause">Відтворення/Пауза</string>
 </resources>

@@ -19,6 +19,7 @@ public class PlayerTweaksData {
     public static final int PLAYER_BUTTON_LIKE = 0b10000000000;
     public static final int PLAYER_BUTTON_DISLIKE = 0b100000000000;
     public static final int PLAYER_BUTTON_ADD_TO_PLAYLIST = 0b1000000000000;
+    public static final int PLAYER_BUTTON_PLAY_PAUSE = 0b10000000000000;
     @SuppressLint("StaticFieldLeak")
     private static PlayerTweaksData sInstance;
     private final AppPrefs mPrefs;

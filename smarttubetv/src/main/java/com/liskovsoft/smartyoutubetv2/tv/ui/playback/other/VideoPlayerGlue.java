@@ -113,13 +113,15 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
 
     @Override
     protected void onCreatePrimaryActions(ArrayObjectAdapter adapter) {
+        PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(getContext());
+
         // Order matters, super.onCreatePrimaryActions() will create the play / pause action.
         // Will display as follows:
         // play/pause, previous, rewind, fast forward, next
         //   > /||      |<        <<        >>         >|
-        super.onCreatePrimaryActions(adapter);
-
-        PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(getContext());
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_PLAY_PAUSE)) {
+            super.onCreatePrimaryActions(adapter);
+        }
 
         adapter.add(mSkipPreviousAction);
         //adapter.add(mRewindAction);
@@ -145,6 +147,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
 
     @Override
     protected void onCreateSecondaryActions(ArrayObjectAdapter adapter) {
+        // Does nothing
         super.onCreateSecondaryActions(adapter);
 
         // MAX: 7 items. But with custom modification it supports more.

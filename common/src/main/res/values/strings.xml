@@ -294,4 +294,5 @@
     <string name="action_subtitles">Subtitles</string>
     <string name="action_like">Like</string>
     <string name="action_dislike">Dislike</string>
+    <string name="action_play_pause">Play/Pause</string>
 </resources>

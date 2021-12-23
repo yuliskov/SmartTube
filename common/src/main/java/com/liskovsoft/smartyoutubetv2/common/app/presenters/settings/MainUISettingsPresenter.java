@@ -219,7 +219,8 @@ public class MainUISettingsPresenter extends BasePresenter<Void> {
                 {R.string.action_subscribe, PlayerTweaksData.PLAYER_BUTTON_SUBSCRIBE},
                 {R.string.action_like, PlayerTweaksData.PLAYER_BUTTON_LIKE},
                 {R.string.action_dislike, PlayerTweaksData.PLAYER_BUTTON_DISLIKE},
-                {R.string.action_playlist_add, PlayerTweaksData.PLAYER_BUTTON_ADD_TO_PLAYLIST}
+                {R.string.action_playlist_add, PlayerTweaksData.PLAYER_BUTTON_ADD_TO_PLAYLIST},
+                {R.string.action_play_pause, PlayerTweaksData.PLAYER_BUTTON_PLAY_PAUSE}
         }) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
                 if (optionItem.isSelected()) {
