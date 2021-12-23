@@ -123,10 +123,14 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
             super.onCreatePrimaryActions(adapter);
         }
 
-        adapter.add(mSkipPreviousAction);
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_PREVIOUS)) {
+            adapter.add(mSkipPreviousAction);
+        }
         //adapter.add(mRewindAction);
         //adapter.add(mFastForwardAction);
-        adapter.add(mSkipNextAction);
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_NEXT)) {
+            adapter.add(mSkipNextAction);
+        }
         if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_REPEAT_MODE)) {
             adapter.add(mRepeatAction);
         }
@@ -158,7 +162,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
 
         PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(getContext());
 
-        adapter.add(mHighQualityAction);
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_HIGH_QUALITY)) {
+            adapter.add(mHighQualityAction);
+        }
         if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_OPEN_CHANNEL)) {
             adapter.add(mChannelAction);
         }

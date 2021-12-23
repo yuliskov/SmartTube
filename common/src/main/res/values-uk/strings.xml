@@ -292,4 +292,7 @@
     <string name="action_dislike">Неподобається</string>
     <string name="action_play_pause">Відтворення/Пауза</string>
     <string name="action_repeat_mode">Режим відтворення</string>
+    <string name="action_next">Наступне відео</string>
+    <string name="action_previous">Попереднє відео</string>
+    <string name="action_high_quality">Якість відео</string>
 </resources>

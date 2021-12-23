@@ -296,4 +296,7 @@
     <string name="action_dislike">Dislike</string>
     <string name="action_play_pause">Play/Pause</string>
     <string name="action_repeat_mode">Playback mode</string>
+    <string name="action_next">Next video</string>
+    <string name="action_previous">Previous video</string>
+    <string name="action_high_quality">Video quality</string>
 </resources>
