@@ -75,7 +75,7 @@
         Beachten Sie, dass Anleitungsschritte recht lange Titel haben können.
     </string>
     <string name="guidedstep_continue">Weiter</string>
-    <string name="guidedstep_letsdoit">Los geht's</string>
+    <string name="guidedstep_letsdoit">Los geht\'s</string>
     <string name="guidedstep_nevermind">Egal</string>
     <string name="guidedstep_cancel">Abbrechen</string>
     <string name="header_icon">Kopfzeilen-Symbol</string>
