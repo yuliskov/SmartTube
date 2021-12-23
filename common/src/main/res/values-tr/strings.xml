@@ -59,7 +59,7 @@
     <string name="default_lang">Varsayılan</string>
     <string name="dialog_select_language">Uygulama dili</string>
     <string name="subtitle_default">Varsayılan</string>
-    <string name="subtitle_white_semi_transparent">Yarı saydam arka plan</string>
+    <string name="subtitle_white_semi_transparent">Yarı saydam arka planda beyaz</string>
     <string name="subtitle_style">Altyazı stili</string>
     <string name="subtitle_language">Altyazı dili</string>
     <string name="action_search">Aramaya başla</string>
@@ -115,8 +115,8 @@
     <string name="repeat_mode_none">Videodan sonra oynatmayı durdur</string>
     <string name="subscribed_to_channel">Kanala abone olundu</string>
     <string name="unsubscribed_from_channel">Kanal aboneliğinden çıkıldı</string>
-    <string name="subtitle_yellow_transparent">Sarı</string>
-    <string name="subtitle_white_black">Siyah arka plan</string>
+    <string name="subtitle_yellow_transparent">Saydam arka planda sarı</string>
+    <string name="subtitle_white_black">Siyah arka planda beyaz</string>
     <string name="player_seek_preview">Ararken ön izleme</string>
     <string name="color_scheme_dark_grey_oled">Koyu Gri (OLED)</string>
     <string name="channels_section_sorting">Kanallar bölümü sıralaması</string>
@@ -281,4 +281,7 @@
     <string name="ui_hide_timeout_sec">%s sn</string>
     <string name="screen_dimming_timeout_min">%s dk</string>
     <string name="mark_all_channels_watched">Tüm kanalları izlendi olarak işaretle</string>
+    <string name="move_section_up">Bölümü yukarı taşı</string>
+    <string name="move_section_down">Bölümü aşağı taşı</string>
+    <string name="player_buttons">Oynatıcı düğmeleri</string>
 </resources>
