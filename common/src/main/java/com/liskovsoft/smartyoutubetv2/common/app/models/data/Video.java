@@ -15,6 +15,8 @@ import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
  * Video is an object that holds the various metadata associated with a single video.
  */
 public final class Video implements Parcelable {
+    private static final String TERTIARY_TEXT_DELIM = "•";
+    private static final int MAX_AUTHOR_LENGTH_CHARS = 20;
     public long id;
     public String title;
     public String category;
@@ -183,6 +185,31 @@ public final class Video implements Parcelable {
 
     public static boolean isEmpty(Video video) {
         return video == null || video.videoId == null;
+    }
+
+    public static String extractAuthor(Video video) {
+        if (video == null) {
+            return null;
+        }
+
+        String result = null;
+
+        if (video.author != null) {
+            result = video.author;
+        }
+
+        if (video.description != null) {
+            String[] split = video.description.split(TERTIARY_TEXT_DELIM);
+
+            if (split.length <= 1) {
+                result = video.description;
+            } else {
+                // First part usually is quality a label (4K etc)
+                result = split[0].length() > 4 ? split[0] : split[1];
+            }
+        }
+
+        return result != null ? Helpers.abbreviate(result.trim(), MAX_AUTHOR_LENGTH_CHARS) : null;
     }
 
     public int describeContents() {
