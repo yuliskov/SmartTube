@@ -293,6 +293,6 @@
     <string name="action_play_pause">Воспроизведение/Пауза</string>
     <string name="action_repeat_mode">Режим воспроизведения</string>
     <string name="action_next">Следующее видео</string>
-    <string name="action_previous">Предидущее видео</string>
+    <string name="action_previous">Предыдущее видео</string>
     <string name="action_high_quality">Качество видео</string>
 </resources>
