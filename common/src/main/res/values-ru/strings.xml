@@ -291,4 +291,5 @@
     <string name="action_like">Нравится</string>
     <string name="action_dislike">Ненравится</string>
     <string name="action_play_pause">Воспроизведение/Пауза</string>
+    <string name="action_repeat_mode">Режимы воспроизведения</string>
 </resources>

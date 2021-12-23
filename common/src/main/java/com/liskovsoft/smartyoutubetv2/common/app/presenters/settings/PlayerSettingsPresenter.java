@@ -164,7 +164,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 {R.string.action_like, PlayerTweaksData.PLAYER_BUTTON_LIKE},
                 {R.string.action_dislike, PlayerTweaksData.PLAYER_BUTTON_DISLIKE},
                 {R.string.action_playlist_add, PlayerTweaksData.PLAYER_BUTTON_ADD_TO_PLAYLIST},
-                {R.string.action_play_pause, PlayerTweaksData.PLAYER_BUTTON_PLAY_PAUSE}
+                {R.string.action_play_pause, PlayerTweaksData.PLAYER_BUTTON_PLAY_PAUSE},
+                {R.string.action_repeat_mode, PlayerTweaksData.PLAYER_BUTTON_REPEAT_MODE}
         }) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
                 if (optionItem.isSelected()) {

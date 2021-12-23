@@ -127,7 +127,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         //adapter.add(mRewindAction);
         //adapter.add(mFastForwardAction);
         adapter.add(mSkipNextAction);
-        adapter.add(mRepeatAction);
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_REPEAT_MODE)) {
+            adapter.add(mRepeatAction);
+        }
         if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_VIDEO_SPEED)) {
             adapter.add(mVideoSpeedAction);
         }
