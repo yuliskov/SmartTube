@@ -15,6 +15,10 @@ public class PlayerTweaksData {
     public static final int PLAYER_BUTTON_VIDEO_STATS = 0b1000000;
     public static final int PLAYER_BUTTON_OPEN_CHANNEL = 0b10000000;
     public static final int PLAYER_BUTTON_SUBTITLES = 0b100000000;
+    public static final int PLAYER_BUTTON_SUBSCRIBE = 0b1000000000;
+    public static final int PLAYER_BUTTON_LIKE = 0b10000000000;
+    public static final int PLAYER_BUTTON_DISLIKE = 0b100000000000;
+    public static final int PLAYER_BUTTON_ADD_TO_PLAYLIST = 0b1000000000000;
     @SuppressLint("StaticFieldLeak")
     private static PlayerTweaksData sInstance;
     private final AppPrefs mPrefs;

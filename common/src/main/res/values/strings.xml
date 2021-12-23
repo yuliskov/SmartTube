@@ -285,12 +285,13 @@
     <string name="player_buttons">Player buttons</string>
     <string name="action_playlist_add">Add to playlist</string>
     <string name="action_video_stats">Video stats</string>
-    <string name="action_subscribe_off">Subscribe off</string>
-    <string name="action_subscribe_on">Subscribe on</string>
+    <string name="action_subscribe">Subscribe</string>
     <string name="action_channel">Open channel</string>
     <string name="action_pip">Start PIP</string>
     <string name="action_screen_off">Screen off</string>
-    <string name="action_playback_queue">Show playback queue</string>
+    <string name="action_playback_queue">Playback queue</string>
     <string name="action_video_speed">Video speed</string>
-    <string name="action_subtitles">Show subtitles</string>
+    <string name="action_subtitles">Subtitles</string>
+    <string name="action_like">Like</string>
+    <string name="action_dislike">Dislike</string>
 </resources>

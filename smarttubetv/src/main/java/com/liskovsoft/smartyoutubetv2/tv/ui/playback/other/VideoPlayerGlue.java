@@ -12,6 +12,7 @@ import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.PlaybackControlsRow;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxControlsVideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChannelAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAction;
@@ -117,18 +118,29 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         // play/pause, previous, rewind, fast forward, next
         //   > /||      |<        <<        >>         >|
         super.onCreatePrimaryActions(adapter);
+
+        PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(getContext());
+
         adapter.add(mSkipPreviousAction);
         //adapter.add(mRewindAction);
         //adapter.add(mFastForwardAction);
         adapter.add(mSkipNextAction);
         adapter.add(mRepeatAction);
-        adapter.add(mVideoSpeedAction);
-        if (Helpers.isPictureInPictureSupported(getContext())) {
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_VIDEO_SPEED)) {
+            adapter.add(mVideoSpeedAction);
+        }
+        if (Helpers.isPictureInPictureSupported(getContext()) && playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_PIP)) {
             adapter.add(mPipAction);
         }
-        adapter.add(mScreenOffAction);
-        adapter.add(mVideoZoomAction);
-        adapter.add(mSearchAction);
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF)) {
+            adapter.add(mScreenOffAction);
+        }
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_VIDEO_ZOOM)) {
+            adapter.add(mVideoZoomAction);
+        }
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SEARCH)) {
+            adapter.add(mSearchAction);
+        }
     }
 
     @Override
@@ -139,15 +151,33 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         // Origin: {@link androidx.leanback.widget.ControlBarPresenter#MAX_CONTROLS}
         // Custom mod: {@link com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.ControlBarPresenter#MAX_CONTROLS}
 
+        PlayerTweaksData playerTweaksData = PlayerTweaksData.instance(getContext());
+
         adapter.add(mHighQualityAction);
-        adapter.add(mChannelAction);
-        adapter.add(mThumbsUpAction);
-        adapter.add(mThumbsDownAction);
-        adapter.add(mClosedCaptioningAction);
-        adapter.add(mPlaylistAddAction);
-        adapter.add(mPlaybackQueueAction);
-        adapter.add(mSubscribeAction);
-        adapter.add(mVideoStatsAction);
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_OPEN_CHANNEL)) {
+            adapter.add(mChannelAction);
+        }
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_LIKE)) {
+            adapter.add(mThumbsUpAction);
+        }
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_DISLIKE)) {
+            adapter.add(mThumbsDownAction);
+        }
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SUBTITLES)) {
+            adapter.add(mClosedCaptioningAction);
+        }
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_ADD_TO_PLAYLIST)) {
+            adapter.add(mPlaylistAddAction);
+        }
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_PLAYBACK_QUEUE)) {
+            adapter.add(mPlaybackQueueAction);
+        }
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SUBSCRIBE)) {
+            adapter.add(mSubscribeAction);
+        }
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_VIDEO_STATS)) {
+            adapter.add(mVideoStatsAction);
+        }
     }
 
     @Override
