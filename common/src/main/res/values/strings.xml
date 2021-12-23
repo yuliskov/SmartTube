@@ -282,7 +282,7 @@
     <string name="mark_all_channels_watched">Mark all channels as watched</string>
     <string name="move_section_up">Move section up</string>
     <string name="move_section_down">Move section down</string>
-    <string name="player_buttons">Player buttons</string>
+    <string name="player_buttons">Setup player buttons</string>
     <string name="action_playlist_add">Add to playlist</string>
     <string name="action_video_stats">Video stats</string>
     <string name="action_subscribe">Subscribe</string>

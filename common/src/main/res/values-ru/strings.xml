@@ -278,7 +278,7 @@
     <string name="mark_all_channels_watched">Отметить все каналы как просмотренные</string>
     <string name="move_section_up">Переместить раздел выше</string>
     <string name="move_section_down">Переместить раздел ниже</string>
-    <string name="player_buttons">Кнопки плеера</string>
+    <string name="player_buttons">Настроить кнопки плеера</string>
     <string name="action_playlist_add">Добавить в плейлист</string>
     <string name="action_video_stats">Информация для админов</string>
     <string name="action_subscribe">Подписаться</string>
