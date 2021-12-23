@@ -319,7 +319,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
         if (item.belongsToChannelUploads()) { // We need to be sure we exactly on Channels section
             ChannelUploadsMenuPresenter.instance(getContext()).showMenu(item, (videoItem, action) -> {
-                if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE && isMultiGridChannelUploadsSection()) {
+                if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE) {
                     VideoGroup removedGroup = VideoGroup.from(item);
                     removedGroup.setAction(VideoGroup.ACTION_REMOVE);
                     getView().updateSection(removedGroup);
