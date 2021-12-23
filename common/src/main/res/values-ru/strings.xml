@@ -279,4 +279,15 @@
     <string name="move_section_up">Переместить раздел выше</string>
     <string name="move_section_down">Переместить раздел ниже</string>
     <string name="player_buttons">Кнопки плеера</string>
+    <string name="action_playlist_add">Добавить в плейлист</string>
+    <string name="action_video_stats">Информация для админов</string>
+    <string name="action_subscribe">Подписаться</string>
+    <string name="action_channel">Открыть канал</string>
+    <string name="action_pip">Картинка в картинке</string>
+    <string name="action_screen_off">Выключить экран</string>
+    <string name="action_playback_queue">Очередь воспроизведения</string>
+    <string name="action_video_speed">Скорость видео</string>
+    <string name="action_subtitles">Субтитры</string>
+    <string name="action_like">Нравится</string>
+    <string name="action_dislike">Ненравится</string>
 </resources>
