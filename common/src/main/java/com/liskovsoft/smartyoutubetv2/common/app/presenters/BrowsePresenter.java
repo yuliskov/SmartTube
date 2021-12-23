@@ -23,6 +23,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.Channel
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.SectionMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.SectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
@@ -47,7 +48,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Callable;
 
 public class BrowsePresenter extends BasePresenter<BrowseView> implements SectionPresenter, VideoGroupPresenter {
@@ -72,6 +72,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private Disposable mContinueAction;
     private Disposable mSignCheckAction;
     private BrowseSection mCurrentSection;
+    private Video mCurrentVideo;
     private long mLastUpdateTimeMs;
     private int mStartSectionIndex;
 
@@ -284,13 +285,15 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        if (mCurrentSection.getType() == BrowseSection.TYPE_MULTI_GRID && item.isChannelUploadsSection()) {
+        if (isMultiGridChannelUploadsSection() && item.belongsToChannelUploads()) {
             if (mMainUIData.isUploadsAutoLoadEnabled()) {
                 updateMultiGrid(item);
             } else {
                 updateMultiGrid(null); // clear
             }
         }
+
+        mCurrentVideo = item;
     }
 
     @Override
@@ -299,7 +302,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        if (mCurrentSection.getType() == BrowseSection.TYPE_MULTI_GRID && item.hasUploads()) { // Is Channels new look enabled?
+        if (isMultiGridChannelUploadsSection()) { // Is Channels new look enabled?
             updateMultiGrid(item);
         } else {
             VideoActionPresenter.instance(getContext()).apply(item);
@@ -314,13 +317,25 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        if (item.isChannelUploadsSection()) { // We need to be sure we exactly on Channels section
-            ChannelUploadsMenuPresenter.instance(getContext()).showMenu(item);
+        if (item.belongsToChannelUploads()) { // We need to be sure we exactly on Channels section
+            ChannelUploadsMenuPresenter.instance(getContext()).showMenu(item, (videoItem, action) -> {
+                if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE && isMultiGridChannelUploadsSection()) {
+                    VideoGroup removedGroup = VideoGroup.from(item);
+                    removedGroup.setAction(VideoGroup.ACTION_REMOVE);
+                    getView().updateSection(removedGroup);
+                }
+            });
         } else {
-            VideoMenuPresenter.instance(getContext()).showMenu(item, videoItem -> {
-                VideoGroup removedGroup = VideoGroup.from(videoItem);
-                removedGroup.setAction(VideoGroup.ACTION_REMOVE);
-                getView().updateSection(removedGroup);
+            VideoMenuPresenter.instance(getContext()).showMenu(item, (videoItem, action) -> {
+                if (action == VideoMenuCallback.ACTION_REMOVE) {
+                    VideoGroup removedGroup = VideoGroup.from(videoItem);
+                    removedGroup.setAction(VideoGroup.ACTION_REMOVE);
+                    getView().updateSection(removedGroup);
+                } else if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE && isMultiGridChannelUploadsSection()) {
+                    VideoGroup removedGroup = VideoGroup.from(mCurrentVideo);
+                    removedGroup.setAction(VideoGroup.ACTION_REMOVE);
+                    getView().updateSection(removedGroup);
+                }
             });
         }
 
@@ -712,5 +727,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         return item.playlistId != null ?
                 ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item) :
                 mGroupManager.getChannelObserve(item.channelId).map(list -> list.get(0));
+    }
+
+    /**
+     * Is Channels new look enabled?
+     */
+    private boolean isMultiGridChannelUploadsSection() {
+        return mCurrentSection != null && mCurrentSection.getType() == BrowseSection.TYPE_MULTI_GRID && mCurrentSection.getId() == MediaGroup.TYPE_CHANNEL_UPLOADS;
     }
 }

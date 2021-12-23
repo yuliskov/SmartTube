@@ -61,7 +61,9 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     private VideoMenuCallback mCallback;
 
     public interface VideoMenuCallback {
-        void onItemRemoved(Video item);
+        int ACTION_REMOVE = 0;
+        int ACTION_UNSUBSCRIBE = 1;
+        void onItemAction(Video videoItem, int action);
     }
 
     private VideoMenuPresenter(Context context) {
@@ -314,9 +316,10 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
                                     var -> {},
                                     error -> Log.e(TAG, "Mark as 'not interested' error: %s", error.getMessage()),
                                     () -> {
-                                        //MessageHelpers.showMessage(getContext(), mVideo.belongToHistory() ? R.string.removed_from_history : R.string.you_wont_see_this_video);
                                         if (mCallback != null) {
-                                            mCallback.onItemRemoved(mVideo);
+                                            mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
+                                        } else {
+                                            MessageHelpers.showMessage(getContext(), mVideo.belongsToHistory() ? R.string.removed_from_history : R.string.you_wont_see_this_video);
                                         }
                                     }
                             );
@@ -527,9 +530,14 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         mSubscribeAction = RxUtils.execute(observable);
 
-        MessageHelpers.showMessage(getContext(), mVideo.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel);
-
         mVideo.isSubscribed = !mVideo.isSubscribed;
+
+        if (!mVideo.isSubscribed && mCallback != null) {
+            mSettingsPresenter.closeDialog();
+            mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_UNSUBSCRIBE);
+        } else {
+            MessageHelpers.showMessage(getContext(), !mVideo.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel);
+        }
     }
 
     private void updateEnabledMenuItems() {

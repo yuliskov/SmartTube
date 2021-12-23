@@ -38,10 +38,15 @@ public class VideoGroup {
     }
 
     public static VideoGroup from(Video item) {
+        return from(item, 0);
+    }
+
+    public static VideoGroup from(Video item, int groupPosition) {
         VideoGroup videoGroup = new VideoGroup();
         videoGroup.mId = item.group.getId();
         videoGroup.mTitle = item.group.getTitle();
         videoGroup.mVideos = Collections.singletonList(item);
+        videoGroup.mPosition = groupPosition;
 
         return videoGroup;
     }

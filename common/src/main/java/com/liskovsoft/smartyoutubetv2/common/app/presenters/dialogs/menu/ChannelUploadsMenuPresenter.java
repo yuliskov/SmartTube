@@ -11,6 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -22,6 +23,7 @@ public class ChannelUploadsMenuPresenter extends BasePresenter<Void> {
     private final MediaServiceManager mServiceManager;
     private Disposable mUnsubscribeAction;
     private Video mVideo;
+    private VideoMenuCallback mCallback;
 
     private ChannelUploadsMenuPresenter(Context context) {
         super(context);
@@ -35,8 +37,13 @@ public class ChannelUploadsMenuPresenter extends BasePresenter<Void> {
         return new ChannelUploadsMenuPresenter(context);
     }
 
+    public void showMenu(Video video, VideoMenuCallback callback) {
+        mCallback = callback;
+        showMenu(video);
+    }
+
     public void showMenu(Video video) {
-        if (video == null || !video.isChannelUploadsSection()) {
+        if (video == null || !video.belongsToChannelUploads()) {
             return;
         }
 
@@ -103,6 +110,11 @@ public class ChannelUploadsMenuPresenter extends BasePresenter<Void> {
     private void unsubscribe(String channelId) {
         mUnsubscribeAction = RxUtils.execute(mItemManager.unsubscribeObserve(channelId));
 
-        MessageHelpers.showMessage(getContext(), R.string.unsubscribed_from_channel);
+        if (mCallback != null) {
+            mSettingsPresenter.closeDialog();
+            mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_UNSUBSCRIBE);
+        } else {
+            MessageHelpers.showMessage(getContext(), R.string.unsubscribed_from_channel);
+        }
     }
 }

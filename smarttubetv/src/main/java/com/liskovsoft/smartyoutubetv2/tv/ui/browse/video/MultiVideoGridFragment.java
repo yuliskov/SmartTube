@@ -198,7 +198,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
             clear1();
             clear2();
         } else if (group.getAction() == VideoGroup.ACTION_REMOVE) {
-            // Remove not supported
+            mGridAdapter1.remove(group);
             return;
         }
 
