@@ -210,7 +210,13 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     public void onDispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            tickle();
+            tickle(); // show Player UI
+        }
+    }
+
+    public void onDispatchGenericMotionEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            tickle(); // show Player UI
         }
     }
 
