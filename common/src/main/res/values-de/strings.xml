@@ -275,9 +275,22 @@
     <string name="add_remove_from_recent_playlist">Hinzufügen/Entfernen aus letzter Wiedergabeliste</string>
     <string name="hide_settings_section">Einstellungen-Kategorie ausblenden (gefährlich!)</string>
     <string name="volume">Lautstärke %s%%</string>
-    <string name="auto_frame_rate_sec">%s sec</string>
-    <string name="audio_shift_sec">%s sec</string>
-    <string name="ui_hide_timeout_sec">%s sec</string>
-    <string name="screen_dimming_timeout_min">%s min</string>
+    <string name="auto_frame_rate_sec">%s sek.</string>
+    <string name="audio_shift_sec">%s sek.</string>
+    <string name="ui_hide_timeout_sec">%s sek.</string>
+    <string name="screen_dimming_timeout_min">%s min.</string>
     <string name="mark_all_channels_watched">Alle Kanäle als gesehen markieren</string>
+    <string name="move_section_up">Kategorie nach oben verschieben</string>
+    <string name="move_section_down">Kategorie nach unten verschieben</string>
+    <string name="player_buttons">Player Schaltflächen</string>
+    <string name="action_playlist_add">Zur Wiedergabeliste hinzufügen</string>
+    <string name="action_video_stats">Videostatistiken</string>
+    <string name="action_subscribe_off">Abonnieren aus</string>
+    <string name="action_subscribe_on">Abonnieren an</string>
+    <string name="action_channel">Kanal öffnen</string>
+    <string name="action_pip">Bild-in-Bild starten</string>
+    <string name="action_screen_off">Bildschirm aus</string>
+    <string name="action_playback_queue">Warteschlange anzeigen</string>
+    <string name="action_video_speed">Video-Geschwindigkeit</string>
+    <string name="action_subtitles">Untertitel anzeigen</string>
 </resources>
