@@ -11,6 +11,9 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Video is an object that holds the various metadata associated with a single video.
  */
@@ -210,6 +213,20 @@ public final class Video implements Parcelable {
         }
 
         return result != null ? Helpers.abbreviate(result.trim(), MAX_AUTHOR_LENGTH_CHARS) : null;
+    }
+
+    public static List<Video> findVideosByAuthor(VideoGroup group, String author) {
+        List<Video> result = new ArrayList<>();
+
+        if (group != null && group.getVideos() != null) {
+            for (Video video : group.getVideos()) {
+                if (Helpers.equals(Video.extractAuthor(video), author)) {
+                    result.add(video);
+                }
+            }
+        }
+
+        return result;
     }
 
     public int describeContents() {

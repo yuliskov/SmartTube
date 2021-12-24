@@ -24,6 +24,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> implements VideoGroupPresenter {
@@ -85,9 +86,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     public void onVideoItemLongClicked(Video item) {
         VideoMenuPresenter.instance(getContext()).showMenu(item, (videoItem, action) -> {
             if (action == VideoMenuCallback.ACTION_PLAYLIST_REMOVE) {
-                VideoGroup removedGroup = VideoGroup.from(videoItem);
-                removedGroup.setAction(VideoGroup.ACTION_REMOVE);
-                getView().update(removedGroup);
+                removeItem(videoItem);
             }
         });
     }
@@ -273,5 +272,15 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         }
 
         return null;
+    }
+
+    private void removeItem(Video item) {
+        removeItem(Collections.singletonList(item));
+    }
+
+    private void removeItem(List<Video> items) {
+        VideoGroup removedGroup = VideoGroup.from(items);
+        removedGroup.setAction(VideoGroup.ACTION_REMOVE);
+        getView().update(removedGroup);
     }
 }

@@ -321,22 +321,18 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         if (item.belongsToChannelUploads()) { // We need to be sure we exactly on Channels section
             ChannelUploadsMenuPresenter.instance(getContext()).showMenu(item, (videoItem, action) -> {
                 if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE) { // works with any uploads section look
-                    VideoGroup removedGroup = VideoGroup.from(item);
-                    removedGroup.setAction(VideoGroup.ACTION_REMOVE);
-                    getView().updateSection(removedGroup);
+                    removeItem(item);
                 }
             });
         } else {
             VideoMenuPresenter.instance(getContext()).showMenu(item, (videoItem, action) -> {
                 if (action == VideoMenuCallback.ACTION_REMOVE ||
                     action == VideoMenuCallback.ACTION_PLAYLIST_REMOVE) {
-                    VideoGroup removedGroup = VideoGroup.from(videoItem);
-                    removedGroup.setAction(VideoGroup.ACTION_REMOVE);
-                    getView().updateSection(removedGroup);
+                    removeItem(videoItem);
                 } else if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE && isMultiGridChannelUploadsSection()) {
-                    VideoGroup removedGroup = VideoGroup.from(mCurrentVideo);
-                    removedGroup.setAction(VideoGroup.ACTION_REMOVE);
-                    getView().updateSection(removedGroup);
+                    removeItem(mCurrentVideo);
+                } else if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE && isSubscriptionsSection()) {
+                    removeItem(Video.findVideosByAuthor(videoItem.group, Video.extractAuthor(videoItem)));
                 }
             });
         }
@@ -740,5 +736,19 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private boolean isPlaylistsSection() {
         return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_USER_PLAYLISTS;
+    }
+
+    private boolean isSubscriptionsSection() {
+        return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_SUBSCRIPTIONS;
+    }
+
+    private void removeItem(Video item) {
+        removeItem(Collections.singletonList(item));
+    }
+
+    private void removeItem(List<Video> items) {
+        VideoGroup removedGroup = VideoGroup.from(items);
+        removedGroup.setAction(VideoGroup.ACTION_REMOVE);
+        getView().updateSection(removedGroup);
     }
 }

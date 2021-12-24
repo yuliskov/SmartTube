@@ -42,10 +42,18 @@ public class VideoGroup {
     }
 
     public static VideoGroup from(Video item, int groupPosition) {
+        return from(Collections.singletonList(item), groupPosition);
+    }
+
+    public static VideoGroup from(List<Video> items) {
+        return from(items, 0);
+    }
+
+    public static VideoGroup from(List<Video> items, int groupPosition) {
         VideoGroup videoGroup = new VideoGroup();
-        videoGroup.mId = item.group.getId();
-        videoGroup.mTitle = item.group.getTitle();
-        videoGroup.mVideos = Collections.singletonList(item);
+        videoGroup.mId = items.get(0).group.getId();
+        videoGroup.mTitle = items.get(0).group.getTitle();
+        videoGroup.mVideos = items;
         videoGroup.mPosition = groupPosition;
 
         return videoGroup;
