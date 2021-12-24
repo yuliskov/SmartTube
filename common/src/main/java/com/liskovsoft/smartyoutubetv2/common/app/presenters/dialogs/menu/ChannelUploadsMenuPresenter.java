@@ -49,6 +49,8 @@ public class ChannelUploadsMenuPresenter extends BasePresenter<Void> {
 
         mVideo = video;
 
+        RxUtils.disposeActions(mUnsubscribeAction);
+
         prepareAndShowDialog();
     }
 
@@ -61,7 +63,7 @@ public class ChannelUploadsMenuPresenter extends BasePresenter<Void> {
         appendUnsubscribeButton();
         appendMarkAsWatched();
 
-        mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mUnsubscribeAction));
+        mSettingsPresenter.showDialog(mVideo.title);
     }
 
     private void appendOpenChannelUploadsButton() {
@@ -108,6 +110,7 @@ public class ChannelUploadsMenuPresenter extends BasePresenter<Void> {
     }
 
     private void unsubscribe(String channelId) {
+        RxUtils.disposeActions(mUnsubscribeAction);
         mUnsubscribeAction = RxUtils.execute(mItemManager.unsubscribeObserve(channelId));
 
         if (mCallback != null) {

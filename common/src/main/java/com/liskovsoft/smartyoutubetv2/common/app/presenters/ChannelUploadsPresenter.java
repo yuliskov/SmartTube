@@ -13,6 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -82,7 +83,13 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
     @Override
     public void onVideoItemLongClicked(Video item) {
-        VideoMenuPresenter.instance(getContext()).showMenu(item);
+        VideoMenuPresenter.instance(getContext()).showMenu(item, (videoItem, action) -> {
+            if (action == VideoMenuCallback.ACTION_PLAYLIST_REMOVE) {
+                VideoGroup removedGroup = VideoGroup.from(videoItem);
+                removedGroup.setAction(VideoGroup.ACTION_REMOVE);
+                getView().update(removedGroup);
+            }
+        });
     }
 
     @Override

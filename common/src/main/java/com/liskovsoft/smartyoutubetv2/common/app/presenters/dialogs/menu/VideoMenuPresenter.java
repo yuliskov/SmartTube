@@ -40,8 +40,8 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     private final MediaItemManager mItemManager;
     private final AppDialogPresenter mSettingsPresenter;
     private final MediaServiceManager mServiceManager;
-    private Disposable mPlaylistAction;
-    private Disposable mAddAction;
+    private Disposable mPlaylistInfoAction;
+    private Disposable mAddToPlaylistAction;
     private Disposable mNotInterestedAction;
     private Disposable mSubscribeAction;
     private Video mVideo;
@@ -61,8 +61,10 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     private VideoMenuCallback mCallback;
 
     public interface VideoMenuCallback {
-        int ACTION_REMOVE = 0;
+        int ACTION_UNDEFINED = 0;
         int ACTION_UNSUBSCRIBE = 1;
+        int ACTION_REMOVE = 2;
+        int ACTION_PLAYLIST_REMOVE = 3;
         void onItemAction(Video videoItem, int action);
     }
 
@@ -119,7 +121,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         updateEnabledMenuItems();
 
-        RxUtils.disposeActions(mPlaylistAction, mAddAction, mNotInterestedAction, mSubscribeAction);
+        RxUtils.disposeActions(mPlaylistInfoAction, mAddToPlaylistAction, mNotInterestedAction, mSubscribeAction);
 
         mVideo = video;
 
@@ -132,7 +134,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        mPlaylistAction = mItemManager.getVideoPlaylistsInfosObserve(mVideo.videoId)
+        mPlaylistInfoAction = mItemManager.getVideoPlaylistsInfosObserve(mVideo.videoId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -163,7 +165,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         if (!mSettingsPresenter.isEmpty()) {
             String title = mVideo != null ? mVideo.title : null;
-            mSettingsPresenter.showDialog(title, () -> RxUtils.disposeActions(mPlaylistAction));
+            mSettingsPresenter.showDialog(title, () -> RxUtils.disposeActions(mPlaylistInfoAction));
         }
     }
 
@@ -185,7 +187,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         if (mSettingsPresenter.isEmpty()) {
             MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
         } else {
-            mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistAction));
+            mSettingsPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistInfoAction));
         }
     }
 
@@ -488,16 +490,19 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
     }
 
     private void addToPlaylist(String playlistId, boolean checked) {
-        RxUtils.disposeActions(mPlaylistAction, mAddAction);
+        RxUtils.disposeActions(mPlaylistInfoAction, mAddToPlaylistAction);
         Observable<Void> editObserve;
 
         if (checked) {
             editObserve = mItemManager.addToPlaylistObserve(playlistId, mVideo.videoId);
         } else {
+            if (mCallback != null) {
+                mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_PLAYLIST_REMOVE);
+            }
             editObserve = mItemManager.removeFromPlaylistObserve(playlistId, mVideo.videoId);
         }
 
-        mAddAction = RxUtils.execute(editObserve);
+        mAddToPlaylistAction = RxUtils.execute(editObserve);
     }
 
     private void toggleSubscribe() {
