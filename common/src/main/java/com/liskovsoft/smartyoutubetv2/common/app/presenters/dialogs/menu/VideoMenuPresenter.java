@@ -541,6 +541,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         if (!mVideo.isSubscribed && mCallback != null) {
             mSettingsPresenter.closeDialog();
+            MessageHelpers.cancelToasts();
             mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_UNSUBSCRIBE);
         } else {
             MessageHelpers.showMessage(getContext(), !mVideo.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel);
