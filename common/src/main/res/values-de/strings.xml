@@ -292,8 +292,8 @@
     <string name="action_playback_queue">Warteschlange</string>
     <string name="action_video_speed">Video-Geschwindigkeit</string>
     <string name="action_subtitles">Untertitel anzeigen</string>
-    <string name="action_like">Mag ich (Like)</string>
-    <string name="action_dislike">Mag ich nicht (Dislike)</string>
+    <string name="action_like">Mag ich</string>
+    <string name="action_dislike">Mag ich nicht</string>
     <string name="action_play_pause">Wiedergabe/Pause</string>
     <string name="action_repeat_mode">Wiedergabe-Modus</string>
     <string name="action_next">Nächstes Video</string>
