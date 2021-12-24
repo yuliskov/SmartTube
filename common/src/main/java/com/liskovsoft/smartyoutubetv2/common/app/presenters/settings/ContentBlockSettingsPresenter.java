@@ -111,6 +111,10 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
                 optionItem -> mContentBlockData.enableColorMarkers(optionItem.isSelected()),
                 mContentBlockData.isColorMarkersEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.content_block_no_skipping_mode),
+                optionItem -> mContentBlockData.enableSegmentSkipping(!optionItem.isSelected()),
+                !mContentBlockData.isSegmentSkippingEnabled()));
+
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 

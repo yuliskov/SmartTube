@@ -295,4 +295,5 @@
     <string name="action_next">Наступне відео</string>
     <string name="action_previous">Попереднє відео</string>
     <string name="action_high_quality">Якість відео</string>
+    <string name="content_block_no_skipping_mode">Режим без пропусків</string>
 </resources>

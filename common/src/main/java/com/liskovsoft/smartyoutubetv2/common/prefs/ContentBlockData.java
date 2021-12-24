@@ -2,7 +2,6 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Build;
 import android.os.Build.VERSION;
 import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -26,6 +25,7 @@ public class ContentBlockData {
     private int mNotificationType;
     private boolean mIsSkipEachSegmentOnceEnabled;
     private boolean mIsColorMarkersEnabled;
+    private boolean mIsSegmentSkippingEnabled;
 
     private ContentBlockData(Context context) {
         mAppPrefs = AppPrefs.instance(context);
@@ -90,6 +90,15 @@ public class ContentBlockData {
         persistData();
     }
 
+    public boolean isSegmentSkippingEnabled() {
+        return mIsSegmentSkippingEnabled;
+    }
+
+    public void enableSegmentSkipping(boolean enabled) {
+        mIsSegmentSkippingEnabled = enabled;
+        persistData();
+    }
+
     private void restoreState() {
         String data = mAppPrefs.getData(CONTENT_BLOCK_DATA);
 
@@ -100,6 +109,7 @@ public class ContentBlockData {
         String categories = Helpers.parseStr(split, 2);
         mIsSkipEachSegmentOnceEnabled = Helpers.parseBoolean(split, 3, true);
         mIsColorMarkersEnabled = Helpers.parseBoolean(split, 4, true);
+        mIsSegmentSkippingEnabled = Helpers.parseBoolean(split, 5, true);
 
         if (categories != null) {
             String[] categoriesArr = Helpers.splitArray(categories);
@@ -126,7 +136,7 @@ public class ContentBlockData {
         String categories = Helpers.mergeArray(mCategories.toArray());
 
         mAppPrefs.setData(CONTENT_BLOCK_DATA, Helpers.mergeObject(
-                mIsSponsorBlockEnabled, mNotificationType, categories, mIsSkipEachSegmentOnceEnabled, mIsColorMarkersEnabled
+                mIsSponsorBlockEnabled, mNotificationType, categories, mIsSkipEachSegmentOnceEnabled, mIsColorMarkersEnabled, mIsSegmentSkippingEnabled
         ));
     }
 }
