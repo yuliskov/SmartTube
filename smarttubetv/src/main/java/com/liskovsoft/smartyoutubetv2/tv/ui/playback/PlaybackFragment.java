@@ -352,9 +352,6 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     private void createPlayerObjects() {
-        //System.gc(); // OutOfMemoryError fix (simple wrapper for below)?
-        Runtime.getRuntime().gc(); // OutOfMemoryError fix?
-
         // NOTE: position matters!
 
         createPlayer();
