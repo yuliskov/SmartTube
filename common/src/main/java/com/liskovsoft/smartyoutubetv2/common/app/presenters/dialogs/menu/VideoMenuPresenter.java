@@ -5,6 +5,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -496,7 +497,8 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         if (checked) {
             editObserve = mItemManager.addToPlaylistObserve(playlistId, mVideo.videoId);
         } else {
-            if (mCallback != null) {
+            // Check that the current video belongs to the right section
+            if (mCallback != null && Helpers.equals(mVideo.playlistId, playlistId)) {
                 mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_PLAYLIST_REMOVE);
             }
             editObserve = mItemManager.removeFromPlaylistObserve(playlistId, mVideo.videoId);

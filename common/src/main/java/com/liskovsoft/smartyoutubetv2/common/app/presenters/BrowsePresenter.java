@@ -329,7 +329,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         } else {
             VideoMenuPresenter.instance(getContext()).showMenu(item, (videoItem, action) -> {
                 if (action == VideoMenuCallback.ACTION_REMOVE ||
-                        (action == VideoMenuCallback.ACTION_PLAYLIST_REMOVE && isPlaylistsSection())) {
+                    action == VideoMenuCallback.ACTION_PLAYLIST_REMOVE) {
                     VideoGroup removedGroup = VideoGroup.from(videoItem);
                     removedGroup.setAction(VideoGroup.ACTION_REMOVE);
                     getView().updateSection(removedGroup);
