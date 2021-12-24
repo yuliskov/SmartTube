@@ -171,7 +171,7 @@ public class GeneralData {
         index = findPinnedItemIndex(sectionId);
 
         if (index != -1) {
-            return  index + shift >= 0 && index + shift < mEnabledSections.size();
+            return  index + shift >= 0 && index + shift < mPinnedItems.size();
         }
 
         return false;
