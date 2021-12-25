@@ -153,20 +153,23 @@ public final class Video implements Parcelable {
     @Override
     public boolean equals(@Nullable Object obj) {
         if (obj instanceof Video) {
+            Video video = (Video) obj;
+
             if (videoId != null) {
-                return videoId.equals(((Video) obj).videoId);
+                // Also don't confuse current video with jam of one (different playlists)
+                return videoId.equals(video.videoId) && Helpers.equals(playlistId, video.playlistId);
             }
 
             if (playlistId != null) {
-                return playlistId.equals(((Video) obj).playlistId);
+                return playlistId.equals(video.playlistId);
             }
 
             if (channelId != null) {
-                return channelId.equals(((Video) obj).channelId);
+                return channelId.equals(video.channelId);
             }
 
             if (mediaItem != null) {
-                return mediaItem.equals(((Video) obj).mediaItem);
+                return mediaItem.equals(video.mediaItem);
             }
         }
 

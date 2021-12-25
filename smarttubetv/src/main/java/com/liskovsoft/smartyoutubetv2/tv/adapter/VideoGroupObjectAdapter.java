@@ -84,6 +84,9 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         }
     }
 
+    /**
+     * Compare by reference. Because there may be multiple same videos.
+     */
     public int indexOf(Video item) {
         // Compare by reference. Because there may be multiple same videos.
         int index = -1;
@@ -91,6 +94,23 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         for (Video video : mVideoItems) {
             index++;
             if (video == item) {
+                return index;
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * Regular compare. Use with caution!<br/>
+     * UI may consists of multiple rows with same video or even multiple videos in the same row.
+     */
+    public int indexOfAlt(Video item) {
+        int index = -1;
+
+        for (Video video : mVideoItems) {
+            index++;
+            if (video.equals(item)) {
                 return index;
             }
         }

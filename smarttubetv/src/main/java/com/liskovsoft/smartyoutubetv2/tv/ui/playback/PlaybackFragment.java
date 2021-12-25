@@ -522,10 +522,20 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
                 super.onBindRowViewHolder(holder, item);
 
                 // Set position of item inside first row (playlist items)
-                if (getVideo() != null && getVideo().playlistIndex > 0 &&
-                        mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView().getSelectedPosition() == 0) {
-                    ViewHolder vh = (ViewHolder) holder;
-                    vh.getGridView().setSelectedPosition(getVideo().playlistIndex);
+                //if (getVideo() != null && getVideo().playlistIndex > 0 &&
+                //        mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView().getSelectedPosition() == 0) {
+                //    ViewHolder vh = (ViewHolder) holder;
+                //    vh.getGridView().setSelectedPosition(getVideo().playlistIndex);
+                //}
+
+                // Set position of item inside first row (playlist items)
+                if (mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView().getSelectedPosition() == 0) {
+                    int index = getIndexOfSuggestedItem();
+
+                    if (index > 0) {
+                        ViewHolder vh = (ViewHolder) holder;
+                        vh.getGridView().setSelectedPosition(index);
+                    }
                 }
             }
 
@@ -538,6 +548,17 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         };
 
         mCardPresenter = new VideoCardPresenter();
+    }
+
+    private int getIndexOfSuggestedItem() {
+        // NOTE: skip first row. It's PlaybackControlsRow
+        Object row = mRowsAdapter != null && mRowsAdapter.size() > 1 ? mRowsAdapter.get(1) : null;
+
+        if (row instanceof ListRow) {
+            return ((VideoGroupObjectAdapter) ((ListRow) row).getAdapter()).indexOfAlt(getVideo());
+        }
+
+        return -1;
     }
 
     private void setupEventListeners() {
