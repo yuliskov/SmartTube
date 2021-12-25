@@ -207,8 +207,9 @@ public final class Video implements Parcelable {
             if (split.length <= 1) {
                 result = video.description;
             } else {
-                // First part usually is quality a label (4K etc)
-                result = split[0].length() > 4 ? split[0] : split[1];
+                // First part may be a special label (4K, Stream, New etc)
+                // Two cases to detect label: 1) Description is long (4 items); 2) First item of description is too short (2 letters)
+                result = split.length < 4 && split[0].length() > 2 ? split[0] : split[1];
             }
         }
 
