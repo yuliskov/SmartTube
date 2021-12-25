@@ -297,6 +297,6 @@
     <string name="action_repeat_mode">Režim přehrávání</string>
     <string name="action_next">Další video</string>
     <string name="action_previous">Předešlé video</string>
-    <string name="action_high_quality">Video kvalita</string>
+    <string name="action_high_quality">Kvalita videa</string>
     <string name="content_block_no_skipping_mode">Režim bez přeskakování</string>
 </resources>
