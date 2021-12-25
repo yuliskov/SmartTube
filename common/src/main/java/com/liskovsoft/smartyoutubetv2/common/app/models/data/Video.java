@@ -156,7 +156,7 @@ public final class Video implements Parcelable {
             Video video = (Video) obj;
 
             if (videoId != null) {
-                // Also don't confuse current video with jam of one (different playlists)
+                // Also don't confuse with jam of current video (different playlists)
                 return videoId.equals(video.videoId) && Helpers.equals(playlistId, video.playlistId);
             }
 
