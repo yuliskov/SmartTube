@@ -279,4 +279,24 @@
     <string name="ui_hide_timeout_sec">%s sek</string>
     <string name="screen_dimming_timeout_min">%s min</string>
     <string name="mark_all_channels_watched">Označit všechny kanály jako zhlédnuté</string>
+    <string name="move_section_up">Posuň sekci nahoru</string>
+    <string name="move_section_down">Posuň sekci dolů</string>
+    <string name="player_buttons">Nastavení tlačítek přehrávače</string>
+    <string name="action_playlist_add">Přidat do playlistu</string>
+    <string name="action_video_stats">Video statistiky</string>
+    <string name="action_subscribe">Odebírat</string>
+    <string name="action_channel">Otevřít kanál</string>
+    <string name="action_pip">PIP</string>
+    <string name="action_screen_off">Vypnout obrazovku</string>
+    <string name="action_playback_queue">Fronta přehrávání</string>
+    <string name="action_video_speed">Video rychlost</string>
+    <string name="action_subtitles">Titulky</string>
+    <string name="action_like">Líbí se</string>
+    <string name="action_dislike">Nelíbí se</string>
+    <string name="action_play_pause">Přehrát/Pozastavit</string>
+    <string name="action_repeat_mode">Režim přehrávání</string>
+    <string name="action_next">Další video</string>
+    <string name="action_previous">Předešlé video</string>
+    <string name="action_high_quality">Video kvalita</string>
+    <string name="content_block_no_skipping_mode">Režim bez přeskakování</string>
 </resources>
