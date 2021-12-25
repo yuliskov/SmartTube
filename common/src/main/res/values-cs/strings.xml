@@ -289,7 +289,7 @@
     <string name="action_pip">PIP</string>
     <string name="action_screen_off">Vypnout obrazovku</string>
     <string name="action_playback_queue">Fronta přehrávání</string>
-    <string name="action_video_speed">Video rychlost</string>
+    <string name="action_video_speed">Rychlost videa</string>
     <string name="action_subtitles">Titulky</string>
     <string name="action_like">Líbí se</string>
     <string name="action_dislike">Nelíbí se</string>
