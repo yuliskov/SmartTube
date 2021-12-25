@@ -224,7 +224,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private void sortSections() {
-        Collections.sort(mSections, Comparator.comparingInt(o -> mGeneralData.getSectionIndex(o.getId())));
+        // NOTE: Comparator.comparingInt API >= 24
+        Collections.sort(mSections, (o1, o2) -> {
+            return mGeneralData.getSectionIndex(o1.getId()) - mGeneralData.getSectionIndex(o2.getId());
+        });
     }
 
     public void updateChannelSorting() {
