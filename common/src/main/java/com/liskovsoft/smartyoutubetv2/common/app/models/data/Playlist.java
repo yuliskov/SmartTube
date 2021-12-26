@@ -55,6 +55,11 @@ public class Playlist {
     //    }
     //}
 
+    public void addAll(List<Video> videos) {
+        mPlaylist.removeAll(videos);
+        mPlaylist.addAll(videos);
+    }
+
     /**
      * Adds a video to the end of the playlist.
      *

@@ -5,6 +5,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
@@ -173,9 +174,19 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
         getController().clearSuggestions(); // clear previous videos
 
+        int groupIndex = -1;
+
         for (MediaGroup group : suggestions) {
+            groupIndex++;
             if (group != null && !group.isEmpty()) {
-                getController().updateSuggestions(VideoGroup.from(group));
+                VideoGroup videoGroup = VideoGroup.from(group);
+                getController().updateSuggestions(videoGroup);
+
+                // Merge remote queue with player's queue
+                if (groupIndex == 0 && video.isRemote) {
+                    Playlist.instance().addAll(videoGroup.getVideos());
+                    Playlist.instance().setCurrent(video);
+                }
             }
         }
     }

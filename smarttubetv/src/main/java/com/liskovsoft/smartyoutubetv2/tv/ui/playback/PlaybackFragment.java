@@ -530,7 +530,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
                 // Set position of item inside first row (playlist items)
                 if (mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView().getSelectedPosition() == 0) {
-                    int index = getIndexOfSuggestedItem();
+                    int index = getSuggestedItemIndex();
 
                     if (index > 0) {
                         ViewHolder vh = (ViewHolder) holder;
@@ -550,12 +550,24 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         mCardPresenter = new VideoCardPresenter();
     }
 
-    private int getIndexOfSuggestedItem() {
+    private int getSuggestedItemIndex() {
+        if (getVideo() == null || !getVideo().hasPlaylist()) {
+            return -1;
+        }
+
         // NOTE: skip first row. It's PlaybackControlsRow
         Object row = mRowsAdapter != null && mRowsAdapter.size() > 1 ? mRowsAdapter.get(1) : null;
 
         if (row instanceof ListRow) {
-            return ((VideoGroupObjectAdapter) ((ListRow) row).getAdapter()).indexOfAlt(getVideo());
+            VideoGroupObjectAdapter adapter = (VideoGroupObjectAdapter) ((ListRow) row).getAdapter();
+            int index = adapter.indexOfAlt(getVideo());
+
+            // Below doesn't work. onBindRowViewHolder won't called on update hidden list.
+            //if (index == -1) {
+            //    mEventListener.onScrollEnd((Video) adapter.get(adapter.size() - 1));
+            //}
+
+            return index == -1 ? adapter.size() - 1 : index; // select last possible item on fail
         }
 
         return -1;
@@ -1190,7 +1202,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         // Disable scrolling on partially updated rows. This prevent controls from misbehaving.
         if (mRowPresenter != null && mRowsSupportFragment != null) {
             ViewHolder vh = mRowsSupportFragment.getRowViewHolder(mRowsSupportFragment.getSelectedPosition());
-            if (vh != null) {
+            // Skip PlaybackRowPresenter.ViewHolder
+            if (vh instanceof ListRowPresenter.ViewHolder) {
                 mRowPresenter.freeze(vh, freeze);
             }
         }
