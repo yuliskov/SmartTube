@@ -8,7 +8,9 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
@@ -87,6 +89,8 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         VideoMenuPresenter.instance(getContext()).showMenu(item, (videoItem, action) -> {
             if (action == VideoMenuCallback.ACTION_PLAYLIST_REMOVE) {
                 removeItem(videoItem);
+            } else if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE) {
+                MessageHelpers.showMessage(getContext(), R.string.unsubscribed_from_channel);
             }
         });
     }
