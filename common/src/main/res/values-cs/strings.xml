@@ -299,4 +299,9 @@
     <string name="action_previous">Předešlé video</string>
     <string name="action_high_quality">Kvalita videa</string>
     <string name="content_block_no_skipping_mode">Režim bez přeskakování</string>
+    <string name="content_block_action_type">Vyberte akci</string>
+    <string name="content_block_action_none">Nedělat nic</string>
+    <string name="content_block_action_only_skip">Pouze přeskakovat</string>
+    <string name="content_block_action_toast">Přeskakovat s upozorněním</string>
+    <string name="content_block_action_dialog">Ukaž dialog k potvrzení</string>
 </resources>
