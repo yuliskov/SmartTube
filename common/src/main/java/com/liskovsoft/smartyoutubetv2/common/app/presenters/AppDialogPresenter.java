@@ -18,8 +18,8 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     private final List<SettingsCategory> mCategories;
     private final Handler mHandler;
     private final Runnable mCloseDialog = this::closeDialog;
+    private final List<Runnable> mOnFinish = new ArrayList<>();
     private String mTitle;
-    private Runnable mOnFinish;
     private long mTimeoutMs;
 
     public static class SettingsCategory {
@@ -94,9 +94,13 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     public void onFinish() {
         clear();
 
-        if (mOnFinish != null) {
-            mOnFinish.run();
+        for (Runnable callback : mOnFinish) {
+            if (callback != null) {
+                callback.run();
+            }
         }
+
+        mOnFinish.clear();
     }
 
     public void clear() {
@@ -125,7 +129,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
 
     public void showDialog(String dialogTitle, Runnable onFinish) {
         mTitle = dialogTitle;
-        mOnFinish = onFinish;
+        mOnFinish.add(onFinish);
 
         if (getView() != null) {
             getView().clear();
