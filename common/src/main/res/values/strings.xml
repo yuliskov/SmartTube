@@ -300,4 +300,9 @@
     <string name="action_previous">Previous video</string>
     <string name="action_high_quality">Video quality</string>
     <string name="content_block_no_skipping_mode">No-skipping mode</string>
+    <string name="content_block_action_type">Choose action</string>
+    <string name="content_block_action_none">Do nothing</string>
+    <string name="content_block_action_only_skip">Only skip</string>
+    <string name="content_block_action_toast">Skip with notification</string>
+    <string name="content_block_action_dialog">Show confirmation dialog</string>
 </resources>

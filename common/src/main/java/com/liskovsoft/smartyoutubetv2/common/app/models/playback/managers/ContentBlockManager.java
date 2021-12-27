@@ -127,7 +127,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                             if (mContentBlockData.isColorMarkersEnabled()) {
                                 getController().setSeekBarSegments(toSeekBarSegments(segments));
                             }
-                            if (mContentBlockData.isSegmentSkippingEnabled()) {
+                            if (mContentBlockData.getActionType() != ContentBlockData.ACTION_DO_NOTHING) {
                                 startPlaybackWatcher();
                             }
                         },
@@ -171,13 +171,13 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                 Integer resId = mLocalizedMapping.get(segment.getCategory());
                 String localizedCategory = resId != null ? getActivity().getString(resId) : segment.getCategory();
 
-                int type = mContentBlockData.getNotificationType();
+                int type = mContentBlockData.getActionType();
 
-                if (type == ContentBlockData.NOTIFICATION_TYPE_NONE || getController().isInPIPMode()) {
+                if (type == ContentBlockData.ACTION_SKIP_ONLY || getController().isInPIPMode()) {
                     getController().setPositionMs(segment.getEndMs());
-                } else if (type == ContentBlockData.NOTIFICATION_TYPE_TOAST) {
+                } else if (type == ContentBlockData.ACTION_SKIP_WITH_TOAST) {
                     messageSkip(segment.getEndMs(), localizedCategory);
-                } else if (type == ContentBlockData.NOTIFICATION_TYPE_DIALOG) {
+                } else if (type == ContentBlockData.ACTION_SHOW_DIALOG) {
                     confirmSkip(segment.getEndMs(), localizedCategory);
                 }
 

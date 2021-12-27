@@ -37,7 +37,7 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.clear();
         
         appendSponsorBlockSwitch(settingsPresenter);
-        appendNotificationTypeSection(settingsPresenter);
+        appendActionTypeSection(settingsPresenter);
         appendCategoriesSection(settingsPresenter);
         appendMiscSection(settingsPresenter);
 
@@ -53,22 +53,23 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendSingleSwitch(sponsorBlockOption);
     }
 
-    private void appendNotificationTypeSection(AppDialogPresenter settingsPresenter) {
+    private void appendActionTypeSection(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        int notificationType = mContentBlockData.getNotificationType();
+        int notificationType = mContentBlockData.getActionType();
 
         for (int[] pair : new int[][] {
-                {R.string.content_block_notify_none, ContentBlockData.NOTIFICATION_TYPE_NONE},
-                {R.string.content_block_notify_toast, ContentBlockData.NOTIFICATION_TYPE_TOAST},
-                {R.string.content_block_notify_dialog, ContentBlockData.NOTIFICATION_TYPE_DIALOG}
+                {R.string.content_block_action_none, ContentBlockData.ACTION_DO_NOTHING},
+                {R.string.content_block_action_only_skip, ContentBlockData.ACTION_SKIP_ONLY},
+                {R.string.content_block_action_toast, ContentBlockData.ACTION_SKIP_WITH_TOAST},
+                {R.string.content_block_action_dialog, ContentBlockData.ACTION_SHOW_DIALOG}
         }) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]),
-                    optionItem -> mContentBlockData.setNotificationType(pair[1]),
+                    optionItem -> mContentBlockData.setActionType(pair[1]),
                     notificationType == pair[1]));
         }
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.content_block_notification_type), options);
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.content_block_action_type), options);
     }
 
     private void appendCategoriesSection(AppDialogPresenter settingsPresenter) {
@@ -110,10 +111,6 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(getContext().getString(R.string.sponsor_color_markers),
                 optionItem -> mContentBlockData.enableColorMarkers(optionItem.isSelected()),
                 mContentBlockData.isColorMarkersEnabled()));
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.content_block_no_skipping_mode),
-                optionItem -> mContentBlockData.enableSegmentSkipping(!optionItem.isSelected()),
-                !mContentBlockData.isSegmentSkippingEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }

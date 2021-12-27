@@ -296,4 +296,9 @@
     <string name="action_previous">Предыдущее видео</string>
     <string name="action_high_quality">Качество видео</string>
     <string name="content_block_no_skipping_mode">Режим без пропусков</string>
+    <string name="content_block_action_type">Выбрать действие</string>
+    <string name="content_block_action_none">Ничего не делать</string>
+    <string name="content_block_action_only_skip">Только пропуск</string>
+    <string name="content_block_action_toast">Пропуск с уведомлением</string>
+    <string name="content_block_action_dialog">Диалог подтверждения</string>
 </resources>

@@ -13,19 +13,19 @@ import java.util.Set;
 public class ContentBlockData {
     public static final String SPONSOR_BLOCK_NAME = "SponsorBlock";
     public static final String SPONSOR_BLOCK_URL = "https://sponsor.ajay.app";
-    public static final int NOTIFICATION_TYPE_NONE = 0;
-    public static final int NOTIFICATION_TYPE_TOAST = 1;
-    public static final int NOTIFICATION_TYPE_DIALOG = 2;
+    public static final int ACTION_SKIP_ONLY = 0;
+    public static final int ACTION_SKIP_WITH_TOAST = 1;
+    public static final int ACTION_SHOW_DIALOG = 2;
+    public static final int ACTION_DO_NOTHING = 3;
     private static final String CONTENT_BLOCK_DATA = "content_block_data";
     @SuppressLint("StaticFieldLeak")
     private static ContentBlockData sInstance;
     private final AppPrefs mAppPrefs;
     private boolean mIsSponsorBlockEnabled;
     private final Set<String> mCategories = new HashSet<>();
-    private int mNotificationType;
+    private int mActionType;
     private boolean mIsSkipEachSegmentOnceEnabled;
     private boolean mIsColorMarkersEnabled;
-    private boolean mIsSegmentSkippingEnabled;
 
     private ContentBlockData(Context context) {
         mAppPrefs = AppPrefs.instance(context);
@@ -63,12 +63,12 @@ public class ContentBlockData {
         persistData();
     }
 
-    public int getNotificationType() {
-        return mNotificationType;
+    public int getActionType() {
+        return mActionType;
     }
 
-    public void setNotificationType(int type) {
-        mNotificationType = type;
+    public void setActionType(int type) {
+        mActionType = type;
         persistData();
     }
 
@@ -90,26 +90,16 @@ public class ContentBlockData {
         persistData();
     }
 
-    public boolean isSegmentSkippingEnabled() {
-        return mIsSegmentSkippingEnabled;
-    }
-
-    public void enableSegmentSkipping(boolean enabled) {
-        mIsSegmentSkippingEnabled = enabled;
-        persistData();
-    }
-
     private void restoreState() {
         String data = mAppPrefs.getData(CONTENT_BLOCK_DATA);
 
         String[] split = Helpers.splitObjectLegacy(data);
 
         mIsSponsorBlockEnabled = Helpers.parseBoolean(split, 0, VERSION.SDK_INT > 19); // Android 4 may have memory problems
-        mNotificationType = Helpers.parseInt(split, 1, NOTIFICATION_TYPE_TOAST);
+        mActionType = Helpers.parseInt(split, 1, ACTION_SKIP_WITH_TOAST);
         String categories = Helpers.parseStr(split, 2);
         mIsSkipEachSegmentOnceEnabled = Helpers.parseBoolean(split, 3, true);
         mIsColorMarkersEnabled = Helpers.parseBoolean(split, 4, true);
-        mIsSegmentSkippingEnabled = Helpers.parseBoolean(split, 5, true);
 
         if (categories != null) {
             String[] categoriesArr = Helpers.splitArray(categories);
@@ -136,7 +126,7 @@ public class ContentBlockData {
         String categories = Helpers.mergeArray(mCategories.toArray());
 
         mAppPrefs.setData(CONTENT_BLOCK_DATA, Helpers.mergeObject(
-                mIsSponsorBlockEnabled, mNotificationType, categories, mIsSkipEachSegmentOnceEnabled, mIsColorMarkersEnabled, mIsSegmentSkippingEnabled
+                mIsSponsorBlockEnabled, mActionType, categories, mIsSkipEachSegmentOnceEnabled, mIsColorMarkersEnabled, null
         ));
     }
 }
