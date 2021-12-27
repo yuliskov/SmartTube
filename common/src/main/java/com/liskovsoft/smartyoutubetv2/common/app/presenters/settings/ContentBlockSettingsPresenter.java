@@ -4,6 +4,7 @@ import android.content.Context;
 import androidx.core.content.ContextCompat;
 import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.ContentBlockManager.SegmentAction;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
@@ -53,23 +54,66 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendSingleSwitch(sponsorBlockOption);
     }
 
+    //private void appendActionTypeSection(AppDialogPresenter settingsPresenter) {
+    //    List<OptionItem> options = new ArrayList<>();
+    //
+    //    int notificationType = mContentBlockData.getActionType();
+    //
+    //    for (int[] pair : new int[][] {
+    //            {R.string.content_block_action_none, ContentBlockData.ACTION_DO_NOTHING},
+    //            {R.string.content_block_action_only_skip, ContentBlockData.ACTION_SKIP_ONLY},
+    //            {R.string.content_block_action_toast, ContentBlockData.ACTION_SKIP_WITH_TOAST},
+    //            {R.string.content_block_action_dialog, ContentBlockData.ACTION_SHOW_DIALOG}
+    //    }) {
+    //        options.add(UiOptionItem.from(getContext().getString(pair[0]),
+    //                optionItem -> {
+    //                    //mContentBlockData.setActionType(pair[1]);
+    //
+    //                    AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
+    //                    dialogPresenter.clear();
+    //                    dialogPresenter.appendRadioCategory(afrPauseCategory.title, afrPauseCategory.options);
+    //                    dialogPresenter.showDialog(afrPauseCategory.title, mApplyAfr);
+    //                },
+    //                notificationType == pair[1]));
+    //    }
+    //
+    //    settingsPresenter.appendStringsCategory(getContext().getString(R.string.content_block_action_type), options);
+    //}
+
     private void appendActionTypeSection(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        int notificationType = mContentBlockData.getActionType();
+        Set<SegmentAction> actions = mContentBlockData.getActions();
 
-        for (int[] pair : new int[][] {
-                {R.string.content_block_action_none, ContentBlockData.ACTION_DO_NOTHING},
-                {R.string.content_block_action_only_skip, ContentBlockData.ACTION_SKIP_ONLY},
-                {R.string.content_block_action_toast, ContentBlockData.ACTION_SKIP_WITH_TOAST},
-                {R.string.content_block_action_dialog, ContentBlockData.ACTION_SHOW_DIALOG}
-        }) {
-            options.add(UiOptionItem.from(getContext().getString(pair[0]),
-                    optionItem -> mContentBlockData.setActionType(pair[1]),
-                    notificationType == pair[1]));
+        for (SegmentAction action : actions) {
+            options.add(UiOptionItem.from(
+                    getColoredString(mContentBlockData.getLocalizedResMapping().get(action.segmentCategory), mContentBlockData.getColorResMapping().get(action.segmentCategory)),
+                    optionItem -> {
+                        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
+                        dialogPresenter.clear();
+
+                        List<OptionItem> nestedOptions = new ArrayList<>();
+                        nestedOptions.add(UiOptionItem.from(getContext().getString(R.string.content_block_action_none),
+                                optionItem1 -> action.actionType = ContentBlockData.ACTION_DO_NOTHING,
+                                action.actionType == ContentBlockData.ACTION_DO_NOTHING));
+                        nestedOptions.add(UiOptionItem.from(getContext().getString(R.string.content_block_action_only_skip),
+                                optionItem1 -> action.actionType = ContentBlockData.ACTION_SKIP_ONLY,
+                                action.actionType == ContentBlockData.ACTION_SKIP_ONLY));
+                        nestedOptions.add(UiOptionItem.from(getContext().getString(R.string.content_block_action_toast),
+                                optionItem1 -> action.actionType = ContentBlockData.ACTION_SKIP_WITH_TOAST,
+                                action.actionType == ContentBlockData.ACTION_SKIP_WITH_TOAST));
+                        nestedOptions.add(UiOptionItem.from(getContext().getString(R.string.content_block_action_dialog),
+                                optionItem1 -> action.actionType = ContentBlockData.ACTION_SHOW_DIALOG,
+                                action.actionType == ContentBlockData.ACTION_SHOW_DIALOG));
+
+                        String title = getContext().getString(mContentBlockData.getLocalizedResMapping().get(action.segmentCategory));
+
+                        dialogPresenter.appendRadioCategory(title, nestedOptions);
+                        dialogPresenter.showDialog(title, mContentBlockData::persistActions);
+                    }));
         }
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.content_block_action_type), options);
+        settingsPresenter.appendStringsCategory(getContext().getString(R.string.content_block_action_type), options);
     }
 
     private void appendCategoriesSection(AppDialogPresenter settingsPresenter) {
