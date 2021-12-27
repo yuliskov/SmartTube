@@ -329,11 +329,12 @@ public final class Video implements Parcelable {
         return videoId == null && mediaItem != null && mediaItem.getType() == MediaItem.TYPE_PLAYLIST;
     }
 
+    public boolean belongsToUndefined() {
+        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_UNDEFINED;
+    }
+
     public boolean belongsToChannelUploads() {
-        return group != null && (
-                (group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_CHANNEL_UPLOADS) ||
-                (group.getSection() != null && group.getSection().getId() == MediaGroup.TYPE_CHANNEL_UPLOADS)
-        );
+        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_CHANNEL_UPLOADS;
     }
 
     public boolean belongsToPlaylists() {
