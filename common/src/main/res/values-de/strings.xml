@@ -300,4 +300,9 @@
     <string name="action_previous">Vorheriges Video</string>
     <string name="action_high_quality">Video-Qualität</string>
     <string name="content_block_no_skipping_mode">Nicht-Überspringen-Modus</string>
+    <string name="content_block_action_type">Aktion wählen</string>
+    <string name="content_block_action_none">Nichts tun</string>
+    <string name="content_block_action_only_skip">Nur Überspringen</string>
+    <string name="content_block_action_toast">Überspringen mit Benachrichtigung</string>
+    <string name="content_block_action_dialog">Bestätigungsdialog anzeigen</string>
 </resources>
