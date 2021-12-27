@@ -330,7 +330,7 @@ public final class Video implements Parcelable {
     }
 
     public boolean belongsToChannelUploads() {
-        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_CHANNEL_UPLOADS;
+        return group != null && group.getMediaGroup() != null && (group.getMediaGroup().getType() == MediaGroup.TYPE_CHANNEL_UPLOADS || group.getSection().getId() == MediaGroup.TYPE_CHANNEL_UPLOADS);
     }
 
     public boolean belongsToPlaylists() {

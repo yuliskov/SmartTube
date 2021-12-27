@@ -382,7 +382,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         }
 
         mSettingsPresenter.appendSingleButton(
-                UiOptionItem.from(getContext().getString(mVideo.belongsToSubscriptions() ? R.string.unsubscribe_from_channel : R.string.subscribe_unsubscribe_from_channel),
+                UiOptionItem.from(getContext().getString(mVideo.isSubscribed || mVideo.belongsToSubscriptions() || mVideo.belongsToChannelUploads() ? R.string.unsubscribe_from_channel : R.string.subscribe_unsubscribe_from_channel),
                         optionItem -> toggleSubscribe()));
     }
 
