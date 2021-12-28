@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
+import android.text.TextUtils;
 import androidx.core.content.ContextCompat;
 import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -159,8 +160,14 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 
-    private CharSequence getColoredString(int strResId, int colorResId) {
+    private CharSequence getColoredStringOld(int strResId, int colorResId) {
         return mContentBlockData.isColorMarkersEnabled() ?
                 Utils.color(getContext().getString(strResId), ContextCompat.getColor(getContext(), colorResId)) : getContext().getString(strResId);
+    }
+
+    private CharSequence getColoredString(int strResId, int colorResId) {
+        String origin = getContext().getString(strResId);
+        CharSequence colorMark = Utils.color("●", ContextCompat.getColor(getContext(), colorResId));
+        return TextUtils.concat( colorMark, " ", origin);
     }
 }
