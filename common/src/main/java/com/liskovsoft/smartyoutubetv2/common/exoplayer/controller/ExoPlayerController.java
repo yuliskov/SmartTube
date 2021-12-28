@@ -53,7 +53,8 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
         mMediaSourceFactory.setTrackErrorFixer(new TrackErrorFixer(mTrackSelectorManager));
 
-        //initFormats();
+        // Shield 720p fix???
+        initFormats();
     }
 
     private void initFormats() {
