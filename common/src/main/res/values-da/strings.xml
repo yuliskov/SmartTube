@@ -13,7 +13,7 @@
   <string name="subscriptions_signin_title">Se det siste fra kanaler du syntes om</string>
   <string name="subscriptions_signin_subtitle">Log på for at se dine abonnementer</string>
   <string name="subscriptions_signin_button_text">LOG PÅ</string>
-  <string name="library_signin_to_show_more">Se videoer du syntes om, lagret eller abonneret på</string>
+  <string name="library_signin_to_show_more">Se videoer du syntes om, gemt eller abonneret på</string>
   <string name="library_signin_subtitle">Log på for at se dit biblioteket </string>
   <string name="action_signin">LOG PÅ</string>
   <string name="title_video_formats">Video formater</string>
@@ -293,4 +293,17 @@
   <string name="action_playback_queue">Vis afspilningskø</string>
   <string name="action_video_speed">videohastighed</string>
   <string name="action_subtitles">Vis undertekster</string>
+  <string name="action_like">Syntes om</string>
+  <string name="action_dislike">Syntes ikke om</string>
+  <string name="action_play_pause">Afspil/Pause</string>
+  <string name="action_repeat_mode">Afspilningstilstand</string>
+  <string name="action_next">Næste video</string>
+  <string name="action_previous">Forrige video</string>
+  <string name="action_high_quality">Video kvalitet</string>
+  <string name="content_block_no_skipping_mode">Ingen overspringstilstand</string>
+  <string name="content_block_action_type">Vælg handling</string>
+  <string name="content_block_action_none">Gør intet</string>
+  <string name="content_block_action_only_skip">Spring kun over</string>
+  <string name="content_block_action_toast">Spring over med notifikation</string>
+  <string name="content_block_action_dialog">Vis bekræftelsesdialog</string>
 </resources>
