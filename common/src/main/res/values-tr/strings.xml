@@ -22,7 +22,7 @@
     <string name="playback_queue_category_title">Oynatma sırası</string>
     <string name="video_max_quality">Otomatik (en iyi kalite)</string>
     <string name="audio_max_quality">Otomatik (en iyi kalite)</string>
-    <string name="subtitles_disabled">Altyazılar devre dışı bırakıldı</string>
+    <string name="subtitles_disabled">Kapalı</string>
     <string name="auto_frame_rate">Otomatik kare hızı</string>
     <string name="frame_rate_correction">Fps düzeltme:\n%s</string>
     <string name="category_background_playback">Arka planda oynatma</string>
@@ -39,7 +39,7 @@
     <string name="video_buffer_size_high">Yüksek</string>
     <string name="update_changelog">Değişiklik günlüğü</string>
     <string name="install_update">Güncellemeyi yükle</string>
-    <string name="section_is_empty">Oops! Burada hiçbir şey yok.</string>
+    <string name="section_is_empty">Hata! Burada hiçbir şey yok.</string>
     <string name="dialog_add_to_playlist">Oynatma listesine Ekle/Kaldır</string>
     <string name="msg_signed_users_only">Sadece oturum açmış kullanıcılar</string>
     <string name="msg_cant_load_content">İçerik yüklenemiyor.\n1) Ağ bağlantısını kontrol edin.\n2) Hesabınızda oturum açmayı deneyin.</string>
@@ -109,7 +109,7 @@
     <string name="card_multiline_title">Çok satırlı başlıklar</string>
     <string name="cards_style">Kart stili</string>
     <string name="repeat_mode_all">Tüm videoları tek tek oynat</string>
-    <string name="repeat_mode_one">Mevcut videoyu tekrarla</string>
+    <string name="repeat_mode_one">Videoyu tekrarla</string>
     <string name="repeat_mode_pause">Her videodan sonra oynatmayı duraklat</string>
     <string name="repeat_mode_pause_alt">Her oynatma listesi olmayan videodan sonra oynatmayı duraklat</string>
     <string name="repeat_mode_none">Videodan sonra oynatmayı durdur</string>
@@ -273,7 +273,6 @@
     <string name="focus_on_search_results">Arama sonuçlarına otomatik odaklan</string>
     <string name="context_menu">İçerik menüsü</string>
     <string name="add_remove_from_recent_playlist">Son oynatma listesine Ekle/Kaldır</string>
-    <string name="player_ending_time">Bitiş saati: %s</string>
     <string name="hide_settings_section">Ayarlar bölümünü gizle (tehlikeli!)</string>
     <string name="volume">Ses %s%%</string>
     <string name="auto_frame_rate_sec">%s sn</string>
