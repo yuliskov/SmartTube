@@ -174,7 +174,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             if (isPositionAtSegmentStart(getController().getPositionMs(), segment)) {
                 isSegmentFound = true;
                 foundSegment = segment;
-                Integer resId = mContentBlockData.getLocalizedResMapping().get(segment.getCategory());
+                Integer resId = mContentBlockData.getLocalizedRes(segment.getCategory());
                 String localizedCategory = resId != null ? getActivity().getString(resId) : segment.getCategory();
 
                 int type = mContentBlockData.getAction(segment.getCategory());
@@ -243,7 +243,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         settingsPresenter.showDialog(ContentBlockData.SPONSOR_BLOCK_NAME);
     }
 
-    public List<SeekBarSegment> toSeekBarSegments(List<SponsorSegment> segments) {
+    private List<SeekBarSegment> toSeekBarSegments(List<SponsorSegment> segments) {
         if (segments == null) {
             return null;
         }
@@ -256,7 +256,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             double endRatio = (double) sponsorSegment.getEndMs() / getController().getLengthMs(); // Range: [0, 1]
             seekBarSegment.startProgress = (int) (startRatio * Integer.MAX_VALUE); // Could safely cast to int
             seekBarSegment.endProgress = (int) (endRatio * Integer.MAX_VALUE); // Could safely cast to int
-            seekBarSegment.color = ContextCompat.getColor(getActivity(), mContentBlockData.getColorResMapping().get(sponsorSegment.getCategory()));
+            seekBarSegment.color = ContextCompat.getColor(getActivity(), mContentBlockData.getColorRes(sponsorSegment.getCategory()));
             result.add(seekBarSegment);
         }
 

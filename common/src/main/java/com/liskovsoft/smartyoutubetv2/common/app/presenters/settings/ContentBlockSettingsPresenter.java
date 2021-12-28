@@ -87,7 +87,7 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
 
         for (SegmentAction action : actions) {
             options.add(UiOptionItem.from(
-                    getColoredString(mContentBlockData.getLocalizedResMapping().get(action.segmentCategory), mContentBlockData.getColorResMapping().get(action.segmentCategory)),
+                    getColoredString(mContentBlockData.getLocalizedRes(action.segmentCategory), mContentBlockData.getColorRes(action.segmentCategory)),
                     optionItem -> {
                         AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getContext());
                         dialogPresenter.clear();
@@ -106,7 +106,7 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
                                 optionItem1 -> action.actionType = ContentBlockData.ACTION_SHOW_DIALOG,
                                 action.actionType == ContentBlockData.ACTION_SHOW_DIALOG));
 
-                        String title = getContext().getString(mContentBlockData.getLocalizedResMapping().get(action.segmentCategory));
+                        String title = getContext().getString(mContentBlockData.getLocalizedRes(action.segmentCategory));
 
                         dialogPresenter.appendRadioCategory(title, nestedOptions);
                         dialogPresenter.showDialog(title, mContentBlockData::persistActions);
@@ -122,14 +122,14 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         Set<String> categories = mContentBlockData.getCategories();
 
         for (CharSequence[] pair : new CharSequence[][] {
-                {getColoredString(R.string.content_block_sponsor, R.color.green), SponsorSegment.CATEGORY_SPONSOR},
-                {getColoredString(R.string.content_block_intro, R.color.cyan), SponsorSegment.CATEGORY_INTRO},
-                {getColoredString(R.string.content_block_outro, R.color.blue), SponsorSegment.CATEGORY_OUTRO},
-                {getColoredString(R.string.content_block_self_promo, R.color.yellow), SponsorSegment.CATEGORY_SELF_PROMO},
-                {getColoredString(R.string.content_block_interaction, R.color.magenta), SponsorSegment.CATEGORY_INTERACTION},
-                {getColoredString(R.string.content_block_music_off_topic, R.color.brown), SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC},
-                {getColoredString(R.string.content_block_preview_recap, R.color.light_blue), SponsorSegment.CATEGORY_PREVIEW_RECAP},
-                {getColoredString(R.string.content_block_highlight, R.color.white), SponsorSegment.CATEGORY_HIGHLIGHT}
+                {getColoredString(R.string.content_block_sponsor, mContentBlockData.getColorRes(SponsorSegment.CATEGORY_SPONSOR)), SponsorSegment.CATEGORY_SPONSOR},
+                {getColoredString(R.string.content_block_intro, mContentBlockData.getColorRes(SponsorSegment.CATEGORY_INTRO)), SponsorSegment.CATEGORY_INTRO},
+                {getColoredString(R.string.content_block_outro, mContentBlockData.getColorRes(SponsorSegment.CATEGORY_OUTRO)), SponsorSegment.CATEGORY_OUTRO},
+                {getColoredString(R.string.content_block_self_promo, mContentBlockData.getColorRes(SponsorSegment.CATEGORY_SELF_PROMO)), SponsorSegment.CATEGORY_SELF_PROMO},
+                {getColoredString(R.string.content_block_interaction, mContentBlockData.getColorRes(SponsorSegment.CATEGORY_INTERACTION)), SponsorSegment.CATEGORY_INTERACTION},
+                {getColoredString(R.string.content_block_music_off_topic, mContentBlockData.getColorRes(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC)), SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC},
+                {getColoredString(R.string.content_block_preview_recap, mContentBlockData.getColorRes(SponsorSegment.CATEGORY_PREVIEW_RECAP)), SponsorSegment.CATEGORY_PREVIEW_RECAP},
+                {getColoredString(R.string.content_block_highlight, mContentBlockData.getColorRes(SponsorSegment.CATEGORY_HIGHLIGHT)), SponsorSegment.CATEGORY_HIGHLIGHT}
         }) {
             options.add(UiOptionItem.from(pair[0],
                     optionItem -> {

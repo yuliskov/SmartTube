@@ -73,34 +73,25 @@ public class ContentBlockData {
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_HIGHLIGHT, R.color.white);
     }
 
-    public Map<String, Integer> getLocalizedResMapping() {
-        return mSegmentLocalizedMapping;
+    public Integer getLocalizedRes(String segmentCategory) {
+        return mSegmentLocalizedMapping.get(segmentCategory);
     }
 
-    public Map<String, Integer> getColorResMapping() {
-        return mSegmentColorMapping;
-    }
-
-    public boolean isSponsorBlockEnabled() {
-        return mIsSponsorBlockEnabled;
-    }
-
-    public void enableSponsorBlock(boolean enabled) {
-        mIsSponsorBlockEnabled = enabled;
-        persistData();
+    public Integer getColorRes(String segmentCategory) {
+        return mSegmentColorMapping.get(segmentCategory);
     }
 
     public Set<String> getCategories() {
         return mCategories;
     }
 
-    public void addCategory(String categoryKey) {
-        mCategories.add(categoryKey);
+    public void addCategory(String segmentCategory) {
+        mCategories.add(segmentCategory);
         persistData();
     }
 
-    public void removeCategory(String categoryKey) {
-        mCategories.remove(categoryKey);
+    public void removeCategory(String segmentCategory) {
+        mCategories.remove(segmentCategory);
         persistData();
     }
 
@@ -116,6 +107,15 @@ public class ContentBlockData {
         }
 
         return ACTION_DO_NOTHING;
+    }
+
+    public boolean isSponsorBlockEnabled() {
+        return mIsSponsorBlockEnabled;
+    }
+
+    public void enableSponsorBlock(boolean enabled) {
+        mIsSponsorBlockEnabled = enabled;
+        persistData();
     }
 
     public void persistActions() {
