@@ -115,7 +115,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     }
 
     private void updateSponsorSegmentsAndWatch(Video item) {
-        if (item == null || item.videoId == null || mContentBlockData.getCategories().isEmpty()) {
+        if (item == null || item.videoId == null || mContentBlockData.getEnabledCategories().isEmpty()) {
             mSponsorSegments = null;
             return;
         }
@@ -123,7 +123,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         // Reset colors
         getController().setSeekBarSegments(null);
 
-        mSegmentsAction = mMediaItemManager.getSponsorSegmentsObserve(item.videoId, mContentBlockData.getCategories())
+        mSegmentsAction = mMediaItemManager.getSponsorSegmentsObserve(item.videoId, mContentBlockData.getEnabledCategories())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -133,7 +133,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                             if (mContentBlockData.isColorMarkersEnabled()) {
                                 getController().setSeekBarSegments(toSeekBarSegments(segments));
                             }
-                            if (mContentBlockData.isAnyActionEnabled()) {
+                            if (mContentBlockData.isActionsEnabled()) {
                                 startPlaybackWatcher();
                             }
                         },
@@ -251,6 +251,10 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         List<SeekBarSegment> result = new ArrayList<>();
 
         for (SponsorSegment sponsorSegment : segments) {
+            if (!mContentBlockData.isColorMarkerEnabled(sponsorSegment.getCategory())) {
+                continue;
+            }
+
             SeekBarSegment seekBarSegment = new SeekBarSegment();
             double startRatio = (double) sponsorSegment.getStartMs() / getController().getLengthMs(); // Range: [0, 1]
             double endRatio = (double) sponsorSegment.getEndMs() / getController().getLengthMs(); // Range: [0, 1]

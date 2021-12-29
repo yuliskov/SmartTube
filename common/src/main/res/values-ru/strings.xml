@@ -301,4 +301,5 @@
     <string name="content_block_action_only_skip">Только пропуск</string>
     <string name="content_block_action_toast">Пропуск с уведомлением</string>
     <string name="content_block_action_dialog">Диалог подтверждения</string>
+    <string name="content_block_filler">Филлерная сцена</string>
 </resources>

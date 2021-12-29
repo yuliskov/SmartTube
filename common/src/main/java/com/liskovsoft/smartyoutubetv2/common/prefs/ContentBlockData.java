@@ -11,6 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.Conten
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
@@ -18,6 +19,7 @@ import java.util.Set;
 public class ContentBlockData {
     public static final String SPONSOR_BLOCK_NAME = "SponsorBlock";
     public static final String SPONSOR_BLOCK_URL = "https://sponsor.ajay.app";
+    public static final int ACTION_UNDEFINED = -1;
     public static final int ACTION_SKIP_ONLY = 0;
     public static final int ACTION_SKIP_WITH_TOAST = 1;
     public static final int ACTION_SHOW_DIALOG = 2;
@@ -27,17 +29,18 @@ public class ContentBlockData {
     private static ContentBlockData sInstance;
     private final AppPrefs mAppPrefs;
     private boolean mIsSponsorBlockEnabled;
-    private final Set<String> mCategories = new LinkedHashSet<>();
+    private final Set<String> mColorCategories = new LinkedHashSet<>();
     private final Set<SegmentAction> mActions = new LinkedHashSet<>();
     private boolean mIsSkipEachSegmentOnceEnabled;
-    private boolean mIsColorMarkersEnabled;
     private Map<String, Integer> mSegmentLocalizedMapping;
     private Map<String, Integer> mSegmentColorMapping;
+    private Set<String> mAllCategories;
 
     private ContentBlockData(Context context) {
         mAppPrefs = AppPrefs.instance(context);
         initLocalizedMapping();
         initColorMapping();
+        initAllCategories();
         restoreState();
     }
 
@@ -59,6 +62,7 @@ public class ContentBlockData {
         mSegmentLocalizedMapping.put(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC, R.string.content_block_music_off_topic);
         mSegmentLocalizedMapping.put(SponsorSegment.CATEGORY_PREVIEW_RECAP, R.string.content_block_preview_recap);
         mSegmentLocalizedMapping.put(SponsorSegment.CATEGORY_HIGHLIGHT, R.string.content_block_highlight);
+        mSegmentLocalizedMapping.put(SponsorSegment.CATEGORY_FILLER, R.string.content_block_filler);
     }
 
     private void initColorMapping() {
@@ -71,6 +75,20 @@ public class ContentBlockData {
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC, R.color.brown);
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_PREVIEW_RECAP, R.color.light_blue);
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_HIGHLIGHT, R.color.white);
+        mSegmentColorMapping.put(SponsorSegment.CATEGORY_FILLER, R.color.grey);
+    }
+
+    private void initAllCategories() {
+        mAllCategories = new LinkedHashSet<>();
+        mAllCategories.add(SponsorSegment.CATEGORY_SPONSOR);
+        mAllCategories.add(SponsorSegment.CATEGORY_INTRO);
+        mAllCategories.add(SponsorSegment.CATEGORY_OUTRO);
+        mAllCategories.add(SponsorSegment.CATEGORY_INTERACTION);
+        mAllCategories.add(SponsorSegment.CATEGORY_SELF_PROMO);
+        mAllCategories.add(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC);
+        mAllCategories.add(SponsorSegment.CATEGORY_PREVIEW_RECAP);
+        mAllCategories.add(SponsorSegment.CATEGORY_HIGHLIGHT);
+        mAllCategories.add(SponsorSegment.CATEGORY_FILLER);
     }
 
     public Integer getLocalizedRes(String segmentCategory) {
@@ -81,18 +99,40 @@ public class ContentBlockData {
         return mSegmentColorMapping.get(segmentCategory);
     }
 
-    public Set<String> getCategories() {
-        return mCategories;
+    public Set<String> getAllCategories() {
+        return Collections.unmodifiableSet(mAllCategories);
     }
 
-    public void addCategory(String segmentCategory) {
-        mCategories.add(segmentCategory);
+    public Set<String> getEnabledCategories() {
+        Set<String> enabledCategories = new HashSet<>();
+
+        for (SegmentAction action : mActions) {
+            if (action.actionType != ACTION_DO_NOTHING) {
+                enabledCategories.add(action.segmentCategory);
+            }
+        }
+
+        enabledCategories.addAll(mColorCategories);
+
+        return Collections.unmodifiableSet(enabledCategories);
+    }
+
+    public void enableColorMarker(String segmentCategory) {
+        mColorCategories.add(segmentCategory);
         persistData();
     }
 
-    public void removeCategory(String segmentCategory) {
-        mCategories.remove(segmentCategory);
+    public void disableColorMarker(String segmentCategory) {
+        mColorCategories.remove(segmentCategory);
         persistData();
+    }
+
+    public boolean isColorMarkerEnabled(String segmentCategory) {
+        return mColorCategories.contains(segmentCategory);
+    }
+
+    public boolean isColorMarkersEnabled() {
+        return !mColorCategories.isEmpty();
     }
 
     public Set<SegmentAction> getActions() {
@@ -106,7 +146,7 @@ public class ContentBlockData {
             }
         }
 
-        return ACTION_DO_NOTHING;
+        return ACTION_UNDEFINED;
     }
 
     public boolean isSponsorBlockEnabled() {
@@ -122,7 +162,7 @@ public class ContentBlockData {
         persistData();
     }
 
-    public boolean isAnyActionEnabled() {
+    public boolean isActionsEnabled() {
         for (SegmentAction action : mActions) {
             if (action.actionType != ACTION_DO_NOTHING) {
                 return true;
@@ -141,15 +181,6 @@ public class ContentBlockData {
         persistData();
     }
 
-    public boolean isColorMarkersEnabled() {
-        return mIsColorMarkersEnabled;
-    }
-
-    public void enableColorMarkers(boolean enabled) {
-        mIsColorMarkersEnabled = enabled;
-        persistData();
-    }
-
     private void restoreState() {
         String data = mAppPrefs.getData(CONTENT_BLOCK_DATA);
 
@@ -158,29 +189,19 @@ public class ContentBlockData {
         mIsSponsorBlockEnabled = Helpers.parseBoolean(split, 0, VERSION.SDK_INT > 19); // Android 4 may have memory problems
         String categories = Helpers.parseStr(split, 2);
         mIsSkipEachSegmentOnceEnabled = Helpers.parseBoolean(split, 3, true);
-        mIsColorMarkersEnabled = Helpers.parseBoolean(split, 4, true);
+        // colorMarkers: index 4
         String actions = Helpers.parseStr(split, 6);
 
         if (categories != null) {
             String[] categoriesArr = Helpers.splitArray(categories);
 
-            mCategories.clear();
+            mColorCategories.clear();
 
-            mCategories.addAll(Arrays.asList(categoriesArr));
+            mColorCategories.addAll(Arrays.asList(categoriesArr));
         } else {
-            mCategories.clear();
+            mColorCategories.clear();
 
-            mCategories.addAll(Arrays.asList(
-                        SponsorSegment.CATEGORY_SPONSOR,
-                        SponsorSegment.CATEGORY_INTRO,
-                        SponsorSegment.CATEGORY_OUTRO,
-                        SponsorSegment.CATEGORY_INTERACTION,
-                        SponsorSegment.CATEGORY_SELF_PROMO,
-                        SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC,
-                        SponsorSegment.CATEGORY_PREVIEW_RECAP,
-                        SponsorSegment.CATEGORY_HIGHLIGHT
-                    )
-            );
+            mColorCategories.addAll(mAllCategories);
         }
 
         if (actions != null) {
@@ -191,26 +212,22 @@ public class ContentBlockData {
             for (String action : actionsArr) {
                 mActions.add(SegmentAction.from(action));
             }
-        } else {
-            mActions.clear();
+        }
 
-            mActions.add(SegmentAction.from(SponsorSegment.CATEGORY_SPONSOR, ACTION_SKIP_WITH_TOAST));
-            mActions.add(SegmentAction.from(SponsorSegment.CATEGORY_INTRO, ACTION_SKIP_WITH_TOAST));
-            mActions.add(SegmentAction.from(SponsorSegment.CATEGORY_OUTRO, ACTION_SKIP_WITH_TOAST));
-            mActions.add(SegmentAction.from(SponsorSegment.CATEGORY_INTERACTION, ACTION_SKIP_WITH_TOAST));
-            mActions.add(SegmentAction.from(SponsorSegment.CATEGORY_SELF_PROMO, ACTION_SKIP_WITH_TOAST));
-            mActions.add(SegmentAction.from(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC, ACTION_SKIP_WITH_TOAST));
-            mActions.add(SegmentAction.from(SponsorSegment.CATEGORY_PREVIEW_RECAP, ACTION_SKIP_WITH_TOAST));
-            mActions.add(SegmentAction.from(SponsorSegment.CATEGORY_HIGHLIGHT, ACTION_SKIP_WITH_TOAST));
+        // Easy add new segments
+        for (String segmentCategory : mAllCategories) {
+            if (getAction(segmentCategory) == ACTION_UNDEFINED) {
+                mActions.add(SegmentAction.from(segmentCategory, ACTION_SKIP_WITH_TOAST));
+            }
         }
     }
 
     private void persistData() {
-        String categories = Helpers.mergeArray(mCategories.toArray());
+        String categories = Helpers.mergeArray(mColorCategories.toArray());
         String actions = Helpers.mergeArray(mActions.toArray());
 
         mAppPrefs.setData(CONTENT_BLOCK_DATA, Helpers.mergeObject(
-                mIsSponsorBlockEnabled, null, categories, mIsSkipEachSegmentOnceEnabled, mIsColorMarkersEnabled, null, actions
+                mIsSponsorBlockEnabled, null, categories, mIsSkipEachSegmentOnceEnabled, null, null, actions
         ));
     }
 }

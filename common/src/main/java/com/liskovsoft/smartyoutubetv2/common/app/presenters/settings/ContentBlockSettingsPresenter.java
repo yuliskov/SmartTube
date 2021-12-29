@@ -39,8 +39,8 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.clear();
         
         appendSponsorBlockSwitch(settingsPresenter);
-        appendActionTypeSection(settingsPresenter);
-        appendCategoriesSection(settingsPresenter);
+        appendActionsSection(settingsPresenter);
+        appendColorMarkersSection(settingsPresenter);
         appendMiscSection(settingsPresenter);
 
         settingsPresenter.showDialog(ContentBlockData.SPONSOR_BLOCK_NAME);
@@ -81,7 +81,7 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
     //    settingsPresenter.appendStringsCategory(getContext().getString(R.string.content_block_action_type), options);
     //}
 
-    private void appendActionTypeSection(AppDialogPresenter settingsPresenter) {
+    private void appendActionsSection(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
         Set<SegmentAction> actions = mContentBlockData.getActions();
@@ -117,33 +117,22 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.content_block_action_type), options);
     }
 
-    private void appendCategoriesSection(AppDialogPresenter settingsPresenter) {
+    private void appendColorMarkersSection(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        Set<String> categories = mContentBlockData.getCategories();
-
-        for (CharSequence[] pair : new CharSequence[][] {
-                {getColoredString(R.string.content_block_sponsor, mContentBlockData.getColorRes(SponsorSegment.CATEGORY_SPONSOR)), SponsorSegment.CATEGORY_SPONSOR},
-                {getColoredString(R.string.content_block_intro, mContentBlockData.getColorRes(SponsorSegment.CATEGORY_INTRO)), SponsorSegment.CATEGORY_INTRO},
-                {getColoredString(R.string.content_block_outro, mContentBlockData.getColorRes(SponsorSegment.CATEGORY_OUTRO)), SponsorSegment.CATEGORY_OUTRO},
-                {getColoredString(R.string.content_block_self_promo, mContentBlockData.getColorRes(SponsorSegment.CATEGORY_SELF_PROMO)), SponsorSegment.CATEGORY_SELF_PROMO},
-                {getColoredString(R.string.content_block_interaction, mContentBlockData.getColorRes(SponsorSegment.CATEGORY_INTERACTION)), SponsorSegment.CATEGORY_INTERACTION},
-                {getColoredString(R.string.content_block_music_off_topic, mContentBlockData.getColorRes(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC)), SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC},
-                {getColoredString(R.string.content_block_preview_recap, mContentBlockData.getColorRes(SponsorSegment.CATEGORY_PREVIEW_RECAP)), SponsorSegment.CATEGORY_PREVIEW_RECAP},
-                {getColoredString(R.string.content_block_highlight, mContentBlockData.getColorRes(SponsorSegment.CATEGORY_HIGHLIGHT)), SponsorSegment.CATEGORY_HIGHLIGHT}
-        }) {
-            options.add(UiOptionItem.from(pair[0],
+        for (String segmentCategory : mContentBlockData.getAllCategories()) {
+            options.add(UiOptionItem.from(getColoredString(mContentBlockData.getLocalizedRes(segmentCategory), mContentBlockData.getColorRes(segmentCategory)),
                     optionItem -> {
                         if (optionItem.isSelected()) {
-                            mContentBlockData.addCategory((String) pair[1]);
+                            mContentBlockData.enableColorMarker(segmentCategory);
                         } else {
-                            mContentBlockData.removeCategory((String) pair[1]);
+                            mContentBlockData.disableColorMarker(segmentCategory);
                         }
                     },
-                    categories.contains((String) pair[1])));
+                    mContentBlockData.isColorMarkerEnabled(segmentCategory)));
         }
 
-        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.content_block_categories), options);
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.sponsor_color_markers), options);
     }
 
     private void appendMiscSection(AppDialogPresenter settingsPresenter) {
@@ -153,17 +142,17 @@ public class ContentBlockSettingsPresenter extends BasePresenter<Void> {
                 optionItem -> mContentBlockData.enableSkipEachSegmentOnce(optionItem.isSelected()),
                 mContentBlockData.isSkipEachSegmentOnceEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.sponsor_color_markers),
-                optionItem -> mContentBlockData.enableColorMarkers(optionItem.isSelected()),
-                mContentBlockData.isColorMarkersEnabled()));
+        //options.add(UiOptionItem.from(getContext().getString(R.string.sponsor_color_markers),
+        //        optionItem -> mContentBlockData.enableColorMarkers(optionItem.isSelected()),
+        //        mContentBlockData.isColorMarkersEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 
-    private CharSequence getColoredStringOld(int strResId, int colorResId) {
-        return mContentBlockData.isColorMarkersEnabled() ?
-                Utils.color(getContext().getString(strResId), ContextCompat.getColor(getContext(), colorResId)) : getContext().getString(strResId);
-    }
+    //private CharSequence getColoredStringOld(int strResId, int colorResId) {
+    //    return mContentBlockData.isColorMarkersEnabled() ?
+    //            Utils.color(getContext().getString(strResId), ContextCompat.getColor(getContext(), colorResId)) : getContext().getString(strResId);
+    //}
 
     private CharSequence getColoredString(int strResId, int colorResId) {
         String origin = getContext().getString(strResId);
