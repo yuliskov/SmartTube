@@ -305,6 +305,6 @@
     <string name="content_block_action_only_skip">Only skip</string>
     <string name="content_block_action_toast">Skip with notification</string>
     <string name="content_block_action_dialog">Show confirmation dialog</string>
-    <string name="content_block_filler">Filler scene</string>
+    <string name="content_block_filler">Off-topic (filler)</string>
     <string name="keyboard_auto_show">Show keyboard automatically</string>
 </resources>

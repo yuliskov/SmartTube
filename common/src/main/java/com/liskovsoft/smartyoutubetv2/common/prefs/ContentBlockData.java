@@ -187,13 +187,14 @@ public class ContentBlockData {
         String[] split = Helpers.splitObjectLegacy(data);
 
         mIsSponsorBlockEnabled = Helpers.parseBoolean(split, 0, VERSION.SDK_INT > 19); // Android 4 may have memory problems
-        String categories = Helpers.parseStr(split, 2);
+        // categories: index 2
         mIsSkipEachSegmentOnceEnabled = Helpers.parseBoolean(split, 3, true);
         // colorMarkers: index 4
         String actions = Helpers.parseStr(split, 6);
+        String colorCategories = Helpers.parseStr(split, 7);
 
-        if (categories != null) {
-            String[] categoriesArr = Helpers.splitArray(categories);
+        if (colorCategories != null) {
+            String[] categoriesArr = Helpers.splitArray(colorCategories);
 
             mColorCategories.clear();
 
@@ -223,11 +224,11 @@ public class ContentBlockData {
     }
 
     private void persistData() {
-        String categories = Helpers.mergeArray(mColorCategories.toArray());
+        String colorCategories = Helpers.mergeArray(mColorCategories.toArray());
         String actions = Helpers.mergeArray(mActions.toArray());
 
         mAppPrefs.setData(CONTENT_BLOCK_DATA, Helpers.mergeObject(
-                mIsSponsorBlockEnabled, null, categories, mIsSkipEachSegmentOnceEnabled, null, null, actions
+                mIsSponsorBlockEnabled, null, null, mIsSkipEachSegmentOnceEnabled, null, null, actions, colorCategories
         ));
     }
 }
