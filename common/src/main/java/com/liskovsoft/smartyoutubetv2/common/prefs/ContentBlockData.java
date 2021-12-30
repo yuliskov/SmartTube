@@ -72,10 +72,10 @@ public class ContentBlockData {
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_OUTRO, R.color.blue);
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_SELF_PROMO, R.color.yellow);
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_INTERACTION, R.color.magenta);
-        mSegmentColorMapping.put(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC, R.color.brown);
+        mSegmentColorMapping.put(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC, R.color.orange_peel);
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_PREVIEW_RECAP, R.color.light_blue);
         mSegmentColorMapping.put(SponsorSegment.CATEGORY_HIGHLIGHT, R.color.white);
-        mSegmentColorMapping.put(SponsorSegment.CATEGORY_FILLER, R.color.grey);
+        mSegmentColorMapping.put(SponsorSegment.CATEGORY_FILLER, R.color.electric_violet);
     }
 
     private void initAllCategories() {

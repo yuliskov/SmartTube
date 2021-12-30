@@ -10,6 +10,8 @@
     <color name="dark_red">#B31217</color>
     <color name="transparent">#00FFFFFF</color>
     <color name="light_blue">#2793E6</color>
+    <color name="electric_violet">#7300ff</color>
+    <color name="orange_peel">#ff9900</color>
     <!--<color name="yellow">#CDDC39</color>-->
     <color name="light_grey">#E4E4E4</color>
     <color name="leanback">#0096A6</color>
