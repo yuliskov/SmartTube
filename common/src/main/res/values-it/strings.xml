@@ -305,4 +305,6 @@
     <string name="content_block_action_only_skip">Salta direttamente</string>
     <string name="content_block_action_toast">Salta con notifica</string>
     <string name="content_block_action_dialog">Mostra la finestra di conferma</string>
+    <string name="content_block_filler">Fuori tema (riempitivo)</string>
+    <string name="keyboard_auto_show">Mostra automaticamente la tastiera</string>
 </resources>
