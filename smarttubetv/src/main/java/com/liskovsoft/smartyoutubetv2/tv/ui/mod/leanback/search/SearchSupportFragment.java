@@ -337,13 +337,15 @@ public class SearchSupportFragment extends Fragment {
         mSearchTextEditor.setSelectAllOnFocus(true); // Select all on focus (easy clear previous search)
         mSearchTextEditor.setOnFocusChangeListener((v, focused) -> {
             Log.d(TAG, "on search field focused");
-            if (focused && mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
-                mRowsSupportFragment.getVerticalGridView().clearFocus();
 
-                if (getContext() != null) {
-                    Helpers.showKeyboard(getContext());
-                }
-            }
+            // BUG: focus lost with keyboard???
+            //if (focused && mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
+            //    mRowsSupportFragment.getVerticalGridView().clearFocus();
+            //
+            //    if (getContext() != null) {
+            //        Helpers.showKeyboard(getContext());
+            //    }
+            //}
         });
 
         // MOD: commit search button
