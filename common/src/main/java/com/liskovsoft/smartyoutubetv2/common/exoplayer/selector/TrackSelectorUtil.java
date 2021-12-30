@@ -5,17 +5,18 @@ import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.VideoTrack;
 
 import java.util.HashMap;
 
 public class TrackSelectorUtil {
-    public static final String CODEC_SHORT_AV1 = "av01";
-    public static final String CODEC_SHORT_AVC = "avc";
-    public static final String CODEC_SHORT_VP9 = "vp9";
-    public static final String CODEC_SHORT_VP9_HDR = "vp9.2";
-    public static final String CODEC_SHORT_MP4A = "mp4a";
-    public static final String CODEC_SHORT_VORBIS = "vorbis";
+    private static final String CODEC_SHORT_AV1 = "av01";
+    private static final String CODEC_SHORT_AVC = "avc";
+    private static final String CODEC_SHORT_VP9 = "vp9";
+    private static final String CODEC_SHORT_VP9_HDR = "vp9.2";
+    private static final String CODEC_SHORT_AV1_HDR_ENDING = "10.0.110.09.18.09.0";
+    private static final String CODEC_SHORT_AV1_HDR_ENDING2 = "10.0.110.09.16.09.0";
+    private static final String CODEC_SHORT_MP4A = "mp4a";
+    private static final String CODEC_SHORT_VORBIS = "vorbis";
     private static final String SEPARATOR = ", ";
     private static final HashMap<Integer, Integer> mResolutionMap = new HashMap<>();
 
@@ -104,7 +105,7 @@ public class TrackSelectorUtil {
             return false;
         }
 
-        return codec.equals(CODEC_SHORT_VP9_HDR);
+        return codec.equals(CODEC_SHORT_VP9_HDR) || Helpers.endsWith(codec, CODEC_SHORT_AV1_HDR_ENDING, CODEC_SHORT_AV1_HDR_ENDING2);
     }
 
     public static String extractCodec(Format format) {
