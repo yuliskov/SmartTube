@@ -334,7 +334,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 } else if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE && isMultiGridChannelUploadsSection()) {
                     removeItem(mCurrentVideo);
                 } else if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE && isSubscriptionsSection()) {
-                    removeItem(Video.findVideosByAuthor(videoItem.group, Video.extractAuthor(videoItem)));
+                    removeItem(Video.findVideosByAuthor(videoItem.group, videoItem.extractAuthor()));
                 }
             });
         }

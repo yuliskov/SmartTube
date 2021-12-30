@@ -196,22 +196,18 @@ public final class Video implements Parcelable {
         return video == null || video.videoId == null;
     }
 
-    public static String extractAuthor(Video video) {
-        if (video == null) {
-            return null;
-        }
-
+    public String extractAuthor() {
         String result = null;
 
-        if (video.author != null) {
-            result = video.author;
+        if (author != null) {
+            result = author;
         }
 
-        if (video.description != null) {
-            String[] split = video.description.split(TERTIARY_TEXT_DELIM);
+        if (description != null) {
+            String[] split = description.split(TERTIARY_TEXT_DELIM);
 
             if (split.length <= 1) {
-                result = video.description;
+                result = description;
             } else {
                 // First part may be a special label (4K, Stream, New etc)
                 // Two cases to detect label: 1) Description is long (4 items); 2) First item of description is too short (2 letters)
@@ -227,7 +223,7 @@ public final class Video implements Parcelable {
 
         if (group != null && group.getVideos() != null) {
             for (Video video : group.getVideos()) {
-                if (Helpers.equals(Video.extractAuthor(video), author)) {
+                if (Helpers.equals(video.extractAuthor(), author)) {
                     result.add(video);
                 }
             }

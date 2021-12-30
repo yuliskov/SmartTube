@@ -444,8 +444,8 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         section.channelId = video.channelId;
         // Trying to properly format channel playlists, mixes etc
         section.title = String.format("%s - %s",
-                video.title != null && isSectionItem ? video.title : groupTitle != null ? Video.extractAuthor(video) : video.title,
-                groupTitle != null ? groupTitle : Video.extractAuthor(video)
+                video.title != null && isSectionItem ? video.title : groupTitle != null ? video.extractAuthor() : video.title,
+                groupTitle != null ? groupTitle : video.extractAuthor()
         );
         section.cardImageUrl = video.cardImageUrl;
 
