@@ -306,4 +306,5 @@
     <string name="content_block_action_toast">Skip with notification</string>
     <string name="content_block_action_dialog">Show confirmation dialog</string>
     <string name="content_block_filler">Filler scene</string>
+    <string name="keyboard_auto_show">Show keyboard automatically</string>
 </resources>

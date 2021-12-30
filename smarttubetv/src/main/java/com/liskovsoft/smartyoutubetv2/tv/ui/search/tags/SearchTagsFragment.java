@@ -38,6 +38,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         setupEventListeners();
         setItemResultsAdapter(mItemResultsAdapter);
         setSearchTagsProvider(new MediaServiceSearchTagProvider());
+        enableKeyboardAutoShow(mSearchData.isKeyboardAutoShowEnabled());
     }
 
     private void setupEventListeners() {
