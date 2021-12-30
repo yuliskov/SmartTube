@@ -305,4 +305,6 @@
     <string name="content_block_action_only_skip">Nur Überspringen</string>
     <string name="content_block_action_toast">Überspringen mit Benachrichtigung</string>
     <string name="content_block_action_dialog">Bestätigungsdialog anzeigen</string>
+    <string name="content_block_filler">Off-Topic (Filler)</string>
+    <string name="keyboard_auto_show">Tastatur automatisch anzeigen</string>
 </resources>
