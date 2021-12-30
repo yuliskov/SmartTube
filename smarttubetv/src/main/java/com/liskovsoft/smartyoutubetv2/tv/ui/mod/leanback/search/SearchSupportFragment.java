@@ -328,20 +328,20 @@ public class SearchSupportFragment extends Fragment {
 
         mSearchTextEditor = mSearchBar.findViewById(R.id.lb_search_text_editor);
         mSearchTextEditor.setSelectAllOnFocus(true); // Select all on focus (easy clear previous search)
-        mSearchTextEditor.setOnFocusChangeListener((v, focused) -> {
-            Log.d(TAG, "on search field focused");
-
-            if (mIsKeyboardAutoShowEnabled && focused &&
-                    mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
-                mRowsSupportFragment.getVerticalGridView().clearFocus();
-
-                if (getContext() != null) {
-                    Helpers.showKeyboard(getContext());
-                }
-            }
-        });
+        //mSearchTextEditor.setOnFocusChangeListener((v, focused) -> {
+        //    Log.d(TAG, "on search field focused");
+        //
+        //    if (mIsKeyboardAutoShowEnabled && focused &&
+        //            mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
+        //        mRowsSupportFragment.getVerticalGridView().clearFocus();
+        //
+        //        if (getContext() != null) {
+        //            Helpers.showKeyboard(getContext());
+        //        }
+        //    }
+        //});
         // BUGFIX: focus lost with keyboard???
-        mSearchTextEditor.setOnKeyboardDismissListener(this::focusOnSearchField);
+        //mSearchTextEditor.setOnKeyboardDismissListener(this::focusOnSearchField);
 
         // MOD: commit search button
         mSearchOrbView = mSearchBar.findViewById(com.liskovsoft.smartyoutubetv2.tv.R.id.lb_search_bar_search_orb);
