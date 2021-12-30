@@ -305,4 +305,6 @@
     <string name="content_block_action_only_skip">Sadece atla</string>
     <string name="content_block_action_toast">Bildirimle atla</string>
     <string name="content_block_action_dialog">Onay mesajı göster</string>
+    <string name="content_block_filler">Konu dışı (boşluk doldurma)</string>
+    <string name="keyboard_auto_show">Klavyeyi otomatik olarak göster</string>
 </resources>
