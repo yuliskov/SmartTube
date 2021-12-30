@@ -2,6 +2,9 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.dialogs;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.leanback.preference.LeanbackPreferenceDialogFragment;
@@ -21,6 +24,7 @@ import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.RadioListPreferenceDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreference;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreferenceDialogFragment;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import java.util.List;
 
@@ -29,6 +33,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     private static final String TAG = AppDialogFragment.class.getSimpleName();
     private AppPreferenceFragment mPreferenceFragment;
     private AppDialogPresenter mSettingsPresenter;
+    private boolean mIsTransparent;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,6 +108,15 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     }
 
     @Override
+    public void enableTransparent(boolean enable) {
+        mIsTransparent = enable;
+
+        if (mPreferenceFragment != null) {
+            mPreferenceFragment.enableTransparent(enable);
+        }
+    }
+
+    @Override
     public void clear() {
         if (getActivity() != null) {
             getActivity().runOnUiThread(this::onPreferenceStartInitialScreen);
@@ -119,14 +133,16 @@ public class AppDialogFragment extends LeanbackSettingsFragment
 
         if (pref instanceof StringListPreference) {
             StringListPreference listPreference = (StringListPreference) pref;
-            LeanbackPreferenceDialogFragment f = StringListPreferenceDialogFragment.newInstanceStringList(listPreference.getKey());
+            StringListPreferenceDialogFragment f = StringListPreferenceDialogFragment.newInstanceStringList(listPreference.getKey());
+            f.enableTransparent(mIsTransparent);
             f.setTargetFragment(caller, 0);
             startPreferenceFragment(f);
 
             return true;
         } else if (pref instanceof ListPreference) {
             ListPreference listPreference = (ListPreference) pref;
-            LeanbackPreferenceDialogFragment f = RadioListPreferenceDialogFragment.newInstanceSingle(listPreference.getKey());
+            RadioListPreferenceDialogFragment f = RadioListPreferenceDialogFragment.newInstanceSingle(listPreference.getKey());
+            f.enableTransparent(mIsTransparent);
             f.setTargetFragment(caller, 0);
             startPreferenceFragment(f);
 
@@ -154,6 +170,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
         private AppDialogFragmentManager mManager;
         private String mTitle;
         private int mBackStackCount;
+        private boolean mIsTransparent;
 
         @Override
         public void onCreatePreferences(Bundle bundle, String s) {
@@ -164,6 +181,17 @@ public class AppDialogFragment extends LeanbackSettingsFragment
             initPrefs();
 
             Log.d(TAG, "onCreatePreferences");
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View view = super.onCreateView(inflater, container, savedInstanceState);
+
+            if (mIsTransparent && view != null) {
+                ViewUtil.setDialogTransparent(getActivity(), view);
+            }
+
+            return view;
         }
 
         private void initPrefs() {
@@ -241,6 +269,10 @@ public class AppDialogFragment extends LeanbackSettingsFragment
 
         public void setTitle(String title) {
             mTitle = title;
+        }
+
+        public void enableTransparent(boolean enable) {
+            mIsTransparent = enable;
         }
     }
 }

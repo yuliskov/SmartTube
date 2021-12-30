@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.util;
 
+import android.content.Context;
 import android.os.Build.VERSION;
 import android.text.BidiFormatter;
 import android.text.Layout;
@@ -7,12 +8,14 @@ import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.FocusHighlight;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.RowPresenter;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.BaseRequestOptions;
 import com.bumptech.glide.request.RequestOptions;
+import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextview.MarqueeTextView;
 
@@ -136,5 +139,13 @@ public class ViewUtil {
         return new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.NONE) // ensure start animation from beginning
                 .skipMemoryCache(true); // ensure start animation from beginning
+    }
+
+    public static void setDialogTransparent(Context context, View rootView) {
+        View title = rootView.findViewById(R.id.decor_title_container);
+        View mainFrame = rootView.findViewById(R.id.main_frame);
+        int bgColor = ContextCompat.getColor(context, R.color.transparent);
+        title.setBackgroundColor(bgColor);
+        mainFrame.setBackgroundColor(bgColor);
     }
 }

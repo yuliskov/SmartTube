@@ -21,6 +21,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     private final List<Runnable> mOnFinish = new ArrayList<>();
     private String mTitle;
     private long mTimeoutMs;
+    private boolean mIsTransparent;
 
     public static class SettingsCategory {
         public static SettingsCategory radioList(String title, List<OptionItem> items) {
@@ -105,6 +106,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
 
     public void clear() {
         mTimeoutMs = 0;
+        mIsTransparent = false;
         mHandler.removeCallbacks(mCloseDialog);
         mCategories.clear();
     }
@@ -113,6 +115,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     public void onViewInitialized() {
         getView().setTitle(mTitle);
         getView().addCategories(mCategories);
+        getView().enableTransparent(mIsTransparent);
     }
 
     public void showDialog() {
@@ -185,6 +188,10 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
 
     public void setCloseTimeoutMs(long timeoutMs) {
         mTimeoutMs = timeoutMs;
+    }
+
+    public void enableTransparent(boolean enable) {
+        mIsTransparent = enable;
     }
 
     public boolean isEmpty() {

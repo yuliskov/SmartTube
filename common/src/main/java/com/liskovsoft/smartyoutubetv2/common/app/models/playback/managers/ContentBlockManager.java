@@ -240,6 +240,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         settingsPresenter.appendSingleButton(cancelOption);
         settingsPresenter.setCloseTimeoutMs(skipPositionMs - getController().getPositionMs());
 
+        settingsPresenter.enableTransparent(true);
         settingsPresenter.showDialog(ContentBlockData.SPONSOR_BLOCK_NAME);
     }
 
