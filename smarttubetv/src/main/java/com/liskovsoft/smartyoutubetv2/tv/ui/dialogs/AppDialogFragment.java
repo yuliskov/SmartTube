@@ -131,6 +131,8 @@ public class AppDialogFragment extends LeanbackSettingsFragment
             return false;
         }
 
+        // NOTE: if you need transparent CheckedList then you should subclass it manually.
+
         if (pref instanceof StringListPreference) {
             StringListPreference listPreference = (StringListPreference) pref;
             StringListPreferenceDialogFragment f = StringListPreferenceDialogFragment.newInstanceStringList(listPreference.getKey());
