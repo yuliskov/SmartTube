@@ -232,7 +232,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         );
 
         OptionItem cancelOption = UiOptionItem.from(
-                getActivity().getString(R.string.cancel_segment_skip),
+                getActivity().getString(R.string.cancel_dialog),
                 option -> settingsPresenter.closeDialog()
         );
 
