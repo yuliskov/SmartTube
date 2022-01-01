@@ -16,7 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader.MetadataListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -46,7 +46,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     private static final int SUBTITLE_STYLES_ID = 45;
     private final Handler mHandler;
     private final MediaItemManager mMediaItemManager;
-    private final VideoLoader mVideoLoader;
+    private final VideoLoaderManager mVideoLoader;
     private boolean mEngineReady;
     private boolean mDebugViewEnabled;
     private PlayerData mPlayerData;
@@ -65,7 +65,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         }
     };
 
-    public PlayerUIManager(VideoLoader videoLoader) {
+    public PlayerUIManager(VideoLoaderManager videoLoader) {
         mVideoLoader = videoLoader;
         mHandler = new Handler(Looper.getMainLooper());
 

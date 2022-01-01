@@ -31,12 +31,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VideoLoader extends PlayerEventListenerHelper {
-    private static final String TAG = VideoLoader.class.getSimpleName();
+public class VideoLoaderManager extends PlayerEventListenerHelper {
+    private static final String TAG = VideoLoaderManager.class.getSimpleName();
     private static final int BUFFERING_CHECK_MS = 5_000;
     private final Playlist mPlaylist;
     private final Handler mHandler;
-    private final SuggestionsLoader mSuggestionsLoader;
+    private final SuggestionsLoaderManager mSuggestionsLoader;
     private Video mLastVideo;
     private long mPrevErrorTimeMs;
     private PlayerData mPlayerData;
@@ -58,7 +58,7 @@ public class VideoLoader extends PlayerEventListenerHelper {
         }
     };
 
-    public VideoLoader(SuggestionsLoader suggestionsLoader) {
+    public VideoLoaderManager(SuggestionsLoaderManager suggestionsLoader) {
         mSuggestionsLoader = suggestionsLoader;
         mPlaylist = Playlist.instance();
         mHandler = new Handler(Looper.getMainLooper());

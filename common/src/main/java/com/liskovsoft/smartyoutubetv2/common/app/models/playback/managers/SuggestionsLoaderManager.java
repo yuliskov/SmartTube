@@ -21,8 +21,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class SuggestionsLoader extends PlayerEventListenerHelper {
-    private static final String TAG = SuggestionsLoader.class.getSimpleName();
+public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
+    private static final String TAG = SuggestionsLoaderManager.class.getSimpleName();
     private final Set<MetadataListener> mListeners = new HashSet<>();
     private Disposable mMetadataAction;
     private Disposable mScrollAction;

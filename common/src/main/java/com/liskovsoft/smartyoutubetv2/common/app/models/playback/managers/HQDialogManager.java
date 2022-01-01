@@ -36,11 +36,11 @@ public class HQDialogManager extends PlayerEventListenerHelper {
     private final Map<Integer, OptionCategory> mCategories = new LinkedHashMap<>();
     private final Map<Integer, OptionCategory> mCategoriesInt = new LinkedHashMap<>();
     private final Set<Runnable> mHideListeners = new HashSet<>();
-    private final StateUpdater mStateUpdater;
+    private final VideoStateManager mStateUpdater;
     private PlayerData mPlayerData;
     private AppDialogPresenter mAppDialogPresenter;;
 
-    public HQDialogManager(StateUpdater stateUpdater) {
+    public HQDialogManager(VideoStateManager stateUpdater) {
         mStateUpdater = stateUpdater;
     }
 

@@ -25,8 +25,8 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     private static final String TAG = RemoteControlManager.class.getSimpleName();
     private final RemoteManager mRemoteManager;
     private final RemoteControlData mRemoteControlData;
-    private final SuggestionsLoader mSuggestionsLoader;
-    private final VideoLoader mVideoLoader;
+    private final SuggestionsLoaderManager mSuggestionsLoader;
+    private final VideoLoaderManager mVideoLoader;
     private Disposable mListeningAction;
     private Disposable mPostStartPlayAction;
     private Disposable mPostStateAction;
@@ -35,7 +35,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     private boolean mConnected;
     private int mIsGlobalVolumeWorking = -1;
 
-    public RemoteControlManager(Context context, SuggestionsLoader suggestionsLoader, VideoLoader videoLoader) {
+    public RemoteControlManager(Context context, SuggestionsLoaderManager suggestionsLoader, VideoLoaderManager videoLoader) {
         MediaService mediaService = YouTubeMediaService.instance();
         mSuggestionsLoader = suggestionsLoader;
         mVideoLoader = videoLoader;

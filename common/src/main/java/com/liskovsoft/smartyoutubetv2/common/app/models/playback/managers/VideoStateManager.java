@@ -1,53 +1,40 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
-import androidx.annotation.NonNull;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
-import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
-import com.liskovsoft.sharedutils.rx.RxUtils;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
-import java.util.Map;
-
-public class StateUpdater extends PlayerEventListenerHelper {
-    private static final String TAG = StateUpdater.class.getSimpleName();
-    private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
-    private static final int MAX_PERSISTENT_STATE_SIZE = 30;
-    private static final long LIVE_THRESHOLD_MS = 60_000;
+public class VideoStateManager extends PlayerEventListenerHelper {
+    private static final String TAG = VideoStateManager.class.getSimpleName();
     private boolean mIsPlayEnabled;
     private Video mVideo;
     private FormatItem mTempVideoFormat;
-    // Don't store state inside Video object.
-    // As one video might correspond to multiple Video objects.
-    private final Map<String, State> mStates = Utils.createLRUMap(MAX_PERSISTENT_STATE_SIZE);
-    private AppPrefs mPrefs;
     private Disposable mHistoryAction;
     private PlayerData mPlayerData;
+    private VideoStateService mStateService;
     private boolean mIsPlayBlocked;
     private float mVolume = 1;
 
     @Override
     public void onInitDone() { // called each time a video opened from the browser
-        mPrefs = AppPrefs.instance(getActivity());
         mPlayerData = PlayerData.instance(getActivity());
+        mStateService = VideoStateService.instance(getActivity());
 
-        if (mStates.size() == 0) {
-            restoreClipData();
-            // onInitDone usually called after openVideo
-            // So, we need to repeat some things again.
-            resetPositionOfNewVideo(mVideo);
-        }
+        // onInitDone usually called after openVideo
+        // So, we need to repeat some things again.
+        resetPositionOfNewVideo(mVideo);
     }
 
     /**
@@ -218,10 +205,10 @@ public class StateUpdater extends PlayerEventListenerHelper {
             return;
         }
 
-        State state = mStates.get(item.videoId);
+        State state = mStateService.getByVideoId(item.videoId);
 
         // Reset position of music videos
-        if (state != null && (state.lengthMs < MUSIC_VIDEO_LENGTH_MS || item.isLive)) {
+        if (state != null && (state.lengthMs < VideoStateService.MUSIC_VIDEO_LENGTH_MS || item.isLive)) {
             resetPosition(item);
         }
     }
@@ -238,53 +225,23 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void resetPosition(String videoId) {
-        State state = mStates.get(videoId);
+        State state = mStateService.getByVideoId(videoId);
 
         if (state != null) {
             if (mPlayerData.isRememberSpeedEachEnabled()) {
-                mStates.put(videoId, new State(videoId, 0, state.lengthMs, state.speed));
+                mStateService.save(new State(videoId, 0, state.lengthMs, state.speed));
             } else {
-                mStates.remove(videoId);
+                mStateService.removeByVideoId(videoId);
             }
         }
     }
 
     private void persistVideoState() {
-        if (getController().getLengthMs() <= MUSIC_VIDEO_LENGTH_MS && !mPlayerData.isRememberSpeedEachEnabled()) {
+        if (getController().getLengthMs() <= VideoStateService.MUSIC_VIDEO_LENGTH_MS && !mPlayerData.isRememberSpeedEachEnabled()) {
             return;
         }
 
-        StringBuilder sb = new StringBuilder();
-
-        for (State state : mStates.values()) {
-            if (state.lengthMs <= MUSIC_VIDEO_LENGTH_MS && !mPlayerData.isRememberSpeedEachEnabled()) {
-                continue;
-            }
-
-            if (sb.length() != 0) {
-                sb.append("|");
-            }
-
-            sb.append(state);
-        }
-
-        mPrefs.setStateUpdaterData(sb.toString());
-    }
-
-    private void restoreClipData() {
-        String data = mPrefs.getStateUpdaterData();
-
-        if (data != null) {
-            String[] split = data.split("\\|");
-
-            for (String spec : split) {
-                State state = State.from(spec);
-
-                if (state != null) {
-                    mStates.put(state.videoId, state);
-                }
-            }
-        }
+        mStateService.persistState();
     }
 
     private void restoreVideoFormat() {
@@ -327,9 +284,9 @@ public class StateUpdater extends PlayerEventListenerHelper {
         long positionMs = getController().getPositionMs();
         long remainsMs = lengthMs - positionMs;
         boolean isPositionActual = remainsMs > 1_000;
-        boolean isRealLiveStream = video.isLive && remainsMs < LIVE_THRESHOLD_MS;
+        boolean isRealLiveStream = video.isLive && remainsMs < VideoStateService.LIVE_THRESHOLD_MS;
         if ((isPositionActual && !isRealLiveStream) || !getPlayEnabled()) { // Is pause after each video enabled?
-            mStates.put(video.videoId, new State(video.videoId, positionMs, lengthMs, getController().getSpeed()));
+            mStateService.save(new State(video.videoId, positionMs, lengthMs, getController().getSpeed()));
             // Sync video. You could safely use it later to restore state.
             video.percentWatched = positionMs / (lengthMs / 100f);
         } else {
@@ -340,13 +297,13 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void restorePosition(Video item) {
-        State state = mStates.get(item.videoId);
+        State state = mStateService.getByVideoId(item.videoId);
 
         // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
         boolean containsWebPosition = item.percentWatched > 10 && item.percentWatched < 90;
         if (containsWebPosition) {
             // Web state is buggy on short videos (e.g. video clips)
-            boolean isLongVideo = getController().getLengthMs() > MUSIC_VIDEO_LENGTH_MS;
+            boolean isLongVideo = getController().getLengthMs() > VideoStateService.MUSIC_VIDEO_LENGTH_MS;
             if (isLongVideo) {
                 state = new State(item.videoId, convertToMs(item.percentWatched));
             }
@@ -367,12 +324,12 @@ public class StateUpdater extends PlayerEventListenerHelper {
     }
 
     private void restoreSpeed(Video item) {
-        boolean isLiveThreshold = getController().getLengthMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
+        boolean isLiveThreshold = getController().getLengthMs() - getController().getPositionMs() < VideoStateService.LIVE_THRESHOLD_MS;
 
         if (item.isLive && isLiveThreshold) {
             getController().setSpeed(1.0f);
         } else {
-            State state = mStates.get(item.videoId);
+            State state = mStateService.getByVideoId(item.videoId);
             getController().setSpeed(state != null && mPlayerData.isRememberSpeedEachEnabled() ? state.speed : mPlayerData.getSpeed());
         }
     }
@@ -450,53 +407,6 @@ public class StateUpdater extends PlayerEventListenerHelper {
             } else {
                 screensaverManager.disableChecked();
             }
-        }
-    }
-
-    private static class State {
-        public final String videoId;
-        public final long positionMs;
-        private final long lengthMs;
-        public final float speed;
-
-        public State(String videoId, long positionMs) {
-            this(videoId, positionMs, -1);
-        }
-
-        public State(String videoId, long positionMs, long lengthMs) {
-            this(videoId, positionMs, lengthMs, 1.0f);
-        }
-
-        public State(String videoId, long positionMs, long lengthMs, float speed) {
-            this.videoId = videoId;
-            this.positionMs = positionMs;
-            this.lengthMs = lengthMs;
-            this.speed = speed;
-        }
-
-        public static State from(String spec) {
-            if (spec == null) {
-                return null;
-            }
-
-            String[] split = spec.split(",");
-
-            if (split.length != 4) {
-                return null;
-            }
-
-            String videoId = split[0];
-            long positionMs = Helpers.parseLong(split[1]);
-            long lengthMs = Helpers.parseLong(split[2]);
-            float speed = Helpers.parseFloat(split[3]);
-
-            return new State(videoId, positionMs, lengthMs, speed);
-        }
-
-        @NonNull
-        @Override
-        public String toString() {
-            return String.format("%s,%s,%s,%s", videoId, positionMs, lengthMs, speed);
         }
     }
 }
