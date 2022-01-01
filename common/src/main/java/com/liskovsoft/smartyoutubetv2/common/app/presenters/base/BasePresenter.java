@@ -3,10 +3,16 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.base;
 import android.app.Activity;
 import android.content.Context;
 import androidx.fragment.app.Fragment;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.lang.ref.WeakReference;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class BasePresenter<T> implements Presenter<T> {
     private WeakReference<T> mView = new WeakReference<>(null);
@@ -94,6 +100,26 @@ public abstract class BasePresenter<T> implements Presenter<T> {
         if (mOnDone != null) {
             mOnDone.run();
             mOnDone = null;
+        }
+    }
+
+    protected void removeItem(Video item) {
+        removeItem(Collections.singletonList(item));
+    }
+
+    protected void removeItem(List<Video> items) {
+        VideoGroup removedGroup = VideoGroup.from(items);
+        removedGroup.setAction(VideoGroup.ACTION_REMOVE);
+        T view = getView();
+
+        updateView(removedGroup, view);
+    }
+
+    private void updateView(VideoGroup group, T view) {
+        if (view instanceof BrowseView) {
+            ((BrowseView) view).updateSection(group);
+        } else if (view instanceof ChannelUploadsView) {
+            ((ChannelUploadsView) view).update(group);
         }
     }
 }

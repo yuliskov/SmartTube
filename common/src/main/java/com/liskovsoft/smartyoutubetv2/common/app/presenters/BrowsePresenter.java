@@ -743,14 +743,4 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private boolean isSubscriptionsSection() {
         return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_SUBSCRIPTIONS;
     }
-
-    private void removeItem(Video item) {
-        removeItem(Collections.singletonList(item));
-    }
-
-    private void removeItem(List<Video> items) {
-        VideoGroup removedGroup = VideoGroup.from(items);
-        removedGroup.setAction(VideoGroup.ACTION_REMOVE);
-        getView().updateSection(removedGroup);
-    }
 }

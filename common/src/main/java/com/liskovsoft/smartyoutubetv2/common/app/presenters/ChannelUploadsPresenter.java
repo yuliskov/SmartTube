@@ -277,14 +277,4 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
         return null;
     }
-
-    private void removeItem(Video item) {
-        removeItem(Collections.singletonList(item));
-    }
-
-    private void removeItem(List<Video> items) {
-        VideoGroup removedGroup = VideoGroup.from(items);
-        removedGroup.setAction(VideoGroup.ACTION_REMOVE);
-        getView().update(removedGroup);
-    }
 }
