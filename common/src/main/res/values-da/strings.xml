@@ -306,4 +306,7 @@
   <string name="content_block_action_only_skip">Spring kun over</string>
   <string name="content_block_action_toast">Spring over med notifikation</string>
   <string name="content_block_action_dialog">Vis bekræftelsesdialog</string>
+  <string name="content_block_filler">Uden for emnet (fyld)</string>
+  <string name="cancel_dialog">Fortryd</string>
+  <string name="keyboard_auto_show">Vis tastatur automatisk</string>
 </resources>
