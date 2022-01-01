@@ -219,35 +219,20 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         }
     }
 
-    //private void resetPosition(Video video) {
-    //    video.percentWatched = 0;
-    //    resetPosition(video.videoId);
-    //}
-    //
-    //private void resetPosition(String videoId) {
-    //    State state = mStateService.getByVideoId(videoId);
-    //
-    //    if (state != null) {
-    //        if (mPlayerData.isRememberSpeedEachEnabled()) {
-    //            mStateService.save(new State(videoId, 0, state.lengthMs, state.speed));
-    //        } else {
-    //            mStateService.removeByVideoId(videoId);
-    //        }
-    //    }
-    //}
-
     private void resetPosition(Video video) {
-        // Mark video as fully viewed. This could help to restore proper progress marker on the video card later.
-        video.percentWatched = 100;
+        video.percentWatched = 0;
         resetPosition(video.videoId);
     }
 
     private void resetPosition(String videoId) {
-        // Mark video as fully viewed. This could help to restore proper progress marker on the video card later.
         State state = mStateService.getByVideoId(videoId);
 
         if (state != null) {
-            mStateService.save(new State(videoId, state.lengthMs, state.lengthMs, state.speed));
+            if (mPlayerData.isRememberSpeedEachEnabled()) {
+                mStateService.save(new State(videoId, 0, state.lengthMs, state.speed));
+            } else {
+                mStateService.removeByVideoId(videoId);
+            }
         }
     }
 
@@ -305,9 +290,12 @@ public class VideoStateManager extends PlayerEventListenerHelper {
             // Sync video. You could safely use it later to restore state.
             video.percentWatched = positionMs / (lengthMs / 100f);
         } else {
+            // Mark video as fully viewed. This could help to restore proper progress marker on the video card later.
+            mStateService.save(new State(video.videoId, lengthMs, lengthMs, 1.0f));
+            video.percentWatched = 100;
+
             // Reset position when video almost ended
-            resetPosition(video);
-            video.percentWatched = 0;
+            //resetPosition(video);
         }
     }
 
