@@ -219,20 +219,35 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         }
     }
 
+    //private void resetPosition(Video video) {
+    //    video.percentWatched = 0;
+    //    resetPosition(video.videoId);
+    //}
+    //
+    //private void resetPosition(String videoId) {
+    //    State state = mStateService.getByVideoId(videoId);
+    //
+    //    if (state != null) {
+    //        if (mPlayerData.isRememberSpeedEachEnabled()) {
+    //            mStateService.save(new State(videoId, 0, state.lengthMs, state.speed));
+    //        } else {
+    //            mStateService.removeByVideoId(videoId);
+    //        }
+    //    }
+    //}
+
     private void resetPosition(Video video) {
-        video.percentWatched = 0;
+        // Mark video as fully viewed. This could help to restore proper progress marker on the video card later.
+        video.percentWatched = 100;
         resetPosition(video.videoId);
     }
 
     private void resetPosition(String videoId) {
+        // Mark video as fully viewed. This could help to restore proper progress marker on the video card later.
         State state = mStateService.getByVideoId(videoId);
 
         if (state != null) {
-            if (mPlayerData.isRememberSpeedEachEnabled()) {
-                mStateService.save(new State(videoId, 0, state.lengthMs, state.speed));
-            } else {
-                mStateService.removeByVideoId(videoId);
-            }
+            mStateService.save(new State(videoId, state.lengthMs, state.lengthMs, state.speed));
         }
     }
 
