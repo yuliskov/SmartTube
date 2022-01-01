@@ -8,6 +8,7 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
@@ -79,6 +80,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             runRemoteControlTasks();
             dontKeepConnection();
             configureProxy();
+            initVideoStateService();
             sRunOnce = true;
         }
     }
@@ -121,6 +123,12 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         if (getContext() != null && GeneralData.instance(getContext()).isProxyEnabled()) {
             ProxyManager proxyManager = ProxyManager.instance(getContext());
             proxyManager.enableProxy(true);
+        }
+    }
+
+    private void initVideoStateService() {
+        if (getContext() != null) {
+            VideoStateService.instance(getContext());
         }
     }
 

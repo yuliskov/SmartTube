@@ -201,7 +201,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
      * Reset position of currently opened music and live videos.
      */
     private void resetPositionOfNewVideo(Video item) {
-        if (item == null) {
+        if (mStateService == null || item == null) {
             return;
         }
 

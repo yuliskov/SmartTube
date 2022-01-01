@@ -3,6 +3,8 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -78,11 +80,20 @@ public class VideoGroup {
             return videoGroup;
         }
 
+        VideoStateService stateService = VideoStateService.instance(null);
+
         for (MediaItem item : mediaGroup.getMediaItems()) {
             Video video = Video.from(item);
             // Group position in multi-grid fragments
             video.groupPosition = videoGroup.mPosition;
             video.group = videoGroup;
+            if (stateService != null && video.percentWatched == -1) {
+                State state = stateService.getByVideoId(video.videoId);
+                // Sync video.
+                if (state != null) {
+                    video.percentWatched = state.positionMs / (state.lengthMs / 100f);
+                }
+            }
             videoGroup.mVideos.add(video);
         }
 

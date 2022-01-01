@@ -30,7 +30,7 @@ public class VideoStateService {
     }
 
     public static VideoStateService instance(Context context) {
-        if (sInstance == null) {
+        if (sInstance == null && context != null) {
             sInstance = new VideoStateService(context.getApplicationContext());
         }
 
