@@ -14,11 +14,13 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager
 public class ChannelUploadsFragment extends VideoGridFragment implements ChannelUploadsView {
     private ProgressBarManager mProgressBarManager;
     private ChannelUploadsPresenter mPresenter;
+    private boolean mIsFragmentCreated;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mIsFragmentCreated = true;
         mPresenter = ChannelUploadsPresenter.instance(getContext());
         mPresenter.setView(this);
 
@@ -51,6 +53,17 @@ public class ChannelUploadsFragment extends VideoGridFragment implements Channel
     public void onDestroy() {
         super.onDestroy();
         mPresenter.onViewDestroyed();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!mIsFragmentCreated) {
+            mPresenter.onViewResumed();
+        }
+
+        mIsFragmentCreated = false;
     }
 
     @Override
