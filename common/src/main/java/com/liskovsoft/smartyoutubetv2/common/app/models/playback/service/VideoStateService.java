@@ -73,6 +73,7 @@ public class VideoStateService {
         StringBuilder sb = new StringBuilder();
 
         for (State state : mStates.values()) {
+            // Storage optimization!!!
             //if (state.lengthMs <= MUSIC_VIDEO_LENGTH_MS && !mPlayerData.isRememberSpeedEachEnabled()) {
             //    continue;
             //}

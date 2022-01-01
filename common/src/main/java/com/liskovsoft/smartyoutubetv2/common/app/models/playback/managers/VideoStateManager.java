@@ -294,6 +294,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
             mStateService.save(new State(video.videoId, lengthMs, lengthMs, 1.0f));
             video.percentWatched = 100;
 
+            // Storage optimization!!!
             // Reset position when video almost ended
             //resetPosition(video);
         }
