@@ -14,6 +14,7 @@ public class VideoGroup {
     public static final int ACTION_APPEND = 0;
     public static final int ACTION_REPLACE = 1;
     public static final int ACTION_REMOVE = 2;
+    public static final int ACTION_SYNC = 3;
     private static final String TAG = VideoGroup.class.getSimpleName();
     private int mId;
     private String mTitle;

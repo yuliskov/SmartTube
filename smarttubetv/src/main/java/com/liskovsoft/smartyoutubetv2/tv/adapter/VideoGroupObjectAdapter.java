@@ -135,4 +135,15 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
             }
         }
     }
+
+    public void sync(VideoGroup group) {
+        for (Video video : group.getVideos()) {
+            int index = mVideoItems.indexOf(video);
+            if (index != -1) {
+                Video origin = mVideoItems.get(index);
+                origin.sync(video);
+                notifyItemRangeChanged(index, 1);
+            }
+        }
+    }
 }

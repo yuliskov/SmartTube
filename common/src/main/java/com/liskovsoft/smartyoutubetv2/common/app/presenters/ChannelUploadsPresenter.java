@@ -11,6 +11,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
@@ -68,6 +69,11 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
             getView().clear();
             updateGrid(mMediaGroup);
         }
+    }
+
+    @Override
+    public void onViewResumed() {
+        syncItem(Playlist.instance().getAll());
     }
 
     @Override

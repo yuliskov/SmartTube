@@ -11,6 +11,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -122,6 +123,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         getView().selectSection(mStartSectionIndex);
         showBootDialogs();
         Utils.updateRemoteControlService(getContext());
+    }
+
+    @Override
+    public void onViewResumed() {
+        syncItem(Playlist.instance().getAll());
     }
 
     private void initCategories() {

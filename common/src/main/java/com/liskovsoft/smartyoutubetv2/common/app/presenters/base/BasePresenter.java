@@ -115,6 +115,18 @@ public abstract class BasePresenter<T> implements Presenter<T> {
         updateView(removedGroup, view);
     }
 
+    protected void syncItem(Video item) {
+        syncItem(Collections.singletonList(item));
+    }
+
+    protected void syncItem(List<Video> items) {
+        VideoGroup removedGroup = VideoGroup.from(items);
+        removedGroup.setAction(VideoGroup.ACTION_SYNC);
+        T view = getView();
+
+        updateView(removedGroup, view);
+    }
+
     private void updateView(VideoGroup group, T view) {
         if (view instanceof BrowseView) {
             ((BrowseView) view).updateSection(group);

@@ -115,10 +115,15 @@ public class VideoGridFragment extends GridFragment implements VideoCategoryFrag
             return;
         }
 
-        if (group.getAction() == VideoGroup.ACTION_REPLACE) {
+        int action = group.getAction();
+
+        if (action == VideoGroup.ACTION_REPLACE) {
             clear();
-        } else if (group.getAction() == VideoGroup.ACTION_REMOVE) {
+        } else if (action == VideoGroup.ACTION_REMOVE) {
             mGridAdapter.remove(group);
+            return;
+        } else if (action == VideoGroup.ACTION_SYNC) {
+            mGridAdapter.sync(group);
             return;
         }
 
