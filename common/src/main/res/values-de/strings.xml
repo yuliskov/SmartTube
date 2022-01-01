@@ -307,4 +307,5 @@
     <string name="content_block_action_dialog">Bestätigungsdialog anzeigen</string>
     <string name="content_block_filler">Off-Topic (Filler)</string>
     <string name="keyboard_auto_show">Tastatur automatisch anzeigen</string>
+    <string name="cancel_dialog">Abbrechen</string>
 </resources>
