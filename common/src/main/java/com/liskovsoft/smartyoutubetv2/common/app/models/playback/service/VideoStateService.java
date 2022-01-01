@@ -73,9 +73,9 @@ public class VideoStateService {
         StringBuilder sb = new StringBuilder();
 
         for (State state : mStates.values()) {
-            if (state.lengthMs <= MUSIC_VIDEO_LENGTH_MS && !mPlayerData.isRememberSpeedEachEnabled()) {
-                continue;
-            }
+            //if (state.lengthMs <= MUSIC_VIDEO_LENGTH_MS && !mPlayerData.isRememberSpeedEachEnabled()) {
+            //    continue;
+            //}
 
             if (sb.length() != 0) {
                 sb.append("|");
