@@ -55,9 +55,11 @@ public class VideoGroup {
     public static VideoGroup from(List<Video> items, int groupPosition) {
         VideoGroup videoGroup = new VideoGroup();
         // Getting topmost element. Could help when syncing multi rows fragments.
-        Video topItem = items.get(items.size() - 1);
-        videoGroup.mId = topItem.group.getId();
-        videoGroup.mTitle = topItem.group.getTitle();
+        Video topItem = findTopmostItemWithGroup(items);
+        if (topItem.group != null) {
+            videoGroup.mId = topItem.group.getId();
+            videoGroup.mTitle = topItem.group.getTitle();
+        }
         videoGroup.mVideos = items;
         videoGroup.mPosition = groupPosition;
 
@@ -145,5 +147,19 @@ public class VideoGroup {
 
     public void setAction(int action) {
         mAction = action;
+    }
+
+    /**
+     * Getting topmost element. Could help when syncing multi rows fragments.
+     */
+    private static Video findTopmostItemWithGroup(List<Video> items) {
+        for (int i = (items.size() - 1); i >= 0; i--) {
+            Video video = items.get(i);
+            if (video.group != null) {
+                return video;
+            }
+        }
+
+        return items.get(items.size() - 1);
     }
 }
