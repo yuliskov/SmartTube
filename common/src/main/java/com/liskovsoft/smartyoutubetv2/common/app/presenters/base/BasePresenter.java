@@ -109,6 +109,10 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     }
 
     protected void removeItem(List<Video> items) {
+        if (items.size() == 0) {
+            return;
+        }
+
         VideoGroup removedGroup = VideoGroup.from(items);
         removedGroup.setAction(VideoGroup.ACTION_REMOVE);
         T view = getView();
@@ -121,6 +125,10 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     }
 
     protected void syncItem(List<Video> items) {
+        if (items.size() == 0) {
+            return;
+        }
+
         VideoGroup removedGroup = VideoGroup.from(items);
         removedGroup.setAction(VideoGroup.ACTION_SYNC);
         T view = getView();
