@@ -125,11 +125,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         Utils.updateRemoteControlService(getContext());
     }
 
-    @Override
-    public void onViewResumed() {
-        syncItem(Playlist.instance().getAll());
-    }
-
     private void initCategories() {
         cleanupPinnedItems();
 

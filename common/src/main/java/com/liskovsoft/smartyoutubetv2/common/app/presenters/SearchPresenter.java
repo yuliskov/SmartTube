@@ -72,11 +72,6 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     }
 
     @Override
-    public void onViewResumed() {
-        syncItem(Playlist.instance().getAll());
-    }
-
-    @Override
     public void onVideoItemSelected(Video item) {
         // NOP
     }

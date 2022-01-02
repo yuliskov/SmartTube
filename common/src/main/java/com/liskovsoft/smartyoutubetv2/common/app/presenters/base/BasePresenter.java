@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.base;
 import android.app.Activity;
 import android.content.Context;
 import androidx.fragment.app.Fragment;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
@@ -16,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class BasePresenter<T> implements Presenter<T> {
+    private static boolean sSync;
     private WeakReference<T> mView = new WeakReference<>(null);
     private WeakReference<Activity> mActivity = new WeakReference<>(null);
     private WeakReference<Context> mApplicationContext = new WeakReference<>(null);
@@ -90,7 +92,9 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void onViewResumed() {
-        // NOP
+        if (sSync) {
+            syncItem(Playlist.instance().getAll());
+        }
     }
 
     public void setOnDone(Runnable onDone) {
@@ -120,11 +124,11 @@ public abstract class BasePresenter<T> implements Presenter<T> {
         updateView(removedGroup, view);
     }
 
-    protected void syncItem(Video item) {
+    private void syncItem(Video item) {
         syncItem(Collections.singletonList(item));
     }
 
-    protected void syncItem(List<Video> items) {
+    private void syncItem(List<Video> items) {
         if (items.size() == 0) {
             return;
         }
@@ -133,16 +137,26 @@ public abstract class BasePresenter<T> implements Presenter<T> {
         removedGroup.setAction(VideoGroup.ACTION_SYNC);
         T view = getView();
 
-        updateView(removedGroup, view);
+        if (updateView(removedGroup, view)) {
+            sSync = false;
+        }
     }
 
-    private void updateView(VideoGroup group, T view) {
+    private boolean updateView(VideoGroup group, T view) {
         if (view instanceof BrowseView) {
             ((BrowseView) view).updateSection(group);
         } else if (view instanceof ChannelUploadsView) {
             ((ChannelUploadsView) view).update(group);
         } else if (view instanceof SearchView) {
             ((SearchView) view).updateSearch(group);
+        } else {
+            return false;
         }
+
+        return true;
+    }
+
+    protected static void enableSync() {
+        sSync = true;
     }
 }
