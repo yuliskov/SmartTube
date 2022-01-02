@@ -304,4 +304,7 @@
     <string name="content_block_action_only_skip">Přeskakovat</string>
     <string name="content_block_action_toast">Přeskakovat s upozorněním</string>
     <string name="content_block_action_dialog">Ukaž dialog k potvrzení</string>
+    <string name="content_block_filler">Mimo téma (výplň)</string>
+    <string name="keyboard_auto_show">Zobraz klávesnici automaticky</string>
+    <string name="cancel_dialog">Zrušit</string>
 </resources>
