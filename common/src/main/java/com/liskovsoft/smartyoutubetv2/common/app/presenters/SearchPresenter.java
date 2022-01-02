@@ -8,6 +8,7 @@ import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.SearchOptions;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -68,6 +69,11 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
         startSearchInt(mSearchText);
         mSearchText = null;
         mSearchOptions = 0;
+    }
+
+    @Override
+    public void onViewResumed() {
+        syncItem(Playlist.instance().getAll());
     }
 
     @Override

@@ -24,11 +24,13 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     private String mNewQuery;
     private VideoCardPresenter mCardPresenter;
     private SearchData mSearchData;
+    private boolean mIsFragmentCreated;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mIsFragmentCreated = true;
         mSearchPresenter = SearchPresenter.instance(getContext());
         mSearchPresenter.setView(this);
         mCardPresenter = new VideoCardPresenter();
@@ -56,6 +58,17 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     public void onDestroy() {
         super.onDestroy();
         mSearchPresenter.onViewDestroyed();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!mIsFragmentCreated) {
+            mSearchPresenter.onViewResumed();
+        }
+
+        mIsFragmentCreated = false;
     }
 
     @Override
