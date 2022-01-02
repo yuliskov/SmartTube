@@ -73,6 +73,10 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
 
     @Override
     public void onViewResumed() {
+        if (AppDialogPresenter.instance(getContext()).isDialogShown()) {
+            return;
+        }
+
         syncItem(Playlist.instance().getAll());
     }
 

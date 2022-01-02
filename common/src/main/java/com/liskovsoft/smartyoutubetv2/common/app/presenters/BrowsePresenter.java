@@ -127,6 +127,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     @Override
     public void onViewResumed() {
+        if (AppDialogPresenter.instance(getContext()).isDialogShown()) {
+            return;
+        }
+
         syncItem(Playlist.instance().getAll());
     }
 

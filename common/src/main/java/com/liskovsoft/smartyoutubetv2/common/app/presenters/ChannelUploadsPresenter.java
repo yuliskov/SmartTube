@@ -73,6 +73,10 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
     @Override
     public void onViewResumed() {
+        if (AppDialogPresenter.instance(getContext()).isDialogShown()) {
+            return;
+        }
+
         syncItem(Playlist.instance().getAll());
     }
 
