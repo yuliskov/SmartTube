@@ -243,7 +243,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     }
 
     private void persistVideoState() {
-        if (AppDialogPresenter.instance(getActivity()).isDialogShown() || getController().isInPIPMode()) {
+        if (AppDialogPresenter.instance(getActivity()).isDialogShown()) {
             return;
         }
 
