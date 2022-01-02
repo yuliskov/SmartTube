@@ -8,6 +8,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.Presenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.BrowseView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.lang.ref.WeakReference;
@@ -132,6 +133,8 @@ public abstract class BasePresenter<T> implements Presenter<T> {
             ((BrowseView) view).updateSection(group);
         } else if (view instanceof ChannelUploadsView) {
             ((ChannelUploadsView) view).update(group);
+        } else if (view instanceof SearchView) {
+            ((SearchView) view).updateSearch(group);
         }
     }
 }
