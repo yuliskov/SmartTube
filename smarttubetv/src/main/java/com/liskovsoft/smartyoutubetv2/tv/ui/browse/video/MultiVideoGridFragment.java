@@ -203,7 +203,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
             mGridAdapter1.remove(group);
             return;
         } else if (action == VideoGroup.ACTION_SYNC) {
-            // NOP
+            mGridAdapter1.sync(group);
             return;
         }
 
@@ -230,7 +230,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
             // Remove not supported
             return;
         } else if (action == VideoGroup.ACTION_SYNC) {
-            // NOP
+            // Sync not supported
             return;
         }
 
