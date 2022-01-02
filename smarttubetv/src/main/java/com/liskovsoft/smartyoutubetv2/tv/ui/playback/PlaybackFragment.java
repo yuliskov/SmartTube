@@ -189,7 +189,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             initializePlayer();
         }
 
-        mExoPlayerController.onViewPaused(false);
+        // NOTE: don't move this into another place! Multiple components rely on it.
         mEventListener.onViewResumed();
     }
 
@@ -197,12 +197,12 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     public void onPause() {
         super.onPause();
 
+        // NOTE: don't move this into another place! Multiple components rely on it.
+        mEventListener.onViewPaused();
+
         if (Util.SDK_INT <= 23) {
             releasePlayer();
         }
-
-        mExoPlayerController.onViewPaused(true);
-        mEventListener.onViewPaused();
     }
 
     public void onDispatchKeyEvent(KeyEvent event) {

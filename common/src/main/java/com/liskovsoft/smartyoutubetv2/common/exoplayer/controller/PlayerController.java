@@ -42,5 +42,4 @@ public interface PlayerController {
     float getSpeed();
     void setVolume(float volume);
     float getVolume();
-    void onViewPaused(boolean isPaused);
 }

@@ -8,6 +8,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService.State;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
@@ -191,6 +192,11 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         restoreFormats();
     }
 
+    @Override
+    public void onViewPaused() {
+        persistVideoState();
+    }
+
     private void clearStateOfNextVideo() {
         if (getController().getVideo() != null && getController().getVideo().nextMediaItem != null) {
             resetPosition(getController().getVideo().nextMediaItem.getVideoId());
@@ -237,7 +243,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     }
 
     private void persistVideoState() {
-        if (getController().getLengthMs() <= VideoStateService.MUSIC_VIDEO_LENGTH_MS && !mPlayerData.isRememberSpeedEachEnabled()) {
+        if (AppDialogPresenter.instance(getActivity()).isDialogShown() || getController().isInPIPMode()) {
             return;
         }
 
@@ -270,7 +276,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         if (video != null) {
             savePosition(video);
             updateHistory();
-            persistVideoState();
+            //persistVideoState();
             persistVolume();
         }
     }

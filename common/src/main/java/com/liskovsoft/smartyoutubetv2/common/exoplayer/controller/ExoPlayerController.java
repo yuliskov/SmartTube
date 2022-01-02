@@ -43,7 +43,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private PlayerEventListener mEventListener;
     private SimpleExoPlayer mPlayer;
     private PlayerView mPlayerView;
-    private boolean mIsViewPaused;
 
     public ExoPlayerController(Context context) {
         mContext = context.getApplicationContext();
@@ -380,11 +379,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         } else {
             return 1;
         }
-    }
-
-    @Override
-    public void onViewPaused(boolean isPaused) {
-        mIsViewPaused = isPaused;
     }
 
     private void setQualityInfo(String qualityInfoStr) {
