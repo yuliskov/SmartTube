@@ -345,18 +345,12 @@ public final class Video implements Parcelable {
         return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_HISTORY;
     }
 
-    public boolean sync(Video video) {
+    public void sync(Video video) {
         if (video == null) {
-            return false;
-        }
-
-        if (Helpers.floatEquals(percentWatched, video.percentWatched)) {
-            return false;
+            return;
         }
 
         percentWatched = video.percentWatched;
-
-        return true;
     }
 
     public void sync(MediaItemMetadata metadata) {

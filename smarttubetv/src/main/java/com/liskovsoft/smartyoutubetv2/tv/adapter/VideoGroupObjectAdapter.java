@@ -141,9 +141,8 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
             int index = mVideoItems.indexOf(video);
             if (index != -1) {
                 Video origin = mVideoItems.get(index);
-                if (origin.sync(video)) {
-                    notifyItemRangeChanged(index, 1);
-                }
+                origin.sync(video);
+                notifyItemRangeChanged(index, 1);
             }
         }
     }
