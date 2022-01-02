@@ -54,8 +54,9 @@ public class VideoGroup {
 
     public static VideoGroup from(List<Video> items, int groupPosition) {
         VideoGroup videoGroup = new VideoGroup();
-        videoGroup.mId = items.get(0).group.getId();
-        videoGroup.mTitle = items.get(0).group.getTitle();
+        Video topItem = items.get(items.size() - 1);
+        videoGroup.mId = topItem.group.getId();
+        videoGroup.mTitle = topItem.group.getTitle();
         videoGroup.mVideos = items;
         videoGroup.mPosition = groupPosition;
 
