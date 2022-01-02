@@ -74,7 +74,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     @Override
     public void updateSearch(VideoGroup group) {
         freeze(true);
-        mItemResultsAdapter.append(group);
+        update(group);
         freeze(false);
 
         attachAdapter(1, mItemResultsAdapter);
@@ -101,28 +101,6 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     @Override
     public void startVoiceRecognition() {
         startSearch(null, true);
-    }
-    
-    private void startSearch(String searchText, boolean enableRecognition) {
-        mNewQuery = null;
-
-        if (searchText != null) {
-            setSearchQuery(searchText, true);
-        } else {
-            selectAllText();
-            loadSearchTags("");
-
-            if (enableRecognition) {
-                startRecognition();
-            } else {
-                focusOnSearchField();
-            }
-        }
-
-        if (getRowsSupportFragment() != null) {
-            // Move selection to the top
-            getRowsSupportFragment().setSelectedPosition(0);
-        }
     }
 
     @Override
@@ -153,6 +131,79 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
                 getRowsSupportFragment().setSelectedPosition(1);
             }
         }
+    }
+
+    @Override
+    protected void onItemViewClicked(Object item) {
+        if (item instanceof Video) {
+            mSearchPresenter.onVideoItemClicked((Video) item);
+        } else if (item instanceof Tag) {
+            startSearch(((Tag) item).tag, false);
+        }
+    }
+
+    @Override
+    protected void onItemViewSelected(Object item) {
+        if (item instanceof Video) {
+            checkScrollEnd((Video) item);
+        }
+    }
+
+    @Override
+    public void onSearchSettingsClicked() {
+        mSearchPresenter.onSearchSettingsClicked();
+    }
+
+    private void checkScrollEnd(Video item) {
+        int size = mItemResultsAdapter.size();
+        int index = mItemResultsAdapter.indexOf(item);
+
+        if (index > (size - ViewUtil.ROW_SCROLL_CONTINUE_NUM)) {
+            mSearchPresenter.onScrollEnd((Video) mItemResultsAdapter.get(size - 1));
+        }
+    }
+
+    private void startSearch(String searchText, boolean enableRecognition) {
+        mNewQuery = null;
+
+        if (searchText != null) {
+            setSearchQuery(searchText, true);
+        } else {
+            selectAllText();
+            loadSearchTags("");
+
+            if (enableRecognition) {
+                startRecognition();
+            } else {
+                focusOnSearchField();
+            }
+        }
+
+        if (getRowsSupportFragment() != null) {
+            // Move selection to the top
+            getRowsSupportFragment().setSelectedPosition(0);
+        }
+    }
+
+    private void update(VideoGroup group) {
+        if (mItemResultsAdapter == null) {
+            return;
+        }
+
+        int action = group.getAction();
+
+        if (action == VideoGroup.ACTION_REPLACE) {
+            mItemResultsAdapter.clear();
+        } else if (action == VideoGroup.ACTION_SYNC) {
+            mItemResultsAdapter.sync(group);
+            return;
+        }
+
+        if (group.isEmpty()) {
+            return;
+        }
+
+        mItemResultsAdapter.append(group);
     }
 
     private void loadSearchResult(String searchQuery) {
@@ -186,36 +237,6 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
             } else if (item instanceof Tag) {
                 startSearch(((Tag) item).tag, false);
             }
-        }
-    }
-
-    @Override
-    protected void onItemViewClicked(Object item) {
-        if (item instanceof Video) {
-            mSearchPresenter.onVideoItemClicked((Video) item);
-        } else if (item instanceof Tag) {
-            startSearch(((Tag) item).tag, false);
-        }
-    }
-
-    @Override
-    protected void onItemViewSelected(Object item) {
-        if (item instanceof Video) {
-            checkScrollEnd((Video) item);
-        }
-    }
-
-    @Override
-    public void onSearchSettingsClicked() {
-        mSearchPresenter.onSearchSettingsClicked();
-    }
-
-    private void checkScrollEnd(Video item) {
-        int size = mItemResultsAdapter.size();
-        int index = mItemResultsAdapter.indexOf(item);
-
-        if (index > (size - ViewUtil.ROW_SCROLL_CONTINUE_NUM)) {
-            mSearchPresenter.onScrollEnd((Video) mItemResultsAdapter.get(size - 1));
         }
     }
 }
