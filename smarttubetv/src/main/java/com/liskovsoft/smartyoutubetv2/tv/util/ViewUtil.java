@@ -7,13 +7,15 @@ import android.text.Layout;
 import android.text.TextUtils.TruncateAt;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.FocusHighlight;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.RowPresenter;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.BaseRequestOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
@@ -141,11 +143,24 @@ public class ViewUtil {
                 .skipMemoryCache(true); // ensure start animation from beginning
     }
 
-    public static void setDialogTransparent(Context context, View rootView) {
-        View title = rootView.findViewById(R.id.decor_title_container);
+    public static void enableTransparentDialog(Context context, View rootView) {
+        if (context == null || rootView == null) {
+            return;
+        }
+
+        View container = rootView.findViewById(R.id.settings_preference_fragment_container);
         View mainFrame = rootView.findViewById(R.id.main_frame);
+        View title = rootView.findViewById(R.id.decor_title_container);
         int bgColor = ContextCompat.getColor(context, R.color.transparent);
-        title.setBackgroundColor(bgColor);
-        mainFrame.setBackgroundColor(bgColor);
+
+        if (container instanceof FrameLayout) {
+            container.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
+        }
+        if (mainFrame instanceof LinearLayout) {
+            mainFrame.setBackgroundColor(bgColor);
+        }
+        if (title instanceof FrameLayout) {
+            title.setBackgroundColor(bgColor);
+        }
     }
 }

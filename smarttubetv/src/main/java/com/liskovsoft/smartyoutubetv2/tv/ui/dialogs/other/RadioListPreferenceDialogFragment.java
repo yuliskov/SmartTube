@@ -41,7 +41,7 @@ public class RadioListPreferenceDialogFragment extends LeanbackListPreferenceDia
 
         if (view != null) {
             if (mIsTransparent) {
-                ViewUtil.setDialogTransparent(getActivity(), view);
+                ViewUtil.enableTransparentDialog(getActivity(), view);
             }
 
             VerticalGridView verticalGridView = view.findViewById(android.R.id.list);

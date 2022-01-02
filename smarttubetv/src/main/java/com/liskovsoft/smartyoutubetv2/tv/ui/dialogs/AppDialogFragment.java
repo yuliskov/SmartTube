@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.leanback.preference.LeanbackPreferenceDialogFragment;
 import androidx.leanback.preference.LeanbackPreferenceFragment;
 import androidx.leanback.preference.LeanbackSettingsFragment;
 import androidx.preference.DialogPreference;
@@ -41,6 +40,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
 
         mSettingsPresenter = AppDialogPresenter.instance(getActivity());
         mSettingsPresenter.setView(this);
+        mIsTransparent = mSettingsPresenter.isTransparent();
     }
 
     @Override
@@ -64,6 +64,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
             mSettingsPresenter.setView(this);
 
             mPreferenceFragment = buildPreferenceFragment();
+            mPreferenceFragment.enableTransparent(mIsTransparent);
             startPreferenceFragment(mPreferenceFragment);
 
             mSettingsPresenter.onViewInitialized();
@@ -108,15 +109,6 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     }
 
     @Override
-    public void enableTransparent(boolean enable) {
-        mIsTransparent = enable;
-
-        if (mPreferenceFragment != null) {
-            mPreferenceFragment.enableTransparent(enable);
-        }
-    }
-
-    @Override
     public void clear() {
         if (getActivity() != null) {
             getActivity().runOnUiThread(this::onPreferenceStartInitialScreen);
@@ -130,8 +122,6 @@ public class AppDialogFragment extends LeanbackSettingsFragment
         if (!Utils.checkActivity(getActivity())) {
             return false;
         }
-
-        // NOTE: if you need transparent CheckedList then you should subclass it manually.
 
         if (pref instanceof StringListPreference) {
             StringListPreference listPreference = (StringListPreference) pref;
@@ -151,7 +141,21 @@ public class AppDialogFragment extends LeanbackSettingsFragment
             return true;
         }
 
+        // NOTE: Transparent CheckedList should be placed here (just in case you'll need it).
+
         return super.onPreferenceDisplayDialog(caller, pref);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+
+        if (mIsTransparent && view != null) {
+            // Enable transparent background (this is the only place to do it)
+            ViewUtil.enableTransparentDialog(getActivity(), view);
+        }
+
+        return view;
     }
 
     @Override
@@ -190,7 +194,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
             View view = super.onCreateView(inflater, container, savedInstanceState);
 
             if (mIsTransparent && view != null) {
-                ViewUtil.setDialogTransparent(getActivity(), view);
+                ViewUtil.enableTransparentDialog(getActivity(), view);
             }
 
             return view;

@@ -38,7 +38,7 @@ public class StringListPreferenceDialogFragment extends LeanbackListPreferenceDi
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         if (mIsTransparent && view != null) {
-            ViewUtil.setDialogTransparent(getActivity(), view);
+            ViewUtil.enableTransparentDialog(getActivity(), view);
         }
 
         return view;

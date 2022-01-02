@@ -115,7 +115,6 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     public void onViewInitialized() {
         getView().setTitle(mTitle);
         getView().addCategories(mCategories);
-        getView().enableTransparent(mIsTransparent);
     }
 
     public void showDialog() {
@@ -192,6 +191,10 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
 
     public void enableTransparent(boolean enable) {
         mIsTransparent = enable;
+    }
+
+    public boolean isTransparent() {
+        return mIsTransparent;
     }
 
     public boolean isEmpty() {
