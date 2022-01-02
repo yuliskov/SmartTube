@@ -54,6 +54,7 @@ public class VideoGroup {
 
     public static VideoGroup from(List<Video> items, int groupPosition) {
         VideoGroup videoGroup = new VideoGroup();
+        // Getting topmost element. Could help when syncing multi rows fragments.
         Video topItem = items.get(items.size() - 1);
         videoGroup.mId = topItem.group.getId();
         videoGroup.mTitle = topItem.group.getTitle();
