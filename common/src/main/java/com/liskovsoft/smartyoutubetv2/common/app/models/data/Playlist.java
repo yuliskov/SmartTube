@@ -33,28 +33,6 @@ public class Playlist {
         mCurrentIndex = -1;
     }
 
-    ///**
-    // * Adds a video to the end of the playlist.
-    // *
-    // * @param video to be added to the playlist.
-    // */
-    //public void add(Video video) {
-    //    if (Video.isEmpty(video)) {
-    //        return;
-    //    }
-    //
-    //    if (Video.equals(video, getCurrent())) {
-    //        mPlaylist.set(mCurrentPosition, video);
-    //    } else {
-    //        mPlaylist.add(++mCurrentPosition, video);
-    //
-    //        // Video opened from the browser or suggestions.
-    //        // In this case remove all next items.
-    //        trimPlaylist();
-    //        stripPrevItem();
-    //    }
-    //}
-
     public void addAll(List<Video> videos) {
         mPlaylist.removeAll(videos);
         mPlaylist.addAll(videos);
@@ -70,8 +48,12 @@ public class Playlist {
             return;
         }
 
+        Video current = getCurrent();
+
         // Skip add currently playing item
-        if (video.equals(getCurrent())) {
+        // And replace to correct position sync in fragments
+        if (video.equals(current)) {
+            replace(current, video);
             return;
         }
 
@@ -232,6 +214,14 @@ public class Playlist {
                 prevItem.mediaItem = null;
                 prevItem.nextMediaItem = null;
             }
+        }
+    }
+
+    private void replace(Video origin, Video newItem) {
+        int index = mPlaylist.indexOf(origin);
+
+        if (index != -1) {
+            mPlaylist.set(index, newItem);
         }
     }
 }
