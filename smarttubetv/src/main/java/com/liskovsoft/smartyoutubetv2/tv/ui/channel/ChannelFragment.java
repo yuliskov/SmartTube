@@ -13,11 +13,13 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
     private static final String TAG = ChannelFragment.class.getSimpleName();
     private ChannelPresenter mChannelPresenter;
     private ProgressBarManager mProgressBarManager;
+    private boolean mIsFragmentCreated;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mIsFragmentCreated = true;
         mChannelPresenter = ChannelPresenter.instance(getContext());
         mChannelPresenter.setView(this);
 
@@ -43,6 +45,17 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
     public void onDestroy() {
         super.onDestroy();
         mChannelPresenter.onViewDestroyed();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!mIsFragmentCreated) {
+            mChannelPresenter.onViewResumed();
+        }
+
+        mIsFragmentCreated = false;
     }
 
     @Override
