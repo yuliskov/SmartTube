@@ -311,7 +311,8 @@ public class VideoStateManager extends PlayerEventListenerHelper {
 
         // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
         boolean containsWebPosition = item.percentWatched > 10 && item.percentWatched < 90;
-        if (containsWebPosition) {
+        boolean stateIsOutdated = state == null || state.timestamp < item.timestamp;
+        if (containsWebPosition && stateIsOutdated) {
             // Web state is buggy on short videos (e.g. video clips)
             boolean isLongVideo = getController().getLengthMs() > VideoStateService.MUSIC_VIDEO_LENGTH_MS;
             if (isLongVideo) {

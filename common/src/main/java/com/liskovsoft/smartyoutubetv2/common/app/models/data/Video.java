@@ -46,6 +46,7 @@ public final class Video implements Parcelable {
     public int groupPosition = -1; // group position in multi-grid fragments
     public String clickTrackingParams;
     public boolean isSynced;
+    public long timestamp;
 
     public Video() {
         
@@ -107,6 +108,7 @@ public final class Video implements Parcelable {
         video.isUpcoming = item.isUpcoming();
         video.clickTrackingParams = item.getClickTrackingParams();
         video.mediaItem = item;
+        video.timestamp = System.currentTimeMillis();
 
         return video;
     }
