@@ -308,4 +308,5 @@
     <string name="content_block_filler">Off-topic (filler)</string>
     <string name="keyboard_auto_show">Show keyboard automatically</string>
     <string name="cancel_dialog">Cancel</string>
+    <string name="msg_player_error_source2">Video source isn\'t working</string>
 </resources>

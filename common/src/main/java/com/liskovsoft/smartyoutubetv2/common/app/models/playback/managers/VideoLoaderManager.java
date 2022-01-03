@@ -387,7 +387,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void initErrorMap() {
-        mErrorMap.put(PlayerEventListener.ERROR_TYPE_SOURCE, R.string.msg_player_error_source);
+        mErrorMap.put(PlayerEventListener.ERROR_TYPE_SOURCE, R.string.msg_player_error_source2);
         mErrorMap.put(PlayerEventListener.ERROR_TYPE_RENDERER, R.string.msg_player_error_renderer);
 
         // Hide unknown error on stable build
