@@ -310,7 +310,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         State state = mStateService.getByVideoId(item.videoId);
 
         // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
-        boolean containsWebPosition = item.percentWatched > 10 && item.percentWatched < 90;
+        boolean containsWebPosition = item.percentWatched >= 10;
         boolean stateIsOutdated = state == null || state.timestamp < item.timestamp;
         if (containsWebPosition && stateIsOutdated) {
             // Web state is buggy on short videos (e.g. video clips)
@@ -346,6 +346,10 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     }
 
     private long convertToMs(float percentWatched) {
+        if (percentWatched >= 100) {
+            return -1;
+        }
+
         long newPositionMs = (long) (getController().getLengthMs() / 100 * percentWatched);
 
         boolean samePositions = Math.abs(newPositionMs - getController().getPositionMs()) < 10_000;
