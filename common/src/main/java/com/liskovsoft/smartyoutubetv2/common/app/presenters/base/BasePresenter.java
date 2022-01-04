@@ -93,8 +93,8 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     @Override
     public void onViewResumed() {
-        if (sSync) {
-            syncItem(Playlist.instance().getAll());
+        if (sSync && canViewBeSynced()) {
+            syncItem(Playlist.instance().getAllChanged());
         }
     }
 
@@ -143,6 +143,14 @@ public abstract class BasePresenter<T> implements Presenter<T> {
         }
     }
 
+    private boolean canViewBeSynced() {
+        T view = getView();
+        return view instanceof BrowseView ||
+               view instanceof ChannelView ||
+               view instanceof ChannelUploadsView ||
+               view instanceof SearchView;
+    }
+
     private boolean updateView(VideoGroup group, T view) {
         if (view instanceof BrowseView) {
             ((BrowseView) view).updateSection(group);
@@ -161,5 +169,6 @@ public abstract class BasePresenter<T> implements Presenter<T> {
 
     protected static void enableSync() {
         sSync = true;
+        Playlist.instance().onNewSession();
     }
 }

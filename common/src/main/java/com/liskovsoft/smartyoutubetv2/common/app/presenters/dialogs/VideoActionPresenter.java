@@ -29,8 +29,8 @@ public class VideoActionPresenter extends BasePresenter<Void> {
 
             ChannelUploadsPresenter.instance(getContext()).openChannel(item);
         } else if (item.hasVideo()) {
-            PlaybackPresenter.instance(getContext()).openVideo(item);
             BasePresenter.enableSync();
+            PlaybackPresenter.instance(getContext()).openVideo(item);
         } else if (item.hasChannel()) {
             Utils.chooseChannelPresenter(getContext(), item);
         } else if (item.hasPlaylist()) {

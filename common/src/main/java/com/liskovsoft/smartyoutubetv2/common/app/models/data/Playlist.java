@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -11,6 +12,7 @@ public class Playlist {
     private List<Video> mPlaylist;
     private int mCurrentIndex;
     private static Playlist sInstance;
+    private int mNewSessionIndex;
 
     private Playlist() {
         mPlaylist = new ArrayList<>();
@@ -185,7 +187,17 @@ public class Playlist {
     }
 
     public List<Video> getAll() {
-        return mPlaylist;
+        return Collections.unmodifiableList(mPlaylist);
+    }
+
+    public List<Video> getAllChanged() {
+        int size = mPlaylist.size();
+
+        if (mNewSessionIndex < 0 || mNewSessionIndex >= size) {
+            return getAll();
+        }
+
+        return Collections.unmodifiableList(mPlaylist.subList(mNewSessionIndex, size));
     }
 
     /**
@@ -223,5 +235,9 @@ public class Playlist {
         if (index != -1) {
             mPlaylist.set(index, newItem);
         }
+    }
+
+    public void onNewSession() {
+        mNewSessionIndex = mCurrentIndex;
     }
 }
