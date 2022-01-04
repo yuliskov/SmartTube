@@ -138,11 +138,13 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
 
     public void sync(VideoGroup group) {
         for (Video video : group.getVideos()) {
-            int index = mVideoItems.indexOf(video);
-            if (index != -1) {
-                Video origin = mVideoItems.get(index);
-                origin.sync(video);
-                notifyItemRangeChanged(index, 1);
+            // Search for multiple occurrences (e.g. History section)
+            for (int i = 0; i < mVideoItems.size(); i++) {
+                Video origin = mVideoItems.get(i);
+                if (origin.equals(video)) {
+                    origin.sync(video);
+                    notifyItemRangeChanged(i, 1);
+                }
             }
         }
     }
