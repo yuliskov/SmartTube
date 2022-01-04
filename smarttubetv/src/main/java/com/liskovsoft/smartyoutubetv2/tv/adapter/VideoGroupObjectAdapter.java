@@ -140,7 +140,8 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         for (Video video : group.getVideos()) {
             int index = mVideoItems.indexOf(video);
             if (index != -1) {
-                // Item already changed. Just need to redraw.
+                Video origin = mVideoItems.get(index);
+                origin.sync(video);
                 notifyItemRangeChanged(index, 1);
             }
         }
