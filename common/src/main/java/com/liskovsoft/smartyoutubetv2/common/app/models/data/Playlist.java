@@ -56,6 +56,7 @@ public class Playlist {
         // And replace to correct position sync in fragments
         if (video.equals(current)) {
             replace(current, video);
+            mNewSessionIndex--;
             return;
         }
 
@@ -96,7 +97,8 @@ public class Playlist {
             // Don't remove current index. Except this is the last element.
             // Give a chance to replace current element.
             if (index < mCurrentIndex) {
-                --mCurrentIndex;
+                mCurrentIndex--;
+                mNewSessionIndex--;
             }
 
             // Index out of bounds as the result of previous operation.
@@ -238,6 +240,6 @@ public class Playlist {
     }
 
     public void onNewSession() {
-        mNewSessionIndex = mCurrentIndex;
+        mNewSessionIndex = mCurrentIndex + 1;
     }
 }
