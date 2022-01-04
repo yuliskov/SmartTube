@@ -119,7 +119,7 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
 
         cardView.setTitleText(video.title);
         cardView.setContentText(video.description);
-        // Count progress that very close to zero.
+        // Count progress that very close to zero. E.g. when user closed video immediately.
         cardView.setProgress(video.percentWatched > 0 && video.percentWatched < 1 ? 1 : Math.round(video.percentWatched));
         cardView.setBadgeText(video.hasNewContent ?
                 context.getString(R.string.badge_new_content) : video.isLive ? context.getString(R.string.badge_live) : video.badge);
