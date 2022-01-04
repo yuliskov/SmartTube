@@ -188,7 +188,7 @@ public class ContentBlockData {
 
         mIsSponsorBlockEnabled = Helpers.parseBoolean(split, 0, VERSION.SDK_INT > 19); // Android 4 may have memory problems
         // categories: index 2
-        mIsSkipEachSegmentOnceEnabled = Helpers.parseBoolean(split, 3, true);
+        mIsSkipEachSegmentOnceEnabled = Helpers.parseBoolean(split, 3, false);
         // colorMarkers: index 4
         String actions = Helpers.parseStr(split, 6);
         String colorCategories = Helpers.parseStr(split, 7);
