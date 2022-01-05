@@ -39,6 +39,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     private Disposable mScrollAction;
     private Video mVideoItem;
     private MediaGroup mMediaGroup;
+    private boolean mIsCleanupEnabled;
 
     public ChannelUploadsPresenter(Context context) {
         super(context);
@@ -59,6 +60,9 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
     @Override
     public void onViewInitialized() {
+        super.onViewInitialized();
+        mIsCleanupEnabled = true;
+
         if (mVideoItem != null) {
             getView().clear();
             updateGrid(mVideoItem);
@@ -69,12 +73,30 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     @Override
+    public void onViewResumed() {
+        super.onViewResumed();
+        mIsCleanupEnabled = true;
+    }
+
+    @Override
+    public void onViewDestroyed() {
+        super.onViewDestroyed();
+        disposeActions();
+        if (mIsCleanupEnabled) {
+            mVideoItem = null;
+            mMediaGroup = null;
+        }
+    }
+
+    @Override
     public void onVideoItemSelected(Video item) {
         // NOP
     }
 
     @Override
     public void onVideoItemClicked(Video item) {
+        // Activity could be killed. So keeping cache to easily restore.
+        mIsCleanupEnabled = false;
         VideoActionPresenter.instance(getContext()).apply(item);
     }
 
@@ -105,14 +127,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         if (!scrollInProgress) {
             continueVideoGroup(group);
         }
-    }
-
-    @Override
-    public void onViewDestroyed() {
-        super.onViewDestroyed();
-        disposeActions();
-        mVideoItem = null;
-        mMediaGroup = null;
     }
 
     @Override
