@@ -134,11 +134,11 @@ public abstract class BasePresenter<T> implements Presenter<T> {
             return;
         }
 
-        VideoGroup removedGroup = VideoGroup.from(items);
-        removedGroup.setAction(VideoGroup.ACTION_SYNC);
+        VideoGroup syncGroup = VideoGroup.from(items);
+        syncGroup.setAction(VideoGroup.ACTION_SYNC);
         T view = getView();
 
-        if (updateView(removedGroup, view)) {
+        if (updateView(syncGroup, view)) {
             sSync = false;
         }
     }

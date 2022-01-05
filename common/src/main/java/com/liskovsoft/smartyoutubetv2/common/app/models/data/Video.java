@@ -117,10 +117,18 @@ public final class Video implements Parcelable {
     }
 
     public static Video from(String videoId, String playlistId, int playlistIndex) {
+        return from(videoId, playlistId, playlistIndex, null, null, null, -1);
+    }
+
+    public static Video from(String videoId, String playlistId, int playlistIndex, String channelId, String title, String description, float percentWatched) {
         Video video = new Video();
         video.videoId = videoId;
         video.playlistId = playlistId;
         video.playlistIndex = playlistIndex;
+        video.channelId = channelId;
+        video.title = title;
+        video.description = description;
+        video.percentWatched = percentWatched;
 
         return video;
     }
@@ -387,6 +395,10 @@ public final class Video implements Parcelable {
         isSubscribed = metadata.isSubscribed();
         isUpcoming = metadata.isUpcoming();
         isSynced = true;
+    }
+
+    public Video copy() {
+        return from(videoId, playlistId, playlistIndex, channelId, title, description, percentWatched);
     }
 
     // Builder for Video object.

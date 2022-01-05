@@ -240,6 +240,23 @@ public class Playlist {
     }
 
     public void onNewSession() {
+        // To avoid excessive sync we need to find changed items only
         mNewSessionIndex = mCurrentIndex + 1;
+
+        // Video usually contains multiple internal objects.
+        // To avoid excessive memory consumptions we need to do cleanup sometimes.
+        cleanup();
+    }
+
+    /**
+     * Video usually contains multiple internal objects.<br/>
+     * To avoid excessive memory consumptions we need to do cleanup sometimes.
+     */
+    private void cleanup() {
+        for (Video video : mPlaylist) {
+            video.mediaItem = null;
+            video.nextMediaItem = null;
+            video.group = null;
+        }
     }
 }
