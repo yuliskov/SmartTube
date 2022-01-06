@@ -13,6 +13,7 @@ public class SearchData {
     private int mSearchOptions;
     private boolean mIsFocusOnResultsEnabled;
     private boolean mIsKeyboardAutoShowEnabled;
+    private boolean mIsBackgroundPlaybackEnabled;
 
     private SearchData(Context context) {
         mAppPrefs = AppPrefs.instance(context);
@@ -63,6 +64,15 @@ public class SearchData {
         return mIsKeyboardAutoShowEnabled;
     }
 
+    public void enableBackgroundPlayback(boolean enabled) {
+        mIsBackgroundPlaybackEnabled = enabled;
+        persistData();
+    }
+
+    public boolean isBackgroundPlaybackEnabled() {
+        return mIsBackgroundPlaybackEnabled;
+    }
+
     private void restoreData() {
         String data = mAppPrefs.getData(SEARCH_DATA);
 
@@ -72,10 +82,12 @@ public class SearchData {
         mSearchOptions = Helpers.parseInt(split, 1, 0);
         mIsFocusOnResultsEnabled = Helpers.parseBoolean(split, 2, true);
         mIsKeyboardAutoShowEnabled = Helpers.parseBoolean(split, 3, true);
+        mIsBackgroundPlaybackEnabled = Helpers.parseBoolean(split, 4, false);
     }
 
     private void persistData() {
         mAppPrefs.setData(SEARCH_DATA,
-                Helpers.mergeObject(mIsInstantVoiceSearchEnabled, mSearchOptions, mIsFocusOnResultsEnabled, mIsKeyboardAutoShowEnabled));
+                Helpers.mergeObject(mIsInstantVoiceSearchEnabled, mSearchOptions, mIsFocusOnResultsEnabled,
+                        mIsKeyboardAutoShowEnabled, mIsBackgroundPlaybackEnabled));
     }
 }

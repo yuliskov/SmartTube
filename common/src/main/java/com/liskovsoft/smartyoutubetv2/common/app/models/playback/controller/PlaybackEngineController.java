@@ -54,8 +54,8 @@ public interface PlaybackEngineController {
     boolean isEngineInitialized();
     void restartEngine();
     void reloadPlayback();
-    void setPlaybackMode(int type);
-    int getPlaybackMode();
+    void setBackgroundMode(int type);
+    int getBackgroundMode();
     boolean isInPIPMode();
     boolean containsMedia();
     void setSpeed(float speed);

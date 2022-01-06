@@ -151,7 +151,7 @@ public class PlaybackActivity extends LeanbackActivity {
     }
 
     private boolean wannaEnterToPip() {
-        return mPlaybackFragment != null && mPlaybackFragment.getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_PIP && !isInPictureInPictureMode();
+        return mPlaybackFragment != null && mPlaybackFragment.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PIP && !isInPictureInPictureMode();
     }
 
     @Override
@@ -193,13 +193,13 @@ public class PlaybackActivity extends LeanbackActivity {
 
     private boolean doNotFinish() {
         sIsInPipMode = isInPipMode();
-        return sIsInPipMode || (mPlaybackFragment.getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND
+        return sIsInPipMode || (mPlaybackFragment.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND
         && mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_N_BACK);
     }
 
     private boolean doNotDestroy() {
         sIsInPipMode = isInPipMode();
-        return sIsInPipMode || mPlaybackFragment.getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND;
+        return sIsInPipMode || mPlaybackFragment.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND;
     }
 
     @SuppressWarnings("deprecation")
@@ -253,7 +253,7 @@ public class PlaybackActivity extends LeanbackActivity {
     public void onUserLeaveHint() {
         // Check that user not open dialog instead of really leaving the activity
         if (!AppDialogPresenter.instance(this).isDialogShown() && isHomePressed()) {
-            switch (mPlaybackFragment.getPlaybackMode()) {
+            switch (mPlaybackFragment.getBackgroundMode()) {
                 case PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND:
                     enterBackgroundPlayMode();
                     // Do we need to do something additional when running Play Behind?

@@ -30,6 +30,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.Sub
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
@@ -284,6 +285,9 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onSearchClicked() {
+        if (SearchData.instance(getActivity()).isBackgroundPlaybackEnabled()) {
+            onPipClicked();
+        }
         SearchPresenter.instance(getActivity()).startSearch(null);
     }
 
@@ -305,7 +309,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onPipClicked() {
         getController().showControls(false);
-        getController().setPlaybackMode(PlaybackEngineController.BACKGROUND_MODE_PIP);
+        getController().setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_PIP);
         getController().finish();
     }
 

@@ -126,7 +126,7 @@ public class HQDialogManager extends PlayerEventListenerHelper {
         ViewManager.instance(getActivity()).blockTop(null);
 
         if (getController() != null) {
-            getController().setPlaybackMode(mPlayerData.getBackgroundMode());
+            getController().setBackgroundMode(mPlayerData.getBackgroundMode());
         }
     }
 

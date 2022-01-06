@@ -310,4 +310,5 @@
     <string name="cancel_dialog">Cancel</string>
     <string name="msg_player_error_source2">Video source isn\'t working</string>
     <string name="hide_upcoming">Hide upcoming from Subscriptions</string>
+    <string name="search_background_playback">Enter PIP when searching from player</string>
 </resources>

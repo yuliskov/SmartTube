@@ -34,7 +34,6 @@ import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.util.Util;
-import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
@@ -224,7 +223,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     public void onFinish() {
         // Fix background play when playing trailers from NUM
         // On API > 23 onStop not immediately occurred after onPause
-        if (getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_DEFAULT) {
+        if (getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_DEFAULT) {
             if (Util.SDK_INT > 23) {
                 releasePlayer();
             }
@@ -310,7 +309,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         // Background audio mode is complicated (null surface error) on Android 9 (api 28) and above. Try avoid it.
         // More info: DebugInfoMediaCodecVideoRenderer#handleMessage
-        if (getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND &&
+        if (getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND &&
             !ViewManager.instance(getContext()).isNewViewPending()) {
             Log.d(TAG, "releasePlayer: Engine release is blocked by background playback. Exiting...");
             return;
@@ -917,13 +916,13 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
-    public void setPlaybackMode(int type) {
+    public void setBackgroundMode(int type) {
         Log.d(TAG, "Setting engine block type to %s...", type);
         mPlaybackMode = type;
     }
 
     @Override
-    public int getPlaybackMode() {
+    public int getBackgroundMode() {
         return mPlaybackMode;
     }
 
@@ -1006,7 +1005,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         // Fix situations when engine didn't properly destroyed.
         // E.g. after closing dialogs.
-        setPlaybackMode(PlaybackEngineController.BACKGROUND_MODE_DEFAULT);
+        setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_DEFAULT);
         releasePlayer();
 
         mPlaybackPresenter.onViewDestroyed();
