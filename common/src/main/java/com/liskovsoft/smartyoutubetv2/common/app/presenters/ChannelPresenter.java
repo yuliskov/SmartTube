@@ -37,6 +37,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private List<MediaGroup> mMediaGroups;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
+    private boolean mIsCleanupEnabled;
 
     public ChannelPresenter(Context context) {
         super(context);
@@ -56,6 +57,9 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
     @Override
     public void onViewInitialized() {
+        super.onViewInitialized();
+        mIsCleanupEnabled = true;
+
         if (mChannelId != null) {
             getView().clear();
             updateRows(mChannelId);
@@ -66,12 +70,29 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     @Override
+    public void onViewResumed() {
+        super.onViewResumed();
+        mIsCleanupEnabled = true;
+    }
+
+    @Override
+    public void onViewDestroyed() {
+        super.onViewDestroyed();
+        disposeActions();
+        if (mIsCleanupEnabled) {
+            mChannelId = null;
+            mMediaGroups = null;
+        }
+    }
+
+    @Override
     public void onVideoItemSelected(Video item) {
         // NOP
     }
 
     @Override
     public void onVideoItemClicked(Video item) {
+        mIsCleanupEnabled = false;
         VideoActionPresenter.instance(getContext()).apply(item);
     }
 
@@ -96,14 +117,6 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
         if (!scrollInProgress) {
             continueGroup(group);
         }
-    }
-
-    @Override
-    public void onViewDestroyed() {
-        super.onViewDestroyed();
-        disposeActions();
-        mChannelId = null;
-        mMediaGroups = null;
     }
 
     @Override
