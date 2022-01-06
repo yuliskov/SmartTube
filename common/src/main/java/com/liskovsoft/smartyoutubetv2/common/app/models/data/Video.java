@@ -397,6 +397,9 @@ public final class Video implements Parcelable {
         isSynced = true;
     }
 
+    /**
+     * Creating lightweight copy of origin.
+     */
     public Video copy() {
         return from(videoId, playlistId, playlistIndex, channelId, title, description, percentWatched);
     }

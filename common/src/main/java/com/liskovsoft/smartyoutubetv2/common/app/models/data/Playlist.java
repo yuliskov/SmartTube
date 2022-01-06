@@ -15,7 +15,13 @@ public class Playlist {
     private int mNewSessionIndex;
 
     private Playlist() {
-        mPlaylist = new ArrayList<>();
+        mPlaylist = new ArrayList<Video>() {
+            @Override
+            public boolean add(Video video) {
+                // Creating lightweight copy of origin
+                return super.add(video.copy());
+            }
+        };
         mCurrentIndex = -1;
     }
 
@@ -248,11 +254,27 @@ public class Playlist {
      * Video usually contains multiple internal objects.<br/>
      * To avoid excessive memory consumptions we need to do cleanup sometimes.
      */
-    public void cleanup() {
+    //public void cleanup() {
+    //    for (Video video : mPlaylist) {
+    //        video.mediaItem = null;
+    //        video.nextMediaItem = null;
+    //        video.group = null;
+    //    }
+    //}
+
+    /**
+     * Since all items are clones (saves memory) we need to sync sometimes.
+     */
+    public void sync(Video origin) {
+        if (origin == null) {
+            return;
+        }
+
         for (Video video : mPlaylist) {
-            video.mediaItem = null;
-            video.nextMediaItem = null;
-            video.group = null;
+            if (video.equals(origin)) {
+                video.sync(origin);
+                break;
+            }
         }
     }
 }
