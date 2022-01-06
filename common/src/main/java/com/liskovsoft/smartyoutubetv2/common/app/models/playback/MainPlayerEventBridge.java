@@ -210,8 +210,8 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
     
     @Override
-    public void onSeek() {
-        process(PlayerEventListener::onSeek);
+    public void onSeekEnd() {
+        process(PlayerEventListener::onSeekEnd);
     }
 
     @Override

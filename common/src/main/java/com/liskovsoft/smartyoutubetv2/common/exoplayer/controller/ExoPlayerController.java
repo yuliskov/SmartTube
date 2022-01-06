@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.controller;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Build.VERSION;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -344,6 +343,11 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             mPlayer.stop();
             mEventListener.onPlayEnd();
         }
+    }
+
+    @Override
+    public void onSeekProcessed() {
+        mEventListener.onSeekEnd();
     }
 
     @Override

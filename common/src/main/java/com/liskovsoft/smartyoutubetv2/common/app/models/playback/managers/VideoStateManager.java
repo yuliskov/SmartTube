@@ -189,6 +189,11 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     }
 
     @Override
+    public void onSeekEnd() {
+        saveState();
+    }
+
+    @Override
     public void onSourceChanged(Video item) {
         restoreFormats();
     }
