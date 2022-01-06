@@ -94,7 +94,11 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     @Override
     public void onViewResumed() {
         if (sSync && canViewBeSynced()) {
-            syncItem(Playlist.instance().getAllChanged());
+            Playlist playlist = Playlist.instance();
+            syncItem(playlist.getChangedItems());
+            // Video usually contains multiple internal objects.
+            // To avoid excessive memory consumptions we need to do cleanup sometimes.
+            playlist.cleanup();
         }
     }
 
