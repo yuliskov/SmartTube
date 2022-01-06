@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.channeluploads;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.leanback.widget.VerticalGridView;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
@@ -12,14 +13,17 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.VideoGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 
 public class ChannelUploadsFragment extends VideoGridFragment implements ChannelUploadsView {
+    private static final String SELECTED_ITEM_INDEX = "SelectedItemIndex";
     private ProgressBarManager mProgressBarManager;
     private ChannelUploadsPresenter mPresenter;
     private boolean mIsFragmentCreated;
+    private int mRestoredItemIndex = -1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mRestoredItemIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_ITEM_INDEX, -1) : -1;
         mIsFragmentCreated = true;
         mPresenter = ChannelUploadsPresenter.instance(getContext());
         mPresenter.setView(this);
@@ -33,6 +37,14 @@ public class ChannelUploadsFragment extends VideoGridFragment implements Channel
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Not robust. Because tab content often changed after reloading.
+        outState.putInt(SELECTED_ITEM_INDEX, getPosition());
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
@@ -40,6 +52,10 @@ public class ChannelUploadsFragment extends VideoGridFragment implements Channel
         mProgressBarManager.setRootView((ViewGroup) getActivity().findViewById(android.R.id.content).getRootView());
 
         mPresenter.onViewInitialized();
+
+        // Restore state after crash
+        setPosition(mRestoredItemIndex);
+        mRestoredItemIndex = -1;
     }
 
     @Override
