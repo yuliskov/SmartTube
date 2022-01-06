@@ -63,6 +63,10 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
         mChannelPresenter.onViewDestroyed();
     }
 
+    public void onFinish() {
+        mChannelPresenter.onFinish();
+    }
+
     @Override
     public void onResume() {
         super.onResume();

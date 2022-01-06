@@ -37,7 +37,6 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     private List<MediaGroup> mMediaGroups;
     private Disposable mUpdateAction;
     private Disposable mScrollAction;
-    private boolean mIsCleanupEnabled;
 
     public ChannelPresenter(Context context) {
         super(context);
@@ -58,7 +57,6 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     @Override
     public void onViewInitialized() {
         super.onViewInitialized();
-        mIsCleanupEnabled = true;
 
         if (mChannelId != null) {
             getView().clear();
@@ -70,19 +68,19 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     @Override
-    public void onViewResumed() {
-        super.onViewResumed();
-        mIsCleanupEnabled = true;
-    }
-
-    @Override
     public void onViewDestroyed() {
         super.onViewDestroyed();
         disposeActions();
-        if (mIsCleanupEnabled) {
-            mChannelId = null;
-            mMediaGroups = null;
-        }
+    }
+
+    @Override
+    public void onFinish() {
+        super.onFinish();
+
+        // Destroy the cache only (!) when user pressed back (e.g. wants to explicitly kill the activity)
+        // Otherwise keep the cache to easily restore in case activity is killed by the system.
+        mChannelId = null;
+        mMediaGroups = null;
     }
 
     @Override
@@ -92,7 +90,6 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
     @Override
     public void onVideoItemClicked(Video item) {
-        mIsCleanupEnabled = false;
         VideoActionPresenter.instance(getContext()).apply(item);
     }
 

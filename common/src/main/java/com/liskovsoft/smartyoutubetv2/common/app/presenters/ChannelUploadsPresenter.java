@@ -39,7 +39,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     private Disposable mScrollAction;
     private Video mVideoItem;
     private MediaGroup mMediaGroup;
-    private boolean mIsCleanupEnabled;
 
     public ChannelUploadsPresenter(Context context) {
         super(context);
@@ -61,7 +60,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     @Override
     public void onViewInitialized() {
         super.onViewInitialized();
-        mIsCleanupEnabled = true;
 
         if (mVideoItem != null) {
             getView().clear();
@@ -73,19 +71,19 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     @Override
-    public void onViewResumed() {
-        super.onViewResumed();
-        mIsCleanupEnabled = true;
-    }
-
-    @Override
     public void onViewDestroyed() {
         super.onViewDestroyed();
         disposeActions();
-        if (mIsCleanupEnabled) {
-            mVideoItem = null;
-            mMediaGroup = null;
-        }
+    }
+
+    @Override
+    public void onFinish() {
+        super.onFinish();
+
+        // Destroy the cache only (!) when user pressed back (e.g. wants to explicitly kill the activity)
+        // Otherwise keep the cache to easily restore in case activity is killed by the system.
+        mVideoItem = null;
+        mMediaGroup = null;
     }
 
     @Override
@@ -95,8 +93,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
     @Override
     public void onVideoItemClicked(Video item) {
-        // Activity could be killed. So keeping cache to easily restore.
-        mIsCleanupEnabled = false;
         VideoActionPresenter.instance(getContext()).apply(item);
     }
 

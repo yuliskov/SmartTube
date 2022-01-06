@@ -15,7 +15,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager
 public class ChannelUploadsFragment extends VideoGridFragment implements ChannelUploadsView {
     private static final String SELECTED_ITEM_INDEX = "SelectedItemIndex";
     private ProgressBarManager mProgressBarManager;
-    private ChannelUploadsPresenter mPresenter;
+    private ChannelUploadsPresenter mChannelUploadsPresenter;
     private boolean mIsFragmentCreated;
     private int mRestoredItemIndex = -1;
 
@@ -25,8 +25,8 @@ public class ChannelUploadsFragment extends VideoGridFragment implements Channel
 
         mRestoredItemIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_ITEM_INDEX, -1) : -1;
         mIsFragmentCreated = true;
-        mPresenter = ChannelUploadsPresenter.instance(getContext());
-        mPresenter.setView(this);
+        mChannelUploadsPresenter = ChannelUploadsPresenter.instance(getContext());
+        mChannelUploadsPresenter.setView(this);
 
         mProgressBarManager = new ProgressBarManager();
     }
@@ -51,7 +51,7 @@ public class ChannelUploadsFragment extends VideoGridFragment implements Channel
         // Don't move to onCreateView
         mProgressBarManager.setRootView((ViewGroup) getActivity().findViewById(android.R.id.content).getRootView());
 
-        mPresenter.onViewInitialized();
+        mChannelUploadsPresenter.onViewInitialized();
 
         // Restore state after crash
         setPosition(mRestoredItemIndex);
@@ -68,7 +68,11 @@ public class ChannelUploadsFragment extends VideoGridFragment implements Channel
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mPresenter.onViewDestroyed();
+        mChannelUploadsPresenter.onViewDestroyed();
+    }
+
+    public void onFinish() {
+        mChannelUploadsPresenter.onFinish();
     }
 
     @Override
@@ -76,7 +80,7 @@ public class ChannelUploadsFragment extends VideoGridFragment implements Channel
         super.onResume();
 
         if (!mIsFragmentCreated) {
-            mPresenter.onViewResumed();
+            mChannelUploadsPresenter.onViewResumed();
         }
 
         mIsFragmentCreated = false;
