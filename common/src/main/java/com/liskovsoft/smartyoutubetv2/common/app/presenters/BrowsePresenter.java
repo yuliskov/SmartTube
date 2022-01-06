@@ -9,9 +9,9 @@ import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.SettingsItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -20,8 +20,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.errors.CategoryEmptyErro
 import com.liskovsoft.smartyoutubetv2.common.app.models.errors.SignInError;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.BootDialogPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.ChannelUploadsMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.ChannelUploadsMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.SectionMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
@@ -32,10 +32,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
-import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.utils.ScreenHelper;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
-import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -54,10 +52,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private static final String TAG = BrowsePresenter.class.getSimpleName();
     private static final long HEADER_REFRESH_PERIOD_MS = 120 * 60 * 1_000;
     private static final int MIN_GROUP_SIZE = 13;
-    private static final int SHORTS_LEN_MS = 50 * 1_000;
     @SuppressLint("StaticFieldLeak")
     private static BrowsePresenter sInstance;
-    private final PlaybackPresenter mPlaybackPresenter;
     private final MainUIData mMainUIData;
     private final GeneralData mGeneralData;
     private final List<BrowseSection> mSections;
@@ -79,7 +75,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private BrowsePresenter(Context context) {
         super(context);
         mDataSourcePresenter = AppDataSourceManager.instance();
-        mPlaybackPresenter = PlaybackPresenter.instance(context);
         mSections = new ArrayList<>();
         mGridMapping = new HashMap<>();
         mRowMapping = new HashMap<>();
@@ -694,20 +689,17 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        if (mGeneralData.isHideShortsEnabled() && mediaGroup.getType() == MediaGroup.TYPE_SUBSCRIPTIONS) {
+        if ((mGeneralData.isHideShortsEnabled() || mGeneralData.isHideUpcomingEnabled())
+                && mediaGroup.getType() == MediaGroup.TYPE_SUBSCRIPTIONS) {
 
-            // Remove Shorts
-            // Predicate replacement function for devices with Android 6.0 and below.
-            Helpers.removeIf(mediaGroup.getMediaItems(), value -> {
-                if (value.getTitle() == null) {
+            // Remove Shorts and/or Upcoming
+            // NOTE: Predicate replacement function for devices with Android 6.0 and below.
+            Helpers.removeIf(mediaGroup.getMediaItems(), mediaItem -> {
+                if (mediaItem == null) {
                     return false;
                 }
 
-                int lengthMs = ServiceHelper.timeTextToMillis(value.getBadgeText());
-                return lengthMs > 0 && lengthMs < SHORTS_LEN_MS;
-                //return value.title.toLowerCase().contains("#short")  ||
-                //       value.title.toLowerCase().contains("#shorts") ||
-                //       value.title.toLowerCase().contains("#tiktok");
+                return (mGeneralData.isHideShortsEnabled() && Utils.isShort(mediaItem)) || (mGeneralData.isHideUpcomingEnabled() && mediaItem.isUpcoming());
             });
         }
     }

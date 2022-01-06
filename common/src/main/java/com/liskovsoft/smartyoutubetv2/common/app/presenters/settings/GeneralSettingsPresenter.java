@@ -215,6 +215,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.hideShorts(option.isSelected()),
                 mGeneralData.isHideShortsEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_upcoming),
+                option -> mGeneralData.hideUpcoming(option.isSelected()),
+                mGeneralData.isHideUpcomingEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.return_to_launcher),
                 option -> mGeneralData.enableReturnToLauncher(option.isSelected()),
                 mGeneralData.isReturnToLauncherEnabled()));

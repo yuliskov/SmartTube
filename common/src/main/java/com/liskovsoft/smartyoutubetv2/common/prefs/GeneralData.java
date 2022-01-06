@@ -35,6 +35,7 @@ public class GeneralData {
     private boolean mIsReturnToLauncherEnabled;
     private int mBackgroundShortcut;
     private boolean mIsHideShortsEnabled;
+    private boolean mIsHideUpcomingEnabled;
     private boolean mIsRemapFastForwardToNextEnabled;
     private int mScreenDimmingTimeoutMin;
     private boolean mIsProxyEnabled;
@@ -274,6 +275,15 @@ public class GeneralData {
         return mIsHideShortsEnabled;
     }
 
+    public void hideUpcoming(boolean enable) {
+        mIsHideUpcomingEnabled = enable;
+        persistState();
+    }
+
+    public boolean isHideUpcomingEnabled() {
+        return mIsHideUpcomingEnabled;
+    }
+
     public void remapFastForwardToNext(boolean enable) {
         mIsRemapFastForwardToNextEnabled = enable;
         persistState();
@@ -360,6 +370,7 @@ public class GeneralData {
         mIsOkButtonLongPressDisabled = Helpers.parseBoolean(split, 12, false);
         mLastPlaylistId = Helpers.parseStr(split, 13);
         String selectedSections = Helpers.parseStr(split, 14);
+        mIsHideUpcomingEnabled = Helpers.parseBoolean(split, 15, false);
 
         if (selectedSections != null) {
             String[] selectedSectionsArr = Helpers.splitArrayLegacy(selectedSections);
@@ -387,6 +398,7 @@ public class GeneralData {
         mPrefs.setData(GENERAL_DATA, Helpers.mergeObject(null, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut,
                 mIsReturnToLauncherEnabled,mBackgroundShortcut, pinnedItems,
                 mIsHideShortsEnabled, mIsRemapFastForwardToNextEnabled, mScreenDimmingTimeoutMin,
-                mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId, selectedCategories));
+                mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId,
+                selectedCategories, mIsHideUpcomingEnabled));
     }
 }

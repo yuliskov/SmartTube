@@ -305,4 +305,5 @@
     <string name="keyboard_auto_show">Показывать клавиатуру автоматически</string>
     <string name="cancel_dialog">Отменить</string>
     <string name="msg_player_error_source2">Источник видео не работает</string>
+    <string name="hide_upcoming">Скрывать анонсы из Подписок</string>
 </resources>
