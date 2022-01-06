@@ -92,7 +92,9 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     /**
      * Called when user pressed back button.
      */
+    @Override
     public void onFinish() {
+        super.onFinish();
         clear();
 
         for (Runnable callback : mOnFinish) {

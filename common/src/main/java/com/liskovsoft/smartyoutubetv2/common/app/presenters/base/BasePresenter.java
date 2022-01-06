@@ -102,6 +102,11 @@ public abstract class BasePresenter<T> implements Presenter<T> {
         }
     }
 
+    @Override
+    public void onFinish() {
+        // NOP
+    }
+
     public void setOnDone(Runnable onDone) {
         mOnDone = onDone;
     }

@@ -10,4 +10,5 @@ public interface Presenter<T> {
     void onViewInitialized();
     void onViewDestroyed();
     void onViewResumed();
+    void onFinish();
 }
