@@ -190,12 +190,14 @@ public class VideoStateManager extends PlayerEventListenerHelper {
 
     @Override
     public void onSeekEnd() {
+        // Scenario: user opens ui and does some seeking
         saveState();
     }
 
     @Override
     public void onControlsShown(boolean shown) {
         if (shown) {
+            // Scenario: user clicked on channel button
             saveState();
         }
     }
