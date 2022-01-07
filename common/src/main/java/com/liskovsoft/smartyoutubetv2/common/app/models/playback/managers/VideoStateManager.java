@@ -34,7 +34,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         mPlayerData = PlayerData.instance(getActivity());
         mStateService = VideoStateService.instance(getActivity());
 
-        // onInitDone usually called after openVideo
+        // onInitDone usually called after openVideo (if PlaybackView is destroyed)
         // So, we need to repeat some things again.
         resetPositionOfNewVideo(mVideo);
     }
@@ -45,14 +45,6 @@ public class VideoStateManager extends PlayerEventListenerHelper {
      */
     @Override
     public void openVideo(Video item) {
-        setPlayEnabled(true); // video just added
-
-        mVideo = item;
-        mTempVideoFormat = null;
-
-        resetPositionOfNewVideo(item);
-        resetSpeedOfNewVideo();
-
         // Ensure that we aren't running on presenter init stage
         if (getController() != null) {
             // Save state of the previous video.
@@ -60,10 +52,15 @@ public class VideoStateManager extends PlayerEventListenerHelper {
             if (!item.equals(mVideo)) { // video might be opened twice (when remote connection enabled). Fix for that.
                 saveState();
             }
-
-            // Restore format according to profile on every new video
-            //restoreVideoFormat();
         }
+
+        setPlayEnabled(true); // video just added
+
+        mVideo = item;
+        mTempVideoFormat = null;
+
+        resetPositionOfNewVideo(item);
+        resetSpeedOfNewVideo();
     }
 
     @Override
