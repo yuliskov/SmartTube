@@ -27,11 +27,10 @@ import io.reactivex.schedulers.Schedulers;
 import java.util.Set;
 
 public class StoryboardManager {
-    private static final String TAG = SettingsManager.class.getSimpleName();
+    private static final String TAG = StoryboardManager.class.getSimpleName();
     private static final long FRAME_DURATION_MS = 10_000;
     private final MediaItemManager mMediaItemManager;
     private final Context mContext;
-    private Video mVideo;
     private long mLengthMs;
     private MediaItemStoryboard mStoryboard;
     private Disposable mFormatAction;
@@ -54,7 +53,6 @@ public class StoryboardManager {
     }
 
     public void setVideo(Video video, long lengthMs) {
-        mVideo = video;
         mLengthMs = lengthMs;
         mSeekPositions = null;
         mCachedImageNums = new ArraySet<>();
@@ -134,25 +132,28 @@ public class StoryboardManager {
         loadPreview(mSeekPositions[index], callback);
     }
 
-    public void loadPreview(long currentPosition, Callback callback) {
+    private void loadPreview(long currentPosition, Callback callback) {
         if (mStoryboard == null || mStoryboard.getGroupDurationMS() == 0) {
             return;
         }
 
-        int imgNum = (int) currentPosition / mStoryboard.getGroupDurationMS();
+        int groupNum = (int) currentPosition / mStoryboard.getGroupDurationMS();
         long realPosMS = currentPosition % mStoryboard.getGroupDurationMS();
         Size size = mStoryboard.getGroupSize();
         GlideThumbnailTransformation transformation =
                 new GlideThumbnailTransformation(realPosMS, size.getWidth(), size.getHeight(), size.getRowCount(), size.getColCount(), size.getDurationEachMS());
 
+        //Log.d(TAG, "Loading preview. Position: %s, groupNum: %s, groupDurationMS: %s, groupSize", currentPosition, groupNum, mStoryboard.getGroupDurationMS(), size);
+
         Glide.with(mContext)
                 .asBitmap()
-                .load(mStoryboard.getGroupUrl(imgNum))
+                .load(mStoryboard.getGroupUrl(groupNum))
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                 .transform(transformation)
                 .into(new CustomTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        //Log.d(TAG, "onPreviewLoaded: image hashCode: %s", resource.hashCode());
                         callback.onBitmapLoaded(resource);
                     }
 
@@ -162,10 +163,10 @@ public class StoryboardManager {
                     }
                 });
 
-        if (mCurrentImgNum != imgNum) {
-            mSeekDirection = mCurrentImgNum < imgNum ? DIRECTION_RIGHT : DIRECTION_LEFT;
-            mCachedImageNums.add(imgNum);
-            mCurrentImgNum = imgNum;
+        if (mCurrentImgNum != groupNum) {
+            mSeekDirection = mCurrentImgNum < groupNum ? DIRECTION_RIGHT : DIRECTION_LEFT;
+            mCachedImageNums.add(groupNum);
+            mCurrentImgNum = groupNum;
 
             preloadNextImage();
         }
