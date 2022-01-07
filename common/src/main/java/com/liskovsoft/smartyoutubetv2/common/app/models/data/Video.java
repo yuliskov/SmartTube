@@ -401,7 +401,11 @@ public final class Video implements Parcelable {
      * Creating lightweight copy of origin.
      */
     public Video copy() {
-        return from(videoId, playlistId, playlistIndex, channelId, title, description, percentWatched);
+        Video video = from(videoId, playlistId, playlistIndex, channelId, title, description, percentWatched);
+        if (group != null) {
+            video.group = group.copy(); // Needed for proper multi row fragments sync (row id == group id)
+        }
+        return video;
     }
 
     // Builder for Video object.

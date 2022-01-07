@@ -162,4 +162,16 @@ public class VideoGroup {
 
         return items.get(items.size() - 1);
     }
+
+    /**
+     * Lightweight copy (without nested videos)
+     */
+    public VideoGroup copy() {
+        VideoGroup videoGroup = new VideoGroup();
+        videoGroup.mId = mId;
+        videoGroup.mTitle = mTitle;
+        videoGroup.mPosition = mPosition;
+
+        return videoGroup;
+    }
 }
