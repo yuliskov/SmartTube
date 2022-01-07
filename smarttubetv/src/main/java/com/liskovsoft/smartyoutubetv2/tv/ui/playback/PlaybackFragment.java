@@ -1047,12 +1047,12 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void showControlsOverlay(boolean runAnimation) {
-        // Do throttle. Called so many times.
+        super.showControlsOverlay(runAnimation);
+
+        // Do throttle. Called so many times. Rely on boxing because initial state is unknown.
         if (mIsControlsShownPreviously != null && mIsControlsShownPreviously) {
             return;
         }
-
-        super.showControlsOverlay(runAnimation);
 
         updatePlayerBackground();
 
@@ -1069,12 +1069,12 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
     @Override
     public void hideControlsOverlay(boolean runAnimation) {
+        super.hideControlsOverlay(runAnimation);
+
         // Do throttle. Called so many times. Rely on boxing because initial state is unknown.
         if (mIsControlsShownPreviously != null && !mIsControlsShownPreviously) {
             return;
         }
-
-        super.hideControlsOverlay(runAnimation);
 
         if (mPlayerGlue != null) {
             mPlayerGlue.setControlsVisibility(false);
