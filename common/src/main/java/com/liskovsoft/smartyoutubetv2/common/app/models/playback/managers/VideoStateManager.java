@@ -194,6 +194,13 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     }
 
     @Override
+    public void onControlsShown(boolean shown) {
+        if (shown) {
+            saveState();
+        }
+    }
+
+    @Override
     public void onSourceChanged(Video item) {
         restoreFormats();
     }

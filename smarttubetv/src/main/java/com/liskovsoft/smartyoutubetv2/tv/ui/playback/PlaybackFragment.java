@@ -105,6 +105,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private MediaSessionCompat mMediaSession;
     private MediaSessionConnector mMediaSessionConnector;
     private boolean mIsAfrRunning;
+    private Boolean mIsControlsShownPreviously;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -1046,6 +1047,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     @Override
     public void showControlsOverlay(boolean runAnimation) {
+        // Do throttle. Called so many times.
+        if (mIsControlsShownPreviously != null && mIsControlsShownPreviously) {
+            return;
+        }
+
         super.showControlsOverlay(runAnimation);
 
         updatePlayerBackground();
@@ -1057,10 +1063,17 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         if (mEventListener != null) {
             mEventListener.onControlsShown(true);
         }
+
+        mIsControlsShownPreviously = true;
     }
 
     @Override
     public void hideControlsOverlay(boolean runAnimation) {
+        // Do throttle. Called so many times. Rely on boxing because initial state is unknown.
+        if (mIsControlsShownPreviously != null && !mIsControlsShownPreviously) {
+            return;
+        }
+
         super.hideControlsOverlay(runAnimation);
 
         if (mPlayerGlue != null) {
@@ -1070,6 +1083,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         if (mEventListener != null) {
             mEventListener.onControlsShown(false);
         }
+
+        mIsControlsShownPreviously = false;
     }
 
     @Override
