@@ -10,12 +10,12 @@ import androidx.leanback.media.SurfaceHolderGlueHost;
  * {@link PlaybackGlueHost} implementation
  * the interaction between {@link PlaybackGlue} and {@link androidx.leanback.app.VideoSupportFragment}.
  */
-public class SurfaceSupportFragmentGlueHost extends PlaybackSupportFragmentGlueHost
+public class SurfacePlaybackFragmentGlueHost extends PlaybackSupportFragmentGlueHost
         implements SurfaceHolderGlueHost {
     @SuppressWarnings("HidingField") // Supertype field is package scope to avoid synthetic accessor
-    private final SurfaceSupportFragment mFragment;
+    private final SurfacePlaybackFragment mFragment;
 
-    public SurfaceSupportFragmentGlueHost(SurfaceSupportFragment fragment) {
+    public SurfacePlaybackFragmentGlueHost(SurfacePlaybackFragment fragment) {
         super(fragment);
         this.mFragment = fragment;
     }

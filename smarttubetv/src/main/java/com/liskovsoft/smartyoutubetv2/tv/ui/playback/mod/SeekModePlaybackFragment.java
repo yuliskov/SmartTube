@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.playback.other;
+package com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod;
 
 import android.os.Bundle;
 import androidx.leanback.widget.PlaybackSeekDataProvider;
@@ -8,7 +8,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 /**
  * Disables this behavior when seeking: <em>Show or hide other rows other than PlaybackRow.</em>
  */
-public class SeekModeOverrideFragment extends VideoEventsOverrideFragment {
+public class SeekModePlaybackFragment extends EventsOverridePlaybackFragment {
     private PlaybackSeekUi.Client mSeekUiClient2;
 
     @Override

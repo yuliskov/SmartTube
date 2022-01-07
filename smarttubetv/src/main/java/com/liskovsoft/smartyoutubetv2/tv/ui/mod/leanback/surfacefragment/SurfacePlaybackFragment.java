@@ -16,7 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
  * Subclass of {@link PlaybackSupportFragment} that is responsible for providing a {@link SurfaceView}
  * and rendering video.
  */
-public class SurfaceSupportFragment extends PlaybackSupportFragment {
+public class SurfacePlaybackFragment extends PlaybackSupportFragment {
     SurfaceWrapper mVideoSurfaceWrapper;
     AspectRatioFrameLayout mVideoSurfaceRoot;
     private int mBackgroundResId;

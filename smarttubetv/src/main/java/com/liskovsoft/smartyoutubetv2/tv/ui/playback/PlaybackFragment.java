@@ -65,9 +65,9 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.surfacefragment.SurfaceSupportFragmentGlueHost;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.surfacefragment.SurfacePlaybackFragmentGlueHost;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.BackboneQueueNavigator;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.SeekModeOverrideFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.SeekModePlaybackFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.StoryboardSeekDataProvider;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue.OnActionClickedListener;
@@ -83,7 +83,7 @@ import java.util.Map;
  * Plays selected video, loads playlist and related videos, and delegates playback to
  * {@link VideoPlayerGlue}.
  */
-public class PlaybackFragment extends SeekModeOverrideFragment implements PlaybackView, PlaybackController {
+public class PlaybackFragment extends SeekModePlaybackFragment implements PlaybackView, PlaybackController {
     private static final String TAG = PlaybackFragment.class.getSimpleName();
     private static final int UPDATE_DELAY_MS = 16;
     private VideoPlayerGlue mPlayerGlue;
@@ -392,7 +392,7 @@ public class PlaybackFragment extends SeekModeOverrideFragment implements Playba
 
         OnActionClickedListener playerActionListener = new PlayerActionListener();
         mPlayerGlue = new VideoPlayerGlue(getContext(), playerAdapter, playerActionListener);
-        mPlayerGlue.setHost(new SurfaceSupportFragmentGlueHost(this));
+        mPlayerGlue.setHost(new SurfacePlaybackFragmentGlueHost(this));
         mPlayerGlue.setSeekEnabled(true);
         mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end
         StoryboardSeekDataProvider.setSeekProvider(mPlayerGlue);
