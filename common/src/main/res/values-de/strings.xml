@@ -309,6 +309,6 @@
     <string name="keyboard_auto_show">Tastatur automatisch anzeigen</string>
     <string name="cancel_dialog">Abbrechen</string>
     <string name="msg_player_error_source2">Video-Quelle funktioniert nicht</string>
-    <string name="hide_upcoming">Anstehende Videos aus den Abos ausblenden</string>
+    <string name="hide_upcoming">Anstehende Videos aus Abos ausblenden</string>
     <string name="search_background_playback">Bild-in-Bild öffnen bei Suche über den Player</string>
 </resources>
