@@ -115,9 +115,9 @@ public class VideoTrack extends MediaTrack {
         } else if (type == COMPARE_TYPE_IN_BOUNDS_NO_FPS) {
             result = inBounds(id1, id2, size1, size2, -1, -1, codecs1, codecs2);
         } else if (type == COMPARE_TYPE_IN_BOUNDS_PRESET) {
-            result = inBoundsProfile(id1, id2, size1, size2, frameRate1, frameRate2, codecs1, codecs2);
+            result = inBoundsPreset(id1, id2, size1, size2, frameRate1, frameRate2, codecs1, codecs2);
         } else if (type == COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS) {
-            result = inBoundsProfile(id1, id2, size1, size2, -1, -1, codecs1, codecs2);
+            result = inBoundsPreset(id1, id2, size1, size2, -1, -1, codecs1, codecs2);
         } else {
             result = compare(id1, id2, size1, size2, frameRate1, frameRate2, codecs1, codecs2);
         }
@@ -141,7 +141,7 @@ public class VideoTrack extends MediaTrack {
         return result;
     }
 
-    private int inBoundsProfile(String id1, String id2, int size1, int size2, float frameRate1, float frameRate2, String codecs1, String codecs2) {
+    private int inBoundsPreset(String id1, String id2, int size1, int size2, float frameRate1, float frameRate2, String codecs1, String codecs2) {
         int result = -1;
 
         if (Helpers.equals(id1, id2)) {
