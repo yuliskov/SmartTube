@@ -26,8 +26,9 @@ public class VideoTrack extends MediaTrack {
         }
 
         int threshold = size1 / 100 * diffPercents;
+        boolean diffWithinThreshold = Math.abs(size1 - size2) < threshold;
 
-        return Math.abs(size1 - size2) < threshold;
+        return diffWithinThreshold;
     }
 
     private static boolean sizeLessOrEquals(int size1, int size2) {
@@ -38,12 +39,23 @@ public class VideoTrack extends MediaTrack {
         return size1 <= size2 || sizeEquals(size1, size2);
     }
 
+    private static boolean sizeLess(int size1, int size2) {
+        if (size1 == -1 || size2 == -1) {
+            return false;
+        }
+
+        return !sizeEquals(size1, size2) && size1 < size2;
+    }
+
     private static boolean fpsEquals(float fps1, float fps2) {
         if (fps1 == -1 || fps2 == -1) {
             return true;
         }
 
-        return Math.abs(fps1 - fps2) < 10;
+        int threshold = 10;
+        boolean diffWithinThreshold = Math.abs(fps1 - fps2) < threshold;
+
+        return diffWithinThreshold;
     }
 
     private static boolean fpsLessOrEquals(float fps1, float fps2) {
@@ -52,6 +64,14 @@ public class VideoTrack extends MediaTrack {
         }
 
         return fps1 <= fps2 || fpsEquals(fps1, fps2);
+    }
+
+    private static boolean fpsLess(float fps1, float fps2) {
+        if (fps1 == -1 || fps2 == -1) {
+            return true; // probably LIVE translation
+        }
+        
+        return !fpsEquals(fps1, fps2) && fps1 < fps2;
     }
 
     private boolean isLive(MediaTrack track) {
@@ -144,54 +164,103 @@ public class VideoTrack extends MediaTrack {
     }
 
     private int inBoundsPreset(String id1, String id2, int size1, int size2, float frameRate1, float frameRate2, String codecs1, String codecs2) {
-        int result = -1;
-
         if (Helpers.equals(id1, id2)) {
-            result = 0;
-        } else if (sizeEquals(size1, size2)) {
-            if (fpsEquals(frameRate2, frameRate1)) {
-                if (TrackSelectorUtil.isHdrCodec(codecs1) == TrackSelectorUtil.isHdrCodec(codecs2)) {
-                    result = 0;
-                } else if (TrackSelectorUtil.isHdrCodec(codecs1)) {
-                    result = 1;
-                }
-            } else if (fpsLessOrEquals(frameRate2, frameRate1)) {
-                if (TrackSelectorUtil.isHdrCodec(codecs1) == TrackSelectorUtil.isHdrCodec(codecs2)) {
-                    result = 1;
-                } else if (TrackSelectorUtil.isHdrCodec(codecs1)) {
-                    result = 1;
-                }
-            }
-        } else if (sizeLessOrEquals(size2, size1) && fpsLessOrEquals(frameRate2, frameRate1)) {
-            if (TrackSelectorUtil.isHdrCodec(codecs1) == TrackSelectorUtil.isHdrCodec(codecs2)) {
-                result = 1;
-            } else if (TrackSelectorUtil.isHdrCodec(codecs1)) {
-                result = 1;
-            }
+            return 0;
         }
 
-        return result;
+        if (!TrackSelectorUtil.isHdrCodec(codecs1) && TrackSelectorUtil.isHdrCodec(codecs2)) {
+            return -1;
+        }
+
+        if (fpsLess(frameRate1, frameRate2)) {
+            return -1;
+        }
+
+        if (sizeLess(size1, size2)) {
+            return -1;
+        }
+
+        return 1;
     }
+
+    //private int inBoundsPreset(String id1, String id2, int size1, int size2, float frameRate1, float frameRate2, String codecs1, String codecs2) {
+    //    int result = -1;
+    //
+    //    if (Helpers.equals(id1, id2)) {
+    //        result = 0;
+    //    } else if (sizeEquals(size1, size2)) {
+    //        if (fpsEquals(frameRate2, frameRate1)) {
+    //            if (TrackSelectorUtil.isHdrCodec(codecs1) == TrackSelectorUtil.isHdrCodec(codecs2)) {
+    //                result = 0;
+    //            } else if (TrackSelectorUtil.isHdrCodec(codecs1)) {
+    //                result = 1;
+    //            }
+    //        } else if (fpsLessOrEquals(frameRate2, frameRate1)) {
+    //            if (TrackSelectorUtil.isHdrCodec(codecs1) == TrackSelectorUtil.isHdrCodec(codecs2)) {
+    //                result = 1;
+    //            } else if (TrackSelectorUtil.isHdrCodec(codecs1)) {
+    //                result = 1;
+    //            }
+    //        }
+    //    } else if (sizeLessOrEquals(size2, size1) && fpsLessOrEquals(frameRate2, frameRate1)) {
+    //        if (TrackSelectorUtil.isHdrCodec(codecs1) == TrackSelectorUtil.isHdrCodec(codecs2)) {
+    //            result = 1;
+    //        } else if (TrackSelectorUtil.isHdrCodec(codecs1)) {
+    //            result = 1;
+    //        }
+    //    }
+    //
+    //    return result;
+    //}
 
     private int compare(String id1, String id2, int size1, int size2, float frameRate1, float frameRate2, String codecs1, String codecs2) {
-        int result = -1;
-
         if (Helpers.equals(id1, id2)) {
-            result = 0;
-        } else if (sizeLessOrEquals(size2, size1)) {
-            if (fpsLessOrEquals(frameRate2, frameRate1)) {
-                if (TrackSelectorUtil.isHdrCodec(codecs1) == TrackSelectorUtil.isHdrCodec(codecs2)) {
-                    result = 0;
-                } else if (TrackSelectorUtil.isHdrCodec(codecs2)) {
-                    result = -1;
-                } else {
-                    result = 1;
-                }
-            }
+            return 0;
         }
 
-        return result;
+        int leftScore = 0;
+        int rightScore = 0;
+
+        if (TrackSelectorUtil.isHdrCodec(codecs1) && !TrackSelectorUtil.isHdrCodec(codecs2)) {
+            leftScore += 3;
+        } else if (TrackSelectorUtil.isHdrCodec(codecs2) && !TrackSelectorUtil.isHdrCodec(codecs1)) {
+            rightScore += 3;
+        }
+
+        if (fpsLess(frameRate1, frameRate2)) {
+            rightScore += 2;
+        } else if (fpsLess(frameRate2, frameRate1)) {
+            leftScore += 2;
+        }
+
+        if (sizeLess(size1, size2)) {
+            rightScore += 1;
+        } else if (sizeLess(size2, size1)) {
+            leftScore += 1;
+        }
+
+        return leftScore - rightScore;
     }
+
+    //private int compare(String id1, String id2, int size1, int size2, float frameRate1, float frameRate2, String codecs1, String codecs2) {
+    //    int result = -1;
+    //
+    //    if (Helpers.equals(id1, id2)) {
+    //        result = 0;
+    //    } else if (sizeLessOrEquals(size2, size1)) {
+    //        if (fpsLessOrEquals(frameRate2, frameRate1)) {
+    //            if (TrackSelectorUtil.isHdrCodec(codecs1) == TrackSelectorUtil.isHdrCodec(codecs2)) {
+    //                result = 0;
+    //            } else if (TrackSelectorUtil.isHdrCodec(codecs2)) {
+    //                result = -1;
+    //            } else {
+    //                result = 1;
+    //            }
+    //        }
+    //    }
+    //
+    //    return result;
+    //}
 
     /**
      * Check widescreen: 16:9, 16:8, 16:7 etc<br/>
