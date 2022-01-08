@@ -213,7 +213,7 @@
     <string name="player_show_global_ending_time">Mostra sempre l\'ora di fine del video sullo schermo</string>
     <string name="uploads_old_look">Reimposta vecchio look sezione caricamenti</string>
     <string name="background_playback_activation">Riproduzione in background (attivazione)</string>
-    <string name="channels_old_look">Reimposta vecchio look sezione canali </string>
+    <string name="channels_old_look">Reimposta vecchio look sezione canali</string>
     <string name="channels_auto_load">Caricamento automatico contenuto sezione canali</string>
     <string name="return_to_background_video">Torna al video in esecuzione in background</string>
     <string name="pin_unpin_from_sidebar">Fissa o rimuovi dalla barra laterale</string>
@@ -225,7 +225,7 @@
     <string name="share_embed_link">Condividi link incorporato</string>
     <string name="card_text_scroll_factor">Velocità scorrimento testo titoli video</string>
     <string name="preferred_update_source">Seleziona fonte aggiornamenti</string>
-    <string name="hide_shorts">Nascondi i video corti dalle Iscrizioni </string>
+    <string name="hide_shorts">Nascondi i video corti dalle Iscrizioni</string>
     <string name="key_remapping">Rimappatura tasti</string>
     <string name="screen_dimming">Oscura schermo</string>
     <string name="removed_from_playback_queue">Rimosso dalla coda di riproduzione</string>
@@ -308,4 +308,7 @@
     <string name="content_block_filler">Fuori tema (riempitivo)</string>
     <string name="keyboard_auto_show">Mostra automaticamente la tastiera</string>
     <string name="cancel_dialog">Annulla</string>
+    <string name="msg_player_error_source2">La sorgente video non funziona</string>
+    <string name="hide_upcoming">Nascondi i video seguenti dalle Iscrizioni</string>
+    <string name="search_background_playback">Entra in PiP quando cerchi dal lettore</string>
 </resources>
