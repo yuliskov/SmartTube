@@ -105,6 +105,11 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             return;
         }
 
+        if (item.group == null) {
+            Log.e(TAG, "Can't scroll. Video group is null.");
+            return;
+        }
+
         VideoGroup group = item.group;
 
         Log.d(TAG, "onScrollEnd: Group title: " + group.getTitle());

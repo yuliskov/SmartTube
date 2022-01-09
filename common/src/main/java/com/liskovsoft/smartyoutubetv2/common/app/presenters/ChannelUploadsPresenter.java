@@ -180,6 +180,11 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
         disposeActions();
 
+        // Channel item position restore may be called too early (Xiaomi)
+        if (getView() == null) {
+            return;
+        }
+
         getView().showProgressBar(true);
 
         MediaGroup mediaGroup = group.getMediaGroup();
