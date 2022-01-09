@@ -307,4 +307,8 @@
     <string name="content_block_action_dialog">Onay mesajı göster</string>
     <string name="content_block_filler">Konu dışı (boşluk doldurma)</string>
     <string name="keyboard_auto_show">Klavyeyi otomatik olarak göster</string>
+    <string name="cancel_dialog">İptal et</string>
+    <string name="msg_player_error_source2">Video kaynağı çalışmıyor</string>
+    <string name="hide_upcoming">Aboneliklerde yaklaşan yayınları gizle</string>
+    <string name="search_background_playback">Oynatıcıdan arama yaparken resim içinde resim moduna geç</string>
 </resources>
