@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
+import android.app.Activity;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.v4.media.MediaMetadataCompat;
@@ -65,9 +66,9 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.SeekModePlaybackFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.surface.SurfacePlaybackFragmentGlueHost;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.BackboneQueueNavigator;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.SeekModePlaybackFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.StoryboardSeekDataProvider;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue.OnActionClickedListener;
@@ -191,6 +192,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         // NOTE: don't move this into another place! Multiple components rely on it.
         mEventListener.onViewResumed();
+        showHidePlayerOverlay(true); // PIP mode fix
     }
 
     @Override
@@ -203,6 +205,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         if (Util.SDK_INT <= 23) {
             releasePlayer();
         }
+
+        showHidePlayerOverlay(false); // PIP mode fix
     }
 
     public void onDispatchKeyEvent(KeyEvent event) {
@@ -1255,6 +1259,18 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             showControls(controlsShown);
             showDebugInfo(debugShown);
             setDebugButtonState(debugShown);
+        }
+    }
+
+    private void showHidePlayerOverlay(boolean show) {
+        Activity activity = getActivity();
+
+        if (activity != null) {
+            View overlay = activity.findViewById(R.id.player_overlay_wrapper);
+
+            if (overlay != null) {
+                overlay.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
         }
     }
 }
