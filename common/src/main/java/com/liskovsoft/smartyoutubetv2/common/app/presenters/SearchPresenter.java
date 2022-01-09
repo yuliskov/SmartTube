@@ -18,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionP
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SearchView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.sharedutils.rx.RxUtils;
@@ -59,16 +60,25 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
     }
 
     @Override
+    public void onViewInitialized() {
+        startSearchInt(mSearchText);
+        mSearchText = null;
+        mSearchOptions = 0;
+    }
+
+    @Override
     public void onViewDestroyed() {
         super.onViewDestroyed();
         disposeActions();
     }
 
     @Override
-    public void onViewInitialized() {
-        startSearchInt(mSearchText);
-        mSearchText = null;
-        mSearchOptions = 0;
+    public void onFinish() {
+        super.onFinish();
+
+        if (mSearchData.isBackgroundPlaybackEnabled() && PlaybackPresenter.instance(getContext()).isRunningInBackground()) {
+            ViewManager.instance(getContext()).startView(SplashView.class);
+        }
     }
 
     @Override

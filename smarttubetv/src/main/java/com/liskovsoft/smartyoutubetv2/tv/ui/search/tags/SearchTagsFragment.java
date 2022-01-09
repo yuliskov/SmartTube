@@ -229,6 +229,10 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         return isVoice;
     }
 
+    public void onFinish() {
+        mSearchPresenter.onFinish();
+    }
+
     private final class ItemViewLongPressedListener implements OnItemLongPressedListener {
         @Override
         public void onItemLongPressed(Presenter.ViewHolder itemViewHolder, Object item) {
