@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
 import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -35,7 +36,9 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.MyDefaultDashChunkSource;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.MyDefaultLoadErrorHandlingPolicy;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.app.AppConstants;
+import com.liskovsoft.youtubeapi.common.helpers.RetrofitHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -121,7 +124,10 @@ public class ExoMediaSourceFactory {
      * @return A new DataSource factory.
      */
     private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
-        return buildDataSourceFactory(mContext, useBandwidthMeter ? BANDWIDTH_METER : null);
+        PlayerTweaksData tweaksData = PlayerTweaksData.instance(mContext);
+        DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
+        return new DefaultDataSourceFactory(mContext, bandwidthMeter,
+                tweaksData.isBufferingFixEnabled() ? buildHttpDataSourceFactory2(bandwidthMeter) : buildHttpDataSourceFactory(bandwidthMeter));
     }
 
     /**
@@ -132,7 +138,9 @@ public class ExoMediaSourceFactory {
      * @return A new HttpDataSource factory.
      */
     private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
-        return buildHttpDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
+        PlayerTweaksData tweaksData = PlayerTweaksData.instance(mContext);
+        DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
+        return tweaksData.isBufferingFixEnabled() ? buildHttpDataSourceFactory2(bandwidthMeter) : buildHttpDataSourceFactory(bandwidthMeter);
     }
 
     @SuppressWarnings("deprecation")
@@ -236,21 +244,17 @@ public class ExoMediaSourceFactory {
         return result;
     }
 
-    private static DataSource.Factory buildDataSourceFactory(Context context, DefaultBandwidthMeter bandwidthMeter) {
-        return new DefaultDataSourceFactory(context, bandwidthMeter, buildHttpDataSourceFactory(bandwidthMeter));
-    }
-
     /**
      * Use OkHttp for networking
      */
-    //private static HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-    //    // OkHttpHelpers.getOkHttpClient()
-    //    // RetrofitHelper.createOkHttpClient()
-    //    OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(RetrofitHelper.createOkHttpClient(), AppConstants.APP_USER_AGENT,
-    //            bandwidthMeter);
-    //    //addCommonHeaders(dataSourceFactory);
-    //    return dataSourceFactory;
-    //}
+    private static HttpDataSource.Factory buildHttpDataSourceFactory2(DefaultBandwidthMeter bandwidthMeter) {
+        // OkHttpHelpers.getOkHttpClient()
+        // RetrofitHelper.createOkHttpClient()
+        OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(RetrofitHelper.createOkHttpClient(), AppConstants.APP_USER_AGENT,
+                bandwidthMeter);
+        addCommonHeaders(dataSourceFactory);
+        return dataSourceFactory;
+    }
 
     /**
      * Use built-in component for networking

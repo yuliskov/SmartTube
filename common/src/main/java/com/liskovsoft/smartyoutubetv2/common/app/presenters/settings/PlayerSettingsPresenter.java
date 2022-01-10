@@ -185,6 +185,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendTweaksCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from("Buffering fix (experimental)",
+                option -> mPlayerTweaksData.enableBufferingFix(option.isSelected()),
+                mPlayerTweaksData.isBufferingFixEnabled()));
+
         options.add(UiOptionItem.from("Disable playback notifications",
                 option -> mPlayerTweaksData.disablePlaybackNotifications(option.isSelected()),
                 mPlayerTweaksData.isPlaybackNotificationsDisabled()));
