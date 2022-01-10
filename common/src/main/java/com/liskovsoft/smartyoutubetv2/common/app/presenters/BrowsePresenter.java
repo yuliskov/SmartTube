@@ -511,7 +511,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 
                                 filterIfNeeded(mediaGroup);
 
-                                VideoGroup videoGroup = VideoGroup.from(mediaGroup, section, moveToTopIfNeeded(mediaGroup));
+                                // Move to top isn't working properly (too slow)
+                                //VideoGroup videoGroup = VideoGroup.from(mediaGroup, section, moveToTopIfNeeded(mediaGroup));
+                                VideoGroup videoGroup = VideoGroup.from(mediaGroup, section);
 
                                 getView().updateSection(videoGroup);
 
