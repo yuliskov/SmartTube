@@ -311,4 +311,5 @@
     <string name="msg_player_error_source2">Video kaynağı çalışmıyor</string>
     <string name="hide_upcoming">Aboneliklerde yaklaşan yayınları gizle</string>
     <string name="search_background_playback">Oynatıcıdan arama yaparken resim içinde resim moduna geç</string>
+    <string name="trending_row_name">Trendler</string>
 </resources>
