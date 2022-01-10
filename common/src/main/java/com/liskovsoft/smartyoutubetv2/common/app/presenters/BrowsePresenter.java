@@ -511,11 +511,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 
                                 filterIfNeeded(mediaGroup);
 
-                                VideoGroup videoGroup = VideoGroup.from(mediaGroup, section);
+                                VideoGroup videoGroup = VideoGroup.from(mediaGroup, section, moveToTopIfNeeded(mediaGroup));
 
                                 getView().updateSection(videoGroup);
 
-                                loadNextPortionIfNeeded(videoGroup);
+                                continueGroupIfNeeded(videoGroup);
                             }
 
                             // Hide loading as long as first group received
@@ -567,7 +567,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 getView().showProgressBar(false);
                             }
 
-                            loadNextPortionIfNeeded(videoGroup);
+                            continueGroupIfNeeded(videoGroup);
                         },
                         error -> {
                             Log.e(TAG, "updateGridHeader error: %s", error.getMessage());
@@ -655,7 +655,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     /**
      * Most tiny ui has 8 cards in a row or 24 in grid.
      */
-    private void loadNextPortionIfNeeded(VideoGroup videoGroup) {
+    private void continueGroupIfNeeded(VideoGroup videoGroup) {
         boolean groupTooSmall = videoGroup.getVideos() != null && videoGroup.getVideos().size() < MIN_GROUP_SIZE;
         if (groupTooSmall || mMainUIData.getUIScale() < 0.8f || mMainUIData.getVideoGridScale() < 0.8f) {
             continueGroup(videoGroup);
@@ -714,6 +714,14 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 getContext().getString(R.string.breaking_news_row_name),
                 getContext().getString(R.string.covid_news_row_name)
         ));
+    }
+
+    private int moveToTopIfNeeded(MediaGroup mediaGroup) {
+        if (mediaGroup == null) {
+            return -1;
+        }
+
+        return Helpers.equalsAny(mediaGroup.getTitle(), getContext().getString(R.string.trending_row_name)) ? 0 : -1;
     }
 
     private Observable<MediaGroup> createPinnedAction(Video item) {

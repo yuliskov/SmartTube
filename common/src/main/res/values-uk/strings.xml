@@ -307,4 +307,5 @@
     <string name="msg_player_error_source2">Джерело відео не працює</string>
     <string name="hide_upcoming">Приховувати анонси з Підписок</string>
     <string name="search_background_playback">Переходити у режим Картинка в картинці, якщо пошук запущено з плеєру</string>
+    <string name="trending_row_name">Популярне</string>
 </resources>

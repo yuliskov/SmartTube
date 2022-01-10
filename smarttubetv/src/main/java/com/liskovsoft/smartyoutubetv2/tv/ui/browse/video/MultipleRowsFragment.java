@@ -150,7 +150,12 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             mVideoGroupAdapters.put(mediaGroupId, mediaGroupAdapter);
 
             ListRow row = new ListRow(rowHeader, mediaGroupAdapter);
-            mRowsAdapter.add(row);
+
+            if (group.getPosition() == -1) {
+                mRowsAdapter.add(row);
+            } else {
+                mRowsAdapter.add(group.getPosition(), row);
+            }
         } else {
             Log.d(TAG, "Continue row %s %s", group.getTitle(), System.currentTimeMillis());
 

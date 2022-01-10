@@ -21,7 +21,7 @@ public class VideoGroup {
     private List<Video> mVideos;
     private MediaGroup mMediaGroup;
     private BrowseSection mCategory;
-    private int mPosition;
+    private int mPosition = -1;
     private int mAction;
 
     public static VideoGroup from(BrowseSection category) {
@@ -41,7 +41,7 @@ public class VideoGroup {
     }
 
     public static VideoGroup from(Video item) {
-        return from(item, 0);
+        return from(item, -1);
     }
 
     public static VideoGroup from(Video item, int groupPosition) {
@@ -49,7 +49,7 @@ public class VideoGroup {
     }
 
     public static VideoGroup from(List<Video> items) {
-        return from(items, 0);
+        return from(items, -1);
     }
 
     public static VideoGroup from(List<Video> items, int groupPosition) {
