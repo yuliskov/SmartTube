@@ -153,6 +153,13 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 },
                 mGeneralData.isRemapFastForwardToNextEnabled()));
 
+        options.add(UiOptionItem.from("Page Down/Up -> Next/Previous",
+                option -> {
+                    mGeneralData.remapPageDownToNext(option.isSelected());
+                    mRestartApp = true;
+                },
+                mGeneralData.isRemapPageDownToNextEnabled()));
+
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.key_remapping), options);
     }
 

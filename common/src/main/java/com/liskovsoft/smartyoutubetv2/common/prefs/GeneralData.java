@@ -42,6 +42,7 @@ public class GeneralData {
     private boolean mIsBridgeCheckEnabled;
     private boolean mIsOkButtonLongPressDisabled;
     private String mLastPlaylistId;
+    private boolean mIsRemapPageDownToNextEnabled;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -293,6 +294,15 @@ public class GeneralData {
         return mIsRemapFastForwardToNextEnabled;
     }
 
+    public void remapPageDownToNext(boolean enable) {
+        mIsRemapPageDownToNextEnabled = enable;
+        persistState();
+    }
+
+    public boolean isRemapPageDownToNextEnabled() {
+        return mIsRemapPageDownToNextEnabled;
+    }
+
     public void setScreenDimmingTimeoutMin(int timeoutMin) {
         mScreenDimmingTimeoutMin = timeoutMin;
         persistState();
@@ -371,6 +381,7 @@ public class GeneralData {
         mLastPlaylistId = Helpers.parseStr(split, 13);
         String selectedSections = Helpers.parseStr(split, 14);
         mIsHideUpcomingEnabled = Helpers.parseBoolean(split, 15, false);
+        mIsRemapPageDownToNextEnabled = Helpers.parseBoolean(split, 16, false);
 
         if (selectedSections != null) {
             String[] selectedSectionsArr = Helpers.splitArrayLegacy(selectedSections);
@@ -399,6 +410,6 @@ public class GeneralData {
                 mIsReturnToLauncherEnabled,mBackgroundShortcut, pinnedItems,
                 mIsHideShortsEnabled, mIsRemapFastForwardToNextEnabled, mScreenDimmingTimeoutMin,
                 mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId,
-                selectedCategories, mIsHideUpcomingEnabled));
+                selectedCategories, mIsHideUpcomingEnabled, mIsRemapPageDownToNextEnabled));
     }
 }

@@ -8,7 +8,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.GlobalKeyTranslator;
-import com.liskovsoft.smartyoutubetv2.common.misc.MediaKeyTranslator;
+import com.liskovsoft.smartyoutubetv2.common.misc.PlayerKeyTranslator;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.DoubleBackManager;
@@ -38,7 +38,7 @@ public abstract class LeanbackActivity extends MotherActivity {
         mModeSyncManager = ModeSyncManager.instance();
         mDoubleBackManager = new DoubleBackManager(this);
         mGeneralData = GeneralData.instance(this);
-        mGlobalKeyTranslator = this instanceof PlaybackActivity ? new GlobalKeyTranslator(this) : new MediaKeyTranslator(this);
+        mGlobalKeyTranslator = this instanceof PlaybackActivity ? new PlayerKeyTranslator(this) : new GlobalKeyTranslator(this);
     }
 
     @Override
