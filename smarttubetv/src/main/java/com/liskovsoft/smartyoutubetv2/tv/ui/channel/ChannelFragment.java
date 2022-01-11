@@ -20,7 +20,7 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(null); // Real restore takes place in the presenter
         
         mRestoredItemIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_ITEM_INDEX, -1) : -1;
         mIsFragmentCreated = true;

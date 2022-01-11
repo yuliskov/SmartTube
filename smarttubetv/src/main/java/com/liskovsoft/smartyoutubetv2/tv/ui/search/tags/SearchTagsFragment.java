@@ -28,7 +28,7 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(null); // Real restore takes place in the presenter
 
         mIsFragmentCreated = true;
         mSearchPresenter = SearchPresenter.instance(getContext());
