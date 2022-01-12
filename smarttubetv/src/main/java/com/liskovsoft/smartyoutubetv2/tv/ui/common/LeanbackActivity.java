@@ -38,7 +38,9 @@ public abstract class LeanbackActivity extends MotherActivity {
         mModeSyncManager = ModeSyncManager.instance();
         mDoubleBackManager = new DoubleBackManager(this);
         mGeneralData = GeneralData.instance(this);
-        mGlobalKeyTranslator = this instanceof PlaybackActivity ? new PlayerKeyTranslator(this) : new GlobalKeyTranslator(this);
+        mGlobalKeyTranslator = this instanceof PlaybackActivity ?
+                new PlayerKeyTranslator(this, ((PlaybackActivity) this).getPlaybackView()) :
+                new GlobalKeyTranslator(this);
     }
 
     @Override

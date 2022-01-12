@@ -10,6 +10,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -298,5 +299,9 @@ public class PlaybackActivity extends LeanbackActivity {
         long backPressedAgoMs = System.currentTimeMillis() - mBackPressedMs;
         Log.d(TAG, "Back pressed ms ago: " + backPressedAgoMs);
         return backPressedAgoMs < 1_000;
+    }
+
+    public PlaybackView getPlaybackView() {
+        return mPlaybackFragment;
     }
 }

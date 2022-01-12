@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class GlobalKeyTranslator extends KeyTranslator {
     private final Map<Integer, Integer> mKeyMapping = new HashMap<>();
+    private final Map<Integer, Runnable> mActionMapping = new HashMap<>();
 
     public GlobalKeyTranslator(Context context) {
         initKeyMapping();
@@ -31,5 +32,10 @@ public class GlobalKeyTranslator extends KeyTranslator {
     @Override
     protected Map<Integer, Integer> getKeyMapping() {
         return mKeyMapping;
+    }
+
+    @Override
+    protected Map<Integer, Runnable> getActionMapping() {
+        return mActionMapping;
     }
 }

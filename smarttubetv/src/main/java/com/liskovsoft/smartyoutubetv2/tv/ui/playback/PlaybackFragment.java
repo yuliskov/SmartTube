@@ -992,6 +992,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
+    public PlayerEventListener getEventListener() {
+        return mEventListener;
+    }
+
+    @Override
     public PlaybackController getController() {
         return this;
     }
