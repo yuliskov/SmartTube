@@ -16,7 +16,9 @@ import com.liskovsoft.smartyoutubetv2.common.misc.BackupAndRestoreManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,12 +29,16 @@ import java.util.Map.Entry;
 public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private final GeneralData mGeneralData;
     private final PlayerData mPlayerData;
+    private final PlayerTweaksData mPlayerTweaksData;
+    private final MainUIData mMainUIData;
     private boolean mRestartApp;
 
-    public GeneralSettingsPresenter(Context context) {
+    private GeneralSettingsPresenter(Context context) {
         super(context);
         mGeneralData = GeneralData.instance(context);
         mPlayerData = PlayerData.instance(context);
+        mPlayerTweaksData = PlayerTweaksData.instance(context);
+        mMainUIData = MainUIData.instance(context);
     }
 
     public static GeneralSettingsPresenter instance(Context context) {
@@ -45,6 +51,8 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
         appendBootToSection(settingsPresenter);
         appendEnabledSections(settingsPresenter);
+        appendContextMenuItemsCategory(settingsPresenter);
+        appendPlayerButtonsCategory(settingsPresenter);
         appendAppExitCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
         appendBackgroundPlaybackActivationCategory(settingsPresenter);
@@ -81,6 +89,66 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.side_panel_sections), options);
+    }
+
+    private void appendContextMenuItemsCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.not_interested, MainUIData.MENU_ITEM_NOT_INTERESTED},
+                {R.string.remove_from_history, MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY},
+                {R.string.add_remove_from_recent_playlist, MainUIData.MENU_ITEM_RECENT_PLAYLIST},
+                {R.string.pin_unpin_from_sidebar, MainUIData.MENU_ITEM_PIN_TO_SIDEBAR},
+                {R.string.add_remove_from_playback_queue, MainUIData.MENU_ITEM_ADD_TO_QUEUE},
+                {R.string.share_link, MainUIData.MENU_ITEM_SHARE_LINK},
+                {R.string.dialog_account_list, MainUIData.MENU_ITEM_SELECT_ACCOUNT},
+                {R.string.move_section_up, MainUIData.MENU_ITEM_MOVE_SECTION_UP},
+                {R.string.move_section_down, MainUIData.MENU_ITEM_MOVE_SECTION_DOWN}}) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
+                if (optionItem.isSelected()) {
+                    mMainUIData.enableMenuItem(pair[1]);
+                } else {
+                    mMainUIData.disableMenuItem(pair[1]);
+                }
+            }, mMainUIData.isMenuItemEnabled(pair[1])));
+        }
+
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.context_menu), options);
+    }
+
+    private void appendPlayerButtonsCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.action_video_stats, PlayerTweaksData.PLAYER_BUTTON_VIDEO_STATS},
+                {R.string.action_playback_queue, PlayerTweaksData.PLAYER_BUTTON_PLAYBACK_QUEUE},
+                {R.string.action_screen_off, PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF},
+                {R.string.action_video_zoom, PlayerTweaksData.PLAYER_BUTTON_VIDEO_ZOOM},
+                {R.string.action_channel, PlayerTweaksData.PLAYER_BUTTON_OPEN_CHANNEL},
+                {R.string.action_search, PlayerTweaksData.PLAYER_BUTTON_SEARCH},
+                {R.string.action_pip, PlayerTweaksData.PLAYER_BUTTON_PIP},
+                {R.string.action_video_speed, PlayerTweaksData.PLAYER_BUTTON_VIDEO_SPEED},
+                {R.string.action_subtitles, PlayerTweaksData.PLAYER_BUTTON_SUBTITLES},
+                {R.string.action_subscribe, PlayerTweaksData.PLAYER_BUTTON_SUBSCRIBE},
+                {R.string.action_like, PlayerTweaksData.PLAYER_BUTTON_LIKE},
+                {R.string.action_dislike, PlayerTweaksData.PLAYER_BUTTON_DISLIKE},
+                {R.string.action_playlist_add, PlayerTweaksData.PLAYER_BUTTON_ADD_TO_PLAYLIST},
+                {R.string.action_play_pause, PlayerTweaksData.PLAYER_BUTTON_PLAY_PAUSE},
+                {R.string.action_repeat_mode, PlayerTweaksData.PLAYER_BUTTON_REPEAT_MODE},
+                {R.string.action_next, PlayerTweaksData.PLAYER_BUTTON_NEXT},
+                {R.string.action_previous, PlayerTweaksData.PLAYER_BUTTON_PREVIOUS},
+                {R.string.action_high_quality, PlayerTweaksData.PLAYER_BUTTON_HIGH_QUALITY}
+        }) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
+                if (optionItem.isSelected()) {
+                    mPlayerTweaksData.enablePlayerButton(pair[1]);
+                } else {
+                    mPlayerTweaksData.disablePlayerButton(pair[1]);
+                }
+            }, mPlayerTweaksData.isPlayerButtonEnabled(pair[1])));
+        }
+
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_buttons), options);
     }
 
     private void appendBootToSection(AppDialogPresenter settingsPresenter) {
@@ -198,14 +266,14 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         }
 
         options.add(UiOptionItem.from(
-                String.format("%s\n%s", getContext().getString(R.string.app_restore), backupManager.getBackupPath()),
+                String.format("%s:\n%s", getContext().getString(R.string.app_restore), backupManager.getBackupPath()),
                 option -> {
                     backupManager.checkPermAndRestore();
                     MessageHelpers.showMessage(getContext(), R.string.msg_done);
                 }));
 
         options.add(UiOptionItem.from(
-                String.format("%s\n%s", getContext().getString(R.string.app_backup), backupManager.getBackupPath()),
+                String.format("%s:\n%s", getContext().getString(R.string.app_backup), backupManager.getBackupPath()),
                 option -> {
                     mGeneralData.enableSection(MediaGroup.TYPE_SETTINGS, true); // prevent Settings lock
                     mGeneralData.enableSettingsSection(true); // prevent Settings lock
@@ -245,7 +313,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
         ProxyManager proxyManager = ProxyManager.instance(getContext());
 
-        options.add(UiOptionItem.from("Web Proxy config: " + proxyManager.getConfigPath(),
+        options.add(UiOptionItem.from("Web Proxy config:\n" + proxyManager.getConfigPath(),
                 option -> {
                     mGeneralData.enableProxy(option.isSelected());
                     proxyManager.enableProxy(option.isSelected());
