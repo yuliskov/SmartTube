@@ -23,7 +23,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private final GeneralData mGeneralData;
@@ -160,12 +159,12 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 },
                 mGeneralData.isRemapFastForwardToNextEnabled()));
 
-        options.add(UiOptionItem.from("Page Down/Up -> Next/Previous",
+        options.add(UiOptionItem.from("Page Up/Down -> Next/Previous",
                 option -> {
-                    mGeneralData.remapPageDownToNext(option.isSelected());
+                    mGeneralData.remapPageUpToNext(option.isSelected());
                     mRestartApp = true;
                 },
-                mGeneralData.isRemapPageDownToNextEnabled()));
+                mGeneralData.isRemapPageUpToNextEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.key_remapping), options);
     }
