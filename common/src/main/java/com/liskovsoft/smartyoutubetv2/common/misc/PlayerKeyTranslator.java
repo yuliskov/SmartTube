@@ -50,11 +50,15 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             actionMapping.put(KeyEvent.KEYCODE_PAGE_UP, () -> {
                 if (mPlaybackView.getEventListener() != null) {
                     mPlaybackView.getEventListener().onThumbsUpClicked(true);
+                    mPlaybackView.getController().setLikeButtonState(true);
+                    mPlaybackView.getController().setDislikeButtonState(false);
                 }
             });
             actionMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, () -> {
                 if (mPlaybackView.getEventListener() != null) {
                     mPlaybackView.getEventListener().onThumbsDownClicked(true);
+                    mPlaybackView.getController().setLikeButtonState(false);
+                    mPlaybackView.getController().setDislikeButtonState(true);
                 }
             });
         }

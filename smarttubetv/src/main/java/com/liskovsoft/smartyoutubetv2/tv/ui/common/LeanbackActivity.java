@@ -38,6 +38,13 @@ public abstract class LeanbackActivity extends MotherActivity {
         mModeSyncManager = ModeSyncManager.instance();
         mDoubleBackManager = new DoubleBackManager(this);
         mGeneralData = GeneralData.instance(this);
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        // Start after PlaybackActivity fragment creation
         mGlobalKeyTranslator = this instanceof PlaybackActivity ?
                 new PlayerKeyTranslator(this, ((PlaybackActivity) this).getPlaybackView()) :
                 new GlobalKeyTranslator(this);
