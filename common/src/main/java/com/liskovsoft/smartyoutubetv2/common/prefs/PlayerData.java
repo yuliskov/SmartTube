@@ -64,6 +64,7 @@ public class PlayerData {
     private boolean mIsGlobalEndingTimeEnabled;
     private boolean mIsEndingTimeEnabled;
     private boolean mIsDoubleRefreshRateEnabled;
+    private int mStartSeekIncrementMs;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -401,6 +402,15 @@ public class PlayerData {
         return formatItem != null ? formatItem : Helpers.isVP9Supported() ? FormatItem.VIDEO_FHD_VP9_60 : FormatItem.VIDEO_HD_AVC_30;
     }
 
+    public int getStartSeekIncrementMs() {
+        return mStartSeekIncrementMs;
+    }
+
+    public void setStartSeekIncrementMs(int startSeekIncrementMs) {
+        this.mStartSeekIncrementMs = startSeekIncrementMs;
+        persistData();
+    }
+
     private void initSubtitleStyles() {
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_default, R.color.light_grey, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_white_semi_transparent, R.color.light_grey, R.color.semi_grey, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
@@ -458,6 +468,7 @@ public class PlayerData {
         mIsGlobalEndingTimeEnabled = Helpers.parseBoolean(split, 33, false);
         mIsEndingTimeEnabled = Helpers.parseBoolean(split, 34, false);
         mIsDoubleRefreshRateEnabled = Helpers.parseBoolean(split, 35, true);
+        mStartSeekIncrementMs = Helpers.parseInt(split, 36, 10_000);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -473,6 +484,6 @@ public class PlayerData {
                 mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
                 mIsLowQualityEnabled, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
-                mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled));
+                mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mStartSeekIncrementMs));
     }
 }
