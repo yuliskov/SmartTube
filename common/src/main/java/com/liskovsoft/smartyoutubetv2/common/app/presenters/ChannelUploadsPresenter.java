@@ -132,7 +132,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
     public void openChannel(Video item) {
         // Working with uploads or playlists
-        if (item == null || (!item.hasUploads() && item.playlistId == null)) {
+        if (item == null || (!item.hasUploads() && !item.hasPlaylist())) {
             return;
         }
 
@@ -163,7 +163,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
         return item.hasUploads() ?
                 mGroupManager.getGroupObserve(item.mediaItem) :
-                mItemManager.getMetadataObserve(item.videoId, item.playlistId, 0)
+                mItemManager.getMetadataObserve(item.videoId, item.playlistId, 0, item.playlistParams)
                         .flatMap(mediaItemMetadata -> Observable.just(findPlaylistRow(mediaItemMetadata)));
     }
 

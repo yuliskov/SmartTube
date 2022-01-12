@@ -29,6 +29,7 @@ public final class Video implements Parcelable {
     public String videoUrl;
     public String playlistId;
     public int playlistIndex;
+    public String playlistParams;
     public String bgImageUrl;
     public String cardImageUrl;
     public String author;
@@ -104,6 +105,7 @@ public final class Video implements Parcelable {
         video.previewUrl = item.getVideoPreviewUrl();
         video.playlistId = item.getPlaylistId();
         video.playlistIndex = item.getPlaylistIndex();
+        video.playlistParams = item.getPlaylistParams();
         video.isLive = item.isLive();
         video.isUpcoming = item.isUpcoming();
         video.clickTrackingParams = item.getClickTrackingParams();
@@ -314,8 +316,11 @@ public final class Video implements Parcelable {
         return channelId != null;
     }
 
+    /**
+     * NOTE: Channels section uses <em>playlistParams</em> instead of <em>playlistId</em>
+     */
     public boolean hasPlaylist() {
-        return playlistId != null;
+        return playlistId != null || playlistParams != null;
     }
 
     public boolean hasUploads() {
