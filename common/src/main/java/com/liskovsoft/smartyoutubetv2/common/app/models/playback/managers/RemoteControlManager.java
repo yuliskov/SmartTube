@@ -34,6 +34,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     private Video mVideo;
     private boolean mConnected;
     private int mIsGlobalVolumeWorking = -1;
+    private long mNewVideoPositionMs;
 
     public RemoteControlManager(Context context, SuggestionsLoaderManager suggestionsLoader, VideoLoaderManager videoLoader) {
         MediaService mediaService = YouTubeMediaService.instance();
@@ -65,6 +66,11 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
 
     @Override
     public void onVideoLoaded(Video item) {
+        if (mNewVideoPositionMs > 0) {
+            getController().setPositionMs(mNewVideoPositionMs);
+            mNewVideoPositionMs = 0;
+        }
+
         postStartPlaying(item, getController().getPlay());
         mVideo = item;
     }
@@ -223,10 +229,6 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         }
 
         Log.d(TAG, "Is remote connected: %s, command type: %s", mConnected, command.getType());
-        
-        //if (getController() != null && getController().getVideo() != null) {
-        //    getController().getVideo().isRemote = mConnected;
-        //}
 
         switch (command.getType()) {
             case Command.TYPE_OPEN_VIDEO:
@@ -235,6 +237,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 }
                 Utils.movePlayerToForeground(getActivity());
                 Video newVideo = Video.from(command.getVideoId(), command.getPlaylistId(), command.getPlaylistIndex());
+                mNewVideoPositionMs = command.getCurrentTimeMs();
                 openNewVideo(newVideo);
                 break;
             case Command.TYPE_UPDATE_PLAYLIST:
@@ -342,6 +345,10 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         if (Video.equals(mVideo, newVideo) && Utils.isPlayerInForeground(getActivity())) { // same video already playing
             mVideo.playlistId = newVideo.playlistId;
             mVideo.playlistIndex = newVideo.playlistIndex;
+            if (mNewVideoPositionMs > 0) {
+                getController().setPositionMs(mNewVideoPositionMs);
+                mNewVideoPositionMs = 0;
+            }
             postStartPlaying(mVideo, getController().isPlaying());
         } else if (newVideo != null) {
             newVideo.isRemote = true;
