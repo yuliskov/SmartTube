@@ -304,7 +304,7 @@
     <string name="content_block_filler">Отход от темы (оффтопик)</string>
     <string name="keyboard_auto_show">Показывать клавиатуру автоматически</string>
     <string name="cancel_dialog">Отменить</string>
-    <string name="msg_player_error_source2">Источник видео не работает</string>
+    <string name="msg_player_error_source2">Источник видео не работает или неправильное время</string>
     <string name="hide_upcoming">Скрывать анонсы из Подписок</string>
     <string name="search_background_playback">Переходить в режим Картинка в картинке, если поиск запущен из плеера</string>
     <string name="trending_row_name">В тренде</string>
