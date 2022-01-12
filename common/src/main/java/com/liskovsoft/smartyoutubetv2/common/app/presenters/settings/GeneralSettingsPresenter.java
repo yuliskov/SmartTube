@@ -68,10 +68,17 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         Map<Integer, Integer> sections = mGeneralData.getDefaultSections();
 
         for (Entry<Integer, Integer> section : sections.entrySet()) {
-             options.add(UiOptionItem.from(getContext().getString(section.getKey()), optionItem -> {
-                 mGeneralData.enableSection(section.getValue(), optionItem.isSelected());
-                 BrowsePresenter.instance(getContext()).updateSections();
-             }, mGeneralData.isSectionEnabled(section.getValue())));
+            int sectionResId = section.getKey();
+            int sectionId = section.getValue();
+
+            if (sectionId == MediaGroup.TYPE_SETTINGS) {
+                continue;
+            }
+
+            options.add(UiOptionItem.from(getContext().getString(sectionResId), optionItem -> {
+                mGeneralData.enableSection(sectionId, optionItem.isSelected());
+                BrowsePresenter.instance(getContext()).updateSections();
+            }, mGeneralData.isSectionEnabled(sectionId)));
         }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.side_panel_sections), options);
