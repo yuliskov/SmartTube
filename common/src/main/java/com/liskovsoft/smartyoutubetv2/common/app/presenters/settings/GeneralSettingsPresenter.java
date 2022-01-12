@@ -18,7 +18,6 @@ import com.liskovsoft.smartyoutubetv2.common.misc.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
-import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,7 +28,6 @@ import java.util.Map.Entry;
 public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private final GeneralData mGeneralData;
     private final PlayerData mPlayerData;
-    private final PlayerTweaksData mPlayerTweaksData;
     private final MainUIData mMainUIData;
     private boolean mRestartApp;
 
@@ -37,7 +35,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         super(context);
         mGeneralData = GeneralData.instance(context);
         mPlayerData = PlayerData.instance(context);
-        mPlayerTweaksData = PlayerTweaksData.instance(context);
         mMainUIData = MainUIData.instance(context);
     }
 
@@ -52,7 +49,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendBootToSection(settingsPresenter);
         appendEnabledSections(settingsPresenter);
         appendContextMenuItemsCategory(settingsPresenter);
-        appendPlayerButtonsCategory(settingsPresenter);
         appendAppExitCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
         appendBackgroundPlaybackActivationCategory(settingsPresenter);
@@ -114,41 +110,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.context_menu), options);
-    }
-
-    private void appendPlayerButtonsCategory(AppDialogPresenter settingsPresenter) {
-        List<OptionItem> options = new ArrayList<>();
-
-        for (int[] pair : new int[][] {
-                {R.string.action_video_stats, PlayerTweaksData.PLAYER_BUTTON_VIDEO_STATS},
-                {R.string.action_playback_queue, PlayerTweaksData.PLAYER_BUTTON_PLAYBACK_QUEUE},
-                {R.string.action_screen_off, PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF},
-                {R.string.action_video_zoom, PlayerTweaksData.PLAYER_BUTTON_VIDEO_ZOOM},
-                {R.string.action_channel, PlayerTweaksData.PLAYER_BUTTON_OPEN_CHANNEL},
-                {R.string.action_search, PlayerTweaksData.PLAYER_BUTTON_SEARCH},
-                {R.string.action_pip, PlayerTweaksData.PLAYER_BUTTON_PIP},
-                {R.string.action_video_speed, PlayerTweaksData.PLAYER_BUTTON_VIDEO_SPEED},
-                {R.string.action_subtitles, PlayerTweaksData.PLAYER_BUTTON_SUBTITLES},
-                {R.string.action_subscribe, PlayerTweaksData.PLAYER_BUTTON_SUBSCRIBE},
-                {R.string.action_like, PlayerTweaksData.PLAYER_BUTTON_LIKE},
-                {R.string.action_dislike, PlayerTweaksData.PLAYER_BUTTON_DISLIKE},
-                {R.string.action_playlist_add, PlayerTweaksData.PLAYER_BUTTON_ADD_TO_PLAYLIST},
-                {R.string.action_play_pause, PlayerTweaksData.PLAYER_BUTTON_PLAY_PAUSE},
-                {R.string.action_repeat_mode, PlayerTweaksData.PLAYER_BUTTON_REPEAT_MODE},
-                {R.string.action_next, PlayerTweaksData.PLAYER_BUTTON_NEXT},
-                {R.string.action_previous, PlayerTweaksData.PLAYER_BUTTON_PREVIOUS},
-                {R.string.action_high_quality, PlayerTweaksData.PLAYER_BUTTON_HIGH_QUALITY}
-        }) {
-            options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
-                if (optionItem.isSelected()) {
-                    mPlayerTweaksData.enablePlayerButton(pair[1]);
-                } else {
-                    mPlayerTweaksData.disablePlayerButton(pair[1]);
-                }
-            }, mPlayerTweaksData.isPlayerButtonEnabled(pair[1])));
-        }
-
-        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_buttons), options);
     }
 
     private void appendBootToSection(AppDialogPresenter settingsPresenter) {
