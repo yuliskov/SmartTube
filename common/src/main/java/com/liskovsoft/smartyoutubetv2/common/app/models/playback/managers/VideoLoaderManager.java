@@ -33,7 +33,6 @@ import java.util.Map;
 
 public class VideoLoaderManager extends PlayerEventListenerHelper {
     private static final String TAG = VideoLoaderManager.class.getSimpleName();
-    private static final int BUFFERING_CHECK_MS = 5_000;
     private final Playlist mPlaylist;
     private final Handler mHandler;
     private final SuggestionsLoaderManager mSuggestionsLoader;
@@ -44,7 +43,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
     private boolean mSkipAdd;
     private Disposable mFormatInfoAction;
     private Disposable mMpdStreamAction;
-    private final Map<Integer, Integer> mErrorMap = new HashMap<>();
+    private final Map<Integer, Runnable> mErrorActions = new HashMap<>();
     private final Runnable mReloadVideoHandler = () -> loadVideo(mLastVideo);
     private final Runnable mPendingNext = () -> {
         if (getController() != null) {
@@ -67,7 +66,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
     @Override
     public void onInitDone() {
         mPlayerData = PlayerData.instance(getActivity());
-        initErrorMap();
+        initErrorActions();
     }
 
     @Override
@@ -103,14 +102,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
     public void onEngineError(int type) {
         Log.e(TAG, "Player error occurred: %s. Trying to fix…", type);
 
-        if (mErrorMap.get(type) != null) {
-            // Some ciphered data might be stalled.
-            // Might happen when the app wasn't used quite a long time.
-            MessageHelpers.showMessage(getActivity(), getErrorMessage(type));
-
-            // Delay to fix frequent requests
-            Utils.postDelayed(mHandler, mPendingRestartEngine, 3_000);
-        }
+        startErrorAction(type);
     }
 
     @Override
@@ -386,20 +378,34 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         Utils.removeCallbacks(mHandler, mReloadVideoHandler, mPendingRestartEngine, mPendingNext);
     }
 
-    private void initErrorMap() {
-        mErrorMap.put(PlayerEventListener.ERROR_TYPE_SOURCE, R.string.msg_player_error_source2);
-        mErrorMap.put(PlayerEventListener.ERROR_TYPE_RENDERER, R.string.msg_player_error_renderer);
+    private void initErrorActions() {
+        // Some ciphered data could be outdated.
+        // Might happen when the app wasn't used quite a long time.
+        mErrorActions.put(PlayerEventListener.ERROR_TYPE_SOURCE, () -> {
+            // New buffering setting could also cause such errors.
+            PlayerTweaksData.instance(getActivity()).enableBufferingFix(false);
 
-        // Hide unknown error on stable build
+            MessageHelpers.showMessage(getActivity(), R.string.msg_player_error_source2);
+        });
+        mErrorActions.put(PlayerEventListener.ERROR_TYPE_RENDERER, () -> MessageHelpers.showMessage(getActivity(), R.string.msg_player_error_renderer));
+
+        // Hide unknown error on stable build only
         //mErrorMap.put(PlayerEventListener.ERROR_TYPE_UNEXPECTED, BuildConfig.FLAVOR.equals("ststable") ? -1 : R.string.msg_player_error_unexpected);
 
         // Hide unknown error on all devices
-        mErrorMap.put(PlayerEventListener.ERROR_TYPE_UNEXPECTED, -1);
+        mErrorActions.put(PlayerEventListener.ERROR_TYPE_UNEXPECTED, () -> {});
     }
 
-    private String getErrorMessage(int type) {
-        Integer resId = mErrorMap.get(type);
-        
-        return resId == null ? getActivity().getString(R.string.msg_player_error, type) : resId > 0 ? getActivity().getString(resId) : null;
+    private void startErrorAction(int type) {
+        Runnable action = mErrorActions.get(type);
+
+        if (action != null) {
+            action.run();
+        } else {
+            MessageHelpers.showMessage(getActivity(), getActivity().getString(R.string.msg_player_error, type));
+        }
+
+        // Delay to fix frequent requests
+        Utils.postDelayed(mHandler, mPendingRestartEngine, 3_000);
     }
 }
