@@ -406,6 +406,10 @@ public final class Video implements Parcelable {
         isSubscribed = metadata.isSubscribed();
         isUpcoming = metadata.isUpcoming();
         isSynced = true;
+
+        if (mediaItem != null) {
+            mediaItem.sync(metadata);
+        }
     }
 
     /**
