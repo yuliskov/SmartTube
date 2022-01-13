@@ -382,8 +382,11 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         // Some ciphered data could be outdated.
         // Might happen when the app wasn't used quite a long time.
         mErrorActions.put(PlayerEventListener.ERROR_TYPE_SOURCE, () -> {
-            // New buffering setting could also cause such errors.
-            PlayerTweaksData.instance(getActivity()).enableBufferingFix(false);
+            // This buffering setting could also cause such errors.
+            PlayerTweaksData tweaksData = PlayerTweaksData.instance(getActivity());
+            if (tweaksData.isBufferingFixEnabled()) {
+                tweaksData.enableBufferingFix(false);
+            }
 
             MessageHelpers.showMessage(getActivity(), R.string.msg_player_error_source2);
         });
