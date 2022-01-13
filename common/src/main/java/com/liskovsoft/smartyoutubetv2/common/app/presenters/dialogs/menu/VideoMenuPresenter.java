@@ -441,6 +441,7 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
 
         Video section = new Video();
         section.playlistId = video.playlistId;
+        section.playlistParams = video.playlistParams;
         section.channelId = video.channelId;
         // Trying to properly format channel playlists, mixes etc
         section.title = String.format("%s - %s",

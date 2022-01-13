@@ -267,7 +267,12 @@ public final class Video implements Parcelable {
 
         String[] split = spec.split("&vi;");
 
-        if (split.length != 10) {
+        // Add backward compatibility
+        if (split.length == 10) {
+            split = Helpers.appendArray(split, new String[]{null});
+        }
+
+        if (split.length != 11) {
             return null;
         }
 
@@ -283,14 +288,15 @@ public final class Video implements Parcelable {
         result.bgImageUrl = Helpers.parseStr(split[7]);
         result.cardImageUrl = Helpers.parseStr(split[8]);
         result.mediaItem = YouTubeMediaService.deserializeMediaItem(Helpers.parseStr(split[9]));
+        result.playlistParams = Helpers.parseStr(split[10]);
 
         return result;
     }
 
     @Override
     public String toString() {
-        return String.format("%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s",
-                id, category, title, videoId, videoUrl, playlistId, channelId, bgImageUrl, cardImageUrl, YouTubeMediaService.serialize(mediaItem));
+        return String.format("%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s",
+                id, category, title, videoId, videoUrl, playlistId, channelId, bgImageUrl, cardImageUrl, YouTubeMediaService.serialize(mediaItem), playlistParams);
     }
 
     //@Override
