@@ -245,6 +245,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                     Video video = getController().getVideo();
                     if (video != null) {
                         video.playlistId = command.getPlaylistId();
+                        video.playlistParams = null;
                         mSuggestionsLoader.loadSuggestions(video);
                     }
                 }
@@ -345,6 +346,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         if (Video.equals(mVideo, newVideo) && Utils.isPlayerInForeground(getActivity())) { // same video already playing
             mVideo.playlistId = newVideo.playlistId;
             mVideo.playlistIndex = newVideo.playlistIndex;
+            mVideo.playlistParams = newVideo.playlistParams;
             if (mNewVideoPositionMs > 0) {
                 getController().setPositionMs(mNewVideoPositionMs);
                 mNewVideoPositionMs = 0;
