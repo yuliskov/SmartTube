@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.content.Context;
 import android.view.KeyEvent;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 
@@ -9,10 +11,12 @@ import java.util.Map;
 
 public class PlayerKeyTranslator extends GlobalKeyTranslator {
     private final GeneralData mGeneralData;
+    private final Context mContext;
     private final PlaybackView mPlaybackView;
 
     public PlayerKeyTranslator(Context context, PlaybackView playbackView) {
         super(context);
+        mContext = context;
         mGeneralData = GeneralData.instance(context);
         mPlaybackView = playbackView;
         initKeyMapping();
@@ -52,6 +56,7 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
                     mPlaybackView.getEventListener().onThumbsUpClicked(true);
                     mPlaybackView.getController().setLikeButtonState(true);
                     mPlaybackView.getController().setDislikeButtonState(false);
+                    MessageHelpers.showMessage(mContext, R.string.action_like);
                 }
             });
             actionMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, () -> {
@@ -59,6 +64,7 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
                     mPlaybackView.getEventListener().onThumbsDownClicked(true);
                     mPlaybackView.getController().setLikeButtonState(false);
                     mPlaybackView.getController().setDislikeButtonState(true);
+                    MessageHelpers.showMessage(mContext, R.string.action_dislike);
                 }
             });
         }

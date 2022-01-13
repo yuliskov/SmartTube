@@ -25,8 +25,8 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             >
-        <!-- Fix voice search activation after fragment restore??? -->
-        <!-- <requestFocus/> -->
+        <!-- Should be commented out? Fix voice search activation after fragment restore? -->
+        <requestFocus/>
     </androidx.leanback.widget.SpeechOrbView>
 
     <RelativeLayout
