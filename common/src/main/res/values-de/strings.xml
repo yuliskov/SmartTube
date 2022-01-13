@@ -209,8 +209,8 @@
     <string name="video_aspect">Seitenverhältnis</string>
     <string name="player_tweaks">Entwickleroptionen</string>
     <string name="header_uploads">Uploads</string>
-    <string name="player_show_global_clock">Uhr dauerhaft auf dem Bildschirm anzeigen</string>
-    <string name="player_show_global_ending_time">Endzeit dauerhaft auf dem Bildschirm anzeigen</string>
+    <string name="player_show_global_clock">Uhr immer auf dem Bildschirm anzeigen</string>
+    <string name="player_show_global_ending_time">Endzeit immer auf dem Bildschirm anzeigen</string>
     <string name="uploads_old_look">Altes Aussehen der Uploads-Kategorie</string>
     <string name="background_playback_activation">Hintergrund-Wiedergabe (Taste)</string>
     <string name="channels_old_look">Altes Aussehen der Kanäle-Kategorie</string>
@@ -308,8 +308,8 @@
     <string name="content_block_filler">Off-Topic (Filler)</string>
     <string name="keyboard_auto_show">Tastatur automatisch anzeigen</string>
     <string name="cancel_dialog">Abbrechen</string>
-    <string name="msg_player_error_source2">Video-Quelle funktioniert nicht</string>
-    <string name="hide_upcoming">Anstehende Videos aus Abos ausblenden</string>
+    <string name="msg_player_error_source2">Video-Quelle funktioniert nicht oder falsche Uhrzeit</string>
+    <string name="hide_upcoming">Anstehende Videos in Abos ausblenden</string>
     <string name="search_background_playback">Bild-in-Bild öffnen bei Suche über den Player</string>
     <string name="trending_row_name">Trends</string>
 </resources>
