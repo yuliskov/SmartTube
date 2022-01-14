@@ -6,7 +6,10 @@ import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 
 public class PlayerKeyTranslator extends GlobalKeyTranslator {
@@ -51,9 +54,14 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
         Map<Integer, Runnable> actionMapping = getActionMapping();
 
         addLikeAction(actionMapping);
+        addSpeedAction(actionMapping);
     }
 
     private void addLikeAction(Map<Integer, Runnable> actionMapping) {
+        if (!mGeneralData.isRemapPageUpToLikeEnabled() && !mGeneralData.isRemapChannelUpToLikeEnabled()) {
+            return;
+        }
+
         Runnable likeAction = () -> {
             if (mPlaybackView.getEventListener() != null) {
                 mPlaybackView.getEventListener().onThumbsUpClicked(true);
@@ -79,6 +87,50 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
         if (mGeneralData.isRemapChannelUpToLikeEnabled()) {
             actionMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, likeAction);
             actionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, dislikeAction);
+        }
+    }
+
+    private void addSpeedAction(Map<Integer, Runnable> actionMapping) {
+        if (!mGeneralData.isRemapPageUpToSpeedEnabled() && !mGeneralData.isRemapChannelUpToSpeedEnabled()
+            && !mGeneralData.isRemapFastForwardToSpeedEnabled()) {
+            return;
+        }
+
+        Runnable speedUpAction = () -> speedUp(true);
+        Runnable speedDownAction = () -> speedUp(false);
+
+        if (mGeneralData.isRemapPageUpToSpeedEnabled()) {
+            actionMapping.put(KeyEvent.KEYCODE_PAGE_UP, speedUpAction);
+            actionMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, speedDownAction);
+        }
+
+        if (mGeneralData.isRemapChannelUpToSpeedEnabled()) {
+            actionMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, speedUpAction);
+            actionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, speedDownAction);
+        }
+
+        if (mGeneralData.isRemapFastForwardToSpeedEnabled()) {
+            actionMapping.put(KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, speedUpAction);
+            actionMapping.put(KeyEvent.KEYCODE_MEDIA_REWIND, speedDownAction);
+        }
+    }
+
+    private void speedUp(boolean up) {
+        float[] speedSteps =
+                new float[]{0.25f, 0.5f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f, 1.0f, 1.1f, 1.15f, 1.2f, 1.25f, 1.3f, 1.4f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f, 3.0f};
+
+        if (mPlaybackView.getController() != null) {
+            float currentSpeed = mPlaybackView.getController().getSpeed();
+            int currentIndex = Arrays.binarySearch(speedSteps, currentSpeed);
+
+            if (currentIndex >= 0) {
+                int newIndex = up ? currentIndex + 1 : currentIndex - 1;
+
+                float speed = newIndex >= 0 && newIndex < speedSteps.length ? speedSteps[newIndex] : speedSteps[currentIndex];
+
+                PlayerData.instance(mContext).setSpeed(speed);
+                mPlaybackView.getController().setSpeed(speed);
+            }
         }
     }
 }

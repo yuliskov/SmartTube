@@ -46,6 +46,9 @@ public class GeneralData {
     private boolean mIsRemapPageUpToLikeEnabled;
     private boolean mIsRemapChannelUpToNextEnabled;
     private boolean mIsRemapChannelUpToLikeEnabled;
+    private boolean mIsRemapPageUpToSpeedEnabled;
+    private boolean mIsRemapChannelUpToSpeedEnabled;
+    private boolean mIsRemapFastForwardToSpeedEnabled;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -290,6 +293,7 @@ public class GeneralData {
 
     public void remapFastForwardToNext(boolean enable) {
         mIsRemapFastForwardToNextEnabled = enable;
+        mIsRemapFastForwardToSpeedEnabled = false;
         persistState();
     }
 
@@ -297,9 +301,20 @@ public class GeneralData {
         return mIsRemapFastForwardToNextEnabled;
     }
 
+    public void remapFastForwardToSpeed(boolean enable) {
+        mIsRemapFastForwardToSpeedEnabled = enable;
+        mIsRemapFastForwardToNextEnabled = false;
+        persistState();
+    }
+
+    public boolean isRemapFastForwardToSpeedEnabled() {
+        return mIsRemapFastForwardToSpeedEnabled;
+    }
+
     public void remapPageUpToNext(boolean enable) {
         mIsRemapPageUpToNextEnabled = enable;
         mIsRemapPageUpToLikeEnabled = false;
+        mIsRemapPageUpToSpeedEnabled = false;
         persistState();
     }
 
@@ -310,6 +325,7 @@ public class GeneralData {
     public void remapPageUpToLike(boolean enable) {
         mIsRemapPageUpToLikeEnabled = enable;
         mIsRemapPageUpToNextEnabled = false;
+        mIsRemapPageUpToSpeedEnabled = false;
         persistState();
     }
 
@@ -317,9 +333,21 @@ public class GeneralData {
         return mIsRemapPageUpToLikeEnabled;
     }
 
+    public void remapPageUpToSpeed(boolean enable) {
+        mIsRemapPageUpToSpeedEnabled = enable;
+        mIsRemapPageUpToLikeEnabled = false;
+        mIsRemapPageUpToNextEnabled = false;
+        persistState();
+    }
+
+    public boolean isRemapPageUpToSpeedEnabled() {
+        return mIsRemapPageUpToSpeedEnabled;
+    }
+
     public void remapChannelUpToNext(boolean enable) {
         mIsRemapChannelUpToNextEnabled = enable;
         mIsRemapChannelUpToLikeEnabled = false;
+        mIsRemapChannelUpToSpeedEnabled = false;
         persistState();
     }
 
@@ -330,11 +358,23 @@ public class GeneralData {
     public void remapChannelUpToLike(boolean enable) {
         mIsRemapChannelUpToLikeEnabled = enable;
         mIsRemapChannelUpToNextEnabled = false;
+        mIsRemapChannelUpToSpeedEnabled = false;
         persistState();
     }
 
     public boolean isRemapChannelUpToLikeEnabled() {
         return mIsRemapChannelUpToLikeEnabled;
+    }
+
+    public void remapChannelUpToSpeed(boolean enable) {
+        mIsRemapChannelUpToSpeedEnabled = enable;
+        mIsRemapChannelUpToLikeEnabled = false;
+        mIsRemapChannelUpToNextEnabled = false;
+        persistState();
+    }
+
+    public boolean isRemapChannelUpToSpeedEnabled() {
+        return mIsRemapChannelUpToSpeedEnabled;
     }
 
     public void setScreenDimmingTimeoutMin(int timeoutMin) {
@@ -419,6 +459,9 @@ public class GeneralData {
         mIsRemapPageUpToLikeEnabled = Helpers.parseBoolean(split, 17, false);
         mIsRemapChannelUpToNextEnabled = Helpers.parseBoolean(split, 18, false);
         mIsRemapChannelUpToLikeEnabled = Helpers.parseBoolean(split, 19, false);
+        mIsRemapPageUpToSpeedEnabled = Helpers.parseBoolean(split, 20, false);
+        mIsRemapChannelUpToSpeedEnabled = Helpers.parseBoolean(split, 21, false);
+        mIsRemapFastForwardToSpeedEnabled = Helpers.parseBoolean(split, 22, false);
 
         if (selectedSections != null) {
             String[] selectedSectionsArr = Helpers.splitArrayLegacy(selectedSections);
@@ -448,6 +491,7 @@ public class GeneralData {
                 mIsHideShortsEnabled, mIsRemapFastForwardToNextEnabled, mScreenDimmingTimeoutMin,
                 mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId,
                 selectedCategories, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled,
-                mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled));
+                mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
+                mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled));
     }
 }

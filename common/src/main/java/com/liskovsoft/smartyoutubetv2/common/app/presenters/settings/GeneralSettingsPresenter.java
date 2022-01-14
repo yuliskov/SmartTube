@@ -188,6 +188,13 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 },
                 mGeneralData.isRemapFastForwardToNextEnabled()));
 
+        options.add(UiOptionItem.from("Fast Forward/Rewind -> Speed Up/Down",
+                option -> {
+                    mGeneralData.remapFastForwardToSpeed(option.isSelected());
+                    mRestartApp = true;
+                },
+                mGeneralData.isRemapFastForwardToSpeedEnabled()));
+
         options.add(UiOptionItem.from("Page Up/Down -> Next/Previous",
                 option -> {
                     mGeneralData.remapPageUpToNext(option.isSelected());
@@ -202,6 +209,13 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 },
                 mGeneralData.isRemapPageUpToLikeEnabled()));
 
+        options.add(UiOptionItem.from("Page Up/Down -> Speed Up/Down",
+                option -> {
+                    mGeneralData.remapPageUpToSpeed(option.isSelected());
+                    mRestartApp = true;
+                },
+                mGeneralData.isRemapPageUpToSpeedEnabled()));
+
         options.add(UiOptionItem.from("Channel Up/Down -> Next/Previous",
                 option -> {
                     mGeneralData.remapChannelUpToNext(option.isSelected());
@@ -215,6 +229,13 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     mRestartApp = true;
                 },
                 mGeneralData.isRemapChannelUpToLikeEnabled()));
+
+        options.add(UiOptionItem.from("Channel Up/Down -> Speed Up/Down",
+                option -> {
+                    mGeneralData.remapChannelUpToSpeed(option.isSelected());
+                    mRestartApp = true;
+                },
+                mGeneralData.isRemapChannelUpToSpeedEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.key_remapping), options);
     }
