@@ -170,7 +170,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             }
 
             value.videoId = null;
-            return value.playlistId == null && value.channelId == null;
+            return !value.hasPlaylist() && value.channelId == null;
         });
     }
 
@@ -732,7 +732,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private Observable<MediaGroup> createPinnedAction(Video item) {
-        return item.playlistId != null ?
+        return item.hasPlaylist() ?
                 ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item) :
                 mGroupManager.getChannelObserve(item.channelId).map(list -> list.get(0));
     }

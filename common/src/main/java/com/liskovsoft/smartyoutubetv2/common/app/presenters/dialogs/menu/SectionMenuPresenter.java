@@ -255,6 +255,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
 
         Video section = new Video();
         section.playlistId = video.playlistId;
+        section.playlistParams = video.playlistParams;
         section.channelId = video.channelId;
         section.title = String.format("%s - %s",
                 video.group != null && video.group.getTitle() != null ? video.group.getTitle() : video.title,

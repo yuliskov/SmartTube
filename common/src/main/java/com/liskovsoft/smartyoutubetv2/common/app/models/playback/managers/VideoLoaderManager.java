@@ -199,7 +199,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             case PlaybackEngineController.PLAYBACK_MODE_LIST:
                 // stop player (if not playing playlist)
                 Video video = getController().getVideo();
-                if ((video != null && video.playlistId != null) || mPlaylist.getNext() != null) {
+                if ((video != null && video.hasPlaylist()) || mPlaylist.getNext() != null) {
                     onNextClicked();
                     getController().showControls(true);
                 } else {

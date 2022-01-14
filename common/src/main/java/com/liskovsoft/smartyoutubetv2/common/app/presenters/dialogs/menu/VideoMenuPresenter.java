@@ -441,8 +441,8 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
         section.playlistParams = video.playlistParams;
         section.channelId = video.channelId;
         // Trying to properly format channel playlists, mixes etc
-        boolean isChannelItem = video.getGroupTitle() != null && video.belongsToChannelGroup();
-        boolean isUserPlaylistItem = video.getGroupTitle() != null && video.belongsToUserPlaylistGroup();
+        boolean isChannelItem = video.getGroupTitle() != null && video.belongsToSameAuthorGroup() && video.belongsToSamePlaylistGroup();
+        boolean isUserPlaylistItem = video.getGroupTitle() != null && video.belongsToSamePlaylistGroup();
         String title = isChannelItem ? video.extractAuthor() : isUserPlaylistItem ? null : video.title;
         String subtitle = isChannelItem || isUserPlaylistItem ? video.getGroupTitle() : video.description;
         section.title = title != null ? String.format("%s - %s", title, subtitle) : String.format("%s", subtitle);

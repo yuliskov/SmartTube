@@ -178,6 +178,10 @@ public final class Video implements Parcelable {
                 return playlistId.equals(video.playlistId);
             }
 
+            if (playlistParams != null) {
+                return playlistParams.equals(video.playlistParams);
+            }
+
             if (channelId != null) {
                 return channelId.equals(video.channelId);
             }
@@ -357,48 +361,36 @@ public final class Video implements Parcelable {
         return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_UNDEFINED;
     }
 
-    public boolean belongsToChannelGroup() {
-        if (group == null || group.getMediaGroup() == null || group.getMediaGroup().getMediaItems() == null) {
+    public boolean belongsToSameAuthorGroup() {
+        if (!checkMediaItems()) {
             return false;
         }
 
-        MediaItem previousItem = null;
+        List<MediaItem> mediaItems = group.getMediaGroup().getMediaItems();
 
-        for (MediaItem item : group.getMediaGroup().getMediaItems()) {
-            if (previousItem == null) {
-                previousItem = item;
-            } else {
-                String author1 = extractAuthor(item.getDescription());
-                String author2 = extractAuthor(previousItem.getDescription());
-                String playlist1 = item.getPlaylistId() != null ? item.getPlaylistId() : item.getPlaylistParams();
-                String playlist2 = previousItem.getPlaylistId() != null ? previousItem.getPlaylistId() : previousItem.getPlaylistParams();
-                return Helpers.equals(author1, author2) && Helpers.equals(playlist1, playlist2);
-            }
-        }
+        MediaItem first = mediaItems.get(0);
+        MediaItem second = mediaItems.get(1);
 
-        return false;
+        String author1 = extractAuthor(first.getDescription());
+        String author2 = extractAuthor(second.getDescription());
+
+        return author1 != null && author2 != null && Helpers.equals(author1, author2);
     }
 
-    public boolean belongsToUserPlaylistGroup() {
-        if (group == null || group.getMediaGroup() == null || group.getMediaGroup().getMediaItems() == null) {
+    public boolean belongsToSamePlaylistGroup() {
+        if (!checkMediaItems()) {
             return false;
         }
 
-        MediaItem previousItem = null;
+        List<MediaItem> mediaItems = group.getMediaGroup().getMediaItems();
 
-        for (MediaItem item : group.getMediaGroup().getMediaItems()) {
-            if (previousItem == null) {
-                previousItem = item;
-            } else {
-                String author1 = extractAuthor(item.getDescription());
-                String author2 = extractAuthor(previousItem.getDescription());
-                String playlist1 = item.getPlaylistId() != null ? item.getPlaylistId() : item.getPlaylistParams();
-                String playlist2 = previousItem.getPlaylistId() != null ? previousItem.getPlaylistId() : previousItem.getPlaylistParams();
-                return !Helpers.equals(author1, author2) && Helpers.equals(playlist1, playlist2);
-            }
-        }
+        MediaItem first = mediaItems.get(0);
+        MediaItem second = mediaItems.get(1);
 
-        return false;
+        String playlist1 = first.getPlaylistId() != null ? first.getPlaylistId() : first.getPlaylistParams();
+        String playlist2 = second.getPlaylistId() != null ? second.getPlaylistId() : second.getPlaylistParams();
+
+        return playlist1 != null && playlist2 != null && Helpers.equals(playlist1, playlist2);
     }
 
     public boolean belongsToPlaylist() {
@@ -477,6 +469,11 @@ public final class Video implements Parcelable {
             video.group = group.copy(); // Needed for proper multi row fragments sync (row id == group id)
         }
         return video;
+    }
+
+    private boolean checkMediaItems() {
+        return group != null && group.getMediaGroup() != null
+                && group.getMediaGroup().getMediaItems() != null && group.getMediaGroup().getMediaItems().size() >= 2;
     }
 
     // Builder for Video object.
