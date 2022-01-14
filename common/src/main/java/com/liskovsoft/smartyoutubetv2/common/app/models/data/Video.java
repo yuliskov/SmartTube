@@ -337,12 +337,16 @@ public final class Video implements Parcelable {
         return videoId == null && channelId != null;
     }
 
-    public boolean isPlaylistItem() {
+    public boolean hasPlaylistIndex() {
         return playlistIndex > 0;
     }
 
     public boolean isPlaylist() {
         return videoId == null && mediaItem != null && mediaItem.getType() == MediaItem.TYPE_PLAYLIST;
+    }
+
+    public String getGroupTitle() {
+        return group != null ? group.getTitle() : null;
     }
 
     public boolean belongsToUndefined() {
@@ -363,6 +367,10 @@ public final class Video implements Parcelable {
 
     public boolean belongsToHistory() {
         return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_HISTORY;
+    }
+
+    public boolean belongsToSection() {
+        return group != null && group.getSection() != null;
     }
 
     public void sync(Video video) {

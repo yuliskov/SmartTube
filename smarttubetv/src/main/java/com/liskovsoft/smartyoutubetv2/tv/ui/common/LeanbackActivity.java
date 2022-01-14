@@ -66,8 +66,8 @@ public abstract class LeanbackActivity extends MotherActivity {
         }
 
         KeyEvent newEvent = mGlobalKeyTranslator.translate(event);
-        // Don't push key down if handled (key code unknown). Otherwise you'll observe old behavior.
-        return newEvent.getKeyCode() == KeyEvent.KEYCODE_UNKNOWN || super.dispatchKeyEvent(newEvent);
+        // Set unknown key as handled to disable original key behavior.
+        return super.dispatchKeyEvent(newEvent) || newEvent.getKeyCode() == KeyEvent.KEYCODE_UNKNOWN;
     }
 
     public UriBackgroundManager getBackgroundManager() {

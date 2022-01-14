@@ -20,7 +20,7 @@ public class VideoGroup {
     private String mTitle;
     private List<Video> mVideos;
     private MediaGroup mMediaGroup;
-    private BrowseSection mCategory;
+    private BrowseSection mSection;
     private int mPosition = -1;
     private int mAction;
 
@@ -66,9 +66,9 @@ public class VideoGroup {
         return videoGroup;
     }
 
-    public static VideoGroup from(MediaGroup mediaGroup, BrowseSection category, int groupPosition) {
+    public static VideoGroup from(MediaGroup mediaGroup, BrowseSection section, int groupPosition) {
         VideoGroup videoGroup = new VideoGroup();
-        videoGroup.mCategory = category;
+        videoGroup.mSection = section;
         videoGroup.mPosition = groupPosition;
 
         if (mediaGroup == null) {
@@ -126,7 +126,7 @@ public class VideoGroup {
     }
 
     public BrowseSection getSection() {
-        return mCategory;
+        return mSection;
     }
 
     public boolean isEmpty() {

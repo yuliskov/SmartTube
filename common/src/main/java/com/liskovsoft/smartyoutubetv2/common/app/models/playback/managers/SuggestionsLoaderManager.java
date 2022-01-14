@@ -166,10 +166,10 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         }
 
         if (!video.isRemote) {
-            if (video.isPlaylistItem() && !getController().isSuggestionsEmpty()) {
-                Log.d(TAG, "Skip reloading suggestions when watching playlist.");
-                return;
-            }
+            //if (video.hasPlaylistIndex() && !getController().isSuggestionsEmpty()) {
+            //    Log.d(TAG, "Skip reloading suggestions when watching playlist.");
+            //    return;
+            //}
 
             if (getController().isSuggestionsShown()) {
                 Log.d(TAG, "Suggestions is opened. Seems that user want to stay here.");

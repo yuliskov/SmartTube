@@ -436,17 +436,17 @@ public class VideoMenuPresenter extends BasePresenter<Void> {
             return null;
         }
 
-        String groupTitle = video.group != null && video.group.getTitle() != null ? video.group.getTitle() : null;
-        boolean isSectionItem = video.group != null && video.group.getSection() != null;
-
         Video section = new Video();
         section.playlistId = video.playlistId;
         section.playlistParams = video.playlistParams;
         section.channelId = video.channelId;
         // Trying to properly format channel playlists, mixes etc
+        boolean isJam = video.title != null && video.belongsToSection();
+        boolean isChannelPlaylistItem = video.getGroupTitle() != null;
+        boolean isUserPlaylistItem = false;
         section.title = String.format("%s - %s",
-                video.title != null && isSectionItem ? video.title : groupTitle != null ? video.extractAuthor() : video.title,
-                groupTitle != null ? groupTitle : video.extractAuthor()
+                isJam ? video.title : isChannelPlaylistItem ? video.extractAuthor() : video.title,
+                isChannelPlaylistItem ? video.getGroupTitle() : video.extractAuthor()
         );
         section.cardImageUrl = video.cardImageUrl;
 
