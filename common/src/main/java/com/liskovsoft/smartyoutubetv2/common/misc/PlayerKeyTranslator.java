@@ -9,7 +9,6 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Map;
 
 public class PlayerKeyTranslator extends GlobalKeyTranslator {
@@ -130,6 +129,7 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
 
                 PlayerData.instance(mContext).setSpeed(speed);
                 mPlaybackView.getController().setSpeed(speed);
+                MessageHelpers.showMessage(mContext, String.format("%sx", speed));
             }
         }
     }

@@ -21,7 +21,9 @@ public abstract class KeyTranslator {
         if (actionMapping != null) {
             Runnable action = actionMapping.get(event.getKeyCode());
             if (action != null) {
-                action.run();
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    action.run();
+                }
                 newKeyCode = KeyEvent.KEYCODE_UNKNOWN; // disable original mapping
             }
         }
