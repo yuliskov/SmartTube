@@ -7,7 +7,7 @@
     <string name="header_music">音樂</string>
     <string name="header_news">新聞</string>
     <string name="header_gaming">遊戲</string>
-    <string name="header_playlists">播放列表</string>
+    <string name="header_playlists">播放清單</string>
     <string name="header_settings">設定</string>
     <string name="header_channels">訂閱頻道清單</string>
     <string name="subscriptions_signin_title">看您喜歡的頻道最新訊息</string>
@@ -40,11 +40,11 @@
     <string name="update_changelog">更新日誌</string>
     <string name="install_update">安裝更新</string>
     <string name="section_is_empty">糟糕！ 這裡什麼都沒有。</string>
-    <string name="dialog_add_to_playlist">新增/刪除播放列表</string>
+    <string name="dialog_add_to_playlist">新增/刪除播放清單</string>
     <string name="msg_signed_users_only">只限登入用戶</string>
     <string name="msg_cant_load_content">無法載入內容。\n1） 檢查網路連線。\n2） 嘗試登入到您的帳戶。</string>
     <string name="title_video_presets">影片預設</string>
-    <string name="settings_accounts">帳號</string>
+    <string name="settings_accounts">帳戶</string>
     <string name="settings_left_panel">編輯類別</string>
     <string name="settings_themes">主題</string>
     <string name="settings_other">其它</string>
@@ -103,7 +103,7 @@
     <string name="you_wont_see_this_video">影片已經從推薦中刪除</string>
     <string name="settings_search">搜尋</string>
     <string name="dialog_search">搜尋</string>
-    <string name="instant_voice_search">即時語音搜索</string>
+    <string name="instant_voice_search">即時語音搜尋</string>
     <string name="option_background_playback_behind">稍後觀看</string>
     <string name="next_video_info_is_not_loaded_yet">下一部影片訊息尚未載入</string>
     <string name="card_multiline_title">複數行標題</string>
@@ -118,7 +118,7 @@
     <string name="subtitle_yellow_transparent">黃色</string>
     <string name="subtitle_white_black">背景播放</string>
     <string name="player_seek_preview">搜尋時預覽</string>
-    <string name="color_scheme_dark_grey_oled">深灰色（OLED）</string>
+    <string name="color_scheme_dark_grey_oled">深灰色 (OLED)</string>
     <string name="channels_section_sorting">頻道排序</string>
     <string name="sorting_by_new_content">新活動</string>
     <string name="sorting_alphabetically">A-Z</string>
@@ -143,12 +143,12 @@
     <string name="video_zoom_fit_both">符合螢幕長寬</string>
     <string name="video_zoom_stretch">延伸</string>
     <string name="color_scheme_teal">藍綠色</string>
-    <string name="color_scheme_teal_oled">藍綠色（OLED）</string>
+    <string name="color_scheme_teal_oled">藍綠色 (OLED)</string>
     <string name="player_seek_preview_none">關閉</string>
     <string name="player_seek_preview_single">單幀</string>
     <string name="player_seek_preview_carousel">循環播放</string>
-    <string name="player_seek_preview_carousel_slow">循環播放（慢）</string>
-    <string name="player_seek_preview_carousel_fast">循環播放（快）</string>
+    <string name="player_seek_preview_carousel_slow">循環播放 (慢)</string>
+    <string name="player_seek_preview_carousel_fast">循環播放 (快)</string>
     <string name="unsubscribe_from_channel">取消訂閱</string>
     <string name="card_title_lines_num">卡片標題行數</string>
     <string name="card_auto_scrolled_title">自動滾動</string>
@@ -178,7 +178,7 @@
     <string name="content_block_sponsor">廣告商</string>
     <string name="content_block_intro">開頭動畫</string>
     <string name="content_block_outro">結束動畫</string>
-    <string name="content_block_interaction">互動提醒（訂閱）</string>
+    <string name="content_block_interaction">互動提醒 (訂閱)</string>
     <string name="content_block_self_promo">自我推銷</string>
     <string name="content_block_music_off_topic">非音樂部分的剪輯</string>
     <string name="confirm_segment_skip">跳過片段? \"%s\"？</string>
