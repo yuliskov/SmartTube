@@ -200,6 +200,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public void updateSections() {
+        if (getView() == null) {
+            return;
+        }
+
         int index = 0;
 
         sortSections();
