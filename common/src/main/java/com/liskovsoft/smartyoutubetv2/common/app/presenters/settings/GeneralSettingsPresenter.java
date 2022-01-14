@@ -182,59 +182,35 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         options.add(UiOptionItem.from("Fast Forward/Rewind -> Next/Previous",
-                option -> {
-                    mGeneralData.remapFastForwardToNext(option.isSelected());
-                    mRestartApp = true;
-                },
+                option -> mGeneralData.remapFastForwardToNext(option.isSelected()),
                 mGeneralData.isRemapFastForwardToNextEnabled()));
 
         options.add(UiOptionItem.from("Fast Forward/Rewind -> Speed Up/Down",
-                option -> {
-                    mGeneralData.remapFastForwardToSpeed(option.isSelected());
-                    mRestartApp = true;
-                },
+                option -> mGeneralData.remapFastForwardToSpeed(option.isSelected()),
                 mGeneralData.isRemapFastForwardToSpeedEnabled()));
 
         options.add(UiOptionItem.from("Page Up/Down -> Next/Previous",
-                option -> {
-                    mGeneralData.remapPageUpToNext(option.isSelected());
-                    mRestartApp = true;
-                },
+                option -> mGeneralData.remapPageUpToNext(option.isSelected()),
                 mGeneralData.isRemapPageUpToNextEnabled()));
 
         options.add(UiOptionItem.from("Page Up/Down -> Like/Dislike",
-                option -> {
-                    mGeneralData.remapPageUpToLike(option.isSelected());
-                    mRestartApp = true;
-                },
+                option -> mGeneralData.remapPageUpToLike(option.isSelected()),
                 mGeneralData.isRemapPageUpToLikeEnabled()));
 
         options.add(UiOptionItem.from("Page Up/Down -> Speed Up/Down",
-                option -> {
-                    mGeneralData.remapPageUpToSpeed(option.isSelected());
-                    mRestartApp = true;
-                },
+                option -> mGeneralData.remapPageUpToSpeed(option.isSelected()),
                 mGeneralData.isRemapPageUpToSpeedEnabled()));
 
         options.add(UiOptionItem.from("Channel Up/Down -> Next/Previous",
-                option -> {
-                    mGeneralData.remapChannelUpToNext(option.isSelected());
-                    mRestartApp = true;
-                },
+                option -> mGeneralData.remapChannelUpToNext(option.isSelected()),
                 mGeneralData.isRemapChannelUpToNextEnabled()));
 
         options.add(UiOptionItem.from("Channel Up/Down -> Like/Dislike",
-                option -> {
-                    mGeneralData.remapChannelUpToLike(option.isSelected());
-                    mRestartApp = true;
-                },
+                option -> mGeneralData.remapChannelUpToLike(option.isSelected()),
                 mGeneralData.isRemapChannelUpToLikeEnabled()));
 
         options.add(UiOptionItem.from("Channel Up/Down -> Speed Up/Down",
-                option -> {
-                    mGeneralData.remapChannelUpToSpeed(option.isSelected());
-                    mRestartApp = true;
-                },
+                option -> mGeneralData.remapChannelUpToSpeed(option.isSelected()),
                 mGeneralData.isRemapChannelUpToSpeedEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.key_remapping), options);
