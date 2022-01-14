@@ -208,11 +208,15 @@ public final class Video implements Parcelable {
     }
 
     public String extractAuthor() {
-        String result = null;
-
         if (author != null) {
-            result = author;
+            return author;
         }
+
+        return extractAuthor(description);
+    }
+
+    private static String extractAuthor(String description) {
+        String result = null;
 
         if (description != null) {
             String[] split = description.split(TERTIARY_TEXT_DELIM);
@@ -353,12 +357,56 @@ public final class Video implements Parcelable {
         return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_UNDEFINED;
     }
 
-    public boolean belongsToChannelUploads() {
-        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_CHANNEL_UPLOADS;
+    public boolean belongsToChannelGroup() {
+        if (group == null || group.getMediaGroup() == null || group.getMediaGroup().getMediaItems() == null) {
+            return false;
+        }
+
+        MediaItem previousItem = null;
+
+        for (MediaItem item : group.getMediaGroup().getMediaItems()) {
+            if (previousItem == null) {
+                previousItem = item;
+            } else {
+                String author1 = extractAuthor(item.getDescription());
+                String author2 = extractAuthor(previousItem.getDescription());
+                String playlist1 = item.getPlaylistId() != null ? item.getPlaylistId() : item.getPlaylistParams();
+                String playlist2 = previousItem.getPlaylistId() != null ? previousItem.getPlaylistId() : previousItem.getPlaylistParams();
+                return Helpers.equals(author1, author2) && Helpers.equals(playlist1, playlist2);
+            }
+        }
+
+        return false;
     }
 
-    public boolean belongsToPlaylists() {
+    public boolean belongsToUserPlaylistGroup() {
+        if (group == null || group.getMediaGroup() == null || group.getMediaGroup().getMediaItems() == null) {
+            return false;
+        }
+
+        MediaItem previousItem = null;
+
+        for (MediaItem item : group.getMediaGroup().getMediaItems()) {
+            if (previousItem == null) {
+                previousItem = item;
+            } else {
+                String author1 = extractAuthor(item.getDescription());
+                String author2 = extractAuthor(previousItem.getDescription());
+                String playlist1 = item.getPlaylistId() != null ? item.getPlaylistId() : item.getPlaylistParams();
+                String playlist2 = previousItem.getPlaylistId() != null ? previousItem.getPlaylistId() : previousItem.getPlaylistParams();
+                return !Helpers.equals(author1, author2) && Helpers.equals(playlist1, playlist2);
+            }
+        }
+
+        return false;
+    }
+
+    public boolean belongsToPlaylist() {
         return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_USER_PLAYLISTS;
+    }
+
+    public boolean belongsToChannelUploads() {
+        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_CHANNEL_UPLOADS;
     }
 
     public boolean belongsToSubscriptions() {
