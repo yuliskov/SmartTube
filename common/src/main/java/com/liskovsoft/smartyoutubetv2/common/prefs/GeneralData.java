@@ -44,6 +44,8 @@ public class GeneralData {
     private String mLastPlaylistId;
     private boolean mIsRemapPageUpToNextEnabled;
     private boolean mIsRemapPageUpToLikeEnabled;
+    private boolean mIsRemapChannelUpToNextEnabled;
+    private boolean mIsRemapChannelUpToLikeEnabled;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -315,6 +317,26 @@ public class GeneralData {
         return mIsRemapPageUpToLikeEnabled;
     }
 
+    public void remapChannelUpToNext(boolean enable) {
+        mIsRemapChannelUpToNextEnabled = enable;
+        mIsRemapChannelUpToLikeEnabled = false;
+        persistState();
+    }
+
+    public boolean isRemapChannelUpToNextEnabled() {
+        return mIsRemapChannelUpToNextEnabled;
+    }
+
+    public void remapChannelUpToLike(boolean enable) {
+        mIsRemapChannelUpToLikeEnabled = enable;
+        mIsRemapChannelUpToNextEnabled = false;
+        persistState();
+    }
+
+    public boolean isRemapChannelUpToLikeEnabled() {
+        return mIsRemapChannelUpToLikeEnabled;
+    }
+
     public void setScreenDimmingTimeoutMin(int timeoutMin) {
         mScreenDimmingTimeoutMin = timeoutMin;
         persistState();
@@ -395,6 +417,8 @@ public class GeneralData {
         mIsHideUpcomingEnabled = Helpers.parseBoolean(split, 15, false);
         mIsRemapPageUpToNextEnabled = Helpers.parseBoolean(split, 16, false);
         mIsRemapPageUpToLikeEnabled = Helpers.parseBoolean(split, 17, false);
+        mIsRemapChannelUpToNextEnabled = Helpers.parseBoolean(split, 18, false);
+        mIsRemapChannelUpToLikeEnabled = Helpers.parseBoolean(split, 19, false);
 
         if (selectedSections != null) {
             String[] selectedSectionsArr = Helpers.splitArrayLegacy(selectedSections);
@@ -423,6 +447,7 @@ public class GeneralData {
                 mIsReturnToLauncherEnabled,mBackgroundShortcut, pinnedItems,
                 mIsHideShortsEnabled, mIsRemapFastForwardToNextEnabled, mScreenDimmingTimeoutMin,
                 mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId,
-                selectedCategories, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled));
+                selectedCategories, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled,
+                mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled));
     }
 }

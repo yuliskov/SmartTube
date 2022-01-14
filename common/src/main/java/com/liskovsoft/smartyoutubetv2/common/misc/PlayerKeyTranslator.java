@@ -41,32 +41,44 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
             globalKeyMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
         }
 
-        if (mGeneralData.isRemapPageUpToLikeEnabled()) {
-            globalKeyMapping.put(KeyEvent.KEYCODE_PAGE_UP, KeyEvent.KEYCODE_UNKNOWN);
-            globalKeyMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, KeyEvent.KEYCODE_UNKNOWN);
+        if (mGeneralData.isRemapChannelUpToNextEnabled()) {
+            globalKeyMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, KeyEvent.KEYCODE_MEDIA_NEXT);
+            globalKeyMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS);
         }
     }
 
     private void initActionMapping() {
         Map<Integer, Runnable> actionMapping = getActionMapping();
 
+        addLikeAction(actionMapping);
+    }
+
+    private void addLikeAction(Map<Integer, Runnable> actionMapping) {
+        Runnable likeAction = () -> {
+            if (mPlaybackView.getEventListener() != null) {
+                mPlaybackView.getEventListener().onThumbsUpClicked(true);
+                mPlaybackView.getController().setLikeButtonState(true);
+                mPlaybackView.getController().setDislikeButtonState(false);
+                MessageHelpers.showMessage(mContext, R.string.action_like);
+            }
+        };
+        Runnable dislikeAction = () -> {
+            if (mPlaybackView.getEventListener() != null) {
+                mPlaybackView.getEventListener().onThumbsDownClicked(true);
+                mPlaybackView.getController().setLikeButtonState(false);
+                mPlaybackView.getController().setDislikeButtonState(true);
+                MessageHelpers.showMessage(mContext, R.string.action_dislike);
+            }
+        };
+
         if (mGeneralData.isRemapPageUpToLikeEnabled()) {
-            actionMapping.put(KeyEvent.KEYCODE_PAGE_UP, () -> {
-                if (mPlaybackView.getEventListener() != null) {
-                    mPlaybackView.getEventListener().onThumbsUpClicked(true);
-                    mPlaybackView.getController().setLikeButtonState(true);
-                    mPlaybackView.getController().setDislikeButtonState(false);
-                    MessageHelpers.showMessage(mContext, R.string.action_like);
-                }
-            });
-            actionMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, () -> {
-                if (mPlaybackView.getEventListener() != null) {
-                    mPlaybackView.getEventListener().onThumbsDownClicked(true);
-                    mPlaybackView.getController().setLikeButtonState(false);
-                    mPlaybackView.getController().setDislikeButtonState(true);
-                    MessageHelpers.showMessage(mContext, R.string.action_dislike);
-                }
-            });
+            actionMapping.put(KeyEvent.KEYCODE_PAGE_UP, likeAction);
+            actionMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, dislikeAction);
+        }
+
+        if (mGeneralData.isRemapChannelUpToLikeEnabled()) {
+            actionMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, likeAction);
+            actionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, dislikeAction);
         }
     }
 }

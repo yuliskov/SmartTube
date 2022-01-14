@@ -202,6 +202,20 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 },
                 mGeneralData.isRemapPageUpToLikeEnabled()));
 
+        options.add(UiOptionItem.from("Channel Up/Down -> Next/Previous",
+                option -> {
+                    mGeneralData.remapChannelUpToNext(option.isSelected());
+                    mRestartApp = true;
+                },
+                mGeneralData.isRemapChannelUpToNextEnabled()));
+
+        options.add(UiOptionItem.from("Channel Up/Down -> Like/Dislike",
+                option -> {
+                    mGeneralData.remapChannelUpToLike(option.isSelected());
+                    mRestartApp = true;
+                },
+                mGeneralData.isRemapChannelUpToLikeEnabled()));
+
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.key_remapping), options);
     }
 
