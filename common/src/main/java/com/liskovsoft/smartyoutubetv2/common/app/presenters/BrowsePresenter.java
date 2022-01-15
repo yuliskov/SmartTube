@@ -60,6 +60,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private final Map<Integer, Observable<MediaGroup>> mGridMapping;
     private final Map<Integer, Observable<List<MediaGroup>>> mRowMapping;
     private final Map<Integer, Callable<List<SettingsItem>>> mSettingsGridMapping;
+    private final Map<Integer, BrowseSection> mSectionsMapping;
     private final AppDataSourceManager mDataSourcePresenter;
     private final MediaGroupManager mGroupManager;
     private final MediaItemManager mItemManager;
@@ -79,6 +80,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mGridMapping = new HashMap<>();
         mRowMapping = new HashMap<>();
         mSettingsGridMapping = new HashMap<>();
+        mSectionsMapping = new HashMap<>();
         mMainUIData = MainUIData.instance(context);
         mGeneralData = GeneralData.instance(context);
         ScreenHelper.initPipMode(context);
@@ -89,7 +91,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mItemManager = mediaService.getMediaItemManager();
         mSignInManager = mediaService.getSignInManager();
 
-        initCategories();
+        initSections();
     }
 
     public static BrowsePresenter instance(Context context) {
@@ -120,36 +122,34 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         Utils.updateRemoteControlService(getContext());
     }
 
-    private void initCategories() {
-        cleanupPinnedItems();
-
-        initCategoryHeaders();
+    private void initSections() {
+        initSectionMapping();
         initPinnedHeaders();
 
-        initCategoryCallbacks();
+        initSectionCallbacks();
         initPinnedCallbacks();
 
         initSettingsSubCategories();
     }
 
-    private void initCategoryHeaders() {
+    private void initSectionMapping() {
         int uploadsType = mMainUIData.isUploadsOldLookEnabled() ? BrowseSection.TYPE_GRID : BrowseSection.TYPE_MULTI_GRID;
 
-        mSections.add(new BrowseSection(MediaGroup.TYPE_HOME, getContext().getString(R.string.header_home), BrowseSection.TYPE_ROW, R.drawable.icon_home));
-        mSections.add(new BrowseSection(MediaGroup.TYPE_GAMING, getContext().getString(R.string.header_gaming), BrowseSection.TYPE_ROW, R.drawable.icon_gaming));
-        mSections.add(new BrowseSection(MediaGroup.TYPE_NEWS, getContext().getString(R.string.header_news), BrowseSection.TYPE_ROW, R.drawable.icon_news));
-        mSections.add(new BrowseSection(MediaGroup.TYPE_MUSIC, getContext().getString(R.string.header_music), BrowseSection.TYPE_ROW, R.drawable.icon_music));
-        mSections.add(new BrowseSection(MediaGroup.TYPE_CHANNEL_UPLOADS, getContext().getString(R.string.header_channels), uploadsType, R.drawable.icon_channels, true));
-        mSections.add(new BrowseSection(MediaGroup.TYPE_SUBSCRIPTIONS, getContext().getString(R.string.header_subscriptions), BrowseSection.TYPE_GRID, R.drawable.icon_subscriptions, true));
-        mSections.add(new BrowseSection(MediaGroup.TYPE_HISTORY, getContext().getString(R.string.header_history), BrowseSection.TYPE_GRID, R.drawable.icon_history, true));
-        mSections.add(new BrowseSection(MediaGroup.TYPE_USER_PLAYLISTS, getContext().getString(R.string.header_playlists), BrowseSection.TYPE_ROW, R.drawable.icon_playlist, true));
+        mSectionsMapping.put(MediaGroup.TYPE_HOME, new BrowseSection(MediaGroup.TYPE_HOME, getContext().getString(R.string.header_home), BrowseSection.TYPE_ROW, R.drawable.icon_home));
+        mSectionsMapping.put(MediaGroup.TYPE_GAMING, new BrowseSection(MediaGroup.TYPE_GAMING, getContext().getString(R.string.header_gaming), BrowseSection.TYPE_ROW, R.drawable.icon_gaming));
+        mSectionsMapping.put(MediaGroup.TYPE_NEWS, new BrowseSection(MediaGroup.TYPE_NEWS, getContext().getString(R.string.header_news), BrowseSection.TYPE_ROW, R.drawable.icon_news));
+        mSectionsMapping.put(MediaGroup.TYPE_MUSIC, new BrowseSection(MediaGroup.TYPE_MUSIC, getContext().getString(R.string.header_music), BrowseSection.TYPE_ROW, R.drawable.icon_music));
+        mSectionsMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, new BrowseSection(MediaGroup.TYPE_CHANNEL_UPLOADS, getContext().getString(R.string.header_channels), uploadsType, R.drawable.icon_channels, true));
+        mSectionsMapping.put(MediaGroup.TYPE_SUBSCRIPTIONS, new BrowseSection(MediaGroup.TYPE_SUBSCRIPTIONS, getContext().getString(R.string.header_subscriptions), BrowseSection.TYPE_GRID, R.drawable.icon_subscriptions, true));
+        mSectionsMapping.put(MediaGroup.TYPE_HISTORY, new BrowseSection(MediaGroup.TYPE_HISTORY, getContext().getString(R.string.header_history), BrowseSection.TYPE_GRID, R.drawable.icon_history, true));
+        mSectionsMapping.put(MediaGroup.TYPE_USER_PLAYLISTS, new BrowseSection(MediaGroup.TYPE_USER_PLAYLISTS, getContext().getString(R.string.header_playlists), BrowseSection.TYPE_ROW, R.drawable.icon_playlist, true));
 
         if (mGeneralData.isSettingsSectionEnabled()) {
-            mSections.add(new BrowseSection(MediaGroup.TYPE_SETTINGS, getContext().getString(R.string.header_settings), BrowseSection.TYPE_SETTINGS_GRID, R.drawable.icon_settings));
+            mSectionsMapping.put(MediaGroup.TYPE_SETTINGS, new BrowseSection(MediaGroup.TYPE_SETTINGS, getContext().getString(R.string.header_settings), BrowseSection.TYPE_SETTINGS_GRID, R.drawable.icon_settings));
         }
     }
 
-    private void initCategoryCallbacks() {
+    private void initSectionCallbacks() {
         mRowMapping.put(MediaGroup.TYPE_HOME, mGroupManager.getHomeObserve());
         mRowMapping.put(MediaGroup.TYPE_NEWS, mGroupManager.getNewsObserve());
         mRowMapping.put(MediaGroup.TYPE_MUSIC, mGroupManager.getMusicObserve());
@@ -161,26 +161,21 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsUpdateObserve());
     }
 
-    private void cleanupPinnedItems() {
-        Collection<Video> pinnedItems = mGeneralData.getPinnedItems();
-
-        Helpers.removeIf(pinnedItems, value -> {
-            if (value == null) {
-                return true;
-            }
-
-            value.videoId = null;
-            return !value.hasPlaylist() && value.channelId == null;
-        });
-    }
-
     private void initPinnedHeaders() {
         Collection<Video> pinnedItems = mGeneralData.getPinnedItems();
 
         for (Video item : pinnedItems) {
             if (item != null) {
-                BrowseSection category = new BrowseSection(item.hashCode(), item.title, BrowseSection.TYPE_GRID, item.cardImageUrl, true, item);
-                mSections.add(category);
+                if (item.extra == -1) {
+                    BrowseSection section = new BrowseSection(item.hashCode(), item.title, BrowseSection.TYPE_GRID, item.cardImageUrl, true, item);
+                    mSections.add(section);
+                } else {
+                    BrowseSection section = mSectionsMapping.get(item.extra);
+
+                    if (section != null) {
+                        mSections.add(section);
+                    }
+                }
             }
         }
     }
@@ -385,12 +380,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     public void pinItem(Video item) {
         mGeneralData.addPinnedItem(item);
 
-        BrowseSection category = new BrowseSection(item.hashCode(), item.title, BrowseSection.TYPE_GRID, item.cardImageUrl, true, item);
-        mSections.add(category);
+        BrowseSection section = new BrowseSection(item.hashCode(), item.title, BrowseSection.TYPE_GRID, item.cardImageUrl, true, item);
+        mSections.add(section);
         mGridMapping.put(item.hashCode(), createPinnedAction(item));
 
         if (getView() != null) {
-            getView().addSection(-1, category); // add last
+            getView().addSection(-1, section); // add last
         }
     }
 

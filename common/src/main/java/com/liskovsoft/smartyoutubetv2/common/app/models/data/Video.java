@@ -48,6 +48,7 @@ public final class Video implements Parcelable {
     public String clickTrackingParams;
     public boolean isSynced;
     public final long timestamp = System.currentTimeMillis();
+    public int extra = -1;
 
     public Video() {
 
@@ -177,7 +178,7 @@ public final class Video implements Parcelable {
      */
     @Override
     public int hashCode() {
-        int hashCode = Helpers.hashCodeAny(videoId, playlistId, playlistParams, channelId, mediaItem);
+        int hashCode = Helpers.hashCodeAny(videoId, playlistId, playlistParams, channelId, mediaItem, extra);
         return hashCode != -1 ? hashCode : super.hashCode();
     }
     
@@ -257,12 +258,17 @@ public final class Video implements Parcelable {
 
         String[] split = spec.split("&vi;");
 
-        // Add backward compatibility
+        // Backward compatibility
         if (split.length == 10) {
             split = Helpers.appendArray(split, new String[]{null});
         }
 
-        if (split.length != 11) {
+        // Backward compatibility
+        if (split.length == 11) {
+            split = Helpers.appendArray(split, new String[]{null});
+        }
+
+        if (split.length != 12) {
             return null;
         }
 
@@ -279,14 +285,15 @@ public final class Video implements Parcelable {
         result.cardImageUrl = Helpers.parseStr(split[8]);
         result.mediaItem = YouTubeMediaService.deserializeMediaItem(Helpers.parseStr(split[9]));
         result.playlistParams = Helpers.parseStr(split[10]);
+        result.extra = Helpers.parseInt(split[11]);
 
         return result;
     }
 
     @Override
     public String toString() {
-        return String.format("%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s",
-                id, category, title, videoId, videoUrl, playlistId, channelId, bgImageUrl, cardImageUrl, YouTubeMediaService.serialize(mediaItem), playlistParams);
+        return String.format("%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s",
+                id, category, title, videoId, videoUrl, playlistId, channelId, bgImageUrl, cardImageUrl, YouTubeMediaService.serialize(mediaItem), playlistParams, extra);
     }
 
     //@Override

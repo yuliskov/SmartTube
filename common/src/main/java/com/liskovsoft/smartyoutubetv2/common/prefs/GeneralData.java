@@ -9,7 +9,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.utils.HashList;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +31,6 @@ public class GeneralData {
     private boolean mIsSettingsSectionEnabled;
     private int mBootSectionId;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
-    private final List<Integer> mEnabledSections = new HashList<>();
     private final List<Video> mPinnedItems = new HashList<>();
     private int mAppExitShortcut;
     private boolean mIsReturnToLauncherEnabled;
@@ -66,7 +67,7 @@ public class GeneralData {
     }
 
     public Collection<Video> getPinnedItems() {
-        return mPinnedItems;
+        return Collections.unmodifiableList(mPinnedItems);
     }
 
     public void addPinnedItem(Video item) {
@@ -87,13 +88,16 @@ public class GeneralData {
         if (enabled) {
             int index = getDefaultSectionIndex(sectionId);
 
+            Video item = new Video();
+            item.extra = sectionId;
+
             if (index == -1) {
-                mEnabledSections.add(sectionId);
+                mPinnedItems.add(item);
             } else {
-                mEnabledSections.add(index, sectionId);
+                mPinnedItems.add(index, item);
             }
         } else {
-            mEnabledSections.remove((Object) sectionId);
+            Helpers.removeIf(mPinnedItems, value -> value.extra == sectionId);
         }
 
         persistState();
@@ -115,15 +119,22 @@ public class GeneralData {
     }
 
     public Collection<Integer> getEnabledSections() {
-        return mEnabledSections;
+        List<Integer> enabledSections = new ArrayList<>();
+
+        for (Video item : mPinnedItems) {
+            if (item.extra != -1) {
+                enabledSections.add(item.extra);
+            }
+        }
+
+        return enabledSections;
     }
 
     /**
      * Contains sections and pinned items!
      */
     public boolean isSectionEnabled(int sectionId) {
-        return mEnabledSections.contains(sectionId) ||
-                Helpers.findFirst(mPinnedItems, item -> item.hashCode() == sectionId) != null; // by default enable all pinned items
+        return Helpers.findFirst(mPinnedItems, item -> item.hashCode() == sectionId || item.extra == sectionId) != null; // by default enable all pinned items
     }
 
     //public void setSectionIndex(int sectionId, int index) {
@@ -135,16 +146,7 @@ public class GeneralData {
         // 1) Distinguish section from pinned item
         // 2) Add pinned items after the sections
 
-        int index = findSectionIndex(sectionId);
-
-        if (index == -1) {
-            index = findPinnedItemIndex(sectionId);
-
-            // Add pinned items after the sections
-            if (index != -1) {
-                index += mEnabledSections.size();
-            }
-        }
+        int index = findPinnedItemIndex(sectionId);
 
         return index;
     }
@@ -165,18 +167,8 @@ public class GeneralData {
         return canShiftSection(sectionId, 1);
     }
 
-    private int findSectionIndex(int sectionId) {
-        return mEnabledSections.indexOf(sectionId);
-    }
-
     private boolean canShiftSection(int sectionId, int shift) {
-        int index = findSectionIndex(sectionId);
-
-        if (index != -1) {
-            return index + shift >= 0 && index + shift < mEnabledSections.size();
-        }
-
-        index = findPinnedItemIndex(sectionId);
+        int index = findPinnedItemIndex(sectionId);
 
         if (index != -1) {
             return  index + shift >= 0 && index + shift < mPinnedItems.size();
@@ -190,15 +182,7 @@ public class GeneralData {
             return;
         }
 
-        int index = findSectionIndex(sectionId);
-
-        if (index != -1) {
-            mEnabledSections.add(index + shift, mEnabledSections.get(index));
-            persistState();
-            return;
-        }
-
-        index = findPinnedItemIndex(sectionId);
+        int index = findPinnedItemIndex(sectionId);
 
         if (index != -1) {
             mPinnedItems.add(index + shift, mPinnedItems.get(index));
@@ -210,8 +194,8 @@ public class GeneralData {
         int index = -1;
 
         for (Video item : mPinnedItems) {
-            // Distinguish pinned items by hashCode!
-            if (item.hashCode() == sectionId) {
+            // Distinguish pinned items by hashCode or extra field (default section)!
+            if (item.hashCode() == sectionId || item.extra == sectionId) {
                 index = mPinnedItems.indexOf(item);
                 break;
             }
@@ -434,6 +418,17 @@ public class GeneralData {
         mDefaultSections.put(R.string.header_settings, MediaGroup.TYPE_SETTINGS);
     }
 
+    private void cleanupPinnedItems() {
+        Helpers.removeIf(mPinnedItems, value -> {
+            if (value == null) {
+                return true;
+            }
+
+            value.videoId = null;
+            return !value.hasPlaylist() && value.channelId == null && value.extra == -1;
+        });
+    }
+
     private void restoreState() {
         String data = mPrefs.getData(GENERAL_DATA);
 
@@ -463,14 +458,18 @@ public class GeneralData {
         mIsRemapChannelUpToSpeedEnabled = Helpers.parseBoolean(split, 21, false);
         mIsRemapFastForwardToSpeedEnabled = Helpers.parseBoolean(split, 22, false);
 
+        // Backward compatibility
         if (selectedSections != null) {
             String[] selectedSectionsArr = Helpers.splitArrayLegacy(selectedSections);
 
             for (String sectionId : selectedSectionsArr) {
-                mEnabledSections.add(Helpers.parseInt(sectionId));
+                int sectionIdParsed = Helpers.parseInt(sectionId);
+
+                Video video = new Video();
+                video.extra = sectionIdParsed;
+
+                mPinnedItems.add(video);
             }
-        } else {
-            mEnabledSections.addAll(mDefaultSections.values());
         }
 
         if (pinnedItems != null) {
@@ -479,18 +478,25 @@ public class GeneralData {
             for (String pinnedItem : pinnedItemsArr) {
                 mPinnedItems.add(Video.fromString(pinnedItem));
             }
+        } else {
+            for (int sectionId : mDefaultSections.values()) {
+                Video video = new Video();
+                video.extra = sectionId;
+                mPinnedItems.add(video);
+            }
         }
+
+        cleanupPinnedItems();
     }
 
     private void persistState() {
-        String selectedCategories = Helpers.mergeArray(mEnabledSections.toArray());
         String pinnedItems = Helpers.mergeArray(mPinnedItems.toArray());
         // Zero index is skipped. Selected sections were there.
         mPrefs.setData(GENERAL_DATA, Helpers.mergeObject(null, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut,
                 mIsReturnToLauncherEnabled,mBackgroundShortcut, pinnedItems,
                 mIsHideShortsEnabled, mIsRemapFastForwardToNextEnabled, mScreenDimmingTimeoutMin,
                 mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId,
-                selectedCategories, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled,
+                null, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled,
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled));
     }
