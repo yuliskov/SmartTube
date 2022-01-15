@@ -124,7 +124,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private void initSections() {
         initSectionMapping();
-        initPinnedHeaders();
 
         initSectionCallbacks();
         initPinnedCallbacks();
@@ -161,7 +160,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mGridMapping.put(MediaGroup.TYPE_CHANNEL_UPLOADS, mGroupManager.getSubscribedChannelsUpdateObserve());
     }
 
-    private void initPinnedHeaders() {
+    private void initPinnedSections() {
+        mSections.clear();
+
         Collection<Video> pinnedItems = mGeneralData.getPinnedItems();
 
         for (Video item : pinnedItems) {
@@ -194,10 +195,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         mSettingsGridMapping.put(MediaGroup.TYPE_SETTINGS, () -> mDataSourcePresenter.getSettingItems(getContext()));
     }
 
-    public void updateSections() {
+    private void updateSections() {
         if (getView() == null) {
             return;
         }
+
+        initPinnedSections();
 
         int index = 0;
 
@@ -260,6 +263,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private void updateCategoryType(int categoryId, int categoryType) {
         if (categoryType == -1 || categoryId == -1 || mSections == null) {
             return;
+        }
+
+        BrowseSection section = mSectionsMapping.get(categoryId);
+
+        if (section != null) {
+            section.setType(categoryType);
         }
 
         for (BrowseSection category : mSections) {
@@ -375,6 +384,28 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         Collection<Video> items = mGeneralData.getPinnedItems();
 
         return items.contains(item);
+    }
+
+    public void moveSectionUp(int sectionId) {
+        mGeneralData.moveSectionUp(sectionId);
+        updateSections();
+    }
+
+    public void moveSectionDown(int sectionId) {
+        mGeneralData.moveSectionDown(sectionId);
+        updateSections();
+    }
+
+    public void enableSection(int sectionId, boolean enable) {
+        mGeneralData.enableSection(sectionId, enable);
+
+        if (enable) {
+            updateSections();
+        } else {
+            if (getView() != null) {
+                getView().removeSection(mSectionsMapping.get(sectionId));
+            }
+        }
     }
 
     public void pinItem(Video item) {

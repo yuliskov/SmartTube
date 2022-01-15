@@ -168,8 +168,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         mSettingsPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.unpin_from_sidebar),
                         optionItem -> {
-                            GeneralData.instance(getContext()).enableSection(mSection.getId(), false);
-                            BrowsePresenter.instance(getContext()).updateSections();
+                            BrowsePresenter.instance(getContext()).enableSection(mSection.getId(), false);
                             mSettingsPresenter.closeDialog();
                         }));
     }
@@ -219,8 +218,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
             mSettingsPresenter.appendSingleButton(
                     UiOptionItem.from(getContext().getString(R.string.move_section_up), optionItem -> {
                         mSettingsPresenter.closeDialog();
-                        generalData.moveSectionUp(mSection.getId());
-                        BrowsePresenter.instance(getContext()).updateSections();
+                        BrowsePresenter.instance(getContext()).moveSectionUp(mSection.getId());
                     }));
         }
 
@@ -228,8 +226,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
             mSettingsPresenter.appendSingleButton(
                     UiOptionItem.from(getContext().getString(R.string.move_section_down), optionItem -> {
                         mSettingsPresenter.closeDialog();
-                        generalData.moveSectionDown(mSection.getId());
-                        BrowsePresenter.instance(getContext()).updateSections();
+                        BrowsePresenter.instance(getContext()).moveSectionDown(mSection.getId());
                     }));
         }
     }
