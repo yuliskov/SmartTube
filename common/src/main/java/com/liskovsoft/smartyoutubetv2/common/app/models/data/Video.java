@@ -166,37 +166,19 @@ public final class Video implements Parcelable {
         if (obj instanceof Video) {
             Video video = (Video) obj;
 
-            if (videoId != null) {
-                // Also don't confuse with jam of current video (different playlists).
-                // NOTE: you may have a problems with opening same video from phone.
-                //return videoId.equals(video.videoId) && Helpers.equals(playlistId, video.playlistId);
-
-                return videoId.equals(video.videoId);
-            }
-
-            if (playlistId != null) {
-                return playlistId.equals(video.playlistId);
-            }
-
-            if (playlistParams != null) {
-                return playlistParams.equals(video.playlistParams);
-            }
-
-            if (channelId != null) {
-                return channelId.equals(video.channelId);
-            }
-
-            if (mediaItem != null) {
-                return mediaItem.equals(video.mediaItem);
-            }
+            return hashCode() == video.hashCode();
         }
 
         return false;
     }
 
+    /**
+     * NOTE: hashCode is used generate id that should be the same if contents of items is the same
+     */
     @Override
     public int hashCode() {
-        return Helpers.hashCodeAny(videoId, playlistId, channelId, mediaItem);
+        int hashCode = Helpers.hashCodeAny(videoId, playlistId, playlistParams, channelId, mediaItem);
+        return hashCode != -1 ? hashCode : super.hashCode();
     }
     
     public static boolean equals(Video video1, Video video2) {
