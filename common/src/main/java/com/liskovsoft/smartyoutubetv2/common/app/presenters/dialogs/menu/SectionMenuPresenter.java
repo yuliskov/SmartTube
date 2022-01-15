@@ -24,7 +24,6 @@ import java.util.Iterator;
 
 public class SectionMenuPresenter extends BaseMenuPresenter {
     private static final String TAG = SectionMenuPresenter.class.getSimpleName();
-    private final MediaItemManager mItemManager;
     private final AppDialogPresenter mDialogPresenter;
     private final MediaServiceManager mServiceManager;
     private Video mVideo;
@@ -40,7 +39,6 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
     private SectionMenuPresenter(Context context) {
         super(context);
         MediaService service = YouTubeMediaService.instance();
-        mItemManager = service.getMediaItemManager();
         mServiceManager = MediaServiceManager.instance();
         mDialogPresenter = AppDialogPresenter.instance(context);
     }
