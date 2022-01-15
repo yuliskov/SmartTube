@@ -13,8 +13,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
@@ -24,10 +22,10 @@ import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
 import java.util.Iterator;
 
-public class SectionMenuPresenter extends BasePresenter<Void> {
+public class SectionMenuPresenter extends BaseMenuPresenter {
     private static final String TAG = SectionMenuPresenter.class.getSimpleName();
     private final MediaItemManager mItemManager;
-    private final AppDialogPresenter mSettingsPresenter;
+    private final AppDialogPresenter mDialogPresenter;
     private final MediaServiceManager mServiceManager;
     private Video mVideo;
     private BrowseSection mSection;
@@ -44,11 +42,31 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         MediaService service = YouTubeMediaService.instance();
         mItemManager = service.getMediaItemManager();
         mServiceManager = MediaServiceManager.instance();
-        mSettingsPresenter = AppDialogPresenter.instance(context);
+        mDialogPresenter = AppDialogPresenter.instance(context);
     }
 
     public static SectionMenuPresenter instance(Context context) {
         return new SectionMenuPresenter(context);
+    }
+
+    @Override
+    protected Video getVideo() {
+        return mVideo;
+    }
+
+    @Override
+    protected AppDialogPresenter getDialogPresenter() {
+        return mDialogPresenter;
+    }
+
+    @Override
+    protected boolean isPinToSidebarEnabled() {
+        return false;
+    }
+
+    @Override
+    protected boolean isAccountSelectionEnabled() {
+        return mIsAccountSelectionEnabled;
     }
 
     public void showMenu(BrowseSection section) {
@@ -87,7 +105,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        mSettingsPresenter.clear();
+        mDialogPresenter.clear();
 
         appendReturnToBackgroundVideoButton();
         appendRefreshButton();
@@ -97,9 +115,9 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         appendAccountSelectionButton();
         appendMoveSectionButton();
 
-        if (!mSettingsPresenter.isEmpty()) {
+        if (!mDialogPresenter.isEmpty()) {
             String title = mSection != null ? mSection.getTitle() : null;
-            mSettingsPresenter.showDialog(title, this::disposeActions);
+            mDialogPresenter.showDialog(title, this::disposeActions);
         }
     }
 
@@ -108,7 +126,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        mSettingsPresenter.clear();
+        mDialogPresenter.clear();
 
         appendReturnToBackgroundVideoButton();
         appendRefreshButton();
@@ -117,11 +135,11 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         appendAccountSelectionButton();
         appendMoveSectionButton();
 
-        if (mSettingsPresenter.isEmpty()) {
+        if (mDialogPresenter.isEmpty()) {
             MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
         } else {
             String title = mSection != null ? mSection.getTitle() : null;
-            mSettingsPresenter.showDialog(title, this::disposeActions);
+            mDialogPresenter.showDialog(title, this::disposeActions);
         }
     }
 
@@ -135,12 +153,12 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        mSettingsPresenter.appendSingleButton(
+        mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.unpin_from_sidebar),
                         optionItem -> {
                             if (mVideo.hasPlaylist() || mVideo.hasChannel()) {
                                 togglePinToSidebar(createPinnedSection(mVideo));
-                                mSettingsPresenter.closeDialog();
+                                mDialogPresenter.closeDialog();
                             } else {
                                 mServiceManager.loadChannelUploads(mVideo, group -> {
                                     if (group.getMediaItems() != null) {
@@ -149,7 +167,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
                                         Video section = createPinnedSection(Video.from(firstItem));
                                         section.title = mVideo.title;
                                         togglePinToSidebar(section);
-                                        mSettingsPresenter.closeDialog();
+                                        mDialogPresenter.closeDialog();
                                     }
                                 });
                             }
@@ -165,23 +183,12 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        mSettingsPresenter.appendSingleButton(
+        mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.unpin_from_sidebar),
                         optionItem -> {
                             BrowsePresenter.instance(getContext()).enableSection(mSection.getId(), false);
-                            mSettingsPresenter.closeDialog();
+                            mDialogPresenter.closeDialog();
                         }));
-    }
-
-    private void appendAccountSelectionButton() {
-        if (!mIsAccountSelectionEnabled) {
-            return;
-        }
-
-        mSettingsPresenter.appendSingleButton(
-                UiOptionItem.from(getContext().getString(R.string.dialog_account_list), optionItem -> {
-                    AccountSelectionPresenter.instance(getContext()).show(true);
-                }));
     }
 
     private void appendRefreshButton() {
@@ -193,13 +200,13 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        mSettingsPresenter.appendSingleButton(
+        mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.refresh_section), optionItem -> {
                     if (BrowsePresenter.instance(getContext()).getView() != null) {
                         BrowsePresenter.instance(getContext()).getView().focusOnContent();
                         BrowsePresenter.instance(getContext()).refresh();
                     }
-                    mSettingsPresenter.closeDialog();
+                    mDialogPresenter.closeDialog();
                 }));
     }
 
@@ -215,17 +222,17 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
         GeneralData generalData = GeneralData.instance(getContext());
 
         if (generalData.canMoveSectionUp(mSection.getId())) {
-            mSettingsPresenter.appendSingleButton(
+            mDialogPresenter.appendSingleButton(
                     UiOptionItem.from(getContext().getString(R.string.move_section_up), optionItem -> {
-                        mSettingsPresenter.closeDialog();
+                        mDialogPresenter.closeDialog();
                         BrowsePresenter.instance(getContext()).moveSectionUp(mSection.getId());
                     }));
         }
 
         if (generalData.canMoveSectionDown(mSection.getId())) {
-            mSettingsPresenter.appendSingleButton(
+            mDialogPresenter.appendSingleButton(
                     UiOptionItem.from(getContext().getString(R.string.move_section_down), optionItem -> {
-                        mSettingsPresenter.closeDialog();
+                        mDialogPresenter.closeDialog();
                         BrowsePresenter.instance(getContext()).moveSectionDown(mSection.getId());
                     }));
         }
@@ -268,7 +275,7 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        mSettingsPresenter.appendSingleButton(
+        mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.return_to_background_video),
                         // Assume that the Playback view already blocked and remembered.
                         optionItem -> ViewManager.instance(getContext()).startView(SplashView.class)
@@ -285,9 +292,9 @@ public class SectionMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        mSettingsPresenter.appendSingleButton(
+        mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.mark_all_channels_watched), optionItem -> {
-                    mSettingsPresenter.closeDialog();
+                    mDialogPresenter.closeDialog();
 
                     MediaServiceManager serviceManager = MediaServiceManager.instance();
 
