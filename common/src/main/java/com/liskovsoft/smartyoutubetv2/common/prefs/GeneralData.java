@@ -458,11 +458,6 @@ public class GeneralData {
         mIsRemapChannelUpToSpeedEnabled = Helpers.parseBoolean(split, 21, false);
         mIsRemapFastForwardToSpeedEnabled = Helpers.parseBoolean(split, 22, false);
 
-        // Backward compatibility
-        if (selectedSections != null) {
-            initPinnedItems();
-        }
-
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
 
@@ -473,8 +468,9 @@ public class GeneralData {
             initPinnedItems();
         }
 
+        // Backward compatibility
         if (!isSectionEnabled(MediaGroup.TYPE_SETTINGS)) {
-            enableSection(MediaGroup.TYPE_SETTINGS, true);
+            initPinnedItems();
         }
 
         cleanupPinnedItems();
@@ -482,9 +478,7 @@ public class GeneralData {
 
     private void initPinnedItems() {
         for (int sectionId : mDefaultSections.values()) {
-            Video video = new Video();
-            video.extra = sectionId;
-            mPinnedItems.add(video);
+            enableSection(sectionId, true);
         }
     }
 
