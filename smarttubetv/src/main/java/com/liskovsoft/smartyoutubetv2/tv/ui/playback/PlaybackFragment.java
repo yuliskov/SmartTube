@@ -558,7 +558,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private int getSuggestedItemIndex() {
-        if (getVideo() == null || !getVideo().hasPlaylist()) {
+        if (getVideo() == null || !getVideo().hasPlaylist() || !getVideo().hasVideo()) {
             return -1;
         }
 
