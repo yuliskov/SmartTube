@@ -770,7 +770,7 @@ public class SearchSupportFragment extends Fragment {
         }
     }
 
-    void submitQuery(String query) {
+    protected void submitQuery(String query) {
         if (query == null) {
             return;
         }

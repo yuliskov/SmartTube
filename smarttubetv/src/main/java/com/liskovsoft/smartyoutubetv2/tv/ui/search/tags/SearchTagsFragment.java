@@ -149,6 +149,15 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         }
     }
 
+    /**
+     * Fix: voice search: autofocus on results (mNewQuery is null)
+     */
+    @Override
+    protected void submitQuery(String query) {
+        super.submitQuery(query);
+        mNewQuery = query;
+    }
+
     @Override
     public void onSearchSettingsClicked() {
         mSearchPresenter.onSearchSettingsClicked();

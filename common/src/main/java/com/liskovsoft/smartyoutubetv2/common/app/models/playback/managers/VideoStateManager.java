@@ -20,6 +20,7 @@ import io.reactivex.disposables.Disposable;
 
 public class VideoStateManager extends PlayerEventListenerHelper {
     private static final String TAG = VideoStateManager.class.getSimpleName();
+    private static final float RESTORE_POSITION_PERCENTS = 12;
     private boolean mIsPlayEnabled;
     private Video mVideo;
     private FormatItem mTempVideoFormat;
@@ -324,7 +325,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         State state = mStateService.getByVideoId(item.videoId);
 
         // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
-        boolean containsWebPosition = item.percentWatched >= 10;
+        boolean containsWebPosition = item.percentWatched >= RESTORE_POSITION_PERCENTS;
         boolean stateIsOutdated = state == null || state.timestamp < item.timestamp;
         if (containsWebPosition && stateIsOutdated) {
             // Web state is buggy on short videos (e.g. video clips)

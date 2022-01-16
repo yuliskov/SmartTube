@@ -460,33 +460,32 @@ public class GeneralData {
 
         // Backward compatibility
         if (selectedSections != null) {
-            String[] selectedSectionsArr = Helpers.splitArrayLegacy(selectedSections);
-
-            for (String sectionId : selectedSectionsArr) {
-                int sectionIdParsed = Helpers.parseInt(sectionId);
-
-                Video video = new Video();
-                video.extra = sectionIdParsed;
-
-                mPinnedItems.add(video);
-            }
+            initPinnedItems();
         }
 
-        if (pinnedItems != null) {
+        if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
 
             for (String pinnedItem : pinnedItemsArr) {
                 mPinnedItems.add(Video.fromString(pinnedItem));
             }
         } else {
-            for (int sectionId : mDefaultSections.values()) {
-                Video video = new Video();
-                video.extra = sectionId;
-                mPinnedItems.add(video);
-            }
+            initPinnedItems();
+        }
+
+        if (!isSectionEnabled(MediaGroup.TYPE_SETTINGS)) {
+            enableSection(MediaGroup.TYPE_SETTINGS, true);
         }
 
         cleanupPinnedItems();
+    }
+
+    private void initPinnedItems() {
+        for (int sectionId : mDefaultSections.values()) {
+            Video video = new Video();
+            video.extra = sectionId;
+            mPinnedItems.add(video);
+        }
     }
 
     private void persistState() {
