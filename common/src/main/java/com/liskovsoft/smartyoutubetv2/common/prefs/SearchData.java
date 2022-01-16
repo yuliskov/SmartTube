@@ -81,7 +81,7 @@ public class SearchData {
         mIsInstantVoiceSearchEnabled = Helpers.parseBoolean(split, 0, false);
         mSearchOptions = Helpers.parseInt(split, 1, 0);
         mIsFocusOnResultsEnabled = Helpers.parseBoolean(split, 2, true);
-        mIsKeyboardAutoShowEnabled = Helpers.parseBoolean(split, 3, true);
+        mIsKeyboardAutoShowEnabled = Helpers.parseBoolean(split, 3, false);
         mIsBackgroundPlaybackEnabled = Helpers.parseBoolean(split, 4, false);
     }
 
