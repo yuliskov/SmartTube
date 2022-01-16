@@ -362,11 +362,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     @Override
     public void onSectionFocused(int sectionId) {
-        // Close PIP in Settings section
-        if (sectionId == MediaGroup.TYPE_SETTINGS) {
-            PlaybackPresenter.instance(getContext()).forceFinish();
-        }
-
         updateSection(sectionId);
     }
 

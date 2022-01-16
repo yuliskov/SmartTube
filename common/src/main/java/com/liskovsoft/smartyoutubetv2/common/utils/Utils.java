@@ -460,9 +460,11 @@ public class Utils {
                 //if (group.get(0).getMediaItems() != null) {
                 //    PlaybackPresenter.instance(context).openVideo(Video.from(group.get(0).getMediaItems().get(0)));
                 //}
+
+                // TODO: clear only once, on start
+                ChannelUploadsPresenter.instance(context).clear();
                 ChannelUploadsPresenter.instance(context).updateGrid(group.get(0));
             } else {
-                // Just in case we're opening channel inside a channel
                 // TODO: clear only once, on start
                 ChannelPresenter.instance(context).clear();
                 ChannelPresenter.instance(context).updateRows(group);

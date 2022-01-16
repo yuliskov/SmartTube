@@ -23,7 +23,7 @@
     <string name="video_max_quality">Auto (max quality)</string>
     <string name="audio_max_quality">Auto (max quality)</string>
     <string name="subtitles_disabled">Subtitles disabled</string>
-    <string name="auto_frame_rate">Auto frame rate</string>
+    <string name="auto_frame_rate">Auto Frame Rate</string>
     <string name="frame_rate_correction">Fix fps:\n%s</string>
     <string name="category_background_playback">Background playback</string>
     <string name="not_implemented">Not implemented</string>
@@ -155,7 +155,7 @@
     <string name="share_link">Share link</string>
     <string name="subscribe_to_channel">Subscribe to channel</string>
     <string name="wait_data_loading">Please wait while data is loading…</string>
-    <string name="auto_frame_rate_pause">Auto frame rate switch pause</string>
+    <string name="auto_frame_rate_pause">Auto Frame Rate (pause when switching)</string>
     <string name="auto_frame_rate_applying">Applying auto frame rate %sx%s@%s</string>
     <string name="audio_shift">Audio shift</string>
     <string name="player_remember_speed">Remember speed</string>

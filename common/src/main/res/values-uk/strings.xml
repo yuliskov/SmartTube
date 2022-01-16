@@ -23,7 +23,7 @@
     <string name="video_max_quality">Авто (макс. якість)</string>
     <string name="audio_max_quality">Авто (макс. якість)</string>
     <string name="subtitles_disabled">Субтитри відключені</string>
-    <string name="auto_frame_rate">Автофреймрейт</string>
+    <string name="auto_frame_rate">Auto Frame Rate</string>
     <string name="frame_rate_correction">Виправляти fps:\n%s</string>
     <string name="category_background_playback">Фонове відтворення</string>
     <string name="not_implemented">Поки не зроблено</string>
@@ -155,7 +155,7 @@
     <string name="share_link">Поділитися посиланням</string>
     <string name="subscribe_to_channel">Підписатися на канал</string>
     <string name="wait_data_loading">Зачекайте поки дані завантажуються…</string>
-    <string name="auto_frame_rate_pause">Автофреймрейт (пауза при перемиканні)</string>
+    <string name="auto_frame_rate_pause">Auto Frame Rate (пауза при перемиканні)</string>
     <string name="auto_frame_rate_applying">Застосовується автофреймрейт %sx%s@%s</string>
     <string name="audio_shift">Зміщення аудіо</string>
     <string name="player_remember_speed">Запам\'ятовувати швидкість</string>
