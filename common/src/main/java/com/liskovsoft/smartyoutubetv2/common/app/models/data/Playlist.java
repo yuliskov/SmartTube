@@ -41,6 +41,9 @@ public class Playlist {
         mCurrentIndex = -1;
     }
 
+    /**
+     * Used to sync list with remotely added items
+     */
     public void addAll(List<Video> videos) {
         mPlaylist.removeAll(videos);
         mPlaylist.addAll(videos);
@@ -206,6 +209,13 @@ public class Playlist {
         }
 
         return Collections.unmodifiableList(mPlaylist.subList(mNewSessionIndex, size));
+    }
+
+    public void removeAllAfterCurrent() {
+        int fromIndex = mCurrentIndex + 1;
+        if (fromIndex > 0 && fromIndex < mPlaylist.size()) {
+            mPlaylist.subList(fromIndex, mPlaylist.size()).clear();
+        }
     }
 
     /**

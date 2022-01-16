@@ -20,6 +20,7 @@ import androidx.leanback.widget.ClassPresenterSelector;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
+import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
@@ -76,6 +77,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.EndingTimeView;
 
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -1219,6 +1221,33 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
             freeze(false);
         }
+    }
+
+    @Override
+    public int getSuggestionsIndex(VideoGroup group) {
+        if (mRowsAdapter == null) {
+            Log.e(TAG, "Related videos row not initialized yet.");
+            return -1;
+        }
+
+        VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(group.getId());
+
+        int index = -1;
+
+        for (int i = 0; i < mRowsAdapter.size(); i++) {
+            Object row = mRowsAdapter.get(i);
+
+            if (row instanceof ListRow) {
+                ObjectAdapter adapter = ((ListRow) row).getAdapter();
+
+                if (adapter == existingAdapter) {
+                    index = mRowsAdapter.indexOf(row);
+                    break;
+                }
+            }
+        }
+
+        return index != -1 ? index - 1 : -1;
     }
 
     /**

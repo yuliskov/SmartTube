@@ -90,7 +90,15 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
                 .subscribe(
                         continueMediaGroup -> {
                             getController().showProgressBar(false);
-                            getController().updateSuggestions(VideoGroup.from(continueMediaGroup, group.getSection()));
+                            VideoGroup videoGroup = VideoGroup.from(continueMediaGroup, group.getSection());
+                            getController().updateSuggestions(videoGroup);
+
+                            // Merge remote queue with player's queue
+                            Video video = getController().getVideo();
+                            if (video != null && video.isRemote && getController().getSuggestionsIndex(videoGroup) == 0) {
+                                Playlist.instance().addAll(videoGroup.getVideos());
+                                Playlist.instance().setCurrent(video);
+                            }
                         },
                         error -> {
                             getController().showProgressBar(false);
@@ -189,6 +197,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
 
                 // Merge remote queue with player's queue
                 if (groupIndex == 0 && video.isRemote) {
+                    Playlist.instance().removeAllAfterCurrent();
                     Playlist.instance().addAll(videoGroup.getVideos());
                     Playlist.instance().setCurrent(video);
                 }
