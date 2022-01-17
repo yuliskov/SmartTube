@@ -203,7 +203,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     private int getHeaderResId(Object o) {
         if (o instanceof PageRow) {
-            return ((CategoryHeaderItem) ((PageRow) o).getHeaderItem()).getResId();
+            return ((SectionHeaderItem) ((PageRow) o).getHeaderItem()).getResId();
         }
 
         return -1;
@@ -211,7 +211,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     private String getIconUrl(Object o) {
         if (o instanceof PageRow) {
-            return ((CategoryHeaderItem) ((PageRow) o).getHeaderItem()).getIconUrl();
+            return ((SectionHeaderItem) ((PageRow) o).getHeaderItem()).getIconUrl();
         }
 
         return null;
@@ -346,7 +346,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     private void createHeader(int index, BrowseSection header) {
-        HeaderItem headerItem = new CategoryHeaderItem(header);
+        HeaderItem headerItem = new SectionHeaderItem(header);
 
         PageRow pageRow = new PageRow(headerItem);
         if (index == -1 || mSectionRowAdapter.size() < index) {

@@ -44,8 +44,8 @@ public class BrowseSectionFragmentFactory extends BrowseSupportFragment.Fragment
 
         HeaderItem header = row.getHeaderItem();
 
-        if (header instanceof CategoryHeaderItem) {
-            mFragmentType = ((CategoryHeaderItem) header).getType();
+        if (header instanceof SectionHeaderItem) {
+            mFragmentType = ((SectionHeaderItem) header).getType();
         }
 
         Fragment fragment = null;
