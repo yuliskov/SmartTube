@@ -29,6 +29,11 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
     public void onCreate() {
         super.onCreate();
 
+        setupKeepAlive();
+        setupViewManager();
+    }
+
+    private void setupViewManager() {
         ViewManager viewManager = ViewManager.instance(this);
 
         viewManager.setRoot(BrowseActivity.class);
@@ -43,5 +48,9 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         viewManager.register(AddDeviceView.class, AddDeviceActivity.class, BrowseActivity.class);
         viewManager.register(ChannelView.class, ChannelActivity.class, BrowseActivity.class);
         viewManager.register(ChannelUploadsView.class, ChannelUploadsActivity.class, BrowseActivity.class);
+    }
+
+    private void setupKeepAlive() {
+        System.setProperty("http.keepAlive", "false");
     }
 }
