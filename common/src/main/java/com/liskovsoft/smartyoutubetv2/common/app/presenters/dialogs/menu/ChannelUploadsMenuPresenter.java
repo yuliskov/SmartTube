@@ -122,6 +122,12 @@ public class ChannelUploadsMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
+        boolean contentAlreadyLoaded = mVideo.groupPosition == 0;
+
+        if (contentAlreadyLoaded) {
+            return;
+        }
+
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.mark_channel_as_watched), optionItem -> {
                     mServiceManager.loadChannelUploads(mVideo, (group) -> {});
