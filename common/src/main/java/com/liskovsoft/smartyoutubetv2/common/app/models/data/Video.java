@@ -20,6 +20,7 @@ import java.util.List;
 public final class Video implements Parcelable {
     private static final String TERTIARY_TEXT_DELIM = "•";
     private static final int MAX_AUTHOR_LENGTH_CHARS = 20;
+    private static final String[] sNotPlaylistParams = new String[] {"EAIYAQ%3D%3D"};
     public long id;
     public String title;
     public String category;
@@ -323,7 +324,7 @@ public final class Video implements Parcelable {
      * NOTE: Channels section uses <em>playlistParams</em> instead of <em>playlistId</em>
      */
     public boolean hasPlaylist() {
-        return playlistId != null || playlistParams != null;
+        return playlistId != null || (playlistParams != null && !Helpers.containsAny(playlistParams, sNotPlaylistParams));
     }
 
     public boolean hasUploads() {
