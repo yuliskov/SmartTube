@@ -32,6 +32,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.ErrorDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.headers.ExtendedHeadersSupportFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -194,27 +195,36 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         setSearchAffordanceColor(ContextCompat.getColor(getActivity(), brandAccentColorRes));
 
         setHeaderPresenterSelector(new PresenterSelector() {
+            private final Map<Integer, Presenter> mPresenterMap = new HashMap<>();
+
             @Override
             public Presenter getPresenter(Object o) {
-                return new IconHeaderItemPresenter(getHeaderResId(o), getIconUrl(o));
+                Presenter presenter = mPresenterMap.get(o.hashCode());
+
+                if (presenter == null) {
+                    presenter = new IconHeaderItemPresenter(getHeaderResId(o), getIconUrl(o));
+                    mPresenterMap.put(o.hashCode(), presenter);
+                }
+
+                return presenter;
+            }
+
+            private int getHeaderResId(Object o) {
+                if (o instanceof PageRow) {
+                    return ((SectionHeaderItem) ((PageRow) o).getHeaderItem()).getResId();
+                }
+
+                return -1;
+            }
+
+            private String getIconUrl(Object o) {
+                if (o instanceof PageRow) {
+                    return ((SectionHeaderItem) ((PageRow) o).getHeaderItem()).getIconUrl();
+                }
+
+                return null;
             }
         });
-    }
-
-    private int getHeaderResId(Object o) {
-        if (o instanceof PageRow) {
-            return ((SectionHeaderItem) ((PageRow) o).getHeaderItem()).getResId();
-        }
-
-        return -1;
-    }
-
-    private String getIconUrl(Object o) {
-        if (o instanceof PageRow) {
-            return ((SectionHeaderItem) ((PageRow) o).getHeaderItem()).getIconUrl();
-        }
-
-        return null;
     }
 
     private int getSelectedHeaderId() {
