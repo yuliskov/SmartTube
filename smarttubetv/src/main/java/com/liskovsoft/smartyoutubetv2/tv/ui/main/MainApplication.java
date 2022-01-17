@@ -25,11 +25,15 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.AppDialogActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.signin.SignInActivity;
 
 public class MainApplication extends MultiDexApplication { // fix: Didn't find class "com.google.firebase.provider.FirebaseInitProvider"
+    static {
+        System.setProperty("http.keepAlive", "false");
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
 
-        setupKeepAlive();
+        //setupKeepAlive();
         setupViewManager();
     }
 
