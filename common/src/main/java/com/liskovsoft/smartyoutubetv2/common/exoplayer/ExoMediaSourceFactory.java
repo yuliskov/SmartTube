@@ -127,7 +127,7 @@ public class ExoMediaSourceFactory {
         PlayerTweaksData tweaksData = PlayerTweaksData.instance(mContext);
         DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
         return new DefaultDataSourceFactory(mContext, bandwidthMeter,
-                tweaksData.isBufferingFixEnabled() ? buildHttpDataSourceFactory2(bandwidthMeter) : buildHttpDataSourceFactory(bandwidthMeter));
+                tweaksData.isBufferingFixEnabled() ? buildOkHttpDataSourceFactory(bandwidthMeter) : buildDefaultHttpDataSourceFactory(bandwidthMeter));
     }
 
     /**
@@ -140,7 +140,7 @@ public class ExoMediaSourceFactory {
     private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
         PlayerTweaksData tweaksData = PlayerTweaksData.instance(mContext);
         DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
-        return tweaksData.isBufferingFixEnabled() ? buildHttpDataSourceFactory2(bandwidthMeter) : buildHttpDataSourceFactory(bandwidthMeter);
+        return tweaksData.isBufferingFixEnabled() ? buildOkHttpDataSourceFactory(bandwidthMeter) : buildDefaultHttpDataSourceFactory(bandwidthMeter);
     }
 
     @SuppressWarnings("deprecation")
@@ -244,10 +244,21 @@ public class ExoMediaSourceFactory {
         return result;
     }
 
+    ///**
+    // * https://exoplayer.dev/network-stacks.html
+    // */
+    //private static HttpDataSource.Factory buildCronetDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+    //    // OkHttpHelpers.getOkHttpClient()
+    //    // RetrofitHelper.createOkHttpClient()
+    //    CronetDataSource.Factory dataSourceFactory = new CronetDataSource.Factory(cronetEngine, executor);
+    //    addCommonHeaders(dataSourceFactory);
+    //    return dataSourceFactory;
+    //}
+
     /**
      * Use OkHttp for networking
      */
-    private static HttpDataSource.Factory buildHttpDataSourceFactory2(DefaultBandwidthMeter bandwidthMeter) {
+    private static HttpDataSource.Factory buildOkHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
         // OkHttpHelpers.getOkHttpClient()
         // RetrofitHelper.createOkHttpClient()
         OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(RetrofitHelper.wrapDns(RetrofitHelper.createOkHttpClient()), AppConstants.APP_USER_AGENT,
@@ -259,13 +270,13 @@ public class ExoMediaSourceFactory {
     /**
      * Use built-in component for networking
      */
-    private static HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+    private static HttpDataSource.Factory buildDefaultHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
         //DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(
         //        AppConstants.APP_USER_AGENT, bandwidthMeter);
 
         DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(
                 AppConstants.APP_USER_AGENT, bandwidthMeter, DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
-                DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS, true);
+                DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS, true); // allowCrossProtocolRedirects = true
 
         addCommonHeaders(dataSourceFactory); // cause troubles for some users
         //if (YouTubeSignInManager.mAuthorizationHeaderCached != null) {

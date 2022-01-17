@@ -32,6 +32,7 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.DisplayHolde
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.internal.UhdHelper;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -345,6 +346,7 @@ public final class DebugInfoManager implements Runnable, Player.EventListener {
 
     private void appendVersion() {
         appendRow("ExoPlayer Version", ExoPlayerLibraryInfo.VERSION);
+        appendRow("ExoPlayer HttpDataSource", PlayerTweaksData.instance(mContext).isBufferingFixEnabled() ? "OkHttpDataSource" : "DefaultHttpDataSource");
         appendRow(mAppVersion, AppInfoHelpers.getAppVersionName(mContext));
     }
 
