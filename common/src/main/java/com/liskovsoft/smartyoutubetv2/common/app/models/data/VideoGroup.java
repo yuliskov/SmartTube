@@ -41,7 +41,7 @@ public class VideoGroup {
     }
 
     public static VideoGroup from(Video item) {
-        return from(item, -1);
+        return from(item, extractGroupPosition(item));
     }
 
     public static VideoGroup from(Video item, int groupPosition) {
@@ -49,7 +49,7 @@ public class VideoGroup {
     }
 
     public static VideoGroup from(List<Video> items) {
-        return from(items, -1);
+        return from(items, extractGroupPosition(items));
     }
 
     public static VideoGroup from(List<Video> items, int groupPosition) {
@@ -150,6 +150,18 @@ public class VideoGroup {
     }
 
     /**
+     * Lightweight copy (without nested videos)
+     */
+    public VideoGroup copy() {
+        VideoGroup videoGroup = new VideoGroup();
+        videoGroup.mId = mId;
+        videoGroup.mTitle = mTitle;
+        videoGroup.mPosition = mPosition;
+
+        return videoGroup;
+    }
+
+    /**
      * Getting topmost element. Could help when syncing multi rows fragments.
      */
     private static Video findTopmostItemWithGroup(List<Video> items) {
@@ -163,15 +175,21 @@ public class VideoGroup {
         return items.get(items.size() - 1);
     }
 
-    /**
-     * Lightweight copy (without nested videos)
-     */
-    public VideoGroup copy() {
-        VideoGroup videoGroup = new VideoGroup();
-        videoGroup.mId = mId;
-        videoGroup.mTitle = mTitle;
-        videoGroup.mPosition = mPosition;
+    private static int extractGroupPosition(List<Video> items) {
+        if (items == null || items.isEmpty()) {
+            return -1;
+        }
 
-        return videoGroup;
+        return extractGroupPosition(items.get(0));
+    }
+
+    private static int extractGroupPosition(Video item) {
+        int groupPosition = -1;
+
+        if (item != null) {
+            groupPosition = item.groupPosition;
+        }
+
+        return groupPosition;
     }
 }
