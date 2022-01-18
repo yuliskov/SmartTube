@@ -151,16 +151,17 @@ public class ViewUtil {
         View container = rootView.findViewById(R.id.settings_preference_fragment_container);
         View mainFrame = rootView.findViewById(R.id.main_frame);
         View title = rootView.findViewById(R.id.decor_title_container);
-        int bgColor = ContextCompat.getColor(context, R.color.transparent);
+        int transparent = ContextCompat.getColor(context, R.color.transparent);
+        int semiTransparent = ContextCompat.getColor(context, R.color.semi_grey);
 
         if (container instanceof FrameLayout) {
             container.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
         }
         if (mainFrame instanceof LinearLayout) {
-            mainFrame.setBackgroundColor(bgColor);
+            mainFrame.setBackgroundColor(semiTransparent);
         }
         if (title instanceof FrameLayout) {
-            title.setBackgroundColor(bgColor);
+            title.setBackgroundColor(transparent);
         }
     }
 }

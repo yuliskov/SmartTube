@@ -71,11 +71,13 @@
         <!-- Overlay bottom bar (can't hide it from styles) -->
         <item tools:targetApi="19" name="android:windowTranslucentNavigation">true</item>
     </style>
+    <!-- AppDialogFragment style -->
     <style name="App.Theme.Leanback.Preferences.Base" parent="Theme.Leanback">
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Leanback</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:backgroundDimEnabled">true</item>
+        <!-- AppDialogFragment background dimming -->
+        <item name="android:backgroundDimEnabled">false</item>
         <item name="android:colorAccent" tools:targetApi="21">@color/fastlane_background</item>
         <item name="android:colorPrimary" tools:targetApi="21">@color/fastlane_background_dark</item>
         <!-- Disable activity transition animations -->
@@ -155,7 +157,7 @@
 
     <!--  Color scheme: Dark Grey (OLED)  -->
     <style name="App.Theme.DarkGrey.OLED.Browse" parent="App.Theme.DarkGrey.Browse">
-        <item name="brandAccentColor">@color/semi_grey</item>
+        <item name="brandAccentColor">@color/semi_transparent</item>
         <item name="cardSelectedBackground">@color/card_selected_background_white_grey</item>
         <item name="appLogo">@mipmap/app_logo_semi_grey</item>
     </style>
