@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="header_home">Domov</string>
     <string name="title_search">Vyhledávání</string>
@@ -22,7 +23,7 @@
     <string name="video_max_quality">Auto (maximální kvalita)</string>
     <string name="audio_max_quality">Auto (maximální kvalita)</string>
     <string name="subtitles_disabled">Zakázáno</string>
-    <string name="auto_frame_rate">Automatická frekvence snímků</string>
+    <string name="auto_frame_rate">Automatická snímková frekvence</string>
     <string name="frame_rate_correction">Opravit fps: \n%s</string>
     <string name="category_background_playback">Přehrávání na pozadí</string>
     <string name="not_implemented">Není implementováno</string>
@@ -154,7 +155,7 @@
     <string name="share_link">Sdílet odkaz</string>
     <string name="subscribe_to_channel">Přihlásit se k odběru kanálu</string>
     <string name="wait_data_loading">Prosím počkejte, než se načtou data…</string>
-    <string name="auto_frame_rate_pause">Pozastavení automatické snímkové frekvence</string>
+    <string name="auto_frame_rate_pause">Automatická snímková frekvence (pozastav při přepnutí)</string>
     <string name="auto_frame_rate_applying">Aplikování automatické snímkové frekvence %sx%s@%s</string>
     <string name="audio_shift">Posunutí zvuku</string>
     <string name="player_remember_speed">Pamatovat rychlost videa</string>
@@ -208,8 +209,8 @@
     <string name="video_aspect">Poměr stran</string>
     <string name="player_tweaks">Vývojářské možnosti</string>
     <string name="header_uploads">Nahraná videa</string>
-    <string name="player_show_global_clock">Zobrazit hodiny v horní části videa</string>
-    <string name="player_show_global_ending_time">Trvale zobrazit čas ukončení na obrazovce</string>
+    <string name="player_show_global_clock">Vždy zobrazit hodiny v horní části videa</string>
+    <string name="player_show_global_ending_time">Vždy zobrazit čas ukončení na obrazovce</string>
     <string name="uploads_old_look">Vrátit zpět starý vzhled sekce Nahraná videa</string>
     <string name="background_playback_activation">Přehrávání na pozadí (aktivace)</string>
     <string name="channels_old_look">Vrátit zpět starý vzhled sekce Kanály</string>
@@ -286,7 +287,7 @@
     <string name="action_video_stats">Video statistiky</string>
     <string name="action_subscribe">Odebírat</string>
     <string name="action_channel">Otevřít kanál</string>
-    <string name="action_pip">PIP</string>
+    <string name="action_pip">Obraz v obraze</string>
     <string name="action_screen_off">Vypnout obrazovku</string>
     <string name="action_playback_queue">Fronta přehrávání</string>
     <string name="action_video_speed">Rychlost videa</string>
@@ -307,4 +308,8 @@
     <string name="content_block_filler">Mimo téma (výplň)</string>
     <string name="keyboard_auto_show">Zobraz klávesnici automaticky</string>
     <string name="cancel_dialog">Zrušit</string>
+    <string name="msg_player_error_source2">Zdroj videa nefunguje nebo je nesprávný čas</string>
+    <string name="hide_upcoming">Skryj nadcházející videa v Odběrech</string>
+    <string name="search_background_playback">Zapni Obraz v obraze, pokud vyhledávám z přehrávače</string>
+    <string name="trending_row_name">Trendy</string>
 </resources>
