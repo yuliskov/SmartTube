@@ -286,7 +286,7 @@
     <string name="upload_date_this_month">W tym miesiącu</string>
     <string name="upload_date_this_week">W tym tygodniu</string>
     <string name="upload_date_this_year">W tym roku</string>
-    <string name="upload_date_today">Today</string>
+    <string name="upload_date_today">Dziś</string>
     <string name="uploads_old_look">Przywróć stary wygląd sekcji przesyłania</string>
     <string name="uploads_row_name">Przesyłanie</string>
     <string name="video_aspect">Format obrazu</string>
@@ -310,4 +310,8 @@
     <string name="wait_data_loading">Proszę czekać, trwa ładowanie danych…</string>
     <string name="web_site">Strona internetowa</string>
     <string name="you_wont_see_this_video">Film został usunięty z polecanych</string>
+    <string name="hide_upcoming">Ukryj ogłoszenia w Subskrypcjach</string>
+    <string name="msg_player_error_source2">Źródło wideo nie działa lub jest w niepoprawnym czasie</string>
+    <string name="search_background_playback">Przełącz na tryb PIP, jeśli wyszukiwanie jest uruchamiane z odtwarzacza</string>
+    <string name="trending_row_name">Trendy</string>
 </resources>
