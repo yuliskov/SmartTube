@@ -172,7 +172,7 @@ public class VideoGroup {
             }
         }
 
-        return items.get(items.size() - 1);
+        return items.get(items.size() - 1); // No group. Fallback to last item then.
     }
 
     private static int extractGroupPosition(List<Video> items) {
@@ -180,7 +180,7 @@ public class VideoGroup {
             return -1;
         }
 
-        return extractGroupPosition(items.get(0));
+        return extractGroupPosition(findTopmostItemWithGroup(items));
     }
 
     private static int extractGroupPosition(Video item) {
