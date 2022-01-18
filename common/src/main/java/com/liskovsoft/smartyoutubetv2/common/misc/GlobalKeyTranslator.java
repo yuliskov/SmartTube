@@ -2,6 +2,8 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.content.Context;
 import android.view.KeyEvent;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,9 +11,14 @@ import java.util.Map;
 public class GlobalKeyTranslator extends KeyTranslator {
     private final Map<Integer, Integer> mKeyMapping = new HashMap<>();
     private final Map<Integer, Runnable> mActionMapping = new HashMap<>();
+    private final GeneralData mGeneralData;
+    private final Context mContext;
 
     public GlobalKeyTranslator(Context context) {
+        mGeneralData = GeneralData.instance(context);
+        mContext = context;
         initKeyMapping();
+        initActionMapping();
     }
 
     private void initKeyMapping() {
@@ -27,6 +34,21 @@ public class GlobalKeyTranslator extends KeyTranslator {
         // Remapping below doesn't work. Why?
         //mKeyMapping.put(KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_DPAD_LEFT);
         //mKeyMapping.put(KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, KeyEvent.KEYCODE_DPAD_RIGHT);
+    }
+
+    private void initActionMapping() {
+        addSearchAction();
+    }
+
+    private void addSearchAction() {
+        if (!mGeneralData.isRemapChannelUpToSearchEnabled()) {
+            return;
+        }
+
+        Runnable searchAction = () -> SearchPresenter.instance(mContext).startSearch(null);
+
+        mActionMapping.put(KeyEvent.KEYCODE_CHANNEL_UP, searchAction);
+        mActionMapping.put(KeyEvent.KEYCODE_CHANNEL_DOWN, searchAction);
     }
 
     @Override

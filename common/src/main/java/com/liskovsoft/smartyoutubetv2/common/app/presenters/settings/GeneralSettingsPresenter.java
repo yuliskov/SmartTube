@@ -212,6 +212,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.remapChannelUpToSpeed(option.isSelected()),
                 mGeneralData.isRemapChannelUpToSpeedEnabled()));
 
+        options.add(UiOptionItem.from("Channel Up/Down -> Search",
+                option -> mGeneralData.remapChannelUpToSearch(option.isSelected()),
+                mGeneralData.isRemapChannelUpToSearchEnabled()));
+
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.key_remapping), options);
     }
 

@@ -50,6 +50,7 @@ public class GeneralData {
     private boolean mIsRemapPageUpToSpeedEnabled;
     private boolean mIsRemapChannelUpToSpeedEnabled;
     private boolean mIsRemapFastForwardToSpeedEnabled;
+    private boolean mIsRemapChannelUpToSearchEnabled;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -330,6 +331,7 @@ public class GeneralData {
 
     public void remapChannelUpToNext(boolean enable) {
         mIsRemapChannelUpToNextEnabled = enable;
+        mIsRemapChannelUpToSearchEnabled = false;
         mIsRemapChannelUpToLikeEnabled = false;
         mIsRemapChannelUpToSpeedEnabled = false;
         persistState();
@@ -341,6 +343,7 @@ public class GeneralData {
 
     public void remapChannelUpToLike(boolean enable) {
         mIsRemapChannelUpToLikeEnabled = enable;
+        mIsRemapChannelUpToSearchEnabled = false;
         mIsRemapChannelUpToNextEnabled = false;
         mIsRemapChannelUpToSpeedEnabled = false;
         persistState();
@@ -352,6 +355,7 @@ public class GeneralData {
 
     public void remapChannelUpToSpeed(boolean enable) {
         mIsRemapChannelUpToSpeedEnabled = enable;
+        mIsRemapChannelUpToSearchEnabled = false;
         mIsRemapChannelUpToLikeEnabled = false;
         mIsRemapChannelUpToNextEnabled = false;
         persistState();
@@ -359,6 +363,18 @@ public class GeneralData {
 
     public boolean isRemapChannelUpToSpeedEnabled() {
         return mIsRemapChannelUpToSpeedEnabled;
+    }
+
+    public void remapChannelUpToSearch(boolean enable) {
+        mIsRemapChannelUpToSearchEnabled = enable;
+        mIsRemapChannelUpToSpeedEnabled = false;
+        mIsRemapChannelUpToLikeEnabled = false;
+        mIsRemapChannelUpToNextEnabled = false;
+        persistState();
+    }
+
+    public boolean isRemapChannelUpToSearchEnabled() {
+        return mIsRemapChannelUpToSearchEnabled;
     }
 
     public void setScreenDimmingTimeoutMin(int timeoutMin) {
@@ -457,6 +473,7 @@ public class GeneralData {
         mIsRemapPageUpToSpeedEnabled = Helpers.parseBoolean(split, 20, false);
         mIsRemapChannelUpToSpeedEnabled = Helpers.parseBoolean(split, 21, false);
         mIsRemapFastForwardToSpeedEnabled = Helpers.parseBoolean(split, 22, false);
+        mIsRemapChannelUpToSearchEnabled = Helpers.parseBoolean(split, 23, false);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -491,6 +508,6 @@ public class GeneralData {
                 mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId,
                 null, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled,
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
-                mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled));
+                mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled));
     }
 }
