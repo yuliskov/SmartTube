@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.tv.util;
 
 import android.content.Context;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.os.Build.VERSION;
 import android.text.BidiFormatter;
 import android.text.Layout;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
@@ -163,5 +166,12 @@ public class ViewUtil {
         if (title instanceof FrameLayout) {
             title.setBackgroundColor(transparent);
         }
+    }
+
+    public static void makeMonochrome(ImageView iconView) {
+        ColorMatrix colorMatrix = new ColorMatrix();
+        colorMatrix.setSaturation(0);
+        ColorMatrixColorFilter filter = new ColorMatrixColorFilter(colorMatrix);
+        iconView.setColorFilter(filter);
     }
 }
