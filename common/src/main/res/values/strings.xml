@@ -315,5 +315,5 @@
     <string name="player_seek_type">Seek type</string>
     <string name="player_seek_regular">Regular</string>
     <string name="player_seek_memory_pause">Seek with memory (pause)</string>
-    <string name="player_seek_memory_play">Seek with memory (playing)</string>
+    <string name="player_seek_memory_play">Seek with memory (keep playing)</string>
 </resources>
