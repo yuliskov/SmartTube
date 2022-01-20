@@ -310,6 +310,6 @@
     <string name="trending_row_name">В тренде</string>
     <string name="player_seek_type">Тип перемотки</string>
     <string name="player_seek_regular">Обычная</string>
-    <string name="player_seek_memory_pause">Перемотка с памятью (ставить на паузу)</string>
-    <string name="player_seek_memory_play">Перемотка с памятью (продолжить играть)</string>
+    <string name="player_seek_memory_pause">Запоминать позицию (ставить на паузу)</string>
+    <string name="player_seek_memory_play">Запоминать позицию (продолжить играть)</string>
 </resources>

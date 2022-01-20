@@ -314,6 +314,6 @@
     <string name="trending_row_name">Trending</string>
     <string name="player_seek_type">Seek type</string>
     <string name="player_seek_regular">Regular</string>
-    <string name="player_seek_memory_pause">Seek with memory (pause)</string>
-    <string name="player_seek_memory_play">Seek with memory (keep playing)</string>
+    <string name="player_seek_memory_pause">Remember position (pause)</string>
+    <string name="player_seek_memory_play">Remember position (keep playing)</string>
 </resources>
