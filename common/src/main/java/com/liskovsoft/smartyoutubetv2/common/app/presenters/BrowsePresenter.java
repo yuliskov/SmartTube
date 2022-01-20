@@ -47,6 +47,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class BrowsePresenter extends BasePresenter<BrowseView> implements SectionPresenter, VideoGroupPresenter {
     private static final String TAG = BrowsePresenter.class.getSimpleName();
@@ -526,6 +527,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         firstGroup.setAction(VideoGroup.ACTION_REPLACE);
         getView().updateSection(firstGroup);
 
+        final AtomicInteger emissionIndex = new AtomicInteger(-1);
+
         mUpdateAction = groups
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -551,7 +554,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             }
 
                             // Hide loading as long as first group received
-                            if (!mediaGroups.isEmpty()) {
+                            if (!mediaGroups.isEmpty() && emissionIndex.incrementAndGet() == 0) {
                                 getView().showProgressBar(false);
                             }
                         },
