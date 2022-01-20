@@ -45,7 +45,7 @@ public class SearchTagsActivity extends LeanbackActivity {
         // If there are no results found, press the left key to reselect the microphone
         if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT && !mFragment.hasResults()) {
             mFragment.focusOnSearchField();
-        } else if (keyCode == KeyEvent.KEYCODE_SEARCH && event.getRepeatCount() == 1) {
+        } else if ((keyCode == KeyEvent.KEYCODE_SEARCH || keyCode == KeyEvent.KEYCODE_SCROLL_LOCK)&& event.getRepeatCount() == 1) {
             mFragment.pressKeySearch();
         } else if (keyCode == KeyEvent.KEYCODE_BACK && mIsKeyboardShowing && mFragment.getView() != null) {
             // hide keyboard first if visible
