@@ -692,7 +692,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
      */
     private void continueGroupIfNeeded(VideoGroup videoGroup) {
         boolean groupTooSmall = videoGroup.getVideos() != null && videoGroup.getVideos().size() < MIN_GROUP_SIZE;
-        if (groupTooSmall || mMainUIData.getUIScale() < 0.8f || mMainUIData.getVideoGridScale() < 0.8f) {
+        if (mMainUIData.getUIScale() < 0.8f || mMainUIData.getVideoGridScale() < 0.8f) {
             continueGroup(videoGroup);
         }
     }
