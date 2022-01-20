@@ -33,7 +33,7 @@ public class PlayerData {
     private int mOKButtonBehavior;
     private int mUIHideTimeoutSec;
     private boolean mIsAbsoluteDateEnabled;
-    private boolean mIsPauseOnSeekEnabled;
+    private boolean mIsSeekMemoryPauseEnabled;
     private boolean mIsClockEnabled;
     private boolean mIsGlobalClockEnabled;
     private boolean mIsRemainingTimeEnabled;
@@ -64,6 +64,7 @@ public class PlayerData {
     private boolean mIsGlobalEndingTimeEnabled;
     private boolean mIsEndingTimeEnabled;
     private boolean mIsDoubleRefreshRateEnabled;
+    private boolean mIsSeekMemoryPlayEnabled;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -116,13 +117,22 @@ public class PlayerData {
         return mSeekPreviewMode;
     }
 
-    public void enablePauseOnSeek(boolean enable) {
-        mIsPauseOnSeekEnabled = enable;
+    public void enableSeekMemoryPause(boolean enable) {
+        mIsSeekMemoryPauseEnabled = enable;
         persistData();
     }
 
-    public boolean isPauseOnSeekEnabled() {
-        return mIsPauseOnSeekEnabled;
+    public boolean isSeekMemoryPauseEnabled() {
+        return mIsSeekMemoryPauseEnabled;
+    }
+
+    public void enableSeekMemoryPlay(boolean enable) {
+        mIsSeekMemoryPlayEnabled = enable;
+        persistData();
+    }
+
+    public boolean isSeekMemoryPlayEnabled() {
+        return mIsSeekMemoryPlayEnabled;
     }
 
     public boolean isClockEnabled() {
@@ -427,7 +437,7 @@ public class PlayerData {
         mUIHideTimeoutSec = Helpers.parseInt(split, 1, 3);
         mIsAbsoluteDateEnabled = Helpers.parseBoolean(split, 2, false);
         mSeekPreviewMode = Helpers.parseInt(split, 3, SEEK_PREVIEW_SINGLE);
-        mIsPauseOnSeekEnabled = Helpers.parseBoolean(split, 4, false);
+        mIsSeekMemoryPauseEnabled = Helpers.parseBoolean(split, 4, false);
         mIsClockEnabled = Helpers.parseBoolean(split, 5, true);
         mIsRemainingTimeEnabled = Helpers.parseBoolean(split, 6, true);
         mBackgroundMode = Helpers.parseInt(split, 7, PlaybackEngineController.BACKGROUND_MODE_DEFAULT);
@@ -458,6 +468,7 @@ public class PlayerData {
         mIsGlobalEndingTimeEnabled = Helpers.parseBoolean(split, 33, false);
         mIsEndingTimeEnabled = Helpers.parseBoolean(split, 34, false);
         mIsDoubleRefreshRateEnabled = Helpers.parseBoolean(split, 35, true);
+        mIsSeekMemoryPlayEnabled = Helpers.parseBoolean(split, 36, false);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -465,7 +476,7 @@ public class PlayerData {
     }
 
     private void persistData() {
-        mPrefs.setData(VIDEO_PLAYER_DATA, Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec, mIsAbsoluteDateEnabled, mSeekPreviewMode, mIsPauseOnSeekEnabled,
+        mPrefs.setData(VIDEO_PLAYER_DATA, Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec, mIsAbsoluteDateEnabled, mSeekPreviewMode, mIsSeekMemoryPauseEnabled,
                 mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null, // afrData was there
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
@@ -473,6 +484,6 @@ public class PlayerData {
                 mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
                 mIsLowQualityEnabled, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
-                mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled));
+                mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekMemoryPlayEnabled));
     }
 }

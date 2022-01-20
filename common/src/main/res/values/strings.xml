@@ -312,4 +312,8 @@
     <string name="hide_upcoming">Hide upcoming from Subscriptions</string>
     <string name="search_background_playback">Enter PIP when searching from player</string>
     <string name="trending_row_name">Trending</string>
+    <string name="player_seek_type">Seek type</string>
+    <string name="player_seek_regular">Regular</string>
+    <string name="player_seek_memory_pause">Seek with memory (pause)</string>
+    <string name="player_seek_memory_play">Seek with memory (playing)</string>
 </resources>

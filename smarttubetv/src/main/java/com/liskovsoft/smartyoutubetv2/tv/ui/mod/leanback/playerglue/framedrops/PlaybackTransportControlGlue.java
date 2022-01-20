@@ -35,6 +35,7 @@ import androidx.leanback.widget.PlaybackSeekDataProvider;
 import androidx.leanback.widget.PlaybackSeekUi;
 import androidx.leanback.widget.PlaybackTransportRowPresenter;
 import androidx.leanback.widget.RowPresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.lang.ref.WeakReference;
 
@@ -329,6 +330,7 @@ public class PlaybackTransportControlGlue<T extends PlayerAdapter>
         long mPositionBeforeSeek;
         long mLastUserPosition;
         boolean mIsSeek;
+        PlayerData mPlayerData = PlayerData.instance(getContext());
 
         @Override
         public PlaybackSeekDataProvider getPlaybackSeekDataProvider() {
@@ -350,7 +352,9 @@ public class PlaybackTransportControlGlue<T extends PlayerAdapter>
             // otherwise we will call seekTo() and may need to restore the original position.
             mPositionBeforeSeek = mSeekProvider == null ? mPlayerAdapter.getCurrentPosition() : -1;
             mLastUserPosition = -1;
-            pause();
+            if (mPlayerData.isSeekMemoryPauseEnabled()) {
+                pause();
+            }
         }
 
         @Override

@@ -308,4 +308,8 @@
     <string name="hide_upcoming">Приховувати анонси з Підписок</string>
     <string name="search_background_playback">Переходити у режим Картинка в картинці, якщо пошук запущено з плеєру</string>
     <string name="trending_row_name">Популярне</string>
+    <string name="player_seek_type">Тип перемотування</string>
+    <string name="player_seek_regular">Звичайна</string>
+    <string name="player_seek_memory_pause">Перемотування з пам\'яттю (пауза)</string>
+    <string name="player_seek_memory_play">Перемотування з пам\'яттю (відтворювання)</string>
 </resources>

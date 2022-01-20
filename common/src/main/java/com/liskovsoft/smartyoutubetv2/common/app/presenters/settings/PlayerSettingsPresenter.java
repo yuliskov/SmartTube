@@ -40,6 +40,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendOKButtonCategory(settingsPresenter);
         appendPlayerButtonsCategory(settingsPresenter);
         appendUIAutoHideCategory(settingsPresenter);
+        appendSeekTypeCategory(settingsPresenter);
         appendSeekingPreviewCategory(settingsPresenter);
         appendRememberSpeedCategory(settingsPresenter);
         appendEndingTimeCategory(settingsPresenter);
@@ -261,6 +262,33 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_tweaks), options);
     }
 
+    private void appendSeekTypeCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_seek_regular),
+                option -> {
+                    mPlayerData.enableSeekMemoryPause(false);
+                    mPlayerData.enableSeekMemoryPlay(false);
+                },
+                !mPlayerData.isSeekMemoryPauseEnabled() && !mPlayerData.isSeekMemoryPlayEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_seek_memory_pause),
+                option -> {
+                    mPlayerData.enableSeekMemoryPause(true);
+                    mPlayerData.enableSeekMemoryPlay(false);
+                },
+                mPlayerData.isSeekMemoryPauseEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_seek_memory_play),
+                option -> {
+                    mPlayerData.enableSeekMemoryPause(false);
+                    mPlayerData.enableSeekMemoryPlay(true);
+                },
+                mPlayerData.isSeekMemoryPlayEnabled()));
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_seek_type), options);
+    }
+
     private void appendEndingTimeCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
@@ -299,9 +327,9 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         //        option -> mPlayerData.enableTimeCorrection(option.isSelected()),
         //        mPlayerData.isTimeCorrectionEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_pause_when_seek),
-                option -> mPlayerData.enablePauseOnSeek(option.isSelected()),
-                mPlayerData.isPauseOnSeekEnabled()));
+        //options.add(UiOptionItem.from(getContext().getString(R.string.player_pause_when_seek),
+        //        option -> mPlayerData.enableSeekMemory(option.isSelected()),
+        //        mPlayerData.isSeekMemoryEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_clock),
                 option -> mPlayerData.enableClock(option.isSelected()),
