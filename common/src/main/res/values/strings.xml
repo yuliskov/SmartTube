@@ -127,7 +127,7 @@
     <string name="playlists_style">Playlists section style</string>
     <string name="playlists_style_grid">Grid</string>
     <string name="playlists_style_rows">Rows</string>
-    <string name="player_show_clock">Show clock in pop-up menu</string>
+    <string name="player_show_clock">Show clock</string>
     <string name="player_show_remaining_time">Show remaining time</string>
     <string name="player_show_ending_time">Show ending time</string>
     <string name="open_channel_uploads">Open channel uploads</string>

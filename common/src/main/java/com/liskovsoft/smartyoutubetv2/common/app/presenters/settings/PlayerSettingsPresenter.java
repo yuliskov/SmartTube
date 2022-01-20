@@ -335,6 +335,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerData.enableClock(option.isSelected()),
                 mPlayerData.isClockEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_quality_info),
+                option -> mPlayerData.enableQualityInfo(option.isSelected()),
+                mPlayerData.isQualityInfoEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_global_clock),
                 option -> mPlayerData.enableGlobalClock(option.isSelected()),
                 mPlayerData.isGlobalClockEnabled()));
@@ -354,10 +358,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         //
         //options.add(remainingTime);
         //options.add(endingTime);
-
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_quality_info),
-                option -> mPlayerData.enableQualityInfo(option.isSelected()),
-                mPlayerData.isQualityInfoEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
