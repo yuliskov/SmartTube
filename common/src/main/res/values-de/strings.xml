@@ -312,7 +312,7 @@
     <string name="hide_upcoming">Anstehende Videos in Abos ausblenden</string>
     <string name="search_background_playback">Bild-in-Bild öffnen bei Suche über den Player</string>
     <string name="trending_row_name">Trends</string>
-    <string name="player_seek_type">Art des Spulens</string>
+    <string name="player_seek_type">Verhalten beim Spulen</string>
     <string name="player_seek_regular">Normal</string>
     <string name="player_seek_confirmation_pause">Mit Bestätigung (Pause beim Spulen)</string>
     <string name="player_seek_confirmation_play">Mit Bestätigung (Wiedergabe beim Spulen)</string>
