@@ -312,4 +312,8 @@
     <string name="hide_upcoming">Skryj nadcházející videa v Odběrech</string>
     <string name="search_background_playback">Zapni Obraz v obraze, pokud vyhledávám z přehrávače</string>
     <string name="trending_row_name">Trendy</string>
+    <string name="player_seek_type">Typ přetáčení</string>
+    <string name="player_seek_regular">Normální</string>
+    <string name="player_seek_confirmation_pause">S potvrzením (pozastav při přetáčení)</string>
+    <string name="player_seek_confirmation_play">S potvrzením (hraj dál při přetáčení)</string>
 </resources>
