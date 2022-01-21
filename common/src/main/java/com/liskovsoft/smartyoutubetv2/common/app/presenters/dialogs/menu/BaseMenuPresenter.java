@@ -25,6 +25,13 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     protected abstract boolean isPinToSidebarEnabled();
     protected abstract boolean isAccountSelectionEnabled();
 
+    public void closeDialog() {
+        if (getDialogPresenter() != null) {
+            getDialogPresenter().closeDialog();
+        }
+        MessageHelpers.cancelToasts();
+    }
+
     protected void appendPinToSidebarButton() {
         if (!isPinToSidebarEnabled()) {
             return;

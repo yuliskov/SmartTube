@@ -378,7 +378,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (mVideo == null || !mVideo.canSubscribe()) {
+        if (mVideo == null || (!mVideo.canSubscribe() && !mVideo.hasVideo())) {
             return;
         }
 
@@ -461,7 +461,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         // Until synced we won't really know weather we subscribed to a channel.
         // Exclusion: channel item (can't be synced)
         // Note, regular items (from subscribed section etc) aren't contain channel id
-        if (mVideo.isSynced || mVideo.isChannel()) {
+        if (mVideo.isSynced || mVideo.canSubscribe()) {
             toggleSubscribeInt();
         } else {
             MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
@@ -486,12 +486,10 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mVideo.isSubscribed = !mVideo.isSubscribed;
 
         if (!mVideo.isSubscribed && mCallback != null) {
-            mDialogPresenter.closeDialog();
-            MessageHelpers.cancelToasts();
             mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_UNSUBSCRIBE);
-        } else {
-            MessageHelpers.showMessage(getContext(), !mVideo.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel);
         }
+
+        MessageHelpers.showMessage(getContext(), !mVideo.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel);
     }
 
     private void updateEnabledMenuItems() {
