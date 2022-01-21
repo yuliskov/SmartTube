@@ -127,7 +127,7 @@
     <string name="playlists_style">Stile playlist</string>
     <string name="playlists_style_grid">Griglia</string>
     <string name="playlists_style_rows">Righe</string>
-    <string name="player_show_clock">Mostra orologio nel menu a comparsa</string>
+    <string name="player_show_clock">Mostra orologio</string>
     <string name="player_show_remaining_time">Mostra tempo rimanente</string>
     <string name="player_show_ending_time">Mostra ora di fine</string>																
     <string name="open_channel_uploads">Apri video caricati</string>
@@ -312,4 +312,8 @@
     <string name="hide_upcoming">Nascondi i video seguenti dalle Iscrizioni</string>
     <string name="search_background_playback">Entra in PiP quando cerchi dal lettore</string>
     <string name="trending_row_name">Tendenze</string>
+    <string name="player_seek_type">Cerca tipo</string>
+    <string name="player_seek_regular">Regolare</string>
+    <string name="player_seek_memory_pause">Ricorda la posizione e metti in pausa</string>
+    <string name="player_seek_memory_play">Ricorda la posizione e continua la riproduzione</string>
 </resources>
