@@ -462,7 +462,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                             } else {
                                 // MOD: resume immediately after seeking
 
-                                if ((mPlayerData.isSeekMemoryPauseEnabled() || mPlayerData.isSeekMemoryPlayEnabled()) && keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+                                if ((mPlayerData.isSeekConfirmPauseEnabled() || mPlayerData.isSeekConfirmPlayEnabled()) && keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
                                     return true;
                                 }
 
@@ -478,7 +478,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                             } else {
                                 // MOD: resume immediately after seeking
 
-                                if ((mPlayerData.isSeekMemoryPauseEnabled() || mPlayerData.isSeekMemoryPlayEnabled()) && keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+                                if ((mPlayerData.isSeekConfirmPauseEnabled() || mPlayerData.isSeekConfirmPlayEnabled()) && keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
                                     return true;
                                 }
 

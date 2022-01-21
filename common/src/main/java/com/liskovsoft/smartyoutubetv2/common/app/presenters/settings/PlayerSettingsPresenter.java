@@ -267,24 +267,24 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_seek_regular),
                 option -> {
-                    mPlayerData.enableSeekMemoryPause(false);
-                    mPlayerData.enableSeekMemoryPlay(false);
+                    mPlayerData.enableSeekConfirmPause(false);
+                    mPlayerData.enableSeekConfirmPlay(false);
                 },
-                !mPlayerData.isSeekMemoryPauseEnabled() && !mPlayerData.isSeekMemoryPlayEnabled()));
+                !mPlayerData.isSeekConfirmPauseEnabled() && !mPlayerData.isSeekConfirmPlayEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_seek_memory_pause),
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_seek_confirmation_pause),
                 option -> {
-                    mPlayerData.enableSeekMemoryPause(true);
-                    mPlayerData.enableSeekMemoryPlay(false);
+                    mPlayerData.enableSeekConfirmPause(true);
+                    mPlayerData.enableSeekConfirmPlay(false);
                 },
-                mPlayerData.isSeekMemoryPauseEnabled()));
+                mPlayerData.isSeekConfirmPauseEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_seek_memory_play),
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_seek_confirmation_play),
                 option -> {
-                    mPlayerData.enableSeekMemoryPause(false);
-                    mPlayerData.enableSeekMemoryPlay(true);
+                    mPlayerData.enableSeekConfirmPause(false);
+                    mPlayerData.enableSeekConfirmPlay(true);
                 },
-                mPlayerData.isSeekMemoryPlayEnabled()));
+                mPlayerData.isSeekConfirmPlayEnabled()));
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_seek_type), options);
     }

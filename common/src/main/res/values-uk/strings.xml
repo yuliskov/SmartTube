@@ -310,6 +310,6 @@
     <string name="trending_row_name">Популярне</string>
     <string name="player_seek_type">Тип перемотування</string>
     <string name="player_seek_regular">Звичайна</string>
-    <string name="player_seek_memory_pause">Запам\'ятовувати позицію та ставити на паузу</string>
-    <string name="player_seek_memory_play">Запам\'ятовувати позицію та продовжити грати</string>
+    <string name="player_seek_confirmation_pause">З підтвердженням (пауза під час перемотування)</string>
+    <string name="player_seek_confirmation_play">З підтвердженням (грати під час перемотування)</string>
 </resources>

@@ -352,7 +352,7 @@ public class PlaybackTransportControlGlue<T extends PlayerAdapter>
             // otherwise we will call seekTo() and may need to restore the original position.
             mPositionBeforeSeek = mSeekProvider == null ? mPlayerAdapter.getCurrentPosition() : -1;
             mLastUserPosition = -1;
-            if (mPlayerData.isSeekMemoryPauseEnabled()) {
+            if (mPlayerData.isSeekConfirmPauseEnabled()) {
                 pause();
             }
         }
