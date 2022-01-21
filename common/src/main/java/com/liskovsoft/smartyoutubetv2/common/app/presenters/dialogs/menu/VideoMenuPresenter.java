@@ -378,7 +378,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (mVideo == null || (!mVideo.hasChannel() && !mVideo.hasVideo())) {
+        if (mVideo == null || !mVideo.canSubscribe()) {
             return;
         }
 

@@ -461,6 +461,10 @@ public final class Video implements Parcelable {
         return video;
     }
 
+    public boolean canSubscribe() {
+        return (hasChannel() && !channelId.startsWith("FE")) || hasVideo();
+    }
+
     private boolean checkMediaItems() {
         return group != null && group.getMediaGroup() != null
                 && group.getMediaGroup().getMediaItems() != null && group.getMediaGroup().getMediaItems().size() >= 2;
