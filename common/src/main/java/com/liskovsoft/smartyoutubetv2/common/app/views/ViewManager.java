@@ -35,7 +35,8 @@ public class ViewManager {
     private boolean mIsMoveToBackEnabled;
     private boolean mIsFinishing;
     private boolean mIsSinglePlayerMode;
-    private long mStartActivityMs;
+    private long mPendingActivityMs;
+    private Class<?> mPendingActivityClass;
 
     private ViewManager(Context context) {
         mContext = context;
@@ -161,7 +162,8 @@ public class ViewManager {
     private void startActivity(Class<?> activityClass) {
         Log.d(TAG, "Launching activity: " + activityClass.getSimpleName());
 
-        mStartActivityMs = System.currentTimeMillis();
+        mPendingActivityMs = System.currentTimeMillis();
+        mPendingActivityClass = activityClass;
 
         Intent intent = new Intent(mContext, activityClass);
 
@@ -399,6 +401,10 @@ public class ViewManager {
     }
 
     public boolean isNewViewPending() {
-        return System.currentTimeMillis() - mStartActivityMs < 1_000;
+        return System.currentTimeMillis() - mPendingActivityMs < 1_000;
+    }
+
+    public boolean isNewViewPending(Class<?> currentView) {
+        return isNewViewPending() && mViewMapping.get(currentView) != mPendingActivityClass;
     }
 }
