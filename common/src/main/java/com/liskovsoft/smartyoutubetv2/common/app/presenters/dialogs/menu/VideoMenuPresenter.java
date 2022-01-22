@@ -157,7 +157,10 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::prepareAndShowDialogSigned,
-                        error -> Log.e(TAG, "Get playlists error: %s", error.getMessage())
+                        error -> {
+                            prepareAndShowDialogSigned(null); // fallback to something on error
+                            Log.e(TAG, "Get playlists error: %s", error.getMessage());
+                        }
                 );
     }
 
