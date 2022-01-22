@@ -116,7 +116,7 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
 
     private void speedUp(boolean up) {
         float[] speedSteps =
-                new float[]{0.25f, 0.5f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f, 1.0f, 1.1f, 1.15f, 1.2f, 1.25f, 1.3f, 1.4f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f, 3.0f};
+                new float[]{0.25f, 0.5f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f, 1.0f, 1.05f, 1.1f, 1.15f, 1.2f, 1.25f, 1.3f, 1.4f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f, 3.0f};
 
         if (mPlaybackView.getController() != null) {
             float currentSpeed = mPlaybackView.getController().getSpeed();
