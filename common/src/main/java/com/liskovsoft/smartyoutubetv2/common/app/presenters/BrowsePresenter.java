@@ -726,8 +726,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        if ((mGeneralData.isHideShortsEnabled() || mGeneralData.isHideUpcomingEnabled())
-                && mediaGroup.getType() == MediaGroup.TYPE_SUBSCRIPTIONS) {
+        boolean isHideShortsEnabled = (mGeneralData.isHideShortsEnabled() && mediaGroup.getType() == MediaGroup.TYPE_SUBSCRIPTIONS) ||
+                (mGeneralData.isHideShortsFromHomeEnabled() && mediaGroup.getType() == MediaGroup.TYPE_HOME);
+        boolean isHideUpcomingEnabled = mGeneralData.isHideUpcomingEnabled() && mediaGroup.getType() == MediaGroup.TYPE_SUBSCRIPTIONS;
+
+        if (isHideShortsEnabled || isHideUpcomingEnabled) {
 
             // Remove Shorts and/or Upcoming
             // NOTE: Predicate replacement function for devices with Android 6.0 and below.
@@ -736,7 +739,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                     return false;
                 }
 
-                return (mGeneralData.isHideShortsEnabled() && Utils.isShort(mediaItem)) || (mGeneralData.isHideUpcomingEnabled() && mediaItem.isUpcoming());
+                return (isHideShortsEnabled && Utils.isShort(mediaItem)) || (isHideUpcomingEnabled && mediaItem.isUpcoming());
             });
         }
     }

@@ -312,4 +312,5 @@
     <string name="player_seek_regular">Обычное</string>
     <string name="player_seek_confirmation_pause">С подтверждением (пауза во время перемотки)</string>
     <string name="player_seek_confirmation_play">С подтверждением (играть во время перемотки)</string>
+    <string name="hide_shorts_from_home">Скрывать короткие видео из Главной</string>
 </resources>
