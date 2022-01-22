@@ -154,6 +154,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     public boolean isDialogShown() {
         // Also check that current dialog almost closed (new view start is pending from a menu item)
         // Hmm. Maybe current dialog is pending. Check that view is null.
+        // Also check that we aren't started the same view (nested dialog).
         return !mCategories.isEmpty() && (!ViewManager.instance(getContext()).isNewViewPending(AppDialogView.class) || getView() == null);
     }
 
