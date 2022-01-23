@@ -57,7 +57,7 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
         appendRunInBackgroundSwitch(settingsPresenter);
         appendAddDeviceButton(settingsPresenter);
         appendRemoveAllDevicesButton(settingsPresenter);
-        appendMiscCategory(settingsPresenter);
+        //appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_remote_control), this::unhold);
     }
