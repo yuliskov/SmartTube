@@ -3,6 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.liskovsoft.smartyoutubetv2.tv">
 
+    <!-- Shield on Android 11 speech recognizer not working fix? -->
+    <!-- https://stackoverflow.com/questions/64319117/speechrecognizer-not-available-when-targeting-android-11 -->
+    <queries>
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
+    </queries>
+
     <permission
         android:name="${applicationId}.ACCESS_VIDEO_DATA"
         android:protectionLevel="signature" />
