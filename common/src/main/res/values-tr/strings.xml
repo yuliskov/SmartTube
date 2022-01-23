@@ -316,5 +316,6 @@
     <string name="player_seek_regular">Normal</string>
     <string name="player_seek_confirmation_pause">Onay ile (ararken duraklat)</string>
     <string name="player_seek_confirmation_play">Onay ile (ararken oynat)</string>
-    <string name="hide_shorts_from_home">Ana Sayfa\'dan shortsları gizle</string>
+    <string name="hide_shorts_from_home">Ana Sayfa\'dan Shortsları gizle</string>
+    <string name="finish_on_disconnect">Telefon bağlantısı kesildiğinde uygulamayı sonlandır</string>
 </resources>
