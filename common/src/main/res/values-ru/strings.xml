@@ -313,4 +313,5 @@
     <string name="player_seek_confirmation_pause">С подтверждением (пауза во время перемотки)</string>
     <string name="player_seek_confirmation_play">С подтверждением (играть во время перемотки)</string>
     <string name="hide_shorts_from_home">Скрывать короткие видео с Главной</string>
+    <string name="finish_on_disconnect">Завершить приложение, если телефон отключен</string>
 </resources>

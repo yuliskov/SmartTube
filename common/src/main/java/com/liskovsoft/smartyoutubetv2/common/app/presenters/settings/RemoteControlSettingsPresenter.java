@@ -22,14 +22,14 @@ import java.util.List;
 public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
     @SuppressLint("StaticFieldLeak")
     private static RemoteControlSettingsPresenter sInstance;
-    private final RemoteControlData mDeviceLinkData;
+    private final RemoteControlData mRemoteControlData;
     private final RemoteManager mRemoteManager;
 
     public RemoteControlSettingsPresenter(Context context) {
         super(context);
         MediaService mediaService = YouTubeMediaService.instance();
         mRemoteManager = mediaService.getRemoteManager();
-        mDeviceLinkData = RemoteControlData.instance(context);
+        mRemoteControlData = RemoteControlData.instance(context);
     }
 
     public static RemoteControlSettingsPresenter instance(Context context) {
@@ -57,6 +57,7 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
         appendRunInBackgroundSwitch(settingsPresenter);
         appendAddDeviceButton(settingsPresenter);
         appendRemoveAllDevicesButton(settingsPresenter);
+        appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_remote_control), this::unhold);
     }
@@ -64,9 +65,9 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
     private void appendRunInBackgroundSwitch(AppDialogPresenter settingsPresenter) {
         settingsPresenter.appendSingleSwitch(UiOptionItem.from(getContext().getString(R.string.settings_remote_control), optionItem -> {
             // Remote link depends on background service
-            mDeviceLinkData.enableRunInBackground(optionItem.isSelected());
+            mRemoteControlData.enableRunInBackground(optionItem.isSelected());
             Utils.updateRemoteControlService(getContext());
-        }, mDeviceLinkData.isRunInBackgroundEnabled()));
+        }, mRemoteControlData.isRunInBackgroundEnabled()));
     }
 
     private void appendAddDeviceButton(AppDialogPresenter settingsPresenter) {
@@ -74,7 +75,7 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.dialog_add_device), option -> {
                     AddDevicePresenter.instance(getContext()).start();
 
-                    mDeviceLinkData.enableRunInBackground(true);
+                    mRemoteControlData.enableRunInBackground(true);
                     Utils.updateRemoteControlService(getContext());
                 }));
     }
@@ -88,7 +89,7 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
                     MessageHelpers.showMessage(getContext(), R.string.msg_done);
                     settingsPresenter.closeDialog();
 
-                    mDeviceLinkData.enableRunInBackground(false);
+                    mRemoteControlData.enableRunInBackground(false);
                     Utils.updateRemoteControlService(getContext());
                 }
         );
@@ -96,5 +97,15 @@ public class RemoteControlSettingsPresenter extends BasePresenter<Void> {
         options.add(confirmItem);
 
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.dialog_remove_all_devices), options);
+    }
+
+    private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.finish_on_disconnect),
+                option -> mRemoteControlData.enableFinishOnDisconnect(option.isSelected()),
+                mRemoteControlData.isFinishOnDisconnectEnabled()));
+
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
 }
