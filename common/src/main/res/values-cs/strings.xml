@@ -317,4 +317,5 @@
     <string name="player_seek_confirmation_pause">S potvrzením (pozastav při přetáčení)</string>
     <string name="player_seek_confirmation_play">S potvrzením (hraj dál při přetáčení)</string>
     <string name="hide_shorts_from_home">Skryj krátké klipy z nabídky Domů</string>
+    <string name="finish_on_disconnect">Ukončit aplikaci, když se telefon odpojí</string>
 </resources>
