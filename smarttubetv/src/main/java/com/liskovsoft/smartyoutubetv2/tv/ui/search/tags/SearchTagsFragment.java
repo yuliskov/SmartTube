@@ -154,8 +154,8 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
      */
     @Override
     protected void submitQuery(String query) {
-        super.submitQuery(query);
         mNewQuery = query;
+        super.submitQuery(query);
     }
 
     @Override
