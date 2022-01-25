@@ -336,6 +336,10 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
                                    RowPresenter.ViewHolder rowViewHolder, Row row) {
             if (item instanceof Video) {
                 mMainPresenter.onVideoItemSelected((Video) item);
+
+                // Change unwatched state (remove red mark)
+                //((Video) item).hasNewContent = false;
+                //mGridAdapter1.notifyItemRangeChanged(mGridAdapter1.indexOf((Video) item), 1);
             }
         }
     }
