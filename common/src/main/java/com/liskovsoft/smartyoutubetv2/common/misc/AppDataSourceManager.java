@@ -103,6 +103,8 @@ public class AppDataSourceManager {
                 new VideoPreset("2160p    60fps    vp9+hdr", "3840,2160,60,vp9.2"),
                 new VideoPreset("4320p    30fps    av01", "7680,4320,30,av01"),
                 new VideoPreset("4320p    60fps    av01", "7680,4320,60,av01"),
+                new VideoPreset("4320p    30fps    av01+hdr", "7680,4320,30,av01.hdr"),
+                new VideoPreset("4320p    60fps    av01+hdr", "7680,4320,60,av01.hdr"),
                 new VideoPreset("4320p    30fps    vp9", "7680,4320,30,vp9"),
                 new VideoPreset("4320p    60fps    vp9", "7680,4320,60,vp9"),
                 new VideoPreset("4320p    30fps    vp9+hdr", "7680,4320,30,vp9.2"),

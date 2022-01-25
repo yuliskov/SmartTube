@@ -15,6 +15,7 @@ public class TrackSelectorUtil {
     private static final String CODEC_SHORT_VP9_HDR = "vp9.2";
     private static final String CODEC_SHORT_AV1_HDR_ENDING = "10.0.110.09.18.09.0";
     private static final String CODEC_SHORT_AV1_HDR_ENDING2 = "10.0.110.09.16.09.0";
+    private static final String HDR_PROFILE_ENDING = "hdr";
     private static final String CODEC_SHORT_MP4A = "mp4a";
     private static final String CODEC_SHORT_VORBIS = "vorbis";
     private static final String SEPARATOR = ", ";
@@ -105,7 +106,7 @@ public class TrackSelectorUtil {
             return false;
         }
 
-        return codec.equals(CODEC_SHORT_VP9_HDR) || Helpers.endsWith(codec, CODEC_SHORT_AV1_HDR_ENDING, CODEC_SHORT_AV1_HDR_ENDING2);
+        return codec.equals(CODEC_SHORT_VP9_HDR) || Helpers.endsWith(codec, CODEC_SHORT_AV1_HDR_ENDING, CODEC_SHORT_AV1_HDR_ENDING2, HDR_PROFILE_ENDING);
     }
 
     public static String extractCodec(Format format) {
