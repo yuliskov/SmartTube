@@ -338,6 +338,7 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
                 mMainPresenter.onVideoItemSelected((Video) item);
 
                 // Change unwatched state (remove red mark)
+                // Exception: Cannot call this method while RecyclerView is computing a layout
                 //((Video) item).hasNewContent = false;
                 //mGridAdapter1.notifyItemRangeChanged(mGridAdapter1.indexOf((Video) item), 1);
             }
