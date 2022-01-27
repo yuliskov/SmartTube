@@ -316,4 +316,6 @@
     <string name="player_seek_regular">Normal</string>
     <string name="player_seek_confirmation_pause">Mit Bestätigung (Pause beim Spulen)</string>
     <string name="player_seek_confirmation_play">Mit Bestätigung (Wiedergabe beim Spulen)</string>
+    <string name="hide_shorts_from_home">Kurzvideos in Start ausblenden</string>
+    <string name="finish_on_disconnect">App beenden wenn das Telefon getrennt wird</string>
 </resources>
