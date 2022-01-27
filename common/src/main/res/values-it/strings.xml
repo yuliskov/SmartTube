@@ -317,5 +317,5 @@
     <string name="player_seek_confirmation_pause">Con conferma (pausa durante la ricerca)</string>
     <string name="player_seek_confirmation_play">Con conferma (play durante la ricerca)</string>
     <string name="hide_shorts_from_home">Nascondi i cortometraggi dalla Home</string>
-    <string name="finish_on_disconnect">Chiudi l'app quando il telefono è disconnesso</string>
+    <string name="finish_on_disconnect">Chiudi l\'app quando il telefono è disconnesso</string>
 </resources>
