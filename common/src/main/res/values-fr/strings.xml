@@ -310,12 +310,12 @@
     <string name="cancel_dialog">Annuler</string>
     <string name="msg_player_error_source2">La source vidéo ne fonctionne pas</string>
     <string name="hide_upcoming">Masquer la suite des abonnements</string>
-    <string name="search_background_playback">Entrer dans PIP lors d'une recherche à partir du lecteur</string>
+    <string name="search_background_playback">Entrer dans PIP lors d\'une recherche à partir du lecteur</string>
     <string name="trending_row_name">Tendance</string>
     <string name="player_seek_type">Rechercher un comportement</string>
     <string name="player_seek_regular">Régulier</string>
     <string name="player_seek_confirmation_pause">Avec confirmation (pause pendant la recherche)</string>
     <string name="player_seek_confirmation_play">Avec confirmation (lecture pendant la recherche)</string>
-    <string name="hide_shorts_from_home">Cacher les shorts de l'accueil</string>
-    <string name="finish_on_disconnect">Couper l'application lorsque le téléphone est déconnecté</string>
+    <string name="hide_shorts_from_home">Cacher les shorts de l\'accueil</string>
+    <string name="finish_on_disconnect">Couper l\'application lorsque le téléphone est déconnecté</string>
 </resources>
