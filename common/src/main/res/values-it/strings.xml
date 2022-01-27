@@ -270,7 +270,7 @@
     <string name="upload_date_this_year">Quest\'anno</string>
     <string name="double_refresh_rate">Doppia frequenza di aggiornamento</string>
     <string name="upload_date_last_hour">Ultima ora</string>
-    <string name="focus_on_search_results">Autofocus sui risultati della ricerca</string>
+    <string name="focus_on_search_results">Messa a fuoco automatica sui risultati della ricerca</string>
     <string name="context_menu">Menu contestuale</string>
     <string name="add_remove_from_recent_playlist">Aggiungi o rimuovi dalla recente playlist</string>
     <string name="hide_settings_section">Nascondi la sezione delle Impostazioni (pericoloso!)</string>
@@ -287,7 +287,7 @@
     <string name="action_video_stats">Statistiche del video</string>
     <string name="action_subscribe">Sottoscrivi</string>
     <string name="action_channel">Apri canale</string>
-    <string name="action_pip">PiP</string>
+    <string name="action_pip">Immagine nell\'immagine (PiP)</string>
     <string name="action_screen_off">Spegni schermo</string>
     <string name="action_playback_queue">Coda di riproduzione</string>
     <string name="action_video_speed">Velocità del video</string>
@@ -317,4 +317,5 @@
     <string name="player_seek_confirmation_pause">Con conferma (pausa durante la ricerca)</string>
     <string name="player_seek_confirmation_play">Con conferma (play durante la ricerca)</string>
     <string name="hide_shorts_from_home">Nascondi i cortometraggi dalla Home</string>
+    <string name="finish_on_disconnect">Chiudi l'app quando il telefono è disconnesso</string>
 </resources>
