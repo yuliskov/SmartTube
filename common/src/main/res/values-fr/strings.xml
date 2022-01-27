@@ -183,7 +183,7 @@
     <string name="content_block_music_off_topic">Section non musicale du clip</string>
     <string name="confirm_segment_skip">Ignorer la section \"%s\"?</string>
     <string name="cancel_segment_skip">Annuler le saut de la section</string>
-    <string name="msg_skipping_segment">Sauter section \"%s\"…</string>
+    <string name="msg_skipping_segment">Saut section \"%s\"…</string>
     <string name="content_block_notification_type">Type de notification</string>
     <string name="content_block_notify_none">Sans notification</string>
     <string name="content_block_notify_toast">Toaster</string>
@@ -243,7 +243,7 @@
     <string name="app_backup_restore">Sauvegarde/Restauration</string>
     <string name="app_backup">Sauvegarde des données</string>
     <string name="app_restore">Restaurer des données à partir d\'une sauvegarde</string>
-    <string name="skip_each_segment_once">Ne plus sautez encore de segments</string>
+    <string name="skip_each_segment_once">Ne plus sautez encore de sections</string>
     <string name="disable_ok_long_press">Désactiver le bouton OK pression longue</string>
     <string name="player_time_correction">Affichage de l\'heure en fonction de la vitesse</string>
     <string name="sponsor_color_markers">Marqueurs de couleur sur la barre de progression</string>
@@ -307,6 +307,15 @@
     <string name="content_block_action_dialog">Afficher la boîte de dialogue de confirmation</string>
     <string name="content_block_filler">Hors sujet (remplissage)</string>
     <string name="keyboard_auto_show">Afficher le clavier automatiquement</string>
-    <string name="cancel_dialog">Annulerl</string>
+    <string name="cancel_dialog">Annuler</string>
     <string name="msg_player_error_source2">La source vidéo ne fonctionne pas</string>
+    <string name="hide_upcoming">Masquer la suite des abonnements</string>
+    <string name="search_background_playback">Entrer dans PIP lors d'une recherche à partir du lecteur</string>
+    <string name="trending_row_name">Tendance</string>
+    <string name="player_seek_type">Rechercher un comportement</string>
+    <string name="player_seek_regular">Régulier</string>
+    <string name="player_seek_confirmation_pause">Avec confirmation (pause pendant la recherche)</string>
+    <string name="player_seek_confirmation_play">Avec confirmation (lecture pendant la recherche)</string>
+    <string name="hide_shorts_from_home">Cacher les shorts de l'accueil</string>
+    <string name="finish_on_disconnect">Couper l'application lorsque le téléphone est déconnecté</string>
 </resources>
