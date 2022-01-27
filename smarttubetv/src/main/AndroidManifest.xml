@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.liskovsoft.smartyoutubetv2.tv">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.liskovsoft.smartyoutubetv2.tv">
 
     <!-- Shield on Android 11 speech recognizer not working fix? -->
     <!-- https://stackoverflow.com/questions/64319117/speechrecognizer-not-available-when-targeting-android-11 -->
@@ -66,7 +66,8 @@
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity"
             android:launchMode="singleInstance"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection">
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -114,17 +115,20 @@
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity"
             android:launchMode="singleInstance"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"/>
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="landscape"/>
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.channel.ChannelActivity"
             android:launchMode="singleInstance"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"/>
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="landscape"/>
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.channeluploads.ChannelUploadsActivity"
             android:launchMode="singleInstance"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"/>
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="landscape"/>
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity"
@@ -132,31 +136,37 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
             android:supportsPictureInPicture="true"
             android:resizeableActivity="true"
+            android:screenOrientation="landscape"
             android:theme="@style/App.Theme.Leanback.Player"/>
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.search.regular.SearchActivity"
             android:launchMode="singleInstance"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"/>
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="landscape"/>
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.SearchTagsActivity"
             android:launchMode="singleInstance"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"/>
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+            android:screenOrientation="landscape"/>
 
         <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.onboarding.OnboardingActivity"
                   android:launchMode="singleInstance"
                   android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+                  android:screenOrientation="landscape"
                   android:theme="@style/Theme.Leanback.Onboarding"/>
 
         <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.signin.SignInActivity"
                   android:launchMode="singleInstance"
                   android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+                  android:screenOrientation="landscape"
                   android:theme="@style/App.Theme.Leanback.GuidedStep"/>
 
         <activity android:name="com.liskovsoft.smartyoutubetv2.tv.ui.adddevice.AddDeviceActivity"
                   android:launchMode="singleInstance"
                   android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+                  android:screenOrientation="landscape"
                   android:theme="@style/App.Theme.Leanback.GuidedStep"/>
 
         <!-- noHistory is essential for dialogs. Because otherwise you'll see previous dialog content when opening. -->
@@ -164,6 +174,7 @@
                   android:noHistory="true"
                   android:launchMode="singleInstance"
                   android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|layoutDirection"
+                  android:screenOrientation="landscape"
                   android:theme="@style/App.Theme.Leanback.Preferences"/>
 
         <!--
@@ -174,8 +185,9 @@
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.ui.details.VideoDetailsActivity"
             android:launchMode="singleInstance"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.Leanback.Details">
-            
+
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -194,9 +206,11 @@
             android:name="com.liskovsoft.smartyoutubetv2.tv.old.ui.VerticalGridActivity"
             android:exported="true"
             android:parentActivityName="com.liskovsoft.smartyoutubetv2.tv.ui.browse.BrowseActivity"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.Leanback.VerticalGrid" />
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.old.ui.GuidedStepActivity"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.Example.Leanback.GuidedStep" />
         -->
 
@@ -214,11 +228,13 @@
 
         <activity android:name="com.liskovsoft.smartyoutubetv2.tv.old.ui.SettingsActivity"
             android:exported="true"
+            android:screenOrientation="landscape"
             android:theme="@style/App.Theme.Leanback.Preferences"
             />
 
         <activity
             android:name="com.liskovsoft.smartyoutubetv2.tv.old.ui.AuthenticationActivity"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.Example.Leanback.GuidedStep" />
         -->
 

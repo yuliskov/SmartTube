@@ -2,9 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.misc;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
@@ -35,9 +33,10 @@ public class MotherActivity extends FragmentActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         // Fixing: Only fullscreen opaque activities can request orientation (api 26)
         // NOTE: You should remove 'screenOrientation' from the manifest.
-        if (VERSION.SDK_INT != 26) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
+        // NOTE: Possible side effect: initDpi() won't work: "When you setRequestedOrientation() the view may be restarted"
+        //if (VERSION.SDK_INT != 26) {
+        //    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        //}
         super.onCreate(savedInstanceState);
 
         Log.d(TAG, "Starting %s...", this.getClass().getSimpleName());
