@@ -116,6 +116,7 @@ public class ScreensaverManager {
             dimContainer = layoutInflater.inflate(R.layout.dim_container, null);
             if (rootView instanceof ViewGroup) {
                 // Add negative margin to fix un-proper viewport positioning on some devices
+                // NOTE: below code is not working!!!
                 // NOTE: comment out code below if you don't want this
                 //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 //        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
