@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -416,11 +417,16 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
     @Override
     public void showProgressBar(boolean show) {
+        Runnable callback;
+
         if (show) {
-            mProgressBarManager.show();
+            callback = mProgressBarManager::show;
         } else {
-            mProgressBarManager.hide();
+            callback = mProgressBarManager::hide;
         }
+
+        // Essential. Need to run on the main thread.
+        new Handler(Looper.getMainLooper()).post(callback);
     }
 
     @Override

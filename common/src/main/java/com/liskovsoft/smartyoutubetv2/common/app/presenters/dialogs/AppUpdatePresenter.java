@@ -11,6 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.utils.LoadingManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
@@ -49,6 +50,7 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
         mIsForceCheck = forceCheck;
 
         if (forceCheck) {
+            LoadingManager.showLoading(getContext(), true);
             mUpdateChecker.forceCheckForUpdates(mUpdateManifestUrls);
         } else {
             mUpdateChecker.checkForUpdates(mUpdateManifestUrls);
@@ -57,6 +59,10 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
 
     @Override
     public void onUpdateFound(String versionName, List<String> changelog, String apkPath) {
+        if (mIsForceCheck) {
+            LoadingManager.showLoading(getContext(), false);
+        }
+
         // Don't show update dialog if player opened
         if (getContext() != null && !Utils.isPlayerInForeground(getContext()) && Utils.isAppInForeground()) {
             showUpdateDialog(versionName, changelog, apkPath);
@@ -66,10 +72,12 @@ public class AppUpdatePresenter extends BasePresenter<Void> implements AppUpdate
     @Override
     public void onUpdateError(Exception error) {
         if (mIsForceCheck) {
+            LoadingManager.showLoading(getContext(), false);
+
             if (AppUpdateCheckerListener.LATEST_VERSION.equals(error.getMessage())) {
                 MessageHelpers.showMessage(getContext(), R.string.update_not_found);
             } else {
-                MessageHelpers.showMessage(getContext(), R.string.update_in_progress);
+                MessageHelpers.showMessage(getContext(), R.string.update_error);
             }
         }
 
