@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
+import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HQDialogManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUIManager;
@@ -185,25 +186,17 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendTweaksCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from("Buffering fix (experimental)",
-                option -> mPlayerTweaksData.enableBufferingFix(option.isSelected()),
-                mPlayerTweaksData.isBufferingFixEnabled()));
+        options.add(UiOptionItem.from("Enable sleep timer (one hour)",
+                option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
+                mPlayerData.isSonyTimerFixEnabled()));
 
         options.add(UiOptionItem.from("Disable playback notifications",
                 option -> mPlayerTweaksData.disablePlaybackNotifications(option.isSelected()),
                 mPlayerTweaksData.isPlaybackNotificationsDisabled()));
 
-        options.add(UiOptionItem.from("Live stream fix (1080/AVC)",
-                option -> mPlayerTweaksData.enableLiveStreamFix(option.isSelected()),
-                mPlayerTweaksData.isLiveStreamFixEnabled()));
-
         options.add(UiOptionItem.from("Audio sync fix",
                 option -> mPlayerTweaksData.enableAudioSyncFix(option.isSelected()),
                 mPlayerTweaksData.isAudioSyncFixEnabled()));
-
-        options.add(UiOptionItem.from("Amlogic 1080/60 fix",
-                option -> mPlayerTweaksData.enableAmlogicFix(option.isSelected()),
-                mPlayerTweaksData.isAmlogicFixEnabled()));
 
         options.add(UiOptionItem.from("Ambilight/Aspect ratio fix",
                 option -> {
@@ -215,6 +208,14 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 },
                 mPlayerTweaksData.isTextureViewEnabled()));
 
+        options.add(UiOptionItem.from("Amlogic 1080/60 fix",
+                option -> mPlayerTweaksData.enableAmlogicFix(option.isSelected()),
+                mPlayerTweaksData.isAmlogicFixEnabled()));
+
+        options.add(UiOptionItem.from("Live stream fix (1080/AVC)",
+                option -> mPlayerTweaksData.enableLiveStreamFix(option.isSelected()),
+                mPlayerTweaksData.isLiveStreamFixEnabled()));
+
         options.add(UiOptionItem.from("Tunneled video playback (Android 5+)",
                 option -> {
                     mPlayerTweaksData.enableTunneledPlayback(option.isSelected());
@@ -224,10 +225,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                     }
                 },
                 mPlayerTweaksData.isTunneledPlaybackEnabled()));
-
-        options.add(UiOptionItem.from("Sleep timer fix",
-                option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
-                mPlayerData.isSonyTimerFixEnabled()));
 
         options.add(UiOptionItem.from("Disable snap to vsync",
                 option -> mPlayerTweaksData.disableSnapToVsync(option.isSelected()),
@@ -249,9 +246,17 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableFrameDropFix(option.isSelected()),
                 mPlayerTweaksData.isFrameDropFixEnabled()));
 
+        options.add(UiOptionItem.from("Buffering fix (experimental)",
+                option -> mPlayerTweaksData.enableBufferingFix(option.isSelected()),
+                mPlayerTweaksData.isBufferingFixEnabled()));
+
         options.add(UiOptionItem.from("Keep finished activity",
                 option -> mPlayerTweaksData.enableKeepFinishedActivity(option.isSelected()),
                 mPlayerTweaksData.isKeepFinishedActivityEnabled()));
+
+        options.add(UiOptionItem.from("Disable Channels service",
+                option -> GlobalPreferences.instance(getContext()).enableChannelsService(!option.isSelected()),
+                !GlobalPreferences.instance(getContext()).isChannelsServiceEnabled()));
 
         // Need to be enabled on older version of ExoPlayer (e.g. 2.10.6).
         // It's because there's no tweaks for modern devices.
