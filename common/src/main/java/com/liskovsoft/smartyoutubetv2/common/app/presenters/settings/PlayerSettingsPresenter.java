@@ -208,11 +208,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 },
                 mPlayerTweaksData.isTextureViewEnabled()));
 
-        options.add(UiOptionItem.from("Amlogic 1080/60 fix",
+        options.add(UiOptionItem.from("Amlogic 1080p@60fps fix",
                 option -> mPlayerTweaksData.enableAmlogicFix(option.isSelected()),
                 mPlayerTweaksData.isAmlogicFixEnabled()));
 
-        options.add(UiOptionItem.from("Live stream fix (1080/AVC)",
+        options.add(UiOptionItem.from("Live stream fix (1080p)",
                 option -> mPlayerTweaksData.enableLiveStreamFix(option.isSelected()),
                 mPlayerTweaksData.isLiveStreamFixEnabled()));
 
@@ -234,7 +234,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.skipProfileLevelCheck(option.isSelected()),
                 mPlayerTweaksData.isProfileLevelCheckSkipped()));
 
-        options.add(UiOptionItem.from("Force legacy codecs",
+        options.add(UiOptionItem.from("Force legacy codecs (720p)",
                 option -> mPlayerData.enableLowQuality(option.isSelected()),
                 mPlayerData.isLowQualityEnabled()));
 
@@ -250,7 +250,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableBufferingFix(option.isSelected()),
                 mPlayerTweaksData.isBufferingFixEnabled()));
 
-        options.add(UiOptionItem.from("Keep finished activity",
+        options.add(UiOptionItem.from("Keep finished activities",
                 option -> mPlayerTweaksData.enableKeepFinishedActivity(option.isSelected()),
                 mPlayerTweaksData.isKeepFinishedActivityEnabled()));
 
