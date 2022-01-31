@@ -105,7 +105,7 @@
     <string name="dialog_search">Поиск</string>
     <string name="instant_voice_search">Сразу запускать голосовой поиск</string>
     <string name="option_background_playback_behind">Играть позади</string>
-    <string name="next_video_info_is_not_loaded_yet">Информация о следующем видео еще не загрузилась</string>
+    <string name="next_video_info_is_not_loaded_yet">Информация о следующем видео ещё не загрузилась</string>
     <string name="card_multiline_title">Несколько строк в заголовках</string>
     <string name="cards_style">Стиль карточек</string>
     <string name="repeat_mode_all">Играть видео друг за другом</string>
@@ -192,7 +192,7 @@
     <string name="intent_force_close">Принудительный выход, если видео открыто из внешнего источника</string>
     <string name="btn_confirm">Подтвердить</string>
     <string name="player_low_video_quality">Низкое качество видео</string>
-    <string name="remote_session_closed">Удаленная сессия закрыта</string>
+    <string name="remote_session_closed">Удалённая сессия закрыта</string>
     <string name="msg_mode_switch_error">Не получилось переключить дисплей в режим \"%s\"</string>
     <string name="msg_player_error">В плеере возникла ошибка %s. Перезапускаю воспроизведение…</string>
     <string name="video_preset_disabled">Без профиля</string>
@@ -245,7 +245,7 @@
     <string name="app_restore">Восстановить данные из бэкапа</string>
     <string name="skip_each_segment_once">Не пропускать сегменты повторно</string>
     <string name="disable_ok_long_press">Не обрабатывать долгое удержание кнопки ОК</string>
-    <string name="player_time_correction">Отображать время с учетом скорости воспроизведения</string>
+    <string name="player_time_correction">Отображать время с учётом скорости воспроизведения</string>
     <string name="sponsor_color_markers">Цветовые метки на шкале прогресса</string>
     <string name="refresh_section">Обновить раздел</string>
     <string name="option_disabled">Отключено</string>
