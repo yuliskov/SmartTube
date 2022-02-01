@@ -316,5 +316,5 @@
     <string name="finish_on_disconnect">Завершити додаток, якщо телефон відключений</string>
     <string name="update_error">Помилка оновлення</string>
     <string name="hide_shorts_from_history">Приховувати короткі відео з Історії</string>
-    <string name="replace_screensaver">Замінити скрінсейвер затемненням екрану</string>
+    <string name="disable_screensaver">Вимкнути скрінсейвер</string>
 </resources>

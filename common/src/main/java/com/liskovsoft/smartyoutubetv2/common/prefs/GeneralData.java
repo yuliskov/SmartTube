@@ -53,7 +53,7 @@ public class GeneralData {
     private boolean mIsRemapChannelUpToSearchEnabled;
     private boolean mIsHideShortsFromHomeEnabled;
     private boolean mIsHideShortsFromHistoryEnabled;
-    private boolean mIsReplaceScreensaverEnabled;
+    private boolean mIsScreensaverDisabled;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -333,13 +333,13 @@ public class GeneralData {
         return mIsHideUpcomingEnabled;
     }
 
-    public void replaceScreensaver(boolean enable) {
-        mIsReplaceScreensaverEnabled = enable;
+    public void disableScreensaver(boolean enable) {
+        mIsScreensaverDisabled = enable;
         persistState();
     }
 
-    public boolean isReplaceScreensaverEnabled() {
-        return mIsReplaceScreensaverEnabled;
+    public boolean isScreensaverDisabled() {
+        return mIsScreensaverDisabled;
     }
 
     public void remapFastForwardToNext(boolean enable) {
@@ -542,7 +542,7 @@ public class GeneralData {
         mIsRemapChannelUpToSearchEnabled = Helpers.parseBoolean(split, 23, false);
         mIsHideShortsFromHomeEnabled = Helpers.parseBoolean(split, 24, false);
         mIsHideShortsFromHistoryEnabled = Helpers.parseBoolean(split, 25, false);
-        mIsReplaceScreensaverEnabled = Helpers.parseBoolean(split, 26, false);
+        mIsScreensaverDisabled = Helpers.parseBoolean(split, 26, false);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -577,6 +577,6 @@ public class GeneralData {
                 null, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled,
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
-                mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsReplaceScreensaverEnabled));
+                mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled));
     }
 }

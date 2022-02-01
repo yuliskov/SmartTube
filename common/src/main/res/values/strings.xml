@@ -320,5 +320,5 @@
     <string name="finish_on_disconnect">Finish the app when phone is disconnected</string>
     <string name="update_error">Update error</string>
     <string name="hide_shorts_from_history">Hide shorts from History</string>
-    <string name="replace_screensaver">Replace screensaver with dimming</string>
+    <string name="disable_screensaver">Disable screensaver</string>
 </resources>

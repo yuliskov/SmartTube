@@ -285,9 +285,9 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.hideUpcoming(option.isSelected()),
                 mGeneralData.isHideUpcomingEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.replace_screensaver),
-                option -> mGeneralData.replaceScreensaver(option.isSelected()),
-                mGeneralData.isReplaceScreensaverEnabled()));
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_screensaver),
+                option -> mGeneralData.disableScreensaver(option.isSelected()),
+                mGeneralData.isScreensaverDisabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.return_to_launcher),
                 option -> mGeneralData.enableReturnToLauncher(option.isSelected()),

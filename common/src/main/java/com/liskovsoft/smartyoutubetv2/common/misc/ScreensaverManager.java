@@ -6,7 +6,6 @@ import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -140,7 +139,7 @@ public class ScreensaverManager {
         }
 
         // Disable screensaver on certain circumstances
-        if (show && (isPlaying() || isSigning() || mGeneralData.isReplaceScreensaverEnabled())) {
+        if (show && (isPlaying() || isSigning() || mGeneralData.isScreensaverDisabled())) {
             Helpers.disableScreensaver(activity);
             return;
         }
