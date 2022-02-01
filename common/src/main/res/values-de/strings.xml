@@ -318,4 +318,5 @@
     <string name="player_seek_confirmation_play">Mit Bestätigung (Wiedergabe beim Spulen)</string>
     <string name="hide_shorts_from_home">Kurzvideos in Start ausblenden</string>
     <string name="finish_on_disconnect">App beenden wenn das Telefon getrennt wird</string>
+    <string name="update_error">Update-Fehler</string>
 </resources>
