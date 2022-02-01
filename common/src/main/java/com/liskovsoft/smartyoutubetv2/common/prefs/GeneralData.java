@@ -53,6 +53,7 @@ public class GeneralData {
     private boolean mIsRemapChannelUpToSearchEnabled;
     private boolean mIsHideShortsFromHomeEnabled;
     private boolean mIsHideShortsFromHistoryEnabled;
+    private boolean mIsReplaceScreensaverEnabled;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -332,6 +333,15 @@ public class GeneralData {
         return mIsHideUpcomingEnabled;
     }
 
+    public void replaceScreensaver(boolean enable) {
+        mIsReplaceScreensaverEnabled = enable;
+        persistState();
+    }
+
+    public boolean isReplaceScreensaverEnabled() {
+        return mIsReplaceScreensaverEnabled;
+    }
+
     public void remapFastForwardToNext(boolean enable) {
         mIsRemapFastForwardToNextEnabled = enable;
         mIsRemapFastForwardToSpeedEnabled = false;
@@ -532,6 +542,7 @@ public class GeneralData {
         mIsRemapChannelUpToSearchEnabled = Helpers.parseBoolean(split, 23, false);
         mIsHideShortsFromHomeEnabled = Helpers.parseBoolean(split, 24, false);
         mIsHideShortsFromHistoryEnabled = Helpers.parseBoolean(split, 25, false);
+        mIsReplaceScreensaverEnabled = Helpers.parseBoolean(split, 26, false);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -566,6 +577,6 @@ public class GeneralData {
                 null, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled,
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
-                mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled));
+                mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsReplaceScreensaverEnabled));
     }
 }

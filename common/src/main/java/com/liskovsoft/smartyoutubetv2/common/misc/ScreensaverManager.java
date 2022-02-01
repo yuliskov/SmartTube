@@ -101,6 +101,7 @@ public class ScreensaverManager {
             return;
         }
 
+        // Disable dimming on certain circumstances
         if (show && mDimColorResId == R.color.dimming &&
                 (isPlaying() || isSigning() || mGeneralData.getScreenDimmingTimeoutMin() == GeneralData.SCREEN_DIMMING_NEVER)
         ) {
@@ -137,8 +138,9 @@ public class ScreensaverManager {
         if (activity == null) {
             return;
         }
-        
-        if (show && (isPlaying() || isSigning())) {
+
+        // Disable screensaver on certain circumstances
+        if (show && (isPlaying() || isSigning() || mGeneralData.isReplaceScreensaverEnabled())) {
             Helpers.disableScreensaver(activity);
             return;
         }
