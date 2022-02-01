@@ -315,4 +315,5 @@
     <string name="hide_shorts_from_home">Скрывать короткие видео с Главной</string>
     <string name="finish_on_disconnect">Завершить приложение, если телефон отключен</string>
     <string name="update_error">Ошибка обновления</string>
+    <string name="hide_shorts_from_history">Скрывать короткие видео из Истории</string>
 </resources>

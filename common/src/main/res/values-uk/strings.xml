@@ -315,4 +315,5 @@
     <string name="hide_shorts_from_home">Приховувати короткі відео з Головної</string>
     <string name="finish_on_disconnect">Завершити додаток, якщо телефон відключений</string>
     <string name="update_error">Помилка оновлення</string>
+    <string name="hide_shorts_from_history">Приховувати короткі відео з Історії</string>
 </resources>

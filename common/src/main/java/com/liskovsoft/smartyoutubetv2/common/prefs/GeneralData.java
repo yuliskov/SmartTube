@@ -35,7 +35,7 @@ public class GeneralData {
     private int mAppExitShortcut;
     private boolean mIsReturnToLauncherEnabled;
     private int mBackgroundShortcut;
-    private boolean mIsHideShortsEnabled;
+    private boolean mIsHideShortsFromSubscriptionsEnabled;
     private boolean mIsHideUpcomingEnabled;
     private boolean mIsRemapFastForwardToNextEnabled;
     private int mScreenDimmingTimeoutMin;
@@ -52,6 +52,7 @@ public class GeneralData {
     private boolean mIsRemapFastForwardToSpeedEnabled;
     private boolean mIsRemapChannelUpToSearchEnabled;
     private boolean mIsHideShortsFromHomeEnabled;
+    private boolean mIsHideShortsFromHistoryEnabled;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -295,13 +296,13 @@ public class GeneralData {
         persistState();
     }
 
-    public void hideShorts(boolean enable) {
-        mIsHideShortsEnabled = enable;
+    public void hideShortsFromSubscriptions(boolean enable) {
+        mIsHideShortsFromSubscriptionsEnabled = enable;
         persistState();
     }
 
-    public boolean isHideShortsEnabled() {
-        return mIsHideShortsEnabled;
+    public boolean isHideShortsFromSubscriptionsEnabled() {
+        return mIsHideShortsFromSubscriptionsEnabled;
     }
 
     public void hideShortsFromHome(boolean enable) {
@@ -311,6 +312,15 @@ public class GeneralData {
 
     public boolean isHideShortsFromHomeEnabled() {
         return mIsHideShortsFromHomeEnabled;
+    }
+
+    public void hideShortsFromHistory(boolean enable) {
+        mIsHideShortsFromHistoryEnabled = enable;
+        persistState();
+    }
+
+    public boolean isHideShortsFromHistoryEnabled() {
+        return mIsHideShortsFromHistoryEnabled;
     }
 
     public void hideUpcoming(boolean enable) {
@@ -503,7 +513,7 @@ public class GeneralData {
         mIsReturnToLauncherEnabled = Helpers.parseBoolean(split, 4, true);
         mBackgroundShortcut = Helpers.parseInt(split, 5, BACKGROUND_PLAYBACK_SHORTCUT_HOME);
         String pinnedItems = Helpers.parseStr(split, 6);
-        mIsHideShortsEnabled = Helpers.parseBoolean(split, 7, false);
+        mIsHideShortsFromSubscriptionsEnabled = Helpers.parseBoolean(split, 7, false);
         mIsRemapFastForwardToNextEnabled = Helpers.parseBoolean(split, 8, false);
         mScreenDimmingTimeoutMin = Helpers.parseInt(split, 9, 1);
         mIsProxyEnabled = Helpers.parseBoolean(split, 10, false);
@@ -521,6 +531,7 @@ public class GeneralData {
         mIsRemapFastForwardToSpeedEnabled = Helpers.parseBoolean(split, 22, false);
         mIsRemapChannelUpToSearchEnabled = Helpers.parseBoolean(split, 23, false);
         mIsHideShortsFromHomeEnabled = Helpers.parseBoolean(split, 24, false);
+        mIsHideShortsFromHistoryEnabled = Helpers.parseBoolean(split, 25, false);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -550,11 +561,11 @@ public class GeneralData {
         String pinnedItems = Helpers.mergeArray(mPinnedItems.toArray());
         // Zero index is skipped. Selected sections were there.
         mPrefs.setData(GENERAL_DATA, Helpers.mergeObject(null, mBootSectionId, mIsSettingsSectionEnabled, mAppExitShortcut,
-                mIsReturnToLauncherEnabled,mBackgroundShortcut, pinnedItems,
-                mIsHideShortsEnabled, mIsRemapFastForwardToNextEnabled, mScreenDimmingTimeoutMin,
+                mIsReturnToLauncherEnabled,mBackgroundShortcut, pinnedItems, mIsHideShortsFromSubscriptionsEnabled, mIsRemapFastForwardToNextEnabled, mScreenDimmingTimeoutMin,
                 mIsProxyEnabled, mIsBridgeCheckEnabled, mIsOkButtonLongPressDisabled, mLastPlaylistId,
                 null, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled,
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
-                mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled, mIsHideShortsFromHomeEnabled));
+                mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
+                mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled));
     }
 }

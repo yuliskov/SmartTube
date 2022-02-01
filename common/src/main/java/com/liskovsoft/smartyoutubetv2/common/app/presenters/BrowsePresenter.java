@@ -726,8 +726,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        boolean isHideShortsEnabled = (mGeneralData.isHideShortsEnabled() && mediaGroup.getType() == MediaGroup.TYPE_SUBSCRIPTIONS) ||
-                (mGeneralData.isHideShortsFromHomeEnabled() && mediaGroup.getType() == MediaGroup.TYPE_HOME);
+        boolean isHideShortsEnabled = (mGeneralData.isHideShortsFromSubscriptionsEnabled() && mediaGroup.getType() == MediaGroup.TYPE_SUBSCRIPTIONS) ||
+                (mGeneralData.isHideShortsFromHomeEnabled() && mediaGroup.getType() == MediaGroup.TYPE_HOME) ||
+                (mGeneralData.isHideShortsFromHistoryEnabled() && mediaGroup.getType() == MediaGroup.TYPE_HISTORY);
         boolean isHideUpcomingEnabled = mGeneralData.isHideUpcomingEnabled() && mediaGroup.getType() == MediaGroup.TYPE_SUBSCRIPTIONS;
 
         if (isHideShortsEnabled || isHideUpcomingEnabled) {
