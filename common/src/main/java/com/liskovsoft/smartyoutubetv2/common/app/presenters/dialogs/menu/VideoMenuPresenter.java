@@ -227,7 +227,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             options.add(UiOptionItem.from(
                     playlistInfo.getTitle(),
                     (item) -> {
-                        addToPlaylist(playlistInfo.getPlaylistId(), item.isSelected());
+                        addRemoveFromPlaylist(playlistInfo.getPlaylistId(), item.isSelected());
                         GeneralData.instance(getContext()).setLastPlaylistId(playlistInfo.getPlaylistId());
                     },
                     playlistInfo.isSelected()));
@@ -261,7 +261,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                         UiOptionItem.from(getContext().getString(
                                 playlistInfo.isSelected() ? R.string.dialog_remove_from : R.string.dialog_add_to, playlistInfo.getTitle()),
                                 optionItem -> {
-                                    addToPlaylist(playlistInfo.getPlaylistId(), !playlistInfo.isSelected());
+                                    addRemoveFromPlaylist(playlistInfo.getPlaylistId(), !playlistInfo.isSelected());
                                     MessageHelpers.showMessage(getContext(), getContext().getString(
                                             playlistInfo.isSelected() ? R.string.removed_from : R.string.added_to, playlistInfo.getTitle()
                                     ));
@@ -439,7 +439,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                         }));
     }
 
-    private void addToPlaylist(String playlistId, boolean checked) {
+    private void addRemoveFromPlaylist(String playlistId, boolean checked) {
         RxUtils.disposeActions(mPlaylistInfoAction, mAddToPlaylistAction);
         Observable<Void> editObserve;
 

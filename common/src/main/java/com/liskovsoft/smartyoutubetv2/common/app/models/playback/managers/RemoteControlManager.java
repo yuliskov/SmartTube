@@ -247,6 +247,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                     if (video != null) {
                         video.playlistId = command.getPlaylistId();
                         video.playlistParams = null;
+                        video.isRemote = true;
                         mSuggestionsLoader.loadSuggestions(video);
                     }
                 }
