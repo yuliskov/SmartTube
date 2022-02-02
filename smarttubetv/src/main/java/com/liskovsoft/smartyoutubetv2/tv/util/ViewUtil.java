@@ -103,7 +103,7 @@ public class ViewUtil {
                 // App dialog title fix.
                 textView.setSelected(true);
 
-                // Fix: enable rtl scrolling on rtl languages
+                // Fix: right scrolling on rtl languages
                 // Fix: text disappear on rtl languages
                 if (VERSION.SDK_INT > 17 && BidiFormatter.getInstance().isRtlContext()) {
                     textView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
