@@ -83,6 +83,7 @@ public class ViewUtil {
         if (VERSION.SDK_INT > 17) {
             if (BidiFormatter.getInstance().isRtlContext()) {
                 // TODO: fix marquee on rtl languages
+                // TODO: text disappear on rtl languages
                 return;
             }
         }
