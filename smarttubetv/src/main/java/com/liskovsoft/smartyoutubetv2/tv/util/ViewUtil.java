@@ -7,6 +7,7 @@ import android.os.Build.VERSION;
 import android.text.BidiFormatter;
 import android.text.Layout;
 import android.text.TextUtils.TruncateAt;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
@@ -69,6 +70,11 @@ public class ViewUtil {
         for (TextView textView : textViews) {
             textView.setEllipsize(TruncateAt.END);
             textView.setHorizontallyScrolling(false);
+
+            // Fix: text disappear on rtl languages
+            if (VERSION.SDK_INT > 17 && BidiFormatter.getInstance().isRtlContext()) {
+                textView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_START);
+            }
         }
     }
 
@@ -80,13 +86,13 @@ public class ViewUtil {
             return;
         }
 
-        if (VERSION.SDK_INT > 17) {
-            if (BidiFormatter.getInstance().isRtlContext()) {
-                // TODO: fix marquee on rtl languages
-                // TODO: text disappear on rtl languages
-                return;
-            }
-        }
+        //if (VERSION.SDK_INT > 17) {
+        //    if (BidiFormatter.getInstance().isRtlContext()) {
+        //        // TODO: fix marquee on rtl languages
+        //        // TODO: text disappear on rtl languages
+        //        return;
+        //    }
+        //}
 
         for (TextView textView : textViews) {
             if (ViewUtil.isTruncated(textView)) { // multiline scroll fix
@@ -96,6 +102,14 @@ public class ViewUtil {
 
                 // App dialog title fix.
                 textView.setSelected(true);
+
+                // Fix: enable rtl scrolling on rtl languages
+                // Fix: text disappear on rtl languages
+                if (VERSION.SDK_INT > 17 && BidiFormatter.getInstance().isRtlContext()) {
+                    textView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
+                    textView.setTextDirection(TextView.TEXT_DIRECTION_RTL);
+                    textView.setGravity(Gravity.START);
+                }
             }
         }
     }
