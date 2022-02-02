@@ -80,12 +80,13 @@ public class ViewUtil {
             return;
         }
 
-        if (VERSION.SDK_INT > 17) {
-            if (BidiFormatter.getInstance().isRtlContext()) {
-                // TODO: fix marquee on rtl languages
-                return;
-            }
-        }
+        // TODO: fix marquee on rtl languages
+        //if (VERSION.SDK_INT > 17) {
+        //    if (BidiFormatter.getInstance().isRtlContext()) {
+        //        // TODO: fix marquee on rtl languages
+        //        return;
+        //    }
+        //}
 
         for (TextView textView : textViews) {
             if (ViewUtil.isTruncated(textView)) { // multiline scroll fix
