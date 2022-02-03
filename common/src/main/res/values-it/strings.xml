@@ -260,8 +260,8 @@
     <string name="video_preset_adaptive">Adattivo</string>
     <string name="content_block_preview_recap">Anteprima o riassunto del video</string>
     <string name="content_block_highlight">Parti più importanti del video</string>
-    <string name="removed_from_history">Il video è stato rimosso dalla cronologia</string>
-    <string name="remove_from_history">Rimuovi dalla cronologia</string>
+    <string name="removed_from_history">Il video è stato rimosso dalla Cronologia</string>
+    <string name="remove_from_history">Rimuovi dalla Cronologia</string>
     <string name="upload_date">Data di caricamento</string>
     <string name="upload_date_any">Qualsiasi data</string>
     <string name="upload_date_today">Oggi</string>
@@ -316,6 +316,9 @@
     <string name="player_seek_regular">Regolare</string>
     <string name="player_seek_confirmation_pause">Con conferma (pausa durante la ricerca)</string>
     <string name="player_seek_confirmation_play">Con conferma (play durante la ricerca)</string>
-    <string name="hide_shorts_from_home">Nascondi i cortometraggi dalla Home</string>
-    <string name="finish_on_disconnect">Chiudi l\'app quando il telefono è disconnesso</string>
+    <string name="hide_shorts_from_home">Nascondi i video corti dalla Home</string>
+    <string name="finish_on_disconnect">Chiudi l'app quando il telefono è disconnesso</string>
+    <string name="update_error">Errore durante l'aggiornametno</string>
+    <string name="hide_shorts_from_history">Nascondi i video corti dalla CronologiaHistory</string>
+    <string name="disable_screensaver">Disabilita lo screensaver</string>
 </resources>
