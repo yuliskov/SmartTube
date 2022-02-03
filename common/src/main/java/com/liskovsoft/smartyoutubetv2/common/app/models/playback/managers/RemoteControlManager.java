@@ -313,26 +313,24 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 break;
             case Command.TYPE_STOP:
                 if (getController() != null) {
-                    getController().finish();
-                }
-                if (getActivity() != null) {
-                    ViewManager.instance(getActivity()).properlyFinishTheApp(getActivity());
+                    getController().finish(); // close player
                 }
                 break;
             case Command.TYPE_CONNECTED:
-                //if (getActivity() != null) {
-                //    // NOTE: It's not a good idea to remember connection state (mConnected) at this point.
-                //    //Utils.moveAppToForeground(getActivity());
-                //    //MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_connected, command.getDeviceName()));
-                //}
+                // NOTE: there are possible false calls when mobile client unloaded from the memory.
+                if (getActivity() != null && mRemoteControlData.isFinishOnDisconnectEnabled()) {
+                    // NOTE: It's not a good idea to remember connection state (mConnected) at this point.
+                    Utils.moveAppToForeground(getActivity());
+                    MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_connected, command.getDeviceName()));
+                }
                 break;
             case Command.TYPE_DISCONNECTED:
-                //// Note: there are possible false calls when mobile client unloaded from the memory.
-                //if (getActivity() != null && mRemoteControlData.isFinishOnDisconnectEnabled()) {
-                //    // NOTE: It's not a good idea to remember connection state (mConnected) at this point.
-                //    MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_disconnected, command.getDeviceName()));
-                //    ViewManager.instance(getActivity()).properlyFinishTheApp(getActivity());
-                //}
+                // NOTE: there are possible false calls when mobile client unloaded from the memory.
+                if (getActivity() != null && mRemoteControlData.isFinishOnDisconnectEnabled()) {
+                    // NOTE: It's not a good idea to remember connection state (mConnected) at this point.
+                    MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_disconnected, command.getDeviceName()));
+                    ViewManager.instance(getActivity()).properlyFinishTheApp(getActivity());
+                }
                 break;
         }
 
