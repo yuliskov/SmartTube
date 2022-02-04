@@ -109,7 +109,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
     @Override
     public void setPositionMs(long positionMs) {
-        if (positionMs >= 0 && mPlayer != null) {
+        if (mPlayer != null && positionMs >= 0 && positionMs <= getLengthMs()) {
             mPlayer.seekTo(positionMs);
         }
     }
