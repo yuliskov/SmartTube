@@ -142,14 +142,8 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
 
     public void removeAuthor(VideoGroup group) {
         String author = group.getVideos().get(0).extractAuthor(); // assume same author
-        Helpers.removeIf(mVideoItems, (video, index) -> {
-            if (Helpers.equals(author, video.extractAuthor())) {
-                notifyItemRangeChanged(index, 1);
-                return true;
-            } else {
-                return false;
-            }
-        });
+        List<Video> result = Helpers.filter(mVideoItems, video -> Helpers.equals(author, video.extractAuthor()));
+        remove(VideoGroup.from(result));
     }
 
     public void sync(VideoGroup group) {
