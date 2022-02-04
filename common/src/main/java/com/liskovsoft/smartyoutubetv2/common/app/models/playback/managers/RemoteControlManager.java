@@ -316,10 +316,10 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 if (getController() != null) {
                     getController().finish();
                 }
-                // Finish the app
-                if (getActivity() != null) {
-                    ViewManager.instance(getActivity()).properlyFinishTheApp(getActivity());
-                }
+                //// Finish the app
+                //if (getActivity() != null) {
+                //    ViewManager.instance(getActivity()).properlyFinishTheApp(getActivity());
+                //}
                 break;
             case Command.TYPE_CONNECTED:
                 // NOTE: there are possible false calls when mobile client unloaded from the memory.
@@ -331,11 +331,11 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 break;
             case Command.TYPE_DISCONNECTED:
                 // NOTE: there are possible false calls when mobile client unloaded from the memory.
-                //if (getActivity() != null && mRemoteControlData.isFinishOnDisconnectEnabled()) {
-                //    // NOTE: It's not a good idea to remember connection state (mConnected) at this point.
-                //    MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_disconnected, command.getDeviceName()));
-                //    ViewManager.instance(getActivity()).properlyFinishTheApp(getActivity());
-                //}
+                if (getActivity() != null && mRemoteControlData.isFinishOnDisconnectEnabled()) {
+                    // NOTE: It's not a good idea to remember connection state (mConnected) at this point.
+                    MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_disconnected, command.getDeviceName()));
+                    ViewManager.instance(getActivity()).properlyFinishTheApp(getActivity());
+                }
                 break;
         }
 
