@@ -340,7 +340,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                     removeItem(mCurrentVideo);
                     VideoMenuPresenter.instance(getContext()).closeDialog();
                 } else if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE && isSubscriptionsSection()) {
-                    removeItem(Video.findVideosByAuthor(videoItem.group, videoItem.extractAuthor()));
+                    removeItemAuthor(videoItem);
                     VideoMenuPresenter.instance(getContext()).closeDialog();
                 }
             });

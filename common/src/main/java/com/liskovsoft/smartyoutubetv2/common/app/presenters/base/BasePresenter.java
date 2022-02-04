@@ -116,16 +116,20 @@ public abstract class BasePresenter<T> implements Presenter<T> {
     }
 
     protected void removeItem(Video item) {
-        removeItem(Collections.singletonList(item));
+        removeItem(Collections.singletonList(item), VideoGroup.ACTION_REMOVE);
     }
 
-    protected void removeItem(List<Video> items) {
+    protected void removeItemAuthor(Video item) {
+        removeItem(Collections.singletonList(item), VideoGroup.ACTION_REMOVE_AUTHOR);
+    }
+
+    private void removeItem(List<Video> items, int action) {
         if (items.size() == 0) {
             return;
         }
 
         VideoGroup removedGroup = VideoGroup.from(items);
-        removedGroup.setAction(VideoGroup.ACTION_REMOVE);
+        removedGroup.setAction(action);
         T view = getView();
 
         updateView(removedGroup, view);
