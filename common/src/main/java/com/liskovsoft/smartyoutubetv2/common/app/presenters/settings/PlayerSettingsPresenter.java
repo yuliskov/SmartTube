@@ -186,6 +186,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendTweaksCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
+        options.add(UiOptionItem.from("Alt presets behavior (limit bandwidth)",
+                option -> mPlayerTweaksData.enableNoFpsPresets(option.isSelected()),
+                mPlayerTweaksData.isNoFpsPresetsEnabled()));
+
         options.add(UiOptionItem.from("Enable sleep timer (one hour)",
                 option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
                 mPlayerData.isSonyTimerFixEnabled()));
@@ -242,7 +246,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.forceSWDecoder(option.isSelected()),
                 mPlayerTweaksData.isSWDecoderForced()));
 
-        options.add(UiOptionItem.from("Frame drops fix (experimental)",
+        options.add(UiOptionItem.from("Frame drop fix (experimental)",
                 option -> mPlayerTweaksData.enableFrameDropFix(option.isSelected()),
                 mPlayerTweaksData.isFrameDropFixEnabled()));
 
