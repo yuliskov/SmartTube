@@ -108,8 +108,11 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
     }
 
     private void syncCurrentVideo(MediaItemMetadata mediaItemMetadata, Video video) {
-        video.sync(mediaItemMetadata, PlayerData.instance(getActivity()).isAbsoluteDateEnabled());
-        getController().setVideo(video);
+        // On upcoming translations metadata contains less info (e.g. no time).
+        if (getController().containsMedia()) {
+            video.sync(mediaItemMetadata, PlayerData.instance(getActivity()).isAbsoluteDateEnabled());
+            getController().setVideo(video);
+        }
     }
 
     public void loadSuggestions(Video video) {

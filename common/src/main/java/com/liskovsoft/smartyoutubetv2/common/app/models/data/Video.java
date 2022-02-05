@@ -441,7 +441,7 @@ public final class Video implements Parcelable {
         // No checks. This data wasn't existed before sync.
         channelId = metadata.getChannelId();
         nextMediaItem = metadata.getNextVideo();
-        // TODO: Upcoming videos metadata wrongly reported as live
+        // NOTE: Upcoming videos metadata wrongly reported as live
         isLive = metadata.isLive();
         isUpcoming = metadata.isUpcoming();
         isSubscribed = metadata.isSubscribed();
