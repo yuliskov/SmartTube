@@ -54,7 +54,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
         // Shield 720p fix???
         initFormats();
-        //VideoTrack.sRespectFps = !PlayerTweaksData.instance(context).isNoFpsPresetsEnabled();
+        VideoTrack.sIsNoFpsPresetsEnabled = PlayerTweaksData.instance(context).isNoFpsPresetsEnabled();
     }
 
     private void initFormats() {

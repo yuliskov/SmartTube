@@ -12,6 +12,7 @@ public class VideoTrack extends MediaTrack {
     private static final int COMPARE_TYPE_IN_BOUNDS_PRESET = 1;
     private static final int COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS = 3;
     private static final int COMPARE_TYPE_NORMAL = 2;
+    public static boolean sIsNoFpsPresetsEnabled;
 
     public VideoTrack(int rendererIndex) {
         super(rendererIndex);
@@ -91,8 +92,8 @@ public class VideoTrack extends MediaTrack {
         // Detect preset by id presence
         boolean isPreset = format.id == null;
         return isPreset ?
-                //compare(track2, isMultiFpsFormat ? COMPARE_TYPE_IN_BOUNDS_PRESET : COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS) :
-                compare(track2, COMPARE_TYPE_IN_BOUNDS_PRESET) : // EXPERIMENT: replaced multi fps with strict fps in presets
+                compare(track2, isMultiFpsFormat || !sIsNoFpsPresetsEnabled ? COMPARE_TYPE_IN_BOUNDS_PRESET : COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS) :
+                //compare(track2, COMPARE_TYPE_IN_BOUNDS_PRESET) : // EXPERIMENT: replaced multi fps with strict fps in presets
                 compare(track2, isMultiFpsFormat ? COMPARE_TYPE_IN_BOUNDS : COMPARE_TYPE_IN_BOUNDS_NO_FPS);
     }
 
