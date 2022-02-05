@@ -180,7 +180,7 @@ public class TrackSelectorUtil {
         return getResolutionLabelByHeight(Math.min(height, width));
     }
 
-    private static String getResolutionLabelByHeight(int height) {
+    public static String getResolutionLabelByHeight(int height) {
         String qualityLabel = null;
 
         // Non-regular examples
