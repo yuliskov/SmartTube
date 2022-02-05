@@ -310,6 +310,9 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
             case Command.TYPE_VOLUME:
                 //Utils.setGlobalVolume(getActivity(), command.getVolume());
                 setVolume(command.getVolume());
+
+                //postVolumeChange(Utils.getGlobalVolume(getActivity()));
+                postVolumeChange(getVolume()); // Just in case volume cannot be changed (e.g. Fire TV stick)
                 break;
             case Command.TYPE_STOP:
                 // Close player
@@ -338,10 +341,6 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 }
                 break;
         }
-
-        // Don't uncomment. Calls will brake casting logic.
-        //postVolumeChange(Utils.getGlobalVolume(getActivity()));
-        //postVolumeChange(getVolume());
     }
 
     @Override
