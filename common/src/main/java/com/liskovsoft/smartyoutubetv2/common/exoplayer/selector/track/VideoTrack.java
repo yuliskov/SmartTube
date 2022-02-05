@@ -51,7 +51,7 @@ public class VideoTrack extends MediaTrack {
 
     private static boolean fpsEquals(float fps1, float fps2) {
         if (fps1 == -1 || fps2 == -1) {
-            return true;
+            return true; // probably LIVE translation
         }
 
         int threshold = 10;
@@ -69,8 +69,8 @@ public class VideoTrack extends MediaTrack {
     }
 
     private static boolean fpsLess(float fps1, float fps2) {
-        if (fps1 == -1 || fps2 == -1) {
-            return true; // probably LIVE translation
+        if (fps1 == -1 && fps2 == -1) {
+            return false;
         }
         
         return !fpsEquals(fps1, fps2) && fps1 < fps2;
@@ -88,11 +88,12 @@ public class VideoTrack extends MediaTrack {
 
         // NOTE: MultiFpsFormat: 25/50, 30/60. Currently no more that 720p.
         boolean isMultiFpsFormat = sizeLessOrEquals(format.height, 720);
+        boolean respectPresetsFps = !sIsNoFpsPresetsEnabled || sizeEquals(format.height, track2.format.height);
 
         // Detect preset by id presence
         boolean isPreset = format.id == null;
         return isPreset ?
-                compare(track2, isMultiFpsFormat || !sIsNoFpsPresetsEnabled ? COMPARE_TYPE_IN_BOUNDS_PRESET : COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS) :
+                compare(track2, isMultiFpsFormat || respectPresetsFps ? COMPARE_TYPE_IN_BOUNDS_PRESET : COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS) :
                 //compare(track2, COMPARE_TYPE_IN_BOUNDS_PRESET) : // EXPERIMENT: replaced multi fps with strict fps in presets
                 compare(track2, isMultiFpsFormat ? COMPARE_TYPE_IN_BOUNDS : COMPARE_TYPE_IN_BOUNDS_NO_FPS);
     }
