@@ -339,8 +339,9 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 break;
         }
 
+        // Don't uncomment. Calls will brake casting logic.
         //postVolumeChange(Utils.getGlobalVolume(getActivity()));
-        postVolumeChange(getVolume());
+        //postVolumeChange(getVolume());
     }
 
     @Override
