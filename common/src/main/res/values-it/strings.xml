@@ -317,8 +317,8 @@
     <string name="player_seek_confirmation_pause">Con conferma (pausa durante la ricerca)</string>
     <string name="player_seek_confirmation_play">Con conferma (play durante la ricerca)</string>
     <string name="hide_shorts_from_home">Nascondi i video corti dalla Home</string>
-    <string name="finish_on_disconnect">Chiudi l\'app quando il telefono è disconnesso</string>
-    <string name="update_error">Errore durante l\'aggiornametno</string>
-    <string name="hide_shorts_from_history">Nascondi i video corti dalla CronologiaHistory</string>
+    <string name="finish_on_disconnect">Chiudi l\'app dopo la disconnessione del telefono</string>
+    <string name="update_error">Errore durante l\'aggiornamento</string>
+    <string name="hide_shorts_from_history">Nascondi i video corti dalla Cronologia</string>
     <string name="disable_screensaver">Disabilita lo screensaver</string>
 </resources>
