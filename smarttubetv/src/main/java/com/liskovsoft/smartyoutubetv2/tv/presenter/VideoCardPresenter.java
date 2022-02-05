@@ -123,7 +123,7 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
         cardView.setProgress(video.percentWatched > 0 && video.percentWatched < 1 ? 1 : Math.round(video.percentWatched));
         cardView.setBadgeText(video.hasNewContent ?
                 context.getString(R.string.badge_new_content) : video.isLive ? context.getString(R.string.badge_live) : video.badge);
-        cardView.setBadgeColor(video.hasNewContent || video.isLive || video.isUpcoming ?
+        cardView.setBadgeColor(video.hasNewContent || video.isLive ?
                 ContextCompat.getColor(context, R.color.dark_red) : ContextCompat.getColor(context, R.color.black));
 
         if (mIsAnimatedPreviewsEnabled) {
