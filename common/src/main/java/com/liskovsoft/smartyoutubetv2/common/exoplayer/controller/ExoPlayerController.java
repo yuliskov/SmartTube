@@ -109,9 +109,13 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         return mPlayer.getCurrentPosition();
     }
 
+    /**
+     * NOTE: Pos gathered from content block data may slightly exceed video duration
+     * (e.g. 302200 when duration is 302000).
+     */
     @Override
     public void setPositionMs(long positionMs) {
-        if (mPlayer != null && positionMs >= 0 && positionMs <= getLengthMs()) {
+        if (mPlayer != null && positionMs >= 0 && getLengthMs() != -1) {
             mPlayer.seekTo(positionMs);
         }
     }
@@ -122,7 +126,8 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             return -1;
         }
 
-        return mPlayer.getDuration();
+        long duration = mPlayer.getDuration();
+        return duration != C.TIME_UNSET ? duration : -1;
     }
 
     @Override
