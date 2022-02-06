@@ -100,6 +100,7 @@ public class ScreensaverManager {
             return;
         }
 
+        // Disable dimming on certain circumstances
         if (show && mDimColorResId == R.color.dimming &&
                 (isPlaying() || isSigning() || mGeneralData.getScreenDimmingTimeoutMin() == GeneralData.SCREEN_DIMMING_NEVER)
         ) {
@@ -114,6 +115,14 @@ public class ScreensaverManager {
             LayoutInflater layoutInflater = activity.getLayoutInflater();
             dimContainer = layoutInflater.inflate(R.layout.dim_container, null);
             if (rootView instanceof ViewGroup) {
+                // Add negative margin to fix un-proper viewport positioning on some devices
+                // NOTE: below code is not working!!!
+                // NOTE: comment out code below if you don't want this
+                //LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                //        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                //params.setMargins(-200, -200, -200, -200);
+                //((ViewGroup) rootView).addView(dimContainer, params);
+
                 ((ViewGroup) rootView).addView(dimContainer);
             }
         }
@@ -128,8 +137,9 @@ public class ScreensaverManager {
         if (activity == null) {
             return;
         }
-        
-        if (show && (isPlaying() || isSigning())) {
+
+        // Disable screensaver on certain circumstances
+        if (show && (isPlaying() || isSigning() || mGeneralData.isScreensaverDisabled())) {
             Helpers.disableScreensaver(activity);
             return;
         }

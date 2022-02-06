@@ -338,8 +338,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                     removeItem(videoItem);
                 } else if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE && isMultiGridChannelUploadsSection()) {
                     removeItem(mCurrentVideo);
+                    VideoMenuPresenter.instance(getContext()).closeDialog();
                 } else if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE && isSubscriptionsSection()) {
-                    removeItem(Video.findVideosByAuthor(videoItem.group, videoItem.extractAuthor()));
+                    removeItemAuthor(videoItem);
+                    VideoMenuPresenter.instance(getContext()).closeDialog();
                 }
             });
         }
@@ -724,8 +726,12 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        if ((mGeneralData.isHideShortsEnabled() || mGeneralData.isHideUpcomingEnabled())
-                && mediaGroup.getType() == MediaGroup.TYPE_SUBSCRIPTIONS) {
+        boolean isHideShortsEnabled = (mGeneralData.isHideShortsFromSubscriptionsEnabled() && mediaGroup.getType() == MediaGroup.TYPE_SUBSCRIPTIONS) ||
+                (mGeneralData.isHideShortsFromHomeEnabled() && mediaGroup.getType() == MediaGroup.TYPE_HOME) ||
+                (mGeneralData.isHideShortsFromHistoryEnabled() && mediaGroup.getType() == MediaGroup.TYPE_HISTORY);
+        boolean isHideUpcomingEnabled = mGeneralData.isHideUpcomingEnabled() && mediaGroup.getType() == MediaGroup.TYPE_SUBSCRIPTIONS;
+
+        if (isHideShortsEnabled || isHideUpcomingEnabled) {
 
             // Remove Shorts and/or Upcoming
             // NOTE: Predicate replacement function for devices with Android 6.0 and below.
@@ -734,7 +740,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                     return false;
                 }
 
-                return (mGeneralData.isHideShortsEnabled() && Utils.isShort(mediaItem)) || (mGeneralData.isHideUpcomingEnabled() && mediaItem.isUpcoming());
+                return (isHideShortsEnabled && Utils.isShort(mediaItem)) || (isHideUpcomingEnabled && mediaItem.isUpcoming());
             });
         }
     }

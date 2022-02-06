@@ -51,7 +51,6 @@ import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -61,7 +60,7 @@ public class Utils {
     private static final String QR_CODE_URL_TEMPLATE = "https://api.qrserver.com/v1/create-qr-code/?data=%s";
     private static final int GLOBAL_VOLUME_TYPE = AudioManager.STREAM_MUSIC;
     private static final String GLOBAL_VOLUME_SERVICE = Context.AUDIO_SERVICE;
-    private static final int SHORTS_LEN_MS = 50 * 1_000;
+    private static final int SHORTS_LEN_MS = 60 * 1_000;
 
     /**
      * Limit the maximum size of a Map by removing oldest entries when limit reached

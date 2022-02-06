@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
+import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HQDialogManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUIManager;
@@ -185,25 +186,21 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendTweaksCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from("Buffering fix (experimental)",
-                option -> mPlayerTweaksData.enableBufferingFix(option.isSelected()),
-                mPlayerTweaksData.isBufferingFixEnabled()));
+        options.add(UiOptionItem.from("Alt presets behavior (limit bandwidth)",
+                option -> mPlayerTweaksData.enableNoFpsPresets(option.isSelected()),
+                mPlayerTweaksData.isNoFpsPresetsEnabled()));
+
+        options.add(UiOptionItem.from("Enable sleep timer (one hour)",
+                option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
+                mPlayerData.isSonyTimerFixEnabled()));
 
         options.add(UiOptionItem.from("Disable playback notifications",
                 option -> mPlayerTweaksData.disablePlaybackNotifications(option.isSelected()),
                 mPlayerTweaksData.isPlaybackNotificationsDisabled()));
 
-        options.add(UiOptionItem.from("Live stream fix (1080/AVC)",
-                option -> mPlayerTweaksData.enableLiveStreamFix(option.isSelected()),
-                mPlayerTweaksData.isLiveStreamFixEnabled()));
-
         options.add(UiOptionItem.from("Audio sync fix",
                 option -> mPlayerTweaksData.enableAudioSyncFix(option.isSelected()),
                 mPlayerTweaksData.isAudioSyncFixEnabled()));
-
-        options.add(UiOptionItem.from("Amlogic 1080/60 fix",
-                option -> mPlayerTweaksData.enableAmlogicFix(option.isSelected()),
-                mPlayerTweaksData.isAmlogicFixEnabled()));
 
         options.add(UiOptionItem.from("Ambilight/Aspect ratio fix",
                 option -> {
@@ -215,6 +212,14 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 },
                 mPlayerTweaksData.isTextureViewEnabled()));
 
+        options.add(UiOptionItem.from("Amlogic 1080p@60fps fix",
+                option -> mPlayerTweaksData.enableAmlogicFix(option.isSelected()),
+                mPlayerTweaksData.isAmlogicFixEnabled()));
+
+        options.add(UiOptionItem.from("Live stream fix (1080p)",
+                option -> mPlayerTweaksData.enableLiveStreamFix(option.isSelected()),
+                mPlayerTweaksData.isLiveStreamFixEnabled()));
+
         options.add(UiOptionItem.from("Tunneled video playback (Android 5+)",
                 option -> {
                     mPlayerTweaksData.enableTunneledPlayback(option.isSelected());
@@ -225,10 +230,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 },
                 mPlayerTweaksData.isTunneledPlaybackEnabled()));
 
-        options.add(UiOptionItem.from("Sleep timer fix",
-                option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
-                mPlayerData.isSonyTimerFixEnabled()));
-
         options.add(UiOptionItem.from("Disable snap to vsync",
                 option -> mPlayerTweaksData.disableSnapToVsync(option.isSelected()),
                 mPlayerTweaksData.isSnappingToVsyncDisabled()));
@@ -237,7 +238,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.skipProfileLevelCheck(option.isSelected()),
                 mPlayerTweaksData.isProfileLevelCheckSkipped()));
 
-        options.add(UiOptionItem.from("Force legacy codecs",
+        options.add(UiOptionItem.from("Force legacy codecs (720p)",
                 option -> mPlayerData.enableLowQuality(option.isSelected()),
                 mPlayerData.isLowQualityEnabled()));
 
@@ -245,13 +246,29 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.forceSWDecoder(option.isSelected()),
                 mPlayerTweaksData.isSWDecoderForced()));
 
-        options.add(UiOptionItem.from("Frame drops fix (experimental)",
+        options.add(UiOptionItem.from("Frame drop fix (experimental)",
                 option -> mPlayerTweaksData.enableFrameDropFix(option.isSelected()),
                 mPlayerTweaksData.isFrameDropFixEnabled()));
 
-        options.add(UiOptionItem.from("Keep finished activity",
+        options.add(UiOptionItem.from("Buffering fix (experimental)",
+                option -> mPlayerTweaksData.enableBufferingFix(option.isSelected()),
+                mPlayerTweaksData.isBufferingFixEnabled()));
+
+        options.add(UiOptionItem.from("Keep finished activities",
                 option -> mPlayerTweaksData.enableKeepFinishedActivity(option.isSelected()),
                 mPlayerTweaksData.isKeepFinishedActivityEnabled()));
+
+        options.add(UiOptionItem.from("Disable Channels service",
+                option -> GlobalPreferences.instance(getContext()).enableChannelsService(!option.isSelected()),
+                !GlobalPreferences.instance(getContext()).isChannelsServiceEnabled()));
+
+        options.add(UiOptionItem.from("Prefer IPv4 DNS",
+                option -> GlobalPreferences.instance(getContext()).preferIPv4Dns(option.isSelected()),
+                GlobalPreferences.instance(getContext()).isIPv4DnsPreferred()));
+
+        options.add(UiOptionItem.from("Enable DNS over HTTPS",
+                option -> GlobalPreferences.instance(getContext()).enableDnsOverHttps(option.isSelected()),
+                GlobalPreferences.instance(getContext()).isDnsOverHttpsEnabled()));
 
         // Need to be enabled on older version of ExoPlayer (e.g. 2.10.6).
         // It's because there's no tweaks for modern devices.
@@ -267,24 +284,24 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
 
         options.add(UiOptionItem.from(getContext().getString(R.string.player_seek_regular),
                 option -> {
-                    mPlayerData.enableSeekMemoryPause(false);
-                    mPlayerData.enableSeekMemoryPlay(false);
+                    mPlayerData.enableSeekConfirmPause(false);
+                    mPlayerData.enableSeekConfirmPlay(false);
                 },
-                !mPlayerData.isSeekMemoryPauseEnabled() && !mPlayerData.isSeekMemoryPlayEnabled()));
+                !mPlayerData.isSeekConfirmPauseEnabled() && !mPlayerData.isSeekConfirmPlayEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_seek_memory_pause),
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_seek_confirmation_pause),
                 option -> {
-                    mPlayerData.enableSeekMemoryPause(true);
-                    mPlayerData.enableSeekMemoryPlay(false);
+                    mPlayerData.enableSeekConfirmPause(true);
+                    mPlayerData.enableSeekConfirmPlay(false);
                 },
-                mPlayerData.isSeekMemoryPauseEnabled()));
+                mPlayerData.isSeekConfirmPauseEnabled()));
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.player_seek_memory_play),
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_seek_confirmation_play),
                 option -> {
-                    mPlayerData.enableSeekMemoryPause(false);
-                    mPlayerData.enableSeekMemoryPlay(true);
+                    mPlayerData.enableSeekConfirmPause(false);
+                    mPlayerData.enableSeekConfirmPlay(true);
                 },
-                mPlayerData.isSeekMemoryPlayEnabled()));
+                mPlayerData.isSeekConfirmPlayEnabled()));
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_seek_type), options);
     }

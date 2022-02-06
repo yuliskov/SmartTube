@@ -84,6 +84,26 @@ public class MediaServiceManager {
                 );
     }
 
+    public void loadMetadata(MediaItem mediaItem, OnMetadata onMetadata) {
+        if (mediaItem == null) {
+            return;
+        }
+
+        RxUtils.disposeActions(mMetadataAction);
+
+        Observable<MediaItemMetadata> observable;
+
+        observable = mItemManager.getMetadataObserve(mediaItem);
+
+        mMetadataAction = observable
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        onMetadata::onMetadata,
+                        error -> Log.e(TAG, "loadMetadata error: %s", error.getMessage())
+                );
+    }
+
     public void loadChannelUploads(Video item, OnMediaGroup onMediaGroup) {
         if (item == null) {
             return;

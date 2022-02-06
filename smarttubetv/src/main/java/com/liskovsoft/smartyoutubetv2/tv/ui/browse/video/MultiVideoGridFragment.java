@@ -336,6 +336,12 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
                                    RowPresenter.ViewHolder rowViewHolder, Row row) {
             if (item instanceof Video) {
                 mMainPresenter.onVideoItemSelected((Video) item);
+
+                // Not working: Exception: Cannot call this method while RecyclerView is computing a layout
+                // Change unwatched state (remove red mark).
+                // Possible this isn't what you want. Red mark improve navigation inside the channel list.
+                //((Video) item).hasNewContent = false;
+                //mGridAdapter1.notifyItemRangeChanged(mGridAdapter1.indexOf((Video) item), 1);
             }
         }
     }

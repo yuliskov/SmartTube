@@ -225,7 +225,7 @@
     <string name="share_embed_link">Yerleştirme video bağlantısını paylaş</string>
     <string name="card_text_scroll_factor">Kart metin kaydırma hızı</string>
     <string name="preferred_update_source">Güncelleme kaynağını seç</string>
-    <string name="hide_shorts">Aboneliklerde Shortsları gizle</string>
+    <string name="hide_shorts">Abonelikler\'de Shortsları gizle</string>
     <string name="key_remapping">Tuş yeniden atama</string>
     <string name="screen_dimming">Ekran karartma</string>
     <string name="removed_from_playback_queue">Oynatma sırasından kaldırıldı</string>
@@ -275,10 +275,10 @@
     <string name="add_remove_from_recent_playlist">Son oynatma listesine Ekle/Kaldır</string>
     <string name="hide_settings_section">Ayarlar bölümünü gizle (tehlikeli!)</string>
     <string name="volume">Ses %s%%</string>
-    <string name="auto_frame_rate_sec">%s sn</string>
-    <string name="audio_shift_sec">%s sn</string>
-    <string name="ui_hide_timeout_sec">%s sn</string>
-    <string name="screen_dimming_timeout_min">%s dk</string>
+    <string name="auto_frame_rate_sec">%s sn.</string>
+    <string name="audio_shift_sec">%s sn.</string>
+    <string name="ui_hide_timeout_sec">%s sn.</string>
+    <string name="screen_dimming_timeout_min">%s dk.</string>
     <string name="mark_all_channels_watched">Tüm kanalları izlendi olarak işaretle</string>
     <string name="move_section_up">Bölümü yukarı taşı</string>
     <string name="move_section_down">Bölümü aşağı taşı</string>
@@ -308,8 +308,17 @@
     <string name="content_block_filler">Konu dışı (boşluk doldurma)</string>
     <string name="keyboard_auto_show">Klavyeyi otomatik olarak göster</string>
     <string name="cancel_dialog">İptal et</string>
-    <string name="msg_player_error_source2">Video kaynağı çalışmıyor</string>
-    <string name="hide_upcoming">Aboneliklerde yaklaşan yayınları gizle</string>
+    <string name="msg_player_error_source2">Video kaynağı çalışmıyor ya da hatalı saat</string>
+    <string name="hide_upcoming">Abonelikler\'de yaklaşan yayınları gizle</string>
     <string name="search_background_playback">Oynatıcıdan arama yaparken resim içinde resim moduna geç</string>
     <string name="trending_row_name">Trendler</string>
+    <string name="player_seek_type">Arama davranışı</string>
+    <string name="player_seek_regular">Normal</string>
+    <string name="player_seek_confirmation_pause">Onay ile (ararken duraklat)</string>
+    <string name="player_seek_confirmation_play">Onay ile (ararken oynat)</string>
+    <string name="hide_shorts_from_home">Ana Sayfa\'da Shortsları gizle</string>
+    <string name="finish_on_disconnect">Telefon bağlantısı kesildiğinde uygulamayı sonlandır</string>
+    <string name="update_error">Güncelleme hatası</string>
+    <string name="hide_shorts_from_history">Geçmiş\'te Shortsları gizle</string>
+    <string name="disable_screensaver">Ekran koruyucuyu devre dışı bırak</string>
 </resources>

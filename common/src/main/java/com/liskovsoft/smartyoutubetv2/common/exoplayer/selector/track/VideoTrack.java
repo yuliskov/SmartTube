@@ -5,12 +5,14 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
 
 public class VideoTrack extends MediaTrack {
+    private static final float LOW_FPS_THRESHOLD = 10;
     private static final int SIZE_EQUITY_THRESHOLD_PERCENT = 5; // was 15 before
     private static final int COMPARE_TYPE_IN_BOUNDS = 0;
     private static final int COMPARE_TYPE_IN_BOUNDS_NO_FPS = 4;
     private static final int COMPARE_TYPE_IN_BOUNDS_PRESET = 1;
     private static final int COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS = 3;
     private static final int COMPARE_TYPE_NORMAL = 2;
+    public static boolean sIsNoFpsPresetsEnabled;
 
     public VideoTrack(int rendererIndex) {
         super(rendererIndex);
@@ -49,7 +51,7 @@ public class VideoTrack extends MediaTrack {
 
     private static boolean fpsEquals(float fps1, float fps2) {
         if (fps1 == -1 || fps2 == -1) {
-            return true;
+            return true; // probably LIVE translation
         }
 
         int threshold = 10;
@@ -67,8 +69,13 @@ public class VideoTrack extends MediaTrack {
     }
 
     private static boolean fpsLess(float fps1, float fps2) {
-        if (fps1 == -1 || fps2 == -1) {
-            return true; // probably LIVE translation
+        // NOTE: commented out after no fps fix option
+        //if (fps1 == -1 || fps2 == -1) {
+        //    return true; // probably LIVE translation
+        //}
+
+        if (fps1 == -1 && fps2 == -1) {
+            return false;
         }
         
         return !fpsEquals(fps1, fps2) && fps1 < fps2;
@@ -89,10 +96,16 @@ public class VideoTrack extends MediaTrack {
 
         // Detect preset by id presence
         boolean isPreset = format.id == null;
-        return isPreset ?
-                //compare(track2, isMultiFpsFormat ? COMPARE_TYPE_IN_BOUNDS_PRESET : COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS) :
-                compare(track2, COMPARE_TYPE_IN_BOUNDS_PRESET) : // EXPERIMENT: replaced multi fps with strict fps in presets
-                compare(track2, isMultiFpsFormat ? COMPARE_TYPE_IN_BOUNDS : COMPARE_TYPE_IN_BOUNDS_NO_FPS);
+
+        if (isPreset) {
+            // Overcome non-standard aspect ratio by getting resolution label
+            boolean respectPresetsFps = !sIsNoFpsPresetsEnabled ||
+                    sizeEquals(format.height, Integer.parseInt(TrackSelectorUtil.getResolutionLabelByHeight(track2.format.height)));
+            //return compare(track2, COMPARE_TYPE_IN_BOUNDS_PRESET) : // EXPERIMENT: replaced multi fps with strict fps in presets
+            return compare(track2, isMultiFpsFormat || respectPresetsFps ? COMPARE_TYPE_IN_BOUNDS_PRESET : COMPARE_TYPE_IN_BOUNDS_PRESET_NO_FPS);
+        } else {
+            return compare(track2, isMultiFpsFormat ? COMPARE_TYPE_IN_BOUNDS : COMPARE_TYPE_IN_BOUNDS_NO_FPS);
+        }
     }
 
     @Override
@@ -125,8 +138,8 @@ public class VideoTrack extends MediaTrack {
         String id1 = format.id;
         String id2 = track2.format.id;
         // Low fps (e.g. 8fps) on original track could break whole comparison
-        float frameRate1 = format.frameRate < 10 ? 30 : format.frameRate;
-        float frameRate2 = track2.format.frameRate;
+        float frameRate1 = format.frameRate < LOW_FPS_THRESHOLD ? 30 : format.frameRate;
+        float frameRate2 = track2.format.frameRate < LOW_FPS_THRESHOLD ? 30 : track2.format.frameRate;
         String codecs1 = format.codecs;
         String codecs2 = track2.format.codecs;
 

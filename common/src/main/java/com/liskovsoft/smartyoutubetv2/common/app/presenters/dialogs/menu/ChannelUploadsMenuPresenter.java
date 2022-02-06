@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.R;
@@ -15,6 +16,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMe
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.disposables.Disposable;
+
+import java.util.List;
 
 public class ChannelUploadsMenuPresenter extends BaseMenuPresenter {
     private final MediaItemManager mItemManager;
@@ -113,7 +116,25 @@ public class ChannelUploadsMenuPresenter extends BaseMenuPresenter {
                 UiOptionItem.from(getContext().getString(R.string.unsubscribe_from_channel), optionItem -> {
                     // Maybe this is subscribed items view
                     ChannelUploadsPresenter.instance(getContext())
-                            .obtainVideoGroup(mVideo, group -> unsubscribe(group.getChannelId()));
+                            .obtainVideoGroup(mVideo, group -> {
+                                // Some uploads groups doesn't contain channel button.
+                                // Use data from first item instead.
+                                if (group.getChannelId() == null) {
+                                    List<MediaItem> mediaItems = group.getMediaItems();
+
+                                    if (mediaItems != null && mediaItems.size() > 0) {
+                                        mServiceManager.loadMetadata(mediaItems.get(0), metadata -> {
+                                            unsubscribe(metadata.getChannelId());
+                                            mVideo.channelId = metadata.getChannelId();
+                                        });
+                                    }
+
+                                    return;
+                                }
+
+                                unsubscribe(group.getChannelId());
+                                mVideo.channelId = group.getChannelId();
+                            });
                 }));
     }
 
@@ -136,6 +157,10 @@ public class ChannelUploadsMenuPresenter extends BaseMenuPresenter {
     }
 
     private void unsubscribe(String channelId) {
+        if (channelId == null) {
+            return;
+        }
+
         RxUtils.disposeActions(mUnsubscribeAction);
         mUnsubscribeAction = RxUtils.execute(mItemManager.unsubscribeObserve(channelId));
 

@@ -308,8 +308,13 @@
     <string name="hide_upcoming">Приховувати анонси з Підписок</string>
     <string name="search_background_playback">Переходити у режим Картинка в картинці, якщо пошук запущено з плеєру</string>
     <string name="trending_row_name">Популярне</string>
-    <string name="player_seek_type">Тип перемотування</string>
+    <string name="player_seek_type">Поведінка перемотування</string>
     <string name="player_seek_regular">Звичайна</string>
-    <string name="player_seek_memory_pause">Запам\'ятовувати позицію та ставити на паузу</string>
-    <string name="player_seek_memory_play">Запам\'ятовувати позицію та продовжити грати</string>
+    <string name="player_seek_confirmation_pause">З підтвердженням (пауза під час перемотування)</string>
+    <string name="player_seek_confirmation_play">З підтвердженням (грати під час перемотування)</string>
+    <string name="hide_shorts_from_home">Приховувати короткі відео з Головної</string>
+    <string name="finish_on_disconnect">Завершувати додаток після відключення телефону</string>
+    <string name="update_error">Помилка оновлення</string>
+    <string name="hide_shorts_from_history">Приховувати короткі відео з Історії</string>
+    <string name="disable_screensaver">Вимкнути скрінсейвер</string>
 </resources>

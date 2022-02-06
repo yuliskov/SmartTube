@@ -21,6 +21,7 @@ public final class Video implements Parcelable {
     private static final String TERTIARY_TEXT_DELIM = "•";
     private static final int MAX_AUTHOR_LENGTH_CHARS = 20;
     private static final String[] sNotPlaylistParams = new String[] {"EAIYAQ%3D%3D"};
+    private static final String SECTION_PREFIX = "FE";
     public long id;
     public String title;
     public String category;
@@ -440,9 +441,10 @@ public final class Video implements Parcelable {
         // No checks. This data wasn't existed before sync.
         channelId = metadata.getChannelId();
         nextMediaItem = metadata.getNextVideo();
+        // NOTE: Upcoming videos metadata wrongly reported as live
         isLive = metadata.isLive();
-        isSubscribed = metadata.isSubscribed();
         isUpcoming = metadata.isUpcoming();
+        isSubscribed = metadata.isSubscribed();
         isSynced = true;
 
         if (mediaItem != null) {
@@ -459,6 +461,10 @@ public final class Video implements Parcelable {
             video.group = group.copy(); // Needed for proper multi row fragments sync (row id == group id)
         }
         return video;
+    }
+
+    public boolean canSubscribe() {
+        return hasChannel() && !channelId.startsWith(SECTION_PREFIX);
     }
 
     private boolean checkMediaItems() {

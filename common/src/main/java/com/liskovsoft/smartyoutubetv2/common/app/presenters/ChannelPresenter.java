@@ -5,6 +5,7 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -148,6 +149,18 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                 // Maybe this is subscribed items view
                 ChannelUploadsPresenter.instance(getContext())
                         .obtainVideoGroup(item, group -> {
+                            // Some uploads groups doesn't contain channel button.
+                            // Use data from first item instead.
+                            if (group.getChannelId() == null) {
+                                List<MediaItem> mediaItems = group.getMediaItems();
+
+                                if (mediaItems != null && mediaItems.size() > 0) {
+                                    openChannel(Video.from(mediaItems.get(0)));
+                                }
+
+                                return;
+                            }
+
                             openChannel(group.getChannelId());
                             item.channelId = group.getChannelId();
                         });

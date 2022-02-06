@@ -24,6 +24,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackInfoFormatter2;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.VideoTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
@@ -53,6 +54,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
 
         // Shield 720p fix???
         initFormats();
+        VideoTrack.sIsNoFpsPresetsEnabled = PlayerTweaksData.instance(context).isNoFpsPresetsEnabled();
     }
 
     private void initFormats() {
@@ -107,9 +109,13 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         return mPlayer.getCurrentPosition();
     }
 
+    /**
+     * NOTE: Pos gathered from content block data may slightly exceed video duration
+     * (e.g. 302200 when duration is 302000).
+     */
     @Override
     public void setPositionMs(long positionMs) {
-        if (positionMs >= 0 && mPlayer != null) {
+        if (mPlayer != null && positionMs >= 0 && getLengthMs() != -1) {
             mPlayer.seekTo(positionMs);
         }
     }
@@ -120,7 +126,8 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             return -1;
         }
 
-        return mPlayer.getDuration();
+        long duration = mPlayer.getDuration();
+        return duration != C.TIME_UNSET ? duration : -1;
     }
 
     @Override

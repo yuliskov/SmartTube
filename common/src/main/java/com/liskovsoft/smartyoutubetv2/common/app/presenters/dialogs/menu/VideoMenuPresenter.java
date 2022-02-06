@@ -157,7 +157,10 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::prepareAndShowDialogSigned,
-                        error -> Log.e(TAG, "Get playlists error: %s", error.getMessage())
+                        error -> {
+                            prepareAndShowDialogSigned(null); // fallback to something on error
+                            Log.e(TAG, "Get playlists error: %s", error.getMessage());
+                        }
                 );
     }
 
@@ -224,7 +227,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             options.add(UiOptionItem.from(
                     playlistInfo.getTitle(),
                     (item) -> {
-                        addToPlaylist(playlistInfo.getPlaylistId(), item.isSelected());
+                        addRemoveFromPlaylist(playlistInfo.getPlaylistId(), item.isSelected());
                         GeneralData.instance(getContext()).setLastPlaylistId(playlistInfo.getPlaylistId());
                     },
                     playlistInfo.isSelected()));
@@ -258,7 +261,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                         UiOptionItem.from(getContext().getString(
                                 playlistInfo.isSelected() ? R.string.dialog_remove_from : R.string.dialog_add_to, playlistInfo.getTitle()),
                                 optionItem -> {
-                                    addToPlaylist(playlistInfo.getPlaylistId(), !playlistInfo.isSelected());
+                                    addRemoveFromPlaylist(playlistInfo.getPlaylistId(), !playlistInfo.isSelected());
                                     MessageHelpers.showMessage(getContext(), getContext().getString(
                                             playlistInfo.isSelected() ? R.string.removed_from : R.string.added_to, playlistInfo.getTitle()
                                     ));
@@ -378,7 +381,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (mVideo == null || (!mVideo.hasChannel() && !mVideo.hasVideo())) {
+        if (mVideo == null || (!mVideo.canSubscribe() && !mVideo.hasVideo())) {
             return;
         }
 
@@ -436,7 +439,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                         }));
     }
 
-    private void addToPlaylist(String playlistId, boolean checked) {
+    private void addRemoveFromPlaylist(String playlistId, boolean checked) {
         RxUtils.disposeActions(mPlaylistInfoAction, mAddToPlaylistAction);
         Observable<Void> editObserve;
 
@@ -461,7 +464,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         // Until synced we won't really know weather we subscribed to a channel.
         // Exclusion: channel item (can't be synced)
         // Note, regular items (from subscribed section etc) aren't contain channel id
-        if (mVideo.isSynced || mVideo.isChannel()) {
+        if (mVideo.isSynced || mVideo.canSubscribe()) {
             toggleSubscribeInt();
         } else {
             MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
@@ -486,12 +489,10 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mVideo.isSubscribed = !mVideo.isSubscribed;
 
         if (!mVideo.isSubscribed && mCallback != null) {
-            mDialogPresenter.closeDialog();
-            MessageHelpers.cancelToasts();
             mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_UNSUBSCRIBE);
-        } else {
-            MessageHelpers.showMessage(getContext(), !mVideo.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel);
         }
+
+        MessageHelpers.showMessage(getContext(), !mVideo.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel);
     }
 
     private void updateEnabledMenuItems() {

@@ -41,6 +41,7 @@ public class PlayerTweaksData {
     private boolean mIsTunneledPlaybackEnabled;
     private int mPlayerButtons;
     private boolean mIsBufferingFixEnabled;
+    private boolean mIsNoFpsPresetsEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -196,6 +197,15 @@ public class PlayerTweaksData {
         return mIsBufferingFixEnabled;
     }
 
+    public void enableNoFpsPresets(boolean enable) {
+        mIsNoFpsPresetsEnabled = enable;
+        persistData();
+    }
+
+    public boolean isNoFpsPresetsEnabled() {
+        return mIsNoFpsPresetsEnabled;
+    }
+
     private void restoreData() {
         String data = mPrefs.getData(VIDEO_PLAYER_TWEAKS_DATA);
 
@@ -217,6 +227,7 @@ public class PlayerTweaksData {
         mIsTunneledPlaybackEnabled = Helpers.parseBoolean(split, 12, false);
         mPlayerButtons = Helpers.parseInt(split, 13, Integer.MAX_VALUE); // all buttons
         mIsBufferingFixEnabled = Helpers.parseBoolean(split, 14, false);
+        mIsNoFpsPresetsEnabled = Helpers.parseBoolean(split, 15, false);
     }
 
     private void persistData() {
@@ -225,7 +236,7 @@ public class PlayerTweaksData {
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
                 null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled,
                 mIsLiveStreamFixEnabled, mIsPlaybackNotificationsDisabled, mIsTunneledPlaybackEnabled, mPlayerButtons,
-                mIsBufferingFixEnabled
+                mIsBufferingFixEnabled, mIsNoFpsPresetsEnabled
         ));
     }
 }

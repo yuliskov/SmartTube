@@ -186,6 +186,15 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                     } else {
                         // not found, seek to neighbour key position at lower side.
                         int insertIndex = -1 - index;
+
+                        // MOD: Fix no seek backwards bug: keyframe is close to current position
+                        if (insertIndex > 0) {
+                            newPos = mPositions[insertIndex - 1];
+                            if (Math.abs(mCurrentTimeInMs - newPos) < 3_000) {
+                                insertIndex--;
+                            }
+                        }
+
                         if (insertIndex > 0) {
                             newPos = mPositions[insertIndex - 1];
                             thumbHeroIndex = insertIndex - 1;
@@ -462,7 +471,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                             } else {
                                 // MOD: resume immediately after seeking
 
-                                if ((mPlayerData.isSeekMemoryPauseEnabled() || mPlayerData.isSeekMemoryPlayEnabled()) && keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+                                if ((mPlayerData.isSeekConfirmPauseEnabled() || mPlayerData.isSeekConfirmPlayEnabled()) && keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
                                     return true;
                                 }
 
@@ -478,7 +487,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
                             } else {
                                 // MOD: resume immediately after seeking
 
-                                if ((mPlayerData.isSeekMemoryPauseEnabled() || mPlayerData.isSeekMemoryPlayEnabled()) && keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+                                if ((mPlayerData.isSeekConfirmPauseEnabled() || mPlayerData.isSeekConfirmPlayEnabled()) && keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
                                     return true;
                                 }
 

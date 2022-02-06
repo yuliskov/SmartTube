@@ -31,6 +31,12 @@ public class MotherActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        // Fixing: Only fullscreen opaque activities can request orientation (api 26)
+        // NOTE: You should remove 'screenOrientation' from the manifest.
+        // NOTE: Possible side effect: initDpi() won't work: "When you setRequestedOrientation() the view may be restarted"
+        //if (VERSION.SDK_INT != 26) {
+        //    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        //}
         super.onCreate(savedInstanceState);
 
         Log.d(TAG, "Starting %s...", this.getClass().getSimpleName());

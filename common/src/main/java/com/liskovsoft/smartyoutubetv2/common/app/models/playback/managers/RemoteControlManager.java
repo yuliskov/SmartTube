@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.sharedutils.rx.RxUtils;
@@ -246,6 +247,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                     if (video != null) {
                         video.playlistId = command.getPlaylistId();
                         video.playlistParams = null;
+                        video.isRemote = true;
                         mSuggestionsLoader.loadSuggestions(video);
                     }
                 }
@@ -308,30 +310,37 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
             case Command.TYPE_VOLUME:
                 //Utils.setGlobalVolume(getActivity(), command.getVolume());
                 setVolume(command.getVolume());
+
+                //postVolumeChange(Utils.getGlobalVolume(getActivity()));
+                postVolumeChange(getVolume()); // Just in case volume cannot be changed (e.g. Fire TV stick)
                 break;
             case Command.TYPE_STOP:
+                // Close player
                 if (getController() != null) {
                     getController().finish();
                 }
+                //// Finish the app
+                //if (getActivity() != null) {
+                //    ViewManager.instance(getActivity()).properlyFinishTheApp(getActivity());
+                //}
                 break;
             case Command.TYPE_CONNECTED:
-                if (getActivity() != null) {
-                    // NOTE: It's not a good idea to remember connection state (mConnected) at this point.
-                    //Utils.moveAppToForeground(getActivity());
-                    //MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_connected, command.getDeviceName()));
-                }
+                // NOTE: there are possible false calls when mobile client unloaded from the memory.
+                //if (getActivity() != null && mRemoteControlData.isFinishOnDisconnectEnabled()) {
+                //    // NOTE: It's not a good idea to remember connection state (mConnected) at this point.
+                //    Utils.moveAppToForeground(getActivity());
+                //    MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_connected, command.getDeviceName()));
+                //}
                 break;
             case Command.TYPE_DISCONNECTED:
-                // Note: there are possible false calls when mobile client unloaded from the memory.
-                if (getActivity() != null) {
+                // NOTE: there are possible false calls when mobile client unloaded from the memory.
+                if (getActivity() != null && mRemoteControlData.isFinishOnDisconnectEnabled()) {
                     // NOTE: It's not a good idea to remember connection state (mConnected) at this point.
-                    //MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_disconnected, command.getDeviceName()));
+                    MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_disconnected, command.getDeviceName()));
+                    ViewManager.instance(getActivity()).properlyFinishTheApp(getActivity());
                 }
                 break;
         }
-
-        //postVolumeChange(Utils.getGlobalVolume(getActivity()));
-        postVolumeChange(getVolume());
     }
 
     @Override

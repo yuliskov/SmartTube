@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="header_home">Domov</string>
+    <string name="header_home">Domů</string>
     <string name="title_search">Vyhledávání</string>
     <string name="header_subscriptions">Odběry</string>
     <string name="header_history">Historie</string>
@@ -225,7 +225,7 @@
     <string name="share_embed_link">Sdílet vložený odkaz</string>
     <string name="card_text_scroll_factor">Rychlost posouvání textu karty</string>
     <string name="preferred_update_source">Preferovaný zdroj aktualizace</string>
-    <string name="hide_shorts">Skrýt Shorts z Odběrů</string>
+    <string name="hide_shorts">Skryj krátké klipy z Odběrů</string>
     <string name="key_remapping">Přenastavení tlačítek</string>
     <string name="screen_dimming">Ztmavení obrazovky</string>
     <string name="removed_from_playback_queue">Smazáno z fronty přehrávání</string>
@@ -312,4 +312,10 @@
     <string name="hide_upcoming">Skryj nadcházející videa v Odběrech</string>
     <string name="search_background_playback">Zapni Obraz v obraze, pokud vyhledávám z přehrávače</string>
     <string name="trending_row_name">Trendy</string>
+    <string name="player_seek_type">Typ přetáčení</string>
+    <string name="player_seek_regular">Normální</string>
+    <string name="player_seek_confirmation_pause">S potvrzením (pozastav při přetáčení)</string>
+    <string name="player_seek_confirmation_play">S potvrzením (hraj dál při přetáčení)</string>
+    <string name="hide_shorts_from_home">Skryj krátké klipy z nabídky Domů</string>
+    <string name="finish_on_disconnect">Ukončit aplikaci, když se telefon odpojí</string>
 </resources>

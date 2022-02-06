@@ -81,7 +81,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
             case REQUEST_SPEECH:
                 switch (resultCode) {
                     case Activity.RESULT_OK:
-                        setSearchQuery(data, false);
+                        setSearchQuery(data, true);
                         break;
                     case Activity.RESULT_CANCELED:
                         Log.i(TAG, "Recognizer canceled");

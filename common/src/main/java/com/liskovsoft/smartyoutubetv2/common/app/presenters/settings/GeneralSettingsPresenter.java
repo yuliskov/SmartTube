@@ -269,18 +269,25 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     private void appendMiscCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        // Disable long press on buggy controllers.
-        options.add(UiOptionItem.from(getContext().getString(R.string.disable_ok_long_press),
-                option -> mGeneralData.disableOkButtonLongPress(option.isSelected()),
-                mGeneralData.isOkButtonLongPressDisabled()));
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_from_history),
+                option -> mGeneralData.hideShortsFromHistory(option.isSelected()),
+                mGeneralData.isHideShortsFromHistoryEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts_from_home),
+                option -> mGeneralData.hideShortsFromHome(option.isSelected()),
+                mGeneralData.isHideShortsFromHomeEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_shorts),
-                option -> mGeneralData.hideShorts(option.isSelected()),
-                mGeneralData.isHideShortsEnabled()));
+                option -> mGeneralData.hideShortsFromSubscriptions(option.isSelected()),
+                mGeneralData.isHideShortsFromSubscriptionsEnabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.hide_upcoming),
                 option -> mGeneralData.hideUpcoming(option.isSelected()),
                 mGeneralData.isHideUpcomingEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_screensaver),
+                option -> mGeneralData.disableScreensaver(option.isSelected()),
+                mGeneralData.isScreensaverDisabled()));
 
         options.add(UiOptionItem.from(getContext().getString(R.string.return_to_launcher),
                 option -> mGeneralData.enableReturnToLauncher(option.isSelected()),
@@ -293,9 +300,14 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 },
                 !mGeneralData.isSettingsSectionEnabled()));
 
+        // Disable long press on buggy controllers.
+        options.add(UiOptionItem.from(getContext().getString(R.string.disable_ok_long_press),
+                option -> mGeneralData.disableOkButtonLongPress(option.isSelected()),
+                mGeneralData.isOkButtonLongPressDisabled()));
+
         ProxyManager proxyManager = ProxyManager.instance(getContext());
 
-        options.add(UiOptionItem.from("Web Proxy config:\n" + proxyManager.getConfigPath(),
+        options.add(UiOptionItem.from("Enable Web Proxy config:\n" + proxyManager.getConfigPath(),
                 option -> {
                     mGeneralData.enableProxy(option.isSelected());
                     proxyManager.enableProxy(option.isSelected());
