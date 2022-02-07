@@ -316,4 +316,9 @@
     <string name="player_seek_regular">Normaal</string>
     <string name="player_seek_memory_pause">Onthoud positie en pauze</string>
     <string name="player_seek_memory_play">Onthoud positie en blijf spelen</string>
+    <string name="hide_shorts_from_home">Shorts verbergen op home</string>
+    <string name="finish_on_disconnect">Voltooi de app nadat de telefoon is losgekoppeld</string>
+    <string name="update_error">Update fout</string>
+    <string name="hide_shorts_from_history">Shorts verbergen op geschiedenis</string>
+    <string name="disable_screensaver">Schermbeveiliging uitschakelen</string>
 </resources>
