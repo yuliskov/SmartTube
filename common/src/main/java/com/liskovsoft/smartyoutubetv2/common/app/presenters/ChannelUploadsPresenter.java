@@ -162,9 +162,11 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         disposeActions();
 
         return item.hasUploads() ?
-                mGroupManager.getGroupObserve(item.mediaItem) :
-                mItemManager.getMetadataObserve(item.videoId, item.playlistId, 0, item.playlistParams)
-                        .flatMap(mediaItemMetadata -> Observable.just(findPlaylistRow(mediaItemMetadata)));
+               mGroupManager.getGroupObserve(item.mediaItem) :
+               item.hasReloadPageKey() ?
+               mGroupManager.getGroupObserve(item.getReloadPageKey()) :
+               mItemManager.getMetadataObserve(item.videoId, item.playlistId, 0, item.playlistParams)
+                       .flatMap(mediaItemMetadata -> Observable.just(findPlaylistRow(mediaItemMetadata)));
     }
 
     private void updateGrid(Video item) {

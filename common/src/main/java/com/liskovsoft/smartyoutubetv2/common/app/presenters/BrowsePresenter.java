@@ -766,7 +766,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private Observable<MediaGroup> createPinnedAction(Video item) {
-        return item.hasPlaylist() ?
+        return (item.hasPlaylist() || item.hasReloadPageKey()) ?
                 ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item) :
                 mGroupManager.getChannelObserve(item.channelId).map(list -> list.get(0));
     }

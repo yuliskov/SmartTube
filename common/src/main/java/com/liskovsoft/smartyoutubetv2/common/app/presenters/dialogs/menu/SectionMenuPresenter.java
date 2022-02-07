@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
@@ -59,7 +58,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
 
     @Override
     protected boolean isPinToSidebarEnabled() {
-        return false;
+        return mIsUnpinFromSidebarEnabled;
     }
 
     @Override
@@ -107,7 +106,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
 
         appendReturnToBackgroundVideoButton();
         appendRefreshButton();
-        appendUnpinFromSidebarButton();
+        appendTogglePinToSidebarButton(getContext().getString(R.string.unpin_from_sidebar), true);
         appendUnpinSectionFromSidebarButton();
         appendMarkAllChannelsWatchedButton();
         appendAccountSelectionButton();
@@ -128,7 +127,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
 
         appendReturnToBackgroundVideoButton();
         appendRefreshButton();
-        appendUnpinFromSidebarButton();
+        appendTogglePinToSidebarButton(getContext().getString(R.string.unpin_from_sidebar), true);
         appendUnpinSectionFromSidebarButton();
         appendAccountSelectionButton();
         appendMoveSectionButton();
@@ -139,37 +138,6 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
             String title = mSection != null ? mSection.getTitle() : null;
             mDialogPresenter.showDialog(title, this::disposeActions);
         }
-    }
-
-    private void appendUnpinFromSidebarButton() {
-        if (!mIsUnpinFromSidebarEnabled) {
-            return;
-        }
-
-        // Prepare to new channel playlists
-        if (mVideo == null || (!mVideo.hasPlaylist() && !mVideo.hasUploads() && !mVideo.hasChannel())) {
-            return;
-        }
-
-        mDialogPresenter.appendSingleButton(
-                UiOptionItem.from(getContext().getString(R.string.unpin_from_sidebar),
-                        optionItem -> {
-                            if (mVideo.hasPlaylist() || mVideo.hasChannel()) {
-                                togglePinToSidebar(createPinnedSection(mVideo));
-                                mDialogPresenter.closeDialog();
-                            } else {
-                                mServiceManager.loadChannelUploads(mVideo, group -> {
-                                    if (group.getMediaItems() != null) {
-                                        MediaItem firstItem = group.getMediaItems().get(0);
-
-                                        Video section = createPinnedSection(Video.from(firstItem));
-                                        section.title = mVideo.title;
-                                        togglePinToSidebar(section);
-                                        mDialogPresenter.closeDialog();
-                                    }
-                                });
-                            }
-                        }));
     }
 
     private void appendUnpinSectionFromSidebarButton() {
@@ -234,38 +202,6 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
                         BrowsePresenter.instance(getContext()).moveSectionDown(mSection.getId());
                     }));
         }
-    }
-
-    private void togglePinToSidebar(Video section) {
-        BrowsePresenter presenter = BrowsePresenter.instance(getContext());
-
-        // Toggle between pin/unpin while dialog is opened
-        boolean isItemPinned = presenter.isItemPinned(section);
-
-        if (isItemPinned) {
-            presenter.unpinItem(section);
-        } else {
-            presenter.pinItem(section);
-        }
-        //MessageHelpers.showMessage(getContext(), isItemPinned ? R.string.unpinned_from_sidebar : R.string.pinned_to_sidebar);
-    }
-
-    private Video createPinnedSection(Video video) {
-        if (video == null || (!video.hasPlaylist() && !video.hasChannel() && !video.hasUploads())) {
-            return null;
-        }
-
-        Video section = new Video();
-        section.playlistId = video.playlistId;
-        section.playlistParams = video.playlistParams;
-        section.channelId = video.channelId;
-        section.title = String.format("%s - %s",
-                video.group != null && video.group.getTitle() != null ? video.group.getTitle() : video.title,
-                video.author != null ? video.author : video.description
-        );
-        section.cardImageUrl = video.cardImageUrl;
-
-        return section;
     }
 
     private void appendReturnToBackgroundVideoButton() {

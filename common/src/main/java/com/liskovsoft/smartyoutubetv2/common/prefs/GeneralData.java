@@ -507,7 +507,7 @@ public class GeneralData {
             }
 
             value.videoId = null;
-            return !value.hasPlaylist() && value.channelId == null && value.extra == -1;
+            return !value.hasPlaylist() && value.channelId == null && value.extra == -1 && !value.hasReloadPageKey();
         });
     }
 

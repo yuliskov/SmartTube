@@ -32,6 +32,7 @@ public final class Video implements Parcelable {
     public String playlistId;
     public int playlistIndex;
     public String playlistParams;
+    public String reloadPageKey;
     public String bgImageUrl;
     public String cardImageUrl;
     public String author;
@@ -109,6 +110,7 @@ public final class Video implements Parcelable {
         video.playlistId = item.getPlaylistId();
         video.playlistIndex = item.getPlaylistIndex();
         video.playlistParams = item.getPlaylistParams();
+        video.reloadPageKey = item.getReloadPageKey();
         video.isLive = item.isLive();
         video.isUpcoming = item.isUpcoming();
         video.clickTrackingParams = item.getClickTrackingParams();
@@ -180,7 +182,7 @@ public final class Video implements Parcelable {
      */
     @Override
     public int hashCode() {
-        int hashCode = Helpers.hashCodeAny(videoId, playlistId, playlistParams, channelId, mediaItem, extra);
+        int hashCode = Helpers.hashCodeAny(videoId, playlistId, reloadPageKey, playlistParams, channelId, mediaItem, extra);
         return hashCode != -1 ? hashCode : super.hashCode();
     }
     
@@ -260,17 +262,22 @@ public final class Video implements Parcelable {
 
         String[] split = spec.split("&vi;");
 
-        // Backward compatibility
+        // 'playlistParams' backward compatibility
         if (split.length == 10) {
             split = Helpers.appendArray(split, new String[]{null});
         }
 
-        // Backward compatibility
+        // 'extra' backward compatibility
         if (split.length == 11) {
             split = Helpers.appendArray(split, new String[]{null});
         }
 
-        if (split.length != 12) {
+        // 'reloadPageKey' backward compatibility
+        if (split.length == 12) {
+            split = Helpers.appendArray(split, new String[]{null});
+        }
+
+        if (split.length != 13) {
             return null;
         }
 
@@ -288,14 +295,16 @@ public final class Video implements Parcelable {
         result.mediaItem = YouTubeMediaService.deserializeMediaItem(Helpers.parseStr(split[9]));
         result.playlistParams = Helpers.parseStr(split[10]);
         result.extra = Helpers.parseInt(split[11]);
+        result.reloadPageKey = Helpers.parseStr(split[12]);
 
         return result;
     }
 
     @Override
     public String toString() {
-        return String.format("%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s",
-                id, category, title, videoId, videoUrl, playlistId, channelId, bgImageUrl, cardImageUrl, YouTubeMediaService.serialize(mediaItem), playlistParams, extra);
+        return String.format("%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s",
+                id, category, title, videoId, videoUrl, playlistId, channelId, bgImageUrl, cardImageUrl,
+                YouTubeMediaService.serialize(mediaItem), playlistParams, extra, getReloadPageKey());
     }
 
     //@Override
@@ -328,6 +337,10 @@ public final class Video implements Parcelable {
         return playlistId != null || (playlistParams != null && !Helpers.containsAny(playlistParams, sNotPlaylistParams));
     }
 
+    public boolean hasReloadPageKey() {
+        return reloadPageKey != null || (group != null && group.getMediaGroup() != null && group.getMediaGroup().getReloadPageKey() != null);
+    }
+
     public boolean hasUploads() {
         return mediaItem != null && mediaItem.hasUploads();
     }
@@ -346,6 +359,11 @@ public final class Video implements Parcelable {
 
     public String getGroupTitle() {
         return group != null ? group.getTitle() : null;
+    }
+
+    public String getReloadPageKey() {
+        return reloadPageKey != null ? reloadPageKey :
+                (group != null && group.getMediaGroup() != null && group.getMediaGroup().getReloadPageKey() != null) ? group.getMediaGroup().getReloadPageKey() : null;
     }
 
     public boolean belongsToUndefined() {

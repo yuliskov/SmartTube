@@ -32,22 +32,29 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         MessageHelpers.cancelToasts();
     }
 
-    protected void appendPinToSidebarButton() {
+    protected void appendTogglePinToSidebarButton() {
+        appendTogglePinToSidebarButton(getContext().getString(R.string.pin_unpin_from_sidebar), false);
+    }
+
+    protected void appendTogglePinToSidebarButton(String buttonTitle, boolean autoCloseDialog) {
         if (!isPinToSidebarEnabled()) {
             return;
         }
 
         Video original = getVideo();
 
-        if (original == null || (!original.hasPlaylist() && !original.hasUploads() && !original.isPlaylist())) {
+        if (original == null || (!original.hasPlaylist() && !original.hasUploads() && !original.isPlaylist() && !original.hasReloadPageKey())) {
             return;
         }
 
         getDialogPresenter().appendSingleButton(
-                UiOptionItem.from(getContext().getString(R.string.pin_unpin_from_sidebar),
+                UiOptionItem.from(buttonTitle,
                         optionItem -> {
-                            if (original.hasPlaylist() || original.isPlaylist()) {
+                            if (original.hasPlaylist() || original.isPlaylist() || original.hasReloadPageKey()) {
                                 togglePinToSidebar(createPinnedSection(original));
+                                if (autoCloseDialog) {
+                                    getDialogPresenter().closeDialog();
+                                }
                             } else {
                                 mServiceManager.loadChannelUploads(original, group -> {
                                     if (group.getMediaItems() != null) {
@@ -56,6 +63,9 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                                         Video section = createPinnedSection(Video.from(firstItem));
                                         section.title = original.title;
                                         togglePinToSidebar(section);
+                                        if (autoCloseDialog) {
+                                            getDialogPresenter().closeDialog();
+                                        }
                                     }
                                 });
                             }
@@ -77,9 +87,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     private Video createPinnedSection(Video video) {
-        Video original = getVideo();
-
-        if (video == null || (!video.hasPlaylist() && !video.hasUploads() && !original.isPlaylist())) {
+        if (video == null || (!video.hasPlaylist() && !video.hasUploads() && !video.isPlaylist() && !video.hasReloadPageKey())) {
             return null;
         }
 
@@ -87,12 +95,13 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         section.playlistId = video.playlistId;
         section.playlistParams = video.playlistParams;
         section.channelId = video.channelId;
+        section.reloadPageKey = video.getReloadPageKey();
         // Trying to properly format channel playlists, mixes etc
         boolean isChannelItem = video.getGroupTitle() != null && video.belongsToSameAuthorGroup() && video.belongsToSamePlaylistGroup();
         boolean isUserPlaylistItem = video.getGroupTitle() != null && video.belongsToSamePlaylistGroup();
         String title = isChannelItem ? video.extractAuthor() : isUserPlaylistItem ? null : video.title;
         String subtitle = isChannelItem || isUserPlaylistItem ? video.getGroupTitle() : video.description;
-        section.title = title != null ? String.format("%s - %s", title, subtitle) : String.format("%s", subtitle);
+        section.title = title != null && subtitle != null ? String.format("%s - %s", title, subtitle) : String.format("%s", title != null ? title : subtitle);
         section.cardImageUrl = video.cardImageUrl;
 
         return section;
