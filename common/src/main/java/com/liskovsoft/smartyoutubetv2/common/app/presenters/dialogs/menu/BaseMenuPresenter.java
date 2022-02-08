@@ -1,7 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 
 import android.content.Context;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -43,31 +42,18 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         Video original = getVideo();
 
-        if (original == null || (!original.hasPlaylist() && !original.isPlaylist() && !original.hasReloadPageKey() && !original.isChannel())) {
+        if (original == null || (!original.hasPlaylist() && !original.isPlaylist() && !original.hasReloadPageKey() && !original.isChannel() && !original.hasChannel())) {
             return;
         }
 
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(buttonTitle,
                         optionItem -> {
-                            if (original.hasPlaylist() || original.isPlaylist() || original.hasReloadPageKey() || original.isChannel()) {
+                            if (original.hasPlaylist() || original.isPlaylist() || original.hasReloadPageKey() || original.isChannel() || original.hasChannel()) {
                                 togglePinToSidebar(createPinnedSection(original));
                                 if (autoCloseDialog) {
                                     getDialogPresenter().closeDialog();
                                 }
-                            } else {
-                                mServiceManager.loadChannelUploads(original, group -> {
-                                    if (group.getMediaItems() != null) {
-                                        MediaItem firstItem = group.getMediaItems().get(0);
-
-                                        Video section = createPinnedSection(Video.from(firstItem));
-                                        section.title = original.title;
-                                        togglePinToSidebar(section);
-                                        if (autoCloseDialog) {
-                                            getDialogPresenter().closeDialog();
-                                        }
-                                    }
-                                });
                             }
                         }));
     }
@@ -87,7 +73,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     private Video createPinnedSection(Video video) {
-        if (video == null || (!video.hasPlaylist() && !video.isPlaylist() && !video.hasReloadPageKey() && !video.isChannel())) {
+        if (video == null || (!video.hasPlaylist() && !video.isPlaylist() && !video.hasReloadPageKey() && !video.isChannel() && !video.hasChannel())) {
             return null;
         }
 
@@ -98,7 +84,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         section.reloadPageKey = video.getReloadPageKey();
         section.itemType = video.itemType;
         // Trying to properly format channel playlists, mixes etc
-        boolean isChannelItem = video.getGroupTitle() != null && video.belongsToSameAuthorGroup() && video.belongsToSamePlaylistGroup();
+        boolean isChannelItem = (video.hasChannel() && !video.hasPlaylist() && !video.isChannel()) || (video.getGroupTitle() != null && video.belongsToSameAuthorGroup() && video.belongsToSamePlaylistGroup());
         boolean isUserPlaylistItem = video.getGroupTitle() != null && video.belongsToSamePlaylistGroup();
         String title = isChannelItem ? video.extractAuthor() : isUserPlaylistItem ? null : video.title;
         String subtitle = isChannelItem || isUserPlaylistItem ? video.getGroupTitle() : video.description;

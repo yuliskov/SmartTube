@@ -40,7 +40,7 @@ public class MediaServiceManager {
     }
 
     public interface OnMediaGroupList {
-        void onMediaGroupList(List<MediaGroup> group);
+        void onMediaGroupList(List<MediaGroup> groupList);
     }
 
     public MediaServiceManager() {
@@ -151,7 +151,8 @@ public class MediaServiceManager {
 
         RxUtils.disposeActions(mRowsAction);
 
-        Observable<List<MediaGroup>> observable = mGroupManager.getChannelObserve(item.mediaItem);
+        Observable<List<MediaGroup>> observable = item.mediaItem != null ?
+                mGroupManager.getChannelObserve(item.mediaItem) : mGroupManager.getChannelObserve(item.channelId);
 
         mRowsAction = observable
                 .subscribeOn(Schedulers.newThread())
