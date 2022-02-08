@@ -97,11 +97,11 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         section.reloadPageKey = video.getReloadPageKey();
         section.itemType = video.itemType;
         // Trying to properly format channel playlists, mixes etc
-        boolean isChannel = video.hasChannel() && !video.hasPlaylist() && !video.isChannel();
+        boolean hasChannel = video.hasChannel() && !video.hasPlaylist() && !video.isChannel();
         boolean isChannelItem = video.getGroupTitle() != null && video.belongsToSameAuthorGroup() && video.belongsToSamePlaylistGroup();
         boolean isUserPlaylistItem = video.getGroupTitle() != null && video.belongsToSamePlaylistGroup();
-        String title = isChannel || isChannelItem ? video.extractAuthor() : isUserPlaylistItem ? null : video.title;
-        String subtitle = isChannelItem || isUserPlaylistItem ? video.getGroupTitle() : isChannel ? null : video.description;
+        String title = hasChannel || isChannelItem ? video.extractAuthor() : isUserPlaylistItem ? null : video.title;
+        String subtitle = isChannelItem || isUserPlaylistItem ? video.getGroupTitle() : hasChannel || video.isChannel() ? null : video.description;
         section.title = title != null && subtitle != null ? String.format("%s - %s", title, subtitle) : String.format("%s", title != null ? title : subtitle);
         section.cardImageUrl = video.cardImageUrl;
 
