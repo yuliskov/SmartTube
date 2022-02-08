@@ -43,14 +43,14 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         Video original = getVideo();
 
-        if (original == null || (!original.hasPlaylist() && !original.hasUploads() && !original.isPlaylist() && !original.hasReloadPageKey())) {
+        if (original == null || (!original.hasPlaylist() && !original.isPlaylist() && !original.hasReloadPageKey() && !original.isChannel())) {
             return;
         }
 
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(buttonTitle,
                         optionItem -> {
-                            if (original.hasPlaylist() || original.isPlaylist() || original.hasReloadPageKey()) {
+                            if (original.hasPlaylist() || original.isPlaylist() || original.hasReloadPageKey() || original.isChannel()) {
                                 togglePinToSidebar(createPinnedSection(original));
                                 if (autoCloseDialog) {
                                     getDialogPresenter().closeDialog();
@@ -87,7 +87,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     private Video createPinnedSection(Video video) {
-        if (video == null || (!video.hasPlaylist() && !video.hasUploads() && !video.isPlaylist() && !video.hasReloadPageKey())) {
+        if (video == null || (!video.hasPlaylist() && !video.isPlaylist() && !video.hasReloadPageKey() && !video.isChannel())) {
             return null;
         }
 
@@ -96,6 +96,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         section.playlistParams = video.playlistParams;
         section.channelId = video.channelId;
         section.reloadPageKey = video.getReloadPageKey();
+        section.itemType = video.itemType;
         // Trying to properly format channel playlists, mixes etc
         boolean isChannelItem = video.getGroupTitle() != null && video.belongsToSameAuthorGroup() && video.belongsToSamePlaylistGroup();
         boolean isUserPlaylistItem = video.getGroupTitle() != null && video.belongsToSamePlaylistGroup();

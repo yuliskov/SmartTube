@@ -25,6 +25,7 @@ public final class Video implements Parcelable {
     public long id;
     public String title;
     public String category;
+    public int itemType = -1;
     public String description;
     public String channelId;
     public String videoId;
@@ -96,6 +97,7 @@ public final class Video implements Parcelable {
         video.id = item.getId();
         video.title = item.getTitle();
         video.category = item.getContentType();
+        video.itemType = item.getType();
         video.description = item.getDescription();
         video.videoId = item.getVideoId();
         video.channelId = item.getChannelId();
@@ -269,7 +271,7 @@ public final class Video implements Parcelable {
 
         // 'extra' backward compatibility
         if (split.length == 11) {
-            split = Helpers.appendArray(split, new String[]{null});
+            split = Helpers.appendArray(split, new String[]{"-1"});
         }
 
         // 'reloadPageKey' backward compatibility
@@ -277,7 +279,12 @@ public final class Video implements Parcelable {
             split = Helpers.appendArray(split, new String[]{null});
         }
 
-        if (split.length != 13) {
+        // 'type' backward compatibility
+        if (split.length == 13) {
+            split = Helpers.appendArray(split, new String[]{"-1"});
+        }
+
+        if (split.length != 14) {
             return null;
         }
 
@@ -296,15 +303,16 @@ public final class Video implements Parcelable {
         result.playlistParams = Helpers.parseStr(split[10]);
         result.extra = Helpers.parseInt(split[11]);
         result.reloadPageKey = Helpers.parseStr(split[12]);
+        result.itemType = Helpers.parseInt(split[13]);
 
         return result;
     }
 
     @Override
     public String toString() {
-        return String.format("%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s",
+        return String.format("%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s&vi;%s",
                 id, category, title, videoId, videoUrl, playlistId, channelId, bgImageUrl, cardImageUrl,
-                YouTubeMediaService.serialize(mediaItem), playlistParams, extra, getReloadPageKey());
+                YouTubeMediaService.serialize(mediaItem), playlistParams, extra, getReloadPageKey(), itemType);
     }
 
     //@Override
@@ -338,7 +346,7 @@ public final class Video implements Parcelable {
     }
 
     public boolean hasReloadPageKey() {
-        return reloadPageKey != null || (group != null && group.getMediaGroup() != null && group.getMediaGroup().getReloadPageKey() != null);
+        return getReloadPageKey() != null;
     }
 
     public boolean hasUploads() {
@@ -354,7 +362,7 @@ public final class Video implements Parcelable {
     }
 
     public boolean isPlaylist() {
-        return videoId == null && mediaItem != null && mediaItem.getType() == MediaItem.TYPE_PLAYLIST;
+        return videoId == null && itemType == MediaItem.TYPE_PLAYLIST;
     }
 
     public String getGroupTitle() {

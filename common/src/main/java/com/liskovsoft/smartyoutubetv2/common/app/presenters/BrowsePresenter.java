@@ -768,7 +768,19 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private Observable<MediaGroup> createPinnedAction(Video item) {
         return (item.hasPlaylist() || item.hasReloadPageKey()) ?
                 ChannelUploadsPresenter.instance(getContext()).obtainPlaylistObservable(item) :
-                mGroupManager.getChannelObserve(item.channelId).map(list -> list.get(0));
+                mGroupManager.getChannelObserve(item.channelId).map(list -> {
+                    MediaGroup group = null;
+
+                    // Try to guess video uploads group by size
+                    for (MediaGroup mediaGroup : list) {
+                        if (mediaGroup != null && mediaGroup.getMediaItems() != null && mediaGroup.getMediaItems().size() > 3) {
+                            group = mediaGroup;
+                            break;
+                        }
+                    }
+
+                    return group != null ? group : list.get(0);
+                });
     }
 
     /**
