@@ -42,18 +42,31 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         Video original = getVideo();
 
-        if (original == null || (!original.hasPlaylist() && !original.isPlaylist() && !original.hasReloadPageKey() && !original.isChannel())) {
+        if (original == null ||
+                (!original.hasVideo() && !original.hasPlaylist() && !original.isPlaylist() && !original.hasReloadPageKey() && !original.hasChannel() && !original.isChannel())) {
             return;
         }
 
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(buttonTitle,
                         optionItem -> {
-                            if (original.hasPlaylist() || original.isPlaylist() || original.hasReloadPageKey() || original.isChannel()) {
+                            if (original.hasPlaylist() || original.isPlaylist() || original.hasReloadPageKey() || original.hasChannel() || original.isChannel()) {
                                 togglePinToSidebar(createPinnedSection(original));
                                 if (autoCloseDialog) {
                                     getDialogPresenter().closeDialog();
                                 }
+                            } else {
+                                MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
+
+                                mServiceManager.loadMetadata(original, metadata -> {
+                                    original.channelId = metadata.getChannelId();
+
+                                    togglePinToSidebar(createPinnedSection(original));
+
+                                    if (autoCloseDialog) {
+                                        getDialogPresenter().closeDialog();
+                                    }
+                                });
                             }
                         }));
     }
@@ -73,7 +86,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     private Video createPinnedSection(Video video) {
-        if (video == null || (!video.hasPlaylist() && !video.isPlaylist() && !video.hasReloadPageKey() && !video.isChannel())) {
+        if (video == null || (!video.hasPlaylist() && !video.isPlaylist() && !video.hasReloadPageKey() && !video.hasChannel() && !video.isChannel())) {
             return null;
         }
 

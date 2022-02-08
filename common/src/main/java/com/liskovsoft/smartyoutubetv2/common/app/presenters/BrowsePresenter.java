@@ -773,7 +773,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
                     // Try to guess video uploads group by size
                     for (MediaGroup mediaGroup : list) {
-                        if (mediaGroup != null && mediaGroup.getMediaItems() != null && mediaGroup.getMediaItems().size() > 3) {
+                        if (mediaGroup != null && mediaGroup.getMediaItems() != null && mediaGroup.getMediaItems().size() > 10) {
                             group = mediaGroup;
                             break;
                         }
