@@ -42,14 +42,14 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         Video original = getVideo();
 
-        if (original == null || (!original.hasPlaylist() && !original.isPlaylist() && !original.hasReloadPageKey() && !original.isChannel() && !original.hasChannel())) {
+        if (original == null || (!original.hasPlaylist() && !original.isPlaylist() && !original.hasReloadPageKey() && !original.isChannel())) {
             return;
         }
 
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(buttonTitle,
                         optionItem -> {
-                            if (original.hasPlaylist() || original.isPlaylist() || original.hasReloadPageKey() || original.isChannel() || original.hasChannel()) {
+                            if (original.hasPlaylist() || original.isPlaylist() || original.hasReloadPageKey() || original.isChannel()) {
                                 togglePinToSidebar(createPinnedSection(original));
                                 if (autoCloseDialog) {
                                     getDialogPresenter().closeDialog();
@@ -73,7 +73,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     private Video createPinnedSection(Video video) {
-        if (video == null || (!video.hasPlaylist() && !video.isPlaylist() && !video.hasReloadPageKey() && !video.isChannel() && !video.hasChannel())) {
+        if (video == null || (!video.hasPlaylist() && !video.isPlaylist() && !video.hasReloadPageKey() && !video.isChannel())) {
             return null;
         }
 
