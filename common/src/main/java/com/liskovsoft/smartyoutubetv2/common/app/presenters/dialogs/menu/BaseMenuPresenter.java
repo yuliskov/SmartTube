@@ -56,7 +56,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                                     getDialogPresenter().closeDialog();
                                 }
                             } else {
-                                MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
+                                MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
 
                                 mServiceManager.loadMetadata(original, metadata -> {
                                     original.channelId = metadata.getChannelId();
