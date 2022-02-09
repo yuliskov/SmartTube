@@ -106,7 +106,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
 
         appendReturnToBackgroundVideoButton();
         appendRefreshButton();
-        appendTogglePinToSidebarButton(getContext().getString(R.string.unpin_from_sidebar), true);
+        appendUnpinVideoFromSidebarButton(true);
         appendUnpinSectionFromSidebarButton();
         appendMarkAllChannelsWatchedButton();
         appendAccountSelectionButton();
@@ -127,7 +127,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
 
         appendReturnToBackgroundVideoButton();
         appendRefreshButton();
-        appendTogglePinToSidebarButton(getContext().getString(R.string.unpin_from_sidebar), true);
+        appendUnpinVideoFromSidebarButton(true);
         appendUnpinSectionFromSidebarButton();
         appendAccountSelectionButton();
         appendMoveSectionButton();

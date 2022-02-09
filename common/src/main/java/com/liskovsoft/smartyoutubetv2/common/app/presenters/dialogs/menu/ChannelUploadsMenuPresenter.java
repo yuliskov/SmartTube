@@ -84,7 +84,7 @@ public class ChannelUploadsMenuPresenter extends BaseMenuPresenter {
         appendOpenChannelButton();
         appendUnsubscribeButton();
         appendMarkAsWatched();
-        appendTogglePinToSidebarButton();
+        appendTogglePinVideoToSidebarButton();
 
         mDialogPresenter.showDialog(mVideo.title);
     }

@@ -31,11 +31,11 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         MessageHelpers.cancelToasts();
     }
 
-    protected void appendTogglePinToSidebarButton() {
-        appendTogglePinToSidebarButton(getContext().getString(R.string.pin_unpin_from_sidebar), false);
+    protected void appendTogglePinVideoToSidebarButton() {
+        appendTogglePinVideoToSidebarButton(false);
     }
 
-    protected void appendTogglePinToSidebarButton(String buttonTitle, boolean autoCloseDialog) {
+    protected void appendTogglePinVideoToSidebarButton(boolean autoCloseDialog) {
         if (!isPinToSidebarEnabled()) {
             return;
         }
@@ -48,7 +48,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         }
 
         getDialogPresenter().appendSingleButton(
-                UiOptionItem.from(buttonTitle,
+                UiOptionItem.from(getContext().getString(R.string.pin_unpin_from_sidebar),
                         optionItem -> {
                             if (original.hasPlaylist() || original.isPlaylist() || original.hasReloadPageKey() || original.hasChannel() || original.isChannel()) {
                                 togglePinToSidebar(createPinnedSection(original));
@@ -67,6 +67,28 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                                         getDialogPresenter().closeDialog();
                                     }
                                 });
+                            }
+                        }));
+    }
+
+    protected void appendUnpinVideoFromSidebarButton(boolean autoCloseDialog) {
+        if (!isPinToSidebarEnabled()) {
+            return;
+        }
+
+        Video original = getVideo();
+
+        if (original == null ||
+                (!original.hasVideo() && !original.hasPlaylist() && !original.isPlaylist() && !original.hasReloadPageKey() && !original.hasChannel() && !original.isChannel())) {
+            return;
+        }
+
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.unpin_from_sidebar),
+                        optionItem -> {
+                            togglePinToSidebar(original);
+                            if (autoCloseDialog) {
+                                getDialogPresenter().closeDialog();
                             }
                         }));
     }
