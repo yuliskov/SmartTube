@@ -225,7 +225,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             ViewManager.instance(getContext()).startView(ChannelView.class);
         }
 
-        filterIfNeeded(mediaGroups);
+        moveToTopIfNeeded(mediaGroups);
 
         for (MediaGroup mediaGroup : mediaGroups) {
             if (mediaGroup.getMediaItems() == null) {
@@ -264,7 +264,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     /**
      * Sort channel content: move Uploads on top.
      */
-    private void filterIfNeeded(List<MediaGroup> mediaGroups) {
+    private void moveToTopIfNeeded(List<MediaGroup> mediaGroups) {
         moveToTop(mediaGroups, R.string.playlists_row_name);
         moveToTop(mediaGroups, R.string.popular_uploads_row_name);
         moveToTop(mediaGroups, R.string.uploads_row_name);

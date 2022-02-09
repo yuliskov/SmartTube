@@ -771,9 +771,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                 mGroupManager.getChannelObserve(item.channelId).map(list -> {
                     MediaGroup group = null;
 
-                    // Try to skip live video row
+                    // Default row is Uploads
                     for (MediaGroup mediaGroup : list) {
-                        if (mediaGroup != null && mediaGroup.getMediaItems() != null && mediaGroup.getMediaItems().size() > 10) {
+                        if (mediaGroup != null && Helpers.equals(mediaGroup.getTitle(), getContext().getString(R.string.uploads_row_name))) {
                             group = mediaGroup;
                             break;
                         }
