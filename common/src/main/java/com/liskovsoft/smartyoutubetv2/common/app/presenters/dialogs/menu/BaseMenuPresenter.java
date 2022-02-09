@@ -32,68 +32,59 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     protected void appendTogglePinVideoToSidebarButton() {
-        appendTogglePinVideoToSidebarButton(false);
+        appendTogglePinChannelButton();
+        appendTogglePinPlaylistButton();
     }
 
-    protected void appendTogglePinVideoToSidebarButton(boolean autoCloseDialog) {
+    private void appendTogglePinPlaylistButton() {
         if (!isPinToSidebarEnabled()) {
             return;
         }
 
         Video original = getVideo();
 
-        if (original == null ||
-                (!original.hasVideo() && !original.hasPlaylist() && !original.isPlaylist() && !original.hasReloadPageKey() && !original.hasChannel() && !original.isChannel())) {
+        if (original == null || !original.hasPlaylist()) {
             return;
         }
 
         getDialogPresenter().appendSingleButton(
-                UiOptionItem.from(getContext().getString(R.string.pin_unpin_from_sidebar),
+                UiOptionItem.from(getContext().getString(R.string.pin_unpin_playlist),
+                        optionItem -> togglePinToSidebar(createPinnedPlaylist(original))));
+    }
+
+    private void appendTogglePinChannelButton() {
+        if (!isPinToSidebarEnabled()) {
+            return;
+        }
+
+        Video original = getVideo();
+
+        if (original == null || (!original.hasVideo() && !original.hasReloadPageKey() && !original.hasChannel())) {
+            return;
+        }
+
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(
+                        getContext().getString(original.isPlaylist() || original.belongsToPlaylist() ? R.string.pin_unpin_playlist : R.string.pin_unpin_channel),
                         optionItem -> {
-                            if (original.hasPlaylist() || original.isPlaylist() || original.hasReloadPageKey() || original.hasChannel() || original.isChannel()) {
-                                togglePinToSidebar(createPinnedSection(original));
-                                if (autoCloseDialog) {
-                                    getDialogPresenter().closeDialog();
-                                }
-                            } else {
+                            if (original.hasVideo() && !original.hasChannel()) {
                                 MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
 
-                                mServiceManager.loadMetadata(original, metadata -> {
-                                    original.channelId = metadata.getChannelId();
-
-                                    togglePinToSidebar(createPinnedSection(original));
-
-                                    if (autoCloseDialog) {
-                                        getDialogPresenter().closeDialog();
-                                    }
-                                });
-                            }
-                        }));
-    }
-
-    protected void appendUnpinVideoFromSidebarButton(boolean autoCloseDialog) {
-        if (!isPinToSidebarEnabled()) {
-            return;
-        }
-
-        Video original = getVideo();
-
-        if (original == null ||
-                (!original.hasVideo() && !original.hasPlaylist() && !original.isPlaylist() && !original.hasReloadPageKey() && !original.hasChannel() && !original.isChannel())) {
-            return;
-        }
-
-        getDialogPresenter().appendSingleButton(
-                UiOptionItem.from(getContext().getString(R.string.unpin_from_sidebar),
-                        optionItem -> {
-                            togglePinToSidebar(original);
-                            if (autoCloseDialog) {
-                                getDialogPresenter().closeDialog();
+                                mServiceManager.loadMetadata(
+                                        original,
+                                        metadata -> {
+                                            Video video = Video.from(original);
+                                            video.sync(metadata);
+                                            togglePinToSidebar(createPinnedChannel(video));
+                                        }
+                                );
+                            } else {
+                                togglePinToSidebar(createPinnedChannel(original));
                             }
                         }));
     }
     
-    private void togglePinToSidebar(Video section) {
+    protected void togglePinToSidebar(Video section) {
         BrowsePresenter presenter = BrowsePresenter.instance(getContext());
 
         // Toggle between pin/unpin while dialog is opened
@@ -107,23 +98,40 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         MessageHelpers.showMessage(getContext(), section.title + ": " + getContext().getString(isItemPinned ? R.string.unpinned_from_sidebar : R.string.pinned_to_sidebar));
     }
 
-    private Video createPinnedSection(Video video) {
-        if (video == null || (!video.hasPlaylist() && !video.isPlaylist() && !video.hasReloadPageKey() && !video.hasChannel() && !video.isChannel())) {
+    private Video createPinnedPlaylist(Video video) {
+        if (video == null || !video.hasPlaylist()) {
             return null;
         }
 
         Video section = new Video();
+        section.itemType = video.itemType;
         section.playlistId = video.playlistId;
         section.playlistParams = video.playlistParams;
+        // Trying to properly format channel playlists, mixes etc
+        boolean isChannelPlaylistItem = video.getGroupTitle() != null && video.belongsToSameAuthorGroup() && video.belongsToSamePlaylistGroup();
+        boolean isUserPlaylistItem = video.getGroupTitle() != null && video.belongsToSamePlaylistGroup();
+        String title = isChannelPlaylistItem ? video.extractAuthor() : isUserPlaylistItem ? null : video.title;
+        String subtitle = isChannelPlaylistItem || isUserPlaylistItem ? video.getGroupTitle() : video.extractAuthor();
+        section.title = title != null && subtitle != null ? String.format("%s - %s", title, subtitle) : String.format("%s", title != null ? title : subtitle);
+        section.cardImageUrl = video.cardImageUrl;
+
+        return section;
+    }
+
+    private Video createPinnedChannel(Video video) {
+        if (video == null || (!video.hasReloadPageKey() && !video.hasChannel() && !video.isChannel())) {
+            return null;
+        }
+
+        Video section = new Video();
+        section.itemType = video.itemType;
         section.channelId = video.channelId;
         section.reloadPageKey = video.getReloadPageKey();
-        section.itemType = video.itemType;
         // Trying to properly format channel playlists, mixes etc
-        boolean hasChannel = video.hasChannel() && !video.hasPlaylist() && !video.isChannel();
-        boolean isChannelItem = video.getGroupTitle() != null && video.belongsToSameAuthorGroup() && video.belongsToSamePlaylistGroup();
+        boolean hasChannel = video.hasChannel() && !video.isChannel();
         boolean isUserPlaylistItem = video.getGroupTitle() != null && video.belongsToSamePlaylistGroup();
-        String title = hasChannel || isChannelItem ? video.extractAuthor() : isUserPlaylistItem ? null : video.title;
-        String subtitle = isChannelItem || isUserPlaylistItem ? video.getGroupTitle() : hasChannel || video.isChannel() ? null : video.extractAuthor();
+        String title = hasChannel ? video.extractAuthor() : isUserPlaylistItem ? null : video.title;
+        String subtitle = isUserPlaylistItem ? video.getGroupTitle() : hasChannel || video.isChannel() ? null : video.extractAuthor();
         section.title = title != null && subtitle != null ? String.format("%s - %s", title, subtitle) : String.format("%s", title != null ? title : subtitle);
         section.cardImageUrl = video.cardImageUrl;
 
@@ -136,8 +144,9 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         }
 
         getDialogPresenter().appendSingleButton(
-                UiOptionItem.from(getContext().getString(R.string.dialog_account_list), optionItem -> {
-                    AccountSelectionPresenter.instance(getContext()).show(true);
-                }));
+                UiOptionItem.from(
+                        getContext().getString(R.string.dialog_account_list),
+                        optionItem -> AccountSelectionPresenter.instance(getContext()).show(true)
+                ));
     }
 }

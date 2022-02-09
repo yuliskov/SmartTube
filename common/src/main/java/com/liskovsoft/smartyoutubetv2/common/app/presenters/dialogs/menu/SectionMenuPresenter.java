@@ -106,7 +106,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
 
         appendReturnToBackgroundVideoButton();
         appendRefreshButton();
-        appendUnpinVideoFromSidebarButton(true);
+        appendUnpinVideoFromSidebarButton();
         appendUnpinSectionFromSidebarButton();
         appendMarkAllChannelsWatchedButton();
         appendAccountSelectionButton();
@@ -127,7 +127,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
 
         appendReturnToBackgroundVideoButton();
         appendRefreshButton();
-        appendUnpinVideoFromSidebarButton(true);
+        appendUnpinVideoFromSidebarButton();
         appendUnpinSectionFromSidebarButton();
         appendAccountSelectionButton();
         appendMoveSectionButton();
@@ -138,6 +138,23 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
             String title = mSection != null ? mSection.getTitle() : null;
             mDialogPresenter.showDialog(title, this::disposeActions);
         }
+    }
+
+    private void appendUnpinVideoFromSidebarButton() {
+        if (!mIsUnpinFromSidebarEnabled) {
+            return;
+        }
+
+        if (mVideo == null || (!mVideo.hasPlaylist() && !mVideo.hasReloadPageKey() && !mVideo.hasChannel())) {
+            return;
+        }
+
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.unpin_from_sidebar),
+                        optionItem -> {
+                            togglePinToSidebar(mVideo);
+                            mDialogPresenter.closeDialog();
+                        }));
     }
 
     private void appendUnpinSectionFromSidebarButton() {

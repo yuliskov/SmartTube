@@ -121,6 +121,36 @@ public final class Video implements Parcelable {
         return video;
     }
 
+    public static Video from(Video item) {
+        Video video = new Video();
+
+        video.id = item.id;
+        video.title = item.title;
+        video.category = item.category;
+        video.itemType = item.itemType;
+        video.description = item.description;
+        video.videoId = item.videoId;
+        video.channelId = item.channelId;
+        video.videoUrl = item.videoUrl;
+        video.bgImageUrl = item.bgImageUrl;
+        video.cardImageUrl = item.cardImageUrl;
+        video.author = item.author;
+        video.percentWatched = item.percentWatched;
+        video.badge = item.badge;
+        video.hasNewContent = item.hasNewContent;
+        video.previewUrl = item.previewUrl;
+        video.playlistId = item.playlistId;
+        video.playlistIndex = item.playlistIndex;
+        video.playlistParams = item.playlistParams;
+        video.reloadPageKey = item.reloadPageKey;
+        video.isLive = item.isLive;
+        video.isUpcoming = item.isUpcoming;
+        video.clickTrackingParams = item.clickTrackingParams;
+        video.mediaItem = item.mediaItem;
+
+        return video;
+    }
+
     public static Video from(String videoId) {
         return from(videoId, null, -1);
     }
@@ -212,6 +242,7 @@ public final class Video implements Parcelable {
         String result = null;
 
         if (description != null) {
+            description = description.replace(TERTIARY_TEXT_DELIM + " LIVE", ""); // remove special marks
             String[] split = description.split(TERTIARY_TEXT_DELIM);
 
             if (split.length <= 1) {
@@ -399,10 +430,10 @@ public final class Video implements Parcelable {
         List<MediaItem> mediaItems = group.getMediaGroup().getMediaItems();
 
         MediaItem first = mediaItems.get(0);
-        MediaItem second = mediaItems.get(1);
+        MediaItem last = mediaItems.get(mediaItems.size() - 1);
 
         String author1 = extractAuthor(first.getDescription());
-        String author2 = extractAuthor(second.getDescription());
+        String author2 = extractAuthor(last.getDescription());
 
         return author1 != null && author2 != null && Helpers.equals(author1, author2);
     }
