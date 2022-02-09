@@ -101,7 +101,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         boolean isChannelItem = video.getGroupTitle() != null && video.belongsToSameAuthorGroup() && video.belongsToSamePlaylistGroup();
         boolean isUserPlaylistItem = video.getGroupTitle() != null && video.belongsToSamePlaylistGroup();
         String title = hasChannel || isChannelItem ? video.extractAuthor() : isUserPlaylistItem ? null : video.title;
-        String subtitle = isChannelItem || isUserPlaylistItem ? video.getGroupTitle() : hasChannel || video.isChannel() ? null : video.description;
+        String subtitle = isChannelItem || isUserPlaylistItem ? video.getGroupTitle() : hasChannel || video.isChannel() ? null : video.extractAuthor();
         section.title = title != null && subtitle != null ? String.format("%s - %s", title, subtitle) : String.format("%s", title != null ? title : subtitle);
         section.cardImageUrl = video.cardImageUrl;
 
