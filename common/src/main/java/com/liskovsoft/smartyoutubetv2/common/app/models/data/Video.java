@@ -345,6 +345,9 @@ public final class Video implements Parcelable {
         return playlistId != null || (playlistParams != null && !Helpers.containsAny(playlistParams, sNotPlaylistParams));
     }
 
+    /**
+     * Persist on Channels and User playlists sections
+     */
     public boolean hasReloadPageKey() {
         return getReloadPageKey() != null;
     }
@@ -361,14 +364,24 @@ public final class Video implements Parcelable {
         return playlistIndex > 0;
     }
 
+    /**
+     * Special type of channels that work as playlist
+     */
     public boolean isPlaylist() {
         return videoId == null && itemType == MediaItem.TYPE_PLAYLIST;
+    }
+
+    public boolean belongsToPlaylist() {
+        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_USER_PLAYLISTS;
     }
 
     public String getGroupTitle() {
         return group != null ? group.getTitle() : null;
     }
 
+    /**
+     * Persist on Channels and User playlists sections
+     */
     public String getReloadPageKey() {
         return reloadPageKey != null ? reloadPageKey :
                 (group != null && group.getMediaGroup() != null && group.getMediaGroup().getReloadPageKey() != null) ? group.getMediaGroup().getReloadPageKey() : null;
@@ -408,10 +421,6 @@ public final class Video implements Parcelable {
         String playlist2 = second.getPlaylistId() != null ? second.getPlaylistId() : second.getPlaylistParams();
 
         return playlist1 != null && playlist2 != null && Helpers.equals(playlist1, playlist2);
-    }
-
-    public boolean belongsToPlaylist() {
-        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_USER_PLAYLISTS;
     }
 
     public boolean belongsToChannelUploads() {
