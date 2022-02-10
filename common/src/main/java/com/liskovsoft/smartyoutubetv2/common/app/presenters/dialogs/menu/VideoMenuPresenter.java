@@ -492,7 +492,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_UNSUBSCRIBE);
         }
 
-        MessageHelpers.showMessage(getContext(), !mVideo.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel);
+        MessageHelpers.showMessage(getContext(), mVideo.extractAuthor() + ": " + getContext().getString(!mVideo.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel));
     }
 
     private void updateEnabledMenuItems() {
