@@ -32,8 +32,8 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     protected void appendTogglePinVideoToSidebarButton() {
-        appendTogglePinChannelButton();
         appendTogglePinPlaylistButton();
+        appendTogglePinChannelButton();
     }
 
     private void appendTogglePinPlaylistButton() {
@@ -65,7 +65,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(
-                        getContext().getString(original.isPlaylist() || original.belongsToPlaylist() ? R.string.pin_unpin_playlist : R.string.pin_unpin_channel),
+                        getContext().getString(original.isChannelPlaylist() || original.belongsToPlaylist() ? R.string.pin_unpin_playlist : R.string.pin_unpin_channel),
                         optionItem -> {
                             if (original.hasVideo()) {
                                 MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);

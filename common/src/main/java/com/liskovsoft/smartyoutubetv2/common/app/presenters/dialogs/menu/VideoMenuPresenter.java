@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.VideoPlaylistInfo;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -217,7 +216,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (mVideo == null || !mVideo.hasVideo() || mVideo.isPlaylist()) {
+        if (mVideo == null || !mVideo.hasVideo() || mVideo.isChannelPlaylist()) {
             return;
         }
 
@@ -287,7 +286,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         // Prepare to special type of channels that work as playlist
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(
-                        mVideo.isPlaylist() ? R.string.open_playlist : R.string.open_channel), optionItem -> Utils.chooseChannelPresenter(getContext(), mVideo)));
+                        mVideo.isChannelPlaylist() ? R.string.open_playlist : R.string.open_channel), optionItem -> Utils.chooseChannelPresenter(getContext(), mVideo)));
     }
 
     private void appendOpenPlaylistButton() {
@@ -300,7 +299,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
 
         // Prepare to special type of channels that work as playlist
-        if (mVideo.isPlaylist() && ChannelPresenter.canOpenChannel(mVideo)) {
+        if (mVideo.isChannelPlaylist() && ChannelPresenter.canOpenChannel(mVideo)) {
             return;
         }
 
@@ -381,12 +380,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (mVideo == null || (!mVideo.canSubscribe() && !mVideo.hasVideo())) {
-            return;
-        }
-
-        // Prepare to special type of channels that work as playlist
-        if (mVideo.mediaItem != null && mVideo.mediaItem.getType() == MediaItem.TYPE_PLAYLIST) {
+        if (mVideo == null || mVideo.isChannelPlaylist() || (!mVideo.canSubscribe() && !mVideo.hasVideo())) {
             return;
         }
 
@@ -465,34 +459,36 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         // Exclusion: channel item (can't be synced)
         // Note, regular items (from subscribed section etc) aren't contain channel id
         if (mVideo.isSynced || mVideo.canSubscribe()) {
-            toggleSubscribeInt();
+            toggleSubscribe(mVideo);
         } else {
             MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
 
             mServiceManager.loadMetadata(mVideo, metadata -> {
-                mVideo.sync(metadata);
-                toggleSubscribeInt();
+                Video video = Video.from(mVideo);
+                video.sync(metadata);
+                toggleSubscribe(video);
             });
         }
     }
 
-    private void toggleSubscribeInt() {
-        if (mVideo == null) {
+    private void toggleSubscribe(Video video) {
+        if (video == null) {
             return;
         }
 
-        Observable<Void> observable = mVideo.isSubscribed ?
-                mItemManager.unsubscribeObserve(mVideo.channelId) : mItemManager.subscribeObserve(mVideo.channelId);
+        Observable<Void> observable = video.isSubscribed ?
+                mItemManager.unsubscribeObserve(video.channelId) : mItemManager.subscribeObserve(video.channelId);
 
         mSubscribeAction = RxUtils.execute(observable);
 
-        mVideo.isSubscribed = !mVideo.isSubscribed;
+        video.isSubscribed = !video.isSubscribed;
 
-        if (!mVideo.isSubscribed && mCallback != null) {
-            mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_UNSUBSCRIBE);
+        if (!video.isSubscribed && mCallback != null) {
+            mCallback.onItemAction(video, VideoMenuCallback.ACTION_UNSUBSCRIBE);
         }
 
-        MessageHelpers.showMessage(getContext(), mVideo.extractAuthor() + ": " + getContext().getString(!mVideo.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel));
+        MessageHelpers.showMessage(getContext(),
+                video.extractAuthor() + ": " + getContext().getString(!video.isSubscribed ? R.string.unsubscribed_from_channel : R.string.subscribed_to_channel));
     }
 
     private void updateEnabledMenuItems() {

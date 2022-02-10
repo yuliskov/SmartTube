@@ -398,8 +398,8 @@ public final class Video implements Parcelable {
     /**
      * Special type of channels that work as playlist
      */
-    public boolean isPlaylist() {
-        return videoId == null && itemType == MediaItem.TYPE_PLAYLIST;
+    public boolean isChannelPlaylist() {
+        return videoId == null && channelId != null && itemType == MediaItem.TYPE_PLAYLIST;
     }
 
     public boolean belongsToPlaylist() {
