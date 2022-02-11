@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.channel;
 
 import android.os.Bundle;
 import android.view.ViewGroup;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
@@ -11,17 +12,30 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager
 
 public class ChannelFragment extends MultipleRowsFragment implements ChannelView {
     private static final String TAG = ChannelFragment.class.getSimpleName();
+    private static final String SELECTED_ITEM_INDEX = "SelectedItemIndex";
     private ChannelPresenter mChannelPresenter;
     private ProgressBarManager mProgressBarManager;
+    private boolean mIsFragmentCreated;
+    private int mRestoredItemIndex = -1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
+        super.onCreate(null); // Real restore takes place in the presenter
+        
+        mRestoredItemIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_ITEM_INDEX, -1) : -1;
+        mIsFragmentCreated = true;
         mChannelPresenter = ChannelPresenter.instance(getContext());
         mChannelPresenter.setView(this);
 
         mProgressBarManager = new ProgressBarManager();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Not robust. Because tab content often changed after reloading.
+        outState.putInt(SELECTED_ITEM_INDEX, getPosition());
     }
 
     @Override
@@ -32,6 +46,10 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
         mProgressBarManager.setRootView((ViewGroup) getActivity().findViewById(android.R.id.content).getRootView());
 
         mChannelPresenter.onViewInitialized();
+
+        // Restore state after crash
+        setPosition(mRestoredItemIndex);
+        mRestoredItemIndex = -1;
     }
 
     @Override
@@ -43,6 +61,21 @@ public class ChannelFragment extends MultipleRowsFragment implements ChannelView
     public void onDestroy() {
         super.onDestroy();
         mChannelPresenter.onViewDestroyed();
+    }
+
+    public void onFinish() {
+        mChannelPresenter.onFinish();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!mIsFragmentCreated) {
+            mChannelPresenter.onViewResumed();
+        }
+
+        mIsFragmentCreated = false;
     }
 
     @Override

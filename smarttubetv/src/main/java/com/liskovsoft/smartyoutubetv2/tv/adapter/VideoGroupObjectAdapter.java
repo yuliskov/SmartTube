@@ -84,6 +84,9 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         }
     }
 
+    /**
+     * Compare by reference. Because there may be multiple same videos.
+     */
     public int indexOf(Video item) {
         // Compare by reference. Because there may be multiple same videos.
         int index = -1;
@@ -91,6 +94,23 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
         for (Video video : mVideoItems) {
             index++;
             if (video == item) {
+                return index;
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * Regular compare. Use with caution!<br/>
+     * UI may consists of multiple rows with same video or even multiple videos in the same row.
+     */
+    public int indexOfAlt(Video item) {
+        int index = -1;
+
+        for (Video video : mVideoItems) {
+            index++;
+            if (video.equals(item)) {
                 return index;
             }
         }
@@ -108,10 +128,33 @@ public class VideoGroupObjectAdapter extends ObjectAdapter {
 
     public void remove(VideoGroup group) {
         for (Video video : group.getVideos()) {
-            int index = mVideoItems.indexOf(video);
-            if (index != -1) {
-                mVideoItems.remove(video);
-                notifyItemRangeRemoved(index, 1);
+            while (true) { // remove all occurrences of the same element (if present)
+                int index = mVideoItems.indexOf(video);
+                if (index != -1) {
+                    mVideoItems.remove(video);
+                    notifyItemRangeRemoved(index, 1);
+                } else {
+                    break;
+                }
+            }
+        }
+    }
+
+    public void removeAuthor(VideoGroup group) {
+        String author = group.getVideos().get(0).extractAuthor(); // assume same author
+        List<Video> result = Helpers.filter(mVideoItems, video -> Helpers.equals(author, video.extractAuthor()));
+        remove(VideoGroup.from(result));
+    }
+
+    public void sync(VideoGroup group) {
+        for (Video video : group.getVideos()) {
+            // Search for multiple occurrences (e.g. History section)
+            for (int i = 0; i < mVideoItems.size(); i++) {
+                Video origin = mVideoItems.get(i);
+                if (origin.equals(video)) {
+                    origin.sync(video);
+                    notifyItemRangeChanged(i, 1);
+                }
             }
         }
     }

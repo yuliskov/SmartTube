@@ -8,15 +8,15 @@ public class SearchData {
     private static final String SEARCH_DATA = "search_data";
     @SuppressLint("StaticFieldLeak")
     private static SearchData sInstance;
-    private final Context mContext;
     private final AppPrefs mAppPrefs;
     private boolean mIsInstantVoiceSearchEnabled;
     private int mSearchOptions;
     private boolean mIsFocusOnResultsEnabled;
+    private boolean mIsKeyboardAutoShowEnabled;
+    private boolean mIsBackgroundPlaybackEnabled;
 
     private SearchData(Context context) {
-        mContext = context;
-        mAppPrefs = AppPrefs.instance(mContext);
+        mAppPrefs = AppPrefs.instance(context);
         restoreData();
     }
 
@@ -55,6 +55,24 @@ public class SearchData {
         return mSearchOptions;
     }
 
+    public void enableKeyboardAutoShow(boolean enabled) {
+        mIsKeyboardAutoShowEnabled = enabled;
+        persistData();
+    }
+
+    public boolean isKeyboardAutoShowEnabled() {
+        return mIsKeyboardAutoShowEnabled;
+    }
+
+    public void enableBackgroundPlayback(boolean enabled) {
+        mIsBackgroundPlaybackEnabled = enabled;
+        persistData();
+    }
+
+    public boolean isBackgroundPlaybackEnabled() {
+        return mIsBackgroundPlaybackEnabled;
+    }
+
     private void restoreData() {
         String data = mAppPrefs.getData(SEARCH_DATA);
 
@@ -62,10 +80,14 @@ public class SearchData {
 
         mIsInstantVoiceSearchEnabled = Helpers.parseBoolean(split, 0, false);
         mSearchOptions = Helpers.parseInt(split, 1, 0);
-        mIsFocusOnResultsEnabled = Helpers.parseBoolean(split, 2, false);
+        mIsFocusOnResultsEnabled = Helpers.parseBoolean(split, 2, true);
+        mIsKeyboardAutoShowEnabled = Helpers.parseBoolean(split, 3, false);
+        mIsBackgroundPlaybackEnabled = Helpers.parseBoolean(split, 4, false);
     }
 
     private void persistData() {
-        mAppPrefs.setData(SEARCH_DATA, Helpers.mergeObject(mIsInstantVoiceSearchEnabled, mSearchOptions, mIsFocusOnResultsEnabled));
+        mAppPrefs.setData(SEARCH_DATA,
+                Helpers.mergeObject(mIsInstantVoiceSearchEnabled, mSearchOptions, mIsFocusOnResultsEnabled,
+                        mIsKeyboardAutoShowEnabled, mIsBackgroundPlaybackEnabled));
     }
 }

@@ -80,7 +80,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
             case REQUEST_SPEECH:
                 switch (resultCode) {
                     case Activity.RESULT_OK:
-                        setSearchQuery(data, false);
+                        setSearchQuery(data, true);
                         break;
                     case Activity.RESULT_CANCELED:
                         Log.i(TAG, "Recognizer canceled");
@@ -139,6 +139,8 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
                         startActivityForResult(getRecognizerIntent(), REQUEST_SPEECH);
                     } catch (ActivityNotFoundException e) {
                         Log.e(TAG, "Cannot find activity for speech recognizer", e);
+                    } catch (NullPointerException e) {
+                        Log.e(TAG, "Speech recognizer can't obtain applicationInfo", e);
                     }
                 } else {
                     Log.e(TAG, "Can't perform search. Fragment is detached.");

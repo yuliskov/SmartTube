@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.channeluploads;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.leanback.widget.VerticalGridView;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
@@ -12,15 +13,20 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.browse.video.VideoGridFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 
 public class ChannelUploadsFragment extends VideoGridFragment implements ChannelUploadsView {
+    private static final String SELECTED_ITEM_INDEX = "SelectedItemIndex";
     private ProgressBarManager mProgressBarManager;
-    private ChannelUploadsPresenter mPresenter;
+    private ChannelUploadsPresenter mChannelUploadsPresenter;
+    private boolean mIsFragmentCreated;
+    private int mRestoredItemIndex = -1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(null); // Real restore takes place in the presenter
 
-        mPresenter = ChannelUploadsPresenter.instance(getContext());
-        mPresenter.setView(this);
+        mRestoredItemIndex = savedInstanceState != null ? savedInstanceState.getInt(SELECTED_ITEM_INDEX, -1) : -1;
+        mIsFragmentCreated = true;
+        mChannelUploadsPresenter = ChannelUploadsPresenter.instance(getContext());
+        mChannelUploadsPresenter.setView(this);
 
         mProgressBarManager = new ProgressBarManager();
     }
@@ -31,13 +37,25 @@ public class ChannelUploadsFragment extends VideoGridFragment implements Channel
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Not robust. Because tab content often changed after reloading.
+        outState.putInt(SELECTED_ITEM_INDEX, getPosition());
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         // Don't move to onCreateView
         mProgressBarManager.setRootView((ViewGroup) getActivity().findViewById(android.R.id.content).getRootView());
 
-        mPresenter.onViewInitialized();
+        mChannelUploadsPresenter.onViewInitialized();
+
+        // Restore state after crash
+        setPosition(mRestoredItemIndex);
+        mRestoredItemIndex = -1;
     }
 
     @Override
@@ -50,7 +68,22 @@ public class ChannelUploadsFragment extends VideoGridFragment implements Channel
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mPresenter.onViewDestroyed();
+        mChannelUploadsPresenter.onViewDestroyed();
+    }
+
+    public void onFinish() {
+        mChannelUploadsPresenter.onFinish();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (!mIsFragmentCreated) {
+            mChannelUploadsPresenter.onViewResumed();
+        }
+
+        mIsFragmentCreated = false;
     }
 
     @Override

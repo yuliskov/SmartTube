@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.browse.dialog.ErrorDialogFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.headers.ExtendedHeadersSupportFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -194,27 +196,36 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView,
         setSearchAffordanceColor(ContextCompat.getColor(getActivity(), brandAccentColorRes));
 
         setHeaderPresenterSelector(new PresenterSelector() {
+            private final Map<Integer, Presenter> mPresenterMap = new HashMap<>();
+
             @Override
             public Presenter getPresenter(Object o) {
-                return new IconHeaderItemPresenter(getHeaderResId(o), getIconUrl(o));
+                Presenter presenter = mPresenterMap.get(o.hashCode());
+
+                if (presenter == null) {
+                    presenter = new IconHeaderItemPresenter(getHeaderResId(o), getIconUrl(o));
+                    mPresenterMap.put(o.hashCode(), presenter);
+                }
+
+                return presenter;
+            }
+
+            private int getHeaderResId(Object o) {
+                if (o instanceof PageRow) {
+                    return ((SectionHeaderItem) ((PageRow) o).getHeaderItem()).getResId();
+                }
+
+                return -1;
+            }
+
+            private String getIconUrl(Object o) {
+                if (o instanceof PageRow) {
+                    return ((SectionHeaderItem) ((PageRow) o).getHeaderItem()).getIconUrl();
+                }
+
+                return null;
             }
         });
-    }
-
-    private int getHeaderResId(Object o) {
-        if (o instanceof PageRow) {
-            return ((CategoryHeaderItem) ((PageRow) o).getHeaderItem()).getResId();
-        }
-
-        return -1;
-    }
-
-    private String getIconUrl(Object o) {
-        if (o instanceof PageRow) {
-            return ((CategoryHeaderItem) ((PageRow) o).getHeaderItem()).getIconUrl();
-        }
-
-        return null;
     }
 
     private int getSelectedHeaderId() {
@@ -255,14 +266,16 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView,
     }
 
     @Override
-    public void addSection(int index, BrowseSection category) {
-        if (category == null) {
+    public void addSection(int index, BrowseSection section) {
+        if (section == null) {
             return;
         }
 
-        if (mSections.get(category.getId()) == null) {
-            mSections.put(category.getId(), category);
-            createHeader(index, category);
+        removeSection(section);
+
+        if (mSections.get(section.getId()) == null) {
+            mSections.put(section.getId(), section);
+            createHeader(index, section);
         }
     }
 
@@ -344,7 +357,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView,
     }
 
     private void createHeader(int index, BrowseSection header) {
-        HeaderItem headerItem = new CategoryHeaderItem(header);
+        HeaderItem headerItem = new SectionHeaderItem(header);
 
         PageRow pageRow = new PageRow(headerItem);
         if (index == -1 || mSectionRowAdapter.size() < index) {
@@ -404,11 +417,16 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView,
 
     @Override
     public void showProgressBar(boolean show) {
+        Runnable callback;
+
         if (show) {
-            mProgressBarManager.show();
+            callback = mProgressBarManager::show;
         } else {
-            mProgressBarManager.hide();
+            callback = mProgressBarManager::hide;
         }
+
+        // Essential. Need to run on the main thread.
+        new Handler(Looper.getMainLooper()).post(callback);
     }
 
     @Override

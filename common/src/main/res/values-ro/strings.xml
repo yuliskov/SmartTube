@@ -58,7 +58,7 @@
     <string name="default_lang">Mod implicit</string>
     <string name="dialog_select_language">Limbă aplicație</string>
     <string name="subtitle_default">Mod implicit</string>
-    <string name="subtitle_semi_transparent_bg">Fundal semitransparent</string>
+    <string name="subtitle_white_semi_transparent">Fundal semitransparent</string>
     <string name="subtitle_style">Stil subtitrare</string>
     <string name="subtitle_language">Limbă subtitrare</string>
     <string name="action_search">Pornește Căutarea</string>

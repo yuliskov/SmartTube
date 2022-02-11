@@ -50,7 +50,12 @@
     <!-- Multiline description in the player -->
     <integer name="lb_details_description_subtitle_max_lines">2</integer>
     <integer name="lb_details_description_title_max_lines">2</integer>
-    
+
+    <!-- App Dialog title tweaks -->
+    <dimen name="lb_preference_decor_title_margin_top">10dp</dimen>
+    <dimen name="lb_preference_decor_title_margin_bottom">10dp</dimen>
+    <dimen name="lb_preference_decor_title_margin_end">24dp</dimen>
+
     <!--
     Making my card's corner rounded. More info:
     https://stackoverflow.com/questions/42623677/android-tv-verticalgridfragment-shadow-dimension-and-color

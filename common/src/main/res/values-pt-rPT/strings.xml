@@ -58,7 +58,7 @@
     <string name="default_lang">Padrão</string>
     <string name="dialog_select_language">Idioma da aplicação</string>
     <string name="subtitle_default">Padrão</string>
-    <string name="subtitle_semi_transparent_bg">Fundo semitransparente</string>
+    <string name="subtitle_white_semi_transparent">Fundo semitransparente</string>
     <string name="subtitle_style">Estilo das legendas</string>
     <string name="subtitle_language">Idioma das legendas</string>
     <string name="action_search">Começe a pesquisar</string>
@@ -112,8 +112,8 @@
     <string name="repeat_mode_none">Parar a reprodução após o vídeo</string>
     <string name="subscribed_to_channel">Canal subscrito</string>
     <string name="unsubscribed_from_channel">Cancelar subscrição do canal</string>
-    <string name="subtitle_yellow">Amarelo</string>
-    <string name="subtitle_black_bg">Fundo preto</string>
+    <string name="subtitle_yellow_transparent">Amarelo</string>
+    <string name="subtitle_white_black">Fundo preto</string>
     <string name="player_seek_preview">Visualizar enquanto procura</string>
     <string name="color_scheme_dark_grey_oled">Cinza Escuro (OLED)</string>
     <string name="channels_section_sorting">Classificação dos canais</string>

@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface PlaybackUIController {
     void updateSuggestions(VideoGroup group);
+    int getSuggestionsIndex(VideoGroup group);
     void resetSuggestedPosition();
     boolean isSuggestionsEmpty();
     void clearSuggestions();

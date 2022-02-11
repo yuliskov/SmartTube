@@ -198,14 +198,6 @@ public class SearchSupportFragment extends Fragment {
         }
     };
 
-    public void focusOnSearchField() {
-        mSearchTextEditor.requestFocus(); // MOD: focus on search field
-    }
-
-    public String getSearchBarText() {
-        return mSearchTextEditor.getText().toString();
-    }
-
     final Runnable mStartRecognitionRunnable = new Runnable() {
         @Override
         public void run() {
@@ -231,6 +223,7 @@ public class SearchSupportFragment extends Fragment {
     private String mTitle;
     private Drawable mBadgeDrawable;
     private ExternalQuery mExternalQuery;
+    private boolean mIsKeyboardAutoShowEnabled;
 
     private SpeechRecognizer mSpeechRecognizer;
     private boolean mScrollToEndAfterTextChanged;
@@ -348,11 +341,9 @@ public class SearchSupportFragment extends Fragment {
         mSearchTextEditor.setSelectAllOnFocus(true); // Select all on focus (easy clear previous search)
         mSearchTextEditor.setOnFocusChangeListener((v, focused) -> {
             Log.d(TAG, "on search field focused");
-            if (focused && mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
-                // scroll cursor to end after transition from lb_search_bar_speech_orb
-                mScrollToEndAfterTextChanged = mSearchTextEditor.getText().length() == 0;
-                Selection.setSelection(mSearchTextEditor.getText(), mSearchTextEditor.length());
 
+            if (mIsKeyboardAutoShowEnabled && focused &&
+                    mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView() != null) {
                 mRowsSupportFragment.getVerticalGridView().clearFocus();
 
                 if (getContext() != null) {
@@ -360,6 +351,8 @@ public class SearchSupportFragment extends Fragment {
                 }
             }
         });
+        // BUGFIX: focus lost with keyboard???
+        //mSearchTextEditor.setOnKeyboardDismissListener(this::focusOnSearchField);
 
         mSearchTextEditor.addTextChangedListener(new TextWatcher() {
             @Override
@@ -779,6 +772,45 @@ public class SearchSupportFragment extends Fragment {
         // NOP
     }
 
+    public void focusOnSearchField() {
+        mSearchTextEditor.requestFocus(); // MOD: focus on search field
+    }
+
+    protected String getSearchBarText() {
+        return mSearchTextEditor.getText().toString();
+    }
+
+    /**
+     * Select rows container after query submit<br/>
+     * May helps with "hide kbd on back properly"
+     */
+    protected void focusOnResults() {
+        if (mRowsSupportFragment == null || mRowsSupportFragment.getVerticalGridView() == null
+                || mResultAdapter.size() == 0) {
+            return;
+        }
+
+        // MOD: hide kbd on back properly
+        if (mRowsSupportFragment.getVerticalGridView().requestFocus()) {
+            mStatus &= ~RESULTS_CHANGED;
+        }
+    }
+
+    protected void selectAllText() {
+        if (mSearchTextEditor != null) {
+            mSearchTextEditor.selectAll();
+        }
+    }
+
+    protected void enableKeyboardAutoShow(boolean enable) {
+        mIsKeyboardAutoShowEnabled = enable;
+    }
+
+    private void onSetSearchResultProvider() {
+        mHandler.removeCallbacks(mSetSearchResultProvider);
+        mHandler.post(mSetSearchResultProvider);
+    }
+
     void retrieveResults(String searchQuery) {
         if (DEBUG) Log.v(TAG, "retrieveResults " + searchQuery);
         if (mProvider.onQueryTextChange(searchQuery)) {
@@ -786,7 +818,7 @@ public class SearchSupportFragment extends Fragment {
         }
     }
 
-    void submitQuery(String query) {
+    protected void submitQuery(String query) {
         if (query == null) {
             return;
         }
@@ -828,33 +860,6 @@ public class SearchSupportFragment extends Fragment {
             // MOD: Comment to fix moving focus to voice button when activity started
             //mSearchBar.requestFocus();
         }
-    }
-
-    /**
-     * Select rows container after query submit<br/>
-     * May helps with "hide kbd on back properly"
-     */
-    protected void focusOnResults() {
-        if (mRowsSupportFragment == null || mRowsSupportFragment.getVerticalGridView() == null
-                || mResultAdapter.size() == 0) {
-            return;
-        }
-
-        // MOD: hide kbd on back properly
-        if (mRowsSupportFragment.getVerticalGridView().requestFocus()) {
-            mStatus &= ~RESULTS_CHANGED;
-        }
-    }
-
-    protected void selectAllText() {
-        if (mSearchTextEditor != null) {
-            mSearchTextEditor.selectAll();
-        }
-    }
-
-    private void onSetSearchResultProvider() {
-        mHandler.removeCallbacks(mSetSearchResultProvider);
-        mHandler.post(mSetSearchResultProvider);
     }
 
     void releaseAdapter() {

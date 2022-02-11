@@ -6,17 +6,18 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.mediaserviceinterfaces.data.SponsorSegment;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader.MetadataListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.ContentBlockData;
-import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -24,9 +25,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class ContentBlockManager extends PlayerEventListenerHelper implements MetadataListener {
@@ -39,8 +38,6 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     private Disposable mProgressAction;
     private Disposable mSegmentsAction;
     private boolean mIsSameSegment;
-    private Map<String, Integer> mLocalizedMapping;
-    private Map<String, Integer> mSegmentColorMapping;
 
     public static class SeekBarSegment {
         public int startProgress;
@@ -48,37 +45,46 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         public int color = Color.GREEN;
     }
 
+    public static class SegmentAction {
+        public String segmentCategory;
+        public int actionType;
+
+        public static SegmentAction from(String spec) {
+            if (spec == null) {
+                return null;
+            }
+
+            String[] split = spec.split(",");
+
+            if (split.length != 2) {
+                return null;
+            }
+
+            String name = Helpers.parseStr(split[0]);
+            int action = Helpers.parseInt(split[1]);
+
+            return from(name, action);
+        }
+
+        public static SegmentAction from(String name, int action) {
+            SegmentAction blockedSegment = new SegmentAction();
+            blockedSegment.segmentCategory = name;
+            blockedSegment.actionType = action;
+
+            return blockedSegment;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("%s,%s", segmentCategory, actionType);
+        }
+    }
+
     @Override
     public void onInitDone() {
         MediaService mediaService = YouTubeMediaService.instance();
         mMediaItemManager = mediaService.getMediaItemManager();
         mContentBlockData = ContentBlockData.instance(getActivity());
-        initLocalizedMapping();
-        initSegmentColorMapping();
-    }
-
-    private void initLocalizedMapping() {
-        mLocalizedMapping = new HashMap<>();
-        mLocalizedMapping.put(SponsorSegment.CATEGORY_SPONSOR, R.string.content_block_sponsor);
-        mLocalizedMapping.put(SponsorSegment.CATEGORY_INTRO, R.string.content_block_intro);
-        mLocalizedMapping.put(SponsorSegment.CATEGORY_OUTRO, R.string.content_block_outro);
-        mLocalizedMapping.put(SponsorSegment.CATEGORY_SELF_PROMO, R.string.content_block_self_promo);
-        mLocalizedMapping.put(SponsorSegment.CATEGORY_INTERACTION, R.string.content_block_interaction);
-        mLocalizedMapping.put(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC, R.string.content_block_music_off_topic);
-        mLocalizedMapping.put(SponsorSegment.CATEGORY_PREVIEW_RECAP, R.string.content_block_preview_recap);
-        mLocalizedMapping.put(SponsorSegment.CATEGORY_HIGHLIGHT, R.string.content_block_highlight);
-    }
-
-    private void initSegmentColorMapping() {
-        mSegmentColorMapping = new HashMap<>();
-        mSegmentColorMapping.put(SponsorSegment.CATEGORY_SPONSOR, ContextCompat.getColor(getActivity(), R.color.green));
-        mSegmentColorMapping.put(SponsorSegment.CATEGORY_INTRO, ContextCompat.getColor(getActivity(), R.color.cyan));
-        mSegmentColorMapping.put(SponsorSegment.CATEGORY_OUTRO, ContextCompat.getColor(getActivity(), R.color.blue));
-        mSegmentColorMapping.put(SponsorSegment.CATEGORY_SELF_PROMO, ContextCompat.getColor(getActivity(), R.color.yellow));
-        mSegmentColorMapping.put(SponsorSegment.CATEGORY_INTERACTION, ContextCompat.getColor(getActivity(), R.color.magenta));
-        mSegmentColorMapping.put(SponsorSegment.CATEGORY_MUSIC_OFF_TOPIC, ContextCompat.getColor(getActivity(), R.color.brown));
-        mSegmentColorMapping.put(SponsorSegment.CATEGORY_PREVIEW_RECAP, ContextCompat.getColor(getActivity(), R.color.light_blue));
-        mSegmentColorMapping.put(SponsorSegment.CATEGORY_HIGHLIGHT, ContextCompat.getColor(getActivity(), R.color.white));
     }
 
     @Override
@@ -109,7 +115,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
     }
 
     private void updateSponsorSegmentsAndWatch(Video item) {
-        if (item == null || item.videoId == null || mContentBlockData.getCategories().isEmpty()) {
+        if (item == null || item.videoId == null || mContentBlockData.getEnabledCategories().isEmpty()) {
             mSponsorSegments = null;
             return;
         }
@@ -117,7 +123,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         // Reset colors
         getController().setSeekBarSegments(null);
 
-        mSegmentsAction = mMediaItemManager.getSponsorSegmentsObserve(item.videoId, mContentBlockData.getCategories())
+        mSegmentsAction = mMediaItemManager.getSponsorSegmentsObserve(item.videoId, mContentBlockData.getEnabledCategories())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -127,7 +133,9 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
                             if (mContentBlockData.isColorMarkersEnabled()) {
                                 getController().setSeekBarSegments(toSeekBarSegments(segments));
                             }
-                            startPlaybackWatcher();
+                            if (mContentBlockData.isActionsEnabled()) {
+                                startPlaybackWatcher();
+                            }
                         },
                         error -> Log.d(TAG, "It's ok. Nothing to block in this video. Error msg: %s", error.getMessage())
                 );
@@ -166,16 +174,16 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
             if (isPositionAtSegmentStart(getController().getPositionMs(), segment)) {
                 isSegmentFound = true;
                 foundSegment = segment;
-                Integer resId = mLocalizedMapping.get(segment.getCategory());
+                Integer resId = mContentBlockData.getLocalizedRes(segment.getCategory());
                 String localizedCategory = resId != null ? getActivity().getString(resId) : segment.getCategory();
 
-                int type = mContentBlockData.getNotificationType();
+                int type = mContentBlockData.getAction(segment.getCategory());
 
-                if (type == ContentBlockData.NOTIFICATION_TYPE_NONE || getController().isInPIPMode()) {
+                if (type == ContentBlockData.ACTION_SKIP_ONLY || getController().isInPIPMode()) {
                     getController().setPositionMs(segment.getEndMs());
-                } else if (type == ContentBlockData.NOTIFICATION_TYPE_TOAST) {
+                } else if (type == ContentBlockData.ACTION_SKIP_WITH_TOAST) {
                     messageSkip(segment.getEndMs(), localizedCategory);
-                } else if (type == ContentBlockData.NOTIFICATION_TYPE_DIALOG) {
+                } else if (type == ContentBlockData.ACTION_SHOW_DIALOG) {
                     confirmSkip(segment.getEndMs(), localizedCategory);
                 }
 
@@ -193,8 +201,9 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
 
     private boolean isPositionAtSegmentStart(long positionMs, SponsorSegment segment) {
         // Note. Getting into account playback speed. Also check that the zone is long enough.
-        float checkEndMs = segment.getStartMs() + SEGMENT_CHECK_LENGTH_MS * getController().getSpeed();
-        return positionMs >= segment.getStartMs() && positionMs <= checkEndMs && checkEndMs <= segment.getEndMs();
+        //float checkEndMs = segment.getStartMs() + SEGMENT_CHECK_LENGTH_MS * getController().getSpeed();
+        //return positionMs >= segment.getStartMs() && positionMs <= checkEndMs && checkEndMs <= segment.getEndMs();
+        return positionMs >= segment.getStartMs() && positionMs <= segment.getEndMs();
     }
 
     private boolean isPositionInsideSegment(long positionMs, SponsorSegment segment) {
@@ -224,7 +233,7 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         );
 
         OptionItem cancelOption = UiOptionItem.from(
-                getActivity().getString(R.string.cancel_segment_skip),
+                getActivity().getString(R.string.cancel_dialog),
                 option -> settingsPresenter.closeDialog()
         );
 
@@ -232,10 +241,11 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         settingsPresenter.appendSingleButton(cancelOption);
         settingsPresenter.setCloseTimeoutMs(skipPositionMs - getController().getPositionMs());
 
+        settingsPresenter.enableTransparent(true);
         settingsPresenter.showDialog(ContentBlockData.SPONSOR_BLOCK_NAME);
     }
 
-    public List<SeekBarSegment> toSeekBarSegments(List<SponsorSegment> segments) {
+    private List<SeekBarSegment> toSeekBarSegments(List<SponsorSegment> segments) {
         if (segments == null) {
             return null;
         }
@@ -243,12 +253,16 @@ public class ContentBlockManager extends PlayerEventListenerHelper implements Me
         List<SeekBarSegment> result = new ArrayList<>();
 
         for (SponsorSegment sponsorSegment : segments) {
+            if (!mContentBlockData.isColorMarkerEnabled(sponsorSegment.getCategory())) {
+                continue;
+            }
+
             SeekBarSegment seekBarSegment = new SeekBarSegment();
             double startRatio = (double) sponsorSegment.getStartMs() / getController().getLengthMs(); // Range: [0, 1]
             double endRatio = (double) sponsorSegment.getEndMs() / getController().getLengthMs(); // Range: [0, 1]
             seekBarSegment.startProgress = (int) (startRatio * Integer.MAX_VALUE); // Could safely cast to int
             seekBarSegment.endProgress = (int) (endRatio * Integer.MAX_VALUE); // Could safely cast to int
-            seekBarSegment.color = mSegmentColorMapping.get(sponsorSegment.getCategory());
+            seekBarSegment.color = ContextCompat.getColor(getActivity(), mContentBlockData.getColorRes(sponsorSegment.getCategory()));
             result.add(seekBarSegment);
         }
 

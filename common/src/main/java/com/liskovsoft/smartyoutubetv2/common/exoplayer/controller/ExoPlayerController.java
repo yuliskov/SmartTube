@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.exoplayer.controller;
 
 import android.content.Context;
+import android.os.Build.VERSION;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.PlaybackParameters;
@@ -22,8 +24,10 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.ExoFormatItem;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackInfoFormatter2;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.TrackSelectorUtil;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.selector.track.VideoTrack;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.ExoUtils;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 
 import java.io.InputStream;
 import java.util.List;
@@ -34,22 +38,23 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private final ExoMediaSourceFactory mMediaSourceFactory;
     private final TrackSelectorManager mTrackSelectorManager;
     private final TrackInfoFormatter2 mTrackFormatter;
-    private final TrackErrorFixer mTrackErrorFixer;
     private boolean mOnSourceChanged;
     private Video mVideo;
     private PlayerEventListener mEventListener;
     private SimpleExoPlayer mPlayer;
     private PlayerView mPlayerView;
-    private boolean mIsViewPaused;
 
     public ExoPlayerController(Context context) {
         mContext = context.getApplicationContext();
         mMediaSourceFactory = ExoMediaSourceFactory.instance(context);
         mTrackSelectorManager = new TrackSelectorManager();
         mTrackFormatter = new TrackInfoFormatter2();
-        mTrackErrorFixer = new TrackErrorFixer(mTrackSelectorManager);
 
+        mMediaSourceFactory.setTrackErrorFixer(new TrackErrorFixer(mTrackSelectorManager));
+
+        // Shield 720p fix???
         initFormats();
+        VideoTrack.sIsNoFpsPresetsEnabled = PlayerTweaksData.instance(context).isNoFpsPresetsEnabled();
     }
 
     private void initFormats() {
@@ -89,10 +94,10 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     private void openMediaSource(MediaSource mediaSource) {
         setQualityInfo("");
 
-        mOnSourceChanged = true;
         mTrackSelectorManager.invalidate();
-        mPlayer.prepare(mediaSource);
+        mOnSourceChanged = true;
         mEventListener.onSourceChanged(mVideo);
+        mPlayer.prepare(mediaSource);
     }
 
     @Override
@@ -104,9 +109,13 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         return mPlayer.getCurrentPosition();
     }
 
+    /**
+     * NOTE: Pos gathered from content block data may slightly exceed video duration
+     * (e.g. 302200 when duration is 302000).
+     */
     @Override
     public void setPositionMs(long positionMs) {
-        if (positionMs >= 0 && mPlayer != null) {
+        if (mPlayer != null && positionMs >= 0 && getLengthMs() != -1) {
             mPlayer.seekTo(positionMs);
         }
     }
@@ -117,7 +126,8 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
             return -1;
         }
 
-        return mPlayer.getDuration();
+        long duration = mPlayer.getDuration();
+        return duration != C.TIME_UNSET ? duration : -1;
     }
 
     @Override
@@ -190,6 +200,13 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     @Override
     public void setTrackSelector(DefaultTrackSelector trackSelector) {
         mTrackSelectorManager.setTrackSelector(trackSelector);
+
+        if (mContext != null && trackSelector != null && PlayerTweaksData.instance(mContext).isTunneledPlaybackEnabled()) {
+            // Enable tunneling if supported by the current media and device configuration.
+            if (VERSION.SDK_INT >= 21) {
+                trackSelector.setParameters(trackSelector.buildUponParameters().setTunnelingAudioSessionId(C.generateAudioSessionIdV21(mContext)));
+            }
+        }
     }
 
     @Override
@@ -220,9 +237,8 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     @Override
     public void selectFormat(FormatItem formatItem) {
         if (formatItem != null) {
-            mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(formatItem));
-            // TODO: move to the {@link #onTrackChanged()} somehow
             mEventListener.onTrackSelected(formatItem);
+            mTrackSelectorManager.selectTrack(ExoFormatItem.toMediaTrack(formatItem));
         }
     }
 
@@ -287,9 +303,7 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     public void onPlayerError(ExoPlaybackException error) {
         Log.e(TAG, "onPlayerError: " + error);
 
-        if (mTrackErrorFixer.fixError(error)) {
-            return;
-        }
+        // Player is released at this point. So, there is no sense to restore the playback here.
 
         //if (error.type == ExoPlaybackException.TYPE_UNEXPECTED &&
         //    error.getCause() instanceof IllegalArgumentException) {
@@ -339,6 +353,11 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
     }
 
     @Override
+    public void onSeekProcessed() {
+        mEventListener.onSeekEnd();
+    }
+
+    @Override
     public void setSpeed(float speed) {
         if (mPlayer != null && speed > 0) {
             mPlayer.setPlaybackParameters(new PlaybackParameters(speed, 1.0f));
@@ -371,11 +390,6 @@ public class ExoPlayerController implements Player.EventListener, PlayerControll
         } else {
             return 1;
         }
-    }
-
-    @Override
-    public void onViewPaused(boolean isPaused) {
-        mIsViewPaused = isPaused;
     }
 
     private void setQualityInfo(String qualityInfoStr) {

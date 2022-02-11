@@ -16,7 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoader.MetadataListener;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.SuggestionsLoaderManager.MetadataListener;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -29,7 +29,8 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.OnS
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
-import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
@@ -46,7 +47,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     private static final int SUBTITLE_STYLES_ID = 45;
     private final Handler mHandler;
     private final MediaItemManager mMediaItemManager;
-    private final VideoLoader mVideoLoader;
+    private final VideoLoaderManager mVideoLoader;
     private boolean mEngineReady;
     private boolean mDebugViewEnabled;
     private PlayerData mPlayerData;
@@ -65,7 +66,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         }
     };
 
-    public PlayerUIManager(VideoLoader videoLoader) {
+    public PlayerUIManager(VideoLoaderManager videoLoader) {
         mVideoLoader = videoLoader;
         mHandler = new Handler(Looper.getMainLooper());
 
@@ -276,7 +277,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
         // suppose live stream if buffering near the end
         // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
-        intSpeedItems(settingsPresenter, items, new float[]{0.25f, 0.5f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f, 1.0f, 1.1f, 1.15f, 1.2f, 1.25f, 1.3f, 1.4f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f, 3.0f});
+        intSpeedItems(settingsPresenter, items, new float[]{0.25f, 0.5f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f, 1.0f, 1.05f, 1.1f, 1.15f, 1.2f, 1.25f, 1.3f, 1.4f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f, 3.0f});
 
         settingsPresenter.appendRadioCategory(getActivity().getString(R.string.video_speed), items);
         settingsPresenter.showDialog();
@@ -284,6 +285,9 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onSearchClicked() {
+        if (SearchData.instance(getActivity()).isBackgroundPlaybackEnabled()) {
+            onPipClicked();
+        }
         SearchPresenter.instance(getActivity()).startSearch(null);
     }
 
@@ -305,7 +309,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onPipClicked() {
         getController().showControls(false);
-        getController().setPlaybackMode(PlaybackEngineController.BACKGROUND_MODE_PIP);
+        getController().setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_PIP);
         getController().finish();
     }
 

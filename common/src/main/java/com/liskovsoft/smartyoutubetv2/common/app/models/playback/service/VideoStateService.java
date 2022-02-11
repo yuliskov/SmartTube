@@ -1,0 +1,138 @@
+package com.liskovsoft.smartyoutubetv2.common.app.models.playback.service;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import androidx.annotation.NonNull;
+import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+
+import java.util.Map;
+
+public class VideoStateService {
+    public static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
+    public static final long LIVE_THRESHOLD_MS = 60_000;
+    private static final int MAX_PERSISTENT_STATE_SIZE = 30;
+    @SuppressLint("StaticFieldLeak")
+    private static VideoStateService sInstance;
+    // Don't store state inside Video object.
+    // As one video might correspond to multiple Video objects.
+    private final Map<String, State> mStates = Utils.createLRUMap(MAX_PERSISTENT_STATE_SIZE);
+    private final AppPrefs mPrefs;
+    private final PlayerData mPlayerData;
+
+    private VideoStateService(Context context) {
+        mPrefs = AppPrefs.instance(context);
+        mPlayerData = PlayerData.instance(context);
+
+        restoreState();
+    }
+
+    public static VideoStateService instance(Context context) {
+        if (sInstance == null && context != null) {
+            sInstance = new VideoStateService(context.getApplicationContext());
+        }
+
+        return sInstance;
+    }
+
+    public State getByVideoId(String videoId) {
+        return mStates.get(videoId);
+    }
+
+    public boolean isEmpty() {
+        return mStates.size() == 0;
+    }
+
+    public void save(State state) {
+        mStates.put(state.videoId, state);
+    }
+
+    public void removeByVideoId(String videoId) {
+        mStates.remove(videoId);
+    }
+
+    private void restoreState() {
+        String data = mPrefs.getStateUpdaterData();
+
+        if (data != null) {
+            String[] split = data.split("\\|");
+
+            for (String spec : split) {
+                State state = State.from(spec);
+
+                if (state != null) {
+                    mStates.put(state.videoId, state);
+                }
+            }
+        }
+    }
+
+    public void persistState() {
+        StringBuilder sb = new StringBuilder();
+
+        for (State state : mStates.values()) {
+            // NOTE: Storage optimization!!!
+            //if (state.lengthMs <= MUSIC_VIDEO_LENGTH_MS && !mPlayerData.isRememberSpeedEachEnabled()) {
+            //    continue;
+            //}
+
+            if (sb.length() != 0) {
+                sb.append("|");
+            }
+
+            sb.append(state);
+        }
+
+        mPrefs.setStateUpdaterData(sb.toString());
+    }
+
+    public static class State {
+        public final String videoId;
+        public final long positionMs;
+        public final long lengthMs;
+        public final float speed;
+        public final long timestamp = System.currentTimeMillis();
+
+        public State(String videoId, long positionMs) {
+            this(videoId, positionMs, -1);
+        }
+
+        public State(String videoId, long positionMs, long lengthMs) {
+            this(videoId, positionMs, lengthMs, 1.0f);
+        }
+
+        public State(String videoId, long positionMs, long lengthMs, float speed) {
+            this.videoId = videoId;
+            this.positionMs = positionMs;
+            this.lengthMs = lengthMs;
+            this.speed = speed;
+        }
+
+        public static State from(String spec) {
+            if (spec == null) {
+                return null;
+            }
+
+            String[] split = spec.split(",");
+
+            if (split.length != 4) {
+                return null;
+            }
+
+            String videoId = split[0];
+            long positionMs = Helpers.parseLong(split[1]);
+            long lengthMs = Helpers.parseLong(split[2]);
+            float speed = Helpers.parseFloat(split[3]);
+
+            return new State(videoId, positionMs, lengthMs, speed);
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return String.format("%s,%s,%s,%s", videoId, positionMs, lengthMs, speed);
+        }
+    }
+}

@@ -42,6 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/lb_preference_decor_title_text_height"
             android:layout_marginTop="@dimen/lb_preference_decor_title_margin_top"
+            android:layout_marginBottom="@dimen/lb_preference_decor_title_margin_bottom"
             android:layout_marginStart="@dimen/lb_preference_decor_title_margin_start"
             android:layout_marginEnd="@dimen/lb_preference_decor_title_margin_end"
             android:fontFamily="sans-serif"

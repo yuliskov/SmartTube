@@ -117,10 +117,21 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             return;
         }
 
-        if (group.getAction() == VideoGroup.ACTION_REPLACE) {
+        int action = group.getAction();
+
+        if (action == VideoGroup.ACTION_REPLACE) {
             clear();
-        } else if (group.getAction() == VideoGroup.ACTION_REMOVE) {
-            mVideoGroupAdapters.get(group.getId()).remove(group);
+        } else if (action == VideoGroup.ACTION_REMOVE) {
+            VideoGroupObjectAdapter adapter = mVideoGroupAdapters.get(group.getId());
+            if (adapter != null) {
+                adapter.remove(group);
+            }
+            return;
+        } else if (action == VideoGroup.ACTION_SYNC) {
+            VideoGroupObjectAdapter adapter = mVideoGroupAdapters.get(group.getId());
+            if (adapter != null) {
+                adapter.sync(group);
+            }
             return;
         }
 
@@ -139,7 +150,12 @@ public abstract class MultipleRowsFragment extends RowsSupportFragment implement
             mVideoGroupAdapters.put(mediaGroupId, mediaGroupAdapter);
 
             ListRow row = new ListRow(rowHeader, mediaGroupAdapter);
-            mRowsAdapter.add(row);
+
+            if (group.getPosition() == -1) {
+                mRowsAdapter.add(row);
+            } else {
+                mRowsAdapter.add(group.getPosition(), row);
+            }
         } else {
             Log.d(TAG, "Continue row %s %s", group.getTitle(), System.currentTimeMillis());
 

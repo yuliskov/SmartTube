@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.playback;
 
+import android.app.Activity;
 import android.os.Build.VERSION;
 import android.os.Bundle;
 import android.support.v4.media.MediaMetadataCompat;
@@ -19,6 +20,7 @@ import androidx.leanback.widget.ClassPresenterSelector;
 import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
+import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.OnItemViewSelectedListener;
 import androidx.leanback.widget.Presenter;
 import androidx.leanback.widget.Row;
@@ -33,7 +35,6 @@ import com.google.android.exoplayer2.ext.leanback.LeanbackPlayerAdapter;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.FixedTrackSelection;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -66,16 +67,17 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.common.LeanbackActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.UriBackgroundManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.ProgressBarManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc.SeekBar;
-import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.surfacefragment.SurfaceSupportFragmentGlueHost;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.SeekModePlaybackFragment;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.mod.surface.SurfacePlaybackFragmentGlueHost;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.BackboneQueueNavigator;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.StoryboardSeekDataProvider;
-import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoEventsOverrideFragment;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.other.VideoPlayerGlue.OnActionClickedListener;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.EndingTimeView;
 
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +86,7 @@ import java.util.Map;
  * Plays selected video, loads playlist and related videos, and delegates playback to
  * {@link VideoPlayerGlue}.
  */
-public class PlaybackFragment extends VideoEventsOverrideFragment implements PlaybackView, PlaybackController {
+public class PlaybackFragment extends SeekModePlaybackFragment implements PlaybackView, PlaybackController {
     private static final String TAG = PlaybackFragment.class.getSimpleName();
     private static final int UPDATE_DELAY_MS = 16;
     private VideoPlayerGlue mPlayerGlue;
@@ -106,6 +108,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     private MediaSessionCompat mMediaSession;
     private MediaSessionConnector mMediaSessionConnector;
     private boolean mIsAfrRunning;
+    private Boolean mIsControlsShownPreviously;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -189,20 +192,23 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             initializePlayer();
         }
 
-        mExoPlayerController.onViewPaused(false);
+        // NOTE: don't move this into another place! Multiple components rely on it.
         mEventListener.onViewResumed();
+        showHidePlayerOverlay(true); // PIP mode fix
     }
 
     @Override
     public void onPause() {
         super.onPause();
 
+        // NOTE: don't move this into another place! Multiple components rely on it.
+        mEventListener.onViewPaused();
+
         if (Util.SDK_INT <= 23) {
             releasePlayer();
         }
 
-        mExoPlayerController.onViewPaused(true);
-        mEventListener.onViewPaused();
+        showHidePlayerOverlay(false); // PIP mode fix
     }
 
     public void onDispatchKeyEvent(KeyEvent event) {
@@ -211,14 +217,20 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
     public void onDispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            tickle();
+            tickle(); // show Player UI
+        }
+    }
+
+    public void onDispatchGenericMotionEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            tickle(); // show Player UI
         }
     }
 
     public void onFinish() {
         // Fix background play when playing trailers from NUM
         // On API > 23 onStop not immediately occurred after onPause
-        if (getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_DEFAULT) {
+        if (getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_DEFAULT) {
             if (Util.SDK_INT > 23) {
                 releasePlayer();
             }
@@ -304,7 +316,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         // Background audio mode is complicated (null surface error) on Android 9 (api 28) and above. Try avoid it.
         // More info: DebugInfoMediaCodecVideoRenderer#handleMessage
-        if (getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND &&
+        if (getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND &&
             !ViewManager.instance(getContext()).isNewViewPending()) {
             Log.d(TAG, "releasePlayer: Engine release is blocked by background playback. Exiting...");
             return;
@@ -386,7 +398,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         OnActionClickedListener playerActionListener = new PlayerActionListener();
         mPlayerGlue = new VideoPlayerGlue(getContext(), playerAdapter, playerActionListener);
-        mPlayerGlue.setHost(new SurfaceSupportFragmentGlueHost(this));
+        mPlayerGlue.setHost(new SurfacePlaybackFragmentGlueHost(this));
         mPlayerGlue.setSeekEnabled(true);
         mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end
         StoryboardSeekDataProvider.setSeekProvider(mPlayerGlue);
@@ -439,7 +451,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         }
 
         mMediaSessionConnector.setMediaMetadataProvider(player -> {
-            if (getVideo() == null || PlayerTweaksData.instance(getContext()).isNotificationFixEnabled()) {
+            if (getVideo() == null || PlayerTweaksData.instance(getContext()).isPlaybackNotificationsDisabled()) {
                 return null;
             }
 
@@ -447,8 +459,10 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, getVideo().title);
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, getVideo().title);
-            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, getVideo().description);
+            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, getVideo().extractAuthor());
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, getVideo().description);
+            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, getVideo().cardImageUrl);
+            metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, getLengthMs());
 
             return metadataBuilder.build();
         });
@@ -517,10 +531,20 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
                 super.onBindRowViewHolder(holder, item);
 
                 // Set position of item inside first row (playlist items)
-                if (getVideo() != null && getVideo().playlistIndex > 0 &&
-                        mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView().getSelectedPosition() == 0) {
-                    ViewHolder vh = (ViewHolder) holder;
-                    vh.getGridView().setSelectedPosition(getVideo().playlistIndex);
+                //if (getVideo() != null && getVideo().playlistIndex > 0 &&
+                //        mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView().getSelectedPosition() == 0) {
+                //    ViewHolder vh = (ViewHolder) holder;
+                //    vh.getGridView().setSelectedPosition(getVideo().playlistIndex);
+                //}
+
+                // Set position of item inside first row (playlist items)
+                if (mRowsSupportFragment != null && mRowsSupportFragment.getVerticalGridView().getSelectedPosition() == 0) {
+                    int index = getSuggestedItemIndex();
+
+                    if (index > 0) {
+                        ViewHolder vh = (ViewHolder) holder;
+                        vh.getGridView().setSelectedPosition(index);
+                    }
                 }
             }
 
@@ -533,6 +557,29 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         };
 
         mCardPresenter = new VideoCardPresenter();
+    }
+
+    private int getSuggestedItemIndex() {
+        if (getVideo() == null || !getVideo().hasPlaylist() || !getVideo().hasVideo()) {
+            return -1;
+        }
+
+        // NOTE: skip first row. It's PlaybackControlsRow
+        Object row = mRowsAdapter != null && mRowsAdapter.size() > 1 ? mRowsAdapter.get(1) : null;
+
+        if (row instanceof ListRow) {
+            VideoGroupObjectAdapter adapter = (VideoGroupObjectAdapter) ((ListRow) row).getAdapter();
+            int index = adapter.indexOfAlt(getVideo());
+
+            // Below doesn't work. onBindRowViewHolder won't called on update hidden list.
+            //if (index == -1) {
+            //    mEventListener.onScrollEnd((Video) adapter.get(adapter.size() - 1));
+            //}
+
+            return index == -1 ? adapter.size() - 1 : index; // select last possible item on fail
+        }
+
+        return -1;
     }
 
     private void setupEventListeners() {
@@ -876,13 +923,13 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
-    public void setPlaybackMode(int type) {
+    public void setBackgroundMode(int type) {
         Log.d(TAG, "Setting engine block type to %s...", type);
         mPlaybackMode = type;
     }
 
     @Override
-    public int getPlaybackMode() {
+    public int getBackgroundMode() {
         return mPlaybackMode;
     }
 
@@ -947,6 +994,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     }
 
     @Override
+    public PlayerEventListener getEventListener() {
+        return mEventListener;
+    }
+
+    @Override
     public PlaybackController getController() {
         return this;
     }
@@ -965,7 +1017,7 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
 
         // Fix situations when engine didn't properly destroyed.
         // E.g. after closing dialogs.
-        setPlaybackMode(PlaybackEngineController.BACKGROUND_MODE_DEFAULT);
+        setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_DEFAULT);
         releasePlayer();
 
         mPlaybackPresenter.onViewDestroyed();
@@ -1008,6 +1060,11 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
     public void showControlsOverlay(boolean runAnimation) {
         super.showControlsOverlay(runAnimation);
 
+        // Do throttle. Called so many times. Rely on boxing because initial state is unknown.
+        if (mIsControlsShownPreviously != null && mIsControlsShownPreviously) {
+            return;
+        }
+
         updatePlayerBackground();
 
         if (mPlayerGlue != null) {
@@ -1017,11 +1074,18 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         if (mEventListener != null) {
             mEventListener.onControlsShown(true);
         }
+
+        mIsControlsShownPreviously = true;
     }
 
     @Override
     public void hideControlsOverlay(boolean runAnimation) {
         super.hideControlsOverlay(runAnimation);
+
+        // Do throttle. Called so many times. Rely on boxing because initial state is unknown.
+        if (mIsControlsShownPreviously != null && !mIsControlsShownPreviously) {
+            return;
+        }
 
         if (mPlayerGlue != null) {
             mPlayerGlue.setControlsVisibility(false);
@@ -1030,6 +1094,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         if (mEventListener != null) {
             mEventListener.onControlsShown(false);
         }
+
+        mIsControlsShownPreviously = false;
     }
 
     @Override
@@ -1157,6 +1223,33 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         }
     }
 
+    @Override
+    public int getSuggestionsIndex(VideoGroup group) {
+        if (mRowsAdapter == null) {
+            Log.e(TAG, "Related videos row not initialized yet.");
+            return -1;
+        }
+
+        VideoGroupObjectAdapter existingAdapter = mMediaGroupAdapters.get(group.getId());
+
+        int index = -1;
+
+        for (int i = 0; i < mRowsAdapter.size(); i++) {
+            Object row = mRowsAdapter.get(i);
+
+            if (row instanceof ListRow) {
+                ObjectAdapter adapter = ((ListRow) row).getAdapter();
+
+                if (adapter == existingAdapter) {
+                    index = mRowsAdapter.indexOf(row);
+                    break;
+                }
+            }
+        }
+
+        return index != -1 ? index - 1 : -1;
+    }
+
     /**
      * Disable scrolling on partially updated rows. This prevent controls from misbehaving.
      */
@@ -1164,7 +1257,8 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
         // Disable scrolling on partially updated rows. This prevent controls from misbehaving.
         if (mRowPresenter != null && mRowsSupportFragment != null) {
             ViewHolder vh = mRowsSupportFragment.getRowViewHolder(mRowsSupportFragment.getSelectedPosition());
-            if (vh != null) {
+            // Skip PlaybackRowPresenter.ViewHolder
+            if (vh instanceof ListRowPresenter.ViewHolder) {
                 mRowPresenter.freeze(vh, freeze);
             }
         }
@@ -1199,6 +1293,18 @@ public class PlaybackFragment extends VideoEventsOverrideFragment implements Pla
             showControls(controlsShown);
             showDebugInfo(debugShown);
             setDebugButtonState(debugShown);
+        }
+    }
+
+    private void showHidePlayerOverlay(boolean show) {
+        Activity activity = getActivity();
+
+        if (activity != null) {
+            View overlay = activity.findViewById(R.id.player_overlay_wrapper);
+
+            if (overlay != null) {
+                overlay.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
         }
     }
 }

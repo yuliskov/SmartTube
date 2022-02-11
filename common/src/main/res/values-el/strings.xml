@@ -58,7 +58,7 @@
     <string name="default_lang">Προεπιλεγμένο</string>
     <string name="dialog_select_language">Γλώσσα Εφαρμογής</string>
     <string name="subtitle_default">Προεπιλεγμένο</string>
-    <string name="subtitle_semi_transparent_bg">Ημιδιαφανές Φόντο</string>
+    <string name="subtitle_white_semi_transparent">Ημιδιαφανές Φόντο</string>
     <string name="subtitle_style">Στύλ Υποτίτλων</string>
     <string name="subtitle_language">Γλώσσα Υπότιτλου</string>
     <string name="action_search">Έναρξη Αναζήτησης</string>
@@ -112,8 +112,8 @@
     <string name="repeat_mode_none">Διακοπή αναπαραγωγής μετά από ένα βίντεο</string>
     <string name="subscribed_to_channel">Εγγραφήκατε στο κανάλι</string>
     <string name="unsubscribed_from_channel">Καταργήθηκε η εγγραφή από το κανάλι</string>
-    <string name="subtitle_yellow">Κίτρινο</string>
-    <string name="subtitle_black_bg">Μαύρο Φόντο</string>
+    <string name="subtitle_yellow_transparent">Κίτρινο</string>
+    <string name="subtitle_white_black">Μαύρο Φόντο</string>
     <string name="player_seek_preview">Προεπισκόπηση κατά την αναζήτηση</string>
     <string name="color_scheme_dark_grey_oled">Μαύρο Γκρι (OLED)</string>
     <string name="channels_section_sorting">Ταξινόμηση ενότητας καναλιού</string>

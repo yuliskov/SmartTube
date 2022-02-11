@@ -5,6 +5,7 @@ import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaGroupManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -18,7 +19,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGrou
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
-import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -56,6 +57,8 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
 
     @Override
     public void onViewInitialized() {
+        super.onViewInitialized();
+
         if (mChannelId != null) {
             getView().clear();
             updateRows(mChannelId);
@@ -63,6 +66,22 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             getView().clear();
             updateRows(mMediaGroups);
         }
+    }
+
+    @Override
+    public void onViewDestroyed() {
+        super.onViewDestroyed();
+        disposeActions();
+    }
+
+    @Override
+    public void onFinish() {
+        super.onFinish();
+
+        // Destroy the cache only (!) when user pressed back (e.g. wants to explicitly kill the activity)
+        // Otherwise keep the cache to easily restore in case activity is killed by the system.
+        mChannelId = null;
+        mMediaGroups = null;
     }
 
     @Override
@@ -87,6 +106,11 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             return;
         }
 
+        if (item.group == null) {
+            Log.e(TAG, "Can't scroll. Video group is null.");
+            return;
+        }
+
         VideoGroup group = item.group;
 
         Log.d(TAG, "onScrollEnd: Group title: " + group.getTitle());
@@ -99,14 +123,6 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     }
 
     @Override
-    public void onViewDestroyed() {
-        super.onViewDestroyed();
-        disposeActions();
-        mChannelId = null;
-        mMediaGroups = null;
-    }
-
-    @Override
     public boolean hasPendingActions() {
         return RxUtils.isAnyActionRunning(mScrollAction, mUpdateAction);
     }
@@ -116,7 +132,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             return false;
         }
 
-        return item.videoId != null || item.channelId != null || item.isChannelUploadsSection();
+        return item.videoId != null || item.channelId != null || item.belongsToChannelUploads();
     }
 
     public void openChannel(Video item) {
@@ -129,10 +145,22 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
                     openChannel(metadata.getChannelId());
                     item.channelId = metadata.getChannelId();
                 });
-            } else if (item.isChannelUploadsSection()) {
+            } else if (item.belongsToChannelUploads()) {
                 // Maybe this is subscribed items view
                 ChannelUploadsPresenter.instance(getContext())
                         .obtainVideoGroup(item, group -> {
+                            // Some uploads groups doesn't contain channel button.
+                            // Use data from first item instead.
+                            if (group.getChannelId() == null) {
+                                List<MediaItem> mediaItems = group.getMediaItems();
+
+                                if (mediaItems != null && mediaItems.size() > 0) {
+                                    openChannel(Video.from(mediaItems.get(0)));
+                                }
+
+                                return;
+                            }
+
                             openChannel(group.getChannelId());
                             item.channelId = group.getChannelId();
                         });
@@ -193,7 +221,11 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             return;
         }
 
-        filterIfNeeded(mediaGroups);
+        if (ViewManager.instance(getContext()).getTopView() != ChannelView.class) {
+            ViewManager.instance(getContext()).startView(ChannelView.class);
+        }
+
+        moveToTopIfNeeded(mediaGroups);
 
         for (MediaGroup mediaGroup : mediaGroups) {
             if (mediaGroup.getMediaItems() == null) {
@@ -232,7 +264,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
     /**
      * Sort channel content: move Uploads on top.
      */
-    private void filterIfNeeded(List<MediaGroup> mediaGroups) {
+    private void moveToTopIfNeeded(List<MediaGroup> mediaGroups) {
         moveToTop(mediaGroups, R.string.playlists_row_name);
         moveToTop(mediaGroups, R.string.popular_uploads_row_name);
         moveToTop(mediaGroups, R.string.uploads_row_name);

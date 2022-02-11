@@ -193,12 +193,17 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
             return;
         }
 
+        int action = group.getAction();
+
         // Clear both because second grid is dependable on first one
-        if (group.getAction() == VideoGroup.ACTION_REPLACE) {
+        if (action == VideoGroup.ACTION_REPLACE) {
             clear1();
             clear2();
-        } else if (group.getAction() == VideoGroup.ACTION_REMOVE) {
-            // Remove not supported
+        } else if (action == VideoGroup.ACTION_REMOVE) {
+            mGridAdapter1.remove(group);
+            return;
+        } else if (action == VideoGroup.ACTION_SYNC) {
+            mGridAdapter1.sync(group);
             return;
         }
 
@@ -217,10 +222,15 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
             return;
         }
 
-        if (group.getAction() == VideoGroup.ACTION_REPLACE) {
+        int action = group.getAction();
+        
+        if (action == VideoGroup.ACTION_REPLACE) {
             clear2();
-        } else if (group.getAction() == VideoGroup.ACTION_REMOVE) {
+        } else if (action == VideoGroup.ACTION_REMOVE) {
             // Remove not supported
+            return;
+        } else if (action == VideoGroup.ACTION_SYNC) {
+            // Sync not supported
             return;
         }
 
@@ -326,6 +336,12 @@ public class MultiVideoGridFragment extends MultiGridFragment implements VideoCa
                                    RowPresenter.ViewHolder rowViewHolder, Row row) {
             if (item instanceof Video) {
                 mMainPresenter.onVideoItemSelected((Video) item);
+
+                // Not working: Exception: Cannot call this method while RecyclerView is computing a layout
+                // Change unwatched state (remove red mark).
+                // Possible this isn't what you want. Red mark improve navigation inside the channel list.
+                //((Video) item).hasNewContent = false;
+                //mGridAdapter1.notifyItemRangeChanged(mGridAdapter1.indexOf((Video) item), 1);
             }
         }
     }

@@ -29,7 +29,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     private static final int AUTO_FRAME_RATE_ID = 21;
     private static final int AUTO_FRAME_RATE_DELAY_ID = 22;
     private final HQDialogManager mUiManager;
-    private final StateUpdater mStateUpdater;
+    private final VideoStateManager mStateUpdater;
     private final AutoFrameRateHelper mAutoFrameRateHelper;
     private final ModeSyncManager mModeSyncManager;
     private final Runnable mApplyAfr = this::applyAfr;
@@ -42,7 +42,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         restorePlayback();
     };
 
-    public AutoFrameRateManager(HQDialogManager uiManager, StateUpdater stateUpdater) {
+    public AutoFrameRateManager(HQDialogManager uiManager, VideoStateManager stateUpdater) {
         mUiManager = uiManager;
         mStateUpdater = stateUpdater;
         mAutoFrameRateHelper = AutoFrameRateHelper.instance(null);
@@ -201,56 +201,56 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
         }
     }
 
+    //private void addUiOptions() {
+    //    if (mAutoFrameRateHelper.isSupported()) {
+    //        OptionCategory afrCategory = createAutoFrameRateCategory(
+    //                getActivity(), PlayerData.instance(getActivity()),
+    //                () -> {}, this::onResolutionSwitchClick, this::onFpsCorrectionClick, this::onDoubleRefreshRateClick);
+    //
+    //        OptionCategory afrDelayCategory = createAutoFrameRatePauseCategory(
+    //                getActivity(), PlayerData.instance(getActivity()));
+    //
+    //        mUiManager.addCategory(afrCategory);
+    //        mUiManager.addCategory(afrDelayCategory);
+    //        mUiManager.addOnDialogHide(mApplyAfr);
+    //    } else {
+    //        mUiManager.removeCategory(AUTO_FRAME_RATE_ID);
+    //        mUiManager.removeCategory(AUTO_FRAME_RATE_DELAY_ID);
+    //        mUiManager.removeOnDialogHide(mApplyAfr);
+    //    }
+    //}
+
+    // Avoid nested dialogs. They have problems with timings. So player controls may hide without user interaction.
     private void addUiOptions() {
         if (mAutoFrameRateHelper.isSupported()) {
             OptionCategory afrCategory = createAutoFrameRateCategory(
                     getActivity(), PlayerData.instance(getActivity()),
                     () -> {}, this::onResolutionSwitchClick, this::onFpsCorrectionClick, this::onDoubleRefreshRateClick);
 
-            OptionCategory afrDelayCategory = createAutoFrameRatePauseCategory(
+            OptionCategory afrPauseCategory = createAutoFrameRatePauseCategory(
                     getActivity(), PlayerData.instance(getActivity()));
 
-            mUiManager.addCategory(afrCategory);
-            mUiManager.addCategory(afrDelayCategory);
-            mUiManager.addOnDialogHide(mApplyAfr);
+            // Create nested dialogs
+
+            List<OptionItem> options = new ArrayList<>();
+            options.add(UiOptionItem.from(afrCategory.title, optionItem -> {
+                AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
+                dialogPresenter.clear();
+                dialogPresenter.appendCheckedCategory(afrCategory.title, afrCategory.options);
+                dialogPresenter.showDialog(afrCategory.title, mApplyAfr);
+            }));
+            options.add(UiOptionItem.from(afrPauseCategory.title, optionItem -> {
+                AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
+                dialogPresenter.clear();
+                dialogPresenter.appendRadioCategory(afrPauseCategory.title, afrPauseCategory.options);
+                dialogPresenter.showDialog(afrPauseCategory.title, mApplyAfr);
+            }));
+
+            mUiManager.addCategory(OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_STRING, getActivity().getString(R.string.auto_frame_rate), options));
         } else {
             mUiManager.removeCategory(AUTO_FRAME_RATE_ID);
-            mUiManager.removeCategory(AUTO_FRAME_RATE_DELAY_ID);
-            mUiManager.removeOnDialogHide(mApplyAfr);
         }
     }
-
-    // Avoid nested dialogs. They have problems with timings. So player controls may hide without user interaction.
-    //private void addUiOptions() {
-    //    if (mAutoFrameRateHelper.isSupported()) {
-    //        OptionCategory afrCategory = createAutoFrameRateCategory(
-    //                getActivity(), PlayerData.instance(getActivity()),
-    //                () -> {}, this::onResolutionSwitchClick, this::onFpsCorrectionClick);
-    //
-    //        OptionCategory afrPauseCategory = createAutoFrameRatePauseCategory(
-    //                getActivity(), PlayerData.instance(getActivity()));
-    //
-    //        // Create nested dialogs
-    //
-    //        List<OptionItem> options = new ArrayList<>();
-    //        options.add(UiOptionItem.from(afrCategory.title, optionItem -> {
-    //            AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
-    //            dialogPresenter.clear();
-    //            dialogPresenter.appendCheckedCategory(afrCategory.title, afrCategory.options);
-    //            dialogPresenter.showDialog(afrCategory.title, mApplyAfr);
-    //        }));
-    //        options.add(UiOptionItem.from(afrPauseCategory.title, optionItem -> {
-    //            AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
-    //            dialogPresenter.clear();
-    //            dialogPresenter.appendRadioCategory(afrPauseCategory.title, afrPauseCategory.options);
-    //            dialogPresenter.showDialog(afrPauseCategory.title, mApplyAfr);
-    //        }));
-    //
-    //        mUiManager.addCategory(OptionCategory.from(AUTO_FRAME_RATE_ID, OptionCategory.TYPE_STRING, getActivity().getString(R.string.auto_frame_rate), options));
-    //    } else {
-    //        mUiManager.removeCategory(AUTO_FRAME_RATE_ID);
-    //    }
-    //}
 
     public static OptionCategory createAutoFrameRateCategory(Context context, PlayerData playerData) {
         return createAutoFrameRateCategory(context, playerData, () -> {}, () -> {}, () -> {}, () -> {});

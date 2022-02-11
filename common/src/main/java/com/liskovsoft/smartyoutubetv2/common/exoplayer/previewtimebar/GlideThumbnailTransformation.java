@@ -4,16 +4,19 @@ import android.graphics.Bitmap;
 import androidx.annotation.NonNull;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
+import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.BuildConfig;
 
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 
 public class GlideThumbnailTransformation extends BitmapTransformation {
+    private static final String TAG = GlideThumbnailTransformation.class.getSimpleName();
     private final int mWidth;
     private final int mHeight;
     private final int mMaxLines;
     private final int mMaxColumns;
-    private final int mThumbnailsEach; // duration of each thumbnail in millisseconds
+    private final int mThumbDurationMS; // duration of each thumbnail in milliseconds
 
     private final int mX;
     private final int mY;
@@ -27,11 +30,15 @@ public class GlideThumbnailTransformation extends BitmapTransformation {
         mHeight = height;
         mMaxLines = rowCount;
         mMaxColumns = colCount;
-        mThumbnailsEach = durationMS;
+        mThumbDurationMS = durationMS;
 
-        int square = (int) position / mThumbnailsEach;
-        mY = square / mMaxLines;
-        mX = square % mMaxColumns;
+        int thumbPos = (int) position / mThumbDurationMS;
+        mY = thumbPos / mMaxLines;
+        mX = thumbPos % mMaxColumns;
+
+        if (BuildConfig.DEBUG) {
+            Log.d(TAG, "Thumbnail coordinates (%sx%s): pos: %s, line: %s, col: %s", mMaxColumns, mMaxLines, thumbPos + 1, mY + 1, mX + 1);
+        }
     }
 
     private int getX() {
@@ -43,11 +50,11 @@ public class GlideThumbnailTransformation extends BitmapTransformation {
     }
 
     @Override
-    protected Bitmap transform(@NonNull BitmapPool pool, @NonNull Bitmap toTransform,
+    protected Bitmap transform(@NonNull BitmapPool pool, @NonNull Bitmap groupBitmap,
                                int outWidth, int outHeight) {
-        int width = mWidth == 0 ? toTransform.getWidth() / mMaxColumns : mWidth;
-        int height = mHeight == 0 ? toTransform.getHeight() / mMaxLines : mHeight;
-        return Bitmap.createBitmap(toTransform, mX * width, mY * height, width, height);
+        int width = mWidth == 0 ? groupBitmap.getWidth() / mMaxColumns : mWidth;
+        int height = mHeight == 0 ? groupBitmap.getHeight() / mMaxLines : mHeight;
+        return Bitmap.createBitmap(groupBitmap, mX * width, mY * height, width, height);
     }
 
     @Override

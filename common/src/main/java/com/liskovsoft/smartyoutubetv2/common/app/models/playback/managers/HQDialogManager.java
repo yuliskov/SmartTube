@@ -36,11 +36,11 @@ public class HQDialogManager extends PlayerEventListenerHelper {
     private final Map<Integer, OptionCategory> mCategories = new LinkedHashMap<>();
     private final Map<Integer, OptionCategory> mCategoriesInt = new LinkedHashMap<>();
     private final Set<Runnable> mHideListeners = new HashSet<>();
-    private final StateUpdater mStateUpdater;
+    private final VideoStateManager mStateUpdater;
     private PlayerData mPlayerData;
     private AppDialogPresenter mAppDialogPresenter;;
 
-    public HQDialogManager(StateUpdater stateUpdater) {
+    public HQDialogManager(VideoStateManager stateUpdater) {
         mStateUpdater = stateUpdater;
     }
 
@@ -125,7 +125,9 @@ public class HQDialogManager extends PlayerEventListenerHelper {
     private void updateBackgroundPlayback() {
         ViewManager.instance(getActivity()).blockTop(null);
 
-        getController().setPlaybackMode(mPlayerData.getBackgroundMode());
+        if (getController() != null) {
+            getController().setBackgroundMode(mPlayerData.getBackgroundMode());
+        }
     }
 
     private void addBackgroundPlaybackCategory() {

@@ -8,15 +8,19 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.VideoActionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.interfaces.VideoGroupPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ChannelUploadsView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -29,7 +33,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     private static final String TAG = ChannelUploadsPresenter.class.getSimpleName();
     @SuppressLint("StaticFieldLeak")
     private static ChannelUploadsPresenter sInstance;
-    private final PlaybackPresenter mPlaybackPresenter;
     private final MediaGroupManager mGroupManager;
     private final MediaItemManager mItemManager;
     private Disposable mUpdateAction;
@@ -42,7 +45,6 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         MediaService mediaService = YouTubeMediaService.instance();
         mGroupManager = mediaService.getMediaGroupManager();
         mItemManager = mediaService.getMediaItemManager();
-        mPlaybackPresenter = PlaybackPresenter.instance(context);
     }
 
     public static ChannelUploadsPresenter instance(Context context) {
@@ -57,6 +59,8 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
 
     @Override
     public void onViewInitialized() {
+        super.onViewInitialized();
+
         if (mVideoItem != null) {
             getView().clear();
             updateGrid(mVideoItem);
@@ -67,22 +71,40 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     @Override
+    public void onViewDestroyed() {
+        super.onViewDestroyed();
+        disposeActions();
+    }
+
+    @Override
+    public void onFinish() {
+        super.onFinish();
+
+        // Destroy the cache only (!) when user pressed back (e.g. wants to explicitly kill the activity)
+        // Otherwise keep the cache to easily restore in case activity is killed by the system.
+        mVideoItem = null;
+        mMediaGroup = null;
+    }
+
+    @Override
     public void onVideoItemSelected(Video item) {
         // NOP
     }
 
     @Override
     public void onVideoItemClicked(Video item) {
-        if (item.hasVideo()) {
-            mPlaybackPresenter.openVideo(item);
-        } else if (item.hasChannel()) {
-            openChannel(item);
-        }
+        VideoActionPresenter.instance(getContext()).apply(item);
     }
 
     @Override
     public void onVideoItemLongClicked(Video item) {
-        VideoMenuPresenter.instance(getContext()).showMenu(item);
+        VideoMenuPresenter.instance(getContext()).showMenu(item, (videoItem, action) -> {
+            if (action == VideoMenuCallback.ACTION_PLAYLIST_REMOVE) {
+                removeItem(videoItem);
+            } else if (action == VideoMenuCallback.ACTION_UNSUBSCRIBE) {
+                MessageHelpers.showMessage(getContext(), R.string.unsubscribed_from_channel);
+            }
+        });
     }
 
     @Override
@@ -104,21 +126,13 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
     }
 
     @Override
-    public void onViewDestroyed() {
-        super.onViewDestroyed();
-        disposeActions();
-        mVideoItem = null;
-        mMediaGroup = null;
-    }
-
-    @Override
     public boolean hasPendingActions() {
         return RxUtils.isAnyActionRunning(mScrollAction, mUpdateAction);
     }
 
     public void openChannel(Video item) {
         // Working with uploads or playlists
-        if (item == null || (!item.hasUploads() && item.playlistId == null)) {
+        if (item == null || (!item.hasUploads() && !item.hasPlaylist())) {
             return;
         }
 
@@ -148,9 +162,11 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         disposeActions();
 
         return item.hasUploads() ?
-                mGroupManager.getGroupObserve(item.mediaItem) :
-                mItemManager.getMetadataObserve(item.videoId, item.playlistId, 0)
-                        .flatMap(mediaItemMetadata -> Observable.just(findPlaylistRow(mediaItemMetadata)));
+               mGroupManager.getGroupObserve(item.mediaItem) :
+               item.hasReloadPageKey() ?
+               mGroupManager.getGroupObserve(item.getReloadPageKey()) :
+               mItemManager.getMetadataObserve(item.videoId, item.playlistId, 0, item.playlistParams)
+                       .flatMap(mediaItemMetadata -> Observable.just(findPlaylistRow(mediaItemMetadata)));
     }
 
     private void updateGrid(Video item) {
@@ -165,6 +181,11 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         Log.d(TAG, "continueGroup: start continue group: " + group.getTitle());
 
         disposeActions();
+
+        // Channel item position restore may be called too early (Xiaomi)
+        if (getView() == null) {
+            return;
+        }
 
         getView().showProgressBar(true);
 
@@ -217,6 +238,10 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
             return;
         }
 
+        if (ViewManager.instance(getContext()).getTopView() != ChannelUploadsView.class) {
+            ViewManager.instance(getContext()).startView(ChannelUploadsView.class);
+        }
+
         getView().update(VideoGroup.from(mediaGroup));
 
         // Hide loading as long as first group received
@@ -262,5 +287,11 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         }
 
         return null;
+    }
+
+    public void clear() {
+        if (getView() != null) {
+            getView().clear();
+        }
     }
 }

@@ -6,7 +6,9 @@ import android.content.Intent;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.service.VideoStateService;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
@@ -16,6 +18,8 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import io.reactivex.disposables.Disposable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +31,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private static SplashPresenter sInstance;
     private static boolean sRunOnce;
     private final List<IntentProcessor> mIntentChain = new ArrayList<>();
+    private Disposable mRefreshCachePeriodicAction;
 
     private interface IntentProcessor {
         boolean process(Intent intent);
@@ -55,6 +60,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     public void onViewInitialized() {
         applyRunOnceTasks();
 
+        runRefreshCachePeriodicTask();
         showAccountSelection();
 
         if (getView() != null) {
@@ -72,8 +78,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             updateChannels();
             getBackupDataOnce();
             runRemoteControlTasks();
-            dontKeepConnection();
+            //setupKeepAlive();
             configureProxy();
+            initVideoStateService();
             sRunOnce = true;
         }
     }
@@ -108,15 +115,25 @@ public class SplashPresenter extends BasePresenter<SplashView> {
         }
     }
 
-    private void dontKeepConnection() {
-        System.setProperty("http.keepAlive", "false");
-    }
-
     private void configureProxy() {
         if (getContext() != null && GeneralData.instance(getContext()).isProxyEnabled()) {
             ProxyManager proxyManager = ProxyManager.instance(getContext());
             proxyManager.enableProxy(true);
         }
+    }
+
+    private void initVideoStateService() {
+        if (getContext() != null) {
+            VideoStateService.instance(getContext());
+        }
+    }
+
+    private void runRefreshCachePeriodicTask() {
+        if (RxUtils.isAnyActionRunning(mRefreshCachePeriodicAction)) {
+            return;
+        }
+
+        mRefreshCachePeriodicAction = RxUtils.startInterval(YouTubeMediaService.instance()::refreshCacheIfNeeded, 30 * 60);
     }
 
     private void checkTouchSupport() {

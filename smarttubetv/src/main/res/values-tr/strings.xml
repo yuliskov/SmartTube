@@ -18,8 +18,8 @@
     <string name="buy_2">$9.99</string>
     <string name="queue_name">Sırayı Oynat</string>
 
-    <string name="search_results">İçin arama sonuçları \'%1$s\'</string>
-    <string name="no_search_results">İçin arama sonucu bulunamadı \'%1$s\'</string>
+    <string name="search_results">\'%1$s\' için arama sonuçları</string>
+    <string name="no_search_results">\'%1$s\' için arama sonucu bulunamadı</string>
     <string name="catalog_url">https://storage.googleapis.com/android-tv/android_tv_videos_new.json</string>
 
     <!-- Error messages -->
@@ -77,8 +77,8 @@
     <string name="guidedstep_continue">Devam et</string>
     <string name="guidedstep_letsdoit">Haydi Yapalım şunu</string>
     <string name="guidedstep_nevermind">Boşver</string>
-    <string name="guidedstep_cancel">İptal etmek</string>
-    <string name="header_icon">Üstbilgi simgesi</string>
+    <string name="guidedstep_cancel">İptal et</string>
+    <string name="header_icon">Başlık simgesi</string>
 
     <string name="mobile_welcome_title">Leanback Örneğine Hoş Geldiniz</string>
     <string name="mobile_welcome_description">Leanback Sample uygulamasına hoş geldiniz! Harika bir geriye yaslanma deneyimi için bunu bir Android TV\'de açmayı deneyin.</string>
@@ -96,42 +96,47 @@
     <string name="pref_title_settings">Uygulama Ayarları</string>
     <string name="pref_title_recommendations">Öneriler</string>
     <string name="pref_key_recommendations">pref_recommendations</string>
-    <string name="pref_key_screen_general">general settings</string>
+    <string name="pref_key_screen_general">general_settings</string>
     <string name="pref_title_screen_general">Genel Ayarlar</string>
     <string name="pref_key_screen_signin">signin</string>
     <string name="pref_title_screen_signin">Lütfen giriş yapın</string>
     <string name="pref_title_login_description">Lütfen kullanıcı adınızı ve şifrenizi giriniz</string>
     <string name="pref_title_username">Kullanıcı adı</string>
-    <string name="pref_title_password">Parola</string>
+    <string name="pref_title_password">Şifre</string>
     <string name="pref_key_login">pref_login</string>
     <string name="pref_title_login">Oturum aç</string>
     <string name="playback_tag">PLAYBACK_TAG</string>
     <string name="no_title">Başlık yok</string>
 
     <!-- Vineyard -->
-    <string name="title_oops">Oops</string>
+    <string name="title_oops">Hata</string>
     <string name="title_no_videos">Video yok</string>
-    <string name="message_try_again">Tekrar deneyin?</string>
+    <string name="message_try_again">Tekrar dene?</string>
     <string name="message_check_again">Tekrar kontrol et?</string>
-    <string name="text_search_results">için arama sonuçları %s</string>
-    <string name="text_post_results_title">için yayınlar %s</string>
+    <string name="text_search_results">%s için arama sonuçları</string>
+    <string name="text_post_results_title">%s için yayınlar</string>
     <string name="text_no_results">Sonuç yok</string>
     <string name="error_message_network_needed">Hata! Bunu yapmak için bir ağ bağlantısına ihtiyacınız var!</string>
 
     <!--  NEW ITEMS  -->
     <string name="signin_view_title">Kullanıcı Kodu yükleniyor…</string>
     <string name="signin_view_description">Oturum açmak için bu kodu sayfaya girin %s</string>
-    <string name="signin_view_action_text">Bitti</string>
-    <string name="action_subscribe_off">Abone Ol Kapalı</string>
-    <string name="action_subscribe_on">Abone Ol</string>
-    <string name="action_channel">Açık Kanal</string>
-    <string name="action_playlist_add">Oynatma listesine ekle</string>
-    <string name="action_video_stats">Video İstatistikleri</string>
-    <string name="require_checked">Gerektirir \"%s\"</string>
+    <string name="signin_view_action_text">Tamam</string>
+    <string name="require_checked">\"%s\" gerektirir</string>
     <string name="msg_press_again_to_exit">Çıkmak için tekrar basın</string>
     <string name="player_remaining_time">Kalan: %s</string>
+    <string name="player_ending_time">Bitiş saati: %s</string>
     <string name="badge_new_content">YENİ İÇERİK</string>
     <string name="badge_live">CANLI</string>
-    <string name="action_pip">PIP Başlat</string>
     <string name="add_device_view_description">Cihazı bağlamak için bu kodu telefonunuzun YouTube uygulamasında Ayarlar / TV\'de İzle bölümüne girin</string>
+    <string name="playback_controls_repeat_pause">Tekrarla Duraklat</string>
+    <string name="playback_controls_repeat_list">Tekrarla Liste</string>
+    <string name="action_playlist_add">Oynatma listesine ekle</string>
+    <string name="action_video_stats">Video istatistikleri</string>
+    <string name="action_subscribe_off">Abone ol Kapalı</string>
+    <string name="action_subscribe_on">Abone ol Açık</string>
+    <string name="action_channel">Kanalı aç</string>
+    <string name="action_pip">Resim içinde resim</string>
+    <string name="action_screen_off">Ekranı kapat</string>
+    <string name="action_playback_queue">Oynatma sırası</string>
 </resources>

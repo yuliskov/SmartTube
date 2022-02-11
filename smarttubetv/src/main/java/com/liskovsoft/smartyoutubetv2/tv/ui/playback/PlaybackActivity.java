@@ -10,6 +10,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -74,6 +75,15 @@ public class PlaybackActivity extends LeanbackActivity {
         }
 
         return super.dispatchTouchEvent(event);
+    }
+
+    @Override
+    public boolean dispatchGenericMotionEvent(MotionEvent event) {
+        if (mPlaybackFragment != null) {
+            mPlaybackFragment.onDispatchGenericMotionEvent(event);
+        }
+
+        return super.dispatchGenericMotionEvent(event);
     }
 
     @Override
@@ -142,7 +152,7 @@ public class PlaybackActivity extends LeanbackActivity {
     }
 
     private boolean wannaEnterToPip() {
-        return mPlaybackFragment != null && mPlaybackFragment.getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_PIP && !isInPictureInPictureMode();
+        return mPlaybackFragment != null && mPlaybackFragment.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PIP && !isInPictureInPictureMode();
     }
 
     @Override
@@ -158,7 +168,7 @@ public class PlaybackActivity extends LeanbackActivity {
 
         // NOTE: block back button for PIP.
         // User pressed PIP button in the player.
-        if (!isBackPressed() || mGeneralData.getBackgroundShortcut() == GeneralData.BACKGROUND_SHORTCUT_HOME_N_BACK) {
+        if (!isBackPressed() || mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_N_BACK) {
             enterPipMode();
         }
 
@@ -184,13 +194,13 @@ public class PlaybackActivity extends LeanbackActivity {
 
     private boolean doNotFinish() {
         sIsInPipMode = isInPipMode();
-        return sIsInPipMode || (mPlaybackFragment.getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND
-        && mGeneralData.getBackgroundShortcut() == GeneralData.BACKGROUND_SHORTCUT_HOME_N_BACK);
+        return sIsInPipMode || (mPlaybackFragment.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND
+        && mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_N_BACK);
     }
 
     private boolean doNotDestroy() {
         sIsInPipMode = isInPipMode();
-        return sIsInPipMode || mPlaybackFragment.getPlaybackMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND;
+        return sIsInPipMode || mPlaybackFragment.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND;
     }
 
     @SuppressWarnings("deprecation")
@@ -244,7 +254,7 @@ public class PlaybackActivity extends LeanbackActivity {
     public void onUserLeaveHint() {
         // Check that user not open dialog instead of really leaving the activity
         if (!AppDialogPresenter.instance(this).isDialogShown() && isHomePressed()) {
-            switch (mPlaybackFragment.getPlaybackMode()) {
+            switch (mPlaybackFragment.getBackgroundMode()) {
                 case PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND:
                     enterBackgroundPlayMode();
                     // Do we need to do something additional when running Play Behind?
@@ -289,5 +299,9 @@ public class PlaybackActivity extends LeanbackActivity {
         long backPressedAgoMs = System.currentTimeMillis() - mBackPressedMs;
         Log.d(TAG, "Back pressed ms ago: " + backPressedAgoMs);
         return backPressedAgoMs < 1_000;
+    }
+
+    public PlaybackView getPlaybackView() {
+        return mPlaybackFragment;
     }
 }

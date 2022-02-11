@@ -23,6 +23,8 @@ public class MainUIData {
     public static final int MENU_ITEM_SELECT_ACCOUNT = 0b10000;
     public static final int MENU_ITEM_NOT_INTERESTED = 0b100000;
     public static final int MENU_ITEM_REMOVE_FROM_HISTORY = 0b1000000;
+    public static final int MENU_ITEM_MOVE_SECTION_UP = 0b10000000;
+    public static final int MENU_ITEM_MOVE_SECTION_DOWN = 0b100000000;
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
     private final Context mContext;
@@ -238,7 +240,8 @@ public class MainUIData {
         mIsUploadsOldLookEnabled = Helpers.parseBoolean(split, 9, false);
         mIsUploadsAutoLoadEnabled = Helpers.parseBoolean(split, 10, true);
         mCardTextScrollSpeed = Helpers.parseFloat(split, 11, 2);
-        mMenuItems = Helpers.parseInt(split, 12, Integer.MAX_VALUE); // all by default
+        mMenuItems = Helpers.parseInt(split, 12,
+                Integer.MAX_VALUE & ~(MENU_ITEM_RECENT_PLAYLIST | MENU_ITEM_ADD_TO_QUEUE | MENU_ITEM_SHARE_LINK | MENU_ITEM_SELECT_ACCOUNT)); // all except these items
     }
 
     private void persistState() {

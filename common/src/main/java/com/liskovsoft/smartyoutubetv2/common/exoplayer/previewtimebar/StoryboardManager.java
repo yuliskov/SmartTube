@@ -13,12 +13,11 @@ import com.bumptech.glide.request.transition.Transition;
 //import com.liskovsoft.appupdatechecker2.other.SettingsManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
-import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemStoryboard;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemStoryboard.Size;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -32,7 +31,6 @@ public class StoryboardManager {
     private static final long FRAME_DURATION_MS = 10_000;
     private final MediaItemManager mMediaItemManager;
     private final Context mContext;
-    private Video mVideo;
     private long mLengthMs;
     private MediaItemStoryboard mStoryboard;
     private Disposable mFormatAction;
@@ -55,7 +53,6 @@ public class StoryboardManager {
     }
 
     public void setVideo(Video video, long lengthMs) {
-        mVideo = video;
         mLengthMs = lengthMs;
         mSeekPositions = null;
         mCachedImageNums = new ArraySet<>();
@@ -135,25 +132,28 @@ public class StoryboardManager {
         loadPreview(mSeekPositions[index], callback);
     }
 
-    public void loadPreview(long currentPosition, Callback callback) {
+    private void loadPreview(long currentPosition, Callback callback) {
         if (mStoryboard == null || mStoryboard.getGroupDurationMS() == 0) {
             return;
         }
 
-        int imgNum = (int) currentPosition / mStoryboard.getGroupDurationMS();
+        int groupNum = (int) currentPosition / mStoryboard.getGroupDurationMS();
         long realPosMS = currentPosition % mStoryboard.getGroupDurationMS();
         Size size = mStoryboard.getGroupSize();
         GlideThumbnailTransformation transformation =
                 new GlideThumbnailTransformation(realPosMS, size.getWidth(), size.getHeight(), size.getRowCount(), size.getColCount(), size.getDurationEachMS());
 
+        //Log.d(TAG, "Loading preview. Position: %s, groupNum: %s, groupDurationMS: %s, groupSize", currentPosition, groupNum, mStoryboard.getGroupDurationMS(), size);
+
         Glide.with(mContext)
                 .asBitmap()
-                .load(mStoryboard.getGroupUrl(imgNum))
+                .load(mStoryboard.getGroupUrl(groupNum))
                 .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
                 .transform(transformation)
                 .into(new CustomTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        //Log.d(TAG, "onPreviewLoaded: image hashCode: %s", resource.hashCode());
                         callback.onBitmapLoaded(resource);
                     }
 
@@ -163,10 +163,10 @@ public class StoryboardManager {
                     }
                 });
 
-        if (mCurrentImgNum != imgNum) {
-            mSeekDirection = mCurrentImgNum < imgNum ? DIRECTION_RIGHT : DIRECTION_LEFT;
-            mCachedImageNums.add(imgNum);
-            mCurrentImgNum = imgNum;
+        if (mCurrentImgNum != groupNum) {
+            mSeekDirection = mCurrentImgNum < groupNum ? DIRECTION_RIGHT : DIRECTION_LEFT;
+            mCachedImageNums.add(groupNum);
+            mCurrentImgNum = groupNum;
 
             preloadNextImage();
         }

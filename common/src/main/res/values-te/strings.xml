@@ -59,7 +59,7 @@
     <string name="default_lang">డిఫాల్ట్</string>
     <string name="dialog_select_language">భాష</string>
     <string name="subtitle_default">డిఫాల్ట్</string>
-    <string name="subtitle_semi_transparent_bg">సెమిట్రాన్స్పరెంట్ నేపథ్యం</string>
+    <string name="subtitle_white_semi_transparent">సెమిట్రాన్స్పరెంట్ నేపథ్యం</string>
     <string name="subtitle_style">ఉపశీర్షిక శైలి</string>
     <string name="subtitle_language">ఉపశీర్షిక భాష</string>
     <string name="action_search">శోధనను ప్రారంభించండి</string>
@@ -114,8 +114,8 @@
     <string name="repeat_mode_none">ఒక వీడియో తర్వాత ప్లేబ్యాక్ ఆపు</string>
     <string name="subscribed_to_channel">ఛానెల్‌కు సభ్యత్వాన్ని పొందారు</string>
     <string name="unsubscribed_from_channel">ఛానెల్ నుండి చందాను తొలగించారు</string>
-    <string name="subtitle_yellow">పసుపు</string>
-    <string name="subtitle_black_bg">నలుపు నేపథ్యం</string>
+    <string name="subtitle_yellow_transparent">పసుపు</string>
+    <string name="subtitle_white_black">నలుపు నేపథ్యం</string>
     <string name="player_seek_preview">కోరుతున్నప్పుడు ప్రివ్యూ చేయండి</string>
     <string name="color_scheme_dark_grey_oled">డార్క్ గ్రే (OLED)</string>
     <string name="channels_section_sorting">ఛానెల్స్ విభాగం సార్టింగ్</string>

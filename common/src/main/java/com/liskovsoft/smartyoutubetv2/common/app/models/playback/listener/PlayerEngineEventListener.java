@@ -28,7 +28,7 @@ public interface PlayerEngineEventListener {
     void onPause();
     void onPlayEnd();
     void onBuffering();
-    void onSeek();
+    void onSeekEnd();
     void onSourceChanged(Video item);
     void onVideoLoaded(Video item);
     void onEngineInitialized();

@@ -58,7 +58,7 @@
     <string name="dialog_select_language">Keel</string>
     <string name="header_channels">Kanalid</string>
     <string name="subtitle_default">Tavalised</string>
-    <string name="subtitle_semi_transparent_bg">Pool-läbipaistev taust</string>
+    <string name="subtitle_white_semi_transparent">Pool-läbipaistev taust</string>
     <string name="subtitle_style">Subtiitrite stiil</string>
     <string name="subtitle_language">Subtiitrite keel</string>
     <string name="action_search">Otsida!</string>
@@ -113,8 +113,8 @@
     <string name="repeat_mode_none">Lõpetada pärast ühte videot</string>
     <string name="subscribed_to_channel">Olete liitunud </string>
     <string name="unsubscribed_from_channel">Liitumine tühistatud</string>
-    <string name="subtitle_yellow">Kollased</string>
-    <string name="subtitle_black_bg">Must taust</string>
+    <string name="subtitle_yellow_transparent">Kollased</string>
+    <string name="subtitle_white_black">Must taust</string>
     <string name="player_seek_preview">Eelvaatus kermisel</string>
     <string name="color_scheme_dark_grey_oled">Tume-hall (OLED)</string>
     <string name="channels_section_sorting">Kanalite sorteerimine</string>

@@ -33,7 +33,7 @@ public class PlayerData {
     private int mOKButtonBehavior;
     private int mUIHideTimeoutSec;
     private boolean mIsAbsoluteDateEnabled;
-    private boolean mIsPauseOnSeekEnabled;
+    private boolean mIsSeekConfirmPauseEnabled;
     private boolean mIsClockEnabled;
     private boolean mIsGlobalClockEnabled;
     private boolean mIsRemainingTimeEnabled;
@@ -64,6 +64,7 @@ public class PlayerData {
     private boolean mIsGlobalEndingTimeEnabled;
     private boolean mIsEndingTimeEnabled;
     private boolean mIsDoubleRefreshRateEnabled;
+    private boolean mIsSeekConfirmPlayEnabled;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -116,13 +117,22 @@ public class PlayerData {
         return mSeekPreviewMode;
     }
 
-    public void enablePauseOnSeek(boolean enable) {
-        mIsPauseOnSeekEnabled = enable;
+    public void enableSeekConfirmPause(boolean enable) {
+        mIsSeekConfirmPauseEnabled = enable;
         persistData();
     }
 
-    public boolean isPauseOnSeekEnabled() {
-        return mIsPauseOnSeekEnabled;
+    public boolean isSeekConfirmPauseEnabled() {
+        return mIsSeekConfirmPauseEnabled;
+    }
+
+    public void enableSeekConfirmPlay(boolean enable) {
+        mIsSeekConfirmPlayEnabled = enable;
+        persistData();
+    }
+
+    public boolean isSeekConfirmPlayEnabled() {
+        return mIsSeekConfirmPlayEnabled;
     }
 
     public boolean isClockEnabled() {
@@ -403,9 +413,9 @@ public class PlayerData {
 
     private void initSubtitleStyles() {
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_default, R.color.light_grey, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
-        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_semi_transparent_bg, R.color.light_grey, R.color.semi_grey, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
-        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_black_bg, R.color.light_grey, R.color.black, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
-        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_yellow, R.color.yellow, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
+        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_white_semi_transparent, R.color.light_grey, R.color.semi_transparent, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
+        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_white_black, R.color.light_grey, R.color.black, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
+        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_yellow_transparent, R.color.yellow, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
     }
 
     /**
@@ -427,7 +437,7 @@ public class PlayerData {
         mUIHideTimeoutSec = Helpers.parseInt(split, 1, 3);
         mIsAbsoluteDateEnabled = Helpers.parseBoolean(split, 2, false);
         mSeekPreviewMode = Helpers.parseInt(split, 3, SEEK_PREVIEW_SINGLE);
-        mIsPauseOnSeekEnabled = Helpers.parseBoolean(split, 4, false);
+        mIsSeekConfirmPauseEnabled = Helpers.parseBoolean(split, 4, false);
         mIsClockEnabled = Helpers.parseBoolean(split, 5, true);
         mIsRemainingTimeEnabled = Helpers.parseBoolean(split, 6, true);
         mBackgroundMode = Helpers.parseInt(split, 7, PlaybackEngineController.BACKGROUND_MODE_DEFAULT);
@@ -462,6 +472,7 @@ public class PlayerData {
         mIsGlobalEndingTimeEnabled = Helpers.parseBoolean(split, 33, false);
         mIsEndingTimeEnabled = Helpers.parseBoolean(split, 34, false);
         mIsDoubleRefreshRateEnabled = Helpers.parseBoolean(split, 35, true);
+        mIsSeekConfirmPlayEnabled = Helpers.parseBoolean(split, 36, false);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -469,7 +480,7 @@ public class PlayerData {
     }
 
     private void persistData() {
-        mPrefs.setData(VIDEO_PLAYER_DATA, Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec, mIsAbsoluteDateEnabled, mSeekPreviewMode, mIsPauseOnSeekEnabled,
+        mPrefs.setData(VIDEO_PLAYER_DATA, Helpers.mergeObject(mOKButtonBehavior, mUIHideTimeoutSec, mIsAbsoluteDateEnabled, mSeekPreviewMode, mIsSeekConfirmPauseEnabled,
                 mIsClockEnabled, mIsRemainingTimeEnabled, mBackgroundMode, null, // afrData was there
                 Helpers.toString(mVideoFormat), Helpers.toString(mAudioFormat), Helpers.toString(mSubtitleFormat),
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
@@ -477,6 +488,6 @@ public class PlayerData {
                 mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
                 mIsLowQualityEnabled, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
-                mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled));
+                mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled));
     }
 }

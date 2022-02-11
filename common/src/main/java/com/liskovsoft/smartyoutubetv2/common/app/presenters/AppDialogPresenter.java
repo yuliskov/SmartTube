@@ -18,9 +18,10 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     private final List<SettingsCategory> mCategories;
     private final Handler mHandler;
     private final Runnable mCloseDialog = this::closeDialog;
+    private final List<Runnable> mOnFinish = new ArrayList<>();
     private String mTitle;
-    private Runnable mOnFinish;
     private long mTimeoutMs;
+    private boolean mIsTransparent;
 
     public static class SettingsCategory {
         public static SettingsCategory radioList(String title, List<OptionItem> items) {
@@ -91,16 +92,23 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     /**
      * Called when user pressed back button.
      */
+    @Override
     public void onFinish() {
+        super.onFinish();
         clear();
 
-        if (mOnFinish != null) {
-            mOnFinish.run();
+        for (Runnable callback : mOnFinish) {
+            if (callback != null) {
+                callback.run();
+            }
         }
+
+        mOnFinish.clear();
     }
 
     public void clear() {
         mTimeoutMs = 0;
+        mIsTransparent = false;
         mHandler.removeCallbacks(mCloseDialog);
         mCategories.clear();
     }
@@ -125,7 +133,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
 
     public void showDialog(String dialogTitle, Runnable onFinish) {
         mTitle = dialogTitle;
-        mOnFinish = onFinish;
+        mOnFinish.add(onFinish);
 
         if (getView() != null) {
             getView().clear();
@@ -146,7 +154,8 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     public boolean isDialogShown() {
         // Also check that current dialog almost closed (new view start is pending from a menu item)
         // Hmm. Maybe current dialog is pending. Check that view is null.
-        return !mCategories.isEmpty() && (!ViewManager.instance(getContext()).isNewViewPending() || getView() == null);
+        // Also check that we aren't started the same view (nested dialog).
+        return !mCategories.isEmpty() && (!ViewManager.instance(getContext()).isNewViewPending(AppDialogView.class) || getView() == null);
     }
 
     public void appendRadioCategory(String categoryTitle, List<OptionItem> items) {
@@ -181,6 +190,14 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
 
     public void setCloseTimeoutMs(long timeoutMs) {
         mTimeoutMs = timeoutMs;
+    }
+
+    public void enableTransparent(boolean enable) {
+        mIsTransparent = enable;
+    }
+
+    public boolean isTransparent() {
+        return mIsTransparent;
     }
 
     public boolean isEmpty() {

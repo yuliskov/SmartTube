@@ -28,14 +28,19 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.AppDialogActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.signin.SignInActivity;
 
 public class MainApplication extends MultiDexApplication { // fix: Didn't find class "com.google.firebase.provider.FirebaseInitProvider"
+    static {
+        System.setProperty("http.keepAlive", "false");
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
 
-        Thread.setDefaultUncaughtExceptionHandler(
-                new UncaughtExceptionHandler(getApplicationContext(), true));
-        Analytics.init(getApplicationContext());
+        //setupKeepAlive();
+        setupViewManager();
+    }
 
+    private void setupViewManager() {
         ViewManager viewManager = ViewManager.instance(this);
 
         viewManager.setRoot(BrowseActivity.class);
@@ -50,5 +55,9 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
         viewManager.register(AddDeviceView.class, AddDeviceActivity.class, BrowseActivity.class);
         viewManager.register(ChannelView.class, ChannelActivity.class, BrowseActivity.class);
         viewManager.register(ChannelUploadsView.class, ChannelUploadsActivity.class, BrowseActivity.class);
+    }
+
+    private void setupKeepAlive() {
+        System.setProperty("http.keepAlive", "false");
     }
 }

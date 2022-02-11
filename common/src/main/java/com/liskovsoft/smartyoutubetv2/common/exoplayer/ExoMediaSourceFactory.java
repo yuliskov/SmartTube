@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.text.TextUtils;
 import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -32,8 +33,12 @@ import com.google.android.exoplayer2.upstream.HttpDataSource.BaseFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.MyDefaultDashChunkSource;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.MyDefaultLoadErrorHandlingPolicy;
+import com.liskovsoft.smartyoutubetv2.common.exoplayer.errors.TrackErrorFixer;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.app.AppConstants;
+import com.liskovsoft.youtubeapi.common.helpers.RetrofitHelper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,6 +60,7 @@ public class ExoMediaSourceFactory {
     private static final boolean USE_BANDWIDTH_METER = false;
     private Handler mMainHandler;
     private MediaSourceEventListener mEventLogger;
+    private TrackErrorFixer mTrackErrorFixer;
 
     private ExoMediaSourceFactory(Context context) {
         mContext = context;
@@ -118,7 +124,10 @@ public class ExoMediaSourceFactory {
      * @return A new DataSource factory.
      */
     private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
-        return buildDataSourceFactory(mContext, useBandwidthMeter ? BANDWIDTH_METER : null);
+        PlayerTweaksData tweaksData = PlayerTweaksData.instance(mContext);
+        DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
+        return new DefaultDataSourceFactory(mContext, bandwidthMeter,
+                tweaksData.isBufferingFixEnabled() ? buildOkHttpDataSourceFactory(bandwidthMeter) : buildDefaultHttpDataSourceFactory(bandwidthMeter));
     }
 
     /**
@@ -129,7 +138,9 @@ public class ExoMediaSourceFactory {
      * @return A new HttpDataSource factory.
      */
     private HttpDataSource.Factory buildHttpDataSourceFactory(boolean useBandwidthMeter) {
-        return buildHttpDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null);
+        PlayerTweaksData tweaksData = PlayerTweaksData.instance(mContext);
+        DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
+        return tweaksData.isBufferingFixEnabled() ? buildOkHttpDataSourceFactory(bandwidthMeter) : buildDefaultHttpDataSourceFactory(bandwidthMeter);
     }
 
     @SuppressWarnings("deprecation")
@@ -150,7 +161,7 @@ public class ExoMediaSourceFactory {
             case C.TYPE_DASH:
                 DashMediaSource dashSource =
                         new DashMediaSource.Factory(
-                                new DefaultDashChunkSource.Factory(mMediaDataSourceFactory),
+                                new MyDefaultDashChunkSource.Factory(mMediaDataSourceFactory, mTrackErrorFixer),
                                 buildDataSourceFactory(USE_BANDWIDTH_METER)
                         )
                                 .setManifestParser(new LiveDashManifestParser()) // Don't make static! Need state reset for each live source.
@@ -233,32 +244,39 @@ public class ExoMediaSourceFactory {
         return result;
     }
 
-    private static DataSource.Factory buildDataSourceFactory(Context context, DefaultBandwidthMeter bandwidthMeter) {
-        return new DefaultDataSourceFactory(context, bandwidthMeter, buildHttpDataSourceFactory(bandwidthMeter));
-    }
-
-    /**
-     * Use OkHttp for networking
-     */
-    //private static HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+    ///**
+    // * https://exoplayer.dev/network-stacks.html
+    // */
+    //private static HttpDataSource.Factory buildCronetDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
     //    // OkHttpHelpers.getOkHttpClient()
     //    // RetrofitHelper.createOkHttpClient()
-    //    OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(RetrofitHelper.createOkHttpClient(), AppConstants.APP_USER_AGENT,
-    //            bandwidthMeter);
-    //    //addCommonHeaders(dataSourceFactory);
+    //    CronetDataSource.Factory dataSourceFactory = new CronetDataSource.Factory(cronetEngine, executor);
+    //    addCommonHeaders(dataSourceFactory);
     //    return dataSourceFactory;
     //}
 
     /**
+     * Use OkHttp for networking
+     */
+    private static HttpDataSource.Factory buildOkHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+        // OkHttpHelpers.getOkHttpClient()
+        // RetrofitHelper.createOkHttpClient()
+        OkHttpDataSourceFactory dataSourceFactory = new OkHttpDataSourceFactory(RetrofitHelper.createOkHttpClient(), AppConstants.APP_USER_AGENT,
+                bandwidthMeter);
+        addCommonHeaders(dataSourceFactory);
+        return dataSourceFactory;
+    }
+
+    /**
      * Use built-in component for networking
      */
-    private static HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
+    private static HttpDataSource.Factory buildDefaultHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
         //DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(
         //        AppConstants.APP_USER_AGENT, bandwidthMeter);
 
         DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(
                 AppConstants.APP_USER_AGENT, bandwidthMeter, DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
-                DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS, true);
+                DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS, true); // allowCrossProtocolRedirects = true
 
         addCommonHeaders(dataSourceFactory); // cause troubles for some users
         //if (YouTubeSignInManager.mAuthorizationHeaderCached != null) {
@@ -361,4 +379,8 @@ public class ExoMediaSourceFactory {
     //                periods);
     //    }
     //}
+
+    public void setTrackErrorFixer(TrackErrorFixer trackErrorFixer) {
+        mTrackErrorFixer = trackErrorFixer;
+    }
 }

@@ -12,8 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
-import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
+import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
@@ -31,6 +31,12 @@ public class MotherActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        // Fixing: Only fullscreen opaque activities can request orientation (api 26)
+        // NOTE: You should remove 'screenOrientation' from the manifest.
+        // NOTE: Possible side effect: initDpi() won't work: "When you setRequestedOrientation() the view may be restarted"
+        //if (VERSION.SDK_INT != 26) {
+        //    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        //}
         super.onCreate(savedInstanceState);
 
         Log.d(TAG, "Starting %s...", this.getClass().getSimpleName());
@@ -109,7 +115,9 @@ public class MotherActivity extends FragmentActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleContextWrapper.wrap(newBase, LocaleUpdater.getSavedLocale(newBase)));
+        Context contextWrapper = LocaleContextWrapper.wrap(newBase, LocaleUpdater.getSavedLocale(newBase));
+
+        super.attachBaseContext(contextWrapper);
     }
 
     @Override

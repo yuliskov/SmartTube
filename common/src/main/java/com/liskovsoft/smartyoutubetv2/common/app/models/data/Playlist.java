@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -11,9 +12,16 @@ public class Playlist {
     private List<Video> mPlaylist;
     private int mCurrentIndex;
     private static Playlist sInstance;
+    private int mNewSessionIndex;
 
     private Playlist() {
-        mPlaylist = new ArrayList<>();
+        mPlaylist = new ArrayList<Video>() {
+            @Override
+            public boolean add(Video video) {
+                // Creating lightweight copy of origin
+                return super.add(video.copy());
+            }
+        };
         mCurrentIndex = -1;
     }
 
@@ -33,27 +41,13 @@ public class Playlist {
         mCurrentIndex = -1;
     }
 
-    ///**
-    // * Adds a video to the end of the playlist.
-    // *
-    // * @param video to be added to the playlist.
-    // */
-    //public void add(Video video) {
-    //    if (Video.isEmpty(video)) {
-    //        return;
-    //    }
-    //
-    //    if (Video.equals(video, getCurrent())) {
-    //        mPlaylist.set(mCurrentPosition, video);
-    //    } else {
-    //        mPlaylist.add(++mCurrentPosition, video);
-    //
-    //        // Video opened from the browser or suggestions.
-    //        // In this case remove all next items.
-    //        trimPlaylist();
-    //        stripPrevItem();
-    //    }
-    //}
+    /**
+     * Used to sync list with remotely added items
+     */
+    public void addAll(List<Video> videos) {
+        mPlaylist.removeAll(videos);
+        mPlaylist.addAll(videos);
+    }
 
     /**
      * Adds a video to the end of the playlist.
@@ -65,8 +59,13 @@ public class Playlist {
             return;
         }
 
+        Video current = getCurrent();
+
         // Skip add currently playing item
-        if (video.equals(getCurrent())) {
+        // And replace to correct position sync in fragments
+        if (video.equals(current)) {
+            replace(current, video);
+            mNewSessionIndex--;
             return;
         }
 
@@ -107,7 +106,8 @@ public class Playlist {
             // Don't remove current index. Except this is the last element.
             // Give a chance to replace current element.
             if (index < mCurrentIndex) {
-                --mCurrentIndex;
+                mCurrentIndex--;
+                mNewSessionIndex--;
             }
 
             // Index out of bounds as the result of previous operation.
@@ -198,7 +198,24 @@ public class Playlist {
     }
 
     public List<Video> getAll() {
-        return mPlaylist;
+        return Collections.unmodifiableList(mPlaylist);
+    }
+
+    public List<Video> getChangedItems() {
+        int size = mPlaylist.size();
+
+        if (mNewSessionIndex < 0 || mNewSessionIndex >= size) {
+            return getAll();
+        }
+
+        return Collections.unmodifiableList(mPlaylist.subList(mNewSessionIndex, size));
+    }
+
+    public void removeAllAfterCurrent() {
+        int fromIndex = mCurrentIndex + 1;
+        if (fromIndex > 0 && fromIndex < mPlaylist.size()) {
+            mPlaylist.subList(fromIndex, mPlaylist.size()).clear();
+        }
     }
 
     /**
@@ -226,6 +243,47 @@ public class Playlist {
             if (prevItem != null) {
                 prevItem.mediaItem = null;
                 prevItem.nextMediaItem = null;
+            }
+        }
+    }
+
+    private void replace(Video origin, Video newItem) {
+        int index = mPlaylist.indexOf(origin);
+
+        if (index != -1) {
+            mPlaylist.set(index, newItem);
+        }
+    }
+
+    public void onNewSession() {
+        // To avoid excessive sync we need to find changed items only
+        mNewSessionIndex = mCurrentIndex + 1;
+    }
+
+    /**
+     * Video usually contains multiple internal objects.<br/>
+     * To avoid excessive memory consumptions we need to do cleanup sometimes.
+     */
+    //public void cleanup() {
+    //    for (Video video : mPlaylist) {
+    //        video.mediaItem = null;
+    //        video.nextMediaItem = null;
+    //        video.group = null;
+    //    }
+    //}
+
+    /**
+     * Since all items are clones (saves memory) we need to sync sometimes.
+     */
+    public void sync(Video origin) {
+        if (origin == null) {
+            return;
+        }
+
+        for (Video video : mPlaylist) {
+            if (video.equals(origin)) {
+                video.sync(origin);
+                break;
             }
         }
     }

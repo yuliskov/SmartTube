@@ -3,10 +3,10 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.browse;
 import androidx.leanback.widget.HeaderItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.BrowseSection;
 
-public class CategoryHeaderItem extends HeaderItem {
+public class SectionHeaderItem extends HeaderItem {
     private final BrowseSection mHeader;
 
-    public CategoryHeaderItem(BrowseSection header) {
+    public SectionHeaderItem(BrowseSection header) {
         super(header.getId(), header.getTitle());
         mHeader = header;
     }

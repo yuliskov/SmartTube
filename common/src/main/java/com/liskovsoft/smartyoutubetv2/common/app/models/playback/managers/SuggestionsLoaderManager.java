@@ -5,11 +5,12 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
-import com.liskovsoft.smartyoutubetv2.common.utils.RxUtils;
+import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -20,8 +21,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class SuggestionsLoader extends PlayerEventListenerHelper {
-    private static final String TAG = SuggestionsLoader.class.getSimpleName();
+public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
+    private static final String TAG = SuggestionsLoaderManager.class.getSimpleName();
     private final Set<MetadataListener> mListeners = new HashSet<>();
     private Disposable mMetadataAction;
     private Disposable mScrollAction;
@@ -89,7 +90,15 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
                 .subscribe(
                         continueMediaGroup -> {
                             getController().showProgressBar(false);
-                            getController().updateSuggestions(VideoGroup.from(continueMediaGroup, group.getSection()));
+                            VideoGroup videoGroup = VideoGroup.from(continueMediaGroup, group.getSection());
+                            getController().updateSuggestions(videoGroup);
+
+                            // Merge remote queue with player's queue
+                            Video video = getController().getVideo();
+                            if (video != null && video.isRemote && getController().getSuggestionsIndex(videoGroup) == 0) {
+                                Playlist.instance().addAll(videoGroup.getVideos());
+                                Playlist.instance().setCurrent(video);
+                            }
                         },
                         error -> {
                             getController().showProgressBar(false);
@@ -99,8 +108,12 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
     }
 
     private void syncCurrentVideo(MediaItemMetadata mediaItemMetadata, Video video) {
-        video.sync(mediaItemMetadata, PlayerData.instance(getActivity()).isAbsoluteDateEnabled());
-        getController().setVideo(video);
+        // NOTE: Skip upcoming (no media) because default title more informative (e.g. has scheduled time).
+        // NOTE: Upcoming videos metadata wrongly reported as live
+        if (getController().containsMedia()) {
+            video.sync(mediaItemMetadata, PlayerData.instance(getActivity()).isAbsoluteDateEnabled());
+            getController().setVideo(video);
+        }
     }
 
     public void loadSuggestions(Video video) {
@@ -116,12 +129,17 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
         Observable<MediaItemMetadata> observable;
 
-        if (video.mediaItem != null && !video.isRemote) {
-            observable = mediaItemManager.getMetadataObserve(video.mediaItem);
-        } else {
-            // Video might be loaded from channels
-            observable = mediaItemManager.getMetadataObserve(video.videoId, video.playlistId, video.playlistIndex);
-        }
+        // NOTE: Load suggestions from mediaItem isn't robust. Because playlistId may be initialized from RemoteControlManager
+        //if (video.mediaItem != null && !video.isRemote) {
+        //    observable = mediaItemManager.getMetadataObserve(video.mediaItem);
+        //} else {
+        //    // Video might be loaded from channels
+        //    observable = mediaItemManager.getMetadataObserve(video.videoId, video.playlistId, video.playlistIndex);
+        //}
+
+        // NOTE: Load suggestions from mediaItem isn't robust. Because playlistId may be initialized from RemoteControlManager.
+        // Video might be loaded from Channels section (has playlistParams)
+        observable = mediaItemManager.getMetadataObserve(video.videoId, video.playlistId, video.playlistIndex, video.playlistParams);
 
         clearSuggestionsIfNeeded(video);
 
@@ -160,10 +178,10 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
         }
 
         if (!video.isRemote) {
-            if (video.isPlaylistItem() && !getController().isSuggestionsEmpty()) {
-                Log.d(TAG, "Skip reloading suggestions when watching playlist.");
-                return;
-            }
+            //if (video.hasPlaylistIndex() && !getController().isSuggestionsEmpty()) {
+            //    Log.d(TAG, "Skip reloading suggestions when watching playlist.");
+            //    return;
+            //}
 
             if (getController().isSuggestionsShown()) {
                 Log.d(TAG, "Suggestions is opened. Seems that user want to stay here.");
@@ -173,9 +191,20 @@ public class SuggestionsLoader extends PlayerEventListenerHelper {
 
         getController().clearSuggestions(); // clear previous videos
 
+        int groupIndex = -1;
+
         for (MediaGroup group : suggestions) {
+            groupIndex++;
             if (group != null && !group.isEmpty()) {
-                getController().updateSuggestions(VideoGroup.from(group));
+                VideoGroup videoGroup = VideoGroup.from(group);
+                getController().updateSuggestions(videoGroup);
+
+                // Merge remote queue with player's queue
+                if (groupIndex == 0 && video.isRemote) {
+                    Playlist.instance().removeAllAfterCurrent();
+                    Playlist.instance().addAll(videoGroup.getVideos());
+                    Playlist.instance().setCurrent(video);
+                }
             }
         }
     }

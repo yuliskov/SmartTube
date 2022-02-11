@@ -7,9 +7,9 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SearchPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.autoframerate.ModeSyncManager;
-import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.GlobalKeyTranslator;
-import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
+import com.liskovsoft.smartyoutubetv2.common.misc.PlayerKeyTranslator;
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.tv.ui.common.keyhandler.DoubleBackManager;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.PlaybackActivity;
@@ -25,7 +25,6 @@ public abstract class LeanbackActivity extends MotherActivity {
     private DoubleBackManager mDoubleBackManager;
     private GeneralData mGeneralData;
     private GlobalKeyTranslator mGlobalKeyTranslator;
-    //private ScreensaverManager mScreensaverManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +38,16 @@ public abstract class LeanbackActivity extends MotherActivity {
         mModeSyncManager = ModeSyncManager.instance();
         mDoubleBackManager = new DoubleBackManager(this);
         mGeneralData = GeneralData.instance(this);
-        mGlobalKeyTranslator = new GlobalKeyTranslator(this);
-        //mScreensaverManager = new ScreensaverManager(this);
-        //mScreensaverManager.setBlocked(this instanceof PlaybackActivity);
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        // Start after PlaybackActivity fragment creation
+        mGlobalKeyTranslator = this instanceof PlaybackActivity ?
+                new PlayerKeyTranslator(this, ((PlaybackActivity) this).getPlaybackView()) :
+                new GlobalKeyTranslator(this);
     }
 
     @Override
@@ -59,9 +65,9 @@ public abstract class LeanbackActivity extends MotherActivity {
             finishTheApp();
         }
 
-        //mScreensaverManager.enable();
-
-        return super.dispatchKeyEvent(mGlobalKeyTranslator.translate(event));
+        KeyEvent newEvent = mGlobalKeyTranslator.translate(event);
+        // Set unknown key as handled to disable original key behavior.
+        return super.dispatchKeyEvent(newEvent) || newEvent.getKeyCode() == KeyEvent.KEYCODE_UNKNOWN;
     }
 
     public UriBackgroundManager getBackgroundManager() {
@@ -73,7 +79,6 @@ public abstract class LeanbackActivity extends MotherActivity {
         super.onStart();
 
         mBackgroundManager.onStart();
-        //mScreensaverManager.enable();
     }
 
     @Override

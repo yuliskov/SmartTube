@@ -6,6 +6,24 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 
 public class PlayerTweaksData {
     private static final String VIDEO_PLAYER_TWEAKS_DATA = "video_player_tweaks_data";
+    public static final int PLAYER_BUTTON_VIDEO_ZOOM = 0b1;
+    public static final int PLAYER_BUTTON_SEARCH = 0b10;
+    public static final int PLAYER_BUTTON_PIP = 0b100;
+    public static final int PLAYER_BUTTON_SCREEN_OFF = 0b1000;
+    public static final int PLAYER_BUTTON_PLAYBACK_QUEUE = 0b10000;
+    public static final int PLAYER_BUTTON_VIDEO_SPEED = 0b100000;
+    public static final int PLAYER_BUTTON_VIDEO_STATS = 0b1000000;
+    public static final int PLAYER_BUTTON_OPEN_CHANNEL = 0b10000000;
+    public static final int PLAYER_BUTTON_SUBTITLES = 0b100000000;
+    public static final int PLAYER_BUTTON_SUBSCRIBE = 0b1000000000;
+    public static final int PLAYER_BUTTON_LIKE = 0b10000000000;
+    public static final int PLAYER_BUTTON_DISLIKE = 0b100000000000;
+    public static final int PLAYER_BUTTON_ADD_TO_PLAYLIST = 0b1000000000000;
+    public static final int PLAYER_BUTTON_PLAY_PAUSE = 0b10000000000000;
+    public static final int PLAYER_BUTTON_REPEAT_MODE = 0b100000000000000;
+    public static final int PLAYER_BUTTON_NEXT = 0b1000000000000000;
+    public static final int PLAYER_BUTTON_PREVIOUS = 0b10000000000000000;
+    public static final int PLAYER_BUTTON_HIGH_QUALITY = 0b100000000000000000;
     @SuppressLint("StaticFieldLeak")
     private static PlayerTweaksData sInstance;
     private final AppPrefs mPrefs;
@@ -19,7 +37,11 @@ public class PlayerTweaksData {
     private boolean mIsAudioSyncFixEnabled;
     private boolean mIsKeepFinishedActivityEnabled;
     private boolean mIsLiveStreamFixEnabled;
-    private boolean mIsNotificationFixEnabled;
+    private boolean mIsPlaybackNotificationsDisabled;
+    private boolean mIsTunneledPlaybackEnabled;
+    private int mPlayerButtons;
+    private boolean mIsBufferingFixEnabled;
+    private boolean mIsNoFpsPresetsEnabled;
 
     private PlayerTweaksData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -52,8 +74,8 @@ public class PlayerTweaksData {
         return mIsFrameDropFixEnabled;
     }
 
-    public void disableSnapToVsync(boolean enable) {
-        mIsSnapToVsyncDisabled = enable;
+    public void disableSnapToVsync(boolean disable) {
+        mIsSnapToVsyncDisabled = disable;
         persistData();
     }
 
@@ -134,13 +156,54 @@ public class PlayerTweaksData {
         return mIsLiveStreamFixEnabled;
     }
 
-    public void enableNotificationFix(boolean enable) {
-        mIsNotificationFixEnabled = enable;
+    public void disablePlaybackNotifications(boolean disable) {
+        mIsPlaybackNotificationsDisabled = disable;
         persistData();
     }
 
-    public boolean isNotificationFixEnabled() {
-        return mIsNotificationFixEnabled;
+    public boolean isPlaybackNotificationsDisabled() {
+        return mIsPlaybackNotificationsDisabled;
+    }
+
+    public boolean isTunneledPlaybackEnabled() {
+        return mIsTunneledPlaybackEnabled;
+    }
+
+    public void enableTunneledPlayback(boolean enable) {
+        mIsTunneledPlaybackEnabled = enable;
+        persistData();
+    }
+
+    public void enablePlayerButton(int playerButtons) {
+        mPlayerButtons |= playerButtons;
+        persistData();
+    }
+
+    public void disablePlayerButton(int playerButtons) {
+        mPlayerButtons &= ~playerButtons;
+        persistData();
+    }
+
+    public boolean isPlayerButtonEnabled(int menuItems) {
+        return (mPlayerButtons & menuItems) == menuItems;
+    }
+
+    public void enableBufferingFix(boolean enable) {
+        mIsBufferingFixEnabled = enable;
+        persistData();
+    }
+
+    public boolean isBufferingFixEnabled() {
+        return mIsBufferingFixEnabled;
+    }
+
+    public void enableNoFpsPresets(boolean enable) {
+        mIsNoFpsPresetsEnabled = enable;
+        persistData();
+    }
+
+    public boolean isNoFpsPresetsEnabled() {
+        return mIsNoFpsPresetsEnabled;
     }
 
     private void restoreData() {
@@ -160,7 +223,11 @@ public class PlayerTweaksData {
         mIsAudioSyncFixEnabled = Helpers.parseBoolean(split, 8, false);
         mIsKeepFinishedActivityEnabled = Helpers.parseBoolean(split, 9, false);
         mIsLiveStreamFixEnabled = Helpers.parseBoolean(split, 10, false);
-        mIsNotificationFixEnabled = Helpers.parseBoolean(split, 11, false);
+        mIsPlaybackNotificationsDisabled = Helpers.parseBoolean(split, 11, !Helpers.isAndroidTV(mPrefs.getContext()));
+        mIsTunneledPlaybackEnabled = Helpers.parseBoolean(split, 12, false);
+        mPlayerButtons = Helpers.parseInt(split, 13, Integer.MAX_VALUE); // all buttons
+        mIsBufferingFixEnabled = Helpers.parseBoolean(split, 14, false);
+        mIsNoFpsPresetsEnabled = Helpers.parseBoolean(split, 15, false);
     }
 
     private void persistData() {
@@ -168,7 +235,8 @@ public class PlayerTweaksData {
                 mIsAmlogicFixEnabled, mIsFrameDropFixEnabled, mIsSnapToVsyncDisabled,
                 mIsProfileLevelCheckSkipped, mIsSWDecoderForced, mIsTextureViewEnabled,
                 null, mIsSetOutputSurfaceWorkaroundEnabled, mIsAudioSyncFixEnabled, mIsKeepFinishedActivityEnabled,
-                mIsLiveStreamFixEnabled, mIsNotificationFixEnabled
+                mIsLiveStreamFixEnabled, mIsPlaybackNotificationsDisabled, mIsTunneledPlaybackEnabled, mPlayerButtons,
+                mIsBufferingFixEnabled, mIsNoFpsPresetsEnabled
         ));
     }
 }

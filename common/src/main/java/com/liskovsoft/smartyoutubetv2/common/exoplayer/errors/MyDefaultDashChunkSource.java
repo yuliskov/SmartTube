@@ -15,18 +15,22 @@ import com.google.android.exoplayer2.upstream.TransferListener;
 import java.util.List;
 
 public class MyDefaultDashChunkSource extends DefaultDashChunkSource {
+    private final TrackErrorFixer mTrackErrorFixer;
+
     public static final class Factory implements DashChunkSource.Factory {
 
         private final DataSource.Factory dataSourceFactory;
         private final int maxSegmentsPerLoad;
+        private final TrackErrorFixer trackErrorFixer;
 
-        public Factory(DataSource.Factory dataSourceFactory) {
-            this(dataSourceFactory, 1);
+        public Factory(DataSource.Factory dataSourceFactory, TrackErrorFixer trackErrorFixer) {
+            this(dataSourceFactory, trackErrorFixer, 1);
         }
 
-        public Factory(DataSource.Factory dataSourceFactory, int maxSegmentsPerLoad) {
+        public Factory(DataSource.Factory dataSourceFactory, TrackErrorFixer trackErrorFixer, int maxSegmentsPerLoad) {
             this.dataSourceFactory = dataSourceFactory;
             this.maxSegmentsPerLoad = maxSegmentsPerLoad;
+            this.trackErrorFixer = trackErrorFixer;
         }
 
         @Override
@@ -58,7 +62,8 @@ public class MyDefaultDashChunkSource extends DefaultDashChunkSource {
                     maxSegmentsPerLoad,
                     enableEventMessageTrack,
                     closedCaptionFormats,
-                    playerEmsgHandler);
+                    playerEmsgHandler,
+                    trackErrorFixer);
         }
 
     }
@@ -67,12 +72,19 @@ public class MyDefaultDashChunkSource extends DefaultDashChunkSource {
                                     int[] adaptationSetIndices, TrackSelection trackSelection, int trackType,
                                     DataSource dataSource, long elapsedRealtimeOffsetMs, int maxSegmentsPerLoad,
                                     boolean enableEventMessageTrack, List<Format> closedCaptionFormats,
-                                    @Nullable PlayerTrackEmsgHandler playerTrackEmsgHandler) {
-        super(manifestLoaderErrorThrower, manifest, periodIndex, adaptationSetIndices, trackSelection, trackType, dataSource, elapsedRealtimeOffsetMs, maxSegmentsPerLoad, enableEventMessageTrack, closedCaptionFormats, playerTrackEmsgHandler);
+                                    @Nullable PlayerTrackEmsgHandler playerTrackEmsgHandler, @Nullable TrackErrorFixer trackErrorFixer) {
+        super(manifestLoaderErrorThrower, manifest, periodIndex, adaptationSetIndices, trackSelection,
+                trackType, dataSource, elapsedRealtimeOffsetMs, maxSegmentsPerLoad,
+                enableEventMessageTrack, closedCaptionFormats, playerTrackEmsgHandler);
+        mTrackErrorFixer = trackErrorFixer;
     }
 
     @Override
     public boolean onChunkLoadError(Chunk chunk, boolean cancelable, Exception e, long blacklistDurationMs) {
-        return true;
+        if (mTrackErrorFixer == null) {
+            return super.onChunkLoadError(chunk, cancelable, e, blacklistDurationMs);
+        }
+
+        return mTrackErrorFixer.fixError(e) || super.onChunkLoadError(chunk, cancelable, e, blacklistDurationMs);
     }
 }

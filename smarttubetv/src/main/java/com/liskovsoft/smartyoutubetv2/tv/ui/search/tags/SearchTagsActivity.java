@@ -56,4 +56,11 @@ public class SearchTagsActivity extends LeanbackActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    @Override
+    public void finishReally() {
+        super.finishReally();
+
+        mFragment.onFinish();
+    }
 }
