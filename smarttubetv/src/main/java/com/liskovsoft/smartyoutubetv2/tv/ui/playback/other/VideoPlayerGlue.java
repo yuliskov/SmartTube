@@ -140,9 +140,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         if (Helpers.isPictureInPictureSupported(getContext()) && playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_PIP)) {
             adapter.add(mPipAction);
         }
-        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF)) {
-            adapter.add(mScreenOffAction);
-        }
+//        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF)) {
+//            adapter.add(mScreenOffAction);
+//        }
         if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_VIDEO_ZOOM)) {
             adapter.add(mVideoZoomAction);
         }
