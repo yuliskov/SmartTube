@@ -107,7 +107,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
 //        appendReturnToBackgroundVideoButton();
         appendRefreshButton();
         appendUnpinVideoFromSidebarButton();
-        appendUnpinSectionFromSidebarButton();
+//        appendUnpinSectionFromSidebarButton();
         appendMarkAllChannelsWatchedButton();
         appendAccountSelectionButton();
         appendMoveSectionButton();

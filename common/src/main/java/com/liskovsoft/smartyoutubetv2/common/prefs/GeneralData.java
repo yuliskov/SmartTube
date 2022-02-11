@@ -542,7 +542,7 @@ public class GeneralData {
         mIsRemapChannelUpToSearchEnabled = Helpers.parseBoolean(split, 23, false);
         mIsHideShortsFromHomeEnabled = Helpers.parseBoolean(split, 24, false);
         mIsHideShortsFromHistoryEnabled = Helpers.parseBoolean(split, 25, false);
-        mIsScreensaverDisabled = Helpers.parseBoolean(split, 26, true);
+        mIsScreensaverDisabled = true;
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
