@@ -9,9 +9,9 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
 import java.util.HashMap;
 
 public class TrackSelectorUtil {
-    private static final String CODEC_SHORT_AV1 = "av01";
+    public static final String CODEC_SHORT_AV1 = "av01";
     private static final String CODEC_SHORT_AVC = "avc";
-    private static final String CODEC_SHORT_VP9 = "vp9";
+    public static final String CODEC_SHORT_VP9 = "vp9";
     private static final String CODEC_SHORT_VP9_HDR = "vp9.2";
     private static final String CODEC_SHORT_AV1_HDR_ENDING = "10.0.110.09.18.09.0";
     private static final String CODEC_SHORT_AV1_HDR_ENDING2 = "10.0.110.09.16.09.0";

@@ -36,6 +36,7 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
     public void onCreate() {
         super.onCreate();
 
+        Analytics.init(getApplicationContext());
         //setupKeepAlive();
         setupViewManager();
     }
