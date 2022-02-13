@@ -726,6 +726,21 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         return null;
     }
 
+    private int findSectionIndex(int sectionId) {
+        int sectionIndex = -1;
+
+        for (BrowseSection section : mSections) {
+            if (section.isEnabled()) {
+                sectionIndex++;
+                if (section.getId() == sectionId) {
+                    return sectionIndex;
+                }
+            }
+        }
+
+        return -1;
+    }
+
     private void filterIfNeeded(MediaGroup mediaGroup) {
         if (mediaGroup == null || mediaGroup.getMediaItems() == null) {
             return;
@@ -816,16 +831,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             return;
         }
 
-        int sectionIndex = -1;
-
-        for (BrowseSection section : mSections) {
-            if (section.isEnabled()) {
-                sectionIndex++;
-                if (section.getId() == sectionId) {
-                    break;
-                }
-            }
-        }
+        int sectionIndex = findSectionIndex(sectionId);
 
         if (sectionIndex != -1) {
             getView().selectSection(sectionIndex);
