@@ -72,7 +72,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private BrowseSection mCurrentSection;
     private Video mCurrentVideo;
     private long mLastUpdateTimeMs;
-    private int mStartSectionIndex;
+    private int mBootSectionIndex;
+    private int mSelectedSectionId = -1;
+    private int mSelectedSectionIndex = -1;
 
     private BrowsePresenter(Context context) {
         super(context);
@@ -118,7 +120,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         updateChannelSorting();
         updatePlaylistsStyle();
         updateSections();
-        getView().selectSection(mStartSectionIndex);
+        getView().selectSection(mSelectedSectionIndex != -1 ? mSelectedSectionIndex : mBootSectionIndex);
         showBootDialogs();
         Utils.updateRemoteControlService(getContext());
     }
@@ -212,7 +214,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
             if (section.isEnabled()) {
                 if (section.getId() == mGeneralData.getBootSectionId()) {
-                    mStartSectionIndex = index;
+                    mBootSectionIndex = index;
+                }
+                if (section.getId() == mSelectedSectionId) {
+                    mSelectedSectionIndex = index;
                 }
                 getView().addSection(index++, section);
             } else {
@@ -800,5 +805,29 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private boolean isSubscriptionsSection() {
         return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_SUBSCRIPTIONS;
+    }
+
+    public void selectSection(int sectionId) {
+        ViewManager.instance(getContext()).startView(BrowseView.class); // focus view
+
+        if (getView() == null) {
+            mSelectedSectionId = sectionId;
+            return;
+        }
+
+        int sectionIndex = -1;
+
+        for (BrowseSection section : mSections) {
+            if (section.isEnabled()) {
+                sectionIndex++;
+                if (section.getId() == sectionId) {
+                    break;
+                }
+            }
+        }
+
+        if (sectionIndex != -1) {
+            getView().selectSection(sectionIndex);
+        }
     }
 }
