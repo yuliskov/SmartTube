@@ -810,8 +810,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     public void selectSection(int sectionId) {
         ViewManager.instance(getContext()).startView(BrowseView.class); // focus view
 
+        mSelectedSectionId = sectionId;
+
         if (getView() == null) {
-            mSelectedSectionId = sectionId;
             return;
         }
 
