@@ -74,7 +74,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private long mLastUpdateTimeMs;
     private int mBootSectionIndex;
     private int mSelectedSectionId = -1;
-    private int mSelectedSectionIndex = -1;
 
     private BrowsePresenter(Context context) {
         super(context);
@@ -120,7 +119,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         updateChannelSorting();
         updatePlaylistsStyle();
         updateSections();
-        getView().selectSection(mSelectedSectionIndex != -1 ? mSelectedSectionIndex : mBootSectionIndex);
+        int selectedSectionIndex = findSectionIndex(mSelectedSectionId);
+        mSelectedSectionId = -1;
+        getView().selectSection(selectedSectionIndex != -1 ? selectedSectionIndex : mBootSectionIndex);
         showBootDialogs();
         Utils.updateRemoteControlService(getContext());
     }
@@ -215,9 +216,6 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
             if (section.isEnabled()) {
                 if (section.getId() == mGeneralData.getBootSectionId()) {
                     mBootSectionIndex = index;
-                }
-                if (section.getId() == mSelectedSectionId) {
-                    mSelectedSectionIndex = index;
                 }
                 getView().addSection(index++, section);
             } else {
@@ -727,6 +725,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     private int findSectionIndex(int sectionId) {
+        if (sectionId == -1) {
+            return -1;
+        }
+
         int sectionIndex = -1;
 
         for (BrowseSection section : mSections) {
@@ -825,9 +827,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     public void selectSection(int sectionId) {
         ViewManager.instance(getContext()).startView(BrowseView.class); // focus view
 
-        mSelectedSectionId = sectionId;
-
         if (getView() == null) {
+            mSelectedSectionId = sectionId;
             return;
         }
 
