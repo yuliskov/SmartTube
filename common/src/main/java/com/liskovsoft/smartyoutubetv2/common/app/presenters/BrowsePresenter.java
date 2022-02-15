@@ -308,7 +308,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     @Override
     public void onVideoItemClicked(Video item) {
-        if (getView() == null) {
+        if (getContext() == null) {
             return;
         }
 
@@ -324,7 +324,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     @Override
     public void onVideoItemLongClicked(Video item) {
-        if (getView() == null) {
+        if (getContext() == null) {
             return;
         }
 
