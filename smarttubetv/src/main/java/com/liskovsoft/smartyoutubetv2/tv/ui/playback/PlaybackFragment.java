@@ -77,7 +77,6 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView;
 import com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.EndingTimeView;
 
 import java.io.InputStream;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -180,7 +179,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         super.onStop();
 
         if (Util.SDK_INT > 23) {
-            releasePlayer();
+            maybeReleasePlayer();
         }
     }
 
@@ -205,7 +204,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mEventListener.onViewPaused();
 
         if (Util.SDK_INT <= 23) {
-            releasePlayer();
+            maybeReleasePlayer();
         }
 
         showHidePlayerOverlay(false); // PIP mode fix
@@ -232,7 +231,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         // On API > 23 onStop not immediately occurred after onPause
         if (getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_DEFAULT) {
             if (Util.SDK_INT > 23) {
-                releasePlayer();
+                maybeReleasePlayer();
             }
 
             // Bug: history not updated on Android 6.0.1
@@ -307,7 +306,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
     }
 
-    private void releasePlayer() {
+    private void maybeReleasePlayer() {
         // Inside dialogs we could change engine settings on fly
         if (AppDialogPresenter.instance(getContext()).isDialogShown()) {
             Log.d(TAG, "releasePlayer: Engine release is blocked by dialog. Exiting...");
@@ -322,6 +321,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
+        releasePlayer();
+    }
+
+    private void releasePlayer() {
         if (mPlayer != null) {
             Log.d(TAG, "releasePlayer: Start releasing player engine...");
             mEventListener.onEngineReleased();
@@ -1017,7 +1020,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         // Fix situations when engine didn't properly destroyed.
         // E.g. after closing dialogs.
-        setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_DEFAULT);
         releasePlayer();
 
         mPlaybackPresenter.onViewDestroyed();
