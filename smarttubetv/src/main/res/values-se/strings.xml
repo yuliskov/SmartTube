@@ -2,8 +2,8 @@
 <resources>
     <string translatable="false" name="app_name"><![CDATA[SmartTube Next]]></string>
     <string translatable="false" name="browse_title"><![CDATA[SmartTube Next]]></string>
-    <string name="related_movies">Related Videos</string>
-    <string name="vertical_grid_title"><![CDATA[Vertical Video Grid]]></string>
+    <string name="related_movies">Relaterade videor</string>
+    <string name="vertical_grid_title"><![CDATA[Vertikalt videorutnät]]></string>
 
     <string name="popular_header">Populära videor</string>
     <string name="more_samples">Fler urval</string>
