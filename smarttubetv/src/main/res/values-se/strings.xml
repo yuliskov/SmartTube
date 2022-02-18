@@ -75,33 +75,33 @@
     <string name="guidedstep_cancel">Avbryt</string>
     <string name="header_icon">Huvudikon</string>
 
-    <string name="mobile_welcome_title">Welcome to the Leanback Sample</string>
-    <string name="mobile_welcome_description">Welcome to the Leanback Sample app! Try opening this on an Android TV for a great leanback experience.</string>
+    <string name="mobile_welcome_title">Välkommen till Leanback-exemplet</string>
+    <string name="mobile_welcome_description">Välkommen till Leanback-exempelappen! Try opening this on an Android TV for a great leanback experience.</string>
 
     <!-- Strings related to onboarding -->
-    <string name="onboarding_title_welcome">Welcome to the Leanback Sample</string>
-    <string name="onboarding_title_design">Designed for Android TV</string>
-    <string name="onboarding_title_simple">Simple to include</string>
-    <string name="onboarding_title_project">Check out the Sample Project</string>
+    <string name="onboarding_title_welcome">Välkommen till Leanback-exemplet</string>
+    <string name="onboarding_title_design">Byggd för Android TV</string>
+    <string name="onboarding_title_simple">Enkel att inkludera</string>
+    <string name="onboarding_title_project">Kolla in exempelprojektet</string>
 
-    <string name="onboarding_description_welcome">This is the Onboarding Fragment, which runs when the user first opens the app</string>
-    <string name="onboarding_description_design">The Leanback sample shows how to quickly design apps designed for a 10-foot user interface</string>
-    <string name="onboarding_description_simple">You can include the Leanback library through gradle in your own apps</string>
-    <string name="onboarding_description_project">Are you looking for guidance? This sample is available on GitHub so you can see how we built this.</string>
-    <string name="pref_title_settings">App Settings</string>
-    <string name="pref_title_recommendations">Recommendations</string>
+    <string name="onboarding_description_welcome">Detta är onboardingfragmentet, som körs när en användare först öppnar appen</string>
+    <string name="onboarding_description_design">Leanback-exemplet visar hur man snabbt kan bygga appar ämnade för gränssnitt på 10 fot</string>
+    <string name="onboarding_description_simple">Du kan inkludera Leanback-biblioteket med gradle i din egen app</string>
+    <string name="onboarding_description_project">Behöver du stöd? Det här exemplet finns på GitHub så du kan se hur vi byggde detta.</string>
+    <string name="pref_title_settings">Appinställningar</string>
+    <string name="pref_title_recommendations">Rekommendationer</string>
     <string name="pref_key_recommendations">pref_recommendations</string>
     <string name="pref_key_screen_general">general_settings</string>
-    <string name="pref_title_screen_general">General Settings</string>
+    <string name="pref_title_screen_general">Allmänna inställningar</string>
     <string name="pref_key_screen_signin">signin</string>
-    <string name="pref_title_screen_signin">Please Login</string>
-    <string name="pref_title_login_description">Please enter your username and password</string>
-    <string name="pref_title_username">Username</string>
-    <string name="pref_title_password">Password</string>
+    <string name="pref_title_screen_signin">Vänligen logga in</string>
+    <string name="pref_title_login_description">Ange ditt användarnamn och lösenord</string>
+    <string name="pref_title_username">Användarnamn</string>
+    <string name="pref_title_password">Lösenord</string>
     <string name="pref_key_login">pref_login</string>
-    <string name="pref_title_login">Login</string>
-    <string name="playback_tag">PLAYBACK_TAG</string>
-    <string name="no_title">No title</string>
+    <string name="pref_title_login">Logga in</string>
+    <string name="playback_tag">UPPSPELNINGS_TAG</string>
+    <string name="no_title">Ingen titel</string>
 
     <!-- Vineyard -->
     <string name="title_oops">Hoppsan</string>
