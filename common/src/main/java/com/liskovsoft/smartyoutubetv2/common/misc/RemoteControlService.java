@@ -29,12 +29,17 @@ public class RemoteControlService extends Service {
     public void onCreate() {
         super.onCreate();
 
+        //// https://stackoverflow.com/questions/46445265/android-8-0-java-lang-illegalstateexception-not-allowed-to-start-service-inten
+        //if (VERSION.SDK_INT >= 26) {
+        //    // NOTE: it's impossible to hide notification on Android 9 and above
+        //    // https://stackoverflow.com/questions/10962418/how-to-startforeground-without-showing-notification
+        //    startForeground(NOTIFICATION_ID, createNotification());
+        //}
+
         // https://stackoverflow.com/questions/46445265/android-8-0-java-lang-illegalstateexception-not-allowed-to-start-service-inten
-        if (VERSION.SDK_INT >= 26) {
-            // NOTE: it's impossible to hide notification on Android 9 and above
-            // https://stackoverflow.com/questions/10962418/how-to-startforeground-without-showing-notification
-            startForeground(NOTIFICATION_ID, createNotification());
-        }
+        // NOTE: it's impossible to hide notification on Android 9 and above
+        // https://stackoverflow.com/questions/10962418/how-to-startforeground-without-showing-notification
+        startForeground(NOTIFICATION_ID, createNotification());
     }
 
     @Override
