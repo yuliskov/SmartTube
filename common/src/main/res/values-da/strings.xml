@@ -217,7 +217,7 @@
   <string name="player_show_global_ending_time">Vis videoens sluttid på skærmen konstant</string>
   <string name="player_show_global_clock">Vis ur på skærmen konstant</string>
   <string name="header_uploads">Uploads</string>
-  <string name="player_tweaks">Udvikler muligheder</string>
+  <string name="player_tweaks">Muligheder for udvikler</string>
   <string name="video_aspect">Billedformat</string>
   <string name="msg_player_error_unexpected">Ukendt videodekoderfejl</string>
   <string name="msg_player_error_renderer">Det valgte videoformat understøttes ikke</string>
@@ -309,4 +309,19 @@
   <string name="content_block_filler">Uden for emnet (fyld)</string>
   <string name="cancel_dialog">Fortryd</string>
   <string name="keyboard_auto_show">Vis tastatur automatisk</string>
+  <string name="pin_unpin_playlist">Fastgør/Frigør afspilningsliste</string>
+  <string name="pin_unpin_channel">Fastgør/Frigør kanal</string>
+  <string name="msg_player_error_source2">Videokilden virker ikke eller forkert tidspunkt</string>
+  <string name="hide_upcoming">Skjul kommende fra abonnementer</string>
+  <string name="search_background_playback">Brug PIP når du søger fra afspiller</string>
+  <string name="trending_row_name">Trending</string>
+  <string name="player_seek_type">Søge adfærd</string>
+  <string name="player_seek_regular">Regulær</string>
+  <string name="player_seek_confirmation_pause">Med bekræftelse (pause under søgning)</string>
+  <string name="player_seek_confirmation_play">Med bekræftelse (afspil mens du søger)</string>
+  <string name="hide_shorts_from_home">Skjul shorts fra startskærmen</string>
+  <string name="finish_on_disconnect">Afslut appen efter at have afbrudt telefonen</string>
+  <string name="update_error">Opdateringsfejl</string>
+  <string name="hide_shorts_from_history">Skjul shorts fra Historien</string>
+  <string name="disable_screensaver">Deaktiver pauseskærm</string>
 </resources>
