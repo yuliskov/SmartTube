@@ -55,6 +55,8 @@ public class EndingTimeView extends AppCompatTextView implements TickleListener 
         if (getVisibility() == View.VISIBLE) {
             String endingTime = getEndingTime();
             if (endingTime != null) {
+                // https://stackoverflow.com/questions/5437674/what-unicode-characters-represent-time/9454080
+                //setText(String.format("⌛ %s", endingTime));
                 setText(endingTime);
             }
         }
@@ -82,8 +84,7 @@ public class EndingTimeView extends AppCompatTextView implements TickleListener 
             return null;
         }
 
-        return String.format("⌛ %s", DateFormatter.formatTimeShort(getContext(), System.currentTimeMillis() + remainingTimeMs));
-        //return getContext().getString(R.string.player_ending_time, DateFormatter.formatTimeShort(getContext(), System.currentTimeMillis() + remainingTimeMs));
+        return DateFormatter.formatTimeShort(getContext(), System.currentTimeMillis() + remainingTimeMs);
     }
 
     private long applySpeedCorrection(long timeMs) {
