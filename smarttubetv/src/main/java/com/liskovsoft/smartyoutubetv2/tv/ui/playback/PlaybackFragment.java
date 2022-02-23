@@ -354,6 +354,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
         mPlayer = null;
         mPlayerGlue = null;
+        setAdapter(null); // PlayerGlue->LeanbackPlayerAdapter->Context memory leak fix
         mRowsAdapter = null;
         mSubtitleManager = null;
         mDebugInfoManager = null;
@@ -397,10 +398,10 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     private void createPlayerGlue() {
-        PlayerAdapter playerAdapter = new LeanbackPlayerAdapter(getContext(), mPlayer, UPDATE_DELAY_MS);
+        PlayerAdapter playerAdapter = new LeanbackPlayerAdapter(getContext(), mPlayer, UPDATE_DELAY_MS); // NOTE: possible context memory leak
 
         OnActionClickedListener playerActionListener = new PlayerActionListener();
-        mPlayerGlue = new VideoPlayerGlue(getContext(), playerAdapter, playerActionListener);
+        mPlayerGlue = new VideoPlayerGlue(getContext(), playerAdapter, playerActionListener); // NOTE: possible context memory leak
         mPlayerGlue.setHost(new SurfacePlaybackFragmentGlueHost(this));
         mPlayerGlue.setSeekEnabled(true);
         mPlayerGlue.setControlsOverlayAutoHideEnabled(false); // don't show controls on some player events like play/pause/end

@@ -194,4 +194,6 @@ dependencies {
     stbetaImplementation('com.google.firebase:firebase-crashlytics:' + firebaseCrashlyticsVersion) {
         transitive = true
     }
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 }
