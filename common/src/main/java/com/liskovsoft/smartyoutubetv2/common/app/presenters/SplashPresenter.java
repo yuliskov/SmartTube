@@ -77,7 +77,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             initIntentChain();
             updateChannels();
             getBackupDataOnce();
-            runRemoteControlTasks();
+//            runRemoteControlTasks();
             //setupKeepAlive();
             configureProxy();
             initVideoStateService();

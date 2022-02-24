@@ -60,9 +60,9 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
     @Override
     public void onViewResumed() {
-        mAutoFrameRateHelper.setFpsCorrectionEnabled(mPlayerData.isAfrFpsCorrectionEnabled());
-        mAutoFrameRateHelper.setResolutionSwitchEnabled(mPlayerData.isAfrResSwitchEnabled(), false);
-        mAutoFrameRateHelper.setDoubleRefreshRateEnabled(mPlayerData.isDoubleRefreshRateEnabled());
+        mAutoFrameRateHelper.setFpsCorrectionEnabled(false);
+        mAutoFrameRateHelper.setResolutionSwitchEnabled(false, false);
+        mAutoFrameRateHelper.setDoubleRefreshRateEnabled(false);
 
 //        addUiOptions();
     }
