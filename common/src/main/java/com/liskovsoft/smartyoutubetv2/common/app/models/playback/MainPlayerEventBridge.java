@@ -50,13 +50,13 @@ public class MainPlayerEventBridge implements PlayerEventListener {
 
 //        RemoteControlManager commandManager = new RemoteControlManager(context, suggestionsLoader, videoLoader);
         HQDialogManager hqDialogManager = new HQDialogManager(stateUpdater);
-//        AutoFrameRateManager autoFrameRateManager = new AutoFrameRateManager(hqDialogManager, stateUpdater);
+        AutoFrameRateManager autoFrameRateManager = new AutoFrameRateManager(hqDialogManager, stateUpdater);
 
         suggestionsLoader.addMetadataListener(uiManager);
 //        suggestionsLoader.addMetadataListener(contentBlockManager);
 
         // NOTE: position matters!!!
-//        mEventListeners.add(autoFrameRateManager);
+        mEventListeners.add(autoFrameRateManager);
         mEventListeners.add(uiManager);
         mEventListeners.add(hqDialogManager);
         mEventListeners.add(stateUpdater);
