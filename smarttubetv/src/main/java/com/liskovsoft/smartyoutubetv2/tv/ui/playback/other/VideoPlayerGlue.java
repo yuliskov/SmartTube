@@ -53,8 +53,6 @@ import java.util.concurrent.TimeUnit;
 public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
     private static final long TEN_SECONDS = TimeUnit.SECONDS.toMillis(10);
     private static final String TAG = VideoPlayerGlue.class.getSimpleName();
-    private final OnActionClickedListener mActionListener;
-
     private final ThumbsUpAction mThumbsUpAction;
     private final ThumbsDownAction mThumbsDownAction;
     private final PlaybackControlsRow.SkipPreviousAction mSkipPreviousAction;
@@ -78,6 +76,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
     private QualityInfoListener mQualityInfoListener;
     private int mPreviousAction = KeyEvent.ACTION_UP;
     private boolean mIsSingleKeyDown;
+    private OnActionClickedListener mActionListener;
 
     public VideoPlayerGlue(
             Context context,
@@ -449,6 +448,17 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
     @Override
     public void onTopEdgeFocused() {
         mActionListener.onTopEdgeFocused();
+    }
+
+    /**
+     * Various memory leak fixes
+     */
+    public void destroy() {
+        if (getPlayerAdapter() != null) {
+            getPlayerAdapter().onDetachedFromHost(); // surfaceHolderGlueHost memory leak fix
+        }
+        mActionListener = null; // activity memory leak fix
+        setHost(null); // fragment memory leak fix
     }
 
     /** Listens for when skip to next and previous actions have been dispatched. */
