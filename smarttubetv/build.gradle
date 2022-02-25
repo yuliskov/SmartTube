@@ -201,4 +201,6 @@ dependencies {
     stbetaImplementation('com.google.firebase:firebase-crashlytics:' + firebaseCrashlyticsVersion) {
         transitive = true
     }
+
+    implementation 'org.conscrypt:conscrypt-android:2.5.2'
 }
