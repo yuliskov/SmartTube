@@ -36,7 +36,7 @@
 
     <LinearLayout
         android:id="@+id/player_overlay_wrapper"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|right"
@@ -47,6 +47,7 @@
             android:id="@+id/global_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="20sp"
             android:textSize="20sp"
             android:visibility="gone"
             android:textColor="@color/white"

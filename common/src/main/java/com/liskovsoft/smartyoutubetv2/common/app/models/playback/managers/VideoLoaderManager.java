@@ -358,7 +358,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                     .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
-                            getController()::openDash,
+                            dashManifest -> getController().openDash(dashManifest),
                             error -> Log.e(TAG, "createMpdStream error: %s", error.getMessage())
                     );
         } else if (formatInfo.containsUrlListInfo()) {
