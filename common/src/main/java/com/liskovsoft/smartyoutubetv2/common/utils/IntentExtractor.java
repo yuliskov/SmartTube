@@ -17,9 +17,9 @@ public class IntentExtractor {
     private static final String VIDEO_ID_LIST_KEY = "video_ids";
     private static final String CHANNEL_URL = "/channel/";
     private static final String USER_URL = "/user/";
-    private static final String SUBSCRIPTIONS_URL = "https://www.youtube.com/tv#/zylon-surface?c=FEsubscriptions&resume";
-    private static final String HISTORY_URL = "https://www.youtube.com/tv#/zylon-surface?c=FEmy_youtube&resume";
-    private static final String RECOMMENDED_URL = "https://www.youtube.com/tv#/zylon-surface?c=default&resume";
+    private static final String SUBSCRIPTIONS_URL = "https://www.youtube.com/tv#/zylon-surface?c=FEsubscriptions"; // last 'resume' param isn't parsed by intent and should be removed
+    private static final String HISTORY_URL = "https://www.youtube.com/tv#/zylon-surface?c=FEmy_youtube"; // last 'resume' param isn't parsed by intent and should be removed
+    private static final String RECOMMENDED_URL = "https://www.youtube.com/tv#/zylon-surface?c=default"; // last 'resume' param isn't parsed by intent and should be removed
     private static final String PLAYLIST_KEY = "list";
 
     public static String extractVideoId(Intent intent) {
@@ -124,7 +124,34 @@ public class IntentExtractor {
     public static boolean isChannelUrl(Intent intent) {
         return intent != null
                 && extractUri(intent) != null
-                && Helpers.hasItem(new String[] {SUBSCRIPTIONS_URL, HISTORY_URL, RECOMMENDED_URL}, extractUri(intent).toString());
+                && Helpers.equalsAny(extractUri(intent).toString(), SUBSCRIPTIONS_URL, HISTORY_URL, RECOMMENDED_URL);
+    }
+
+    /**
+     * ATV: Subscriptions icon url
+     */
+    public static boolean isSubscriptionsUrl(Intent intent) {
+        return intent != null
+                && extractUri(intent) != null
+                && Helpers.equals(extractUri(intent).toString(), SUBSCRIPTIONS_URL);
+    }
+
+    /**
+     * ATV: History icon url
+     */
+    public static boolean isHistoryUrl(Intent intent) {
+        return intent != null
+                && extractUri(intent) != null
+                && Helpers.equals(extractUri(intent).toString(), HISTORY_URL);
+    }
+
+    /**
+     * ATV: Recommended icon url
+     */
+    public static boolean isRecommendedUrl(Intent intent) {
+        return intent != null
+                && extractUri(intent) != null
+                && Helpers.equals(extractUri(intent).toString(), RECOMMENDED_URL);
     }
 
     public static boolean isRootUrl(Intent intent) {

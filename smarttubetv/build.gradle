@@ -59,8 +59,8 @@ android {
         applicationId "com.liskovsoft.smarttubetv"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 616
-        versionName "14.26"
+        versionCode 618
+        versionName "14.28"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
@@ -201,4 +201,8 @@ dependencies {
     stbetaImplementation('com.google.firebase:firebase-crashlytics:' + firebaseCrashlyticsVersion) {
         transitive = true
     }
+
+    // debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
+
+    implementation 'org.conscrypt:conscrypt-android:2.5.2'
 }
