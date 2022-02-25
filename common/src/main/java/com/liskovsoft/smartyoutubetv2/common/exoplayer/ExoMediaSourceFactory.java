@@ -126,8 +126,7 @@ public class ExoMediaSourceFactory {
     private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
         PlayerTweaksData tweaksData = PlayerTweaksData.instance(mContext);
         DefaultBandwidthMeter bandwidthMeter = useBandwidthMeter ? BANDWIDTH_METER : null;
-        return new DefaultDataSourceFactory(mContext, bandwidthMeter,
-                tweaksData.isBufferingFixEnabled() ? buildOkHttpDataSourceFactory(bandwidthMeter) : buildDefaultHttpDataSourceFactory(bandwidthMeter));
+        return new DefaultDataSourceFactory(mContext, bandwidthMeter, buildOkHttpDataSourceFactory(bandwidthMeter));
     }
 
     /**
