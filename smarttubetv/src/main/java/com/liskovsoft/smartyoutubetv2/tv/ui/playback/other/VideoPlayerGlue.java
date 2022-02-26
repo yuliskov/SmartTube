@@ -72,11 +72,11 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
     private final PipAction mPipAction;
     private final ScreenOffAction mScreenOffAction;
     private final PlaybackQueueAction mPlaybackQueueAction;
+    private final OnActionClickedListener mActionListener;
     private String mQualityInfo;
     private QualityInfoListener mQualityInfoListener;
     private int mPreviousAction = KeyEvent.ACTION_UP;
     private boolean mIsSingleKeyDown;
-    private OnActionClickedListener mActionListener;
 
     public VideoPlayerGlue(
             Context context,
@@ -448,17 +448,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
     @Override
     public void onTopEdgeFocused() {
         mActionListener.onTopEdgeFocused();
-    }
-
-    /**
-     * Various memory leak fixes
-     */
-    public void destroy() {
-        if (getPlayerAdapter() != null) {
-            getPlayerAdapter().onDetachedFromHost(); // surfaceHolderGlueHost memory leak fix
-        }
-        mActionListener = null; // activity memory leak fix
-        setHost(null); // fragment memory leak fix
     }
 
     /** Listens for when skip to next and previous actions have been dispatched. */
