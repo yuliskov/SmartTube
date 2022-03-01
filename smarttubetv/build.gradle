@@ -195,5 +195,8 @@ dependencies {
         transitive = true
     }
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
+    // ???
+    // implementation 'org.conscrypt:conscrypt-android:2.5.2'
+
+    // debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 }
