@@ -450,15 +450,6 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         mActionListener.onTopEdgeFocused();
     }
 
-    /**
-     * Try to release associated resources
-     */
-    public void release() {
-        if (getPlayerAdapter() != null) {
-            getPlayerAdapter().onDetachedFromHost(); // surfaceHolderGlueHost memory leak fix
-        }
-    }
-
     /** Listens for when skip to next and previous actions have been dispatched. */
     public interface OnActionClickedListener {
         /** Skip to the previous item in the queue. */

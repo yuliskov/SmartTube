@@ -352,9 +352,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         if (mMediaSession != null) {
             mMediaSession.release();
         }
-        if (mPlayerGlue != null) {
-            mPlayerGlue.release();
-        }
         setAdapter(null); // PlayerGlue->LeanbackPlayerAdapter->Context memory leak fix
         mPlayer = null;
         mPlayerGlue = null;
