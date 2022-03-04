@@ -55,7 +55,7 @@ public class PlayerData {
     private int mAfrPauseSec;
     private int mAudioDelayMs;
     private boolean mIsRememberSpeedEnabled;
-    private boolean mIsLowQualityEnabled;
+    private boolean mIsLegacyCodecsForced;
     private int mPlaybackMode;
     private boolean mIsSonyTimerFixEnabled;
     private boolean mIsQualityInfoEnabled;
@@ -227,12 +227,12 @@ public class PlayerData {
         persistData();
     }
 
-    public boolean isLowQualityEnabled() {
-        return mIsLowQualityEnabled;
+    public boolean isLegacyCodecsForced() {
+        return mIsLegacyCodecsForced;
     }
 
-    public void enableLowQuality(boolean enable) {
-        mIsLowQualityEnabled = enable;
+    public void forceLegacyCodecs(boolean enable) {
+        mIsLegacyCodecsForced = enable;
         persistData();
     }
 
@@ -457,7 +457,7 @@ public class PlayerData {
         mIsRememberSpeedEnabled = Helpers.parseBoolean(split, 21, false);
         mPlaybackMode = Helpers.parseInt(split, 22, PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL);
         // didn't remember what was there
-        mIsLowQualityEnabled = Helpers.parseBoolean(split, 24, Helpers.equalsAny(Build.MODEL, "NV501")); // Eltex crash fix
+        mIsLegacyCodecsForced = Helpers.parseBoolean(split, 24, Helpers.equalsAny(Build.MODEL, "NV501")); // Eltex crash fix
         mIsSonyTimerFixEnabled = Helpers.parseBoolean(split, 25, false);
         // old player tweaks
         mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
@@ -482,7 +482,7 @@ public class PlayerData {
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs,
                 mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
-                mIsLowQualityEnabled, mIsSonyTimerFixEnabled, null, null, // old player tweaks
+                mIsLegacyCodecsForced, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled));
     }

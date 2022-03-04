@@ -239,8 +239,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 mPlayerTweaksData.isProfileLevelCheckSkipped()));
 
         options.add(UiOptionItem.from("Force legacy codecs (720p)",
-                option -> mPlayerData.enableLowQuality(option.isSelected()),
-                mPlayerData.isLowQualityEnabled()));
+                option -> mPlayerData.forceLegacyCodecs(option.isSelected()),
+                mPlayerData.isLegacyCodecsForced()));
 
         options.add(UiOptionItem.from("Force SW video decoder",
                 option -> mPlayerTweaksData.forceSWDecoder(option.isSelected()),

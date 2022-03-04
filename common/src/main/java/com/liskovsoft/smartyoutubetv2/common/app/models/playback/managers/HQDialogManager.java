@@ -264,8 +264,8 @@ public class HQDialogManager extends PlayerEventListenerHelper {
     }
 
     private static void setFormat(FormatItem formatItem, PlayerData playerData, Runnable onFormatSelected) {
-        if (playerData.isLowQualityEnabled()) {
-            playerData.enableLowQuality(false);
+        if (playerData.isLegacyCodecsForced()) {
+            playerData.forceLegacyCodecs(false);
         }
         playerData.setFormat(formatItem);
         onFormatSelected.run();
