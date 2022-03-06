@@ -3,7 +3,10 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.search.tags;
 import android.os.Bundle;
 import android.text.TextUtils;
 import androidx.annotation.Nullable;
+import androidx.leanback.widget.HeaderItem;
+import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.Presenter;
+import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.search.MediaServiceSearchTagProvider;
@@ -16,10 +19,13 @@ import com.liskovsoft.smartyoutubetv2.tv.presenter.base.OnItemLongPressedListene
 import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.vineyard.SearchTagsFragmentBase;
 import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class SearchTagsFragment extends SearchTagsFragmentBase {
     private static final String TAG = SearchTagsFragment.class.getSimpleName();
     private SearchPresenter mSearchPresenter;
-    private VideoGroupObjectAdapter mItemResultsAdapter;
+    private Map<Integer, VideoGroupObjectAdapter> mSearchGroupAdapters;
     private String mSearchQuery;
     private String mNewQuery;
     private VideoCardPresenter mCardPresenter;
@@ -34,11 +40,12 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         mSearchPresenter = SearchPresenter.instance(getContext());
         mSearchPresenter.setView(this);
         mCardPresenter = new VideoCardPresenter();
-        mItemResultsAdapter = new VideoGroupObjectAdapter(mCardPresenter);
+        mSearchGroupAdapters = new HashMap<>();
+        //mItemResultsAdapter = new VideoGroupObjectAdapter(mCardPresenter);
         mSearchData = SearchData.instance(getContext());
 
         setupEventListeners();
-        setItemResultsAdapter(mItemResultsAdapter);
+        //setItemResultsAdapter(mItemResultsAdapter);
         setSearchTagsProvider(new MediaServiceSearchTagProvider());
         enableKeyboardAutoShow(mSearchData.isKeyboardAutoShowEnabled());
     }
@@ -76,16 +83,30 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         freeze(true);
         update(group);
         freeze(false);
-
-        attachAdapter(1, mItemResultsAdapter);
     }
 
     @Override
     public void clearSearch() {
         mSearchQuery = null;
-        mItemResultsAdapter.clear();
-        // Notify about changes (could help with search autofocus)
-        detachAdapter(1);
+
+        for (VideoGroupObjectAdapter adapter : mSearchGroupAdapters.values()) {
+            adapter.clear();
+        }
+
+        mSearchGroupAdapters.clear();
+
+        ObjectAdapter resultsAdapter = getResultsAdapter();
+
+        if (resultsAdapter == null) {
+            return;
+        }
+
+        int size = resultsAdapter.size();
+
+        for (int i = 0; i < size; i++) {
+            // Notify about changes (could help with search autofocus)
+            detachAdapter(1); // first adapter is tag adapter
+        }
     }
 
     @Override
@@ -164,12 +185,30 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
     }
 
     private void checkScrollEnd(Video item) {
-        int size = mItemResultsAdapter.size();
-        int index = mItemResultsAdapter.indexOf(item);
+        VideoGroupObjectAdapter resultsAdapter = getItemResultsAdapter(item);
+
+        if (resultsAdapter == null) {
+            return;
+        }
+
+        int size = resultsAdapter.size();
+        int index = resultsAdapter.indexOf(item);
 
         if (index > (size - ViewUtil.ROW_SCROLL_CONTINUE_NUM)) {
-            mSearchPresenter.onScrollEnd((Video) mItemResultsAdapter.get(size - 1));
+            mSearchPresenter.onScrollEnd((Video) resultsAdapter.get(size - 1));
         }
+    }
+
+    private VideoGroupObjectAdapter getItemResultsAdapter(Video item) {
+        for (VideoGroupObjectAdapter adapter : mSearchGroupAdapters.values()) {
+            int index = adapter.indexOf(item);
+
+            if (index != -1) {
+                return adapter;
+            }
+        }
+        
+        return null;
     }
 
     private void startSearch(String searchText, boolean enableRecognition) {
@@ -194,17 +233,16 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
         }
     }
 
-    private void update(VideoGroup group) {
-        if (mItemResultsAdapter == null) {
-            return;
-        }
-
+    public void update(VideoGroup group) {
         int action = group.getAction();
 
         if (action == VideoGroup.ACTION_REPLACE) {
-            mItemResultsAdapter.clear();
+            clearSearch();
         } else if (action == VideoGroup.ACTION_SYNC) {
-            mItemResultsAdapter.sync(group);
+            VideoGroupObjectAdapter adapter = mSearchGroupAdapters.get(group.getId());
+            if (adapter != null) {
+                adapter.sync(group);
+            }
             return;
         }
 
@@ -212,7 +250,26 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
             return;
         }
 
-        mItemResultsAdapter.append(group);
+        HeaderItem rowHeader = new HeaderItem(group.getTitle());
+        int mediaGroupId = group.getId(); // Create unique int from category.
+
+        VideoGroupObjectAdapter existingAdapter = mSearchGroupAdapters.get(mediaGroupId);
+
+        if (existingAdapter == null) {
+            VideoGroupObjectAdapter mediaGroupAdapter = new VideoGroupObjectAdapter(group, mCardPresenter);
+
+            mSearchGroupAdapters.put(mediaGroupId, mediaGroupAdapter);
+            
+            attachAdapter(getResultsAdapter().size(), rowHeader, mediaGroupAdapter);
+        } else {
+            Log.d(TAG, "Continue row %s %s", group.getTitle(), System.currentTimeMillis());
+
+            freeze(true);
+
+            existingAdapter.append(group); // continue row
+
+            freeze(false);
+        }
     }
 
     private void loadSearchResult(String searchQuery) {

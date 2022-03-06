@@ -120,7 +120,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
             return;
         }
 
-        loadSearchResult(searchText);
+        loadSearchResultAlt(searchText);
     }
     
     private void loadSearchResult(String searchText) {
@@ -264,7 +264,7 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                         String searchText = getView().getSearchText();
 
                         if (searchText != null && !searchText.isEmpty()) {
-                            loadSearchResult(searchText);
+                            loadSearchResultAlt(searchText);
                             settingsPresenter.closeDialog();
                         }
                     },
