@@ -173,7 +173,7 @@
     <string name="msg_done">Terminé</string>
     <string name="settings_general">Général</string>
     <string name="settings_video">Vidéo</string>
-    <string name="content_block_confirm_skip">Confirmer sortie</string>
+    <string name="content_block_confirm_skip">Confirmer le saut</string>
     <string name="content_block_categories">Catégories</string>
     <string name="content_block_sponsor">Sponsor</string>
     <string name="content_block_intro">Animation entracte/intro</string>
@@ -216,8 +216,10 @@
     <string name="channels_old_look">Restaurer l\'ancienne apparence dans la section des chaînes</string>
     <string name="channels_auto_load">Chargement automatique du contenu de la section Chaînes</string>
     <string name="return_to_background_video">Retour à la vidéo en arrière-plan</string>
-    <string name="pinned_to_sidebar">Épingler à la barre latérale</string>
     <string name="pin_unpin_from_sidebar">Épingler/Dépingler à partir de la barre latérale</string>
+    <string name="pin_unpin_playlist">Épingler/Dépingler playlist</string>
+    <string name="pin_unpin_channel">Épingler/Dépingler chaine</string>
+    <string name="pinned_to_sidebar">Épingler à la barre latérale</string>
     <string name="unpinned_from_sidebar">Déplacer de la barre latérale</string>
     <string name="unpin_from_sidebar">Déplacer dans barre latérale</string>
     <string name="dialog_select_country">Pays</string>
@@ -318,4 +320,7 @@
     <string name="player_seek_confirmation_play">Avec confirmation (lecture pendant la recherche)</string>
     <string name="hide_shorts_from_home">Cacher les shorts de l\'accueil</string>
     <string name="finish_on_disconnect">Couper l\'application lorsque le téléphone est déconnecté</string>
+    <string name="update_error">Erreur de mise à jour</string>
+    <string name="hide_shorts_from_history">Masquer les shorts de l'historique</string>
+    <string name="disable_screensaver">Désactiver l'économiseur d'écran</string>
 </resources>
