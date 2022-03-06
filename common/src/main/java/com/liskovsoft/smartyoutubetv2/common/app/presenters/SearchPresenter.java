@@ -145,6 +145,31 @@ public class SearchPresenter extends BasePresenter<SearchView> implements VideoG
                         () -> getView().showProgressBar(false)
                 );
     }
+
+    private void loadSearchResultAlt(String searchText) {
+        Log.d(TAG, "Start search for '%s'", searchText);
+
+        disposeActions();
+        getView().showProgressBar(true);
+
+        MediaGroupManager mediaGroupManager = mMediaService.getMediaGroupManager();
+
+        getView().clearSearch();
+
+        mLoadAction = mediaGroupManager.getSearchAltObserve(searchText, mSearchOptions)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        mediaGroups -> {
+                            Log.d(TAG, "Receiving results for '%s'", searchText);
+                            for (MediaGroup mediaGroup : mediaGroups) {
+                                getView().updateSearch(VideoGroup.from(mediaGroup));
+                            }
+                        },
+                        error -> Log.e(TAG, "loadSearchData error: %s", error.getMessage()),
+                        () -> getView().showProgressBar(false)
+                );
+    }
     
     private void continueGroup(VideoGroup group) {
         if (RxUtils.isAnyActionRunning(mScrollAction)) {
