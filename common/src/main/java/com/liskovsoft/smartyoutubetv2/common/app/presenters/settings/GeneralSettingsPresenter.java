@@ -248,18 +248,18 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         }
 
         options.add(UiOptionItem.from(
-                String.format("%s:\n%s", getContext().getString(R.string.app_restore), backupManager.getBackupPath()),
-                option -> {
-                    backupManager.checkPermAndRestore();
-                    MessageHelpers.showMessage(getContext(), R.string.msg_done);
-                }));
-
-        options.add(UiOptionItem.from(
                 String.format("%s:\n%s", getContext().getString(R.string.app_backup), backupManager.getBackupPath()),
                 option -> {
                     mGeneralData.enableSection(MediaGroup.TYPE_SETTINGS, true); // prevent Settings lock
                     mGeneralData.enableSettingsSection(true); // prevent Settings lock
                     backupManager.checkPermAndBackup();
+                    MessageHelpers.showMessage(getContext(), R.string.msg_done);
+                }));
+
+        options.add(UiOptionItem.from(
+                String.format("%s:\n%s", getContext().getString(R.string.app_restore), backupManager.getBackupPath()),
+                option -> {
+                    backupManager.checkPermAndRestore();
                     MessageHelpers.showMessage(getContext(), R.string.msg_done);
                 }));
 
