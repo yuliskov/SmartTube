@@ -290,6 +290,7 @@
     <string name="action_subscribe">Odebírat</string>
     <string name="action_channel">Otevřít kanál</string>
     <string name="action_pip">Obraz v obraze</string>
+    <string name="action_video_info">Popis videa</string>
     <string name="action_screen_off">Vypnout obrazovku</string>
     <string name="action_playback_queue">Fronta přehrávání</string>
     <string name="action_video_speed">Rychlost videa</string>
