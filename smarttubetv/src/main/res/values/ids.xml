@@ -10,6 +10,7 @@
     <item name="action_video_speed" type="id"/>
     <item name="action_search" type="id"/>
     <item name="action_pip" type="id"/>
+    <item name="action_info" type="id"/>
     <item name="action_screen_off" type="id"/>
     <item name="action_playback_queue" type="id"/>
     <item name="channel_new_content" type="id"/>

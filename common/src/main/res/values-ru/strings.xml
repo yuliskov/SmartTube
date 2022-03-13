@@ -286,6 +286,7 @@
     <string name="action_subscribe">Подписаться</string>
     <string name="action_channel">Открыть канал</string>
     <string name="action_pip">Картинка в картинке</string>
+    <string name="action_video_info">Описание видео</string>
     <string name="action_screen_off">Выключить экран</string>
     <string name="action_playback_queue">Очередь воспроизведения</string>
     <string name="action_video_speed">Скорость видео</string>
