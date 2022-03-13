@@ -18,7 +18,7 @@ import java.util.List;
  * Video is an object that holds the various metadata associated with a single video.
  */
 public final class Video implements Parcelable {
-    private static final String TERTIARY_TEXT_DELIM = "•";
+    public static final String TERTIARY_TEXT_DELIM = "•";
     private static final int MAX_AUTHOR_LENGTH_CHARS = 20;
     private static final String[] sNotPlaylistParams = new String[] {"EAIYAQ%3D%3D"};
     private static final String SECTION_PREFIX = "FE";

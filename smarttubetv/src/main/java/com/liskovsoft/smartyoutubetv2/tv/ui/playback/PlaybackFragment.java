@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -58,6 +59,7 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.renderer.CustomO
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
@@ -780,8 +782,18 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         if (mPlayerGlue != null && video != null) {
             // Preserve player formatting
             mPlayerGlue.setTitle(video.title != null ? video.title : "...");
-            mPlayerGlue.setSubtitle(video.description != null ? video.description : "...");
+            mPlayerGlue.setSubtitle(video.description != null ? appendLive(video.description, video.isLive) : "...");
         }
+    }
+
+    private CharSequence appendLive(String title, boolean isLive) {
+        CharSequence result = title;
+
+        if (getContext() != null && isLive) {
+            result = TextUtils.concat( title, " ", Video.TERTIARY_TEXT_DELIM, " ", Utils.color("LIVE", ContextCompat.getColor(getContext(), R.color.red)));
+        }
+
+        return result;
     }
 
     @Override
