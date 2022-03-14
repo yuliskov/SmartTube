@@ -371,6 +371,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         } else if (action == mPlaybackQueueAction) {
             mActionListener.onPlaybackQueue();
             handled = true;
+        } else if (action == mVideoInfoAction) {
+            mActionListener.onVideoInfo();
+            handled = true;
         }
 
         if (handled) {
@@ -487,6 +490,8 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         void onDebugInfo(boolean enabled);
 
         void onVideoSpeed();
+
+        void onVideoInfo();
 
         void onSearch();
 

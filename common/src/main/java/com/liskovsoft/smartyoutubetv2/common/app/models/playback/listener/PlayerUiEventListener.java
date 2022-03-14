@@ -26,6 +26,7 @@ public interface PlayerUiEventListener {
     void onPlaylistAddClicked();
     void onDebugInfoClicked(boolean enabled);
     void onVideoSpeedClicked();
+    void onVideoInfoClicked();
     void onSearchClicked();
     void onVideoZoomClicked();
     void onPipClicked();

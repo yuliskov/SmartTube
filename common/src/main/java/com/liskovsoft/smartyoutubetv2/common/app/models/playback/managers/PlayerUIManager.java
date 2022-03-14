@@ -284,6 +284,11 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     }
 
     @Override
+    public void onVideoInfoClicked() {
+        MessageHelpers.showMessage(getActivity(), "not implemented yet");
+    }
+
+    @Override
     public void onSearchClicked() {
         if (SearchData.instance(getActivity()).isBackgroundPlaybackEnabled()) {
             onPipClicked();
