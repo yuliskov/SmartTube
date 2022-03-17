@@ -65,6 +65,9 @@ public class AppDialogFragmentManager {
 
         initMultiSelectListPreference(category, pref);
 
+        //pref.setDialogLayoutResource(R.layout.text_dialog);
+        //pref.setDialogMessage(category.items.get(0).getDescription());
+
         return pref;
     }
 
