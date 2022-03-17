@@ -25,7 +25,7 @@ public final class Video implements Parcelable {
     private static final String SECTION_PREFIX = "FE";
     public long id;
     public String title;
-    public String subtitle;
+    public String info;
     public String description;
     public String category;
     public int itemType = -1;
@@ -57,7 +57,7 @@ public final class Video implements Parcelable {
     public int extra = -1;
 
     public Video() {
-
+       // NOP
     }
 
     private Video(
@@ -73,7 +73,7 @@ public final class Video implements Parcelable {
         this.id = id;
         this.category = category;
         this.title = title;
-        this.subtitle = desc;
+        this.info = desc;
         this.videoId = videoId;
         this.videoUrl = videoUrl;
         this.bgImageUrl = bgImageUrl;
@@ -85,7 +85,7 @@ public final class Video implements Parcelable {
         id = in.readLong();
         category = in.readString();
         title = in.readString();
-        subtitle = in.readString();
+        info = in.readString();
         bgImageUrl = in.readString();
         cardImageUrl = in.readString();
         videoId = in.readString();
@@ -98,7 +98,7 @@ public final class Video implements Parcelable {
 
         video.id = item.getId();
         video.title = item.getTitle();
-        video.subtitle = item.getSubtitle();
+        video.info = item.getInfo();
         video.category = item.getContentType();
         video.itemType = item.getType();
         video.videoId = item.getVideoId();
@@ -130,7 +130,7 @@ public final class Video implements Parcelable {
         video.title = item.title;
         video.category = item.category;
         video.itemType = item.itemType;
-        video.subtitle = item.subtitle;
+        video.info = item.info;
         video.videoId = item.videoId;
         video.channelId = item.channelId;
         video.videoUrl = item.videoUrl;
@@ -161,14 +161,14 @@ public final class Video implements Parcelable {
         return from(videoId, playlistId, playlistIndex, null, null, null, -1);
     }
 
-    public static Video from(String videoId, String playlistId, int playlistIndex, String channelId, String title, String subtitle, float percentWatched) {
+    public static Video from(String videoId, String playlistId, int playlistIndex, String channelId, String title, String info, float percentWatched) {
         Video video = new Video();
         video.videoId = videoId;
         video.playlistId = playlistId;
         video.playlistIndex = playlistIndex;
         video.channelId = channelId;
         video.title = title;
-        video.subtitle = subtitle;
+        video.info = info;
         video.percentWatched = percentWatched;
 
         return video;
@@ -237,21 +237,21 @@ public final class Video implements Parcelable {
             return author;
         }
 
-        return extractAuthor(subtitle);
+        return extractAuthor(info);
     }
 
-    private static String extractAuthor(String subtitle) {
+    private static String extractAuthor(String info) {
         String result = null;
 
-        if (subtitle != null) {
-            subtitle = subtitle.replace(TERTIARY_TEXT_DELIM + " LIVE", ""); // remove special marks
-            String[] split = subtitle.split(TERTIARY_TEXT_DELIM);
+        if (info != null) {
+            info = info.replace(TERTIARY_TEXT_DELIM + " LIVE", ""); // remove special marks
+            String[] split = info.split(TERTIARY_TEXT_DELIM);
 
             if (split.length <= 1) {
-                result = subtitle;
+                result = info;
             } else {
                 // First part may be a special label (4K, Stream, New etc)
-                // Two cases to detect label: 1) Description is long (4 items); 2) First item of subtitle is too short (2 letters)
+                // Two cases to detect label: 1) Description is long (4 items); 2) First item of info is too short (2 letters)
                 result = split.length < 4 && split[0].trim().length() > 2 ? split[0] : split[1];
             }
         }
@@ -282,7 +282,7 @@ public final class Video implements Parcelable {
         dest.writeLong(id);
         dest.writeString(category);
         dest.writeString(title);
-        dest.writeString(subtitle);
+        dest.writeString(info);
         dest.writeString(bgImageUrl);
         dest.writeString(cardImageUrl);
         dest.writeString(videoId);
@@ -434,8 +434,8 @@ public final class Video implements Parcelable {
         MediaItem first = mediaItems.get(0);
         MediaItem last = mediaItems.get(mediaItems.size() - 1);
 
-        String author1 = extractAuthor(first.getSubtitle());
-        String author2 = extractAuthor(last.getSubtitle());
+        String author1 = extractAuthor(first.getInfo());
+        String author2 = extractAuthor(last.getInfo());
 
         return author1 != null && author2 != null && Helpers.equals(author1, author2);
     }
@@ -484,7 +484,7 @@ public final class Video implements Parcelable {
         sync(metadata, false);
     }
 
-    public void sync(MediaItemMetadata metadata, boolean useAltSubtitle) {
+    public void sync(MediaItemMetadata metadata, boolean useAltInfo) {
         if (metadata == null) {
             return;
         }
@@ -495,15 +495,15 @@ public final class Video implements Parcelable {
             title = newTitle;
         }
 
-        String newSubtitle = null;
+        String newInfo = null;
 
         // Don't sync future translation because of not precise info
         if (!metadata.isUpcoming()) {
-            newSubtitle = useAltSubtitle ? metadata.getSubtitleAlt() : metadata.getSubtitle();
+            newInfo = useAltInfo ? metadata.getInfoAlt() : metadata.getInfo();
         }
 
-        if (newSubtitle != null) {
-            subtitle = newSubtitle;
+        if (newInfo != null) {
+            info = newInfo;
         }
 
         // No checks. This data wasn't existed before sync.
@@ -537,7 +537,7 @@ public final class Video implements Parcelable {
      * Creating lightweight copy of origin.
      */
     public Video copy() {
-        Video video = from(videoId, playlistId, playlistIndex, channelId, title, subtitle, percentWatched);
+        Video video = from(videoId, playlistId, playlistIndex, channelId, title, info, percentWatched);
         if (group != null) {
             video.group = group.copy(); // Needed for proper multi row fragments sync (row id == group id)
         }
