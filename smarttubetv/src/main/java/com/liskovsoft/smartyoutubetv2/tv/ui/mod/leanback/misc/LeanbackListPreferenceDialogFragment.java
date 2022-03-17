@@ -18,6 +18,7 @@ package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -164,8 +165,17 @@ public class LeanbackListPreferenceDialogFragment extends LeanbackPreferenceDial
         final CharSequence message = mDialogMessage;
         if (!TextUtils.isEmpty(message)) {
             final TextView messageView = (TextView) view.findViewById(android.R.id.message);
+
+            // Modified. Make textView focusable and clickable.
+            messageView.setAutoLinkMask(Linkify.WEB_URLS);
+            messageView.setFocusable(true);
+
             messageView.setVisibility(View.VISIBLE);
             messageView.setText(message);
+
+            // Modified. Remove other views.
+            ViewGroup parent = (ViewGroup) verticalGridView.getParent();
+            parent.removeView(verticalGridView);
         }
 
         return view;
