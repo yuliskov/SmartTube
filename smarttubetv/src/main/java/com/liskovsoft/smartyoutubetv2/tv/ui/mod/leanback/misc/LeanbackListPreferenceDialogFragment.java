@@ -56,6 +56,7 @@ public class LeanbackListPreferenceDialogFragment extends LeanbackPreferenceDial
     protected CharSequence[] mEntryValues;
     private CharSequence mDialogTitle;
     private CharSequence mDialogMessage;
+    private int mDialogLayoutRes;
     protected Set<String> mInitialSelections;
     protected String mInitialSelection;
 
@@ -89,6 +90,7 @@ public class LeanbackListPreferenceDialogFragment extends LeanbackPreferenceDial
             final DialogPreference preference = getPreference();
             mDialogTitle = preference.getDialogTitle();
             mDialogMessage = preference.getDialogMessage();
+            mDialogLayoutRes = preference.getDialogLayoutResource();
 
             if (preference instanceof ListPreference) {
                 mMulti = false;
