@@ -217,6 +217,8 @@
     <string name="channels_auto_load">Kanallar bölümü içeriğini otomatik yükle</string>
     <string name="return_to_background_video">Arka planda oynatılan videoya dön</string>
     <string name="pin_unpin_from_sidebar">Kenar çubuğuna Sabitle/Kaldır</string>
+    <string name="pin_unpin_playlist">Oynatma listesini Sabitle/Kaldır</string>
+    <string name="pin_unpin_channel">Kanalı Sabitle/Kaldır</string>
     <string name="pinned_to_sidebar">Kenar çubuğuna sabitlendi</string>
     <string name="unpin_from_sidebar">Kenar çubuğundan kaldır</string>
     <string name="unpinned_from_sidebar">Kenar çubuğundan kaldırıldı</string>
@@ -288,6 +290,7 @@
     <string name="action_subscribe">Abone ol</string>
     <string name="action_channel">Kanalı aç</string>
     <string name="action_pip">Resim içinde resim</string>
+    <string name="action_video_info">Video açıklaması</string>
     <string name="action_screen_off">Ekranı kapat</string>
     <string name="action_playback_queue">Oynatma sırası</string>
     <string name="action_video_speed">Video hızı</string>
