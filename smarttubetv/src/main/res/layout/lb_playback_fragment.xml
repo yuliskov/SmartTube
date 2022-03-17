@@ -41,9 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top|right"
         android:gravity="right"
-        android:paddingTop="10sp"
-        android:paddingStart="20sp"
-        android:paddingEnd="20sp">
+        android:padding="10sp">
         <!-- Global clock -->
         <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time.DateTimeView
             android:id="@+id/global_time"

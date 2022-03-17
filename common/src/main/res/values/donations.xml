@@ -3,7 +3,8 @@
     <string-array name="donations">
         <!-- <item>Donation Alerts (VISA, PayPal)|https://www.donationalerts.com/r/firsthash</item> -->
         <!-- <item>BountySource (PayPal, VISA)|https://salt.bountysource.com/checkout/amount?team=smarttube</item> -->
-        <item>Patreon (PayPal)|https://www.patreon.com/smarttube</item>
+        <item>PayPal|https://bit.ly/3wb2FxE</item>
+        <item>Patreon|https://www.patreon.com/smarttube</item>
         <!--<item>QIWI (RU, Visa)|https://qiwi.com/n/GUESS025</item>-->
         <!--<item>DonatePay (RU, PayPal, Visa)|https://new.donatepay.ru/@459197</item>-->
         <!-- <item>PrivatBank (UA)|https://privatbank.ua/ru/sendmoney?payment=9e46a6ef78</item> -->
