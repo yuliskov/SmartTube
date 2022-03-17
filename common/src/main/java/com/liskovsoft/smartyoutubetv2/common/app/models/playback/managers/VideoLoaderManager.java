@@ -333,6 +333,11 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             scheduleReloadVideoTimer(30 * 1_000);
             mSuggestionsLoader.loadSuggestions(mLastVideo);
         }
+
+        Video video = getController().getVideo();
+        if (video != null) {
+            video.sync(formatInfo);
+        }
     }
 
     private void scheduleReloadVideoTimer(int reloadIntervalMs) {

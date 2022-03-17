@@ -10,6 +10,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AppDialogPresenter extends BasePresenter<AppDialogView> {
@@ -36,6 +37,10 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
             return new SettingsCategory(title, items, TYPE_STRING_LIST);
         }
 
+        public static SettingsCategory longText(String title, OptionItem item) {
+            return new SettingsCategory(title, Collections.singletonList(item), TYPE_LONG_TEXT);
+        }
+
         public static SettingsCategory singleSwitch(OptionItem item) {
             ArrayList<OptionItem> items = new ArrayList<>();
             items.add(item);
@@ -59,6 +64,7 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         public static final int TYPE_SINGLE_SWITCH = 2;
         public static final int TYPE_SINGLE_BUTTON = 3;
         public static final int TYPE_STRING_LIST = 4;
+        public static final int TYPE_LONG_TEXT = 5;
         public int type;
         public String title;
         public List<OptionItem> items;
@@ -168,6 +174,10 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
 
     public void appendStringsCategory(String categoryTitle, List<OptionItem> items) {
         mCategories.add(SettingsCategory.stringList(categoryTitle, items));
+    }
+
+    public void appendLongTextCategory(String categoryTitle, OptionItem item) {
+        mCategories.add(SettingsCategory.longText(categoryTitle, item));
     }
 
     public void appendSingleSwitch(OptionItem optionItem) {

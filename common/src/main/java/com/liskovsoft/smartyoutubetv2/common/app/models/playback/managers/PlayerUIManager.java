@@ -285,20 +285,18 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onVideoInfoClicked() {
-        if (!mIsMetadataLoaded) {
+        if (!mIsMetadataLoaded || getController().getVideo().description == null) {
             MessageHelpers.showLongMessage(getActivity(), R.string.wait_data_loading);
             return;
         }
-
-        List<OptionItem> options = new ArrayList<>();
 
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
 
         settingsPresenter.clear();
 
-        options.add(UiOptionItem.from(getController().getVideo().description, optionItem -> {}));
-
-        settingsPresenter.appendStringsCategory(getController().getVideo().title, options);
+        settingsPresenter.appendLongTextCategory(
+                getController().getVideo().title, UiOptionItem.from(getController().getVideo().description, null)
+        );
 
         settingsPresenter.showDialog(getController().getVideo().title);
     }

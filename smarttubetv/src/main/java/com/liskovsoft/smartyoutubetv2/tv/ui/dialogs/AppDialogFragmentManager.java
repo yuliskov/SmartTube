@@ -55,6 +55,8 @@ public class AppDialogFragmentManager {
                 return createSwitchPreference(category);
             case SettingsCategory.TYPE_SINGLE_BUTTON:
                 return createButtonPreference(category);
+            case SettingsCategory.TYPE_LONG_TEXT:
+                return createLongTextPreference(category);
         }
 
         throw  new IllegalStateException("Can't find matched preference for type: " + category.type);
@@ -62,6 +64,17 @@ public class AppDialogFragmentManager {
 
     private Preference createStringListPreference(SettingsCategory category) {
         MultiSelectListPreference pref = new StringListPreference(mStyledContext);
+
+        initMultiSelectListPreference(category, pref);
+
+        return pref;
+    }
+
+    private Preference createLongTextPreference(SettingsCategory category) {
+        MultiSelectListPreference pref = new StringListPreference(mStyledContext);
+
+        pref.setDialogMessage(category.items.get(0).getTitle());
+        pref.setDialogLayoutResource(R.layout.text_dialog);
 
         initMultiSelectListPreference(category, pref);
 

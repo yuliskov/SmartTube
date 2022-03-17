@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -506,7 +507,9 @@ public final class Video implements Parcelable {
         }
 
         // No checks. This data wasn't existed before sync.
-        description = metadata.getDescription();
+        if (metadata.getDescription() != null) {
+            description = metadata.getDescription();
+        }
         channelId = metadata.getChannelId();
         nextMediaItem = metadata.getNextVideo();
         // NOTE: Upcoming videos metadata wrongly reported as live
@@ -517,6 +520,16 @@ public final class Video implements Parcelable {
 
         if (mediaItem != null) {
             mediaItem.sync(metadata);
+        }
+    }
+
+    public void sync(MediaItemFormatInfo formatInfo) {
+        if (formatInfo == null) {
+            return;
+        }
+
+        if (description == null) {
+            description = formatInfo.getDescription();
         }
     }
 
