@@ -320,4 +320,5 @@
     <string name="update_error">Ошибка обновления</string>
     <string name="hide_shorts_from_history">Скрывать короткие видео из Истории</string>
     <string name="disable_screensaver">Отключить скринсейвер</string>
+    <string name="description_not_found">Описание не найдено</string>
 </resources>

@@ -320,4 +320,5 @@
     <string name="update_error">Помилка оновлення</string>
     <string name="hide_shorts_from_history">Приховувати короткі відео з Історії</string>
     <string name="disable_screensaver">Вимкнути скрінсейвер</string>
+    <string name="description_not_found">Опис не знайдено</string>
 </resources>

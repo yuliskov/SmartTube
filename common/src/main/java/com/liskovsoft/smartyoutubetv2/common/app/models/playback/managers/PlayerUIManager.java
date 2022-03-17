@@ -285,8 +285,13 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onVideoInfoClicked() {
-        if (!mIsMetadataLoaded || getController().getVideo().description == null) {
+        if (!mIsMetadataLoaded) {
             MessageHelpers.showLongMessage(getActivity(), R.string.wait_data_loading);
+            return;
+        }
+
+        if (getController().getVideo().description == null) {
+            MessageHelpers.showLongMessage(getActivity(), R.string.description_not_found);
             return;
         }
 
