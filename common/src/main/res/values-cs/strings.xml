@@ -324,4 +324,5 @@
     <string name="update_error">Chyba aktualizace</string>
     <string name="hide_shorts_from_history">Skryj krátké klipy z nabídky Historie</string>
     <string name="disable_screensaver">Zakaž spořič obrazovky</string>
+    <string name="description_not_found">Popis nenalezen</string>
 </resources>
