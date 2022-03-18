@@ -337,7 +337,6 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 if (getActivity() != null && mRemoteControlData.isFinishOnDisconnectEnabled()) {
                     // NOTE: It's not a good idea to remember connection state (mConnected) at this point.
                     MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_disconnected, command.getDeviceName()));
-                    getController().finishReally();
                     ViewManager.instance(getActivity()).properlyFinishTheApp(getActivity());
                 }
                 break;

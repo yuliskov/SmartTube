@@ -330,6 +330,8 @@ public class ViewManager {
             mIsMoveToBackEnabled = true;
             mIsFinishing = true;
 
+            mActivityStack.clear();
+
             ((MotherActivity) activity).finishReally();
         }
     }

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import androidx.annotation.Nullable;
 import androidx.leanback.widget.HeaderItem;
+import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ObjectAdapter;
 import androidx.leanback.widget.Presenter;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -149,9 +150,29 @@ public class SearchTagsFragment extends SearchTagsFragmentBase {
             super.focusOnResults();
             if (getRowsSupportFragment() != null) {
                 // Move selection to the videos (second row)
-                getRowsSupportFragment().setSelectedPosition(1);
+                getRowsSupportFragment().setSelectedPosition(findResultsIndex());
             }
         }
+    }
+
+    /**
+     * Usually, but not always: first row - tags, second row is video results
+     */
+    private int findResultsIndex() {
+        ObjectAdapter rows = getResultsAdapter();
+
+        int index = -1;
+
+        for (int i = 0; i < rows.size(); i++) {
+            Object row = rows.get(i);
+            if (row instanceof ListRow &&
+                ((ListRow) row).getAdapter() instanceof VideoGroupObjectAdapter) {
+                index = i;
+                break;
+            }
+        }
+
+        return index;
     }
 
     @Override
