@@ -55,6 +55,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsPinToSidebarEnabled;
     private boolean mIsOpenPlaylistButtonEnabled;
     private boolean mIsAddToPlaybackQueueButtonEnabled;
+    private boolean mIsOpenDescriptionButtonEnabled;
     private VideoMenuCallback mCallback;
 
     public interface VideoMenuCallback {
@@ -127,6 +128,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsAccountSelectionEnabled = true;
         mIsReturnToBackgroundVideoEnabled = true;
         mIsPinToSidebarEnabled = true;
+        mIsOpenDescriptionButtonEnabled = true;
 
         showMenuInt(video);
     }
@@ -179,6 +181,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendSubscribeButton();
         appendOpenPlaylistButton();
         appendTogglePinVideoToSidebarButton();
+        appendOpenDescriptionButton();
         appendAddToPlaybackQueueButton();
         appendShareButton();
         appendAccountSelectionButton();
@@ -200,6 +203,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendOpenPlaylistButton();
         appendOpenChannelButton();
         appendTogglePinVideoToSidebarButton();
+        appendOpenDescriptionButton();
         appendAddToPlaybackQueueButton();
         appendShareButton();
         appendAccountSelectionButton();
@@ -375,6 +379,40 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                 }));
     }
 
+    private void appendOpenDescriptionButton() {
+        if (!mIsOpenDescriptionButtonEnabled || mVideo == null) {
+            return;
+        }
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.action_video_info),
+                        optionItem -> {
+                            MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
+                            mServiceManager.loadMetadata(mVideo, metadata -> {
+                                String description = metadata.getDescription();
+                                if (description != null) {
+                                    showLongText(description);
+                                } else {
+                                    mServiceManager.loadFormatInfo(mVideo, formatInfo -> {
+                                        String newDescription = formatInfo.getDescription();
+                                        if (newDescription != null) {
+                                            showLongText(newDescription);
+                                        } else {
+                                            MessageHelpers.showMessage(getContext(), R.string.description_not_found);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                ));
+    }
+
+    private void showLongText(String description) {
+        mDialogPresenter.clear();
+        mDialogPresenter.appendLongTextCategory(mVideo.title, UiOptionItem.from(description, null));
+        mDialogPresenter.showDialog(mVideo.title);
+    }
+
     private void appendSubscribeButton() {
         if (!mIsSubscribeButtonEnabled) {
             return;
@@ -520,6 +558,10 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY)) {
             mIsRemoveFromHistoryButtonEnabled = false;
+        }
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_OPEN_DESCRIPTION)) {
+            mIsOpenDescriptionButtonEnabled = false;
         }
     }
 }

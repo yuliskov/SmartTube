@@ -24,6 +24,7 @@ public class MainUIData {
     public static final int MENU_ITEM_REMOVE_FROM_HISTORY = 0b1000000;
     public static final int MENU_ITEM_MOVE_SECTION_UP = 0b10000000;
     public static final int MENU_ITEM_MOVE_SECTION_DOWN = 0b100000000;
+    public static final int MENU_ITEM_OPEN_DESCRIPTION = 0b1000000000;
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
     private final Context mContext;

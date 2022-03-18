@@ -7,6 +7,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.SignInManager;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItemFormatInfo;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
@@ -30,6 +31,7 @@ public class MediaServiceManager {
     private Disposable mSignCheckAction;
     private Disposable mRowsAction;
     private Disposable mSubscribedChannelsAction;
+    private Disposable mFormatInfoAction;
 
     public interface OnMetadata {
         void onMetadata(MediaItemMetadata metadata);
@@ -41,6 +43,10 @@ public class MediaServiceManager {
 
     public interface OnMediaGroupList {
         void onMediaGroupList(List<MediaGroup> groupList);
+    }
+
+    public interface OnFormatInfo {
+        void onFormatInfo(MediaItemFormatInfo formatInfo);
     }
 
     public MediaServiceManager() {
@@ -160,6 +166,24 @@ public class MediaServiceManager {
                 .subscribe(
                         onMediaGroupList::onMediaGroupList,
                         error -> Log.e(TAG, "loadChannelRows error: %s", error.getMessage())
+                );
+    }
+
+    public void loadFormatInfo(Video item, OnFormatInfo onFormatInfo) {
+        if (item == null) {
+            return;
+        }
+
+        RxUtils.disposeActions(mFormatInfoAction);
+
+        Observable<MediaItemFormatInfo> observable = mItemManager.getFormatInfoObserve(item.videoId);
+
+        mFormatInfoAction = observable
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        onFormatInfo::onFormatInfo,
+                        error -> Log.e(TAG, "loadFormatInfo error: %s", error.getMessage())
                 );
     }
 
