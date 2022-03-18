@@ -124,7 +124,7 @@ public class IntentExtractor {
     public static boolean isChannelUrl(Intent intent) {
         return intent != null
                 && extractUri(intent) != null
-                && Helpers.equalsAny(extractUri(intent).toString(), SUBSCRIPTIONS_URL, HISTORY_URL, RECOMMENDED_URL);
+                && Helpers.startsWithAny(extractUri(intent).toString(), SUBSCRIPTIONS_URL, HISTORY_URL, RECOMMENDED_URL);
     }
 
     /**
@@ -133,7 +133,7 @@ public class IntentExtractor {
     public static boolean isSubscriptionsUrl(Intent intent) {
         return intent != null
                 && extractUri(intent) != null
-                && Helpers.equals(extractUri(intent).toString(), SUBSCRIPTIONS_URL);
+                && Helpers.startsWith(extractUri(intent).toString(), SUBSCRIPTIONS_URL);
     }
 
     /**
@@ -142,7 +142,7 @@ public class IntentExtractor {
     public static boolean isHistoryUrl(Intent intent) {
         return intent != null
                 && extractUri(intent) != null
-                && Helpers.equals(extractUri(intent).toString(), HISTORY_URL);
+                && Helpers.startsWith(extractUri(intent).toString(), HISTORY_URL);
     }
 
     /**
@@ -151,7 +151,7 @@ public class IntentExtractor {
     public static boolean isRecommendedUrl(Intent intent) {
         return intent != null
                 && extractUri(intent) != null
-                && Helpers.equals(extractUri(intent).toString(), RECOMMENDED_URL);
+                && Helpers.startsWith(extractUri(intent).toString(), RECOMMENDED_URL);
     }
 
     public static boolean isRootUrl(Intent intent) {
