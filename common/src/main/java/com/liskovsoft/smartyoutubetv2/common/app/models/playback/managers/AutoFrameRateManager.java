@@ -144,7 +144,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     }
 
     private void applyAfr() {
-        if (mPlayerData.isAfrEnabled()) {
+        if (getController() != null && mPlayerData.isAfrEnabled()) {
             FormatItem videoFormat = getController().getVideoFormat();
             applyAfr(videoFormat, false);
             // Send data to AFR daemon via tvQuickActions app

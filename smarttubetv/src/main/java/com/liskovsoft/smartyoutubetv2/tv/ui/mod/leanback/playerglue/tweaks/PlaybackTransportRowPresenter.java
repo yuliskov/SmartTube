@@ -1056,7 +1056,9 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         }
         mPlaybackControlsPresenter.onUnbindViewHolder(vh.mControlsVh);
         mSecondaryControlsPresenter.onUnbindViewHolder(vh.mSecondaryControlsVh);
-        row.setOnPlaybackProgressChangedListener(null);
+        if (row != null) {
+            row.setOnPlaybackProgressChangedListener(null);
+        }
 
         super.onUnbindRowViewHolder(holder);
     }
