@@ -290,6 +290,7 @@
     <string name="action_subscribe">Sottoscrivi</string>
     <string name="action_channel">Apri canale</string>
     <string name="action_pip">Immagine nell\'immagine (PiP)</string>
+    <string name="action_video_info">Descrizione del video</string>
     <string name="action_screen_off">Spegni schermo</string>
     <string name="action_playback_queue">Coda di riproduzione</string>
     <string name="action_video_speed">Velocità del video</string>
@@ -323,4 +324,5 @@
     <string name="update_error">Errore durante l\'aggiornamento</string>
     <string name="hide_shorts_from_history">Nascondi i video corti dalla Cronologia</string>
     <string name="disable_screensaver">Disabilita lo screensaver</string>
+    <string name="description_not_found">Descrizione non trovata</string>
 </resources>
