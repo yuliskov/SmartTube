@@ -73,17 +73,7 @@ public class MotherActivity extends FragmentActivity {
             mScreensaverManager.enable();
         }
 
-        boolean result = false;
-
-        try {
-            result = super.dispatchKeyEvent(event);
-        } catch (SecurityException e) {
-            // Error when clicking on url in description dialog
-            // Permission Denial: starting Intent { act=android.intent.action.VIEW... not started from uid
-            e.printStackTrace();
-        }
-
-        return result;
+        return super.dispatchKeyEvent(event);
     }
 
     @Override
