@@ -17,8 +17,12 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc;
 
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +38,7 @@ import androidx.preference.DialogPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.MultiSelectListPreference;
 import androidx.recyclerview.widget.RecyclerView;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -174,6 +179,8 @@ public class LeanbackListPreferenceDialogFragment extends LeanbackPreferenceDial
             messageView.setFocusable(true);
 
             messageView.setVisibility(View.VISIBLE);
+            // Modified. Make text link clickable
+            //messageView.setText(toSpannableString(message));
             messageView.setText(message);
 
             // Modified. Remove other views.
@@ -182,6 +189,30 @@ public class LeanbackListPreferenceDialogFragment extends LeanbackPreferenceDial
         }
 
         return view;
+    }
+
+    /**
+     * Make link open in browser. Not working.
+     */
+    private CharSequence toSpannableString(CharSequence message) {
+        SpannableStringBuilder builder = SpannableStringBuilder.valueOf(message);
+        URLSpan[] spans = builder.getSpans(0, builder.length(), URLSpan.class);
+
+        for (URLSpan span : spans) {
+           builder.setSpan(new ClickableSpan() {
+                   @Override
+                   public void onClick(@NonNull View widget) {
+                       MessageHelpers.showMessage(getContext(), "On link clicked " + span.getURL());
+                   }
+               },
+               builder.getSpanStart(span),
+               builder.getSpanEnd(span),
+               Spanned.SPAN_INCLUSIVE_EXCLUSIVE
+           );
+           builder.removeSpan(span);
+        }
+
+        return builder;
     }
 
     public RecyclerView.Adapter onCreateAdapter() {
