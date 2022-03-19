@@ -179,7 +179,7 @@ public class LeanbackListPreferenceDialogFragment extends LeanbackPreferenceDial
             messageView.setFocusable(true);
 
             messageView.setVisibility(View.VISIBLE);
-            // Modified. Make text link clickable
+            // Modified. Make link open in browser
             //messageView.setText(toSpannableString(message));
             messageView.setText(message);
 
