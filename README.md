@@ -138,6 +138,8 @@ If you want to support my developments you are welcome to buy me a cup of coffee
 > **ETH**: 0xe455E21a085ae195a097cd4F456051A9916A5064  
 > **ETC**: 0x209eCd33Fa61fA92167595eB3Aea92EE1905c815  
 > **XMR**: 48QsMjqfkeW54vkgKyRnjodtYxdmLk6HXfTWPSZoaFPEDpoHDwFUciGCe1QC9VAeGrgGw4PKNAksX9RW7myFqYJQDN5cHGT  
+> **BNB**: bnb1amjr7fauftxxyhe4f95280vklctj243k9u55fq  
+> **DOGE**: DBnqJwJs2GJBxrCDsi5bXwSmjnz8uGdUpB  
 > **eUSDT**: 0xe455e21a085ae195a097cd4f456051a9916a5064
 
 
