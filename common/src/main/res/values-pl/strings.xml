@@ -313,7 +313,7 @@
     <string name="cancel_dialog">Anuluj</string>
     <string name="msg_player_error_source2">Źródło wideo nie działa lub jest w nieodpowiednim czasie</string>
     <string name="hide_upcoming">Ukryj nadchodzące w Subskrypcjach</string>
-    <string name="search_background_playback">Przełącz na tryb 'obraz w obrazie', jeśli wyszukiwanie jest uruchamiane z odtwarzacza</string>
+    <string name="search_background_playback">Przełącz na tryb \'obraz w obrazie\', jeśli wyszukiwanie jest uruchamiane z odtwarzacza</string>
     <string name="trending_row_name">Trendy</string>
     <string name="player_seek_type">Szukaj zachowania</string>
     <string name="player_seek_regular">Regularny</string>
