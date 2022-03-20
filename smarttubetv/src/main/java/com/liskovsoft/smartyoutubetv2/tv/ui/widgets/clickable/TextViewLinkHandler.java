@@ -9,14 +9,13 @@ import android.widget.TextView;
 
 /**
  * Usage:
- * <code>
+ * <pre>
  *     textView.setMovementMethod(new TextViewLinkHandler() {
- *         @Override
  *         public void onLinkClick(String url) {
  *             Toast.makeText(textView.getContext(), url, Toast.LENGTH_SHORT).show();
  *         }
  *     });
- * </code>
+ * </pre>
  */
 public abstract class TextViewLinkHandler extends LinkMovementMethod {
     public boolean onTouchEvent(TextView widget, Spannable buffer, MotionEvent event) {
