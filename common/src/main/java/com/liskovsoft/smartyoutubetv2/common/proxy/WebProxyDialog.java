@@ -35,7 +35,7 @@ public class WebProxyDialog {
     private int mNumTests;
 
     public WebProxyDialog(Context context) {
-        mContext = context.getApplicationContext();
+        mContext = context;
         mProxyManager = new ProxyManager(mContext);
         mProxyTestHandler = new Handler(Looper.myLooper());
         mUrlTests = new ArrayList<>();
@@ -55,6 +55,8 @@ public class WebProxyDialog {
             if (checked) {
                 // FIXME: If user hit cancel in dialog, proxy remains enabled.
                 showProxyConfigDialog();
+            } else {
+                mProxyManager.configureSystemProxy();
             }
         }
     }
@@ -110,6 +112,9 @@ public class WebProxyDialog {
             appendStatusMessage(R.string.proxy_test_aborted);
             return;
         }
+
+        mProxyManager.saveProxyInfoToPrefs(proxy, true);
+        mProxyManager.configureSystemProxy();
 
         String[] testUrls = mContext.getString(R.string.proxy_test_urls).split("\n");
         OkHttpClient okHttpClient = OkHttpHelpers.createOkHttpClient();
@@ -179,6 +184,7 @@ public class WebProxyDialog {
             } else {
                 Log.d(TAG, "Saving proxy info: " + proxy);
                 mProxyManager.saveProxyInfoToPrefs(proxy, true);
+                mProxyManager.configureSystemProxy();
                 for (Call call: mUrlTests) call.cancel();
                 mProxyConfigDialog.dismiss();
             }
@@ -194,6 +200,16 @@ public class WebProxyDialog {
         mProxyConfigDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener((view) -> {
             for (Call call: mUrlTests) call.cancel();
             mProxyConfigDialog.dismiss();
+        });
+
+        mProxyConfigDialog.setOnDismissListener(dialog -> {
+            Proxy proxy = validateProxyConfigFields();
+            if (proxy != null) {
+                Log.d(TAG, "Saving proxy info: " + proxy);
+                mProxyManager.saveProxyInfoToPrefs(proxy, true);
+                mProxyManager.configureSystemProxy();
+                for (Call call: mUrlTests) call.cancel();
+            }
         });
     }
 }

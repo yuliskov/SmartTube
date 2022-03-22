@@ -217,7 +217,7 @@ public class ProxyManager {
         Proxy proxy = isProxyEnabled() && mProxy != null ? mProxy : Proxy.NO_PROXY;
         Context appContext = mContext.getApplicationContext();
         InetSocketAddress proxyAddr = (InetSocketAddress) proxy.address();
-        switch (mProxy.type()) {
+        switch (proxy.type()) {
             case HTTP:
                 System.setProperty("http.proxyHost", proxyAddr.getHostString());
                 System.setProperty("http.proxyPort", proxyAddr.getPort() + "");

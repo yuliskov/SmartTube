@@ -85,14 +85,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="HTTP"
-            android:textColor="@color/dialog_text_color" />
+            android:textColor="@color/dialog_text_color"
+            android:buttonTint="@color/dialog_text_color" />
 
         <RadioButton
             android:id="@+id/proxy_type_socks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SOCKS"
-            android:textColor="@color/dialog_text_color" />
+            android:textColor="@color/dialog_text_color"
+            android:buttonTint="@color/dialog_text_color" />
     </RadioGroup>
 
     <TextView
@@ -100,7 +102,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:lines="4"
+        android:lines="5"
         android:textColor="@color/dialog_text_color"
         android:padding="5dp" />
 </LinearLayout>
