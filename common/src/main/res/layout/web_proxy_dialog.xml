@@ -29,8 +29,36 @@
         android:autofillHints=""
         android:ems="10"
         android:hint="@string/proxy_port_hint"
-        android:imeOptions="actionDone"
+        android:imeOptions="actionNext"
         android:inputType="number"
+        android:textColor="@color/dialog_text_color"
+        android:textCursorDrawable="@null"
+        android:backgroundTint="@color/dialog_text_color"
+        android:textColorHint="@color/white_50" />
+
+    <EditText
+        android:id="@+id/proxy_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/proxy_username_hint"
+        android:imeOptions="actionNext"
+        android:inputType="textPersonName"
+        android:textColor="@color/dialog_text_color"
+        android:textCursorDrawable="@null"
+        android:backgroundTint="@color/dialog_text_color"
+        android:textColorHint="@color/white_50" />
+
+    <EditText
+        android:id="@+id/proxy_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/proxy_password_hint"
+        android:imeOptions="actionDone"
+        android:inputType="textPassword"
         android:textColor="@color/dialog_text_color"
         android:textCursorDrawable="@null"
         android:backgroundTint="@color/dialog_text_color"

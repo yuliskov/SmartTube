@@ -323,6 +323,8 @@
     <string name="description_not_found">Опис не знайдено</string>
     <string name="proxy_port_hint">Порт проксі-сервера</string>
     <string name="proxy_host_hint">Ім\'я або IP-адреса проксі-сервера</string>
+    <string name="proxy_username_hint">Ім\'я користувача проксі</string>
+    <string name="proxy_password_hint">Пароль проксі-сервера</string>
     <string name="proxy_type">Тип проксі-сервера</string>
     <string name="enable_web_proxy">Використовувати веб-проксі</string>
     <string name="proxy_not_supported">Використовувати веб-проксі (потрібен Android 4.4+)</string>
@@ -333,7 +335,9 @@
     <string name="proxy_type_invalid">Тип проксі не встановлено.</string>
     <string name="proxy_host_invalid">Хост проксі не встановлено.</string>
     <string name="proxy_port_invalid">Недійсний проксі-порт, має &gt; 0.</string>
+    <string name="proxy_credentials_invalid">Облікові дані проксі недійсні.</string>
     <string name="proxy_test_aborted">Тест скасовано, спершу виправте налаштування проксі.</string>
+    <string name="proxy_application_aborted">Будь ласка, спершу виправте налаштування проксі.</string>
     <string name="proxy_test_start">Тест#%d: %s …</string>
     <string name="proxy_test_error">Помилка #%d: %s</string>
     <string name="proxy_test_status">Статус#%d: %s %d %s</string>

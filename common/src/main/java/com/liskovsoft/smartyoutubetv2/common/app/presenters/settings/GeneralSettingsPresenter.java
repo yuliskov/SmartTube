@@ -14,10 +14,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.BackupAndRestoreManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
-import com.liskovsoft.smartyoutubetv2.common.misc.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.proxy.WebProxyDialog;
 
 import java.util.ArrayList;
@@ -307,19 +307,19 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.disableOkButtonLongPress(option.isSelected()),
                 mGeneralData.isOkButtonLongPressDisabled()));
 
-        //ProxyManager proxyManager = ProxyManager.instance(getContext());
+        ProxyManager proxyManager = new ProxyManager(getContext());
 
-        options.add(UiOptionItem.from(getContext().getString(R.string.enable_web_proxy),
-                option -> {
-                    mGeneralData.enableProxy(option.isSelected());
-                    new WebProxyDialog(getContext()).enable(option.isSelected());
-                    if (option.isSelected()) {
-                        settingsPresenter.closeDialog();
-                    }
-                    //mRestartApp = true;
-                    //proxyManager.enableProxy(option.isSelected());
-                },
-                mGeneralData.isProxyEnabled()));
+        if (proxyManager.isProxySupported()) {
+            options.add(UiOptionItem.from(getContext().getString(R.string.enable_web_proxy),
+                    option -> {
+                        mGeneralData.enableProxy(option.isSelected());
+                        new WebProxyDialog(getContext()).enable(option.isSelected());
+                        if (option.isSelected()) {
+                            settingsPresenter.closeDialog();
+                        }
+                    },
+                    mGeneralData.isProxyEnabled()));
+        }
 
         //options.add(UiOptionItem.from("Enable Web Proxy config:\n" + proxyManager.getConfigPath(),
         //        option -> {

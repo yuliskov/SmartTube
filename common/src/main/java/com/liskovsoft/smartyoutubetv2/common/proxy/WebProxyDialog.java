@@ -35,29 +35,27 @@ public class WebProxyDialog {
     private int mNumTests;
 
     public WebProxyDialog(Context context) {
-        //super(context.getString(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-        //        ? R.string.enable_web_proxy : R.string.proxy_not_supported), false);
-
-        mContext = context;
+        mContext = context.getApplicationContext();
         mProxyManager = new ProxyManager(mContext);
         mProxyTestHandler = new Handler(Looper.myLooper());
         mUrlTests = new ArrayList<>();
     }
 
+    public boolean isSupported() {
+        return mProxyManager.isProxySupported();
+    }
+
     public boolean isEnabled() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            return mProxyManager.isProxyEnabled();
-        } else {
-            return false;
-        }
+        return mProxyManager.isProxyEnabled();
     }
 
     public void enable(boolean checked) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (isSupported()) {
             mProxyManager.saveProxyInfoToPrefs(null, checked);
-            if (checked)
+            if (checked) {
                 // FIXME: If user hit cancel in dialog, proxy remains enabled.
                 showProxyConfigDialog();
+            }
         }
     }
 
@@ -92,6 +90,12 @@ public class WebProxyDialog {
         if (proxyPort <= 0) {
             isConfigValid = false;
             appendStatusMessage(R.string.proxy_port_invalid);
+        }
+        String proxyUser = ((EditText) mProxyConfigDialog.findViewById(R.id.proxy_username)).getText().toString();
+        String proxyPassword = ((EditText) mProxyConfigDialog.findViewById(R.id.proxy_password)).getText().toString();
+        if (proxyUser.isEmpty() != proxyPassword.isEmpty()) {
+            isConfigValid = false;
+            appendStatusMessage(R.string.proxy_credentials_invalid);
         }
         if (!isConfigValid) {
             return null;
@@ -171,7 +175,7 @@ public class WebProxyDialog {
             ((TextView) mProxyConfigDialog.findViewById(R.id.proxy_config_message)).setText("");
             Proxy proxy = validateProxyConfigFields();
             if (proxy == null) {
-                appendStatusMessage("Please correct proxy settings first.");
+                appendStatusMessage(R.string.proxy_application_aborted);
             } else {
                 Log.d(TAG, "Saving proxy info: " + proxy);
                 mProxyManager.saveProxyInfoToPrefs(proxy, true);

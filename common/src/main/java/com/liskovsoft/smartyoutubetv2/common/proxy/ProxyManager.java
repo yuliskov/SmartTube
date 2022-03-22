@@ -43,7 +43,7 @@ public class ProxyManager {
     private boolean mEnabled;
 
     public ProxyManager(Context context) {
-        mContext = context;
+        mContext = context.getApplicationContext();
         mPrefs = AppPrefs.instance(mContext);
         loadProxyInfoFromPrefs();
     }
@@ -72,7 +72,7 @@ public class ProxyManager {
      * @return True if proxy setting is enabled in preference. Otherwise false.
      */
     public boolean isProxyEnabled() {
-        return mEnabled;
+        return isProxySupported() && mEnabled;
     }
 
     /**
@@ -121,9 +121,7 @@ public class ProxyManager {
 
     protected void loadProxyInfoFromPrefs() {
         try {
-            // TODO: fix later
-            //String proxyUriString = mPrefs.getWebProxyUri();
-            String proxyUriString = "";
+            String proxyUriString = mPrefs.getWebProxyUri();
 
             Log.d(TAG, "Web Proxy URI from preferences: \""
                     + proxyUriString + "\"; " + mEnabled);
@@ -136,8 +134,7 @@ public class ProxyManager {
                         InetSocketAddress.createUnresolved(proxyURI.getHost(), proxyURI.getPort()));
             }
 
-            // TODO: fix later
-            //mEnabled = mPrefs.getWebProxyEnabled();
+            mEnabled = mPrefs.isWebProxyEnabled();
         }
         catch (URISyntaxException e) {
             Log.e(TAG, e);
@@ -160,18 +157,12 @@ public class ProxyManager {
             mProxy = new Proxy(proxy.type(), proxy.address());
         mEnabled = enable;
         String proxyUriString = getProxyUriString();
-
-        // TODO: fix later
-        //mPrefs.setWebProxyUri(proxyUriString);
-        //mPrefs.setWebProxyEnabled(mEnabled);
-
-
-        // TODO: fix later
-        //String toastMessage = enable ? mContext.getString(R.string.proxy_enabled, proxyUriString)
-        //        : mContext.getString(R.string.proxy_disabled);
-        //MessageHelpers.showLongMessage(mContext, toastMessage);
-        //Log.d(TAG, "Saved Web Proxy URI to preferences: "
-        //        + proxyUriString + "; Enabled: " + mEnabled);
+        
+        mPrefs.setWebProxyUri(proxyUriString);
+        mPrefs.setWebProxyEnabled(mEnabled);
+        
+        Log.d(TAG, "Saved Web Proxy URI to preferences: "
+                + proxyUriString + "; Enabled: " + mEnabled);
     }
 
     /**
@@ -223,7 +214,7 @@ public class ProxyManager {
         if (BuildConfig.DEBUG && Build.VERSION.SDK_INT < 19) {
             throw new AssertionError("API level must >= 19");
         }
-        Proxy proxy = mEnabled && mProxy != null ? mProxy : Proxy.NO_PROXY;
+        Proxy proxy = isProxyEnabled() && mProxy != null ? mProxy : Proxy.NO_PROXY;
         Context appContext = mContext.getApplicationContext();
         InetSocketAddress proxyAddr = (InetSocketAddress) proxy.address();
         switch (mProxy.type()) {
@@ -234,6 +225,13 @@ public class ProxyManager {
                 System.setProperty("https.proxyPort", proxyAddr.getPort() + "");
                 System.clearProperty("socksProxyHost");
                 System.clearProperty("socksProxyPort");
+
+                //System.setProperty("http.proxyUser", proxyAddr.getProxyUser());
+                //System.setProperty("http.proxyPassword", proxyAddr.getProxyPassword());
+                //System.setProperty("https.proxyUser", proxyAddr.getProxyUser());
+                //System.setProperty("https.proxyPassword", proxyAddr.getProxyPassword());
+                //System.clearProperty("socksProxyUser");
+                //System.clearProperty("socksProxyPassword");
                 break;
             case SOCKS:
                 System.setProperty("socksProxyHost", proxyAddr.getHostString());
@@ -242,6 +240,13 @@ public class ProxyManager {
                 System.clearProperty("http.proxyPort");
                 System.clearProperty("https.proxyHost");
                 System.clearProperty("https.proxyPort");
+
+                //System.setProperty("socksProxyUser", proxyAddr.getProxyUser());
+                //System.setProperty("socksProxyPassword", proxyAddr.getProxyPassword());
+                //System.clearProperty("http.proxyUser");
+                //System.clearProperty("http.proxyPassword");
+                //System.clearProperty("https.proxyUser");
+                //System.clearProperty("https.proxyPassword");
                 break;
             case DIRECT:
                 System.clearProperty("socksProxyHost");
@@ -250,6 +255,13 @@ public class ProxyManager {
                 System.clearProperty("http.proxyPort");
                 System.clearProperty("https.proxyHost");
                 System.clearProperty("https.proxyPort");
+
+                System.clearProperty("socksProxyUser");
+                System.clearProperty("socksProxyPassword");
+                System.clearProperty("http.proxyUser");
+                System.clearProperty("http.proxyPassword");
+                System.clearProperty("https.proxyUser");
+                System.clearProperty("https.proxyPassword");
                 break;
         }
         Field loadedApkField = appContext.getClass().getField("mLoadedApk");
@@ -277,14 +289,17 @@ public class ProxyManager {
 
     public boolean configureSystemProxy() {
         try {
-            if (Build.VERSION.SDK_INT < 19) {
-                throw new UnsupportedOperationException("Web Proxy support not implemented for API level < 19");
-            } else { // API level >= 19
+            if (isProxySupported()) {
                 return setWebProxyAPI19Plus();
             }
         } catch (Exception e) {
             Log.e(TAG, e);
-            return false;
         }
+
+        return false;
+    }
+
+    public boolean isProxySupported() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
     }
 }

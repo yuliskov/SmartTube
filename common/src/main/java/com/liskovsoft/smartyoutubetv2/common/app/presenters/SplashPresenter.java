@@ -14,9 +14,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.smartyoutubetv2.common.misc.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -80,7 +80,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             getBackupDataOnce();
             runRemoteControlTasks();
             //setupKeepAlive();
-            //configureProxy();
+            configureProxy();
             initVideoStateService();
             sRunOnce = true;
         }
@@ -118,8 +118,9 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     private void configureProxy() {
         if (getContext() != null && GeneralData.instance(getContext()).isProxyEnabled()) {
-            ProxyManager proxyManager = ProxyManager.instance(getContext());
-            proxyManager.enableProxy(true);
+            new ProxyManager(getContext()).configureSystemProxy();
+            //ProxyManager proxyManager = ProxyManager.instance(getContext());
+            //proxyManager.enableProxy(true);
         }
     }
 

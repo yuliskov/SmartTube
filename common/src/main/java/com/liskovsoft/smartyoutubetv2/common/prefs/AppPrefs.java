@@ -13,6 +13,8 @@ public class AppPrefs extends SharedPreferencesBase {
     private static final String BACKUP_DATA = "backup_data";
     private static final String STATE_UPDATER_DATA = "state_updater_data";
     private static final String VIEW_MANAGER_DATA = "view_manager_data";
+    private static final String WEB_PROXY_URI = "web_proxy_uri";
+    private static final String WEB_PROXY_ENABLED = "web_proxy_enabled";
     private String mBootResolution;
 
     private AppPrefs(Context context) {
@@ -68,18 +70,18 @@ public class AppPrefs extends SharedPreferencesBase {
     }
 
     public String getWebProxyUri() {
-        return null;
+        return getString(WEB_PROXY_URI, "");
     }
 
     public void setWebProxyUri(String uri) {
-        
+        putString(WEB_PROXY_URI, uri);
     }
 
-    public boolean getWebProxyEnabled() {
-        return false;
+    public boolean isWebProxyEnabled() {
+        return getBoolean(WEB_PROXY_ENABLED, false);
     }
 
     public void setWebProxyEnabled(boolean enabled) {
-        
+        putBoolean(WEB_PROXY_ENABLED, enabled);
     }
 }

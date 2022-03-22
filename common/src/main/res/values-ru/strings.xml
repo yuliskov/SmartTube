@@ -323,6 +323,8 @@
     <string name="description_not_found">Описание не найдено</string>
     <string name="proxy_port_hint">Порт прокси</string>
     <string name="proxy_host_hint">Имя или IP-адрес прокси-сервера</string>
+    <string name="proxy_username_hint">Имя пользователя-прокси</string>
+    <string name="proxy_password_hint">Пароль прокси</string>
     <string name="proxy_type">Тип прокси</string>
     <string name="enable_web_proxy">Использовать веб-прокси</string>
     <string name="proxy_not_supported">Использовать веб-прокси (требуется Android 4.4+)</string>
@@ -333,7 +335,9 @@
     <string name="proxy_type_invalid">Тип прокси не задан.</string>
     <string name="proxy_host_invalid">Хост прокси не задан.</string>
     <string name="proxy_port_invalid">Недопустимый порт прокси-сервера, должен &gt; 0.</string>
+    <string name="proxy_credentials_invalid">Неверные учетные данные прокси-сервера.</string>
     <string name="proxy_test_aborted">Тест прерван, сначала исправьте настройки прокси.</string>
+    <string name="proxy_application_aborted">Пожалуйста, сначала исправьте настройки прокси.</string>
     <string name="proxy_test_start">Тест#%d: %s…</string>
     <string name="proxy_test_error">Ошибка#%d: %s</string>
     <string name="proxy_test_status">Статус#%d: %s %d %s</string>
