@@ -795,7 +795,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         CharSequence result = title;
 
         if (getContext() != null && isLive) {
-            result = TextUtils.concat( title, " ", Video.TERTIARY_TEXT_DELIM, " ", Utils.color("LIVE", ContextCompat.getColor(getContext(), R.color.red)));
+            result = TextUtils.concat( title, " ", Video.TERTIARY_TEXT_DELIM, " ", Utils.color(getContext().getString(R.string.badge_live), ContextCompat.getColor(getContext(), R.color.red)));
         }
 
         return result;
