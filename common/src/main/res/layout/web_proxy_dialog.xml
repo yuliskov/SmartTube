@@ -17,7 +17,9 @@
         android:hint="@string/proxy_host_hint"
         android:imeOptions="actionNext"
         android:inputType="textUri|textPersonName"
-        android:textColor="@color/white"
+        android:textColor="@color/dialog_text_color"
+        android:textCursorDrawable="@null"
+        android:backgroundTint="@color/dialog_text_color"
         android:textColorHint="@color/white_50" />
 
     <EditText
@@ -29,7 +31,9 @@
         android:hint="@string/proxy_port_hint"
         android:imeOptions="actionDone"
         android:inputType="number"
-        android:textColor="@color/white"
+        android:textColor="@color/dialog_text_color"
+        android:textCursorDrawable="@null"
+        android:backgroundTint="@color/dialog_text_color"
         android:textColorHint="@color/white_50" />
 
     <TextView
@@ -38,8 +42,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:text="@string/proxy_type"
-        android:textColor="@color/black"
-        android:textSize="18sp" />
+        android:textColor="@color/dialog_text_color"
+        android:textSize="18sp"
+        android:padding="5dp" />
 
     <RadioGroup
         android:id="@+id/proxy_type"
@@ -51,15 +56,15 @@
             android:id="@+id/proxy_type_http"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/proxy_type_http"
-            android:textColor="@color/white" />
+            android:text="HTTP"
+            android:textColor="@color/dialog_text_color" />
 
         <RadioButton
             android:id="@+id/proxy_type_socks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/proxy_type_socks"
-            android:textColor="@color/white" />
+            android:text="SOCKS"
+            android:textColor="@color/dialog_text_color" />
     </RadioGroup>
 
     <TextView
@@ -68,5 +73,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:lines="4"
-        android:textColor="@color/black" />
+        android:textColor="@color/dialog_text_color"
+        android:padding="5dp" />
 </LinearLayout>

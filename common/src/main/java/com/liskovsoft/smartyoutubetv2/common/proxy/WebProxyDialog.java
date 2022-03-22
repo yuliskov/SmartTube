@@ -141,14 +141,13 @@ public class WebProxyDialog {
     protected void showProxyConfigDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext, R.style.AppDialog);
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View contentView = inflater.inflate(R.layout.web_proxy_config, null);
+        View contentView = inflater.inflate(R.layout.web_proxy_dialog, null);
 
         if (mProxyManager.getProxyType() == Proxy.Type.DIRECT) {
             ((EditText) contentView.findViewById(R.id.proxy_host)).setText("");
             ((EditText) contentView.findViewById(R.id.proxy_port)).setText("");
             ((RadioGroup) contentView.findViewById(R.id.proxy_type)).clearCheck();
-        }
-        else {
+        } else {
             ((EditText) contentView.findViewById(R.id.proxy_host)).setText(mProxyManager.getProxyHost());
             ((EditText) contentView.findViewById(R.id.proxy_port)).setText(String.valueOf(mProxyManager.getProxyPort()));
             int proxyTypeId = mProxyManager.getProxyType() == Proxy.Type.HTTP ? R.id.proxy_type_http : R.id.proxy_type_socks;
@@ -173,8 +172,7 @@ public class WebProxyDialog {
             Proxy proxy = validateProxyConfigFields();
             if (proxy == null) {
                 appendStatusMessage("Please correct proxy settings first.");
-            }
-            else {
+            } else {
                 Log.d(TAG, "Saving proxy info: " + proxy);
                 mProxyManager.saveProxyInfoToPrefs(proxy, true);
                 for (Call call: mUrlTests) call.cancel();

@@ -307,16 +307,16 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.disableOkButtonLongPress(option.isSelected()),
                 mGeneralData.isOkButtonLongPressDisabled()));
 
-        ProxyManager proxyManager = ProxyManager.instance(getContext());
+        //ProxyManager proxyManager = ProxyManager.instance(getContext());
 
-        options.add(UiOptionItem.from("Enable Web Proxy",
+        options.add(UiOptionItem.from(getContext().getString(R.string.enable_web_proxy),
                 option -> {
                     mGeneralData.enableProxy(option.isSelected());
                     new WebProxyDialog(getContext()).enable(option.isSelected());
-                    mRestartApp = true;
                     if (option.isSelected()) {
                         settingsPresenter.closeDialog();
                     }
+                    //mRestartApp = true;
                     //proxyManager.enableProxy(option.isSelected());
                 },
                 mGeneralData.isProxyEnabled()));

@@ -321,4 +321,20 @@
     <string name="hide_shorts_from_history">Скрывать короткие видео из Истории</string>
     <string name="disable_screensaver">Отключить скринсейвер</string>
     <string name="description_not_found">Описание не найдено</string>
+    <string name="proxy_port_hint">Порт прокси</string>
+    <string name="proxy_host_hint">Имя или IP-адрес прокси-сервера</string>
+    <string name="proxy_type">Тип прокси</string>
+    <string name="enable_web_proxy">Использовать веб-прокси</string>
+    <string name="proxy_not_supported">Использовать веб-прокси (требуется Android 4.4+)</string>
+    <string name="proxy_test_btn">Тест</string>
+    <string name="proxy_settings_title">Настройки прокси-сервера</string>
+    <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
+    <string name="proxy_test_cancelled">Тест №%d: отменен.</string>
+    <string name="proxy_type_invalid">Тип прокси не задан.</string>
+    <string name="proxy_host_invalid">Хост прокси не задан.</string>
+    <string name="proxy_port_invalid">Недопустимый порт прокси-сервера, должен &gt; 0.</string>
+    <string name="proxy_test_aborted">Тест прерван, сначала исправьте настройки прокси.</string>
+    <string name="proxy_test_start">Тест#%d: %s…</string>
+    <string name="proxy_test_error">Ошибка#%d: %s</string>
+    <string name="proxy_test_status">Статус#%d: %s %d %s</string>
 </resources>
