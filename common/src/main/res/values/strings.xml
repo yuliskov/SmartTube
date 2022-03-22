@@ -325,4 +325,22 @@
     <string name="hide_shorts_from_history">Hide shorts from History</string>
     <string name="disable_screensaver">Disable screensaver</string>
     <string name="description_not_found">Description not found</string>
+    <string name="proxy_port_hint">Proxy Port</string>
+    <string name="proxy_host_hint">Proxy hostname or IP</string>
+    <string name="proxy_type">Proxy Type</string>
+    <string name="proxy_type_http" translatable="false">HTTP</string>
+    <string name="proxy_type_socks" translatable="false">SOCKS</string>
+    <string name="enable_web_proxy">Use Web Proxy</string>
+    <string name="proxy_not_supported">Use Web Proxy (Needs Android 4.4+)</string>
+    <string name="proxy_test_btn">Test</string>
+    <string name="proxy_settings_title">Proxy Server Settings</string>
+    <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
+    <string name="proxy_test_cancelled">Test#%d: cancelled.</string>
+    <string name="proxy_type_invalid">Proxy type not set.</string>
+    <string name="proxy_host_invalid">Proxy host not set.</string>
+    <string name="proxy_port_invalid">Invalid proxy port, must &gt; 0.</string>
+    <string name="proxy_test_aborted">Test aborted, please fix proxy settings first.</string>
+    <string name="proxy_test_start">Test#%d: %s …</string>
+    <string name="proxy_test_error">Error#%d: %s</string>
+    <string name="proxy_test_status">Status#%d: %s %d %s</string>
 </resources>

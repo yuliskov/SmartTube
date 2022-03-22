@@ -80,7 +80,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             getBackupDataOnce();
             runRemoteControlTasks();
             //setupKeepAlive();
-            configureProxy();
+            //configureProxy();
             initVideoStateService();
             sRunOnce = true;
         }

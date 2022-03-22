@@ -123,7 +123,7 @@ public class ProxyManager {
         try {
             // TODO: fix later
             //String proxyUriString = mPrefs.getWebProxyUri();
-            String proxyUriString = null;
+            String proxyUriString = "";
 
             Log.d(TAG, "Web Proxy URI from preferences: \""
                     + proxyUriString + "\"; " + mEnabled);

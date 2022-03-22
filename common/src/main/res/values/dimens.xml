@@ -16,4 +16,6 @@
     <dimen name="debug_text_size">10sp</dimen>
     <dimen name="player_suggestions_height">50dp</dimen>
     <dimen name="subtitle_text_size">30sp</dimen>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
 </resources>

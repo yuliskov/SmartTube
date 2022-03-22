@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/web_proxy_config"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="10sp">
+
+    <EditText
+        android:id="@+id/proxy_host"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/proxy_host_hint"
+        android:imeOptions="actionNext"
+        android:inputType="textUri|textPersonName"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white_50" />
+
+    <EditText
+        android:id="@+id/proxy_port"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/proxy_port_hint"
+        android:imeOptions="actionDone"
+        android:inputType="number"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white_50" />
+
+    <TextView
+        android:id="@+id/proxy_type_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:text="@string/proxy_type"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <RadioGroup
+        android:id="@+id/proxy_type"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/proxy_type_http"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/proxy_type_http"
+            android:textColor="@color/white" />
+
+        <RadioButton
+            android:id="@+id/proxy_type_socks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/proxy_type_socks"
+            android:textColor="@color/white" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/proxy_config_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:lines="4"
+        android:textColor="@color/black" />
+</LinearLayout>

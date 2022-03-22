@@ -18,6 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.proxy.WebProxyDialog;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -308,13 +309,25 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
         ProxyManager proxyManager = ProxyManager.instance(getContext());
 
-        options.add(UiOptionItem.from("Enable Web Proxy config:\n" + proxyManager.getConfigPath(),
+        options.add(UiOptionItem.from("Enable Web Proxy",
                 option -> {
                     mGeneralData.enableProxy(option.isSelected());
-                    proxyManager.enableProxy(option.isSelected());
+                    new WebProxyDialog(getContext()).enable(option.isSelected());
                     mRestartApp = true;
+                    if (option.isSelected()) {
+                        settingsPresenter.closeDialog();
+                    }
+                    //proxyManager.enableProxy(option.isSelected());
                 },
                 mGeneralData.isProxyEnabled()));
+
+        //options.add(UiOptionItem.from("Enable Web Proxy config:\n" + proxyManager.getConfigPath(),
+        //        option -> {
+        //            mGeneralData.enableProxy(option.isSelected());
+        //            proxyManager.enableProxy(option.isSelected());
+        //            mRestartApp = true;
+        //        },
+        //        mGeneralData.isProxyEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }
