@@ -290,6 +290,7 @@
     <string name="action_subscribe">Kanal abonnieren</string>
     <string name="action_channel">Kanal öffnen</string>
     <string name="action_pip">Bild-in-Bild</string>
+    <string name="action_video_info">Video-Beschreibung</string>
     <string name="action_screen_off">Bildschirm aus</string>
     <string name="action_playback_queue">Warteschlange</string>
     <string name="action_video_speed">Video-Geschwindigkeit</string>
@@ -323,4 +324,5 @@
     <string name="update_error">Update-Fehler</string>
     <string name="hide_shorts_from_history">Kurzvideos in Verlauf ausblenden</string>
     <string name="disable_screensaver">Bildschirmschoner deaktivieren</string>
+    <string name="description_not_found">Beschreibung nicht gefunden</string>
 </resources>
