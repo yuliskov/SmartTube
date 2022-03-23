@@ -290,6 +290,7 @@
     <string name="action_subscribe">Sottoscrivi</string>
     <string name="action_channel">Apri canale</string>
     <string name="action_pip">Immagine nell\'immagine (PiP)</string>
+    <string name="action_video_info">Descrizione del video</string>
     <string name="action_screen_off">Spegni schermo</string>
     <string name="action_playback_queue">Coda di riproduzione</string>
     <string name="action_video_speed">Velocità del video</string>
@@ -323,4 +324,25 @@
     <string name="update_error">Errore durante l\'aggiornamento</string>
     <string name="hide_shorts_from_history">Nascondi i video corti dalla Cronologia</string>
     <string name="disable_screensaver">Disabilita lo screensaver</string>
+    <string name="description_not_found">Descrizione non trovata</string>
+    <string name="proxy_port_hint">Porta del Proxy</string>
+    <string name="proxy_host_hint">Proxy hostname o IP</string>
+    <string name="proxy_username_hint">Proxy username (può essere vuoto)</string>
+    <string name="proxy_password_hint">Proxy password (può essere vuoto)</string>
+    <string name="proxy_type">Tipo di Proxy</string>
+    <string name="enable_web_proxy">Utilizza Proxy Web</string>
+    <string name="proxy_not_supported">Utilizza Proxy Web (serve almeno Android 4.4+)</string>
+    <string name="proxy_test_btn">Test</string>
+    <string name="proxy_settings_title">Impostazioni del Proxy Server</string>
+    <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
+    <string name="proxy_test_cancelled">Test#%d: annullato.</string>
+    <string name="proxy_type_invalid">Tipo di Proxy non impostato.</string>
+    <string name="proxy_host_invalid">Host del Proxy non impostato.</string>
+    <string name="proxy_port_invalid">Porta del Proxy non corretta, deve essere &gt; 0.</string>
+    <string name="proxy_credentials_invalid">Username o password sbagliati.</string>
+    <string name="proxy_test_aborted">Test annullato, per favore correggi prima le impostazioni del Proxy.</string>
+    <string name="proxy_application_aborted">Per favore, correggi prima le impostazioni del Proxy.</string>
+    <string name="proxy_test_start">Test#%d: %s …</string>
+    <string name="proxy_test_error">Errore#%d: %s</string>
+    <string name="proxy_test_status">Stato#%d: %s %d %s</string>
 </resources>
