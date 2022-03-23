@@ -323,8 +323,8 @@
     <string name="description_not_found">Опис не знайдено</string>
     <string name="proxy_port_hint">Порт проксі-сервера</string>
     <string name="proxy_host_hint">Ім\'я або IP-адреса проксі-сервера</string>
-    <string name="proxy_username_hint">Ім\'я користувача проксі</string>
-    <string name="proxy_password_hint">Пароль проксі-сервера</string>
+    <string name="proxy_username_hint">Ім\'я користувача проксі (може бути порожнім)</string>
+    <string name="proxy_password_hint">Пароль проксі-сервера (може бути порожнім)</string>
     <string name="proxy_type">Тип проксі-сервера</string>
     <string name="enable_web_proxy">Використовувати веб-проксі</string>
     <string name="proxy_not_supported">Використовувати веб-проксі (потрібен Android 4.4+)</string>
