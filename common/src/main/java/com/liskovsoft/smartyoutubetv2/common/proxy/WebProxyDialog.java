@@ -21,8 +21,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
 import java.util.ArrayList;
 
 public class WebProxyDialog {
@@ -103,7 +101,7 @@ public class WebProxyDialog {
             return null;
         }
         Proxy.Type proxyType = proxyTypeId == R.id.proxy_type_http ? Proxy.Type.HTTP : Proxy.Type.SOCKS;
-        return new Proxy(proxyType, InetSocketAddress.createUnresolved(proxyHost, proxyPort));
+        return new Proxy(proxyType, PasswdInetSocketAddress.createUnresolved(proxyHost, proxyPort, proxyUser, proxyPassword));
     }
 
     protected void testProxyConnections() {
@@ -159,6 +157,8 @@ public class WebProxyDialog {
         } else {
             ((EditText) contentView.findViewById(R.id.proxy_host)).setText(mProxyManager.getProxyHost());
             ((EditText) contentView.findViewById(R.id.proxy_port)).setText(String.valueOf(mProxyManager.getProxyPort()));
+            ((EditText) contentView.findViewById(R.id.proxy_username)).setText(mProxyManager.getProxyUsername());
+            ((EditText) contentView.findViewById(R.id.proxy_password)).setText(mProxyManager.getProxyPassword());
             int proxyTypeId = mProxyManager.getProxyType() == Proxy.Type.HTTP ? R.id.proxy_type_http : R.id.proxy_type_socks;
             ((RadioGroup) contentView.findViewById(R.id.proxy_type)).check(proxyTypeId);
         }
