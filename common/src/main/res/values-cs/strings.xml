@@ -327,8 +327,8 @@
     <string name="description_not_found">Popis nenalezen</string>
     <string name="proxy_port_hint">Proxy port</string>
     <string name="proxy_host_hint">Název nebo IP adresa proxy serveru</string>
-    <string name="proxy_username_hint">Uživatelké jméno proxy (může být prázdné)</string>
-    <string name="proxy_password_hint">Heslo proxy (může být prázdné)</string>
+    <string name="proxy_username_hint">Uživatelké jméno proxy</string>
+    <string name="proxy_password_hint">Heslo proxy</string>
     <string name="proxy_type">Typ proxy</string>
     <string name="enable_web_proxy">Použij webové proxy</string>
     <string name="proxy_not_supported">Použijte webové proxy (Vyžaduje Android 4.4+)</string>
