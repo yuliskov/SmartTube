@@ -323,8 +323,8 @@
     <string name="description_not_found">Описание не найдено</string>
     <string name="proxy_port_hint">Порт прокси</string>
     <string name="proxy_host_hint">Имя или IP-адрес прокси-сервера</string>
-    <string name="proxy_username_hint">Имя пользователя-прокси (можеть быть пустым)</string>
-    <string name="proxy_password_hint">Пароль прокси (можеть быть пустым)</string>
+    <string name="proxy_username_hint">Имя пользователя прокси</string>
+    <string name="proxy_password_hint">Пароль прокси</string>
     <string name="proxy_type">Тип прокси</string>
     <string name="enable_web_proxy">Использовать веб-прокси</string>
     <string name="proxy_not_supported">Использовать веб-прокси (требуется Android 4.4+)</string>
