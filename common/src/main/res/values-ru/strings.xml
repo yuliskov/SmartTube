@@ -335,7 +335,7 @@
     <string name="proxy_type_invalid">Тип прокси не задан.</string>
     <string name="proxy_host_invalid">Хост прокси не задан.</string>
     <string name="proxy_port_invalid">Недопустимый порт прокси-сервера, должен &gt; 0.</string>
-    <string name="proxy_credentials_invalid">Неверные учетные данные прокси-сервера.</string>
+    <string name="proxy_credentials_invalid">Недопустимое имя пользователя или пароль.</string>
     <string name="proxy_test_aborted">Тест прерван, сначала исправьте настройки прокси.</string>
     <string name="proxy_application_aborted">Пожалуйста, сначала исправьте настройки прокси.</string>
     <string name="proxy_test_start">Тест#%d: %s…</string>

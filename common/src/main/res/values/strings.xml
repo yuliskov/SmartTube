@@ -339,7 +339,7 @@
     <string name="proxy_type_invalid">Proxy type not set.</string>
     <string name="proxy_host_invalid">Proxy host not set.</string>
     <string name="proxy_port_invalid">Invalid proxy port, must &gt; 0.</string>
-    <string name="proxy_credentials_invalid">Proxy credentials invalid.</string>
+    <string name="proxy_credentials_invalid">Invalid username or password.</string>
     <string name="proxy_test_aborted">Test aborted, please fix proxy settings first.</string>
     <string name="proxy_application_aborted">Please, correct proxy settings first.</string>
     <string name="proxy_test_start">Test#%d: %s …</string>

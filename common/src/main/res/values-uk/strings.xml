@@ -335,7 +335,7 @@
     <string name="proxy_type_invalid">Тип проксі не встановлено.</string>
     <string name="proxy_host_invalid">Хост проксі не встановлено.</string>
     <string name="proxy_port_invalid">Недійсний проксі-порт, має &gt; 0.</string>
-    <string name="proxy_credentials_invalid">Облікові дані проксі недійсні.</string>
+    <string name="proxy_credentials_invalid">Неприпустиме ім\'я користувача або пароль.</string>
     <string name="proxy_test_aborted">Тест скасовано, спершу виправте налаштування проксі.</string>
     <string name="proxy_application_aborted">Будь ласка, спершу виправте налаштування проксі.</string>
     <string name="proxy_test_start">Тест#%d: %s …</string>
