@@ -325,4 +325,24 @@
     <string name="hide_shorts_from_history">Skryj krátké klipy z nabídky Historie</string>
     <string name="disable_screensaver">Zakaž spořič obrazovky</string>
     <string name="description_not_found">Popis nenalezen</string>
+    <string name="proxy_port_hint">Proxy port</string>
+    <string name="proxy_host_hint">Název nebo IP adresa proxy serveru</string>
+    <string name="proxy_username_hint">Uživatelké jméno proxy (může být prázdné)</string>
+    <string name="proxy_password_hint">Heslo proxy (může být prázdné)</string>
+    <string name="proxy_type">Typ proxy</string>
+    <string name="enable_web_proxy">Použij webové proxy</string>
+    <string name="proxy_not_supported">Použijte webové proxy (Vyžaduje Android 4.4+)</string>
+    <string name="proxy_test_btn">Test</string>
+    <string name="proxy_settings_title">Nastavení proxy serveru</string>
+    <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
+    <string name="proxy_test_cancelled">Test#%d: zrušen.</string>
+    <string name="proxy_type_invalid">Typ proxy není nastaven.</string>
+    <string name="proxy_host_invalid">Hostitel proxy není nastaven.</string>
+    <string name="proxy_port_invalid">Neplatný proxy port, musí být &gt; 0.</string>
+    <string name="proxy_credentials_invalid">Neplatné uživ. jméno nebo heslo.</string>
+    <string name="proxy_test_aborted">Test přerušen, prosím opravte nastavení proxy.</string>
+    <string name="proxy_application_aborted">Nejprve prosím opravte nastavení proxy.</string>
+    <string name="proxy_test_start">Test#%d: %s …</string>
+    <string name="proxy_test_error">Chyba#%d: %s</string>
+    <string name="proxy_test_status">Status#%d: %s %d %s</string>
 </resources>
