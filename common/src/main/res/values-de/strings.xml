@@ -325,4 +325,24 @@
     <string name="hide_shorts_from_history">Kurzvideos in Verlauf ausblenden</string>
     <string name="disable_screensaver">Bildschirmschoner deaktivieren</string>
     <string name="description_not_found">Beschreibung nicht gefunden</string>
+    <string name="proxy_port_hint">Proxy-Port</string>
+    <string name="proxy_host_hint">Proxy-Hostname oder IP</string>
+    <string name="proxy_username_hint">Proxy-Benutzername (kann leer sein)</string>
+    <string name="proxy_password_hint">Proxy-Passwort (kann leer sein)</string>
+    <string name="proxy_type">Proxy-Typ</string>
+    <string name="enable_web_proxy">Web-Proxy verwenden</string>
+    <string name="proxy_not_supported">Web-Proxy verwenden (benötigt Android 4.4+)</string>
+    <string name="proxy_test_btn">Test</string>
+    <string name="proxy_settings_title">Proxy-Server-Einstellungen</string>
+    <string name="proxy_test_urls">https://www.youtube.com\nhttps://www.google.com</string>
+    <string name="proxy_test_cancelled">Test#%d: abgebrochen.</string>
+    <string name="proxy_type_invalid">Proxy-Typ nicht eingestellt.</string>
+    <string name="proxy_host_invalid">Proxy-Host nicht eingestellt.</string>
+    <string name="proxy_port_invalid">Ungültiger Proxy-Port, muss &gt; 0.</string>
+    <string name="proxy_credentials_invalid">Ungültiger Benutzername oder Passwort.</string>
+    <string name="proxy_test_aborted">Test abgebrochen, bitte korrigieren Sie zuerst die Proxy-Einstellungen.</string>
+    <string name="proxy_application_aborted">Bitte korrigieren Sie zuerst die Proxy-Einstellungen.</string>
+    <string name="proxy_test_start">Test#%d: %s …</string>
+    <string name="proxy_test_error">Fehler#%d: %s</string>
+    <string name="proxy_test_status">Status#%d: %s %d %s</string>
 </resources>
