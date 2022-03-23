@@ -239,25 +239,26 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             return false;
         });
 
-        mIntentChain.add(intent -> {
-            int sectionId = -1;
-
-            // ATV channel icon clicked
-            if (IntentExtractor.isSubscriptionsUrl(intent)) {
-                sectionId = MediaGroup.TYPE_SUBSCRIPTIONS;
-            } else if (IntentExtractor.isHistoryUrl(intent)) {
-                sectionId = MediaGroup.TYPE_HISTORY;
-            } else if (IntentExtractor.isRecommendedUrl(intent)) {
-                sectionId = MediaGroup.TYPE_HOME;
-            }
-
-            if (sectionId != -1) {
-                BrowsePresenter.instance(getContext()).selectSection(sectionId);
-                return true;
-            }
-
-            return false;
-        });
+        // NOTE: doesn't work very well. E.g. there's problems with focus or conflicts with 'boot to' section option.
+        //mIntentChain.add(intent -> {
+        //    int sectionId = -1;
+        //
+        //    // ATV channel icon clicked
+        //    if (IntentExtractor.isSubscriptionsUrl(intent)) {
+        //        sectionId = MediaGroup.TYPE_SUBSCRIPTIONS;
+        //    } else if (IntentExtractor.isHistoryUrl(intent)) {
+        //        sectionId = MediaGroup.TYPE_HISTORY;
+        //    } else if (IntentExtractor.isRecommendedUrl(intent)) {
+        //        sectionId = MediaGroup.TYPE_HOME;
+        //    }
+        //
+        //    if (sectionId != -1) {
+        //        BrowsePresenter.instance(getContext()).selectSection(sectionId);
+        //        return true;
+        //    }
+        //
+        //    return false;
+        //});
 
         // Should come last
         mIntentChain.add(intent -> {
