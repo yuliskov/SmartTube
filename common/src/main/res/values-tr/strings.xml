@@ -324,4 +324,5 @@
     <string name="update_error">Güncelleme hatası</string>
     <string name="hide_shorts_from_history">Geçmiş\'te Shortsları gizle</string>
     <string name="disable_screensaver">Ekran koruyucuyu devre dışı bırak</string>
+    <string name="description_not_found">Açıklama bulunamadı</string>
 </resources>
