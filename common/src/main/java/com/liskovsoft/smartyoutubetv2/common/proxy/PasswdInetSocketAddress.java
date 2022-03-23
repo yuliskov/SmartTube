@@ -12,8 +12,8 @@ public class PasswdInetSocketAddress extends SocketAddress {
 
     private PasswdInetSocketAddress(String hostname, int port, String username, String password) {
         mInetSocketAddress = InetSocketAddress.createUnresolved(hostname, port);
-        mUsername = username;
-        mPassword = password;
+        mUsername = username != null && username.isEmpty() ? null : username;
+        mPassword = password != null && password.isEmpty() ? null : password;
     }
 
     public static PasswdInetSocketAddress createUnresolved(String host, int port, String username, String password) {

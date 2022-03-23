@@ -28,12 +28,34 @@ public class PasswdURI {
     public String getUsername() {
         String authority = mURI.getAuthority();
         String[] split = authority.split("@");
-        return split.length == 2 ? split[0].split(":")[0] : null;
+
+        String result = null;
+
+        if (split.length == 2) {
+            String[] split2 = split[0].split(":");
+
+            if (split2.length == 2) {
+                result = split2[0];
+            }
+        }
+
+        return result;
     }
 
     public String getPassword() {
         String authority = mURI.getAuthority();
         String[] split = authority.split("@");
-        return split.length == 2 ? split[0].split(":")[1] : null;
+        
+        String result = null;
+
+        if (split.length == 2) {
+            String[] split2 = split[0].split(":");
+
+            if (split2.length == 2) {
+                result = split2[1];
+            }
+        }
+
+        return result;
     }
 }
