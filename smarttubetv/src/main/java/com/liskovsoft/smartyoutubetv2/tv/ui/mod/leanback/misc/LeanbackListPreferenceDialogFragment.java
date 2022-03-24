@@ -179,8 +179,10 @@ public class LeanbackListPreferenceDialogFragment extends LeanbackPreferenceDial
             messageView.setFocusable(true);
             //messageView.setOnClickListener(v -> {
             //    TextView description = (TextView) v;
-            //    CharSequence selection = description.getText().subSequence(description.getSelectionStart(), description.getSelectionEnd());
-            //    Utils.openLink(v.getContext(), selection.toString());
+            //    if (description.getSelectionStart() < description.getSelectionEnd()) {
+            //        CharSequence selection = description.getText().subSequence(description.getSelectionStart(), description.getSelectionEnd());
+            //        Helpers.openLink(v.getContext(), selection.toString());
+            //    }
             //});
 
             messageView.setVisibility(View.VISIBLE);
