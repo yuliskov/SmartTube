@@ -175,8 +175,13 @@ public class LeanbackListPreferenceDialogFragment extends LeanbackPreferenceDial
             // Modified. Make textView focusable and clickable.
             messageView.setAutoLinkMask(Linkify.WEB_URLS);
             messageView.setMovementMethod(LinkMovementMethod.getInstance()); // allow to move if no links in desc
-            messageView.setLinksClickable(true);
+            messageView.setLinksClickable(true); // NOTE: don't prevent click actions
             messageView.setFocusable(true);
+            //messageView.setOnClickListener(v -> {
+            //    TextView description = (TextView) v;
+            //    CharSequence selection = description.getText().subSequence(description.getSelectionStart(), description.getSelectionEnd());
+            //    Utils.openLink(v.getContext(), selection.toString());
+            //});
 
             messageView.setVisibility(View.VISIBLE);
             // Modified. Make link open in browser
