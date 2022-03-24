@@ -327,8 +327,8 @@
     <string name="description_not_found">Beschreibung nicht gefunden</string>
     <string name="proxy_port_hint">Proxy-Port</string>
     <string name="proxy_host_hint">Proxy-Hostname oder IP</string>
-    <string name="proxy_username_hint">Proxy-Benutzername (kann leer sein)</string>
-    <string name="proxy_password_hint">Proxy-Passwort (kann leer sein)</string>
+    <string name="proxy_username_hint">Proxy-Benutzername</string>
+    <string name="proxy_password_hint">Proxy-Passwort</string>
     <string name="proxy_type">Proxy-Typ</string>
     <string name="enable_web_proxy">Web-Proxy verwenden</string>
     <string name="proxy_not_supported">Web-Proxy verwenden (benötigt Android 4.4+)</string>
