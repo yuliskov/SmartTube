@@ -1,0 +1,21 @@
+<resources>
+    <string name="connect">Підключити</string>
+    <string name="connected">Вимкнути</string>
+    <string name="error1">Помилка</string>
+    <string name="connecting">Підключення&#8230;</string>
+    <string name="initing">Ініціалізація&#8230;</string>
+    <string name="help">Допомога</string>
+    <string name="init_fail">Ініціалізація не вдалася: </string>
+    <string name="down_fail">Неможливо завантажити дані: </string>
+    <string name="not_show_more">Більше не показувати</string>
+    <string name="statusline_bytecount">Отримання %2$s (%1$s) | Надсилання %4$s (%3$s)</string>
+    <string name="notifcation_title_notconnect">Немає підключення</string>
+    <string name="bits_per_second">%.0f біт/с</string>
+    <string name="kbits_per_second">%.1f кбіт/с</string>
+    <string name="mbits_per_second">%.1f Мбіт/с</string>
+    <string name="gbits_per_second">%.1f Гбіт/с</string>
+    <string name="volume_byte">%.0f Б</string>
+    <string name="volume_kbyte">%.1f КБ</string>
+    <string name="volume_mbyte">%.1f МБ</string>
+    <string name="volume_gbyte">%.1f ГБ</string>
+</resources>

@@ -139,6 +139,11 @@ android {
             output.outputFileName = new File(newApkName)
         }
     }
+
+    packagingOptions {
+        // openvpn module fix: More than one file was found with OS independent path 'META-INF/com.android.tools/proguard/coroutines.pro'
+        exclude 'META-INF/com.android.tools/proguard/coroutines.pro'
+    }
 }
 
 dependencies {
@@ -181,14 +186,13 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:' + testXSupportLibraryVersion
     androidTestImplementation 'androidx.test.espresso:espresso-core:' + espressoVersion
 
+    implementation project(':common')
     implementation project(':sharedutils')
     implementation project(':mediaserviceinterfaces')
     implementation project(':youtubeapi')
 
     implementation 'io.reactivex.rxjava2:rxandroid:' + rxAndroidVersion
     implementation 'io.reactivex.rxjava2:rxjava:' + rxJavaVersion
-
-    implementation project(path: ':common')
 
     // Add the Firebase Crashlytics SDK.
     stbetaImplementation('com.google.firebase:firebase-crashlytics:' + firebaseCrashlyticsVersion) {

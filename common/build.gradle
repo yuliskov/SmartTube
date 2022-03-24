@@ -49,7 +49,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:' + appCompatXLibraryVersion
     testImplementation 'junit:junit:' + junitVersion
     androidTestImplementation 'androidx.test.ext:junit:' + testXSupportLibraryVersion
-    
+
+    implementation project(':openvpn')
     implementation project(':sharedutils')
     implementation project(':mediaserviceinterfaces')
     implementation project(':youtubeapi')
