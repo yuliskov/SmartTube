@@ -457,7 +457,7 @@ public class PlayerData {
         mIsRememberSpeedEnabled = Helpers.parseBoolean(split, 21, false);
         mPlaybackMode = Helpers.parseInt(split, 22, PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL);
         // didn't remember what was there
-        mIsLegacyCodecsForced = Helpers.parseBoolean(split, 24, Helpers.equalsAny(Build.MODEL, "NV501")); // Eltex crash fix
+        mIsLegacyCodecsForced = Helpers.parseBoolean(split, 24, Build.VERSION.SDK_INT <= 19); // Android 4 playback crash fix
         mIsSonyTimerFixEnabled = Helpers.parseBoolean(split, 25, false);
         // old player tweaks
         mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
