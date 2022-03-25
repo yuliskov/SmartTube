@@ -20,7 +20,7 @@ import ru.yourok.openvpn.ProfileAsync.OnProfileLoadListener
 import java.lang.Runnable
 
 
-class VPNService(private val activity: Activity, private val context: Context) : ByteCountListener, StateListener {
+class VPNService(private val context: Context) : ByteCountListener, StateListener {
     private var profileAsync: ProfileAsync? = null
     private var profileStatus = false
     private var listener: OnVPNStatusChangeListener? = null
@@ -55,7 +55,7 @@ class VPNService(private val activity: Activity, private val context: Context) :
                         Handler(Looper.getMainLooper()).post {
                             Toast.makeText(
                                 context,
-                                activity.getString(R.string.init_fail) + msg,
+                                context.getString(R.string.init_fail) + msg,
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -87,13 +87,13 @@ class VPNService(private val activity: Activity, private val context: Context) :
     fun onResume() {
         VpnStatus.addStateListener(this)
         VpnStatus.addByteCountListener(this)
-        val intent = Intent(activity, OpenVPNService::class.java)
+        val intent = Intent(context, OpenVPNService::class.java)
         intent.action = OpenVPNService.START_SERVICE
-        activity.bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+        context.bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
     }
 
     fun onPause() {
-        activity.unbindService(mConnection)
+        context.unbindService(mConnection)
     }
 
     fun cleanup() {
@@ -130,10 +130,10 @@ class VPNService(private val activity: Activity, private val context: Context) :
     }
 
     private fun startVPNConnection(vp: VpnProfile) {
-        val intent = Intent(activity, LaunchVPN::class.java)
+        val intent = Intent(context, LaunchVPN::class.java)
         intent.putExtra(LaunchVPN.EXTRA_KEY, vp.uuid.toString())
         intent.action = Intent.ACTION_MAIN
-        activity.startActivity(intent)
+        context.startActivity(intent)
     }
 
     private fun stopVPNConnection() {
@@ -154,7 +154,7 @@ class VPNService(private val activity: Activity, private val context: Context) :
         localizedResId: Int,
         level: ConnectionStatus
     ) {
-        //activity.runOnUiThread {
+        //context.runOnUiThread {
         CoroutineScope(Dispatchers.Default).launch {
             when (state) {
                 "CONNECTED" -> {
@@ -173,7 +173,7 @@ class VPNService(private val activity: Activity, private val context: Context) :
                 "AUTH_FAILED" -> {
                     Log.i("VPNService", "status: auth failed")
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(activity, "Wrong Username or Password!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Wrong Username or Password!", Toast.LENGTH_SHORT).show()
                         cStatus = false
                     }
                 }

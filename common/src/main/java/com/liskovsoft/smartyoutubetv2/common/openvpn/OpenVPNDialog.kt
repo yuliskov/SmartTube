@@ -7,15 +7,12 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
-import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import com.liskovsoft.sharedutils.mylogger.Log
 import com.liskovsoft.sharedutils.okhttp.OkHttpHelpers
 import com.liskovsoft.smartyoutubetv2.common.R
-import com.liskovsoft.smartyoutubetv2.common.proxy.PasswdInetSocketAddress
-import com.liskovsoft.smartyoutubetv2.common.proxy.Proxy
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Request
@@ -63,40 +60,21 @@ class OpenVPNDialog(private val mContext: Context) {
         appendStatusMessage(mContext.getString(resId), *args)
     }
 
-    private fun validateProxyConfigFields(): Proxy? {
+    private fun validateOpenVPNConfigFields(): OpenVPNInfo? {
         var isConfigValid = true
-        val proxyTypeId = (mOpenVPNConfigDialog!!.findViewById<View>(R.id.proxy_type) as RadioGroup?)!!.checkedRadioButtonId
-        if (proxyTypeId == -1) {
-            isConfigValid = false
-            appendStatusMessage(R.string.proxy_type_invalid)
-            mOpenVPNConfigDialog!!.findViewById<View>(R.id.proxy_type_http)!!.requestFocus()
-        }
-        val proxyHost = (mOpenVPNConfigDialog!!.findViewById<View>(R.id.openvpn_config_address) as EditText?)!!.text.toString()
-        if (proxyHost.isEmpty()) {
+        val openVPNAddress = (mOpenVPNConfigDialog!!.findViewById<View>(R.id.openvpn_config_address) as EditText?)!!.text.toString()
+        if (openVPNAddress.isEmpty()) {
             isConfigValid = false
             appendStatusMessage(R.string.proxy_host_invalid)
-        }
-        val proxyPortString = (mOpenVPNConfigDialog!!.findViewById<View>(R.id.proxy_port) as EditText?)!!.text.toString()
-        val proxyPort = if (proxyPortString.isEmpty()) 0 else proxyPortString.toInt()
-        if (proxyPort <= 0) {
-            isConfigValid = false
-            appendStatusMessage(R.string.proxy_port_invalid)
-        }
-        val proxyUser = (mOpenVPNConfigDialog!!.findViewById<View>(R.id.proxy_username) as EditText?)!!.text.toString()
-        val proxyPassword = (mOpenVPNConfigDialog!!.findViewById<View>(R.id.proxy_password) as EditText?)!!.text.toString()
-        if (proxyUser.isEmpty() != proxyPassword.isEmpty()) {
-            isConfigValid = false
-            appendStatusMessage(R.string.proxy_credentials_invalid)
         }
         if (!isConfigValid) {
             return null
         }
-        val proxyType = if (proxyTypeId == R.id.proxy_type_http) Proxy.Type.HTTP else Proxy.Type.SOCKS
-        return Proxy(proxyType, PasswdInetSocketAddress.createUnresolved(proxyHost, proxyPort, proxyUser, proxyPassword))
+        return OpenVPNInfo(openVPNAddress)
     }
 
-    protected fun testProxyConnections() {
-        val proxy = validateProxyConfigFields()
+    private fun testOpenVPNConnections() {
+        val proxy = validateOpenVPNConfigFields()
         if (proxy == null) {
             appendStatusMessage(R.string.proxy_test_aborted)
             return
@@ -160,7 +138,7 @@ class OpenVPNDialog(private val mContext: Context) {
         mOpenVPNConfigDialog!!.show()
         mOpenVPNConfigDialog!!.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener { view: View? ->
             (mOpenVPNConfigDialog!!.findViewById<View>(R.id.openvpn_config_message) as TextView?)!!.text = ""
-            val proxy = validateProxyConfigFields()
+            val proxy = validateOpenVPNConfigFields()
             if (proxy == null) {
                 appendStatusMessage(R.string.proxy_application_aborted)
             } else {
@@ -175,14 +153,14 @@ class OpenVPNDialog(private val mContext: Context) {
             for (call in mUrlTests) call.cancel()
             mUrlTests.clear()
             (mOpenVPNConfigDialog!!.findViewById<View>(R.id.openvpn_config_message) as TextView?)!!.text = ""
-            testProxyConnections()
+            testOpenVPNConnections()
         }
         mOpenVPNConfigDialog!!.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener { view: View? ->
             for (call in mUrlTests) call.cancel()
             mOpenVPNConfigDialog!!.dismiss()
         }
         mOpenVPNConfigDialog!!.setOnDismissListener { dialog: DialogInterface? ->
-            val proxy = validateProxyConfigFields()
+            val proxy = validateOpenVPNConfigFields()
             if (proxy != null) {
                 Log.d(TAG, "Saving proxy info: $proxy")
                 mOpenVPNManager.saveOpenVPNInfoToPrefs(proxy, true)
