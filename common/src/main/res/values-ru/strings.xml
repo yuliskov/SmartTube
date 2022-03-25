@@ -341,4 +341,5 @@
     <string name="proxy_test_start">Тест#%d: %s…</string>
     <string name="proxy_test_error">Ошибка#%d: %s</string>
     <string name="proxy_test_status">Статус#%d: %s %d %s</string>
+    <string name="openvpn_config_address_hint">Адрес файла конфигурации (*.ovpn)</string>
 </resources>
