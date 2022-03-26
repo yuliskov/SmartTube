@@ -1,6 +1,5 @@
-package ru.yourok.openvpn
+package com.liskovsoft.openvpn
 
-import android.app.Activity
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -16,7 +15,9 @@ import de.blinkt.openvpn.core.*
 import de.blinkt.openvpn.core.VpnStatus.ByteCountListener
 import de.blinkt.openvpn.core.VpnStatus.StateListener
 import kotlinx.coroutines.*
-import ru.yourok.openvpn.ProfileAsync.OnProfileLoadListener
+import com.liskovsoft.openvpn.ProfileAsync.OnProfileLoadListener
+import ru.yourok.openvpn.BuildConfig
+import ru.yourok.openvpn.R
 import java.lang.Runnable
 
 

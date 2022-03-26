@@ -1,18 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.common.openvpn
 
-//import androidx.transition.Fade
-//import ru.yourok.num.BuildConfig
-//import ru.yourok.num.R
-//import ru.yourok.num.activity.SettingsActivity
-//import ru.yourok.num.activity.utils.setLanguage
-//import ru.yourok.num.app.AntiZapretProfile
-//import ru.yourok.num.app.App
-//import ru.yourok.num.app.ZaboronaProfile
-//import ru.yourok.num.utils.Coroutines
-//import ru.yourok.num.utils.Coroutines
-//import ru.yourok.num.utils.Download
-//import ru.yourok.num.utils.Prefs
-//import ru.yourok.num.utils.Utils
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ResolveInfo
@@ -24,8 +11,8 @@ import android.os.Looper
 import androidx.core.content.FileProvider
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs
-import ru.yourok.openvpn.OnVPNStatusChangeListener
-import ru.yourok.openvpn.VPNService
+import com.liskovsoft.openvpn.OnVPNStatusChangeListener
+import com.liskovsoft.openvpn.VPNService
 import java.io.File
 
 class OpenVPNManager(context: Context) {

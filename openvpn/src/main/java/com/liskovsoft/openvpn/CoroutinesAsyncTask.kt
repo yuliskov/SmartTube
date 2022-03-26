@@ -1,4 +1,4 @@
-package ru.yourok.openvpn
+package com.liskovsoft.openvpn
 
 import android.util.Log
 import kotlinx.coroutines.*

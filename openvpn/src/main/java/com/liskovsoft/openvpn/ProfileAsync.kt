@@ -1,4 +1,4 @@
-package ru.yourok.openvpn
+package com.liskovsoft.openvpn
 
 import android.content.Context
 import android.net.ConnectivityManager
