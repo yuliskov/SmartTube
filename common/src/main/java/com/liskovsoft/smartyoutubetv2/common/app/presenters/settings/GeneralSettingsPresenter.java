@@ -323,7 +323,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     mGeneralData.isProxyEnabled()));
         }
 
-        OpenVPNManager openVPNManager = new OpenVPNManager(getContext());
+        OpenVPNManager openVPNManager = new OpenVPNManager(getContext(), null);
 
         if (openVPNManager.isOpenVPNSupported()) {
             options.add(UiOptionItem.from(getContext().getString(R.string.enable_openvpn),
@@ -336,14 +336,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     },
                     mGeneralData.isVPNEnabled()));
         }
-
-        //options.add(UiOptionItem.from("Enable Web Proxy config:\n" + proxyManager.getConfigPath(),
-        //        option -> {
-        //            mGeneralData.enableProxy(option.isSelected());
-        //            proxyManager.enableProxy(option.isSelected());
-        //            mRestartApp = true;
-        //        },
-        //        mGeneralData.isProxyEnabled()));
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
     }

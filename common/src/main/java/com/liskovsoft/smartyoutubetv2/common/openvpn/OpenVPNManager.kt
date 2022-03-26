@@ -15,7 +15,18 @@ import com.liskovsoft.openvpn.OnVPNStatusChangeListener
 import com.liskovsoft.openvpn.VPNService
 import java.io.File
 
-class OpenVPNManager(context: Context) {
+class OpenVPNManager(context: Context, val callback: OpenVPNCallback? = null) {
+    class OpenVPNInfo(val configAddress: String)
+
+    interface OpenVPNCallback {
+        fun onProfileLoaded(profileLoaded: Boolean) {}
+        fun onVPNStatusChanged(vpnActivated: Boolean) {}
+        fun onConfigDownloadStart() {}
+        fun onConfigDownloadProgress(progress: Int) {}
+        fun onConfigDownloadEnd() {}
+        fun onConfigDownloadError() {}
+    }
+
     private val context = context.applicationContext
     private val prefs = AppPrefs.instance(context.applicationContext)
     private val routineName = "AZDownload"
@@ -28,12 +39,12 @@ class OpenVPNManager(context: Context) {
             launchVPN(prefs.openVPNConfigUri)
             setOnVPNStatusChangeListener(object : OnVPNStatusChangeListener {
                 override fun onProfileLoaded(profileLoaded: Boolean) {
-                    // TODO: notify that profile is loaded
+                    callback?.onProfileLoaded(profileLoaded)
                 }
 
                 override fun onVPNStatusChanged(vpnActivated: Boolean) {
-                    // TODO: notify that ovpn is connected
                     isConnected = vpnActivated
+                    callback?.onVPNStatusChanged(vpnActivated)
                 }
             })
         }
@@ -95,14 +106,14 @@ class OpenVPNManager(context: Context) {
     }
 
     private fun downloadOVPN() {
-        // TODO: notify about config download start
+        callback?.onConfigDownloadStart()
 
         Coroutines.launch(routineName) {
             try {
                 Download.download(prefs.openVPNConfigUri, ovpnFile) { prc ->
                     Handler(Looper.getMainLooper()).post {
                         try {
-                            // TODO: notify about config download progress (prc var)
+                            callback?.onConfigDownloadProgress(prc)
                         } catch (e: Exception) {
                             isDownload = false
                         }
@@ -111,7 +122,7 @@ class OpenVPNManager(context: Context) {
                 }
                 Handler(Looper.getMainLooper()).post {
                     try {
-                        // TODO: notify that config has been downloaded
+                        callback?.onConfigDownloadEnd()
                         openOVPN()
                     } catch (e: Exception) {
                     }
@@ -119,7 +130,7 @@ class OpenVPNManager(context: Context) {
             } catch (e: Exception) {
                 Handler(Looper.getMainLooper()).post {
                     try {
-                        // TODO: notify about config download error
+                        callback?.onConfigDownloadError()
                     } catch (e: Exception) {
                     }
                 }

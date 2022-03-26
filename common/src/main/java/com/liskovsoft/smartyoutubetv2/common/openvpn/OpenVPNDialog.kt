@@ -13,9 +13,9 @@ import androidx.appcompat.app.AlertDialog
 import com.liskovsoft.sharedutils.mylogger.Log
 import com.liskovsoft.smartyoutubetv2.common.R
 
-class OpenVPNDialog(private val mContext: Context) {
+class OpenVPNDialog(private val mContext: Context): OpenVPNManager.OpenVPNCallback {
     private var mOpenVPNConfigDialog: AlertDialog? = null
-    private val mOpenVPNManager: OpenVPNManager = OpenVPNManager(mContext)
+    private val mOpenVPNManager: OpenVPNManager = OpenVPNManager(mContext, this)
     private val mProxyTestHandler: Handler = Handler(Looper.myLooper()!!)
     val isSupported: Boolean
         get() = mOpenVPNManager.isOpenVPNSupported
@@ -38,20 +38,45 @@ class OpenVPNDialog(private val mContext: Context) {
         }
     }
 
+    override fun onProfileLoaded(profileLoaded: Boolean) {
+        appendStatusMessage("Profile loaded: %s", if (profileLoaded) "YES" else "NO")
+    }
+
+    override fun onVPNStatusChanged(vpnActivated: Boolean) {
+        appendStatusMessage("OpenVPN activated: %s", if (vpnActivated) "YES" else "NO")
+    }
+
+    override fun onConfigDownloadStart() {
+        appendStatusMessage("Config download start")
+    }
+
+    override fun onConfigDownloadProgress(progress: Int) {
+        appendStatusMessage("Config download progress: %d", progress)
+    }
+
+    override fun onConfigDownloadEnd() {
+        appendStatusMessage("Config download end")
+    }
+
+    override fun onConfigDownloadError() {
+        appendStatusMessage("Config download error")
+    }
+
     private fun appendStatusMessage(msgFormat: String?, vararg args: Any?) {
         val statusView = mOpenVPNConfigDialog!!.findViewById<TextView>(R.id.openvpn_config_message)
         val message = String.format(msgFormat!!, *args)
-        if (statusView!!.text.toString().isEmpty())
+        if (statusView!!.text.toString().isEmpty()) {
             statusView.append(message)
-        else
+        } else {
             statusView.append("\n$message")
+        }
     }
 
     private fun appendStatusMessage(resId: Int, vararg args: Any?) {
         appendStatusMessage(mContext.getString(resId), *args)
     }
 
-    private fun validateOpenVPNConfigFields(): OpenVPNInfo? {
+    private fun validateOpenVPNConfigFields(): OpenVPNManager.OpenVPNInfo? {
         var isConfigValid = true
         val openVPNAddress = (mOpenVPNConfigDialog!!.findViewById<View>(R.id.openvpn_config_address) as EditText?)!!.text.toString()
         if (openVPNAddress.isEmpty()) {
@@ -61,7 +86,7 @@ class OpenVPNDialog(private val mContext: Context) {
         if (!isConfigValid) {
             return null
         }
-        return OpenVPNInfo(openVPNAddress)
+        return OpenVPNManager.OpenVPNInfo(openVPNAddress)
     }
 
     private fun testOpenVPNConnection() {
