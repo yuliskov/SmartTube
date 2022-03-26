@@ -27,10 +27,10 @@ class OpenVPNDialog(private val mContext: Context) {
     }
 
     @RequiresApi(19)
-    fun enable(checked: Boolean) {
+    fun enable(enabled: Boolean) {
         if (isSupported) {
-            mOpenVPNManager.saveOpenVPNInfoToPrefs(null, checked)
-            if (checked) {
+            mOpenVPNManager.saveOpenVPNInfoToPrefs(enabled = enabled)
+            if (enabled) {
                 showProxyConfigDialog()
             } else {
                 mOpenVPNManager.configureOpenVPN()

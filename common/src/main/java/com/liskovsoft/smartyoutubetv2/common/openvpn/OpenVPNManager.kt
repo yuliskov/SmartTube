@@ -23,20 +23,22 @@ import android.os.Handler
 import android.os.Looper
 import androidx.core.content.FileProvider
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig
+import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs
 import ru.yourok.openvpn.OnVPNStatusChangeListener
 import ru.yourok.openvpn.VPNService
 import java.io.File
 
-class OpenVPNManager(private val context: Context) {
+class OpenVPNManager(context: Context) {
+    private val context = context.applicationContext
+    private val prefs = AppPrefs.instance(context.applicationContext)
     private val routineName = "AZDownload"
     private var isConnected = false
     private var isDownload = true
     private val downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-    private val profile = AntiZapretProfile
-    private val ovpnFile = File(downloadDir, "antizapret-tcp.ovpn")
+    private val ovpnFile = File(downloadDir, "config.ovpn")
     private val numVPNService by lazy {
         VPNService(context).apply {
-            launchVPN(profile)
+            launchVPN(prefs.openVPNConfigUri)
             setOnVPNStatusChangeListener(object : OnVPNStatusChangeListener {
                 override fun onProfileLoaded(profileLoaded: Boolean) {
                     // TODO: notify that profile is loaded
@@ -54,10 +56,14 @@ class OpenVPNManager(private val context: Context) {
         get() = Build.VERSION.SDK_INT >= 19
 
     val isOpenVPNEnabled: Boolean
-        get() = TODO("Not yet implemented")
+        get() = prefs.isOpenVPNEnabled
 
-    fun saveOpenVPNInfoToPrefs(info: OpenVPNInfo?, checked: Boolean) {
-        TODO("Not yet implemented")
+    fun saveOpenVPNInfoToPrefs(info: OpenVPNInfo? = null, enabled: Boolean) {
+        info?.apply {
+            prefs.openVPNConfigUri = configAddress
+        }
+
+        prefs.isOpenVPNEnabled = enabled
     }
 
     fun configureOpenVPN() {
@@ -106,7 +112,7 @@ class OpenVPNManager(private val context: Context) {
 
         Coroutines.launch(routineName) {
             try {
-                Download.download(profile, ovpnFile) { prc ->
+                Download.download(prefs.openVPNConfigUri, ovpnFile) { prc ->
                     Handler(Looper.getMainLooper()).post {
                         try {
                             // TODO: notify about config download progress (prc var)
