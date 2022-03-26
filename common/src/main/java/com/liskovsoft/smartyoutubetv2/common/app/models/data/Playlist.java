@@ -8,7 +8,7 @@ import java.util.List;
  * Manages a playlist of videos.
  */
 public class Playlist {
-    private static final int PLAYLIST_MAX_SIZE = 40;
+    private static final int PLAYLIST_MAX_SIZE = 50;
     private List<Video> mPlaylist;
     private int mCurrentIndex;
     private static Playlist sInstance;
