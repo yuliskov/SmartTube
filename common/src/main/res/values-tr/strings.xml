@@ -345,4 +345,10 @@
     <string name="proxy_test_start">Test#%d: %s …</string>
     <string name="proxy_test_error">Hata#%d: %s</string>
     <string name="proxy_test_status">Durum#%d: %s %d %s</string>
+    <string name="openvpn_config_address_hint">Yapılandırma dosya adresi (*.ovpn)</string>
+    <string name="enable_openvpn">OpenVPN kullan</string>
+    <string name="openvpn_settings_title">OpenVPN Ayarları</string>
+    <string name="openvpn_application_aborted">Lütfen önce OpenVPN ayarlarını düzeltin.</string>
+    <string name="openvpn_test_aborted">Test durduruldu, lütfen önce  OpenVPN ayarlarını düzeltin.</string>
+    <string name="openvpn_address_invalid">OpenVPN yapılandırma adresi ayarlanmadı.</string>
 </resources>
