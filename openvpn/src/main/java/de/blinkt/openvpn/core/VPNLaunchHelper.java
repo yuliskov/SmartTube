@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.Vector;
 
 import de.blinkt.openvpn.VpnProfile;
-import ru.yourok.openvpn.R;
+import com.liskovsoft.openvpn.R;
 
 public class VPNLaunchHelper {
     private static final String MINIPIEVPN = "pie_openvpn";

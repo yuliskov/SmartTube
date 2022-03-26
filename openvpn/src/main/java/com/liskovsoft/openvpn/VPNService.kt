@@ -16,8 +16,7 @@ import de.blinkt.openvpn.core.VpnStatus.ByteCountListener
 import de.blinkt.openvpn.core.VpnStatus.StateListener
 import kotlinx.coroutines.*
 import com.liskovsoft.openvpn.ProfileAsync.OnProfileLoadListener
-import ru.yourok.openvpn.BuildConfig
-import ru.yourok.openvpn.R
+import com.liskovsoft.openvpn.BuildConfig
 import java.lang.Runnable
 
 

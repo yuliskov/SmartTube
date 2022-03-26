@@ -27,7 +27,7 @@ import java.util.FormatFlagsConversionMismatchException;
 import java.util.Locale;
 import java.util.UnknownFormatConversionException;
 
-import ru.yourok.openvpn.R;
+import com.liskovsoft.openvpn.R;
 
 /**
  * Created by arne on 24.04.16.

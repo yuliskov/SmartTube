@@ -22,7 +22,7 @@ import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.util.Locale;
 
-import ru.yourok.openvpn.R;
+import com.liskovsoft.openvpn.R;
 
 /**
  * Created by arne on 23.01.16.

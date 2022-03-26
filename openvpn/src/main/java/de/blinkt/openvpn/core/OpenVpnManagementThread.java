@@ -14,8 +14,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import ru.yourok.openvpn.BuildConfig;
-import ru.yourok.openvpn.R;
+import com.liskovsoft.openvpn.BuildConfig;
+import com.liskovsoft.openvpn.R;
 
 import junit.framework.Assert;
 

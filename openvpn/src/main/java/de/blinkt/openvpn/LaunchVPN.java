@@ -30,7 +30,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
-import ru.yourok.openvpn.R;
+import com.liskovsoft.openvpn.R;
 
 import java.io.IOException;
 

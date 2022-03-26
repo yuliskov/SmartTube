@@ -17,7 +17,7 @@ import android.os.Handler;
 import java.util.LinkedList;
 
 import de.blinkt.openvpn.core.VpnStatus.ByteCountListener;
-import ru.yourok.openvpn.R;
+import com.liskovsoft.openvpn.R;
 
 import static de.blinkt.openvpn.core.OpenVPNManagement.pauseReason;
 

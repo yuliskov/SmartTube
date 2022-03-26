@@ -16,7 +16,7 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Vector;
 
-import ru.yourok.openvpn.R;
+import com.liskovsoft.openvpn.R;
 
 public class VpnStatus {
     final static Object readFileLock = new Object();

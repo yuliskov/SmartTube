@@ -11,8 +11,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
-
-import ru.yourok.openvpn.R;
+import com.liskovsoft.openvpn.R;
 
 public class App extends Application {
 

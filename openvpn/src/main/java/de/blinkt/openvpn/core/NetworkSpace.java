@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 
 import junit.framework.Assert;
 
-import ru.yourok.openvpn.BuildConfig;
+import com.liskovsoft.openvpn.BuildConfig;
 
 
 import java.math.BigInteger;

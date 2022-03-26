@@ -19,7 +19,7 @@ import android.util.Base64;
 
 import androidx.annotation.NonNull;
 
-import ru.yourok.openvpn.R;
+import com.liskovsoft.openvpn.R;
 
 import org.spongycastle.util.io.pem.PemObject;
 import org.spongycastle.util.io.pem.PemWriter;

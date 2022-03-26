@@ -29,7 +29,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import ru.yourok.openvpn.R;
+import com.liskovsoft.openvpn.R;
 
 public class ConfirmDialog extends Activity implements CompoundButton.OnCheckedChangeListener, DialogInterface.OnClickListener {
     private static final String TAG = "OpenVPNVpnConfirm";
