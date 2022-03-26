@@ -2,25 +2,28 @@ package com.liskovsoft.smartyoutubetv2.common.openvpn
 
 import android.content.Context
 import android.content.DialogInterface
-import android.os.Handler
-import android.os.Looper
+import android.content.pm.PackageManager
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import com.liskovsoft.sharedutils.helpers.FileHelpers
+import com.liskovsoft.sharedutils.helpers.PermissionHelpers
 import com.liskovsoft.sharedutils.mylogger.Log
 import com.liskovsoft.smartyoutubetv2.common.R
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity
 
-class OpenVPNDialog(private val mContext: Context): OpenVPNManager.OpenVPNCallback {
-    private var mOpenVPNConfigDialog: AlertDialog? = null
-    private val mOpenVPNManager: OpenVPNManager = OpenVPNManager(mContext, this)
-    private val mProxyTestHandler: Handler = Handler(Looper.myLooper()!!)
-    val isSupported: Boolean
-        get() = mOpenVPNManager.isOpenVPNSupported
-    val isEnabled: Boolean
-        get() = mOpenVPNManager.isOpenVPNEnabled
+class OpenVPNDialog(private val context: Context): OpenVPNManager.OpenVPNCallback, MotherActivity.OnPermissions {
+    private var pendingHandler: (() -> Unit)? = null
+    private var openVPNConfigDialog: AlertDialog? = null
+    private val openVPNManager: OpenVPNManager = OpenVPNManager(context, this)
+
+    val isOpenVPNSupported: Boolean
+        get() = openVPNManager.isOpenVPNSupported
+    val isOpenVPNEnabled: Boolean
+        get() = openVPNManager.isOpenVPNEnabled
 
     private companion object {
         val TAG: String = OpenVPNDialog::class.java.simpleName
@@ -28,12 +31,22 @@ class OpenVPNDialog(private val mContext: Context): OpenVPNManager.OpenVPNCallba
 
     @RequiresApi(19)
     fun enable(enabled: Boolean) {
-        if (isSupported) {
-            mOpenVPNManager.saveOpenVPNInfoToPrefs(enabled = enabled)
+        if (isOpenVPNSupported) {
+            openVPNManager.saveOpenVPNInfoToPrefs(enabled = enabled)
             if (enabled) {
                 showProxyConfigDialog()
             } else {
-                mOpenVPNManager.configureOpenVPN()
+                checkPermissionsAndConfigureOpenVPN()
+            }
+        }
+    }
+
+    override fun onPermissions(requestCode: Int, permissions: Array<out String>?, grantResults: IntArray?) {
+        if (requestCode == PermissionHelpers.REQUEST_EXTERNAL_STORAGE) {
+            if (grantResults != null && grantResults.size >= 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "REQUEST_EXTERNAL_STORAGE permission has been granted");
+
+                pendingHandler?.invoke()
             }
         }
     }
@@ -50,9 +63,9 @@ class OpenVPNDialog(private val mContext: Context): OpenVPNManager.OpenVPNCallba
         appendStatusMessage("Config download start")
     }
 
-    override fun onConfigDownloadProgress(progress: Int) {
-        appendStatusMessage("Config download progress: %d", progress)
-    }
+    //override fun onConfigDownloadProgress(progress: Int) {
+    //    appendStatusMessage("Config download progress: %d", progress)
+    //}
 
     override fun onConfigDownloadEnd() {
         appendStatusMessage("Config download end")
@@ -63,7 +76,11 @@ class OpenVPNDialog(private val mContext: Context): OpenVPNManager.OpenVPNCallba
     }
 
     private fun appendStatusMessage(msgFormat: String?, vararg args: Any?) {
-        val statusView = mOpenVPNConfigDialog!!.findViewById<TextView>(R.id.openvpn_config_message)
+        if (openVPNConfigDialog == null) {
+            return
+        }
+
+        val statusView = openVPNConfigDialog!!.findViewById<TextView>(R.id.openvpn_config_message)
         val message = String.format(msgFormat!!, *args)
         if (statusView!!.text.toString().isEmpty()) {
             statusView.append(message)
@@ -73,12 +90,12 @@ class OpenVPNDialog(private val mContext: Context): OpenVPNManager.OpenVPNCallba
     }
 
     private fun appendStatusMessage(resId: Int, vararg args: Any?) {
-        appendStatusMessage(mContext.getString(resId), *args)
+        appendStatusMessage(context.getString(resId), *args)
     }
 
     private fun validateOpenVPNConfigFields(): OpenVPNManager.OpenVPNInfo? {
         var isConfigValid = true
-        val openVPNAddress = (mOpenVPNConfigDialog!!.findViewById<View>(R.id.openvpn_config_address) as EditText?)!!.text.toString()
+        val openVPNAddress = (openVPNConfigDialog!!.findViewById<View>(R.id.openvpn_config_address) as EditText?)!!.text.toString()
         if (openVPNAddress.isEmpty()) {
             isConfigValid = false
             appendStatusMessage(R.string.openvpn_address_invalid)
@@ -95,54 +112,65 @@ class OpenVPNDialog(private val mContext: Context): OpenVPNManager.OpenVPNCallba
             appendStatusMessage(R.string.openvpn_test_aborted)
             return
         }
-        mOpenVPNManager.saveOpenVPNInfoToPrefs(openVPNInfo, true)
-        mOpenVPNManager.configureOpenVPN()
-
-        // TODO: output OpenVPN status messages
+        openVPNManager.saveOpenVPNInfoToPrefs(openVPNInfo, true)
+        checkPermissionsAndConfigureOpenVPN()
     }
 
     @RequiresApi(19)
     private fun showProxyConfigDialog() {
-        val builder = AlertDialog.Builder(mContext, R.style.AppDialog)
-        val inflater = LayoutInflater.from(mContext)
+        val builder = AlertDialog.Builder(context, R.style.AppDialog)
+        val inflater = LayoutInflater.from(context)
         val contentView = inflater.inflate(R.layout.openvpn_dialog, null)
+
+        (contentView!!.findViewById<View>(R.id.openvpn_config_address) as EditText?)!!.setText(openVPNManager.openVPNConfigUri)
 
         // keep empty, will override below.
         // https://stackoverflow.com/a/15619098/5379584
-        mOpenVPNConfigDialog = builder
+        openVPNConfigDialog = builder
             .setTitle(R.string.openvpn_settings_title)
             .setView(contentView)
             .setNeutralButton(R.string.proxy_test_btn) { dialog: DialogInterface?, which: Int -> }
             .setPositiveButton(android.R.string.ok) { dialog: DialogInterface?, which: Int -> }
             .setNegativeButton(android.R.string.cancel) { dialog: DialogInterface?, which: Int -> }
             .create()
-        mOpenVPNConfigDialog!!.show()
-        mOpenVPNConfigDialog!!.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener { view: View? ->
-            (mOpenVPNConfigDialog!!.findViewById<View>(R.id.openvpn_config_message) as TextView?)!!.text = ""
+        openVPNConfigDialog!!.show()
+        openVPNConfigDialog!!.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener { view: View? ->
+            (openVPNConfigDialog!!.findViewById<View>(R.id.openvpn_config_message) as TextView?)!!.text = ""
             val openVPNInfo = validateOpenVPNConfigFields()
             if (openVPNInfo == null) {
                 appendStatusMessage(R.string.openvpn_application_aborted)
             } else {
                 Log.d(TAG, "Saving OpenVPN info: $openVPNInfo")
-                mOpenVPNManager.saveOpenVPNInfoToPrefs(openVPNInfo, true)
-                mOpenVPNManager.configureOpenVPN()
-                mOpenVPNConfigDialog!!.dismiss()
+                openVPNManager.saveOpenVPNInfoToPrefs(openVPNInfo, true)
+                checkPermissionsAndConfigureOpenVPN()
+                openVPNConfigDialog!!.dismiss()
             }
         }
-        mOpenVPNConfigDialog!!.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener { view: View? ->
-            (mOpenVPNConfigDialog!!.findViewById<View>(R.id.openvpn_config_message) as TextView?)!!.text = ""
+        openVPNConfigDialog!!.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener { view: View? ->
+            (openVPNConfigDialog!!.findViewById<View>(R.id.openvpn_config_message) as TextView?)!!.text = ""
             testOpenVPNConnection()
         }
-        mOpenVPNConfigDialog!!.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener { view: View? ->
+        openVPNConfigDialog!!.getButton(AlertDialog.BUTTON_NEGATIVE).setOnClickListener { view: View? ->
             // TODO: cancel OpenVPN application
-            mOpenVPNConfigDialog!!.dismiss()
+            openVPNConfigDialog!!.dismiss()
         }
-        mOpenVPNConfigDialog!!.setOnDismissListener { dialog: DialogInterface? ->
+        openVPNConfigDialog!!.setOnDismissListener { dialog: DialogInterface? ->
             val openVPNInfo = validateOpenVPNConfigFields()
             if (openVPNInfo != null) {
                 Log.d(TAG, "Saving OpenVPN info: $openVPNInfo")
-                mOpenVPNManager.saveOpenVPNInfoToPrefs(openVPNInfo, true)
-                mOpenVPNManager.configureOpenVPN()
+                openVPNManager.saveOpenVPNInfoToPrefs(openVPNInfo, true)
+                checkPermissionsAndConfigureOpenVPN()
+            }
+        }
+    }
+
+    private fun checkPermissionsAndConfigureOpenVPN() {
+        if (FileHelpers.isExternalStorageReadable()) {
+            if (PermissionHelpers.hasStoragePermissions(context)) {
+                openVPNManager.configureOpenVPN()
+            } else {
+                pendingHandler = { openVPNManager.configureOpenVPN() }
+                PermissionHelpers.verifyStoragePermissions(context)
             }
         }
     }

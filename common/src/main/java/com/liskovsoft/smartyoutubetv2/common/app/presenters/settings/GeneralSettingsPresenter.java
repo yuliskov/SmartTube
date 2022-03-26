@@ -15,7 +15,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.BackupAndRestoreManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.openvpn.OpenVPNDialog;
-import com.liskovsoft.smartyoutubetv2.common.openvpn.OpenVPNManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -323,17 +322,17 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     mGeneralData.isProxyEnabled()));
         }
 
-        OpenVPNManager openVPNManager = new OpenVPNManager(getContext(), null);
+        OpenVPNDialog openVPNDialog = new OpenVPNDialog(getContext());
 
         if (getContext() instanceof MotherActivity) {
-            ((MotherActivity) getContext()).addOnPermissions(openVPNManager);
+            ((MotherActivity) getContext()).addOnPermissions(openVPNDialog);
         }
 
-        if (openVPNManager.isOpenVPNSupported()) {
+        if (openVPNDialog.isOpenVPNSupported()) {
             options.add(UiOptionItem.from(getContext().getString(R.string.enable_openvpn),
                     option -> {
                         mGeneralData.enableVPN(option.isSelected());
-                        new OpenVPNDialog(getContext()).enable(option.isSelected());
+                        openVPNDialog.enable(option.isSelected());
                         if (option.isSelected()) {
                             settingsPresenter.closeDialog();
                         }
