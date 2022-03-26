@@ -345,4 +345,10 @@
     <string name="proxy_test_start">Test#%d: %s …</string>
     <string name="proxy_test_error">Chyba#%d: %s</string>
     <string name="proxy_test_status">Status#%d: %s %d %s</string>
+    <string name="openvpn_config_address_hint">Adresa konfiguračního souboru (*.ovpn)</string>
+    <string name="enable_openvpn">Použít OpenVPN</string>
+    <string name="openvpn_settings_title">Nastavení OpenVPN</string>
+    <string name="openvpn_application_aborted">Nejprve prosím opravte nastavení OpenVPN.</string>
+    <string name="openvpn_test_aborted">Test byl přerušen, nejprve opravte nastavení OpenVPN.</string>
+    <string name="openvpn_address_invalid">Adresa konfigurace OpenVPN není nastavena.</string>
 </resources>
