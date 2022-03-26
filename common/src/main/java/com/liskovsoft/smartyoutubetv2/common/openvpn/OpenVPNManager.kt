@@ -61,6 +61,7 @@ class OpenVPNManager(private val context: Context) {
     }
 
     fun configureOpenVPN() {
+        // TODO: check permissions beforehand
         checkPermissions()
 
         downloadConfig()
