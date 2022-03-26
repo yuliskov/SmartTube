@@ -343,4 +343,8 @@
     <string name="proxy_test_status">Статус#%d: %s %d %s</string>
     <string name="openvpn_config_address_hint">Адреса файла конфігурації (*.ovpn)</string>
     <string name="enable_openvpn">Використовувати OpenVPN</string>
+    <string name="openvpn_settings_title">Налаштування OpenVPN</string>
+    <string name="openvpn_application_aborted">Будь ласка, спершу виправте налаштування OpenVPN.</string>
+    <string name="openvpn_test_aborted">Тест скасовано, спершу виправте налаштування OpenVPN.</string>
+    <string name="openvpn_address_invalid">Адреса файла конфігурації не встановлена.</string>
 </resources>

@@ -347,4 +347,8 @@
     <string name="proxy_test_status">Status#%d: %s %d %s</string>
     <string name="openvpn_config_address_hint">Config file address (*.ovpn)</string>
     <string name="enable_openvpn">Use OpenVPN</string>
+    <string name="openvpn_settings_title">OpenVPN Settings</string>
+    <string name="openvpn_application_aborted">Please, correct OpenVPN settings first.</string>
+    <string name="openvpn_test_aborted">Test aborted, please fix OpenVPN settings first.</string>
+    <string name="openvpn_address_invalid">OpenVPN config address not set.</string>
 </resources>
