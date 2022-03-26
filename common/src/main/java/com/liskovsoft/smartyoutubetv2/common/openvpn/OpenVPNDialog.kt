@@ -31,8 +31,8 @@ class OpenVPNDialog(private val mContext: Context) {
     val isEnabled: Boolean
         get() = mOpenVPNManager.isOpenVPNEnabled
 
-    companion object {
-        val TAG = OpenVPNDialog::class.java.simpleName
+    private companion object {
+        val TAG: String = OpenVPNDialog::class.java.simpleName
     }
 
     @RequiresApi(19)

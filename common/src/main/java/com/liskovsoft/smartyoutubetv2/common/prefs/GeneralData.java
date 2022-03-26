@@ -54,6 +54,7 @@ public class GeneralData {
     private boolean mIsHideShortsFromHomeEnabled;
     private boolean mIsHideShortsFromHistoryEnabled;
     private boolean mIsScreensaverDisabled;
+    private boolean mIsVPNEnabled;
 
     private GeneralData(Context context) {
         mContext = context;
@@ -461,6 +462,15 @@ public class GeneralData {
         return mIsProxyEnabled;
     }
 
+    public void enableVPN(boolean enable) {
+        mIsVPNEnabled = enable;
+        persistState();
+    }
+
+    public boolean isVPNEnabled() {
+        return mIsVPNEnabled;
+    }
+
     public void enableBridgeCheck(boolean enable) {
         mIsBridgeCheckEnabled = enable;
         persistState();
@@ -543,6 +553,7 @@ public class GeneralData {
         mIsHideShortsFromHomeEnabled = Helpers.parseBoolean(split, 24, false);
         mIsHideShortsFromHistoryEnabled = Helpers.parseBoolean(split, 25, false);
         mIsScreensaverDisabled = Helpers.parseBoolean(split, 26, false);
+        mIsVPNEnabled = Helpers.parseBoolean(split, 27, false);
 
         if (pinnedItems != null && !pinnedItems.isEmpty()) {
             String[] pinnedItemsArr = Helpers.splitArray(pinnedItems);
@@ -577,6 +588,6 @@ public class GeneralData {
                 null, mIsHideUpcomingEnabled, mIsRemapPageUpToNextEnabled, mIsRemapPageUpToLikeEnabled,
                 mIsRemapChannelUpToNextEnabled, mIsRemapChannelUpToLikeEnabled, mIsRemapPageUpToSpeedEnabled,
                 mIsRemapChannelUpToSpeedEnabled, mIsRemapFastForwardToSpeedEnabled, mIsRemapChannelUpToSearchEnabled,
-                mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled));
+                mIsHideShortsFromHomeEnabled, mIsHideShortsFromHistoryEnabled, mIsScreensaverDisabled, mIsVPNEnabled));
     }
 }

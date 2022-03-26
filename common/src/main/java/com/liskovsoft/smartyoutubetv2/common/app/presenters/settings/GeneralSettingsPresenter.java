@@ -14,6 +14,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.BackupAndRestoreManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
+import com.liskovsoft.smartyoutubetv2.common.openvpn.OpenVPNDialog;
+import com.liskovsoft.smartyoutubetv2.common.openvpn.OpenVPNManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -319,6 +321,20 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                         }
                     },
                     mGeneralData.isProxyEnabled()));
+        }
+
+        OpenVPNManager openVPNManager = new OpenVPNManager(getContext());
+
+        if (openVPNManager.isOpenVPNSupported()) {
+            options.add(UiOptionItem.from(getContext().getString(R.string.enable_openvpn),
+                    option -> {
+                        mGeneralData.enableVPN(option.isSelected());
+                        new OpenVPNDialog(getContext()).enable(option.isSelected());
+                        if (option.isSelected()) {
+                            settingsPresenter.closeDialog();
+                        }
+                    },
+                    mGeneralData.isVPNEnabled()));
         }
 
         //options.add(UiOptionItem.from("Enable Web Proxy config:\n" + proxyManager.getConfigPath(),
