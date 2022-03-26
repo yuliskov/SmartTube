@@ -345,4 +345,10 @@
     <string name="proxy_test_start">Test#%d: %s …</string>
     <string name="proxy_test_error">Errore#%d: %s</string>
     <string name="proxy_test_status">Stato#%d: %s %d %s</string>
+    <string name="openvpn_config_address_hint">Indirizzo del file di configurazione (*.ovpn)</string>
+    <string name="enable_openvpn">Utilizza OpenVPN</string>
+    <string name="openvpn_settings_title">Impostazioni OpenVPN</string>
+    <string name="openvpn_application_aborted">Per favore, correggi prima le impostazioni di OpenVPN.</string>
+    <string name="openvpn_test_aborted">Test annullato, per favore correggi prima le impostazioni di OpenVPN.</string>
+    <string name="openvpn_address_invalid">Indirizzo di configurazione OpenVPN non impostato.</string>
 </resources>
