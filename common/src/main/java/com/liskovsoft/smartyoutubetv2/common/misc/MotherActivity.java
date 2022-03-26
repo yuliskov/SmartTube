@@ -19,6 +19,9 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MotherActivity extends FragmentActivity {
     private static final String TAG = MotherActivity.class.getSimpleName();
     private static final float DEFAULT_DENSITY = 2.0f; // xhdpi
@@ -27,7 +30,7 @@ public class MotherActivity extends FragmentActivity {
     private static int sNumActivities;
     protected static boolean sIsInPipMode;
     private ScreensaverManager mScreensaverManager;
-    private OnPermissions mOnPermissions;
+    private List<OnPermissions> mOnPermissions;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -206,13 +209,20 @@ public class MotherActivity extends FragmentActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (mOnPermissions != null) {
-            mOnPermissions.onPermissions(requestCode, permissions, grantResults);
+            for (OnPermissions callback : mOnPermissions) {
+                callback.onPermissions(requestCode, permissions, grantResults);
+            }
+            mOnPermissions.clear();
             mOnPermissions = null;
         }
     }
 
     public void addOnPermissions(OnPermissions onPermissions) {
-        mOnPermissions = onPermissions;
+        if (mOnPermissions == null) {
+            mOnPermissions = new ArrayList<>();
+        }
+
+        mOnPermissions.add(onPermissions);
     }
 
     public interface OnPermissions {

@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.openvpn
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
 import android.os.Build
@@ -13,9 +14,17 @@ import com.liskovsoft.smartyoutubetv2.common.BuildConfig
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs
 import com.liskovsoft.openvpn.OnVPNStatusChangeListener
 import com.liskovsoft.openvpn.VPNService
+import com.liskovsoft.sharedutils.helpers.FileHelpers
+import com.liskovsoft.sharedutils.helpers.PermissionHelpers
+import com.liskovsoft.sharedutils.mylogger.Log
+import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity
 import java.io.File
 
-class OpenVPNManager(context: Context, val callback: OpenVPNCallback? = null) {
+class OpenVPNManager(context: Context, val callback: OpenVPNCallback? = null): MotherActivity.OnPermissions {
+    private companion object {
+        val TAG: String = OpenVPNManager::class.java.simpleName
+    }
+
     class OpenVPNInfo(val configAddress: String)
 
     interface OpenVPNCallback {
@@ -65,32 +74,31 @@ class OpenVPNManager(context: Context, val callback: OpenVPNCallback? = null) {
     }
 
     fun configureOpenVPN() {
-        // TODO: check permissions beforehand
-        checkPermissions()
+        if (FileHelpers.isExternalStorageReadable()) {
+            if (PermissionHelpers.hasStoragePermissions(context)) {
+                doConfigure()
+            } else {
+                PermissionHelpers.verifyStoragePermissions(context)
+            }
+        }
+    }
 
+    override fun onPermissions(requestCode: Int, permissions: Array<out String>?, grantResults: IntArray?) {
+        if (requestCode == PermissionHelpers.REQUEST_EXTERNAL_STORAGE) {
+            if (grantResults != null && grantResults.size >= 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "REQUEST_EXTERNAL_STORAGE permission has been granted");
+
+                doConfigure()
+            }
+        }
+    }
+
+    private fun doConfigure() {
         downloadConfig()
 
         numVPNService.init() // toggle connection
 
         isConnected = numVPNService.cStatus
-    }
-
-    private fun checkPermissions() {
-        //val perms = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
-        //perms.forEach { perm ->
-        //    when {
-        //        ContextCompat.checkSelfPermission(activity.baseContext, perm) == PackageManager.PERMISSION_GRANTED -> {
-        //            // granted
-        //        }
-        //        ActivityCompat.shouldShowRequestPermissionRationale(activity, perm) -> {
-        //            activity as SettingsActivity.requestPermissionLauncher.launch(perm)
-        //        }
-        //        // not granted
-        //        else -> {
-        //            activity as SettingsActivity.requestPermissionLauncher.launch(perm)
-        //        }
-        //    }
-        //}
     }
 
     private fun downloadConfig() {

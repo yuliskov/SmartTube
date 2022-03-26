@@ -325,6 +325,10 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
 
         OpenVPNManager openVPNManager = new OpenVPNManager(getContext(), null);
 
+        if (getContext() instanceof MotherActivity) {
+            ((MotherActivity) getContext()).addOnPermissions(openVPNManager);
+        }
+
         if (openVPNManager.isOpenVPNSupported()) {
             options.add(UiOptionItem.from(getContext().getString(R.string.enable_openvpn),
                     option -> {
