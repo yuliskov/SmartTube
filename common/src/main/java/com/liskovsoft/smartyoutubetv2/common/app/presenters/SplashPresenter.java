@@ -126,7 +126,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     private void configureOpenVPN() {
         if (getContext() != null && GeneralData.instance(getContext()).isVPNEnabled()) {
-            new OpenVPNManager(getContext(), null).configureOpenVPN();
+            OpenVPNManager.instance(getContext(), null).configureOpenVPN();
         }
     }
 

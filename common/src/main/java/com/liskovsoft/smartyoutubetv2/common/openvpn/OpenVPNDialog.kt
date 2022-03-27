@@ -18,7 +18,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity
 class OpenVPNDialog(private val context: Context): OpenVPNManager.OpenVPNCallback, MotherActivity.OnPermissions {
     private var pendingHandler: (() -> Unit)? = null
     private var openVPNConfigDialog: AlertDialog? = null
-    private val openVPNManager: OpenVPNManager = OpenVPNManager(context, this)
+    private val openVPNManager: OpenVPNManager = OpenVPNManager.instance(context, this)
 
     val isOpenVPNSupported: Boolean
         get() = openVPNManager.isOpenVPNSupported

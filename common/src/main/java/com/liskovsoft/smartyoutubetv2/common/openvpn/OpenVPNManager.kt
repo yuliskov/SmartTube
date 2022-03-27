@@ -1,5 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.openvpn
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ResolveInfo
@@ -14,10 +15,26 @@ import com.liskovsoft.openvpn.VPNService
 import com.liskovsoft.smartyoutubetv2.common.BuildConfig
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs
 import java.io.File
+import java.lang.ref.WeakReference
 
-class OpenVPNManager(context: Context, val callback: OpenVPNCallback? = null) {
-    private companion object {
-        val TAG: String = OpenVPNManager::class.java.simpleName
+class OpenVPNManager private constructor(context: Context, callback: OpenVPNCallback? = null) {
+    companion object {
+        private val TAG: String = OpenVPNManager::class.java.simpleName
+        @SuppressLint("StaticFieldLeak")
+        private var instance: OpenVPNManager? = null
+        @JvmStatic fun instance(context: Context, callback: OpenVPNCallback? = null): OpenVPNManager {
+            if (instance == null) {
+                instance = OpenVPNManager(context, callback)
+            } else {
+                instance!!.context = context.applicationContext
+                instance!!.callback = callback
+            }
+
+            return instance!!
+        }
+        @JvmStatic fun unhold() {
+            instance = null
+        }
     }
 
     class OpenVPNInfo(val configAddress: String)
@@ -31,7 +48,11 @@ class OpenVPNManager(context: Context, val callback: OpenVPNCallback? = null) {
         fun onConfigDownloadError() {}
     }
 
-    private val context = context.applicationContext
+    private var context = context.applicationContext
+    private var _callback = WeakReference(callback)
+    private var callback: OpenVPNCallback?
+            get() = _callback.get()
+            set(value) { _callback = WeakReference(value) }
     private val prefs = AppPrefs.instance(context.applicationContext)
     private val routineName = "AZDownload"
     private var isConnected = false
@@ -43,12 +64,12 @@ class OpenVPNManager(context: Context, val callback: OpenVPNCallback? = null) {
             launchVPN(prefs.openVPNConfigUri)
             setOnVPNStatusChangeListener(object : OnVPNStatusChangeListener {
                 override fun onProfileLoaded(profileLoaded: Boolean) {
-                    callback?.onProfileLoaded(profileLoaded)
+                    this@OpenVPNManager.callback?.onProfileLoaded(profileLoaded)
                 }
 
                 override fun onVPNStatusChanged(vpnActivated: Boolean) {
                     isConnected = vpnActivated
-                    callback?.onVPNStatusChanged(vpnActivated)
+                    this@OpenVPNManager.callback?.onVPNStatusChanged(vpnActivated)
                 }
             })
         }
@@ -77,6 +98,7 @@ class OpenVPNManager(context: Context, val callback: OpenVPNCallback? = null) {
             numVPNService.start(true)
         } else {
             numVPNService.start(false)
+            unhold()
         }
 
         isConnected = numVPNService.cStatus
