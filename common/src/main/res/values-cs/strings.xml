@@ -351,4 +351,5 @@
     <string name="openvpn_application_aborted">Nejprve prosím opravte nastavení OpenVPN.</string>
     <string name="openvpn_test_aborted">Test byl přerušen, nejprve opravte nastavení OpenVPN.</string>
     <string name="openvpn_address_invalid">Adresa konfigurace OpenVPN není nastavena.</string>
+    <string name="internet_censorship">Cenzura internetu</string>
 </resources>
