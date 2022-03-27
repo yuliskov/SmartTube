@@ -14,6 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.openvpn.OpenVPNManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
@@ -81,6 +82,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             runRemoteControlTasks();
             //setupKeepAlive();
             configureProxy();
+            configureOpenVPN();
             initVideoStateService();
             sRunOnce = true;
         }
@@ -119,8 +121,12 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private void configureProxy() {
         if (getContext() != null && GeneralData.instance(getContext()).isProxyEnabled()) {
             new ProxyManager(getContext()).configureSystemProxy();
-            //ProxyManager proxyManager = ProxyManager.instance(getContext());
-            //proxyManager.enableProxy(true);
+        }
+    }
+
+    private void configureOpenVPN() {
+        if (getContext() != null && GeneralData.instance(getContext()).isVPNEnabled()) {
+            new OpenVPNManager(getContext(), null).configureOpenVPN();
         }
     }
 

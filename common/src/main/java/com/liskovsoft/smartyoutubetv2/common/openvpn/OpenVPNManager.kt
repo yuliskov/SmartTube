@@ -72,9 +72,12 @@ class OpenVPNManager(context: Context, val callback: OpenVPNCallback? = null) {
     }
 
     fun configureOpenVPN() {
-        downloadConfig()
-
-        numVPNService.init() // toggle connection
+        if (isOpenVPNEnabled) {
+            downloadConfig()
+            numVPNService.start(true)
+        } else {
+            numVPNService.start(false)
+        }
 
         isConnected = numVPNService.cStatus
     }

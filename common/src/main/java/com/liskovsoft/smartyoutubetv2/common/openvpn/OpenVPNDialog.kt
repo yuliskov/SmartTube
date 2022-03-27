@@ -69,7 +69,6 @@ class OpenVPNDialog(private val context: Context): OpenVPNManager.OpenVPNCallbac
 
     override fun onConfigDownloadEnd() {
         appendStatusMessage("Config download end")
-        appendStatusMessage("Done")
     }
 
     override fun onConfigDownloadError() {

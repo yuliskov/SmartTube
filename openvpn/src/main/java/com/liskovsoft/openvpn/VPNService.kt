@@ -66,6 +66,23 @@ class VPNService(private val context: Context) : ByteCountListener, StateListene
         }
     }
 
+    fun start(start: Boolean) {
+        val r = Runnable {
+            if (start) {
+                if (!App.isStart) {
+                    startVPN()
+                    App.isStart = true
+                }
+            } else {
+                if (App.isStart) {
+                    stopVPN()
+                    App.isStart = false
+                }
+            }
+        }
+        r.run()
+    }
+
     fun init() {
         val r = Runnable {
             if (!App.isStart) {
