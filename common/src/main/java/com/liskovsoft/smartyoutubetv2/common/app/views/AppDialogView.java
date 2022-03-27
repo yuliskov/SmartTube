@@ -9,4 +9,5 @@ public interface AppDialogView {
     void addCategories(List<SettingsCategory> categories);
     void clear();
     void finish();
+    void goBack();
 }

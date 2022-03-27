@@ -165,6 +165,13 @@ public class AppDialogFragment extends LeanbackSettingsFragment
         }
     }
 
+    @Override
+    public void goBack() {
+        if (mPreferenceFragment != null) {
+            mPreferenceFragment.goBack();
+        }
+    }
+
     public void onFinish() {
         mSettingsPresenter.onFinish();
     }
@@ -237,23 +244,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
                     if (getFragmentManager() != null) {
                         mBackStackCount = 0;
 
-                        getFragmentManager().addOnBackStackChangedListener(() -> {
-                            if (getFragmentManager() != null) {
-                                int currentBackStackCount = getFragmentManager().getBackStackEntryCount();
-
-                                if (currentBackStackCount < mBackStackCount) {
-                                    if (currentBackStackCount == 0) {
-                                        // single dialog
-                                        getActivity().finish();
-                                    } else {
-                                        // multiple stacked dialogs
-                                        getFragmentManager().popBackStack();
-                                    }
-                                }
-
-                                mBackStackCount = currentBackStackCount;
-                            }
-                        });
+                        getFragmentManager().addOnBackStackChangedListener(this::onBackPressed);
                     }
                 }
             }
@@ -279,6 +270,30 @@ public class AppDialogFragment extends LeanbackSettingsFragment
 
         public void enableTransparent(boolean enable) {
             mIsTransparent = enable;
+        }
+
+        public void goBack() {
+            if (getFragmentManager() != null) {
+                getFragmentManager().popBackStack();
+            }
+        }
+
+        private void onBackPressed() {
+            if (getFragmentManager() != null) {
+                int currentBackStackCount = getFragmentManager().getBackStackEntryCount();
+
+                if (currentBackStackCount < mBackStackCount) {
+                    if (currentBackStackCount == 0) {
+                        // single dialog
+                        getActivity().finish();
+                    } else {
+                        // multiple stacked dialogs
+                        getFragmentManager().popBackStack();
+                    }
+                }
+
+                mBackStackCount = currentBackStackCount;
+            }
         }
     }
 }

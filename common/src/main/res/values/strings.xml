@@ -351,4 +351,5 @@
     <string name="openvpn_application_aborted">Please, correct OpenVPN settings first.</string>
     <string name="openvpn_test_aborted">Test aborted, please fix OpenVPN settings first.</string>
     <string name="openvpn_address_invalid">OpenVPN config address not set.</string>
+    <string name="internet_censorship">Internet Censorship</string>
 </resources>

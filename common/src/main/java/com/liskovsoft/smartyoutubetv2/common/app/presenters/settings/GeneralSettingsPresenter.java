@@ -20,6 +20,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.proxy.WebProxyDialog;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -57,6 +58,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendScreenDimmingCategory(settingsPresenter);
         appendKeyRemappingCategory(settingsPresenter);
         appendAppBackupCategory(settingsPresenter);
+        appendInternetCensorship(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_general), () -> {
@@ -253,17 +255,21 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from(
                 String.format("%s:\n%s", getContext().getString(R.string.app_backup), backupManager.getBackupPath()),
                 option -> {
-                    mGeneralData.enableSection(MediaGroup.TYPE_SETTINGS, true); // prevent Settings lock
-                    mGeneralData.enableSettingsSection(true); // prevent Settings lock
-                    backupManager.checkPermAndBackup();
-                    MessageHelpers.showMessage(getContext(), R.string.msg_done);
+                    Utils.showConfirmationDialog(getContext(), () -> {
+                        mGeneralData.enableSection(MediaGroup.TYPE_SETTINGS, true); // prevent Settings lock
+                        mGeneralData.enableSettingsSection(true); // prevent Settings lock
+                        backupManager.checkPermAndBackup();
+                        MessageHelpers.showMessage(getContext(), R.string.msg_done);
+                    });
                 }));
 
         options.add(UiOptionItem.from(
                 String.format("%s:\n%s", getContext().getString(R.string.app_restore), backupManager.getBackupPath()),
                 option -> {
-                    backupManager.checkPermAndRestore();
-                    MessageHelpers.showMessage(getContext(), R.string.msg_done);
+                    Utils.showConfirmationDialog(getContext(), () -> {
+                        backupManager.checkPermAndRestore();
+                        MessageHelpers.showMessage(getContext(), R.string.msg_done);
+                    });
                 }));
 
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.app_backup_restore), options);
@@ -308,6 +314,12 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.disableOkButtonLongPress(option.isSelected()),
                 mGeneralData.isOkButtonLongPressDisabled()));
 
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
+    }
+
+    private void appendInternetCensorship(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
         ProxyManager proxyManager = new ProxyManager(getContext());
 
         if (proxyManager.isProxySupported()) {
@@ -340,6 +352,6 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     mGeneralData.isVPNEnabled()));
         }
 
-        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.internet_censorship), options);
     }
 }

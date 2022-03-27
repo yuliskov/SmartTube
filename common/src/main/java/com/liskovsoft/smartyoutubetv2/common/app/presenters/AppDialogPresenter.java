@@ -157,6 +157,12 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
         }
     }
 
+    public void goBack() {
+        if (getView() != null) {
+            getView().goBack();
+        }
+    }
+
     public boolean isDialogShown() {
         // Also check that current dialog almost closed (new view start is pending from a menu item)
         // Hmm. Maybe current dialog is pending. Check that view is null.

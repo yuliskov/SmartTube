@@ -37,6 +37,9 @@ import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
@@ -48,6 +51,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -481,5 +485,25 @@ public class Utils {
         int lengthMs = ServiceHelper.timeTextToMillis(mediaItem.getBadgeText());
         boolean isShortLength = lengthMs > 0 && lengthMs < SHORTS_LEN_MS;
         return isShortLength || title.contains("#short") || title.contains("#shorts") || title.contains("#tiktok");
+    }
+
+    public static void showConfirmationDialog(Context context, Runnable onConfirm) {
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(context);
+        settingsPresenter.clear();
+
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(context.getString(R.string.cancel),
+                option -> settingsPresenter.goBack()));
+
+        options.add(UiOptionItem.from(context.getString(R.string.btn_confirm),
+                option -> {
+                    settingsPresenter.goBack();
+                    onConfirm.run();
+                }));
+
+        settingsPresenter.appendStringsCategory(context.getString(R.string.btn_confirm), options);
+
+        settingsPresenter.showDialog(context.getString(R.string.btn_confirm));
     }
 }
