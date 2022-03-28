@@ -220,7 +220,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             if (videoId != null) {
                 ViewManager viewManager = ViewManager.instance(getContext());
 
-                if (GeneralData.instance(getContext()).isReturnToLauncherEnabled() && ViewManager.instance(getContext()).getTopView() == null) {
+                if (GeneralData.instance(getContext()).isReturnToLauncherEnabled()) {
                     viewManager.setSinglePlayerMode(true);
                 }
 
