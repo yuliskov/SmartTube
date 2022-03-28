@@ -347,4 +347,9 @@
     <string name="proxy_test_status">Status#%d: %s %d %s</string>
     <string name="openvpn_config_address_hint">Adresse der Konfigurationsdatei (*.ovpn)</string>
     <string name="enable_openvpn">OpenVPN verwenden</string>
+    <string name="openvpn_settings_title">OpenVPN-Einstellungen</string>
+    <string name="openvpn_application_aborted">Bitte korrigieren Sie zuerst die OpenVPN-Einstellungen.</string>
+    <string name="openvpn_test_aborted">Der Test wurde abgebrochen, bitte korrigieren Sie zuerst die OpenVPN-Einstellungen.</string>
+    <string name="openvpn_address_invalid">OpenVPN-Konfigurationsadresse nicht gesetzt.</string>
+    <string name="internet_censorship">Internet-Zensur</string>
 </resources>
