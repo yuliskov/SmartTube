@@ -184,7 +184,7 @@ public class LeanbackListPreferenceDialogFragment extends LeanbackPreferenceDial
             messageView.setVisibility(View.VISIBLE);
             messageView.setText(message);
 
-            LinkifyCompat.addLinks(messageView, Linkify.WEB_URLS, (link) -> Utils.showMultiChooser(getContext(), Uri.parse(link)));
+            LinkifyCompat.addLinks(messageView, Linkify.WEB_URLS, (link) -> Utils.showMultiChooser(messageView.getContext(), Uri.parse(link)));
 
             // Modified. Remove other views.
             ViewGroup parent = (ViewGroup) verticalGridView.getParent();
