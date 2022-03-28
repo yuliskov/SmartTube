@@ -16,7 +16,6 @@
 
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -40,7 +39,6 @@ import androidx.preference.ListPreference;
 import androidx.preference.MultiSelectListPreference;
 import androidx.recyclerview.widget.RecyclerView;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
-import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.Collections;
 import java.util.HashSet;
