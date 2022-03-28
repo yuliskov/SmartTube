@@ -218,14 +218,14 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             String videoId = IntentExtractor.extractVideoId(intent);
 
             if (videoId != null) {
-                PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
-                playbackPresenter.openVideo(videoId);
-
                 ViewManager viewManager = ViewManager.instance(getContext());
 
-                if (GeneralData.instance(getContext()).isReturnToLauncherEnabled()) {
+                if (GeneralData.instance(getContext()).isReturnToLauncherEnabled() && !Utils.isAppInForeground()) {
                     viewManager.setSinglePlayerMode(true);
                 }
+
+                PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
+                playbackPresenter.openVideo(videoId);
 
                 return true;
             }

@@ -16,6 +16,7 @@
 
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -39,6 +40,7 @@ import androidx.preference.ListPreference;
 import androidx.preference.MultiSelectListPreference;
 import androidx.recyclerview.widget.RecyclerView;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -177,12 +179,15 @@ public class LeanbackListPreferenceDialogFragment extends LeanbackPreferenceDial
             messageView.setMovementMethod(LinkMovementMethod.getInstance()); // allow to move if no links in desc
             messageView.setLinksClickable(true); // NOTE: don't prevent click actions
             messageView.setFocusable(true);
+            // Unfortunately, this click listener doesn't override default link click handler
             //messageView.setOnClickListener(v -> {
+            //    // NOTE: don't work in touch mode (when there's no selection)
             //    TextView description = (TextView) v;
-            //    if (description.getSelectionStart() < description.getSelectionEnd()) {
-            //        CharSequence selection = description.getText().subSequence(description.getSelectionStart(), description.getSelectionEnd());
-            //        Helpers.openLink(v.getContext(), selection.toString());
-            //    }
+            //    CharSequence selection = description.getText().subSequence(
+            //            Math.min(description.getSelectionStart(), description.getSelectionEnd()),
+            //            Math.max(description.getSelectionStart(), description.getSelectionEnd())
+            //    );
+            //    Utils.showMultiChooser(v.getContext(), Uri.parse(selection.toString()));
             //});
 
             messageView.setVisibility(View.VISIBLE);

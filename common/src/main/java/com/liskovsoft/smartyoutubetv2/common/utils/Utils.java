@@ -113,7 +113,7 @@ public class Utils {
     }
 
     @TargetApi(17)
-    private static void showMultiChooser(Context context, Uri url) {
+    public static void showMultiChooser(Context context, Uri url) {
         Intent primaryIntent = new Intent(Intent.ACTION_VIEW);
         Intent secondaryIntent = new Intent(Intent.ACTION_SEND);
         primaryIntent.setData(url);
