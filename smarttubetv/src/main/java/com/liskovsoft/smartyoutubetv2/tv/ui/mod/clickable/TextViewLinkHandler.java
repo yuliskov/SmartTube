@@ -1,4 +1,4 @@
-package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.clickable;
+package com.liskovsoft.smartyoutubetv2.tv.ui.mod.clickable;
 
 import android.text.Layout;
 import android.text.Spannable;

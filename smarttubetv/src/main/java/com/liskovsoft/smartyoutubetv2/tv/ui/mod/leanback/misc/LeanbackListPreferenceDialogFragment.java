@@ -16,11 +16,11 @@
 
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
 import android.text.util.Linkify;
@@ -38,7 +38,10 @@ import androidx.preference.DialogPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.MultiSelectListPreference;
 import androidx.recyclerview.widget.RecyclerView;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.clickable.LinkifyCompat;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -173,25 +176,15 @@ public class LeanbackListPreferenceDialogFragment extends LeanbackPreferenceDial
             final TextView messageView = (TextView) view.findViewById(android.R.id.message);
 
             // Modified. Make textView focusable and clickable.
-            messageView.setAutoLinkMask(Linkify.WEB_URLS);
-            messageView.setMovementMethod(LinkMovementMethod.getInstance()); // allow to move if no links in desc
-            messageView.setLinksClickable(true); // NOTE: don't prevent click actions
-            messageView.setFocusable(true);
-            // Unfortunately, this click listener doesn't override default link click handler
-            //messageView.setOnClickListener(v -> {
-            //    // NOTE: don't work in touch mode (when there's no selection)
-            //    TextView description = (TextView) v;
-            //    CharSequence selection = description.getText().subSequence(
-            //            Math.min(description.getSelectionStart(), description.getSelectionEnd()),
-            //            Math.max(description.getSelectionStart(), description.getSelectionEnd())
-            //    );
-            //    Utils.showMultiChooser(v.getContext(), Uri.parse(selection.toString()));
-            //});
+            //messageView.setAutoLinkMask(Linkify.WEB_URLS);
+            //messageView.setMovementMethod(LinkMovementMethod.getInstance()); // allow to move if no links in desc
+            //messageView.setLinksClickable(true); // NOTE: don't prevent click actions
 
+            messageView.setFocusable(true);
             messageView.setVisibility(View.VISIBLE);
-            // Modified. Make link open in browser
-            //messageView.setText(toSpannableString(message));
             messageView.setText(message);
+
+            LinkifyCompat.addLinks(messageView, Linkify.WEB_URLS, (link) -> Utils.showMultiChooser(getContext(), Uri.parse(link)));
 
             // Modified. Remove other views.
             ViewGroup parent = (ViewGroup) verticalGridView.getParent();
