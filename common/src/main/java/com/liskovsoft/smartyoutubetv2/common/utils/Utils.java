@@ -487,7 +487,7 @@ public class Utils {
         return isShortLength || title.contains("#short") || title.contains("#shorts") || title.contains("#tiktok");
     }
 
-    public static void showConfirmationDialog(Context context, Runnable onConfirm) {
+    public static void showConfirmationDialog(Context context, Runnable onConfirm, String title) {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(context);
         settingsPresenter.clear();
 
@@ -502,8 +502,8 @@ public class Utils {
                     onConfirm.run();
                 }));
 
-        settingsPresenter.appendStringsCategory(context.getString(R.string.btn_confirm), options);
+        settingsPresenter.appendStringsCategory(title, options);
 
-        settingsPresenter.showDialog(context.getString(R.string.btn_confirm));
+        settingsPresenter.showDialog(title);
     }
 }

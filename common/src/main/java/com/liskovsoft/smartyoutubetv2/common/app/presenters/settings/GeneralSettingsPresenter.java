@@ -260,7 +260,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                         mGeneralData.enableSettingsSection(true); // prevent Settings lock
                         backupManager.checkPermAndBackup();
                         MessageHelpers.showMessage(getContext(), R.string.msg_done);
-                    });
+                    }, getContext().getString(R.string.app_backup));
                 }));
 
         options.add(UiOptionItem.from(
@@ -269,7 +269,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                     Utils.showConfirmationDialog(getContext(), () -> {
                         backupManager.checkPermAndRestore();
                         MessageHelpers.showMessage(getContext(), R.string.msg_done);
-                    });
+                    }, getContext().getString(R.string.app_restore));
                 }));
 
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.app_backup_restore), options);
