@@ -7,6 +7,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.MainPlayerEvent
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 
 public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     private static final String TAG = PlaybackPresenter.class.getSimpleName();
@@ -78,6 +79,12 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     public void forceFinish() {
         if (getView() != null) {
             getView().getController().finishReally();
+        }
+    }
+
+    public void setPosition(String timeCode) {
+        if (getView() != null) {
+            getView().getController().setPositionMs(ServiceHelper.timeTextToMillis(timeCode));
         }
     }
 }

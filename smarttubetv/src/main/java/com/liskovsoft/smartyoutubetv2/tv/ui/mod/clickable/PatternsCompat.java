@@ -334,6 +334,13 @@ public final class PatternsCompat {
             WORD_BOUNDARY + ")"
     );
 
+    private static final String TIME_CODE_PART = "(?:\\d+:\\d+)";
+
+    public static final Pattern AUTOLINK_TIME_CODE = Pattern.compile("(" + WORD_BOUNDARY +
+            "(?:" + TIME_CODE_PART + ")" +
+            WORD_BOUNDARY + ")"
+    );
+
     public static final Pattern EMAIL_ADDRESS
             = Pattern.compile(
             "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +

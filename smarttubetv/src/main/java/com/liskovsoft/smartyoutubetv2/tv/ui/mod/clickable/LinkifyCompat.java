@@ -55,9 +55,16 @@ import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
  */
 public final class LinkifyCompat {
     private static final String[] EMPTY_STRING = new String[0];
+    public static final int WEB_URLS = 0x01;
+    public static final int EMAIL_ADDRESSES = 0x02;
+    public static final int PHONE_NUMBERS = 0x04;
+    public static final int MAP_ADDRESSES = 0x08;
+    public static final int TIME_CODES = 0x10;
+    public static final int ALL = WEB_URLS | EMAIL_ADDRESSES | PHONE_NUMBERS | MAP_ADDRESSES | TIME_CODES;
 
     public interface LinkifyClickHandler {
-        void onClick(String link);
+        void onUrlClick(String link);
+        void onTimeClick(String timeCode);
     }
 
     private static final Comparator<LinkSpec>  COMPARATOR = new Comparator<LinkSpec>() {
@@ -121,6 +128,7 @@ public final class LinkifyCompat {
         }
 
         final ArrayList<LinkSpec> links = new ArrayList<>();
+        final ArrayList<LinkSpec> timeLinks = new ArrayList<>();
 
         if ((mask & Linkify.WEB_URLS) != 0) {
             gatherLinks(links, text, PatternsCompat.AUTOLINK_WEB_URL,
@@ -132,6 +140,11 @@ public final class LinkifyCompat {
             gatherLinks(links, text, PatternsCompat.AUTOLINK_EMAIL_ADDRESS,
                     new String[] { "mailto:" },
                     null, null);
+        }
+
+        if ((mask & TIME_CODES) != 0) {
+            gatherLinks(timeLinks, text, PatternsCompat.AUTOLINK_TIME_CODE,
+                    null, null, null);
         }
 
         if ((mask & Linkify.MAP_ADDRESSES) != 0) {
@@ -147,6 +160,12 @@ public final class LinkifyCompat {
         for (LinkSpec link: links) {
             if (link.frameworkAddedSpan == null) {
                 applyLink(link.url, link.start, link.end, text);
+            }
+        }
+
+        for (LinkSpec timeLink: timeLinks) {
+            if (timeLink.frameworkAddedSpan == null) {
+                applyTimeLink(timeLink.url, timeLink.start, timeLink.end, text);
             }
         }
 
@@ -436,14 +455,17 @@ public final class LinkifyCompat {
             int end = m.end();
 
             if (matchFilter == null || matchFilter.acceptMatch(s, start, end)) {
-                LinkSpec spec = new LinkSpec();
-                String url = makeUrl(m.group(0), schemes, m, transformFilter);
+                // MODIFIED: Support link without a prefix
+                String url = schemes != null ? makeUrl(m.group(0), schemes, m, transformFilter) : m.group(0);
 
-                spec.url = url;
-                spec.start = start;
-                spec.end = end;
+                if (url != null && !url.isEmpty()) {
+                    LinkSpec spec = new LinkSpec();
+                    spec.url = url;
+                    spec.start = start;
+                    spec.end = end;
 
-                links.add(spec);
+                    links.add(spec);
+                }
             }
         }
     }
@@ -454,9 +476,23 @@ public final class LinkifyCompat {
             public void onClick(View widget) {
                 Object tag = widget.getTag(R.id.linkify_click_handler);
                 if (tag != null) {
-                    ((LinkifyClickHandler) tag).onClick(url);
+                    ((LinkifyClickHandler) tag).onUrlClick(url);
                 } else {
                     super.onClick(widget);
+                }
+            }
+        };
+
+        text.setSpan(span, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    }
+
+    private static void applyTimeLink(String url, int start, int end, Spannable text) {
+        URLSpan span = new URLSpan(url) {
+            @Override
+            public void onClick(View widget) {
+                Object tag = widget.getTag(R.id.linkify_click_handler);
+                if (tag != null) {
+                    ((LinkifyClickHandler) tag).onTimeClick(url);
                 }
             }
         };

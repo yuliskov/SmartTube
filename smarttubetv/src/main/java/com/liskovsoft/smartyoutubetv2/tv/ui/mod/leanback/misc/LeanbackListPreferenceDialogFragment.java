@@ -40,8 +40,10 @@ import androidx.preference.MultiSelectListPreference;
 import androidx.recyclerview.widget.RecyclerView;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.clickable.LinkifyCompat;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.clickable.LinkifyCompat.LinkifyClickHandler;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -184,8 +186,17 @@ public class LeanbackListPreferenceDialogFragment extends LeanbackPreferenceDial
             messageView.setVisibility(View.VISIBLE);
             messageView.setText(message);
 
-            //LinkifyCompat.addLinks(messageView, Linkify.WEB_URLS, (link) -> MessageHelpers.showMessage(messageView.getContext(), "On link clicked " + link));
-            LinkifyCompat.addLinks(messageView, Linkify.WEB_URLS, (link) -> Utils.showMultiChooser(messageView.getContext(), Uri.parse(link)));
+            LinkifyCompat.addLinks(messageView, LinkifyCompat.WEB_URLS | LinkifyCompat.TIME_CODES, new LinkifyClickHandler() {
+                @Override
+                public void onUrlClick(String link) {
+                    Utils.showMultiChooser(messageView.getContext(), Uri.parse(link));
+                }
+
+                @Override
+                public void onTimeClick(String timeCode) {
+                    PlaybackPresenter.instance(messageView.getContext()).setPosition(timeCode);
+                }
+            });
 
             // Modified. Remove other views.
             ViewGroup parent = (ViewGroup) verticalGridView.getParent();
