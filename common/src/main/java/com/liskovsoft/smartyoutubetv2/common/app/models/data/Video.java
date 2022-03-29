@@ -55,6 +55,7 @@ public final class Video implements Parcelable {
     public boolean isSynced;
     public final long timestamp = System.currentTimeMillis();
     public int extra = -1;
+    public int pendingPosMs;
 
     public Video() {
        // NOP

@@ -134,6 +134,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
 
         // In this state video length is not undefined.
         restorePosition(item);
+        restorePendingPosition(item);
         restoreSpeed(item);
         // Player thinks that subs not enabled if I enable it too early (e.g. on source change event).
         restoreSubtitleFormat();
@@ -346,6 +347,16 @@ public class VideoStateManager extends PlayerEventListenerHelper {
 
         if (!mIsPlayBlocked) {
             getController().setPlay(getPlayEnabled());
+        }
+    }
+
+    /**
+     * Restore position from description time code
+     */
+    private void restorePendingPosition(Video item) {
+        if (item.pendingPosMs > 0) {
+            getController().setPositionMs(item.pendingPosMs);
+            item.pendingPosMs = 0;
         }
     }
 

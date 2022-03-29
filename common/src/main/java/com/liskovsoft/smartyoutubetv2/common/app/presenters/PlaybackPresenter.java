@@ -5,6 +5,7 @@ import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.MainPlayerEventBridge;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
@@ -85,6 +86,12 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     public void setPosition(String timeCode) {
         if (getView() != null) {
             getView().getController().setPositionMs(ServiceHelper.timeTextToMillis(timeCode));
+        } else {
+            Video video = VideoMenuPresenter.getVideoHolder();
+            if (video != null) {
+                video.pendingPosMs = ServiceHelper.timeTextToMillis(timeCode);
+                openVideo(video);
+            }
         }
     }
 }

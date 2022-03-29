@@ -29,6 +29,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +43,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private Disposable mNotInterestedAction;
     private Disposable mSubscribeAction;
     private Video mVideo;
+    private static WeakReference<Video> sVideoHolder = new WeakReference<>(null);
     private boolean mIsNotInterestedButtonEnabled;
     private boolean mIsRemoveFromHistoryButtonEnabled;
     private boolean mIsOpenChannelButtonEnabled;
@@ -76,6 +78,10 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
     public static VideoMenuPresenter instance(Context context) {
         return new VideoMenuPresenter(context);
+    }
+
+    public static Video getVideoHolder() {
+        return sVideoHolder.get();
     }
 
     @Override
@@ -143,6 +149,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         RxUtils.disposeActions(mPlaylistInfoAction, mAddToPlaylistAction, mNotInterestedAction, mSubscribeAction);
 
         mVideo = video;
+        sVideoHolder = new WeakReference<>(video);
 
         MediaServiceManager.instance().authCheck(this::obtainPlaylistsAndShowDialogSigned, this::prepareAndShowDialogUnsigned);
     }
