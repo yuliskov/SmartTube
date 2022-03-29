@@ -153,9 +153,10 @@ public final class LinkifyCompat {
 
         pruneOverlaps(links, text);
 
-        if (links.size() == 0) {
-            return false;
-        }
+        // MODIFIED: force enable scrolling even there's no links in text
+        //if (links.size() == 0 && timeLinks.size() == 0) {
+        //    return false;
+        //}
 
         for (LinkSpec link: links) {
             if (link.frameworkAddedSpan == null) {
@@ -169,7 +170,7 @@ public final class LinkifyCompat {
             }
         }
 
-        return true;
+        return true; // force enable scrolling even there's no links in text
     }
 
     public static boolean addLinks(@NonNull TextView text, @LinkifyMask int mask, LinkifyClickHandler onClick) {
