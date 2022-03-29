@@ -43,7 +43,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private Disposable mNotInterestedAction;
     private Disposable mSubscribeAction;
     private Video mVideo;
-    private static WeakReference<Video> sVideoHolder = new WeakReference<>(null);
+    public static WeakReference<Video> sVideoHolder = new WeakReference<>(null);
     private boolean mIsNotInterestedButtonEnabled;
     private boolean mIsRemoveFromHistoryButtonEnabled;
     private boolean mIsOpenChannelButtonEnabled;
@@ -78,10 +78,6 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
     public static VideoMenuPresenter instance(Context context) {
         return new VideoMenuPresenter(context);
-    }
-
-    public static Video getVideoHolder() {
-        return sVideoHolder.get();
     }
 
     @Override

@@ -87,7 +87,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
         if (getView() != null) {
             getView().getController().setPositionMs(ServiceHelper.timeTextToMillis(timeCode));
         } else {
-            Video video = VideoMenuPresenter.getVideoHolder();
+            Video video = VideoMenuPresenter.sVideoHolder.get();
             if (video != null) {
                 video.pendingPosMs = ServiceHelper.timeTextToMillis(timeCode);
                 openVideo(video);
