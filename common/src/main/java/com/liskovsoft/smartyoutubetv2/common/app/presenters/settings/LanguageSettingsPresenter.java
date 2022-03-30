@@ -47,10 +47,15 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
     private void appendLanguageCategory(AppDialogPresenter settingsPresenter) {
         Map<String, String> locales = getSupportedLocales();
         String language = mLangUpdater.getPreferredLanguage();
+        String languageTitle = "";
 
         List<OptionItem> options = new ArrayList<>();
 
         for (Entry<String, String> entry : locales.entrySet()) {
+            if (entry.getValue().equals(language)) {
+                languageTitle = String.format(" (%s)", entry.getKey());
+            }
+
             options.add(UiOptionItem.from(
                     entry.getKey(),
                     option -> {
@@ -60,16 +65,22 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
                     entry.getValue().equals(language)));
         }
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.dialog_select_language), options);
+        settingsPresenter.appendRadioCategory(
+                getContext().getString(R.string.dialog_select_language) + languageTitle, options);
     }
 
     private void appendCountryCategory(AppDialogPresenter settingsPresenter) {
         Map<String, String> countries = getSupportedCountries();
         String country = mLangUpdater.getPreferredCountry();
+        String countryTitle = "";
 
         List<OptionItem> options = new ArrayList<>();
 
         for (Entry<String, String> entry : countries.entrySet()) {
+            if (entry.getValue().equals(country)) {
+                countryTitle = String.format(" (%s)", entry.getKey());
+            }
+
             options.add(UiOptionItem.from(
                     entry.getKey(),
                     option -> {
@@ -79,7 +90,8 @@ public class LanguageSettingsPresenter extends BasePresenter<Void> {
                     entry.getValue().equals(country)));
         }
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.dialog_select_country), options);
+        settingsPresenter.appendRadioCategory(
+                getContext().getString(R.string.dialog_select_country) + countryTitle, options);
     }
 
     /**
