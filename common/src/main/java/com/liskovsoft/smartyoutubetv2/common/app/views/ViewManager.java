@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import androidx.annotation.NonNull;
 import com.liskovsoft.sharedutils.helpers.FileHelpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
@@ -389,8 +390,9 @@ public class ViewManager {
     private void safeStartActivity(Context context, Intent intent) {
         try {
             context.startActivity(intent);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | ActivityNotFoundException e) {
             Log.e(TAG, "Error when starting activity: %s", e.getMessage());
+            MessageHelpers.showLongMessage(context, e.getLocalizedMessage());
         }
     }
 
