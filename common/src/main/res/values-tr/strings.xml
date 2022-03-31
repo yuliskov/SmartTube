@@ -349,7 +349,7 @@
     <string name="enable_openvpn">OpenVPN kullan</string>
     <string name="openvpn_settings_title">OpenVPN Ayarları</string>
     <string name="openvpn_application_aborted">Lütfen önce OpenVPN ayarlarını düzeltin.</string>
-    <string name="openvpn_test_aborted">Test durduruldu, lütfen önce  OpenVPN ayarlarını düzeltin.</string>
+    <string name="openvpn_test_aborted">Test durduruldu, lütfen önce OpenVPN ayarlarını düzeltin.</string>
     <string name="openvpn_address_invalid">OpenVPN yapılandırma adresi ayarlanmadı.</string>
     <string name="internet_censorship">İnternet Sansürü</string>
     <string name="rename_section">Bölümü yeniden adlandır</string>
