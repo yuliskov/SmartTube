@@ -103,6 +103,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 {R.string.dialog_account_list, MainUIData.MENU_ITEM_SELECT_ACCOUNT},
                 {R.string.move_section_up, MainUIData.MENU_ITEM_MOVE_SECTION_UP},
                 {R.string.move_section_down, MainUIData.MENU_ITEM_MOVE_SECTION_DOWN},
+                {R.string.rename_section, MainUIData.MENU_ITEM_RENAME_SECTION},
                 {R.string.action_video_info, MainUIData.MENU_ITEM_OPEN_DESCRIPTION}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
                 if (optionItem.isSelected()) {
