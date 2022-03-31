@@ -334,7 +334,7 @@ public final class PatternsCompat {
             WORD_BOUNDARY + ")"
     );
 
-    private static final String TIME_CODE_PART = "(?:\\d+:\\d+)";
+    private static final String TIME_CODE_PART = "(?:\\d+\\:\\d+)(?:\\:\\d+)?";
 
     public static final Pattern AUTOLINK_TIME_CODE = Pattern.compile("(" + WORD_BOUNDARY +
             "(?:" + TIME_CODE_PART + ")" +
