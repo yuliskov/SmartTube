@@ -90,4 +90,11 @@ public class BrowseSection {
     public Video getData() {
         return mData;
     }
+
+    /**
+     * Check reserved ids range for default (built-in) sections
+     */
+    public boolean isDefault() {
+        return mId < 30;
+    }
 }

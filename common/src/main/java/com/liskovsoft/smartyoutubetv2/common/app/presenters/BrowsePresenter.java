@@ -406,7 +406,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     }
 
     public void renameSection(BrowseSection section) {
-        //mGeneralData.moveSectionDown(section.getId());
+        mGeneralData.renameSection(section.getId(), section.getTitle());
         updateSections();
     }
 

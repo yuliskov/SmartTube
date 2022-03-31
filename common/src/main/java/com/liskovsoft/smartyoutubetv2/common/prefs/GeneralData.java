@@ -192,6 +192,13 @@ public class GeneralData {
         return index;
     }
 
+    public void renameSection(int sectionId, String newTitle) {
+        int index = findPinnedItemIndex(sectionId);
+        Video video = mPinnedItems.get(index);
+        video.title = newTitle;
+        persistState();
+    }
+
     public void moveSectionUp(int sectionId) {
         shiftSection(sectionId, -1);
     }
