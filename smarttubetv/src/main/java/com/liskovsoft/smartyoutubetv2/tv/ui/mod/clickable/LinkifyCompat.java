@@ -405,7 +405,9 @@ public final class LinkifyCompat {
     }
 
     private static boolean shouldAddLinksFallbackToFramework() {
-        return Build.VERSION.SDK_INT >= 28;
+        // MODIFIED: use custom realization always
+        //return Build.VERSION.SDK_INT >= 28;
+        return false;
     }
 
     private static void addLinkMovementMethod(@NonNull TextView t) {
