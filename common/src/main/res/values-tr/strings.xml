@@ -351,4 +351,7 @@
     <string name="openvpn_application_aborted">Lütfen önce OpenVPN ayarlarını düzeltin.</string>
     <string name="openvpn_test_aborted">Test durduruldu, lütfen önce  OpenVPN ayarlarını düzeltin.</string>
     <string name="openvpn_address_invalid">OpenVPN yapılandırma adresi ayarlanmadı.</string>
+    <string name="internet_censorship">İnternet Sansürü</string>
+    <string name="rename_section">Bölümü yeniden adlandır</string>
+    <string name="simple_edit_value_hint">Yeni değer</string>
 </resources>
