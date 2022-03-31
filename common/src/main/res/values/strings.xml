@@ -320,7 +320,7 @@
     <string name="player_seek_confirmation_pause">With confirmation (pause while seeking)</string>
     <string name="player_seek_confirmation_play">With confirmation (play while seeking)</string>
     <string name="hide_shorts_from_home">Hide shorts from Home</string>
-    <string name="finish_on_disconnect">Finish the app after disconnect the phone</string>
+    <string name="finish_on_disconnect">Finish the app after disconnect the phone/tablet</string>
     <string name="update_error">Update error</string>
     <string name="hide_shorts_from_history">Hide shorts from History</string>
     <string name="disable_screensaver">Disable screensaver</string>

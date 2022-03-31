@@ -316,7 +316,7 @@
     <string name="player_seek_confirmation_pause">З підтвердженням (пауза під час перемотування)</string>
     <string name="player_seek_confirmation_play">З підтвердженням (грати під час перемотування)</string>
     <string name="hide_shorts_from_home">Приховувати короткі відео з Головної</string>
-    <string name="finish_on_disconnect">Завершувати додаток після відключення телефону</string>
+    <string name="finish_on_disconnect">Завершувати додаток після відключення телефону/планшету</string>
     <string name="update_error">Помилка оновлення</string>
     <string name="hide_shorts_from_history">Приховувати короткі відео з Історії</string>
     <string name="disable_screensaver">Вимкнути скрінсейвер</string>
