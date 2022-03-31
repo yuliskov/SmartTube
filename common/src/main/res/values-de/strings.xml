@@ -320,7 +320,7 @@
     <string name="player_seek_confirmation_pause">Mit Bestätigung (Pause beim Spulen)</string>
     <string name="player_seek_confirmation_play">Mit Bestätigung (Wiedergabe beim Spulen)</string>
     <string name="hide_shorts_from_home">Kurzvideos in Start ausblenden</string>
-    <string name="finish_on_disconnect">App nach dem Trennen des Telefons beenden</string>
+    <string name="finish_on_disconnect">App nach dem Trennen des Telefons/Tablets beenden</string>
     <string name="update_error">Update-Fehler</string>
     <string name="hide_shorts_from_history">Kurzvideos in Verlauf ausblenden</string>
     <string name="disable_screensaver">Bildschirmschoner deaktivieren</string>
@@ -352,4 +352,6 @@
     <string name="openvpn_test_aborted">Der Test wurde abgebrochen, bitte korrigieren Sie zuerst die OpenVPN-Einstellungen.</string>
     <string name="openvpn_address_invalid">OpenVPN-Konfigurationsadresse nicht gesetzt.</string>
     <string name="internet_censorship">Internet-Zensur</string>
+    <string name="rename_section">Kategorie umbenennen</string>
+    <string name="simple_edit_value_hint">Neuer Wert</string>
 </resources>
