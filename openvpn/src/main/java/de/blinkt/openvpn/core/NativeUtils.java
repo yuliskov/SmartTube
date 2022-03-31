@@ -10,9 +10,13 @@ import java.security.InvalidKeyException;
 
 public class NativeUtils {
     static {
-        System.loadLibrary("ovpnutil");
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN)
-            System.loadLibrary("jbcrypto");
+        try {
+            System.loadLibrary("ovpnutil");
+            if (Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN)
+                System.loadLibrary("jbcrypto");
+        } catch (UnsatisfiedLinkError e) { // Unsupported arch fix
+            e.printStackTrace();
+        }
     }
     public static native byte[] rsasign(byte[] input, int pkey) throws InvalidKeyException;
     public static native String[] getIfconfig() throws IllegalArgumentException;
