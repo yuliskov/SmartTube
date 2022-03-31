@@ -387,13 +387,26 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         return items.contains(item);
     }
 
-    public void moveSectionUp(int sectionId) {
-        mGeneralData.moveSectionUp(sectionId);
+    public void moveSectionUp(BrowseSection section) {
+        mGeneralData.moveSectionUp(section.getId());
         updateSections();
     }
 
-    public void moveSectionDown(int sectionId) {
-        mGeneralData.moveSectionDown(sectionId);
+    public void moveSectionDown(BrowseSection section) {
+        mGeneralData.moveSectionDown(section.getId());
+        updateSections();
+    }
+
+    public boolean canMoveSectionUp(BrowseSection section) {
+        return mGeneralData.canMoveSectionUp(section.getId());
+    }
+
+    public boolean canMoveSectionDown(BrowseSection section) {
+        return mGeneralData.canMoveSectionDown(section.getId());
+    }
+
+    public void renameSection(BrowseSection section) {
+        //mGeneralData.moveSectionDown(section.getId());
         updateSections();
     }
 

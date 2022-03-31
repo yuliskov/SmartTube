@@ -348,4 +348,6 @@
     <string name="openvpn_test_aborted">Тест скасовано, спершу виправте налаштування OpenVPN.</string>
     <string name="openvpn_address_invalid">Адреса файла конфігурації не встановлена.</string>
     <string name="internet_censorship">Цензура в Інтернеті</string>
+    <string name="rename_section">Перейменувати розділ</string>
+    <string name="simple_edit_value_hint">Нове значення</string>
 </resources>

@@ -352,4 +352,6 @@
     <string name="openvpn_test_aborted">Test aborted, please fix OpenVPN settings first.</string>
     <string name="openvpn_address_invalid">OpenVPN config address not set.</string>
     <string name="internet_censorship">Internet Censorship</string>
+    <string name="rename_section">Rename section</string>
+    <string name="simple_edit_value_hint">New value</string>
 </resources>

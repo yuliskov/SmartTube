@@ -348,4 +348,6 @@
     <string name="openvpn_test_aborted">Тест прерван, сначала исправьте настройки OpenVPN.</string>
     <string name="openvpn_address_invalid">Адрес файла конфигурации не задан.</string>
     <string name="internet_censorship">Интернет-цензура</string>
+    <string name="rename_section">Переименовать раздел</string>
+    <string name="simple_edit_value_hint">Новое значение</string>
 </resources>
