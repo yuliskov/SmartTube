@@ -226,7 +226,8 @@ public class PlayerTweaksData {
         mIsLiveStreamFixEnabled = Helpers.parseBoolean(split, 10, false);
         mIsPlaybackNotificationsDisabled = Helpers.parseBoolean(split, 11, !Helpers.isAndroidTV(mPrefs.getContext()));
         mIsTunneledPlaybackEnabled = Helpers.parseBoolean(split, 12, false);
-        mPlayerButtons = Helpers.parseInt(split, 13, Integer.MAX_VALUE ^ PlayerTweaksData.PLAYER_BUTTON_VIDEO_INFO); // all buttons, except info button
+        // Example usage: Integer.MAX_VALUE ^ PlayerTweaksData.PLAYER_BUTTON_VIDEO_INFO // all buttons, except info button
+        mPlayerButtons = Helpers.parseInt(split, 13, Integer.MAX_VALUE); // all buttons
         mIsBufferingFixEnabled = Helpers.parseBoolean(split, 14, false);
         mIsNoFpsPresetsEnabled = Helpers.parseBoolean(split, 15, false);
     }
