@@ -346,7 +346,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 break;
             case Command.TYPE_DPAD:
                 int key = KeyEvent.KEYCODE_UNKNOWN;
-                boolean isShortAction = false;
+                boolean isLongAction = false;
                 switch (command.getKey()) {
                     case Command.KEY_UP:
                         key = KeyEvent.KEYCODE_DPAD_UP;
@@ -356,13 +356,14 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                         break;
                     case Command.KEY_LEFT:
                         key = KeyEvent.KEYCODE_DPAD_LEFT;
+                        isLongAction = true; // enable fast seeking
                         break;
                     case Command.KEY_RIGHT:
                         key = KeyEvent.KEYCODE_DPAD_RIGHT;
+                        isLongAction = true; // enable fast seeking
                         break;
                     case Command.KEY_ENTER:
                         key = KeyEvent.KEYCODE_DPAD_CENTER;
-                        isShortAction = true; // act like click, don't show ctx menu
                         break;
                     case Command.KEY_BACK:
                         key = KeyEvent.KEYCODE_BACK;
@@ -373,12 +374,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
 
                     final int resultKey = key;
 
-                    if (isShortAction) {
-                        mActionDown = RxUtils.runAsync(() -> {
-                            Instrumentation instrumentation = new Instrumentation();
-                            instrumentation.sendKeyDownUpSync(resultKey);
-                        });
-                    } else {
+                    if (isLongAction) {
                         mActionDown = RxUtils.runAsync(() -> {
                             Instrumentation instrumentation = new Instrumentation();
                             instrumentation.sendKeySync(new KeyEvent(KeyEvent.ACTION_DOWN, resultKey));
@@ -387,6 +383,11 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                             Instrumentation instrumentation = new Instrumentation();
                             instrumentation.sendKeySync(new KeyEvent(KeyEvent.ACTION_UP, resultKey));
                         }, 500);
+                    } else {
+                        mActionDown = RxUtils.runAsync(() -> {
+                            Instrumentation instrumentation = new Instrumentation();
+                            instrumentation.sendKeyDownUpSync(resultKey);
+                        });
                     }
                 }
                 break;
