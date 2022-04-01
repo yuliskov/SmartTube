@@ -1,6 +1,8 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
+import android.app.Instrumentation;
 import android.content.Context;
+import android.view.KeyEvent;
 import androidx.annotation.Nullable;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.RemoteManager;
@@ -338,6 +340,36 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                     // NOTE: It's not a good idea to remember connection state (mConnected) at this point.
                     MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_disconnected, command.getDeviceName()));
                     ViewManager.instance(getActivity()).properlyFinishTheApp(getActivity());
+                }
+                break;
+            case Command.TYPE_DPAD:
+                int key = KeyEvent.KEYCODE_UNKNOWN;
+                switch (command.getKey()) {
+                    case Command.KEY_UP:
+                        key = KeyEvent.KEYCODE_DPAD_UP;
+                        break;
+                    case Command.KEY_DOWN:
+                        key = KeyEvent.KEYCODE_DPAD_DOWN;
+                        break;
+                    case Command.KEY_LEFT:
+                        key = KeyEvent.KEYCODE_DPAD_LEFT;
+                        break;
+                    case Command.KEY_RIGHT:
+                        key = KeyEvent.KEYCODE_DPAD_RIGHT;
+                        break;
+                    case Command.KEY_ENTER:
+                        key = KeyEvent.KEYCODE_DPAD_CENTER;
+                        break;
+                    case Command.KEY_BACK:
+                        key = KeyEvent.KEYCODE_BACK;
+                        break;
+                }
+                if (key != KeyEvent.KEYCODE_UNKNOWN) {
+                    final int resultKey = key;
+                    RxUtils.runAsync(() -> {
+                        Instrumentation instrumentation = new Instrumentation();
+                        instrumentation.sendKeyDownUpSync(resultKey);
+                    });
                 }
                 break;
         }
