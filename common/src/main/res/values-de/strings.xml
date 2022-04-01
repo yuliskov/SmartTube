@@ -320,15 +320,15 @@
     <string name="player_seek_confirmation_pause">Mit Bestätigung (Pause beim Spulen)</string>
     <string name="player_seek_confirmation_play">Mit Bestätigung (Wiedergabe beim Spulen)</string>
     <string name="hide_shorts_from_home">Kurzvideos in Start ausblenden</string>
-    <string name="finish_on_disconnect">App nach dem Trennen des Telefons beenden</string>
+    <string name="finish_on_disconnect">App nach dem Trennen des Telefons/Tablets beenden</string>
     <string name="update_error">Update-Fehler</string>
     <string name="hide_shorts_from_history">Kurzvideos in Verlauf ausblenden</string>
     <string name="disable_screensaver">Bildschirmschoner deaktivieren</string>
     <string name="description_not_found">Beschreibung nicht gefunden</string>
     <string name="proxy_port_hint">Proxy-Port</string>
     <string name="proxy_host_hint">Proxy-Hostname oder IP</string>
-    <string name="proxy_username_hint">Proxy-Benutzername (kann leer sein)</string>
-    <string name="proxy_password_hint">Proxy-Passwort (kann leer sein)</string>
+    <string name="proxy_username_hint">Proxy-Benutzername</string>
+    <string name="proxy_password_hint">Proxy-Passwort</string>
     <string name="proxy_type">Proxy-Typ</string>
     <string name="enable_web_proxy">Web-Proxy verwenden</string>
     <string name="proxy_not_supported">Web-Proxy verwenden (benötigt Android 4.4+)</string>
@@ -345,4 +345,13 @@
     <string name="proxy_test_start">Test#%d: %s …</string>
     <string name="proxy_test_error">Fehler#%d: %s</string>
     <string name="proxy_test_status">Status#%d: %s %d %s</string>
+    <string name="openvpn_config_address_hint">Adresse der Konfigurationsdatei (*.ovpn)</string>
+    <string name="enable_openvpn">OpenVPN verwenden</string>
+    <string name="openvpn_settings_title">OpenVPN-Einstellungen</string>
+    <string name="openvpn_application_aborted">Bitte korrigieren Sie zuerst die OpenVPN-Einstellungen.</string>
+    <string name="openvpn_test_aborted">Der Test wurde abgebrochen, bitte korrigieren Sie zuerst die OpenVPN-Einstellungen.</string>
+    <string name="openvpn_address_invalid">OpenVPN-Konfigurationsadresse nicht gesetzt.</string>
+    <string name="internet_censorship">Internet-Zensur</string>
+    <string name="rename_section">Kategorie umbenennen</string>
+    <string name="simple_edit_value_hint">Neuer Wert</string>
 </resources>
