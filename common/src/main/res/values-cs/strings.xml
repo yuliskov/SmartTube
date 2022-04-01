@@ -320,15 +320,15 @@
     <string name="player_seek_confirmation_pause">S potvrzením (pozastav při přetáčení)</string>
     <string name="player_seek_confirmation_play">S potvrzením (hraj dál při přetáčení)</string>
     <string name="hide_shorts_from_home">Skryj krátké klipy z nabídky Domů</string>
-    <string name="finish_on_disconnect">Ukončit aplikaci, když se telefon odpojí</string>
+    <string name="finish_on_disconnect">Ukončit aplikaci, když se telefon/tablet odpojí</string>
     <string name="update_error">Chyba aktualizace</string>
     <string name="hide_shorts_from_history">Skryj krátké klipy z nabídky Historie</string>
     <string name="disable_screensaver">Zakaž spořič obrazovky</string>
     <string name="description_not_found">Popis nenalezen</string>
     <string name="proxy_port_hint">Proxy port</string>
     <string name="proxy_host_hint">Název nebo IP adresa proxy serveru</string>
-    <string name="proxy_username_hint">Uživatelké jméno proxy (může být prázdné)</string>
-    <string name="proxy_password_hint">Heslo proxy (může být prázdné)</string>
+    <string name="proxy_username_hint">Uživatelké jméno proxy</string>
+    <string name="proxy_password_hint">Heslo proxy</string>
     <string name="proxy_type">Typ proxy</string>
     <string name="enable_web_proxy">Použij webové proxy</string>
     <string name="proxy_not_supported">Použijte webové proxy (Vyžaduje Android 4.4+)</string>
@@ -345,4 +345,13 @@
     <string name="proxy_test_start">Test#%d: %s …</string>
     <string name="proxy_test_error">Chyba#%d: %s</string>
     <string name="proxy_test_status">Status#%d: %s %d %s</string>
+    <string name="openvpn_config_address_hint">Adresa konfiguračního souboru (*.ovpn)</string>
+    <string name="enable_openvpn">Použít OpenVPN</string>
+    <string name="openvpn_settings_title">Nastavení OpenVPN</string>
+    <string name="openvpn_application_aborted">Nejprve prosím opravte nastavení OpenVPN.</string>
+    <string name="openvpn_test_aborted">Test byl přerušen, nejprve opravte nastavení OpenVPN.</string>
+    <string name="openvpn_address_invalid">Adresa konfigurace OpenVPN není nastavena.</string>
+    <string name="internet_censorship">Cenzura internetu</string>
+    <string name="rename_section">Přejmenovat sekci</string>
+    <string name="simple_edit_value_hint">Nová hodnota</string>
 </resources>
