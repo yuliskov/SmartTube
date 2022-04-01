@@ -315,12 +315,12 @@
     <string name="hide_upcoming">Nascondi i video seguenti dalle Iscrizioni</string>
     <string name="search_background_playback">Entra in PiP quando cerchi dal lettore</string>
     <string name="trending_row_name">Tendenze</string>
-    <string name="player_seek_type">Cerca comportamento</string>
+    <string name="player_seek_type">Tipo di ricerca</string>
     <string name="player_seek_regular">Regolare</string>
     <string name="player_seek_confirmation_pause">Con conferma (pausa durante la ricerca)</string>
     <string name="player_seek_confirmation_play">Con conferma (play durante la ricerca)</string>
     <string name="hide_shorts_from_home">Nascondi i video corti dalla Home</string>
-    <string name="finish_on_disconnect">Chiudi l\'app dopo la disconnessione del telefono</string>
+    <string name="finish_on_disconnect">Chiudi l\'app dopo la disconnessione del telefono o tablet</string>
     <string name="update_error">Errore durante l\'aggiornamento</string>
     <string name="hide_shorts_from_history">Nascondi i video corti dalla Cronologia</string>
     <string name="disable_screensaver">Disabilita lo screensaver</string>
@@ -345,4 +345,13 @@
     <string name="proxy_test_start">Test#%d: %s …</string>
     <string name="proxy_test_error">Errore#%d: %s</string>
     <string name="proxy_test_status">Stato#%d: %s %d %s</string>
+    <string name="openvpn_config_address_hint">Indirizzo del file di configurazione (*.ovpn)</string>
+    <string name="enable_openvpn">Utilizza OpenVPN</string>
+    <string name="openvpn_settings_title">Impostazioni OpenVPN</string>
+    <string name="openvpn_application_aborted">Per favore, correggi prima le impostazioni di OpenVPN.</string>
+    <string name="openvpn_test_aborted">Test annullato, per favore correggi prima le impostazioni di OpenVPN.</string>
+    <string name="openvpn_address_invalid">Indirizzo di configurazione OpenVPN non impostato.</string>
+    <string name="internet_censorship">Censura su Internet</string>
+    <string name="rename_section">Rinomina sezione</string>
+    <string name="simple_edit_value_hint">Nuovo valore</string>
 </resources>
