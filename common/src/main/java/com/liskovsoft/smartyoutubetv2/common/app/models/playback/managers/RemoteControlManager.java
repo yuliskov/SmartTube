@@ -38,6 +38,8 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     private boolean mConnected;
     private int mIsGlobalVolumeWorking = -1;
     private long mNewVideoPositionMs;
+    private Disposable mActionDown;
+    private Disposable mActionUp;
 
     public RemoteControlManager(Context context, SuggestionsLoaderManager suggestionsLoader, VideoLoaderManager videoLoader) {
         MediaService mediaService = YouTubeMediaService.instance();
@@ -365,11 +367,17 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                         break;
                 }
                 if (key != KeyEvent.KEYCODE_UNKNOWN) {
+                    RxUtils.disposeActions(mActionDown, mActionUp);
+
                     final int resultKey = key;
-                    RxUtils.runAsync(() -> {
+                    mActionDown = RxUtils.runAsync(() -> {
                         Instrumentation instrumentation = new Instrumentation();
-                        instrumentation.sendKeyDownUpSync(resultKey);
+                        instrumentation.sendKeySync(new KeyEvent(KeyEvent.ACTION_DOWN, resultKey));
                     });
+                    mActionUp = RxUtils.runAsync(() -> {
+                        Instrumentation instrumentation = new Instrumentation();
+                        instrumentation.sendKeySync(new KeyEvent(KeyEvent.ACTION_UP, resultKey));
+                    }, 500);
                 }
                 break;
         }
