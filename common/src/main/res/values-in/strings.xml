@@ -281,7 +281,7 @@
     <string name="audio_shift_sec">%s detik</string>
     <string name="ui_hide_timeout_sec">%s detik</string>
     <string name="screen_dimming_timeout_min">%s menit</string>
-    <string name="mark_all_channels_watched">Tandai semua saluran sebagai telah ditonton/string>
+    <string name="mark_all_channels_watched">Tandai semua saluran sebagai telah ditonton</string>
     <string name="move_section_up">Pindahkan bagian ke atas</string>
     <string name="move_section_down">Pindahkan bagian ke bawah</string>
     <string name="player_buttons">Atur tombol pemutar</string>
