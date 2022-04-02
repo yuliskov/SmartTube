@@ -350,4 +350,6 @@
     <string name="internet_censorship">Цензура в Інтернеті</string>
     <string name="rename_section">Перейменувати розділ</string>
     <string name="simple_edit_value_hint">Нове значення</string>
+    <string name="seek_interval">Інтервал перемотування</string>
+    <string name="seek_interval_sec">%s сек</string>
 </resources>

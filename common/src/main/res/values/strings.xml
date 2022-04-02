@@ -354,4 +354,6 @@
     <string name="internet_censorship">Internet Censorship</string>
     <string name="rename_section">Rename section</string>
     <string name="simple_edit_value_hint">New value</string>
+    <string name="seek_interval">Seek interval</string>
+    <string name="seek_interval_sec">%s sec</string>
 </resources>

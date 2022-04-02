@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HQDialogManager;
@@ -43,6 +44,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendUIAutoHideCategory(settingsPresenter);
         appendSeekTypeCategory(settingsPresenter);
         appendSeekingPreviewCategory(settingsPresenter);
+        appendSeekIntervalCategory(settingsPresenter);
         appendRememberSpeedCategory(settingsPresenter);
         appendEndingTimeCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
@@ -125,6 +127,18 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_seek_preview), options);
+    }
+
+    private void appendSeekIntervalCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int intervalMs : new int[] {1_000, 2_000, 3_000, 5_000, 10_000, 15_000, 20_000, 30_000, 60_000}) {
+            options.add(UiOptionItem.from(getContext().getString(R.string.seek_interval_sec, Helpers.toString(intervalMs / 1_000f)),
+                    optionItem -> mPlayerData.setStartSeekIncrementMs(intervalMs),
+                    intervalMs == mPlayerData.getStartSeekIncrementMs()));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.seek_interval), options);
     }
 
     private void appendRememberSpeedCategory(AppDialogPresenter settingsPresenter) {
