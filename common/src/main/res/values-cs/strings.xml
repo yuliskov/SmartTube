@@ -354,4 +354,6 @@
     <string name="internet_censorship">Cenzura internetu</string>
     <string name="rename_section">Přejmenovat sekci</string>
     <string name="simple_edit_value_hint">Nová hodnota</string>
+    <string name="seek_interval">Interval přeskakování</string>
+    <string name="seek_interval_sec">%s sek</string>
 </resources>
