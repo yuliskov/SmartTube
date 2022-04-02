@@ -277,10 +277,10 @@
     <string name="add_remove_from_recent_playlist">Přidat/odebrat z nedávného playlistu</string>
     <string name="hide_settings_section">Skryj sekci Nastavení (nebezpečné!)</string>
     <string name="volume">Hlasitost %s%%</string>
-    <string name="auto_frame_rate_sec">%s sek</string>
-    <string name="audio_shift_sec">%s sek</string>
-    <string name="ui_hide_timeout_sec">%s sek</string>
-    <string name="screen_dimming_timeout_min">%s min</string>
+    <string name="auto_frame_rate_sec">%s sekund</string>
+    <string name="audio_shift_sec">%s sekund</string>
+    <string name="ui_hide_timeout_sec">%s sekund</string>
+    <string name="screen_dimming_timeout_min">%s minut</string>
     <string name="mark_all_channels_watched">Označit všechny kanály jako zhlédnuté</string>
     <string name="move_section_up">Posuň sekci nahoru</string>
     <string name="move_section_down">Posuň sekci dolů</string>
@@ -355,5 +355,5 @@
     <string name="rename_section">Přejmenovat sekci</string>
     <string name="simple_edit_value_hint">Nová hodnota</string>
     <string name="seek_interval">Interval přeskakování</string>
-    <string name="seek_interval_sec">%s sek</string>
+    <string name="seek_interval_sec">%s sekund</string>
 </resources>
