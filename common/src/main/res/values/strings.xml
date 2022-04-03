@@ -363,4 +363,6 @@
     <string name="audio_sync_fix">Audio sync fix</string>
     <string name="ambilight_ratio_fix_desc">Fixes absent bias lighting. Fixes incorrect aspect ratio.</string>
     <string name="ambilight_ratio_fix">Ambilight/Aspect ratio fix</string>
+    <string name="force_legacy_codecs_desc">Significantly improves performance on low-end devices. Maximum resolution is 720p.</string>
+    <string name="force_legacy_codecs">Force legacy codecs (720p)</string>
 </resources>

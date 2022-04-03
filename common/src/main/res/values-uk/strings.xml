@@ -359,4 +359,6 @@
     <string name="audio_sync_fix">Виправлення синхронізації звуку</string>
     <string name="ambilight_ratio_fix_desc">Виправляє відсутнє фонове підсвічування для телевізорів. Виправляє неправильне співвідношення сторін відео.</string>
     <string name="ambilight_ratio_fix">Виправлення Ambilight та співвідношення сторін відео</string>
+    <string name="force_legacy_codecs_desc">Значно покращує продуктивність на слабких пристроях. Максимальна роздільна здатність 720p.</string>
+    <string name="force_legacy_codecs">Використовувати застарілі кодеки (720p)</string>
 </resources>

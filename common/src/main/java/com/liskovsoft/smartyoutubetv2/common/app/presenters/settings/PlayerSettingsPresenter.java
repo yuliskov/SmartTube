@@ -201,18 +201,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendTweaksCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from("Alt presets behavior (limit bandwidth)",
-                option -> mPlayerTweaksData.enableNoFpsPresets(option.isSelected()),
-                mPlayerTweaksData.isNoFpsPresetsEnabled()));
-
-        options.add(UiOptionItem.from("Enable sleep timer (one hour)",
-                option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
-                mPlayerData.isSonyTimerFixEnabled()));
-
-        options.add(UiOptionItem.from("Disable playback notifications",
-                option -> mPlayerTweaksData.disablePlaybackNotifications(option.isSelected()),
-                mPlayerTweaksData.isPlaybackNotificationsDisabled()));
-
         options.add(UiOptionItem.from(getContext().getString(R.string.audio_sync_fix),
                 getContext().getString(R.string.audio_sync_fix_desc),
                 option -> mPlayerTweaksData.enableAudioSyncFix(option.isSelected()),
@@ -228,6 +216,23 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                     }
                 },
                 mPlayerTweaksData.isTextureViewEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.force_legacy_codecs),
+                getContext().getString(R.string.force_legacy_codecs_desc),
+                option -> mPlayerData.forceLegacyCodecs(option.isSelected()),
+                mPlayerData.isLegacyCodecsForced()));
+
+        options.add(UiOptionItem.from("Alt presets behavior (limit bandwidth)",
+                option -> mPlayerTweaksData.enableNoFpsPresets(option.isSelected()),
+                mPlayerTweaksData.isNoFpsPresetsEnabled()));
+
+        options.add(UiOptionItem.from("Enable sleep timer (one hour)",
+                option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
+                mPlayerData.isSonyTimerFixEnabled()));
+
+        options.add(UiOptionItem.from("Disable playback notifications",
+                option -> mPlayerTweaksData.disablePlaybackNotifications(option.isSelected()),
+                mPlayerTweaksData.isPlaybackNotificationsDisabled()));
 
         options.add(UiOptionItem.from("Amlogic 1080p@60fps fix",
                 option -> mPlayerTweaksData.enableAmlogicFix(option.isSelected()),
@@ -254,10 +259,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from("Skip codec profile level check",
                 option -> mPlayerTweaksData.skipProfileLevelCheck(option.isSelected()),
                 mPlayerTweaksData.isProfileLevelCheckSkipped()));
-
-        options.add(UiOptionItem.from("Force legacy codecs (720p)",
-                option -> mPlayerData.forceLegacyCodecs(option.isSelected()),
-                mPlayerData.isLegacyCodecsForced()));
 
         options.add(UiOptionItem.from("Force SW video decoder",
                 option -> mPlayerTweaksData.forceSWDecoder(option.isSelected()),
