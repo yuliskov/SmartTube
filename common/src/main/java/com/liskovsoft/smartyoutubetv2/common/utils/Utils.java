@@ -13,6 +13,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -22,6 +23,7 @@ import android.os.IBinder;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.Window;
 import android.view.WindowManager;
 import androidx.browser.customtabs.CustomTabsIntent;
@@ -333,11 +335,17 @@ public class Utils {
     }
 
     public static CharSequence color(CharSequence string, int color) {
-        SpannableString spannableString = new SpannableString(string);
+        SpannableString spannable = new SpannableString(string);
         ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(color);
-        spannableString.setSpan(foregroundColorSpan, 0, spannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(foregroundColorSpan, 0, spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        return spannableString;
+        return spannable;
+    }
+
+    public static CharSequence italic(CharSequence string) {
+        SpannableString spannable = new SpannableString(string);
+        spannable.setSpan(new StyleSpan(Typeface.ITALIC), 0, spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return spannable;
     }
 
     @SuppressWarnings("deprecation")

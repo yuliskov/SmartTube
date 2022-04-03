@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.dialogs;
 
 import android.content.Context;
+import android.text.TextUtils;
 import androidx.preference.DialogPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.MultiSelectListPreference;
@@ -9,6 +10,7 @@ import androidx.preference.SwitchPreference;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter.OptionCategory;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreference;
 
@@ -227,7 +229,7 @@ public class AppDialogFragmentManager {
 
             // Note, multi lists don't have individual (per item) descriptions. So, append description to title.
             if (optionItem.getDescription() != null) {
-                title += "\n" + optionItem.getDescription();
+                title = TextUtils.concat(title, "\n", Utils.italic(optionItem.getDescription()));
             }
 
             titles[i] = title;
