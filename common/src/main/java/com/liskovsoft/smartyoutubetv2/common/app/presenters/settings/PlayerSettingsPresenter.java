@@ -222,13 +222,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerData.forceLegacyCodecs(option.isSelected()),
                 mPlayerData.isLegacyCodecsForced()));
 
-        options.add(UiOptionItem.from("Alt presets behavior (limit bandwidth)",
-                option -> mPlayerTweaksData.enableNoFpsPresets(option.isSelected()),
-                mPlayerTweaksData.isNoFpsPresetsEnabled()));
-
-        options.add(UiOptionItem.from("Enable sleep timer (one hour)",
-                option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
-                mPlayerData.isSonyTimerFixEnabled()));
+        options.add(UiOptionItem.from(getContext().getString(R.string.live_stream_fix),
+                getContext().getString(R.string.live_stream_fix_desc),
+                option -> mPlayerTweaksData.enableLiveStreamFix(option.isSelected()),
+                mPlayerTweaksData.isLiveStreamFixEnabled()));
 
         options.add(UiOptionItem.from("Disable playback notifications",
                 option -> mPlayerTweaksData.disablePlaybackNotifications(option.isSelected()),
@@ -237,10 +234,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from("Amlogic 1080p@60fps fix",
                 option -> mPlayerTweaksData.enableAmlogicFix(option.isSelected()),
                 mPlayerTweaksData.isAmlogicFixEnabled()));
-
-        options.add(UiOptionItem.from("Live stream fix (1080p)",
-                option -> mPlayerTweaksData.enableLiveStreamFix(option.isSelected()),
-                mPlayerTweaksData.isLiveStreamFixEnabled()));
 
         options.add(UiOptionItem.from("Tunneled video playback (Android 5+)",
                 option -> {
@@ -251,6 +244,14 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                     }
                 },
                 mPlayerTweaksData.isTunneledPlaybackEnabled()));
+
+        options.add(UiOptionItem.from("Alt presets behavior (limit bandwidth)",
+                option -> mPlayerTweaksData.enableNoFpsPresets(option.isSelected()),
+                mPlayerTweaksData.isNoFpsPresetsEnabled()));
+
+        options.add(UiOptionItem.from("Enable sleep timer (one hour)",
+                option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
+                mPlayerData.isSonyTimerFixEnabled()));
 
         options.add(UiOptionItem.from("Disable snap to vsync",
                 option -> mPlayerTweaksData.disableSnapToVsync(option.isSelected()),

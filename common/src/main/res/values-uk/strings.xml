@@ -361,4 +361,6 @@
     <string name="ambilight_ratio_fix">Виправлення Ambilight та співвідношення сторін відео</string>
     <string name="force_legacy_codecs_desc">Значно покращує продуктивність на слабких пристроях. Максимальна роздільна здатність 720p.</string>
     <string name="force_legacy_codecs">Використовувати застарілі кодеки (720p)</string>
+    <string name="live_stream_fix_desc">Значно покращує продуктивність трансляцій на слабких пристроях. Максимальна роздільна здатність 1080p.</string>
+    <string name="live_stream_fix">Виправлення прямих трансляцій (1080p)</string>
 </resources>
