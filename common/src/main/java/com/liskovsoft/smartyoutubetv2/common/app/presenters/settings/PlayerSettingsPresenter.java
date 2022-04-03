@@ -227,7 +227,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableLiveStreamFix(option.isSelected()),
                 mPlayerTweaksData.isLiveStreamFixEnabled()));
 
-        options.add(UiOptionItem.from("Disable playback notifications",
+        options.add(UiOptionItem.from(getContext().getString(R.string.playback_notifications_fix),
+                getContext().getString(R.string.playback_notifications_fix_desc),
                 option -> mPlayerTweaksData.disablePlaybackNotifications(option.isSelected()),
                 mPlayerTweaksData.isPlaybackNotificationsDisabled()));
 

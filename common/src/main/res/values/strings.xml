@@ -367,4 +367,6 @@
     <string name="force_legacy_codecs">Force legacy codecs (720p)</string>
     <string name="live_stream_fix_desc">Significantly improves live stream performance on low-end devices. Maximum resolution is 1080p.</string>
     <string name="live_stream_fix">Live stream fix (1080p)</string>
+    <string name="playback_notifications_fix_desc">Hides track change notifications. Could be useful on AOSP-based firmwares.</string>
+    <string name="playback_notifications_fix">Disable playback notifications</string>
 </resources>
