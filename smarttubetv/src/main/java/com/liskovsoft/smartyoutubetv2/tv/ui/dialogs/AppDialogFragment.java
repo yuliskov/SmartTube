@@ -17,7 +17,7 @@ import androidx.preference.PreferenceScreen;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter.SettingsCategory;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.views.AppDialogView;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.RadioListPreferenceDialogFragment;
@@ -102,7 +102,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     }
 
     @Override
-    public void addCategories(List<SettingsCategory> categories) {
+    public void addCategories(List<OptionCategory> categories) {
         if (mPreferenceFragment != null) {
             mPreferenceFragment.addCategories(categories);
         }
@@ -178,7 +178,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
 
     public static class AppPreferenceFragment extends LeanbackPreferenceFragment {
         private static final String TAG = AppPreferenceFragment.class.getSimpleName();
-        private List<SettingsCategory> mCategories;
+        private List<OptionCategory> mCategories;
         private Context mExtractedContext;
         private AppDialogFragmentManager mManager;
         private String mTitle;
@@ -220,7 +220,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
 
         private void addCategories(PreferenceScreen screen) {
             if (mCategories != null) {
-                for (SettingsCategory category : mCategories) {
+                for (OptionCategory category : mCategories) {
                     if (category.items != null) {
                         screen.addPreference(mManager.createPreference(category));
                     }
@@ -260,7 +260,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
             return super.onPreferenceTreeClick(preference);
         }
 
-        public void addCategories(List<SettingsCategory> categories) {
+        public void addCategories(List<OptionCategory> categories) {
             mCategories = categories;
         }
 

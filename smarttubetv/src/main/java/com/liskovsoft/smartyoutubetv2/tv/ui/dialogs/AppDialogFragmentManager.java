@@ -8,7 +8,7 @@ import androidx.preference.Preference;
 import androidx.preference.SwitchPreference;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter.SettingsCategory;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.other.StringListPreference;
 
@@ -43,26 +43,26 @@ public class AppDialogFragmentManager {
         mOnChange = onChange;
     }
 
-    public Preference createPreference(SettingsCategory category) {
+    public Preference createPreference(OptionCategory category) {
         switch (category.type) {
-            case SettingsCategory.TYPE_CHECKBOX_LIST:
+            case OptionCategory.TYPE_CHECKBOX_LIST:
                 return createCheckedListPreference(category);
-            case SettingsCategory.TYPE_RADIO_LIST:
+            case OptionCategory.TYPE_RADIO_LIST:
                 return createRadioListPreference(category);
-            case SettingsCategory.TYPE_STRING_LIST:
+            case OptionCategory.TYPE_STRING_LIST:
                 return createStringListPreference(category);
-            case SettingsCategory.TYPE_SINGLE_SWITCH:
+            case OptionCategory.TYPE_SINGLE_SWITCH:
                 return createSwitchPreference(category);
-            case SettingsCategory.TYPE_SINGLE_BUTTON:
+            case OptionCategory.TYPE_SINGLE_BUTTON:
                 return createButtonPreference(category);
-            case SettingsCategory.TYPE_LONG_TEXT:
+            case OptionCategory.TYPE_LONG_TEXT:
                 return createLongTextPreference(category);
         }
 
         throw  new IllegalStateException("Can't find matched preference for type: " + category.type);
     }
 
-    private Preference createStringListPreference(SettingsCategory category) {
+    private Preference createStringListPreference(OptionCategory category) {
         MultiSelectListPreference pref = new StringListPreference(mStyledContext);
 
         initMultiSelectListPreference(category, pref);
@@ -70,7 +70,7 @@ public class AppDialogFragmentManager {
         return pref;
     }
 
-    private Preference createLongTextPreference(SettingsCategory category) {
+    private Preference createLongTextPreference(OptionCategory category) {
         MultiSelectListPreference pref = new StringListPreference(mStyledContext);
 
         pref.setDialogMessage(category.items.get(0).getTitle());
@@ -80,7 +80,7 @@ public class AppDialogFragmentManager {
         return pref;
     }
 
-    public Preference createButtonPreference(SettingsCategory category) {
+    public Preference createButtonPreference(OptionCategory category) {
         Preference result = null;
 
         if (category.items.size() == 1) {
@@ -99,7 +99,7 @@ public class AppDialogFragmentManager {
         return result;
     }
 
-    public Preference createSwitchPreference(SettingsCategory category) {
+    public Preference createSwitchPreference(OptionCategory category) {
         Preference result = null;
 
         if (category.items.size() == 1) {
@@ -119,7 +119,7 @@ public class AppDialogFragmentManager {
         return result;
     }
 
-    public Preference createRadioListPreference(SettingsCategory category) {
+    public Preference createRadioListPreference(OptionCategory category) {
         ListPreference pref = new ListPreference(mStyledContext);
 
         initSingleSelectListPreference(category, pref);
@@ -127,7 +127,7 @@ public class AppDialogFragmentManager {
         return pref;
     }
 
-    public Preference createCheckedListPreference(SettingsCategory category) {
+    public Preference createCheckedListPreference(OptionCategory category) {
         MultiSelectListPreference pref = new MultiSelectListPreference(mStyledContext);
 
         initMultiSelectListPreference(category, pref);
@@ -135,7 +135,7 @@ public class AppDialogFragmentManager {
         return pref;
     }
 
-    private void initSingleSelectListPreference(SettingsCategory category, ListPreference pref) {
+    private void initSingleSelectListPreference(OptionCategory category, ListPreference pref) {
         initDialogPreference(category, pref);
 
         ListPreferenceData prefData = createListPreferenceData(category.items);
@@ -156,7 +156,7 @@ public class AppDialogFragmentManager {
         });
     }
 
-    private void initMultiSelectListPreference(SettingsCategory category, MultiSelectListPreference pref) {
+    private void initMultiSelectListPreference(OptionCategory category, MultiSelectListPreference pref) {
         initDialogPreference(category, pref);
 
         ListPreferenceData prefData = createListPreferenceData(category.items);
@@ -225,6 +225,11 @@ public class AppDialogFragmentManager {
             CharSequence title = optionItem.getTitle();
             String value = optionItem.toString();
 
+            // Note, multi lists don't have individual (per item) descriptions. So, append description to title.
+            if (optionItem.getDescription() != null) {
+                title += "\n" + optionItem.getDescription();
+            }
+
             titles[i] = title;
             hashes[i] = value;
 
@@ -237,7 +242,7 @@ public class AppDialogFragmentManager {
         return new ListPreferenceData(titles, hashes, defaultValue, defaultValues);
     }
 
-    private void initDialogPreference(SettingsCategory category, DialogPreference pref) {
+    private void initDialogPreference(OptionCategory category, DialogPreference pref) {
         pref.setPersistent(false);
         pref.setTitle(category.title);
         pref.setDialogTitle(category.title);

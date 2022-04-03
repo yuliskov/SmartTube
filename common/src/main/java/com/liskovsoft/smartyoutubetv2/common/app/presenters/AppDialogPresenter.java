@@ -16,7 +16,7 @@ import java.util.List;
 public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     @SuppressLint("StaticFieldLeak")
     private static AppDialogPresenter sInstance;
-    private final List<SettingsCategory> mCategories;
+    private final List<OptionCategory> mCategories;
     private final Handler mHandler;
     private final Runnable mCloseDialog = this::closeDialog;
     private final List<Runnable> mOnFinish = new ArrayList<>();
@@ -24,36 +24,36 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     private long mTimeoutMs;
     private boolean mIsTransparent;
 
-    public static class SettingsCategory {
-        public static SettingsCategory radioList(String title, List<OptionItem> items) {
-            return new SettingsCategory(title, items, TYPE_RADIO_LIST);
+    public static class OptionCategory {
+        public static OptionCategory radioList(String title, List<OptionItem> items) {
+            return new OptionCategory(title, items, TYPE_RADIO_LIST);
         }
 
-        public static SettingsCategory checkedList(String title, List<OptionItem> items) {
-            return new SettingsCategory(title, items, TYPE_CHECKBOX_LIST);
+        public static OptionCategory checkedList(String title, List<OptionItem> items) {
+            return new OptionCategory(title, items, TYPE_CHECKBOX_LIST);
         }
 
-        public static SettingsCategory stringList(String title, List<OptionItem> items) {
-            return new SettingsCategory(title, items, TYPE_STRING_LIST);
+        public static OptionCategory stringList(String title, List<OptionItem> items) {
+            return new OptionCategory(title, items, TYPE_STRING_LIST);
         }
 
-        public static SettingsCategory longText(String title, OptionItem item) {
-            return new SettingsCategory(title, Collections.singletonList(item), TYPE_LONG_TEXT);
+        public static OptionCategory longText(String title, OptionItem item) {
+            return new OptionCategory(title, Collections.singletonList(item), TYPE_LONG_TEXT);
         }
 
-        public static SettingsCategory singleSwitch(OptionItem item) {
+        public static OptionCategory singleSwitch(OptionItem item) {
             ArrayList<OptionItem> items = new ArrayList<>();
             items.add(item);
-            return new SettingsCategory(null, items, TYPE_SINGLE_SWITCH);
+            return new OptionCategory(null, items, TYPE_SINGLE_SWITCH);
         }
 
-        public static SettingsCategory singleButton(OptionItem item) {
+        public static OptionCategory singleButton(OptionItem item) {
             ArrayList<OptionItem> items = new ArrayList<>();
             items.add(item);
-            return new SettingsCategory(null, items, TYPE_SINGLE_BUTTON);
+            return new OptionCategory(null, items, TYPE_SINGLE_BUTTON);
         }
 
-        private SettingsCategory(String title, List<OptionItem> items, int type) {
+        private OptionCategory(String title, List<OptionItem> items, int type) {
             this.type = type;
             this.title = title;
             this.items = items;
@@ -171,27 +171,27 @@ public class AppDialogPresenter extends BasePresenter<AppDialogView> {
     }
 
     public void appendRadioCategory(String categoryTitle, List<OptionItem> items) {
-        mCategories.add(SettingsCategory.radioList(categoryTitle, items));
+        mCategories.add(OptionCategory.radioList(categoryTitle, items));
     }
 
     public void appendCheckedCategory(String categoryTitle, List<OptionItem> items) {
-        mCategories.add(SettingsCategory.checkedList(categoryTitle, items));
+        mCategories.add(OptionCategory.checkedList(categoryTitle, items));
     }
 
     public void appendStringsCategory(String categoryTitle, List<OptionItem> items) {
-        mCategories.add(SettingsCategory.stringList(categoryTitle, items));
+        mCategories.add(OptionCategory.stringList(categoryTitle, items));
     }
 
     public void appendLongTextCategory(String categoryTitle, OptionItem item) {
-        mCategories.add(SettingsCategory.longText(categoryTitle, item));
+        mCategories.add(OptionCategory.longText(categoryTitle, item));
     }
 
     public void appendSingleSwitch(OptionItem optionItem) {
-        mCategories.add(SettingsCategory.singleSwitch(optionItem));
+        mCategories.add(OptionCategory.singleSwitch(optionItem));
     }
 
     public void appendSingleButton(OptionItem optionItem) {
-        mCategories.add(SettingsCategory.singleButton(optionItem));
+        mCategories.add(OptionCategory.singleButton(optionItem));
     }
 
     public void showDialogMessage(String dialogTitle, Runnable onClose, int timeoutMs) {

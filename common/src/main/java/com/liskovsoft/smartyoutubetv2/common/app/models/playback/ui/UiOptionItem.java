@@ -61,10 +61,19 @@ public class UiOptionItem implements OptionItem {
         return from(title, callback, isChecked, null);
     }
 
+    public static OptionItem from(CharSequence title, CharSequence description, OptionCallback callback, boolean isChecked) {
+        return from(title, description, callback, isChecked, null);
+    }
+
     public static OptionItem from(CharSequence title, OptionCallback callback, boolean isChecked, Object data) {
+        return from(title, null, callback, isChecked, data);
+    }
+
+    public static OptionItem from(CharSequence title, CharSequence description, OptionCallback callback, boolean isChecked, Object data) {
         UiOptionItem uiOptionItem = new UiOptionItem();
 
         uiOptionItem.mTitle = title;
+        uiOptionItem.mDescription = description;
         uiOptionItem.mIsSelected = isChecked;
         uiOptionItem.mCallback = callback;
         uiOptionItem.mData = data;

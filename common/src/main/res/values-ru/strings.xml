@@ -355,4 +355,5 @@
     <string name="seek_interval_sec">%s сек</string>
     <string name="subtitle_system">Системный стиль</string>
     <string name="subtitle_scale">Масштаб субтитров</string>
+    <string name="audio_sync_fix_desc">Альтернативный способ синхронизации звука. Считается устаревшим, но, в некоторых случаях, помогает.</string>
 </resources>
