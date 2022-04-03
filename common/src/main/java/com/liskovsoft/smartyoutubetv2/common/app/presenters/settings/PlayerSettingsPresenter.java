@@ -218,7 +218,8 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.enableAudioSyncFix(option.isSelected()),
                 mPlayerTweaksData.isAudioSyncFixEnabled()));
 
-        options.add(UiOptionItem.from("Ambilight/Aspect ratio fix",
+        options.add(UiOptionItem.from(getContext().getString(R.string.ambilight_ratio_fix),
+                getContext().getString(R.string.ambilight_ratio_fix_desc),
                 option -> {
                     mPlayerTweaksData.enableTextureView(option.isSelected());
                     if (option.isSelected()) {

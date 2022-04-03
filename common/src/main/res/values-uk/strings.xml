@@ -357,4 +357,6 @@
     <string name="subtitle_scale">Масштаб субтитрів</string>
     <string name="audio_sync_fix_desc">Альтернативний спосіб синхронізації звуку. Вважається застарілим, але, в деяких випадках, допомагає.</string>
     <string name="audio_sync_fix">Виправлення синхронізації звуку</string>
+    <string name="ambilight_ratio_fix_desc">Виправляє відсутнє фонове підсвічування для телевізорів. Виправляє неправильне співвідношення сторін відео.</string>
+    <string name="ambilight_ratio_fix">Виправлення Ambilight та співвідношення сторін відео</string>
 </resources>

@@ -361,4 +361,6 @@
     <string name="subtitle_scale">Subtitle scale</string>
     <string name="audio_sync_fix_desc">An alternative way to synchronize audio. It considered obsolete, but, in some cases, may help.</string>
     <string name="audio_sync_fix">Audio sync fix</string>
+    <string name="ambilight_ratio_fix_desc">Fixes absent bias lighting. Fixes incorrect aspect ratio.</string>
+    <string name="ambilight_ratio_fix">Ambilight/Aspect ratio fix</string>
 </resources>
