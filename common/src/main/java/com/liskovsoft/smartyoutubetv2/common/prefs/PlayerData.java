@@ -66,6 +66,7 @@ public class PlayerData {
     private boolean mIsDoubleRefreshRateEnabled;
     private boolean mIsSeekConfirmPlayEnabled;
     private int mStartSeekIncrementMs;
+    private int mSubtitleSizePx;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -342,6 +343,15 @@ public class PlayerData {
         persistData();
     }
 
+    public int getSubtitleSizePx() {
+        return mSubtitleSizePx;
+    }
+
+    public void setSubtitleSizePx(int sizePx) {
+        mSubtitleSizePx = sizePx;
+        persistData();
+    }
+
     public void setVideoZoomMode(int mode) {
         mVideoZoomMode = mode;
         persistData();
@@ -422,10 +432,14 @@ public class PlayerData {
     }
 
     private void initSubtitleStyles() {
-        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_default, R.color.light_grey, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
+        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_white_transparent, R.color.light_grey, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_white_semi_transparent, R.color.light_grey, R.color.semi_transparent, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_white_black, R.color.light_grey, R.color.black, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_yellow_transparent, R.color.yellow, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
+
+        if (Build.VERSION.SDK_INT >= 19) {
+            mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_system));
+        }
     }
 
     /**
@@ -480,6 +494,7 @@ public class PlayerData {
         mIsDoubleRefreshRateEnabled = Helpers.parseBoolean(split, 35, true);
         mIsSeekConfirmPlayEnabled = Helpers.parseBoolean(split, 36, false);
         mStartSeekIncrementMs = Helpers.parseInt(split, 37, 10_000);
+        mSubtitleSizePx = Helpers.parseInt(split, 38, 60);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -495,6 +510,7 @@ public class PlayerData {
                 mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
                 mIsLegacyCodecsForced, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
-                mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled, mStartSeekIncrementMs));
+                mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
+                mStartSeekIncrementMs, mSubtitleSizePx));
     }
 }

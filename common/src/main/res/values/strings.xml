@@ -116,6 +116,7 @@
     <string name="subscribed_to_channel">Subscribed to channel</string>
     <string name="unsubscribed_from_channel">Unsubscribed from channel</string>
     <string name="subtitle_yellow_transparent">Yellow on transparent background</string>
+    <string name="subtitle_white_transparent">White on transparent background</string>
     <string name="subtitle_white_black">White on black background</string>
     <string name="player_seek_preview">Preview while seeking</string>
     <string name="color_scheme_dark_grey_oled">Dark Grey (OLED)</string>
@@ -356,4 +357,6 @@
     <string name="simple_edit_value_hint">New value</string>
     <string name="seek_interval">Seek interval</string>
     <string name="seek_interval_sec">%s sec</string>
+    <string name="subtitle_system">System style</string>
+    <string name="subtitle_size">Subtitle size</string>
 </resources>

@@ -116,6 +116,7 @@
     <string name="subscribed_to_channel">Подписка на канал оформлена</string>
     <string name="unsubscribed_from_channel">Подписка на канал отменена</string>
     <string name="subtitle_yellow_transparent">Жёлтые на прозрачном фоне</string>
+    <string name="subtitle_white_transparent">Белые на прозрачном фоне</string>
     <string name="subtitle_white_black">Белые на чёрном фоне</string>
     <string name="player_seek_preview">Превью при перемотке</string>
     <string name="color_scheme_dark_grey_oled">Тёмно-серая (OLED)</string>
@@ -352,4 +353,6 @@
     <string name="simple_edit_value_hint">Новое значение</string>
     <string name="seek_interval">Интервал перемотки</string>
     <string name="seek_interval_sec">%s сек</string>
+    <string name="subtitle_system">Системный стиль</string>
+    <string name="subtitle_size">Размер субтитров</string>
 </resources>
