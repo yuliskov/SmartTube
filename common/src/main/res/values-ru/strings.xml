@@ -353,7 +353,7 @@
     <string name="simple_edit_value_hint">Новое значение</string>
     <string name="seek_interval">Интервал перемотки</string>
     <string name="seek_interval_sec">%s сек</string>
-    <string name="subtitle_system">Системный стиль\n(Настройки Андроид > Спец. возможности)</string>
+    <string name="subtitle_system">Системный стиль (Настройки Андроид > Спец. возможности)</string>
     <string name="subtitle_scale">Масштаб субтитров</string>
     <string name="audio_sync_fix_desc">Альтернативный способ синхронизации звука. Считается устаревшим, но, в некоторых случаях, помогает.</string>
     <string name="audio_sync_fix">Исправление синхронизации звука</string>
