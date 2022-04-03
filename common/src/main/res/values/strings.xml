@@ -357,7 +357,7 @@
     <string name="simple_edit_value_hint">New value</string>
     <string name="seek_interval">Seek interval</string>
     <string name="seek_interval_sec">%s sec</string>
-    <string name="subtitle_system">System style (Android settings > Accessibility)</string>
+    <string name="subtitle_system">System style\n(Android settings > Accessibility)</string>
     <string name="subtitle_scale">Subtitle scale</string>
     <string name="audio_sync_fix_desc">An alternative way to synchronize audio. It considered obsolete, but, in some cases, may help.</string>
     <string name="audio_sync_fix">Audio sync fix</string>
