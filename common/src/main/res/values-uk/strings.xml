@@ -354,5 +354,5 @@
     <string name="seek_interval">Інтервал перемотування</string>
     <string name="seek_interval_sec">%s сек</string>
     <string name="subtitle_system">Системний стиль</string>
-    <string name="subtitle_size">Розмір субтитрів</string>
+    <string name="subtitle_scale">Масштаб субтитрів</string>
 </resources>

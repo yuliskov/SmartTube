@@ -66,7 +66,7 @@ public class PlayerData {
     private boolean mIsDoubleRefreshRateEnabled;
     private boolean mIsSeekConfirmPlayEnabled;
     private int mStartSeekIncrementMs;
-    private int mSubtitleSizePx;
+    private float mSubtitleScale;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -343,12 +343,12 @@ public class PlayerData {
         persistData();
     }
 
-    public int getSubtitleSizePx() {
-        return mSubtitleSizePx;
+    public float getSubtitleScale() {
+        return mSubtitleScale;
     }
 
-    public void setSubtitleSizePx(int sizePx) {
-        mSubtitleSizePx = sizePx;
+    public void setSubtitleScale(float scale) {
+        mSubtitleScale = scale;
         persistData();
     }
 
@@ -494,7 +494,8 @@ public class PlayerData {
         mIsDoubleRefreshRateEnabled = Helpers.parseBoolean(split, 35, true);
         mIsSeekConfirmPlayEnabled = Helpers.parseBoolean(split, 36, false);
         mStartSeekIncrementMs = Helpers.parseInt(split, 37, 10_000);
-        mSubtitleSizePx = Helpers.parseInt(split, 38, 60);
+        // old subs size px
+        mSubtitleScale = Helpers.parseFloat(split, 39, 1.0f);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -511,6 +512,6 @@ public class PlayerData {
                 mIsLegacyCodecsForced, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
-                mStartSeekIncrementMs, mSubtitleSizePx));
+                mStartSeekIncrementMs, null, mSubtitleScale));
     }
 }

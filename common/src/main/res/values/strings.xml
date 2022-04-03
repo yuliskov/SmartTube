@@ -358,5 +358,5 @@
     <string name="seek_interval">Seek interval</string>
     <string name="seek_interval_sec">%s sec</string>
     <string name="subtitle_system">System style</string>
-    <string name="subtitle_size">Subtitle size</string>
+    <string name="subtitle_scale">Subtitle scale</string>
 </resources>

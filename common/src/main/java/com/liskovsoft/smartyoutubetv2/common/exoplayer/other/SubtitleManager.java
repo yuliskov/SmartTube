@@ -143,13 +143,13 @@ public class SubtitleManager implements TextOutput {
                             userStyle.edgeColor, userStyle.getTypeface());
             mSubtitleView.setStyle(style);
 
-            float textSize = getTextSizePx();
-            mSubtitleView.setFixedTextSize(TypedValue.COMPLEX_UNIT_PX, textSize * captioningManager.getFontScale());
+            float textSizePx = getTextSizePx();
+            mSubtitleView.setFixedTextSize(TypedValue.COMPLEX_UNIT_PX, textSizePx * captioningManager.getFontScale());
         }
     }
 
     private float getTextSizePx() {
-        //return mSubtitleView.getContext().getResources().getDimension(R.dimen.subtitle_text_size);
-        return mPlayerData.getSubtitleSizePx();
+        float textSizePx = mSubtitleView.getContext().getResources().getDimension(R.dimen.subtitle_text_size);
+        return textSizePx * mPlayerData.getSubtitleScale();
     }
 }

@@ -74,12 +74,13 @@ public class SubtitleSettingsPresenter extends BasePresenter<Void> {
     private void appendSubtitleSizeCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        for (int sizePx : Helpers.range(10, 100, 5)) {
-            options.add(UiOptionItem.from(String.format("%s px", sizePx),
-                    optionItem -> mPlayerData.setSubtitleSizePx(sizePx),
-                    sizePx == mPlayerData.getSubtitleSizePx()));
+        for (int scalePercent : Helpers.range(10, 200, 10)) {
+            float scale = scalePercent / 100f;
+            options.add(UiOptionItem.from(String.format("%sx", scale),
+                    optionItem -> mPlayerData.setSubtitleScale(scale),
+                    Helpers.floatEquals(scale, mPlayerData.getSubtitleScale())));
         }
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.subtitle_size), options);
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.subtitle_scale), options);
     }
 }
