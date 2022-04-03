@@ -360,4 +360,5 @@
     <string name="subtitle_system">System style</string>
     <string name="subtitle_scale">Subtitle scale</string>
     <string name="audio_sync_fix_desc">An alternative way to synchronize audio. It considered obsolete, but, in some cases, may help.</string>
+    <string name="audio_sync_fix">Audio sync fix</string>
 </resources>

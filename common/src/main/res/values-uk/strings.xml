@@ -356,4 +356,5 @@
     <string name="subtitle_system">Системний стиль</string>
     <string name="subtitle_scale">Масштаб субтитрів</string>
     <string name="audio_sync_fix_desc">Альтернативний спосіб синхронізації звуку. Вважається застарілим, але, в деяких випадках, допомагає.</string>
+    <string name="audio_sync_fix">Виправлення синхронізації звуку</string>
 </resources>

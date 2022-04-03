@@ -213,7 +213,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.disablePlaybackNotifications(option.isSelected()),
                 mPlayerTweaksData.isPlaybackNotificationsDisabled()));
 
-        options.add(UiOptionItem.from("Audio sync fix",
+        options.add(UiOptionItem.from(getContext().getString(R.string.audio_sync_fix),
                 getContext().getString(R.string.audio_sync_fix_desc),
                 option -> mPlayerTweaksData.enableAudioSyncFix(option.isSelected()),
                 mPlayerTweaksData.isAudioSyncFixEnabled()));
