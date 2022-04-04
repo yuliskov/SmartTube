@@ -357,6 +357,6 @@
     <string name="simple_edit_value_hint">Yeni değer</string>
     <string name="seek_interval">Arama aralığı</string>
     <string name="seek_interval_sec">%s sn.</string>
-    <string name="subtitle_system">Sistem stili</string>
+    <string name="subtitle_system">Sistem stili (Android ayarları > Erişilebilirlik)</string>
     <string name="subtitle_scale">Altyazı ölçeği</string>
 </resources>
