@@ -22,6 +22,7 @@ public interface PlaybackUIController {
     void setSubscribeButtonState(boolean subscribe);
     void setDebugButtonState(boolean show);
     void showDebugInfo(boolean show);
+    void showSubtitles(boolean show);
     List<SubtitleStyle> getSubtitleStyles();
     void setSubtitleStyle(SubtitleStyle subtitleStyle);
     SubtitleStyle getSubtitleStyle();

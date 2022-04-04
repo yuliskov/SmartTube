@@ -174,6 +174,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         // Activate debug infos when restoring after PIP.
         getController().showDebugInfo(mDebugViewEnabled);
         getController().setDebugButtonState(mDebugViewEnabled);
+        getController().showSubtitles(true);
     }
 
     @Override
@@ -183,6 +184,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
             getController().showControls(false);
             getController().showDebugInfo(false);
             getController().setDebugButtonState(false);
+            getController().showSubtitles(false);
         }
     }
 

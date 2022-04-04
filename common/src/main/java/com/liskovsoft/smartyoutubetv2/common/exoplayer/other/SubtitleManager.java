@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.TypedValue;
+import android.view.View;
 import android.view.accessibility.CaptioningManager;
 import android.view.accessibility.CaptioningManager.CaptionStyle;
 import androidx.core.content.ContextCompat;
@@ -79,6 +80,10 @@ public class SubtitleManager implements TextOutput {
     public void setSubtitleStyle(SubtitleStyle subtitleStyle) {
         mPlayerData.setSubtitleStyle(subtitleStyle);
         configureSubtitleView();
+    }
+
+    public void show(boolean show) {
+        mSubtitleView.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     private List<Cue> forceCenterAlignment(List<Cue> cues) {

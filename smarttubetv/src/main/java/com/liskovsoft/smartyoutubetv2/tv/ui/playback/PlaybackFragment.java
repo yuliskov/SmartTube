@@ -1196,6 +1196,13 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
     }
 
+    @Override
+    public void showSubtitles(boolean show) {
+        if (mSubtitleManager != null) {
+            mSubtitleManager.show(show);
+        }
+    }
+
     public boolean isDebugInfoShown() {
         return mDebugInfoManager != null && mDebugInfoManager.isShown();
     }
