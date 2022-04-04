@@ -83,7 +83,9 @@ public class SubtitleManager implements TextOutput {
     }
 
     public void show(boolean show) {
-        mSubtitleView.setVisibility(show ? View.VISIBLE : View.GONE);
+        if (mSubtitleView != null) {
+            mSubtitleView.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
     }
 
     private List<Cue> forceCenterAlignment(List<Cue> cues) {
