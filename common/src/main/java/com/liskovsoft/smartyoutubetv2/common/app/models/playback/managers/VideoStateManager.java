@@ -339,7 +339,8 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         // Do I need to check that item isn't live? (state != null && !item.isLive)
         if (state != null) {
             long remainsMs = getController().getLengthMs() - state.positionMs;
-            boolean isVideoEnded = remainsMs < 1_000;
+            // Url list videos at this stage has undefined (-1) length. So, we need to ensure that remains is positive.
+            boolean isVideoEnded = remainsMs >= 0 && remainsMs < 1_000;
             if (!isVideoEnded || !getPlayEnabled()) {
                 getController().setPositionMs(state.positionMs);
             }
