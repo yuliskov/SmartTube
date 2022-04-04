@@ -56,8 +56,8 @@ public class EndingTimeView extends AppCompatTextView implements TickleListener 
             String endingTime = getEndingTime();
             if (endingTime != null) {
                 // https://stackoverflow.com/questions/5437674/what-unicode-characters-represent-time/9454080
-                setText(endingTime);
-                //setText(String.format("⌛ %s", endingTime));
+                //setText(endingTime);
+                setText(String.format("⌛ %s", endingTime));
                 //setText(String.format("(%s)", endingTime));
             }
         }
