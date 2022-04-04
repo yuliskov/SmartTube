@@ -356,8 +356,8 @@
     <string name="subtitle_system">Системный стиль (Настройки Андроид > Спец. возможности)</string>
     <string name="subtitle_scale">Масштаб субтитров</string>
     <string name="audio_sync_fix_desc">Альтернативный способ синхронизации звука. Считается устаревшим, но, в некоторых случаях, помогает.</string>
-    <string name="audio_sync_fix">Исправление синхронизации звука</string>
-    <string name="ambilight_ratio_fix_desc">Исправляет отсутствующую фоновую подсветку для телевизоров. Исправляет неправильное соотношение сторон видео.</string>
+    <string name="audio_sync_fix">Исправление рассинхронизации звука</string>
+    <string name="ambilight_ratio_fix_desc">Исправляет отсутствующую фоновую подсветку. Исправляет неправильное соотношение сторон видео.</string>
     <string name="ambilight_ratio_fix">Исправление Ambilight и соотношения сторон видео</string>
     <string name="force_legacy_codecs_desc">Значительно повышает производительность на слабых устройствах. Максимальное разрешение 720p.</string>
     <string name="force_legacy_codecs">Использовать устаревшие кодеки (720p)</string>
