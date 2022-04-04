@@ -59,7 +59,7 @@
     <string name="default_lang">Varsayılan</string>
     <string name="dialog_select_language">Uygulama dili</string>
     <string name="subtitle_default">Varsayılan</string>
-    <string name="subtitle_white_semi_transparent">Yarı saydam arka planda beyaz</string>
+    <string name="subtitle_white_semi_transparent">Beyaz (Yarı saydam arka plan)</string>
     <string name="subtitle_style">Altyazı stili</string>
     <string name="subtitle_language">Altyazı dili</string>
     <string name="action_search">Aramaya başla</string>
@@ -115,8 +115,9 @@
     <string name="repeat_mode_none">Videodan sonra oynatmayı durdur</string>
     <string name="subscribed_to_channel">Kanala abone olundu</string>
     <string name="unsubscribed_from_channel">Kanal aboneliğinden çıkıldı</string>
-    <string name="subtitle_yellow_transparent">Saydam arka planda sarı</string>
-    <string name="subtitle_white_black">Siyah arka planda beyaz</string>
+    <string name="subtitle_yellow_transparent">Sarı (Saydam arka plan)</string>
+    <string name="subtitle_white_transparent">Beyaz (Saydam arka plan)</string>
+    <string name="subtitle_white_black">Beyaz (Siyah arka plan)</string>
     <string name="player_seek_preview">Ararken ön izleme</string>
     <string name="color_scheme_dark_grey_oled">Koyu Gri (OLED)</string>
     <string name="channels_section_sorting">Kanallar bölümü sıralaması</string>
@@ -354,4 +355,8 @@
     <string name="internet_censorship">İnternet Sansürü</string>
     <string name="rename_section">Bölümü yeniden adlandır</string>
     <string name="simple_edit_value_hint">Yeni değer</string>
+    <string name="seek_interval">Arama aralığı</string>
+    <string name="seek_interval_sec">%s sn.</string>
+    <string name="subtitle_system">Sistem stili (Android ayarları > Erişilebilirlik)</string>
+    <string name="subtitle_scale">Altyazı ölçeği</string>
 </resources>
