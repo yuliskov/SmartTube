@@ -27,6 +27,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
     private final Handler mHandler;
     private final SuggestionsLoaderManager mSuggestionsLoader;
     private Video mLastVideo;
+    private int mLastError = -1;
     private long mPrevErrorTimeMs;
     private PlayerData mPlayerData;
     private long mSleepTimerStartMs;
@@ -99,10 +101,17 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onEngineError(int type) {
-        Log.e(TAG, "Player error occurred: %s. Trying to fix…", type);
+    public void onEngineError(int error) {
+        Log.e(TAG, "Player error occurred: %s. Trying to fix…", error);
 
-        startErrorAction(type);
+        mLastError = error;
+
+        startErrorAction(error);
+    }
+
+    @Override
+    public void onVideoLoaded(Video item) {
+        mLastError = -1;
     }
 
     @Override
@@ -327,7 +336,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                     );
         } else if (formatInfo.containsUrlListInfo()) {
             Log.d(TAG, "Found url list video. This is always LQ. Loading...");
-            getController().openUrlList(formatInfo.createUrlList());
+            getController().openUrlList(applyFix(formatInfo.createUrlList()));
         } else {
             Log.d(TAG, "Empty format info received. Seems future live translation. No video data to pass to the player.");
             scheduleReloadVideoTimer(30 * 1_000);
@@ -404,16 +413,25 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         mErrorActions.put(PlayerEventListener.ERROR_TYPE_UNEXPECTED, () -> {});
     }
 
-    private void startErrorAction(int type) {
-        Runnable action = mErrorActions.get(type);
+    private void startErrorAction(int error) {
+        Runnable action = mErrorActions.get(error);
 
         if (action != null) {
             action.run();
         } else {
-            MessageHelpers.showMessage(getActivity(), getActivity().getString(R.string.msg_player_error, type));
+            MessageHelpers.showMessage(getActivity(), getActivity().getString(R.string.msg_player_error, error));
         }
 
         // Delay to fix frequent requests
         Utils.postDelayed(mHandler, mPendingRestartEngine, 3_000);
+    }
+
+    private List<String> applyFix(List<String> urlList) {
+        // Sometimes top url cannot be played
+        if (mLastError == PlayerEventListener.ERROR_TYPE_SOURCE) {
+            Collections.reverse(urlList);
+        }
+
+        return urlList;
     }
 }
