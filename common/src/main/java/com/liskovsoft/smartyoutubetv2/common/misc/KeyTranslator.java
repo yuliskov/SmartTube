@@ -37,8 +37,13 @@ public abstract class KeyTranslator {
             handled = true;
 
             RxUtils.runAsync(() -> {
-                Instrumentation instrumentation = new Instrumentation();
-                instrumentation.sendKeySync(newKeyEvent);
+                try {
+                    Instrumentation instrumentation = new Instrumentation();
+                    instrumentation.sendKeySync(newKeyEvent);
+                } catch (SecurityException e) {
+                    // Injecting to another application requires INJECT_EVENTS permission
+                    e.printStackTrace();
+                }
             });
         }
 
