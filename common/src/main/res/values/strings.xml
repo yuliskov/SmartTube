@@ -361,7 +361,7 @@
     <string name="subtitle_scale">Subtitle scale</string>
     <string name="audio_sync_fix_desc">An alternative way to synchronize audio. It considered obsolete, but, in some cases, may help.</string>
     <string name="audio_sync_fix">Audio sync fix</string>
-    <string name="ambilight_ratio_fix_desc">Fixes absent bias lighting. Fixes incorrect aspect ratio.</string>
+    <string name="ambilight_ratio_fix_desc">Fixes absent bias lighting. Fixes incorrect aspect ratio. Fixes blank screenshots.</string>
     <string name="ambilight_ratio_fix">Ambilight/Aspect ratio fix</string>
     <string name="force_legacy_codecs_desc">Significantly improves performance on low-end devices. Maximum resolution is 720p.</string>
     <string name="force_legacy_codecs">Force legacy codecs (720p)</string>
@@ -369,4 +369,8 @@
     <string name="live_stream_fix">Live stream fix (1080p)</string>
     <string name="playback_notifications_fix_desc">Hides track change notifications. Could be useful on AOSP-based firmwares.</string>
     <string name="playback_notifications_fix">Disable playback notifications</string>
+    <string name="amlogic_fix_desc">Frame drop fix on Amlogic-based devices.</string>
+    <string name="amlogic_fix">Amlogic 1080p@60fps fix</string>
+    <string name="tunneled_video_playback_desc">Tunneled video playback promises benefits such as better audio/video synchronization (AV sync) and smoother playback. Required Android 5+</string>
+    <string name="tunneled_video_playback">Tunneled video playback (Android 5+)</string>
 </resources>

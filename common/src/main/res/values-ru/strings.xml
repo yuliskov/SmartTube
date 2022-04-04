@@ -357,7 +357,7 @@
     <string name="subtitle_scale">Масштаб субтитров</string>
     <string name="audio_sync_fix_desc">Альтернативный способ синхронизации звука. Считается устаревшим, но, в некоторых случаях, помогает.</string>
     <string name="audio_sync_fix">Исправление рассинхронизации звука</string>
-    <string name="ambilight_ratio_fix_desc">Исправляет отсутствующую фоновую подсветку. Исправляет неправильное соотношение сторон видео.</string>
+    <string name="ambilight_ratio_fix_desc">Исправляет отсутствующую фоновую подсветку. Исправляет неправильное соотношение сторон видео. Исправляет пустые скриншоты.</string>
     <string name="ambilight_ratio_fix">Исправление Ambilight и соотношения сторон видео</string>
     <string name="force_legacy_codecs_desc">Значительно повышает производительность на слабых устройствах. Максимальное разрешение 720p.</string>
     <string name="force_legacy_codecs">Использовать устаревшие кодеки (720p)</string>
@@ -365,4 +365,8 @@
     <string name="live_stream_fix">Исправление прямых трансляций (1080p)</string>
     <string name="playback_notifications_fix_desc">Скрывает уведомление о смене воспроизводимого трека. Может быть полезеным на прошивках на базе AOSP.</string>
     <string name="playback_notifications_fix">Отключить уведомления о воспроизведении</string>
+    <string name="amlogic_fix_desc">Исправление потери кадров на устройствах на базе Amlogic.</string>
+    <string name="amlogic_fix">Исправление 1080p@60fps на Amlogic</string>
+    <string name="tunneled_video_playback_desc">Туннельное воспроизведение обещает лучшую синхронизацию аудио/видео и более плавное воспроизведение. Требуется Андроид 5+</string>
+    <string name="tunneled_video_playback">Туннельное воспроизведение (Android 5+)</string>
 </resources>

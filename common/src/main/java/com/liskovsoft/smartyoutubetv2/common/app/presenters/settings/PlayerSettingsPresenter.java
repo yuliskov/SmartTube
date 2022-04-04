@@ -232,11 +232,13 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerTweaksData.disablePlaybackNotifications(option.isSelected()),
                 mPlayerTweaksData.isPlaybackNotificationsDisabled()));
 
-        options.add(UiOptionItem.from("Amlogic 1080p@60fps fix",
+        options.add(UiOptionItem.from(getContext().getString(R.string.amlogic_fix),
+                getContext().getString(R.string.amlogic_fix_desc),
                 option -> mPlayerTweaksData.enableAmlogicFix(option.isSelected()),
                 mPlayerTweaksData.isAmlogicFixEnabled()));
 
-        options.add(UiOptionItem.from("Tunneled video playback (Android 5+)",
+        options.add(UiOptionItem.from(getContext().getString(R.string.tunneled_video_playback),
+                getContext().getString(R.string.tunneled_video_playback_desc),
                 option -> {
                     mPlayerTweaksData.enableTunneledPlayback(option.isSelected());
                     if (option.isSelected()) {
