@@ -28,7 +28,6 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     private PlayerData mPlayerData;
     private VideoStateService mStateService;
     private boolean mIsPlayBlocked;
-    private float mVolume = 1;
 
     @Override
     public void onInitDone() { // called each time a video opened from the browser
@@ -291,7 +290,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
             savePosition(video);
             updateHistory();
             //persistVideoState();
-            persistVolume();
+            //persistVolume();
         }
     }
 
@@ -401,12 +400,12 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         return mIsPlayEnabled;
     }
 
-    private void persistVolume() {
-        mVolume = getController().getVolume();
-    }
+    //private void persistVolume() {
+    //    mVolume = getController().getVolume();
+    //}
 
     private void restoreVolume() {
-        getController().setVolume(mVolume);
+        getController().setVolume(mPlayerData.getMasterVolume());
     }
 
     private void restoreFormats() {

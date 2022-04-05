@@ -39,6 +39,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendVideoBufferCategory(settingsPresenter);
         //appendVideoZoomCategory(settingsPresenter);
         appendAudioShiftCategory(settingsPresenter);
+        appendMasterVolumeCategory(settingsPresenter);
         appendOKButtonCategory(settingsPresenter);
         appendPlayerButtonsCategory(settingsPresenter);
         appendUIAutoHideCategory(settingsPresenter);
@@ -111,6 +112,19 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendAudioShiftCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = HQDialogManager.createAudioShiftCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
+    }
+
+    private void appendMasterVolumeCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int scalePercent : Helpers.range(0, 100, 5)) {
+            float scale = scalePercent / 100f;
+            options.add(UiOptionItem.from(String.format("%sx", scale),
+                    optionItem -> mPlayerData.setMasterVolume(scale),
+                    Helpers.floatEquals(scale, mPlayerData.getMasterVolume())));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.master_volume), options);
     }
 
     private void appendSeekingPreviewCategory(AppDialogPresenter settingsPresenter) {
