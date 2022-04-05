@@ -375,19 +375,12 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                     final int resultKey = key;
 
                     if (isLongAction) {
-                        mActionDown = RxUtils.runAsync(() -> {
-                            Instrumentation instrumentation = new Instrumentation();
-                            instrumentation.sendKeySync(new KeyEvent(KeyEvent.ACTION_DOWN, resultKey));
-                        });
-                        mActionUp = RxUtils.runAsync(() -> {
-                            Instrumentation instrumentation = new Instrumentation();
-                            instrumentation.sendKeySync(new KeyEvent(KeyEvent.ACTION_UP, resultKey));
-                        }, 500);
+                        mActionDown = RxUtils.runAsync(() ->
+                                Utils.sendKey(new KeyEvent(KeyEvent.ACTION_DOWN, resultKey)));
+                        mActionUp = RxUtils.runAsync(() ->
+                                Utils.sendKey(new KeyEvent(KeyEvent.ACTION_UP, resultKey)), 500);
                     } else {
-                        mActionDown = RxUtils.runAsync(() -> {
-                            Instrumentation instrumentation = new Instrumentation();
-                            instrumentation.sendKeyDownUpSync(resultKey);
-                        });
+                        mActionDown = RxUtils.runAsync(() -> Utils.sendKey(resultKey));
                     }
                 }
                 break;

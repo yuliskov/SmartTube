@@ -4,6 +4,7 @@ import android.app.Instrumentation;
 import android.view.KeyEvent;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.Map;
 
@@ -36,15 +37,7 @@ public abstract class KeyTranslator {
         if (newKeyEvent != event) {
             handled = true;
 
-            RxUtils.runAsync(() -> {
-                try {
-                    Instrumentation instrumentation = new Instrumentation();
-                    instrumentation.sendKeySync(newKeyEvent);
-                } catch (SecurityException e) {
-                    // Injecting to another application requires INJECT_EVENTS permission
-                    e.printStackTrace();
-                }
-            });
+            RxUtils.runAsync(() -> Utils.sendKey(newKeyEvent));
         }
 
         return handled;

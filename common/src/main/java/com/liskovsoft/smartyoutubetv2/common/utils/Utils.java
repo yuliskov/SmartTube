@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
+import android.app.Instrumentation;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -24,6 +25,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import androidx.browser.customtabs.CustomTabsIntent;
@@ -513,5 +515,25 @@ public class Utils {
         settingsPresenter.appendStringsCategory(title, options);
 
         settingsPresenter.showDialog(title);
+    }
+
+    public static void sendKey(int key) {
+        try {
+            Instrumentation instrumentation = new Instrumentation();
+            instrumentation.sendKeyDownUpSync(key);
+        } catch (SecurityException e) {
+            // Injecting to another application requires INJECT_EVENTS permission
+            e.printStackTrace();
+        }
+    }
+
+    public static void sendKey(KeyEvent keyEvent) {
+        try {
+            Instrumentation instrumentation = new Instrumentation();
+            instrumentation.sendKeySync(keyEvent);
+        } catch (SecurityException e) {
+            // Injecting to another application requires INJECT_EVENTS permission
+            e.printStackTrace();
+        }
     }
 }
