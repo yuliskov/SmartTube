@@ -354,4 +354,22 @@
     <string name="internet_censorship">Internet-Zensur</string>
     <string name="rename_section">Kategorie umbenennen</string>
     <string name="simple_edit_value_hint">Neuer Wert</string>
+    <string name="seek_interval">Spulintervall</string>
+    <string name="seek_interval_sec">%s sek.</string>
+    <string name="subtitle_system">System-Stil (Android-Einstellungen > Barrierefreiheit)</string>
+    <string name="subtitle_scale">Untertitel-Skalierung</string>
+    <string name="audio_sync_fix_desc">Eine alternative Methode zur Synchronisierung von Audio/Video. Sie gilt als veraltet, kann aber in manchen Fällen hilfreich sein.</string>
+    <string name="audio_sync_fix">Audio-Synchronisation-Fix</string>
+    <string name="ambilight_ratio_fix_desc">Behebt fehlende Bias-Beleuchtung. Korrigiert falsches Seitenverhältnis. Behebt leere Screenshots. Beeinträchtigt die Performance!</string>
+    <string name="ambilight_ratio_fix">Ambilight/Seitenverhältnis/Screenshots-Fix</string>
+    <string name="force_legacy_codecs_desc">Erhebliche Verbesserung der Leistung auf Low-End-Geräten. Die maximale Auflösung beträgt 720p.</string>
+    <string name="force_legacy_codecs">Legacy-Codecs erzwingen (720p)</string>
+    <string name="live_stream_fix_desc">Erhebliche Verbesserung der Live-Stream-Leistung auf Low-End-Geräten. Die maximale Auflösung beträgt 1080p.</string>
+    <string name="live_stream_fix">Live-Stream-Fix (1080p)</string>
+    <string name="playback_notifications_fix_desc">Ausblenden von Benachrichtigungen. Könnte auf AOSP-basierten Firmwares nützlich sein.</string>
+    <string name="playback_notifications_fix">Wiedergabe-Benachrichtigungen deaktivieren</string>
+    <string name="amlogic_fix_desc">Frame-Drop-Fix auf Amlogic-basierten Geräten.</string>
+    <string name="amlogic_fix">Amlogic 1080p@60fps Fix</string>
+    <string name="tunneled_video_playback_desc">Die getunnelte Video-Wiedergabe verspricht Vorteile wie eine bessere Audio/Video-Synchronisation (AV-Sync) und eine flüssigere Wiedergabe. Erfordert Android 5+</string>
+    <string name="tunneled_video_playback">Getunnelte Video-Wiedergabe (Android 5+)</string>
 </resources>
