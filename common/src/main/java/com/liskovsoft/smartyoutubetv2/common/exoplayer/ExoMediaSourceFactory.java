@@ -113,7 +113,8 @@ public class ExoMediaSourceFactory {
             mediaSources[i] = buildMediaSource(Uri.parse(urlList.get(i)), null);
         }
 
-        return mediaSources.length == 1 ? mediaSources[0] : new ConcatenatingMediaSource(mediaSources); // or playlist
+        //return mediaSources.length == 1 ? mediaSources[0] : new ConcatenatingMediaSource(mediaSources); // or playlist
+        return mediaSources[0]; // item with max resolution
     }
 
     /**
