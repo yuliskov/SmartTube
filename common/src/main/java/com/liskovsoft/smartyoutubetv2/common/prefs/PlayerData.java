@@ -67,7 +67,7 @@ public class PlayerData {
     private boolean mIsSeekConfirmPlayEnabled;
     private int mStartSeekIncrementMs;
     private float mSubtitleScale;
-    private float mMasterVolume;
+    private float mPlayerVolume;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -353,12 +353,12 @@ public class PlayerData {
         persistData();
     }
 
-    public float getMasterVolume() {
-        return mMasterVolume;
+    public float getPlayerVolume() {
+        return mPlayerVolume;
     }
 
-    public void setMasterVolume(float scale) {
-        mMasterVolume = scale;
+    public void setPlayerVolume(float scale) {
+        mPlayerVolume = scale;
         persistData();
     }
 
@@ -506,7 +506,7 @@ public class PlayerData {
         mStartSeekIncrementMs = Helpers.parseInt(split, 37, 10_000);
         // old subs size px
         mSubtitleScale = Helpers.parseFloat(split, 39, 1.0f);
-        mMasterVolume = Helpers.parseFloat(split, 40, 1.0f);
+        mPlayerVolume = Helpers.parseFloat(split, 40, 1.0f);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -523,6 +523,6 @@ public class PlayerData {
                 mIsLegacyCodecsForced, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
-                mStartSeekIncrementMs, null, mSubtitleScale, mMasterVolume));
+                mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume));
     }
 }

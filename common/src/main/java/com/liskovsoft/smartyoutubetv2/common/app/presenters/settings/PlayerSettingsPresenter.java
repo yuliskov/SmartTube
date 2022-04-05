@@ -120,11 +120,11 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         for (int scalePercent : Helpers.range(0, 100, 5)) {
             float scale = scalePercent / 100f;
             options.add(UiOptionItem.from(String.format("%sx", scale),
-                    optionItem -> mPlayerData.setMasterVolume(scale),
-                    Helpers.floatEquals(scale, mPlayerData.getMasterVolume())));
+                    optionItem -> mPlayerData.setPlayerVolume(scale),
+                    Helpers.floatEquals(scale, mPlayerData.getPlayerVolume())));
         }
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.master_volume), options);
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.volume_limit), options);
     }
 
     private void appendSeekingPreviewCategory(AppDialogPresenter settingsPresenter) {

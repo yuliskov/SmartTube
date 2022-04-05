@@ -370,4 +370,5 @@
     <string name="tunneled_video_playback_desc">Тунельне відтворення обіцяє кращу синхронізацію аудіо/відео та більш плавне відтворення. Потрібен Андроїд 5+</string>
     <string name="tunneled_video_playback">Тунельне відтворення (Android 5+)</string>
     <string name="master_volume">Основна гучність</string>
+    <string name="volume_limit">Обмеження гучності</string>
 </resources>

@@ -370,4 +370,5 @@
     <string name="tunneled_video_playback_desc">Туннельное воспроизведение обещает лучшую синхронизацию аудио/видео и более плавное воспроизведение. Требуется Андроид 5+</string>
     <string name="tunneled_video_playback">Туннельное воспроизведение (Android 5+)</string>
     <string name="master_volume">Основная громкость</string>
+    <string name="volume_limit">Ограничение громкости</string>
 </resources>

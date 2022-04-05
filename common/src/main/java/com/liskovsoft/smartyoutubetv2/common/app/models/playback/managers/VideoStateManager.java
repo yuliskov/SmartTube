@@ -405,7 +405,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     //}
 
     private void restoreVolume() {
-        getController().setVolume(mPlayerData.getMasterVolume());
+        getController().setVolume(mPlayerData.getPlayerVolume());
     }
 
     private void restoreFormats() {
