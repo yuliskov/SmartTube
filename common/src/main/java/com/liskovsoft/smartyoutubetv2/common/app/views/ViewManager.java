@@ -12,6 +12,7 @@ import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
@@ -334,6 +335,12 @@ public class ViewManager {
             mActivityStack.clear();
 
             ((MotherActivity) activity).finishReally();
+
+            // Reset state because app isn't fully finished
+            RxUtils.runAsync(() -> {
+                mIsMoveToBackEnabled = false;
+                mIsFinishing = false;
+            }, 1_000);
         }
     }
 
