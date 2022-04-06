@@ -372,4 +372,6 @@
     <string name="amlogic_fix">Amlogic 1080p@60fps Fix</string>
     <string name="tunneled_video_playback_desc">Die getunnelte Video-Wiedergabe verspricht Vorteile wie eine bessere Audio/Video-Synchronisation (AV-Sync) und eine flüssigere Wiedergabe. Erfordert Android 5+</string>
     <string name="tunneled_video_playback">Getunnelte Video-Wiedergabe (Android 5+)</string>
+    <string name="master_volume">Gesamtlautstärke</string>
+    <string name="volume_limit">Lautstärkebegrenzung</string>
 </resources>
