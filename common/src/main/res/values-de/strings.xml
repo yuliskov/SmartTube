@@ -116,6 +116,7 @@
     <string name="subscribed_to_channel">Kanal abonniert</string>
     <string name="unsubscribed_from_channel">Kanal nicht mehr abonniert</string>
     <string name="subtitle_yellow_transparent">Gelb auf transparentem Hintergrund</string>
+    <string name="subtitle_white_transparent">Weiß auf transparentem Hintergrund</string>
     <string name="subtitle_white_black">Weiß auf schwarzem Hintergrund</string>
     <string name="player_seek_preview">Vorschau beim Spulen anzeigen</string>
     <string name="color_scheme_dark_grey_oled">Dunkel (OLED)</string>
