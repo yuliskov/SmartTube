@@ -328,7 +328,7 @@ public class ViewManager {
     public void properlyFinishTheApp(Context activity) {
         if (activity instanceof MotherActivity) {
             Log.d(TAG, "Trying finish the app...");
-            mIsMoveToBackEnabled = true;
+            mIsMoveToBackEnabled = true; // close all activities below current one
             mIsFinishing = true;
 
             mActivityStack.clear();
