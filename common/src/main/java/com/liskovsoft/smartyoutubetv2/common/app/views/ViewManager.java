@@ -336,7 +336,7 @@ public class ViewManager {
 
             ((MotherActivity) activity).finishReally();
 
-            // Reset state because app isn't fully finished
+            // Fix: Can't open the app from history after finish
             RxUtils.runAsync(() -> {
                 mIsMoveToBackEnabled = false;
                 mIsFinishing = false;
