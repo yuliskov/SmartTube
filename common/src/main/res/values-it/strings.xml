@@ -359,18 +359,20 @@
     <string name="seek_interval_sec">%s sec</string>
     <string name="subtitle_system">Stile di sistema (Impostazioni Android > Accessibilità)</string>
     <string name="subtitle_scale">Scala dei sottotitoli</string>
-    <string name="audio_sync_fix_desc">Un modo alternativo per sincronizzare audio/video. È considerato obsoleto, ma, in alcuni casi, può essere d\'aiuto.</string>
-    <string name="audio_sync_fix">Correzione della sincronizzazione audio</string>
-    <string name="ambilight_ratio_fix_desc">Corregge l\'illuminazione bias assente. Risolve proporzioni errate. Risolve gli screenshot vuoti.</string>
-    <string name="ambilight_ratio_fix">Correzione Ambilight/Proporzioni</string>
+    <string name="audio_sync_fix_desc">Un modo alternativo per sincronizzare audio/video. È considerato obsoleto, ma, in alcuni casi, può essere d'aiuto.</string>
+    <string name="audio_sync_fix">Corregge la sincronizzazione audio</string>
+    <string name="ambilight_ratio_fix_desc">Corregge l\'illuminazione bias assente. Risolve proporzioni errate. Risolve gli screenshot vuoti. Influisce sulle prestazioni!</string>
+    <string name="ambilight_ratio_fix">Corregge Ambilight/Proporzioni/Screenshots</string>
     <string name="force_legacy_codecs_desc">Migliora notevolmente le prestazioni sui dispositivi di fascia bassa. La risoluzione massima è 720p.</string>
     <string name="force_legacy_codecs">Forza codec obsoleti (720p)</string>
     <string name="live_stream_fix_desc">Migliora notevolmente le prestazioni del live streaming sui dispositivi di fascia bassa. La risoluzione massima è 1080p.</string>
-    <string name="live_stream_fix">Correzione del live streaming (1080p)</string>
+    <string name="live_stream_fix">Corregge il live streaming (1080p)</string>
     <string name="playback_notifications_fix_desc">Nasconde le notifiche di modifica della traccia. Potrebbe essere utile su firmware basati su AOSP.</string>
     <string name="playback_notifications_fix">Disabilita le notifiche di riproduzione</string>
-    <string name="amlogic_fix_desc">Correzione per i fotogrammi saltati su dispositivi basati su Amlogic.</string>
-    <string name="amlogic_fix">Correzione Amlogic 1080p@60fps</string>
+    <string name="amlogic_fix_desc">Corregge i fotogrammi saltati su dispositivi basati su Amlogic.</string>
+    <string name="amlogic_fix">Corregge Amlogic 1080p@60fps</string>
     <string name="tunneled_video_playback_desc">La riproduzione video tunneled promette vantaggi come una migliore sincronizzazione audio/video (AV sync) e una riproduzione più fluida. Richiesto Android 5+</string>
     <string name="tunneled_video_playback">Riproduzione video tunneled (Android 5+)</string>
+    <string name="master_volume">Volume principale</string>
+    <string name="volume_limit">Limite volume</string>
 </resources>
