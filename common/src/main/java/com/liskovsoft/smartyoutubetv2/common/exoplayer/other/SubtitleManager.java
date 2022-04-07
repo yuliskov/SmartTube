@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build.VERSION;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.accessibility.CaptioningManager;
@@ -145,7 +146,7 @@ public class SubtitleManager implements TextOutput {
 
             CaptionStyleCompat style =
                     new CaptionStyleCompat(userStyle.foregroundColor,
-                            userStyle.backgroundColor, userStyle.windowColor,
+                            userStyle.backgroundColor, VERSION.SDK_INT >= 21 ? userStyle.windowColor : Color.TRANSPARENT,
                             userStyle.edgeType,
                             userStyle.edgeColor, userStyle.getTypeface());
             mSubtitleView.setStyle(style);
