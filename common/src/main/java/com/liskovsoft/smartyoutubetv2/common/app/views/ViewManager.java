@@ -352,7 +352,7 @@ public class ViewManager {
         if (kill) {
             destroyApp();
         } else {
-            // Fix: can't start finished app when open from history
+            // Fix: can't start finished app activity from history
             // Reset state because the app continue to run in the background
             mIsMoveToBackEnabled = false;
             mIsFinishing = false;
