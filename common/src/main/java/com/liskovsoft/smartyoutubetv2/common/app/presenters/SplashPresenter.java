@@ -147,7 +147,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private void checkTouchSupport() {
         if (Helpers.isTouchSupported(getContext())) {
             MessageHelpers.showLongMessage(getContext(), "The app is designed for tv boxes. Phones aren't supported.");
-            ViewManager.instance(getContext()).forceFinishTheApp(true);
+            ViewManager.instance(getContext()).forceFinishTheApp();
         }
     }
 

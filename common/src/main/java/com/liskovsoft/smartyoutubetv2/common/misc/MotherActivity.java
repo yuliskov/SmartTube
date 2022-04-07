@@ -16,7 +16,6 @@ import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
 import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 
 import java.util.ArrayList;
@@ -27,7 +26,6 @@ public class MotherActivity extends FragmentActivity {
     private static final float DEFAULT_DENSITY = 2.0f; // xhdpi
     private static final float DEFAULT_WIDTH = 1920f; // xhdpi
     private static DisplayMetrics sCachedDisplayMetrics;
-    private static int sNumActivities;
     protected static boolean sIsInPipMode;
     private ScreensaverManager mScreensaverManager;
     private List<OnPermissions> mOnPermissions;
@@ -47,7 +45,6 @@ public class MotherActivity extends FragmentActivity {
         initDpi();
         initTheme();
 
-        sNumActivities++;
         mScreensaverManager = new ScreensaverManager(this);
     }
 
@@ -101,22 +98,6 @@ public class MotherActivity extends FragmentActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        sNumActivities--;
-
-        if (ViewManager.instance(this).isFinishing()) {
-            boolean noActivities = sNumActivities == 0;
-            boolean singlePipActivity = sNumActivities == 1 && sIsInPipMode;
-            if (noActivities || singlePipActivity) {
-                // Don't destroy the app. Let remote functions continue to work in background.
-                ViewManager.instance(this).forceFinishTheApp(false);
-                sCachedDisplayMetrics = null; // recreate metric data (if ones changed via settings)
-            }
-        }
-    }
-
-    @Override
     protected void attachBaseContext(Context newBase) {
         Context contextWrapper = LocaleContextWrapper.wrap(newBase, LocaleUpdater.getSavedLocale(newBase));
 
@@ -160,22 +141,6 @@ public class MotherActivity extends FragmentActivity {
             setTheme(rootThemeResId);
         }
     }
-
-    //private void initDpi() {
-    //    // Do caching to prevent sudden dpi change.
-    //    // Could happen when screen goes off or after PIP mode.
-    //    if (sCachedDisplayMetrics == null) {
-    //        float uiScale = MainUIData.instance(this).getUIScale();
-    //        DisplayMetrics displayMetrics = new DisplayMetrics();
-    //        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-    //        float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
-    //        displayMetrics.density = DEFAULT_DENSITY / widthRatio * uiScale;
-    //        displayMetrics.scaledDensity = DEFAULT_DENSITY / widthRatio * uiScale;
-    //        sCachedDisplayMetrics = displayMetrics;
-    //    }
-    //
-    //    getResources().getDisplayMetrics().setTo(sCachedDisplayMetrics);
-    //}
 
     private void initDpi() {
         // To adapt to resolution change (e.g. on AFR) we can't do caching.

@@ -12,6 +12,7 @@ import com.liskovsoft.sharedutils.helpers.FileHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.locale.LocaleUpdater;
 import com.liskovsoft.sharedutils.mylogger.Log;
+import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
@@ -21,6 +22,7 @@ import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
+import java.util.logging.Handler;
 
 public class ViewManager {
     private static final String TAG = ViewManager.class.getSimpleName();
@@ -267,20 +269,6 @@ public class ViewManager {
         LocaleUpdater.clearCache();
     }
 
-    //public void restartApp() {
-    //    //startView(SplashView.class);
-    //    //
-    //    //mMoveViewsToBack = true;
-    //    //
-    //    //persistState();
-    //    //
-    //    //System.exit(0);
-    //
-    //    mMoveViewsToBack = false;
-    //
-    //    triggerRebirth3(mContext, mViewMapping.get(SplashView.class));
-    //}
-
     /**
      * More info: https://stackoverflow.com/questions/6609414/how-do-i-programmatically-restart-an-android-app
      */
@@ -321,9 +309,8 @@ public class ViewManager {
     }
 
     /**
-     * Only moves tasks to back.<br/>
-     * Main magic happened in {@link MotherActivity}<br/>
-     * But, in conclusion {@link #forceFinishTheApp(boolean)} always be called
+     * Finishes the app without killing it (by moves tasks to back).<br/>
+     * The app continue to run in the background.
      * @param activity this activity
      */
     public void properlyFinishTheApp(Context activity) {
@@ -335,28 +322,23 @@ public class ViewManager {
             mActivityStack.clear();
 
             ((MotherActivity) activity).finishReally();
+
+            // Fix: can't start finished app activity from history.
+            // Do reset state because the app should continue to run in the background.
+            // NOTE: Don't rely on MotherActivity.onDestroy() because activity can be killed silently.
+            RxUtils.runAsync(() -> {
+                clearCaches();
+                mIsMoveToBackEnabled = false;
+                mIsFinishing = false;
+            }, 1_000);
         }
     }
 
     /**
-     * This routine will be called after {@link #properlyFinishTheApp(Context)}<br/>
-     * At this moment all activities should be destroyed<br/>
-     * Main magic happened in {@link MotherActivity}
-     * @param kill finish the app or continue to run in the background (state will be reset)
+     * Simply kills the app.
      */
-    public void forceFinishTheApp(boolean kill) {
-        SplashPresenter.unhold();
-        BrowsePresenter.unhold();
-        clearCaches();
-
-        if (kill) {
-            destroyApp();
-        } else {
-            // Fix: can't start finished app activity from history
-            // Reset state because the app continue to run in the background
-            mIsMoveToBackEnabled = false;
-            mIsFinishing = false;
-        }
+    public void forceFinishTheApp() {
+        destroyApp();
     }
 
     private static void destroyApp() {
