@@ -322,7 +322,8 @@ public class ViewManager {
 
     /**
      * Only moves tasks to back.<br/>
-     * Main magic happened in {@link MotherActivity}
+     * Main magic happened in {@link MotherActivity}<br/>
+     * But, in conclusion {@link #forceFinishTheApp(boolean)} always be called
      * @param activity this activity
      */
     public void properlyFinishTheApp(Context activity) {
@@ -337,6 +338,12 @@ public class ViewManager {
         }
     }
 
+    /**
+     * This routine will be called after {@link #properlyFinishTheApp(Context)}<br/>
+     * At this moment all activities should be destroyed<br/>
+     * Main magic happened in {@link MotherActivity}
+     * @param kill finish the app or continue to run in the background (state will be reset)
+     */
     public void forceFinishTheApp(boolean kill) {
         SplashPresenter.unhold();
         BrowsePresenter.unhold();
@@ -344,6 +351,10 @@ public class ViewManager {
 
         if (kill) {
             destroyApp();
+        } else {
+            // Reset state because the app continue to run in the background
+            mIsMoveToBackEnabled = false;
+            mIsFinishing = false;
         }
     }
 
