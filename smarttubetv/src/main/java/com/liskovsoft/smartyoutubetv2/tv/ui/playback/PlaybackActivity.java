@@ -178,7 +178,7 @@ public class PlaybackActivity extends LeanbackActivity {
             mViewManager.startParentView(this);
         } else {
             if (mPlayerTweaksData.isKeepFinishedActivityEnabled()) {
-                moveTaskToBack(true);
+                //moveTaskToBack(true); // Don't do this or you'll have problems when player overlaps other apps (e.g. casting)
                 mViewManager.startParentView(this);
             } else {
                 mPlaybackFragment.onFinish();
