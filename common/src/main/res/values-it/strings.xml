@@ -359,7 +359,7 @@
     <string name="seek_interval_sec">%s sec</string>
     <string name="subtitle_system">Stile di sistema (Impostazioni Android > Accessibilità)</string>
     <string name="subtitle_scale">Scala dei sottotitoli</string>
-    <string name="audio_sync_fix_desc">Un modo alternativo per sincronizzare audio/video. È considerato obsoleto, ma, in alcuni casi, può essere d'aiuto.</string>
+    <string name="audio_sync_fix_desc">Un modo alternativo per sincronizzare audio/video. È considerato obsoleto, ma, in alcuni casi, può essere d\'aiuto.</string>
     <string name="audio_sync_fix">Corregge la sincronizzazione audio</string>
     <string name="ambilight_ratio_fix_desc">Corregge l\'illuminazione bias assente. Risolve proporzioni errate. Risolve gli screenshot vuoti. Influisce sulle prestazioni!</string>
     <string name="ambilight_ratio_fix">Corregge Ambilight/Proporzioni/Screenshots</string>
