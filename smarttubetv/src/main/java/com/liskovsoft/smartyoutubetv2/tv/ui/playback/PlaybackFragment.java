@@ -1208,21 +1208,6 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public List<SubtitleStyle> getSubtitleStyles() {
-        return mSubtitleManager.getSubtitleStyles();
-    }
-
-    @Override
-    public void setSubtitleStyle(SubtitleStyle subtitleStyle) {
-        mSubtitleManager.setSubtitleStyle(subtitleStyle);
-    }
-
-    @Override
-    public SubtitleStyle getSubtitleStyle() {
-        return mSubtitleManager.getSubtitleStyle();
-    }
-
-    @Override
     public void updateSuggestions(VideoGroup group) {
         if (mRowsAdapter == null) {
             Log.e(TAG, "Related videos row not initialized yet.");
@@ -1275,6 +1260,26 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         return index != -1 ? index - 1 : -1;
+    }
+
+    @Override
+    public VideoGroup getSuggestionsByIndex(int rowIndex) {
+        if (getVideo() == null || !getVideo().hasVideo()) {
+            return null;
+        }
+
+        // NOTE: skip first row. It's PlaybackControlsRow
+        int realIndex = 1 + rowIndex;
+        Object row = mRowsAdapter != null && mRowsAdapter.size() > realIndex ? mRowsAdapter.get(realIndex) : null;
+
+        VideoGroup result = null;
+
+        if (row instanceof ListRow) {
+            VideoGroupObjectAdapter adapter = (VideoGroupObjectAdapter) ((ListRow) row).getAdapter();
+            result = VideoGroup.from(adapter.getAll());
+        }
+
+        return result;
     }
 
     /**

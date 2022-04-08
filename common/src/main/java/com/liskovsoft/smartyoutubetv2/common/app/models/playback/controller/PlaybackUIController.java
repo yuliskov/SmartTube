@@ -2,13 +2,13 @@ package com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.ContentBlockManager.SeekBarSegment;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 
 import java.util.List;
 
 public interface PlaybackUIController {
     void updateSuggestions(VideoGroup group);
     int getSuggestionsIndex(VideoGroup group);
+    VideoGroup getSuggestionsByIndex(int index);
     void resetSuggestedPosition();
     boolean isSuggestionsEmpty();
     void clearSuggestions();
@@ -23,9 +23,6 @@ public interface PlaybackUIController {
     void setDebugButtonState(boolean show);
     void showDebugInfo(boolean show);
     void showSubtitles(boolean show);
-    List<SubtitleStyle> getSubtitleStyles();
-    void setSubtitleStyle(SubtitleStyle subtitleStyle);
-    SubtitleStyle getSubtitleStyle();
     void loadStoryboard();
     void showError(String errorInfo);
     void showProgressBar(boolean show);

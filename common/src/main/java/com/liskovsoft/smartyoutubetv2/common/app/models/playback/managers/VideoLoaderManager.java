@@ -10,6 +10,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
@@ -295,6 +296,15 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                 MessageHelpers.showMessageThrottled(getActivity(), R.string.wait_data_loading);
             }
             Utils.postDelayed(mHandler, mPendingNext, 1_000);
+        } else if (current.isRemote) {
+            openFirstVideoFromRecommended(current);
+        }
+    }
+
+    private void openFirstVideoFromRecommended(Video video) {
+        VideoGroup suggestions = getController().getSuggestionsByIndex(video.isRemote ? 1 : 0);
+        if (suggestions != null && suggestions.getVideos() != null && suggestions.getVideos().size() > 0) {
+            openVideoInt(suggestions.getVideos().get(0));
         }
     }
 
