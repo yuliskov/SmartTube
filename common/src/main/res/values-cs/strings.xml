@@ -29,7 +29,7 @@
     <string name="not_implemented">Není implementováno</string>
     <string name="option_background_playback_off">Zakázáno</string>
     <string name="option_background_playback_pip">Video a zvuk</string>
-    <string name="option_background_playback_only_audio">Pouze audio</string>
+    <string name="option_background_playback_only_audio">Pouze zvuk</string>
     <string name="playback_settings">Nastavení přehrávání</string>
     <string name="video_speed">Rychlost videa</string>
     <string name="resolution_switch">Přepnout rozlišení</string>
@@ -116,6 +116,7 @@
     <string name="subscribed_to_channel">Přihlášen k odběru kanálu</string>
     <string name="unsubscribed_from_channel">Odhlášen z odběru kanálu</string>
     <string name="subtitle_yellow_transparent">Žlutá</string>
+    <string name="subtitle_white_transparent">Bílá na průhledném pozadí</string>
     <string name="subtitle_white_black">Černé pozadí</string>
     <string name="player_seek_preview">Náhledy při přeskakování</string>
     <string name="color_scheme_dark_grey_oled">Tmavé (OLED)</string>
@@ -356,4 +357,22 @@
     <string name="simple_edit_value_hint">Nová hodnota</string>
     <string name="seek_interval">Interval přeskakování</string>
     <string name="seek_interval_sec">%s sekund</string>
+    <string name="subtitle_system">Systémový styl (nastavení Androidu > Přístupnost)</string>
+    <string name="subtitle_scale">Velikost titulků</string>
+    <string name="audio_sync_fix_desc">Jiný způsob synchronizace audia/videa. Pozažuje se za zastaralý, ale v některých případech může pomoci.</string>
+    <string name="audio_sync_fix">Oprava synchronizace zvuku</string>
+    <string name="ambilight_ratio_fix_desc">Opravuje chybějící bias osvětlení. Opravuje nesprávný poměr stran. Opravuje prázdné screenshoty. Ovlivňuje výkon!</string>
+    <string name="ambilight_ratio_fix">Oprava Ambilight/Poměru stran/Screenshotů</string>
+    <string name="force_legacy_codecs_desc">Výrazně zlepšuje výkon na zařízeních nižší třídy. Maximální rozlišení je 720p.</string>
+    <string name="force_legacy_codecs">Vynucení starších kodeků (720p)</string>
+    <string name="live_stream_fix_desc">Výrazně zlepšuje výkon živého vysílání na zařízeních nižší třídy. Maximální rozlišení je 1080p.</string>
+    <string name="live_stream_fix">Oprava živého vysílání (1080p)</string>
+    <string name="playback_notifications_fix_desc">Skryje oznámení změny stopy. Mohlo by to být užitečné pro firmware založený na AOSP.</string>
+    <string name="playback_notifications_fix">Zakázat oznámení přehrávání</string>
+    <string name="amlogic_fix_desc">Oprava poklesu snímků na Amlogic zařízeních.</string>
+    <string name="amlogic_fix">Amlogic 1080p@60fps oprava</string>
+    <string name="tunneled_video_playback_desc">Tunelované video přehrávání slibuje výhody jako např. lepší audio/video synchronizace (AV synchronizace) a plynulejší přehrávání. Vyžaduje Android 5+</string>
+    <string name="tunneled_video_playback">Tunelované video přehrávání (Android 5+)</string>
+    <string name="master_volume">Hlavní hlasitost</string>
+    <string name="volume_limit">Omezení hlasitosti</string>
 </resources>
