@@ -61,7 +61,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
             }
         } else {
             // in seeking state? doing recheck...
-            disableUiAutoHideTimeout();
             enableUiAutoHideTimeout();
         }
     };
@@ -81,6 +80,11 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         // Could be set once per activity creation (view layout stuff)
         getController().setVideoZoomMode(mPlayerData.getVideoZoomMode());
         getController().setVideoAspectRatio(mPlayerData.getVideoAspectRatio());
+    }
+
+    @Override
+    public void openVideo(Video item) {
+        enableUiAutoHideTimeout();
     }
 
     @Override

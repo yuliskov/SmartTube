@@ -54,7 +54,6 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerControll
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.DebugInfoManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ExoPlayerInitializer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.renderer.CustomOverridesRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
@@ -1118,6 +1117,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mIsControlsShownPreviously = false;
     }
 
+    /**
+     * Show controls or suggestions: depending what has been shown last.
+     */
     @Override
     public void showControls(boolean show) {
         if (isInPIPMode()) {

@@ -391,6 +391,10 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
+        if (mVideo.videoId == null) {
+            return;
+        }
+
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.action_video_info),
                         optionItem -> {
@@ -398,12 +402,12 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                             mServiceManager.loadMetadata(mVideo, metadata -> {
                                 String description = metadata.getDescription();
                                 if (description != null) {
-                                    showLongText(description);
+                                    showLongTextDialog(description);
                                 } else {
                                     mServiceManager.loadFormatInfo(mVideo, formatInfo -> {
                                         String newDescription = formatInfo.getDescription();
                                         if (newDescription != null) {
-                                            showLongText(newDescription);
+                                            showLongTextDialog(newDescription);
                                         } else {
                                             MessageHelpers.showMessage(getContext(), R.string.description_not_found);
                                         }
@@ -419,13 +423,20 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
+        if (mVideo.videoId == null) {
+            return;
+        }
+
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.play_video),
-                        optionItem -> PlaybackPresenter.instance(getContext()).openVideo(mVideo)
+                        optionItem -> {
+                            PlaybackPresenter.instance(getContext()).openVideo(mVideo);
+                            mDialogPresenter.closeDialog();
+                        }
                 ));
     }
 
-    private void showLongText(String description) {
+    private void showLongTextDialog(String description) {
         mDialogPresenter.clear();
         mDialogPresenter.appendLongTextCategory(mVideo.title, UiOptionItem.from(description, null));
         mDialogPresenter.showDialog(mVideo.title);
