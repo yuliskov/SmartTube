@@ -143,11 +143,10 @@ public class ProxyManager {
             }
 
             mEnabled = mPrefs.isWebProxyEnabled();
-        }
-        catch (URISyntaxException e) {
+        } catch (URISyntaxException | IllegalArgumentException e) {
             Log.e(TAG, e);
             mProxy = Proxy.NO_PROXY;
-            mEnabled = false; // disable invalid proxy settings.
+            mEnabled = false; // invalid settings found. disable proxy.
         }
     }
 
