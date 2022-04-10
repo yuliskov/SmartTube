@@ -176,7 +176,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         switch (playbackMode) {
             case PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL:
                 onNextClicked();
-                getController().showControls(true);
+                getController().showOverlay(true);
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
                 getController().setPositionMs(0);
@@ -190,7 +190,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                     getController().finish();
                 } else {
                     onNextClicked();
-                    getController().showControls(true);
+                    getController().showOverlay(true);
                 }
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
@@ -203,7 +203,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                     Utils.showRepeatInfo(getActivity(), playbackMode);
                 } else {
                     onNextClicked();
-                    getController().showControls(true);
+                    getController().showOverlay(true);
                 }
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_LIST:
@@ -211,7 +211,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                 Video video = getController().getVideo();
                 if ((video != null && video.hasPlaylist()) || mPlaylist.getNext() != null) {
                     onNextClicked();
-                    getController().showControls(true);
+                    getController().showOverlay(true);
                 } else {
                     getController().showSuggestions(true);
                     getController().setPlay(false);
@@ -362,7 +362,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
     private void scheduleReloadVideoTimer(int reloadIntervalMs) {
         if (getController().isEngineInitialized()) {
             Log.d(TAG, "Starting check for the future stream...");
-            getController().showControls(true);
+            getController().showOverlay(true);
             Utils.postDelayed(mHandler, mReloadVideoHandler, reloadIntervalMs);
         }
     }
@@ -384,7 +384,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         disposeActions();
 
         if (item.hasVideo()) {
-            getController().showControls(true);
+            getController().showOverlay(true);
             getBridge().openVideo(item);
         } else if (item.hasChannel()) {
             ChannelPresenter.instance(getActivity()).openChannel(item);

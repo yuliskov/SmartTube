@@ -102,7 +102,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
 
         // Show user info instead of black screen.
         if (!getPlayEnabled()) {
-            getController().showControls(true);
+            getController().showOverlay(true);
         }
     }
 

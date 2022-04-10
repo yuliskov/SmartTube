@@ -149,7 +149,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      * Update background depending what's shown: controls or suggestions
      */
     private void updatePlayerBackground() {
-        if (isControlsShown()) {
+        if (isOverlayShown()) {
             setBackgroundResource(isSuggestionsShown() ? R.drawable.player_background2 : R.drawable.player_background);
         }
     }
@@ -748,7 +748,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         @Override
         public void onTopEdgeFocused() {
-            showControls(false);
+            showOverlay(false);
         }
 
         @Override
@@ -815,7 +815,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     @Override
     public void showError(String errorMessage) {
         mPlayerGlue.setTitle(errorMessage);
-        showControls(true);
+        showOverlay(true);
     }
 
     @Override
@@ -1071,7 +1071,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
-    public boolean isControlsShown() {
+    public boolean isOverlayShown() {
         return isControlsOverlayVisible();
     }
 
@@ -1121,7 +1121,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      * Show controls or suggestions: depending what has been shown last.
      */
     @Override
-    public void showControls(boolean show) {
+    public void showOverlay(boolean show) {
         if (isInPIPMode()) {
             // UI couldn't be properly displayed in PIP mode
             return;
@@ -1141,7 +1141,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
-        showControls(show);
+        showOverlay(show);
 
         if (show && !isSuggestionsShown() && !isSuggestionsEmpty()) {
             setPlayerRowIndex(1);
@@ -1314,7 +1314,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             // save state
             Video video = getVideo();
             int repeatButtonState = getRepeatButtonState();
-            boolean controlsShown = isControlsShown();
+            boolean controlsShown = isOverlayShown();
             boolean debugShown = isDebugInfoShown();
 
             // silently recreate player objects
@@ -1324,7 +1324,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             // restore state
             setVideo(video);
             setRepeatButtonState(repeatButtonState);
-            showControls(controlsShown);
+            showOverlay(controlsShown);
             showDebugInfo(debugShown);
             setDebugButtonState(debugShown);
         }

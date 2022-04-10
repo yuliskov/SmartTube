@@ -209,7 +209,7 @@ public class PlaybackActivity extends LeanbackActivity {
         if (Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 26) {
             if (Build.VERSION.SDK_INT == 21) {
                 // Playback pause fix?
-                mPlaybackFragment.showControls(true);
+                mPlaybackFragment.showOverlay(true);
             }
 
             if (mPlaybackFragment.isPlaying()) {

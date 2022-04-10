@@ -12,8 +12,8 @@ public interface PlaybackUIController {
     void resetSuggestedPosition();
     boolean isSuggestionsEmpty();
     void clearSuggestions();
-    void showControls(boolean show);
-    boolean isControlsShown();
+    void showOverlay(boolean show);
+    boolean isOverlayShown();
     void showSuggestions(boolean show);
     boolean isSuggestionsShown();
     void setRepeatButtonState(int modeIndex);

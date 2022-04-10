@@ -1,6 +1,5 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
-import android.app.Instrumentation;
 import android.content.Context;
 import android.view.KeyEvent;
 import androidx.annotation.Nullable;
@@ -238,7 +237,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         switch (command.getType()) {
             case Command.TYPE_OPEN_VIDEO:
                 if (getController() != null) {
-                    getController().showControls(false);
+                    getController().showOverlay(false);
                 }
                 Utils.movePlayerToForeground(getActivity());
                 Video newVideo = Video.from(command.getVideoId(), command.getPlaylistId(), command.getPlaylistIndex());
@@ -258,7 +257,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 break;
             case Command.TYPE_SEEK:
                 if (getController() != null) {
-                    getController().showControls(false);
+                    getController().showOverlay(false);
                     Utils.movePlayerToForeground(getActivity());
                     getController().setPositionMs(command.getCurrentTimeMs());
                     postSeek(command.getCurrentTimeMs());
