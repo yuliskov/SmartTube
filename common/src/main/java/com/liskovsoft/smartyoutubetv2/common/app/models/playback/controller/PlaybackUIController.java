@@ -16,6 +16,8 @@ public interface PlaybackUIController {
     boolean isOverlayShown();
     void showSuggestions(boolean show);
     boolean isSuggestionsShown();
+    void showControls(boolean show);
+    boolean isControlsShown();
     void setRepeatButtonState(int modeIndex);
     void setLikeButtonState(boolean like);
     void setDislikeButtonState(boolean dislike);

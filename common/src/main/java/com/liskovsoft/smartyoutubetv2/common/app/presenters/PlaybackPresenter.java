@@ -63,6 +63,10 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
         mMainPlayerEventBridge.openVideo(item);
 
         mViewManager.startView(PlaybackView.class);
+
+        if (getView() != null) {
+            getView().getController().showOverlay(false);
+        }
     }
 
     public Video getVideo() {

@@ -1066,13 +1066,18 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
+    public boolean isOverlayShown() {
+        return isControlsOverlayVisible();
+    }
+
+    @Override
     public boolean isSuggestionsShown() {
         return isControlsOverlayVisible() && getPlayerRowIndex() != 0;
     }
 
     @Override
-    public boolean isOverlayShown() {
-        return isControlsOverlayVisible();
+    public boolean isControlsShown() {
+        return isControlsOverlayVisible() && getPlayerRowIndex() == 0;
     }
 
     @Override
@@ -1145,6 +1150,20 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         if (show && !isSuggestionsShown() && !isSuggestionsEmpty()) {
             setPlayerRowIndex(1);
+        }
+    }
+
+    @Override
+    public void showControls(boolean show) {
+        if (isInPIPMode()) {
+            // UI couldn't be properly displayed in PIP mode
+            return;
+        }
+
+        showOverlay(show);
+
+        if (show) {
+            setPlayerRowIndex(0);
         }
     }
 
