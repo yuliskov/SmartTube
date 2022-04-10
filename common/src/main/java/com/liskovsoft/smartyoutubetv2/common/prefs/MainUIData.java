@@ -26,6 +26,7 @@ public class MainUIData {
     public static final int MENU_ITEM_MOVE_SECTION_DOWN = 0b100000000;
     public static final int MENU_ITEM_OPEN_DESCRIPTION = 0b1000000000;
     public static final int MENU_ITEM_RENAME_SECTION = 0b10000000000;
+    public static final int MENU_ITEM_PLAY_VIDEO = 0b100000000000;
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;
     private final Context mContext;
@@ -242,7 +243,7 @@ public class MainUIData {
         mIsUploadsAutoLoadEnabled = Helpers.parseBoolean(split, 10, true);
         mCardTextScrollSpeed = Helpers.parseFloat(split, 11, 2);
         mMenuItems = Helpers.parseInt(split, 12,
-                Integer.MAX_VALUE & ~(MENU_ITEM_RECENT_PLAYLIST | MENU_ITEM_ADD_TO_QUEUE | MENU_ITEM_SELECT_ACCOUNT)); // all except this items
+                Integer.MAX_VALUE & ~(MENU_ITEM_RECENT_PLAYLIST | MENU_ITEM_ADD_TO_QUEUE | MENU_ITEM_SELECT_ACCOUNT | MENU_ITEM_PLAY_VIDEO)); // all except this items
     }
 
     private void persistState() {

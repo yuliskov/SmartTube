@@ -371,4 +371,5 @@
     <string name="tunneled_video_playback">Тунельне відтворення (Android 5+)</string>
     <string name="master_volume">Основна гучність</string>
     <string name="volume_limit">Обмеження гучності</string>
+    <string name="play_video">Відтворити</string>
 </resources>

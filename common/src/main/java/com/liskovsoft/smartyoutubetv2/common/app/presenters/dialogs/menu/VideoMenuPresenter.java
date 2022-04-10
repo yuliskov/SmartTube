@@ -58,6 +58,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsOpenPlaylistButtonEnabled;
     private boolean mIsAddToPlaybackQueueButtonEnabled;
     private boolean mIsOpenDescriptionButtonEnabled;
+    private boolean mIsPlayVideoButtonEnabled;
     private VideoMenuCallback mCallback;
 
     public interface VideoMenuCallback {
@@ -131,6 +132,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsReturnToBackgroundVideoEnabled = true;
         mIsPinToSidebarEnabled = true;
         mIsOpenDescriptionButtonEnabled = true;
+        mIsPlayVideoButtonEnabled = true;
 
         showMenuInt(video);
     }
@@ -175,6 +177,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         mDialogPresenter.clear();
 
+        appendPlayVideoButton();
         appendReturnToBackgroundVideoButton();
         appendNotInterestedButton();
         appendAddToRecentPlaylistButton(videoPlaylistInfos);
@@ -202,6 +205,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         mDialogPresenter.clear();
 
+        appendPlayVideoButton();
         appendReturnToBackgroundVideoButton();
         appendOpenPlaylistButton();
         appendOpenChannelButton();
@@ -410,6 +414,17 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                 ));
     }
 
+    private void appendPlayVideoButton() {
+        if (!mIsPlayVideoButtonEnabled || mVideo == null) {
+            return;
+        }
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.play_video),
+                        optionItem -> PlaybackPresenter.instance(getContext()).openVideo(mVideo)
+                ));
+    }
+
     private void showLongText(String description) {
         mDialogPresenter.clear();
         mDialogPresenter.appendLongTextCategory(mVideo.title, UiOptionItem.from(description, null));
@@ -565,6 +580,10 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_OPEN_DESCRIPTION)) {
             mIsOpenDescriptionButtonEnabled = false;
+        }
+        
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PLAY_VIDEO)) {
+            mIsPlayVideoButtonEnabled = false;
         }
     }
 }
