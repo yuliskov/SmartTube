@@ -179,6 +179,9 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         getController().showDebugInfo(mDebugViewEnabled);
         getController().setDebugButtonState(mDebugViewEnabled);
         getController().showSubtitles(true);
+
+        // Maybe dialog just closed. Reset timeout just in case.
+        enableUiAutoHideTimeout();
     }
 
     @Override
