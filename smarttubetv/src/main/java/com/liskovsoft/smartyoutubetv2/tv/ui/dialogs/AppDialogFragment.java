@@ -175,7 +175,7 @@ public class AppDialogFragment extends LeanbackSettingsFragment
     public void onFinish() {
         mSettingsPresenter.onFinish();
     }
-
+    
     public static class AppPreferenceFragment extends LeanbackPreferenceFragment {
         private static final String TAG = AppPreferenceFragment.class.getSimpleName();
         private List<OptionCategory> mCategories;

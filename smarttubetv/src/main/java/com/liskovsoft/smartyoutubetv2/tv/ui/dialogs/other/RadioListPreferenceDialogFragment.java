@@ -95,7 +95,6 @@ public class RadioListPreferenceDialogFragment extends LeanbackListPreferenceDia
                 }
             }
 
-            //getFragmentManager().popBackStack();
             notifyDataSetChanged();
         }
     }

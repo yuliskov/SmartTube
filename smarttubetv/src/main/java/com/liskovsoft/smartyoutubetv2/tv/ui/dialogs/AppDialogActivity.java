@@ -13,8 +13,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 public class AppDialogActivity extends MotherActivity {
     private static final String TAG = AppDialogActivity.class.getSimpleName();
     private AppDialogFragment mFragment;
-
-    @SuppressWarnings("deprecation")
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

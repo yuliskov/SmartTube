@@ -270,7 +270,7 @@ public class LeanbackListPreferenceDialogFragment extends LeanbackPreferenceDial
         public int getItemCount() {
             return mEntries.length;
         }
-
+        
         @Override
         public void onItemClick(ViewHolder viewHolder) {
             final int index = viewHolder.getAdapterPosition();
