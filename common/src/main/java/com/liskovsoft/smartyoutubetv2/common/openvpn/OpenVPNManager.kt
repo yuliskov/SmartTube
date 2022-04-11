@@ -60,6 +60,7 @@ class OpenVPNManager private constructor(context: Context, callback: OpenVPNCall
     private val ovpnFile = File(downloadDir, "config.ovpn")
     private val numVPNService by lazy {
         VPNService(context).apply {
+            // TODO: maybe below not needed
             launchVPN(prefs.openVPNConfigUri)
             setOnVPNStatusChangeListener(object : OnVPNStatusChangeListener {
                 override fun onProfileLoaded(profileLoaded: Boolean) {
@@ -93,7 +94,11 @@ class OpenVPNManager private constructor(context: Context, callback: OpenVPNCall
 
     fun configureOpenVPN() {
         if (isOpenVPNEnabled) {
+
+            // TODO: download config doesn't work. Only uri!
             downloadConfig()
+
+            //numVPNService.launchVPN(prefs.openVPNConfigUri)
             numVPNService.start(true)
         } else {
             numVPNService.start(false)
