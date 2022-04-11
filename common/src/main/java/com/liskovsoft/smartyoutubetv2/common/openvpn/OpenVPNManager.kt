@@ -9,10 +9,9 @@ import android.os.Build
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
-import androidx.core.content.FileProvider
 import com.liskovsoft.openvpn.OnVPNStatusChangeListener
 import com.liskovsoft.openvpn.VPNService
-import com.liskovsoft.smartyoutubetv2.common.BuildConfig
+import com.liskovsoft.sharedutils.helpers.FileHelpers
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs
 import java.io.File
 import java.lang.ref.WeakReference
@@ -157,11 +156,7 @@ class OpenVPNManager private constructor(context: Context, callback: OpenVPNCall
                     Uri.fromFile(ovpnFile)
                 } else {
                     intent.flags += Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    FileProvider.getUriForFile(
-                        context,
-                        BuildConfig.APPLICATION_ID + ".provider",
-                        ovpnFile
-                    )
+                    FileHelpers.getFileUri(context, ovpnFile)
                 }
                 intent.setDataAndType(path, "application/x-openvpn-profile")
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

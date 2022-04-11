@@ -154,14 +154,14 @@ class OpenVPNDialog(private val context: Context): OpenVPNManager.OpenVPNCallbac
             // TODO: cancel OpenVPN application
             openVPNConfigDialog!!.dismiss()
         }
-        openVPNConfigDialog!!.setOnDismissListener { dialog: DialogInterface? ->
-            val openVPNInfo = validateOpenVPNConfigFields()
-            if (openVPNInfo != null) {
-                Log.d(TAG, "Saving OpenVPN info: $openVPNInfo")
-                openVPNManager.saveOpenVPNInfoToPrefs(openVPNInfo, true)
-                checkPermissionsAndConfigureOpenVPN()
-            }
-        }
+        //openVPNConfigDialog!!.setOnDismissListener { dialog: DialogInterface? ->
+        //    val openVPNInfo = validateOpenVPNConfigFields()
+        //    if (openVPNInfo != null) {
+        //        Log.d(TAG, "Saving OpenVPN info: $openVPNInfo")
+        //        openVPNManager.saveOpenVPNInfoToPrefs(openVPNInfo, true)
+        //        checkPermissionsAndConfigureOpenVPN()
+        //    }
+        //}
     }
 
     private fun checkPermissionsAndConfigureOpenVPN() {
