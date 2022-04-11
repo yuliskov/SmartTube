@@ -465,7 +465,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, getVideo().title);
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, getVideo().title);
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, getVideo().extractAuthor());
-            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, getVideo().info);
+            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, getVideo().secondTitle);
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, getVideo().cardImageUrl);
             metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, getLengthMs());
 
@@ -785,8 +785,8 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         if (mPlayerGlue != null && video != null) {
             // Preserve player formatting
-            mPlayerGlue.setTitle(video.title != null ? video.title : "...");
-            mPlayerGlue.setSubtitle(video.info != null ? appendLive(video.info, video.isLive) : "...");
+            mPlayerGlue.setTitle(video.getPlayerTitle() != null ? video.getPlayerTitle() : "...");
+            mPlayerGlue.setSubtitle(video.getPlayerSecondTitle() != null ? appendLive(video.getPlayerSecondTitle(), video.isLive) : "...");
         }
     }
 

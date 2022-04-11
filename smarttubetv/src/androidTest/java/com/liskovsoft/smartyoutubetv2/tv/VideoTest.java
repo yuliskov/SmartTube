@@ -57,7 +57,7 @@ public class VideoTest {
 
             assert testVideo.id == testVideoClone.id;
             assert testVideo.title.equals(testVideoClone.title);
-            assert testVideo.info.equals(testVideoClone.info);
+            assert testVideo.secondTitle.equals(testVideoClone.secondTitle);
             assert testVideo.category.equals(testVideoClone.category);
             assert testVideo.author.equals(testVideoClone.author);
             assert testVideo.bgImageUrl.equals(testVideoClone.bgImageUrl);

@@ -25,7 +25,9 @@ public final class Video implements Parcelable {
     private static final String SECTION_PREFIX = "FE";
     public long id;
     public String title;
-    public String info;
+    public String secondTitle;
+    private String newTitle;
+    private String newSecondTitle;
     public String description;
     public String category;
     public int itemType = -1;
@@ -74,7 +76,7 @@ public final class Video implements Parcelable {
         this.id = id;
         this.category = category;
         this.title = title;
-        this.info = desc;
+        this.secondTitle = desc;
         this.videoId = videoId;
         this.videoUrl = videoUrl;
         this.bgImageUrl = bgImageUrl;
@@ -86,7 +88,7 @@ public final class Video implements Parcelable {
         id = in.readLong();
         category = in.readString();
         title = in.readString();
-        info = in.readString();
+        secondTitle = in.readString();
         bgImageUrl = in.readString();
         cardImageUrl = in.readString();
         videoId = in.readString();
@@ -99,7 +101,7 @@ public final class Video implements Parcelable {
 
         video.id = item.getId();
         video.title = item.getTitle();
-        video.info = item.getInfo();
+        video.secondTitle = item.getSecondTitle();
         video.category = item.getContentType();
         video.itemType = item.getType();
         video.videoId = item.getVideoId();
@@ -131,7 +133,7 @@ public final class Video implements Parcelable {
         video.title = item.title;
         video.category = item.category;
         video.itemType = item.itemType;
-        video.info = item.info;
+        video.secondTitle = item.secondTitle;
         video.videoId = item.videoId;
         video.channelId = item.channelId;
         video.videoUrl = item.videoUrl;
@@ -169,7 +171,7 @@ public final class Video implements Parcelable {
         video.playlistIndex = playlistIndex;
         video.channelId = channelId;
         video.title = title;
-        video.info = info;
+        video.secondTitle = info;
         video.percentWatched = percentWatched;
 
         return video;
@@ -238,7 +240,7 @@ public final class Video implements Parcelable {
             return author;
         }
 
-        return extractAuthor(info);
+        return extractAuthor(secondTitle);
     }
 
     private static String extractAuthor(String info) {
@@ -283,7 +285,7 @@ public final class Video implements Parcelable {
         dest.writeLong(id);
         dest.writeString(category);
         dest.writeString(title);
-        dest.writeString(info);
+        dest.writeString(secondTitle);
         dest.writeString(bgImageUrl);
         dest.writeString(cardImageUrl);
         dest.writeString(videoId);
@@ -435,8 +437,8 @@ public final class Video implements Parcelable {
         MediaItem first = mediaItems.get(0);
         MediaItem last = mediaItems.get(mediaItems.size() - 1);
 
-        String author1 = extractAuthor(first.getInfo());
-        String author2 = extractAuthor(last.getInfo());
+        String author1 = extractAuthor(first.getSecondTitle());
+        String author2 = extractAuthor(last.getSecondTitle());
 
         return author1 != null && author2 != null && Helpers.equals(author1, author2);
     }
@@ -485,27 +487,14 @@ public final class Video implements Parcelable {
         sync(metadata, false);
     }
 
-    public void sync(MediaItemMetadata metadata, boolean useAltInfo) {
+    public void sync(MediaItemMetadata metadata, boolean useAltSecondTitle) {
         if (metadata == null) {
             return;
         }
 
-        String newTitle = metadata.getTitle();
-
-        if (newTitle != null) {
-            title = newTitle;
-        }
-
-        String newInfo = null;
-
-        // Don't sync future translation because of not precise info
-        if (!metadata.isUpcoming()) {
-            newInfo = useAltInfo ? metadata.getInfoAlt() : metadata.getInfo();
-        }
-
-        if (newInfo != null) {
-            info = newInfo;
-        }
+        newTitle = metadata.getTitle();
+        
+        newSecondTitle = useAltSecondTitle ? metadata.getSecondTitleAlt() : metadata.getSecondTitle();
 
         // No checks. This data wasn't existed before sync.
         if (metadata.getDescription() != null) {
@@ -538,7 +527,7 @@ public final class Video implements Parcelable {
      * Creating lightweight copy of origin.
      */
     public Video copy() {
-        Video video = from(videoId, playlistId, playlistIndex, channelId, title, info, percentWatched);
+        Video video = from(videoId, playlistId, playlistIndex, channelId, title, secondTitle, percentWatched);
         if (group != null) {
             video.group = group.copy(); // Needed for proper multi row fragments sync (row id == group id)
         }
@@ -547,6 +536,15 @@ public final class Video implements Parcelable {
 
     public boolean canSubscribe() {
         return hasChannel() && !channelId.startsWith(SECTION_PREFIX);
+    }
+
+    public String getPlayerTitle() {
+        return newTitle != null ? newTitle : title != null ? title : null;
+    }
+
+    public String getPlayerSecondTitle() {
+        // Don't sync future translation because of not precise info
+        return newSecondTitle != null && !isUpcoming ? newSecondTitle : secondTitle != null ? secondTitle : null;
     }
 
     private boolean checkMediaItems() {
