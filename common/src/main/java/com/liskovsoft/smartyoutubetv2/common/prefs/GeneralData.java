@@ -31,7 +31,6 @@ public class GeneralData {
     private boolean mIsSettingsSectionEnabled;
     private int mBootSectionId;
     private final Map<Integer, Integer> mDefaultSections = new LinkedHashMap<>();
-    private final List<Video> mPinnedItems = new HashList<>();
     private int mAppExitShortcut;
     private boolean mIsReturnToLauncherEnabled;
     private int mBackgroundShortcut;
@@ -55,6 +54,26 @@ public class GeneralData {
     private boolean mIsHideShortsFromHistoryEnabled;
     private boolean mIsScreensaverDisabled;
     private boolean mIsVPNEnabled;
+
+    private final List<Video> mPinnedItems = new HashList<Video>() {
+        @Override
+        public boolean add(Video video) {
+            if (video == null) {
+                return false;
+            }
+
+            return super.add(video);
+        }
+
+        @Override
+        public void add(int index, Video video) {
+            if (video == null) {
+                return;
+            }
+
+            super.add(index, video);
+        }
+    };
 
     private GeneralData(Context context) {
         mContext = context;
