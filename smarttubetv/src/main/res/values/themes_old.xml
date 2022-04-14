@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.Example.Leanback.Title.Text" parent="Widget.Leanback.Title.Text">
+    </style>
+
+    <style name="Widget.Example.Leanback.Rows.VerticalGridView" parent="Widget.Leanback.Rows.VerticalGridView">
+        <item name="android:paddingTop">96dp</item>
+    </style>
+
+    <style name="Widget.Example.Leanback.GuidanceIconStyle" parent="Widget.Leanback.GuidanceIconStyle">
+        <item name="android:background">@color/icon_background</item>
+    </style>
+
+    <style name="Widget.Example.Leanback.FirstStepGuidanceIconStyle" parent="Widget.Leanback.GuidanceIconStyle">
+        <item name="android:background">@color/icon_alt_background</item>
+    </style>
+
+    <style name="Widget.Example.Leanback.SecondStepGuidanceIconStyle" parent="Widget.Leanback.GuidanceIconStyle">
+        <item name="android:padding">24dp</item>
+    </style>
+
+    <style name="Theme.Example.Leanback.GuidedStep" parent="Theme.Leanback.GuidedStep">
+        <item name="guidanceIconStyle">@style/Widget.Example.Leanback.GuidanceIconStyle</item>
+    </style>
+
+    <style name="Theme.Example.Leanback.GuidedStep.First">
+        <item name="guidanceIconStyle">@style/Widget.Example.Leanback.FirstStepGuidanceIconStyle
+        </item>
+    </style>
+</resources>

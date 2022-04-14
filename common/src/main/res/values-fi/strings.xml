@@ -44,7 +44,7 @@
   <string name="msg_cant_load_content">Oops. Sisältöä ei voida ladata.</string>
   <string name="title_video_presets">Videon esiasetus</string>
   <string name="settings_accounts">Tilit</string>
-  <string name="settings_left_panel">Muokkaa kategorioita</string>
+  <string name="settings_left_panel">Muokkaa osioita</string>
   <string name="settings_themes">Teemat</string>
   <string name="settings_other">Muut</string>
   <string name="settings_player">Videosoitin</string>
@@ -68,7 +68,7 @@
   <string name="web_site">Verkkosivu</string>
   <string name="donation">Lahjoitus</string>
   <string name="dialog_about">Tietoja</string>
-  <string name="dialog_player_ui">Video soitin</string>
+  <string name="dialog_player_ui">Videosoitin</string>
   <string name="player_show_ui_on_pause">Näytä valikko kun pysäytetty</string>
   <string name="player_pause_on_ok">OK näppäin pysäyttää toiston</string>
   <string name="player_ok_button_behavior">OK näppäimen käyttö</string>
@@ -319,4 +319,6 @@
   <string name="update_error">Päivitys ei onnistunut</string>
   <string name="unpin_from_sidebar">Irrota sivuvalikosta</string>
   <string name="player_show_ending_time">Näytä loppuaika</string>
+  <string name="hide_shorts_from_history">Piilota Shorts-videot katseluhistoriasta</string>
+  <string name="disable_screensaver">Älä käytä näytönsäästäjää</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers;
 
 import android.content.Context;
+import android.view.KeyEvent;
 import androidx.annotation.Nullable;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.RemoteManager;
@@ -36,6 +37,8 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
     private boolean mConnected;
     private int mIsGlobalVolumeWorking = -1;
     private long mNewVideoPositionMs;
+    private Disposable mActionDown;
+    private Disposable mActionUp;
 
     public RemoteControlManager(Context context, SuggestionsLoaderManager suggestionsLoader, VideoLoaderManager videoLoader) {
         MediaService mediaService = YouTubeMediaService.instance();
@@ -234,7 +237,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
         switch (command.getType()) {
             case Command.TYPE_OPEN_VIDEO:
                 if (getController() != null) {
-                    getController().showControls(false);
+                    getController().showOverlay(false);
                 }
                 Utils.movePlayerToForeground(getActivity());
                 Video newVideo = Video.from(command.getVideoId(), command.getPlaylistId(), command.getPlaylistIndex());
@@ -254,7 +257,7 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                 break;
             case Command.TYPE_SEEK:
                 if (getController() != null) {
-                    getController().showControls(false);
+                    getController().showOverlay(false);
                     Utils.movePlayerToForeground(getActivity());
                     getController().setPositionMs(command.getCurrentTimeMs());
                     postSeek(command.getCurrentTimeMs());
@@ -338,6 +341,46 @@ public class RemoteControlManager extends PlayerEventListenerHelper {
                     // NOTE: It's not a good idea to remember connection state (mConnected) at this point.
                     MessageHelpers.showLongMessage(getActivity(), getActivity().getString(R.string.device_disconnected, command.getDeviceName()));
                     ViewManager.instance(getActivity()).properlyFinishTheApp(getActivity());
+                }
+                break;
+            case Command.TYPE_DPAD:
+                int key = KeyEvent.KEYCODE_UNKNOWN;
+                boolean isLongAction = false;
+                switch (command.getKey()) {
+                    case Command.KEY_UP:
+                        key = KeyEvent.KEYCODE_DPAD_UP;
+                        break;
+                    case Command.KEY_DOWN:
+                        key = KeyEvent.KEYCODE_DPAD_DOWN;
+                        break;
+                    case Command.KEY_LEFT:
+                        key = KeyEvent.KEYCODE_DPAD_LEFT;
+                        isLongAction = true; // enable fast seeking
+                        break;
+                    case Command.KEY_RIGHT:
+                        key = KeyEvent.KEYCODE_DPAD_RIGHT;
+                        isLongAction = true; // enable fast seeking
+                        break;
+                    case Command.KEY_ENTER:
+                        key = KeyEvent.KEYCODE_DPAD_CENTER;
+                        break;
+                    case Command.KEY_BACK:
+                        key = KeyEvent.KEYCODE_BACK;
+                        break;
+                }
+                if (key != KeyEvent.KEYCODE_UNKNOWN) {
+                    RxUtils.disposeActions(mActionDown, mActionUp);
+
+                    final int resultKey = key;
+
+                    if (isLongAction) {
+                        mActionDown = RxUtils.runAsync(() ->
+                                Utils.sendKey(new KeyEvent(KeyEvent.ACTION_DOWN, resultKey)));
+                        mActionUp = RxUtils.runAsync(() ->
+                                Utils.sendKey(new KeyEvent(KeyEvent.ACTION_UP, resultKey)), 500);
+                    } else {
+                        mActionDown = RxUtils.runAsync(() -> Utils.sendKey(resultKey));
+                    }
                 }
                 break;
         }

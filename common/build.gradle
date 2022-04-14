@@ -1,4 +1,5 @@
 apply from: gradle.ext.sharedModulesConstants
+apply plugin: 'kotlin-android'
 apply plugin: 'com.android.library'
 
 android {
@@ -49,7 +50,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:' + appCompatXLibraryVersion
     testImplementation 'junit:junit:' + junitVersion
     androidTestImplementation 'androidx.test.ext:junit:' + testXSupportLibraryVersion
-    
+
+    implementation project(':openvpn')
     implementation project(':sharedutils')
     implementation project(':mediaserviceinterfaces')
     implementation project(':youtubeapi')
@@ -79,6 +81,10 @@ dependencies {
     implementation 'androidx.work:work-runtime:' + workVersion
 
     implementation 'androidx.browser:browser:' + browserXVersion
+
+    implementation 'androidx.core:core-ktx:' + kotlinCoreVersion
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:' + kotlinVersion
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:' + kotlinCoreVersion
 
     stbetaImplementation project(path: ':leanbackassistant')
     stbetaImplementation project(path: ':appupdatechecker2')

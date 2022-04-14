@@ -24,6 +24,7 @@ public class PlayerTweaksData {
     public static final int PLAYER_BUTTON_NEXT = 0b1000000000000000;
     public static final int PLAYER_BUTTON_PREVIOUS = 0b10000000000000000;
     public static final int PLAYER_BUTTON_HIGH_QUALITY = 0b100000000000000000;
+    public static final int PLAYER_BUTTON_VIDEO_INFO = 0b1000000000000000000;
     @SuppressLint("StaticFieldLeak")
     private static PlayerTweaksData sInstance;
     private final AppPrefs mPrefs;
@@ -225,6 +226,7 @@ public class PlayerTweaksData {
         mIsLiveStreamFixEnabled = Helpers.parseBoolean(split, 10, false);
         mIsPlaybackNotificationsDisabled = Helpers.parseBoolean(split, 11, !Helpers.isAndroidTV(mPrefs.getContext()));
         mIsTunneledPlaybackEnabled = Helpers.parseBoolean(split, 12, false);
+        // Example usage: Integer.MAX_VALUE ^ PlayerTweaksData.PLAYER_BUTTON_VIDEO_INFO // all buttons, except info button
         mPlayerButtons = Helpers.parseInt(split, 13, Integer.MAX_VALUE); // all buttons
         mIsBufferingFixEnabled = Helpers.parseBoolean(split, 14, false);
         mIsNoFpsPresetsEnabled = Helpers.parseBoolean(split, 15, false);

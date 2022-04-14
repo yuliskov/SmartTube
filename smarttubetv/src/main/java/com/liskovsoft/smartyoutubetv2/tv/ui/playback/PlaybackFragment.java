@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -53,11 +54,11 @@ import com.liskovsoft.smartyoutubetv2.common.exoplayer.controller.PlayerControll
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.DebugInfoManager;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.ExoPlayerInitializer;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager;
-import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.renderer.CustomOverridesRenderersFactory;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.versions.selector.RestoreTrackSelector;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.adapter.VideoGroupObjectAdapter;
 import com.liskovsoft.smartyoutubetv2.tv.presenter.CustomListRowPresenter;
@@ -148,7 +149,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
      * Update background depending what's shown: controls or suggestions
      */
     private void updatePlayerBackground() {
-        if (isControlsShown()) {
+        if (isOverlayShown()) {
             setBackgroundResource(isSuggestionsShown() ? R.drawable.player_background2 : R.drawable.player_background);
         }
     }
@@ -352,9 +353,9 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         if (mMediaSession != null) {
             mMediaSession.release();
         }
+        setAdapter(null); // PlayerGlue->LeanbackPlayerAdapter->Context memory leak fix
         mPlayer = null;
         mPlayerGlue = null;
-        setAdapter(null); // PlayerGlue->LeanbackPlayerAdapter->Context memory leak fix
         mRowsAdapter = null;
         mSubtitleManager = null;
         mDebugInfoManager = null;
@@ -464,7 +465,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, getVideo().title);
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, getVideo().title);
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, getVideo().extractAuthor());
-            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, getVideo().description);
+            metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_SUBTITLE, getVideo().secondTitle);
             metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, getVideo().cardImageUrl);
             metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, getLengthMs());
 
@@ -716,6 +717,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
+        public void onVideoInfo() {
+            mEventListener.onVideoInfoClicked();
+        }
+
+        @Override
         public void onSearch() {
             mEventListener.onSearchClicked();
         }
@@ -742,7 +748,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         @Override
         public void onTopEdgeFocused() {
-            showControls(false);
+            showOverlay(false);
         }
 
         @Override
@@ -779,9 +785,19 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         if (mPlayerGlue != null && video != null) {
             // Preserve player formatting
-            mPlayerGlue.setTitle(video.title != null ? video.title : "...");
-            mPlayerGlue.setSubtitle(video.description != null ? video.description : "...");
+            mPlayerGlue.setTitle(video.getPlayerTitle() != null ? video.getPlayerTitle() : "...");
+            mPlayerGlue.setSubtitle(video.getPlayerSecondTitle() != null ? appendLive(video.getPlayerSecondTitle(), video.isLive) : "...");
         }
+    }
+
+    private CharSequence appendLive(String title, boolean isLive) {
+        CharSequence result = title;
+
+        if (getContext() != null && isLive) {
+            result = TextUtils.concat( title, " ", Video.TERTIARY_TEXT_DELIM, " ", Utils.color(getContext().getString(R.string.badge_live), ContextCompat.getColor(getContext(), R.color.red)));
+        }
+
+        return result;
     }
 
     @Override
@@ -799,7 +815,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     @Override
     public void showError(String errorMessage) {
         mPlayerGlue.setTitle(errorMessage);
-        showControls(true);
+        showOverlay(true);
     }
 
     @Override
@@ -1050,13 +1066,18 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
     }
 
     @Override
+    public boolean isOverlayShown() {
+        return isControlsOverlayVisible();
+    }
+
+    @Override
     public boolean isSuggestionsShown() {
         return isControlsOverlayVisible() && getPlayerRowIndex() != 0;
     }
 
     @Override
     public boolean isControlsShown() {
-        return isControlsOverlayVisible();
+        return isControlsOverlayVisible() && getPlayerRowIndex() == 0;
     }
 
     @Override
@@ -1101,8 +1122,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         mIsControlsShownPreviously = false;
     }
 
+    /**
+     * Show controls or suggestions: depending what has been shown last.
+     */
     @Override
-    public void showControls(boolean show) {
+    public void showOverlay(boolean show) {
         if (isInPIPMode()) {
             // UI couldn't be properly displayed in PIP mode
             return;
@@ -1122,10 +1146,24 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             return;
         }
 
-        showControls(show);
+        showOverlay(show);
 
         if (show && !isSuggestionsShown() && !isSuggestionsEmpty()) {
             setPlayerRowIndex(1);
+        }
+    }
+
+    @Override
+    public void showControls(boolean show) {
+        if (isInPIPMode()) {
+            // UI couldn't be properly displayed in PIP mode
+            return;
+        }
+
+        showOverlay(show);
+
+        if (show) {
+            setPlayerRowIndex(0);
         }
     }
 
@@ -1179,23 +1217,15 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
     }
 
+    @Override
+    public void showSubtitles(boolean show) {
+        if (mSubtitleManager != null) {
+            mSubtitleManager.show(show);
+        }
+    }
+
     public boolean isDebugInfoShown() {
         return mDebugInfoManager != null && mDebugInfoManager.isShown();
-    }
-
-    @Override
-    public List<SubtitleStyle> getSubtitleStyles() {
-        return mSubtitleManager.getSubtitleStyles();
-    }
-
-    @Override
-    public void setSubtitleStyle(SubtitleStyle subtitleStyle) {
-        mSubtitleManager.setSubtitleStyle(subtitleStyle);
-    }
-
-    @Override
-    public SubtitleStyle getSubtitleStyle() {
-        return mSubtitleManager.getSubtitleStyle();
     }
 
     @Override
@@ -1253,6 +1283,26 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         return index != -1 ? index - 1 : -1;
     }
 
+    @Override
+    public VideoGroup getSuggestionsByIndex(int rowIndex) {
+        if (getVideo() == null || !getVideo().hasVideo()) {
+            return null;
+        }
+
+        // NOTE: skip first row. It's PlaybackControlsRow
+        int realIndex = 1 + rowIndex;
+        Object row = mRowsAdapter != null && mRowsAdapter.size() > realIndex ? mRowsAdapter.get(realIndex) : null;
+
+        VideoGroup result = null;
+
+        if (row instanceof ListRow) {
+            VideoGroupObjectAdapter adapter = (VideoGroupObjectAdapter) ((ListRow) row).getAdapter();
+            result = VideoGroup.from(adapter.getAll());
+        }
+
+        return result;
+    }
+
     /**
      * Disable scrolling on partially updated rows. This prevent controls from misbehaving.
      */
@@ -1283,7 +1333,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             // save state
             Video video = getVideo();
             int repeatButtonState = getRepeatButtonState();
-            boolean controlsShown = isControlsShown();
+            boolean controlsShown = isOverlayShown();
             boolean debugShown = isDebugInfoShown();
 
             // silently recreate player objects
@@ -1293,7 +1343,7 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
             // restore state
             setVideo(video);
             setRepeatButtonState(repeatButtonState);
-            showControls(controlsShown);
+            showOverlay(controlsShown);
             showDebugInfo(debugShown);
             setDebugButtonState(debugShown);
         }

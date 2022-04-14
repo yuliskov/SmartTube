@@ -162,6 +162,11 @@ public class AutoFrameRateHelper {
     }
 
     private void restoreOriginalState(Activity activity, boolean force) {
+        if (activity == null) {
+            Log.e(TAG, "activity == null");
+            return;
+        }
+
         if (!isSupported()) {
             Log.d(TAG, "restoreOriginalState: autoframerate not enabled... exiting...");
             return;

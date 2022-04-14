@@ -77,7 +77,6 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
     public class ViewHolder extends PlaybackRowPresenter.ViewHolder implements PlaybackSeekUi {
         private static final long SPEED_INCREASE_PERIOD_MS = 1000;
         private static final double SPEED_INCREASE_FACTOR = 1.5;
-        private static final long START_SEEK_INCREMENT_MS = 10_000;
         private static final int CONTROLS_MODE_FULL = 0;
         private static final int CONTROLS_MODE_COMPACT = 1;
         final Presenter.ViewHolder mDescriptionViewHolder;
@@ -289,7 +288,7 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         long calculateSeekIncrement() {
             if (mSeekIncrementMs == -1) {
                 mSeekStartTimeMs = System.currentTimeMillis();
-                mSeekIncrementMs = START_SEEK_INCREMENT_MS;
+                mSeekIncrementMs = mPlayerData.getStartSeekIncrementMs();
             } else {
                 // increase seek speed by 1.5 every 1 second
                 long timePassed = System.currentTimeMillis() - mSeekStartTimeMs;
@@ -1056,7 +1055,9 @@ public class PlaybackTransportRowPresenter extends PlaybackRowPresenter {
         }
         mPlaybackControlsPresenter.onUnbindViewHolder(vh.mControlsVh);
         mSecondaryControlsPresenter.onUnbindViewHolder(vh.mSecondaryControlsVh);
-        row.setOnPlaybackProgressChangedListener(null);
+        if (row != null) {
+            row.setOnPlaybackProgressChangedListener(null);
+        }
 
         super.onUnbindRowViewHolder(holder);
     }

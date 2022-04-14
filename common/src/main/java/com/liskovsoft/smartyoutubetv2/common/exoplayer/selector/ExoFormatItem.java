@@ -35,7 +35,7 @@ public class ExoFormatItem implements FormatItem {
     private String mFormatId;
     private boolean mIsPreset;
 
-    public static List<FormatItem> from(Set<MediaTrack> mediaTracks) {
+    synchronized public static List<FormatItem> from(Set<MediaTrack> mediaTracks) {
         if (mediaTracks == null) {
             return null;
         }

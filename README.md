@@ -9,7 +9,7 @@ stability, voice search and casting support **might** be worse than in the offic
 
 **Do you have any question?** Ctrl+F or ⌘F this readme first!
 
-[**Installation**](#Installation) | [**FAQ**](#FAQ) | [Support / Chat](#Support) | [Changelog](https://t.me/s/SmartTubeNextNewsEN) | [Donation](#Donation) | [source code](https://github.com/yuliskov/SmartTubeNext)
+[**Installation**](#Installation) | [**Donation**](#Donation) | [**FAQ**](#FAQ) | [Support / Chat](#Support) | [Changelog](https://t.me/s/SmartTubeNextNewsEN) | [Source Code](https://github.com/yuliskov/SmartTubeNext)
 
 
 ## Device support
@@ -126,15 +126,21 @@ To enable global voice search, an additional app must be installed alongside Sma
 
 If you want to support my developments you are welcome to buy me a cup of coffee :)
 
-<!-- > [BountySource (**PayPal**, **VISA**)](https://salt.bountysource.com/checkout/amount?team=smarttube)   -->
-> [Patreon (**PayPal**)](https://www.patreon.com/smarttube)  
+<!-- 
+> [BountySource (**PayPal**, **VISA**)](https://salt.bountysource.com/checkout/amount?team=smarttube)   
 > [QIWI (RU, Visa)](https://qiwi.com/n/GUESS025)  
-> [DonatePay (RU, **PayPal**, Visa)](https://new.donatepay.ru/@459197)  
+> [DonatePay (RU, **PayPal**, Visa)](https://new.donatepay.ru/@459197) 
+-->
+> [**Patreon**](https://www.patreon.com/smarttube)  
+> **PayPal**: firsthash at gmail.com  
 > **BTC**: 1JAT5VVWarVBkpVbNDn8UA8HXNdrukuBSx  
 > **LTC**: ltc1qgc24eq9jl9cq78qnd5jpqhemkajg9vudwyd8pw  
 > **ETH**: 0xe455E21a085ae195a097cd4F456051A9916A5064  
 > **ETC**: 0x209eCd33Fa61fA92167595eB3Aea92EE1905c815  
-> **XMR**: 48QsMjqfkeW54vkgKyRnjodtYxdmLk6HXfTWPSZoaFPEDpoHDwFUciGCe1QC9VAeGrgGw4PKNAksX9RW7myFqYJQDN5cHGT
+> **XMR**: 48QsMjqfkeW54vkgKyRnjodtYxdmLk6HXfTWPSZoaFPEDpoHDwFUciGCe1QC9VAeGrgGw4PKNAksX9RW7myFqYJQDN5cHGT  
+> **BNB**: bnb1amjr7fauftxxyhe4f95280vklctj243k9u55fq  
+> **DOGE**: DBnqJwJs2GJBxrCDsi5bXwSmjnz8uGdUpB  
+> **eUSDT**: 0xe455e21a085ae195a097cd4f456051a9916a5064
 
 
 ## Support

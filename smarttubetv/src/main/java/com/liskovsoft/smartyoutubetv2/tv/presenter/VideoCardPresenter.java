@@ -12,10 +12,8 @@ import androidx.core.content.ContextCompat;
 import androidx.leanback.widget.Presenter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -118,7 +116,7 @@ public class VideoCardPresenter extends ExtendedCardPresenter {
         Context context = cardView.getContext();
 
         cardView.setTitleText(video.title);
-        cardView.setContentText(video.description);
+        cardView.setContentText(video.secondTitle);
         // Count progress that very close to zero. E.g. when user closed video immediately.
         cardView.setProgress(video.percentWatched > 0 && video.percentWatched < 1 ? 1 : Math.round(video.percentWatched));
         cardView.setBadgeText(video.hasNewContent ?

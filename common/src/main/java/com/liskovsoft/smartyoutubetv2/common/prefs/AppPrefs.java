@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import com.liskovsoft.sharedutils.prefs.SharedPreferencesBase;
 import com.liskovsoft.smartyoutubetv2.common.R;
+import com.liskovsoft.smartyoutubetv2.common.openvpn.ConstsKt;
 
 public class AppPrefs extends SharedPreferencesBase {
     private static final String TAG = AppPrefs.class.getSimpleName();
@@ -13,6 +14,10 @@ public class AppPrefs extends SharedPreferencesBase {
     private static final String BACKUP_DATA = "backup_data";
     private static final String STATE_UPDATER_DATA = "state_updater_data";
     private static final String VIEW_MANAGER_DATA = "view_manager_data";
+    private static final String WEB_PROXY_URI = "web_proxy_uri";
+    private static final String WEB_PROXY_ENABLED = "web_proxy_enabled";
+    private static final String OPENVPN_CONFIG_URI = "openvpn_config_uri";
+    private static final String OPENVPN_ENABLED = "openvpn_enabled";
     private String mBootResolution;
 
     private AppPrefs(Context context) {
@@ -68,18 +73,34 @@ public class AppPrefs extends SharedPreferencesBase {
     }
 
     public String getWebProxyUri() {
-        return null;
+        return getString(WEB_PROXY_URI, "");
     }
 
     public void setWebProxyUri(String uri) {
-        
+        putString(WEB_PROXY_URI, uri);
     }
 
-    public boolean getWebProxyEnabled() {
-        return false;
+    public boolean isWebProxyEnabled() {
+        return getBoolean(WEB_PROXY_ENABLED, false);
     }
 
     public void setWebProxyEnabled(boolean enabled) {
-        
+        putBoolean(WEB_PROXY_ENABLED, enabled);
+    }
+
+    public String getOpenVPNConfigUri() {
+        return getString(OPENVPN_CONFIG_URI, ConstsKt.AntiZapretProfile);
+    }
+
+    public void setOpenVPNConfigUri(String uri) {
+        putString(OPENVPN_CONFIG_URI, uri);
+    }
+
+    public boolean isOpenVPNEnabled() {
+        return getBoolean(OPENVPN_ENABLED, false);
+    }
+
+    public void setOpenVPNEnabled(boolean enabled) {
+        putBoolean(OPENVPN_ENABLED, enabled);
     }
 }

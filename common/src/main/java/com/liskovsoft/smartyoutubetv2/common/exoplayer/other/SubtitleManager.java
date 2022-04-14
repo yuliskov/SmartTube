@@ -4,7 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build.VERSION;
 import android.util.TypedValue;
+import android.view.View;
+import android.view.accessibility.CaptioningManager;
+import android.view.accessibility.CaptioningManager.CaptionStyle;
 import androidx.core.content.ContextCompat;
 import com.google.android.exoplayer2.text.CaptionStyleCompat;
 import com.google.android.exoplayer2.text.Cue;
@@ -31,11 +35,19 @@ public class SubtitleManager implements TextOutput {
         public final int backgroundColorResId;
         public final int captionStyle;
 
+        public SubtitleStyle(int nameResId) {
+            this(nameResId, -1, -1, -1);
+        }
+
         public SubtitleStyle(int nameResId, int subsColorResId, int backgroundColorResId, int captionStyle) {
             this.nameResId = nameResId;
             this.subsColorResId = subsColorResId;
             this.backgroundColorResId = backgroundColorResId;
             this.captionStyle = captionStyle;
+        }
+
+        public boolean isSystem() {
+            return subsColorResId == -1 && backgroundColorResId == -1 && captionStyle == -1;
         }
     }
 
@@ -71,6 +83,12 @@ public class SubtitleManager implements TextOutput {
         configureSubtitleView();
     }
 
+    public void show(boolean show) {
+        if (mSubtitleView != null) {
+            mSubtitleView.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
+    }
+
     private List<Cue> forceCenterAlignment(List<Cue> cues) {
         List<Cue> result = new ArrayList<>();
 
@@ -95,19 +113,51 @@ public class SubtitleManager implements TextOutput {
 
             SubtitleStyle subtitleStyle = getSubtitleStyle();
 
-            int textColor = ContextCompat.getColor(mContext, subtitleStyle.subsColorResId);
-            int outlineColor = ContextCompat.getColor(mContext, R.color.black);
-            int backgroundColor = ContextCompat.getColor(mContext, subtitleStyle.backgroundColorResId);
+            if (subtitleStyle.isSystem()) {
+                applySystemStyle();
+            } else {
+                applyStyle(subtitleStyle);
+            }
+        }
+    }
+
+    private void applyStyle(SubtitleStyle subtitleStyle) {
+        int textColor = ContextCompat.getColor(mContext, subtitleStyle.subsColorResId);
+        int outlineColor = ContextCompat.getColor(mContext, R.color.black);
+        int backgroundColor = ContextCompat.getColor(mContext, subtitleStyle.backgroundColorResId);
+
+        CaptionStyleCompat style =
+                new CaptionStyleCompat(textColor,
+                        backgroundColor, Color.TRANSPARENT,
+                        subtitleStyle.captionStyle,
+                        outlineColor, Typeface.DEFAULT_BOLD);
+        mSubtitleView.setStyle(style);
+
+        float textSize = getTextSizePx();
+        mSubtitleView.setFixedTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+    }
+
+    private void applySystemStyle() {
+        CaptioningManager captioningManager =
+                (CaptioningManager) mContext.getSystemService(Context.CAPTIONING_SERVICE);
+
+        if (captioningManager != null) {
+            CaptionStyle userStyle = captioningManager.getUserStyle();
 
             CaptionStyleCompat style =
-                    new CaptionStyleCompat(textColor,
-                            backgroundColor, Color.TRANSPARENT,
-                            subtitleStyle.captionStyle,
-                            outlineColor, Typeface.DEFAULT_BOLD);
+                    new CaptionStyleCompat(userStyle.foregroundColor,
+                            userStyle.backgroundColor, VERSION.SDK_INT >= 21 ? userStyle.windowColor : Color.TRANSPARENT,
+                            userStyle.edgeType,
+                            userStyle.edgeColor, userStyle.getTypeface());
             mSubtitleView.setStyle(style);
 
-            float textSize = mSubtitleView.getContext().getResources().getDimension(R.dimen.subtitle_text_size);
-            mSubtitleView.setFixedTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+            float textSizePx = getTextSizePx();
+            mSubtitleView.setFixedTextSize(TypedValue.COMPLEX_UNIT_PX, textSizePx * captioningManager.getFontScale());
         }
+    }
+
+    private float getTextSizePx() {
+        float textSizePx = mSubtitleView.getContext().getResources().getDimension(R.dimen.subtitle_text_size);
+        return textSizePx * mPlayerData.getSubtitleScale();
     }
 }

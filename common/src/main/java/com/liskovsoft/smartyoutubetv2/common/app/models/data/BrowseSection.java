@@ -9,7 +9,7 @@ public class BrowseSection {
     public static final int TYPE_MULTI_GRID = 3;
     private static final int MAX_TITLE_LENGTH_CHARS = 30;
     private final int mId;
-    private final String mTitle;
+    private String mTitle;
     private final int mResId;
     private final String mIconUrl;
     private final boolean mIsAuthOnly;
@@ -51,6 +51,10 @@ public class BrowseSection {
         return mTitle;
     }
 
+    public void setTitle(String title) {
+        mTitle = title;
+    }
+
     public int getId() {
         return mId;
     }
@@ -85,5 +89,12 @@ public class BrowseSection {
 
     public Video getData() {
         return mData;
+    }
+
+    /**
+     * Check reserved ids range for default (built-in) sections
+     */
+    public boolean isDefault() {
+        return mId < 30;
     }
 }

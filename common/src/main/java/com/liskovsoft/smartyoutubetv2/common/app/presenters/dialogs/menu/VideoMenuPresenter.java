@@ -29,6 +29,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +43,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private Disposable mNotInterestedAction;
     private Disposable mSubscribeAction;
     private Video mVideo;
+    public static WeakReference<Video> sVideoHolder = new WeakReference<>(null);
     private boolean mIsNotInterestedButtonEnabled;
     private boolean mIsRemoveFromHistoryButtonEnabled;
     private boolean mIsOpenChannelButtonEnabled;
@@ -55,6 +57,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsPinToSidebarEnabled;
     private boolean mIsOpenPlaylistButtonEnabled;
     private boolean mIsAddToPlaybackQueueButtonEnabled;
+    private boolean mIsOpenDescriptionButtonEnabled;
+    private boolean mIsPlayVideoButtonEnabled;
     private VideoMenuCallback mCallback;
 
     public interface VideoMenuCallback {
@@ -127,6 +131,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsAccountSelectionEnabled = true;
         mIsReturnToBackgroundVideoEnabled = true;
         mIsPinToSidebarEnabled = true;
+        mIsOpenDescriptionButtonEnabled = true;
+        mIsPlayVideoButtonEnabled = true;
 
         showMenuInt(video);
     }
@@ -141,6 +147,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         RxUtils.disposeActions(mPlaylistInfoAction, mAddToPlaylistAction, mNotInterestedAction, mSubscribeAction);
 
         mVideo = video;
+        sVideoHolder = new WeakReference<>(video);
 
         MediaServiceManager.instance().authCheck(this::obtainPlaylistsAndShowDialogSigned, this::prepareAndShowDialogUnsigned);
     }
@@ -170,6 +177,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         mDialogPresenter.clear();
 
+        appendPlayVideoButton();
         appendReturnToBackgroundVideoButton();
         appendNotInterestedButton();
         appendAddToRecentPlaylistButton(videoPlaylistInfos);
@@ -179,6 +187,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendSubscribeButton();
         appendOpenPlaylistButton();
         appendTogglePinVideoToSidebarButton();
+        appendOpenDescriptionButton();
         appendAddToPlaybackQueueButton();
         appendShareButton();
         appendAccountSelectionButton();
@@ -196,10 +205,12 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         mDialogPresenter.clear();
 
+        appendPlayVideoButton();
         appendReturnToBackgroundVideoButton();
         appendOpenPlaylistButton();
         appendOpenChannelButton();
         appendTogglePinVideoToSidebarButton();
+        appendOpenDescriptionButton();
         appendAddToPlaybackQueueButton();
         appendShareButton();
         appendAccountSelectionButton();
@@ -375,6 +386,62 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                 }));
     }
 
+    private void appendOpenDescriptionButton() {
+        if (!mIsOpenDescriptionButtonEnabled || mVideo == null) {
+            return;
+        }
+
+        if (mVideo.videoId == null) {
+            return;
+        }
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.action_video_info),
+                        optionItem -> {
+                            MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
+                            mServiceManager.loadMetadata(mVideo, metadata -> {
+                                String description = metadata.getDescription();
+                                if (description != null) {
+                                    showLongTextDialog(description);
+                                } else {
+                                    mServiceManager.loadFormatInfo(mVideo, formatInfo -> {
+                                        String newDescription = formatInfo.getDescription();
+                                        if (newDescription != null) {
+                                            showLongTextDialog(newDescription);
+                                        } else {
+                                            MessageHelpers.showMessage(getContext(), R.string.description_not_found);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                ));
+    }
+
+    private void appendPlayVideoButton() {
+        if (!mIsPlayVideoButtonEnabled || mVideo == null) {
+            return;
+        }
+
+        if (mVideo.videoId == null) {
+            return;
+        }
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.play_video),
+                        optionItem -> {
+                            PlaybackPresenter.instance(getContext()).openVideo(mVideo);
+                            mDialogPresenter.closeDialog();
+                        }
+                ));
+    }
+
+    private void showLongTextDialog(String description) {
+        mDialogPresenter.clear();
+        mDialogPresenter.appendLongTextCategory(mVideo.title, UiOptionItem.from(description, null));
+        mDialogPresenter.showDialog(mVideo.title);
+    }
+
     private void appendSubscribeButton() {
         if (!mIsSubscribeButtonEnabled) {
             return;
@@ -520,6 +587,14 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY)) {
             mIsRemoveFromHistoryButtonEnabled = false;
+        }
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_OPEN_DESCRIPTION)) {
+            mIsOpenDescriptionButtonEnabled = false;
+        }
+        
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PLAY_VIDEO)) {
+            mIsPlayVideoButtonEnabled = false;
         }
     }
 }
