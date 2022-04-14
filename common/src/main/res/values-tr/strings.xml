@@ -375,4 +375,5 @@
     <string name="tunneled_video_playback">Tünelli video oynatma (Android 5+)</string>
     <string name="master_volume">Ana ses</string>
     <string name="volume_limit">Ses sınırı</string>
+    <string name="play_video">Oynat</string>
 </resources>
