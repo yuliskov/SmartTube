@@ -116,6 +116,7 @@
   <string name="subscribed_to_channel">Suscrito al canal</string>
   <string name="unsubscribed_from_channel">Desuscribirse del canal</string>
   <string name="subtitle_yellow_transparent">Amarillo sobre fondo transparente</string>
+  <string name="subtitle_white_transparent">Blanco sobre fondo transparente</string>
   <string name="subtitle_white_black">Blanco sobre fondo negro</string>
   <string name="player_seek_preview">Previsualizar mientras busca</string>
   <string name="color_scheme_dark_grey_oled">Gris oscuro (OLED)</string>
@@ -176,7 +177,7 @@
   <string name="content_block_confirm_skip">Confirmar al saltar</string>
   <string name="content_block_categories">Omitir segmentos</string>
   <string name="content_block_sponsor">Patrocinador</string>
-  <string name="content_block_intro">Animación del intermedio/intro</string>
+  <string name="content_block_intro">Animación de intermedio/intro</string>
   <string name="content_block_outro">Tarjetas/créditos finales</string>
   <string name="content_block_interaction">Recordatorio de interacción (suscribirse)</string>
   <string name="content_block_self_promo">Autopromoción</string>
@@ -227,7 +228,7 @@
   <string name="share_embed_link">Compartir enlace embebido</string>
   <string name="card_text_scroll_factor">Velocidad scroll texto tarjeta</string>
   <string name="preferred_update_source">Seleccionar fuente actualizaciones</string>
-  <string name="hide_shorts">Ocultar Cortos en Suscripciones</string>
+  <string name="hide_shorts">Ocultar cortos en suscripciones</string>
   <string name="key_remapping">Remapeo de teclas</string>
   <string name="screen_dimming">Atenuación de pantalla</string>
   <string name="removed_from_playback_queue">Eliminado de cola de reproducción</string>
@@ -246,7 +247,7 @@
   <string name="app_backup">Copia de seguridad</string>
   <string name="app_restore">Restaurar copia de seguridad</string>
   <string name="skip_each_segment_once">No saltar segmentos de nuevo</string>
-  <string name="disable_ok_long_press">Desabilitar pulsación larga botón OK</string>
+  <string name="disable_ok_long_press">Deshabilitar pulsación larga botón OK</string>
   <string name="player_time_correction">Mostrar el tiempo respecto a la velocidad</string>
   <string name="sponsor_color_markers">Marcas de color en la barra de progreso</string>
   <string name="refresh_section">Actualizar sección</string>
@@ -290,6 +291,7 @@
   <string name="action_subscribe">Suscribirse</string>
   <string name="action_channel">Abrir canal</string>
   <string name="action_pip">PIP</string>
+  <string name="action_video_info">Descripción vídeo</string>
   <string name="action_screen_off">Apagar pantalla</string>
   <string name="action_playback_queue">Cola reproducción</string>
   <string name="action_video_speed">Velocidad vídeo</string>
@@ -373,4 +375,5 @@
   <string name="tunneled_video_playback">Reproducción de vídeo en túnel (Android 5+)</string>
   <string name="master_volume">Volumen principal</string>
   <string name="volume_limit">Límite de volumen</string>
+  <string name="play_video">Reproducir</string>
 </resources>
