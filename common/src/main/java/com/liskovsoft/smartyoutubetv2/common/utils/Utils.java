@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
+import android.app.Instrumentation;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,6 +14,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -22,6 +24,8 @@ import android.os.IBinder;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
+import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import androidx.browser.customtabs.CustomTabsIntent;
@@ -37,6 +41,9 @@ import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
@@ -48,6 +55,7 @@ import com.liskovsoft.smartyoutubetv2.common.misc.RemoteControlWorker;
 import com.liskovsoft.smartyoutubetv2.common.prefs.RemoteControlData;
 import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -109,7 +117,7 @@ public class Utils {
     }
 
     @TargetApi(17)
-    private static void showMultiChooser(Context context, Uri url) {
+    public static void showMultiChooser(Context context, Uri url) {
         Intent primaryIntent = new Intent(Intent.ACTION_VIEW);
         Intent secondaryIntent = new Intent(Intent.ACTION_SEND);
         primaryIntent.setData(url);
@@ -329,11 +337,17 @@ public class Utils {
     }
 
     public static CharSequence color(CharSequence string, int color) {
-        SpannableString spannableString = new SpannableString(string);
+        SpannableString spannable = new SpannableString(string);
         ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(color);
-        spannableString.setSpan(foregroundColorSpan, 0, spannableString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.setSpan(foregroundColorSpan, 0, spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        return spannableString;
+        return spannable;
+    }
+
+    public static CharSequence italic(CharSequence string) {
+        SpannableString spannable = new SpannableString(string);
+        spannable.setSpan(new StyleSpan(Typeface.ITALIC), 0, spannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return spannable;
     }
 
     @SuppressWarnings("deprecation")
@@ -481,5 +495,45 @@ public class Utils {
         int lengthMs = ServiceHelper.timeTextToMillis(mediaItem.getBadgeText());
         boolean isShortLength = lengthMs > 0 && lengthMs < SHORTS_LEN_MS;
         return isShortLength || title.contains("#short") || title.contains("#shorts") || title.contains("#tiktok");
+    }
+
+    public static void showConfirmationDialog(Context context, Runnable onConfirm, String title) {
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(context);
+        settingsPresenter.clear();
+
+        List<OptionItem> options = new ArrayList<>();
+
+        options.add(UiOptionItem.from(context.getString(R.string.cancel_dialog),
+                option -> settingsPresenter.goBack()));
+
+        options.add(UiOptionItem.from(context.getString(R.string.btn_confirm),
+                option -> {
+                    settingsPresenter.goBack();
+                    onConfirm.run();
+                }));
+
+        settingsPresenter.appendStringsCategory(title, options);
+
+        settingsPresenter.showDialog(title);
+    }
+
+    public static void sendKey(int key) {
+        try {
+            Instrumentation instrumentation = new Instrumentation();
+            instrumentation.sendKeyDownUpSync(key);
+        } catch (SecurityException e) {
+            // Injecting to another application requires INJECT_EVENTS permission
+            e.printStackTrace();
+        }
+    }
+
+    public static void sendKey(KeyEvent keyEvent) {
+        try {
+            Instrumentation instrumentation = new Instrumentation();
+            instrumentation.sendKeySync(keyEvent);
+        } catch (SecurityException e) {
+            // Injecting to another application requires INJECT_EVENTS permission
+            e.printStackTrace();
+        }
     }
 }

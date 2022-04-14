@@ -49,7 +49,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
+    android.ndkVersion "24.0.8215888"
     compileSdkVersion project.properties.compileSdkVersion
     buildToolsVersion project.properties.buildToolsVersion
     testOptions.unitTests.includeAndroidResources = true
@@ -59,8 +59,8 @@ android {
         applicationId "com.liskovsoft.smarttubetv"
         minSdkVersion project.properties.minSdkVersion
         targetSdkVersion project.properties.targetSdkVersion
-        versionCode 618
-        versionName "14.28"
+        versionCode 650
+        versionName "14.60"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
 
@@ -137,7 +137,7 @@ android {
         variant.outputs.each { output ->
             def project = "STubeNext"
             def flavor = variant.productFlavors[-1].name
-            def buildType = variant.variantData.variantConfiguration.buildType.name.take(1)
+            def buildType = variant.buildType.name.take(1)
             def version = variant.versionName
 
             def newApkName = sprintf("%s_%s_v%s_%s.apk", [project, flavor, version, buildType])
@@ -145,6 +145,11 @@ android {
             // gradle 4.6 migration
             output.outputFileName = new File(newApkName)
         }
+    }
+
+    packagingOptions {
+        // openvpn module fix: More than one file was found with OS independent path 'META-INF/com.android.tools/proguard/coroutines.pro'
+        exclude 'META-INF/com.android.tools/proguard/coroutines.pro'
     }
 }
 
@@ -188,6 +193,7 @@ dependencies {
     androidTestImplementation 'androidx.test:rules:' + testXSupportLibraryVersion
     androidTestImplementation 'androidx.test.espresso:espresso-core:' + espressoVersion
 
+    implementation project(':common')
     implementation project(':sharedutils')
     implementation project(':mediaserviceinterfaces')
     implementation project(':youtubeapi')
@@ -195,12 +201,13 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:' + rxAndroidVersion
     implementation 'io.reactivex.rxjava2:rxjava:' + rxJavaVersion
 
-    implementation project(path: ':common')
-
     // Add the Firebase Crashlytics SDK.
     stbetaImplementation('com.google.firebase:firebase-crashlytics:' + firebaseCrashlyticsVersion) {
         transitive = true
     }
+
+    // Android 4 SponsorBlock fix???
+    // implementation 'org.conscrypt:conscrypt-android:2.5.2'
 
     // debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 

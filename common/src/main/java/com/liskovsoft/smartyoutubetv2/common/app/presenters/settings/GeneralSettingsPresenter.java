@@ -14,10 +14,13 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.BackupAndRestoreManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
-import com.liskovsoft.smartyoutubetv2.common.misc.ProxyManager;
+import com.liskovsoft.smartyoutubetv2.common.openvpn.OpenVPNDialog;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
+import com.liskovsoft.smartyoutubetv2.common.proxy.WebProxyDialog;
+import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -55,6 +58,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendScreenDimmingCategory(settingsPresenter);
         appendKeyRemappingCategory(settingsPresenter);
         appendAppBackupCategory(settingsPresenter);
+        appendInternetCensorship(settingsPresenter);
         appendMiscCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_general), () -> {
@@ -90,6 +94,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
+                {R.string.play_video, MainUIData.MENU_ITEM_PLAY_VIDEO},
                 {R.string.not_interested, MainUIData.MENU_ITEM_NOT_INTERESTED},
                 {R.string.remove_from_history, MainUIData.MENU_ITEM_REMOVE_FROM_HISTORY},
                 {R.string.add_remove_from_recent_playlist, MainUIData.MENU_ITEM_RECENT_PLAYLIST},
@@ -98,7 +103,9 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 {R.string.share_link, MainUIData.MENU_ITEM_SHARE_LINK},
                 {R.string.dialog_account_list, MainUIData.MENU_ITEM_SELECT_ACCOUNT},
                 {R.string.move_section_up, MainUIData.MENU_ITEM_MOVE_SECTION_UP},
-                {R.string.move_section_down, MainUIData.MENU_ITEM_MOVE_SECTION_DOWN}}) {
+                {R.string.move_section_down, MainUIData.MENU_ITEM_MOVE_SECTION_DOWN},
+                {R.string.rename_section, MainUIData.MENU_ITEM_RENAME_SECTION},
+                {R.string.action_video_info, MainUIData.MENU_ITEM_OPEN_DESCRIPTION}}) {
             options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
                 if (optionItem.isSelected()) {
                     mMainUIData.enableMenuItem(pair[1]);
@@ -248,19 +255,23 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         }
 
         options.add(UiOptionItem.from(
-                String.format("%s:\n%s", getContext().getString(R.string.app_restore), backupManager.getBackupPath()),
+                String.format("%s:\n%s", getContext().getString(R.string.app_backup), backupManager.getBackupPath()),
                 option -> {
-                    backupManager.checkPermAndRestore();
-                    MessageHelpers.showMessage(getContext(), R.string.msg_done);
+                    Utils.showConfirmationDialog(getContext(), () -> {
+                        mGeneralData.enableSection(MediaGroup.TYPE_SETTINGS, true); // prevent Settings lock
+                        mGeneralData.enableSettingsSection(true); // prevent Settings lock
+                        backupManager.checkPermAndBackup();
+                        MessageHelpers.showMessage(getContext(), R.string.msg_done);
+                    }, getContext().getString(R.string.app_backup));
                 }));
 
         options.add(UiOptionItem.from(
-                String.format("%s:\n%s", getContext().getString(R.string.app_backup), backupManager.getBackupPath()),
+                String.format("%s:\n%s", getContext().getString(R.string.app_restore), backupManager.getBackupPath()),
                 option -> {
-                    mGeneralData.enableSection(MediaGroup.TYPE_SETTINGS, true); // prevent Settings lock
-                    mGeneralData.enableSettingsSection(true); // prevent Settings lock
-                    backupManager.checkPermAndBackup();
-                    MessageHelpers.showMessage(getContext(), R.string.msg_done);
+                    Utils.showConfirmationDialog(getContext(), () -> {
+                        backupManager.checkPermAndRestore();
+                        MessageHelpers.showMessage(getContext(), R.string.msg_done);
+                    }, getContext().getString(R.string.app_restore));
                 }));
 
         settingsPresenter.appendStringsCategory(getContext().getString(R.string.app_backup_restore), options);
@@ -305,16 +316,44 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
                 option -> mGeneralData.disableOkButtonLongPress(option.isSelected()),
                 mGeneralData.isOkButtonLongPressDisabled()));
 
-        ProxyManager proxyManager = ProxyManager.instance(getContext());
-
-        options.add(UiOptionItem.from("Enable Web Proxy config:\n" + proxyManager.getConfigPath(),
-                option -> {
-                    mGeneralData.enableProxy(option.isSelected());
-                    proxyManager.enableProxy(option.isSelected());
-                    mRestartApp = true;
-                },
-                mGeneralData.isProxyEnabled()));
-
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.player_other), options);
+    }
+
+    private void appendInternetCensorship(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        ProxyManager proxyManager = new ProxyManager(getContext());
+
+        if (proxyManager.isProxySupported()) {
+            options.add(UiOptionItem.from(getContext().getString(R.string.enable_web_proxy),
+                    option -> {
+                        mGeneralData.enableProxy(option.isSelected());
+                        new WebProxyDialog(getContext()).enable(option.isSelected());
+                        if (option.isSelected()) {
+                            settingsPresenter.closeDialog();
+                        }
+                    },
+                    mGeneralData.isProxyEnabled()));
+        }
+
+        OpenVPNDialog openVPNDialog = new OpenVPNDialog(getContext());
+
+        if (getContext() instanceof MotherActivity) {
+            ((MotherActivity) getContext()).addOnPermissions(openVPNDialog);
+        }
+
+        if (openVPNDialog.isOpenVPNSupported()) {
+            options.add(UiOptionItem.from(getContext().getString(R.string.enable_openvpn),
+                    option -> {
+                        mGeneralData.enableVPN(option.isSelected());
+                        openVPNDialog.enable(option.isSelected());
+                        if (option.isSelected()) {
+                            settingsPresenter.closeDialog();
+                        }
+                    },
+                    mGeneralData.isVPNEnabled()));
+        }
+
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.internet_censorship), options);
     }
 }

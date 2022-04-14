@@ -14,9 +14,10 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
-import com.liskovsoft.smartyoutubetv2.common.misc.ProxyManager;
+import com.liskovsoft.smartyoutubetv2.common.openvpn.OpenVPNManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AppPrefs;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
+import com.liskovsoft.smartyoutubetv2.common.proxy.ProxyManager;
 import com.liskovsoft.smartyoutubetv2.common.utils.IntentExtractor;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
@@ -81,6 +82,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 //            runRemoteControlTasks();
             //setupKeepAlive();
             configureProxy();
+            configureOpenVPN();
             initVideoStateService();
             sRunOnce = true;
         }
@@ -118,8 +120,13 @@ public class SplashPresenter extends BasePresenter<SplashView> {
 
     private void configureProxy() {
         if (getContext() != null && GeneralData.instance(getContext()).isProxyEnabled()) {
-            ProxyManager proxyManager = ProxyManager.instance(getContext());
-            proxyManager.enableProxy(true);
+            new ProxyManager(getContext()).configureSystemProxy();
+        }
+    }
+
+    private void configureOpenVPN() {
+        if (getContext() != null && GeneralData.instance(getContext()).isVPNEnabled()) {
+            OpenVPNManager.instance(getContext(), null).configureOpenVPN();
         }
     }
 
@@ -140,7 +147,7 @@ public class SplashPresenter extends BasePresenter<SplashView> {
     private void checkTouchSupport() {
         if (Helpers.isTouchSupported(getContext())) {
             MessageHelpers.showLongMessage(getContext(), "The app is designed for tv boxes. Phones aren't supported.");
-            ViewManager.instance(getContext()).forceFinishTheApp(true);
+            ViewManager.instance(getContext()).forceFinishTheApp();
         }
     }
 
@@ -211,14 +218,15 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             String videoId = IntentExtractor.extractVideoId(intent);
 
             if (videoId != null) {
-                PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
-                playbackPresenter.openVideo(videoId);
-
                 ViewManager viewManager = ViewManager.instance(getContext());
 
-                if (GeneralData.instance(getContext()).isReturnToLauncherEnabled()) {
+                // Also, ensure that we're not opening tube link from description dialog
+                if (GeneralData.instance(getContext()).isReturnToLauncherEnabled() && !AppDialogPresenter.instance(getContext()).isDialogShown()) {
                     viewManager.setSinglePlayerMode(true);
                 }
+
+                PlaybackPresenter playbackPresenter = PlaybackPresenter.instance(getContext());
+                playbackPresenter.openVideo(videoId);
 
                 return true;
             }
@@ -238,25 +246,26 @@ public class SplashPresenter extends BasePresenter<SplashView> {
             return false;
         });
 
-        mIntentChain.add(intent -> {
-            int sectionId = -1;
-
-            // ATV channel icon clicked
-            if (IntentExtractor.isSubscriptionsUrl(intent)) {
-                sectionId = MediaGroup.TYPE_SUBSCRIPTIONS;
-            } else if (IntentExtractor.isHistoryUrl(intent)) {
-                sectionId = MediaGroup.TYPE_HISTORY;
-            } else if (IntentExtractor.isRecommendedUrl(intent)) {
-                sectionId = MediaGroup.TYPE_HOME;
-            }
-
-            if (sectionId != -1) {
-                BrowsePresenter.instance(getContext()).selectSection(sectionId);
-                return true;
-            }
-
-            return false;
-        });
+        // NOTE: doesn't work very well. E.g. there's problems with focus or conflicts with 'boot to' section option.
+        //mIntentChain.add(intent -> {
+        //    int sectionId = -1;
+        //
+        //    // ATV channel icon clicked
+        //    if (IntentExtractor.isSubscriptionsUrl(intent)) {
+        //        sectionId = MediaGroup.TYPE_SUBSCRIPTIONS;
+        //    } else if (IntentExtractor.isHistoryUrl(intent)) {
+        //        sectionId = MediaGroup.TYPE_HISTORY;
+        //    } else if (IntentExtractor.isRecommendedUrl(intent)) {
+        //        sectionId = MediaGroup.TYPE_HOME;
+        //    }
+        //
+        //    if (sectionId != -1) {
+        //        BrowsePresenter.instance(getContext()).selectSection(sectionId);
+        //        return true;
+        //    }
+        //
+        //    return false;
+        //});
 
         // Should come last
         mIntentChain.add(intent -> {

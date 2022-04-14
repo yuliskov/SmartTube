@@ -1,12 +1,18 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUIManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SubtitleSettingsPresenter extends BasePresenter<Void> {
     private final PlayerData mPlayerData;
@@ -27,6 +33,7 @@ public class SubtitleSettingsPresenter extends BasePresenter<Void> {
         // Can't work properly. There is no robust language detection.
         //appendSubtitleLanguageCategory(settingsPresenter);
         appendSubtitleStyleCategory(settingsPresenter);
+        appendSubtitleSizeCategory(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.subtitle_category_title));
     }
@@ -62,5 +69,18 @@ public class SubtitleSettingsPresenter extends BasePresenter<Void> {
     private void appendSubtitleStyleCategory(AppDialogPresenter settingsPresenter) {
         OptionCategory category = PlayerUIManager.createSubtitleStylesCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
+    }
+
+    private void appendSubtitleSizeCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int scalePercent : Helpers.range(10, 200, 10)) {
+            float scale = scalePercent / 100f;
+            options.add(UiOptionItem.from(String.format("%sx", scale),
+                    optionItem -> mPlayerData.setSubtitleScale(scale),
+                    Helpers.floatEquals(scale, mPlayerData.getSubtitleScale())));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.subtitle_scale), options);
     }
 }

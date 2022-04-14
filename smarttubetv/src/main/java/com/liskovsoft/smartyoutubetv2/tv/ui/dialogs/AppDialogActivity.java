@@ -13,12 +13,12 @@ import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 public class AppDialogActivity extends MotherActivity {
     private static final String TAG = AppDialogActivity.class.getSimpleName();
     private AppDialogFragment mFragment;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //setupActivity();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_app_settings);
+        // Can't use getSupportFragmentManager because AppDialogFragment isn't subclass of androidx fragment
         mFragment = (AppDialogFragment) getFragmentManager().findFragmentById(R.id.app_settings_fragment);
     }
 

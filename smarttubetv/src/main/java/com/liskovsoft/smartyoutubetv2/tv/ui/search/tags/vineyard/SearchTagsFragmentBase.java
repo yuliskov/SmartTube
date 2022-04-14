@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.leanback.app.RowsSupportFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
+import androidx.leanback.widget.HeaderItem;
 import androidx.leanback.widget.ListRow;
 import androidx.leanback.widget.ListRowPresenter;
 import androidx.leanback.widget.ObjectAdapter;
@@ -34,7 +35,7 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     private static final int REQUEST_SPEECH = 0x00000010;
 
     private TagAdapter mSearchTagsAdapter;
-    private ObjectAdapter mItemResultsAdapter;
+    //private ObjectAdapter mItemResultsAdapter;
     private ArrayObjectAdapter mResultsAdapter; // contains tags adapter and results adapter (see attachAdapter method)
     private ListRowPresenter mResultsPresenter;
 
@@ -108,9 +109,9 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
     
     protected abstract void onItemViewClicked(Object item);
 
-    protected void setItemResultsAdapter(ObjectAdapter adapter) {
-        mItemResultsAdapter = adapter;
-    }
+    //protected void setItemResultsAdapter(ObjectAdapter adapter) {
+    //    mItemResultsAdapter = adapter;
+    //}
 
     protected void setSearchTagsProvider(SearchTagsProvider provider) {
         mSearchTagsProvider = provider;
@@ -203,6 +204,15 @@ public abstract class SearchTagsFragmentBase extends SearchSupportFragment
             if (!containsAdapter(adapter)) {
                 index = Math.min(index, mResultsAdapter.size());
                 mResultsAdapter.add(index, new ListRow(adapter));
+            }
+        }
+    }
+
+    protected void attachAdapter(int index, HeaderItem header, ObjectAdapter adapter) {
+        if (mResultsAdapter != null) {
+            if (!containsAdapter(adapter)) {
+                index = Math.min(index, mResultsAdapter.size());
+                mResultsAdapter.add(index, new ListRow(header, adapter));
             }
         }
     }

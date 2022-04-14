@@ -5,8 +5,10 @@ import android.content.Context;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.MainPlayerEventBridge;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.youtubeapi.common.helpers.ServiceHelper;
 
 public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     private static final String TAG = PlaybackPresenter.class.getSimpleName();
@@ -61,6 +63,10 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
         mMainPlayerEventBridge.openVideo(item);
 
         mViewManager.startView(PlaybackView.class);
+
+        if (getView() != null) {
+            getView().getController().showControls(true);
+        }
     }
 
     public Video getVideo() {
@@ -78,6 +84,18 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
     public void forceFinish() {
         if (getView() != null) {
             getView().getController().finishReally();
+        }
+    }
+
+    public void setPosition(String timeCode) {
+        if (getView() != null) {
+            getView().getController().setPositionMs(ServiceHelper.timeTextToMillis(timeCode));
+        } else {
+            Video video = VideoMenuPresenter.sVideoHolder.get();
+            if (video != null) {
+                video.pendingPosMs = ServiceHelper.timeTextToMillis(timeCode);
+                openVideo(video);
+            }
         }
     }
 }

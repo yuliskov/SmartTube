@@ -1,6 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.settings;
 
 import android.content.Context;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HQDialogManager;
@@ -38,11 +39,13 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendVideoBufferCategory(settingsPresenter);
         //appendVideoZoomCategory(settingsPresenter);
         appendAudioShiftCategory(settingsPresenter);
+        appendMasterVolumeCategory(settingsPresenter);
         appendOKButtonCategory(settingsPresenter);
         appendPlayerButtonsCategory(settingsPresenter);
         appendUIAutoHideCategory(settingsPresenter);
         appendSeekTypeCategory(settingsPresenter);
         appendSeekingPreviewCategory(settingsPresenter);
+        appendSeekIntervalCategory(settingsPresenter);
         appendRememberSpeedCategory(settingsPresenter);
         appendEndingTimeCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
@@ -111,6 +114,19 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
+    private void appendMasterVolumeCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int scalePercent : Helpers.range(0, 100, 5)) {
+            float scale = scalePercent / 100f;
+            options.add(UiOptionItem.from(String.format("%sx", scale),
+                    optionItem -> mPlayerData.setPlayerVolume(scale),
+                    Helpers.floatEquals(scale, mPlayerData.getPlayerVolume())));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.volume_limit), options);
+    }
+
     private void appendSeekingPreviewCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
@@ -125,6 +141,18 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_seek_preview), options);
+    }
+
+    private void appendSeekIntervalCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int intervalMs : new int[] {1_000, 2_000, 3_000, 5_000, 10_000, 15_000, 20_000, 30_000, 60_000}) {
+            options.add(UiOptionItem.from(getContext().getString(R.string.seek_interval_sec, Helpers.toString(intervalMs / 1_000f)),
+                    optionItem -> mPlayerData.setStartSeekIncrementMs(intervalMs),
+                    intervalMs == mPlayerData.getStartSeekIncrementMs()));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.seek_interval), options);
     }
 
     private void appendRememberSpeedCategory(AppDialogPresenter settingsPresenter) {
@@ -152,6 +180,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
+                {R.string.action_video_info, PlayerTweaksData.PLAYER_BUTTON_VIDEO_INFO},
                 {R.string.action_video_stats, PlayerTweaksData.PLAYER_BUTTON_VIDEO_STATS},
                 {R.string.action_playback_queue, PlayerTweaksData.PLAYER_BUTTON_PLAYBACK_QUEUE},
                 {R.string.action_screen_off, PlayerTweaksData.PLAYER_BUTTON_SCREEN_OFF},
@@ -186,23 +215,13 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     private void appendTweaksCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from("Alt presets behavior (limit bandwidth)",
-                option -> mPlayerTweaksData.enableNoFpsPresets(option.isSelected()),
-                mPlayerTweaksData.isNoFpsPresetsEnabled()));
-
-        options.add(UiOptionItem.from("Enable sleep timer (one hour)",
-                option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
-                mPlayerData.isSonyTimerFixEnabled()));
-
-        options.add(UiOptionItem.from("Disable playback notifications",
-                option -> mPlayerTweaksData.disablePlaybackNotifications(option.isSelected()),
-                mPlayerTweaksData.isPlaybackNotificationsDisabled()));
-
-        options.add(UiOptionItem.from("Audio sync fix",
+        options.add(UiOptionItem.from(getContext().getString(R.string.audio_sync_fix),
+                getContext().getString(R.string.audio_sync_fix_desc),
                 option -> mPlayerTweaksData.enableAudioSyncFix(option.isSelected()),
                 mPlayerTweaksData.isAudioSyncFixEnabled()));
 
-        options.add(UiOptionItem.from("Ambilight/Aspect ratio fix",
+        options.add(UiOptionItem.from(getContext().getString(R.string.ambilight_ratio_fix),
+                getContext().getString(R.string.ambilight_ratio_fix_desc),
                 option -> {
                     mPlayerTweaksData.enableTextureView(option.isSelected());
                     if (option.isSelected()) {
@@ -212,15 +231,28 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 },
                 mPlayerTweaksData.isTextureViewEnabled()));
 
-        options.add(UiOptionItem.from("Amlogic 1080p@60fps fix",
-                option -> mPlayerTweaksData.enableAmlogicFix(option.isSelected()),
-                mPlayerTweaksData.isAmlogicFixEnabled()));
+        options.add(UiOptionItem.from(getContext().getString(R.string.force_legacy_codecs),
+                getContext().getString(R.string.force_legacy_codecs_desc),
+                option -> mPlayerData.forceLegacyCodecs(option.isSelected()),
+                mPlayerData.isLegacyCodecsForced()));
 
-        options.add(UiOptionItem.from("Live stream fix (1080p)",
+        options.add(UiOptionItem.from(getContext().getString(R.string.live_stream_fix),
+                getContext().getString(R.string.live_stream_fix_desc),
                 option -> mPlayerTweaksData.enableLiveStreamFix(option.isSelected()),
                 mPlayerTweaksData.isLiveStreamFixEnabled()));
 
-        options.add(UiOptionItem.from("Tunneled video playback (Android 5+)",
+        options.add(UiOptionItem.from(getContext().getString(R.string.playback_notifications_fix),
+                getContext().getString(R.string.playback_notifications_fix_desc),
+                option -> mPlayerTweaksData.disablePlaybackNotifications(option.isSelected()),
+                mPlayerTweaksData.isPlaybackNotificationsDisabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.amlogic_fix),
+                getContext().getString(R.string.amlogic_fix_desc),
+                option -> mPlayerTweaksData.enableAmlogicFix(option.isSelected()),
+                mPlayerTweaksData.isAmlogicFixEnabled()));
+
+        options.add(UiOptionItem.from(getContext().getString(R.string.tunneled_video_playback),
+                getContext().getString(R.string.tunneled_video_playback_desc),
                 option -> {
                     mPlayerTweaksData.enableTunneledPlayback(option.isSelected());
                     if (option.isSelected()) {
@@ -230,6 +262,14 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 },
                 mPlayerTweaksData.isTunneledPlaybackEnabled()));
 
+        options.add(UiOptionItem.from("Alt presets behavior (limit bandwidth)",
+                option -> mPlayerTweaksData.enableNoFpsPresets(option.isSelected()),
+                mPlayerTweaksData.isNoFpsPresetsEnabled()));
+
+        options.add(UiOptionItem.from("Enable sleep timer (one hour)",
+                option -> mPlayerData.enableSonyTimerFix(option.isSelected()),
+                mPlayerData.isSonyTimerFixEnabled()));
+
         options.add(UiOptionItem.from("Disable snap to vsync",
                 option -> mPlayerTweaksData.disableSnapToVsync(option.isSelected()),
                 mPlayerTweaksData.isSnappingToVsyncDisabled()));
@@ -237,10 +277,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         options.add(UiOptionItem.from("Skip codec profile level check",
                 option -> mPlayerTweaksData.skipProfileLevelCheck(option.isSelected()),
                 mPlayerTweaksData.isProfileLevelCheckSkipped()));
-
-        options.add(UiOptionItem.from("Force legacy codecs (720p)",
-                option -> mPlayerData.enableLowQuality(option.isSelected()),
-                mPlayerData.isLowQualityEnabled()));
 
         options.add(UiOptionItem.from("Force SW video decoder",
                 option -> mPlayerTweaksData.forceSWDecoder(option.isSelected()),

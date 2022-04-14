@@ -57,11 +57,10 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         // Playing the video and dialog overlay isn't shown
         if (getController().isPlaying() && !AppDialogPresenter.instance(getActivity()).isDialogShown()) {
             if (!getController().isSuggestionsShown()) { // don't hide when suggestions is shown
-                getController().showControls(false);
+                getController().showOverlay(false);
             }
         } else {
             // in seeking state? doing recheck...
-            disableUiAutoHideTimeout();
             enableUiAutoHideTimeout();
         }
     };
@@ -81,6 +80,11 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         // Could be set once per activity creation (view layout stuff)
         getController().setVideoZoomMode(mPlayerData.getVideoZoomMode());
         getController().setVideoAspectRatio(mPlayerData.getVideoAspectRatio());
+    }
+
+    @Override
+    public void openVideo(Video item) {
+        enableUiAutoHideTimeout();
     }
 
     @Override
@@ -153,7 +157,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
         if (AppDialogPresenter.instance(getActivity()).isDialogShown()) {
             // Activate debug infos/show ui after engine restarting (buffering, sound shift, error?).
-            getController().showControls(true);
+            getController().showOverlay(true);
             getController().showDebugInfo(mDebugViewEnabled);
             getController().setDebugButtonState(mDebugViewEnabled);
         }
@@ -174,15 +178,20 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         // Activate debug infos when restoring after PIP.
         getController().showDebugInfo(mDebugViewEnabled);
         getController().setDebugButtonState(mDebugViewEnabled);
+        getController().showSubtitles(true);
+
+        // Maybe dialog just closed. Reset timeout just in case.
+        enableUiAutoHideTimeout();
     }
 
     @Override
     public void onViewPaused() {
         if (getController().isInPIPMode()) {
             // UI couldn't be properly displayed in PIP mode
-            getController().showControls(false);
+            getController().showOverlay(false);
             getController().showDebugInfo(false);
             getController().setDebugButtonState(false);
+            getController().showSubtitles(false);
         }
     }
 
@@ -284,6 +293,29 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     }
 
     @Override
+    public void onVideoInfoClicked() {
+        if (!mIsMetadataLoaded) {
+            MessageHelpers.showLongMessage(getActivity(), R.string.wait_data_loading);
+            return;
+        }
+
+        if (getController().getVideo().description == null) {
+            MessageHelpers.showLongMessage(getActivity(), R.string.description_not_found);
+            return;
+        }
+
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
+
+        settingsPresenter.clear();
+
+        settingsPresenter.appendLongTextCategory(
+                getController().getVideo().title, UiOptionItem.from(getController().getVideo().description, null)
+        );
+
+        settingsPresenter.showDialog(getController().getVideo().title);
+    }
+
+    @Override
     public void onSearchClicked() {
         if (SearchData.instance(getActivity()).isBackgroundPlaybackEnabled()) {
             onPipClicked();
@@ -308,7 +340,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onPipClicked() {
-        getController().showControls(false);
+        getController().showOverlay(false);
         getController().setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_PIP);
         getController().finish();
     }
@@ -397,11 +429,11 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     }
 
     private boolean handleMenuKey(int keyCode) {
-        boolean controlsShown = getController().isControlsShown();
+        boolean controlsShown = getController().isOverlayShown();
         boolean suggestionsShown = getController().isSuggestionsShown();
 
         if (KeyHelpers.isMenuKey(keyCode) && !suggestionsShown) {
-            getController().showControls(!controlsShown);
+            getController().showOverlay(!controlsShown);
 
             if (controlsShown) {
                 enableSuggestionsResetTimeout();
@@ -412,12 +444,12 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     }
 
     private boolean handleConfirmKey(int keyCode) {
-        boolean controlsShown = getController().isControlsShown();
+        boolean controlsShown = getController().isOverlayShown();
 
         if (KeyHelpers.isConfirmKey(keyCode) && !controlsShown) {
             switch (mPlayerData.getOKButtonBehavior()) {
                 case PlayerData.ONLY_UI:
-                    getController().showControls(true);
+                    getController().showOverlay(true);
                     return true; // don't show ui
                 case PlayerData.UI_AND_PAUSE:
                     // NOP

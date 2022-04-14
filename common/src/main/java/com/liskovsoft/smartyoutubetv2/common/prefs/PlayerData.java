@@ -55,7 +55,7 @@ public class PlayerData {
     private int mAfrPauseSec;
     private int mAudioDelayMs;
     private boolean mIsRememberSpeedEnabled;
-    private boolean mIsLowQualityEnabled;
+    private boolean mIsLegacyCodecsForced;
     private int mPlaybackMode;
     private boolean mIsSonyTimerFixEnabled;
     private boolean mIsQualityInfoEnabled;
@@ -65,6 +65,9 @@ public class PlayerData {
     private boolean mIsEndingTimeEnabled;
     private boolean mIsDoubleRefreshRateEnabled;
     private boolean mIsSeekConfirmPlayEnabled;
+    private int mStartSeekIncrementMs;
+    private float mSubtitleScale;
+    private float mPlayerVolume;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -227,12 +230,12 @@ public class PlayerData {
         persistData();
     }
 
-    public boolean isLowQualityEnabled() {
-        return mIsLowQualityEnabled;
+    public boolean isLegacyCodecsForced() {
+        return mIsLegacyCodecsForced;
     }
 
-    public void enableLowQuality(boolean enable) {
-        mIsLowQualityEnabled = enable;
+    public void forceLegacyCodecs(boolean enable) {
+        mIsLegacyCodecsForced = enable;
         persistData();
     }
 
@@ -341,6 +344,24 @@ public class PlayerData {
         persistData();
     }
 
+    public float getSubtitleScale() {
+        return mSubtitleScale;
+    }
+
+    public void setSubtitleScale(float scale) {
+        mSubtitleScale = scale;
+        persistData();
+    }
+
+    public float getPlayerVolume() {
+        return mPlayerVolume;
+    }
+
+    public void setPlayerVolume(float scale) {
+        mPlayerVolume = scale;
+        persistData();
+    }
+
     public void setVideoZoomMode(int mode) {
         mVideoZoomMode = mode;
         persistData();
@@ -411,11 +432,24 @@ public class PlayerData {
         return formatItem != null ? formatItem : Helpers.isVP9Supported() ? FormatItem.VIDEO_FHD_VP9_60 : FormatItem.VIDEO_HD_AVC_30;
     }
 
+    public int getStartSeekIncrementMs() {
+        return mStartSeekIncrementMs;
+    }
+
+    public void setStartSeekIncrementMs(int startSeekIncrementMs) {
+        mStartSeekIncrementMs = startSeekIncrementMs;
+        persistData();
+    }
+
     private void initSubtitleStyles() {
-        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_default, R.color.light_grey, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
+        mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_white_transparent, R.color.light_grey, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_white_semi_transparent, R.color.light_grey, R.color.semi_transparent, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_white_black, R.color.light_grey, R.color.black, CaptionStyleCompat.EDGE_TYPE_OUTLINE));
         mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_yellow_transparent, R.color.yellow, R.color.transparent, CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW));
+
+        if (Build.VERSION.SDK_INT >= 19) {
+            mSubtitleStyles.add(new SubtitleStyle(R.string.subtitle_system));
+        }
     }
 
     /**
@@ -461,7 +495,7 @@ public class PlayerData {
         mIsRememberSpeedEnabled = Helpers.parseBoolean(split, 21, false);
         mPlaybackMode = Helpers.parseInt(split, 22, PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL);
         // didn't remember what was there
-        mIsLowQualityEnabled = Helpers.parseBoolean(split, 24, false);
+        mIsLegacyCodecsForced = Helpers.parseBoolean(split, 24, Build.VERSION.SDK_INT <= 19); // Android 4 playback crash fix
         mIsSonyTimerFixEnabled = Helpers.parseBoolean(split, 25, false);
         // old player tweaks
         mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
@@ -473,6 +507,10 @@ public class PlayerData {
         mIsEndingTimeEnabled = Helpers.parseBoolean(split, 34, false);
         mIsDoubleRefreshRateEnabled = Helpers.parseBoolean(split, 35, true);
         mIsSeekConfirmPlayEnabled = Helpers.parseBoolean(split, 36, false);
+        mStartSeekIncrementMs = Helpers.parseInt(split, 37, 10_000);
+        // old subs size px
+        mSubtitleScale = Helpers.parseFloat(split, 39, 1.0f);
+        mPlayerVolume = Helpers.parseFloat(split, 40, 1.0f);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -486,8 +524,9 @@ public class PlayerData {
                 mVideoBufferType, mSubtitleStyleIndex, mVideoZoomMode, mSpeed,
                 mIsAfrEnabled, mIsAfrFpsCorrectionEnabled, mIsAfrResSwitchEnabled, mAfrPauseSec, mAudioDelayMs,
                 mIsRememberSpeedEnabled, mPlaybackMode, null, // didn't remember what was there
-                mIsLowQualityEnabled, mIsSonyTimerFixEnabled, null, null, // old player tweaks
+                mIsLegacyCodecsForced, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
-                mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled));
+                mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
+                mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume));
     }
 }

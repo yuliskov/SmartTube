@@ -178,7 +178,8 @@ public class PlaybackActivity extends LeanbackActivity {
             mViewManager.startParentView(this);
         } else {
             if (mPlayerTweaksData.isKeepFinishedActivityEnabled()) {
-                moveTaskToBack(true);
+                //moveTaskToBack(true); // Don't do this or you'll have problems when player overlaps other apps (e.g. casting)
+                mViewManager.startParentView(this);
             } else {
                 mPlaybackFragment.onFinish();
                 super.finish();
@@ -208,7 +209,7 @@ public class PlaybackActivity extends LeanbackActivity {
         if (Build.VERSION.SDK_INT >= 21 && Build.VERSION.SDK_INT < 26) {
             if (Build.VERSION.SDK_INT == 21) {
                 // Playback pause fix?
-                mPlaybackFragment.showControls(true);
+                mPlaybackFragment.showOverlay(true);
             }
 
             if (mPlaybackFragment.isPlaying()) {

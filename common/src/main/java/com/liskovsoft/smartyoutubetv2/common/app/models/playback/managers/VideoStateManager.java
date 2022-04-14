@@ -28,7 +28,6 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     private PlayerData mPlayerData;
     private VideoStateService mStateService;
     private boolean mIsPlayBlocked;
-    private float mVolume = 1;
 
     @Override
     public void onInitDone() { // called each time a video opened from the browser
@@ -103,7 +102,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
 
         // Show user info instead of black screen.
         if (!getPlayEnabled()) {
-            getController().showControls(true);
+            getController().showOverlay(true);
         }
     }
 
@@ -134,6 +133,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
 
         // In this state video length is not undefined.
         restorePosition(item);
+        restorePendingPosition(item);
         restoreSpeed(item);
         // Player thinks that subs not enabled if I enable it too early (e.g. on source change event).
         restoreSubtitleFormat();
@@ -290,7 +290,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
             savePosition(video);
             updateHistory();
             //persistVideoState();
-            persistVolume();
+            //persistVolume();
         }
     }
 
@@ -338,7 +338,8 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         // Do I need to check that item isn't live? (state != null && !item.isLive)
         if (state != null) {
             long remainsMs = getController().getLengthMs() - state.positionMs;
-            boolean isVideoEnded = remainsMs < 1_000;
+            // Url list videos at this stage has undefined (-1) length. So, we need to ensure that remains is positive.
+            boolean isVideoEnded = remainsMs >= 0 && remainsMs < 1_000;
             if (!isVideoEnded || !getPlayEnabled()) {
                 getController().setPositionMs(state.positionMs);
             }
@@ -346,6 +347,16 @@ public class VideoStateManager extends PlayerEventListenerHelper {
 
         if (!mIsPlayBlocked) {
             getController().setPlay(getPlayEnabled());
+        }
+    }
+
+    /**
+     * Restore position from description time code
+     */
+    private void restorePendingPosition(Video item) {
+        if (item.pendingPosMs > 0) {
+            getController().setPositionMs(item.pendingPosMs);
+            item.pendingPosMs = 0;
         }
     }
 
@@ -389,12 +400,12 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         return mIsPlayEnabled;
     }
 
-    private void persistVolume() {
-        mVolume = getController().getVolume();
-    }
+    //private void persistVolume() {
+    //    mVolume = getController().getVolume();
+    //}
 
     private void restoreVolume() {
-        getController().setVolume(mVolume);
+        getController().setVolume(mPlayerData.getPlayerVolume());
     }
 
     private void restoreFormats() {

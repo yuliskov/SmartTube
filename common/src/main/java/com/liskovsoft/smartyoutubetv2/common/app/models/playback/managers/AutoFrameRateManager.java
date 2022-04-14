@@ -91,13 +91,15 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
 
     @Override
     public void onModeError(Mode newMode) {
-        String msg = getActivity().getString(R.string.msg_mode_switch_error, UhdHelper.toResolution(newMode));
-        Log.e(TAG, msg);
+        if (getActivity() != null) {
+            String msg = getActivity().getString(R.string.msg_mode_switch_error, UhdHelper.toResolution(newMode));
+            Log.e(TAG, msg);
 
-        restorePlayback();
+            restorePlayback();
 
-        // This error could appear even on success.
-        // MessageHelpers.showMessage(getActivity(), msg);
+            // This error could appear even on success.
+            // MessageHelpers.showMessage(getActivity(), msg);
+        }
     }
 
     @Override
@@ -144,7 +146,7 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     }
 
     private void applyAfr() {
-        if (mPlayerData.isAfrEnabled()) {
+        if (getController() != null && mPlayerData.isAfrEnabled()) {
             FormatItem videoFormat = getController().getVideoFormat();
             applyAfr(videoFormat, false);
             // Send data to AFR daemon via tvQuickActions app
@@ -188,14 +190,14 @@ public class AutoFrameRateManager extends PlayerEventListenerHelper implements A
     }
 
     private void savePlayback() {
-        if (mAutoFrameRateHelper.isSupported() && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseSec() > 0) {
+        if (mAutoFrameRateHelper.isSupported() && mPlayerData != null && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseSec() > 0) {
             mStateUpdater.blockPlay(true);
             mIsPlay = mStateUpdater.getPlayEnabled();
         }
     }
 
     private void restorePlayback() {
-        if (mAutoFrameRateHelper.isSupported() && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseSec() > 0) {
+        if (mAutoFrameRateHelper.isSupported() && mPlayerData != null && mPlayerData.isAfrEnabled() && mPlayerData.getAfrPauseSec() > 0) {
             mStateUpdater.blockPlay(false);
             getController().setPlay(mIsPlay);
         }

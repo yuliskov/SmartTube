@@ -15,8 +15,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
-import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
 import java.util.Iterator;
@@ -34,6 +34,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
     private boolean mIsMarkAllChannelsWatchedEnabled;
     private boolean mIsRefreshEnabled;
     private boolean mIsMoveSectionEnabled;
+    private boolean mIsRenameSectionEnabled;
 
     private SectionMenuPresenter(Context context) {
         super(context);
@@ -74,6 +75,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         mIsRefreshEnabled = true;
         mIsMarkAllChannelsWatchedEnabled = true;
         mIsMoveSectionEnabled = true;
+        mIsRenameSectionEnabled = true;
 
         showMenuInt(section);
     }
@@ -111,6 +113,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         appendMarkAllChannelsWatchedButton();
         appendAccountSelectionButton();
         appendMoveSectionButton();
+        appendRenameSectionButton();
 
         if (!mDialogPresenter.isEmpty()) {
             String title = mSection != null ? mSection.getTitle() : null;
@@ -131,6 +134,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
 //        appendUnpinSectionFromSidebarButton();
         appendAccountSelectionButton();
         appendMoveSectionButton();
+        appendRenameSectionButton();
 
         if (mDialogPresenter.isEmpty()) {
             MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
@@ -202,23 +206,45 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        GeneralData generalData = GeneralData.instance(getContext());
-
-        if (generalData.canMoveSectionUp(mSection.getId())) {
+        if (BrowsePresenter.instance(getContext()).canMoveSectionUp(mSection)) {
             mDialogPresenter.appendSingleButton(
                     UiOptionItem.from(getContext().getString(R.string.move_section_up), optionItem -> {
                         mDialogPresenter.closeDialog();
-                        BrowsePresenter.instance(getContext()).moveSectionUp(mSection.getId());
+                        BrowsePresenter.instance(getContext()).moveSectionUp(mSection);
                     }));
         }
 
-        if (generalData.canMoveSectionDown(mSection.getId())) {
+        if (BrowsePresenter.instance(getContext()).canMoveSectionDown(mSection)) {
             mDialogPresenter.appendSingleButton(
                     UiOptionItem.from(getContext().getString(R.string.move_section_down), optionItem -> {
                         mDialogPresenter.closeDialog();
-                        BrowsePresenter.instance(getContext()).moveSectionDown(mSection.getId());
+                        BrowsePresenter.instance(getContext()).moveSectionDown(mSection);
                     }));
         }
+    }
+
+    private void appendRenameSectionButton() {
+        if (!mIsRenameSectionEnabled) {
+            return;
+        }
+
+        if (mSection == null || mSection.isDefault()) {
+            return;
+        }
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.rename_section), optionItem -> {
+                    mDialogPresenter.closeDialog();
+                    SimpleEditDialog.show(
+                            getContext(),
+                            mSection.getTitle(),
+                            newValue -> {
+                                mSection.setTitle(newValue);
+                                BrowsePresenter.instance(getContext()).renameSection(mSection);
+                            },
+                            getContext().getString(R.string.rename_section)
+                    );
+                }));
     }
 
     private void appendReturnToBackgroundVideoButton() {
@@ -297,6 +323,10 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
 
         if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_MOVE_SECTION_DOWN)) {
             mIsMoveSectionEnabled = false;
+        }
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_RENAME_SECTION)) {
+            mIsRenameSectionEnabled = false;
         }
     }
 }

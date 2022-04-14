@@ -11,6 +11,7 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Playlist;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.PlayerEventListenerHelper;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener.PlayerEventListener;
@@ -29,6 +30,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
     private final Handler mHandler;
     private final SuggestionsLoaderManager mSuggestionsLoader;
     private Video mLastVideo;
+    private int mLastError = -1;
     private long mPrevErrorTimeMs;
     private PlayerData mPlayerData;
     private long mSleepTimerStartMs;
@@ -108,16 +111,22 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
     }
 
     @Override
-    public void onEngineError(int type) {
-        Log.e(TAG, "Player error occurred: %s. Trying to fix…", type);
+    public void onEngineError(int error) {
+        Log.e(TAG, "Player error occurred: %s. Trying to fix…", error);
 
-        startErrorAction(type);
+        mLastError = error;
+        startErrorAction(error);
         if (!mIsWasVideoStartError && mLastVideo != null) {
             Analytics.sendVideoStartError(mLastVideo.videoId,
                     mLastVideo.title,
-                    Integer.toString(type));
+                    Integer.toString(error));
             mIsWasVideoStartError = true;
         }
+    }
+
+    @Override
+    public void onVideoLoaded(Video item) {
+        mLastError = -1;
     }
 
     @Override
@@ -186,7 +195,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         switch (playbackMode) {
             case PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL:
                 onNextClicked();
-                getController().showControls(true);
+                getController().showOverlay(true);
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_REPEAT_ONE:
                 getController().setPositionMs(0);
@@ -200,7 +209,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                     getController().finish();
                 } else {
                     onNextClicked();
-                    getController().showControls(true);
+                    getController().showOverlay(true);
                 }
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_PAUSE:
@@ -213,7 +222,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                     Utils.showRepeatInfo(getActivity(), playbackMode);
                 } else {
                     onNextClicked();
-                    getController().showControls(true);
+                    getController().showOverlay(true);
                 }
                 break;
             case PlaybackEngineController.PLAYBACK_MODE_LIST:
@@ -221,7 +230,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                 Video video = getController().getVideo();
                 if ((video != null && video.hasPlaylist()) || mPlaylist.getNext() != null) {
                     onNextClicked();
-                    getController().showControls(true);
+                    getController().showOverlay(true);
                 } else {
                     getController().showSuggestions(true);
                     getController().setPlay(false);
@@ -306,6 +315,15 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                 MessageHelpers.showMessageThrottled(getActivity(), R.string.wait_data_loading);
             }
             Utils.postDelayed(mHandler, mPendingNext, 1_000);
+        } else if (current.isRemote) {
+            openFirstVideoFromRecommended(current);
+        }
+    }
+
+    private void openFirstVideoFromRecommended(Video video) {
+        VideoGroup suggestions = getController().getSuggestionsByIndex(video.isRemote ? 1 : 0);
+        if (suggestions != null && suggestions.getVideos() != null && suggestions.getVideos().size() > 0) {
+            openVideoInt(suggestions.getVideos().get(0));
         }
     }
 
@@ -351,7 +369,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         } else if (formatInfo.containsHlsUrl() && isLive) {
             Log.d(TAG, "Found live video (current or past live stream) in hls format. Loading...");
             getController().openHlsUrl(formatInfo.getHlsManifestUrl());
-        } else if (formatInfo.containsDashVideoInfo() && !mPlayerData.isLowQualityEnabled()) {
+        } else if (formatInfo.containsDashVideoInfo() && !mPlayerData.isLegacyCodecsForced()) {
             Log.d(TAG, "Found regular video in dash format. Loading...");
 
             mMpdStreamAction = formatInfo.createMpdStreamObservable()
@@ -363,7 +381,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                     );
         } else if (formatInfo.containsUrlListInfo()) {
             Log.d(TAG, "Found url list video. This is always LQ. Loading...");
-            getController().openUrlList(formatInfo.createUrlList());
+            getController().openUrlList(applyFix(formatInfo.createUrlList()));
         } else {
             Log.d(TAG, "Empty format info received. Seems future live translation. No video data to pass to the player.");
             scheduleReloadVideoTimer(30 * 1_000);
@@ -375,12 +393,17 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
                 mIsWasVideoStartError = true;
             }
         }
+
+        Video video = getController().getVideo();
+        if (video != null) {
+            video.sync(formatInfo);
+        }
     }
 
     private void scheduleReloadVideoTimer(int reloadIntervalMs) {
         if (getController().isEngineInitialized()) {
             Log.d(TAG, "Starting check for the future stream...");
-            getController().showControls(true);
+            getController().showOverlay(true);
             Utils.postDelayed(mHandler, mReloadVideoHandler, reloadIntervalMs);
         }
     }
@@ -402,7 +425,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         disposeActions();
 
         if (item.hasVideo()) {
-            getController().showControls(true);
+            getController().showOverlay(true);
             getBridge().openVideo(item);
         } else if (item.hasChannel()) {
             ChannelPresenter.instance(getActivity()).openChannel(item);
@@ -441,16 +464,25 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         mErrorActions.put(PlayerEventListener.ERROR_TYPE_UNEXPECTED, () -> {});
     }
 
-    private void startErrorAction(int type) {
-        Runnable action = mErrorActions.get(type);
+    private void startErrorAction(int error) {
+        Runnable action = mErrorActions.get(error);
 
         if (action != null) {
             action.run();
         } else {
-            MessageHelpers.showMessage(getActivity(), getActivity().getString(R.string.msg_player_error, type));
+            MessageHelpers.showMessage(getActivity(), getActivity().getString(R.string.msg_player_error, error));
         }
 
         // Delay to fix frequent requests
         Utils.postDelayed(mHandler, mPendingRestartEngine, 3_000);
+    }
+
+    private List<String> applyFix(List<String> urlList) {
+        // Sometimes top url cannot be played
+        if (mLastError == PlayerEventListener.ERROR_TYPE_SOURCE) {
+            Collections.reverse(urlList);
+        }
+
+        return urlList;
     }
 }

@@ -54,7 +54,7 @@ public abstract class BasePresenter<T> implements Presenter<T> {
         }
 
         // Localization fix: prefer Activity context
-        if (context instanceof Activity) {
+        if (context instanceof Activity && Utils.checkActivity((Activity) context)) {
             mActivity = new WeakReference<>((Activity) context);
         }
 

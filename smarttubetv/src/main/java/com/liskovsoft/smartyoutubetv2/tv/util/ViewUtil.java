@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.tv.util;
 import android.content.Context;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
+import android.os.Build;
 import android.os.Build.VERSION;
 import android.text.BidiFormatter;
 import android.text.Layout;
@@ -162,7 +163,7 @@ public class ViewUtil {
     }
 
     public static void enableTransparentDialog(Context context, View rootView) {
-        if (context == null || rootView == null) {
+        if (context == null || rootView == null || VERSION.SDK_INT <= 19) {
             return;
         }
 
@@ -173,6 +174,7 @@ public class ViewUtil {
         int semiTransparent = ContextCompat.getColor(context, R.color.semi_grey);
 
         if (container instanceof FrameLayout) {
+            // ViewOutlineProvider: NoClassDefFoundError on API 19
             container.setOutlineProvider(ViewOutlineProvider.BACKGROUND);
         }
         if (mainFrame instanceof LinearLayout) {

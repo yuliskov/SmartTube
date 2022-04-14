@@ -17,6 +17,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxCo
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChannelAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.HighQualityAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoInfoAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PipAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PlaybackQueueAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PlaylistAddAction;
@@ -53,8 +54,6 @@ import java.util.concurrent.TimeUnit;
 public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
     private static final long TEN_SECONDS = TimeUnit.SECONDS.toMillis(10);
     private static final String TAG = VideoPlayerGlue.class.getSimpleName();
-    private final OnActionClickedListener mActionListener;
-
     private final ThumbsUpAction mThumbsUpAction;
     private final ThumbsDownAction mThumbsDownAction;
     private final PlaybackControlsRow.SkipPreviousAction mSkipPreviousAction;
@@ -74,6 +73,8 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
     private final PipAction mPipAction;
     private final ScreenOffAction mScreenOffAction;
     private final PlaybackQueueAction mPlaybackQueueAction;
+    private final VideoInfoAction mVideoInfoAction;
+    private final OnActionClickedListener mActionListener;
     private String mQualityInfo;
     private QualityInfoListener mQualityInfoListener;
     private int mPreviousAction = KeyEvent.ACTION_UP;
@@ -109,6 +110,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         mPipAction = new PipAction(context);
         mScreenOffAction = new ScreenOffAction(context);
         mPlaybackQueueAction = new PlaybackQueueAction(context);
+        mVideoInfoAction = new VideoInfoAction(context);
     }
 
     @Override
@@ -185,6 +187,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         }
         if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SUBSCRIBE)) {
             adapter.add(mSubscribeAction);
+        }
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_VIDEO_INFO)) {
+            adapter.add(mVideoInfoAction);
         }
         if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_VIDEO_STATS)) {
             adapter.add(mVideoStatsAction);
@@ -366,6 +371,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         } else if (action == mPlaybackQueueAction) {
             mActionListener.onPlaybackQueue();
             handled = true;
+        } else if (action == mVideoInfoAction) {
+            mActionListener.onVideoInfo();
+            handled = true;
         }
 
         if (handled) {
@@ -482,6 +490,8 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         void onDebugInfo(boolean enabled);
 
         void onVideoSpeed();
+
+        void onVideoInfo();
 
         void onSearch();
 
