@@ -115,11 +115,11 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         Log.e(TAG, "Player error occurred: %s. Trying to fix…", error);
 
         mLastError = error;
-        startErrorAction(type);
+        startErrorAction(error);
         if (!mIsWasVideoStartError && mLastVideo != null) {
             Analytics.sendVideoStartError(mLastVideo.videoId,
                     mLastVideo.title,
-                    Integer.toString(type));
+                    Integer.toString(error));
             mIsWasVideoStartError = true;
         }
     }

@@ -503,7 +503,7 @@ public class Utils {
 
         List<OptionItem> options = new ArrayList<>();
 
-        options.add(UiOptionItem.from(context.getString(R.string.cancel),
+        options.add(UiOptionItem.from(context.getString(R.string.cancel_dialog),
                 option -> settingsPresenter.goBack()));
 
         options.add(UiOptionItem.from(context.getString(R.string.btn_confirm),
