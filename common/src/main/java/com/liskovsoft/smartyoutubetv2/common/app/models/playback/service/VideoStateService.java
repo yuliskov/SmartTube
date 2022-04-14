@@ -13,7 +13,7 @@ import java.util.Map;
 public class VideoStateService {
     public static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
     public static final long LIVE_THRESHOLD_MS = 60_000;
-    private static final int MAX_PERSISTENT_STATE_SIZE = 30;
+    private static final int MAX_PERSISTENT_STATE_SIZE = 50;
     @SuppressLint("StaticFieldLeak")
     private static VideoStateService sInstance;
     // Don't store state inside Video object.

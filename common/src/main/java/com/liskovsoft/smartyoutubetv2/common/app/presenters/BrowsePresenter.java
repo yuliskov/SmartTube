@@ -71,7 +71,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private BrowseSection mCurrentSection;
     private Video mCurrentVideo;
     private long mLastUpdateTimeMs;
-    private int mStartSectionIndex;
+    private int mBootSectionIndex;
+    private int mSelectedSectionId = -1;
 
     private BrowsePresenter(Context context) {
         super(context);
@@ -117,7 +118,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         updateChannelSorting();
         updatePlaylistsStyle();
         updateSections();
-        getView().selectSection(mStartSectionIndex);
+        int selectedSectionIndex = findSectionIndex(mSelectedSectionId);
+        mSelectedSectionId = -1;
+        getView().selectSection(selectedSectionIndex != -1 ? selectedSectionIndex : mBootSectionIndex);
         showBootDialogs();
         Utils.updateRemoteControlService(getContext());
     }
@@ -211,7 +214,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
             if (section.isEnabled()) {
                 if (section.getId() == mGeneralData.getBootSectionId()) {
-                    mStartSectionIndex = index;
+                    mBootSectionIndex = index;
                 }
                 getView().addSection(index++, section);
             } else {
@@ -304,7 +307,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     @Override
     public void onVideoItemClicked(Video item) {
-        if (getView() == null) {
+        if (getContext() == null) {
             return;
         }
 
@@ -320,7 +323,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     @Override
     public void onVideoItemLongClicked(Video item) {
-        if (getView() == null) {
+        if (getContext() == null) {
             return;
         }
 
@@ -720,6 +723,25 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         return null;
     }
 
+    private int findSectionIndex(int sectionId) {
+        if (sectionId == -1) {
+            return -1;
+        }
+
+        int sectionIndex = -1;
+
+        for (BrowseSection section : mSections) {
+            if (section.isEnabled()) {
+                sectionIndex++;
+                if (section.getId() == sectionId) {
+                    return sectionIndex;
+                }
+            }
+        }
+
+        return -1;
+    }
+
     private void filterIfNeeded(MediaGroup mediaGroup) {
         if (mediaGroup == null || mediaGroup.getMediaItems() == null) {
             return;
@@ -799,5 +821,20 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
     private boolean isSubscriptionsSection() {
         return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_SUBSCRIPTIONS;
+    }
+
+    public void selectSection(int sectionId) {
+        ViewManager.instance(getContext()).startView(BrowseView.class); // focus view
+
+        if (getView() == null) {
+            mSelectedSectionId = sectionId;
+            return;
+        }
+
+        int sectionIndex = findSectionIndex(sectionId);
+
+        if (sectionIndex != -1) {
+            getView().selectSection(sectionIndex);
+        }
     }
 }

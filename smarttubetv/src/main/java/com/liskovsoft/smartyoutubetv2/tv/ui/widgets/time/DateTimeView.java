@@ -53,10 +53,10 @@ public class DateTimeView extends AppCompatTextView implements TickleListener {
     @Override
     public void onTickle() {
         if (getVisibility() == View.VISIBLE) {
-            setText(mIsDateEnabled ?
-                    DateFormatter.getCurrentDateTimeShort(getContext()) :
-                    DateFormatter.getCurrentTimeShort(getContext())
-            );
+            String time = mIsDateEnabled ? DateFormatter.getCurrentDateTimeShort(getContext()) : DateFormatter.getCurrentTimeShort(getContext());
+            // https://stackoverflow.com/questions/5437674/what-unicode-characters-represent-time/9454080
+            //setText(String.format("⌚ %s", time));
+            setText(time);
         }
     }
 

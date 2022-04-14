@@ -1,5 +1,7 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.main;
 
+import android.os.Build;
+
 import androidx.multidex.MultiDexApplication;
 
 import com.liskovsoft.sharedutils.Analytics;
@@ -27,6 +29,10 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.search.tags.SearchTagsActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.dialogs.AppDialogActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.signin.SignInActivity;
 
+import org.conscrypt.Conscrypt;
+
+import java.security.Security;
+
 public class MainApplication extends MultiDexApplication { // fix: Didn't find class "com.google.firebase.provider.FirebaseInitProvider"
     static {
         System.setProperty("http.keepAlive", "false");
@@ -35,6 +41,11 @@ public class MainApplication extends MultiDexApplication { // fix: Didn't find c
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // fix for https://android-review.googlesource.com/c/platform/external/conscrypt/+/89408/
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
+            Security.insertProviderAt(Conscrypt.newProvider(), 1);
+        }
 
         Analytics.init(getApplicationContext());
         //setupKeepAlive();

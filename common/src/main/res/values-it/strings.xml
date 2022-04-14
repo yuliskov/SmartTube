@@ -129,7 +129,7 @@
     <string name="playlists_style_rows">Righe</string>
     <string name="player_show_clock">Mostra orologio</string>
     <string name="player_show_remaining_time">Mostra tempo rimanente</string>
-    <string name="player_show_ending_time">Mostra ora di fine</string>																
+    <string name="player_show_ending_time">Mostra ora di fine</string>
     <string name="open_channel_uploads">Apri video caricati</string>
     <string name="app_exit_shortcut">Esci dall\'app</string>
     <string name="app_exit_none">Non uscire</string>
@@ -217,9 +217,11 @@
     <string name="channels_auto_load">Caricamento automatico contenuto sezione canali</string>
     <string name="return_to_background_video">Torna al video in esecuzione in background</string>
     <string name="pin_unpin_from_sidebar">Fissa o rimuovi dalla barra laterale</string>
+    <string name="pin_unpin_playlist">Fissa o rimuovi la playlist</string>
+    <string name="pin_unpin_channel">Fissa o rimuovi il canale</string>
     <string name="pinned_to_sidebar">Fissato alla barra laterale</string>
     <string name="unpin_from_sidebar">Rimuovi dalla barra laterale</string>
-    <string name="unpinned_from_sidebar">Rimosso dalla barra laterale</string>																   
+    <string name="unpinned_from_sidebar">Rimosso dalla barra laterale</string>
     <string name="dialog_select_country">Nazione</string>
     <string name="settings_language_country">Lingua e nazione</string>
     <string name="share_embed_link">Condividi link incorporato</string>
@@ -246,7 +248,7 @@
     <string name="skip_each_segment_once">Non saltare più i segmenti</string>
     <string name="disable_ok_long_press">Disabilita pressione prolungata tasto OK</string>
     <string name="player_time_correction">Visualizza la durata in base alla velocità</string>
-    <string name="sponsor_color_markers">Indicatori di colore sulla barra di avanzamento</string>																		   
+    <string name="sponsor_color_markers">Indicatori di colore sulla barra di avanzamento</string>
     <string name="refresh_section">Aggiorna sezione</string>
     <string name="option_disabled">Disabilitato</string>
     <string name="live_now_row_name">In diretta</string>
