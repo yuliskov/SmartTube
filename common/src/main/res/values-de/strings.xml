@@ -375,4 +375,5 @@
     <string name="tunneled_video_playback">Getunnelte Video-Wiedergabe (Android 5+)</string>
     <string name="master_volume">Gesamtlautstärke</string>
     <string name="volume_limit">Lautstärkebegrenzung</string>
+    <string name="play_video">Abspielen</string>
 </resources>
