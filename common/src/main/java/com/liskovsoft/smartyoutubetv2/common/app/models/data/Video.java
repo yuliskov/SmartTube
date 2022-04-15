@@ -496,6 +496,16 @@ public final class Video implements Parcelable {
         
         newSecondTitle = useAltSecondTitle ? metadata.getSecondTitleAlt() : metadata.getSecondTitle();
 
+        // Casting fix (no title, no desc)
+        if (title == null) {
+            title = newTitle;
+        }
+
+        // Casting fix (no title, no desc)
+        if (secondTitle == null) {
+            secondTitle = newSecondTitle;
+        }
+
         // No checks. This data wasn't existed before sync.
         if (metadata.getDescription() != null) {
             description = metadata.getDescription();
