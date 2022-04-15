@@ -148,10 +148,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         metadata -> updateSuggestions(metadata, video),
-                        error -> {
-                            Log.e(TAG, "loadSuggestions error: %s", error.getMessage());
-                            error.printStackTrace();
-                        }
+                        error -> Log.e(TAG, "loadSuggestions error: %s", error.getMessage())
                 );
     }
 
