@@ -372,4 +372,5 @@
     <string name="master_volume">Основная громкость</string>
     <string name="volume_limit">Ограничение громкости</string>
     <string name="play_video">Воспроизвести</string>
+    <string name="remember_position_of_short_videos">Запоминать позицию коротких видео (менее 10 мин)</string>
 </resources>

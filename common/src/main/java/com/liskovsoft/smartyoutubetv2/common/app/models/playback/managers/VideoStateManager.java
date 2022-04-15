@@ -14,11 +14,14 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.smartyoutubetv2.common.misc.ScreensaverManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
+import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 
 public class VideoStateManager extends PlayerEventListenerHelper {
+    private static final long MUSIC_VIDEO_LENGTH_MS = 6 * 60 * 1000;
+    private static final long LIVE_THRESHOLD_MS = 60_000;
     private static final String TAG = VideoStateManager.class.getSimpleName();
     private static final float RESTORE_POSITION_PERCENTS = 12;
     private boolean mIsPlayEnabled;
@@ -26,12 +29,14 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     private FormatItem mTempVideoFormat;
     private Disposable mHistoryAction;
     private PlayerData mPlayerData;
+    private PlayerTweaksData mPlayerTweaksData;
     private VideoStateService mStateService;
     private boolean mIsPlayBlocked;
 
     @Override
     public void onInitDone() { // called each time a video opened from the browser
         mPlayerData = PlayerData.instance(getActivity());
+        mPlayerTweaksData = PlayerTweaksData.instance(getActivity());
         mStateService = VideoStateService.instance(getActivity());
 
         // onInitDone usually called after openVideo (if PlaybackView is destroyed)
@@ -229,7 +234,9 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         State state = mStateService.getByVideoId(item.videoId);
 
         // Reset position of music videos
-        if (state != null && (state.lengthMs < VideoStateService.MUSIC_VIDEO_LENGTH_MS || item.isLive)) {
+        boolean isShort = state != null && (state.lengthMs < MUSIC_VIDEO_LENGTH_MS && !mPlayerTweaksData.isRememberPositionOfShortVideosEnabled());
+
+        if (isShort || item.isLive) {
             resetPosition(item);
         }
     }
@@ -305,7 +312,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         long positionMs = getController().getPositionMs();
         long remainsMs = lengthMs - positionMs;
         boolean isPositionActual = remainsMs > 1_000;
-        boolean isRealLiveStream = video.isLive && remainsMs < VideoStateService.LIVE_THRESHOLD_MS;
+        boolean isRealLiveStream = video.isLive && remainsMs < LIVE_THRESHOLD_MS;
         if ((isPositionActual && !isRealLiveStream) || !getPlayEnabled()) { // Is pause after each video enabled?
             mStateService.save(new State(video.videoId, positionMs, lengthMs, getController().getSpeed()));
             // Sync video. You could safely use it later to restore state.
@@ -331,7 +338,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         boolean stateIsOutdated = state == null || state.timestamp < item.timestamp;
         if (containsWebPosition && stateIsOutdated) {
             // Web state is buggy on short videos (e.g. video clips)
-            boolean isLongVideo = getController().getLengthMs() > VideoStateService.MUSIC_VIDEO_LENGTH_MS;
+            boolean isLongVideo = getController().getLengthMs() > MUSIC_VIDEO_LENGTH_MS;
             if (isLongVideo) {
                 state = new State(item.videoId, convertToMs(item.percentWatched));
             }
@@ -363,7 +370,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     }
 
     private void restoreSpeed(Video item) {
-        boolean isLiveThreshold = getController().getLengthMs() - getController().getPositionMs() < VideoStateService.LIVE_THRESHOLD_MS;
+        boolean isLiveThreshold = getController().getLengthMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
 
         if (item.isLive && isLiveThreshold) {
             getController().setSpeed(1.0f);

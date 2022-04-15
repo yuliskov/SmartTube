@@ -400,6 +400,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
                 option -> mPlayerData.enableGlobalEndingTime(option.isSelected()),
                 mPlayerData.isGlobalEndingTimeEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.remember_position_of_short_videos),
+                option -> mPlayerTweaksData.enableRememberPositionOfShortVideos(option.isSelected()),
+                mPlayerTweaksData.isRememberPositionOfShortVideosEnabled()));
+
         //OptionItem remainingTime = UiOptionItem.from(getContext().getString(R.string.player_show_remaining_time),
         //        option -> mPlayerData.enableRemainingTime(option.isSelected()), mPlayerData.isRemainingTimeEnabled());
         //

@@ -376,4 +376,5 @@
     <string name="master_volume">Master volume</string>
     <string name="volume_limit">Volume limit</string>
     <string name="play_video">Play</string>
+    <string name="remember_position_of_short_videos">Remember position of short videos (less than 10 min)</string>
 </resources>
