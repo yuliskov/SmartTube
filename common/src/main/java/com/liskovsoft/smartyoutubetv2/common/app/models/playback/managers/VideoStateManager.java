@@ -194,10 +194,12 @@ public class VideoStateManager extends PlayerEventListenerHelper {
 
     @Override
     public void onControlsShown(boolean shown) {
-        if (shown) {
-            // Scenario: user clicked on channel button
-            saveState();
-        }
+        // NOTE: bug: current position saving to wrong video id. Explanation below.
+        // Bug in casting: current video doesn't match currently loaded one into engine.
+        //if (shown) {
+        //    // Scenario: user clicked on channel button
+        //    saveState();
+        //}
     }
 
     @Override
