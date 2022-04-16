@@ -135,7 +135,12 @@ public class ScreensaverManager {
 
         dimContainer.setBackgroundResource(mDimColorResId);
         dimContainer.setVisibility(show ? View.VISIBLE : View.GONE);
+
         mIsScreenOff = mDimColorResId == SCREEN_OFF_RES_ID && show;
+
+        if (mIsScreenOff) {
+            hidePlayerOverlay();
+        }
     }
 
     private void showHideScreensaver(boolean show) {
@@ -177,5 +182,19 @@ public class ScreensaverManager {
         }
 
         return SignInPresenter.instance(activity).getView() != null || AddDevicePresenter.instance(activity).getView() != null;
+    }
+
+    private void hidePlayerOverlay() {
+        Activity activity = mActivity.get();
+
+        if (activity == null) {
+            return;
+        }
+
+        PlaybackView playbackView = PlaybackPresenter.instance(activity).getView();
+
+        if (playbackView != null) {
+            playbackView.getController().showOverlay(false);
+        }
     }
 }
