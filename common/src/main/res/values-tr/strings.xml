@@ -376,4 +376,5 @@
     <string name="master_volume">Ana ses</string>
     <string name="volume_limit">Ses sınırı</string>
     <string name="play_video">Oynat</string>
+    <string name="remember_position_of_short_videos">Kısa videoların konumunu hatırla (10 dakikadan az)</string>
 </resources>
