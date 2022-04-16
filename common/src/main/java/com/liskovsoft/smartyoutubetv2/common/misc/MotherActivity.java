@@ -70,7 +70,10 @@ public class MotherActivity extends FragmentActivity {
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
-            mScreensaverManager.enable();
+            boolean isScreenOffAndSeeking = mScreensaverManager.isScreenOff() && Helpers.equalsAny(event.getKeyCode(), KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT);
+            if (!isScreenOffAndSeeking) {
+                mScreensaverManager.enable();
+            }
         }
 
         return super.dispatchKeyEvent(event);

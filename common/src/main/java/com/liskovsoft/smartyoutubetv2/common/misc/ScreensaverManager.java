@@ -20,12 +20,15 @@ import java.lang.ref.WeakReference;
 
 public class ScreensaverManager {
     private static final String TAG = ScreensaverManager.class.getSimpleName();
+    private static final int SCREEN_OFF_RES_ID = R.color.black;
+    private static final int DIMMING_RES_ID = R.color.dimming;
     private final Handler mHandler;
     private final WeakReference<Activity> mActivity;
     private final Runnable mDimScreen = this::dimScreen;
     private final Runnable mUndimScreen = this::undimScreen;
     private final GeneralData mGeneralData;
     private int mDimColorResId;
+    private boolean mIsScreenOff;
 
     public ScreensaverManager(Activity activity) {
         mActivity = new WeakReference<>(activity);
@@ -38,7 +41,7 @@ public class ScreensaverManager {
      * Screen off check
      */
     public void enableChecked() {
-        if (mDimColorResId == R.color.black) {
+        if (mDimColorResId == SCREEN_OFF_RES_ID) {
             return;
         }
 
@@ -49,7 +52,7 @@ public class ScreensaverManager {
      * Screen off check
      */
     public void disableChecked() {
-        if (mDimColorResId == R.color.black) {
+        if (mDimColorResId == SCREEN_OFF_RES_ID) {
             return;
         }
 
@@ -68,16 +71,19 @@ public class ScreensaverManager {
 
     public void disable() {
         Log.d(TAG, "Disable screensaver");
-
-        mDimColorResId = R.color.dimming;
+        mDimColorResId = DIMMING_RES_ID;
         Utils.removeCallbacks(mHandler, mDimScreen);
         Utils.postDelayed(mHandler, mUndimScreen, 0);
     }
 
     public void doScreenOff() {
         disable();
-        mDimColorResId = R.color.black;
+        mDimColorResId = SCREEN_OFF_RES_ID;
         Utils.postDelayed(mHandler, mDimScreen, 0);
+    }
+
+    public boolean isScreenOff() {
+        return mIsScreenOff;
     }
 
     private void dimScreen() {
@@ -101,7 +107,7 @@ public class ScreensaverManager {
         }
 
         // Disable dimming on certain circumstances
-        if (show && mDimColorResId == R.color.dimming &&
+        if (show && mDimColorResId == DIMMING_RES_ID &&
                 (isPlaying() || isSigning() || mGeneralData.getScreenDimmingTimeoutMin() == GeneralData.SCREEN_DIMMING_NEVER)
         ) {
             return;
@@ -129,6 +135,7 @@ public class ScreensaverManager {
 
         dimContainer.setBackgroundResource(mDimColorResId);
         dimContainer.setVisibility(show ? View.VISIBLE : View.GONE);
+        mIsScreenOff = mDimColorResId == SCREEN_OFF_RES_ID && show;
     }
 
     private void showHideScreensaver(boolean show) {
