@@ -116,7 +116,6 @@
   <string name="subscribed_to_channel">Suscrito al canal</string>
   <string name="unsubscribed_from_channel">Desuscribirse del canal</string>
   <string name="subtitle_yellow_transparent">Amarillo sobre fondo transparente</string>
-  <string name="subtitle_white_transparent">Blanco sobre fondo transparente</string>
   <string name="subtitle_white_black">Blanco sobre fondo negro</string>
   <string name="player_seek_preview">Previsualizar mientras busca</string>
   <string name="color_scheme_dark_grey_oled">Gris oscuro (OLED)</string>
@@ -291,7 +290,6 @@
   <string name="action_subscribe">Suscribirse</string>
   <string name="action_channel">Abrir canal</string>
   <string name="action_pip">PIP</string>
-  <string name="action_video_info">Descripción vídeo</string>
   <string name="action_screen_off">Apagar pantalla</string>
   <string name="action_playback_queue">Cola reproducción</string>
   <string name="action_video_speed">Velocidad vídeo</string>
