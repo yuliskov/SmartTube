@@ -18,7 +18,7 @@ public class Playlist {
         mPlaylist = new ArrayList<Video>() {
             @Override
             public boolean add(Video video) {
-                // Creating lightweight copy of origin
+                // Memory leak fix. Creating lightweight copy of origin.
                 return super.add(video.group != null ? video.copy() : video);
             }
         };
