@@ -19,7 +19,7 @@ public class Playlist {
             @Override
             public boolean add(Video video) {
                 // Creating lightweight copy of origin
-                return super.add(video.copy());
+                return super.add(video.group != null ? video.copy() : video);
             }
         };
         mCurrentIndex = -1;
