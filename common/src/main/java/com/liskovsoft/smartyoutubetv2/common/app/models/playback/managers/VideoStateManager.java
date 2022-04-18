@@ -25,7 +25,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     private static final String TAG = VideoStateManager.class.getSimpleName();
     private static final float RESTORE_POSITION_PERCENTS = 12;
     private boolean mIsPlayEnabled;
-    private Video mVideo;
+    private Video mVideo = new Video();
     private FormatItem mTempVideoFormat;
     private Disposable mHistoryAction;
     private PlayerData mPlayerData;
@@ -41,7 +41,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
 
         // onInitDone usually called after openVideo (if PlaybackView is destroyed)
         // So, we need to repeat some things again.
-        resetPositionOfNewVideo(mVideo);
+        resetPositionIfNeeded(getVideo());
     }
 
     /**
@@ -54,18 +54,18 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         if (getController() != null) {
             // Save state of the previous video.
             // In case video opened from phone and other stuff.
-            if (!item.equals(mVideo)) { // video might be opened twice (when remote connection enabled). Fix for that.
+            if (!item.equals(getVideo())) { // video might be opened twice (when remote connection enabled). Fix for that.
                 saveState();
             }
         }
 
         setPlayEnabled(true); // video just added
 
-        mVideo = item;
         mTempVideoFormat = null;
 
-        resetPositionOfNewVideo(item);
-        resetSpeedOfNewVideo();
+        // Don't do reset on videoLoaded state because this will influences minimized music videos.
+        resetPositionIfNeeded(item);
+        resetGlobalSpeedIfNeeded();
     }
 
     @Override
@@ -130,6 +130,9 @@ public class VideoStateManager extends PlayerEventListenerHelper {
 
     @Override
     public void onVideoLoaded(Video item) {
+        // Actual video that match currently playing one.
+        mVideo = item;
+
         // Restore formats again.
         // Maybe this could help with Shield format problem.
         // NOTE: produce multi thread exception:
@@ -137,9 +140,9 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         //restoreFormats();
 
         // In this state video length is not undefined.
-        restorePosition(item);
-        restorePendingPosition(item);
-        restoreSpeed(item);
+        restorePosition();
+        restorePendingPosition();
+        restoreSpeed();
         // Player thinks that subs not enabled if I enable it too early (e.g. on source change event).
         restoreSubtitleFormat();
 
@@ -188,7 +191,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     @Override
     public void onBuffering() {
         // Check LIVE threshold and set speed to normal
-        restoreSpeed(getController().getVideo());
+        restoreSpeed();
     }
 
     @Override
@@ -218,15 +221,15 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     }
 
     private void clearStateOfNextVideo() {
-        if (getController().getVideo() != null && getController().getVideo().nextMediaItem != null) {
-            resetPosition(getController().getVideo().nextMediaItem.getVideoId());
+        if (getVideo() != null && getVideo().nextMediaItem != null) {
+            resetPosition(getVideo().nextMediaItem.getVideoId());
         }
     }
 
     /**
      * Reset position of currently opened music and live videos.
      */
-    private void resetPositionOfNewVideo(Video item) {
+    private void resetPositionIfNeeded(Video item) {
         if (mStateService == null || item == null) {
             return;
         }
@@ -241,7 +244,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         }
     }
 
-    private void resetSpeedOfNewVideo() {
+    private void resetGlobalSpeedIfNeeded() {
         if (mPlayerData != null && !mPlayerData.isRememberSpeedEnabled()) {
             mPlayerData.setSpeed(1.0f);
         }
@@ -293,7 +296,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
             return;
         }
 
-        Video video = getController().getVideo();
+        Video video = getVideo();
 
         if (video != null) {
             savePosition(video);
@@ -330,7 +333,9 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         Playlist.instance().sync(video);
     }
 
-    private void restorePosition(Video item) {
+    private void restorePosition() {
+        Video item = getVideo();
+
         State state = mStateService.getByVideoId(item.videoId);
 
         // Ignore up to 10% watched because the video might be opened on phone and closed immediately.
@@ -362,14 +367,17 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     /**
      * Restore position from description time code
      */
-    private void restorePendingPosition(Video item) {
+    private void restorePendingPosition() {
+        Video item = getVideo();
+
         if (item.pendingPosMs > 0) {
             getController().setPositionMs(item.pendingPosMs);
             item.pendingPosMs = 0;
         }
     }
 
-    private void restoreSpeed(Video item) {
+    private void restoreSpeed() {
+        Video item = getVideo();
         boolean isLiveThreshold = getController().getLengthMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
 
         if (item.isLive && isLiveThreshold) {
@@ -424,7 +432,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     }
 
     private void updateHistory() {
-        Video video = getController().getVideo();
+        Video video = getVideo();
 
         if (video == null) {
             return;
@@ -458,5 +466,9 @@ public class VideoStateManager extends PlayerEventListenerHelper {
                 screensaverManager.disableChecked();
             }
         }
+    }
+
+    private Video getVideo() {
+        return mVideo;
     }
 }
