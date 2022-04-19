@@ -65,7 +65,7 @@ public abstract class LeanbackActivity extends MotherActivity {
             finishTheApp();
         }
 
-        return mGlobalKeyTranslator.translate(event) || super.dispatchKeyEvent(event);
+        return (mGlobalKeyTranslator != null && mGlobalKeyTranslator.translate(event)) || super.dispatchKeyEvent(event);
     }
 
     public UriBackgroundManager getBackgroundManager() {
