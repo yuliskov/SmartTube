@@ -130,7 +130,7 @@ public class VideoStateManager extends PlayerEventListenerHelper {
 
     @Override
     public void onVideoLoaded(Video item) {
-        // Actual video that match currently playing one.
+        // Actual video that match currently loaded one.
         mVideo = item;
 
         // Restore formats again.
@@ -468,6 +468,9 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         }
     }
 
+    /**
+     * Actual video that match currently loaded one.
+     */
     private Video getVideo() {
         return mVideo;
     }

@@ -3,6 +3,7 @@ package com.liskovsoft.smartyoutubetv2.common.prefs;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Build;
+import android.os.Build.VERSION;
 import com.google.android.exoplayer2.text.CaptionStyleCompat;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.locale.LocaleUtility;
@@ -491,7 +492,7 @@ public class PlayerData {
         mIsRememberSpeedEnabled = Helpers.parseBoolean(split, 21, false);
         mPlaybackMode = Helpers.parseInt(split, 22, PlaybackEngineController.PLAYBACK_MODE_PLAY_ALL);
         // didn't remember what was there
-        mIsLegacyCodecsForced = Helpers.parseBoolean(split, 24, Build.VERSION.SDK_INT <= 19); // Android 4 playback crash fix
+        mIsLegacyCodecsForced = Helpers.parseBoolean(split, 24, VERSION.SDK_INT <= 19); // Android 4 playback crash fix
         mIsSonyTimerFixEnabled = Helpers.parseBoolean(split, 25, false);
         // old player tweaks
         mIsQualityInfoEnabled = Helpers.parseBoolean(split, 28, true);
