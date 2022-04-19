@@ -140,7 +140,7 @@ public class ChannelPresenter extends BasePresenter<ChannelView> implements Vide
             if (item.channelId != null) {
                 openChannel(item.channelId);
             } else if (item.videoId != null) {
-                MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
+                MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
                 mServiceManager.loadMetadata(item, metadata -> {
                     openChannel(metadata.getChannelId());
                     item.channelId = metadata.getChannelId();

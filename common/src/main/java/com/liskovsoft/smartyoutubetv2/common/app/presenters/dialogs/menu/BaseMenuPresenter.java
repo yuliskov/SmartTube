@@ -68,7 +68,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                         getContext().getString(original.isChannelPlaylist() || original.belongsToPlaylist() ? R.string.pin_unpin_playlist : R.string.pin_unpin_channel),
                         optionItem -> {
                             if (original.hasVideo()) {
-                                MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
+                                MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
 
                                 mServiceManager.loadMetadata(
                                         original,

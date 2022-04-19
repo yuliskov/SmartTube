@@ -528,7 +528,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         if (mVideo.isSynced || mVideo.canSubscribe()) {
             toggleSubscribe(mVideo);
         } else {
-            MessageHelpers.showLongMessage(getContext(), R.string.wait_data_loading);
+            MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
 
             mServiceManager.loadMetadata(mVideo, metadata -> {
                 Video video = Video.from(mVideo);

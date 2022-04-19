@@ -233,7 +233,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onSubscribeClicked(boolean subscribed) {
         if (!mIsMetadataLoaded) {
-            MessageHelpers.showLongMessage(getActivity(), R.string.wait_data_loading);
+            MessageHelpers.showMessage(getActivity(), R.string.wait_data_loading);
             getController().setSubscribeButtonState(!subscribed);
             return;
         }
@@ -250,7 +250,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onThumbsDownClicked(boolean thumbsDown) {
         if (!mIsMetadataLoaded) {
-            MessageHelpers.showLongMessage(getActivity(), R.string.wait_data_loading);
+            MessageHelpers.showMessage(getActivity(), R.string.wait_data_loading);
             getController().setDislikeButtonState(!thumbsDown);
             return;
         }
@@ -265,7 +265,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onThumbsUpClicked(boolean thumbsUp) {
         if (!mIsMetadataLoaded) {
-            MessageHelpers.showLongMessage(getActivity(), R.string.wait_data_loading);
+            MessageHelpers.showMessage(getActivity(), R.string.wait_data_loading);
             getController().setLikeButtonState(!thumbsUp);
             return;
         }
@@ -295,12 +295,12 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onVideoInfoClicked() {
         if (!mIsMetadataLoaded) {
-            MessageHelpers.showLongMessage(getActivity(), R.string.wait_data_loading);
+            MessageHelpers.showMessage(getActivity(), R.string.wait_data_loading);
             return;
         }
 
         if (getController().getVideo().description == null) {
-            MessageHelpers.showLongMessage(getActivity(), R.string.description_not_found);
+            MessageHelpers.showMessage(getActivity(), R.string.description_not_found);
             return;
         }
 
