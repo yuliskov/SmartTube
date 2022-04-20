@@ -108,10 +108,10 @@
     <string name="next_video_info_is_not_loaded_yet">Інформація про наступне відео ще не завантажена</string>
     <string name="card_multiline_title">Декілька рядків у заголовках</string>
     <string name="cards_style">Стиль карток</string>
-    <string name="repeat_mode_all">Грати усі відео один за одним</string>
+    <string name="repeat_mode_all">Відтворювати відео безперервно</string>
     <string name="repeat_mode_one">Повторювати поточне відео</string>
-    <string name="repeat_mode_pause">Ставити відтворення на паузу після кожного відео</string>
-    <string name="repeat_mode_pause_alt">Ставити відтворення на паузу після кожного відео не з плейлиста</string>
+    <string name="repeat_mode_pause">Зупиняти відтворення після кожного відео</string>
+    <string name="repeat_mode_pause_alt">Відтворювати безперервно тільки відео з плейлиста</string>
     <string name="repeat_mode_none">Завершувати відтворення після одного відео</string>
     <string name="subscribed_to_channel">Підписка на канал оформлена</string>
     <string name="unsubscribed_from_channel">Підписка на канал скасована</string>
@@ -293,7 +293,7 @@
     <string name="action_video_speed">Швидкість відео</string>
     <string name="action_subtitles">Субтитри</string>
     <string name="action_like">Подобається</string>
-    <string name="action_dislike">Неподобається</string>
+    <string name="action_dislike">Не подобається</string>
     <string name="action_play_pause">Відтворення/Пауза</string>
     <string name="action_repeat_mode">Режим відтворення</string>
     <string name="action_next">Наступне відео</string>
@@ -374,4 +374,6 @@
     <string name="play_video">Відтворити</string>
     <string name="remember_position_of_short_videos">Запам\'ятовувати позицію коротких відео (меньш ніж 10 хв)</string>
     <string name="player_show_tooltips">Показати підказки для кнопок</string>
+    <string name="action_like_unset">Подобається не встановлено</string>
+    <string name="action_dislike_unset">Не подобається не встановлено</string>
 </resources>

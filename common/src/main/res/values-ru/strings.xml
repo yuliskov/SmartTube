@@ -108,10 +108,10 @@
     <string name="next_video_info_is_not_loaded_yet">Информация о следующем видео ещё не загрузилась</string>
     <string name="card_multiline_title">Несколько строк в заголовках</string>
     <string name="cards_style">Стиль карточек</string>
-    <string name="repeat_mode_all">Играть видео друг за другом</string>
+    <string name="repeat_mode_all">Воспроизводить видео непрерывно</string>
     <string name="repeat_mode_one">Повторять текущее видео</string>
-    <string name="repeat_mode_pause">Ставить плеер на паузу после каждого видео</string>
-    <string name="repeat_mode_pause_alt">Ставить плеер на паузу после каждого видео не из плейлиста</string>
+    <string name="repeat_mode_pause">Останавливать воспроизведение после каждого видео</string>
+    <string name="repeat_mode_pause_alt">Воспроизводить непрерывно только видео из плейлиста</string>
     <string name="repeat_mode_none">Завершать воспроизведение после одного видео</string>
     <string name="subscribed_to_channel">Подписка на канал оформлена</string>
     <string name="unsubscribed_from_channel">Подписка на канал отменена</string>
@@ -374,4 +374,6 @@
     <string name="play_video">Воспроизвести</string>
     <string name="remember_position_of_short_videos">Запоминать позицию коротких видео (менее 10 мин)</string>
     <string name="player_show_tooltips">Показать подсказки для кнопок</string>
+    <string name="action_like_unset">Нравится не установлено</string>
+    <string name="action_dislike_unset">Не нравится не установлено</string>
 </resources>

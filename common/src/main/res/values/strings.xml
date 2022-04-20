@@ -108,10 +108,10 @@
     <string name="next_video_info_is_not_loaded_yet">Next video info is not loaded yet</string>
     <string name="card_multiline_title">Multiline titles</string>
     <string name="cards_style">Cards style</string>
-    <string name="repeat_mode_all">Play all videos one by one</string>
+    <string name="repeat_mode_all">Play videos continuously</string>
     <string name="repeat_mode_one">Repeat current video</string>
-    <string name="repeat_mode_pause">Pause playback after each video</string>
-    <string name="repeat_mode_pause_alt">Pause playback after each non-playlist video</string>
+    <string name="repeat_mode_pause">Stop playback after each video</string>
+    <string name="repeat_mode_pause_alt">Play only playlist videos continuously</string>
     <string name="repeat_mode_none">Stop playback after one video</string>
     <string name="subscribed_to_channel">Subscribed to channel</string>
     <string name="unsubscribed_from_channel">Unsubscribed from channel</string>
@@ -378,4 +378,6 @@
     <string name="play_video">Play</string>
     <string name="remember_position_of_short_videos">Remember position of short videos (less than 10 min)</string>
     <string name="player_show_tooltips">Show button tooltips</string>
+    <string name="action_like_unset">Like is unset</string>
+    <string name="action_dislike_unset">Dislike is unset</string>
 </resources>
