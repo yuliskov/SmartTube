@@ -275,7 +275,7 @@
   <string name="proxy_application_aborted">请先正确设置服务器代理。</string>
   <string name="proxy_test_aborted">测试中止，请先修复代理服务器设置。</string>
   <string name="proxy_credentials_invalid">无效的用户名或密码。</string>
-  <string name="proxy_port_invalid">无效的代理服务器端口，必须 > 0.</string>
+  <string name="proxy_port_invalid">无效的代理服务器端口，必须 &gt; 0.</string>
   <string name="proxy_host_invalid">代理主机没有设置。</string>
   <string name="proxy_type_invalid">代理服务器类型没有设置。</string>
   <string name="proxy_test_cancelled">测试#%d: 已取消。</string>
@@ -345,7 +345,7 @@
   <string name="content_block_action_only_skip">只是跳过</string>
   <string name="content_block_action_toast">跳过并且通知</string>
   <string name="content_block_action_dialog">显示确认弹框</string>
-  <string name="content_block_filler">Off-topic (filler)</string>
+  <string name="content_block_filler">题外话 (filler)</string>
   <string name="keyboard_auto_show">自动显示键盘</string>
   <string name="cancel_dialog">取消</string>
   <string name="msg_player_error_source2">视频源无法正常工作或时间不正确</string>
@@ -356,7 +356,7 @@
   <string name="player_seek_regular">常规</string>
   <string name="seek_interval">快进间隔</string>
   <string name="seek_interval_sec">%s 秒</string>
-  <string name="subtitle_system">系统样式 (Android 设置 > 辅助)</string>
+  <string name="subtitle_system">系统样式 (Android 设置 &gt; 辅助)</string>
   <string name="subtitle_scale">字幕缩放</string>
   <string name="audio_sync_fix_desc">声音和视频同步的另一种方法。它被认为已经过时，但在某些情况下可能会有所帮助。</string>
   <string name="audio_sync_fix">音频同步修正</string>
@@ -375,4 +375,6 @@
   <string name="master_volume">主音量控制</string>
   <string name="volume_limit">音量限制</string>
   <string name="subtitle_white_transparent">白色</string>
+  <string name="play_video">播放</string>
+  <string name="remember_position_of_short_videos">记录短视频的播放位置（少于10分钟）</string>
 </resources>
