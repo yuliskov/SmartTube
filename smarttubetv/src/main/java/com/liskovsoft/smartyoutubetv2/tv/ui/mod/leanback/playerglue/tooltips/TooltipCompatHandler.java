@@ -92,7 +92,9 @@ class TooltipCompatHandler implements View.OnLongClickListener, View.OnHoverList
             setPendingHandler(null);
         }
 
-        if (sActiveHandler != null && sActiveHandler.mAnchor == view) {
+        boolean sameAnchor = sActiveHandler != null && sActiveHandler.mAnchor == view;
+
+        if (sameAnchor) {
             sActiveHandler.hide();
         }
 
@@ -102,7 +104,12 @@ class TooltipCompatHandler implements View.OnLongClickListener, View.OnHoverList
         view.setOnFocusChangeListener(null);
 
         if (!TextUtils.isEmpty(tooltipText)) {
-            new TooltipCompatHandler(view, tooltipText);
+            TooltipCompatHandler handler = new TooltipCompatHandler(view, tooltipText);
+
+            // Circle through the button states
+            if (sameAnchor) {
+                handler.show(false);
+            }
         }
     }
 

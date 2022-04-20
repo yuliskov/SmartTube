@@ -244,7 +244,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
             callMediaItemObservable(mMediaItemManager::unsubscribeObserve);
         }
 
-        showSubscribeInfo(subscribed);
+        //showSubscribeInfo(subscribed);
     }
 
     @Override
@@ -355,7 +355,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onRepeatModeClicked(int modeIndex) {
         mPlayerData.setPlaybackMode(modeIndex);
-        Utils.showRepeatInfo(getActivity(), modeIndex);
+        //Utils.showRepeatInfo(getActivity(), modeIndex);
     }
 
     private void intSpeedItems(AppDialogPresenter settingsPresenter, List<OptionItem> items, float[] speedValues) {
