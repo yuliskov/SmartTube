@@ -91,14 +91,17 @@ class TooltipCompatHandler implements View.OnLongClickListener, View.OnHoverList
         if (sPendingHandler != null && sPendingHandler.mAnchor == view) {
             setPendingHandler(null);
         }
-        if (TextUtils.isEmpty(tooltipText)) {
-            if (sActiveHandler != null && sActiveHandler.mAnchor == view) {
-                sActiveHandler.hide();
-            }
-            view.setOnLongClickListener(null);
-            view.setLongClickable(false);
-            view.setOnHoverListener(null);
-        } else {
+
+        if (sActiveHandler != null && sActiveHandler.mAnchor == view) {
+            sActiveHandler.hide();
+        }
+
+        view.setOnLongClickListener(null);
+        view.setLongClickable(false);
+        view.setOnHoverListener(null);
+        view.setOnFocusChangeListener(null);
+
+        if (!TextUtils.isEmpty(tooltipText)) {
             new TooltipCompatHandler(view, tooltipText);
         }
     }
