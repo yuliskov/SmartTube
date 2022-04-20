@@ -69,6 +69,7 @@ public class PlayerData {
     private int mStartSeekIncrementMs;
     private float mSubtitleScale;
     private float mPlayerVolume;
+    private boolean mIsTooltipsEnabled;
 
     private PlayerData(Context context) {
         mPrefs = AppPrefs.instance(context);
@@ -282,6 +283,15 @@ public class PlayerData {
 
     public void setDoubleRefreshRateEnabled(boolean enabled) {
         mIsDoubleRefreshRateEnabled = enabled;
+        persistData();
+    }
+
+    public boolean isTooltipsEnabled() {
+        return mIsTooltipsEnabled;
+    }
+
+    public void enableTooltips(boolean enable) {
+        mIsTooltipsEnabled = enable;
         persistData();
     }
 
@@ -508,6 +518,7 @@ public class PlayerData {
         // old subs size px
         mSubtitleScale = Helpers.parseFloat(split, 39, 1.0f);
         mPlayerVolume = Helpers.parseFloat(split, 40, 1.0f);
+        mIsTooltipsEnabled = Helpers.parseBoolean(split, 41, true);
 
         if (!mIsRememberSpeedEnabled) {
             mSpeed = 1.0f;
@@ -524,6 +535,6 @@ public class PlayerData {
                 mIsLegacyCodecsForced, mIsSonyTimerFixEnabled, null, null, // old player tweaks
                 mIsQualityInfoEnabled, mIsRememberSpeedEachEnabled, mVideoAspectRatio, mIsGlobalClockEnabled, mIsTimeCorrectionEnabled,
                 mIsGlobalEndingTimeEnabled, mIsEndingTimeEnabled, mIsDoubleRefreshRateEnabled, mIsSeekConfirmPlayEnabled,
-                mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume));
+                mStartSeekIncrementMs, null, mSubtitleScale, mPlayerVolume, mIsTooltipsEnabled));
     }
 }

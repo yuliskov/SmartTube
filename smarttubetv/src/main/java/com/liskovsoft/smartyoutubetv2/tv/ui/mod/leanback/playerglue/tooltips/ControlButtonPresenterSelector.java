@@ -32,12 +32,15 @@ import androidx.leanback.widget.PresenterSelector;
  * Binds to items of type {@link Action}.
  */
 public class ControlButtonPresenterSelector extends PresenterSelector {
-
-    private final Presenter mPrimaryPresenter =
+    private final ControlButtonPresenter mPrimaryPresenter =
             new ControlButtonPresenter(R.layout.lb_control_button_primary);
-    private final Presenter mSecondaryPresenter =
+    private final ControlButtonPresenter mSecondaryPresenter =
             new ControlButtonPresenter(R.layout.lb_control_button_secondary);
     private final Presenter[] mPresenters = new Presenter[]{mPrimaryPresenter};
+
+    public ControlButtonPresenterSelector(boolean tooltipsEnabled) {
+        mPrimaryPresenter.tooltipsEnabled = mSecondaryPresenter.tooltipsEnabled = tooltipsEnabled;
+    }
 
     /**
      * Returns the presenter for primary controls.
@@ -81,6 +84,7 @@ public class ControlButtonPresenterSelector extends PresenterSelector {
 
     static class ControlButtonPresenter extends Presenter {
         private int mLayoutResourceId;
+        private boolean tooltipsEnabled;
 
         ControlButtonPresenter(int layoutResourceId) {
             mLayoutResourceId = layoutResourceId;
@@ -113,7 +117,9 @@ public class ControlButtonPresenterSelector extends PresenterSelector {
                         AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED);
 
                 // MODIFIED: enable control tooltips
-                TooltipCompatHandler.setTooltipText(vh.mFocusableView, action.getLabel1());
+                if (tooltipsEnabled) {
+                    TooltipCompatHandler.setTooltipText(vh.mFocusableView, action.getLabel1());
+                }
             }
         }
 

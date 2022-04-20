@@ -384,6 +384,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         //        option -> mPlayerData.enableSeekMemory(option.isSelected()),
         //        mPlayerData.isSeekMemoryEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_show_tooltips),
+                option -> mPlayerData.enableTooltips(option.isSelected()),
+                mPlayerData.isTooltipsEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_clock),
                 option -> mPlayerData.enableClock(option.isSelected()),
                 mPlayerData.isClockEnabled()));
