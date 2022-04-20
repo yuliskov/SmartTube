@@ -101,4 +101,14 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- Tooltip mod: extracted private values -->
+    <dimen name="tooltip_corner_radius_mod">2dp</dimen>
+    <dimen name="tooltip_horizontal_padding_mod">16dp</dimen>
+    <dimen name="tooltip_margin_mod">8dp</dimen>
+    <dimen name="tooltip_precise_anchor_extra_offset_mod">8dp</dimen>
+    <dimen name="tooltip_precise_anchor_threshold_mod">96dp</dimen>
+    <dimen name="tooltip_vertical_padding_mod">6.5dp</dimen>
+    <dimen name="tooltip_y_offset_non_touch_mod">0dp</dimen>
+    <dimen name="tooltip_y_offset_touch_mod">16dp</dimen>
 </resources>

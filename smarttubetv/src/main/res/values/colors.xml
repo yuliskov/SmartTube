@@ -49,4 +49,10 @@
     <color name="primary_light">#B2DFDB</color>
     <color name="primary">#009688</color>
     <color name="white_87pc">#DDFFFFFF</color>
+
+    <!-- Tooltip mod: extracted private values -->
+    <color name="tooltip_background_dark_mod">#e6616161</color>
+    <color name="tooltip_background_light_mod">#e6FFFFFF</color>
+    <color name="foreground_material_dark_mod">@android:color/white</color>
+    <color name="foreground_material_light_mod">@android:color/black</color>
 </resources>

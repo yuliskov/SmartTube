@@ -29,12 +29,12 @@ import androidx.leanback.media.PlaybackGlueHost;
 import androidx.leanback.media.PlayerAdapter;
 import androidx.leanback.widget.Action;
 import androidx.leanback.widget.ArrayObjectAdapter;
-import androidx.leanback.widget.ControlButtonPresenterSelector;
 import androidx.leanback.widget.OnActionClickedListener;
 import androidx.leanback.widget.PlaybackControlsRow;
 import androidx.leanback.widget.PlaybackRowPresenter;
 import androidx.leanback.widget.PlaybackTransportRowPresenter;
 import androidx.leanback.widget.Presenter;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.ControlButtonPresenterSelector;
 
 import java.util.List;
 

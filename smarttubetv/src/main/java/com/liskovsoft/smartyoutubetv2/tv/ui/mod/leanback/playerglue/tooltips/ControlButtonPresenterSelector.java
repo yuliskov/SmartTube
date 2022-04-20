@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.appcompat.widget.TooltipCompat;
 import androidx.leanback.R;
 import androidx.leanback.widget.Action;
 import androidx.leanback.widget.PlaybackControlsRow;
@@ -98,7 +97,6 @@ public class ControlButtonPresenterSelector extends PresenterSelector {
         public void onBindViewHolder(ViewHolder viewHolder, Object item) {
             Action action = (Action) item;
             ActionViewHolder vh = (ActionViewHolder) viewHolder;
-
             vh.mIcon.setImageDrawable(action.getIcon());
             if (vh.mLabel != null) {
                 if (action.getIcon() == null) {
@@ -113,12 +111,19 @@ public class ControlButtonPresenterSelector extends PresenterSelector {
                 vh.mFocusableView.setContentDescription(contentDescription);
                 vh.mFocusableView.sendAccessibilityEvent(
                         AccessibilityEvent.TYPE_VIEW_ACCESSIBILITY_FOCUSED);
-            }
 
-            // MODIFIED: add button tooltips
-            // NOTE: don't work as expected: weird button highlight and no tooltip shown
-            if (action.getLabel1() != null) {
-                TooltipCompat.setTooltipText(vh.mFocusableView, action.getLabel1());
+                // MODIFIED: enable control tooltips
+                //TooltipCompat.setTooltipText(vh.mFocusableView, action.getLabel1());
+
+                TooltipCompatHandler.setTooltipText(vh.mFocusableView, action.getLabel1());
+
+                //vh.mFocusableView.setOnFocusChangeListener((v, hasFocus) -> {
+                //    if (hasFocus) {
+                //        MessageHelpers.showMessage(vh.mFocusableView.getContext(), (String) action.getLabel1());
+                //    } else {
+                //        MessageHelpers.cancelToasts();
+                //    }
+                //});
             }
         }
 
