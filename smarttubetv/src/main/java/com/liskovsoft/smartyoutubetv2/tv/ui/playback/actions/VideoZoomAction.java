@@ -16,6 +16,6 @@ public class VideoZoomAction extends Action {
 
         setIcon(uncoloredDrawable);
         setLabel1(context.getString(
-                R.string.action_video_zoom));
+                R.string.video_aspect));
     }
 }
