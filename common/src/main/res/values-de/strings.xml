@@ -108,11 +108,11 @@
     <string name="next_video_info_is_not_loaded_yet">Informationen zum nächsten Video wurden noch nicht geladen</string>
     <string name="card_multiline_title">Mehrzeilige Titel</string>
     <string name="cards_style">Karten-Stil</string>
-    <string name="repeat_mode_all">Alle Videos nacheinander abspielen</string>
-    <string name="repeat_mode_one">Wiederhole dieses Video</string>
-    <string name="repeat_mode_pause">Pause nach jedem Video</string>
-    <string name="repeat_mode_pause_alt">Pause nach jedem Video (außer Wiedergabelisten)</string>
-    <string name="repeat_mode_none">Stoppen nach jedem Video</string>
+    <string name="repeat_mode_all">Videos fortlaufend abspielen</string>
+    <string name="repeat_mode_one">Aktuelles Video wiederholen</string>
+    <string name="repeat_mode_pause">Wiedergabe nach jedem Video stoppen</string>
+    <string name="repeat_mode_pause_alt">Nur Videos der Wiedergabeliste fortlaufend abspielen</string>
+    <string name="repeat_mode_none">Wiedergabe nach einem Video stoppen</string>
     <string name="subscribed_to_channel">Kanal abonniert</string>
     <string name="unsubscribed_from_channel">Kanal nicht mehr abonniert</string>
     <string name="subtitle_yellow_transparent">Gelb auf transparentem Hintergrund</string>
@@ -377,4 +377,7 @@
     <string name="volume_limit">Lautstärkebegrenzung</string>
     <string name="play_video">Abspielen</string>
     <string name="remember_position_of_short_videos">Position von kurzen Videos merken (weniger als 10 Min.)</string>
+    <string name="player_show_tooltips">Schaltflächen-Tooltips anzeigen</string>
+    <string name="action_like_unset">Mag ich</string>
+    <string name="action_dislike_unset">Mag ich nicht</string>
 </resources>
