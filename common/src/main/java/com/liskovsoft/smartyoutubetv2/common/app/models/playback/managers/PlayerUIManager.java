@@ -304,20 +304,26 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
             return;
         }
 
-        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
+        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
 
-        settingsPresenter.clear();
+        dialogPresenter.clear();
 
-        settingsPresenter.appendLongTextCategory(
+        dialogPresenter.appendLongTextCategory(
                 getController().getVideo().title, UiOptionItem.from(getController().getVideo().description, null)
         );
 
-        settingsPresenter.showDialog(getController().getVideo().title);
+        dialogPresenter.showDialog(getController().getVideo().title);
     }
 
     @Override
     public void onShareLinkClicked() {
-        
+        AppDialogPresenter dialogPresenter = AppDialogPresenter.instance(getActivity());
+
+        dialogPresenter.clear();
+
+        Utils.appendShareDialogItems(getActivity(), dialogPresenter, getController().getVideo());
+
+        dialogPresenter.showDialog(getController().getVideo().title);
     }
 
     @Override

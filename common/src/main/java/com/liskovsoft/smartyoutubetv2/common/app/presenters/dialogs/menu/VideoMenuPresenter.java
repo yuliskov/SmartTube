@@ -361,29 +361,11 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void appendShareButton() {
-        if (!mIsShareButtonEnabled || mVideo == null) {
+        if (!mIsShareButtonEnabled) {
             return;
         }
 
-        if (mVideo.videoId == null && mVideo.channelId == null) {
-            return;
-        }
-
-        mDialogPresenter.appendSingleButton(
-                UiOptionItem.from(getContext().getString(R.string.share_link), optionItem -> {
-                    if (mVideo.videoId != null) {
-                        Utils.displayShareVideoDialog(getContext(), mVideo.videoId);
-                    } else if (mVideo.channelId != null) {
-                        Utils.displayShareChannelDialog(getContext(), mVideo.channelId);
-                    }
-                }));
-
-        mDialogPresenter.appendSingleButton(
-                UiOptionItem.from(getContext().getString(R.string.share_embed_link), optionItem -> {
-                    if (mVideo.videoId != null) {
-                        Utils.displayShareEmbedVideoDialog(getContext(), mVideo.videoId);
-                    }
-                }));
+        Utils.appendShareDialogItems(getContext(), mDialogPresenter, mVideo);
     }
 
     private void appendOpenDescriptionButton() {
