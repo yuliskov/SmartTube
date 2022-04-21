@@ -334,6 +334,11 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
+    public void onShareLinkClicked() {
+        process(PlayerUiEventListener::onShareLinkClicked);
+    }
+
+    @Override
     public void onSearchClicked() {
         process(PlayerUiEventListener::onSearchClicked);
     }

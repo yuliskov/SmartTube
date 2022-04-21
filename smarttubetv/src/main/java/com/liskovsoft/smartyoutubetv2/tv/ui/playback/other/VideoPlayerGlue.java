@@ -17,6 +17,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxCo
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChannelAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.HighQualityAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ShareAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoInfoAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PipAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PlaybackQueueAction;
@@ -74,6 +75,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
     private final ScreenOffAction mScreenOffAction;
     private final PlaybackQueueAction mPlaybackQueueAction;
     private final VideoInfoAction mVideoInfoAction;
+    private final ShareAction mShareAction;
     private final OnActionClickedListener mActionListener;
     private String mQualityInfo;
     private QualityInfoListener mQualityInfoListener;
@@ -111,6 +113,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         mScreenOffAction = new ScreenOffAction(context);
         mPlaybackQueueAction = new PlaybackQueueAction(context);
         mVideoInfoAction = new VideoInfoAction(context);
+        mShareAction = new ShareAction(context);
     }
 
     @Override
@@ -147,6 +150,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         }
         if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_VIDEO_ZOOM)) {
             adapter.add(mVideoZoomAction);
+        }
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SHARE)) {
+            adapter.add(mShareAction);
         }
         if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SEARCH)) {
             adapter.add(mSearchAction);
@@ -374,6 +380,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         } else if (action == mVideoInfoAction) {
             mActionListener.onVideoInfo();
             handled = true;
+        } else if (action == mShareAction) {
+            mActionListener.onShareLink();
+            handled = true;
         }
 
         if (handled) {
@@ -492,6 +501,8 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         void onVideoSpeed();
 
         void onVideoInfo();
+
+        void onShareLink();
 
         void onSearch();
 

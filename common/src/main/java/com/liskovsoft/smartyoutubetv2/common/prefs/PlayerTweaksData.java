@@ -26,6 +26,7 @@ public class PlayerTweaksData {
     public static final int PLAYER_BUTTON_PREVIOUS = 0b10000000000000000;
     public static final int PLAYER_BUTTON_HIGH_QUALITY = 0b100000000000000000;
     public static final int PLAYER_BUTTON_VIDEO_INFO = 0b1000000000000000000;
+    public static final int PLAYER_BUTTON_SHARE = 0b10000000000000000000;
     @SuppressLint("StaticFieldLeak")
     private static PlayerTweaksData sInstance;
     private final AppPrefs mPrefs;

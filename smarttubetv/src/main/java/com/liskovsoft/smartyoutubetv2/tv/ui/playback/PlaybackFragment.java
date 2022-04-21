@@ -722,6 +722,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
+        public void onShareLink() {
+            mEventListener.onShareLinkClicked();
+        }
+
+        @Override
         public void onSearch() {
             mEventListener.onSearchClicked();
         }

@@ -316,6 +316,11 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     }
 
     @Override
+    public void onShareLinkClicked() {
+        
+    }
+
+    @Override
     public void onSearchClicked() {
         if (SearchData.instance(getActivity()).isBackgroundPlaybackEnabled()) {
             onPipClicked();

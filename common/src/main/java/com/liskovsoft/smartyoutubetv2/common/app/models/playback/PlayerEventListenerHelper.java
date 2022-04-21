@@ -225,6 +225,11 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
+    public void onShareLinkClicked() {
+        // NOP
+    }
+
+    @Override
     public void onSearchClicked() {
         // NOP
     }
