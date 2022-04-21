@@ -22,6 +22,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
+import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.Observable;
@@ -365,7 +366,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        Utils.appendShareDialogItems(getContext(), mDialogPresenter, mVideo);
+        AppDialogUtil.appendShareDialogItems(getContext(), mDialogPresenter, mVideo);
     }
 
     private void appendOpenDescriptionButton() {

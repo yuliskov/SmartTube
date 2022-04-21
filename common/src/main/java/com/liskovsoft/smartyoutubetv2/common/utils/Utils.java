@@ -486,35 +486,6 @@ public class Utils {
         });
     }
 
-    /**
-     * Share link dialog items initialization.
-     */
-    public static void appendShareDialogItems(Context context, AppDialogPresenter dialogPresenter, Video video) {
-        if (video == null) {
-            return;
-        }
-
-        if (video.videoId == null && video.channelId == null) {
-            return;
-        }
-
-        dialogPresenter.appendSingleButton(
-                UiOptionItem.from(context.getString(R.string.share_link), optionItem -> {
-                    if (video.videoId != null) {
-                        Utils.displayShareVideoDialog(context, video.videoId);
-                    } else if (video.channelId != null) {
-                        Utils.displayShareChannelDialog(context, video.channelId);
-                    }
-                }));
-
-        dialogPresenter.appendSingleButton(
-                UiOptionItem.from(context.getString(R.string.share_embed_link), optionItem -> {
-                    if (video.videoId != null) {
-                        Utils.displayShareEmbedVideoDialog(context, video.videoId);
-                    }
-                }));
-    }
-
     public static boolean isShort(MediaItem mediaItem) {
         if (mediaItem == null || mediaItem.getTitle() == null) {
             return false;

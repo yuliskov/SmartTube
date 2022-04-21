@@ -4,8 +4,6 @@ import android.content.Context;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.prefs.GlobalPreferences;
 import com.liskovsoft.smartyoutubetv2.common.R;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.HQDialogManager;
-import com.liskovsoft.smartyoutubetv2.common.app.models.playback.managers.PlayerUIManager;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -13,6 +11,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
+import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,22 +94,22 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendVideoBufferCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = HQDialogManager.createVideoBufferCategory(getContext(), mPlayerData);
+        OptionCategory category = AppDialogUtil.createVideoBufferCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
     private void appendVideoPresetsCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = HQDialogManager.createVideoPresetsCategory(getContext(), mPlayerData);
+        OptionCategory category = AppDialogUtil.createVideoPresetsCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
     private void appendVideoZoomCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = PlayerUIManager.createVideoZoomCategory(getContext(), mPlayerData);
+        OptionCategory category = AppDialogUtil.createVideoZoomCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
     private void appendAudioShiftCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = HQDialogManager.createAudioShiftCategory(getContext(), mPlayerData);
+        OptionCategory category = AppDialogUtil.createAudioShiftCategory(getContext(), mPlayerData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
