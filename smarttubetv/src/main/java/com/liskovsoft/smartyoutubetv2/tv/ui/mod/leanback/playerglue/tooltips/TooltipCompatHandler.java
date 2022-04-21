@@ -161,9 +161,8 @@ class TooltipCompatHandler implements View.OnLongClickListener, View.OnHoverList
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if (hasFocus) {
-            mAnchorX = v.getWidth() / 2;
-            mAnchorY = v.getHeight() / 2;
-            show(false);
+            // Wait till probable animation complete (position of button isn't constant)
+            setPendingHandler(this);
         } else {
             hide();
         }
