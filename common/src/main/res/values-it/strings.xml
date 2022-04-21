@@ -108,10 +108,10 @@
     <string name="next_video_info_is_not_loaded_yet">Le informazioni sul video successivo non sono ancora disponibili</string>
     <string name="card_multiline_title">Titoli multilinea</string>
     <string name="cards_style">Stile riquadri</string>
-    <string name="repeat_mode_all">Riproduci tutti i video uno per uno</string>
+    <string name="repeat_mode_all">Riproduci i video continuamente</string>
     <string name="repeat_mode_one">Ripeti video corrente</string>
-    <string name="repeat_mode_pause">Pausa dopo ogni video</string>
-    <string name="repeat_mode_pause_alt">Pausa dopo ogni video non in playlist</string>
+    <string name="repeat_mode_pause">Ferma riproduzione dopo ogni video</string>
+    <string name="repeat_mode_pause_alt">Riproduci solo i video della playlist continuamente</string>
     <string name="repeat_mode_none">Ferma dopo un video</string>
     <string name="subscribed_to_channel">Iscritto al canale</string>
     <string name="unsubscribed_from_channel">Disiscritto dal canale</string>
@@ -377,4 +377,7 @@
     <string name="volume_limit">Limite volume</string>
     <string name="play_video">Riproduci</string>
     <string name="remember_position_of_short_videos">Ricorda la posizione dei video brevi (meno di 10 minuti)</string>
+    <string name="player_show_tooltips">Mostra le descrizioni dei pulsanti</string>
+    <string name="action_like_unset">Mi piace non è selezionato</string>
+    <string name="action_dislike_unset">Non mi piace non è selezionato</string>
 </resources>
