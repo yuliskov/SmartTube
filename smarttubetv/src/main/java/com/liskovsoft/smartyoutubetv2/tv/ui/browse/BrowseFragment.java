@@ -316,6 +316,9 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     @Override
     public void focusOnContent() {
         startHeadersTransitionSafe(false);
+        if (getMainFragment() != null && getMainFragment().getView() != null) {
+            getMainFragment().getView().requestFocus();
+        }
     }
 
     private void focusOnChildFragment() {
