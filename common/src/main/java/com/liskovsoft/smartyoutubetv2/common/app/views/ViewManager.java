@@ -15,14 +15,12 @@ import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
-import com.liskovsoft.smartyoutubetv2.common.app.presenters.SplashPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MotherActivity;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
-import java.util.logging.Handler;
 
 public class ViewManager {
     private static final String TAG = ViewManager.class.getSimpleName();
@@ -328,6 +326,7 @@ public class ViewManager {
             // NOTE: Don't rely on MotherActivity.onDestroy() because activity can be killed silently.
             RxUtils.runAsync(() -> {
                 clearCaches();
+                BrowsePresenter.unhold();
                 mIsMoveToBackEnabled = false;
                 mIsFinishing = false;
             }, 1_000);
