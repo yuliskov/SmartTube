@@ -44,7 +44,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         appendUIAutoHideCategory(settingsPresenter);
         appendSeekTypeCategory(settingsPresenter);
         appendSeekingPreviewCategory(settingsPresenter);
-        appendSeekIntervalCategory(settingsPresenter);
+        AppDialogUtil.appendSeekIntervalDialogItems(getContext(), settingsPresenter, mPlayerData);
         appendRememberSpeedCategory(settingsPresenter);
         appendEndingTimeCategory(settingsPresenter);
         appendMiscCategory(settingsPresenter);
@@ -142,18 +142,6 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.player_seek_preview), options);
     }
 
-    private void appendSeekIntervalCategory(AppDialogPresenter settingsPresenter) {
-        List<OptionItem> options = new ArrayList<>();
-
-        for (int intervalMs : new int[] {1_000, 2_000, 3_000, 5_000, 10_000, 15_000, 20_000, 30_000, 60_000}) {
-            options.add(UiOptionItem.from(getContext().getString(R.string.seek_interval_sec, Helpers.toString(intervalMs / 1_000f)),
-                    optionItem -> mPlayerData.setStartSeekIncrementMs(intervalMs),
-                    intervalMs == mPlayerData.getStartSeekIncrementMs()));
-        }
-
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.seek_interval), options);
-    }
-
     private void appendRememberSpeedCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();
 
@@ -179,6 +167,7 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> options = new ArrayList<>();
 
         for (int[] pair : new int[][] {
+                {R.string.seek_interval, PlayerTweaksData.PLAYER_BUTTON_SEEK_INTERVAL},
                 {R.string.share_link, PlayerTweaksData.PLAYER_BUTTON_SHARE},
                 {R.string.action_video_info, PlayerTweaksData.PLAYER_BUTTON_VIDEO_INFO},
                 {R.string.action_video_stats, PlayerTweaksData.PLAYER_BUTTON_VIDEO_STATS},

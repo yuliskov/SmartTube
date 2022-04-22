@@ -220,6 +220,11 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
+    public void onSeekIntervalClicked() {
+        // NOP
+    }
+
+    @Override
     public void onVideoInfoClicked() {
         // NOP
     }

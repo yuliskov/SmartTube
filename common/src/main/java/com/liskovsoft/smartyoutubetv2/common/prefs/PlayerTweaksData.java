@@ -27,6 +27,7 @@ public class PlayerTweaksData {
     public static final int PLAYER_BUTTON_HIGH_QUALITY = 0b100000000000000000;
     public static final int PLAYER_BUTTON_VIDEO_INFO = 0b1000000000000000000;
     public static final int PLAYER_BUTTON_SHARE = 0b10000000000000000000;
+    public static final int PLAYER_BUTTON_SEEK_INTERVAL = 0b100000000000000000000;
     @SuppressLint("StaticFieldLeak")
     private static PlayerTweaksData sInstance;
     private final AppPrefs mPrefs;
@@ -238,8 +239,8 @@ public class PlayerTweaksData {
         mIsLiveStreamFixEnabled = Helpers.parseBoolean(split, 10, VERSION.SDK_INT <= 19); // Android 4 playback crash fix
         mIsPlaybackNotificationsDisabled = Helpers.parseBoolean(split, 11, !Helpers.isAndroidTV(mPrefs.getContext()));
         mIsTunneledPlaybackEnabled = Helpers.parseBoolean(split, 12, false);
-        // Example usage: Integer.MAX_VALUE ^ PlayerTweaksData.PLAYER_BUTTON_VIDEO_INFO // all buttons, except info button
-        mPlayerButtons = Helpers.parseInt(split, 13, Integer.MAX_VALUE); // all buttons
+        // Example usage: Integer.MAX_VALUE & ~(PlayerTweaksData.PLAYER_BUTTON_VIDEO_INFO | PlayerTweaksData.PLAYER_BUTTON_SEEK_INTERVAL) // all buttons, except info button
+        mPlayerButtons = Helpers.parseInt(split, 13, Integer.MAX_VALUE & ~(PlayerTweaksData.PLAYER_BUTTON_SEEK_INTERVAL)); // all buttons, except seek interval
         mIsBufferingFixEnabled = Helpers.parseBoolean(split, 14, false);
         mIsNoFpsPresetsEnabled = Helpers.parseBoolean(split, 15, false);
         mIsRememberPositionOfShortVideosEnabled = Helpers.parseBoolean(split, 16, false);

@@ -271,16 +271,23 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
 
     @Override
     public void onVideoSpeedClicked() {
-        List<OptionItem> items = new ArrayList<>();
-
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
         settingsPresenter.clear();
 
         // suppose live stream if buffering near the end
         // boolean isStream = Math.abs(player.getDuration() - player.getCurrentPosition()) < 10_000;
-        intSpeedItems(settingsPresenter, items, new float[]{0.25f, 0.5f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f, 1.0f, 1.05f, 1.1f, 1.15f, 1.2f, 1.25f, 1.3f, 1.4f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f, 3.0f});
+        AppDialogUtil.appendSpeedDialogItems(getActivity(), settingsPresenter, mPlayerData, getController());
 
-        settingsPresenter.appendRadioCategory(getActivity().getString(R.string.video_speed), items);
+        settingsPresenter.showDialog();
+    }
+
+    @Override
+    public void onSeekIntervalClicked() {
+        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
+        settingsPresenter.clear();
+
+        AppDialogUtil.appendSeekIntervalDialogItems(getActivity(), settingsPresenter, mPlayerData);
+
         settingsPresenter.showDialog();
     }
 
@@ -359,19 +366,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     public void onRepeatModeClicked(int modeIndex) {
         mPlayerData.setPlaybackMode(modeIndex);
         //Utils.showRepeatInfo(getActivity(), modeIndex);
-    }
-
-    private void intSpeedItems(AppDialogPresenter settingsPresenter, List<OptionItem> items, float[] speedValues) {
-        for (float speed : speedValues) {
-            items.add(UiOptionItem.from(
-                    String.valueOf(speed),
-                    optionItem -> {
-                        mPlayerData.setSpeed(speed);
-                        getController().setSpeed(speed);
-                        //settingsPresenter.closeDialog();
-                    },
-                    getController().getSpeed() == speed));
-        }
     }
 
     private void disableUiAutoHideTimeout() {

@@ -329,6 +329,11 @@ public class MainPlayerEventBridge implements PlayerEventListener {
     }
 
     @Override
+    public void onSeekIntervalClicked() {
+        process(PlayerUiEventListener::onSeekIntervalClicked);
+    }
+
+    @Override
     public void onVideoInfoClicked() {
         process(PlayerUiEventListener::onVideoInfoClicked);
     }

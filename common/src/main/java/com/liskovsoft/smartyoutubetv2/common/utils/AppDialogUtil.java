@@ -1,10 +1,12 @@
 package com.liskovsoft.smartyoutubetv2.common.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
+import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackEngineController;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionCategory;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
@@ -286,5 +288,34 @@ public class AppDialogUtil {
         settingsPresenter.appendStringsCategory(title, options);
 
         settingsPresenter.showDialog(title);
+    }
+
+    public static void appendSeekIntervalDialogItems(Context context, AppDialogPresenter dialogPresenter, PlayerData playerData) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int intervalMs : new int[] {1_000, 2_000, 3_000, 5_000, 10_000, 15_000, 20_000, 30_000, 60_000}) {
+            options.add(UiOptionItem.from(context.getString(R.string.seek_interval_sec, Helpers.toString(intervalMs / 1_000f)),
+                    optionItem -> playerData.setStartSeekIncrementMs(intervalMs),
+                    intervalMs == playerData.getStartSeekIncrementMs()));
+        }
+
+        dialogPresenter.appendRadioCategory(context.getString(R.string.seek_interval), options);
+    }
+
+    public static void appendSpeedDialogItems(Context context, AppDialogPresenter settingsPresenter, PlayerData playerData, PlaybackController playbackController) {
+        List<OptionItem> items = new ArrayList<>();
+        float[] speedValues = new float[]{0.25f, 0.5f, 0.75f, 0.80f, 0.85f, 0.90f, 0.95f, 1.0f, 1.05f, 1.1f, 1.15f, 1.2f, 1.25f, 1.3f, 1.4f, 1.5f, 1.75f, 2f, 2.25f, 2.5f, 2.75f, 3.0f};
+
+        for (float speed : speedValues) {
+            items.add(UiOptionItem.from(
+                    String.valueOf(speed),
+                    optionItem -> {
+                        playerData.setSpeed(speed);
+                        playbackController.setSpeed(speed);
+                        //settingsPresenter.closeDialog();
+                    },
+                    playbackController.getSpeed() == speed));
+        }
+        settingsPresenter.appendRadioCategory(context.getString(R.string.video_speed), items);
     }
 }

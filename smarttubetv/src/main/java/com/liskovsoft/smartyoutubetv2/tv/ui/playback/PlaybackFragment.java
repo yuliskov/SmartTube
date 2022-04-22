@@ -717,6 +717,11 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
         }
 
         @Override
+        public void onSeekInterval() {
+            mEventListener.onSeekIntervalClicked();
+        }
+
+        @Override
         public void onVideoInfo() {
             mEventListener.onVideoInfoClicked();
         }

@@ -33,7 +33,7 @@ import androidx.leanback.widget.Presenter;
 class ControlBarPresenter extends Presenter {
 
     // MOD: increase player's controls number. Origin: 7. Leanback version 1.0.0
-    static final int MAX_CONTROLS = 10;
+    static final int MAX_CONTROLS = 12;
 
     /**
      * The data type expected by this presenter.

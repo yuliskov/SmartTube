@@ -17,6 +17,7 @@ import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tweaks.MaxCo
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ChannelAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ClosedCaptioningAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.HighQualityAction;
+import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.SeekIntervalAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.ShareAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.VideoInfoAction;
 import com.liskovsoft.smartyoutubetv2.tv.ui.playback.actions.PipAction;
@@ -76,6 +77,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
     private final PlaybackQueueAction mPlaybackQueueAction;
     private final VideoInfoAction mVideoInfoAction;
     private final ShareAction mShareAction;
+    private final SeekIntervalAction mSeekIntervalAction;
     private final OnActionClickedListener mActionListener;
     private String mQualityInfo;
     private QualityInfoListener mQualityInfoListener;
@@ -114,6 +116,7 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         mPlaybackQueueAction = new PlaybackQueueAction(context);
         mVideoInfoAction = new VideoInfoAction(context);
         mShareAction = new ShareAction(context);
+        mSeekIntervalAction = new SeekIntervalAction(context);
     }
 
     @Override
@@ -141,6 +144,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         }
         if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_VIDEO_SPEED)) {
             adapter.add(mVideoSpeedAction);
+        }
+        if (playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_SEEK_INTERVAL)) {
+            adapter.add(mSeekIntervalAction);
         }
         if (Helpers.isPictureInPictureSupported(getContext()) && playerTweaksData.isPlayerButtonEnabled(PlayerTweaksData.PLAYER_BUTTON_PIP)) {
             adapter.add(mPipAction);
@@ -383,6 +389,9 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         } else if (action == mShareAction) {
             mActionListener.onShareLink();
             handled = true;
+        } else if (action == mSeekIntervalAction) {
+            mActionListener.onSeekInterval();
+            handled = true;
         }
 
         if (handled) {
@@ -499,6 +508,8 @@ public class VideoPlayerGlue extends MaxControlsVideoPlayerGlue<PlayerAdapter> {
         void onDebugInfo(boolean enabled);
 
         void onVideoSpeed();
+
+        void onSeekInterval();
 
         void onVideoInfo();
 
