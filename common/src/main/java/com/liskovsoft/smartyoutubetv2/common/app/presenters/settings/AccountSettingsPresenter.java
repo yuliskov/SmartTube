@@ -85,16 +85,22 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
                 }, true
         ));
 
+        String accountName = " (" + getContext().getString(R.string.dialog_account_none) + ")";
+
         for (Account account : accounts) {
             optionItems.add(UiOptionItem.from(
-                    formatAccount(account), option -> {
+                    getFullName(account), option -> {
                         selectAccount(account);
                         settingsPresenter.closeDialog();
                     }, account.isSelected()
             ));
+
+            if (account.isSelected()) {
+                accountName = " (" + getSimpleName(account) + ")";
+            }
         }
 
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.dialog_account_list), optionItems);
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.dialog_account_list) + accountName, optionItems);
     }
 
     private void appendRemoveAccountSection(List<Account> accounts, AppDialogPresenter settingsPresenter) {
@@ -102,7 +108,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
 
         for (Account account : accounts) {
             optionItems.add(UiOptionItem.from(
-                    formatAccount(account), option ->
+                    getFullName(account), option ->
                         AppDialogUtil.showConfirmationDialog(
                                 getContext(),
                                 () -> {
@@ -129,7 +135,7 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         }, AccountsData.instance(getContext()).isSelectAccountOnBootEnabled()));
     }
 
-    private String formatAccount(Account account) {
+    private String getFullName(Account account) {
         String format;
 
         if (account.getEmail() != null) {
@@ -139,6 +145,10 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         }
 
         return format;
+    }
+
+    private String getSimpleName(Account account) {
+        return account.getName() != null ? account.getName() : account.getEmail();
     }
 
     private void selectAccount(Account account) {
