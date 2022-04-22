@@ -286,7 +286,7 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getActivity());
         settingsPresenter.clear();
 
-        AppDialogUtil.appendSeekIntervalDialogItems(getActivity(), settingsPresenter, mPlayerData);
+        AppDialogUtil.appendSeekIntervalDialogItems(getActivity(), settingsPresenter, mPlayerData, true);
 
         settingsPresenter.showDialog();
     }

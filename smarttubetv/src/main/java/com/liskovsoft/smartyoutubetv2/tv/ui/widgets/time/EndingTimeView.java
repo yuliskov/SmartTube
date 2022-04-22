@@ -41,7 +41,7 @@ public class EndingTimeView extends AppCompatTextView implements TickleListener 
     private void setIcon() {
         Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.icon_hourglass_bottom);
         if (drawable != null) {
-            drawable.setBounds(0, 3, getLineHeight(), getLineHeight()); // add top bound to align vertically
+            drawable.setBounds(3, 3, getLineHeight(), getLineHeight()); // add bounds to align vertically
             setCompoundDrawables(drawable, null, null, null);
         }
     }

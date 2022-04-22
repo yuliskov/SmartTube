@@ -290,12 +290,17 @@ public class AppDialogUtil {
         settingsPresenter.showDialog(title);
     }
 
-    public static void appendSeekIntervalDialogItems(Context context, AppDialogPresenter dialogPresenter, PlayerData playerData) {
+    public static void appendSeekIntervalDialogItems(Context context, AppDialogPresenter dialogPresenter, PlayerData playerData, boolean closeOnSelect) {
         List<OptionItem> options = new ArrayList<>();
 
         for (int intervalMs : new int[] {1_000, 2_000, 3_000, 5_000, 10_000, 15_000, 20_000, 30_000, 60_000}) {
             options.add(UiOptionItem.from(context.getString(R.string.seek_interval_sec, Helpers.toString(intervalMs / 1_000f)),
-                    optionItem -> playerData.setStartSeekIncrementMs(intervalMs),
+                    optionItem -> {
+                        playerData.setStartSeekIncrementMs(intervalMs);
+                        if (closeOnSelect) {
+                            dialogPresenter.closeDialog();
+                        }
+                    },
                     intervalMs == playerData.getStartSeekIncrementMs()));
         }
 
