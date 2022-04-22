@@ -209,7 +209,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         if (BrowsePresenter.instance(getContext()).canMoveSectionUp(mSection)) {
             mDialogPresenter.appendSingleButton(
                     UiOptionItem.from(getContext().getString(R.string.move_section_up), optionItem -> {
-                        mDialogPresenter.closeDialog();
+                        //mDialogPresenter.closeDialog();
                         BrowsePresenter.instance(getContext()).moveSectionUp(mSection);
                     }));
         }
@@ -217,7 +217,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         if (BrowsePresenter.instance(getContext()).canMoveSectionDown(mSection)) {
             mDialogPresenter.appendSingleButton(
                     UiOptionItem.from(getContext().getString(R.string.move_section_down), optionItem -> {
-                        mDialogPresenter.closeDialog();
+                        //mDialogPresenter.closeDialog();
                         BrowsePresenter.instance(getContext()).moveSectionDown(mSection);
                     }));
         }
