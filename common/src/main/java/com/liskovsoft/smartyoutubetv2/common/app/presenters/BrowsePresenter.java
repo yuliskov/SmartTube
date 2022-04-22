@@ -121,7 +121,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         updateSections();
         int selectedSectionIndex = findSectionIndex(mSelectedSectionId);
         mSelectedSectionId = -1;
-        getView().selectSection(selectedSectionIndex != -1 ? selectedSectionIndex : mBootSectionIndex);
+        getView().selectSection(selectedSectionIndex != -1 ? selectedSectionIndex : mBootSectionIndex, true);
         showBootDialogs();
         Utils.updateRemoteControlService(getContext());
     }
@@ -390,11 +390,16 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     public void moveSectionUp(BrowseSection section) {
         mGeneralData.moveSectionUp(section.getId());
         updateSections();
+
+        // Move current focus
+        getView().selectSection(mGeneralData.getSectionIndex(section.getId()), false);
     }
 
     public void moveSectionDown(BrowseSection section) {
         mGeneralData.moveSectionDown(section.getId());
         updateSections();
+
+        // No need to move focus because section should be already focused.
     }
 
     public boolean canMoveSectionUp(BrowseSection section) {
@@ -851,7 +856,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
         int sectionIndex = findSectionIndex(sectionId);
 
         if (sectionIndex != -1) {
-            getView().selectSection(sectionIndex);
+            getView().selectSection(sectionIndex, true);
         }
     }
 }

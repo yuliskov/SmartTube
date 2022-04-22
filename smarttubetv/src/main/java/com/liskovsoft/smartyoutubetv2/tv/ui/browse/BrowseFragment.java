@@ -106,7 +106,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         mBrowsePresenter.onViewInitialized();
 
         // Restore state after crash
-        selectSection(mRestoredHeaderIndex);
+        selectSection(mRestoredHeaderIndex, true);
         mRestoredHeaderIndex = -1;
 
         // Restore state after crash
@@ -306,10 +306,10 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     }
 
     @Override
-    public void selectSection(int index) {
+    public void selectSection(int index, boolean focusOnContent) {
         if (index >= 0 && index < mSectionRowAdapter.size()) {
             setSelectedPosition(index);
-            mFocusOnChildFragment = true;
+            mFocusOnChildFragment = focusOnContent;
         }
     }
 
