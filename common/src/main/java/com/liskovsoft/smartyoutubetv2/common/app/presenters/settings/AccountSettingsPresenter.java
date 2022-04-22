@@ -67,10 +67,10 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(getContext());
         settingsPresenter.clear();
 
-        appendSelectAccountOnBoot(settingsPresenter);
         appendSelectAccountSection(accounts, settingsPresenter);
         appendAddAccountButton(settingsPresenter);
         appendRemoveAccountSection(accounts, settingsPresenter);
+        appendSelectAccountOnBoot(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.settings_accounts), this::unhold);
     }
