@@ -7,6 +7,7 @@ import android.view.View;
 import androidx.leanback.widget.SearchOrbView;
 import androidx.leanback.widget.TitleView;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 
 import static androidx.leanback.widget.TitleViewAdapter.SEARCH_VIEW_VISIBLE;
@@ -78,13 +79,21 @@ public class NavigateTitleView extends TitleView {
     public void updateComponentsVisibility(int flags) {
         super.updateComponentsVisibility(flags);
 
-        if (mAccountView == null) {
+        int visibility = (flags & SEARCH_VIEW_VISIBLE) == SEARCH_VIEW_VISIBLE
+                ? View.VISIBLE : View.INVISIBLE;
+
+        if (mAccountView != null) {
+            mAccountView.setVisibility(visibility);
+        }
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+
+        if (MainUIData.instance(getContext()).isButtonEnabled(MainUIData.BUTTON_BROWSE_ACCOUNTS)) {
             mAccountView = (SearchOrbView) findViewById(R.id.account_orb);
             mAccountView.setOnOrbClickedListener(v -> AccountSettingsPresenter.instance(getContext()).show());
         }
-
-        int visibility = (flags & SEARCH_VIEW_VISIBLE) == SEARCH_VIEW_VISIBLE
-                ? View.VISIBLE : View.INVISIBLE;
-        mAccountView.setVisibility(visibility);
     }
 }

@@ -376,4 +376,5 @@
     <string name="player_show_tooltips">Показать подсказки для кнопок</string>
     <string name="action_like_unset">Нравится не установлено</string>
     <string name="action_dislike_unset">Не нравится не установлено</string>
+    <string name="various_buttons">Различные кнопки</string>
 </resources>

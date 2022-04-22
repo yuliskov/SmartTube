@@ -380,4 +380,5 @@
     <string name="player_show_tooltips">Show button tooltips</string>
     <string name="action_like_unset">Like is unset</string>
     <string name="action_dislike_unset">Dislike is unset</string>
+    <string name="various_buttons">Various buttons</string>
 </resources>

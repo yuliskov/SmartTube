@@ -51,6 +51,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendBootToSection(settingsPresenter);
         appendEnabledSections(settingsPresenter);
         appendContextMenuItemsCategory(settingsPresenter);
+        appendVariousButtonsCategory(settingsPresenter);
         appendAppExitCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
         appendBackgroundPlaybackActivationCategory(settingsPresenter);
@@ -115,6 +116,24 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendCheckedCategory(getContext().getString(R.string.context_menu), options);
+    }
+
+    private void appendVariousButtonsCategory(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int[] pair : new int[][] {
+                {R.string.settings_accounts, MainUIData.BUTTON_BROWSE_ACCOUNTS}}) {
+            options.add(UiOptionItem.from(getContext().getString(pair[0]), optionItem -> {
+                if (optionItem.isSelected()) {
+                    mMainUIData.enableButton(pair[1]);
+                } else {
+                    mMainUIData.disableButton(pair[1]);
+                }
+                mRestartApp = true;
+            }, mMainUIData.isButtonEnabled(pair[1])));
+        }
+
+        settingsPresenter.appendCheckedCategory(getContext().getString(R.string.various_buttons), options);
     }
 
     private void appendBootToSection(AppDialogPresenter settingsPresenter) {
