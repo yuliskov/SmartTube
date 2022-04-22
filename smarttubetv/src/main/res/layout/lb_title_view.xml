@@ -55,11 +55,10 @@
             android:transitionGroup="true"
             android:layout_marginStart="@dimen/search_bar_right_items_margin"
             app:searchOrbIcon="@drawable/browse_title_account"
-            app:searchOrbColor="#FFFFFF"
-            app:searchOrbBrightColor="#FFFFFF"
-            app:searchOrbIconColor="#000000"
+            app:searchOrbColor="@color/grey"
+            app:searchOrbBrightColor="@color/grey"
+            app:searchOrbIconColor="#FFFFFF"
             android:nextFocusLeft="@id/title_orb"
-            android:nextFocusRight="@id/account_orb"
             android:visibility="invisible" />
     </LinearLayout>
 </merge>
