@@ -1,9 +1,11 @@
 package com.liskovsoft.smartyoutubetv2.tv.ui.widgets.time;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.ContextCompat;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.misc.TickleManager;
@@ -32,7 +34,16 @@ public class EndingTimeView extends AppCompatTextView implements TickleListener 
 
     private void init() {
         mTickleManager = TickleManager.instance();
+        setIcon();
         updateListener();
+    }
+
+    private void setIcon() {
+        Drawable drawable = ContextCompat.getDrawable(getContext(), R.drawable.icon_hourglass_bottom);
+        if (drawable != null) {
+            drawable.setBounds(0, 3, getLineHeight(), getLineHeight()); // add top bound to align vertically
+            setCompoundDrawables(drawable, null, null, null);
+        }
     }
 
     private void updateListener() {
@@ -56,8 +67,9 @@ public class EndingTimeView extends AppCompatTextView implements TickleListener 
             String endingTime = getEndingTime();
             if (endingTime != null) {
                 // https://stackoverflow.com/questions/5437674/what-unicode-characters-represent-time/9454080
-                //setText(endingTime);
-                setText(String.format("⌛ %s", endingTime));
+                setText(endingTime);
+                //setText(TextUtils.concat( Utils.icon(getContext(), R.drawable.action_pip, getLineHeight()), " ", endingTime));
+                //setText(String.format("⌛ %s", endingTime));
                 //setText(String.format("(%s)", endingTime));
             }
         }

@@ -12,7 +12,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 public class SeekIntervalAction extends Action {
     public SeekIntervalAction(Context context) {
         super(R.id.action_seek_interval);
-        Drawable uncoloredDrawable = ContextCompat.getDrawable(context, R.drawable.action_video_speed_alt);
+        Drawable uncoloredDrawable = ContextCompat.getDrawable(context, R.drawable.action_seek_interval);
 
         setIcon(uncoloredDrawable);
         setLabel1(context.getString(
