@@ -79,12 +79,18 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> optionItems = new ArrayList<>();
 
         optionItems.add(UiOptionItem.from(
-                getContext().getString(R.string.dialog_account_none), optionItem -> selectAccount(null), true
+                getContext().getString(R.string.dialog_account_none), optionItem -> {
+                    selectAccount(null);
+                    settingsPresenter.closeDialog();
+                }, true
         ));
 
         for (Account account : accounts) {
             optionItems.add(UiOptionItem.from(
-                    formatAccount(account), option -> selectAccount(account), account.isSelected()
+                    formatAccount(account), option -> {
+                        selectAccount(account);
+                        settingsPresenter.closeDialog();
+                    }, account.isSelected()
             ));
         }
 
