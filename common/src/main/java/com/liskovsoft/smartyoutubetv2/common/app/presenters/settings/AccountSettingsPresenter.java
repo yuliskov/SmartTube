@@ -11,10 +11,12 @@ import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.OptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.SignInPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.prefs.AccountsData;
 import com.liskovsoft.sharedutils.rx.RxUtils;
+import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -77,12 +79,12 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         List<OptionItem> optionItems = new ArrayList<>();
 
         optionItems.add(UiOptionItem.from(
-                getContext().getString(R.string.dialog_account_none), optionItem -> mSignInManager.selectAccount(null), true
+                getContext().getString(R.string.dialog_account_none), optionItem -> selectAccount(null), true
         ));
 
         for (Account account : accounts) {
             optionItems.add(UiOptionItem.from(
-                    formatAccount(account), option -> mSignInManager.selectAccount(account), account.isSelected()
+                    formatAccount(account), option -> selectAccount(account), account.isSelected()
             ));
         }
 
@@ -94,13 +96,16 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
 
         for (Account account : accounts) {
             optionItems.add(UiOptionItem.from(
-                    formatAccount(account), option -> {
-                        if (option.isSelected()) {
-                            mSignInManager.removeAccount(account);
-                            settingsPresenter.closeDialog();
-                            MessageHelpers.showMessage(getContext(), R.string.msg_done);
-                        }
-                    }
+                    formatAccount(account), option ->
+                        AppDialogUtil.showConfirmationDialog(
+                                getContext(),
+                                () -> {
+                                    removeAccount(account);
+                                    settingsPresenter.closeDialog();
+                                    MessageHelpers.showMessage(getContext(), R.string.msg_done);
+                                },
+                                getContext().getString(R.string.dialog_remove_account)
+                        )
             ));
         }
 
@@ -128,5 +133,15 @@ public class AccountSettingsPresenter extends BasePresenter<Void> {
         }
 
         return format;
+    }
+
+    private void selectAccount(Account account) {
+        mSignInManager.selectAccount(account);
+        BrowsePresenter.instance(getContext()).refresh();
+    }
+
+    private void removeAccount(Account account) {
+        mSignInManager.removeAccount(account);
+        BrowsePresenter.instance(getContext()).refresh();
     }
 }

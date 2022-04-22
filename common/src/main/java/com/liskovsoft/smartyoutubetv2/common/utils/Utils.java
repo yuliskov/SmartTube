@@ -498,26 +498,6 @@ public class Utils {
         return isShortLength || title.contains("#short") || title.contains("#shorts") || title.contains("#tiktok");
     }
 
-    public static void showConfirmationDialog(Context context, Runnable onConfirm, String title) {
-        AppDialogPresenter settingsPresenter = AppDialogPresenter.instance(context);
-        settingsPresenter.clear();
-
-        List<OptionItem> options = new ArrayList<>();
-
-        options.add(UiOptionItem.from(context.getString(R.string.cancel),
-                option -> settingsPresenter.goBack()));
-
-        options.add(UiOptionItem.from(context.getString(R.string.btn_confirm),
-                option -> {
-                    settingsPresenter.goBack();
-                    onConfirm.run();
-                }));
-
-        settingsPresenter.appendStringsCategory(title, options);
-
-        settingsPresenter.showDialog(title);
-    }
-
     public static void sendKey(int key) {
         try {
             Instrumentation instrumentation = new Instrumentation();
