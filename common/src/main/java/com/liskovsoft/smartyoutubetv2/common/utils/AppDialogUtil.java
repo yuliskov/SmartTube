@@ -1,9 +1,9 @@
 package com.liskovsoft.smartyoutubetv2.common.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
@@ -297,6 +297,9 @@ public class AppDialogUtil {
             options.add(UiOptionItem.from(context.getString(R.string.seek_interval_sec, Helpers.toString(intervalMs / 1_000f)),
                     optionItem -> {
                         playerData.setStartSeekIncrementMs(intervalMs);
+                        if (playerData.getSeekPreviewMode() == PlayerData.SEEK_PREVIEW_CAROUSEL_SLOW) {
+                            Utils.showNotCompatibleMessage(context, R.string.player_seek_preview_carousel_slow);
+                        }
                         if (closeOnSelect) {
                             dialogPresenter.closeDialog();
                         }

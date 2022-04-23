@@ -377,4 +377,5 @@
     <string name="action_like_unset">Нравится не установлено</string>
     <string name="action_dislike_unset">Не нравится не установлено</string>
     <string name="various_buttons">Различные кнопки</string>
+    <string name="not_compatible_with">Выбранная опция не совместима с</string>
 </resources>

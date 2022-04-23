@@ -530,4 +530,10 @@ public class Utils {
             e.printStackTrace();
         }
     }
+
+    public static void showNotCompatibleMessage(Context context, int msgResId) {
+        MessageHelpers.showMessage(context, String.format("%s '%s'",
+                context.getString(R.string.not_compatible_with),
+                context.getString(msgResId)));
+    }
 }

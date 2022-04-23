@@ -381,4 +381,5 @@
     <string name="action_like_unset">Like is unset</string>
     <string name="action_dislike_unset">Dislike is unset</string>
     <string name="various_buttons">Various buttons</string>
+    <string name="not_compatible_with">Selected option isn\'t compatible with</string>
 </resources>

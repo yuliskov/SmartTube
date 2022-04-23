@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.tv.R;
 
 public class EndingTimeView extends AppCompatTextView implements TickleListener {
     private TickleManager mTickleManager;
+    private boolean mIconIsSet;
 
     public EndingTimeView(Context context) {
         super(context);
@@ -34,7 +35,6 @@ public class EndingTimeView extends AppCompatTextView implements TickleListener 
 
     private void init() {
         mTickleManager = TickleManager.instance();
-        setIcon();
         updateListener();
     }
 
@@ -43,6 +43,7 @@ public class EndingTimeView extends AppCompatTextView implements TickleListener 
         if (drawable != null) {
             drawable.setBounds(3, 3, getLineHeight(), getLineHeight()); // add bounds to align vertically
             setCompoundDrawables(drawable, null, null, null);
+            mIconIsSet = true;
         }
     }
 
@@ -71,6 +72,10 @@ public class EndingTimeView extends AppCompatTextView implements TickleListener 
                 //setText(TextUtils.concat( Utils.icon(getContext(), R.drawable.action_pip, getLineHeight()), " ", endingTime));
                 //setText(String.format("⌛ %s", endingTime));
                 //setText(String.format("(%s)", endingTime));
+
+                if (!mIconIsSet) {
+                    setIcon();
+                }
             }
         }
     }

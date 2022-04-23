@@ -377,4 +377,5 @@
     <string name="action_like_unset">Подобається не встановлено</string>
     <string name="action_dislike_unset">Не подобається не встановлено</string>
     <string name="various_buttons">Різні кнопки</string>
+    <string name="not_compatible_with">Обрана опція не зумісна з</string>
 </resources>
