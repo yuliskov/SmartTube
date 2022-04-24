@@ -148,8 +148,8 @@
     <string name="player_seek_preview_none">Disabled</string>
     <string name="player_seek_preview_single">Single frame</string>
     <string name="player_seek_preview_carousel">Carousel</string>
-    <string name="player_seek_preview_carousel_slow">Carousel (slow)</string>
-    <string name="player_seek_preview_carousel_fast">Carousel (fast)</string>
+    <string name="player_seek_preview_carousel_slow">Carousel (slow, by keyframes)</string>
+    <string name="player_seek_preview_carousel_fast">Carousel (fast, not precise preview)</string>
     <string name="unsubscribe_from_channel">Unsubscribe from channel</string>
     <string name="card_title_lines_num">Card title lines num</string>
     <string name="card_auto_scrolled_title">Auto-scroll cropped title</string>
