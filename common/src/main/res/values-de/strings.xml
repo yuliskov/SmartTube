@@ -380,6 +380,6 @@
     <string name="player_show_tooltips">Schaltflächen-Tooltips anzeigen</string>
     <string name="action_like_unset">Mag ich</string>
     <string name="action_dislike_unset">Mag ich nicht</string>
-    <string name="various_buttons">Verschiedene Tasten</string>
+    <string name="various_buttons">Verschiedene Schaltflächen</string>
     <string name="not_compatible_with">Ausgewählte Option ist nicht kompatibel mit</string>
 </resources>
