@@ -180,13 +180,14 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         appendPlayVideoButton();
         appendReturnToBackgroundVideoButton();
-        appendNotInterestedButton();
+        appendRemoveFromHistoryButton();
         appendAddToRecentPlaylistButton(videoPlaylistInfos);
         appendAddToPlaylistButton(videoPlaylistInfos);
+        appendNotInterestedButton();
         appendOpenChannelButton();
         //appendOpenChannelUploadsButton();
-        appendSubscribeButton();
         appendOpenPlaylistButton();
+        appendSubscribeButton();
         appendTogglePinVideoToSidebarButton();
         appendOpenDescriptionButton();
         appendAddToPlaybackQueueButton();
@@ -208,8 +209,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         appendPlayVideoButton();
         appendReturnToBackgroundVideoButton();
-        appendOpenPlaylistButton();
         appendOpenChannelButton();
+        appendOpenPlaylistButton();
         appendTogglePinVideoToSidebarButton();
         appendOpenDescriptionButton();
         appendAddToPlaybackQueueButton();
@@ -333,16 +334,12 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        if (mVideo.belongsToHistory() && !mIsRemoveFromHistoryButtonEnabled) {
-            return;
-        }
-
-        if (!mVideo.belongsToHistory() && !mIsNotInterestedButtonEnabled) {
+        if (mVideo.belongsToHistory() || !mIsNotInterestedButtonEnabled) {
             return;
         }
 
         mDialogPresenter.appendSingleButton(
-                UiOptionItem.from(getContext().getString(mVideo.belongsToHistory() ? R.string.remove_from_history : R.string.not_interested), optionItem -> {
+                UiOptionItem.from(getContext().getString(R.string.not_interested), optionItem -> {
                     mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem)
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
@@ -353,7 +350,36 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                                         if (mCallback != null) {
                                             mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
                                         } else {
-                                            MessageHelpers.showMessage(getContext(), mVideo.belongsToHistory() ? R.string.removed_from_history : R.string.you_wont_see_this_video);
+                                            MessageHelpers.showMessage(getContext(), R.string.you_wont_see_this_video);
+                                        }
+                                    }
+                            );
+                    mDialogPresenter.closeDialog();
+                }));
+    }
+
+    private void appendRemoveFromHistoryButton() {
+        if (mVideo == null || mVideo.mediaItem == null || mVideo.mediaItem.getFeedbackToken() == null) {
+            return;
+        }
+
+        if (!mVideo.belongsToHistory() || !mIsRemoveFromHistoryButtonEnabled) {
+            return;
+        }
+
+        mDialogPresenter.appendSingleButton(
+                UiOptionItem.from(getContext().getString(R.string.remove_from_history), optionItem -> {
+                    mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem)
+                            .subscribeOn(Schedulers.newThread())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(
+                                    var -> {},
+                                    error -> Log.e(TAG, "Remove from history error: %s", error.getMessage()),
+                                    () -> {
+                                        if (mCallback != null) {
+                                            mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE);
+                                        } else {
+                                            MessageHelpers.showMessage(getContext(), R.string.removed_from_history);
                                         }
                                     }
                             );
