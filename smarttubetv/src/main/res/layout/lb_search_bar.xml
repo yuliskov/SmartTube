@@ -92,6 +92,7 @@
         app:searchOrbBrightColor="@color/orb_bright_color"
         app:searchOrbIconColor="@color/orb_icon_color" />
 
+    <!-- Start search button -->
     <androidx.leanback.widget.SearchOrbView
         android:id="@+id/lb_search_bar_search_orb"
         android:layout_width="wrap_content"
