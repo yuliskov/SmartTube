@@ -380,4 +380,5 @@
     <string name="player_show_tooltips">Düğme ipuçlarını göster</string>
     <string name="action_like_unset">Beğen</string>
     <string name="action_dislike_unset">Beğenme</string>
+    <string name="various_buttons">Çeşitli düğmeler</string>
 </resources>
