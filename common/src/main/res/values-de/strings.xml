@@ -114,7 +114,7 @@
     <string name="repeat_mode_pause_alt">Nur Videos der Wiedergabeliste fortlaufend abspielen</string>
     <string name="repeat_mode_none">Wiedergabe nach einem Video stoppen</string>
     <string name="subscribed_to_channel">Kanal abonniert</string>
-    <string name="unsubscribed_from_channel">Kanal nicht mehr abonniert</string>
+    <string name="unsubscribed_from_channel">Kanal nicht abonniert</string>
     <string name="subtitle_yellow_transparent">Gelb auf transparentem Hintergrund</string>
     <string name="subtitle_white_transparent">Weiß auf transparentem Hintergrund</string>
     <string name="subtitle_white_black">Weiß auf schwarzem Hintergrund</string>
@@ -148,8 +148,8 @@
     <string name="player_seek_preview_none">Keine Vorschau</string>
     <string name="player_seek_preview_single">Einzelbild</string>
     <string name="player_seek_preview_carousel">Mehrere Bilder</string>
-    <string name="player_seek_preview_carousel_slow">Mehrere Bilder (langsam)</string>
-    <string name="player_seek_preview_carousel_fast">Mehrere Bilder (schnell)</string>
+    <string name="player_seek_preview_carousel_slow">Mehrere Bilder (langsam, nach Keyframes)</string>
+    <string name="player_seek_preview_carousel_fast">Mehrere Bilder (schnell, ungenaue Vorschau)</string>
     <string name="unsubscribe_from_channel">Kanal-Abo beenden</string>
     <string name="card_title_lines_num">Zeilenanzahl in Titeln</string>
     <string name="card_auto_scrolled_title">Auto-Scrollen in Titeln</string>
@@ -380,4 +380,6 @@
     <string name="player_show_tooltips">Schaltflächen-Tooltips anzeigen</string>
     <string name="action_like_unset">Mag ich</string>
     <string name="action_dislike_unset">Mag ich nicht</string>
+    <string name="various_buttons">Verschiedene Schaltflächen</string>
+    <string name="not_compatible_with">Ausgewählte Option ist nicht kompatibel mit</string>
 </resources>
