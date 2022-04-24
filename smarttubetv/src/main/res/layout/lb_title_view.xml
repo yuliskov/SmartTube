@@ -35,6 +35,7 @@
         android:layout_gravity="center_vertical|end"
         style="?attr/browseTitleTextStyle"/>
 
+    <!-- MODIFIED: add additional buttons -->
     <LinearLayout android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:orientation="horizontal"
@@ -54,11 +55,11 @@
             android:layout_height="wrap_content"
             android:transitionGroup="true"
             android:layout_marginStart="@dimen/search_bar_right_items_margin"
-            app:searchOrbIcon="@drawable/browse_title_account"
-            app:searchOrbColor="@color/grey"
-            app:searchOrbBrightColor="@color/grey"
-            app:searchOrbIconColor="#FFFFFF"
             android:nextFocusLeft="@id/title_orb"
+            app:searchOrbIcon="@drawable/browse_title_account"
+            app:searchOrbColor="@color/orb_color"
+            app:searchOrbBrightColor="@color/orb_bright_color"
+            app:searchOrbIconColor="@color/orb_icon_color"
             android:visibility="invisible" />
     </LinearLayout>
 </merge>

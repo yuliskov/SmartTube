@@ -88,9 +88,9 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         app:searchOrbIcon="@drawable/search_bar_settings_orb"
-        app:searchOrbColor="#FFFFFF"
-        app:searchOrbBrightColor="#FFFFFF"
-        app:searchOrbIconColor="#000000" />
+        app:searchOrbColor="@color/orb_color"
+        app:searchOrbBrightColor="@color/orb_bright_color"
+        app:searchOrbIconColor="@color/orb_icon_color" />
 
     <androidx.leanback.widget.SearchOrbView
         android:id="@+id/lb_search_bar_search_orb"
@@ -101,7 +101,7 @@
         android:layout_toEndOf="@+id/search_settings_orb"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        app:searchOrbColor="#FFFFFF"
-        app:searchOrbBrightColor="#FFFFFF"
-        app:searchOrbIconColor="#000000" />
+        app:searchOrbColor="@color/orb_color"
+        app:searchOrbBrightColor="@color/orb_bright_color"
+        app:searchOrbIconColor="@color/orb_icon_color" />
 </merge>
