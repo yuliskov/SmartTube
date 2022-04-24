@@ -148,8 +148,8 @@
     <string name="player_seek_preview_none">Disattivato</string>
     <string name="player_seek_preview_single">Singolo frame</string>
     <string name="player_seek_preview_carousel">Carosello</string>
-    <string name="player_seek_preview_carousel_slow">Carosello (lento)</string>
-    <string name="player_seek_preview_carousel_fast">Carosello (veloce)</string>
+    <string name="player_seek_preview_carousel_slow">Carosello (lento, per keyframe)</string>
+    <string name="player_seek_preview_carousel_fast">Carosello (veloce, anteprima non precisa)</string>
     <string name="unsubscribe_from_channel">Disiscriviti dal canale</string>
     <string name="card_title_lines_num">Numero linee titoli</string>
     <string name="card_auto_scrolled_title">Scorrimento automatico titoli tagliati</string>
@@ -285,7 +285,7 @@
     <string name="mark_all_channels_watched">Segna tutti i canali come già visti</string>
     <string name="move_section_up">Muovi la sezione su</string>
     <string name="move_section_down">Muovi la sezione giù</string>
-    <string name="player_buttons">Configura pulsanti riproduzione</string>
+    <string name="player_buttons">Configura i tasti di riproduzione</string>
     <string name="action_playlist_add">Aggiungi alla playlist</string>
     <string name="action_video_stats">Statistiche del video</string>
     <string name="action_subscribe">Sottoscrivi</string>
@@ -377,7 +377,9 @@
     <string name="volume_limit">Limite volume</string>
     <string name="play_video">Riproduci</string>
     <string name="remember_position_of_short_videos">Ricorda la posizione dei video brevi (meno di 10 minuti)</string>
-    <string name="player_show_tooltips">Mostra le descrizioni dei pulsanti</string>
+    <string name="player_show_tooltips">Mostra le descrizioni dei tasti</string>
     <string name="action_like_unset">Mi piace non è selezionato</string>
     <string name="action_dislike_unset">Non mi piace non è selezionato</string>
+    <string name="various_buttons">Tasti vari</string>
+    <string name="not_compatible_with">L\'opzione selezionata non è compatibile con</string>
 </resources>
