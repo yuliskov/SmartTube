@@ -53,7 +53,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private boolean mIsFragmentCreated;
     private int mRestoredHeaderIndex = -1;
     private int mRestoredItemIndex = -1;
-    private boolean mFocusOnChildFragment;
+    private boolean mFocusOnContent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -169,7 +169,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     private void setupFragmentFactory() {
         mSectionFragmentFactory = new BrowseSectionFragmentFactory(
                 (viewHolder, row) -> {
-                    focusOnChildFragment();
+                    focusOnContentIfNeeded();
                     mBrowsePresenter.onSectionFocused(getSelectedHeaderId());
                 }
         );
@@ -261,6 +261,8 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
 
             FragmentTransaction ft = getChildFragmentManager().beginTransaction();
             ft.replace(R.id.scale_frame, fragment);
+            mFocusOnContent = !isShowingHeaders(); // Fix focus lost when error fragment shown and sidebar is hidden
+            ft.runOnCommit(this::focusOnContentIfNeeded);
             ft.commitAllowingStateLoss(); // FIX: "Can not perform this action after onSaveInstanceState"
         }
     }
@@ -309,7 +311,7 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
     public void selectSection(int index, boolean focusOnContent) {
         if (index >= 0 && index < mSectionRowAdapter.size()) {
             setSelectedPosition(index);
-            mFocusOnChildFragment = focusOnContent;
+            mFocusOnContent = focusOnContent; // focus after header transition
         }
     }
 
@@ -321,10 +323,13 @@ public class BrowseFragment extends BrowseSupportFragment implements BrowseView 
         }
     }
 
-    private void focusOnChildFragment() {
-        if (mFocusOnChildFragment) {
-            startHeadersTransitionSafe(false);
-            mFocusOnChildFragment = false;
+    /**
+     * Usually called after header transition or fragment transaction
+     */
+    private void focusOnContentIfNeeded() {
+        if (mFocusOnContent) {
+            focusOnContent();
+            mFocusOnContent = false;
         }
     }
 
