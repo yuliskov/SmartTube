@@ -96,6 +96,10 @@ public class NavigateTitleView extends TitleView {
         if (mAccountView != null) {
             mAccountView.setVisibility(visibility);
         }
+
+        if (mExitPip != null && PlaybackPresenter.instance(getContext()).isRunningInBackground()) {
+            mExitPip.setVisibility(visibility);
+        }
     }
 
     @Override
