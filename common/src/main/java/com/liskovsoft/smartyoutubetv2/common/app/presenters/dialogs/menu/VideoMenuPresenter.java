@@ -178,8 +178,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         mDialogPresenter.clear();
 
-        appendPlayVideoButton();
         appendReturnToBackgroundVideoButton();
+        appendPlayVideoButton();
         appendRemoveFromHistoryButton();
         appendAddToRecentPlaylistButton(videoPlaylistInfos);
         appendAddToPlaylistButton(videoPlaylistInfos);
@@ -207,8 +207,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         mDialogPresenter.clear();
 
-        appendPlayVideoButton();
         appendReturnToBackgroundVideoButton();
+        appendPlayVideoButton();
         appendOpenChannelButton();
         appendOpenPlaylistButton();
         appendTogglePinVideoToSidebarButton();

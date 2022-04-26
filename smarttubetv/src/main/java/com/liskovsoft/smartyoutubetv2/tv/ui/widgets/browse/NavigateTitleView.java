@@ -6,9 +6,14 @@ import android.util.AttributeSet;
 import android.view.View;
 import androidx.leanback.widget.SearchOrbView;
 import androidx.leanback.widget.TitleView;
+import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
+import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
+import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.TooltipCompatHandler;
 
 import static androidx.leanback.widget.TitleViewAdapter.SEARCH_VIEW_VISIBLE;
 
@@ -20,6 +25,7 @@ import static androidx.leanback.widget.TitleViewAdapter.SEARCH_VIEW_VISIBLE;
  */
 public class NavigateTitleView extends TitleView {
     private SearchOrbView mAccountView;
+    private SearchOrbView mExitPip;
 
     public NavigateTitleView(Context context) {
         super(context);
@@ -61,8 +67,12 @@ public class NavigateTitleView extends TitleView {
         }
 
         //  Return the found View in the layout if it's focusable
-        if (nextFoundFocusableViewInLayout != null && nextFoundFocusableViewInLayout.isFocusable()) {
-            return nextFoundFocusableViewInLayout;
+        if (nextFoundFocusableViewInLayout != null && nextFoundFocusableViewInLayout != focused && nextFoundFocusableViewInLayout.isFocusable()) {
+            if (nextFoundFocusableViewInLayout.getVisibility() == View.VISIBLE) {
+                return nextFoundFocusableViewInLayout;
+            } else {
+                return focusSearch(nextFoundFocusableViewInLayout, direction);
+            }
         } else {
             // No focusable view found in layout...propagate to super (should invoke the BrowseFrameLayout.OnFocusSearchListener
             return super.focusSearch(focused, direction);
@@ -85,6 +95,10 @@ public class NavigateTitleView extends TitleView {
         if (mAccountView != null) {
             mAccountView.setVisibility(visibility);
         }
+
+        if (mExitPip != null) {
+            mExitPip.setVisibility(visibility);
+        }
     }
 
     @Override
@@ -94,6 +108,17 @@ public class NavigateTitleView extends TitleView {
         if (MainUIData.instance(getContext()).isButtonEnabled(MainUIData.BUTTON_BROWSE_ACCOUNTS)) {
             mAccountView = (SearchOrbView) findViewById(R.id.account_orb);
             mAccountView.setOnOrbClickedListener(v -> AccountSettingsPresenter.instance(getContext()).show());
+            TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.settings_accounts));
+        }
+
+        if (Helpers.isPictureInPictureSupported(getContext())) {
+            mExitPip = (SearchOrbView) findViewById(R.id.exit_pip);
+            mExitPip.setOnOrbClickedListener(v -> {
+                if (PlaybackPresenter.instance(getContext()).isRunningInBackground()) {
+                    ViewManager.instance(getContext()).startView(SplashView.class);
+                }
+            });
+            TooltipCompatHandler.setTooltipText(mExitPip, getContext().getString(R.string.return_to_background_video));
         }
     }
 }

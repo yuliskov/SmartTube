@@ -37,7 +37,7 @@ import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP;
  * @hide
  */
 @RestrictTo(LIBRARY_GROUP)
-class TooltipCompatHandler implements View.OnLongClickListener, View.OnHoverListener,
+public class TooltipCompatHandler implements View.OnLongClickListener, View.OnHoverListener,
         View.OnAttachStateChangeListener, View.OnFocusChangeListener {
     private static final String TAG = "TooltipCompatHandler";
 
