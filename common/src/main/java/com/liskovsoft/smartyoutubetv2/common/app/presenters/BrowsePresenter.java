@@ -71,6 +71,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private Disposable mSignCheckAction;
     private BrowseSection mCurrentSection;
     private Video mCurrentVideo;
+    private VideoGroup mLastGroup;
     private long mLastUpdateTimeMs;
     private int mBootSectionIndex;
     private int mSelectedSectionId = -1;
@@ -576,7 +577,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
                                 getView().updateSection(videoGroup);
 
-                                continueGroupIfNeeded(videoGroup);
+                                mLastGroup = videoGroup;
                             }
 
                             // Hide loading as long as first group received
@@ -588,7 +589,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             Log.e(TAG, "updateRowsHeader error: %s", error.getMessage());
                             getView().showProgressBar(false);
                             getView().showError(new CategoryEmptyError(getContext()));
-                        });
+                        },
+                        () -> continueGroupIfNeeded(mLastGroup));
     }
 
     private void updateVideoGrid(BrowseSection section, Observable<MediaGroup> group, int position) {
@@ -628,7 +630,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 getView().showProgressBar(false);
                             }
 
-                            continueGroupIfNeeded(videoGroup);
+                            mLastGroup = videoGroup;
                         },
                         error -> {
                             Log.e(TAG, "updateGridHeader error: %s", error.getMessage());
@@ -636,7 +638,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 getView().showProgressBar(false);
                                 getView().showError(new CategoryEmptyError(getContext()));
                             }
-                        });
+                        },
+                        () -> continueGroupIfNeeded(mLastGroup));
     }
 
     private void continueGroup(VideoGroup group) {
@@ -673,6 +676,8 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
 
                             VideoGroup videoGroup = VideoGroup.from(continueGroup, group.getSection(), group.getPosition());
                             getView().updateSection(videoGroup);
+
+                            mLastGroup = videoGroup;
                         },
                         error -> {
                             Log.e(TAG, "continueGroup error: %s", error.getMessage());
@@ -680,7 +685,10 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 getView().showProgressBar(false);
                             }
                         },
-                        () -> getView().showProgressBar(false)
+                        () -> {
+                            getView().showProgressBar(false);
+                            continueGroupIfNeeded(mLastGroup);
+                        }
                 );
     }
 
@@ -717,8 +725,14 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
      * Most tiny ui has 8 cards in a row or 24 in grid.
      */
     private void continueGroupIfNeeded(VideoGroup videoGroup) {
+        if (videoGroup == null) {
+            return;
+        }
+
         boolean groupTooSmall = videoGroup.getVideos() != null && videoGroup.getVideos().size() < MIN_GROUP_SIZE;
-        if (mMainUIData.getUIScale() < 0.8f || mMainUIData.getVideoGridScale() < 0.8f) {
+        boolean isSmallGridEnabled = mMainUIData.getUIScale() < 0.8f || mMainUIData.getVideoGridScale() < 0.8f;
+
+        if (groupTooSmall) {
             continueGroup(videoGroup);
         }
     }
