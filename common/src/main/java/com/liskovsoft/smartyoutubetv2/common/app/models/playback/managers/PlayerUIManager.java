@@ -29,6 +29,7 @@ import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.SearchData;
 import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaService;
+import com.liskovsoft.youtubeapi.service.YouTubeSignInManager;
 import io.reactivex.Observable;
 
 import java.util.ArrayList;
@@ -214,14 +215,6 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
         VideoMenuPresenter.instance(getActivity()).showMenu(item);
     }
 
-    private void showSubscribeInfo(boolean subscribed) {
-        if (subscribed) {
-            MessageHelpers.showMessage(getActivity(), R.string.subscribed_to_channel);
-        } else {
-            MessageHelpers.showMessage(getActivity(), R.string.unsubscribed_from_channel);
-        }
-    }
-
     @Override
     public void onSubscribeClicked(boolean subscribed) {
         if (!mIsMetadataLoaded) {
@@ -230,24 +223,34 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
             return;
         }
 
+        if (!YouTubeSignInManager.instance().isSigned()) {
+            getController().setSubscribeButtonState(false);
+            MessageHelpers.showMessage(getActivity(), R.string.msg_signed_users_only);
+            return;
+        }
+
         if (subscribed) {
             callMediaItemObservable(mMediaItemManager::subscribeObserve);
         } else {
             callMediaItemObservable(mMediaItemManager::unsubscribeObserve);
         }
-
-        //showSubscribeInfo(subscribed);
     }
 
     @Override
-    public void onThumbsDownClicked(boolean thumbsDown) {
+    public void onDislikeClicked(boolean dislike) {
         if (!mIsMetadataLoaded) {
             MessageHelpers.showMessage(getActivity(), R.string.wait_data_loading);
-            getController().setDislikeButtonState(!thumbsDown);
+            getController().setDislikeButtonState(!dislike);
             return;
         }
 
-        if (thumbsDown) {
+        if (!YouTubeSignInManager.instance().isSigned()) {
+            getController().setDislikeButtonState(false);
+            MessageHelpers.showMessage(getActivity(), R.string.msg_signed_users_only);
+            return;
+        }
+
+        if (dislike) {
             callMediaItemObservable(mMediaItemManager::setDislikeObserve);
         } else {
             callMediaItemObservable(mMediaItemManager::removeDislikeObserve);
@@ -255,14 +258,20 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     }
 
     @Override
-    public void onThumbsUpClicked(boolean thumbsUp) {
+    public void onLikeClicked(boolean like) {
         if (!mIsMetadataLoaded) {
             MessageHelpers.showMessage(getActivity(), R.string.wait_data_loading);
-            getController().setLikeButtonState(!thumbsUp);
+            getController().setLikeButtonState(!like);
             return;
         }
 
-        if (thumbsUp) {
+        if (!YouTubeSignInManager.instance().isSigned()) {
+            getController().setLikeButtonState(false);
+            MessageHelpers.showMessage(getActivity(), R.string.msg_signed_users_only);
+            return;
+        }
+
+        if (like) {
             callMediaItemObservable(mMediaItemManager::setLikeObserve);
         } else {
             callMediaItemObservable(mMediaItemManager::removeLikeObserve);

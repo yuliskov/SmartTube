@@ -683,12 +683,12 @@ public class PlaybackFragment extends SeekModePlaybackFragment implements Playba
 
         @Override
         public void onThumbsDown(boolean thumbsDown) {
-            mEventListener.onThumbsDownClicked(thumbsDown);
+            mEventListener.onDislikeClicked(thumbsDown);
         }
 
         @Override
         public void onThumbsUp(boolean thumbsUp) {
-            mEventListener.onThumbsUpClicked(thumbsUp);
+            mEventListener.onLikeClicked(thumbsUp);
         }
 
         @Override

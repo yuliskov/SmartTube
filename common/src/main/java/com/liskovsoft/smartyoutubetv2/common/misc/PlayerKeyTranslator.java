@@ -63,7 +63,7 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
 
         Runnable likeAction = () -> {
             if (mPlaybackView.getEventListener() != null) {
-                mPlaybackView.getEventListener().onThumbsUpClicked(true);
+                mPlaybackView.getEventListener().onLikeClicked(true);
                 mPlaybackView.getController().setLikeButtonState(true);
                 mPlaybackView.getController().setDislikeButtonState(false);
                 MessageHelpers.showMessage(mContext, R.string.action_like);
@@ -71,7 +71,7 @@ public class PlayerKeyTranslator extends GlobalKeyTranslator {
         };
         Runnable dislikeAction = () -> {
             if (mPlaybackView.getEventListener() != null) {
-                mPlaybackView.getEventListener().onThumbsDownClicked(true);
+                mPlaybackView.getEventListener().onDislikeClicked(true);
                 mPlaybackView.getController().setLikeButtonState(false);
                 mPlaybackView.getController().setDislikeButtonState(true);
                 MessageHelpers.showMessage(mContext, R.string.action_dislike);

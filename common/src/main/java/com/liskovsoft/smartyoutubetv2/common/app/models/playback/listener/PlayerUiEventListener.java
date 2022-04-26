@@ -1,8 +1,6 @@
 package com.liskovsoft.smartyoutubetv2.common.app.models.playback.listener;
 
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
-import com.liskovsoft.smartyoutubetv2.common.app.models.data.VideoGroup;
-import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem;
 
 public interface PlayerUiEventListener {
     int REPEAT_NONE = 0;
@@ -19,8 +17,8 @@ public interface PlayerUiEventListener {
     void onRepeatModeClicked(int modeIndex);
     void onHighQualityClicked();
     void onSubscribeClicked(boolean subscribed);
-    void onThumbsDownClicked(boolean thumbsDown);
-    void onThumbsUpClicked(boolean thumbsUp);
+    void onDislikeClicked(boolean dislike);
+    void onLikeClicked(boolean like);
     void onChannelClicked();
     void onSubtitlesClicked();
     void onPlaylistAddClicked();

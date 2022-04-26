@@ -175,12 +175,12 @@ public abstract class PlayerEventListenerHelper implements PlayerEventListener {
     }
 
     @Override
-    public void onThumbsDownClicked(boolean thumbsDown) {
+    public void onDislikeClicked(boolean dislike) {
         // NOP
     }
 
     @Override
-    public void onThumbsUpClicked(boolean thumbsUp) {
+    public void onLikeClicked(boolean like) {
         // NOP
     }
 
