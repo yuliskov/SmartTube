@@ -42,7 +42,7 @@
     <string name="section_is_empty">Oops! There is nothing in here.</string>
     <string name="dialog_add_to_playlist">Add/Remove from playlist</string>
     <string name="msg_signed_users_only">Signed users only</string>
-    <string name="msg_cant_load_content">Can\'t load content.\n1) Check date and time on the device.\n2) Check network connection.\n3) Try to sign in to your account.</string>
+    <string name="msg_cant_load_content">Can\'t load content.\n1) Check date and time on the device.\n2) Check network connection.\n3) Try to sign in to your account.\n4) Maybe there is nothing in here.</string>
     <string name="title_video_presets">Video presets</string>
     <string name="settings_accounts">Accounts</string>
     <string name="settings_left_panel">Edit categories</string>

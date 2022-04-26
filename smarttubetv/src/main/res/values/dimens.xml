@@ -113,5 +113,5 @@
     <dimen name="tooltip_y_offset_touch_mod">16dp</dimen>
 
     <!-- Increase error view lines -->
-    <dimen name="lb_error_message_max_lines">5</dimen>
+    <integer name="lb_error_message_max_lines">7</integer>
 </resources>
