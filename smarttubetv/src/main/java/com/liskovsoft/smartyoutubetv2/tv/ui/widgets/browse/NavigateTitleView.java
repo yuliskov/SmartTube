@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
+import androidx.annotation.NonNull;
 import androidx.leanback.widget.SearchOrbView;
 import androidx.leanback.widget.TitleView;
 import com.liskovsoft.sharedutils.helpers.Helpers;
@@ -95,10 +96,6 @@ public class NavigateTitleView extends TitleView {
         if (mAccountView != null) {
             mAccountView.setVisibility(visibility);
         }
-
-        if (mExitPip != null) {
-            mExitPip.setVisibility(visibility);
-        }
     }
 
     @Override
@@ -119,6 +116,15 @@ public class NavigateTitleView extends TitleView {
                 }
             });
             TooltipCompatHandler.setTooltipText(mExitPip, getContext().getString(R.string.return_to_background_video));
+        }
+    }
+
+    @Override
+    protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
+        super.onVisibilityChanged(changedView, visibility);
+
+        if (visibility == View.VISIBLE && mExitPip != null) {
+            mExitPip.setVisibility(PlaybackPresenter.instance(getContext()).isRunningInBackground() ? View.VISIBLE : View.GONE);
         }
     }
 }
