@@ -25,7 +25,6 @@ public class MotherActivity extends FragmentActivity {
     private static final String TAG = MotherActivity.class.getSimpleName();
     private static final float DEFAULT_DENSITY = 2.0f; // xhdpi
     private static final float DEFAULT_WIDTH = 1920f; // xhdpi
-    private static DisplayMetrics sCachedDisplayMetrics;
     protected static boolean sIsInPipMode;
     private ScreensaverManager mScreensaverManager;
     private List<OnPermissions> mOnPermissions;
@@ -148,19 +147,18 @@ public class MotherActivity extends FragmentActivity {
 
     private void initDpi() {
         // To adapt to resolution change (e.g. on AFR) we can't do caching.
+        getResources().getDisplayMetrics().setTo(getDisplayMetrics());
+    }
 
-        if (sCachedDisplayMetrics == null) {
-            float uiScale = MainUIData.instance(this).getUIScale();
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
-            float density = DEFAULT_DENSITY / widthRatio * uiScale;
-            displayMetrics.density = density;
-            displayMetrics.scaledDensity = density;
-            sCachedDisplayMetrics = displayMetrics;
-        }
-
-        getResources().getDisplayMetrics().setTo(sCachedDisplayMetrics);
+    private DisplayMetrics getDisplayMetrics() {
+        float uiScale = MainUIData.instance(this).getUIScale();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
+        float density = DEFAULT_DENSITY / widthRatio * uiScale;
+        displayMetrics.density = density;
+        displayMetrics.scaledDensity = density;
+        return displayMetrics;
     }
 
     private void applyCustomConfig() {
