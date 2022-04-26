@@ -327,6 +327,7 @@ public class ViewManager {
             RxUtils.runAsync(() -> {
                 clearCaches();
                 BrowsePresenter.unhold();
+                MotherActivity.invalidate();
                 mIsMoveToBackEnabled = false;
                 mIsFinishing = false;
             }, 1_000);
