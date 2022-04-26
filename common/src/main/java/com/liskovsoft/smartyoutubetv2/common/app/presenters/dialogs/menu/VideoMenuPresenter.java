@@ -104,7 +104,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
     public void showAddToPlaylistMenu(Video video) {
         mIsAddToPlaylistButtonEnabled = true;
-        mIsAddToRecentPlaylistButtonEnabled = true;
+        //mIsAddToRecentPlaylistButtonEnabled = true;
 
         showMenuInt(video);
     }
