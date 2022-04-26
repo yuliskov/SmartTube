@@ -53,6 +53,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private static final String TAG = BrowsePresenter.class.getSimpleName();
     private static final long HEADER_REFRESH_PERIOD_MS = 120 * 60 * 1_000;
     private static final int MIN_GROUP_SIZE = 13;
+    private static final int MIN_SCALED_GROUP_SIZE = 25;
     @SuppressLint("StaticFieldLeak")
     private static BrowsePresenter sInstance;
     private final MainUIData mMainUIData;
@@ -72,6 +73,7 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     private BrowseSection mCurrentSection;
     private Video mCurrentVideo;
     private VideoGroup mLastGroup;
+    private int mGroupTotalSize;
     private long mLastUpdateTimeMs;
     private int mBootSectionIndex;
     private int mSelectedSectionId = -1;
@@ -587,10 +589,13 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                         },
                         error -> {
                             Log.e(TAG, "updateRowsHeader error: %s", error.getMessage());
-                            getView().showProgressBar(false);
-                            getView().showError(new CategoryEmptyError(getContext()));
+                            if (getView() != null) {
+                                getView().showProgressBar(false);
+                                getView().showError(new CategoryEmptyError(getContext()));
+                            }
+                            mGroupTotalSize = 0;
                         },
-                        () -> continueGroupIfNeeded(mLastGroup));
+                        this::continueGroupIfNeeded);
     }
 
     private void updateVideoGrid(BrowseSection section, Observable<MediaGroup> group, int position) {
@@ -638,8 +643,9 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                                 getView().showProgressBar(false);
                                 getView().showError(new CategoryEmptyError(getContext()));
                             }
+                            mGroupTotalSize = 0;
                         },
-                        () -> continueGroupIfNeeded(mLastGroup));
+                        this::continueGroupIfNeeded);
     }
 
     private void continueGroup(VideoGroup group) {
@@ -684,10 +690,11 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
                             if (getView() != null) {
                                 getView().showProgressBar(false);
                             }
+                            mGroupTotalSize = 0;
                         },
                         () -> {
                             getView().showProgressBar(false);
-                            continueGroupIfNeeded(mLastGroup);
+                            continueGroupIfNeeded();
                         }
                 );
     }
@@ -724,16 +731,20 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     /**
      * Most tiny ui has 8 cards in a row or 24 in grid.
      */
-    private void continueGroupIfNeeded(VideoGroup videoGroup) {
-        if (videoGroup == null) {
+    private void continueGroupIfNeeded() {
+        if (mLastGroup == null) {
             return;
         }
 
-        boolean groupTooSmall = videoGroup.getVideos() != null && videoGroup.getVideos().size() < MIN_GROUP_SIZE;
-        boolean isSmallGridEnabled = mMainUIData.getUIScale() < 0.8f || mMainUIData.getVideoGridScale() < 0.8f;
+        mGroupTotalSize += mLastGroup.getVideos() != null ? mLastGroup.getVideos().size() : 0;
+
+        boolean isScaledGridEnabled = mMainUIData.getUIScale() < 0.8f || mMainUIData.getVideoGridScale() < 0.8f;
+        boolean groupTooSmall = isScaledGridEnabled ? mGroupTotalSize < MIN_SCALED_GROUP_SIZE : mGroupTotalSize < MIN_GROUP_SIZE;
 
         if (groupTooSmall) {
-            continueGroup(videoGroup);
+            continueGroup(mLastGroup);
+        } else {
+            mGroupTotalSize = 0;
         }
     }
 
