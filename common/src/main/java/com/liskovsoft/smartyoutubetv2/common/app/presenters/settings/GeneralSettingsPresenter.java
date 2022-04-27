@@ -54,7 +54,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         appendVariousButtonsCategory(settingsPresenter);
         appendAppExitCategory(settingsPresenter);
         appendBackgroundPlaybackCategory(settingsPresenter);
-        appendBackgroundPlaybackActivationCategory(settingsPresenter);
+        //appendBackgroundPlaybackActivationCategory(settingsPresenter);
         appendScreenDimmingCategory(settingsPresenter);
         appendKeyRemappingCategory(settingsPresenter);
         appendAppBackupCategory(settingsPresenter);
@@ -188,19 +188,19 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 
-    private void appendBackgroundPlaybackActivationCategory(AppDialogPresenter settingsPresenter) {
-        List<OptionItem> options = new ArrayList<>();
-
-        options.add(UiOptionItem.from("HOME",
-                option -> mGeneralData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME),
-                mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME));
-
-        options.add(UiOptionItem.from("HOME/BACK",
-                option -> mGeneralData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_N_BACK),
-                mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_N_BACK));
-
-        settingsPresenter.appendRadioCategory(getContext().getString(R.string.background_playback_activation), options);
-    }
+    //private void appendBackgroundPlaybackActivationCategory(AppDialogPresenter settingsPresenter) {
+    //    List<OptionItem> options = new ArrayList<>();
+    //
+    //    options.add(UiOptionItem.from("HOME",
+    //            option -> mGeneralData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME),
+    //            mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME));
+    //
+    //    options.add(UiOptionItem.from("HOME/BACK",
+    //            option -> mGeneralData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_N_BACK),
+    //            mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_N_BACK));
+    //
+    //    settingsPresenter.appendRadioCategory(getContext().getString(R.string.background_playback_activation), options);
+    //}
 
     private void appendKeyRemappingCategory(AppDialogPresenter settingsPresenter) {
         List<OptionItem> options = new ArrayList<>();

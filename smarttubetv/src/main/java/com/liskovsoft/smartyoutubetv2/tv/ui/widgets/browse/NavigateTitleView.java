@@ -10,6 +10,7 @@ import androidx.leanback.widget.TitleView;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
@@ -97,7 +98,7 @@ public class NavigateTitleView extends TitleView {
             mAccountView.setVisibility(visibility);
         }
 
-        if (mExitPip != null && PlaybackPresenter.instance(getContext()).isRunningInBackground()) {
+        if (mExitPip != null && (PlaybackPresenter.instance(getContext()).isRunningInBackground() || visibility != View.VISIBLE)) {
             mExitPip.setVisibility(visibility);
         }
     }
@@ -116,7 +117,7 @@ public class NavigateTitleView extends TitleView {
             mExitPip = (SearchOrbView) findViewById(R.id.exit_pip);
             mExitPip.setOnOrbClickedListener(v -> {
                 if (PlaybackPresenter.instance(getContext()).isRunningInBackground()) {
-                    ViewManager.instance(getContext()).startView(SplashView.class);
+                    ViewManager.instance(getContext()).startView(PlaybackView.class);
                 }
             });
             TooltipCompatHandler.setTooltipText(mExitPip, getContext().getString(R.string.return_to_background_video));
