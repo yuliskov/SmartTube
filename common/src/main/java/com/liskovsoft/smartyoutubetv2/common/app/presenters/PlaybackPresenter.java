@@ -65,9 +65,7 @@ public class PlaybackPresenter extends BasePresenter<PlaybackView> {
 
         mMainPlayerEventBridge.openVideo(item);
 
-        if (!isRunningInBackground()) {
-            mViewManager.startView(PlaybackView.class);
-        }
+        mViewManager.startView(PlaybackView.class);
 
         if (getView() != null) {
             getView().getController().showControls(true);

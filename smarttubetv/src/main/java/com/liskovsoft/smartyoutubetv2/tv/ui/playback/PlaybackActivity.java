@@ -32,6 +32,7 @@ public class PlaybackActivity extends LeanbackActivity {
     private PlaybackFragment mPlaybackFragment;
     private ViewManager mViewManager;
     private PlayerTweaksData mPlayerTweaksData;
+    private boolean mBackPressed;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -161,10 +162,11 @@ public class PlaybackActivity extends LeanbackActivity {
 
         // NOTE: block back button for PIP.
         // User pressed PIP button in the player.
-        enterPipMode(); // NOTE: without this call app will hangs when pressing on PIP button
+        if (!mBackPressed) {
+            enterPipMode(); // NOTE: without this call app will hangs when pressing on PIP button
+        }
 
-        //if (doNotFinish()) {
-        if (doNotDestroy()) {
+        if (doNotDestroy() && !mBackPressed) {
             // Ensure to opening this activity when the user is returning to the app
             mViewManager.blockTop(this);
             mViewManager.startParentView(this);
@@ -185,11 +187,17 @@ public class PlaybackActivity extends LeanbackActivity {
         super.finishReally();
     }
 
-    //private boolean doNotFinish() {
-    //    sIsInPipMode = isInPipMode();
-    //    return sIsInPipMode || (mPlaybackFragment.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND
-    //    && mGeneralData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_N_BACK);
-    //}
+    @Override
+    public void onBackPressed() {
+        mBackPressed = true;
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onResume() {
+        mBackPressed = false;
+        super.onResume();
+    }
 
     private boolean doNotDestroy() {
         sIsInPipMode = isInPipMode();
@@ -240,7 +248,7 @@ public class PlaybackActivity extends LeanbackActivity {
     @Override
     public void onUserLeaveHint() {
         // Check that user not open dialog instead of really leaving the activity
-        if (!AppDialogPresenter.instance(this).isDialogShown()) {
+        if (!AppDialogPresenter.instance(this).isDialogShown() && !mBackPressed) {
             switch (mPlaybackFragment.getBackgroundMode()) {
                 case PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND:
                     enterBackgroundPlayMode();
