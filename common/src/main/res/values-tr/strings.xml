@@ -148,8 +148,8 @@
     <string name="player_seek_preview_none">Devre dışı</string>
     <string name="player_seek_preview_single">Tek kare</string>
     <string name="player_seek_preview_carousel">Atlıkarınca</string>
-    <string name="player_seek_preview_carousel_slow">Atlıkarınca (yavaş)</string>
-    <string name="player_seek_preview_carousel_fast">Atlıkarınca (hızlı)</string>
+    <string name="player_seek_preview_carousel_slow">Atlıkarınca (yavaş, ana karelerle)</string>
+    <string name="player_seek_preview_carousel_fast">Atlıkarınca (hızlı, kesin olmayan ön izleme)</string>
     <string name="unsubscribe_from_channel">Kanal aboneliğini iptal et</string>
     <string name="card_title_lines_num">Kart başlık satır sayısı</string>
     <string name="card_auto_scrolled_title">Otomatik kaydırılan kırpılmış başlık</string>
@@ -381,4 +381,6 @@
     <string name="action_like_unset">Beğen</string>
     <string name="action_dislike_unset">Beğenme</string>
     <string name="various_buttons">Çeşitli düğmeler</string>
+    <string name="not_compatible_with">Seçilen seçenek şunlarla uyumlu değil:</string>
+    <string name="subtitle_position">Altyazı alt kaydırma</string>
 </resources>
