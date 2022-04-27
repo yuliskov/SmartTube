@@ -34,6 +34,7 @@ public class SubtitleSettingsPresenter extends BasePresenter<Void> {
         //appendSubtitleLanguageCategory(settingsPresenter);
         appendSubtitleStyleCategory(settingsPresenter);
         appendSubtitleSizeCategory(settingsPresenter);
+        appendSubtitlePositionDialog(settingsPresenter);
 
         settingsPresenter.showDialog(getContext().getString(R.string.subtitle_category_title));
     }
@@ -82,5 +83,18 @@ public class SubtitleSettingsPresenter extends BasePresenter<Void> {
         }
 
         settingsPresenter.appendRadioCategory(getContext().getString(R.string.subtitle_scale), options);
+    }
+
+    private void appendSubtitlePositionDialog(AppDialogPresenter settingsPresenter) {
+        List<OptionItem> options = new ArrayList<>();
+
+        for (int positionPercent : Helpers.range(0, 100, 5)) {
+            float position = positionPercent / 100f;
+            options.add(UiOptionItem.from(String.format("%s%%", positionPercent),
+                    optionItem -> mPlayerData.setSubtitlePosition(position),
+                    Helpers.floatEquals(position, mPlayerData.getSubtitlePosition())));
+        }
+
+        settingsPresenter.appendRadioCategory(getContext().getString(R.string.subtitle_position), options);
     }
 }

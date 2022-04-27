@@ -378,4 +378,5 @@
     <string name="action_dislike_unset">Не нравится не установлено</string>
     <string name="various_buttons">Различные кнопки</string>
     <string name="not_compatible_with">Выбранная опция не совместима с</string>
+    <string name="subtitle_position">Нижний сдвиг субтитров</string>
 </resources>
