@@ -16,6 +16,6 @@ public class PipAction extends Action {
 
         setIcon(uncoloredDrawable);
         setLabel1(context.getString(
-                R.string.action_pip));
+                R.string.run_in_background));
     }
 }

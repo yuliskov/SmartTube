@@ -7,6 +7,7 @@ import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
 import com.liskovsoft.mediaserviceinterfaces.MediaService;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItemMetadata;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.KeyHelpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.sharedutils.mylogger.Log;
@@ -360,7 +361,10 @@ public class PlayerUIManager extends PlayerEventListenerHelper implements Metada
     @Override
     public void onPipClicked() {
         getController().showOverlay(false);
-        getController().setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_PIP);
+        getController().setBackgroundMode(
+                Helpers.isPictureInPictureSupported(getActivity()) ?
+                        PlaybackEngineController.BACKGROUND_MODE_PIP : PlaybackEngineController.BACKGROUND_MODE_SOUND
+        );
         getController().finish();
     }
 
