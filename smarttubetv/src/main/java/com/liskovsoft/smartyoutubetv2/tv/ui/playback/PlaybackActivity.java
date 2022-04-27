@@ -166,7 +166,7 @@ public class PlaybackActivity extends LeanbackActivity {
         //if (doNotFinish()) {
         if (doNotDestroy()) {
             // Ensure to opening this activity when the user is returning to the app
-            //mViewManager.blockTop(this);
+            mViewManager.blockTop(this);
             mViewManager.startParentView(this);
         } else {
             if (mPlayerTweaksData.isKeepFinishedActivityEnabled()) {
@@ -250,7 +250,7 @@ public class PlaybackActivity extends LeanbackActivity {
                     enterPipMode();
                     if (doNotDestroy()) {
                         // Ensure to opening this activity when the user is returning to the app
-                        //mViewManager.blockTop(this);
+                        mViewManager.blockTop(this);
                         // Return to previous activity (create point from that app could be launched)
                         mViewManager.startParentView(this);
                         // Enable collapse app to Home launcher
