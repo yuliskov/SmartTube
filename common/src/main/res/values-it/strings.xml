@@ -42,7 +42,7 @@
     <string name="section_is_empty">Oops! Qui non c\'è niente.</string>
     <string name="dialog_add_to_playlist">Aggiungi o rimuovi dalla playlist</string>
     <string name="msg_signed_users_only">Solo utenti che hanno effettuato l\'accesso</string>
-    <string name="msg_cant_load_content">Non posso caricare il contenuto.\n1)Controlla data e ora sul dispositivo.\n2) Controlla la connessione di rete.\n3) Prova ad accedere al tuo account.</string>
+    <string name="msg_cant_load_content">Non posso caricare il contenuto.\n1)Controlla data e ora sul dispositivo.\n2) Controlla la connessione di rete.\n3) Prova ad accedere al tuo account.\n4) Forse non c\'è niente qui dentro.</string>
     <string name="title_video_presets">Preset video</string>
     <string name="settings_accounts">Profili</string>
     <string name="settings_left_panel">Modifica categorie</string>
