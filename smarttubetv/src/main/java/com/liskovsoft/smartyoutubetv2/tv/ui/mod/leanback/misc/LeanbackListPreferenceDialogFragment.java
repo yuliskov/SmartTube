@@ -16,6 +16,8 @@
 
 package com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.misc;
 
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
@@ -40,6 +42,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.utils.Utils;
+import com.liskovsoft.smartyoutubetv2.tv.ui.main.SplashActivity;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.clickable.LinkifyCompat;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.clickable.LinkifyCompat.LinkifyClickHandler;
 
@@ -185,14 +188,23 @@ public class LeanbackListPreferenceDialogFragment extends LeanbackPreferenceDial
             messageView.setText(message);
 
             LinkifyCompat.addLinks(messageView, LinkifyCompat.WEB_URLS | LinkifyCompat.TIME_CODES, new LinkifyClickHandler() {
+                private final Context context = messageView.getContext();
+
                 @Override
                 public void onUrlClick(String link) {
-                    Utils.showMultiChooser(messageView.getContext(), Uri.parse(link));
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+                    intent.setClass(context, SplashActivity.class);
+
+                    if (intent.resolveActivity(context.getPackageManager()) != null) {
+                        context.startActivity(intent);
+                    } else {
+                        Utils.showMultiChooser(context, Uri.parse(link));
+                    }
                 }
 
                 @Override
                 public void onTimeClick(String timeCode) {
-                    PlaybackPresenter.instance(messageView.getContext()).setPosition(timeCode);
+                    PlaybackPresenter.instance(context).setPosition(timeCode);
                 }
             });
 
