@@ -83,14 +83,16 @@ public class AppDialogUtil {
                         playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_PIP);
                         generalData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME);
                         onSetCallback.run();
-                    }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PIP));
+                    }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PIP &&
+                    generalData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME));
 
             options.add(UiOptionItem.from(String.format("%s (%s)", pip, context.getString(R.string.pressing_home_back)),
                     optionItem -> {
                         playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_PIP);
                         generalData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK);
                         onSetCallback.run();
-                    }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PIP));
+                    }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PIP &&
+                    generalData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK));
         }
 
         String audio = context.getString(R.string.option_background_playback_only_audio);
@@ -99,13 +101,15 @@ public class AppDialogUtil {
                     playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_SOUND);
                     generalData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME);
                     onSetCallback.run();
-                }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND));
+                }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND &&
+                    generalData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME));
         options.add(UiOptionItem.from(String.format("%s (%s)", audio, context.getString(R.string.pressing_home_back)),
                 optionItem -> {
                     playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_SOUND);
                     generalData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK);
                     onSetCallback.run();
-                }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND));
+                }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND &&
+                    generalData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK));
 
         if (Helpers.isAndroidTV(context) && Build.VERSION.SDK_INT < 26) { // useful only for pre-Oreo UI
             String behind = context.getString(R.string.option_background_playback_behind);
@@ -114,13 +118,15 @@ public class AppDialogUtil {
                         playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND);
                         generalData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME);
                         onSetCallback.run();
-                    }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND));
+                    }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND &&
+                        generalData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME));
             options.add(UiOptionItem.from(String.format("%s (%s - %s)", behind, "Android TV 5,6,7", context.getString(R.string.pressing_home_back)),
                     optionItem -> {
                         playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND);
                         generalData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK);
                         onSetCallback.run();
-                    }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND));
+                    }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND &&
+                        generalData.getBackgroundPlaybackShortcut() == GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK));
         }
 
         return OptionCategory.from(BACKGROUND_PLAYBACK_ID, OptionCategory.TYPE_RADIO, categoryTitle, options);
