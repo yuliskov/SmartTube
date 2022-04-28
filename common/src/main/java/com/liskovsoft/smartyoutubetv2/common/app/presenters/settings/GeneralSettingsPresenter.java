@@ -184,7 +184,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
     }
 
     private void appendBackgroundPlaybackCategory(AppDialogPresenter settingsPresenter) {
-        OptionCategory category = AppDialogUtil.createBackgroundPlaybackCategory(getContext(), mPlayerData);
+        OptionCategory category = AppDialogUtil.createBackgroundPlaybackCategory(getContext(), mPlayerData, mGeneralData);
         settingsPresenter.appendRadioCategory(category.title, category.options);
     }
 

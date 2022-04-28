@@ -379,4 +379,6 @@
     <string name="various_buttons">Різні кнопки</string>
     <string name="not_compatible_with">Обрана опція не зумісна з</string>
     <string name="subtitle_position">Зсув субтитрів внизу</string>
+    <string name="pressing_home">натиснувши ДОДОМУ</string>
+    <string name="pressing_home_back">натиснувши ДОДОМУ або ПОВЕРНУТИСЯ</string>
 </resources>

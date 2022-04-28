@@ -383,4 +383,6 @@
     <string name="various_buttons">Various buttons</string>
     <string name="not_compatible_with">Selected option isn\'t compatible with</string>
     <string name="subtitle_position">Subtitle bottom shift</string>
+    <string name="pressing_home">by pressing HOME</string>
+    <string name="pressing_home_back">by pressing HOME or BACK</string>
 </resources>

@@ -12,6 +12,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.Play
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerTweaksData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
@@ -32,6 +33,7 @@ public class PlaybackActivity extends LeanbackActivity {
     private PlaybackFragment mPlaybackFragment;
     private ViewManager mViewManager;
     private PlayerTweaksData mPlayerTweaksData;
+    private GeneralData mGeneralData;
     private boolean mBackPressed;
 
     @Override
@@ -45,6 +47,7 @@ public class PlaybackActivity extends LeanbackActivity {
         }
         mViewManager = ViewManager.instance(this);
         mPlayerTweaksData = PlayerTweaksData.instance(this);
+        mGeneralData = GeneralData.instance(this);
     }
 
     @Override
@@ -189,7 +192,7 @@ public class PlaybackActivity extends LeanbackActivity {
 
     @Override
     public void onBackPressed() {
-        mBackPressed = true;
+        mBackPressed = mGeneralData.getBackgroundPlaybackShortcut() != GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK;
         super.onBackPressed();
     }
 

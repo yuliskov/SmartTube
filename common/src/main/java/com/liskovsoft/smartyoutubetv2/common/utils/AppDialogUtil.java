@@ -3,7 +3,6 @@ package com.liskovsoft.smartyoutubetv2.common.utils;
 import android.content.Context;
 import android.os.Build;
 import com.liskovsoft.sharedutils.helpers.Helpers;
-import com.liskovsoft.sharedutils.helpers.MessageHelpers;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.controller.PlaybackController;
@@ -17,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.autoframerate.FormatItem.VideoPrese
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.OnSelectSubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.exoplayer.other.SubtitleManager.SubtitleStyle;
 import com.liskovsoft.smartyoutubetv2.common.misc.AppDataSourceManager;
+import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
 import com.liskovsoft.smartyoutubetv2.common.prefs.PlayerData;
 
 import java.util.ArrayList;
@@ -61,38 +61,67 @@ public class AppDialogUtil {
                 }));
     }
 
-    public static OptionCategory createBackgroundPlaybackCategory(Context context, PlayerData playerData) {
-        return createBackgroundPlaybackCategory(context, playerData, () -> {});
+    public static OptionCategory createBackgroundPlaybackCategory(Context context, PlayerData playerData, GeneralData generalData) {
+        return createBackgroundPlaybackCategory(context, playerData, generalData, () -> {});
     }
 
-    public static OptionCategory createBackgroundPlaybackCategory(Context context, PlayerData playerData, Runnable onSetCallback) {
+    public static OptionCategory createBackgroundPlaybackCategory(Context context, PlayerData playerData, GeneralData generalData, Runnable onSetCallback) {
         String categoryTitle = context.getString(R.string.category_background_playback);
 
         List<OptionItem> options = new ArrayList<>();
         options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_off),
                 optionItem -> {
                     playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_DEFAULT);
+                    generalData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME);
                     onSetCallback.run();
                 }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_DEFAULT));
-        if (Helpers.isAndroidTV(context) && Build.VERSION.SDK_INT < 26) { // useful only for pre-Oreo UI
-            options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_behind) + " (Android TV 5,6,7)",
-                    optionItem -> {
-                        playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND);
-                        onSetCallback.run();
-                    }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND));
-        }
+
         if (Helpers.isPictureInPictureSupported(context)) {
-            options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_pip),
+            String pip = context.getString(R.string.option_background_playback_pip);
+            options.add(UiOptionItem.from(String.format("%s (%s)", pip, context.getString(R.string.pressing_home)),
                     optionItem -> {
                         playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_PIP);
+                        generalData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME);
+                        onSetCallback.run();
+                    }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PIP));
+
+            options.add(UiOptionItem.from(String.format("%s (%s)", pip, context.getString(R.string.pressing_home_back)),
+                    optionItem -> {
+                        playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_PIP);
+                        generalData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK);
                         onSetCallback.run();
                     }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PIP));
         }
-        options.add(UiOptionItem.from(context.getString(R.string.option_background_playback_only_audio),
+
+        String audio = context.getString(R.string.option_background_playback_only_audio);
+        options.add(UiOptionItem.from(String.format("%s (%s)", audio, context.getString(R.string.pressing_home)),
                 optionItem -> {
                     playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_SOUND);
+                    generalData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME);
                     onSetCallback.run();
                 }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND));
+        options.add(UiOptionItem.from(String.format("%s (%s)", audio, context.getString(R.string.pressing_home_back)),
+                optionItem -> {
+                    playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_SOUND);
+                    generalData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK);
+                    onSetCallback.run();
+                }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_SOUND));
+
+        if (Helpers.isAndroidTV(context) && Build.VERSION.SDK_INT < 26) { // useful only for pre-Oreo UI
+            String behind = context.getString(R.string.option_background_playback_behind);
+            options.add(UiOptionItem.from(String.format("%s (%s - %s)", behind, "Android TV 5,6,7", context.getString(R.string.pressing_home)),
+                    optionItem -> {
+                        playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND);
+                        generalData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME);
+                        onSetCallback.run();
+                    }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND));
+            options.add(UiOptionItem.from(String.format("%s (%s - %s)", behind, "Android TV 5,6,7", context.getString(R.string.pressing_home_back)),
+                    optionItem -> {
+                        playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND);
+                        generalData.setBackgroundPlaybackShortcut(GeneralData.BACKGROUND_PLAYBACK_SHORTCUT_HOME_BACK);
+                        onSetCallback.run();
+                    }, playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_PLAY_BEHIND));
+        }
 
         return OptionCategory.from(BACKGROUND_PLAYBACK_ID, OptionCategory.TYPE_RADIO, categoryTitle, options);
     }
