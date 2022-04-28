@@ -314,12 +314,6 @@ public class GeneralData {
     }
 
     public void setBackgroundPlaybackShortcut(int type) {
-        PlayerData playerData = PlayerData.instance(mContext);
-
-        if (playerData.getBackgroundMode() == PlaybackEngineController.BACKGROUND_MODE_DEFAULT) {
-            playerData.setBackgroundMode(PlaybackEngineController.BACKGROUND_MODE_PIP);
-        }
-
         mBackgroundShortcut = type;
         persistState();
     }
