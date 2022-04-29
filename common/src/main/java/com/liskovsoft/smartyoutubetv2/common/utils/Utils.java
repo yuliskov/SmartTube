@@ -506,7 +506,7 @@ public class Utils {
 
         String title = mediaItem.getTitle().toLowerCase();
 
-        int lengthMs = ServiceHelper.timeTextToMillis(mediaItem.getBadgeText());
+        int lengthMs = mediaItem.getDurationMs();
         boolean isShortLength = lengthMs > 0 && lengthMs < SHORTS_LEN_MS;
         return isShortLength || title.contains("#short") || title.contains("#shorts") || title.contains("#tiktok");
     }
