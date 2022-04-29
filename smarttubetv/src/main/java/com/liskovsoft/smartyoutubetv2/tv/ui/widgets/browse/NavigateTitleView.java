@@ -128,27 +128,26 @@ public class NavigateTitleView extends TitleView {
         }
     }
 
-    //@Override
-    //protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
-    //    super.onVisibilityChanged(changedView, visibility);
-    //
-    //    if (visibility == View.VISIBLE && mExitPip != null) {
-    //        int newVisibility = PlaybackPresenter.instance(getContext()).isRunningInBackground() ? View.VISIBLE : View.GONE;
-    //        mExitPip.setVisibility(newVisibility);
-    //        mPipTitle.setVisibility(newVisibility);
-    //
-    //        if (newVisibility == View.VISIBLE) {
-    //            Video video = PlaybackPresenter.instance(getContext()).getVideo();
-    //            mPipTitle.setText(video != null ? video.title : "");
-    //        }
-    //    }
-    //}
+    @Override
+    protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
+        super.onVisibilityChanged(changedView, visibility);
+
+        if (visibility == View.VISIBLE) { // scroll grid up, scroll grid down
+            applyPipParameters();
+        }
+    }
 
     @Override
     public void onWindowFocusChanged(boolean hasWindowFocus) {
         super.onWindowFocusChanged(hasWindowFocus);
 
-        if (hasWindowFocus && mExitPip != null) {
+        if (hasWindowFocus) { // pip window closed, dialog closed
+            applyPipParameters();
+        }
+    }
+
+    private void applyPipParameters() {
+        if (mExitPip != null) {
             int newVisibility = PlaybackPresenter.instance(getContext()).isRunningInBackground() ? View.VISIBLE : View.GONE;
             mExitPip.setVisibility(newVisibility);
             mPipTitle.setVisibility(newVisibility);
