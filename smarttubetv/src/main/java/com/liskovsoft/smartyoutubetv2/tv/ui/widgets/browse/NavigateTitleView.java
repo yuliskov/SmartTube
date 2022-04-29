@@ -4,14 +4,15 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.leanback.widget.SearchOrbView;
 import androidx.leanback.widget.TitleView;
 import com.liskovsoft.sharedutils.helpers.Helpers;
+import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.settings.AccountSettingsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
-import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
@@ -28,6 +29,7 @@ import static androidx.leanback.widget.TitleViewAdapter.SEARCH_VIEW_VISIBLE;
 public class NavigateTitleView extends TitleView {
     private SearchOrbView mAccountView;
     private SearchOrbView mExitPip;
+    private TextView mPipTitle;
 
     public NavigateTitleView(Context context) {
         super(context);
@@ -100,6 +102,7 @@ public class NavigateTitleView extends TitleView {
 
         if (mExitPip != null && (PlaybackPresenter.instance(getContext()).isRunningInBackground() || visibility != View.VISIBLE)) {
             mExitPip.setVisibility(visibility);
+            mPipTitle.setVisibility(visibility);
         }
     }
 
@@ -115,6 +118,7 @@ public class NavigateTitleView extends TitleView {
 
         if (Helpers.isPictureInPictureSupported(getContext())) {
             mExitPip = (SearchOrbView) findViewById(R.id.exit_pip);
+            mPipTitle = (TextView) findViewById(R.id.pip_title);
             mExitPip.setOnOrbClickedListener(v -> {
                 if (PlaybackPresenter.instance(getContext()).isRunningInBackground()) {
                     ViewManager.instance(getContext()).startView(PlaybackView.class);
@@ -124,12 +128,35 @@ public class NavigateTitleView extends TitleView {
         }
     }
 
-    @Override
-    protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
-        super.onVisibilityChanged(changedView, visibility);
+    //@Override
+    //protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
+    //    super.onVisibilityChanged(changedView, visibility);
+    //
+    //    if (visibility == View.VISIBLE && mExitPip != null) {
+    //        int newVisibility = PlaybackPresenter.instance(getContext()).isRunningInBackground() ? View.VISIBLE : View.GONE;
+    //        mExitPip.setVisibility(newVisibility);
+    //        mPipTitle.setVisibility(newVisibility);
+    //
+    //        if (newVisibility == View.VISIBLE) {
+    //            Video video = PlaybackPresenter.instance(getContext()).getVideo();
+    //            mPipTitle.setText(video != null ? video.title : "");
+    //        }
+    //    }
+    //}
 
-        if (visibility == View.VISIBLE && mExitPip != null) {
-            mExitPip.setVisibility(PlaybackPresenter.instance(getContext()).isRunningInBackground() ? View.VISIBLE : View.GONE);
+    @Override
+    public void onWindowFocusChanged(boolean hasWindowFocus) {
+        super.onWindowFocusChanged(hasWindowFocus);
+
+        if (hasWindowFocus && mExitPip != null) {
+            int newVisibility = PlaybackPresenter.instance(getContext()).isRunningInBackground() ? View.VISIBLE : View.GONE;
+            mExitPip.setVisibility(newVisibility);
+            mPipTitle.setVisibility(newVisibility);
+
+            if (newVisibility == View.VISIBLE) {
+                Video video = PlaybackPresenter.instance(getContext()).getVideo();
+                mPipTitle.setText(video != null ? video.title : "");
+            }
         }
     }
 }

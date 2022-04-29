@@ -192,14 +192,17 @@ public class LeanbackListPreferenceDialogFragment extends LeanbackPreferenceDial
 
                 @Override
                 public void onUrlClick(String link) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-                    intent.setClass(context, SplashActivity.class);
+                    // Can't handle all intents internally (e.g. channel url)
+                    //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+                    //intent.setClass(context, SplashActivity.class);
+                    //
+                    //if (intent.resolveActivity(context.getPackageManager()) != null) {
+                    //    context.startActivity(intent);
+                    //} else {
+                    //    Utils.showMultiChooser(context, Uri.parse(link));
+                    //}
 
-                    if (intent.resolveActivity(context.getPackageManager()) != null) {
-                        context.startActivity(intent);
-                    } else {
-                        Utils.showMultiChooser(context, Uri.parse(link));
-                    }
+                    Utils.showMultiChooser(context, Uri.parse(link));
                 }
 
                 @Override

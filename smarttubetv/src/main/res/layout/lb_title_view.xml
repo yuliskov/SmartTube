@@ -75,5 +75,14 @@
             app:searchOrbBrightColor="@color/orb_bright_color"
             app:searchOrbIconColor="@color/orb_icon_color"
             android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/pip_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/search_bar_right_items_margin"
+            android:maxWidth="@dimen/pip_title_max_width"
+            style="?attr/browseTitleTextStyle"
+            android:visibility="gone" />
     </LinearLayout>
 </merge>
