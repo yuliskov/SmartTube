@@ -29,10 +29,9 @@ public class GlobalKeyTranslator extends KeyTranslator {
         // Fix for the unknown usb remote controller: https://smartyoutubetv.github.io/#comment-3742343397
         mKeyMapping.put(KeyEvent.KEYCODE_ESCAPE, KeyEvent.KEYCODE_BACK);
 
-        // Navigation in categories
-        mKeyMapping.put(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_DPAD_CENTER);
-
         // Remapping below isn't confirmed to be useful
+        // Navigation in categories
+        //mKeyMapping.put(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE, KeyEvent.KEYCODE_DPAD_CENTER);
         // 4pda users have an issues with btn remapping
         //mKeyMapping.put(KeyEvent.KEYCODE_PAGE_UP, KeyEvent.KEYCODE_DPAD_UP);
         //mKeyMapping.put(KeyEvent.KEYCODE_PAGE_DOWN, KeyEvent.KEYCODE_DPAD_DOWN);
