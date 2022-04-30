@@ -381,4 +381,5 @@
     <string name="subtitle_position">Нижний сдвиг субтитров</string>
     <string name="pressing_home">по нажатию ДОМОЙ</string>
     <string name="pressing_home_back">по нажатию ДОМОЙ или НАЗАД</string>
+    <string name="player_number_key_seek">Перематывать цифровыми клавишами</string>
 </resources>

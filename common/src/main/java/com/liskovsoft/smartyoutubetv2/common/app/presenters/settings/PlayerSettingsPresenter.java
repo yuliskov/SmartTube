@@ -373,6 +373,10 @@ public class PlayerSettingsPresenter extends BasePresenter<Void> {
         //        option -> mPlayerData.enableSeekMemory(option.isSelected()),
         //        mPlayerData.isSeekMemoryEnabled()));
 
+        options.add(UiOptionItem.from(getContext().getString(R.string.player_number_key_seek),
+                option -> mPlayerData.enableNumberKeySeek(option.isSelected()),
+                mPlayerData.isNumberKeySeekEnabled()));
+
         options.add(UiOptionItem.from(getContext().getString(R.string.player_show_tooltips),
                 option -> mPlayerData.enableTooltips(option.isSelected()),
                 mPlayerData.isTooltipsEnabled()));

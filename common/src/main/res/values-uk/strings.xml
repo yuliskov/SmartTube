@@ -381,4 +381,5 @@
     <string name="subtitle_position">Зсув субтитрів внизу</string>
     <string name="pressing_home">натиснувши ДОДОМУ</string>
     <string name="pressing_home_back">натиснувши ДОДОМУ або ПОВЕРНУТИСЯ</string>
+    <string name="player_number_key_seek">Перемотувати цифровими клавішами</string>
 </resources>
