@@ -379,8 +379,9 @@ public class VideoStateManager extends PlayerEventListenerHelper {
     private void restoreSpeed() {
         Video item = getVideo();
         boolean isLiveThreshold = getController().getLengthMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
+        boolean isLive = item.isLive && isLiveThreshold;
 
-        if (item.isLive && isLiveThreshold) {
+        if (isLive || item.belongsToMusic()) {
             getController().setSpeed(1.0f);
         } else {
             State state = mStateService.getByVideoId(item.videoId);

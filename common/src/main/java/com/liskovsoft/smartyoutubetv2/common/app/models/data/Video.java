@@ -471,6 +471,10 @@ public final class Video implements Parcelable {
         return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_HISTORY;
     }
 
+    public boolean belongsToMusic() {
+        return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_MUSIC;
+    }
+
     public boolean belongsToSection() {
         return group != null && group.getSection() != null;
     }

@@ -117,16 +117,14 @@ public class NavigateTitleView extends TitleView {
             TooltipCompatHandler.setTooltipText(mAccountView, getContext().getString(R.string.settings_accounts));
         }
 
-        if (Helpers.isPictureInPictureSupported(getContext())) {
-            mExitPip = (SearchOrbView) findViewById(R.id.exit_pip);
-            mPipTitle = (TextView) findViewById(R.id.pip_title);
-            mExitPip.setOnOrbClickedListener(v -> {
-                if (PlaybackPresenter.instance(getContext()).isRunningInBackground()) {
-                    ViewManager.instance(getContext()).startView(PlaybackView.class);
-                }
-            });
-            TooltipCompatHandler.setTooltipText(mExitPip, getContext().getString(R.string.return_to_background_video));
-        }
+        mExitPip = (SearchOrbView) findViewById(R.id.exit_pip);
+        mPipTitle = (TextView) findViewById(R.id.pip_title);
+        mExitPip.setOnOrbClickedListener(v -> {
+            if (PlaybackPresenter.instance(getContext()).isRunningInBackground()) {
+                ViewManager.instance(getContext()).startView(PlaybackView.class);
+            }
+        });
+        TooltipCompatHandler.setTooltipText(mExitPip, getContext().getString(R.string.return_to_background_video));
     }
 
     @Override
