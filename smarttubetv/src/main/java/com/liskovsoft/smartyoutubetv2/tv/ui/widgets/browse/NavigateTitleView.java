@@ -30,6 +30,7 @@ public class NavigateTitleView extends TitleView {
     private SearchOrbView mAccountView;
     private SearchOrbView mExitPip;
     private TextView mPipTitle;
+    private int mGlobalVisibility = View.INVISIBLE;
 
     public NavigateTitleView(Context context) {
         super(context);
@@ -93,16 +94,16 @@ public class NavigateTitleView extends TitleView {
     public void updateComponentsVisibility(int flags) {
         super.updateComponentsVisibility(flags);
 
-        int visibility = (flags & SEARCH_VIEW_VISIBLE) == SEARCH_VIEW_VISIBLE
+        mGlobalVisibility = (flags & SEARCH_VIEW_VISIBLE) == SEARCH_VIEW_VISIBLE
                 ? View.VISIBLE : View.INVISIBLE;
 
         if (mAccountView != null) {
-            mAccountView.setVisibility(visibility);
+            mAccountView.setVisibility(mGlobalVisibility);
         }
 
-        if (mExitPip != null && (PlaybackPresenter.instance(getContext()).isRunningInBackground() || visibility != View.VISIBLE)) {
-            mExitPip.setVisibility(visibility);
-            mPipTitle.setVisibility(visibility);
+        if (mExitPip != null && (PlaybackPresenter.instance(getContext()).isRunningInBackground() || mGlobalVisibility != View.VISIBLE)) {
+            mExitPip.setVisibility(mGlobalVisibility);
+            mPipTitle.setVisibility(mGlobalVisibility);
         }
     }
 
@@ -148,7 +149,7 @@ public class NavigateTitleView extends TitleView {
 
     private void applyPipParameters() {
         if (mExitPip != null) {
-            int newVisibility = PlaybackPresenter.instance(getContext()).isRunningInBackground() ? View.VISIBLE : View.GONE;
+            int newVisibility = PlaybackPresenter.instance(getContext()).isRunningInBackground() ? mGlobalVisibility : View.GONE;
             mExitPip.setVisibility(newVisibility);
             mPipTitle.setVisibility(newVisibility);
 
