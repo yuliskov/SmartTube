@@ -17,6 +17,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.MainUIData;
 import com.liskovsoft.smartyoutubetv2.tv.R;
 import com.liskovsoft.smartyoutubetv2.tv.ui.mod.leanback.playerglue.tooltips.TooltipCompatHandler;
+import com.liskovsoft.smartyoutubetv2.tv.util.ViewUtil;
 
 import static androidx.leanback.widget.TitleViewAdapter.SEARCH_VIEW_VISIBLE;
 
@@ -124,6 +125,8 @@ public class NavigateTitleView extends TitleView {
                 ViewManager.instance(getContext()).startView(PlaybackView.class);
             }
         });
+        ViewUtil.enableMarquee(mPipTitle);
+        ViewUtil.setTextScrollSpeed(mPipTitle, MainUIData.instance(getContext()).getCardTextScrollSpeed());
         TooltipCompatHandler.setTooltipText(mExitPip, getContext().getString(R.string.return_to_background_video));
     }
 

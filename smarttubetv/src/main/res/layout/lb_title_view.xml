@@ -76,12 +76,14 @@
             app:searchOrbIconColor="@color/orb_icon_color"
             android:visibility="gone" />
 
-        <TextView
+        <com.liskovsoft.smartyoutubetv2.tv.ui.widgets.marqueetextview.MarqueeTextView
             android:id="@+id/pip_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/search_bar_right_items_margin"
             android:maxWidth="@dimen/pip_title_max_width"
+            android:textSize="@dimen/lb_details_description_title_text_size"
+            android:ellipsize="marquee"
             style="?attr/browseTitleTextStyle"
             android:visibility="gone" />
     </LinearLayout>
