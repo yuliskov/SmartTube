@@ -125,8 +125,8 @@ public class NavigateTitleView extends TitleView {
                 ViewManager.instance(getContext()).startView(PlaybackView.class);
             }
         });
-        ViewUtil.enableMarquee(mPipTitle);
-        ViewUtil.setTextScrollSpeed(mPipTitle, MainUIData.instance(getContext()).getCardTextScrollSpeed());
+        //ViewUtil.enableMarquee(mPipTitle);
+        //ViewUtil.setTextScrollSpeed(mPipTitle, MainUIData.instance(getContext()).getCardTextScrollSpeed());
         TooltipCompatHandler.setTooltipText(mExitPip, getContext().getString(R.string.return_to_background_video));
     }
 
