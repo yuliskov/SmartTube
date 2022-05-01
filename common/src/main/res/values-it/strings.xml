@@ -382,4 +382,8 @@
     <string name="action_dislike_unset">Non mi piace non è selezionato</string>
     <string name="various_buttons">Tasti vari</string>
     <string name="not_compatible_with">L\'opzione selezionata non è compatibile con</string>
+    <string name="subtitle_position">Spostamento dei sottotitoli in basso</string>
+    <string name="pressing_home">premendo HOME</string>
+    <string name="pressing_home_back">premendo HOME o INDIETRO</string>
+    <string name="player_number_key_seek">Ricerca con i tasti numerici</string>
 </resources>
