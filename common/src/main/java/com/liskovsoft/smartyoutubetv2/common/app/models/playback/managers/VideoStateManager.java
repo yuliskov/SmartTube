@@ -380,8 +380,9 @@ public class VideoStateManager extends PlayerEventListenerHelper {
         Video item = getVideo();
         boolean isLiveThreshold = getController().getLengthMs() - getController().getPositionMs() < LIVE_THRESHOLD_MS;
         boolean isLive = item.isLive && isLiveThreshold;
+        boolean isMusic = getController().getLengthMs() < MUSIC_VIDEO_LENGTH_MS;
 
-        if (isLive || item.belongsToMusic()) {
+        if (isLive || isMusic) {
             getController().setSpeed(1.0f);
         } else {
             State state = mStateService.getByVideoId(item.videoId);

@@ -21,6 +21,7 @@
     <dimen name="settings_card_height">100dp</dimen>
 
     <dimen name="pip_title_max_width">500dp</dimen>
+    <dimen name="pip_title_size">24sp</dimen>
 
     <!-- Card view default size -->
     <!--
