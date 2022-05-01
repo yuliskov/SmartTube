@@ -183,6 +183,7 @@ public class ViewUtil {
         if (title instanceof FrameLayout) {
             title.setBackgroundColor(transparent);
         }
+        // Can't set bg of individual items here because ones isn't added yet.
     }
 
     public static void makeMonochrome(ImageView iconView) {
