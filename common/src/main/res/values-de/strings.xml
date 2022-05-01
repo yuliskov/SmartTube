@@ -42,7 +42,7 @@
     <string name="section_is_empty">Hier ist nichts drin</string>
     <string name="dialog_add_to_playlist">Hinzufügen/Entfernen aus Wiedergabeliste</string>
     <string name="msg_signed_users_only">Nur angemeldete Nutzer</string>
-    <string name="msg_cant_load_content">Inhalt kann nicht geladen werden.\n1) Überprüfen Sie Datum und Uhrzeit auf dem Gerät.\n2) Überprüfen Sie die Internetverbindung.\n3) Versuchen Sie, sich mit Ihrem Konto anzumelden.</string>
+    <string name="msg_cant_load_content">Inhalt kann nicht geladen werden.\n1) Überprüfen Sie Datum und Uhrzeit auf dem Gerät.\n2) Überprüfen Sie die Internetverbindung.\n3) Versuchen Sie, sich mit Ihrem Konto anzumelden.\n4) Vielleicht ist hier nichts drin.</string>
     <string name="title_video_presets">Video-Voreinstellungen</string>
     <string name="settings_accounts">Konten</string>
     <string name="settings_left_panel">Kategorien bearbeiten</string>
@@ -382,4 +382,7 @@
     <string name="action_dislike_unset">Mag ich nicht</string>
     <string name="various_buttons">Verschiedene Schaltflächen</string>
     <string name="not_compatible_with">Ausgewählte Option ist nicht kompatibel mit</string>
+    <string name="subtitle_position">Untertitel-Verschiebung von unten</string>
+    <string name="pressing_home">durch Drücken von HOME</string>
+    <string name="pressing_home_back">durch Drücken von HOME oder BACK</string>
 </resources>
