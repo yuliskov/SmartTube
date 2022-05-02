@@ -183,7 +183,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendRemoveFromHistoryButton();
         appendAddToRecentPlaylistButton(videoPlaylistInfos);
         appendAddToPlaylistButton(videoPlaylistInfos);
-        appendSavePlaylistButton(videoPlaylistInfos);
+        appendSavePlaylistButton();
         appendNotInterestedButton();
         appendOpenChannelButton();
         //appendOpenChannelUploadsButton();
@@ -288,7 +288,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
     }
 
-    private void appendSavePlaylistButton(List<VideoPlaylistInfo> videoPlaylistInfos) {
+    private void appendSavePlaylistButton() {
         //if (!mIsSavePlaylistButtonEnabled || videoPlaylistInfos == null) {
         //    return;
         //}
