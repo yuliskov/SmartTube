@@ -183,13 +183,13 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendRemoveFromHistoryButton();
         appendAddToRecentPlaylistButton(videoPlaylistInfos);
         appendAddToPlaylistButton(videoPlaylistInfos);
-        appendSavePlaylistButton();
         appendNotInterestedButton();
         appendOpenChannelButton();
         //appendOpenChannelUploadsButton();
         appendOpenPlaylistButton();
         appendSubscribeButton();
         appendTogglePinVideoToSidebarButton();
+        appendSavePlaylistButton();
         appendOpenDescriptionButton();
         appendAddToPlaybackQueueButton();
         appendShareButton();
@@ -286,32 +286,6 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
                 break;
             }
         }
-    }
-
-    private void appendSavePlaylistButton() {
-        //if (!mIsSavePlaylistButtonEnabled || videoPlaylistInfos == null) {
-        //    return;
-        //}
-        //
-        //if (mVideo == null || !mVideo.hasPlaylist()) {
-        //    return;
-        //}
-        //
-        //List<OptionItem> options = new ArrayList<>();
-        //
-        //boolean containsPlaylist = false;
-        //
-        //for (VideoPlaylistInfo playlistInfo : videoPlaylistInfos) {
-        //    options.add(UiOptionItem.from(
-        //            playlistInfo.getTitle(),
-        //            (item) -> {
-        //                addRemoveFromPlaylist(playlistInfo.getPlaylistId(), item.isSelected());
-        //                GeneralData.instance(getContext()).setLastPlaylistId(playlistInfo.getPlaylistId());
-        //            },
-        //            playlistInfo.isSelected()));
-        //}
-        //
-        //mDialogPresenter.appendSingleButton(getContext().getString(R.string.dialog_add_to_playlist), options);
     }
 
     private void appendOpenChannelButton() {
