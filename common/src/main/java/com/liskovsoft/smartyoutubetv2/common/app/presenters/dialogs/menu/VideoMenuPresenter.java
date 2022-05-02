@@ -18,7 +18,6 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.ChannelUploadsPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.PlaybackPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.views.PlaybackView;
-import com.liskovsoft.smartyoutubetv2.common.app.views.SplashView;
 import com.liskovsoft.smartyoutubetv2.common.app.views.ViewManager;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.smartyoutubetv2.common.prefs.GeneralData;
@@ -40,7 +39,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private final MediaItemManager mItemManager;
     private final AppDialogPresenter mDialogPresenter;
     private final MediaServiceManager mServiceManager;
-    private Disposable mPlaylistInfoAction;
+    private Disposable mPlaylistsInfoAction;
     private Disposable mAddToPlaylistAction;
     private Disposable mNotInterestedAction;
     private Disposable mSubscribeAction;
@@ -146,7 +145,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         updateEnabledMenuItems();
 
-        RxUtils.disposeActions(mPlaylistInfoAction, mAddToPlaylistAction, mNotInterestedAction, mSubscribeAction);
+        RxUtils.disposeActions(mPlaylistsInfoAction, mAddToPlaylistAction, mNotInterestedAction, mSubscribeAction);
 
         mVideo = video;
         sVideoHolder = new WeakReference<>(video);
@@ -160,7 +159,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             return;
         }
 
-        mPlaylistInfoAction = mItemManager.getVideoPlaylistsInfosObserve(mVideo.videoId)
+        mPlaylistsInfoAction = mItemManager.getVideoPlaylistsInfoObserve(mVideo.videoId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -197,7 +196,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         if (!mDialogPresenter.isEmpty()) {
             String title = mVideo != null ? mVideo.title : null;
-            mDialogPresenter.showDialog(title, () -> RxUtils.disposeActions(mPlaylistInfoAction));
+            mDialogPresenter.showDialog(title, () -> RxUtils.disposeActions(mPlaylistsInfoAction));
         }
     }
 
@@ -221,7 +220,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         if (mDialogPresenter.isEmpty()) {
             MessageHelpers.showMessage(getContext(), R.string.msg_signed_users_only);
         } else {
-            mDialogPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistInfoAction));
+            mDialogPresenter.showDialog(mVideo.title, () -> RxUtils.disposeActions(mPlaylistsInfoAction));
         }
     }
 
@@ -511,7 +510,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     private void addRemoveFromPlaylist(String playlistId, boolean checked) {
-        RxUtils.disposeActions(mPlaylistInfoAction, mAddToPlaylistAction);
+        RxUtils.disposeActions(mPlaylistsInfoAction, mAddToPlaylistAction);
         Observable<Void> editObserve;
 
         if (checked) {
