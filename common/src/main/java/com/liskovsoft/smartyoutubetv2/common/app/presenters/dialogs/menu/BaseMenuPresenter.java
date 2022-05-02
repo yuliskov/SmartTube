@@ -1,7 +1,11 @@
 package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 
 import android.content.Context;
+import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
+import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
+import com.liskovsoft.sharedutils.rx.RxUtils;
 import com.liskovsoft.smartyoutubetv2.common.R;
 import com.liskovsoft.smartyoutubetv2.common.app.models.data.Video;
 import com.liskovsoft.smartyoutubetv2.common.app.models.playback.ui.UiOptionItem;
@@ -10,6 +14,8 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.youtubeapi.service.YouTubeMediaItemManager;
+import io.reactivex.Observable;
 
 public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     private final MediaServiceManager mServiceManager;
@@ -22,6 +28,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     protected abstract Video getVideo();
     protected abstract AppDialogPresenter getDialogPresenter();
     protected abstract boolean isPinToSidebarEnabled();
+    protected abstract boolean isSavePlaylistEnabled();
     protected abstract boolean isAccountSelectionEnabled();
 
     public void closeDialog() {
@@ -151,28 +158,78 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     protected void appendSavePlaylistButton() {
-        //if (!mIsSavePlaylistButtonEnabled || videoPlaylistInfos == null) {
-        //    return;
-        //}
-        //
-        //if (mVideo == null || !mVideo.hasPlaylist()) {
-        //    return;
-        //}
-        //
-        //List<OptionItem> options = new ArrayList<>();
-        //
-        //boolean containsPlaylist = false;
-        //
-        //for (VideoPlaylistInfo playlistInfo : videoPlaylistInfos) {
-        //    options.add(UiOptionItem.from(
-        //            playlistInfo.getTitle(),
-        //            (item) -> {
-        //                addRemoveFromPlaylist(playlistInfo.getPlaylistId(), item.isSelected());
-        //                GeneralData.instance(getContext()).setLastPlaylistId(playlistInfo.getPlaylistId());
-        //            },
-        //            playlistInfo.isSelected()));
-        //}
-        //
-        //mDialogPresenter.appendSingleButton(getContext().getString(R.string.dialog_add_to_playlist), options);
+        if (!isSavePlaylistEnabled()) {
+            return;
+        }
+
+        Video original = getVideo();
+
+        if (original == null || (!original.hasPlaylist() && !original.isChannelPlaylist() && !original.belongsToPlaylist())) {
+            return;
+        }
+
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(
+                        getContext().getString(R.string.save_remove_playlist),
+                        optionItem -> {
+                            MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
+                            if (original.hasPlaylist()) {
+                                Video video = Video.from(original);
+
+                                // Need correct playlist title to further comparison (decide whether save or remove)
+                                video.title = original.group != null ? original.group.getTitle() : video.title;
+                                toggleSavePlaylist(video);
+                            } else if (original.belongsToPlaylist()) {
+                                mServiceManager.loadChannelUploads(
+                                        original,
+                                        mediaGroup -> {
+                                            Video video = Video.from(original);
+                                            MediaItem first = mediaGroup.getMediaItems().get(0);
+
+                                            video.playlistId = first.getPlaylistId();
+                                            toggleSavePlaylist(video);
+                                        }
+                                );
+                            } else {
+                                mServiceManager.loadChannelPlaylist(
+                                        original,
+                                        mediaGroup -> {
+                                            Video video = Video.from(original);
+                                            MediaItem first = mediaGroup.getMediaItems().get(0);
+
+                                            video.playlistId = first.getPlaylistId();
+                                            toggleSavePlaylist(video);
+                                        }
+                                );
+                            }
+                        }
+                ));
+    }
+
+    private void toggleSavePlaylist(Video video) {
+        mServiceManager.loadPlaylists(video, group -> {
+            MediaItemManager manager = YouTubeMediaItemManager.instance();
+
+            boolean isSaved = false;
+
+            for (MediaItem item : group.getMediaItems()) {
+                if (Helpers.equals(video.title, item.getTitle())) {
+                    isSaved = true;
+                    break;
+                }
+            }
+
+            Observable<Void> action;
+
+            if (isSaved) {
+                action = manager.removePlaylistObserve(video.playlistId);
+            } else {
+                action = manager.savePlaylistObserve(video.playlistId);
+            }
+
+            RxUtils.execute(action);
+
+            MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(isSaved ? R.string.removed_from_playlists : R.string.saved_to_playlists));
+        });
     }
 }

@@ -56,6 +56,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsAccountSelectionEnabled;
     private boolean mIsReturnToBackgroundVideoEnabled;
     private boolean mIsPinToSidebarEnabled;
+    private boolean mIsSavePlaylistButtonEnabled;
     private boolean mIsOpenPlaylistButtonEnabled;
     private boolean mIsAddToPlaybackQueueButtonEnabled;
     private boolean mIsOpenDescriptionButtonEnabled;
@@ -98,6 +99,11 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     @Override
+    protected boolean isSavePlaylistEnabled() {
+        return mIsSavePlaylistButtonEnabled;
+    }
+
+    @Override
     protected boolean isAccountSelectionEnabled() {
         return mIsAccountSelectionEnabled;
     }
@@ -132,6 +138,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsAccountSelectionEnabled = true;
         mIsReturnToBackgroundVideoEnabled = true;
         mIsPinToSidebarEnabled = true;
+        mIsSavePlaylistButtonEnabled = true;
         mIsOpenDescriptionButtonEnabled = true;
         mIsPlayVideoButtonEnabled = true;
 
@@ -183,13 +190,13 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendRemoveFromHistoryButton();
         appendAddToRecentPlaylistButton(videoPlaylistInfos);
         appendAddToPlaylistButton(videoPlaylistInfos);
+        appendSavePlaylistButton();
         appendNotInterestedButton();
         appendOpenChannelButton();
         //appendOpenChannelUploadsButton();
         appendOpenPlaylistButton();
         appendSubscribeButton();
         appendTogglePinVideoToSidebarButton();
-        appendSavePlaylistButton();
         appendOpenDescriptionButton();
         appendAddToPlaybackQueueButton();
         appendShareButton();

@@ -32,6 +32,7 @@ public class MediaServiceManager {
     private Disposable mRowsAction;
     private Disposable mSubscribedChannelsAction;
     private Disposable mFormatInfoAction;
+    private Disposable mPlaylistGroupAction;
 
     public interface OnMetadata {
         void onMetadata(MediaItemMetadata metadata);
@@ -169,6 +170,13 @@ public class MediaServiceManager {
                 );
     }
 
+    public void loadChannelPlaylist(Video item, OnMediaGroup group) {
+        loadChannelRows(
+                item,
+                mediaGroupList -> group.onMediaGroup(mediaGroupList.get(0))
+        );
+    }
+
     public void loadFormatInfo(Video item, OnFormatInfo onFormatInfo) {
         if (item == null) {
             return;
@@ -184,6 +192,24 @@ public class MediaServiceManager {
                 .subscribe(
                         onFormatInfo::onFormatInfo,
                         error -> Log.e(TAG, "loadFormatInfo error: %s", error.getMessage())
+                );
+    }
+
+    public void loadPlaylists(Video item, OnMediaGroup onPlaylistGroup) {
+        if (item == null) {
+            return;
+        }
+
+        RxUtils.disposeActions(mPlaylistGroupAction);
+
+        Observable<MediaGroup> observable = mGroupManager.getEmptyPlaylistsObserve();
+
+        mPlaylistGroupAction = observable
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        onPlaylistGroup::onMediaGroup,
+                        error -> Log.e(TAG, "loadPlaylists error: %s", error.getMessage())
                 );
     }
 

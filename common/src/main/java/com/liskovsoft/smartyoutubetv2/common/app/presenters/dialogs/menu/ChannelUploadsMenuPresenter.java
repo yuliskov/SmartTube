@@ -55,6 +55,11 @@ public class ChannelUploadsMenuPresenter extends BaseMenuPresenter {
     }
 
     @Override
+    protected boolean isSavePlaylistEnabled() {
+        return true;
+    }
+
+    @Override
     protected boolean isAccountSelectionEnabled() {
         return true;
     }
