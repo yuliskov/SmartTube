@@ -50,6 +50,11 @@ public class ChannelUploadsMenuPresenter extends BaseMenuPresenter {
     }
 
     @Override
+    protected VideoMenuCallback getCallback() {
+        return mCallback;
+    }
+
+    @Override
     protected boolean isPinToSidebarEnabled() {
         return true;
     }

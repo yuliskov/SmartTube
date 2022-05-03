@@ -407,7 +407,7 @@ public final class Video implements Parcelable {
         return videoId == null && channelId != null && itemType == MediaItem.TYPE_PLAYLIST;
     }
 
-    public boolean belongsToPlaylist() {
+    public boolean belongsToPlaylists() {
         return group != null && group.getMediaGroup() != null && group.getMediaGroup().getType() == MediaGroup.TYPE_USER_PLAYLISTS;
     }
 

@@ -2,6 +2,7 @@ package com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu;
 
 import android.content.Context;
 import com.liskovsoft.mediaserviceinterfaces.MediaItemManager;
+import com.liskovsoft.mediaserviceinterfaces.data.MediaGroup;
 import com.liskovsoft.mediaserviceinterfaces.data.MediaItem;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.MessageHelpers;
@@ -13,6 +14,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.AppDialogPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.BrowsePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
+import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaItemManager;
 import io.reactivex.Observable;
@@ -27,6 +29,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
     protected abstract Video getVideo();
     protected abstract AppDialogPresenter getDialogPresenter();
+    protected abstract VideoMenuCallback getCallback();
     protected abstract boolean isPinToSidebarEnabled();
     protected abstract boolean isSavePlaylistEnabled();
     protected abstract boolean isAccountSelectionEnabled();
@@ -72,7 +75,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(
-                        getContext().getString(original.isChannelPlaylist() || original.belongsToPlaylist() ? R.string.pin_unpin_playlist : R.string.pin_unpin_channel),
+                        getContext().getString(original.isChannelPlaylist() || original.belongsToPlaylists() ? R.string.pin_unpin_playlist : R.string.pin_unpin_channel),
                         optionItem -> {
                             if (original.hasVideo()) {
                                 MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
@@ -164,7 +167,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         Video original = getVideo();
 
-        if (original == null || (!original.hasPlaylist() && !original.isChannelPlaylist() && !original.belongsToPlaylist())) {
+        if (original == null || (!original.hasPlaylist() && !original.isChannelPlaylist() && !original.belongsToPlaylists())) {
             return;
         }
 
@@ -174,38 +177,36 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                         optionItem -> {
                             MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
                             if (original.hasPlaylist()) {
-                                Video video = Video.from(original);
-
-                                // Need correct playlist title to further comparison (decide whether save or remove)
-                                if (original.belongsToSamePlaylistGroup()) {
-                                    video.title = original.group.getTitle();
-                                }
-                                toggleSavePlaylist(video);
-                            } else if (original.belongsToPlaylist()) {
+                                syncToggleSavePlaylist(original, null);
+                            } else if (original.belongsToPlaylists()) {
                                 mServiceManager.loadChannelUploads(
                                         original,
-                                        mediaGroup -> {
-                                            Video video = Video.from(original);
-                                            MediaItem first = mediaGroup.getMediaItems().get(0);
-
-                                            video.playlistId = first.getPlaylistId();
-                                            toggleSavePlaylist(video);
-                                        }
+                                        mediaGroup -> syncToggleSavePlaylist(original, mediaGroup)
                                 );
                             } else {
                                 mServiceManager.loadChannelPlaylist(
                                         original,
-                                        mediaGroup -> {
-                                            Video video = Video.from(original);
-                                            MediaItem first = mediaGroup.getMediaItems().get(0);
-
-                                            video.playlistId = first.getPlaylistId();
-                                            toggleSavePlaylist(video);
-                                        }
+                                        mediaGroup -> syncToggleSavePlaylist(original, mediaGroup)
                                 );
                             }
                         }
                 ));
+    }
+
+    private void syncToggleSavePlaylist(Video original, MediaGroup mediaGroup) {
+        Video video = Video.from(original);
+
+        // Need correct playlist title to further comparison (decide whether save or remove)
+        if (original.belongsToSamePlaylistGroup()) {
+            video.title = original.group.getTitle();
+        }
+
+        if (!original.hasPlaylist() && mediaGroup != null && mediaGroup.getMediaItems() != null) {
+            MediaItem first = mediaGroup.getMediaItems().get(0);
+            video.playlistId = first.getPlaylistId();
+        }
+
+        toggleSavePlaylist(video);
     }
 
     private void toggleSavePlaylist(Video video) {
@@ -225,6 +226,10 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
             if (isSaved) {
                 action = manager.removePlaylistObserve(video.playlistId);
+                if (getVideo().belongsToPlaylists() && getCallback() != null) {
+                    getCallback().onItemAction(getVideo(), VideoMenuCallback.ACTION_REMOVE);
+                    closeDialog();
+                }
             } else {
                 action = manager.savePlaylistObserve(video.playlistId);
             }

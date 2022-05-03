@@ -67,7 +67,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         int ACTION_UNDEFINED = 0;
         int ACTION_UNSUBSCRIBE = 1;
         int ACTION_REMOVE = 2;
-        int ACTION_PLAYLIST_REMOVE = 3;
+        int ACTION_REMOVE_FROM_PLAYLIST = 3;
         void onItemAction(Video videoItem, int action);
     }
 
@@ -91,6 +91,11 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     @Override
     protected AppDialogPresenter getDialogPresenter() {
         return mDialogPresenter;
+    }
+
+    @Override
+    protected VideoMenuCallback getCallback() {
+        return mCallback;
     }
 
     @Override
@@ -195,8 +200,8 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         //appendOpenChannelUploadsButton();
         appendOpenPlaylistButton();
         appendSubscribeButton();
-        appendSavePlaylistButton();
         appendTogglePinVideoToSidebarButton();
+        appendSavePlaylistButton();
         appendOpenDescriptionButton();
         appendAddToPlaybackQueueButton();
         appendShareButton();
@@ -526,7 +531,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         } else {
             // Check that the current video belongs to the right section
             if (mCallback != null && Helpers.equals(mVideo.playlistId, playlistId)) {
-                mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_PLAYLIST_REMOVE);
+                mCallback.onItemAction(mVideo, VideoMenuCallback.ACTION_REMOVE_FROM_PLAYLIST);
             }
             editObserve = mItemManager.removeFromPlaylistObserve(playlistId, mVideo.videoId);
         }
