@@ -386,7 +386,7 @@
     <string name="pressing_home">ANA EKRAN\'a basarak</string>
     <string name="pressing_home_back">ANA EKRAN\'a ya da GERİ\'ye basarak</string>
     <string name="player_number_key_seek">Sayı tuşlarıyla arama</string>
-    <string name="save_remove_playlist">Oynatma Listeleri bölümüne Kaydet/Kaldır</string>
+    <string name="save_remove_playlist">Bu çalma listesini Oynatma Listeleri bölümüne Kaydet/Kaldır</string>
     <string name="removed_from_playlists">Oynatma Listeleri bölümünden kaldırıldı</string>
     <string name="saved_to_playlists">Oynatma Listeleri bölümüne kaydedildi</string>
 </resources>
