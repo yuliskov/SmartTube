@@ -125,7 +125,7 @@
     <string name="sorting_alphabetically">Alfabetik</string>
     <string name="sorting_last_viewed">Son görüntülenen</string>
     <string name="player_pause_when_seek">Ararken duraklat</string>
-    <string name="playlists_style">Oynatma listeleri stili</string>
+    <string name="playlists_style">Oynatma Listeleri bölümü stili</string>
     <string name="playlists_style_grid">Izgara</string>
     <string name="playlists_style_rows">Satırlar</string>
     <string name="player_show_clock">Saati göster</string>
@@ -382,5 +382,11 @@
     <string name="action_dislike_unset">Beğenme</string>
     <string name="various_buttons">Çeşitli düğmeler</string>
     <string name="not_compatible_with">Seçilen seçenek şunlarla uyumlu değil:</string>
-    <string name="subtitle_position">Altyazı alt kaydırma</string>
+    <string name="subtitle_position">Altyazı alttan kaydırma</string>
+    <string name="pressing_home">ANA EKRAN\'a basarak</string>
+    <string name="pressing_home_back">ANA EKRAN\'a ya da GERİ\'ye basarak</string>
+    <string name="player_number_key_seek">Sayı tuşlarıyla arama</string>
+    <string name="save_remove_playlist">Bu çalma listesini Oynatma Listeleri bölümüne Kaydet/Kaldır</string>
+    <string name="removed_from_playlists">Oynatma Listeleri bölümünden kaldırıldı</string>
+    <string name="saved_to_playlists">Oynatma Listeleri bölümüne kaydedildi</string>
 </resources>
