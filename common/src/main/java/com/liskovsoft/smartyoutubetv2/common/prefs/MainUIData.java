@@ -27,6 +27,9 @@ public class MainUIData {
     public static final int MENU_ITEM_OPEN_DESCRIPTION = 0b1000000000;
     public static final int MENU_ITEM_RENAME_SECTION = 0b10000000000;
     public static final int MENU_ITEM_PLAY_VIDEO = 0b100000000000;
+    public static final int MENU_ITEM_SAVE_PLAYLIST = 0b1000000000000;
+    public static final int MENU_ITEM_ADD_TO_PLAYLIST = 0b10000000000000;
+    public static final int MENU_ITEM_SUBSCRIBE = 0b100000000000000;
     public static final int BUTTON_BROWSE_ACCOUNTS = 0b1;
     @SuppressLint("StaticFieldLeak")
     private static MainUIData sInstance;

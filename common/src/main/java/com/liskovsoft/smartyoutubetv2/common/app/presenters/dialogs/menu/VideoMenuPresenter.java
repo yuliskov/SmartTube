@@ -591,6 +591,10 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
             mIsAddToPlaybackQueueButtonEnabled = false;
         }
 
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_ADD_TO_PLAYLIST)) {
+            mIsAddToPlaylistButtonEnabled = false;
+        }
+
         if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SHARE_LINK)) {
             mIsShareButtonEnabled = false;
         }
@@ -617,6 +621,14 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         
         if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_PLAY_VIDEO)) {
             mIsPlayVideoButtonEnabled = false;
+        }
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SAVE_PLAYLIST)) {
+            mIsSavePlaylistButtonEnabled = false;
+        }
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SUBSCRIBE)) {
+            mIsSubscribeButtonEnabled = false;
         }
     }
 }
