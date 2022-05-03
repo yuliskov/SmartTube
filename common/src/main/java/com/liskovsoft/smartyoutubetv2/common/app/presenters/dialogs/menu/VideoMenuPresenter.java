@@ -172,7 +172,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         }
 
         mPlaylistsInfoAction = mItemManager.getVideoPlaylistsInfoObserve(mVideo.videoId)
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::prepareAndShowDialogSigned,
@@ -354,7 +354,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.not_interested), optionItem -> {
                     mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem)
-                            .subscribeOn(Schedulers.newThread())
+                            .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
                                     var -> {},
@@ -383,7 +383,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mDialogPresenter.appendSingleButton(
                 UiOptionItem.from(getContext().getString(R.string.remove_from_history), optionItem -> {
                     mNotInterestedAction = mItemManager.markAsNotInterestedObserve(mVideo.mediaItem)
-                            .subscribeOn(Schedulers.newThread())
+                            .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(
                                     var -> {},

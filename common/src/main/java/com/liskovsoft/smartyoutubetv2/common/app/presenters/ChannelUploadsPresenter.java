@@ -200,7 +200,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         }
 
         mScrollAction = continuation
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         continueMediaGroup -> getView().update(VideoGroup.from(continueMediaGroup)),
@@ -220,7 +220,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         getView().showProgressBar(true);
 
         mUpdateAction = group
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         this::updateGrid,
@@ -258,7 +258,7 @@ public class ChannelUploadsPresenter extends BasePresenter<ChannelUploadsView> i
         Observable<MediaGroup> group = mGroupManager.getGroupObserve(mediaItem);
 
         mUpdateAction = group
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         callback::onGroup,

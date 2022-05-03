@@ -25,7 +25,7 @@ public class MediaServiceSearchTagProvider implements SearchTagsProvider {
         RxUtils.disposeActions(mTagsAction);
 
         mTagsAction = mGroupManager.getSearchTagsObserve(query)
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         tags -> callback.onResults(Tag.from(tags)),

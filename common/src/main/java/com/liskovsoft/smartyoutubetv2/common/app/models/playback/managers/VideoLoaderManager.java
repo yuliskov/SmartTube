@@ -314,7 +314,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
         MediaService service = YouTubeMediaService.instance();
         MediaItemManager mediaItemManager = service.getMediaItemManager();
         mFormatInfoAction = mediaItemManager.getFormatInfoObserve(video.videoId)
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::processFormatInfo,
                            error -> {
@@ -338,7 +338,7 @@ public class VideoLoaderManager extends PlayerEventListenerHelper {
             Log.d(TAG, "Found regular video in dash format. Loading...");
 
             mMpdStreamAction = formatInfo.createMpdStreamObservable()
-                    .subscribeOn(Schedulers.newThread())
+                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             dashManifest -> getController().openDash(dashManifest),

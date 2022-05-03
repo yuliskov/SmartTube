@@ -85,7 +85,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         MediaItemManager mediaItemManager = YouTubeMediaService.instance().getMediaItemManager();
 
         mScrollAction = mediaItemManager.continueGroupObserve(mediaGroup)
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         continueMediaGroup -> {
@@ -144,7 +144,7 @@ public class SuggestionsLoaderManager extends PlayerEventListenerHelper {
         clearSuggestionsIfNeeded(video);
 
         mMetadataAction = observable
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         metadata -> updateSuggestions(metadata, video),
