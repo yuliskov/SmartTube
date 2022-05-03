@@ -177,7 +177,9 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                                 Video video = Video.from(original);
 
                                 // Need correct playlist title to further comparison (decide whether save or remove)
-                                video.title = original.group != null ? original.group.getTitle() : video.title;
+                                if (original.belongsToSamePlaylistGroup()) {
+                                    video.title = original.group.getTitle();
+                                }
                                 toggleSavePlaylist(video);
                             } else if (original.belongsToPlaylist()) {
                                 mServiceManager.loadChannelUploads(
