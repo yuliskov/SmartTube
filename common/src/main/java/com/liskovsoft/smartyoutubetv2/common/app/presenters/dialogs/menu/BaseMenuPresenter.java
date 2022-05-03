@@ -234,9 +234,11 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 action = manager.savePlaylistObserve(video.playlistId);
             }
 
-            RxUtils.execute(action);
+            final boolean isReallySaved = isSaved;
 
-            MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(isSaved ? R.string.removed_from_playlists : R.string.saved_to_playlists));
+            RxUtils.execute(action, () ->
+                    MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(isReallySaved ? R.string.removed_from_playlists : R.string.saved_to_playlists))
+            );
         });
     }
 }
