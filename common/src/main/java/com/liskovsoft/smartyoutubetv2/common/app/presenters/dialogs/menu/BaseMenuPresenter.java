@@ -16,6 +16,7 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.utils.AppDialogUtil;
 import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaItemManager;
 import io.reactivex.Observable;
@@ -215,8 +216,6 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
     private void toggleSavePlaylist(Video video) {
         mServiceManager.loadPlaylists(video, group -> {
-            MediaItemManager manager = YouTubeMediaItemManager.instance();
-
             boolean isSaved = false;
 
             for (MediaItem item : group.getMediaItems()) {
@@ -226,24 +225,36 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 }
             }
 
-            Observable<Void> action;
-
             if (isSaved) {
-                action = manager.removePlaylistObserve(video.playlistId);
                 if (getVideo().belongsToPlaylists() && getCallback() != null) {
-                    getCallback().onItemAction(getVideo(), VideoMenuCallback.ACTION_REMOVE);
-                    closeDialog();
+                    AppDialogUtil.showConfirmationDialog(getContext(), () -> {
+                        removePlaylist(video);
+                        getCallback().onItemAction(getVideo(), VideoMenuCallback.ACTION_REMOVE);
+                        closeDialog();
+                    }, video.title);
+                } else {
+                    removePlaylist(video);
                 }
             } else {
-                action = manager.savePlaylistObserve(video.playlistId);
+                savePlaylist(video);
             }
-
-            final boolean isReallySaved = isSaved;
-
-            RxUtils.execute(action, () ->
-                    MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(isReallySaved ? R.string.removed_from_playlists : R.string.saved_to_playlists))
-            );
         });
+    }
+
+    private void removePlaylist(Video video) {
+        MediaItemManager manager = YouTubeMediaItemManager.instance();
+        Observable<Void> action = manager.removePlaylistObserve(video.playlistId);
+        RxUtils.execute(action, () ->
+                MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.removed_from_playlists))
+        );
+    }
+
+    private void savePlaylist(Video video) {
+        MediaItemManager manager = YouTubeMediaItemManager.instance();
+        Observable<Void> action = manager.savePlaylistObserve(video.playlistId);
+        RxUtils.execute(action, () ->
+                MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.saved_to_playlists))
+        );
     }
 
     protected void appendCreatePlaylistButton() {
