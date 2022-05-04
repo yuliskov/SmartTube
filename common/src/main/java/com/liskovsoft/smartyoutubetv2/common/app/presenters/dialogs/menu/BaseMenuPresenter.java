@@ -265,6 +265,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     private void showCreatePlaylistDialog() {
+        closeDialog();
         SimpleEditDialog.show(
                 getContext(),
                 "Playlist" + new Random().nextInt(100),
@@ -273,7 +274,6 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                     Observable<Void> action = manager.createPlaylistObserve(newValue);
                     RxUtils.execute(action);
                     BrowsePresenter.instance(getContext()).refresh();
-                    closeDialog();
                 },
                 getContext().getString(R.string.create_playlist)
         );
