@@ -74,6 +74,11 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
     }
 
     @Override
+    protected boolean isCreatePlaylistEnabled() {
+        return true;
+    }
+
+    @Override
     protected boolean isAccountSelectionEnabled() {
         return mIsAccountSelectionEnabled;
     }
@@ -121,6 +126,7 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         appendRefreshButton();
         appendUnpinVideoFromSidebarButton();
         appendUnpinSectionFromSidebarButton();
+        appendCreatePlaylistButton();
         appendMarkAllChannelsWatchedButton();
         appendAccountSelectionButton();
         appendMoveSectionButton();

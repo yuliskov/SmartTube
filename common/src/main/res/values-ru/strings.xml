@@ -385,4 +385,5 @@
     <string name="save_remove_playlist">Сохранить/Удалить этот плейлист из раздела Плейлисты</string>
     <string name="removed_from_playlists">Удалено из раздела Плейлисты</string>
     <string name="saved_to_playlists">Сохранено в раздел Плейлисты</string>
+    <string name="create_playlist">Создать плейлист</string>
 </resources>

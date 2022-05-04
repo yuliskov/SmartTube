@@ -96,6 +96,7 @@ public class GeneralSettingsPresenter extends BasePresenter<Void> {
         for (int[] pair : new int[][] {
                 {R.string.subscribe_unsubscribe_from_channel, MainUIData.MENU_ITEM_SUBSCRIBE},
                 {R.string.save_remove_playlist, MainUIData.MENU_ITEM_SAVE_PLAYLIST},
+                {R.string.create_playlist, MainUIData.MENU_ITEM_CREATE_PLAYLIST},
                 {R.string.dialog_add_to_playlist, MainUIData.MENU_ITEM_ADD_TO_PLAYLIST},
                 {R.string.add_remove_from_recent_playlist, MainUIData.MENU_ITEM_RECENT_PLAYLIST},
                 {R.string.play_video, MainUIData.MENU_ITEM_PLAY_VIDEO},

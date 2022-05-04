@@ -57,6 +57,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     private boolean mIsReturnToBackgroundVideoEnabled;
     private boolean mIsPinToSidebarEnabled;
     private boolean mIsSavePlaylistButtonEnabled;
+    private boolean mIsCreatePlaylistButtonEnabled;
     private boolean mIsOpenPlaylistButtonEnabled;
     private boolean mIsAddToPlaybackQueueButtonEnabled;
     private boolean mIsOpenDescriptionButtonEnabled;
@@ -109,6 +110,11 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
     }
 
     @Override
+    protected boolean isCreatePlaylistEnabled() {
+        return mIsCreatePlaylistButtonEnabled;
+    }
+
+    @Override
     protected boolean isAccountSelectionEnabled() {
         return mIsAccountSelectionEnabled;
     }
@@ -144,6 +150,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         mIsReturnToBackgroundVideoEnabled = true;
         mIsPinToSidebarEnabled = true;
         mIsSavePlaylistButtonEnabled = true;
+        mIsCreatePlaylistButtonEnabled = true;
         mIsOpenDescriptionButtonEnabled = true;
         mIsPlayVideoButtonEnabled = true;
 
@@ -202,6 +209,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendSubscribeButton();
         appendTogglePinVideoToSidebarButton();
         appendSavePlaylistButton();
+        appendCreatePlaylistButton();
         appendOpenDescriptionButton();
         appendAddToPlaybackQueueButton();
         appendShareButton();
@@ -625,6 +633,10 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SAVE_PLAYLIST)) {
             mIsSavePlaylistButtonEnabled = false;
+        }
+
+        if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_CREATE_PLAYLIST)) {
+            mIsCreatePlaylistButtonEnabled = false;
         }
 
         if (!mainUIData.isMenuItemEnabled(MainUIData.MENU_ITEM_SUBSCRIBE)) {

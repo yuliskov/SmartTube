@@ -12,12 +12,12 @@ public class SimpleEditDialog {
         void onChange(String newValue);
     }
 
-    public static void show(Context context, String value, OnChange onChange, String dialogTitle) {
+    public static void show(Context context, String defaultValue, OnChange onChange, String dialogTitle) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AppDialog);
         LayoutInflater inflater = LayoutInflater.from(context);
         View contentView = inflater.inflate(R.layout.simple_edit_dialog, null);
 
-        ((EditText) contentView.findViewById(R.id.simple_edit_value)).setText(value);
+        ((EditText) contentView.findViewById(R.id.simple_edit_value)).setText(defaultValue);
 
         // keep empty, will override below.
         // https://stackoverflow.com/a/15619098/5379584

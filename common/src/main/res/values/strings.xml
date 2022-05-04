@@ -389,4 +389,5 @@
     <string name="save_remove_playlist">Save/Remove this playlist from Playlists section</string>
     <string name="removed_from_playlists">Removed from Playlists section</string>
     <string name="saved_to_playlists">Saved to Playlists section</string>
+    <string name="create_playlist">Create playlist</string>
 </resources>

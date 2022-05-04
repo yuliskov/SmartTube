@@ -16,8 +16,11 @@ import com.liskovsoft.smartyoutubetv2.common.app.presenters.base.BasePresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.AccountSelectionPresenter;
 import com.liskovsoft.smartyoutubetv2.common.app.presenters.dialogs.menu.VideoMenuPresenter.VideoMenuCallback;
 import com.liskovsoft.smartyoutubetv2.common.misc.MediaServiceManager;
+import com.liskovsoft.smartyoutubetv2.common.utils.SimpleEditDialog;
 import com.liskovsoft.youtubeapi.service.YouTubeMediaItemManager;
 import io.reactivex.Observable;
+
+import java.util.Random;
 
 public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     private final MediaServiceManager mServiceManager;
@@ -32,6 +35,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     protected abstract VideoMenuCallback getCallback();
     protected abstract boolean isPinToSidebarEnabled();
     protected abstract boolean isSavePlaylistEnabled();
+    protected abstract boolean isCreatePlaylistEnabled();
     protected abstract boolean isAccountSelectionEnabled();
 
     public void closeDialog() {
@@ -240,5 +244,38 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                     MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(isReallySaved ? R.string.removed_from_playlists : R.string.saved_to_playlists))
             );
         });
+    }
+
+    protected void appendCreatePlaylistButton() {
+        if (!isCreatePlaylistEnabled()) {
+            return;
+        }
+
+        Video original = getVideo();
+
+        if (original == null || !original.belongsToPlaylists()) {
+            return;
+        }
+
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(
+                        getContext().getString(R.string.create_playlist),
+                        optionItem -> showCreatePlaylistDialog()
+                        ));
+    }
+
+    private void showCreatePlaylistDialog() {
+        SimpleEditDialog.show(
+                getContext(),
+                "Playlist" + new Random().nextInt(100),
+                newValue -> {
+                    MediaItemManager manager = YouTubeMediaItemManager.instance();
+                    Observable<Void> action = manager.createPlaylistObserve(newValue);
+                    RxUtils.execute(action);
+                    BrowsePresenter.instance(getContext()).refresh();
+                    closeDialog();
+                },
+                getContext().getString(R.string.create_playlist)
+        );
     }
 }
