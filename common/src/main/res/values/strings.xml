@@ -394,4 +394,5 @@
     <string name="add_video_to_new_playlist">Add this video to new playlist</string>
     <string name="cant_delete_empty_playlist">Can\'t delete empty playlist</string>
     <string name="playlist">Playlist</string>
+    <string name="rename_playlist">Rename playlist</string>
 </resources>

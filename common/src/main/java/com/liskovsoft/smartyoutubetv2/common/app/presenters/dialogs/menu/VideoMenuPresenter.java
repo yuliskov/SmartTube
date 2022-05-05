@@ -203,6 +203,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendAddToRecentPlaylistButton(videoPlaylistInfos);
         appendAddToPlaylistButton(videoPlaylistInfos);
         appendCreatePlaylistButton();
+        appendRenamePlaylistButton();
         appendNotInterestedButton();
         appendOpenChannelButton();
         //appendOpenChannelUploadsButton();

@@ -390,4 +390,5 @@
     <string name="add_video_to_new_playlist">Додати це відео у новий плейлист</string>
     <string name="cant_delete_empty_playlist">Неможливо видалити порожній плейлист</string>
     <string name="playlist">Плейлист</string>
+    <string name="rename_playlist">Перейменувати плейлист</string>
 </resources>

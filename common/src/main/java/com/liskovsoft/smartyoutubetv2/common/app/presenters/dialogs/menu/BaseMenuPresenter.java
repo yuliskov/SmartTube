@@ -294,4 +294,42 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 getContext().getString(R.string.create_playlist)
         );
     }
+
+    protected void appendRenamePlaylistButton() {
+        if (!isCreatePlaylistEnabled()) {
+            return;
+        }
+
+        Video original = getVideo();
+
+        if (original == null || !original.belongsToPlaylists()) {
+            return;
+        }
+
+        getDialogPresenter().appendSingleButton(
+                UiOptionItem.from(
+                        getContext().getString(R.string.rename_playlist),
+                        optionItem -> showRenamePlaylistDialog(original)
+                ));
+    }
+
+    private void showRenamePlaylistDialog(Video video) {
+        mServiceManager.loadChannelUploads(
+                video,
+                mediaGroup -> {
+                    closeDialog();
+                    MediaItem firstItem = mediaGroup.getMediaItems().get(0);
+                    SimpleEditDialog.show(
+                            getContext(),
+                            video.title,
+                            newValue -> {
+                                MediaItemManager manager = YouTubeMediaItemManager.instance();
+                                Observable<Void> action = manager.renamePlaylistObserve(firstItem.getPlaylistId(), newValue);
+                                RxUtils.execute(action, () -> BrowsePresenter.instance(getContext()).refresh());
+                            },
+                            getContext().getString(R.string.rename_playlist)
+                    );
+                }
+        );
+    }
 }
