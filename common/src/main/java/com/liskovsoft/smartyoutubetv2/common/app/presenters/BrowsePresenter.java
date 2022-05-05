@@ -854,19 +854,19 @@ public class BrowsePresenter extends BasePresenter<BrowseView> implements Sectio
     /**
      * Is Channels new look enabled?
      */
-    private boolean isMultiGridChannelUploadsSection() {
+    public boolean isMultiGridChannelUploadsSection() {
         return mCurrentSection != null && mCurrentSection.getType() == BrowseSection.TYPE_MULTI_GRID && mCurrentSection.getId() == MediaGroup.TYPE_CHANNEL_UPLOADS;
     }
 
-    private boolean isSettingsSection() {
+    public boolean isSettingsSection() {
         return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_SETTINGS;
     }
 
-    private boolean isPlaylistsSection() {
+    public boolean isPlaylistsSection() {
         return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_USER_PLAYLISTS;
     }
 
-    private boolean isSubscriptionsSection() {
+    public boolean isSubscriptionsSection() {
         return mCurrentSection != null && mCurrentSection.getId() == MediaGroup.TYPE_SUBSCRIPTIONS;
     }
 

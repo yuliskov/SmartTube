@@ -126,11 +126,11 @@ public class SectionMenuPresenter extends BaseMenuPresenter {
         appendRefreshButton();
         appendUnpinVideoFromSidebarButton();
         appendUnpinSectionFromSidebarButton();
-        appendCreatePlaylistButton();
         appendMarkAllChannelsWatchedButton();
         appendAccountSelectionButton();
         appendMoveSectionButton();
         appendRenameSectionButton();
+        appendCreatePlaylistButton();
 
         if (!mDialogPresenter.isEmpty()) {
             String title = mSection != null ? mSection.getTitle() : null;

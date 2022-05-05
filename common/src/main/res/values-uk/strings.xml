@@ -383,7 +383,10 @@
     <string name="pressing_home_back">натиснувши ДОДОМУ або ПОВЕРНУТИСЯ</string>
     <string name="player_number_key_seek">Перемотувати цифровими клавішами</string>
     <string name="save_remove_playlist">Зберегти/Видалити цей плейлист з розділу Плейлисти</string>
+    <string name="remove_playlist">Видалити цей плейлист з розділу Плейлисти</string>
     <string name="removed_from_playlists">Видалено з розділу Плейлисти</string>
     <string name="saved_to_playlists">Збережено у розділ Плейлисти</string>
     <string name="create_playlist">Створити плейлист</string>
+    <string name="add_video_to_new_playlist">Додати це відео у новий плейлист</string>
+    <string name="cant_delete_empty_playlist">Неможливо видалити порожній плейлист</string>
 </resources>

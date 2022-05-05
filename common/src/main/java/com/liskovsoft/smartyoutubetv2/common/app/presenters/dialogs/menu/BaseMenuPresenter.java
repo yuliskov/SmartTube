@@ -178,7 +178,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
 
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(
-                        getContext().getString(R.string.save_remove_playlist),
+                        getContext().getString(original.belongsToPlaylists()? R.string.remove_playlist : R.string.save_remove_playlist),
                         optionItem -> {
                             MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
                             if (original.hasPlaylist()) {
@@ -226,7 +226,10 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
             }
 
             if (isSaved) {
-                if (getVideo().belongsToPlaylists() && getCallback() != null) {
+                if (video.playlistId == null) {
+                    MessageHelpers.showMessage(getContext(), R.string.cant_delete_empty_playlist);
+                    //closeDialog();
+                } else if (getVideo().belongsToPlaylists() && getCallback() != null) { // check that the parent is playlist
                     AppDialogUtil.showConfirmationDialog(getContext(), () -> {
                         removePlaylist(video);
                         getCallback().onItemAction(getVideo(), VideoMenuCallback.ACTION_REMOVE);
@@ -262,29 +265,32 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
             return;
         }
 
-        Video original = getVideo();
+        Video original = getVideo() != null ? getVideo() : new Video();
 
-        if (original == null || !original.belongsToPlaylists()) {
+        if (!original.belongsToPlaylists() && !original.hasVideo() && !BrowsePresenter.instance(getContext()).isPlaylistsSection()) {
             return;
         }
 
         getDialogPresenter().appendSingleButton(
                 UiOptionItem.from(
-                        getContext().getString(R.string.create_playlist),
-                        optionItem -> showCreatePlaylistDialog()
+                        getContext().getString(original.hasVideo() ? R.string.add_video_to_new_playlist : R.string.create_playlist),
+                        optionItem -> showCreatePlaylistDialog(original)
                         ));
     }
 
-    private void showCreatePlaylistDialog() {
+    private void showCreatePlaylistDialog(Video video) {
         closeDialog();
         SimpleEditDialog.show(
                 getContext(),
                 "Playlist" + new Random().nextInt(100),
                 newValue -> {
                     MediaItemManager manager = YouTubeMediaItemManager.instance();
-                    Observable<Void> action = manager.createPlaylistObserve(newValue);
-                    RxUtils.execute(action);
-                    BrowsePresenter.instance(getContext()).refresh();
+                    Observable<Void> action = manager.createPlaylistObserve(newValue, video.hasVideo() ? video.videoId : null);
+                    RxUtils.execute(action, () -> {
+                        if (!video.hasVideo()) {
+                            BrowsePresenter.instance(getContext()).refresh();
+                        }
+                    });
                 },
                 getContext().getString(R.string.create_playlist)
         );
