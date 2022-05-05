@@ -396,4 +396,5 @@
     <string name="playlist">Playlist</string>
     <string name="rename_playlist">Rename playlist</string>
     <string name="cant_rename_empty_playlist">Can\'t rename empty playlist</string>
+    <string name="cant_rename_foreign_playlist">Can\'t rename foreign playlist</string>
 </resources>

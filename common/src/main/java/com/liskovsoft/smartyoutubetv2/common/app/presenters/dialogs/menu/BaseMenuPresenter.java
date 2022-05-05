@@ -314,6 +314,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     }
 
     private void showRenamePlaylistDialog(Video video) {
+        MessageHelpers.showMessage(getContext(), R.string.wait_data_loading);
         mServiceManager.loadChannelUploads(
                 video,
                 mediaGroup -> {
@@ -331,7 +332,10 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                             newValue -> {
                                 MediaItemManager manager = YouTubeMediaItemManager.instance();
                                 Observable<Void> action = manager.renamePlaylistObserve(firstItem.getPlaylistId(), newValue);
-                                RxUtils.execute(action, () -> BrowsePresenter.instance(getContext()).refresh());
+                                RxUtils.execute(
+                                        action,
+                                        () -> MessageHelpers.showMessage(getContext(), R.string.cant_rename_foreign_playlist),
+                                        () -> BrowsePresenter.instance(getContext()).refresh());
                             },
                             getContext().getString(R.string.rename_playlist)
                     );
