@@ -202,6 +202,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendRemoveFromHistoryButton();
         appendAddToRecentPlaylistButton(videoPlaylistInfos);
         appendAddToPlaylistButton(videoPlaylistInfos);
+        appendCreatePlaylistButton();
         appendNotInterestedButton();
         appendOpenChannelButton();
         //appendOpenChannelUploadsButton();
@@ -209,7 +210,6 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
         appendSubscribeButton();
         appendTogglePinVideoToSidebarButton();
         appendSavePlaylistButton();
-        appendCreatePlaylistButton();
         appendOpenDescriptionButton();
         appendAddToPlaybackQueueButton();
         appendShareButton();
