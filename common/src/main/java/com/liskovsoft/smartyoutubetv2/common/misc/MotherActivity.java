@@ -171,33 +171,21 @@ public class MotherActivity extends FragmentActivity {
     //    return sCachedDisplayMetrics;
     //}
 
-    //private DisplayMetrics getDisplayMetrics() {
-    //    // BUG: adapt to resolution change (e.g. on AFR)
-    //    if (sCachedDisplayMetrics == null) {
-    //        DisplayMetrics displayMetrics = new DisplayMetrics();
-    //        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-    //        float uiScale = MainUIData.instance(this).getUIScale();
-    //        float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
-    //        float density = DEFAULT_DENSITY / widthRatio * uiScale;
-    //        displayMetrics.density = density;
-    //        displayMetrics.scaledDensity = density;
-    //        sCachedDisplayMetrics = displayMetrics;
-    //    }
-    //
-    //    return sCachedDisplayMetrics;
-    //}
-
     private DisplayMetrics getDisplayMetrics() {
-        // To adapt to resolution change (e.g. on AFR) we can't do caching.
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        float uiScale = MainUIData.instance(this).getUIScale();
-        float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
-        float density = DEFAULT_DENSITY / widthRatio * uiScale;
-        displayMetrics.density = density;
-        displayMetrics.scaledDensity = density;
+        // BUG: adapt to resolution change (e.g. on AFR)
+        // Don't disable caching or you will experience weird sizes on cards in video suggestions (e.g. after exit from PIP)!
+        if (sCachedDisplayMetrics == null) {
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            float uiScale = MainUIData.instance(this).getUIScale();
+            float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
+            float density = DEFAULT_DENSITY / widthRatio * uiScale;
+            displayMetrics.density = density;
+            displayMetrics.scaledDensity = density;
+            sCachedDisplayMetrics = displayMetrics;
+        }
 
-        return displayMetrics;
+        return sCachedDisplayMetrics;
     }
 
     private void applyCustomConfig() {
