@@ -154,21 +154,50 @@ public class MotherActivity extends FragmentActivity {
         getResources().getDisplayMetrics().setTo(getDisplayMetrics());
     }
 
+    //private DisplayMetrics getDisplayMetrics() {
+    //    DisplayMetrics displayMetrics = new DisplayMetrics();
+    //    getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+    //
+    //    // To adapt to resolution change (e.g. on AFR) check old width.
+    //    if (sCachedDisplayMetrics == null || sCachedDisplayMetrics.widthPixels != displayMetrics.widthPixels) {
+    //        float uiScale = MainUIData.instance(this).getUIScale();
+    //        float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
+    //        float density = DEFAULT_DENSITY / widthRatio * uiScale;
+    //        displayMetrics.density = density;
+    //        displayMetrics.scaledDensity = density;
+    //        sCachedDisplayMetrics = displayMetrics;
+    //    }
+    //
+    //    return sCachedDisplayMetrics;
+    //}
+
+    //private DisplayMetrics getDisplayMetrics() {
+    //    // BUG: adapt to resolution change (e.g. on AFR)
+    //    if (sCachedDisplayMetrics == null) {
+    //        DisplayMetrics displayMetrics = new DisplayMetrics();
+    //        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+    //        float uiScale = MainUIData.instance(this).getUIScale();
+    //        float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
+    //        float density = DEFAULT_DENSITY / widthRatio * uiScale;
+    //        displayMetrics.density = density;
+    //        displayMetrics.scaledDensity = density;
+    //        sCachedDisplayMetrics = displayMetrics;
+    //    }
+    //
+    //    return sCachedDisplayMetrics;
+    //}
+
     private DisplayMetrics getDisplayMetrics() {
+        // To adapt to resolution change (e.g. on AFR) we can't do caching.
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        float uiScale = MainUIData.instance(this).getUIScale();
+        float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
+        float density = DEFAULT_DENSITY / widthRatio * uiScale;
+        displayMetrics.density = density;
+        displayMetrics.scaledDensity = density;
 
-        // To adapt to resolution change (e.g. on AFR) check old width.
-        if (sCachedDisplayMetrics == null || sCachedDisplayMetrics.widthPixels != displayMetrics.widthPixels) {
-            float uiScale = MainUIData.instance(this).getUIScale();
-            float widthRatio = DEFAULT_WIDTH / displayMetrics.widthPixels;
-            float density = DEFAULT_DENSITY / widthRatio * uiScale;
-            displayMetrics.density = density;
-            displayMetrics.scaledDensity = density;
-            sCachedDisplayMetrics = displayMetrics;
-        }
-
-        return sCachedDisplayMetrics;
+        return displayMetrics;
     }
 
     private void applyCustomConfig() {
