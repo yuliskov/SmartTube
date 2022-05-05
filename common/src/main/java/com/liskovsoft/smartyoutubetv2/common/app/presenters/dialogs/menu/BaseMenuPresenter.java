@@ -319,6 +319,12 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                 mediaGroup -> {
                     closeDialog();
                     MediaItem firstItem = mediaGroup.getMediaItems().get(0);
+
+                    if (firstItem.getPlaylistId() == null) {
+                        MessageHelpers.showMessage(getContext(), R.string.cant_rename_empty_playlist);
+                        return;
+                    }
+
                     SimpleEditDialog.show(
                             getContext(),
                             video.title,

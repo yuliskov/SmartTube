@@ -391,4 +391,5 @@
     <string name="cant_delete_empty_playlist">Неможливо видалити порожній плейлист</string>
     <string name="playlist">Плейлист</string>
     <string name="rename_playlist">Перейменувати плейлист</string>
+    <string name="cant_rename_empty_playlist">Неможливо перейменувати порожній плейлист</string>
 </resources>
