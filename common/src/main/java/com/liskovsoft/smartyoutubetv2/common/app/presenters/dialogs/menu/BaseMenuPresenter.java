@@ -335,7 +335,11 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                                 RxUtils.execute(
                                         action,
                                         () -> MessageHelpers.showMessage(getContext(), R.string.cant_rename_foreign_playlist),
-                                        () -> BrowsePresenter.instance(getContext()).refresh());
+                                        () -> {
+                                            video.title = newValue;
+                                            BrowsePresenter.instance(getContext()).syncItem(video);
+                                        }
+                                );
                             },
                             getContext().getString(R.string.rename_playlist)
                     );
