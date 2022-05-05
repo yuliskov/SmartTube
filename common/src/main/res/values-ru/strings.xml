@@ -218,8 +218,8 @@
     <string name="channels_auto_load">Автоматически загружать содержимое раздела Каналы</string>
     <string name="return_to_background_video">Вернуться к фоновому видео</string>
     <string name="pin_unpin_from_sidebar">Закрепить/Открепить от боковой панели</string>
-    <string name="pin_unpin_playlist">Закрепить/Открепить плейлист</string>
-    <string name="pin_unpin_channel">Закрепить/Открепить канал</string>
+    <string name="pin_unpin_playlist">Закрепить/Открепить плейлист от боковой панели</string>
+    <string name="pin_unpin_channel">Закрепить/Открепить канал от боковой панели</string>
     <string name="pinned_to_sidebar">Закреплено на боковой панели</string>
     <string name="unpin_from_sidebar">Открепить от боковой панели</string>
     <string name="unpinned_from_sidebar">Откреплено от боковой панели</string>

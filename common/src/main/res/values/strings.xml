@@ -218,8 +218,8 @@
     <string name="channels_auto_load">Auto load Channels section content</string>
     <string name="return_to_background_video">Return to video running in background</string>
     <string name="pin_unpin_from_sidebar">Pin/Unpin from sidebar</string>
-    <string name="pin_unpin_playlist">Pin/Unpin playlist</string>
-    <string name="pin_unpin_channel">Pin/Unpin channel</string>
+    <string name="pin_unpin_playlist">Pin/Unpin playlist from sidebar</string>
+    <string name="pin_unpin_channel">Pin/Unpin channel from sidebar</string>
     <string name="pinned_to_sidebar">Pinned to sidebar</string>
     <string name="unpin_from_sidebar">Unpin from sidebar</string>
     <string name="unpinned_from_sidebar">Unpinned from sidebar</string>
