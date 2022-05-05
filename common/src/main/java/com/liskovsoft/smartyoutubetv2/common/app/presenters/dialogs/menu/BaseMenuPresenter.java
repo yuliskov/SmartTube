@@ -228,7 +228,6 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
             if (isSaved) {
                 if (video.playlistId == null) {
                     MessageHelpers.showMessage(getContext(), R.string.cant_delete_empty_playlist);
-                    //closeDialog();
                 } else if (getVideo().belongsToPlaylists() && getCallback() != null) { // check that the parent is playlist
                     AppDialogUtil.showConfirmationDialog(getContext(), () -> {
                         removePlaylist(video);
