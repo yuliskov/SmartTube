@@ -281,7 +281,7 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
         closeDialog();
         SimpleEditDialog.show(
                 getContext(),
-                "Playlist" + new Random().nextInt(100),
+                getContext().getString(R.string.playlist) + new Random().nextInt(100),
                 newValue -> {
                     MediaItemManager manager = YouTubeMediaItemManager.instance();
                     Observable<Void> action = manager.createPlaylistObserve(newValue, video.hasVideo() ? video.videoId : null);

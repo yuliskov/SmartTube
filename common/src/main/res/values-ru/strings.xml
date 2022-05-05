@@ -389,4 +389,5 @@
     <string name="create_playlist">Создать плейлист</string>
     <string name="add_video_to_new_playlist">Добавить это видео в новый плейлист</string>
     <string name="cant_delete_empty_playlist">Невозможно удалить пустой плейлист</string>
+    <string name="playlist">Плейлист</string>
 </resources>
