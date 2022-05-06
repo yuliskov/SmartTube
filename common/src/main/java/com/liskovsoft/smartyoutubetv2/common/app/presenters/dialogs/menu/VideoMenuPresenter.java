@@ -199,6 +199,7 @@ public class VideoMenuPresenter extends BaseMenuPresenter {
 
         appendReturnToBackgroundVideoButton();
         appendPlayVideoButton();
+        //appendNotInterestedButton();
         appendRemoveFromHistoryButton();
         appendAddToRecentPlaylistButton(videoPlaylistInfos);
         appendAddToPlaylistButton(videoPlaylistInfos);
