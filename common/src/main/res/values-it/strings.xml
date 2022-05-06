@@ -386,7 +386,15 @@
     <string name="pressing_home">premendo HOME</string>
     <string name="pressing_home_back">premendo HOME o INDIETRO</string>
     <string name="player_number_key_seek">Ricerca con i tasti numerici</string>
-    <string name="save_remove_playlist">Salva o rimuovi dalla sezione playlist</string>
-    <string name="removed_from_playlists">Rimosso dalla sezione playlist</string>
-    <string name="saved_to_playlists">Salvato nella sezione playlist</string>
+    <string name="save_remove_playlist">Salva o rimuovi questa playlist dalla sezione Playlist</string>
+    <string name="remove_playlist">Rimuovi questa playlist dalla sezione Playlist</string>
+    <string name="removed_from_playlists">Rimosso dalla sezione Playlist</string>
+    <string name="saved_to_playlists">Salvato nella sezione Playlist</string>
+    <string name="create_playlist">Crea playlist</string>
+    <string name="add_video_to_new_playlist">Aggiungi questo video ad una nuova playlist</string>
+    <string name="cant_delete_empty_playlist">Non posso cancellare una playlist vuota</string>
+    <string name="playlist">Playlist</string>
+    <string name="rename_playlist">Rinomina playlist</string>
+    <string name="cant_rename_empty_playlist">Non posso rinominare una playlist vuota</string>
+    <string name="cant_rename_foreign_playlist">Non posso rinominare una playlist esterna</string>
 </resources>
