@@ -246,16 +246,18 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
     private void removePlaylist(Video video) {
         MediaItemManager manager = YouTubeMediaItemManager.instance();
         Observable<Void> action = manager.removePlaylistObserve(video.playlistId);
-        RxUtils.execute(action, () ->
-                MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.removed_from_playlists))
+        RxUtils.execute(action,
+                () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.cant_delete_empty_playlist)),
+                () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.removed_from_playlists))
         );
     }
 
     private void savePlaylist(Video video) {
         MediaItemManager manager = YouTubeMediaItemManager.instance();
         Observable<Void> action = manager.savePlaylistObserve(video.playlistId);
-        RxUtils.execute(action, () ->
-                MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.saved_to_playlists))
+        RxUtils.execute(action,
+                () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.cant_save_playlist)),
+                () -> MessageHelpers.showMessage(getContext(), video.title + ": " + getContext().getString(R.string.saved_to_playlists))
         );
     }
 
@@ -286,8 +288,10 @@ public abstract class BaseMenuPresenter extends BasePresenter<Void> {
                     MediaItemManager manager = YouTubeMediaItemManager.instance();
                     Observable<Void> action = manager.createPlaylistObserve(newValue, video.hasVideo() ? video.videoId : null);
                     RxUtils.execute(action, () -> {
-                        if (!video.hasVideo()) {
+                        if (!video.hasVideo()) { // Playlists section
                             BrowsePresenter.instance(getContext()).refresh();
+                        } else {
+                            MessageHelpers.showMessage(getContext(), newValue + ": " + getContext().getString(R.string.saved_to_playlists));
                         }
                     });
                 },

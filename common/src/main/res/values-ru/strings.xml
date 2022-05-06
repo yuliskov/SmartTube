@@ -393,4 +393,5 @@
     <string name="rename_playlist">Переименовать плейлист</string>
     <string name="cant_rename_empty_playlist">Невозможно переименовать пустой плейлист</string>
     <string name="cant_rename_foreign_playlist">Невозможно переименовать чужой плейлист</string>
+    <string name="cant_save_playlist">Этот плейлист сохранить нельзя</string>
 </resources>
